@@ -20,10 +20,10 @@ Box<number> instanceof Object; // OK
 
 
 //// [instanceofOnInstantiationExpression.js]
-maybeBox instanceof Box;
-maybeBox instanceof Box;
-maybeBox instanceof (Box);
-maybeBox instanceof ((Box));
-Box instanceof Object;
-(Box) instanceof Object;
-((Box)) instanceof Object;
+maybeBox instanceof Box; // OK
+maybeBox instanceof Box; // error
+maybeBox instanceof (Box); // error
+maybeBox instanceof ((Box)); // error
+Box instanceof Object; // OK
+(Box) instanceof Object; // OK
+((Box)) instanceof Object; // OK

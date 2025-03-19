@@ -33,6 +33,6 @@ var A;
         function bar() {
         }
         M_1.bar = bar;
-        M.bar();
+        M.bar(); // Should call Z.M.bar
     })(M = A.M || (A.M = {}));
 })(A || (A = {}));

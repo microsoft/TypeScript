@@ -9,9 +9,9 @@
 -    }
 -    return Moclodule;
 -}());
--// Instantiated module.
 +class Moclodule {
 +}
+ // Instantiated module.
  (function (Moclodule) {
 -    var Manager = /** @class */ (function () {
 -        function Manager() {

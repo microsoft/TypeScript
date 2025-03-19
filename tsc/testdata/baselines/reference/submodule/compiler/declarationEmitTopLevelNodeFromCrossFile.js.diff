@@ -13,9 +13,9 @@
 -var a_1 = require("./a");
 +const a_1 = require("./a");
  exports.m = {
--    /**
--    * leading doc for prop
--    */
+     /**
+     * leading doc for prop
+@@= skipped -13, +13 lines =@@
      prop: 1
  };
  exports.x = { p: a_1.fn };

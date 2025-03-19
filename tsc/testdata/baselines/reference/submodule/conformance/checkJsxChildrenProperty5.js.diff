@@ -39,11 +39,11 @@
  function Comp(p) {
      return <div>{p.b}</div>;
  }
--// Error: no children specified
+ // Error: no children specified
 -var k = <Comp a={10} b="hi"/>;
--// Error: JSX.element is not the same as JSX.ElementClass
--var k1 = <Comp a={10} b="hi">
 +let k = <Comp a={10} b="hi"/>;
+ // Error: JSX.element is not the same as JSX.ElementClass
+-var k1 = <Comp a={10} b="hi">
 +let k1 = <Comp a={10} b="hi">
          <Button />
      </Comp>;

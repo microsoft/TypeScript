@@ -21,15 +21,16 @@ function getSecurity(level) {
 //// [commentsAfterCaseClauses3.js]
 function getSecurity(level) {
     switch (level) {
-        case 0:
-        case 1:
-        case 2:
+        case 0: /*Zero*/
+        case 1: /*One*/
+        case 2: /*two*/
+            // Leading comments
             return "Hi";
-        case 3:
-        case 4:
+        case 3: /*three*/
+        case 4: /*four*/
             return "hello";
-        case 5:
-        default:
+        case 5: /*five*/
+        default: /*six*/
             return "world";
     }
 }

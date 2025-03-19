@@ -837,6 +837,9 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource7.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     class Continuation {
@@ -961,6 +964,7 @@ var TypeScript;
         var modType = null;
         var importDecl = ast;
         var isExported = hasFlag(importDecl.varFlags, VarFlags.Exported);
+        // REVIEW: technically, this call isn't strictly necessary, since we'll find the type during the call to resolveTypeMembers
         var aliasedModSymbol = findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context });
         var isGlobal = context.scopeChain.container == context.checker.gloMod;
         if (aliasedModSymbol) {
@@ -1020,6 +1024,7 @@ var TypeScript;
                 context.checker.errorReporter.simpleError(moduleDecl, "Conflicting symbol name for module '" + modName + "'");
             }
             typeSymbol = symbol;
+            // initialize new private scope for the type
             var publicEnclosedTypes = typeSymbol.type.getAllEnclosedTypes().publicMembers;
             var publicEnclosedTypesTable = (publicEnclosedTypes == null) ? new StringHashTable() : publicEnclosedTypes;
             var enclosedTypes = new ScopedMembers(new DualStringHashTable(publicEnclosedTypesTable, new StringHashTable()));
@@ -1046,6 +1051,8 @@ var TypeScript;
         if (context.scopeChain.moduleDecl) {
             context.scopeChain.moduleDecl.recordNonInterface();
         }
+        // REVIEW: If multiple disparate module decls for the same module don't agree
+        // in export privileges, how should we handle it?
         if (isExported) {
             typeSymbol.flags |= SymbolFlags.Exported;
         }
@@ -1072,6 +1079,8 @@ var TypeScript;
         var containerMod = scopeChain.container;
         var foundValSymbol = false;
         typeSymbol = scopeChain.scope.findLocal(className, false, true);
+        // check the value space, since an override may have been declared with the type's name
+        // REVIEW-CLASSES
         if (!typeSymbol) {
             var valTypeSymbol = scopeChain.scope.findLocal(className, false, false);
             if (valTypeSymbol &&
@@ -1087,6 +1096,7 @@ var TypeScript;
                 if (isAmbient) {
                     typeSymbol.flags |= SymbolFlags.Ambient;
                 }
+                // the class was never entered into type space, so add it
                 context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol, context.checker.errorReporter, isExported || isGlobal, true, isAmbient);
             }
         }
@@ -1122,6 +1132,7 @@ var TypeScript;
                 typeSymbol.flags |= SymbolFlags.Ambient;
             }
             ast.type = classType;
+            // class in both name spaces (type for instance type; constructor representative in value space)
             context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol, context.checker.errorReporter, isExported || isGlobal, true, isAmbient);
             if (valueSymbol == null) {
                 context.scopeChain.scope.enter(context.scopeChain.container, ast, typeSymbol, context.checker.errorReporter, isExported || isGlobal, false, isAmbient);
@@ -1129,6 +1140,7 @@ var TypeScript;
         }
         else {
             classType = typeSymbol.type;
+            // If the instance type is null, a call overload was likely declared before the class constructor
             if (classType.instanceType == null) {
                 classType.instanceType = new Type();
                 classType.instanceType.setHasImplementation();
@@ -1140,6 +1152,8 @@ var TypeScript;
             instanceType = classType.instanceType;
             ast.type = classType;
         }
+        // if the class has no declared constructor, either create a default signature or adapt 
+        // it's base class's signature group
         if (!classDecl.constructorDecl) {
             if (typeSymbol && typeSymbol.declAST && typeSymbol.declAST.type && typeSymbol.declAST.type.call && !typeSymbol.declAST.isOverload) {
                 context.checker.errorReporter.duplicateIdentifier(typeSymbol.declAST, typeSymbol.name);
@@ -1168,6 +1182,7 @@ var TypeScript;
             interfaceType = new Type();
             interfaceSymbol = new TypeSymbol(interfaceName, ast.minChar, context.checker.locationInfo.unitIndex, interfaceType);
             interfaceType.symbol = interfaceSymbol;
+            // REVIEW: Shouldn't allocate another table for interface privates
             interfaceType.members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
             interfaceType.ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
             interfaceSymbol.declAST = interfaceDecl;
@@ -1189,7 +1204,7 @@ var TypeScript;
             interfaceSymbol.flags |= SymbolFlags.ModuleMember;
         }
         if (!alreadyInScope) {
-            context.scopeChain.scope.enter(context.scopeChain.container, ast, interfaceSymbol, context.checker.errorReporter, isGlobal || isExported, true, false);
+            context.scopeChain.scope.enter(context.scopeChain.container, ast, interfaceSymbol, context.checker.errorReporter, isGlobal || isExported, true, false); // REVIEW: Technically, interfaces should be ambient
         }
         pushTypeCollectionScope(interfaceSymbol, interfaceType.members, interfaceType.ambientMembers, null, null, context, interfaceType, null, null);
         return true;
@@ -1237,6 +1252,7 @@ var TypeScript;
                     return false;
                 }
             }
+            // Defensive error detection...
             if (varDecl.id == null) {
                 context.checker.errorReporter.simpleError(varDecl, "Expected variable identifier at this location");
                 return false;
@@ -1254,6 +1270,7 @@ var TypeScript;
                 fieldSymbol.flags |= SymbolFlags.ModuleMember;
                 fieldSymbol.declModule = context.scopeChain.moduleDecl;
             }
+            // if it's static, enter it into the class's member list directly
             if (hasFlag(varDecl.varFlags, VarFlags.Property) && isStatic && context.scopeChain.classType) {
                 if (!context.scopeChain.classType.members.publicMembers.add(varDecl.id.text, fieldSymbol)) {
                     context.checker.errorReporter.duplicateIdentifier(ast, fieldSymbol.name);
@@ -1274,6 +1291,7 @@ var TypeScript;
     TypeScript.preCollectVarDeclTypes = preCollectVarDeclTypes;
     function preCollectFuncDeclTypes(ast, parent, context) {
         var scopeChain = context.scopeChain;
+        // REVIEW: This will have to change when we move to "export"
         if (context.scopeChain.moduleDecl) {
             context.scopeChain.moduleDecl.recordNonInterface();
         }
@@ -1290,11 +1308,15 @@ var TypeScript;
         var isOptional = funcDecl.name && hasFlag(funcDecl.name.flags, ASTFlags.OptionalName);
         var go = false;
         var foundSymbol = false;
+        // If this is a class constructor, the "container" is actually the class declaration
         if (isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
             containerSym = containerSym.container;
             containerScope = scopeChain.previous.scope;
         }
         funcDecl.unitIndex = context.checker.locationInfo.unitIndex;
+        // If the parent is the constructor, and this isn't an instance method, skip it.
+        // That way, we'll set the type during scope assignment, and can be sure that the
+        // function will be placed in the constructor-local scope
         if (!funcDecl.isConstructor &&
             containerSym &&
             containerSym.declAST &&
@@ -1303,25 +1325,40 @@ var TypeScript;
             !funcDecl.isMethod()) {
             return go;
         }
+        // Interfaces and overloads
         if (hasFlag(funcDecl.fncFlags, FncFlags.Signature)) {
             var instType = context.scopeChain.thisType;
+            // If the function is static, search in the class type's
             if (nameText && nameText != "__missing") {
                 if (isStatic) {
                     fgSym = containerSym.type.members.allMembers.lookup(nameText);
                 }
                 else {
+                    // REVIEW: This logic should be symmetric with preCollectClassTypes
                     fgSym = containerScope.findLocal(nameText, false, false);
+                    // If we could not find the function symbol in the value context, look
+                    // in the type context.
+                    // This would be the case, for example, if a class constructor override
+                    // were declared before a call override for a given class
                     if (fgSym == null) {
                         fgSym = containerScope.findLocal(nameText, false, true);
                     }
                 }
                 if (fgSym) {
                     foundSymbol = true;
+                    // We'll combine ambient and non-ambient funcdecls during typecheck (for contextual typing).,
+                    // So, if they don't agree, don't use the symbol we've found                    
                     if (!funcDecl.isSignature() && (hasFlag(funcDecl.fncFlags, FncFlags.Ambient) != hasFlag(fgSym.flags, SymbolFlags.Ambient))) {
                         fgSym = null;
                     }
                 }
             }
+            // a function with this symbol has not yet been declared in this scope
+            // REVIEW: In the code below, we need to ensure that only function overloads are considered
+            //  (E.g., if a vardecl has the same id as a function or class, we may use the vardecl symbol
+            //  as the overload.)  Defensively, however, the vardecl won't have a type yet, so it should
+            //  suffice to just check for a null type when considering the overload symbol in
+            //  createFunctionSignature
             if (fgSym == null) {
                 if (!(funcDecl.isSpecialFn())) {
                     fgSym = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, null, !foundSymbol).declAST.type.symbol;
@@ -1329,11 +1366,13 @@ var TypeScript;
                 else {
                     fgSym = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, containerSym, false).declAST.type.symbol;
                 }
+                // set the symbol's declAST, which will point back to the first declaration (symbol or otherwise)
+                // related to this symbol
                 if (fgSym.declAST == null || !funcDecl.isSpecialFn()) {
                     fgSym.declAST = ast;
                 }
             }
-            else {
+            else { // there exists a symbol with this name
                 if ((fgSym.kind() == SymbolKind.Type)) {
                     fgSym = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, fgSym, false).declAST.type.symbol;
                 }
@@ -1349,11 +1388,13 @@ var TypeScript;
             }
         }
         else {
+            // declarations
             if (nameText) {
                 if (isStatic) {
                     fgSym = containerSym.type.members.allMembers.lookup(nameText);
                 }
                 else {
+                    // in the constructor case, we want to check the parent scope for overloads
                     if (funcDecl.isConstructor && context.scopeChain.previous) {
                         fgSym = context.scopeChain.previous.scope.findLocal(nameText, false, false);
                     }
@@ -1369,6 +1410,7 @@ var TypeScript;
                     }
                 }
             }
+            // REVIEW: Move this check into the typecheck phase?  It's only being run over properties...
             if (fgSym &&
                 !fgSym.isAccessor() &&
                 fgSym.type &&
@@ -1384,11 +1426,12 @@ var TypeScript;
                 fgSym.type = context.checker.anyType;
             }
             var sig = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, fgSym, !foundSymbol);
+            // it's a getter or setter function                                   
             if (((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) || (fgSym && fgSym.isAccessor())) {
                 funcDecl.accessorSymbol = context.checker.createAccessorSymbol(funcDecl, fgSym, containerSym.type, (funcDecl.isMethod() && isStatic), true, containerScope, containerSym);
             }
             funcDecl.type.symbol.declAST = ast;
-            if (funcDecl.isConstructor) {
+            if (funcDecl.isConstructor) { // REVIEW: Remove when classes completely replace oldclass
                 go = true;
             }
             ;
@@ -1397,6 +1440,7 @@ var TypeScript;
             if (funcDecl.type.call) {
                 funcDecl.type.symbol.flags |= SymbolFlags.Exported;
             }
+            // Accessors are set to 'exported' above
             if (fgSym && !fgSym.isAccessor() && fgSym.kind() == SymbolKind.Type && fgSym.type.call) {
                 fgSym.flags |= SymbolFlags.Exported;
             }
@@ -1441,6 +1485,8 @@ var TypeScript;
         else if (ast.nodeType == NodeType.InterfaceDeclaration) {
             go = preCollectInterfaceTypes(ast, parent, context);
         }
+        // This will be a constructor arg because this pass only traverses
+        // constructor arg lists
         else if (ast.nodeType == NodeType.ArgDecl) {
             go = preCollectArgDeclTypes(ast, parent, context);
         }

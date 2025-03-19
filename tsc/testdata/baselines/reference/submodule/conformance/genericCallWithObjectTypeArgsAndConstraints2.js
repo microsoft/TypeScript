@@ -41,6 +41,8 @@ var r7 = f3(null, x => x); // any
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints2.js]
+// Generic call with constraints infering type parameter from object member properties
+// No errors expected
 class Base {
     x;
 }
@@ -64,5 +66,5 @@ function f3(x, y) {
 }
 var r4 = f3(new Base(), x => x);
 var r5 = f3(new Derived(), x => x);
-var r6 = f3(null, null);
-var r7 = f3(null, x => x);
+var r6 = f3(null, null); // any
+var r7 = f3(null, x => x); // any

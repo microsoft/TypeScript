@@ -17,7 +17,7 @@ var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<s
  
 
 //// [overEagerReturnTypeSpecialization.js]
-var r1 = v1.func(num => num.toString())
-    .func(str => str.length);
-var r2 = v1.func(num => num.toString())
-    .func(str => str.length);
+var r1 = v1.func(num => num.toString()) // Correctly returns an I1<string>
+    .func(str => str.length); // should error
+var r2 = v1.func(num => num.toString()) // Correctly returns an I1<string>
+    .func(str => str.length); // should be ok 

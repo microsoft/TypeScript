@@ -28,6 +28,7 @@ class Base {
 }
 class Sub extends Base {
     p;
+    // @ts-ignore
     constructor(p) {
         this.p = p;
         console.log('hi');
@@ -38,6 +39,7 @@ class Sub extends Base {
 class Test extends Base {
     p;
     prop;
+    // @ts-ignore
     constructor(p) {
         this.p = p;
         1;

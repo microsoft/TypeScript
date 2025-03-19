@@ -8,9 +8,3 @@
  var E;
  (function (E) {
      E["A"] = "A";
-     E["B"] = "B";
- })(E || (E = {}));
- if (m[E.A] !== null) {
--    m[E.A].toString(); // string
-+    m[E.A].toString();
- }

@@ -20,16 +20,10 @@
 -    };
 -})();
  var console;
--var _super = 10; // No error
+ var _super = 10; // No error
 -var base = /** @class */ (function () {
 -    function base() {
-+var _super = 10;
-+class base {
-+}
-+class Foo extends base {
-+    x() {
-+        console.log(_super);
-     }
+-    }
 -    return base;
 -}());
 -var Foo = /** @class */ (function (_super_1) {
@@ -38,8 +32,13 @@
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
 -    }
 -    Foo.prototype.x = function () {
--        console.log(_super); // Error as this doesnt not resolve to user defined _super
++class base {
++}
++class Foo extends base {
++    x() {
+         console.log(_super); // Error as this doesnt not resolve to user defined _super
 -    };
 -    return Foo;
 -}(base));
++    }
 +}

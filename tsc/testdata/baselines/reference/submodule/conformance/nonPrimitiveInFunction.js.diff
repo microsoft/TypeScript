@@ -1,17 +1,8 @@
 --- old.nonPrimitiveInFunction.js
 +++ new.nonPrimitiveInFunction.js
-@@= skipped -29, +29 lines =@@
- var primitive;
- takeObject(nonPrimitive);
- nonPrimitive = returnObject();
--takeObject(primitive); // expect error
--primitive = returnObject(); // expect error
-+takeObject(primitive);
-+primitive = returnObject();
- function returnError() {
+@@= skipped -35, +35 lines =@@
      var ret = 123;
--    return ret; // expect error
-+    return ret;
+     return ret; // expect error
  }
 -
 -

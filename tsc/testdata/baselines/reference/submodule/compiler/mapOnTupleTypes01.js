@@ -48,19 +48,25 @@ export let h = numNumNumNumNum.map(n => n * n);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = exports.mapOnLooseArrayLiteral = void 0;
 exports.mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
+// Length 1
 let numTuple = [1];
 exports.a = numTuple.map(x => x * x);
+// Length 2
 let numNum = [100, 100];
 let strStr = ["hello", "hello"];
 let numStr = [100, "hello"];
 exports.b = numNum.map(n => n * n);
 exports.c = strStr.map(s => s.charCodeAt(0));
 exports.d = numStr.map(x => x);
+// Length 3
 let numNumNum = [1, 2, 3];
 exports.e = numNumNum.map(n => n * n);
+// Length 4
 let numNumNumNum = [1, 2, 3, 4];
 exports.f = numNumNumNum.map(n => n * n);
+// Length 5
 let numNumNumNumNum = [1, 2, 3, 4, 5];
 exports.g = numNumNumNumNum.map(n => n * n);
+// Length 6
 let numNumNumNumNumNum = [1, 2, 3, 4, 5, 6];
 exports.h = numNumNumNumNum.map(n => n * n);

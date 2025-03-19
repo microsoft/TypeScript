@@ -10,5 +10,6 @@ class C {
 //// [stripInternal1.js]
 class C {
     foo() { }
+    // @internal
     bar() { }
 }

@@ -30,8 +30,8 @@ class Derived extends Base {
         return null;
     }
     bar() {
-        var r = super.foo({ a: 1 });
-        var r2 = super.foo({ a: 1, b: 2 });
-        var r3 = this.foo({ a: 1, b: 2 });
+        var r = super.foo({ a: 1 }); // { a: number }
+        var r2 = super.foo({ a: 1, b: 2 }); // { a: number }
+        var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }
     }
 }

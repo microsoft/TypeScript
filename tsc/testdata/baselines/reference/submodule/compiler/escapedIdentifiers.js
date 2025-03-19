@@ -122,12 +122,24 @@ l\u0061bel4:
     } 
 
 //// [escapedIdentifiers.js]
+/*
+    0 .. \u0030
+    9 .. \u0039
+
+    A .. \u0041
+    Z .. \u005a
+
+    a .. \u0061
+    z .. \u00za
+*/
+// var decl
 var \u0061 = 1;
 a++;
 \u0061++;
 var b = 1;
 b++;
 \u0062++;
+// modules
 var moduleType1;
 (function (moduleType1) {
 })(moduleType1 || (moduleType1 = {}));
@@ -138,6 +150,7 @@ moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
 moduleType2.baz2 = 3;
 moduleType\u0032.baz2 = 3;
+// classes
 class classType1 {
     foo1;
 }
@@ -160,6 +173,7 @@ var interfaceType2Object1 = { bar2: 0 };
 interfaceType2Object1.bar2 = 2;
 var interfaceType2Object2 = { bar2: 0 };
 interfaceType2Object2.bar2 = 2;
+// arguments
 class testClass {
     func(arg1, arg\u0032, arg\u0033, arg4) {
         arg\u0031 = 1;
@@ -168,6 +182,7 @@ class testClass {
         arg4 = 2;
     }
 }
+// constructors
 class constructorTestClass {
     arg1;
     arg2;
@@ -185,19 +200,20 @@ constructorTestObject.arg\u0031 = 1;
 constructorTestObject.arg2 = 'string';
 constructorTestObject.arg\u0033 = true;
 constructorTestObject.arg4 = 2;
+// Lables
 l\u0061bel1: while (false) {
     while (false)
-        continue label1;
+        continue label1; // it will go to next iteration of outer loop 
 }
 label2: while (false) {
     while (false)
-        continue l\u0061bel2;
+        continue l\u0061bel2; // it will go to next iteration of outer loop 
 }
 label3: while (false) {
     while (false)
-        continue label3;
+        continue label3; // it will go to next iteration of outer loop 
 }
 l\u0061bel4: while (false) {
     while (false)
-        continue l\u0061bel4;
+        continue l\u0061bel4; // it will go to next iteration of outer loop 
 }

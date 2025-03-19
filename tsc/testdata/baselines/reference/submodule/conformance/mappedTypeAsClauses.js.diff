@@ -15,13 +15,13 @@
 -var keys; //  "name" | "seats"
 -var carKeys; // "name" | "seats"
 +const e2 = "foo";
-+let primitiveCar;
-+let keys;
-+let carKeys;
++let primitiveCar; // { name: string; seats: number; }
++let keys; //  "name" | "seats"
++let carKeys; // "name" | "seats"
  function f(x) {
      return x;
  }
--f("a"); // Error, should allow only "b"
+ f("a"); // Error, should allow only "b"
 -
 -
 -//// [mappedTypeAsClauses.d.ts]
@@ -219,4 +219,3 @@
 -};
 -type Test1 = keyof Result1<Fruit>;
 -type Test2 = Result2<Fruit>;
-+f("a");

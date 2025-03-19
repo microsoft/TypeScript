@@ -250,7 +250,7 @@ function goo1(x) {
 }
 function goo2(x) {
     if (x.foo !== undefined && x.kind === "A") {
-        x.foo.length;
+        x.foo.length; // Error, intervening discriminant guard
     }
 }
 function foo1(x) {
@@ -280,9 +280,10 @@ function foo5(x) {
 }
 function foo6(x) {
     if (x.foo !== undefined && x.qux) {
-        x.foo.length;
+        x.foo.length; // Error, intervening discriminant guard
     }
 }
+// Repro from #27493
 var Types;
 (function (Types) {
     Types[Types["Str"] = 1] = "Str";
@@ -302,6 +303,7 @@ function func2(inst) {
         }
     }
 }
+// Repro from #29106
 const f = (_a, _b) => { };
 const u = {};
 u.a && u.b && f(u.a, u.b);

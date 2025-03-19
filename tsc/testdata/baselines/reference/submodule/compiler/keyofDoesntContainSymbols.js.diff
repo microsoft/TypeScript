@@ -15,15 +15,15 @@
      return obj[key] = value;
  }
 -var val = set(obj, 'str', '');
--// string
--var valB = set(obj, 'num', '');
--// Expect type error
--// Argument of type '""' is not assignable to parameter of type 'number'.
--var valC = set(obj, sym, sym);
--// Expect type error
--// Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
--var valD = set(obj, num, num);
 +const val = set(obj, 'str', '');
+ // string
+-var valB = set(obj, 'num', '');
 +const valB = set(obj, 'num', '');
+ // Expect type error
+ // Argument of type '""' is not assignable to parameter of type 'number'.
+-var valC = set(obj, sym, sym);
 +const valC = set(obj, sym, sym);
+ // Expect type error
+ // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
+-var valD = set(obj, num, num);
 +const valD = set(obj, num, num);

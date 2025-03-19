@@ -34,4 +34,5 @@ function bar() {
 }
 var a = foo();
 var b = bar();
+// Relating types of a and b produces instantiations of the cyclic anonymous types in foo and bar
 a = b;

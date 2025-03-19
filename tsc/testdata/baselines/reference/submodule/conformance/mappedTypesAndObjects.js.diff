@@ -15,11 +15,10 @@
      obj = x;
      obj = y;
  }
-@@= skipped -13, +13 lines =@@
-     x = {};
+@@= skipped -14, +14 lines =@@
  }
  ;
--// Repro from #13747
+ // Repro from #13747
 -var Form = /** @class */ (function () {
 -    function Form() {
 -        this.values = {};

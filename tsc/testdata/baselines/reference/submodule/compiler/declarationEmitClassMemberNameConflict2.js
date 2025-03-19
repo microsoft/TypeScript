@@ -33,7 +33,10 @@ var Hello1;
     Hello1[Hello1["World1"] = 0] = "World1";
 })(Hello1 || (Hello1 = {}));
 class Foo {
+    // Same names + string => OK
     Bar = Bar;
+    // Same names + enum => OK
     Hello = Hello;
+    // Different names + enum => OK
     Hello2 = Hello1;
 }

@@ -17,9 +17,8 @@
 -};
  var a;
  a.toString();
--a.nonExist(); // error
+ a.nonExist(); // error
 -var destructuring = a.destructuring; // error
 -var rest = __rest(a, []); // ok
-+a.nonExist();
-+var { destructuring } = a;
-+var { ...rest } = a;
++var { destructuring } = a; // error
++var { ...rest } = a; // ok

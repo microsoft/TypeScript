@@ -7,8 +7,7 @@
 -var withoutAsConst = {
 +const withoutAsConst = {
      1: {
--        type: 'text' /*as const*/,
-+        type: 'text',
+         type: 'text' /*as const*/,
      },
  };
 -var withAsConst = {

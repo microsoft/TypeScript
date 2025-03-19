@@ -50,7 +50,3 @@
  var b;
  var d;
  var d2;
- d.x = '';
- b = d;
--b.x = 1; // assigned number to string
-+b.x = 1;

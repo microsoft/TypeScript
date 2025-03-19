@@ -47,6 +47,7 @@ class Base extends BaseBase {
 }
 class Derived extends Base {
 }
+// Ok
 new Derived("", "");
 new Derived("", 3);
 new Derived("", 3, 3);
@@ -54,6 +55,7 @@ new Derived("", 3, 3, 3);
 new Derived("", 3, "");
 new Derived("", "", 3);
 new Derived("", "", 3, 3);
+// Errors
 new Derived(3);
 new Derived("", 3, "", 3);
 new Derived("", 3, "", "");

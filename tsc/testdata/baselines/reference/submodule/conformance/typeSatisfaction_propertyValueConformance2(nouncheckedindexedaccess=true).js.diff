@@ -8,16 +8,15 @@
 +const x = {
      m: true
  };
--// Should be OK
- checkTruths(x);
--// Should be OK
+ // Should be OK
+@@= skipped -9, +9 lines =@@
  checkM(x);
  console.log(x.z);
--// Should be OK under --noUncheckedIndexedAccess
+ // Should be OK under --noUncheckedIndexedAccess
 -var m = x.m;
--// Should be able to detect a failure here
--var x2 = {
 +const m = x.m;
+ // Should be able to detect a failure here
+-var x2 = {
 +const x2 = {
      m: true,
      s: "false"

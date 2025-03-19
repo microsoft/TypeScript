@@ -228,17 +228,17 @@
 -var x10 = g8(1, function (x) { return x; }); // Type number
 -var x11 = g8(1, function (x) { return x + 1; }); // Type number
 +const a = [1, 2];
-+const x1 = g1(1);
-+const x2 = g2(1, 1);
-+const x3 = g2(1, 2);
-+const x4 = g3(1, "two");
-+const x5 = g4(1);
-+const x6 = g5(1, 2);
-+const x7 = g6([1, 2]);
-+const x8 = g6(a);
-+const x9 = g7(a);
-+const x10 = g8(1, x => x);
-+const x11 = g8(1, x => x + 1);
++const x1 = g1(1); // Type 1
++const x2 = g2(1, 1); // Type 1
++const x3 = g2(1, 2); // Type 1 | 2
++const x4 = g3(1, "two"); // Type 1 | "two"
++const x5 = g4(1); // Type number[]
++const x6 = g5(1, 2); // Type (1 | 2)[]
++const x7 = g6([1, 2]); // Type number
++const x8 = g6(a); // Type 1 | 2
++const x9 = g7(a); // Type (1 | 2)[]
++const x10 = g8(1, x => x); // Type number
++const x11 = g8(1, x => x + 1); // Type number
  function makeArray(x) {
      return [x];
  }

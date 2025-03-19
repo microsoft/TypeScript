@@ -42,7 +42,7 @@
 -    }
 -};
 -Object.defineProperty(exports, "__esModule", { value: true });
--// Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
+ // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
 -(function () { return __awaiter(void 0, void 0, void 0, function () {
 -    var response, blob, size, image;
 -    return __generator(this, function (_a) {
@@ -74,7 +74,7 @@
  //// [moduleLookingFile01.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
-@@= skipped -66, +17 lines =@@
+@@= skipped -66, +18 lines =@@
  exports.y = import.metal;
  exports.z = import.import.import.malkovich;
  //// [scriptLookingFile01.js]

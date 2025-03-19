@@ -330,6 +330,10 @@ var TypeScriptAllInOne;
     return 0;
 })(TypeScriptAllInOne || (TypeScriptAllInOne = {}));
 class BasicFeatures {
+    /// <summary>
+    /// Test various of variables. Including nullable,key world as variable,special format
+    /// </summary>
+    /// <returns></returns>
     VARIABLES() {
         var local = Number.MAX_VALUE;
         var min = Number.MIN_VALUE;
@@ -350,6 +354,7 @@ class BasicFeatures {
         var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: () => 'objLit{42}' };
         var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
+        //
         var any = 0 ^=
         ;
         var bool = 0;
@@ -373,6 +378,11 @@ class BasicFeatures {
         var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
         return 0;
     }
+    /// <summary>
+    /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
+    /// </summary>
+    /// <param name="i"></param>
+    /// <returns></returns>
     STATEMENTS(i) {
         var retVal = 0;
         if (i == 1)
@@ -404,6 +414,10 @@ class BasicFeatures {
         }
         return retVal;
     }
+    /// <summary>
+    /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
+    /// </summary>
+    /// <returns></returns>
     TYPES() {
         var retVal = 0;
         var c = new CLASS();
@@ -414,38 +428,43 @@ class BasicFeatures {
         Property;
         retVal += c.Member();
         retVal += xx.Foo() ? 0 : 1;
+        //anonymous type
         var anony = { a: new CLASS() };
         retVal += anony.a.d();
         return retVal;
     }
+    ///// <summary>
+    ///// Test different operators
+    ///// </summary>
+    ///// <returns></returns>
     OPERATOR() {
-        var a = [1, 2, 3, 4, 5,];
-        var i = a[1];
-        i = i + i - i * i / i % i & i | i ^ i;
-        var b = true && false || true ^ false;
-        b = !b;
-        i = ~i;
-        b = i < (i - 1) && (i + 1) > i;
-        var f = true ? 1 : 0;
-        i++;
-        i--;
-        b = true && false || true;
-        i = i << 5;
-        i = i >> 5;
+        var a = [1, 2, 3, 4, 5,]; /*[] bug*/ // YES []
+        var i = a[1]; /*[]*/
+        i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
+        var b = true && false || true ^ false; /*& | ^*/
+        b = !b; /*!*/
+        i = ~i; /*~i*/
+        b = i < (i - 1) && (i + 1) > i; /*< && >*/
+        var f = true ? 1 : 0; /*? :*/ // YES :
+        i++; /*++*/
+        i--; /*--*/
+        b = true && false || true; /*&& ||*/
+        i = i << 5; /*<<*/
+        i = i >> 5; /*>>*/
         var j = i;
-        b = i == j && i != j && i <= j && i >= j;
-        i += 5.0;
-        i -= i;
-        i *= i;
+        b = i == j && i != j && i <= j && i >= j; /*= == && != <= >=*/
+        i += 5.0; /*+=*/
+        i -= i; /*-=*/
+        i *= i; /**=*/
         if (i == 0)
             i++;
-        i /= i;
-        i %= i;
-        i &= i;
-        i |= i;
-        i ^= i;
-        i <<= i;
-        i >>= i;
+        i /= i; /*/=*/
+        i %= i; /*%=*/
+        i &= i; /*&=*/
+        i |= i; /*|=*/
+        i ^= i; /*^=*/
+        i <<= i; /*<<=*/
+        i >>= i; /*>>=*/
         if (i == 0 &&  != b && f == 1)
             return 0;
         else
@@ -468,6 +487,7 @@ class CLASS {
             return false;
     }
 }
+// todo: use these
 class A {
 }
 method1(val, number);

@@ -15,6 +15,7 @@ declare let dec: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.11.js]
+// No NamedEvaluation, no class name
 (
 @dec
 class {
@@ -23,6 +24,7 @@ class {
     @dec
     y;
 });
+// No NamedEvaluation, class name
 (
 @dec
 class C {

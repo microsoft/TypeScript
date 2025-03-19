@@ -41,6 +41,7 @@ g(v => v ? "contextuallyTypable" : Promise.reject());
 g(async v => v ? "contextuallyTypable" : Promise.reject());
 h(v => v ? (abc) => { } : Promise.reject());
 h(async v => v ? (def) => { } : Promise.reject());
+// repro from #29196
 const increment = async (num, str) => {
     return a => {
         return a.length;

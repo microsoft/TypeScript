@@ -16,6 +16,7 @@ if (x = o ?? true) {
 
 
 //// [controlFlowNullishCoalesce.js]
+// assignments in shortcutting rhs
 let a;
 o ?? (a = 1);
 a.toString();

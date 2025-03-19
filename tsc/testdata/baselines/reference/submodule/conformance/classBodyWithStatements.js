@@ -25,5 +25,5 @@ function foo() { }
 var x = 1;
 var y = 2;
 class C3 {
-    x = y + 1;
+    x = y + 1; // ok, need a var in the statement production
 }

@@ -5,7 +5,6 @@
  
  //// [commentOnArrayElement11.js]
 -var array = [
--    , /* comment */
 +const array = [
-+    ,
+     , /* comment */
  ];

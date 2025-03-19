@@ -1,10 +1,9 @@
 --- old.declarationEmitPropertyNumericStringKey.js
 +++ new.declarationEmitPropertyNumericStringKey.js
-@@= skipped -14, +14 lines =@@
- 
+@@= skipped -15, +15 lines =@@
  
  //// [declarationEmitPropertyNumericStringKey.js]
--// https://github.com/microsoft/TypeScript/issues/55292
+ // https://github.com/microsoft/TypeScript/issues/55292
 -var _a, _b, _c;
 -var STATUS = (_a = {},
 -    _a["404"] = "not found",

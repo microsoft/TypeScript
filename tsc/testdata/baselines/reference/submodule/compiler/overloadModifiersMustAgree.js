@@ -21,6 +21,6 @@ interface I {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class baz {
-    foo(bar) { }
+    foo(bar) { } // error - access modifiers do not agree
 }
 function bar(s) { }

@@ -1,33 +1,15 @@
 --- old.implicitAnyFunctionInvocationWithAnyArguements.js
 +++ new.implicitAnyFunctionInvocationWithAnyArguements.js
-@@= skipped -37, +37 lines =@@
- 
- 
- //// [implicitAnyFunctionInvocationWithAnyArguements.js]
--// this should be errors
--var arg0 = null; // error at "arg0"
--var anyArray = [null, undefined]; // error at array literal
--var objL; // error at "y,z"
-+var arg0 = null;
-+var anyArray = [null, undefined];
-+var objL;
- var funcL;
--function temp1(arg1) { } // error at "temp1"
-+function temp1(arg1) { }
- function testFunctionExprC(subReplace) { }
- function testFunctionExprC2(eq) { }
- ;
-@@= skipped -13, +12 lines =@@
- ;
+@@= skipped -51, +51 lines =@@
  function testFuncLiteral(funcLit) { }
  ;
--// this should not be an error
+ // this should not be an error
 -testFunctionExprC2(function (v1, v2) { return 1; });
 +testFunctionExprC2((v1, v2) => 1);
  testObjLiteral(objL);
  testFuncLiteral(funcL);
  var k = temp1(null);
-@@= skipped -12, +11 lines =@@
+@@= skipped -11, +11 lines =@@
  noError(undefined, []);
  noError(null, [null, undefined]);
  noError(undefined, anyArray);

@@ -68,7 +68,7 @@ type Evolver<T extends Evolvable<any> = any> = {
 //// [mappedTypeWithAny.js]
 for (let id in z) {
     let data = z[id];
-    let x = data.notAValue;
+    let x = data.notAValue; // Error
 }
 function bar(arrayish, objectish, indirectArrayish) {
     let arr;

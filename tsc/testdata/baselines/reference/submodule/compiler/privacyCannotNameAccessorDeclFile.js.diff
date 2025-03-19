@@ -31,11 +31,10 @@
      SpecializedWidget.Widget2 = Widget2;
      function createWidget2() {
          return new Widget2();
-@@= skipped -31, +25 lines =@@
- exports.createExportedWidget2 = createExportedWidget2;
+@@= skipped -32, +26 lines =@@
  exports.createExportedWidget3 = createExportedWidget3;
  exports.createExportedWidget4 = createExportedWidget4;
--///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
+ ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 -var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 -var Widgets1 = require("GlobalWidgets");
 +const Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
@@ -43,7 +42,7 @@
  function createExportedWidget1() {
      return Widgets.createWidget1();
  }
-@@= skipped -19, +18 lines =@@
+@@= skipped -18, +18 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.publicClassWithPrivateModuleGetAccessorTypes = exports.publicClassWithWithPrivateGetAccessorTypes = void 0;

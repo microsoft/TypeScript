@@ -149,8 +149,10 @@ var o = {
 }
 
 //// [constDeclarations-scopes.js]
+// global
 const c = "string";
 var n;
+// Control flow statements with blocks
 if (true) {
     const c = 0;
     n = c;
@@ -188,6 +190,7 @@ while (false) {
     label2: label3: label4: const c = 0;
     n = c;
 }
+// Try/catch/finally
 try {
     const c = 0;
     n = c;
@@ -200,12 +203,14 @@ finally {
     const c = 0;
     n = c;
 }
+// Switch
 switch (0) {
     case 0:
         const c = 0;
         n = c;
         break;
 }
+// blocks
 {
     const c = 0;
     n = c;
@@ -214,6 +219,7 @@ switch (0) {
         var b = c;
     }
 }
+// functions
 function F() {
     const c = 0;
     n = c;
@@ -226,6 +232,7 @@ var F3 = function () {
     const c = 0;
     n = c;
 };
+// modules
 var m;
 (function (m) {
     const c = 0;
@@ -235,6 +242,7 @@ var m;
         var b2 = c;
     }
 })(m || (m = {}));
+// methods
 class C {
     constructor() {
         const c = 0;
@@ -254,6 +262,7 @@ class C {
         n = c;
     }
 }
+// object literals
 var o = {
     f() {
         const c = 0;

@@ -41,5 +41,6 @@ var M;
 (function (M) {
 })(M || (M = {}));
 (function (M) {
+    // Should emit 'M.X' in both opening and closing tags
     var y = <X></X>;
 })(M || (M = {}));

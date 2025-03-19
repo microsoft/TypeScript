@@ -1,10 +1,9 @@
 --- old.assignmentCompatWithCallSignatures4.js
 +++ new.assignmentCompatWithCallSignatures4.js
-@@= skipped -100, +100 lines =@@
- }
+@@= skipped -101, +101 lines =@@
  
  //// [assignmentCompatWithCallSignatures4.js]
--// These are mostly permitted with the current loose rules. All ok unless otherwise noted.
+ // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -63,34 +62,14 @@
 +    }
 +    let WithNonGenericSignaturesInBaseType;
      (function (WithNonGenericSignaturesInBaseType) {
--        // target type with non-generic call signatures
+         // target type with non-generic call signatures
          var a2;
-         var a7;
-         var a8;
-@@= skipped -64, +33 lines =@@
-         a7 = b7;
-         b7 = a7;
-         var b8;
--        a8 = b8; // error, { foo: number } and Base are incompatible
--        b8 = a8; // error, { foo: number } and Base are incompatible
-+        a8 = b8;
-+        b8 = a8;
-         var b10;
-         a10 = b10;
-         b10 = a10;
-@@= skipped -24, +24 lines =@@
+@@= skipped -87, +58 lines =@@
          a17 = b17;
          b17 = a17;
      })(WithNonGenericSignaturesInBaseType || (WithNonGenericSignaturesInBaseType = {}));
 -    var WithGenericSignaturesInBaseType;
 +    let WithGenericSignaturesInBaseType;
      (function (WithGenericSignaturesInBaseType) {
--        // target type has generic call signature
+         // target type has generic call signature
          var a2;
-         var b2;
-         a2 = b2;
-         b2 = a2;
--        // target type has generic call signature
-         var a3;
-         var b3;
-         a3 = b3;

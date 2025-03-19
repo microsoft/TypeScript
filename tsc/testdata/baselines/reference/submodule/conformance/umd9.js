@@ -16,4 +16,5 @@ export const x = Foo; // OK in value position because allowUmdGlobalAccess: true
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-exports.x = Foo;
+/// <reference path="foo.d.ts" />
+exports.x = Foo; // OK in value position because allowUmdGlobalAccess: true

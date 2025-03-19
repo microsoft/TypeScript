@@ -7,4 +7,4 @@ tgt2 = src2; // Should error
 
 
 //// [mappedTypeWithAsClauseAndLateBoundProperty.js]
-tgt2 = src2;
+tgt2 = src2; // Should error

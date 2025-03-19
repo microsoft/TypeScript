@@ -15,7 +15,7 @@ var namespace;
 var n;
 var container;
 (function (container) {
-    namespace;
-    n;
-    { }
+    namespace; // this is the identifier 'namespace'
+    n; // this is the identifier 'n'
+    { } // this is a block body
 })(container || (container = {}));

@@ -137,6 +137,7 @@ var Sample;
                 domNode = null;
                 constructor(codeThing) {
                     this.codeThing = codeThing;
+                    // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
                 getDomNode() {
@@ -174,6 +175,7 @@ class AbstractMode {
                 }
                 PlainText.State = State;
                 class Mode extends AbstractMode {
+                    // scenario 2
                     getInitialState() {
                         return new State(self);
                     }

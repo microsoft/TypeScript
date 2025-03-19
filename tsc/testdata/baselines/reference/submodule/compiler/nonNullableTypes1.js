@@ -39,7 +39,7 @@ class A {
 
 //// [nonNullableTypes1.js]
 function f1(x) {
-    let y = x || "hello";
+    let y = x || "hello"; // NonNullable<T> | string
 }
 function error() {
     throw new Error();
@@ -48,22 +48,22 @@ function f2(x) {
     return x || error();
 }
 function f3(x) {
-    let y = x;
+    let y = x; // {}
 }
 function f4(obj) {
     if (obj?.x === "hello") {
-        obj;
+        obj; // NonNullable<T>
     }
     if (obj?.x) {
-        obj;
+        obj; // NonNullable<T>
     }
     if (typeof obj?.x === "string") {
-        obj;
+        obj; // NonNullable<T>
     }
 }
 class A {
     x = "hello";
     foo() {
-        let zz = this?.x;
+        let zz = this?.x; // string
     }
 }

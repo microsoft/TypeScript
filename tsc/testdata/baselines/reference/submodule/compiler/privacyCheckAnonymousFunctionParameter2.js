@@ -20,7 +20,7 @@ module Q {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-exports.x = 1;
+exports.x = 1; // Makes this an external module 
 var Q;
 (function (Q) {
     function foo(x) {

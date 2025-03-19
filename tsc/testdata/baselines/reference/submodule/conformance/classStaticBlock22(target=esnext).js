@@ -77,45 +77,45 @@ class C {
 let await;
 class C {
     static {
-        let await;
+        let await; // illegal, cannot declare a new binding for await
     }
     static {
-        let { await } = {};
+        let { await } = {}; // illegal, cannot declare a new binding for await
     }
     static {
-        let { await: other } = {};
+        let { await: other } = {}; // legal
     }
     static {
-        let await;
+        let await; // illegal, cannot declare a new binding for await
     }
     static {
         function await() { }
-        ;
+        ; // illegal
     }
     static {
         class await {
         }
-        ;
+        ; // illegal
     }
     static {
         class D {
-            await = 1;
-            x = await;
+            await = 1; // legal
+            x = await; // legal (initializers have an implicit function boundary)
         }
         ;
     }
     static {
-        (function await() { });
+        (function await() { }); // legal, 'await' in function expression name not bound inside of static block
     }
     static {
         (class await {
-        });
+        }); // legal, 'await' in class expression name not bound inside of static block
     }
     static {
-        (function () { return await; });
+        (function () { return await; }); // legal, 'await' is inside of a new function boundary
     }
     static {
-        (() => await);
+        (() => await); // legal, 'await' is inside of a new function boundary
     }
     static {
         class E {

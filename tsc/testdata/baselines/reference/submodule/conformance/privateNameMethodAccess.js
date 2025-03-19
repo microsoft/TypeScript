@@ -37,9 +37,9 @@ class A2 {
         }
     }
 }
-new A2().#method();
+new A2().#method(); // Error
 function foo() {
-    new A2().#method();
+    new A2().#method(); // Error
 }
 class B2 {
     m() {

@@ -41,15 +41,15 @@
 -    }
 -};
 -var _this = this;
--// legal JS, if nonsensical, which also triggers the issue
+ // legal JS, if nonsensical, which also triggers the issue
 -var date = function (inspectedElement) { return 0; }.date;
 +const { date, } = (inspectedElement) => 0;
  date.toISOString();
--// Working flow code
+ // Working flow code
 -var date2 = function (inspectedElement) { return ; }.date2, props;
 +const { date2, } = (inspectedElement) => , props;
  date2.toISOString();
--// It could also be an async function
+ // It could also be an async function
 -var constructor = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
 -    return [2 /*return*/];
 -}); }); }.constructor;

@@ -1,8 +1,0 @@
---- old.newNonReferenceType.js
-+++ new.newNonReferenceType.js
-@@= skipped -6, +6 lines =@@
- 
- //// [newNonReferenceType.js]
- var a = new any();
--var b = new boolean(); // error
-+var b = new boolean();

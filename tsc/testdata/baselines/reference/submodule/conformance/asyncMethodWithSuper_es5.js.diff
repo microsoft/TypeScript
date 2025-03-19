@@ -21,7 +21,9 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 +    y() {
      }
--    // async method with only call/get on 'super' does not require a binding
++}
++class B extends A {
+     // async method with only call/get on 'super' does not require a binding
 -    B.prototype.simple = function () {
 -        return __awaiter(this, void 0, void 0, function () {
 -            var a, b;
@@ -38,7 +40,19 @@
 -            });
 -        });
 -    };
--    // async method with assignment/destructuring on 'super' requires a binding
++    async simple() {
++        // call with property access
++        super.x();
++        // call additional property.
++        super.y();
++        // call with element access
++        super["x"]();
++        // property access (read)
++        const a = super.x;
++        // element access (read)
++        const b = super["x"];
++    }
+     // async method with assignment/destructuring on 'super' requires a binding
 -    B.prototype.advanced = function () {
 -        return __awaiter(this, void 0, void 0, function () {
 -            var f, a, b;
@@ -64,24 +78,23 @@
 -    };
 -    return B;
 -}(A));
-+}
-+class B extends A {
-+    async simple() {
-+        super.x();
-+        super.y();
-+        super["x"]();
-+        const a = super.x;
-+        const b = super["x"];
-+    }
 +    async advanced() {
 +        const f = () => { };
++        // call with property access
 +        super.x();
++        // call with element access
 +        super["x"]();
++        // property access (read)
 +        const a = super.x;
++        // element access (read)
 +        const b = super["x"];
++        // property access (assign)
 +        super.x = f;
++        // element access (assign)
 +        super["x"] = f;
++        // destructuring assign with property access
 +        ({ f: super.x } = { f });
++        // destructuring assign with element access
 +        ({ f: super["x"] } = { f });
 +    }
 +}

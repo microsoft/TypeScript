@@ -1,8 +1,0 @@
---- old.widenToAny2.js
-+++ new.widenToAny2.js
-@@= skipped -10, +10 lines =@@
- function foo3(x) {
-     return undefined;
- }
--var z3 = foo3([undefined, "def"]); // Type is any, but should be string
-+var z3 = foo3([undefined, "def"]);

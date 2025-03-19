@@ -10,6 +10,7 @@ class C {
 
 
 //// [staticGetter1.js]
+// once caused stack overflow
 class C {
     static get x() {
         return this;

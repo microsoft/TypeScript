@@ -5,11 +5,10 @@
  
  //// [contextuallyTypedSymbolNamedProperties.js]
 -"use strict";
--// Repros from #43628
+ // Repros from #43628
  const A = Symbol("A");
  const B = Symbol("B");
- f(ab, {
-@@= skipped -9, +7 lines =@@
+@@= skipped -9, +8 lines =@@
      [B]: bp => { bp.description; },
  });
  const x = { [A]: s => s.length };

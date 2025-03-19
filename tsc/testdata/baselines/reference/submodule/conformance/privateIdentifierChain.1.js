@@ -23,8 +23,8 @@ class A {
         return new A();
     }
     constructor() {
-        this?.#b;
-        this?.a.#b;
-        this?.getA().#b;
+        this?.#b; // Error
+        this?.a.#b; // Error
+        this?.getA().#b; // Error
     }
 }

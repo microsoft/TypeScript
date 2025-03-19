@@ -5,7 +5,6 @@
  
  //// [unionOfEnumInference.js]
 -"use strict";
--// Repro from #42932
+ // Repro from #42932
  var Enum;
  (function (Enum) {
-     Enum[Enum["A"] = 0] = "A";

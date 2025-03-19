@@ -18,7 +18,10 @@ const a = (
 //// [jsxNestedWithinTernaryParsesCorrectly.jsx]
 const emptyMessage = null;
 const a = (<div>
-      {0 ? (emptyMessage) : (<span>
+      {0 ? (emptyMessage // must be identifier?
+    ) : (
+    // must be exactly two expression holes
+    <span>
           {0}{0}
         </span>)}
     </div>);

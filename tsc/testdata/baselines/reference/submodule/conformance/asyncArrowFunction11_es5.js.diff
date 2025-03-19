@@ -40,7 +40,7 @@
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
 -    }
 -};
--// https://github.com/Microsoft/TypeScript/issues/24722
+ // https://github.com/Microsoft/TypeScript/issues/24722
 -var A = /** @class */ (function () {
 -    function A() {
 -        var _this = this;
@@ -70,6 +70,6 @@
 +class A {
 +    b = async (...args) => {
 +        await Promise.resolve();
-+        const obj = { ["a"]: () => this };
++        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
 +    };
 +}

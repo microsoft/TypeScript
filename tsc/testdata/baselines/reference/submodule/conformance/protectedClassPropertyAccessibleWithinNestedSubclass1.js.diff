@@ -35,13 +35,10 @@
                  var b;
                  var d1;
                  var d2;
-                 var d3;
-                 var d4;
--                b.x; // OK, accessed within their declaring class
--                d1.x; // OK, accessed within their declaring class
--                d2.x; // OK, accessed within their declaring class
--                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--                d4.x; // OK, accessed within their declaring class
+@@= skipped -33, +15 lines =@@
+                 d2.x; // OK, accessed within their declaring class
+                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+                 d4.x; // OK, accessed within their declaring class
 -            };
 -            return A;
 -        }());
@@ -56,11 +53,6 @@
 -    Derived1.prototype.method1 = function () {
 -        var B = /** @class */ (function () {
 -            function B() {
-+                b.x;
-+                d1.x;
-+                d2.x;
-+                d3.x;
-+                d4.x;
              }
 -            B.prototype.method1b = function () {
 +        }
@@ -73,13 +65,10 @@
                  var b;
                  var d1;
                  var d2;
-                 var d3;
-                 var d4;
--                b.x; // Error, isn't accessed through an instance of the enclosing class
--                d1.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
--                d2.x; // Error, isn't accessed through an instance of the enclosing class
--                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--                d4.x; // Error, isn't accessed through an instance of the enclosing class
+@@= skipped -26, +18 lines =@@
+                 d2.x; // Error, isn't accessed through an instance of the enclosing class
+                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+                 d4.x; // Error, isn't accessed through an instance of the enclosing class
 -            };
 -            return B;
 -        }());
@@ -94,11 +83,6 @@
 -    Derived2.prototype.method2 = function () {
 -        var C = /** @class */ (function () {
 -            function C() {
-+                b.x;
-+                d1.x;
-+                d2.x;
-+                d3.x;
-+                d4.x;
              }
 -            C.prototype.method2c = function () {
 +        }
@@ -111,13 +95,10 @@
                  var b;
                  var d1;
                  var d2;
-                 var d3;
-                 var d4;
--                b.x; // Error, isn't accessed through an instance of the enclosing class
--                d1.x; // Error, isn't accessed through an instance of the enclosing class
--                d2.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
--                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--                d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
+@@= skipped -26, +18 lines =@@
+                 d2.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+                 d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
 -            };
 -            return C;
 -        }());
@@ -132,11 +113,6 @@
 -    Derived3.prototype.method3 = function () {
 -        var D = /** @class */ (function () {
 -            function D() {
-+                b.x;
-+                d1.x;
-+                d2.x;
-+                d3.x;
-+                d4.x;
              }
 -            D.prototype.method3d = function () {
 +        }
@@ -150,13 +126,10 @@
                  var b;
                  var d1;
                  var d2;
-                 var d3;
-                 var d4;
--                b.x; // Error, isn't accessed through an instance of the enclosing class
--                d1.x; // Error, isn't accessed through an instance of the enclosing class
--                d2.x; // Error, isn't accessed through an instance of the enclosing class
--                d3.x; // OK, accessed within their declaring class
--                d4.x; // Error, isn't accessed through an instance of the enclosing class
+@@= skipped -26, +19 lines =@@
+                 d2.x; // Error, isn't accessed through an instance of the enclosing class
+                 d3.x; // OK, accessed within their declaring class
+                 d4.x; // Error, isn't accessed through an instance of the enclosing class
 -            };
 -            return D;
 -        }());
@@ -171,11 +144,6 @@
 -    Derived4.prototype.method4 = function () {
 -        var E = /** @class */ (function () {
 -            function E() {
-+                b.x;
-+                d1.x;
-+                d2.x;
-+                d3.x;
-+                d4.x;
              }
 -            E.prototype.method4e = function () {
 +        }
@@ -188,24 +156,16 @@
                  var b;
                  var d1;
                  var d2;
-                 var d3;
-                 var d4;
--                b.x; // Error, isn't accessed through an instance of the enclosing class
--                d1.x; // Error, isn't accessed through an instance of the enclosing class
--                d2.x; // Error, isn't accessed through an instance of the enclosing class
--                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--                d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+@@= skipped -26, +18 lines =@@
+                 d2.x; // Error, isn't accessed through an instance of the enclosing class
+                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+                 d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
 -            };
 -            return E;
 -        }());
 -    };
 -    return Derived4;
 -}(Derived2));
-+                b.x;
-+                d1.x;
-+                d2.x;
-+                d3.x;
-+                d4.x;
 +            }
 +        }
 +    }
@@ -213,15 +173,3 @@
  var b;
  var d1;
  var d2;
- var d3;
- var d4;
--b.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d1.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d2.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d3.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d4.x; // Error, neither within their declaring class nor classes derived from their declaring class
-+b.x;
-+d1.x;
-+d2.x;
-+d3.x;
-+d4.x;

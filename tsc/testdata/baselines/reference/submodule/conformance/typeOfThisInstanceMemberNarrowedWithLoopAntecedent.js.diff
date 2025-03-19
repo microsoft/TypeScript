@@ -39,6 +39,6 @@
 -    };
 -    return SomeClass2;
 -}());
-+        let n = this.state?.data;
++        let n = this.state?.data; // This should be an error
 +    }
 +}

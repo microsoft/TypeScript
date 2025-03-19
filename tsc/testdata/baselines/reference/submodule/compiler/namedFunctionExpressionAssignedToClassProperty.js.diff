@@ -10,7 +10,7 @@
 -        }; // this shouldn't crash the compiler...
 +class Foo {
 +    a = function bar() {
-+    };
++    }; // this shouldn't crash the compiler...
 +    constructor() {
      }
 -    return Foo;

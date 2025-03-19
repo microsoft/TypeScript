@@ -1,20 +1,9 @@
 --- old.nameCollision.js
 +++ new.nameCollision.js
-@@= skipped -50, +50 lines =@@
- //// [nameCollision.js]
- var A;
- (function (A_1) {
--    // these 2 statements force an underscore before the 'A' 
--    // in the generated function call.
-     var A = 12;
-     var _A = '';
- })(A || (A = {}));
-@@= skipped -10, +8 lines =@@
-     var A = 12;
- })(B || (B = {}));
+@@= skipped -62, +62 lines =@@
  (function (B_1) {
--    // re-opened module with colliding name
--    // this should add an underscore.
+     // re-opened module with colliding name
+     // this should add an underscore.
 -    var B = /** @class */ (function () {
 -        function B() {
 -        }
@@ -36,7 +25,7 @@
          (function (Z_1) {
              var X = 12;
              var Y = 12;
-@@= skipped -23, +19 lines =@@
+@@= skipped -21, +19 lines =@@
      })(Y = X_1.Y || (X_1.Y = {}));
  })(X || (X = {}));
  var Y;
@@ -56,8 +45,5 @@
 +        })(Y = Y_1.Y || (Y_1.Y = {}));
 +    })(Y = Y_1.Y || (Y_1.Y = {}));
  })(Y || (Y = {}));
--// no collision, since interface doesn't
--// generate code.
- var D;
- (function (D) {
-     D.E = 'hello';
+ // no collision, since interface doesn't
+ // generate code.

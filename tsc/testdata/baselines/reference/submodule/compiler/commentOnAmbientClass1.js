@@ -21,3 +21,4 @@ declare class E extends C {
 
 //// [a.js]
 //// [b.js]
+///<reference path="a.ts"/>

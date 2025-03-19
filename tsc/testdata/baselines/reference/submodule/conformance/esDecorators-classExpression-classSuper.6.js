@@ -28,6 +28,7 @@ class C extends Base {
 
 
 //// [esDecorators-classExpression-classSuper.6.js]
+// none of the following should result in caching `super`
 (
 @dec
 class C extends Base {

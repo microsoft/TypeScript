@@ -7,4 +7,4 @@ _this = 10; // Error
 
 //// [collisionThisExpressionAndAmbientVarInGlobal.js]
 var f = () => this;
-_this = 10;
+_this = 10; // Error

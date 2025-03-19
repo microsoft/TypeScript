@@ -47,11 +47,15 @@ class C7 {
 
 
 //// [topLevelAwaitErrors.1.js]
+// reparse call as invalid await should error
 await (1, );
 await , string > (1);
+// reparse tagged template as invalid await should error
 await , string > ``;
+// reparse class extends clause should fail
 class C extends string {
 }
+// await in class decorators should fail
 @(await )
 class C1 {
 }
@@ -61,6 +65,7 @@ class C2 {
 @
 class C3 {
 }
+// await in member decorators should fail
 class C4 {
     @
     ["foo"]() { }
@@ -73,6 +78,7 @@ class C6 {
     @(await )
     ["foo"]() { }
 }
+// await in parameter decorators should fail
 class C7 {
     method1([x]) { }
     method2([x]) { }

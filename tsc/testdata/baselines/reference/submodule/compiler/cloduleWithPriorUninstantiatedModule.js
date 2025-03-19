@@ -20,6 +20,7 @@ module Moclodule {
 //// [cloduleWithPriorUninstantiatedModule.js]
 class Moclodule {
 }
+// Instantiated module.
 (function (Moclodule) {
     class Manager {
     }

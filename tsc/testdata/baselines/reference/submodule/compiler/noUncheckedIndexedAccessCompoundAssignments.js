@@ -23,6 +23,8 @@ declare const n: number;
 
 
 //// [noUncheckedIndexedAccessCompoundAssignments.js]
+// Each line should have one error
+// for a total of 12 errors
 stringMap.foo++;
 --stringMap.foo;
 stringMap.foo += 1;

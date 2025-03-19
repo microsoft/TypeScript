@@ -8,13 +8,10 @@
  ta1 = sa1;
  ta1 = sa2;
  ta2 = sa1;
- ta2 = sa2;
--tb1 = sb1; // Error
-+tb1 = sb1;
+@@= skipped -8, +7 lines =@@
+ tb1 = sb1; // Error
  q["asd"].a.substr(1);
--q["asd"].b; // Error
+ q["asd"].b; // Error
 -var d = q; // Error
--tt = ss; // Error
-+q["asd"].b;
-+const d = q;
-+tt = ss;
++const d = q; // Error
+ tt = ss; // Error

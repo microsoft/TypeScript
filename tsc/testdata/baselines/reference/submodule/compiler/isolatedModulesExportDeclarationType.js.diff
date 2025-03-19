@@ -5,17 +5,14 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var T = 0; // Error as of #56354
--exports.default = T; // Ok
-+const T = 0;
-+exports.default = T;
++const T = 0; // Error as of #56354
+ exports.default = T; // Ok
  //// [test2.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
-@@= skipped -11, +11 lines =@@
- //// [test4.js]
+@@= skipped -12, +12 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--// @ts-expect-error
+ // @ts-expect-error
 -var doesntexist_1 = require("./doesntexist");
 +const doesntexist_1 = require("./doesntexist");
  exports.default = doesntexist_1.default;

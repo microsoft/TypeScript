@@ -13,4 +13,5 @@ interface Function {}
 interface RegExp {}
 
 //// [noDefaultLib.js]
+/// <reference no-default-lib="true"/>
 var x;

@@ -7,25 +7,8 @@
 -"use strict";
  function f1(a, b) {
      a = b;
--    b = a; // Error
-+    b = a;
- }
- function f2(a, b) {
--    a = b; // Error
-+    a = b;
-     b = a;
- }
- function f3(a, b) {
--    a = b; // Error
--    b = a; // Error
-+    a = b;
-+    b = a;
- }
--// Extract<T, Function> is a T that is known to be a Function
- function isFunction(value) {
-     return typeof value === "function";
- }
-@@= skipped -25, +23 lines =@@
+     b = a; // Error
+@@= skipped -25, +24 lines =@@
  }
  function f10(x) {
      if (isFunction(x)) {
@@ -41,22 +24,14 @@
  }
  function f12(x) {
 -    var f = getFunction(x); // () => string
-+    const f = getFunction(x);
++    const f = getFunction(x); // () => string
      f();
  }
  function f20(x, y, z) {
-@@= skipped -9, +9 lines =@@
-     fooBar(z);
+@@= skipped -14, +14 lines =@@
+     fooBat(z); // Error
  }
- function f21(x, y, z) {
--    fooBat(x); // Error
--    fooBat(y); // Error
--    fooBat(z); // Error
-+    fooBat(x);
-+    fooBat(y);
-+    fooBat(z);
- }
--// Repros from #22860
+ // Repros from #22860
 -var Opt = /** @class */ (function () {
 -    function Opt() {
 +class Opt {

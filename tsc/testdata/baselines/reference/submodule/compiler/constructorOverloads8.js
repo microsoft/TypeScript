@@ -20,7 +20,7 @@ interface I {
 //// [constructorOverloads8.js]
 class C {
     constructor(x) { }
-    constructor(y, x) { }
+    constructor(y, x) { } // illegal, 2 constructor implementations
 }
 class D {
     constructor(x) { }

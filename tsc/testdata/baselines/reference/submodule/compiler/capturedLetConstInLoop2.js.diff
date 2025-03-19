@@ -1,10 +1,8 @@
 --- old.capturedLetConstInLoop2.js
 +++ new.capturedLetConstInLoop2.js
-@@= skipped -176, +176 lines =@@
- }
- 
+@@= skipped -178, +178 lines =@@
  //// [capturedLetConstInLoop2.js]
--// ========let
+ // ========let
  function foo0(x) {
 -    var _loop_1 = function (x_1) {
 -        var a = arguments_1.length;
@@ -162,7 +160,7 @@
 +        (() => x + y + a);
      }
  }
--///=======const
+ ///=======const
  function foo0_c(x) {
 -    var _loop_11 = function (x_10) {
 -        var a = arguments_11.length;

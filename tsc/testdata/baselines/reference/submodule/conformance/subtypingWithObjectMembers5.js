@@ -66,27 +66,30 @@ module Optional {
 
 
 //// [subtypingWithObjectMembers5.js]
+// N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+// foo properties are valid, bar properties cause errors in the derived class declarations
 var NotOptional;
 (function (NotOptional) {
     class B {
-        fooo;
+        fooo; // error
     }
     class B2 {
-        2;
+        2; // error
     }
     class B3 {
-        '1.0';
+        '1.0'; // error
     }
 })(NotOptional || (NotOptional = {}));
+// same cases as above but with optional
 var Optional;
 (function (Optional) {
     class B {
-        fooo;
+        fooo; // weak type error
     }
     class B2 {
-        2;
+        2; // weak type error
     }
     class B3 {
-        '1.0';
+        '1.0'; // weak type error
     }
 })(Optional || (Optional = {}));

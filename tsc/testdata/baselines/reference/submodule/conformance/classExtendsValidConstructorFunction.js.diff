@@ -20,7 +20,7 @@
 -    };
 -})();
  function foo() { }
--var x = new foo(); // can be used as a constructor function
+ var x = new foo(); // can be used as a constructor function
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -28,6 +28,5 @@
 -    }
 -    return C;
 -}(foo)); // error, cannot extend it though
-+var x = new foo();
 +class C extends foo {
-+}
++} // error, cannot extend it though

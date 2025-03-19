@@ -17,7 +17,11 @@
 -                Component.prototype.render = function () {
 -                    return <div>
 -            {/* missing */}
--            {null /* preserved */}
++class Component {
++    render() {
++        return <div>
++            
+             {null /* preserved */}
 -            {
 -                        // ??? 1
 -                        }
@@ -28,11 +32,6 @@
 -            {
 -                        // ??? 4
 -                        /* ??? 5 */ }
-+class Component {
-+    render() {
-+        return <div>
-+            
-+            {null}
 +            
 +            
 +            

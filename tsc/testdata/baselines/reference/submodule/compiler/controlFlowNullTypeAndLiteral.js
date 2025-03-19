@@ -27,6 +27,7 @@ function f(x: number | null) {
 
 
 //// [controlFlowNullTypeAndLiteral.js]
+// Repros from #23771
 const myNull = null;
 const objWithValMaybeNull = { val: 1 };
 const addOne = function (num) {
@@ -37,11 +38,11 @@ if (objWithValMaybeNull.val !== null)
 if (objWithValMaybeNull.val !== myNull)
     addOne(objWithValMaybeNull.val);
 if (objWithValMaybeNull.val === null)
-    addOne(objWithValMaybeNull.val);
+    addOne(objWithValMaybeNull.val); // Error
 if (objWithValMaybeNull.val === myNull)
-    addOne(objWithValMaybeNull.val);
+    addOne(objWithValMaybeNull.val); // Error
 function f(x) {
     if (x === myNull) {
-        const s = x;
+        const s = x; // Error
     }
 }

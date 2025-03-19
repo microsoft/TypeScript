@@ -42,14 +42,14 @@ f([container1, container2], (value1, value2) => {
 
 //// [numericStringLiteralTypes.js]
 function f1(a, x) {
-    let s = a[x];
+    let s = a[x]; // boolean
 }
 function f2(a, x) {
-    let s = a[x];
+    let s = a[x]; // boolean
 }
 const container1 = createContainer('hi');
 const container2 = createContainer(2);
 f([container1, container2], (value1, value2) => {
-    value1;
-    value2;
+    value1; // string
+    value2; // number
 });

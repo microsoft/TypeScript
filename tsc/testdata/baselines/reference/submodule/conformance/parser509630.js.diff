@@ -33,7 +33,7 @@
 -    return Any;
 -}(Type));
 +class Type {
-+    examples = [];
++    examples = []; // typing here
 +}
 +class Any extends Type {
 +}

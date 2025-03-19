@@ -17,10 +17,13 @@ for (const c = 0; c < 10; n = c ) {
 
 
 //// [constDeclarations-scopes2.js]
+// global
 const c = "string";
 var n;
 var b;
+// for scope
 for (const c = 0; c < 10; n = c) {
+    // for block
     const c = false;
     b = c;
 }

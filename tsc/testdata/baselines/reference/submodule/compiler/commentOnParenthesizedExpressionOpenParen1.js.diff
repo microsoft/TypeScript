@@ -1,8 +1,0 @@
---- old.commentOnParenthesizedExpressionOpenParen1.js
-+++ new.commentOnParenthesizedExpressionOpenParen1.js
-@@= skipped -8, +8 lines =@@
- //// [commentOnParenthesizedExpressionOpenParen1.js]
- var j;
- var f;
--( /* Preserve */j = f());
-+(j = f());

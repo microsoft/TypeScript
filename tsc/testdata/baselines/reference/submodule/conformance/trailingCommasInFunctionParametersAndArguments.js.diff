@@ -15,7 +15,7 @@
 +f2(...[]);
  f3(1);
  f3(1, 2);
--// Works for constructors too
+ // Works for constructors too
 -var X = /** @class */ (function () {
 -    function X(a) {
 -    }
@@ -29,6 +29,7 @@
 -}());
 +class X {
 +    constructor(a) { }
++    // See trailingCommasInGetter.ts
 +    set x(value) { }
 +}
  new X(1);

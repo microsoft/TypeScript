@@ -8,34 +8,5 @@
 -// by incorrect variance-based relationships
 -// Ref: https://github.com/Microsoft/TypeScript/issues/29698
  function defaultRecord(x, y) {
--    x = y; // no error, but error expected.
-+    x = y;
- }
- function customRecord(x, y) {
--    x = y; // no error, but error expected.
-+    x = y;
- }
- function mixed1(x, y) {
--    x = y; // error
-+    x = y;
- }
- function mixed2(x, y) {
--    x = y; // error
-+    x = y;
- }
- function defaultRecord2(x, y) {
--    x = y; // no error, but error expected.
-+    x = y;
- }
- function customRecord2(x, y) {
--    x = y; // no error, but error expected.
-+    x = y;
- }
- function mixed3(x, y) {
--    x = y; // error
-+    x = y;
- }
- function mixed4(x, y) {
--    x = y; // error
-+    x = y;
+     x = y; // no error, but error expected.
  }

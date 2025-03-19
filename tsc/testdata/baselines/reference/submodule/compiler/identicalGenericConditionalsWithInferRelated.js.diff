@@ -6,12 +6,10 @@
  function f(arg) {
 -    var x = null;
 -    var y = null;
--    x = y; // is err, should be ok
--    y = x; // is err, should be ok
 +    let x = null;
 +    let y = null;
-+    x = y;
-+    y = x;
+     x = y; // is err, should be ok
+     y = x; // is err, should be ok
  }
 -var Y = /** @class */ (function () {
 -    function Y() {

@@ -26,9 +26,11 @@ var b = {
 }
 
 //// [numericStringNamedPropertyEquivalence.js]
+// Each of these types has an error in it. 
+// String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
 class C {
     "1";
-    "1.0";
+    "1.0"; // not a duplicate
     1.0;
 }
 var a;

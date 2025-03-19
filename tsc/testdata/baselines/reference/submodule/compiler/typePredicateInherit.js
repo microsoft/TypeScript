@@ -57,8 +57,8 @@ class D extends C {
 
 //// [typePredicateInherit.js]
 class B {
-    method1() { }
-    method2() { }
+    method1() { } // should error
+    method2() { } // should error
     method3() {
         return true;
     }

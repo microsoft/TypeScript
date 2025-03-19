@@ -6,5 +6,5 @@
  //// [recursiveConditionalEvaluationNonInfinite.js]
 -var y = x; // Error
 -var b = a; // Works
-+const y = x;
-+const b = a;
++const y = x; // Error
++const b = a; // Works

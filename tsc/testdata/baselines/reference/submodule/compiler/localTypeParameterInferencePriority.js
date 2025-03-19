@@ -27,6 +27,7 @@ const ColumnSelectView2: new <S extends Schema>() => Table<UnrollOnHover<S>> = T
 Object.defineProperty(exports, "__esModule", { value: true });
 class Table {
     __schema;
+    // Removing this line, removes the error 
     getRows() {
         return null;
     }

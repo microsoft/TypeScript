@@ -19,6 +19,6 @@ class Base {
 class D extends Base {
     _t;
     constructor() {
-        super(() => { this._t; });
+        super(() => { this._t; }); // no error. only check when this is directly accessing in constructor
     }
 }

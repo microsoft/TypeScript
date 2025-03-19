@@ -31,21 +31,32 @@
 -    }
 -    return D;
 -}(C));
--// exactly
++class C {
++    test;
++}
++class D extends C {
++    test2;
++}
+ // exactly
 -test(function (t1, t2) { t2.test2; });
 -test(function (t1, t2) { t2.test2; });
--// zero arg
++test((t1, t2) => { t2.test2; });
++test((t1, t2) => { t2.test2; });
+ // zero arg
 -test(function () { });
--// fewer args
++test(() => { });
+ // fewer args
 -test(function (t1) { });
--// rest arg
++test((t1) => { });
+ // rest arg
 -test(function () {
 -    var ts = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        ts[_i] = arguments[_i];
 -    }
 -});
--// source function has rest arg
++test((...ts) => { });
+ // source function has rest arg
 -testRest(function (t1) { });
 -testRest(function (t1, t2, t3) { });
 -testRest(function (t1, t2, t3) { });
@@ -62,17 +73,6 @@
 -        t3[_i - 1] = arguments[_i];
 -    }
 -});
-+class C {
-+    test;
-+}
-+class D extends C {
-+    test2;
-+}
-+test((t1, t2) => { t2.test2; });
-+test((t1, t2) => { t2.test2; });
-+test(() => { });
-+test((t1) => { });
-+test((...ts) => { });
 +testRest((t1) => { });
 +testRest((t1, t2, t3) => { });
 +testRest((t1, t2, t3) => { });

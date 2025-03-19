@@ -33,6 +33,7 @@ const [blah2, blah2] = [333, 444];
 
 
 //// [destructuringSameNames.js]
+// Valid cases
 let { foo, foo: bar } = { foo: 1 };
 ({ foo, foo } = { foo: 2 });
 ({ foo, foo: bar } = { foo: 3 });
@@ -47,6 +48,7 @@ let { foo, foo: bar } = { foo: 1 };
 [bar, foo, foo] = [333, 3333, 33333];
 [foo, bar, foo] = [333, 3333, 33333];
 [foo, foo, bar] = [444, 4444, 44444];
+// Error cases
 let { foo1, foo1 } = { foo1: 10 };
 let { foo2, bar2: foo2 } = { foo2: 20, bar2: 220 };
 let { bar3: foo3, foo3 } = { foo3: 30, bar3: 330 };

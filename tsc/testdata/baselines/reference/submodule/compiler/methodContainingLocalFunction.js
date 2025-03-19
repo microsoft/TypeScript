@@ -53,6 +53,7 @@ enum E {
 }
 
 //// [methodContainingLocalFunction.js]
+// The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition {
     exhibitBug() {
         function localFunction() { }

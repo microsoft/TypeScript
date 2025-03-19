@@ -1,10 +1,8 @@
 --- old.unusedLocalsAndParametersDeferred.js
 +++ new.unusedLocalsAndParametersDeferred.js
-@@= skipped -166, +166 lines =@@
- function defered(a) {
-     return a();
+@@= skipped -168, +168 lines =@@
  }
--// function declaration paramter
+ // function declaration paramter
  function f(a) {
 -    defered(function () {
 +    defered(() => {
@@ -12,7 +10,7 @@
      });
  }
  f(0);
--// function expression paramter
+ // function expression paramter
  var fexp = function (a) {
 -    defered(function () {
 +    defered(() => {
@@ -20,7 +18,7 @@
      });
  };
  fexp(1);
--// arrow function paramter
+ // arrow function paramter
 -var farrow = function (a) {
 -    defered(function () {
 +var farrow = (a) => {
@@ -35,20 +33,16 @@
 -        // in a property initalizer
 -        this.p = defered(function () {
 -            prop1;
+-        });
+-    }
 +let prop1;
 +class C {
-+    method(a) {
-+        defered(() => {
-+            a;
-         });
-     }
--    // Method declaration paramter
+     // Method declaration paramter
 -    C.prototype.method = function (a) {
 -        defered(function () {
--            a;
-+    set x(v) {
++    method(a) {
 +        defered(() => {
-+            v;
+             a;
          });
 -    };
 -    Object.defineProperty(C.prototype, "x", {
@@ -60,34 +54,37 @@
 -        },
 -        enumerable: false,
 -        configurable: true
-+    }
-+    p = defered(() => {
-+        prop1;
-     });
+-    });
 -    return C;
 -}());
-+}
- new C();
+-new C();
 -var prop2;
 -var E = /** @class */ (function () {
 -    function class_1() {
 -        // in a property initalizer
 -        this.p = defered(function () {
 -            prop2;
-+let prop2;
-+var E = class {
-+    method(a) {
-+        defered(() => {
-+            a;
-         });
-     }
--    // Method declaration paramter
--    class_1.prototype.method = function (a) {
--        defered(function () {
--            a;
++    }
++    // Accessor declaration paramter
 +    set x(v) {
 +        defered(() => {
 +            v;
+         });
+     }
++    // in a property initalizer
++    p = defered(() => {
++        prop1;
++    });
++}
++new C();
++let prop2;
++var E = class {
+     // Method declaration paramter
+-    class_1.prototype.method = function (a) {
+-        defered(function () {
++    method(a) {
++        defered(() => {
+             a;
          });
 -    };
 -    Object.defineProperty(class_1.prototype, "x", {
@@ -100,6 +97,13 @@
 -        enumerable: false,
 -        configurable: true
 +    }
++    // Accessor declaration paramter
++    set x(v) {
++        defered(() => {
++            v;
++        });
++    }
++    // in a property initalizer
 +    p = defered(() => {
 +        prop2;
      });
@@ -108,7 +112,7 @@
 +};
  new E();
  var o = {
--    // Object literal method declaration paramter
+     // Object literal method declaration paramter
 -    method: function (a) {
 -        defered(function () {
 +    method(a) {
@@ -116,14 +120,14 @@
              a;
          });
      },
--    // Accessor declaration paramter
+     // Accessor declaration paramter
      set x(v) {
 -        defered(function () {
 +        defered(() => {
              v;
          });
      },
--    // in a property initalizer
+     // in a property initalizer
 -    p: defered(function () {
 +    p: defered(() => {
          prop1;
@@ -132,6 +136,7 @@
  o;
 -var _loop_1 = function (i) {
 -    defered(function () {
++// in a for..in statment
 +for (let i in o) {
 +    defered(() => {
          i;
@@ -143,6 +148,7 @@
  }
 -var _loop_2 = function (i) {
 -    defered(function () {
++// in a for..of statment
 +for (let i of [1, 2, 3]) {
 +    defered(() => {
          i;
@@ -155,6 +161,7 @@
  }
 -var _loop_3 = function (i) {
 -    defered(function () {
++// in a for. statment
 +for (let i = 0; i < 10; i++) {
 +    defered(() => {
          i;
@@ -164,7 +171,7 @@
 -for (var i = 0; i < 10; i++) {
 -    _loop_3(i);
  }
--// in a block
+ // in a block
 -var condition = false;
 +const condition = false;
  if (condition) {
@@ -176,7 +183,7 @@
 +        c;
      });
  }
--// in try/catch/finally
+ // in try/catch/finally
  try {
 -    var a_1 = 0;
 -    defered(function () {
@@ -204,7 +211,7 @@
 +        c;
      });
  }
--// in a namespace
+ // in a namespace
  var N;
  (function (N) {
      var x;

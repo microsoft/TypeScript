@@ -33,6 +33,7 @@ module.exports = m2;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
+/**This is on import declaration*/
 const a1 = require("./declFileImportModuleWithExportAssignment_0");
 exports.a = a1;
 exports.a.test1(null, null, null);

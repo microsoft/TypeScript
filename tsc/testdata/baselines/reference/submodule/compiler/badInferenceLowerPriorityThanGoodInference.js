@@ -31,6 +31,7 @@ const result = canYouInferThis(() => ({
     b: x => { }
 }));
 result.BLAH;
+// Repro from #26629
 function goofus(f) { }
 goofus((a) => ({ dog() { return a; } }));
 goofus((a) => ({ dog: function () { return a; } }));

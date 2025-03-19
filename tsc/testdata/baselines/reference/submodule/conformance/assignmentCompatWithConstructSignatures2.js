@@ -55,12 +55,14 @@ t = s;
 t = a2;
 a = s;
 a = a2;
+// errors
 t = () => 1;
 t = function (x) { return ''; };
 a = () => 1;
 a = function (x) { return ''; };
 var s2;
 var a3;
+// these are errors
 t = s2;
 t = a3;
 t = (x) => 1;

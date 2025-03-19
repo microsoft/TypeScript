@@ -144,6 +144,8 @@ interface Array<T> {
 }
 
 //// [staticAnonymousTypeNotReferencingTypeParameter.js]
+// This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
+// this would cause the compiler to run out of memory.
 function outer(x) {
     class Inner {
         static y = x;
@@ -160,6 +162,11 @@ class ListWrapper2 {
 }
 var tessst;
 (function (tessst) {
+    /**
+     * Iterates through 'array' by index and performs the callback on each element of array until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, the callback is applied to each element of array and undefined is returned.
+     */
     function funkyFor(array, callback) {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
@@ -174,6 +181,8 @@ var tessst;
     tessst.funkyFor = funkyFor;
 })(tessst || (tessst = {}));
 class ListWrapper {
+    // JS has no way to express a statically fixed size list, but dart does so we
+    // keep both methods.
     static createFixedSize(dit, size) { return new Array(size); }
     static createGrowableSize(dit, size) { return new Array(size); }
     static clone(dit, array) { return array.slice(0); }

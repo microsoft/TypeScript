@@ -17,6 +17,7 @@ export function test2<T = Record<string, never>>(schema: {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test1 = void 0;
 exports.test2 = test2;
+// repro from #53109
 const test1 = (schema) => { };
 exports.test1 = test1;
 function test2(schema) { }

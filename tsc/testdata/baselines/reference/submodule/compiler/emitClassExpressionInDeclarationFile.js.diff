@@ -36,13 +36,6 @@
 -    C.prototype.tags = function (c) { return c; };
 -    return C;
 -}());
--// repro from #15066
--var FooItem = /** @class */ (function () {
--    function FooItem() {
--    }
--    FooItem.prototype.foo = function () { };
--    return FooItem;
--}());
 +var simpleExample = class {
 +    static getTags() { }
 +    tags() { }
@@ -52,6 +45,13 @@
 +    static getTags(c) { return c; }
 +    tags(c) { return c; }
 +};
+ // repro from #15066
+-var FooItem = /** @class */ (function () {
+-    function FooItem() {
+-    }
+-    FooItem.prototype.foo = function () { };
+-    return FooItem;
+-}());
 +class FooItem {
 +    foo() { }
 +    name;

@@ -45,6 +45,7 @@
      }
 -    Derived.prototype.x = function () {
 +}
++// error
 +class Derived extends Base {
 +    x() {
          return 1;

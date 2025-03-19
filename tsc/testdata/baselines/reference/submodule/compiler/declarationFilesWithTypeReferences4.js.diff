@@ -1,10 +1,6 @@
 --- old.declarationFilesWithTypeReferences4.js
 +++ new.declarationFilesWithTypeReferences4.js
-@@= skipped -11, +11 lines =@@
- }
- 
- //// [app.js]
--/// <reference types="node"/>
+@@= skipped -15, +15 lines =@@
  function foo() {
      return undefined;
  }

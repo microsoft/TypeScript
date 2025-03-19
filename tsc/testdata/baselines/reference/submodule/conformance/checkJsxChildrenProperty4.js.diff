@@ -36,9 +36,9 @@
 -    };
 -    return FetchUser;
 -}(React.Component));
--// Error
 +    }
 +}
+ // Error
  function UserName() {
      return (<FetchUser>
 -            {function (user) { return (<h1>{user.NAme}</h1>); }}
@@ -46,7 +46,7 @@
          </FetchUser>);
  }
  function UserName1() {
-@@= skipped -40, +19 lines =@@
+@@= skipped -40, +20 lines =@@
  
  
              

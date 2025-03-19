@@ -1,12 +1,10 @@
 --- old.ambientModuleDeclarationWithReservedIdentifierInDottedPath2.js
 +++ new.ambientModuleDeclarationWithReservedIdentifierInDottedPath2.js
-@@= skipped -19, +19 lines =@@
- declare;
+@@= skipped -20, +20 lines =@@
  namespace;
  debugger;
--{ } // still an error
+ { } // still an error
 -
 -
 -//// [ambientModuleDeclarationWithReservedIdentifierInDottedPath2.d.ts]
 -export declare const tabId: number;
-+{ }

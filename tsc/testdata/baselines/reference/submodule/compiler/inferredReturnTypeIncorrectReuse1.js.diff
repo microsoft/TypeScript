@@ -1,12 +1,12 @@
 --- old.inferredReturnTypeIncorrectReuse1.js
 +++ new.inferredReturnTypeIncorrectReuse1.js
-@@= skipped -34, +34 lines =@@
- "use strict";
+@@= skipped -35, +35 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.out2 = exports.out = void 0;
--/** Type<(In: string) => number> */
+ /** Type<(In: string) => number> */
 -exports.out = t.pipe(function (s) { return parseInt(s); });
--/** Type<(In: string) => number> */
++exports.out = t.pipe(s => parseInt(s));
+ /** Type<(In: string) => number> */
 -exports.out2 = t2.pipe(function (s) { return parseInt(s); });
 -
 -
@@ -21,5 +21,4 @@
 -/** Type<(In: string) => number> */
 -export declare const out2: Type<(In: string) => number>;
 -export {};
-+exports.out = t.pipe(s => parseInt(s));
 +exports.out2 = t2.pipe(s => parseInt(s));

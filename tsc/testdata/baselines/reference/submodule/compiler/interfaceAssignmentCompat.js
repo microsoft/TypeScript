@@ -77,16 +77,17 @@ var M;
         x[0] = { color: Color.Brown };
         x[1] = { color: Color.Blue };
         x[2] = { color: Color.Green };
-        x = x.sort(CompareYeux);
-        var z = x.sort(CompareEyes);
+        x = x.sort(CompareYeux); // parameter mismatch
+        // type of z inferred from specialized array type
+        var z = x.sort(CompareEyes); // ok
         for (var i = 0, len = z.length; i < len; i++) {
             result += ((Color._map[z[i].color]) + "\r\n");
         }
         var eeks = [];
         for (var j = z.length = 1; j >= 0; j--) {
-            eeks[j] = z[j];
+            eeks[j] = z[j]; // nope: element assignment
         }
-        eeks = z;
+        eeks = z; // nope: array assignment
         return result;
     }
     M.test = test;

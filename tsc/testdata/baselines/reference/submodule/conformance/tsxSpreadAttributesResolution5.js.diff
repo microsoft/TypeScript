@@ -41,7 +41,7 @@
      x: "hello world",
      y: 2
  };
--// Error as "obj" has type { x: string; y: number }
+ // Error as "obj" has type { x: string; y: number }
 -var p = <Poisoned {...obj}/>;
 -var EmptyProp = /** @class */ (function (_super) {
 -    __extends(EmptyProp, _super);
@@ -63,6 +63,6 @@
 +let o = {
      prop1: false
  };
--// Ok
+ // Ok
 -var e = <EmptyProp {...o}/>;
 +let e = <EmptyProp {...o}/>;

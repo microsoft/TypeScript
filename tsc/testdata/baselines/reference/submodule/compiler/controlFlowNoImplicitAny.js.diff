@@ -1,10 +1,8 @@
 --- old.controlFlowNoImplicitAny.js
 +++ new.controlFlowNoImplicitAny.js
-@@= skipped -129, +129 lines =@@
- }
- 
+@@= skipped -131, +131 lines =@@
  //// [controlFlowNoImplicitAny.js]
--// CFA for 'let' with no type annotation and initializer
+ // CFA for 'let' with no type annotation and initializer
  function f1() {
 -    var x;
 +    let x;
@@ -15,9 +13,9 @@
          x = "hello";
      }
 -    var y = x; // string | number | undefined
-+    const y = x;
++    const y = x; // string | number | undefined
  }
--// CFA for 'let' with no type annotation and 'undefined' initializer
+ // CFA for 'let' with no type annotation and 'undefined' initializer
  function f2() {
 -    var x = undefined;
 +    let x = undefined;
@@ -28,9 +26,9 @@
          x = "hello";
      }
 -    var y = x; // string | number | undefined
-+    const y = x;
++    const y = x; // string | number | undefined
  }
--// CFA for 'let' with no type annotation and 'null' initializer
+ // CFA for 'let' with no type annotation and 'null' initializer
  function f3() {
 -    var x = null;
 +    let x = null;
@@ -41,9 +39,9 @@
          x = "hello";
      }
 -    var y = x; // string | number | null
-+    const y = x;
++    const y = x; // string | number | null
  }
--// No CFA for 'let' with with type annotation
+ // No CFA for 'let' with with type annotation
  function f4() {
 -    var x;
 +    let x;
@@ -54,53 +52,45 @@
          x = "hello";
      }
 -    var y = x; // any
-+    const y = x;
++    const y = x; // any
  }
--// CFA for 'var' with no type annotation and initializer
+ // CFA for 'var' with no type annotation and initializer
  function f5() {
-     var x;
-     if (cond) {
-@@= skipped -53, +48 lines =@@
+@@= skipped -51, +51 lines =@@
      if (cond) {
          x = "hello";
      }
 -    var y = x; // string | number | undefined
-+    const y = x;
++    const y = x; // string | number | undefined
  }
--// CFA for 'var' with no type annotation and 'undefined' initializer
+ // CFA for 'var' with no type annotation and 'undefined' initializer
  function f6() {
-     var x = undefined;
-     if (cond) {
-@@= skipped -11, +10 lines =@@
+@@= skipped -11, +11 lines =@@
      if (cond) {
          x = "hello";
      }
 -    var y = x; // string | number | undefined
-+    const y = x;
++    const y = x; // string | number | undefined
  }
--// CFA for 'var' with no type annotation and 'null' initializer
+ // CFA for 'var' with no type annotation and 'null' initializer
  function f7() {
-     var x = null;
-     if (cond) {
-@@= skipped -11, +10 lines =@@
+@@= skipped -11, +11 lines =@@
      if (cond) {
          x = "hello";
      }
 -    var y = x; // string | number | null
-+    const y = x;
++    const y = x; // string | number | null
  }
--// No CFA for 'var' with with type annotation
+ // No CFA for 'var' with with type annotation
  function f8() {
-     var x;
-     if (cond) {
-@@= skipped -11, +10 lines =@@
+@@= skipped -11, +11 lines =@@
      if (cond) {
          x = "hello";
      }
 -    var y = x; // any
-+    const y = x;
++    const y = x; // any
  }
--// No CFA for captured outer variables
+ // No CFA for captured outer variables
  function f9() {
 -    var x;
 +    let x;
@@ -111,13 +101,13 @@
          x = "hello";
      }
 -    var y = x; // string | number | undefined
-+    const y = x;
++    const y = x; // string | number | undefined
      function f() {
 -        var z = x; // any
-+        const z = x;
++        const z = x; // any
      }
  }
--// No CFA for captured outer variables
+ // No CFA for captured outer variables
  function f10() {
 -    var x;
 +    let x;
@@ -130,8 +120,8 @@
 -    var y = x; // string | number | undefined
 -    var f = function () {
 -        var z = x; // any
-+    const y = x;
++    const y = x; // string | number | undefined
 +    const f = () => {
-+        const z = x;
++        const z = x; // any
      };
  }

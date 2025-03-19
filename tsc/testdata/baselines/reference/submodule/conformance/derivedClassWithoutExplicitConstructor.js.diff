@@ -36,7 +36,6 @@
 -    }
 -    return Derived;
 -}(Base));
--var r = new Derived(); // error
 +class Base {
 +    a = 1;
 +    constructor(x) { this.a = x; }
@@ -45,7 +44,7 @@
 +    x = 1;
 +    y = 'hello';
 +}
-+var r = new Derived();
+ var r = new Derived(); // error
  var r2 = new Derived(1);
 -var Base2 = /** @class */ (function () {
 -    function Base2(x) {
@@ -63,8 +62,6 @@
 -    }
 -    return D;
 -}(Base2));
--var d = new D(); // error
--var d2 = new D(new Date()); // ok
 +class Base2 {
 +    a;
 +    constructor(x) { this.a = x; }
@@ -73,5 +70,5 @@
 +    x = 2;
 +    y = null;
 +}
-+var d = new D();
-+var d2 = new D(new Date());
+ var d = new D(); // error
+ var d2 = new D(new Date()); // ok

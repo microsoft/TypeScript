@@ -50,7 +50,7 @@ var p1 = Promise.resolve(`${getSpecifier()}`).then(s => require(s));
 var p11 = Promise.resolve(`${getSpecifier()}`).then(s => require(s));
 const p2 = Promise.resolve(`${whatToLoad ? getSpecifier() : "defaulPath"}`).then(s => require(s));
 p1.then(zero => {
-    return zero.foo();
+    return zero.foo(); // ok, zero is any
 });
 let j;
 var p3 = Promise.resolve(`${j = getSpecifier()}`).then(s => require(s));

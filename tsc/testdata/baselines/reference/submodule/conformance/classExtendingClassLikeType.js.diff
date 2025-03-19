@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Error, no Base constructor function
+ // Error, no Base constructor function
 -var D0 = /** @class */ (function (_super) {
 -    __extends(D0, _super);
 -    function D0() {
@@ -78,7 +78,8 @@
 -    }
 -    return D3;
 -}(getBase()));
--// Error, no constructors with three type arguments
++}
+ // Error, no constructors with three type arguments
 -var D4 = /** @class */ (function (_super) {
 -    __extends(D4, _super);
 -    function D4() {
@@ -86,7 +87,9 @@
 -    }
 -    return D4;
 -}(getBase()));
--// Error, constructor return types differ
++class D4 extends getBase() {
++}
+ // Error, constructor return types differ
 -var D5 = /** @class */ (function (_super) {
 -    __extends(D5, _super);
 -    function D5() {
@@ -94,8 +97,5 @@
 -    }
 -    return D5;
 -}(getBadBase()));
-+}
-+class D4 extends getBase() {
-+}
 +class D5 extends getBadBase() {
 +}

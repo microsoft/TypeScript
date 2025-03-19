@@ -15,6 +15,7 @@ namespace maker {
 
 
 //// [circularTypeofWithFunctionModule.js]
+// Repro from #6072
 class Foo {
 }
 function maker(value) {

@@ -58,38 +58,12 @@
  }
 -var a;
 -var b;
--// Passed argument is not the same as the one being guarded.
 +let a;
 +let b;
+ // Passed argument is not the same as the one being guarded.
  if (isB(b)) {
      a.propB;
- }
--// Parameter index and argument index for the type guard target is not matching.
- if (funA(0, a)) {
--    a.propB; // Error
-+    a.propB;
- }
--// No type guard in if statement
- if (hasNoTypeGuard(a)) {
-     a.propB;
- }
- acceptingDifferentSignatureTypeGuardFunction(isC);
--// Boolean not assignable to type guard
- var assign1;
- assign1 = function (p1, p2) {
-     return true;
- };
--// Must have matching parameter index
- var assign2;
- assign2 = function (p1, p2) {
-     return true;
- };
--// No matching signature
- var assign3;
- assign3 = function (p1, p2, p3) {
-     return true;
- };
--// Type predicates in non-return type positions
+@@= skipped -34, +34 lines =@@
  var b1, is, A;
  function b2(a, is, A) { }
  ;
@@ -97,10 +71,10 @@
  is;
  A;
  {
-     return true;
+@@= skipped -7, +8 lines =@@
  }
  ;
--// Non-compatiable type predicate positions for signature declarations
+ // Non-compatiable type predicate positions for signature declarations
 -var D = /** @class */ (function () {
 -    function D(p1) {
 +class D {
@@ -132,7 +106,7 @@
 +}
  is;
  C;
--// Reference to rest parameter
+ // Reference to rest parameter
 -function b4() {
 -    var a = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
@@ -141,7 +115,7 @@
 +function b4(...a) {
      return true;
  }
--// Reference to binding pattern
+ // Reference to binding pattern
 -function b5(_a, p2, p3) {
 -    var a = _a.a, b = _a.b, p1 = _a.p1;
 +function b5({ a, b, p1 }, p2, p3) {
@@ -157,7 +131,4 @@
 +function b7({ a, b, c: { p1 } }, p2, p3) {
      return true;
  }
--// Should not crash the compiler
- var x;
- if (hasMissingParameter()) {
-     x.propA;
+ // Should not crash the compiler

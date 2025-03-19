@@ -22,8 +22,8 @@ export function foo2() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
 exports.foo2 = foo2;
-const require = require("collisionExportsRequireAndAlias_file1");
-const exports = require("collisionExportsRequireAndAlias_file3333");
+const require = require("collisionExportsRequireAndAlias_file1"); // Error
+const exports = require("collisionExportsRequireAndAlias_file3333"); // Error
 function foo() {
     require.bar();
 }

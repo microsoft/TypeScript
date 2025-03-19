@@ -1,10 +1,9 @@
 --- old.classExtendingPrimitive.js
 +++ new.classExtendingPrimitive.js
-@@= skipped -16, +16 lines =@@
- class C8 extends E { }
+@@= skipped -17, +17 lines =@@
  
  //// [classExtendingPrimitive.js]
--// classes cannot extend primitives
+ // classes cannot extend primitives
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

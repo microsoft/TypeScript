@@ -35,7 +35,7 @@ class Point {
     static Origin = { x: 0, y: 0 };
 }
 (function (Point) {
-    var Origin = "";
+    var Origin = ""; // not an error, since not exported
 })(Point || (Point = {}));
 var A;
 (function (A) {
@@ -50,6 +50,6 @@ var A;
     }
     A.Point = Point;
     (function (Point) {
-        var Origin = "";
+        var Origin = ""; // not an error since not exported
     })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));

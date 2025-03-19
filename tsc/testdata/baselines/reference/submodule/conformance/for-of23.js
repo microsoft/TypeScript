@@ -33,5 +33,5 @@ class FooIterator {
     }
 }
 for (const v of new FooIterator) {
-    const v = 0;
+    const v = 0; // new scope
 }

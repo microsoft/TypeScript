@@ -68,6 +68,7 @@ module s {
 
 
 //// [shadowedInternalModule.js]
+// all errors imported modules conflict with local variables
 var A;
 (function (A) {
     A.Point = { x: 0, y: 0 };
@@ -93,6 +94,7 @@ var b;
 (function (b) {
     b.A = a.A;
 })(b || (b = {}));
+//
 var q;
 (function (q) {
     q.Q = {};

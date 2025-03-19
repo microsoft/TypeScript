@@ -10,6 +10,6 @@
 -    return C;
 -}());
 +class C {
-+    prototype;
-+    static prototype;
++    prototype; // ok
++    static prototype; // error
 +}

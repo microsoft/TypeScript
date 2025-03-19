@@ -39,6 +39,6 @@ class C extends A {
         super(x);
     }
 }
-var r1 = B;
-var r2 = B;
-var r3 = C;
+var r1 = B; // error
+var r2 = B; // error
+var r3 = C; // ok

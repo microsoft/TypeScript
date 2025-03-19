@@ -86,6 +86,7 @@ d2({ x: new SubClass() });
 d2({ x: {} });
 d3({ y: new SubD() });
 d3({ y: new SubClass() });
+// Error
 d3({ y: new Class() });
 d3({});
 d3({ y: 1 });

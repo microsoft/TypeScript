@@ -22,5 +22,6 @@ const _i: I<A> = i;
 //// [varianceRepeatedlyPropegatesWithUnreliableFlag.js]
 const i = null;
 const p2 = null;
+// Commenting out the below line will remove the error on the `const _i: I<A> = i;`
 i.fn(null, p2);
 const _i = i;

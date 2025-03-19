@@ -1,10 +1,8 @@
 --- old.enumShadowedInfinityNaN.js
 +++ new.enumShadowedInfinityNaN.js
-@@= skipped -18, +18 lines =@@
- 
- 
+@@= skipped -20, +20 lines =@@
  //// [enumShadowedInfinityNaN.js]
--// https://github.com/microsoft/TypeScript/issues/54981
+ // https://github.com/microsoft/TypeScript/issues/54981
  {
 -    var Infinity_1 = {};
 -    var En = void 0;

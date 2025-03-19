@@ -33,8 +33,10 @@ function g2<
 function g(a2, x) {
     x = a2;
 }
+// Original CFA report of the above issue
 function g2(a2) {
     if (isA(a2)) {
-        a2.x;
+        // a2 is not narrowed
+        a2.x; // error, but should be ok
     }
 }

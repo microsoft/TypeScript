@@ -1,10 +1,9 @@
 --- old.mappedTypeNotMistakenlyHomomorphic.js
 +++ new.mappedTypeNotMistakenlyHomomorphic.js
-@@= skipped -42, +42 lines =@@
-     ABC[ABC["A"] = 0] = "A";
+@@= skipped -43, +43 lines =@@
      ABC[ABC["B"] = 1] = "B";
  })(ABC || (ABC = {}));
--// 'a' and 'b' properties required !?!?
+ // 'a' and 'b' properties required !?!?
 -var gen2TypeA = { v: "I am A", a: "" };
 -var gen2TypeB = { v: "I am B", b: "" };
 +const gen2TypeA = { v: "I am A", a: "" };

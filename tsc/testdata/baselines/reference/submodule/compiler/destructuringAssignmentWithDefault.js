@@ -38,6 +38,7 @@ function f4(options?: [string, number]) {
 const a = {};
 let x = 0;
 ({ x = 1 } = a);
+// Repro from #26235
 function f1(options) {
     let { color, width } = options || {};
     ({ color, width } = options || {});

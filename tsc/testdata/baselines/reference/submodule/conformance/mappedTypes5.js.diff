@@ -26,10 +26,10 @@
 +    let a2 = r;
 +    let a3 = pr;
 +    let a4 = rp;
-+    let b1 = p;
++    let b1 = p; // Error
 +    let b2 = r;
-+    let b3 = pr;
-+    let b4 = rp;
++    let b3 = pr; // Error
++    let b4 = rp; // Error
 +    let c1 = p;
 +    let c2 = r;
 +    let c3 = pr;

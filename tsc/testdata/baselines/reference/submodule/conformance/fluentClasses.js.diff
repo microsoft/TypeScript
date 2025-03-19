@@ -58,5 +58,4 @@
 +    }
 +}
  var c;
--var z = c.foo().bar().baz(); // Fluent pattern
-+var z = c.foo().bar().baz();
+ var z = c.foo().bar().baz(); // Fluent pattern

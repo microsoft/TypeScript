@@ -73,6 +73,12 @@ instance.returnThis().fn();
 
 
 //// [superPropertyAccessNoError.js]
+//super.publicInstanceMemberFunction in constructor of derived class
+//super.publicInstanceMemberFunction in instance member function of derived class
+//super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class
+//super.publicInstanceMemberFunction in lambda in member function
+//super.publicStaticMemberFunction in static member function of derived class
+//super.publicStaticMemberFunction in static member accessor(get and set) of derived class
 class SomeBaseClass {
     func() {
         return '';

@@ -1,10 +1,6 @@
 --- old.decoratorInstantiateModulesInFunctionBodies.js
 +++ new.decoratorInstantiateModulesInFunctionBodies.js
-@@= skipped -23, +23 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.test = void 0;
--// from #3108
+@@= skipped -27, +27 lines =@@
  exports.test = 'abc';
  //// [b.js]
  "use strict";
@@ -19,21 +15,22 @@
 +const a_1 = require("./a");
  function filter(handler) {
      return function (target, propertyKey) {
--        // ...
+         // ...
      };
  }
 -var Wat = /** @class */ (function () {
 -    function Wat() {
+-    }
+-    Wat.whatever = function () {
 +class Wat {
 +    @filter(() => a_1.test == 'abc')
 +    static whatever() {
-     }
--    Wat.whatever = function () {
--        // ...
+         // ...
 -    };
 -    __decorate([
 -        filter(function () { return a_1.test == 'abc'; })
 -    ], Wat, "whatever", null);
 -    return Wat;
 -}());
++    }
 +}

@@ -31,4 +31,5 @@ class Empty extends React.Component {
     }
 }
 exports.Empty = Empty;
+// OK
 let unionedSpread = <Empty {...obj}/>;

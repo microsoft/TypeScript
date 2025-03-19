@@ -244,10 +244,11 @@ function foo14() {
     let x;
 }
 function foo15() {
+    // https://github.com/microsoft/TypeScript/issues/42678
     const [a, b,] = (() => {
-        (() => console.log(a))();
-        console.log(a);
-        const b = () => a;
+        (() => console.log(a))(); // should error
+        console.log(a); // should error
+        const b = () => a; // should be ok
         return [
             0,
             0,
@@ -267,6 +268,7 @@ function foo17() {
     })();
     const foo = 1;
 }
+// #30907
 function wrapI1() {
     const iter = (function* foo() {
         iter;

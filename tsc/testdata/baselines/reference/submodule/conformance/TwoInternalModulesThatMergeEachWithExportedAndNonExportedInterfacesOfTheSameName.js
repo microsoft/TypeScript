@@ -40,7 +40,9 @@ var l: X.Y.Z.Line;
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.js]
+// ensure merges as expected
 var p;
 var p;
+// ensure merges as expected
 var l;
 var l;

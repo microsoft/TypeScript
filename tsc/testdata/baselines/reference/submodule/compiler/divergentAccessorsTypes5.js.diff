@@ -1,11 +1,9 @@
 --- old.divergentAccessorsTypes5.js
 +++ new.divergentAccessorsTypes5.js
-@@= skipped -39, +39 lines =@@
- 
- 
+@@= skipped -41, +41 lines =@@
  //// [divergentAccessorsTypes5.js]
--// Not really different from divergentAccessorsTypes4.ts,
--// but goes through the deferred type code
+ // Not really different from divergentAccessorsTypes4.ts,
+ // but goes through the deferred type code
 -var One = /** @class */ (function () {
 -    function One() {
 -    }
@@ -51,8 +49,6 @@
 -    });
 -    return Three;
 -}());
--// "hello"
--i.prop1 = 42; // error
 +class One {
 +    get prop1() { return ""; }
 +    set prop1(s) { }
@@ -70,9 +66,6 @@
 +    get prop2() { return ""; }
 +    set prop2(s) { }
 +}
-+i.prop1 = 42;
+ // "hello"
+ i.prop1 = 42; // error
  i.prop1 = "hello";
--// 42
- i.prop2 = 42;
--i.prop2 = "hello"; // error
-+i.prop2 = "hello";

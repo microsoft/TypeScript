@@ -25,6 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Example = void 0;
 class Example {
     constructor() {
+        // types of increment not compatible??
         this.test();
     }
     test() { }

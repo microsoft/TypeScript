@@ -10,13 +10,10 @@
 +const x = {
      y: {},
  };
--// type guard
- function isNotNull(x) {
-     return x !== null && x !== undefined;
- }
--// function which I want to call in the result of the expression
+ // type guard
+@@= skipped -13, +11 lines =@@
  function title(str) {
      return str.length > 0 ? "Dear " + str : "Dear nobody";
  }
 -isNotNull((_a = x === null || x === void 0 ? void 0 : x.y) === null || _a === void 0 ? void 0 : _a.z) ? title(x.y.z) : null; // should not error
-+isNotNull(x?.y?.z) ? title(x.y.z) : null;
++isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error

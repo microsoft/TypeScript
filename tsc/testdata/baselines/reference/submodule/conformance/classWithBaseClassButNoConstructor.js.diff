@@ -38,8 +38,8 @@
 +    foo;
 +}
  var r = C;
--var c = new C(); // error
--var c2 = new C(1); // ok
+ var c = new C(); // error
+ var c2 = new C(1); // ok
 -var Base2 = /** @class */ (function () {
 -    function Base2(x) {
 -    }
@@ -52,8 +52,6 @@
 -    }
 -    return D;
 -}(Base2));
-+var c = new C();
-+var c2 = new C(1);
 +class Base2 {
 +    constructor(x) { }
 +}
@@ -61,9 +59,9 @@
 +    foo;
 +}
  var r2 = D;
--var d = new D(); // error
--var d2 = new D(1); // ok
--// specialized base class
+ var d = new D(); // error
+ var d2 = new D(1); // ok
+ // specialized base class
 -var D2 = /** @class */ (function (_super) {
 -    __extends(D2, _super);
 -    function D2() {
@@ -71,14 +69,12 @@
 -    }
 -    return D2;
 -}(Base2));
-+var d = new D();
-+var d2 = new D(1);
 +class D2 extends Base2 {
 +    foo;
 +}
  var r3 = D2;
--var d3 = new D(); // error
--var d4 = new D(1); // ok
+ var d3 = new D(); // error
+ var d4 = new D(1); // ok
 -var D3 = /** @class */ (function (_super) {
 -    __extends(D3, _super);
 -    function D3() {
@@ -86,13 +82,9 @@
 -    }
 -    return D3;
 -}(Base2));
-+var d3 = new D();
-+var d4 = new D(1);
 +class D3 extends Base2 {
 +    foo;
 +}
  var r4 = D3;
--var d5 = new D(); // error
--var d6 = new D(1); // ok
-+var d5 = new D();
-+var d6 = new D(1);
+ var d5 = new D(); // error
+ var d6 = new D(1); // ok

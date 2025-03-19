@@ -5,8 +5,8 @@
  
  //// [esDecorators-classExpression-namedEvaluation.10.js]
 -var _a, _b;
--// 10.2.1.3 RS: EvaluateBody
--//   Initializer : `=` AssignmentExpression
+ // 10.2.1.3 RS: EvaluateBody
+ //   Initializer : `=` AssignmentExpression
  {
      class C {
 -        static x = (() => {
@@ -137,7 +137,7 @@
 +        };
      }
  }
--// @ts-ignore
+ // @ts-ignore
  {
      class C {
 -        static [_a = __propKey(f())] = (() => {
@@ -164,7 +164,7 @@
 +        };
      }
  }
--// __proto__ is not special in a class field
+ // __proto__ is not special in a class field
  {
      class C {
 -        static __proto__ = (() => {
@@ -347,7 +347,7 @@
 +        };
      }
  }
--// @ts-ignore
+ // @ts-ignore
  {
      class C {
 -        static [_b = __propKey(f())] = (() => {
@@ -374,7 +374,7 @@
 +        };
      }
  }
--// __proto__ is not special in a class field
+ // __proto__ is not special in a class field
  {
      class C {
 -        static __proto__ = (() => {
@@ -427,7 +427,7 @@
 +        };
      }
  }
--// ensure nested named evaluation happens when field is also transformed
+ // ensure nested named evaluation happens when field is also transformed
  {
 -    let C = (() => {
 -        let _static_x_decorators;

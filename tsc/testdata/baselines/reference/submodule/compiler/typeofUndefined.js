@@ -6,4 +6,4 @@ var x: any; // shouldn't be an error since type is the same as the first declara
 
 //// [typeofUndefined.js]
 var x;
-var x;
+var x; // shouldn't be an error since type is the same as the first declaration

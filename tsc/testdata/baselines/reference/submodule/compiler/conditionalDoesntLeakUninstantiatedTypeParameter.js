@@ -11,5 +11,5 @@ const z: TestSynthetic = '3'; // Type '"3""' is not assignable to type 'T'. (sho
 
 
 //// [conditionalDoesntLeakUninstantiatedTypeParameter.js]
-const y = 3;
-const z = '3';
+const y = 3; // Type '3' is not assignable to type 'T'. (shouldn't error)
+const z = '3'; // Type '"3""' is not assignable to type 'T'. (should not mention T)

@@ -1146,3 +1146,4 @@ declare var Array: {
 }
 
 //// [1.0lib-noErrors.js]
+/// <reference no-default-lib="true"/>

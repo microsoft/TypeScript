@@ -1,12 +1,9 @@
 --- old.declarationEmitDestructuring4.js
 +++ new.declarationEmitDestructuring4.js
-@@= skipped -13, +13 lines =@@
- 
- 
- //// [declarationEmitDestructuring4.js]
--// For an array binding pattern with empty elements,
--// we will not make any modification and will emit
--// the similar binding pattern users' have written
+@@= skipped -16, +16 lines =@@
+ // For an array binding pattern with empty elements,
+ // we will not make any modification and will emit
+ // the similar binding pattern users' have written
 -function baz(_a) { }
 -function baz1(_a) {
 -    _a = [1, 2, 3];

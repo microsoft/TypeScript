@@ -5,7 +5,7 @@
  var TopLevelEnum;
  (function (TopLevelEnum) {
 -    TopLevelEnum[TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this] = "ThisWasAllowedButShouldNotBe"; // Should not be allowed
-+    TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this;
++    TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this; // Should not be allowed
 +    if (typeof TopLevelEnum.ThisWasAllowedButShouldNotBe !== "string") TopLevelEnum[TopLevelEnum.ThisWasAllowedButShouldNotBe] = "ThisWasAllowedButShouldNotBe";
  })(TopLevelEnum || (TopLevelEnum = {}));
  var ModuleEnum;
@@ -14,7 +14,7 @@
 +    let EnumInModule;
      (function (EnumInModule) {
 -        EnumInModule[EnumInModule["WasADifferentError"] = this] = "WasADifferentError"; // this was handled as if this was in a module
-+        EnumInModule["WasADifferentError"] = this;
++        EnumInModule["WasADifferentError"] = this; // this was handled as if this was in a module
 +        if (typeof EnumInModule.WasADifferentError !== "string") EnumInModule[EnumInModule.WasADifferentError] = "WasADifferentError";
      })(EnumInModule || (EnumInModule = {}));
  })(ModuleEnum || (ModuleEnum = {}));

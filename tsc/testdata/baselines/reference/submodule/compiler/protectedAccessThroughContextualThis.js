@@ -34,10 +34,10 @@ class Foo {
     }
 }
 function bindCopy() {
-    this.copy = this.protec;
-    console.log(this.privat);
+    this.copy = this.protec; // Should OK
+    console.log(this.privat); // Should error
 }
 const bindCopy2 = function () {
-    this.copy = this.protec;
-    console.log(this.privat);
+    this.copy = this.protec; // Should OK
+    console.log(this.privat); // Should error
 };

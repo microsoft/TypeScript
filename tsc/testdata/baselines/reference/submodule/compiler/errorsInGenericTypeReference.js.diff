@@ -24,28 +24,30 @@
 -    }
 -    return Foo;
 -}());
--// in call type arguments
++class Foo {
++}
+ // in call type arguments
 -var testClass1 = /** @class */ (function () {
 -    function testClass1() {
 -    }
 -    testClass1.prototype.method = function () { };
 -    return testClass1;
 -}());
-+class Foo {
-+}
 +class testClass1 {
 +    method() { }
 +}
  var tc1 = new testClass1();
--tc1.method(); // error: could not find symbol V
--// in constructor type arguments
+ tc1.method(); // error: could not find symbol V
+ // in constructor type arguments
 -var testClass2 = /** @class */ (function () {
 -    function testClass2() {
 -    }
 -    return testClass2;
 -}());
--var tc2 = new testClass2(); // error: could not find symbol V
--// in method return type annotation
++class testClass2 {
++}
+ var tc2 = new testClass2(); // error: could not find symbol V
+ // in method return type annotation
 -var testClass3 = /** @class */ (function () {
 -    function testClass3() {
 -    }
@@ -59,13 +61,19 @@
 -    });
 -    return testClass3;
 -}());
--// in function return type annotation
--function testFunction1() { return null; } // error: could not find symbol V
--// in paramter types
--function testFunction2(p) { } // error: could not find symbol V
--// in var type annotation
--var f; // error: could not find symbol V
--// in constraints
++class testClass3 {
++    testMethod1() { return null; } // error: could not find symbol V
++    static testMethod2() { return null; } // error: could not find symbol V
++    set a(value) { } // error: could not find symbol V
++    property; // error: could not find symbol V
++}
+ // in function return type annotation
+ function testFunction1() { return null; } // error: could not find symbol V
+ // in paramter types
+@@= skipped -57, +26 lines =@@
+ // in var type annotation
+ var f; // error: could not find symbol V
+ // in constraints
 -var testClass4 = /** @class */ (function () {
 -    function testClass4() {
 -    }
@@ -77,7 +85,12 @@
 -    testClass6.prototype.method = function () { }; // error: could not find symbol V
 -    return testClass6;
 -}());
--// in extends clause
++class testClass4 {
++} // error: could not find symbol V
++class testClass6 {
++    method() { } // error: could not find symbol V
++}
+ // in extends clause
 -var testClass7 = /** @class */ (function (_super) {
 -    __extends(testClass7, _super);
 -    function testClass7() {
@@ -85,31 +98,13 @@
 -    }
 -    return testClass7;
 -}(Foo)); // error: could not find symbol V
--// in implements clause
++class testClass7 extends Foo {
++} // error: could not find symbol V
+ // in implements clause
 -var testClass8 = /** @class */ (function () {
 -    function testClass8() {
 -    }
 -    return testClass8;
 -}()); // error: could not find symbol V
-+tc1.method();
-+class testClass2 {
-+}
-+var tc2 = new testClass2();
-+class testClass3 {
-+    testMethod1() { return null; }
-+    static testMethod2() { return null; }
-+    set a(value) { }
-+    property;
-+}
-+function testFunction1() { return null; }
-+function testFunction2(p) { }
-+var f;
-+class testClass4 {
-+}
-+class testClass6 {
-+    method() { }
-+}
-+class testClass7 extends Foo {
-+}
 +class testClass8 {
-+}
++} // error: could not find symbol V

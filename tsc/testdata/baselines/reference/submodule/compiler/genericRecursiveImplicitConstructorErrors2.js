@@ -42,6 +42,7 @@ var TypeScript2;
     class PullSymbol {
         constructor(name, declKind) {
         }
+        // link methods
         addOutgoingLink(linkTo, kind) {
         }
         getType() {

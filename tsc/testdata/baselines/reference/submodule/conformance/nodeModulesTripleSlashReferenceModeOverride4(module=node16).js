@@ -26,6 +26,7 @@ bar;
 export {};
 
 //// [index.js]
-foo;
+/// <reference types="pkg" resolution-mode="import" />
+foo; // foo should resolve while bar should not, since even though index.js is cjs, the refernce is esm
 bar;
 export {};

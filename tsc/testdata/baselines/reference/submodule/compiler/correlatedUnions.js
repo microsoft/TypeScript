@@ -363,6 +363,7 @@ processEvents([
     { name: "click", callback: ev => console.log(ev) },
     { name: "scroll", callback: ev => console.log(ev) },
 ]);
+// --------
 function ff1() {
     const funs = {
         sum: (a, b) => a + b,
@@ -379,7 +380,7 @@ function f1(funcs, key, arg) {
     funcs[key](arg);
 }
 function f2(funcs, key, arg) {
-    const func = funcs[key];
+    const func = funcs[key]; // Type Funcs[K]
     func(arg);
 }
 function f3(funcs, key, arg) {

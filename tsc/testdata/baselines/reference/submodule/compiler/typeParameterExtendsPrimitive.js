@@ -29,6 +29,7 @@ function h<T extends Record<K, number>, K extends string>(array: T[], prop: K): 
 
 
 //// [typeParameterExtendsPrimitive.js]
+// #14473
 function f() {
     var t;
     var v = {
@@ -40,6 +41,7 @@ function g(i) {
     const n = i.x;
     return i.x * 2;
 }
+// #17069
 function h(array, prop) {
     let result = 0;
     for (const v of array) {

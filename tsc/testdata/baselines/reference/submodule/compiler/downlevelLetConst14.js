@@ -101,6 +101,7 @@ var z5 = 1;
     {
         let _z = 1;
         let { a: _z5 } = { a: 1 };
+        // try to step on generated name
         use(_z);
     }
     use(z);

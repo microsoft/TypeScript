@@ -31,11 +31,10 @@
      SpecializedWidget.Widget2 = Widget2;
      function createWidget2() {
          return new Widget2();
-@@= skipped -31, +25 lines =@@
- exports.createExportedWidget2 = createExportedWidget2;
+@@= skipped -32, +26 lines =@@
  exports.createExportedWidget3 = createExportedWidget3;
  exports.createExportedWidget4 = createExportedWidget4;
--///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
+ ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
 -var Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 -var Widgets1 = require("GlobalWidgets");
 +const Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
@@ -43,7 +42,7 @@
  function createExportedWidget1() {
      return Widgets.createWidget1();
  }
-@@= skipped -23, +22 lines =@@
+@@= skipped -22, +22 lines =@@
  exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParmeterTypes1;
  exports.publicFunctionWithPrivateModuleReturnTypes = publicFunctionWithPrivateModuleReturnTypes;
  exports.publicFunctionWithPrivateModuleReturnTypes1 = publicFunctionWithPrivateModuleReturnTypes1;

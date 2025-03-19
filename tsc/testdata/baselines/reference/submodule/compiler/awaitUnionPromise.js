@@ -22,6 +22,7 @@ async function main() {
 
 
 //// [awaitUnionPromise.js]
+// https://github.com/Microsoft/TypeScript/issues/18186
 class AsyncEnumeratorDone {
 }
 ;

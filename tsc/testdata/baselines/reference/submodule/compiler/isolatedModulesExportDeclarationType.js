@@ -29,8 +29,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [test1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const T = 0;
-exports.default = T;
+const T = 0; // Error as of #56354
+exports.default = T; // Ok
 //// [test2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -40,5 +40,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [test4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-expect-error
 const doesntexist_1 = require("./doesntexist");
 exports.default = doesntexist_1.default;

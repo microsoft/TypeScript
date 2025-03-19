@@ -63,7 +63,7 @@
 -}(D2));
 +class C extends E {
 +    foo;
-+}
++} // error
 +class D extends C {
 +    bar;
 +}
@@ -72,7 +72,7 @@
 +}
 +class C2 extends E2 {
 +    foo;
-+}
++} // error
 +class D2 extends C2 {
 +    bar;
 +}

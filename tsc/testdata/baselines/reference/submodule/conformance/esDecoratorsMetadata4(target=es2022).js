@@ -43,5 +43,5 @@ class C {
     @meta('b', 'y')
     m() { }
 }
-PRIVATE_METADATA.get(C[Symbol.metadata]).a;
-PRIVATE_METADATA.get(C[Symbol.metadata]).b;
+PRIVATE_METADATA.get(C[Symbol.metadata]).a; // 'x'
+PRIVATE_METADATA.get(C[Symbol.metadata]).b; // 'y'

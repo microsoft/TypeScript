@@ -25,6 +25,7 @@ if (Math.random()) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.X = X;
 exports.Y = Y;
+// https://github.com/microsoft/TypeScript/issues/56538
 function X() { }
 if (Math.random()) {
     const X = {};

@@ -31,4 +31,4 @@ try {
 finally {
     console.log(x);
 }
-console.log(a);
+console.log(a); // <- error here

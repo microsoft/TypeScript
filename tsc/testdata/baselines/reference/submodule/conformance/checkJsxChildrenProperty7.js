@@ -45,6 +45,7 @@ function AnotherButton(p) {
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+// Error: whitespaces matters
 let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 let k2 = <Comp a={10} b="hi"><Button />
     <AnotherButton />  </Comp>;

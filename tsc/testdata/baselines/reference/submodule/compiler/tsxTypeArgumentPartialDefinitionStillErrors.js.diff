@@ -1,8 +1,0 @@
---- old.tsxTypeArgumentPartialDefinitionStillErrors.js
-+++ new.tsxTypeArgumentPartialDefinitionStillErrors.js
-@@= skipped -17, +17 lines =@@
- function SFC(props) {
-     return '';
- }
--<SFC prop={1}></SFC>; // should error
-+<SFC prop={1}></SFC>;

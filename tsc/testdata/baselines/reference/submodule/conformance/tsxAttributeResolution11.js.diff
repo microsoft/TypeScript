@@ -13,7 +13,7 @@
 -    };
 -    return MyComponent;
 -}());
--// Should be an OK
 +    props;
 +}
+ // Should be an OK
  var x = <MyComponent bar='world'/>;

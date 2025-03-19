@@ -139,6 +139,7 @@ var Ns;
     }
     Ns.foo = foo;
 })(Ns || (Ns = {}));
+// Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n) {
     return n.toString();
 };
@@ -147,6 +148,7 @@ ExpandoExpr2.m = function (n) {
     return n + 1;
 };
 var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length;
+// Should not work in typescript -- classes already have statics
 class ExpandoClass {
     n = 1001;
 }
@@ -155,6 +157,7 @@ ExpandoClass.m = function (n) {
     return n + 1;
 };
 var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n;
+// Class expressions shouldn't work in typescript either
 var ExpandoExpr3 = class {
     n = 10001;
 };

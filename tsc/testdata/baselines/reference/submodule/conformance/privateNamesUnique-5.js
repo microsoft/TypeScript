@@ -16,6 +16,7 @@ const b: A2 = new B();
 
 
 //// [privateNamesUnique-5.js]
+// same as privateNamesUnique-1, but with an interface
 class A {
     #foo;
 }

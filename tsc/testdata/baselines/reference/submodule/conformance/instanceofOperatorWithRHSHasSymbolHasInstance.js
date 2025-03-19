@@ -194,10 +194,10 @@ lhs4 instanceof Rhs10 && lhs4;
 lhs4 instanceof Rhs11 && lhs4;
 lhs4 instanceof Rhs12 && lhs4;
 if (obj instanceof A) {
-    obj;
+    obj; // A
 }
 if (obj instanceof B) {
-    obj;
+    obj; // B
 }
 lhs0 instanceof rhs14 && lhs0;
 lhs0 instanceof rhs15 && lhs0;

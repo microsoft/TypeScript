@@ -19,16 +19,14 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--var _super = 10; // No Error
+ var _super = 10; // No Error
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+var _super = 10;
+-    }
+-    Foo.prototype.x = function () {
 +class Foo {
 +    x() {
-+        var _super = 10;
-     }
--    Foo.prototype.x = function () {
--        var _super = 10; // No error
+         var _super = 10; // No error
 -    };
 -    return Foo;
 -}());
@@ -36,13 +34,12 @@
 -    __extends(b, _super_1);
 -    function b() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
+     }
+-    b.prototype.foo = function () {
 +}
 +class b extends Foo {
 +    foo() {
-+        var _super = 10;
-     }
--    b.prototype.foo = function () {
--        var _super = 10; // Should be error 
+         var _super = 10; // Should be error 
 -    };
 -    return b;
 -}(Foo));
@@ -50,15 +47,14 @@
 -    __extends(c, _super_1);
 -    function c() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
--    }
+     }
 -    c.prototype.foo = function () {
 -        var x = function () {
--            var _super = 10; // Should be error
 +}
 +class c extends Foo {
 +    foo() {
 +        var x = () => {
-+            var _super = 10;
+             var _super = 10; // Should be error
          };
 -    };
 -    return c;

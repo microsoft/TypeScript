@@ -8,6 +8,7 @@ class C2 implements string { }
 class C3 implements boolean { }
 
 //// [classImplementsPrimitive.js]
+// classes cannot implement primitives
 class C {
 }
 class C2 {

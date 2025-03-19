@@ -22,6 +22,7 @@ var c = new B.a.C();
 
 
 //// [circularImportAlias.js]
+// expected no error
 var B;
 (function (B) {
     B.a = A;

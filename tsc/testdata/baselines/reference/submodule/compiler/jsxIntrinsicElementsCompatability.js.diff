@@ -7,7 +7,7 @@
 -/// <reference path="react16.d.ts" />
 -var React = require("react");
  function SomeComponent(props) {
--    // Just so the return value is RectElement, the rendered element doesnt matter
+     // Just so the return value is RectElement, the rendered element doesnt matter
 -    return React.createElement("div", null);
 +    return <div />;
  }

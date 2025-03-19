@@ -1,15 +1,6 @@
 --- old.privacyCheckAnonymousFunctionParameter.js
 +++ new.privacyCheckAnonymousFunctionParameter.js
-@@= skipped -21, +21 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--exports.x = 1; // Makes this an external module
-+exports.x = 1;
- var Query;
- (function (Query) {
-     function fromDoWhile(doWhile) {
-@@= skipped -8, +8 lines =@@
+@@= skipped -29, +29 lines =@@
      }
      Query.fromDoWhile = fromDoWhile;
      function fromOrderBy() {

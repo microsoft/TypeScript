@@ -5,6 +5,7 @@
  
  //// [capturedLetConstInLoop6.js]
 -var _loop_1 = function (x) {
++// ====let
 +for (let x of []) {
      (function () { return x; });
 -    (function () { return x; });
@@ -209,6 +210,7 @@
 -        break;
  }
 -var _loop_11 = function (x) {
++// ====const
 +for (const x of []) {
      (function () { return x; });
 -    (function () { return x; });

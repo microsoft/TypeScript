@@ -45,8 +45,7 @@
 -        doSomething(function () { return x.length; });
 +        doSomething(() => x.length);
      }
--    x = "abc"; // causes x to be considered non-const
-+    x = "abc";
+     x = "abc"; // causes x to be considered non-const
  }
  function f6(x) {
 -    var y = x || "";

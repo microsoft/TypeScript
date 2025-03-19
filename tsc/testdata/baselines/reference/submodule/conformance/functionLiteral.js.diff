@@ -1,10 +1,9 @@
 --- old.functionLiteral.js
 +++ new.functionLiteral.js
-@@= skipped -15, +15 lines =@@
- var z: new (x: number) => number;
+@@= skipped -16, +16 lines =@@
  
  //// [functionLiteral.js]
--// basic valid forms of function literals
+ // basic valid forms of function literals
 -var x = function () { return 1; };
 +var x = () => 1;
  var x;

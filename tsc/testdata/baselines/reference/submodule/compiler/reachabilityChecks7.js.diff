@@ -13,7 +13,7 @@
 -        step((generator = generator.apply(thisArg, _arguments || [])).next());
 -    });
 -};
--// async function without return type annotation - error
+ // async function without return type annotation - error
 -function f1() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -    });
@@ -24,7 +24,7 @@
 -    });
 +let x = async function () {
  };
--// async function with which promised type is void - return can be omitted
+ // async function with which promised type is void - return can be omitted
 -function f2() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -    });

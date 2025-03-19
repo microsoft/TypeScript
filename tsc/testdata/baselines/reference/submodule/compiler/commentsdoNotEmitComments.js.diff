@@ -1,6 +1,12 @@
 --- old.commentsdoNotEmitComments.js
 +++ new.commentsdoNotEmitComments.js
-@@= skipped -100, +100 lines =@@
+@@= skipped -95, +95 lines =@@
+ 
+ //// [commentsdoNotEmitComments.js]
+ var myVariable = 10;
+-function foo(p) {
++function foo(/** parameter comment*/ p) {
+ }
  var fooVar;
  foo(50);
  fooVar();

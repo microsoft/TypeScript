@@ -96,10 +96,14 @@ var MsPortalFx;
     let ViewModels;
     (function (ViewModels) {
         ViewModels.ReExportedEnum = Dialogs.DialogResult;
+        /**
+         * Not exported to show difference. No javascript is emmitted (as expected)
+         */
         var DialogButtons = Dialogs.MessageBoxButtons;
         ViewModels.Callback = Dialogs.DialogResultCallback;
         class SomeUsagesOfTheseConsts {
             constructor() {
+                // these do get replaced by the const value
                 const value1 = ViewModels.ReExportedEnum.Cancel;
                 console.log(value1);
                 const value2 = DialogButtons.OKCancel;

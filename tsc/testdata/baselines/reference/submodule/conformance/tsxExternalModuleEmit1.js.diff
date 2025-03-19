@@ -58,7 +58,8 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.App = void 0;
 -var React = require("react");
--// Should see var button_1 = require('./button') here
++const React = require("react");
+ // Should see var button_1 = require('./button') here
 -var button_1 = require("./button");
 -var App = /** @class */ (function (_super) {
 -    __extends(App, _super);
@@ -66,7 +67,6 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    App.prototype.render = function () {
-+const React = require("react");
 +const button_1 = require("./button");
 +class App extends React.Component {
 +    render() {

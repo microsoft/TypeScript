@@ -54,7 +54,9 @@ exports.x = 0;
 //// [constDeclarations_access_2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='constDeclarations_access_1.ts'/>
 const m = require("constDeclarations_access_1");
+// Errors
 m.x = 1;
 m.x += 2;
 m.x -= 3;
@@ -74,6 +76,7 @@ m.x--;
 --m.x;
 ++((m.x));
 m["x"] = 0;
+// OK
 var a = m.x + 1;
 function f(v) { }
 f(m.x);

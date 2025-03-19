@@ -30,13 +30,14 @@ c = i;
 i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
+// no errors expected
 class C {
     x;
     y(a) { return null; }
     get z() { return 1; }
     set z(v) { }
     0;
-    static foo;
+    static foo; // doesn't effect equivalence
 }
 var c;
 var i;

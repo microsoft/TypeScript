@@ -33,6 +33,7 @@ class Thenable {
     then(a) { }
     handleResolve(result, resolve) {
         if (result instanceof Thenable) {
+            //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
             this.resolvePromise(result, resolve);
         }
     }

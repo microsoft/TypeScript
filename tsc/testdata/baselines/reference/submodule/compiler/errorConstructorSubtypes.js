@@ -14,7 +14,7 @@ x.captureStackTrace
 
 
 //// [errorConstructorSubtypes.js]
-x = Error;
+x = Error; // OK
 x = RangeError;
 new x().message;
 x.captureStackTrace;

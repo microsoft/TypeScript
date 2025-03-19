@@ -1,10 +1,9 @@
 --- old.typeGuardsTypeParameters.js
 +++ new.typeGuardsTypeParameters.js
-@@= skipped -36, +36 lines =@@
- 
+@@= skipped -37, +37 lines =@@
  
  //// [typeGuardsTypeParameters.js]
--// Type guards involving type parameters produce intersection types
+ // Type guards involving type parameters produce intersection types
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -31,7 +30,7 @@
          x.length;
      }
  }
--// Repro from #13872
+ // Repro from #13872
  function fun(item) {
 -    var strings = [];
 -    for (var key in item) {

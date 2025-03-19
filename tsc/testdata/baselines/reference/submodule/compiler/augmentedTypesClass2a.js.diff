@@ -1,20 +1,18 @@
 --- old.augmentedTypesClass2a.js
 +++ new.augmentedTypesClass2a.js
-@@= skipped -6, +6 lines =@@
- var c2 = () => { }
+@@= skipped -7, +7 lines =@@
  
  //// [augmentedTypesClass2a.js]
--//// class then function
+ //// class then function
 -var c2 = /** @class */ (function () {
 -    function c2() {
 -    }
 -    c2.prototype.foo = function () { };
 -    return c2;
 -}()); // error
--function c2() { } // error
--var c2 = function () { };
 +class c2 {
 +    foo() { }
-+}
-+function c2() { }
++} // error
+ function c2() { } // error
+-var c2 = function () { };
 +var c2 = () => { };

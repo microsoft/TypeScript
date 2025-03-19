@@ -241,6 +241,7 @@ for (const y = 0; y < 1;) {
 
 
 //// [capturedLetConstInLoop6_ES6.js]
+// ====let
 for (let x of []) {
     (function () { return x; });
     (() => x);
@@ -347,6 +348,7 @@ for (let y = 0; y < 1; ++y) {
         continue;
     }
 }
+// ====const
 for (const x of []) {
     (function () { return x; });
     (() => x);

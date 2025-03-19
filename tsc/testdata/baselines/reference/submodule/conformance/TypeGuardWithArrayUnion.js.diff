@@ -14,7 +14,4 @@
 +}
  function saySize(message) {
      if (message instanceof Array) {
--        return message.length; // Should have type Message[] here
-+        return message.length;
-     }
- }
+         return message.length; // Should have type Message[] here

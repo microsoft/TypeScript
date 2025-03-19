@@ -41,6 +41,7 @@ const outsideClass: FuncType = function(val) { // compare to errors only on this
 }
 
 //// [classPropertyErrorOnNameOnly.js]
+// turn on strictNullChecks
 class Example {
     insideClass = function (val) {
         switch (val) {
@@ -54,8 +55,9 @@ class Example {
                 return "4";
             case 5:
                 return "5";
+            // forgot case 6
         }
-    };
+    }; // all the way to here
 }
 const outsideClass = function (val) {
     switch (val) {
@@ -69,5 +71,6 @@ const outsideClass = function (val) {
             return "4";
         case 5:
             return "5";
+        // forgot case 6
     }
 };

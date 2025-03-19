@@ -8,7 +8,7 @@
  function Comp(p) {
      return <div>{p.b}</div>;
  }
--// OK
+ // OK
 -var k = <Comp a={10} b="hi" children="lol"/>;
 -var k1 = <Comp a={10} b="hi">
 +let k = <Comp a={10} b="hi" children="lol"/>;

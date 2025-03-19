@@ -13,6 +13,6 @@ class Foo {
 //// [superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.js]
 class Foo {
     constructor() {
-        super();
+        super(); // error
     }
 }

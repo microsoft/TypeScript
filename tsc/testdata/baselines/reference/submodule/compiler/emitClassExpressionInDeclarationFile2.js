@@ -41,8 +41,11 @@ var noPrivates = class {
     tags() { }
     static ps = -1;
     p = 12;
-};
+}
+// altered repro from #15066 to add private property
+;
 exports.noPrivates = noPrivates;
+// altered repro from #15066 to add private property
 class FooItem {
     foo() { }
     name;

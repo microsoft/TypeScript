@@ -6,72 +6,44 @@
  //// [anyAssignabilityInInheritance.js]
 -// any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
  var a;
--var r3 = foo2(a); // any, not a subtype of number so it skips that overload, is a subtype of itself so it picks second (if truly ambiguous it would pick first overload)
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
+ var r3 = foo2(a); // any, not a subtype of number so it skips that overload, is a subtype of itself so it picks second (if truly ambiguous it would pick first overload)
+ var r3 = foo3(a); // any
+@@= skipped -10, +9 lines =@@
+ var r3 = foo3(a); // any
+ var r3 = foo3(a); // any
+ var r3 = foo3(a); // any
 -var A = /** @class */ (function () {
 -    function A() {
 -    }
 -    return A;
 -}());
--var r3 = foo3(a); // any
++class A {
++    foo;
++}
+ var r3 = foo3(a); // any
 -var A2 = /** @class */ (function () {
 -    function A2() {
 -    }
 -    return A2;
 -}());
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
-+var r3 = foo2(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+class A {
-+    foo;
-+}
-+var r3 = foo3(a);
 +class A2 {
 +    foo;
 +}
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);
- var E;
- (function (E) {
-     E[E["A"] = 0] = "A";
- })(E || (E = {}));
--var r3 = foo3(a); // any
-+var r3 = foo3(a);
- function f() { }
- (function (f) {
+ var r3 = foo3(a); // any
+ var r3 = foo3(a); // any
+ var r3 = foo3(a); // any
+@@= skipped -24, +20 lines =@@
      f.bar = 1;
  })(f || (f = {}));
--var r3 = foo3(a); // any
+ var r3 = foo3(a); // any
 -var CC = /** @class */ (function () {
 -    function CC() {
 -    }
 -    return CC;
 -}());
-+var r3 = foo3(a);
 +class CC {
 +    baz;
 +}
  (function (CC) {
      CC.bar = 1;
  })(CC || (CC = {}));
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
--var r3 = foo3(a); // any
-+var r3 = foo3(a);
-+var r3 = foo3(a);
-+var r3 = foo3(a);

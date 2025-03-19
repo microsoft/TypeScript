@@ -77,6 +77,7 @@ function isMobile() {
 //// [uncalledFunctionChecksInConditional2.js]
 {
     const perf = window.performance;
+    // Simplified
     if (perf &&
         perf.measure &&
         perf.clearMarks &&
@@ -85,11 +86,13 @@ function isMobile() {
         perf.clearMarks("");
         perf.clearMeasures("");
     }
+    // With ||
     if (perf &&
         perf.mark &&
         perf.measure || !!true) {
         perf.mark("");
     }
+    // With ??
     if ((perf &&
         perf.mark &&
         perf.measure) ?? !!true) {
@@ -101,6 +104,7 @@ function isMobile() {
     let mark;
     let measure;
     const perf = inBrowser && window.performance;
+    /* istanbul ignore if */
     if (perf &&
         perf.mark &&
         perf.measure &&
@@ -111,6 +115,7 @@ function isMobile() {
             perf.measure(name, startTag, endTag);
             perf.clearMarks(startTag);
             perf.clearMarks(endTag);
+            // perf.clearMeasures(name)
         };
     }
 }
@@ -119,7 +124,7 @@ let _isMobile;
 function isMobile() {
     if (_isMobile === undefined) {
         const isMobileMatch = typeof window !== 'undefined' &&
-            window.matchMedia &&
+            window.matchMedia && // no error
             window.matchMedia('(max-device-width: 680px)');
         _isMobile = isMobileMatch && isMobileMatch.matches;
     }

@@ -24,6 +24,10 @@ var x: {
 
 
 //// [genericSignatureIdentity.js]
+// This test is here to remind us of our current limits of type identity checking.
+// Ideally all of the below declarations would be considered different (and thus errors)
+// but they aren't because we erase type parameters to type any and don't check that
+// constraints are identical.
 var x;
 var x;
 var x;

@@ -54,6 +54,7 @@ export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c_public = void 0;
+// Public elements
 class c_public {
     foo;
 }
@@ -70,10 +71,14 @@ exports.c_public = c_public;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicUse_im_public_mi_public = exports.publicUse_im_public_mu_private = exports.publicUse_im_public_mi_private = void 0;
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
+// Privacy errors - importing private elements
 exports.im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
 exports.im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
 exports.im_public_mi_public = require("m");
 exports.im_public_mu_public = require("m2");
+// Usage of privacy error imports
 var privateUse_im_public_mi_private = new exports.im_public_mi_private.c_public();
 exports.publicUse_im_public_mi_private = new exports.im_public_mi_private.c_public();
 var privateUse_im_public_mu_private = new exports.im_public_mu_private.c_public();

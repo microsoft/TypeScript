@@ -25,9 +25,13 @@ function qat(str: string, num: number): void {
 function foo(str, num) {
     return;
 }
+/**
+ * some sort of block quote
+ */
 function bar(str, num) {
     return;
 }
+// some sort of comment
 function baz(str, num) {
     return;
 }

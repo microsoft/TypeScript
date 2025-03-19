@@ -70,6 +70,7 @@ export interface D { }
 //// [duplicateSymbolsExportMatching.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Should report error only once for instantiated module
 var M;
 (function (M) {
     let inst;
@@ -80,6 +81,7 @@ var M;
         var t;
     })(inst = M.inst || (M.inst = {}));
 })(M || (M = {}));
+// Variables of the same / different type
 var M2;
 (function (M2) {
     var v;
@@ -90,7 +92,7 @@ var M2;
     (function (F) {
         var t;
     })(F || (F = {}));
-    function F() { }
+    function F() { } // Only one error for duplicate identifier (don't consider visibility)
     M.F = F;
 })(M || (M = {}));
 (function (M) {

@@ -9,7 +9,8 @@ while (true)
 }
 
 //// [transformArrowInBlockScopedLoopVarInitializer.js]
+// https://github.com/Microsoft/TypeScript/issues/11236
 while (true) {
     let local = null;
-    var a = () => local;
+    var a = () => local; // <-- Lambda should be converted to function()
 }

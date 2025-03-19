@@ -1,7 +1,0 @@
---- old.emitTopOfFileTripleSlashCommentOnNotEmittedNodeIfRemoveCommentsIsFalse.js
-+++ new.emitTopOfFileTripleSlashCommentOnNotEmittedNodeIfRemoveCommentsIsFalse.js
-@@= skipped -15, +15 lines =@@
- //// [file0.js]
- var x = 10;
- //// [file1.js]
--/// <reference path="file0.ts" />

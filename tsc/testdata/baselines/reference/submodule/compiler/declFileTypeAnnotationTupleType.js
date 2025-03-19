@@ -33,6 +33,7 @@ var m;
 })(m || (m = {}));
 class g {
 }
+// Just the name
 var k = [new c(), new m.c()];
 var l = k;
 var x = [new g(), new m.g(), () => new c()];

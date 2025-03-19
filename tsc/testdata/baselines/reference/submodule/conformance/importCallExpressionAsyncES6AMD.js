@@ -36,28 +36,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
 exports.fn = fn;
 async function fn() {
-    const req = await Promise.resolve().then(() => require('./test'));
+    const req = await Promise.resolve().then(() => require('./test')); // ONE
 }
 class cl1 {
     async m() {
-        const req = await Promise.resolve().then(() => require('./test'));
+        const req = await Promise.resolve().then(() => require('./test')); // TWO
     }
 }
 exports.cl1 = cl1;
 exports.obj = {
     m: async () => {
-        const req = await Promise.resolve().then(() => require('./test'));
+        const req = await Promise.resolve().then(() => require('./test')); // THREE
     }
 };
 class cl2 {
     p = {
         m: async () => {
-            const req = await Promise.resolve().then(() => require('./test'));
+            const req = await Promise.resolve().then(() => require('./test')); // FOUR
         }
     };
 }
 exports.cl2 = cl2;
 const l = async () => {
-    const req = await Promise.resolve().then(() => require('./test'));
+    const req = await Promise.resolve().then(() => require('./test')); // FIVE
 };
 exports.l = l;

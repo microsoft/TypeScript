@@ -7,8 +7,8 @@
 -
 -
 -//// [app.d.mts]
--/// <reference types="node" preserve="true" />
--export declare function drainStream(stream: NodeJS.ReadableStream): Promise<void>;
 +//// [app.mjs]
+ /// <reference types="node" preserve="true" />
+-export declare function drainStream(stream: NodeJS.ReadableStream): Promise<void>;
 +export async function drainStream(stream) {
 +}

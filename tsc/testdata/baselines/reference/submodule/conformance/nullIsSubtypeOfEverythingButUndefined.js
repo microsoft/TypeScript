@@ -94,6 +94,7 @@ var r20 = true ? null : {};
 
 
 //// [nullIsSubtypeOfEverythingButUndefined.js]
+// null is a subtype of any other types except undefined
 var r0 = true ? null : null;
 var r0 = true ? null : null;
 var u;
@@ -114,7 +115,7 @@ var r6 = true ? null : { foo: 1 };
 var r7 = true ? () => { } : null;
 var r7 = true ? null : () => { };
 var r8 = true ? (x) => { return x; } : null;
-var r8b = true ? null : (x) => { return x; };
+var r8b = true ? null : (x) => { return x; }; // type parameters not identical across declarations
 var i1;
 var r9 = true ? i1 : null;
 var r9 = true ? null : i1;
@@ -162,6 +163,10 @@ function f18(x) {
     var r18 = true ? x : null;
     var r18 = true ? null : x;
 }
+//function f18<T, U extends T>(x: U) {
+//    var r18 = true ? x : null;
+//    var r18 = true ? null : x;
+//}
 var r19 = true ? new Object() : null;
 var r19 = true ? null : new Object();
 var r20 = true ? {} : null;

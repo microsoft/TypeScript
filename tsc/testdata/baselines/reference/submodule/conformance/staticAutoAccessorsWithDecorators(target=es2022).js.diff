@@ -1,10 +1,9 @@
 --- old.staticAutoAccessorsWithDecorators(target=es2022).js
 +++ new.staticAutoAccessorsWithDecorators(target=es2022).js
-@@= skipped -14, +14 lines =@@
- 
+@@= skipped -15, +15 lines =@@
  
  //// [staticAutoAccessorsWithDecorators.js]
--// https://github.com/microsoft/TypeScript/issues/53752
+ // https://github.com/microsoft/TypeScript/issues/53752
 -var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
 -    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
 -    var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -72,8 +71,10 @@
 -    };
 -})();
 +class A {
++    // uses class reference
 +    @((t, c) => { })
 +    static accessor x = 1;
++    // uses 'this'
 +    @((t, c) => { })
 +    accessor y = 2;
 +}

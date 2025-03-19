@@ -24,6 +24,11 @@ let x = mergeStyleSets(
 )
 
 //// [mappedTypeMultiInference.js]
+// Expected:
+//   let x: {
+//       a: Style;
+//       b: Style;
+//   }
 let x = mergeStyleSets({}, {
     a: { flashy: true },
 }, {

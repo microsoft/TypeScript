@@ -15,6 +15,6 @@ var x: Foo< { a: string }, { a: string; b: number }>; // Error 2 Type '{ a: stri
 class Foo {
 }
 class Bar {
-    data;
+    data; // Error 1 Type 'Object' does not satisfy the constraint 'T' for type parameter 'U extends T'.
 }
-var x;
+var x; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type 

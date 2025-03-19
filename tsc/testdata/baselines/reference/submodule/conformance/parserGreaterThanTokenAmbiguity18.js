@@ -4,5 +4,5 @@
 1 >>>/**/= 2;
 
 //// [parserGreaterThanTokenAmbiguity18.js]
-1 >>> ;
+1 >>> ; /**/
 2;

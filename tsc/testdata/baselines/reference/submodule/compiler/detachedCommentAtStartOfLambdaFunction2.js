@@ -17,6 +17,10 @@ class TestFile {
 class TestFile {
     name;
     foo(message) {
-        return (...x) => message + this.name;
+        return (...x) => 
+        /// <summary>Test summary</summary>
+        /// <param name="message" type="String" />
+        /// <returns type="Function" />
+        message + this.name;
     }
 }

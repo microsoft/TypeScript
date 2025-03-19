@@ -31,22 +31,12 @@
 -    }
 -    return Derived;
 -}(Base));
--var x = null;
--var y = x[0];
--/*
--// Note - the equivalent for normal interface methods works fine:
--interface A {
--    foo(): Base;
 +class Base {
 +    a;
- }
--interface B<TBase extends Base> extends A {
--    foo(): TBase;
++}
 +class Derived extends Base {
 +    b;
- }
--var b: B<Derived> = null;
--var z: Derived = b.foo();
--*/ 
-+var x = null;
-+var y = x[0];
++}
+ var x = null;
+ var y = x[0];
+ /*

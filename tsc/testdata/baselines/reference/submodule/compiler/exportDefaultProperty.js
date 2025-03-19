@@ -60,6 +60,7 @@ exports.default = "foo".length;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="declarations.d.ts" />
 const foobar_1 = require("foobar");
 const foobarx_1 = require("foobarx");
 const x = X;

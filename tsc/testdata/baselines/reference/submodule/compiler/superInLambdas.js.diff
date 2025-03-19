@@ -22,12 +22,12 @@
 -var User = /** @class */ (function () {
 -    function User() {
 -        this.name = "Bob";
+-    }
+-    User.prototype.sayHello = function () {
 +class User {
 +    name = "Bob";
 +    sayHello() {
-     }
--    User.prototype.sayHello = function () {
--        //console.log("Hello, " + this.name);
+         //console.log("Hello, " + this.name);
 -    };
 -    return User;
 -}());
@@ -36,24 +36,27 @@
 -    function RegisteredUser() {
 -        var _this = _super.call(this) || this;
 -        _this.name = "Frank";
--        // super call in a constructor
--        _super.prototype.sayHello.call(_this);
--        // super call in a lambda in a constructor 
--        var x = function () { return _super.prototype.sayHello.call(_this); };
--        return _this;
++    }
 +}
 +class RegisteredUser extends User {
 +    name = "Frank";
 +    constructor() {
 +        super();
+         // super call in a constructor
+-        _super.prototype.sayHello.call(_this);
 +        super.sayHello();
+         // super call in a lambda in a constructor 
+-        var x = function () { return _super.prototype.sayHello.call(_this); };
+-        return _this;
 +        var x = () => super.sayHello();
      }
 -    RegisteredUser.prototype.sayHello = function () {
 -        var _this = this;
--        // super call in a method
++    sayHello() {
+         // super call in a method
 -        _super.prototype.sayHello.call(this);
--        // super call in a lambda in a method
++        super.sayHello();
+         // super call in a lambda in a method
 -        var x = function () { return _super.prototype.sayHello.call(_this); };
 -    };
 -    return RegisteredUser;
@@ -63,16 +66,22 @@
 -    function RegisteredUser2() {
 -        var _this = _super.call(this) || this;
 -        _this.name = "Joe";
--        // super call in a nested lambda in a constructor 
++        var x = () => super.sayHello();
++    }
++}
++class RegisteredUser2 extends User {
++    name = "Joe";
++    constructor() {
++        super();
+         // super call in a nested lambda in a constructor 
 -        var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
 -        return _this;
-+    sayHello() {
-+        super.sayHello();
-+        var x = () => super.sayHello();
++        var x = () => () => () => super.sayHello();
      }
 -    RegisteredUser2.prototype.sayHello = function () {
 -        var _this = this;
--        // super call in a nested lambda in a method
++    sayHello() {
+         // super call in a nested lambda in a method
 -        var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
 -    };
 -    return RegisteredUser2;
@@ -82,18 +91,21 @@
 -    function RegisteredUser3() {
 -        var _this = _super.call(this) || this;
 -        _this.name = "Sam";
--        // super property in a nested lambda in a constructor 
--        var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
--        return _this;
++        var x = () => () => () => super.sayHello();
++    }
 +}
-+class RegisteredUser2 extends User {
-+    name = "Joe";
++class RegisteredUser3 extends User {
++    name = "Sam";
 +    constructor() {
 +        super();
-+        var x = () => () => () => super.sayHello();
+         // super property in a nested lambda in a constructor 
+-        var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
+-        return _this;
++        var superName = () => () => () => super.name;
      }
 -    RegisteredUser3.prototype.sayHello = function () {
--        // super property in a nested lambda in a method
++    sayHello() {
+         // super property in a nested lambda in a method
 -        var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
 -    };
 -    return RegisteredUser3;
@@ -103,26 +115,6 @@
 -    function RegisteredUser4() {
 -        var _this = _super.call(this) || this;
 -        _this.name = "Mark";
--        // super in a nested lambda in a constructor 
--        var x = function () { return function () { return _super.prototype.; }; };
--        return _this;
-+    sayHello() {
-+        var x = () => () => () => super.sayHello();
-     }
--    RegisteredUser4.prototype.sayHello = function () {
--        // super in a nested lambda in a method
--        var x = function () { return function () { return _super.prototype.; }; };
--    };
--    return RegisteredUser4;
--}(User));
-+}
-+class RegisteredUser3 extends User {
-+    name = "Sam";
-+    constructor() {
-+        super();
-+        var superName = () => () => () => super.name;
-+    }
-+    sayHello() {
 +        var superName = () => () => () => super.name;
 +    }
 +}
@@ -130,9 +122,18 @@
 +    name = "Mark";
 +    constructor() {
 +        super();
+         // super in a nested lambda in a constructor 
+-        var x = function () { return function () { return _super.prototype.; }; };
+-        return _this;
 +        var x = () => () => super.;
-+    }
+     }
+-    RegisteredUser4.prototype.sayHello = function () {
 +    sayHello() {
+         // super in a nested lambda in a method
+-        var x = function () { return function () { return _super.prototype.; }; };
+-    };
+-    return RegisteredUser4;
+-}(User));
 +        var x = () => () => super.;
 +    }
 +}

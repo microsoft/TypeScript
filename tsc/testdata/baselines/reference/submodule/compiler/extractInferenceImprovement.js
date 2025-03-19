@@ -32,6 +32,7 @@ prop = getProperty3(obj, s);
 
 
 //// [extractInferenceImprovement.js]
+// repro mostly from https://github.com/Microsoft/TypeScript/issues/25065
 function getProperty2(obj, key) {
     return obj[key];
 }
@@ -41,7 +42,9 @@ function getProperty3(obj, key) {
 const s = Symbol();
 const obj = {};
 let prop;
+// should work
 prop = getProperty2(obj, 'first');
 prop = getProperty3(obj, 'first');
+// Should fail
 prop = getProperty2(obj, s);
 prop = getProperty3(obj, s);

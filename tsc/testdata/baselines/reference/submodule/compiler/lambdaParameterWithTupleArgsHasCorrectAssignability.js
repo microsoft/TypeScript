@@ -28,8 +28,10 @@ class GenericClass {
     from;
 }
 function createClass(f) {
-    return new GenericClass();
+    return new GenericClass( /* ... use f */ /* ... use f */);
 }
 function consumeClass(c) { }
+// should work
 consumeClass(createClass(str => console.log(str.length)));
+// should work
 consumeClass(createClass((str, _unused_num) => console.log(str.length)));

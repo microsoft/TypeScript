@@ -56,6 +56,7 @@ class NonAmbientClass {
     yadda() { }
 }
 exports.NonAmbientClass = NonAmbientClass;
+/////
 class NonAmbientBase {
     foo() { }
 }

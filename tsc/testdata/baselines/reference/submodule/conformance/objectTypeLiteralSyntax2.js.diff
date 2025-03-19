@@ -1,9 +1,0 @@
---- old.objectTypeLiteralSyntax2.js
-+++ new.objectTypeLiteralSyntax2.js
-@@= skipped -15, +15 lines =@@
- 
- //// [objectTypeLiteralSyntax2.js]
- var x;
--// ASI makes this work
- var y;
- var z;

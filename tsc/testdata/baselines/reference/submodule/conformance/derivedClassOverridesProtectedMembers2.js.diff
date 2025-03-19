@@ -40,7 +40,20 @@
 -    });
 -    return Base;
 -}());
--// Increase visibility of all protected members to public
++class Base {
++    a;
++    b(a) { }
++    get c() { return x; }
++    set c(v) { }
++    d;
++    static r;
++    static s(a) { }
++    static get t() { return x; }
++    static set t(v) { }
++    static u;
++    constructor(a) { }
++}
+ // Increase visibility of all protected members to public
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived(a) {
@@ -62,19 +75,6 @@
 -    });
 -    return Derived;
 -}(Base));
-+class Base {
-+    a;
-+    b(a) { }
-+    get c() { return x; }
-+    set c(v) { }
-+    d;
-+    static r;
-+    static s(a) { }
-+    static get t() { return x; }
-+    static set t(v) { }
-+    static u;
-+    constructor(a) { }
-+}
 +class Derived extends Base {
 +    a;
 +    b(a) { }
@@ -91,7 +91,7 @@
  var d = new Derived(y);
  var r1 = d.a;
  var r2 = d.b(y);
-@@= skipped -69, +39 lines =@@
+@@= skipped -69, +40 lines =@@
  var r6 = Derived.t;
  var r6a = Derived.u;
  Derived.t = y;

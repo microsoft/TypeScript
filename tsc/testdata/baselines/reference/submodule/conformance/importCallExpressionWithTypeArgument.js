@@ -15,5 +15,5 @@ exports.foo = foo;
 function foo() { return "foo"; }
 //// [1.js]
 "use strict";
-var p1 = Promise.resolve().then(() => require("./0"));
-var p2 = Promise.resolve().then(() => require("./0"));
+var p1 = Promise.resolve().then(() => require("./0")); // error
+var p2 = Promise.resolve().then(() => require("./0")); // error

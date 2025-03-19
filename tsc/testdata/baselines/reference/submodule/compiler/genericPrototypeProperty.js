@@ -17,5 +17,6 @@ class C {
     foo(x) { return null; }
 }
 var r = C.prototype;
+// should be any
 var r2 = r.x;
 var r3 = r.foo(null);

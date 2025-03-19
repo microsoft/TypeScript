@@ -40,9 +40,12 @@ class ItemSetEvent extends Event {
 class Event {
     _listeners = [];
     constructor() {
+        // TODO: remove
         this._listeners = [];
     }
     add(listener) {
+        /// <summary>Registers a new listener for the event.</summary>
+        /// <param name="listener">The callback function to register.</param>
         this._listeners.push(listener);
     }
 }

@@ -1,10 +1,9 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints5.js
 +++ new.genericCallWithObjectTypeArgsAndConstraints5.js
-@@= skipped -26, +26 lines =@@
- 
+@@= skipped -27, +27 lines =@@
  
  //// [genericCallWithObjectTypeArgsAndConstraints5.js]
--// Generic call with constraints infering type parameter from object member properties
+ // Generic call with constraints infering type parameter from object member properties
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -28,11 +27,9 @@
  }
  var c;
  var d;
--var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
+ var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
 -var r9 = foo(function () { return 1; }, function () { }); // the constraints are self-referencing, no downstream error
-+var r2 = foo(d, c);
-+var r9 = foo(() => 1, () => { });
++var r9 = foo(() => 1, () => { }); // the constraints are self-referencing, no downstream error
  function other() {
--    var r5 = foo(c, d); // error
-+    var r5 = foo(c, d);
+     var r5 = foo(c, d); // error
  }

@@ -25,8 +25,8 @@ const aPromise = import("./a.d.ts"); // error
 export class A {
 }
 //// [b.js]
-const aPromise = import("./a.ts");
+const aPromise = import("./a.ts"); // error
 export {};
 //// [c.js]
-const aPromise = import("./a.d.ts");
+const aPromise = import("./a.d.ts"); // error
 export {};

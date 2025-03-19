@@ -43,23 +43,23 @@ class c3 {
 //// [collisionRestParameterClassMethod.js]
 class c1 {
     foo(_i, ...restParameters) {
-        var _i = 10;
+        var _i = 10; // no error
     }
     fooNoError(_i) {
-        var _i = 10;
+        var _i = 10; // no error
     }
     f4(_i, ...rest) {
-        var _i;
+        var _i; // no error
     }
     f4NoError(_i) {
-        var _i;
+        var _i; // no error
     }
 }
 class c3 {
     foo(...restParameters) {
-        var _i = 10;
+        var _i = 10; // no error
     }
     fooNoError() {
-        var _i = 10;
+        var _i = 10; // no error
     }
 }

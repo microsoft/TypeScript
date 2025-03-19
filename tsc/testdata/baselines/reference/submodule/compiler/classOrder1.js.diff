@@ -6,14 +6,15 @@
  //// [classOrder1.js]
 -var A = /** @class */ (function () {
 -    function A() {
+-    }
+-    A.prototype.foo = function () {
 +class A {
 +    foo() {
-     }
--    A.prototype.foo = function () {
--        /*WScript.Echo("Here!");*/
+         /*WScript.Echo("Here!");*/
 -    };
 -    return A;
 -}());
++    }
 +}
  var a = new A();
  a.foo();

@@ -1,10 +1,9 @@
 --- old.declFileImportModuleWithExportAssignment.js
 +++ new.declFileImportModuleWithExportAssignment.js
-@@= skipped -32, +32 lines =@@
- "use strict";
+@@= skipped -33, +33 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.a = void 0;
--/**This is on import declaration*/
+ /**This is on import declaration*/
 -var a1 = require("./declFileImportModuleWithExportAssignment_0");
 +const a1 = require("./declFileImportModuleWithExportAssignment_0");
  exports.a = a1;

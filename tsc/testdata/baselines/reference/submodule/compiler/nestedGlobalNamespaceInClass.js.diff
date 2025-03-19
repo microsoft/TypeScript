@@ -1,10 +1,9 @@
 --- old.nestedGlobalNamespaceInClass.js
 +++ new.nestedGlobalNamespaceInClass.js
-@@= skipped -7, +7 lines =@@
- 
+@@= skipped -8, +8 lines =@@
  
  //// [nestedGlobalNamespaceInClass.js]
--// should not crash - from #35717
+ // should not crash - from #35717
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

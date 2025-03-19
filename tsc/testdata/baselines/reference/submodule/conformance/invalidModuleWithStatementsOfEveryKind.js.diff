@@ -1,10 +1,9 @@
 --- old.invalidModuleWithStatementsOfEveryKind.js
 +++ new.invalidModuleWithStatementsOfEveryKind.js
-@@= skipped -80, +80 lines =@@
- 
+@@= skipped -81, +81 lines =@@
  
  //// [invalidModuleWithStatementsOfEveryKind.js]
--// All of these should be an error
+ // All of these should be an error
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -84,7 +83,7 @@
      (function (Color) {
          Color[Color["Blue"] = 0] = "Blue";
          Color[Color["Red"] = 1] = "Red";
-@@= skipped -67, +37 lines =@@
+@@= skipped -66, +37 lines =@@
  })(Y4 || (Y4 = {}));
  var YY;
  (function (YY) {

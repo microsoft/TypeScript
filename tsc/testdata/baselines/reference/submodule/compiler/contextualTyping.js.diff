@@ -1,10 +1,9 @@
 --- old.contextualTyping.js
 +++ new.contextualTyping.js
-@@= skipped -226, +226 lines =@@
- 
+@@= skipped -227, +227 lines =@@
  
  //// [contextualTyping.js]
--// CONTEXT: Class property declaration
+ // CONTEXT: Class property declaration
 -var C1T5 = /** @class */ (function () {
 -    function C1T5() {
 -        this.foo = function (i) {
@@ -13,27 +12,18 @@
 -    }
 -    return C1T5;
 -}());
--// CONTEXT: Module property declaration
 +class C1T5 {
 +    foo = function (i) {
 +        return i;
 +    };
 +}
+ // CONTEXT: Module property declaration
  var C2T5;
  (function (C2T5) {
-     C2T5.foo = function (i) {
-         return i;
-     };
- })(C2T5 || (C2T5 = {}));
--// CONTEXT: Variable declaration
- var c3t1 = (function (s) { return s; });
- var c3t2 = ({
-     n: 1
-@@= skipped -39, +33 lines =@@
- var c3t14 = ({
+@@= skipped -39, +36 lines =@@
      a: []
  });
--// CONTEXT: Class property assignment
+ // CONTEXT: Class property assignment
 -var C4T5 = /** @class */ (function () {
 -    function C4T5() {
 +class C4T5 {
@@ -45,34 +35,14 @@
      }
 -    return C4T5;
 -}());
--// CONTEXT: Module property assignment
 +}
+ // CONTEXT: Module property assignment
  var C5T5;
  (function (C5T5) {
-     C5T5.foo = function (i, s) {
-         return s;
-     };
- })(C5T5 || (C5T5 = {}));
--// CONTEXT: Variable assignment
- var c6t5;
- c6t5 = function (n) { return ({}); };
--// CONTEXT: Array index assignment
- var c7t2;
- c7t2[0] = ({ n: 1 });
- var objc8 = ({});
-@@= skipped -45, +41 lines =@@
- objc8.t14 = ({
-     a: []
- });
--// CONTEXT: Function call
- function c9t5(f) { }
- ;
- c9t5(function (n) {
-     return ({});
- });
--// CONTEXT: Return statement
+@@= skipped -53, +53 lines =@@
+ // CONTEXT: Return statement
  var c10t5 = function () { return function (n) { return ({}); }; };
--// CONTEXT: Newing a class
+ // CONTEXT: Newing a class
 -var C11t5 = /** @class */ (function () {
 -    function C11t5(f) {
 -    }
@@ -83,11 +53,8 @@
 +}
  ;
  var i = new C11t5(function (n) { return ({}); });
--// CONTEXT: Type annotated expression
- var c12t1 = (function (s) { return s; });
- var c12t2 = ({
-     n: 1
-@@= skipped -53, +47 lines =@@
+ // CONTEXT: Type annotated expression
+@@= skipped -44, +42 lines =@@
      }
  };
  var x = {};

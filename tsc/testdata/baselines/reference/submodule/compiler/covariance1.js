@@ -32,7 +32,7 @@ var M;
     function f(y) { }
     M.f = f;
     var a;
-    f({ x: a });
+    f({ x: a }); // ok
     var b;
-    f({ x: b });
+    f({ x: b }); // ok covariant subtype
 })(M || (M = {}));

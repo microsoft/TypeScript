@@ -176,32 +176,32 @@ function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
 //// [recursiveConditionalTypes.js]
 function f11(tx, ta, ux, ua) {
     ta = ua;
-    ua = ta;
-    ta = tx;
-    tx = ta;
+    ua = ta; // Error
+    ta = tx; // Error
+    tx = ta; // Error
 }
 function f22(tn, tm) {
     tn = tm;
     tm = tn;
 }
-f23(['a', 'b', 'c']);
+f23(['a', 'b', 'c']); // string
 ;
-unbox(b1);
-unbox(b2);
-unbox(b3);
-unbox({ value: { value: { value: { value: { value: { value: 5 } } } } } });
-unbox(b4);
-unbox({ value: { value: { get value() { return this; } } } });
-foo(z);
+unbox(b1); // string
+unbox(b2); // string
+unbox(b3); // InfBox<string>
+unbox({ value: { value: { value: { value: { value: { value: 5 } } } } } }); // number
+unbox(b4); // { value: { value: typeof b4 }}
+unbox({ value: { value: { get value() { return this; } } } }); // { readonly value: ... }
+foo(z); // string
 function f20(x, y) {
     x = y;
     y = x;
     f20(y, x);
 }
 function f21(x, y) {
-    f21(y, x);
+    f21(y, x); // Error
 }
 let five;
 function foo2(value) {
-    return value.length;
+    return value.length; // Error
 }

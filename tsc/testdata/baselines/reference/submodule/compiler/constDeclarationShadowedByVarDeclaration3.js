@@ -12,6 +12,7 @@ class Rule {
 }
 
 //// [constDeclarationShadowedByVarDeclaration3.js]
+// Ensure only checking for const declarations shadowed by vars
 class Rule {
     regex = new RegExp('');
     name = '';

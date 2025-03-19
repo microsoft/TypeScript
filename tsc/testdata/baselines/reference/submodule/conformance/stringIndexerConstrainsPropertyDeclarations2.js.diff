@@ -1,10 +1,9 @@
 --- old.stringIndexerConstrainsPropertyDeclarations2.js
 +++ new.stringIndexerConstrainsPropertyDeclarations2.js
-@@= skipped -41, +41 lines =@@
- }
+@@= skipped -42, +42 lines =@@
  
  //// [stringIndexerConstrainsPropertyDeclarations2.js]
--// String indexer providing a constraint of a user defined type
+ // String indexer providing a constraint of a user defined type
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -46,13 +45,11 @@
 +    bar() { return ''; }
 +}
 +class Foo {
-+    a;
-+    b;
-+    c;
-+    d;
++    a; // ok
++    b; // ok
++    c; // error
++    d; // error
 +}
  var a;
--// error
+ // error
  var b = {
-     a: A,
-     b: B

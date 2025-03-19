@@ -55,6 +55,7 @@ var C;
 (function (C) {
     C.a = 1, C.c = 2;
 })(C || (C = {}));
+// Shouldn't be filtered
 export var a1 = 1;
 export let b1 = 1;
 export var c1 = 'a';

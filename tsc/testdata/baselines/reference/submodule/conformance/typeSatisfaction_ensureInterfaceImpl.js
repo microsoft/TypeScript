@@ -18,6 +18,7 @@ const car = {
 const car = {
     start() { },
     move(d) {
+        // d should be number
     },
     stop() { }
 };

@@ -14,4 +14,5 @@ var x: any;
 
 //// [file.jsx]
 var x;
+// Should be OK
 <test1 {...x}/>;

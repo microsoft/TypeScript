@@ -149,13 +149,13 @@ class C {
 }
 function f1(x) {
     if (typeof x === "boolean") {
-        x;
+        x; // never
     }
 }
 function f2(x) {
     while (true) {
         if (typeof x === "boolean") {
-            return x;
+            return x; // never
         }
     }
 }

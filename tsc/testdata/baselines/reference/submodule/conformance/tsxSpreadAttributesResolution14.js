@@ -30,7 +30,9 @@ function AnotherComponent({ property1 }: AnotherComponentProps) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Component;
 function Component(props) {
-    return (<AnotherComponent {...props} Property1/>);
+    return (
+    // Error extra property
+    <AnotherComponent {...props} Property1/>);
 }
 function AnotherComponent({ property1 }) {
     return (<span>{property1}</span>);

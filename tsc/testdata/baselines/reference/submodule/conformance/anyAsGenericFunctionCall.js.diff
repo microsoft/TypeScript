@@ -1,11 +1,6 @@
 --- old.anyAsGenericFunctionCall.js
 +++ new.anyAsGenericFunctionCall.js
-@@= skipped -12, +12 lines =@@
- var d = x<any>(x);
- 
- //// [anyAsGenericFunctionCall.js]
--// any is considered an untyped function call
--// can be called except with type arguments which is an error
+@@= skipped -17, +17 lines =@@
  var x;
  var a = x();
  var b = x('hello');

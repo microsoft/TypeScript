@@ -16,6 +16,7 @@
 -    return Foo;
 -});
 +"use strict";
++///<amd-module name='NamedModule'/>
 +class Foo {
 +    x;
 +    constructor() {

@@ -29,16 +29,16 @@ function foo() {
 //// [collisionRestParameterFunctionExpressions.js]
 function foo() {
     function f1(_i, ...restParameters) {
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f1NoError(_i) {
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f3(...restParameters) {
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f3NoError() {
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f4(_i, ...rest) {
     }

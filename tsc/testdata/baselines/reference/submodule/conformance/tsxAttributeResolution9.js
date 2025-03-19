@@ -36,5 +36,5 @@ class MyComponent {
     props;
 }
 exports.MyComponent = MyComponent;
-<MyComponent foo="bar"/>;
-<MyComponent foo={0}/>;
+<MyComponent foo="bar"/>; // ok  
+<MyComponent foo={0}/>; // should be an error

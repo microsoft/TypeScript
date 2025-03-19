@@ -1,8 +1,0 @@
---- old.moduleResolutionWithSymlinks_referenceTypes.js
-+++ new.moduleResolutionWithSymlinks_referenceTypes.js
-@@= skipped -11, +11 lines =@@
- 
- 
- //// [/app.js]
--/// <reference types="library-a" />
--/// <reference types="library-b" />

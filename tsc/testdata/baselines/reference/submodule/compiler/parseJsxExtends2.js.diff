@@ -1,10 +1,9 @@
 --- old.parseJsxExtends2.js
 +++ new.parseJsxExtends2.js
-@@= skipped -13, +13 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -14, +14 lines =@@
  exports.Foo = Foo;
  function Foo() {
--    // Error: T is not declared.
+     // Error: T is not declared.
 -    return React.createElement(T, { extends: true });
 +    return <T extends/>;
  }

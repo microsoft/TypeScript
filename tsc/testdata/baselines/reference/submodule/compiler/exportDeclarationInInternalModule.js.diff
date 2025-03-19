@@ -51,9 +51,12 @@
 -        }
 -        return SomeType;
 -    }());
--    Bbb.SomeType = SomeType;
--})(Bbb || (Bbb = {}));
--var a;
++    class SomeType {
++    }
+     Bbb.SomeType = SomeType;
++    export * from Aaa; // this line causes the nullref
+ })(Bbb || (Bbb = {}));
+ var a;
 -
 -
 -//// [exportDeclarationInInternalModule.d.ts]
@@ -62,15 +65,12 @@
 -declare class Aaa extends Bbb {
 -}
 -declare namespace Aaa {
-     class SomeType {
-     }
+-    class SomeType {
+-    }
 -}
 -declare namespace Bbb {
 -    export class SomeType {
 -    }
-+    Bbb.SomeType = SomeType;
-     export * from Aaa;
+-    export * from Aaa;
 -}
 -declare var a: Bbb.SomeType;
-+})(Bbb || (Bbb = {}));
-+var a;

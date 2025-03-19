@@ -14,4 +14,4 @@
  }
 -_A_foo = new WeakMap();
 -new A(). = 4; // Error
-+new A().#foo = 4;
++new A().#foo = 4; // Error

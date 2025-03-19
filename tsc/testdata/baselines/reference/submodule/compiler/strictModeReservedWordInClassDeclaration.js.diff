@@ -79,7 +79,7 @@
 -    }
 -    return H;
 -}(package.A));
-+    pulbic() { }
++    pulbic() { } // No Error;
 +}
 +class D {
 +}

@@ -1,10 +1,9 @@
 --- old.augmentedTypesClass4.js
 +++ new.augmentedTypesClass4.js
-@@= skipped -6, +6 lines =@@
- 
+@@= skipped -7, +7 lines =@@
  
  //// [augmentedTypesClass4.js]
--//// class then class
+ //// class then class
 -var c3 = /** @class */ (function () {
 -    function c3() {
 -    }
@@ -19,7 +18,7 @@
 -}()); // error
 +class c3 {
 +    foo() { }
-+}
++} // error
 +class c3 {
 +    bar() { }
-+}
++} // error

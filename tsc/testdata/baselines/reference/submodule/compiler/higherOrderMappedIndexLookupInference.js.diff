@@ -1,14 +1,6 @@
 --- old.higherOrderMappedIndexLookupInference.js
 +++ new.higherOrderMappedIndexLookupInference.js
-@@= skipped -28, +28 lines =@@
- 
- 
- //// [higherOrderMappedIndexLookupInference.js]
--// @strict
- function f1(a, b) {
-     a = b;
-     b = a;
-@@= skipped -13, +12 lines =@@
+@@= skipped -41, +41 lines =@@
      a = b;
      b = a;
  }

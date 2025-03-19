@@ -59,8 +59,8 @@ var Foo;
         }
         var greeter = new Greeter("Hello, world!");
         var str = greeter.greet();
-        function foo2(greeting, ...restGreetings) {
-            var greeters = [];
+        function foo2(greeting, ...restGreetings /* more greeting */) {
+            var greeters = []; /* inline block comment */
             greeters[0] = new Greeter(greeting);
             for (var i = 0; i < restGreetings.length; i++) {
                 greeters.push(new Greeter(restGreetings[i]));
@@ -68,6 +68,7 @@ var Foo;
             return greeters;
         }
         var b = foo2("Hello", "World", "!");
+        // This is simple signle line comment
         for (var j = 0; j < b.length; j++) {
             b[j].greet();
         }

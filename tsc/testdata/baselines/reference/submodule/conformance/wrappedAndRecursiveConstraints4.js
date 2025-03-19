@@ -30,4 +30,4 @@ var r = c.foo('');
 var r2 = r({ length: 3, charAt: (x) => {
         '';
         '';
-    } });
+    } }); // error

@@ -18,5 +18,5 @@ class C {
     }
 }
 var x = new C();
-x.bar2(2, "");
-x.bar2(2, "");
+x.bar2(2, ""); // should error
+x.bar2(2, ""); // should error

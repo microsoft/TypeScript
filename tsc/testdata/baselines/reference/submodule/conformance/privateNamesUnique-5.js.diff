@@ -5,7 +5,7 @@
  
  //// [privateNamesUnique-5.js]
 -"use strict";
--// same as privateNamesUnique-1, but with an interface
+ // same as privateNamesUnique-1, but with an interface
 -var _A_foo, _B_foo;
  class A {
 -    constructor() {

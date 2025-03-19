@@ -39,6 +39,7 @@ const obj = {};
 const obj1 = {
     x: 2
 };
+// OK
 let p = <Opt />;
 let y = <Opt {...obj}/>;
 let y1 = <Opt {...obj1}/>;

@@ -28,11 +28,11 @@ let t8 = { a: 'test', b: 'test' } satisfies A;
 
 
 //// [typeSatisfaction.js]
-const t1 = { a: 1 };
-const t2 = { a: 1, b: 1 };
-const t3 = {};
-const t4 = { a: "a" };
-const t5 = (m => m.substring(0));
+const t1 = { a: 1 }; // Ok
+const t2 = { a: 1, b: 1 }; // Error
+const t3 = {}; // Error
+const t4 = { a: "a" }; // Ok
+const t5 = (m => m.substring(0)); // Ok
 const t6 = [1, 2];
 let t7 = { a: 'test' };
 let t8 = { a: 'test', b: 'test' };

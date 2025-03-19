@@ -24,6 +24,7 @@ export module M {
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = exports.bar4 = exports.bar3 = exports.bar2 = exports.bar1 = exports.bar = exports.foo = void 0;
+// exported let\const bindings should not be renamed
 exports.foo = 10;
 exports.bar = "123";
 [exports.bar1] = [1];

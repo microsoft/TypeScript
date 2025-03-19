@@ -21,6 +21,7 @@ class Foo2 {
     y;
 }
 class C {
+    // Computed properties
     get [1 << 6]() { return new Foo; }
     set [1 << 6](p) { }
 }

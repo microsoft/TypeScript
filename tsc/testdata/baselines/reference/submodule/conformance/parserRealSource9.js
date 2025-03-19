@@ -213,6 +213,9 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource9.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     class Binder {
@@ -285,6 +288,7 @@ var TypeScript;
                     this.bindSymbol(scope, signature.parameters[j]);
                 }
                 if (signature.hasVariableArgList) {
+                    // check that last parameter has an array type
                     var lastParam = signature.parameters[paramLen - 1];
                     lastParam.argsOffset = paramLen - 1;
                     if (!lastParam.getType().isArray()) {
@@ -301,8 +305,8 @@ var TypeScript;
             if (type.hasMembers()) {
                 var members = type.members;
                 var ambientMembers = type.ambientMembers;
-                var typeMembers = type.getAllEnclosedTypes();
-                var ambientTypeMembers = type.getAllAmbientEnclosedTypes();
+                var typeMembers = type.getAllEnclosedTypes(); // REVIEW: Should only be getting exported types?
+                var ambientTypeMembers = type.getAllAmbientEnclosedTypes(); // REVIEW: Should only be getting exported types?
                 var memberScope = new SymbolTableScope(members, ambientMembers, typeMembers, ambientTypeMembers, type.symbol);
                 var agg = new SymbolAggregateScope(type.symbol);
                 var prevCurrentModDecl = this.checker.currentModDecl;
@@ -314,7 +318,7 @@ var TypeScript;
                     this.checker.inBind = true;
                 }
                 if (members) {
-                    this.bind(agg, type.members.allMembers);
+                    this.bind(agg, type.members.allMembers); // REVIEW: Should only be getting exported types?
                 }
                 if (typeMembers) {
                     this.bind(agg, typeMembers.allMembers);
@@ -357,6 +361,11 @@ var TypeScript;
                         }
                         var typeSymbol = symbol;
                         typeSymbol.flags |= SymbolFlags.Bound;
+                        // Since type collection happens out of order, a dynamic module referenced by an import statement
+                        // may not yet be in scope when the import symbol is created.  In that case, we need to search
+                        // out the module symbol now
+                        // Note that we'll also want to do this in resolveTypeMembers, in case the symbol is set outside the
+                        // context of a given module  (E.g., an outer import statement)
                         if (typeSymbol.aliasLink && !typeSymbol.type && typeSymbol.aliasLink.alias.nodeType == NodeType.Name) {
                             var modPath = typeSymbol.aliasLink.alias.text;
                             var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, (id) => scope.find(id, false, true));
@@ -366,6 +375,7 @@ var TypeScript;
                         }
                         if (typeSymbol.type && typeSymbol.type != this.checker.gloModType) {
                             this.bindType(scope, typeSymbol.type, typeSymbol.instanceType);
+                            // bind expansions on the parent type symbol
                             if (typeSymbol.type.isModuleType()) {
                                 for (var i = 0; i < typeSymbol.expansions.length; i++) {
                                     this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType);

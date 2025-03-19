@@ -1,9 +1,0 @@
---- old.objectTypeWithOptionalProperty1.js
-+++ new.objectTypeWithOptionalProperty1.js
-@@= skipped -6, +6 lines =@@
- 
- //// [objectTypeWithOptionalProperty1.js]
- var b = {
--    x: 1 // error
-+    x: 1
- };

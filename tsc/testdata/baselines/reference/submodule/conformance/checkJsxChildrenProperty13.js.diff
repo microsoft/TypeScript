@@ -27,10 +27,10 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    Button.prototype.render = function () {
--        // Error children are specified twice
 +const React = require("react");
 +class Button extends React.Component {
 +    render() {
+         // Error children are specified twice
          return (<InnerButton {...this.props} children="hi">
              <div>Hello World</div>
              </InnerButton>);

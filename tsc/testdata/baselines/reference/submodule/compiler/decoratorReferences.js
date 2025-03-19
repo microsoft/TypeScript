@@ -10,8 +10,8 @@ class C<T> {
 }
 
 //// [decoratorReferences.js]
-@y(1, () => C)
+@y(1, () => C) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
 class C {
-    @y(null)
-    method(x, y) { }
+    @y(null) // <-- y should resolve to the function declaration, not the parameter; T should resolve to the type parameter of the class
+    method(x, y) { } // <-- decorator y should be resolved at the class declaration, not the parameter.
 }

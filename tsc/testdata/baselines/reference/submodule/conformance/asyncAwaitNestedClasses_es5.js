@@ -18,6 +18,7 @@ class A {
 A.B.C.func();
 
 //// [asyncAwaitNestedClasses_es5.js]
+// https://github.com/Microsoft/TypeScript/issues/20744
 class A {
     static B = class B {
         static func2() {

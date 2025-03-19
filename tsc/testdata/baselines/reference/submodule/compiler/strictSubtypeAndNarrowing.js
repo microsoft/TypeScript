@@ -238,6 +238,7 @@ const a11 = [x11, x12];
 const a12 = [x12, x11];
 const a21 = [x22, x21];
 const a22 = [x21, x22];
+// Strict subtype doesn't infer index signatures in non-fresh object types
 const x31 = { a: 1 };
 const a31 = [x31, x32];
 const a32 = [x32, x31];
@@ -246,76 +247,77 @@ const a41 = [x42, x41];
 const a42 = [x41, x42];
 function fx1(f) {
     if (isFunction(f)) {
-        f;
+        f; // () => void
     }
     else {
-        f;
+        f; // undefined
     }
-    f;
+    f; // (() => void) | undefined
 }
 function fx2(f) {
     if (isFunction(f)) {
-        f;
+        f; // () => void
     }
     else {
-        f;
+        f; // undefined
     }
-    f;
+    f; // (() => void) | undefined
 }
 function fx3(f) {
     if (isFunction(f)) {
-        f;
+        f; // () => void
     }
     else {
-        f;
+        f; // undefined
     }
-    f;
+    f; // (() => void) | undefined
 }
 function fx4(f) {
     if (isFunction(f)) {
-        f;
+        f; // () => void
     }
     else {
-        f;
+        f; // undefined
     }
-    f;
+    f; // (() => void) | undefined
 }
 function checkA(f) {
     if (isFunction(f)) {
-        f;
+        f; // A | B
     }
     else {
-        f;
+        f; // C | D
     }
-    f;
+    f; // FnTypes
 }
 function checkB(f) {
     if (isFunction(f)) {
-        f;
+        f; // A | B
     }
     else {
-        f;
+        f; // C | D
     }
-    f;
+    f; // FnTypes
 }
 function checkC(f) {
     if (isFunction(f)) {
-        f;
+        f; // FnTypes
     }
     else {
-        f;
+        f; // never
     }
-    f;
+    f; // FnTypes
 }
 function checkD(f) {
     if (isFunction(f)) {
-        f;
+        f; // FnTypes
     }
     else {
-        f;
+        f; // never
     }
-    f;
+    f; // FnTypes
 }
+// Type of x = y is y with freshness preserved
 function fx10(obj1, obj2) {
     obj1 = obj2 = { x: 1, y: 2 };
     obj2 = obj1 = { x: 1, y: 2 };

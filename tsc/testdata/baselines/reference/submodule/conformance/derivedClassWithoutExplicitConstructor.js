@@ -36,7 +36,7 @@ class Derived extends Base {
     x = 1;
     y = 'hello';
 }
-var r = new Derived();
+var r = new Derived(); // error
 var r2 = new Derived(1);
 class Base2 {
     a;
@@ -46,5 +46,5 @@ class D extends Base2 {
     x = 2;
     y = null;
 }
-var d = new D();
-var d2 = new D(new Date());
+var d = new D(); // error
+var d2 = new D(new Date()); // ok

@@ -23,4 +23,4 @@ class B extends A {
 }
 var x;
 var y;
-x = y;
+x = y; // error

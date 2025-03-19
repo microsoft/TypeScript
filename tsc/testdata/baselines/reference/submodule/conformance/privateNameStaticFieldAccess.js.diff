@@ -15,8 +15,8 @@
      constructor() {
 -        console.log(__classPrivateFieldGet(_a, _a, "f", _A_myField)); //Ok
 -        console.log(__classPrivateFieldGet(this, _a, "f", _A_myField)); //Error
-+        console.log(A.#myField);
-+        console.log(this.#myField);
++        console.log(A.#myField); //Ok
++        console.log(this.#myField); //Error
      }
  }
 -_a = A;

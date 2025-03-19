@@ -65,6 +65,7 @@ function* objectLiteral7() {
 
 
 //// [es5-yieldFunctionObjectLiterals.js]
+// mainly to verify indentation of emitted code
 function g() { return "g"; }
 function* objectLiteral1() {
     const x = {

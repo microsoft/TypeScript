@@ -22,4 +22,4 @@ var mod1;
         moo() { }
     }
 })(mod1 || (mod1 = {}));
-var c;
+var c; // ERROR: C should not be visible

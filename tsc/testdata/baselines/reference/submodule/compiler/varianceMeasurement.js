@@ -87,10 +87,12 @@ const f31 = f30;
 const f32 = f30;
 const f41 = f40;
 const f42 = f40;
-const fn1 = fn;
+// Contravariant in A
+const fn1 = fn; // Error
 const fn2 = fn;
+// Covariant in B
 const fn3 = fn;
-const fn4 = fn;
+const fn4 = fn; // Error
 class C {
 }
-const c1 = new C();
+const c1 = new C(); // Error

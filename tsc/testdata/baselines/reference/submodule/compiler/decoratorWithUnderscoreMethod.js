@@ -21,10 +21,13 @@ class A {
 function dec() {
     return function (target, propKey, descr) {
         console.log(target[propKey]);
+        //logs undefined
+        //propKey has three underscores as prefix, but the method has only two underscores
     };
 }
 class A {
     @dec()
     __foo(bar) {
+        // do something with bar
     }
 }

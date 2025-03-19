@@ -16,7 +16,9 @@ as(Foo); // should emit
 //// [asOperatorASI.js]
 class Foo {
 }
+// Example 1
 var x = 10;
-as `Hello world`;
+as `Hello world`; // should not error
+// Example 2
 var y = 20;
-as(Foo);
+as(Foo); // should emit

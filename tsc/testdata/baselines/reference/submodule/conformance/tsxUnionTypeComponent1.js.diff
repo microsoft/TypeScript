@@ -37,9 +37,11 @@
 -    };
 -    return MyComponent;
 -}(React.Component));
--// Stateless Component As Props
++}
+ // Stateless Component As Props
 -React.createElement(MyComponent, { AnyComponent: function () { return React.createElement("button", null, "test"); } });
--// Component Class as Props
++<MyComponent AnyComponent={() => <button>test</button>}/>;
+ // Component Class as Props
 -var MyButtonComponent = /** @class */ (function (_super) {
 -    __extends(MyButtonComponent, _super);
 -    function MyButtonComponent() {
@@ -48,8 +50,6 @@
 -    return MyButtonComponent;
 -}(React.Component));
 -React.createElement(MyComponent, { AnyComponent: MyButtonComponent });
-+}
-+<MyComponent AnyComponent={() => <button>test</button>}/>;
 +class MyButtonComponent extends React.Component {
 +}
 +<MyComponent AnyComponent={MyButtonComponent}/>;

@@ -36,6 +36,6 @@ class MyComponent {
 exports.default = MyComponent;
 var Something;
 (function (Something) {
-    let MyComponent = 2;
+    let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
     Something.create = make(me.default);
 })(Something || (exports.Something = Something = {}));

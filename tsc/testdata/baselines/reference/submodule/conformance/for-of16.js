@@ -19,5 +19,5 @@ class MyStringIterator {
     }
 }
 var v;
-for (v of new MyStringIterator) { }
-for (v of new MyStringIterator) { }
+for (v of new MyStringIterator) { } // Should fail
+for (v of new MyStringIterator) { } // Should still fail (related errors should still be shown even though type is cached).

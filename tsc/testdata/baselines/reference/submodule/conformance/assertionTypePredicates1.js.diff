@@ -25,34 +25,8 @@
  function f01(x) {
      if (!!true) {
          assert(typeof x === "string");
-@@= skipped -44, +28 lines =@@
-     }
-     if (!!true) {
-         assert(x === undefined || typeof x === "string");
--        x; // string | undefined
-+        x;
-         assertDefined(x);
--        x; // string
-+        x;
-     }
-     if (!!true) {
-         assert(false);
--        x; // Unreachable
-+        x;
-     }
-     if (!!true) {
-         assert(false && x === undefined);
--        x; // Unreachable
-+        x;
-     }
- }
- function f02(x) {
-@@= skipped -49, +49 lines =@@
-     }
-     if (!!true) {
-         Debug.assert(false);
--        x; // Unreachable
-+        x;
+@@= skipped -96, +80 lines =@@
+         x; // Unreachable
      }
  }
 -var Test = /** @class */ (function () {
@@ -96,7 +70,7 @@
          this.assert(typeof x === "string");
          x.length;
          if (this.isTest2()) {
-@@= skipped -36, +34 lines =@@
+@@= skipped -33, +31 lines =@@
          }
          this.assertIsTest2();
          this.z;
@@ -105,7 +79,7 @@
 +    }
 +    baz(x) {
          this.assert(false);
--        x; // Unreachable
+         x; // Unreachable
 -    };
 -    return Test;
 -}());
@@ -115,7 +89,6 @@
 -        var _this = _super !== null && _super.apply(this, arguments) || this;
 -        _this.z = 0;
 -        return _this;
-+        x;
      }
 -    return Test2;
 -}(Test));
@@ -137,14 +110,13 @@
 -    };
 -    Derived.prototype.baz = function (x) {
 -        _super.prototype.assert.call(this, false);
--        x; // Unreachable
--    };
--    return Derived;
--}(Test));
 +    }
 +    baz(x) {
 +        super.assert(false);
-+        x;
+         x; // Unreachable
+-    };
+-    return Derived;
+-}(Test));
 +    }
 +}
  function f11(items) {
@@ -159,18 +131,15 @@
  }
  function f20(x) {
 -    var assert = function (value) { };
--    assert(typeof x === "string"); // Error
--    var a = [assert];
--    a[0](typeof x === "string"); // Error
--    var t1 = new Test();
--    t1.assert(typeof x === "string"); // Error
--    var t2 = new Test();
 +    const assert = (value) => { };
-+    assert(typeof x === "string");
+     assert(typeof x === "string"); // Error
+-    var a = [assert];
 +    const a = [assert];
-+    a[0](typeof x === "string");
+     a[0](typeof x === "string"); // Error
+-    var t1 = new Test();
 +    const t1 = new Test();
-+    t1.assert(typeof x === "string");
+     t1.assert(typeof x === "string"); // Error
+-    var t2 = new Test();
 +    const t2 = new Test();
      t2.assert(typeof x === "string");
  }
@@ -187,11 +156,10 @@
 -        this.assert = function (value) { };
 -    }
 -    TestPropertyDeclaration1.prototype.other = function (x) {
--        this.assert(x); // error
 +class TestPropertyDeclaration1 {
 +    assert = (value) => { };
 +    other(x) {
-+        this.assert(x);
+         this.assert(x); // error
          x;
 -    };
 -    return TestPropertyDeclaration1;
@@ -201,12 +169,11 @@
 -        this.assert = function (value) { };
      }
 -    TestPropertyDeclaration2.prototype.other = function (x) {
--        this.assert(x); // ok
 +}
 +class TestPropertyDeclaration2 {
 +    assert = (value) => { };
 +    other(x) {
-+        this.assert(x);
+         this.assert(x); // ok
          x;
 -    };
 -    return TestPropertyDeclaration2;
@@ -217,11 +184,10 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
      }
 -    ChildInheritedPropertyDeclaration.prototype.other = function (x) {
--        this.assert(x); // ok
 +}
 +class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
 +    other(x) {
-+        this.assert(x);
+         this.assert(x); // ok
          x;
 -    };
 -    return ChildInheritedPropertyDeclaration;
@@ -229,23 +195,10 @@
 +    }
 +}
  function testPropertySignature(x, y) {
--    x.assert(y); // ok
-+    x.assert(y);
+     x.assert(y); // ok
      x;
- }
- function testFunctionThisParameter1(x) {
--    this.assert(x); // ok
-+    this.assert(x);
-     x;
- }
- function testMethodSignature(x, y) {
--    x.assert(y); // ok
-+    x.assert(y);
-     x;
- }
- function testFunctionThisParameter2(x) {
--    this.assert(x); // ok
-+    this.assert(x);
+@@= skipped -63, +51 lines =@@
+     this.assert(x); // ok
      x;
  }
 -

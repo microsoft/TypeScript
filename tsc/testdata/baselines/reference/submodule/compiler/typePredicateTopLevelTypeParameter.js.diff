@@ -5,7 +5,7 @@
  
  //// [typePredicateTopLevelTypeParameter.js]
 -"use strict";
--// Repro from #51980
+ // Repro from #51980
  function getPermissions(user) {
      if (user === 'Jack')
          return 'admin';
@@ -17,4 +17,4 @@
      return a !== undefined;
  }
 -var foundAdmins = admins.filter(isDefined); // "admin"[]
-+const foundAdmins = admins.filter(isDefined);
++const foundAdmins = admins.filter(isDefined); // "admin"[]

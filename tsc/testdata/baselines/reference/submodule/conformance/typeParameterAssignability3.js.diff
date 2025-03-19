@@ -1,10 +1,9 @@
 --- old.typeParameterAssignability3.js
 +++ new.typeParameterAssignability3.js
-@@= skipped -27, +27 lines =@@
- }
+@@= skipped -28, +28 lines =@@
  
  //// [typeParameterAssignability3.js]
--// type parameters are not assignable to one another unless directly or indirectly constrained to one another
+ // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 -var Foo = /** @class */ (function () {
 -    function Foo() {
 -    }
@@ -16,18 +15,9 @@
  function foo(t, u) {
      var a;
      var b;
--    t = a; // ok
--    a = t; // ok
--    b = u; // ok
--    u = b; // ok
--    t = u; // error
--    u = t; // error
-+    t = a;
-+    a = t;
-+    b = u;
-+    u = b;
-+    t = u;
-+    u = t;
+@@= skipped -15, +13 lines =@@
+     t = u; // error
+     u = t; // error
  }
 -var C = /** @class */ (function () {
 -    function C() {
@@ -43,7 +33,7 @@
 +    t;
 +    u;
 +    r = () => {
-+        this.t = this.u;
-+        this.u = this.t;
++        this.t = this.u; // error
++        this.u = this.t; // error
 +    };
 +}

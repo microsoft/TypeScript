@@ -30,6 +30,7 @@ class D extends C {
 }
 
 //// [classWithProtectedProperty.js]
+// accessing any protected outside the class is an error
 class C {
     x;
     a = '';
@@ -42,6 +43,7 @@ class C {
 }
 class D extends C {
     method() {
+        // No errors
         var d = new D();
         var r1 = d.x;
         var r2 = d.a;

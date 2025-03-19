@@ -44,7 +44,9 @@ class Button extends React.Component {
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+// Error: no children specified
 let k = <Comp a={10} b="hi"/>;
+// Error: JSX.element is not the same as JSX.ElementClass
 let k1 = <Comp a={10} b="hi">
         <Button />
     </Comp>;

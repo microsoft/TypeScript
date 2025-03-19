@@ -6,12 +6,11 @@
  //// [thisInStatics.js]
 -var C = /** @class */ (function () {
 -    function C() {
+-    }
+-    C.f = function () {
 +class C {
 +    static f() {
-+        var y = this;
-     }
--    C.f = function () {
--        var y /*1*/ = this;
+         var y /*1*/ = this;
 -    };
 -    Object.defineProperty(C, "x", {
 -        get: function () {
@@ -23,8 +22,9 @@
 -    });
 -    return C;
 -}());
++    }
 +    static get x() {
-+        var y = this;
++        var y /*2*/ = this;
 +        return y;
 +    }
 +}

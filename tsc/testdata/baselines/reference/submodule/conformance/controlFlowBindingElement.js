@@ -95,44 +95,44 @@
 {
     const data = { param: 'value' };
     const { param = (() => { throw new Error('param is not defined'); })(), } = data;
-    console.log(param);
+    console.log(param); // should not trigger 'Unreachable code detected.'    
 }
 {
     const data = { param: 'value' };
     let foo = "";
     const { param = (() => { throw new Error('param is not defined'); })(), } = data;
-    foo;
+    foo; // should be string  
 }
 {
     const data = { param: 'value' };
     let foo = "";
     const { param = (() => { foo = undefined; })(), } = data;
-    foo;
+    foo; // should be string | undefined
 }
 {
     const data = { param: 'value' };
     let foo = "";
     const { param = (() => { return "" + 1; })(), } = data;
-    foo;
+    foo; // should be string
 }
 {
     let foo;
     let window = {};
     window.window = window;
     const { [(() => { foo = ""; return 'window'; })()]: { [(() => { return 'window'; })()]: bar } } = window;
-    foo;
+    foo; // should be string
 }
 {
     let foo;
     let window = {};
     window.window = window;
     const { [(() => { return 'window'; })()]: { [(() => { foo = ""; return 'window'; })()]: bar } } = window;
-    foo;
+    foo; // should be string
 }
 {
     let foo;
     let window = {};
     window.window = window;
     const { [(() => { return 'window'; })()]: { [(() => { return 'window'; })()]: bar = (() => { foo = ""; return window; })() } } = window;
-    foo;
+    foo; // should be string | undefined
 }

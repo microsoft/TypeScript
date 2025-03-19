@@ -1,13 +1,9 @@
 --- old.assignmentCompatWithObjectMembersAccessibility.js
 +++ new.assignmentCompatWithObjectMembersAccessibility.js
-@@= skipped -111, +111 lines =@@
- }
- 
- //// [assignmentCompatWithObjectMembersAccessibility.js]
--// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
+@@= skipped -115, +115 lines =@@
  var TargetIsPublic;
  (function (TargetIsPublic) {
--    // targets
+     // targets
 -    var Base = /** @class */ (function () {
 -        function Base() {
 -        }
@@ -19,7 +15,7 @@
      var a;
      var b;
      var i;
--    // sources
+     // sources
 -    var D = /** @class */ (function () {
 -        function D() {
 -        }
@@ -39,37 +35,10 @@
      var d;
      var e;
      a = b;
-     a = i;
-     a = d;
--    a = e; // error
-+    a = e;
-     b = a;
-     b = i;
-     b = d;
--    b = e; // error
-+    b = e;
-     i = a;
-     i = b;
-     i = d;
--    i = e; // error
-+    i = e;
-     d = a;
-     d = b;
-     d = i;
--    d = e; // error
--    e = a; // errror
--    e = b; // errror
--    e = i; // errror
--    e = d; // errror
-+    d = e;
-+    e = a;
-+    e = b;
-+    e = i;
-+    e = d;
-     e = e;
+@@= skipped -45, +39 lines =@@
  })(TargetIsPublic || (TargetIsPublic = {}));
  (function (TargetIsPublic) {
--    // targets
+     // targets
 -    var Base = /** @class */ (function () {
 -        function Base() {
 -        }
@@ -81,7 +50,7 @@
      var a;
      var b;
      var i;
--    // sources
+     // sources
 -    var D = /** @class */ (function () {
 -        function D() {
 -        }
@@ -100,43 +69,4 @@
 +    }
      var d;
      var e;
--    a = b; // error
--    a = i; // error
-+    a = b;
-+    a = i;
-     a = d;
--    a = e; // error
--    b = a; // error
-+    a = e;
-+    b = a;
-     b = i;
--    b = d; // error
--    b = e; // error
-+    b = d;
-+    b = e;
-     b = b;
--    i = a; // error
-+    i = a;
-     i = b;
--    i = d; // error
--    i = e; // error
-+    i = d;
-+    i = e;
-     i = i;
-     d = a;
--    d = b; // error
--    d = i; // error
--    d = e; // error
--    e = a; // errror
--    e = b; // errror
--    e = i; // errror
--    e = d; // errror
-+    d = b;
-+    d = i;
-+    d = e;
-+    e = a;
-+    e = b;
-+    e = i;
-+    e = d;
-     e = e;
- })(TargetIsPublic || (TargetIsPublic = {}));
+     a = b; // error

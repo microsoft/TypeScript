@@ -27,5 +27,6 @@ exports.Promise = Promise;
 //// [memberAccessMustUseModuleInstances_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='memberAccessMustUseModuleInstances_0.ts'/>
 const WinJS = require("memberAccessMustUseModuleInstances_0");
 WinJS.Promise.timeout(10);

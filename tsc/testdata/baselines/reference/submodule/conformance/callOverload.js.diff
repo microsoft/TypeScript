@@ -14,12 +14,11 @@
 -    return to.concat(ar || Array.prototype.slice.call(from));
 -};
  var n;
--fn(1); // no error
-+fn(1);
+ fn(1); // no error
  fn(1, 2, 3, 4);
  takeTwo(1, 2, 3, 4);
 -withRest.apply(void 0, __spreadArray(['a'], n, false)); // no error
-+withRest('a', ...n);
++withRest('a', ...n); // no error
  withRest();
 -withRest.apply(void 0, n);
 +withRest(...n);

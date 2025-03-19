@@ -32,6 +32,7 @@ var s;
 var t1 = 10;
 var t2 = 10;
 var s;
+// TempateHead & TemplateTail are empty
 `${t1 ** t2}`;
 `${t1 ** t2 ** t1}`;
 `${t1 + t2 ** t1}`;

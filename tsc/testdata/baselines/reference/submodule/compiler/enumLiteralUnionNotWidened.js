@@ -23,6 +23,7 @@ function fn1(x: C): List<C> { return asList(x); }
 function fn2(x: D): List<D> { return asList(x); }
 
 //// [enumLiteralUnionNotWidened.js]
+// repro from #22093
 var A;
 (function (A) {
     A["one"] = "one";
@@ -39,5 +40,8 @@ class List {
     items = [];
 }
 function asList(arg) { return new List(); }
+// TypeScript incorrectly infers the return type of "asList(x)" to be "List<A | B>"
+// The correct type is "List<A | B.foo>"
 function fn1(x) { return asList(x); }
+// If we use the literal "foo" instead of B.foo, the correct type is inferred
 function fn2(x) { return asList(x); }

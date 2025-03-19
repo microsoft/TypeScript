@@ -20,4 +20,4 @@ b.foo(); // should not error
 
 //// [mutuallyRecursiveGenericBaseTypes1.js]
 var b;
-b.foo();
+b.foo(); // should not error

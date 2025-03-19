@@ -44,31 +44,38 @@
 -    return C;
 -}());
 +class C {
-+    "1" = "number";
-+    "-1" = "negative number";
-+    "-2.5" = "negative number";
-+    "3.141592" = "pi-sitive number";
-+    "1.2e-20" = "really small number";
-+    "Infinity" = "A gillion";
-+    "-Infinity" = "Negative-a-gillion";
-+    "NaN" = "not a number";
-+    " 1" = "leading space";
-+    "1    " = "trailing space";
-+    "" = "no nothing";
-+    "    " = "just space";
-+    "1 0 1" = "several numbers and spaces";
-+    "hunter2" = "not a password";
-+    "+Infinity" = "A gillion";
-+    "+NaN" = "not a positive number";
-+    "-NaN" = "not a negative number";
-+    "+1" = "positive number (for the paranoid)";
-+    "1e0" = "just one";
-+    "-0" = "just zero";
-+    "-0e0" = "just zero";
-+    "0xF00D" = "hex food";
-+    "0xBEEF" = "hex beef";
-+    "0123" = "oct 83";
-+    "0o123" = "explicit oct 83";
-+    "0b101101001010" = "explicit binary";
-+    "0.000000000000000000012" = "should've been in exponential form";
++    // These all have numeric names; they should error
++    // because their types are not compatible with the numeric indexer.
++    "1" = "number"; // Error
++    "-1" = "negative number"; // Error
++    "-2.5" = "negative number"; // Error
++    "3.141592" = "pi-sitive number"; // Error
++    "1.2e-20" = "really small number"; // Error
++    "Infinity" = "A gillion"; // Error
++    "-Infinity" = "Negative-a-gillion"; // Error
++    "NaN" = "not a number"; // Error
++    // These all have *partially* numeric names,
++    // but should really be treated as plain string literals.
++    " 1" = "leading space"; // No error
++    "1    " = "trailing space"; // No error
++    "" = "no nothing"; // No error
++    "    " = "just space"; // No error
++    "1 0 1" = "several numbers and spaces"; // No error
++    "hunter2" = "not a password"; // No error
++    "+Infinity" = "A gillion"; // No error
++    "+NaN" = "not a positive number"; // No error
++    "-NaN" = "not a negative number"; // No error
++    // These fall into the above category, however, they are "trickier";
++    // these all are *scanned* as numeric literals, but they are not written in
++    // "canonical" numeric representations.
++    "+1" = "positive number (for the paranoid)"; // No error
++    "1e0" = "just one"; // No error
++    "-0" = "just zero"; // No error
++    "-0e0" = "just zero"; // No error
++    "0xF00D" = "hex food"; // No error
++    "0xBEEF" = "hex beef"; // No error
++    "0123" = "oct 83"; // No error
++    "0o123" = "explicit oct 83"; // No error
++    "0b101101001010" = "explicit binary"; // No error
++    "0.000000000000000000012" = "should've been in exponential form"; // No error
 +}

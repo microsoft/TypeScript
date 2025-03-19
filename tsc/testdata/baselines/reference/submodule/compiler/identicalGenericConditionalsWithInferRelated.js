@@ -37,8 +37,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function f(arg) {
     let x = null;
     let y = null;
-    x = y;
-    y = x;
+    x = y; // is err, should be ok
+    y = x; // is err, should be ok
 }
 class Y {
     decode(ctor) {

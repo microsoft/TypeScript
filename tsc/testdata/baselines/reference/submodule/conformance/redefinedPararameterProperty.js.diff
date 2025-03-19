@@ -1,11 +1,8 @@
 --- old.redefinedPararameterProperty.js
 +++ new.redefinedPararameterProperty.js
-@@= skipped -19, +19 lines =@@
- }
- class Derived extends Base {
+@@= skipped -21, +21 lines =@@
      a;
--    b = this.a /*undefined*/;
-+    b = this.a;
+     b = this.a /*undefined*/;
      constructor(a) {
 -        super();
          this.a = a;

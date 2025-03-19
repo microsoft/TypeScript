@@ -9,10 +9,9 @@
      return x;
  }
  exports.a = doSomething_Actual({ prop: "test" });
--exports.a = {}; // should be fine, equivalent to below
-+exports.a = {};
+ exports.a = {}; // should be fine, equivalent to below
  exports.b = doSomething_Expected({ prop: "test" });
--exports.b = {}; // fine
+ exports.b = {}; // fine
 -
 -
 -//// [mappedTypeUnionConstraintInferences.d.ts]
@@ -32,4 +31,3 @@
 -export declare let b: {
 -    prop?: string;
 -};
-+exports.b = {};

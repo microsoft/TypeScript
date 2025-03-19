@@ -6,9 +6,9 @@
  
 +//// [typescript.js]
  //// [parserRealSource4.js]
--// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
--// See LICENSE.txt in the project root for complete license information.
--///<reference path='typescript.ts' />
+ // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+ // See LICENSE.txt in the project root for complete license information.
+ ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
 -    var BlockIntrinsics = /** @class */ (function () {
@@ -20,7 +20,6 @@
 -            this.hasOwnProperty = undefined;
 -            this.propertyIsEnumerable = undefined;
 -            this.isPrototypeOf = undefined;
--            // initialize the 'constructor' field
 +    class BlockIntrinsics {
 +        prototype = undefined;
 +        toString = undefined;
@@ -30,6 +29,7 @@
 +        propertyIsEnumerable = undefined;
 +        isPrototypeOf = undefined;
 +        constructor() {
+             // initialize the 'constructor' field
              this["constructor"] = undefined;
          }
 -        return BlockIntrinsics;
@@ -49,7 +49,7 @@
              var result = [];
              for (var k in this.table) {
                  if (this.table[k] != undefined) {
-@@= skipped -34, +28 lines =@@
+@@= skipped -34, +32 lines =@@
                  }
              }
              return result;
@@ -125,9 +125,9 @@
 +        }
 +    }
      TypeScript.StringHashTable = StringHashTable;
--    // The resident table is expected to reference the same table object, whereas the 
--    // transientTable may reference different objects over time
--    // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
+     // The resident table is expected to reference the same table object, whereas the 
+     // transientTable may reference different objects over time
+     // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
 -    var DualStringHashTable = /** @class */ (function () {
 -        function DualStringHashTable(primaryTable, secondaryTable) {
 +    class DualStringHashTable {
@@ -190,7 +190,7 @@
              var data = this.primaryTable.lookup(key);
              if (data != undefined) {
                  return data;
-@@= skipped -53, +51 lines =@@
+@@= skipped -53, +54 lines =@@
              else {
                  return this.secondaryTable.lookup(key);
              }
@@ -201,11 +201,7 @@
 +    }
      TypeScript.DualStringHashTable = DualStringHashTable;
      function numberHashFn(key) {
--        var c2 = 0x27d4eb2d; // a prime or an odd constant
-+        var c2 = 0x27d4eb2d;
-         key = (key ^ 61) ^ (key >>> 16);
-         key = key + (key << 3);
-         key = key ^ (key >>> 4);
+         var c2 = 0x27d4eb2d; // a prime or an odd constant
 @@= skipped -18, +17 lines =@@
          return key2 ^ ((key1 >> 5) + key1);
      }
@@ -278,16 +274,16 @@
 -        };
 -        return HashTable;
 -    }());
--    TypeScript.HashTable = HashTable;
--    // Simple Hash table with list of keys and values matching each other at the given index
++        }
++    }
+     TypeScript.HashTable = HashTable;
+     // Simple Hash table with list of keys and values matching each other at the given index
 -    var SimpleHashTable = /** @class */ (function () {
 -        function SimpleHashTable() {
 -            this.keys = [];
 -            this.values = [];
-         }
+-        }
 -        SimpleHashTable.prototype.lookup = function (key, findValue) {
-+    }
-+    TypeScript.HashTable = HashTable;
 +    class SimpleHashTable {
 +        keys = [];
 +        values = [];
@@ -295,7 +291,7 @@
              var searchArray = this.keys;
              if (findValue) {
                  searchArray = this.values;
-@@= skipped -24, +20 lines =@@
+@@= skipped -24, +21 lines =@@
                  }
              }
              return null;

@@ -45,6 +45,8 @@ var t = p.x;
 
 
 //// [a.js]
+/// <reference path="node_modules/math2d/index.d.ts" />
+/// <reference path="math2d-augment.d.ts" />
 let v = new Math2d.Vector(3, 2);
 let magnitude = Math2d.getLength(v);
 let p = v.translate(5, 5);

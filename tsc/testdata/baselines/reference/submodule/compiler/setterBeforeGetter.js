@@ -17,6 +17,7 @@ class Foo {
 //// [setterBeforeGetter.js]
 class Foo {
     _bar;
+    // should not be an error to order them this way
     set bar(thing) {
         this._bar = thing;
     }

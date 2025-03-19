@@ -392,6 +392,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await rimraf(out);
+            await rimraf(p); // also delete the .delete file so that it no longer shows up in a diff tool.
         }
     };
 }

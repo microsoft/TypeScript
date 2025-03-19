@@ -1,8 +1,0 @@
---- old.tsxElementResolution16.js
-+++ new.tsxElementResolution16.js
-@@= skipped -12, +12 lines =@@
- 
- //// [file.jsx]
- var obj1;
--<obj1 x={10}/>; // Error (JSX.Element is implicit any)
-+<obj1 x={10}/>;

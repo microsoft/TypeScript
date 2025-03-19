@@ -63,25 +63,25 @@ var T;
     (function (z) {
         var t;
     })(z || (z = {}));
-    var z;
+    var z; // error
     let y;
     (function (y) {
         var b;
     })(y || (y = {}));
     class y {
-    }
+    } // error
     var w;
     var f;
-    function f() { }
+    function f() { } //error
     function f2() { }
-    var f2;
+    var f2; // error
     var i;
     class C {
     }
-    function C() { }
+    function C() { } // error
     function C2() { }
     class C2 {
-    }
+    } // error
     function fi() { }
     class cli {
     }

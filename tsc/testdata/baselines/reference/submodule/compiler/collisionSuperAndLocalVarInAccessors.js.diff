@@ -19,13 +19,12 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--var _super = 10; // No Error
+ var _super = 10; // No Error
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+var _super = 10;
 +class Foo {
 +    get prop1() {
-+        var _super = 10;
++        var _super = 10; // No error
 +        return 10;
      }
 -    Object.defineProperty(Foo.prototype, "prop1", {
@@ -46,15 +45,33 @@
 -    function b() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
 +    set prop1(val) {
-+        var _super = 10;
++        var _super = 10; // No error
      }
 -    Object.defineProperty(b.prototype, "prop2", {
 -        get: function () {
--            var _super = 10; // Should be error
++}
++class b extends Foo {
++    get prop2() {
++        var _super = 10; // Should be error
++        return 10;
++    }
++    set prop2(val) {
++        var _super = 10; // Should be error
++    }
++}
++class c extends Foo {
++    get prop2() {
++        var x = () => {
+             var _super = 10; // Should be error
 -            return 10;
 -        },
 -        set: function (val) {
--            var _super = 10; // Should be error
++        };
++        return 10;
++    }
++    set prop2(val) {
++        var x = () => {
+             var _super = 10; // Should be error
 -        },
 -        enumerable: false,
 -        configurable: true
@@ -65,11 +82,7 @@
 -    __extends(c, _super_1);
 -    function c() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
-+}
-+class b extends Foo {
-+    get prop2() {
-+        var _super = 10;
-+        return 10;
++        };
      }
 -    Object.defineProperty(c.prototype, "prop2", {
 -        get: function () {
@@ -88,20 +101,4 @@
 -    });
 -    return c;
 -}(Foo));
-+    set prop2(val) {
-+        var _super = 10;
-+    }
-+}
-+class c extends Foo {
-+    get prop2() {
-+        var x = () => {
-+            var _super = 10;
-+        };
-+        return 10;
-+    }
-+    set prop2(val) {
-+        var x = () => {
-+            var _super = 10;
-+        };
-+    }
 +}

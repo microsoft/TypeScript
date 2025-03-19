@@ -220,59 +220,59 @@ function f2(x, k) {
 }
 function f3(x, y, k) {
     x[k] = y[k];
-    y[k] = x[k];
+    y[k] = x[k]; // Error
 }
 function f4(x, y, k) {
     x[k] = y[k];
-    y[k] = x[k];
+    y[k] = x[k]; // Error
 }
 function f5(x, y, k) {
-    x[k] = y[k];
-    y[k] = x[k];
+    x[k] = y[k]; // Error
+    y[k] = x[k]; // Error
 }
 function f6(x, y, k) {
-    x[k] = y[k];
-    y[k] = x[k];
+    x[k] = y[k]; // Error
+    y[k] = x[k]; // Error
 }
 function f10(x, y, k) {
-    x[k] = y[k];
+    x[k] = y[k]; // Error
     y[k] = x[k];
 }
 function f11(x, y, k) {
-    x[k] = y[k];
+    x[k] = y[k]; // Error
     y[k] = x[k];
 }
 function f12(x, y, k) {
-    x[k] = y[k];
-    y[k] = x[k];
+    x[k] = y[k]; // Error
+    y[k] = x[k]; // Error
 }
 function f13(x, y, k) {
-    x[k] = y[k];
-    y[k] = x[k];
+    x[k] = y[k]; // Error
+    y[k] = x[k]; // Error
 }
 function f20(x, y, k) {
     x[k] = y[k];
-    y[k] = x[k];
+    y[k] = x[k]; // Error
 }
 function f21(x, y, k) {
     x[k] = y[k];
-    y[k] = x[k];
+    y[k] = x[k]; // Error
 }
 function f22(x, y, k) {
     x[k] = y[k];
-    y[k] = x[k];
+    y[k] = x[k]; // Error
 }
 function f23(x, y, k) {
     x[k] = y[k];
-    y[k] = x[k];
+    y[k] = x[k]; // Error
 }
 function f30(x, y) {
-    x = y;
+    x = y; // Error
     y = x;
 }
 function f31(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f40(x, y) {
     x = y;
@@ -280,7 +280,7 @@ function f40(x, y) {
 }
 function f41(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f50(obj, key) {
     let item = obj[key];
@@ -295,7 +295,7 @@ function f60(x, y) {
     y = x;
 }
 function f61(x, y) {
-    x = y;
+    x = y; // Error
     y = x;
 }
 function f62(x, y) {
@@ -308,27 +308,27 @@ function f70(x, y) {
 }
 function f71(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f72(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f73(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f74(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f75(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f76(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f80(t) {
     return t;

@@ -9,9 +9,9 @@
 -    f: function (s) { }, // "incorrect" implicit any on 's'
 -    g: function (s) { }
 +let obj = {
-+    f(s) { },
++    f(s) { }, // "incorrect" implicit any on 's'
 +    g(s) { }
  };
--// This needs to not crash (outer node is not expression)
+ // This needs to not crash (outer node is not expression)
 -({ f: function (x) { } });
 +({ f(x) { } });

@@ -38,6 +38,7 @@ var cookieMonster: IceCreamMonster;
 cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");
 
 //// [matchReturnTypeInAllBranches.js]
+// Represents a monster who enjoys ice cream
 class IceCreamMonster {
     iceCreamFlavor;
     iceCreamRemaining;
@@ -51,6 +52,12 @@ class IceCreamMonster {
         this.soundsWhenEating = soundsWhenEating;
         this.name = name;
     }
+    /**
+    * Tells the IceCreamMonster to eat their ice cre    am!
+    *
+    * @param {number} amount The amount of ice cream to e    at.
+    * @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
+    */
     eatIceCream(amount) {
         this.iceCreamRemaining -= amount;
         if (this.iceCreamRemaining <= 0) {

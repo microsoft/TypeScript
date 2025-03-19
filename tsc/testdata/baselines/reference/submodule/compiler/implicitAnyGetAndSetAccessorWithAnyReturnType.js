@@ -26,11 +26,13 @@ class GetterOnly {
 }
 
 //// [implicitAnyGetAndSetAccessorWithAnyReturnType.js]
+// these should be errors
 class GetAndSet {
-    getAndSet = null;
+    getAndSet = null; // error at "getAndSet"
     get haveGetAndSet() {
         return this.getAndSet;
     }
+    // this shouldn't be an error
     set haveGetAndSet(value) {
         this.getAndSet = value;
     }

@@ -18,3 +18,4 @@ declare function foobar(a: typeof foo): typeof bar;
 
 //// [a.js]
 //// [b.js]
+///<reference path="a.ts"/>

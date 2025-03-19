@@ -5,9 +5,8 @@
  //// [controlFlowOptionalChain2.js]
  function funcTwo(arg) {
 -    if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
--        arg; // `B`
 +    if (arg?.type === 'B') {
-+        arg;
+         arg; // `B`
          return;
      }
      arg;
@@ -16,9 +15,8 @@
  }
  function funcThree(arg) {
 -    if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
--        arg; // `B`
 +    if (arg?.type === 'B') {
-+        arg;
+         arg; // `B`
          return;
      }
      arg;
@@ -27,89 +25,70 @@
  }
  function f1(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
--        x; // U | undefined
 +    if (x?.kind === undefined) {
-+        x;
+         x; // U | undefined
      }
      else {
--        x; // X
-+        x;
+@@= skipped -24, +24 lines =@@
      }
  }
  function f2(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
--        x; // undefined
 +    if (x?.kind === undefined) {
-+        x;
+         x; // undefined
      }
      else {
--        x; // X | N
-+        x;
+@@= skipped -8, +8 lines =@@
      }
  }
  function f3(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
--        x; // U | null
 +    if (x?.kind === undefined) {
-+        x;
+         x; // U | null
      }
      else {
--        x; // X
-+        x;
+@@= skipped -8, +8 lines =@@
      }
  }
  function f4(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
--        x; // null
 +    if (x?.kind === undefined) {
-+        x;
+         x; // null
      }
      else {
--        x; // X | N
-+        x;
+@@= skipped -8, +8 lines =@@
      }
  }
  function f5(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
--        x; // never
 +    if (x?.kind === null) {
-+        x;
+         x; // never
      }
      else {
--        x; // X | U | undefined
-+        x;
+@@= skipped -8, +8 lines =@@
      }
  }
  function f6(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
--        x; // N
 +    if (x?.kind === null) {
-+        x;
+         x; // N
      }
      else {
--        x; // X | undefined
-+        x;
+@@= skipped -8, +8 lines =@@
      }
  }
  function f7(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
--        x; // never
 +    if (x?.kind === null) {
-+        x;
+         x; // never
      }
      else {
--        x; // X | U | null
-+        x;
+@@= skipped -8, +8 lines =@@
      }
  }
  function f8(x) {
 -    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
--        x; // N
 +    if (x?.kind === null) {
-+        x;
+         x; // N
      }
      else {
--        x; // X | null
-+        x;
-     }
- }

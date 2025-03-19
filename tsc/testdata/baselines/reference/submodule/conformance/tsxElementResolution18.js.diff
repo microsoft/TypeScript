@@ -1,8 +1,0 @@
---- old.tsxElementResolution18.js
-+++ new.tsxElementResolution18.js
-@@= skipped -9, +9 lines =@@
- 
- 
- //// [file1.jsx]
--// Error under implicit any
- <div n='x'/>;

@@ -36,14 +36,16 @@ function ConditionalOrUndefined() {
     return 0;
 }
 function JustConditional() {
-    return ConditionalOrUndefined();
+    return ConditionalOrUndefined(); // shouldn't error
 }
+// For comparison...
 function genericOrUndefined() {
     return 0;
 }
 function JustGeneric() {
-    return genericOrUndefined();
+    return genericOrUndefined(); // no error
 }
+// Simplified example:
 function f() {
     const x = null;
 }

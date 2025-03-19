@@ -289,17 +289,17 @@ function f01(x) {
     }
     if (!!true) {
         assert(x === undefined || typeof x === "string");
-        x;
+        x; // string | undefined
         assertDefined(x);
-        x;
+        x; // string
     }
     if (!!true) {
         assert(false);
-        x;
+        x; // Unreachable
     }
     if (!!true) {
         assert(false && x === undefined);
-        x;
+        x; // Unreachable
     }
 }
 function f02(x) {
@@ -338,7 +338,7 @@ function f10(x) {
     }
     if (!!true) {
         Debug.assert(false);
-        x;
+        x; // Unreachable
     }
 }
 class Test {
@@ -375,7 +375,7 @@ class Test {
     }
     baz(x) {
         this.assert(false);
-        x;
+        x; // Unreachable
     }
 }
 class Test2 extends Test {
@@ -388,7 +388,7 @@ class Derived extends Test {
     }
     baz(x) {
         super.assert(false);
-        x;
+        x; // Unreachable
     }
 }
 function f11(items) {
@@ -402,11 +402,11 @@ function f11(items) {
 }
 function f20(x) {
     const assert = (value) => { };
-    assert(typeof x === "string");
+    assert(typeof x === "string"); // Error
     const a = [assert];
-    a[0](typeof x === "string");
+    a[0](typeof x === "string"); // Error
     const t1 = new Test();
-    t1.assert(typeof x === "string");
+    t1.assert(typeof x === "string"); // Error
     const t2 = new Test();
     t2.assert(typeof x === "string");
 }
@@ -419,36 +419,36 @@ function example1(things) {
 class TestPropertyDeclaration1 {
     assert = (value) => { };
     other(x) {
-        this.assert(x);
+        this.assert(x); // error
         x;
     }
 }
 class TestPropertyDeclaration2 {
     assert = (value) => { };
     other(x) {
-        this.assert(x);
+        this.assert(x); // ok
         x;
     }
 }
 class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
     other(x) {
-        this.assert(x);
+        this.assert(x); // ok
         x;
     }
 }
 function testPropertySignature(x, y) {
-    x.assert(y);
+    x.assert(y); // ok
     x;
 }
 function testFunctionThisParameter1(x) {
-    this.assert(x);
+    this.assert(x); // ok
     x;
 }
 function testMethodSignature(x, y) {
-    x.assert(y);
+    x.assert(y); // ok
     x;
 }
 function testFunctionThisParameter2(x) {
-    this.assert(x);
+    this.assert(x); // ok
     x;
 }

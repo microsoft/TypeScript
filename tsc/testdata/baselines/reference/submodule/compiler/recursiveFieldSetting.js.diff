@@ -1,10 +1,9 @@
 --- old.recursiveFieldSetting.js
 +++ new.recursiveFieldSetting.js
-@@= skipped -20, +20 lines =@@
- 
+@@= skipped -21, +21 lines =@@
  
  //// [recursiveFieldSetting.js]
--// #32721
+ // #32721
 -var Recursive1 = /** @class */ (function () {
 -    function Recursive1(parent) {
 +class Recursive1 {

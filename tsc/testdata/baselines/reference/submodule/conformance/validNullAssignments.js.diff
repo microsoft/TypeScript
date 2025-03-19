@@ -1,44 +1,17 @@
 --- old.validNullAssignments.js
 +++ new.validNullAssignments.js
-@@= skipped -37, +37 lines =@@
- var c = null;
- var d = null;
- var e = null;
--e = null; // ok
-+e = null;
- var E;
- (function (E) {
+@@= skipped -43, +43 lines =@@
      E[E["A"] = 0] = "A";
  })(E || (E = {}));
--E.A = null; // error
+ E.A = null; // error
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    return C;
 -}());
-+E.A = null;
 +class C {
 +    foo;
 +}
  var f;
--f = null; // ok
--C = null; // error
-+f = null;
-+C = null;
- var g;
--g = null; // ok
--I = null; // error
-+g = null;
-+I = null;
- var M;
- (function (M) {
-     M.x = 1;
- })(M || (M = {}));
--M = null; // error
-+M = null;
- var h = null;
- function i(a) {
-     a = null;
- }
--i = null; // error
-+i = null;
+ f = null; // ok
+ C = null; // error

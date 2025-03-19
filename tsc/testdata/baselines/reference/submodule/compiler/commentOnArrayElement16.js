@@ -11,6 +11,8 @@ const array = [
 
 //// [commentOnArrayElement16.js]
 const array = [
+    // comment start
     1,
     2,
+    // comment end
 ];

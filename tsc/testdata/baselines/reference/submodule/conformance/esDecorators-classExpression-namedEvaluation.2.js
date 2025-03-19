@@ -35,6 +35,8 @@ let x: any, f: any;
 
 //// [esDecorators-classExpression-namedEvaluation.2.js]
 let x, f;
+// 13.2.5.5 RS: PropertyDefinitionEvaluation
+//  PropertyAssignment : PropertyName `:` AssignmentExpression
 ({ x: 
     @dec
     class {
@@ -83,6 +85,7 @@ let x, f;
         @dec
         y;
     } });
+// __proto__ setters do not perform NamedEvaluation
 ({ __proto__: 
     @dec
     class {
@@ -91,6 +94,7 @@ let x, f;
     @dec
     class {
     } });
+// "__proto__" in a computed property name *does* perform NamedEvaluation
 ({ ["__proto__"]: 
     @dec
     class {

@@ -45,18 +45,20 @@ function f2(v: E2) {
 
 
 //// [equalityWithEnumTypes.js]
+// Literal enum type
 var E1;
 (function (E1) {
     E1[E1["a"] = 1] = "a";
     E1[E1["b"] = 2] = "b";
 })(E1 || (E1 = {}));
+// Numeric enum type
 var E2;
 (function (E2) {
     E2[E2["a"] = 1] = "a";
     E2[E2["b"] = 2] = "b";
 })(E2 || (E2 = {}));
 function f1(v) {
-    if (v !== 0) {
+    if (v !== 0) { // Error
         v;
     }
     if (v !== 1) {
@@ -65,7 +67,7 @@ function f1(v) {
     if (v !== 2) {
         v;
     }
-    if (v !== 3) {
+    if (v !== 3) { // Error
         v;
     }
 }

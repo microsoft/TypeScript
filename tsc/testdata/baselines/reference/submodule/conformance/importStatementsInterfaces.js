@@ -44,6 +44,7 @@ module E {
 }
 
 //// [importStatementsInterfaces.js]
+// no code gen expected
 var C;
 (function (C) {
     var a = A;
@@ -52,11 +53,13 @@ var C;
     var p;
     var p = { x: 0, y: 0, z: 0 };
 })(C || (C = {}));
+// no code gen expected
 var D;
 (function (D) {
     var a = A;
     var p;
 })(D || (D = {}));
+// no code gen expected
 var E;
 (function (E) {
     var a = A.inA;

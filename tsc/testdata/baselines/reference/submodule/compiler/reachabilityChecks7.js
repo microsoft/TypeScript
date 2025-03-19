@@ -32,10 +32,12 @@ declare function use(s: string): void;
 let x1 = () => { use("Test"); }
 
 //// [reachabilityChecks7.js]
+// async function without return type annotation - error
 async function f1() {
 }
 let x = async function () {
 };
+// async function with which promised type is void - return can be omitted
 async function f2() {
 }
 async function f3(x) {

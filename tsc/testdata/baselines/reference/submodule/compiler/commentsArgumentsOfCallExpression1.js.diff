@@ -1,27 +1,19 @@
 --- old.commentsArgumentsOfCallExpression1.js
 +++ new.commentsArgumentsOfCallExpression1.js
-@@= skipped -17, +17 lines =@@
-     /*c8*/() => { });
- 
- //// [commentsArgumentsOfCallExpression1.js]
--function foo(/*c1*/ x) { }
--foo(/*c2*/ 1);
--foo(/*c3*/ function () { });
--foo(
--/*c4*/
+@@= skipped -22, +22 lines =@@
+ foo(/*c3*/ function () { });
+ foo(
+ /*c4*/
 -function () { });
--foo(
--/*c5*/
--/*c6*/
++() => { });
+ foo(
+ /*c5*/
+ /*c6*/
 -function () { });
 -foo(/*c7*/ function () { });
--foo(
--/*c7*/
++() => { });
++foo(/*c7*/ () => { });
+ foo(
+ /*c7*/
 -/*c8*/ function () { });
-+function foo(x) { }
-+foo(1);
-+foo(function () { });
-+foo(() => { });
-+foo(() => { });
-+foo(() => { });
-+foo(() => { });
++/*c8*/ () => { });

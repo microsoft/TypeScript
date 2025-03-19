@@ -41,38 +41,39 @@ function f5<T extends string | number>(x: T & number) {
 
 
 //// [intersectionNarrowing.js]
+// Repros from #43130
 function f1(x) {
     if (x) {
-        x;
+        x; // Should narrow to T & string
     }
 }
 function f2(x) {
     if (x !== undefined) {
-        x;
+        x; // Should narrow to T & string
     }
     else {
-        x;
+        x; // Should narrow to T & undefined
     }
 }
 function f3(x) {
     if (typeof x === "string") {
-        x;
+        x; // Should narrow to T & string
     }
     else {
-        x;
+        x; // Should narrow to T & number
     }
 }
 function f4(x) {
     switch (x) {
         case 1:
             x;
-            break;
+            break; // T & 1
         case 2:
             x;
-            break;
-        default: x;
+            break; // T & 2
+        default: x; // Should narrow to never
     }
 }
 function f5(x) {
-    const t1 = x === "hello";
+    const t1 = x === "hello"; // Should be an error
 }

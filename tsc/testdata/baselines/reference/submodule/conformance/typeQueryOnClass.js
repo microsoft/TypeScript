@@ -89,6 +89,7 @@ class C {
     }
 }
 var c;
+// BUG 820454
 var r1;
 var r2;
 class D {

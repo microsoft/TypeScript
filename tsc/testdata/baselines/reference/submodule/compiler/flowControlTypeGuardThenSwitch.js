@@ -51,7 +51,7 @@ let foo = undefined;
 if (isBoth(foo)) {
     switch (foo.kind) {
         case Kind.A:
-            const myA = foo;
+            const myA = foo; // Should not be an error
             break;
         case Kind.B:
             const myB = foo;

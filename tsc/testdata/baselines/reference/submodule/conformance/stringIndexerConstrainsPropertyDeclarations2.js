@@ -42,6 +42,7 @@ var b: { [x: string]: A } = {
 }
 
 //// [stringIndexerConstrainsPropertyDeclarations2.js]
+// String indexer providing a constraint of a user defined type
 class A {
     foo() { return ''; }
 }
@@ -49,12 +50,13 @@ class B extends A {
     bar() { return ''; }
 }
 class Foo {
-    a;
-    b;
-    c;
-    d;
+    a; // ok
+    b; // ok
+    c; // error
+    d; // error
 }
 var a;
+// error
 var b = {
     a: A,
     b: B

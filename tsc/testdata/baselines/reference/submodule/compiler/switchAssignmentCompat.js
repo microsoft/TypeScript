@@ -12,5 +12,5 @@ switch (0) {
 class Foo {
 }
 switch (0) {
-    case Foo: break;
+    case Foo: break; // Error expected
 }

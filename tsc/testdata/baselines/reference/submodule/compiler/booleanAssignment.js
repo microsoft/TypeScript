@@ -16,11 +16,11 @@ b = b2; // OK
 
 //// [booleanAssignment.js]
 var b = new Boolean();
-b = 1;
-b = "a";
-b = {};
+b = 1; // Error
+b = "a"; // Error
+b = {}; // Error
 var o = {};
-o = b;
-b = true;
+o = b; // OK
+b = true; // OK
 var b2;
-b = b2;
+b = b2; // OK

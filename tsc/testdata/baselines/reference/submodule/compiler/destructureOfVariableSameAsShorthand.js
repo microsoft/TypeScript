@@ -30,13 +30,20 @@ async function main() {
 
 //// [destructureOfVariableSameAsShorthand.js]
 async function main() {
+    // These work examples as expected
     get().then((response) => {
+        // body is never
         const body = response.data;
     });
     get().then(({ data }) => {
+        // data is never
     });
     const response = await get();
+    // body is never
     const body = response.data;
+    // data is never
     const { data } = await get();
+    // The following did not work as expected.
+    // shouldBeNever should be never, but was any
     const { data: shouldBeNever } = await get();
 }

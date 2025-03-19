@@ -86,6 +86,7 @@ switch (x) {
     case ((x) => '')(2):
     default:
 }
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 class C {
     id;
 }

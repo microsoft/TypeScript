@@ -76,9 +76,9 @@ for (const k of keys) {
 //// [partialOfLargeAPIIsAbleToBeWorkedWith.js]
 const obj = {};
 for (const k of keys) {
-    obj[k] = () => "12";
+    obj[k] = () => "12"; // shouldn't cause a complexity error
 }
 const obj2 = {};
 for (const k of keys) {
-    obj2[k] = () => "12";
+    obj2[k] = () => "12"; // shouldn't cause a complexity error
 }

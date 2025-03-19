@@ -22,6 +22,7 @@ var v: UnNullify<[a: 1, b?: 2 | undefined]>;
 
 
 //// [optionalTupleElementsAndUndefined.js]
+// Types in the following declarations should be identical
 var v;
 var v;
 var v;

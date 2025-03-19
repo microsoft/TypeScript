@@ -10,7 +10,9 @@
 -        return ({});
 -    };
 -};
-+const toBoundedInteger = (bounds) => (n) => (({}));
++const toBoundedInteger = (bounds) => (n) => (
++// Implementation doesn't matter here
++({}));
  exports.toBoundedInteger = toBoundedInteger;
 -
 -

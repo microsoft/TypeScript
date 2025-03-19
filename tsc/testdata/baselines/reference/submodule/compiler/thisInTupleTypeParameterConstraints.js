@@ -26,5 +26,6 @@ f(x);
 
 
 //// [thisInTupleTypeParameterConstraints.js]
+/// <reference no-default-lib="true"/>
 let x;
 f(x);

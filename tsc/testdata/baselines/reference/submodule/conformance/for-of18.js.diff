@@ -1,8 +1,0 @@
---- old.for-of18.js
-+++ new.for-of18.js
-@@= skipped -28, +28 lines =@@
-     }
- }
- var v;
--for (v of new MyStringIterator) { } // Should succeed
-+for (v of new MyStringIterator) { }

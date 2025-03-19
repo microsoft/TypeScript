@@ -11,6 +11,7 @@ function* gen() {
 }
 
 //// [yieldInForInInDownlevelGenerator.js]
+// https://github.com/microsoft/TypeScript/issues/49808
 function* gen() {
     var obj = { foo: 1, bar: 2 };
     for (var key in obj) {

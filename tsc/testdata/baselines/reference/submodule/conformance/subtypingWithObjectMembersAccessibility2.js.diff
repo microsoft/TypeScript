@@ -1,10 +1,9 @@
 --- old.subtypingWithObjectMembersAccessibility2.js
 +++ new.subtypingWithObjectMembersAccessibility2.js
-@@= skipped -63, +63 lines =@@
- }
+@@= skipped -64, +64 lines =@@
  
  //// [subtypingWithObjectMembersAccessibility2.js]
--// Derived member is private, base member is not causes errors
+ // Derived member is private, base member is not causes errors
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -80,19 +79,19 @@
 +        foo;
 +    }
 +    class B extends A {
-+        foo;
++        foo; // error
 +    }
 +    class A2 {
 +        1;
 +    }
 +    class B2 extends A2 {
-+        1;
++        1; // error
 +    }
 +    class A3 {
 +        '1';
 +    }
 +    class B3 extends A3 {
-+        '1';
++        '1'; // error
 +    }
  })(ExplicitPublic || (ExplicitPublic = {}));
  var ImplicitPublic;
@@ -137,18 +136,18 @@
 +        foo;
 +    }
 +    class B extends A {
-+        foo;
++        foo; // error
 +    }
 +    class A2 {
 +        1;
 +    }
 +    class B2 extends A2 {
-+        1;
++        1; // error
 +    }
 +    class A3 {
 +        '1';
 +    }
 +    class B3 extends A3 {
-+        '1';
++        '1'; // error
 +    }
  })(ImplicitPublic || (ImplicitPublic = {}));

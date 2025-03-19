@@ -203,7 +203,7 @@ class C {
         return this.n + m;
     }
     explicitVoid(m) {
-        return this.n + m;
+        return this.n + m; // 'n' doesn't exist on type 'void'.
     }
 }
 class D {
@@ -218,9 +218,9 @@ class D {
 let impl = {
     a: 12,
     explicitVoid1() {
-        return this.a;
+        return this.a; // error, no 'a' in 'void'
     },
-    explicitVoid2: () => this.a,
+    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object
     explicitStructural: () => 12,
     explicitInterface: () => 12,
     explicitThis() {
@@ -228,9 +228,9 @@ let impl = {
     },
 };
 let implExplicitStructural = impl.explicitStructural;
-implExplicitStructural();
+implExplicitStructural(); // error, no 'a' in 'void'
 let implExplicitInterface = impl.explicitInterface;
-implExplicitInterface();
+implExplicitInterface(); // error, no 'a' in 'void' 
 function explicitStructural(x) {
     return x + this.y;
 }
@@ -243,24 +243,25 @@ function voidThisSpecified(x) {
 let ok = { y: 12, explicitStructural };
 let wrongPropertyType = { y: 'foo', explicitStructural };
 let wrongPropertyName = { wrongName: 12, explicitStructural };
-ok.f();
+ok.f(); // not enough arguments
 ok.f('wrong type');
 ok.f(13, 'too many arguments');
 wrongPropertyType.f(13);
 wrongPropertyName.f(13);
 let c = new C();
-c.explicitC();
+c.explicitC(); // not enough arguments
 c.explicitC('wrong type');
 c.explicitC(13, 'too many arguments');
-c.explicitThis();
+c.explicitThis(); // not enough arguments
 c.explicitThis('wrong type 2');
 c.explicitThis(14, 'too many arguments 2');
-c.implicitThis();
+c.implicitThis(); // not enough arguments
 c.implicitThis('wrong type 2');
 c.implicitThis(14, 'too many arguments 2');
-c.explicitProperty();
+c.explicitProperty(); // not enough arguments
 c.explicitProperty('wrong type 3');
 c.explicitProperty(15, 'too many arguments 3');
+// oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
 let specifiedToVoid = explicitStructural;
 let reconstructed = {
     n: 12,
@@ -270,8 +271,10 @@ let reconstructed = {
     explicitVoid: c.explicitVoid
 };
 ;
+// lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
 let d = new D();
 let explicitXProperty;
+// from differing object types
 c.explicitC = function (m) { return this.x + m; };
 c.explicitProperty = explicitXProperty;
 c.explicitC = d.explicitD;
@@ -282,6 +285,7 @@ c.explicitProperty = d.explicitD;
 c.explicitThis = d.explicitThis;
 c.explicitVoid = d.explicitD;
 c.explicitVoid = d.explicitThis;
+/// class-based polymorphic assignability (with inheritance!) ///
 class Base1 {
     x;
     polymorphic() { return this.x; }
@@ -303,12 +307,14 @@ let b1 = new Base1();
 let d1 = new Derived1();
 let b2 = new Base2();
 let d2 = new Derived2();
-b1.polymorphic = b2.polymorphic;
-b1.explicit = b2.polymorphic;
-d1.explicit = b2.polymorphic;
+b1.polymorphic = b2.polymorphic; // error, 'this.y' not in Base1: { x }
+b1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
+d1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
+////// use this-type for construction with new ////
 function VoidThis() {
 }
 let voidThis = new VoidThis();
+///// syntax-ish errors /////
 class ThisConstructor {
     n;
     constructor(n) {
@@ -317,6 +323,7 @@ class ThisConstructor {
 }
 var thisConstructorType;
 function notFirst(a) { return this.n; }
+///// parse errors /////
 function modifiers() { return this.n; }
 function restParam(...) { return this.n; }
 function optional() { return this.n; }
@@ -327,6 +334,7 @@ number;
 {
     return this.n;
 }
+// can't name parameters 'this' in a lambda.
 c.explicitProperty = (m) => m + this.n;
 const f2 = (m) => m + this.n;
 const f3 = async (m) => m + this.n;

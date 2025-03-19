@@ -20,9 +20,10 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 
 //// [thisTypeInFunctions4.js]
 function problemFunction() {
+    //check type
     if (!isCorrect(this))
         return;
     callsCallback((name) => {
-        this.name = name;
+        this.name = name; //should not error
     });
 }

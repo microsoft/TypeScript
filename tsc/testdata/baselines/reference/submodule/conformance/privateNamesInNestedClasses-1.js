@@ -36,13 +36,13 @@ class A {
         class B {
             #foo = "B's #foo";
             bar(a) {
-                a.#foo;
+                a.#foo; // OK, no compile-time error, don't know what `a` is
             }
             baz(a) {
-                a.#foo;
+                a.#foo; // compile-time error, shadowed
             }
             quux(b) {
-                b.#foo;
+                b.#foo; // OK
             }
         }
         const a = new A();

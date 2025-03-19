@@ -20,8 +20,11 @@ const { constructor } = async () => {};
 
 
 //// [destructuringControlFlowNoCrash.js]
+// legal JS, if nonsensical, which also triggers the issue
 const { date, } = (inspectedElement) => 0;
 date.toISOString();
+// Working flow code
 const { date2, } = (inspectedElement) => , props;
 date2.toISOString();
+// It could also be an async function
 const { constructor } = async () => { };

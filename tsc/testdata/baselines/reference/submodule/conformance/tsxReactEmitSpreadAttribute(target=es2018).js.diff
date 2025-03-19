@@ -5,7 +5,7 @@
  
  //// [test.js]
 -import { jsx as _jsx } from "react/jsx-runtime";
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
  export function T1(a) {
 -    return _jsx("div", { className: "T1", ...a, children: "T1" });
 +    return <div className={"T1"} {...a}>T1</div>;

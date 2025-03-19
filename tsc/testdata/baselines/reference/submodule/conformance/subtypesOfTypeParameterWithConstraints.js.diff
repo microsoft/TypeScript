@@ -1,10 +1,9 @@
 --- old.subtypesOfTypeParameterWithConstraints.js
 +++ new.subtypesOfTypeParameterWithConstraints.js
-@@= skipped -169, +169 lines =@@
- }
+@@= skipped -170, +170 lines =@@
  
  //// [subtypesOfTypeParameterWithConstraints.js]
--// checking whether other types are subtypes of type parameters with constraints
+ // checking whether other types are subtypes of type parameters with constraints
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -53,9 +52,24 @@
 -    }
 -    return D4;
 -}(C3));
--// V > U > T
--// test if T is subtype of T, U, V
--// should all work
++class C3 {
++    foo;
++}
++class D1 extends C3 {
++    foo; // ok
++}
++class D2 extends C3 {
++    foo; // ok
++}
++class D3 extends C3 {
++    foo; // error
++}
++class D4 extends C3 {
++    foo; // ok
++}
+ // V > U > T
+ // test if T is subtype of T, U, V
+ // should all work
 -var D5 = /** @class */ (function (_super) {
 -    __extends(D5, _super);
 -    function D5() {
@@ -77,8 +91,17 @@
 -    }
 -    return D7;
 -}(C3));
--// test if U is a subtype of T, U, V
--// only a subtype of V and itself
++class D5 extends C3 {
++    foo; // ok
++}
++class D6 extends C3 {
++    foo;
++}
++class D7 extends C3 {
++    foo; // ok
++}
+ // test if U is a subtype of T, U, V
+ // only a subtype of V and itself
 -var D8 = /** @class */ (function (_super) {
 -    __extends(D8, _super);
 -    function D8() {
@@ -100,8 +123,17 @@
 -    }
 -    return D10;
 -}(C3));
--// test if V is a subtype of T, U, V
--// only a subtype of itself
++class D8 extends C3 {
++    foo; // error
++}
++class D9 extends C3 {
++    foo; // ok
++}
++class D10 extends C3 {
++    foo; // ok
++}
+ // test if V is a subtype of T, U, V
+ // only a subtype of itself
 -var D11 = /** @class */ (function (_super) {
 -    __extends(D11, _super);
 -    function D11() {
@@ -123,9 +155,18 @@
 -    }
 -    return D13;
 -}(C3));
--// Date > V > U > T
--// test if T is subtype of T, U, V, Date
--// should all work
++class D11 extends C3 {
++    foo; // error
++}
++class D12 extends C3 {
++    foo; // error
++}
++class D13 extends C3 {
++    foo; // ok
++}
+ // Date > V > U > T
+ // test if T is subtype of T, U, V, Date
+ // should all work
 -var D14 = /** @class */ (function (_super) {
 -    __extends(D14, _super);
 -    function D14() {
@@ -154,8 +195,20 @@
 -    }
 -    return D17;
 -}(C3));
--// test if U is a subtype of T, U, V, Date
--// only a subtype of V, Date and itself
++class D14 extends C3 {
++    foo; // ok
++}
++class D15 extends C3 {
++    foo; // ok
++}
++class D16 extends C3 {
++    foo;
++}
++class D17 extends C3 {
++    foo;
++}
+ // test if U is a subtype of T, U, V, Date
+ // only a subtype of V, Date and itself
 -var D18 = /** @class */ (function (_super) {
 -    __extends(D18, _super);
 -    function D18() {
@@ -184,8 +237,20 @@
 -    }
 -    return D21;
 -}(C3));
--// test if V is a subtype of T, U, V, Date
--// only a subtype of itself and Date
++class D18 extends C3 {
++    foo; // ok
++}
++class D19 extends C3 {
++    foo; // error
++}
++class D20 extends C3 {
++    foo; // ok
++}
++class D21 extends C3 {
++    foo;
++}
+ // test if V is a subtype of T, U, V, Date
+ // only a subtype of itself and Date
 -var D22 = /** @class */ (function (_super) {
 -    __extends(D22, _super);
 -    function D22() {
@@ -214,8 +279,20 @@
 -    }
 -    return D25;
 -}(C3));
--// test if Date is a subtype of T, U, V, Date
--// only a subtype of itself
++class D22 extends C3 {
++    foo; // ok
++}
++class D23 extends C3 {
++    foo; // error
++}
++class D24 extends C3 {
++    foo; // error
++}
++class D25 extends C3 {
++    foo; // ok
++}
+ // test if Date is a subtype of T, U, V, Date
+ // only a subtype of itself
 -var D26 = /** @class */ (function (_super) {
 -    __extends(D26, _super);
 -    function D26() {
@@ -244,93 +321,15 @@
 -    }
 -    return D29;
 -}(C3));
-+class C3 {
-+    foo;
-+}
-+class D1 extends C3 {
-+    foo;
-+}
-+class D2 extends C3 {
-+    foo;
-+}
-+class D3 extends C3 {
-+    foo;
-+}
-+class D4 extends C3 {
-+    foo;
-+}
-+class D5 extends C3 {
-+    foo;
-+}
-+class D6 extends C3 {
-+    foo;
-+}
-+class D7 extends C3 {
-+    foo;
-+}
-+class D8 extends C3 {
-+    foo;
-+}
-+class D9 extends C3 {
-+    foo;
-+}
-+class D10 extends C3 {
-+    foo;
-+}
-+class D11 extends C3 {
-+    foo;
-+}
-+class D12 extends C3 {
-+    foo;
-+}
-+class D13 extends C3 {
-+    foo;
-+}
-+class D14 extends C3 {
-+    foo;
-+}
-+class D15 extends C3 {
-+    foo;
-+}
-+class D16 extends C3 {
-+    foo;
-+}
-+class D17 extends C3 {
-+    foo;
-+}
-+class D18 extends C3 {
-+    foo;
-+}
-+class D19 extends C3 {
-+    foo;
-+}
-+class D20 extends C3 {
-+    foo;
-+}
-+class D21 extends C3 {
-+    foo;
-+}
-+class D22 extends C3 {
-+    foo;
-+}
-+class D23 extends C3 {
-+    foo;
-+}
-+class D24 extends C3 {
-+    foo;
-+}
-+class D25 extends C3 {
-+    foo;
-+}
 +class D26 extends C3 {
-+    foo;
++    foo; // ok
 +}
 +class D27 extends C3 {
-+    foo;
++    foo; // error
 +}
 +class D28 extends C3 {
-+    foo;
++    foo; // error
 +}
 +class D29 extends C3 {
-+    foo;
++    foo; // error
 +}

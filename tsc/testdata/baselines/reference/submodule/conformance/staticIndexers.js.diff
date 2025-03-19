@@ -1,10 +1,9 @@
 --- old.staticIndexers.js
 +++ new.staticIndexers.js
-@@= skipped -15, +15 lines =@@
- }
+@@= skipped -16, +16 lines =@@
  
  //// [staticIndexers.js]
--// static indexers not allowed
+ // static indexers not allowed
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

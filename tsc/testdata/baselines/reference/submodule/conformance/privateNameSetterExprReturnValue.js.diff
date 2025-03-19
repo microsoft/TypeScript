@@ -18,9 +18,8 @@
 +    set #foo(a) { }
      bar() {
 -        let x = (__classPrivateFieldSet(this, _C_instances, 42 * 2, "a", _C_foo_set));
--        console.log(x); // 84
 +        let x = (this.#foo = 42 * 2);
-+        console.log(x);
+         console.log(x); // 84
      }
  }
 -_C_instances = new WeakSet(), _C_foo_set = function _C_foo_set(a) { };

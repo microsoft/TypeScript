@@ -10,7 +10,7 @@
  //// [main.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="observable.d.ts"/>
+ /// <reference path="observable.d.ts"/>
 -var observable_1 = require("observable");
 +const observable_1 = require("observable");
  require("./map");

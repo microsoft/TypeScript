@@ -29,10 +29,11 @@ Foo();
 class Foo {
     bar1() { }
     constructor(x) {
+        // WScript.Echo("Constructor function has executed");
     }
 }
-function F1(s) { return s; }
-function F1(a) { return a; }
+function F1(s) { return s; } // error
+function F1(a) { return a; } // error
 var f1 = new Foo("hey");
 f1.bar1();
 Foo();

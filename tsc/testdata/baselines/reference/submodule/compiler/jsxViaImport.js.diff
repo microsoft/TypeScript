@@ -20,7 +20,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="component.d.ts" />
+ /// <reference path="component.d.ts" />
 -var BaseComponent = require("BaseComponent");
 -var TestComponent = /** @class */ (function (_super) {
 -    __extends(TestComponent, _super);

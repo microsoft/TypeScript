@@ -101,32 +101,33 @@ var b: { [x: string]: string; } = {
 
 //// [stringIndexerConstrainsPropertyDeclarations.js]
 class C {
-    constructor() { }
-    a;
-    b;
-    c;
-    "d";
-    "e";
-    1.0;
-    2.0;
-    "3.0";
-    "4.0";
-    f;
+    constructor() { } // ok
+    a; // ok
+    b; // error
+    c; // error
+    "d"; // ok
+    "e"; // error
+    1.0; // ok
+    2.0; // error
+    "3.0"; // ok
+    "4.0"; // error
+    f; // error
     get X() {
         return '';
     }
-    set X(v) { }
+    set X(v) { } // ok
     foo() {
         return '';
     }
-    static sa;
-    static sb;
-    static foo() { }
+    static sa; // ok
+    static sb; // ok
+    static foo() { } // ok
     static get X() {
         return 1;
     }
 }
 var a;
+// error
 var b = {
     a: '',
     b: 1,

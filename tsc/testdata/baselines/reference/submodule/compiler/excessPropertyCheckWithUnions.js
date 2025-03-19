@@ -159,14 +159,18 @@ let wrong = { tag: "T", a1: "extra" };
 wrong = { tag: "A", d20: 12 };
 wrong = { tag: "D" };
 let amb;
+// no error for ambiguous tag, even when it could satisfy both constituents at once
 amb = { tag: "A", x: "hi" };
 amb = { tag: "A", y: 12 };
 amb = { tag: "A", x: "hi", y: 12 };
+// correctly error on excess property 'extra', even when ambiguous
 amb = { tag: "A", x: "hi", extra: 12 };
 amb = { tag: "A", y: 12, extra: 12 };
+// assignability errors still work
 amb = { tag: "A" };
 amb = { tag: "A", z: true };
 let over;
+// these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" };
 over = { a: 1, b: 1, first: "ok", third: "error" };
 let t2 = { ...t1 };
@@ -175,27 +179,29 @@ const abab = {
     kind: "A",
     n: {
         a: "a",
-        b: "b",
+        b: "b", // excess -- kind: "A"
     }
 };
 const abac = {
     kind: "A",
     n: {
         a: "a",
-        c: "c",
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
     }
 };
 const obj = {
     tag: 'button',
     type: 'submit',
+    // should have error here
     href: 'foo',
 };
 ;
 const dataSpecification = {
     foo: "asdfsadffsd"
 };
-const obj1 = { a: 'abc' };
-const obj2 = { a: 5, c: 'abc' };
+// Repro from #34611
+const obj1 = { a: 'abc' }; // Error
+const obj2 = { a: 5, c: 'abc' }; // Error
 function F1(_arg) { }
 F1({
     props: {

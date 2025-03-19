@@ -22,13 +22,12 @@
  var x = asdf;
  var y;
  function foo(x, y) { }
- function foo2() {
+@@= skipped -22, +7 lines =@@
      return asdf;
  }
--var z = x; // should be an error
+ var z = x; // should be an error
 -var C = /** @class */ (function () {
 -    function C() {
-+var z = x;
 +class C {
 +    foo;
 +    bar;
@@ -61,11 +60,10 @@
 -    }
 -    return C4;
 -}(C3));
--var x2 = this.asdf; // no error, this is any
++}
+ var x2 = this.asdf; // no error, this is any
 -var C5 = /** @class */ (function () {
 -    function C5() {
-+}
-+var x2 = this.asdf;
 +class C5 {
 +    constructor() {
          this.asdf = asdf;

@@ -1,10 +1,9 @@
 --- old.strictNullEmptyDestructuring.js
 +++ new.strictNullEmptyDestructuring.js
-@@= skipped -26, +26 lines =@@
- 
+@@= skipped -27, +27 lines =@@
  
  //// [strictNullEmptyDestructuring.js]
--// Repro from #20873
+ // Repro from #20873
 -var _a = null;
 -var _b = null;
 -(null);

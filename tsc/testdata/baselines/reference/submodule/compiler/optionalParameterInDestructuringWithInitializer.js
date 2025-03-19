@@ -64,24 +64,31 @@ performFoo2();
 //// [optionalParameterInDestructuringWithInitializer.js]
 function func1({ a, b } = { a: 1, b: 2 }) {
     f(a, b);
+    // error
 }
 function func2({ a, b = 3 } = { a: 1, b: 2 }) {
     f(a, b);
+    // no error
 }
 function func3({ a, b } = { a: 1 }) {
     f(a, b);
+    // error
 }
 function func4({ a: { b, c }, d } = { a: { b: 1, c: 2 }, d: 3 }) {
     f(b, c);
+    // error
 }
 function func5({ a: { b, c = 4 }, d } = { a: { b: 1, c: 2 }, d: 3 }) {
     f(b, c);
+    // no error
 }
 function func6({ a: { b, c } = { b: 4, c: 5 }, d } = { a: { b: 1, c: 2 }, d: 3 }) {
     f(b, c);
+    // error
 }
 function func7({ a: { b, c = 6 } = { b: 4, c: 5 }, d } = { a: { b: 1, c: 2 }, d: 3 }) {
     f(b, c);
+    // no error
 }
 function performFoo({ bar } = {}) {
     useBar(bar);

@@ -10,6 +10,7 @@ f(1, 2, 3);
 
 
 //// [modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.js]
+// Error missing basic JavaScript objects
 function f(x, y, z) {
     return Array.from(arguments);
 }

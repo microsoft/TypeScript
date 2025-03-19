@@ -29,6 +29,7 @@ const loader = <AsyncLoader
 //// [checkJsxSubtleSkipContextSensitiveBug.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
 const React = require("react");
 class AsyncLoader extends React.Component {
     render() { return null; }

@@ -30,12 +30,13 @@ const xx: [number, ...number[]] = yy;
 
 
 //// [intersectionsAndOptionalProperties.js]
-x = y;
-x = z;
+x = y; // Error
+x = z; // Error
 function foo(v) {
     let x;
-    x = v;
-    x.field = v.field;
+    x = v; // Error
+    x.field = v.field; // Error
 }
+// Repro from #38348
 const yy = [1];
 const xx = yy;

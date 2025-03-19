@@ -1,10 +1,9 @@
 --- old.accessorAccidentalCallDiagnostic.js
 +++ new.accessorAccidentalCallDiagnostic.js
-@@= skipped -10, +10 lines =@@
- 
+@@= skipped -11, +11 lines =@@
  
  //// [accessorAccidentalCallDiagnostic.js]
--// https://github.com/microsoft/TypeScript/issues/24554
+ // https://github.com/microsoft/TypeScript/issues/24554
 -var Test24554 = /** @class */ (function () {
 -    function Test24554() {
 -    }

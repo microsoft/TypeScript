@@ -68,11 +68,12 @@ class D extends C {
         return null;
     }
 }
+// if D is a valid class definition than E is now not safe tranisitively through C
 class E extends D {
     x;
-    get X() { return ''; }
+    get X() { return ''; } // error
     foo() {
-        return '';
+        return ''; // error
     }
 }
 var c;
@@ -80,4 +81,4 @@ var d;
 var e;
 c = d;
 c = e;
-var r = c.foo();
+var r = c.foo(); // e.foo would return string

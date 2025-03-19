@@ -34,10 +34,10 @@
 -    };
 -    return TextComponent;
 -}(React.Component));
--// OK
--var textPropsFalse = {
 +    }
 +}
+ // OK
+-var textPropsFalse = {
 +const textPropsFalse = {
      editable: false
  };

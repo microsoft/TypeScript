@@ -42,4 +42,4 @@ const state = {
     },
     d: false,
 };
-const newState = set(state, ["a", 'b'], 'why');
+const newState = set(state, ["a", 'b'], 'why'); // shouldn't be an error

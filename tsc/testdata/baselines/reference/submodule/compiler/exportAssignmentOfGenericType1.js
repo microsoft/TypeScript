@@ -22,6 +22,7 @@ module.exports = T;
 //// [exportAssignmentOfGenericType1_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='exportAssignmentOfGenericType1_0.ts'/>
 const q = require("exportAssignmentOfGenericType1_0");
 class M extends q {
 }

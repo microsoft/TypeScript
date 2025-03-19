@@ -56,7 +56,7 @@ var M;
         Color.Blue = 4;
     })(Color = M.Color || (M.Color = {}));
 })(M || (M = {}));
-var p = M.Color.Blue;
+var p = M.Color.Blue; // ok
 (function (M) {
     function foo() {
     }
@@ -80,7 +80,7 @@ var p = M.Color.Blue;
         foo.z = 1;
     })(foo || (foo = {}));
 })(M || (M = {}));
-M.foo();
-M.foo.x;
-M.foo.y;
-M.foo.z;
+M.foo(); // ok
+M.foo.x; // error
+M.foo.y; // ok
+M.foo.z; // error

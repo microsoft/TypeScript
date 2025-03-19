@@ -55,6 +55,7 @@ if (ab.type === 'a') {
         ab.foo;
     }
 }
+// Repro from #11185
 class Square {
     kind;
 }

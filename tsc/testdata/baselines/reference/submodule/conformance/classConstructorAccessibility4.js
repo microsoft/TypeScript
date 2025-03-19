@@ -37,7 +37,7 @@ class A {
     method() {
         class B {
             method() {
-                new A();
+                new A(); // OK
             }
         }
         class C extends A {
@@ -49,7 +49,7 @@ class D {
     method() {
         class E {
             method() {
-                new D();
+                new D(); // OK
             }
         }
         class F extends D {

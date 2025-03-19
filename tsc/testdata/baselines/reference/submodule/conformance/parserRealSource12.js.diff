@@ -6,9 +6,9 @@
  
 +//// [typescript.js]
  //// [parserRealSource12.js]
--// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
--// See LICENSE.txt in the project root for complete license information.
--///<reference path='typescript.ts' />
+ // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+ // See LICENSE.txt in the project root for complete license information.
+ ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
 -    var AstWalkOptions = /** @class */ (function () {
@@ -22,7 +22,7 @@
 +    class AstWalkOptions {
 +        goChildren = true;
 +        goNextSibling = true;
-+        reverseSiblings = false;
++        reverseSiblings = false; // visit siblings in reverse execution order
 +        stopWalk(stop = true) {
              this.goChildren = !stop;
              this.goNextSibling = !stop;
@@ -52,20 +52,7 @@
              var preAst = this.pre(ast, parent, this);
              if (preAst === undefined) {
                  preAst = ast;
-@@= skipped -36, +35 lines =@@
-             if (this.options.goChildren) {
-                 var svGoSib = this.options.goNextSibling;
-                 this.options.goNextSibling = true;
--                // Call the "walkChildren" function corresponding to "nodeType".
-                 this.childrenWalkers[ast.nodeType](ast, parent, this);
-                 this.options.goNextSibling = svGoSib;
-             }
-             else {
--                // no go only applies to children of node issuing it
-                 this.options.goChildren = true;
-             }
-             if (this.post) {
-@@= skipped -18, +16 lines =@@
+@@= skipped -54, +56 lines =@@
              else {
                  return preAst;
              }
@@ -105,13 +92,7 @@
              this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
              this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
              this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;
-@@= skipped -128, +127 lines =@@
-             this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone;
-             this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone;
-             this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone;
--            // Verify the code is up to date with the enum
-             for (var e in NodeType._map) {
-                 if (this.childrenWalkers[e] === undefined) {
+@@= skipped -134, +133 lines =@@
                      throw new Error("initWalkers function is not up to date with enum content!");
                  }
              }
@@ -123,7 +104,7 @@
      TypeScript.AstWalkerFactory = AstWalkerFactory;
      var globalAstWalkerFactory;
      function getAstWalkerFactory() {
-@@= skipped -18, +16 lines =@@
+@@= skipped -12, +11 lines =@@
          return globalAstWalkerFactory;
      }
      TypeScript.getAstWalkerFactory = getAstWalkerFactory;
@@ -131,23 +112,4 @@
 +    let ChildrenWalkers;
      (function (ChildrenWalkers) {
          function walkNone(preAst, parent, walker) {
--            // Nothing to do
-         }
-         ChildrenWalkers.walkNone = walkNone;
-         function walkListChildren(preAst, parent, walker) {
-@@= skipped -256, +255 lines =@@
-         ChildrenWalkers.walkScriptChildren = walkScriptChildren;
-         function walkTypeDeclChildren(preAst, parent, walker) {
-             walkNamedTypeChildren(preAst, parent, walker);
--            // walked arguments as part of members
-             if (walker.options.goNextSibling && preAst.extendsList) {
-                 preAst.extendsList = walker.walk(preAst.extendsList, preAst);
-             }
-@@= skipped -32, +31 lines =@@
-         }
-         ChildrenWalkers.walkWithStatementChildren = walkWithStatementChildren;
-         function walkLabelChildren(preAst, parent, walker) {
--            //TODO: Walk "id"?
-         }
-         ChildrenWalkers.walkLabelChildren = walkLabelChildren;
-         function walkLabeledStatementChildren(preAst, parent, walker) {
+             // Nothing to do

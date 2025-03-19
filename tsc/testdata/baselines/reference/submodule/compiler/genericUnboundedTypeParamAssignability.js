@@ -23,17 +23,17 @@ function user<T>(t: T) {
 
 //// [genericUnboundedTypeParamAssignability.js]
 function f1(o) {
-    o.toString();
+    o.toString(); // error
 }
 function f2(o) {
-    o.toString();
+    o.toString(); // no error
 }
 function f3(o) {
-    o.toString();
+    o.toString(); // no error
 }
 function user(t) {
     f1(t);
-    f2(t);
-    f3(t);
-    t.toString();
+    f2(t); // error in strict, unbounded T doesn't satisfy the constraint
+    f3(t); // error in strict, unbounded T doesn't satisfy the constraint
+    t.toString(); // error, for the same reason as f1()
 }

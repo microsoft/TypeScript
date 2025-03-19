@@ -36,10 +36,8 @@
 -    };
 -    return DataProvider;
 -}());
--// The same bug as the above but using indexed accesses
--// (won't surface directly unless unsound indexed access assignments are forbidden)
 +    }
 +}
+ // The same bug as the above but using indexed accesses
+ // (won't surface directly unless unsound indexed access assignments are forbidden)
  function f(message, messageList) {
-     fetchMsg(messageList).methodOnMessageList();
- }

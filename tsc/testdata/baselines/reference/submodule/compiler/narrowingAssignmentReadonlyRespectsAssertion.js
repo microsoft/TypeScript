@@ -58,6 +58,7 @@ function testFunc() {
     const fixture = dataFunc(subDataFunc);
     fixture.cases.forEach(({ val1, val2 }) => {
         if (Array.isArray(val1)) {
+            // This should retain val1 as being an array
             const reversedVal1 = val1.slice().reverse();
             console.log(reversedVal1);
         }

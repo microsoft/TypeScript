@@ -18,8 +18,9 @@ export class Bet implements Aleph {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bet = exports.a = void 0;
-exports.a = 1 + {};
+// @ts-nocheck: additional comments
+exports.a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
 class Bet {
-    q = "lol";
+    q = "lol"; // And so will this implements error
 }
 exports.Bet = Bet;

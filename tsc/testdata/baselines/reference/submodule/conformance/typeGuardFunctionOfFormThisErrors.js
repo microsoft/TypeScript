@@ -80,6 +80,7 @@ class FollowerGuard extends RoyalGuard {
 }
 let a = new FollowerGuard();
 let b = new LeadGuard();
+// Mismatched guards shouldn't be assignable
 b.isFollower = b.isLeader;
 b.isLeader = b.isFollower;
 a.isFollower = a.isLeader;

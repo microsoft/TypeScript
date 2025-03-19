@@ -1,10 +1,7 @@
 --- old.stringLiteralTypesInImplementationSignatures.js
 +++ new.stringLiteralTypesInImplementationSignatures.js
-@@= skipped -28, +28 lines =@@
- 
- 
- //// [stringLiteralTypesInImplementationSignatures.js]
--// String literal types are only valid in overload signatures
+@@= skipped -31, +31 lines =@@
+ // String literal types are only valid in overload signatures
  function foo(x) { }
  var f = function foo(x) { };
 -var f2 = function (x, y) { };

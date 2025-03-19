@@ -51,11 +51,13 @@ export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
 
 
 //// [accessorsOverrideProperty9.js]
+// Base class
 class ApiItem {
     get members() {
         return [];
     }
 }
+// Normal subclass
 class ApiEnumMember extends ApiItem {
 }
 function ApiItemContainerMixin(baseClass) {
@@ -69,7 +71,9 @@ function ApiItemContainerMixin(baseClass) {
     }
     return MixedClass;
 }
+// Subclass inheriting from mixin
 export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
+    // This worked prior to TypeScript 4.0:
     get members() {
         return [];
     }

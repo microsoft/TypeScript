@@ -10,5 +10,5 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 //// [arrayFlatMap.js]
 const array = [];
 const readonlyArray = [];
-array.flatMap(() => []);
-readonlyArray.flatMap(() => []);
+array.flatMap(() => []); // ok
+readonlyArray.flatMap(() => []); // ok

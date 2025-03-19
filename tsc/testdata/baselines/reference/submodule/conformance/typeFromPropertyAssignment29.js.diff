@@ -29,19 +29,10 @@
      return nested;
  }
  ExpandoNested.also = -1;
-@@= skipped -33, +33 lines =@@
-     }
-     Ns.foo = foo;
- })(Ns || (Ns = {}));
--// Should not work in Typescript -- must be const
- var ExpandoExpr2 = function (n) {
-     return n.toString();
- };
-@@= skipped -9, +8 lines =@@
-     return n + 1;
+@@= skipped -43, +43 lines =@@
  };
  var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length;
--// Should not work in typescript -- classes already have statics
+ // Should not work in typescript -- classes already have statics
 -var ExpandoClass = /** @class */ (function () {
 -    function ExpandoClass() {
 -        this.n = 1001;
@@ -56,7 +47,7 @@
      return n + 1;
  };
  var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n;
--// Class expressions shouldn't work in typescript either
+ // Class expressions shouldn't work in typescript either
 -var ExpandoExpr3 = /** @class */ (function () {
 -    function class_1() {
 -        this.n = 10001;

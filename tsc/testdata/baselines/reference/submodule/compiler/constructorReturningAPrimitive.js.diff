@@ -1,11 +1,9 @@
 --- old.constructorReturningAPrimitive.js
 +++ new.constructorReturningAPrimitive.js
-@@= skipped -21, +21 lines =@@
- var b = new B<number>();
- 
+@@= skipped -23, +23 lines =@@
  //// [constructorReturningAPrimitive.js]
--// technically not allowed by JavaScript but we don't have a 'not-primitive' constraint
--// functionally only possible when your class is otherwise devoid of members so of little consequence in practice
+ // technically not allowed by JavaScript but we don't have a 'not-primitive' constraint
+ // functionally only possible when your class is otherwise devoid of members so of little consequence in practice
 -var A = /** @class */ (function () {
 -    function A() {
 +class A {

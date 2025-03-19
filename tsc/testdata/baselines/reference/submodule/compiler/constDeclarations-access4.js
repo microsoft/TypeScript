@@ -46,6 +46,7 @@ M.x.toString();
 
 
 //// [constDeclarations-access4.js]
+// Errors
 M.x = 1;
 M.x += 2;
 M.x -= 3;
@@ -64,6 +65,7 @@ M.x--;
 --M.x;
 ++((M.x));
 M["x"] = 0;
+// OK
 var a = M.x + 1;
 function f(v) { }
 f(M.x);

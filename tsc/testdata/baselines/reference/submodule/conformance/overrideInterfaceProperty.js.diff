@@ -1,10 +1,6 @@
 --- old.overrideInterfaceProperty.js
 +++ new.overrideInterfaceProperty.js
-@@= skipped -21, +21 lines =@@
- 
- //// [overrideInterfaceProperty.js]
- class Sizz extends Mup {
--    // ok, because Mup is an interface
+@@= skipped -25, +25 lines =@@
      get size() { return 0; }
  }
  class Kasizz extends Mup {

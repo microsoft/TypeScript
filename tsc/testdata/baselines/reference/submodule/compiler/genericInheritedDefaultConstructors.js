@@ -19,4 +19,4 @@ class A {
 class B extends A {
     b;
 }
-var c = B;
+var c = B; // shouldn't error here

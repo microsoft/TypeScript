@@ -1,10 +1,9 @@
 --- old.arrowFunctionMissingCurlyWithSemicolon.js
 +++ new.arrowFunctionMissingCurlyWithSemicolon.js
-@@= skipped -6, +6 lines =@@
- var square = (x: number) => x * x;
+@@= skipped -7, +7 lines =@@
  
  //// [arrowFunctionMissingCurlyWithSemicolon.js]
--// Should error at semicolon.
+ // Should error at semicolon.
 -var f = function () { return ; };
 +var f = () => ;
  var b = 1 * 2 * 3 * 4;

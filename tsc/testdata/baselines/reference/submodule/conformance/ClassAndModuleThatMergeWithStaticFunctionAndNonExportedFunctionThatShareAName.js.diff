@@ -19,8 +19,7 @@
 +    static Origin() { return { x: 0, y: 0 }; }
 +}
  (function (Point) {
--    function Origin() { return ""; } // not an error, since not exported
-+    function Origin() { return ""; }
+     function Origin() { return ""; } // not an error, since not exported
  })(Point || (Point = {}));
  var A;
  (function (A) {
@@ -40,7 +39,4 @@
 +    }
      A.Point = Point;
      (function (Point) {
--        function Origin() { return ""; } // not an error since not exported
-+        function Origin() { return ""; }
-     })(Point = A.Point || (A.Point = {}));
- })(A || (A = {}));
+         function Origin() { return ""; } // not an error since not exported

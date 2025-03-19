@@ -101,12 +101,16 @@ class GlobalConstructorWithParameterInitializer {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConstructorWithParameterInitializer = exports.ConstructorWithOptionalParameterProperty = exports.ConstructorWithPrivateParameterProperty = exports.ConstructorWithPublicParameterProperty = exports.ConstructorWithOverloads = exports.ConstructorWithRestParamters = exports.ConstructorWithParameters = exports.SimpleConstructor = void 0;
 class SimpleConstructor {
+    /** This comment should appear for foo*/
     constructor() {
     }
 }
 exports.SimpleConstructor = SimpleConstructor;
 class ConstructorWithParameters {
-    constructor(a, b) {
+    /** This is comment for function signature*/
+    constructor(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
 }
@@ -152,11 +156,15 @@ class ConstructorWithParameterInitializer {
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
 class GlobalSimpleConstructor {
+    /** This comment should appear for foo*/
     constructor() {
     }
 }
 class GlobalConstructorWithParameters {
-    constructor(a, b) {
+    /** This is comment for function signature*/
+    constructor(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
 }

@@ -23,5 +23,5 @@ let x2 = foo({ kind: 'b', data: [1, 2] });  // number
 
 
 //// [discriminatedUnionInference.js]
-let x1 = foo({ kind: 'a', data: 42 });
-let x2 = foo({ kind: 'b', data: [1, 2] });
+let x1 = foo({ kind: 'a', data: 42 }); // number
+let x2 = foo({ kind: 'b', data: [1, 2] }); // number

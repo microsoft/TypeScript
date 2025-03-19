@@ -1,22 +1,7 @@
 --- old.nodePackageSelfNameScoped(module=node16).js
 +++ new.nodePackageSelfNameScoped(module=node16).js
-@@= skipped -20, +20 lines =@@
- }
- 
- //// [index.js]
--// esm format file
- import * as self from "@scope/package";
- self;
- //// [index.mjs]
--// esm format file
- import * as self from "@scope/package";
- self;
- //// [index.cjs]
-@@= skipped -33, +31 lines =@@
-     return result;
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--// cjs format file
+@@= skipped -56, +56 lines =@@
+ // cjs format file
  const self = __importStar(require("@scope/package"));
  self;
 -

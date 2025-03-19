@@ -1,18 +1,13 @@
 --- old.implicitAnyFunctionReturnNullOrUndefined.js
 +++ new.implicitAnyFunctionReturnNullOrUndefined.js
-@@= skipped -26, +26 lines =@@
- 
- 
- //// [implicitAnyFunctionReturnNullOrUndefined.js]
--// this should be an error
--function nullWidenFunction() { return null; } // error at "nullWidenFunction"
--function undefinedWidenFunction() { return undefined; } // error at "undefinedWidenFunction"
+@@= skipped -29, +29 lines =@@
+ // this should be an error
+ function nullWidenFunction() { return null; } // error at "nullWidenFunction"
+ function undefinedWidenFunction() { return undefined; } // error at "undefinedWidenFunction"
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    C.prototype.nullWidenFuncOfC = function () {
-+function nullWidenFunction() { return null; }
-+function undefinedWidenFunction() { return undefined; }
 +class C {
 +    nullWidenFuncOfC() {
          return null;
@@ -24,13 +19,8 @@
 -    };
 -    return C;
 -}());
--// this should not be an error
 +    }
 +}
+ // this should not be an error
  function foo1() { return null; }
  function bar1() { return undefined; }
- function fooBar() { return 1; }
- function fooFoo() { return 5; }
--// this should not be an error as the error is raised by expr above
- nullWidenFunction();
- undefinedWidenFunction();

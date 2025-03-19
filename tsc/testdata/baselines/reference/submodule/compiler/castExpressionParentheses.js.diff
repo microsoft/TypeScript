@@ -1,29 +1,17 @@
 --- old.castExpressionParentheses.js
 +++ new.castExpressionParentheses.js
-@@= skipped -52, +52 lines =@@
- 
- 
+@@= skipped -54, +54 lines =@@
  //// [castExpressionParentheses.js]
--// parentheses should be omitted
--// literals
+ // parentheses should be omitted
+ // literals
 -({ a: 0 });
 +(({ a: 0 }));
  [1, 3,];
  "string";
  23.0;
-@@= skipped -15, +13 lines =@@
- false;
- true;
- null;
--// names and dotted names
- this;
- this.x;
- a.x;
-@@= skipped -13, +12 lines =@@
- 1.0.foo;
- 12e+34.foo;
+@@= skipped -28, +28 lines =@@
  0xff.foo;
--// should keep the parentheses in emit
+ // should keep the parentheses in emit
  (1.0);
 -(new A).foo;
 -(typeof A).x;
@@ -32,9 +20,6 @@
 -(function () { })();
 -(function foo() { })();
 -(-A).x;
--// nested cast, should keep one pair of parenthese
--(-A).x;
--// nested parenthesized expression, should keep one pair of parenthese
 +((new A)).foo;
 +((typeof A)).x;
 +((-A)).x;
@@ -42,5 +27,8 @@
 +(() => { })();
 +(function foo() { }());
 +((-A)).x;
+ // nested cast, should keep one pair of parenthese
+-(-A).x;
 +((-A)).x;
+ // nested parenthesized expression, should keep one pair of parenthese
  (A);

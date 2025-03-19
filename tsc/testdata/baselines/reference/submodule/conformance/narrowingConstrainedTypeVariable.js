@@ -38,6 +38,7 @@ function f3<T extends E>(v: T | { x: string }) {
 
 
 //// [narrowingConstrainedTypeVariable.js]
+// Repro from #20138
 class C {
 }
 function f1(v) {

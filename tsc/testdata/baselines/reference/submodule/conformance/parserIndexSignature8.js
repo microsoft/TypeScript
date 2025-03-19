@@ -6,5 +6,5 @@ var foo2: { [index: RegExp]; }; // expect an error here
 
 
 //// [parserIndexSignature8.js]
-var foo;
-var foo2;
+var foo; // expect an error here
+var foo2; // expect an error here

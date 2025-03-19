@@ -41,6 +41,7 @@ export class Foo<T> extends Base<T> {
 }
 
 //// [inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.js]
+// simple example
 export class Test {
     a;
     b;

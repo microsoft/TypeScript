@@ -1,10 +1,9 @@
 --- old.externalModuleRefernceResolutionOrderInImportDeclaration.js
 +++ new.externalModuleRefernceResolutionOrderInImportDeclaration.js
-@@= skipped -26, +26 lines =@@
- //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.js]
+@@= skipped -27, +27 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
+ ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
 -var file1 = require("./externalModuleRefernceResolutionOrderInImportDeclaration_file1");
 +const file1 = require("./externalModuleRefernceResolutionOrderInImportDeclaration_file1");
  file1.foo();

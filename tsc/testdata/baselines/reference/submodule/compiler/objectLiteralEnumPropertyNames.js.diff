@@ -5,7 +5,7 @@
  
  //// [objectLiteralEnumPropertyNames.js]
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j;
--// Fixes #16887
+ // Fixes #16887
  var Strs;
  (function (Strs) {
      Strs["A"] = "a";

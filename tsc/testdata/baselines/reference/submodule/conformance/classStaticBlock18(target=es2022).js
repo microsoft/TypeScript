@@ -24,6 +24,7 @@ function foo() {
             const c = class {
                 static bar = 2;
                 static {
+                    // do
                 }
             };
         }

@@ -115,4 +115,4 @@ exports.xxxx9 = new server_7.x111();
 const server_8 = require("./server");
 exports.z111 = new server_8.z1();
 const server_9 = require("./server");
-exports.z2 = new server_9.z2();
+exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error

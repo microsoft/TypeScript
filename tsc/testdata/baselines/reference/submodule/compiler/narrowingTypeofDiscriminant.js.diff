@@ -7,23 +7,17 @@
 -"use strict";
  function f1(obj) {
      if (typeof obj.kind === "string") {
--        obj; // { kind: 'a', data: string }
-+        obj;
-     }
-     else {
--        obj; // { kind: 1, data: number }
-+        obj;
+         obj; // { kind: 'a', data: string }
+@@= skipped -10, +9 lines =@@
      }
  }
  function f2(obj) {
 -    if (typeof (obj === null || obj === void 0 ? void 0 : obj.kind) === "string") {
--        obj; // { kind: 'a', data: string }
 +    if (typeof obj?.kind === "string") {
-+        obj;
+         obj; // { kind: 'a', data: string }
      }
      else {
--        obj; // { kind: 1, data: number } | undefined
-+        obj;
+@@= skipped -8, +8 lines =@@
      }
  }
  function numberOk(wrapped) {

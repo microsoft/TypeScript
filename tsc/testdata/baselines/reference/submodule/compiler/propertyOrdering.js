@@ -29,14 +29,14 @@ class Bar {
 class Foo {
     constructor(store) { }
     foo() {
-        return this._store.length;
+        return this._store.length; // shouldn't be an error
     }
-    _store = store;
-    bar() { return this.store; }
+    _store = store; // no repro if this is first line in class body
+    bar() { return this.store; } // should be an error
 }
 class Bar {
     foo() {
-        return this._store.length;
+        return this._store.length; // shouldn't be an error
     }
     constructor(store) {
         this._store = store;

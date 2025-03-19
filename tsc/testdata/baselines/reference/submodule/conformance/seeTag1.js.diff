@@ -1,14 +1,15 @@
 --- old.seeTag1.js
 +++ new.seeTag1.js
-@@= skipped -21, +21 lines =@@
- 
+@@= skipped -22, +22 lines =@@
  
  //// [seeTag1.js]
--/** @see {Foo} foooo*/
+ /** @see {Foo} foooo*/
 -var a = "";
--/** @see {NS.Bar} ns.bar*/
++const a = "";
+ /** @see {NS.Bar} ns.bar*/
 -var b = "";
--/** @see {b} b */
++const b = "";
+ /** @see {b} b */
 -var c = "";
 -
 -
@@ -27,6 +28,4 @@
 -declare const b = "";
 -/** @see {b} b */
 -declare const c = "";
-+const a = "";
-+const b = "";
 +const c = "";

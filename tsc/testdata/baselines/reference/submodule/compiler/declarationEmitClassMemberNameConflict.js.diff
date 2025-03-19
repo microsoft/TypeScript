@@ -10,7 +10,7 @@
 -    C1.prototype.C1 = function () { }; // has to be the same as the class name
 -    C1.prototype.bar = function () {
 +class C1 {
-+    C1() { }
++    C1() { } // has to be the same as the class name
 +    bar() {
          return function (t) {
          };
@@ -25,7 +25,7 @@
 +}
 +exports.C1 = C1;
 +class C2 {
-+    C2;
++    C2; // has to be the same as the class name
 +    bar() {
          return function (t) {
          };
@@ -46,7 +46,7 @@
 +}
 +exports.C2 = C2;
 +class C3 {
-+    get C3() { return 0; }
++    get C3() { return 0; } // has to be the same as the class name
 +    bar() {
          return function (t) {
          };
@@ -67,7 +67,7 @@
 +}
 +exports.C3 = C3;
 +class C4 {
-+    set C4(v) { }
++    set C4(v) { } // has to be the same as the class name
 +    bar() {
          return function (t) {
          };

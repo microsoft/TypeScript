@@ -40,16 +40,16 @@ class C {
 class D extends C {
     foo() {
         super.bar();
-        super.x;
+        super.x; // error
     }
     constructor() {
         super();
         super.bar();
-        super.x;
+        super.x; // error
     }
     get y() {
         super.bar();
-        super.x;
+        super.x; // error
         return 1;
     }
 }

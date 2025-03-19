@@ -26,11 +26,12 @@ class CCCC {
 var aaa = 1;
 class CCC {
     y = aaa;
-    static staticY = aaa;
+    static staticY = aaa; // This shouldnt be error
     constructor(aaa) {
-        this.y = '';
+        this.y = ''; // was: error, cannot assign string to number
     }
 }
+// above is equivalent to this:
 var aaaa = 1;
 class CCCC {
     y;

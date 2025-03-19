@@ -33,4 +33,4 @@ exports.a = require("./b");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const c_1 = require("./c");
-new c_1.a.A();
+new c_1.a.A(); // Error

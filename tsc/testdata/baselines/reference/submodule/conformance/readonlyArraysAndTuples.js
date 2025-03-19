@@ -41,23 +41,23 @@ delete v[0 + 1]; // Error
 
 //// [readonlyArraysAndTuples.js]
 function f1(ma, ra, mt, rt) {
-    ma = ra;
+    ma = ra; // Error
     ma = mt;
-    ma = rt;
+    ma = rt; // Error
     ra = ma;
     ra = mt;
     ra = rt;
-    mt = ma;
-    mt = ra;
-    mt = rt;
-    rt = ma;
-    rt = ra;
+    mt = ma; // Error
+    mt = ra; // Error
+    mt = rt; // Error
+    rt = ma; // Error
+    rt = ra; // Error
     rt = mt;
 }
-v[0] = 1;
-v[1] = 1;
-v[2] = 1;
-delete v[2];
-v[0 + 1] = 1;
-v[0 + 2] = 1;
-delete v[0 + 1];
+v[0] = 1; // Error
+v[1] = 1; // Error
+v[2] = 1; // Error
+delete v[2]; // Error
+v[0 + 1] = 1; // Error
+v[0 + 2] = 1; // Error
+delete v[0 + 1]; // Error

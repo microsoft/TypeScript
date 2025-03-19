@@ -14,7 +14,10 @@ class A {
 
 
 //// [staticAutoAccessors.js]
+// https://github.com/microsoft/TypeScript/issues/53752
 class A {
+    // uses class reference
     static accessor x = 1;
+    // uses 'this'
     accessor y = 2;
 }

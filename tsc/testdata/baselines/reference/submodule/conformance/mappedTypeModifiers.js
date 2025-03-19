@@ -156,18 +156,18 @@ var b04;
 var b04;
 var b04;
 function f1(x) {
-    x.prop;
+    x.prop; // ok
     (x["other"] || 0).toFixed();
 }
 function f2(x) {
-    x.prop;
+    x.prop; // ok
     x["other"].toFixed();
 }
 function f3(x) {
-    x.prop;
+    x.prop; // ok
     x["other"].x.toFixed();
 }
 function f4(x) {
-    x.prop;
+    x.prop; // ok
     x["other"].toFixed();
 }

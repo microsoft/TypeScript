@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// https://github.com/Microsoft/TypeScript/issues/16861
+ // https://github.com/Microsoft/TypeScript/issues/16861
 -var BaseType = /** @class */ (function () {
 -    function BaseType() {
 -    }

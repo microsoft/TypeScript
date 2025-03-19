@@ -17,10 +17,10 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
 -var mod_1 = require("mod");
--// Should see mod_1['default'] in emit here
--React.createElement(Foo, { handler: mod_1.default });
--// Should see mod_1['default'] in emit here
--React.createElement(Foo, __assign({}, mod_1.default));
 +const mod_1 = require("mod");
+ // Should see mod_1['default'] in emit here
+-React.createElement(Foo, { handler: mod_1.default });
 +<Foo handler={mod_1.default}></Foo>;
+ // Should see mod_1['default'] in emit here
+-React.createElement(Foo, __assign({}, mod_1.default));
 +<Foo {...mod_1.default}></Foo>;

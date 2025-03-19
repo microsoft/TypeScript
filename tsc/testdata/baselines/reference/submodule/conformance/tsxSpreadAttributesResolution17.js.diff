@@ -36,6 +36,6 @@
 +    }
 +}
  exports.Empty = Empty;
--// OK
+ // OK
 -var unionedSpread = <Empty {...obj}/>;
 +let unionedSpread = <Empty {...obj}/>;

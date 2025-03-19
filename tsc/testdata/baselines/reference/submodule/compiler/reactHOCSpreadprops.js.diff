@@ -31,7 +31,7 @@
 -    return __assign.apply(this, arguments);
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var React = require("react");
 +const React = require("react");
  function f(App) {

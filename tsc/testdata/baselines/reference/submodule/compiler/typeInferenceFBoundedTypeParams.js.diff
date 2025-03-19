@@ -1,10 +1,8 @@
 --- old.typeInferenceFBoundedTypeParams.js
 +++ new.typeInferenceFBoundedTypeParams.js
-@@= skipped -25, +25 lines =@@
- 
- 
+@@= skipped -27, +27 lines =@@
  //// [typeInferenceFBoundedTypeParams.js]
--// Example from #6037
+ // Example from #6037
  function fold(values, result, fold) {
 -    for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
 -        var value = values_1[_i];
@@ -12,7 +10,7 @@
          result = fold(result, value);
      }
      return result;
-@@= skipped -12, +10 lines =@@
+@@= skipped -10, +9 lines =@@
      values.push(value);
      return values;
  }

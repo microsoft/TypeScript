@@ -45,7 +45,7 @@ class C {
 var f = x;
 var g = x;
 var h = x;
-var h2 = x;
+var h2 = x; // no error
 var M;
 (function (M) {
     M.a = 1;

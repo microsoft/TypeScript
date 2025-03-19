@@ -149,17 +149,17 @@ function transformClassFields() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function f() {
-    let x1;
-    let x2;
-    let x3;
-    let x4;
-    let x5;
-    let x6;
-    let x7;
-    let x8;
-    let x9;
-    var x10;
-    let x11;
+    let x1; // should error
+    let x2; // should error
+    let x3; // should not error
+    let x4; // should not error
+    let x5; // should not error
+    let x6; // should not error
+    let x7; // should not error
+    let x8; // should error
+    let x9; // should error
+    var x10; // should not error
+    let x11; // should not error
     function foo() {
         console.log(x1);
         console.log(x2);
@@ -179,15 +179,15 @@ function f() {
     foo();
 }
 function f2() {
-    let x1;
-    let x2;
-    let x3;
-    let x4;
-    let x5;
-    let x6;
-    let x7;
-    let x8;
-    let x9;
+    let x1; // should error
+    let x2; // should error
+    let x3; // should not error
+    let x4; // should not error
+    let x5; // should not error
+    let x6; // should not error
+    let x7; // should not error
+    let x8; // should error
+    let x9; // should error
     console.log(x1);
     console.log(x2);
     console.log(x3);
@@ -199,14 +199,14 @@ function f2() {
     console.log(x9);
 }
 function f3() {
-    let x;
+    let x; // should error
     function foo() {
         x.toString();
     }
     foo();
 }
 function f4() {
-    let x;
+    let x; // should error
     return {
         foo() {
             return x.toString();
@@ -218,13 +218,13 @@ function f5() {
 }
 exports.default = {};
 function f6() {
-    let key;
+    let key; // should not error
     for (key in {}) {
         console.log(key);
     }
 }
 function f7() {
-    let key;
+    let key; // should not error
     for (key of []) {
         console.log(key);
     }
@@ -232,27 +232,27 @@ function f7() {
 function f8() {
     function ff() {
         let _;
-        let rest;
+        let rest; // should not error
         [_, ...rest] = bar();
     }
 }
 function f9() {
-    const x;
+    const x; // should have only one error
     function bar() {
         let y = x;
     }
 }
 function rw() {
-    let i;
+    let i; // should error
     function inside() {
         i++;
-        console.log(i);
+        console.log(i); // NaN
     }
     inside();
 }
 rw();
 function createBinder() {
-    var file;
+    var file; // should not error
     function bindSourceFile(f) {
         file = f;
         file.toString();
@@ -264,7 +264,7 @@ function transformClassFields() {
         ClassPropertySubstitutionFlags[ClassPropertySubstitutionFlags["ClassAliases"] = 1] = "ClassAliases";
         ClassPropertySubstitutionFlags[ClassPropertySubstitutionFlags["ClassStaticThisOrSuperReference"] = 2] = "ClassStaticThisOrSuperReference";
     })(ClassPropertySubstitutionFlags || (ClassPropertySubstitutionFlags = {}));
-    let enabledSubstitutions;
+    let enabledSubstitutions; // should error
     function enableSubstitutionForClassAliases() {
         enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
         enabledSubstitutions.toString();

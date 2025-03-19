@@ -15,7 +15,7 @@
 -        _A_foo.set(this, __classPrivateFieldGet(this, _A_bar, "f")); // Error
 -        _A_bar.set(this, 3);
 -    }
-+    #foo = this.#bar;
++    #foo = this.#bar; // Error
 +    #bar = 3;
  }
 -_A_foo = new WeakMap(), _A_bar = new WeakMap();
@@ -24,7 +24,7 @@
 -        _A2_instances.add(this);
 -        _A2_foo.set(this, __classPrivateFieldGet(this, _A2_instances, "m", _A2_bar).call(this)); // No Error
 -    }
-+    #foo = this.#bar();
++    #foo = this.#bar(); // No Error
 +    #bar() { return 3; }
      ;
  }
@@ -34,7 +34,7 @@
 -        _A3_instances.add(this);
 -        _A3_foo.set(this, __classPrivateFieldGet(this, _A3_instances, "a", _A3_bar_get)); // No Error
 -    }
-+    #foo = this.#bar;
++    #foo = this.#bar; // No Error
 +    get #bar() { return 3; }
      ;
  }
@@ -44,7 +44,7 @@
 -        _B_foo.set(this, __classPrivateFieldGet(this, _B_bar, "f")); // Error
 -        _B_bar.set(this, __classPrivateFieldGet(this, _B_foo, "f"));
 -    }
-+    #foo = this.#bar;
++    #foo = this.#bar; // Error
 +    #bar = this.#foo;
  }
 -_B_foo = new WeakMap(), _B_bar = new WeakMap();

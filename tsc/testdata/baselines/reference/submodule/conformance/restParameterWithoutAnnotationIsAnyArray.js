@@ -29,6 +29,7 @@ var b = {
 
 
 //// [restParameterWithoutAnnotationIsAnyArray.js]
+// Rest parameters without type annotations are 'any', errors only for the functions with 2 rest params
 function foo(...x) { }
 var f = function foo(...x) { };
 var f2 = (...x, ...y) => { };

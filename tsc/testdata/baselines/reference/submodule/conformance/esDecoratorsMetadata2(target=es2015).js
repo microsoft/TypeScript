@@ -36,11 +36,11 @@ class C {
     @meta('b', 'y')
     m() { }
 }
-C[Symbol.metadata].a;
-C[Symbol.metadata].b;
+C[Symbol.metadata].a; // 'x'
+C[Symbol.metadata].b; // 'y'
 class D extends C {
     @meta('b', 'z')
     m() { }
 }
-D[Symbol.metadata].a;
-D[Symbol.metadata].b;
+D[Symbol.metadata].a; // 'x'
+D[Symbol.metadata].b; // 'z'

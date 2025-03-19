@@ -16,6 +16,7 @@ a.foo();
 //// [classOrder1.js]
 class A {
     foo() {
+        /*WScript.Echo("Here!");*/
     }
 }
 var a = new A();

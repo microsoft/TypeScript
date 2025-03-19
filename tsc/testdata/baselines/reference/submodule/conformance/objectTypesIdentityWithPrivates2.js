@@ -41,6 +41,7 @@ function foo6(x: any): any { }
 
 
 //// [objectTypesIdentityWithPrivates2.js]
+// object types are identical structurally
 class C {
     foo;
 }

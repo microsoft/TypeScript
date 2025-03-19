@@ -1,12 +1,11 @@
 --- old.tsxAttributeResolution12.js
 +++ new.tsxAttributeResolution12.js
-@@= skipped -45, +45 lines =@@
- 
+@@= skipped -46, +46 lines =@@
  
  //// [file.jsx]
--// Errors correctly
+ // Errors correctly
 -var T = TestMod.Test;
 +const T = TestMod.Test;
  var t1 = <T />;
--// Should error
+ // Should error
  var t2 = <TestMod.Test />;

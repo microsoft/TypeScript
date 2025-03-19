@@ -32,6 +32,6 @@ function f() {
     x.a;
     x.b;
     x;
-    delete x;
+    delete x; // No effect
     x;
 }

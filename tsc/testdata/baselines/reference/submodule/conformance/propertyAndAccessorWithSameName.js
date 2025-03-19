@@ -30,7 +30,7 @@ class C {
 }
 class D {
     x;
-    set x(v) { }
+    set x(v) { } // error
 }
 class E {
     x;

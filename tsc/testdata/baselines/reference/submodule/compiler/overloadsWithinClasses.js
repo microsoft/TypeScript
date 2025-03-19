@@ -28,10 +28,10 @@ class X {
 //// [overloadsWithinClasses.js]
 class foo {
     static fnOverload() { }
-    static fnOverload(foo) { }
+    static fnOverload(foo) { } // error
 }
 class bar {
-    static fnOverload(foo) { }
+    static fnOverload(foo) { } // no error
 }
 class X {
     attr(first, second) {

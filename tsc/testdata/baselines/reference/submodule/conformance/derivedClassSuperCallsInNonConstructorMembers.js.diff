@@ -1,10 +1,9 @@
 --- old.derivedClassSuperCallsInNonConstructorMembers.js
 +++ new.derivedClassSuperCallsInNonConstructorMembers.js
-@@= skipped -33, +33 lines =@@
- }
+@@= skipped -34, +34 lines =@@
  
  //// [derivedClassSuperCallsInNonConstructorMembers.js]
--// error to use super calls outside a constructor
+ // error to use super calls outside a constructor
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

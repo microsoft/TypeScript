@@ -70,41 +70,49 @@ function intersection2<T>(thing: T & (0 | 1 | 2)) {
 
 //// [inDoesNotOperateOnPrimitiveTypes.js]
 const validHasKey = (thing, key) => {
-    return key in thing;
+    return key in thing; // Ok
 };
 const alsoValidHasKey = (thing, key) => {
-    return key in thing;
+    return key in thing; // Ok (as T may be instantiated with a valid type)
 };
 function invalidHasKey(thing, key) {
-    return key in thing;
+    return key in thing; // Error (because all possible instantiations are errors)
 }
 function union1(thing) {
-    "key" in thing;
+    "key" in thing; // Error (because all possible instantiations are errors)
 }
 function union2(thing) {
-    "key" in thing;
+    "key" in thing; // Error (because narrowing is possible)
     if (typeof thing === "object") {
-        "key" in thing;
+        "key" in thing; // Ok
     }
 }
 function union3(thing) {
-    "key" in thing;
+    "key" in thing; // Error (because narrowing is possible)
     if (typeof thing !== "string" && typeof thing !== "number") {
-        "key" in thing;
+        "key" in thing; // Ok (because further narrowing is impossible)
     }
 }
 function union4(thing) {
-    "key" in thing;
+    "key" in thing; // Ok (because narrowing is impossible)
 }
 function union5(p) {
+    // For consistency, this should probably not be an error, because useful
+    // narrowing is impossible. However, this is exceptionally strange input,
+    // and it adds a lot of complexity to distinguish between a `T | U` where
+    // one constraint is non-primitive and the other is primitive and a `T | U`
+    // like this where both constraints have primitive and non-primitive
+    // constitutents. Also, the strictly sound behavior would be to error
+    // here, which is what's happening, so "fixing" this by suppressing the
+    // error seems very low-value.
     "key" in p;
     if (typeof p === "object") {
         "key" in p;
     }
 }
 function intersection1(thing) {
-    "key" in thing;
+    "key" in thing; // Error (because all possible instantiations are errors)
 }
 function intersection2(thing) {
-    "key" in thing;
+    "key" in thing; // Error (because all possible instantations are errors)
 }

@@ -10,5 +10,6 @@ const A: {new(): A} = class {}
 
 
 //// [classExpressionAssignment.js]
+// This is invalid
 const A = class {
 };

@@ -42,7 +42,7 @@
      x: "hello world",
      y: 2
  };
--// OK
+ // OK
 -var p = <Poisoned {...obj}/>;
 -var EmptyProp = /** @class */ (function (_super) {
 -    __extends(EmptyProp, _super);
@@ -57,15 +57,15 @@
 -    };
 -    return EmptyProp;
 -}(React.Component));
--// OK
++    }
++}
+ // OK
 -var j;
 -var e1 = <EmptyProp {...{}}/>;
 -var e2 = <EmptyProp {...j}/>;
 -var e3 = <EmptyProp {...{ ref: function (input) { _this.textInput = input; } }}/>;
 -var e4 = <EmptyProp data-prop/>;
 -var e5 = <EmptyProp {...{ "data-prop": true }}/>;
-+    }
-+}
 +let j;
 +let e1 = <EmptyProp {...{}}/>;
 +let e2 = <EmptyProp {...j}/>;

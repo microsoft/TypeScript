@@ -28,4 +28,5 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 
 
 //// [index.js]
+// not exclusively type-only
 import "pkg" with { "resolution-mode": "require" };

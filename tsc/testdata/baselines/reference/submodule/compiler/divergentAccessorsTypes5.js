@@ -40,6 +40,8 @@ i.prop2 = "hello"; // error
 
 
 //// [divergentAccessorsTypes5.js]
+// Not really different from divergentAccessorsTypes4.ts,
+// but goes through the deferred type code
 class One {
     get prop1() { return ""; }
     set prop1(s) { }
@@ -57,7 +59,9 @@ class Three {
     get prop2() { return ""; }
     set prop2(s) { }
 }
-i.prop1 = 42;
+// "hello"
+i.prop1 = 42; // error
 i.prop1 = "hello";
+// 42
 i.prop2 = 42;
-i.prop2 = "hello";
+i.prop2 = "hello"; // error

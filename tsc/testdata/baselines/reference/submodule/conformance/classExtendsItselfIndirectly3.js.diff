@@ -28,7 +28,7 @@
 -}(E)); // error
 +class C extends E {
 +    foo;
-+}
++} // error
  //// [classExtendsItselfIndirectly_file2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -106,7 +106,7 @@
 -}(E2)); // error
 +class C2 extends E2 {
 +    foo;
-+}
++} // error
  //// [classExtendsItselfIndirectly_file5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

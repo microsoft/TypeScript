@@ -12,4 +12,4 @@ x; // string | number
 let x;
 let cond;
 cond ? x = "" : x = 3;
-x;
+x; // string | number

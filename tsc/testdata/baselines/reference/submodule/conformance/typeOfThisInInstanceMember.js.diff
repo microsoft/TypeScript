@@ -35,9 +35,9 @@
 +    }
 +}
  var c;
--// all ok
+ // all ok
  var r = c.x;
- var ra = c.x.x.x;
+@@= skipped -28, +23 lines =@@
  var r2 = c.y;
  var r3 = c.foo();
  var rs = [r, r2, r3];

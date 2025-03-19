@@ -1,8 +1,7 @@
 --- old.sourceMap-Comment1.js
 +++ new.sourceMap-Comment1.js
-@@= skipped -3, +3 lines =@@
- // Comment
+@@= skipped -4, +4 lines =@@
  
  //// [sourceMap-Comment1.js]
--// Comment
+ // Comment
 -//# sourceMappingURL=sourceMap-Comment1.js.map

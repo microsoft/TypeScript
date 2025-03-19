@@ -15,11 +15,6 @@
 -var a4 = ["a", "b"].map(combine(wrap(function (s) { return s.length; }), wrap(function (n) { return n > 10; })));
 -var a5 = ["a", "b"].map(combine(identity, wrap(function (s) { return s.length; })));
 -var a6 = ["a", "b"].map(combine(wrap(function (s) { return s.length; }), identity));
--// This is a contrived class. We could do the same thing with Observables, etc.
--var SetOf = /** @class */ (function () {
--    function SetOf() {
--    }
--    SetOf.prototype.add = function (a) {
 +let f1 = s => s.length;
 +let f2 = wrap(s => s.length);
 +let f3 = arrayize(wrap(s => s.length));
@@ -31,6 +26,11 @@
 +let a4 = ["a", "b"].map(combine(wrap(s => s.length), wrap(n => n > 10)));
 +let a5 = ["a", "b"].map(combine(identity, wrap(s => s.length)));
 +let a6 = ["a", "b"].map(combine(wrap(s => s.length), identity));
+ // This is a contrived class. We could do the same thing with Observables, etc.
+-var SetOf = /** @class */ (function () {
+-    function SetOf() {
+-    }
+-    SetOf.prototype.add = function (a) {
 +class SetOf {
 +    _store;
 +    add(a) {
@@ -57,6 +57,7 @@
 +        this._store.forEach((a, i) => fn(a, i));
 +    }
  }
++/* ... etc ... */
 +function compose(...fns) {
 +    return (x) => fns.reduce((prev, fn) => fn(prev), x);
 +}

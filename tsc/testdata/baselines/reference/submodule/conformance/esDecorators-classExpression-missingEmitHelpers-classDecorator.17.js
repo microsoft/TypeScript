@@ -18,6 +18,7 @@ export {}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var C;
+// uses __esDecorate, __runInitializers, __setFunctionName, __propKey
 ({ [x]: C = 
     @dec
     class {

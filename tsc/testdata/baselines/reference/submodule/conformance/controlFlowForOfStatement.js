@@ -21,5 +21,5 @@ function a() {
     for (x of obj) {
         x = x.toExponential();
     }
-    x;
+    x; // string | boolean
 }

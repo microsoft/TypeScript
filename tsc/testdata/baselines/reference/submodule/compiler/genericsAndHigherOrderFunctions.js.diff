@@ -1,10 +1,9 @@
 --- old.genericsAndHigherOrderFunctions.js
 +++ new.genericsAndHigherOrderFunctions.js
-@@= skipped -19, +19 lines =@@
-             <R>(f: (_: N) => (_: R) => R) => h(combine(f)(g))
+@@= skipped -20, +20 lines =@@
  
  //// [genericsAndHigherOrderFunctions.js]
--// no errors expected
+ // no errors expected
 -var combine = function (f) {
 -    return function (g) {
 -        return function (x) { return f(g(x)); };

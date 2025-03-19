@@ -53,6 +53,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
 class C {
 }
+// This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
 class D extends C {
 }
 exports.D = D;
@@ -71,7 +72,7 @@ const unkown_1 = require("unkown");
 new unkown_1.Foo();
 //// [callAny.js]
 g();
-g();
+g(); // Should get error for type argument
 //// [super.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -80,7 +81,7 @@ const unknown_1 = require("unknown");
 class C extends unknown_1.A {
     m() {
         super.m(1);
-        super.m();
+        super.m(); // Should get error for type argument
     }
 }
 exports.C = C;

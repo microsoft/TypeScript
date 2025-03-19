@@ -47,16 +47,19 @@ const e2 = <TestingOptional y1 y3 extra-prop/>
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// OK
 const c1 = <OneThing yxx='ok'/>;
 const c2 = <OneThing yy={100} yy1="hello"/>;
 const c3 = <OneThing yxx="hello" ignore-prop/>;
 const c4 = <OneThing data="hello" data-prop/>;
 const c5 = <OneThing yxx1='ok'>Hello</OneThing>;
+// OK
 const d1 = <TestingOneThing y1 extra-data/>;
 const d2 = <TestingOneThing extra-data="hello"/>;
 const d3 = <TestingOneThing extra-data="hello" yy="hihi"/>;
 const d4 = <TestingOneThing extra-data="hello" yy={9} direction={10}/>;
 const d5 = <TestingOneThing extra-data="hello" yy="hello" name="Bob"/>;
+// OK
 const e1 = <TestingOptional />;
 const e3 = <TestingOptional y1="hello"/>;
 const e4 = <TestingOptional y1="hello" y2={1000}/>;

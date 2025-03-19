@@ -100,11 +100,11 @@
 -    var x = validate(foo); // { a: number, readonly b: string }
 -    var y = clone(foo); // { a?: number, b: string }
 -    var z = validateAndClone(foo); // { a: number, b: string }
-+    let x = validate(foo);
-+    let y = clone(foo);
-+    let z = validateAndClone(foo);
++    let x = validate(foo); // { a: number, readonly b: string }
++    let y = clone(foo); // { a?: number, b: string }
++    let z = validateAndClone(foo); // { a: number, b: string }
  }
--// Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
+ // Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
  var g1 = applySpec({
 -    sum: function (a) { return 3; },
 +    sum: (a) => 3,
@@ -113,12 +113,12 @@
 +        mul: (b) => "n"
      }
  });
--// Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
+ // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 -var g2 = applySpec({ foo: { bar: { baz: function (x) { return true; } } } });
--// Repro from #12633
++var g2 = applySpec({ foo: { bar: { baz: (x) => true } } });
+ // Repro from #12633
 -var foo = function (object, partial) { return object; };
 -var o = { a: 5, b: 7 };
-+var g2 = applySpec({ foo: { bar: { baz: (x) => true } } });
 +const foo = (object, partial) => object;
 +let o = { a: 5, b: 7 };
  foo(o, { b: 9 });
@@ -128,12 +128,12 @@
 -var x2 = f22({ foo: { value: 42 }, bar: { value: "hello" } });
 -var x3 = f23({ foo: 42, bar: "hello" });
 -var x4 = f24({ foo: 42, bar: "hello" });
--// Repro from #29765
 +let x0 = f20({ foo: 42, bar: "hello" });
 +let x1 = f21({ foo: 42, bar: "hello" });
 +let x2 = f22({ foo: { value: 42 }, bar: { value: "hello" } });
 +let x3 = f23({ foo: 42, bar: "hello" });
 +let x4 = f24({ foo: 42, bar: "hello" });
+ // Repro from #29765
  function getProps(obj, list) {
      return {};
  }

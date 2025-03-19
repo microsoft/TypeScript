@@ -27,9 +27,9 @@ exports.C1 = C1;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var answer = 42;
+var answer = 42; // No exports
 //// [foo_2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const foo = require("./foo_1");
-var x = foo;
+var x = foo; // Cause a runtime dependency

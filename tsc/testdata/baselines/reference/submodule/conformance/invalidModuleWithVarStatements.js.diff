@@ -1,14 +1,6 @@
 --- old.invalidModuleWithVarStatements.js
 +++ new.invalidModuleWithVarStatements.js
-@@= skipped -29, +29 lines =@@
- 
- 
- //// [invalidModuleWithVarStatements.js]
--// All of these should be an error
- var Y;
- (function (Y) {
-     var x = 0;
-@@= skipped -11, +10 lines =@@
+@@= skipped -40, +40 lines =@@
  })(Y2 || (Y2 = {}));
  var Y4;
  (function (Y4) {

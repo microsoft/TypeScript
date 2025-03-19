@@ -17,8 +17,7 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var t = {
--    A: undefined, // error
 +let t = {
-+    A: undefined,
+     A: undefined, // error
      B: undefined,
  };

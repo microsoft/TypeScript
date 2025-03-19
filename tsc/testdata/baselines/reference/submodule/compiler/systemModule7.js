@@ -15,7 +15,9 @@ export module M {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
+// filename: instantiatedModule.ts
 var M;
+// filename: instantiatedModule.ts
 (function (M) {
     var x = 1;
 })(M || (exports.M = M = {}));

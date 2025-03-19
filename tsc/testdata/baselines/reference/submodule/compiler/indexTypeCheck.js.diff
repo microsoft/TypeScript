@@ -1,23 +1,7 @@
 --- old.indexTypeCheck.js
 +++ new.indexTypeCheck.js
-@@= skipped -68, +68 lines =@@
- var yellow;
- var blue;
- var s = "some string";
--yellow[5]; // ok
--yellow["hue"]; // ok
--yellow[{}]; // ok
--s[0]; // error
--s["s"]; // ok
--s[{}]; // ok
--yellow[blue]; // error
-+yellow[5];
-+yellow["hue"];
-+yellow[{}];
-+s[0];
-+s["s"];
-+s[{}];
-+yellow[blue];
+@@= skipped -77, +77 lines =@@
+ yellow[blue]; // error
  var x;
  x[0];
 -var Benchmark = /** @class */ (function () {

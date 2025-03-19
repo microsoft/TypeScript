@@ -33,4 +33,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new a.A();
+new a.A(); // Error

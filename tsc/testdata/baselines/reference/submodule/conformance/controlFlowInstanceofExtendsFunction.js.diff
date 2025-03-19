@@ -21,17 +21,11 @@
      }
 -    return Y;
 -}());
--console.log(X.now()); // works as expected
--console.log(Y.now()); // works as expected
 +    why() {
 +    }
 +}
 +class Y {
 +}
-+console.log(X.now());
-+console.log(Y.now());
+ console.log(X.now()); // works as expected
+ console.log(Y.now()); // works as expected
  exports.x = Math.random() > 0.5 ? new X() : 1;
- if (exports.x instanceof X) {
--    exports.x.why(); // should compile
-+    exports.x.why();
- }

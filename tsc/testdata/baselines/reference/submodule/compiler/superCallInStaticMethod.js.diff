@@ -32,30 +32,31 @@
 -    __extends(Other, _super);
 -    function Other() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+-    }
 +}
 +class Other extends Doing {
-+    static staticMethod() {
-+        super.staticMethod();
-     }
--    // in static method
+     // in static method
 -    Other.staticMethod = function () {
 -        _super.staticMethod.call(this);
 -    };
--    // in a lambda inside a static method
++    static staticMethod() {
++        super.staticMethod();
++    }
+     // in a lambda inside a static method
 -    Other.lambdaInsideAStaticMethod = function () {
 -        var _this = this;
 -        (function () {
 -            _super.staticMethod.call(_this);
 -        });
 -    };
--    // in an object literal inside a static method
--    Other.objectLiteralInsideAStaticMethod = function () {
--        var _this = this;
 +    static lambdaInsideAStaticMethod() {
 +        () => {
 +            super.staticMethod();
 +        };
 +    }
+     // in an object literal inside a static method
+-    Other.objectLiteralInsideAStaticMethod = function () {
+-        var _this = this;
 +    static objectLiteralInsideAStaticMethod() {
          return {
 -            a: function () {
@@ -80,21 +81,23 @@
 -        enumerable: false,
 -        configurable: true
 -    });
--    // in static method
++    }
++    // in a getter
++    static get staticGetter() {
++        super.staticMethod();
++        return 0;
++    }
++    // in a setter
++    static set staticGetter(value) {
++        super.staticMethod();
++    }
+     // in static method
 -    Other.initializerInAStaticMethod = function (a) {
 -        if (a === void 0) { a = _super.staticMethod.call(this); }
 -        _super.staticMethod.call(this);
 -    };
 -    return Other;
 -}(Doing));
-+    }
-+    static get staticGetter() {
-+        super.staticMethod();
-+        return 0;
-+    }
-+    static set staticGetter(value) {
-+        super.staticMethod();
-+    }
 +    static initializerInAStaticMethod(a = super.staticMethod()) {
 +        super.staticMethod();
 +    }

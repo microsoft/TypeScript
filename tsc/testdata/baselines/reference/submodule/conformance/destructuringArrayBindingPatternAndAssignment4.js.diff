@@ -23,4 +23,4 @@
 -    return ar;
 -};
 -var _a = __read(data, 1), value = _a[0]; // Error
-+const [value] = data;
++const [value] = data; // Error

@@ -227,17 +227,20 @@ var x: B = { };
 
 
 //// [contextualTyping.js]
+// CONTEXT: Class property declaration
 class C1T5 {
     foo = function (i) {
         return i;
     };
 }
+// CONTEXT: Module property declaration
 var C2T5;
 (function (C2T5) {
     C2T5.foo = function (i) {
         return i;
     };
 })(C2T5 || (C2T5 = {}));
+// CONTEXT: Variable declaration
 var c3t1 = (function (s) { return s; });
 var c3t2 = ({
     n: 1
@@ -260,6 +263,7 @@ var c3t13 = ({
 var c3t14 = ({
     a: []
 });
+// CONTEXT: Class property assignment
 class C4T5 {
     foo;
     constructor() {
@@ -268,14 +272,17 @@ class C4T5 {
         };
     }
 }
+// CONTEXT: Module property assignment
 var C5T5;
 (function (C5T5) {
     C5T5.foo = function (i, s) {
         return s;
     };
 })(C5T5 || (C5T5 = {}));
+// CONTEXT: Variable assignment
 var c6t5;
 c6t5 = function (n) { return ({}); };
+// CONTEXT: Array index assignment
 var c7t2;
 c7t2[0] = ({ n: 1 });
 var objc8 = ({});
@@ -301,17 +308,21 @@ objc8.t13 = ({
 objc8.t14 = ({
     a: []
 });
+// CONTEXT: Function call
 function c9t5(f) { }
 ;
 c9t5(function (n) {
     return ({});
 });
+// CONTEXT: Return statement
 var c10t5 = function () { return function (n) { return ({}); }; };
+// CONTEXT: Newing a class
 class C11t5 {
     constructor(f) { }
 }
 ;
 var i = new C11t5(function (n) { return ({}); });
+// CONTEXT: Type annotated expression
 var c12t1 = (function (s) { return s; });
 var c12t2 = ({
     n: 1

@@ -5,16 +5,7 @@
  var ls;
  ls = "eager";
 -ls = function () { return "lazy"; };
--// Deeply instantiated generics
 +ls = () => "lazy";
+ // Deeply instantiated generics
  var x;
  var y;
- x = y;
-@@= skipped -27, +26 lines =@@
-     var x;
-     return x;
- }
--// Deeply instantiated generics
- var a = f();
- var b = g();
- a = b;

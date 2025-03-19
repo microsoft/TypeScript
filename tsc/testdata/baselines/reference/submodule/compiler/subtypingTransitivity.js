@@ -36,4 +36,4 @@ var d;
 var d2;
 d.x = '';
 b = d;
-b.x = 1;
+b.x = 1; // assigned number to string

@@ -19,6 +19,9 @@ declare var React: any;
 
 
 //// [file.js]
+// Emit ' word' in the last string
 <div>word <code>code</code> word</div>;
+// Same here
 <div><code>code</code> word</div>;
+// And here
 <div><code /> word</div>;

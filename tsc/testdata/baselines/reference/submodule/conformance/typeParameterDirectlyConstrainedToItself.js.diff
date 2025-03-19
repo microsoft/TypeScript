@@ -1,10 +1,9 @@
 --- old.typeParameterDirectlyConstrainedToItself.js
 +++ new.typeParameterDirectlyConstrainedToItself.js
-@@= skipped -20, +20 lines =@@
- var b2 = <T, U extends U>() => { }
+@@= skipped -21, +21 lines =@@
  
  //// [typeParameterDirectlyConstrainedToItself.js]
--// all of the below should be errors
+ // all of the below should be errors
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

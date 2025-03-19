@@ -28,5 +28,5 @@ class C {
     @meta('b', 'y')
     m() { }
 }
-C[Symbol.metadata].a;
-C[Symbol.metadata].b;
+C[Symbol.metadata].a; // 'x'
+C[Symbol.metadata].b; // 'y'

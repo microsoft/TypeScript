@@ -46,15 +46,18 @@ const inputARand = getEither(inputA, inputALike);
 const inputASet = new Set();
 const result1 = Array.from(inputA);
 const result2 = Array.from(inputA.values());
-const result3 = Array.from(inputA.values());
+const result3 = Array.from(inputA.values()); // expect error
 const result4 = Array.from(inputB, ({ b }) => ({ a: b }));
 const result5 = Array.from(inputALike);
-const result6 = Array.from(inputALike);
+const result6 = Array.from(inputALike); // expect error
 const result7 = Array.from(inputALike, ({ a }) => ({ b: a }));
 const result8 = Array.from(inputARand);
 const result9 = Array.from(inputARand, ({ a }) => ({ b: a }));
 const result10 = Array.from(new Set());
 const result11 = Array.from(inputASet, ({ a }) => ({ b: a }));
+// if this is written inline, the compiler seems to infer
+// the ?: as always taking the false branch, narrowing to ArrayLike<T>,
+// even when the type is written as : Iterable<T>|ArrayLike<T>
 function getEither(in1, in2) {
     return Math.random() > 0.5 ? in1 : in2;
 }

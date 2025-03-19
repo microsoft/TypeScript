@@ -1,10 +1,9 @@
 --- old.letInVarDeclOfForOf_ES5.js
 +++ new.letInVarDeclOfForOf_ES5.js
-@@= skipped -9, +9 lines =@@
- 
+@@= skipped -10, +10 lines =@@
  
  //// [letInVarDeclOfForOf_ES5.js]
--// should not be an error
+ // should not be an error
 -for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
 -    var let = _a[_i];
 -}

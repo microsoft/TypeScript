@@ -17,6 +17,7 @@ module D {
 }
 
 //// [privateStaticNotAccessibleInClodule2.js]
+// Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 class C {
     foo;
     static bar;
@@ -25,5 +26,5 @@ class D extends C {
     baz;
 }
 (function (D) {
-    D.y = D.bar;
+    D.y = D.bar; // error
 })(D || (D = {}));

@@ -1,10 +1,9 @@
 --- old.constructSignatureWithAccessibilityModifiersOnParameters.js
 +++ new.constructSignatureWithAccessibilityModifiersOnParameters.js
-@@= skipped -31, +31 lines =@@
- }
+@@= skipped -32, +32 lines =@@
  
  //// [constructSignatureWithAccessibilityModifiersOnParameters.js]
--// Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
+ // Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
 -var C = /** @class */ (function () {
 -    function C(x, y) {
 +class C {

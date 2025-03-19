@@ -36,10 +36,10 @@ class Foo {
     privProp = 0;
 }
 var f = new Foo();
-f.privMeth();
-f.privProp;
-f.pubMeth();
-f.pubProp;
+f.privMeth(); // should not work
+f.privProp; // should not work
+f.pubMeth(); // should work
+f.pubProp; // should work
 var M;
 (function (M) {
     class C {
@@ -50,5 +50,5 @@ var M;
     M.V = 0;
 })(M || (M = {}));
 var c = new M.C();
-c.pub;
-c.priv;
+c.pub; // should work
+c.priv; // should not work

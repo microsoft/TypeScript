@@ -1,10 +1,9 @@
 --- old.invalidBinaryIntegerLiteralAndOctalIntegerLiteral.js
 +++ new.invalidBinaryIntegerLiteralAndOctalIntegerLiteral.js
-@@= skipped -7, +7 lines =@@
- var octal = 0O91010;
+@@= skipped -8, +8 lines =@@
  
  //// [invalidBinaryIntegerLiteralAndOctalIntegerLiteral.js]
--// Error
+ // Error
 -var binary = 0;
 +var binary = 0b;
  21010;

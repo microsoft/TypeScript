@@ -8,12 +8,11 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.tabId = void 0;
  exports.tabId = chrome.debugger.tabId;
- declare;
+@@= skipped -8, +7 lines =@@
  module;
  debugger;
--{ } // still an error
+ { } // still an error
 -
 -
 -//// [ambientModuleDeclarationWithReservedIdentifierInDottedPath.d.ts]
 -export declare const tabId: number;
-+{ }

@@ -107,7 +107,7 @@ class MessageWrapper {
     wrap() {
         let m = this.message;
         let f = function () {
-            m.secret();
+            m.secret(); // should error
         };
     }
 }
@@ -126,7 +126,7 @@ class Z {
 function bA(arg) {
     this.a();
     arg.a();
-    arg.b();
+    arg.b(); // should error to avoid cross-hierarchy protected access https://www.typescriptlang.org/docs/handbook/2/classes.html#cross-hierarchy-protected-access
 }
 function bB(arg) {
     this.a();
@@ -137,44 +137,44 @@ function bB(arg) {
 function bC(arg) {
     this.a();
     this.c();
-    arg.a();
-    arg.b();
+    arg.a(); // should error
+    arg.b(); // should error
 }
 function bZ(arg) {
     this.z();
-    arg.a();
-    arg.b();
+    arg.a(); // should error
+    arg.b(); // should error
 }
 function bString(arg) {
     this.toLowerCase();
-    arg.a();
-    arg.b();
+    arg.a(); // should error
+    arg.b(); // should error
 }
 function bAny(arg) {
-    arg.a();
-    arg.b();
+    arg.a(); // should error
+    arg.b(); // should error
 }
 class D {
     d() { }
     derived1(arg) {
         arg.d();
-        arg.d1();
+        arg.d1(); // should error
     }
     derived1ThisD(arg) {
         arg.d();
-        arg.d1();
+        arg.d1(); // should error
     }
     derived1ThisD1(arg) {
         arg.d();
         arg.d1();
     }
     derived2(arg) {
-        arg.d();
-        arg.d2();
+        arg.d(); // should error because of overridden method in D2
+        arg.d2(); // should error
     }
     derived2ThisD(arg) {
-        arg.d();
-        arg.d2();
+        arg.d(); // should error because of overridden method in D2
+        arg.d2(); // should error
     }
     derived2ThisD2(arg) {
         arg.d();

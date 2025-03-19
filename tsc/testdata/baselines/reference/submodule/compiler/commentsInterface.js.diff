@@ -5,13 +5,11 @@
  var i3_i;
  i3_i = {
 -    f: /**own f*/ function (/**i3_i a*/ a) { return "Hello" + a; },
-+    f: (a) => "Hello" + a,
++    f: (/**i3_i a*/ a) => "Hello" + a,
      l: this.f,
--    /** own x*/
+     /** own x*/
      x: this.f(10),
-     nc_x: this.l(this.x),
-     nc_f: this.f,
-@@= skipped -12, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  i3_i.l(10);
  i3_i.nc_f(10);
  i3_i.nc_l(10);

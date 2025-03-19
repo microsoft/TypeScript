@@ -10,8 +10,7 @@
 +    p = 'yep';
  }
  class B extends A {
--    get p() { return 'oh no'; } // error
-+    get p() { return 'oh no'; }
+     get p() { return 'oh no'; } // error
  }
  class C {
 -    constructor() {
@@ -24,9 +23,7 @@
 -        super(...arguments);
 -        this._secret = 11;
 -    }
--    get p() { return this._secret; } // error
--    set p(value) { this._secret = value; } // error
 +    _secret = 11;
-+    get p() { return this._secret; }
-+    set p(value) { this._secret = value; }
+     get p() { return this._secret; } // error
+     set p(value) { this._secret = value; } // error
  }

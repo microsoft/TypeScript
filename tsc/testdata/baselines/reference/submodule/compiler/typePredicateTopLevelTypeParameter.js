@@ -18,6 +18,7 @@ const foundAdmins = admins.filter(isDefined);  // "admin"[]
 
 
 //// [typePredicateTopLevelTypeParameter.js]
+// Repro from #51980
 function getPermissions(user) {
     if (user === 'Jack')
         return 'admin';
@@ -27,4 +28,4 @@ const admins = ['Mike', 'Joe'].map(e => getPermissions(e));
 function isDefined(a) {
     return a !== undefined;
 }
-const foundAdmins = admins.filter(isDefined);
+const foundAdmins = admins.filter(isDefined); // "admin"[]

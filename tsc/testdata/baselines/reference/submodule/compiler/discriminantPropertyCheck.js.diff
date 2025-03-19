@@ -1,31 +1,9 @@
 --- old.discriminantPropertyCheck.js
 +++ new.discriminantPropertyCheck.js
-@@= skipped -249, +249 lines =@@
- }
- function goo2(x) {
-     if (x.foo !== undefined && x.kind === "A") {
--        x.foo.length; // Error, intervening discriminant guard
-+        x.foo.length;
+@@= skipped -303, +303 lines =@@
      }
  }
- function foo1(x) {
-@@= skipped -30, +30 lines =@@
- }
- function foo6(x) {
-     if (x.foo !== undefined && x.qux) {
--        x.foo.length; // Error, intervening discriminant guard
-+        x.foo.length;
-     }
- }
--// Repro from #27493
- var Types;
- (function (Types) {
-     Types[Types["Str"] = 1] = "Str";
-@@= skipped -23, +22 lines =@@
-         }
-     }
- }
--// Repro from #29106
+ // Repro from #29106
 -var f = function (_a, _b) { };
 -var u = {};
 +const f = (_a, _b) => { };
@@ -33,7 +11,7 @@
  u.a && u.b && f(u.a, u.b);
  u.b && u.a && f(u.a, u.b);
  function foo(obj) {
-@@= skipped -16, +15 lines =@@
+@@= skipped -15, +15 lines =@@
  function onlyPlus(arg) {
      return arg;
  }

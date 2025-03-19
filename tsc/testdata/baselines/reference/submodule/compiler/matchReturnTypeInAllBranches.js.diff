@@ -1,10 +1,9 @@
 --- old.matchReturnTypeInAllBranches.js
 +++ new.matchReturnTypeInAllBranches.js
-@@= skipped -37, +37 lines =@@
- cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");
+@@= skipped -38, +38 lines =@@
  
  //// [matchReturnTypeInAllBranches.js]
--// Represents a monster who enjoys ice cream
+ // Represents a monster who enjoys ice cream
 -var IceCreamMonster = /** @class */ (function () {
 -    function IceCreamMonster(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
 +class IceCreamMonster {
@@ -17,21 +16,26 @@
          this.iceCreamFlavor = iceCreamFlavor;
          this.iceCreamRemaining = 100;
          this.wantsSprinkles = wantsSprinkles;
-         this.soundsWhenEating = soundsWhenEating;
+@@= skipped -9, +14 lines =@@
          this.name = name;
      }
--    /**
+     /**
 -* Tells the IceCreamMonster to eat their ice cre    am!
 -*
 -* @param {number} amount The amount of ice cream to e    at.
 -* @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
 -*/
 -    IceCreamMonster.prototype.eatIceCream = function (amount) {
++    * Tells the IceCreamMonster to eat their ice cre    am!
++    *
++    * @param {number} amount The amount of ice cream to e    at.
++    * @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
++    */
 +    eatIceCream(amount) {
          this.iceCreamRemaining -= amount;
          if (this.iceCreamRemaining <= 0) {
              this.iceCreamRemaining = 0;
-@@= skipped -24, +22 lines =@@
+@@= skipped -14, +14 lines =@@
          else {
              return 12345;
          }

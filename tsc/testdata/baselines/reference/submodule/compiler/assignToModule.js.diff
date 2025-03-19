@@ -1,8 +1,0 @@
---- old.assignToModule.js
-+++ new.assignToModule.js
-@@= skipped -4, +4 lines =@@
- A = undefined; // invalid LHS
- 
- //// [assignToModule.js]
--A = undefined; // invalid LHS
-+A = undefined;

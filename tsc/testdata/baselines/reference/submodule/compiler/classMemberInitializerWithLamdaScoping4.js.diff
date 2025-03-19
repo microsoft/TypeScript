@@ -17,7 +17,7 @@
 -    return Test1;
 -}());
 +    messageHandler = () => {
-+        console.log(field1);
++        console.log(field1); // Should be error that couldnt find symbol field1
 +    };
 +}
  exports.Test1 = Test1;

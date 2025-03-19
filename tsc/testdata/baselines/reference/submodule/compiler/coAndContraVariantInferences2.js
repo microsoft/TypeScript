@@ -123,23 +123,24 @@ const x = tryCast(types, isNodeArray);  // NodeAray<TypeNode>
 
 //// [coAndContraVariantInferences2.js]
 function f1(a, b) {
-    const x1 = cast(a, isC);
-    const x2 = cast(b, isC);
+    const x1 = cast(a, isC); // cast<A, C>
+    const x2 = cast(b, isC); // cast<A, C>
 }
 function f2(b, c) {
-    consume(b, c, useA);
-    consume(c, b, useA);
-    consume(b, b, useA);
-    consume(c, c, useA);
+    consume(b, c, useA); // consume<A, C>
+    consume(c, b, useA); // consume<A, B>
+    consume(b, b, useA); // consume<B, B>
+    consume(c, c, useA); // consume<C, C>
 }
 function f3(arr) {
     if (every(arr, isC)) {
-        arr;
+        arr; // readonly C[]
     }
     else {
-        arr;
+        arr; // readonly B[]
     }
 }
+// Repro from #52111
 var SyntaxKind;
 (function (SyntaxKind) {
     SyntaxKind[SyntaxKind["Block"] = 0] = "Block";
@@ -149,16 +150,17 @@ var SyntaxKind;
     SyntaxKind[SyntaxKind["FunctionDeclaration"] = 4] = "FunctionDeclaration";
 })(SyntaxKind || (SyntaxKind = {}));
 function foo(node) {
-    assertNode(node, canHaveLocals);
-    node;
+    assertNode(node, canHaveLocals); // assertNode<Node, HasLocals>
+    node; // FunctionDeclaration
 }
 function bar(node) {
-    const a = tryCast(node, isExpression);
+    const a = tryCast(node, isExpression); // tryCast<Expression, Node>
 }
+// Repro from #49924
 var SyntaxKind1;
 (function (SyntaxKind1) {
     SyntaxKind1[SyntaxKind1["ClassExpression"] = 0] = "ClassExpression";
     SyntaxKind1[SyntaxKind1["ClassStatement"] = 1] = "ClassStatement";
 })(SyntaxKind1 || (SyntaxKind1 = {}));
-const maybeClassStatement = tryCast(statement, isClassLike);
-const x = tryCast(types, isNodeArray);
+const maybeClassStatement = tryCast(statement, isClassLike); // ClassLike1
+const x = tryCast(types, isNodeArray); // NodeAray<TypeNode>

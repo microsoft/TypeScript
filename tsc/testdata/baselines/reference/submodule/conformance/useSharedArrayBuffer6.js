@@ -9,5 +9,5 @@ var length = SharedArrayBuffer.length;
 
 //// [useSharedArrayBuffer6.js]
 var foge = new SharedArrayBuffer(1024);
-foge.length;
+foge.length; // should error
 var length = SharedArrayBuffer.length;

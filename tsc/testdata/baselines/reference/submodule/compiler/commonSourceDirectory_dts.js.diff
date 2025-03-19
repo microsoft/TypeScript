@@ -1,10 +1,8 @@
 --- old.commonSourceDirectory_dts.js
 +++ new.commonSourceDirectory_dts.js
-@@= skipped -11, +11 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -13, +13 lines =@@
  exports.x = void 0;
--/// <reference path="../lib/bar.d.ts" preserve="true" />
+ /// <reference path="../lib/bar.d.ts" preserve="true" />
  exports.x = y;
 -//# sourceMappingURL=../src/myMapRoot/index.js.map
 -

@@ -9,8 +9,8 @@
  Bar.fn();
 -var x;
 -var y = x.n;
--// should error
--var z = Foo;
 +let x;
 +let y = x.n;
+ // should error
+-var z = Foo;
 +let z = Foo;

@@ -2368,17 +2368,21 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource11.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     class ASTSpan {
-        minChar = -1;
-        limChar = -1;
+        minChar = -1; // -1 = "undefined" or "compiler generated"
+        limChar = -1; // -1 = "undefined" or "compiler generated"   
     }
     TypeScript.ASTSpan = ASTSpan;
     class AST extends ASTSpan {
         nodeType;
         type = null;
         flags = ASTFlags.Writeable;
+        // REVIEW: for diagnostic purposes
         passCreated = CompilerDiagnostics.analysisPass;
         preComments = null;
         postComments = null;
@@ -2496,6 +2500,7 @@ var TypeScript;
             }
         }
         addToControlFlow(context) {
+            // by default, AST adds itself to current basic block and does not check its children
             context.walker.options.goChildren = false;
             context.addContent(this);
         }
@@ -2511,6 +2516,7 @@ var TypeScript;
             var start = 0;
             var i = 0;
             while (i <= name.length - 6) {
+                // Look for escape sequence \uxxxx
                 if (name.charAt(i) == '\\' && name.charAt(i + 1) == 'u') {
                     var charCode = parseInt(name.substr(i + 2, 4), 16);
                     resolved += name.substr(start, i - start);
@@ -2521,6 +2527,7 @@ var TypeScript;
                 }
                 i++;
             }
+            // Append remaining string
             resolved += name.substring(start);
             return resolved;
         }
@@ -2593,6 +2600,18 @@ var TypeScript;
         sym = null;
         cloId = -1;
         text;
+        // 'actualText' is the text that the user has entered for the identifier. the text might 
+        // include any Unicode escape sequences (e.g.: \u0041 for 'A'). 'text', however, contains 
+        // the resolved value of any escape sequences in the actual text; so in the previous 
+        // example, actualText = '\u0041', text = 'A'.
+        //
+        // For purposes of finding a symbol, use text, as this will allow you to match all 
+        // variations of the variable text. For full-fidelity translation of the user input, such
+        // as emitting, use the actualText field.
+        // 
+        // Note: 
+        //    To change text, and to avoid running into a situation where 'actualText' does not 
+        //    match 'text', always use setText.
         constructor(actualText, hasEscapeSequence) {
             this.actualText = actualText;
             this.hasEscapeSequence = hasEscapeSequence;
@@ -2640,6 +2659,7 @@ var TypeScript;
             return true;
         }
         emit(emitter, tokenId, startLine) {
+            // Emit nothing for a missing ID
         }
     }
     TypeScript.MissingIdentifier = MissingIdentifier;
@@ -2676,7 +2696,7 @@ var TypeScript;
     TypeScript.Expression = Expression;
     class UnaryExpression extends Expression {
         operand;
-        targetType = null;
+        targetType = null; // Target type for an object literal (null if no target type)
         castTerm = null;
         constructor(nodeType, operand) {
             this.operand = operand;
@@ -2684,6 +2704,7 @@ var TypeScript;
         }
         addToControlFlow(context) {
             super.addToControlFlow(context);
+            // TODO: add successor as catch block/finally block if present
             if (this.nodeType == NodeType.Throw) {
                 context.returnStmt();
             }
@@ -2729,6 +2750,9 @@ var TypeScript;
                     this.type = this.castTerm.type;
                     return this;
                 case NodeType.Void:
+                    // REVIEW - Although this is good to do for completeness's sake,
+                    // this shouldn't be strictly necessary from the void operator's
+                    // point of view
                     this.operand = typeFlow.typeCheck(this.operand);
                     this.type = typeFlow.checker.undefinedType;
                     break;
@@ -3127,6 +3151,8 @@ var TypeScript;
         }
         emit(emitter, tokenId, startLine) {
             var mod = this.alias.type;
+            // REVIEW: Only modules may be aliased for now, though there's no real
+            // restriction on what the type symbol may be
             if (!this.isDynamicImport || (this.id.sym && !this.id.sym.onlyReferencedAsTypeRef)) {
                 var prevModAliasId = emitter.modAliasId;
                 var prevFirstModAlias = emitter.firstModAlias;
@@ -3136,6 +3162,7 @@ var TypeScript;
                 emitter.modAliasId = this.id.actualText;
                 emitter.firstModAlias = this.firstAliasedModToString();
                 emitter.emitJavascript(this.alias, TokenID.Tilde, false);
+                // the dynamic import case will insert the semi-colon automatically
                 if (!this.isDynamicImport) {
                     emitter.writeToOutput(";");
                 }
@@ -3259,7 +3286,7 @@ var TypeScript;
         leftCurlyCount = 0;
         rightCurlyCount = 0;
         returnStatementsWithExpressions = [];
-        scopeType = null;
+        scopeType = null; // Type of the FuncDecl, before target typing
         endingToken = null;
         constructor(name, bod, isConstructor, arguments, vars, scopes, statics, nodeType) {
             this.name = name;
@@ -3391,6 +3418,7 @@ var TypeScript;
         rightCurlyCount = 0;
         vars;
         scopes;
+        // Remember if the script contains Unicode chars, that is needed when generating code for this script object to decide the output file correct encoding.
         containsUnicodeChar = false;
         containsUnicodeCharInComment = false;
         constructor(vars, scopes) {
@@ -3466,6 +3494,7 @@ var TypeScript;
         amdDependencies = [];
         vars;
         scopes;
+        // Remember if the module contains Unicode chars, that is needed for dynamic module as we will generate a file for each.
         containsUnicodeChar = false;
         containsUnicodeCharInComment = false;
         constructor(name, members, vars, scopes, endingToken) {
@@ -3736,6 +3765,7 @@ var TypeScript;
             }
             context.current = afterLoop;
             condBlock.addSuccessor(afterLoop);
+            // TODO: check for while (true) and then only continue if afterLoop has predecessors
             context.noContinuation = false;
             context.walker.options.goChildren = false;
         }
@@ -3784,6 +3814,7 @@ var TypeScript;
                 var loopEnd = context.current;
                 loopEnd.addSuccessor(loopStart);
                 context.addContent(this.cond);
+                // TODO: check for while (true) 
                 context.current = afterLoop;
                 loopEnd.addSuccessor(afterLoop);
             }
@@ -3839,6 +3870,7 @@ var TypeScript;
                 context.current.addSuccessor(afterIf);
             }
             if (this.elseBod) {
+                // current block will be thenBod
                 context.current = new BasicBlock();
                 context.noContinuation = false;
                 beforeIf.addSuccessor(context.current);
@@ -3848,6 +3880,7 @@ var TypeScript;
                     context.current.addSuccessor(afterIf);
                 }
                 else {
+                    // thenBod created continuation for if statement
                     if (hasContinuation) {
                         context.noContinuation = false;
                     }
@@ -3931,6 +3964,7 @@ var TypeScript;
                 else {
                     singleItem = this.body;
                 }
+                // match template for filtering 'own' properties from obj
                 if (singleItem !== null) {
                     if (singleItem.nodeType == NodeType.Block) {
                         var block = singleItem;
@@ -4183,6 +4217,7 @@ var TypeScript;
             this.type = typeFlow.voidType;
             return this;
         }
+        // if there are break statements that match this switch, then just link cond block with block after switch
         addToControlFlow(context) {
             var condBlock = context.current;
             context.addContent(this.val);
@@ -4237,9 +4272,12 @@ var TypeScript;
             this.type = typeFlow.voidType;
             return this;
         }
+        // TODO: more reasoning about unreachable cases (such as duplicate literals as case expressions)
+        // for now, assume all cases are reachable, regardless of whether some cases fall through
         addToControlFlow(context) {
             var execBlock = new BasicBlock();
             var sw = context.currentSwitch[context.currentSwitch.length - 1];
+            // TODO: fall-through from previous (+ to end of switch)
             if (this.expr) {
                 var exprBlock = new BasicBlock();
                 context.current = exprBlock;
@@ -4280,6 +4318,7 @@ var TypeScript;
             }
             typeFlow.checkForVoidConstructor(typeLink.type, this);
             this.type = typeLink.type;
+            // in error recovery cases, there may not be a term
             if (this.term) {
                 this.term.type = this.type;
             }
@@ -4457,6 +4496,7 @@ var TypeScript;
             var varSym = new VariableSymbol(this.param.id.text, this.param.minChar, typeFlow.checker.locationInfo.unitIndex, exceptVar);
             exceptVar.symbol = varSym;
             exceptVar.typeLink = new TypeLink();
+            // var type for now (add syntax for type annotation)
             exceptVar.typeLink.type = typeFlow.anyType;
             var thisFnc = typeFlow.thisFnc;
             if (thisFnc && thisFnc.type) {
@@ -4468,6 +4508,10 @@ var TypeScript;
             this.param.sym = exceptVar.symbol;
             typeFlow.scope.enter(exceptVar.symbol.container, this.param, exceptVar.symbol, typeFlow.checker.errorReporter, false, false, false);
             this.body = typeFlow.typeCheck(this.body);
+            // if we're in provisional typecheck mode, clean up the symbol entry
+            // REVIEW: This is obviously bad form, since we're counting on the internal
+            // layout of the symbol table, but this is also the only place where we insert
+            // symbols during typecheck
             if (typeFlow.checker.inProvisionalTypecheckMode()) {
                 var table = typeFlow.scope.getTable();
                 table.secondaryTable.table[exceptVar.symbol.name] = undefined;

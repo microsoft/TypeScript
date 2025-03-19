@@ -18,7 +18,6 @@
  }
 -genericFunction(genericObject, function (_a) {
 -    var greeting = _a.greeting;
--    var s = greeting.toLocaleLowerCase(); // Greeting should be of type string
 +genericFunction(genericObject, ({ greeting }) => {
-+    var s = greeting.toLocaleLowerCase();
+     var s = greeting.toLocaleLowerCase(); // Greeting should be of type string
  });

@@ -124,6 +124,7 @@ var o = {
 }
 
 //// [constDeclarations-validContexts.js]
+// Control flow statements with blocks
 if (true) {
     const c1 = 0;
 }
@@ -152,6 +153,7 @@ if (true) {
 while (false) {
     label2: label3: label4: const c9 = 0;
 }
+// Try/catch/finally
 try {
     const c10 = 0;
 }
@@ -161,6 +163,7 @@ catch (e) {
 finally {
     const c12 = 0;
 }
+// Switch
 switch (0) {
     case 0:
         const c13 = 0;
@@ -169,6 +172,7 @@ switch (0) {
         const c14 = 0;
         break;
 }
+// blocks
 {
     const c15 = 0;
     {
@@ -176,7 +180,9 @@ switch (0) {
         label17: const c17 = 0;
     }
 }
+// global
 const c18 = 0;
+// functions
 function F() {
     const c19 = 0;
 }
@@ -186,6 +192,7 @@ var F2 = () => {
 var F3 = function () {
     const c21 = 0;
 };
+// modules
 var m;
 (function (m) {
     const c22 = 0;
@@ -193,6 +200,7 @@ var m;
         const c23 = 0;
     }
 })(m || (m = {}));
+// methods
 class C {
     constructor() {
         const c24 = 0;
@@ -208,6 +216,7 @@ class C {
         const c27 = value;
     }
 }
+// object literals
 var o = {
     f() {
         const c28 = 0;

@@ -1,8 +1,0 @@
---- old.promiseTest.js
-+++ new.promiseTest.js
-@@= skipped -20, +20 lines =@@
- var p2 = p.then(function (x) {
-     return p;
- });
--var x = p2.data; // number
-+var x = p2.data;

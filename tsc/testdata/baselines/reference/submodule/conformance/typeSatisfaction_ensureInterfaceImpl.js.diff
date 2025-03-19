@@ -7,10 +7,10 @@
 -var car = {
 -    start: function () { },
 -    move: function (d) {
--        // d should be number
 +const car = {
 +    start() { },
 +    move(d) {
+         // d should be number
      },
 -    stop: function () { }
 +    stop() { }

@@ -21,7 +21,7 @@ class A1 {
     }
     constructor() {
         A1.#method("");
-        A1.#method(1);
-        A1.#method();
+        A1.#method(1); // Error
+        A1.#method(); // Error 
     }
 }

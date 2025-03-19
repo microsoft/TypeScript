@@ -19,7 +19,7 @@
 -    var Y;
 +    let Y;
      (function (Y) {
--        // duplicate identifier
+         // duplicate identifier
 -        var Point = /** @class */ (function () {
 -            function Point(x, y) {
 +        class Point {
@@ -35,11 +35,10 @@
          Y.Point = Point;
      })(Y = X.Y || (X.Y = {}));
  })(X || (X = {}));
-@@= skipped -18, +18 lines =@@
- (function (A) {
+@@= skipped -19, +20 lines =@@
      A.Instance = new A();
  })(A || (A = {}));
--// duplicate identifier
+ // duplicate identifier
 -var A = /** @class */ (function () {
 -    function A() {
 -    }

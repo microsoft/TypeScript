@@ -7,5 +7,5 @@ foo: for (;;) {
 
 //// [continueStatementInternalComments.js]
 foo: for (;;) {
-    continue foo;
+    /*1*/ continue /*2*/ foo /*3*/;
 }

@@ -34,4 +34,4 @@ let b2 = x.a ?? 0;
 let b3 = x.a ?? 2;
 let b4 = x.a ?? 2;
 let { bar = 'yo' } = {};
-bar;
+bar; // "yo" | "ha"

@@ -22,5 +22,6 @@
 -    });
 -    return Employee;
 -}());
++    // Will not also error on the setter
 +    set fullName(_) { }
 +}

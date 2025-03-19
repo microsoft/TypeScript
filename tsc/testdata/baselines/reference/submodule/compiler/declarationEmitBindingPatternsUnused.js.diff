@@ -1,20 +1,6 @@
 --- old.declarationEmitBindingPatternsUnused.js
 +++ new.declarationEmitBindingPatternsUnused.js
-@@= skipped -123, +123 lines =@@
- }
- 
- //// [declarationEmitBindingPatternsUnused.js]
--// Resons we can't remove aliases that are not used in the function signature: 
--// 1.Causes duplicate identifier if we remove alias
- function duplicateIndetifiers({ name: alias, name: alias2 }) { }
- function duplicateIndetifiers2(name, { name: alias }) { }
- function duplicateIndetifiers3({ name: alias }, { name: alias2 }) { }
- let value = "";
--// 2.Can change in meaning for typeof value if we remove alias
- function shadowedVariable({ value: alias }) { return value; }
- function notReferenced({ name: alias }) {
- }
-@@= skipped -79, +76 lines =@@
+@@= skipped -202, +202 lines =@@
  let notReferencedCtorType;
  let referencedInSignartureReturnTypeCtorType;
  let referencedInSignartureParamTypeCtorType;

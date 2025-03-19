@@ -274,34 +274,34 @@ function fail(message) {
 function f01(x) {
     if (x === undefined)
         fail("undefined argument");
-    x.length;
+    x.length; // string
 }
 function f02(x) {
     if (x >= 0)
         return x;
     fail("negative number");
-    x;
+    x; // Unreachable
 }
 function f03(x) {
-    x;
+    x; // string
     fail();
-    x;
+    x; // Unreachable
 }
 function f11(x, fail) {
     if (x === undefined)
         fail("undefined argument");
-    x.length;
+    x.length; // string
 }
 function f12(x, fail) {
     if (x >= 0)
         return x;
     fail("negative number");
-    x;
+    x; // Unreachable
 }
 function f13(x, fail) {
-    x;
+    x; // string
     fail();
-    x;
+    x; // Unreachable
 }
 var Debug;
 (function (Debug) {
@@ -309,23 +309,23 @@ var Debug;
 function f21(x) {
     if (x === undefined)
         Debug.fail("undefined argument");
-    x.length;
+    x.length; // string
 }
 function f22(x) {
     if (x >= 0)
         return x;
     Debug.fail("negative number");
-    x;
+    x; // Unreachable
 }
 function f23(x) {
-    x;
+    x; // string
     Debug.fail();
-    x;
+    x; // Unreachable
 }
 function f24(x) {
-    x;
+    x; // string
     ((Debug).fail)();
-    x;
+    x; // Unreachable
 }
 class Test {
     fail(message) {
@@ -334,62 +334,62 @@ class Test {
     f1(x) {
         if (x === undefined)
             this.fail("undefined argument");
-        x.length;
+        x.length; // string
     }
     f2(x) {
         if (x >= 0)
             return x;
         this.fail("negative number");
-        x;
+        x; // Unreachable
     }
     f3(x) {
-        x;
+        x; // string
         this.fail();
-        x;
+        x; // Unreachable
     }
 }
 function f30(x) {
     if (typeof x === "string") {
         fail();
-        x;
+        x; // Unreachable
     }
     else {
-        x;
+        x; // number | undefined
         if (x !== undefined) {
-            x;
+            x; // number
             fail();
-            x;
+            x; // Unreachable
         }
         else {
-            x;
+            x; // undefined
             fail();
-            x;
+            x; // Unreachable
         }
-        x;
+        x; // Unreachable
     }
-    x;
+    x; // Unreachable
 }
 function f31(x) {
     if (typeof x.a === "string") {
         fail();
-        x;
-        x.a;
+        x; // Unreachable
+        x.a; // Unreachable
     }
-    x;
-    x.a;
+    x; // { a: string | number }
+    x.a; // number
 }
 function f40(x) {
     try {
         x;
         fail();
-        x;
+        x; // Unreachable
     }
     finally {
         x;
         fail();
-        x;
+        x; // Unreachable
     }
-    x;
+    x; // Unreachable
 }
 function f41(x) {
     try {
@@ -398,26 +398,26 @@ function f41(x) {
     finally {
         x;
         fail();
-        x;
+        x; // Unreachable
     }
-    x;
+    x; // Unreachable
 }
 function f42(x) {
     try {
         x;
         fail();
-        x;
+        x; // Unreachable
     }
     finally {
         x;
     }
-    x;
+    x; // Unreachable
 }
 function f43() {
     const fail = () => { throw new Error(); };
     const f = [fail];
-    fail();
-    f[0]();
+    fail(); // No effect (missing type annotation)
+    f[0](); // No effect (not a dotted name)
     f;
 }
 const Component = registerComponent('test-component', {
@@ -441,9 +441,11 @@ const Component = registerComponent('test-component', {
     pause() { },
     play() { },
     multiply(f) {
+        // Reference to system because both were registered with the same name.
         return f * this.data.num * this.system.data.counter;
     }
 });
+// Repro from #36147
 class MyThrowable {
     throw() {
         throw new Error();

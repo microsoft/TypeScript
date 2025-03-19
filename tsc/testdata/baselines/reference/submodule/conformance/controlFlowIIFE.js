@@ -99,6 +99,7 @@ function f3() {
         let n = (z => x.length + y + z)(y = 1);
     }
 }
+// Repros from #8381
 let maybeNumber;
 (function () {
     maybeNumber = 1;
@@ -112,8 +113,9 @@ if (!test) {
     throw new Error('Test is not defined');
 }
 (() => {
-    test.slice(1);
+    test.slice(1); // No error
 })();
+// Repro from #23565
 function f4() {
     let v;
     (function () {
@@ -127,12 +129,12 @@ function f5() {
         yield 1;
         v = 1;
     })();
-    v;
+    v; // still undefined
 }
 function f6() {
     let v;
     (async function () {
         v = await 1;
     })();
-    v;
+    v; // still undefined
 }

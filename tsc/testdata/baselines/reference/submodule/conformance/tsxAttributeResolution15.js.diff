@@ -35,14 +35,14 @@
 -    };
 -    return BigGreeter;
 -}(React.Component));
--// Error
--var a = <BigGreeter prop1="hello"/>;
--// OK
--var b = <BigGreeter ref={function (input) { _this.textInput = input; }}/>;
--var c = <BigGreeter data-extra="hi"/>;
 +    }
 +    greeting;
 +}
+ // Error
+-var a = <BigGreeter prop1="hello"/>;
 +let a = <BigGreeter prop1="hello"/>;
+ // OK
+-var b = <BigGreeter ref={function (input) { _this.textInput = input; }}/>;
+-var c = <BigGreeter data-extra="hi"/>;
 +let b = <BigGreeter ref={(input) => { this.textInput = input; }}/>;
 +let c = <BigGreeter data-extra="hi"/>;

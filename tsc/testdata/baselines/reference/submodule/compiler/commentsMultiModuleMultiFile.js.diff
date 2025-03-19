@@ -82,17 +82,18 @@
 -    }
 -}
 -//// [commentsMultiModuleMultiFile_1.d.ts]
--/** this is multi module 3 comment*/
--export declare namespace multiM {
--    /** class d comment*/
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.multiM = void 0;
+ /** this is multi module 3 comment*/
+-export declare namespace multiM {
 +var multiM;
 +(function (multiM) {
+     /** class d comment*/
      class d {
      }
 +    multiM.d = d;
++    /// class f comment
      class f {
      }
 -}

@@ -21,10 +21,10 @@
      foo() {
          const c = new C();
 -        __classPrivateFieldGet(c, _C_x, "f"); // OK
-+        c.#x;
++        c.#x; // OK
          const d = new C();
 -        __classPrivateFieldGet(d, _C_x, "f"); // Error
-+        d.#x;
++        d.#x; // Error
      }
  }
 -_C_x = new WeakMap();

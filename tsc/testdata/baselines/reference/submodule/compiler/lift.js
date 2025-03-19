@@ -25,7 +25,7 @@ class B {
     constructor(y) {
         this.y = y;
     }
-    ll;
+    ll; // to be shadowed
 }
 class C extends B {
     constructor(y, z, w) {

@@ -92,42 +92,42 @@ var E;
     if (typeof E.D !== "string") E[E.D] = "D";
 })(E || (E = {}));
 function f1() {
-    const c1 = E.B;
-    let v1 = c1;
-    const c2 = c1;
-    let v2 = c2;
-    const c3 = E.B;
-    let v3 = c3;
-    const c4 = c1;
-    let v4 = c4;
+    const c1 = E.B; // Fresh E.B
+    let v1 = c1; // E
+    const c2 = c1; // Fresh E.B
+    let v2 = c2; // E
+    const c3 = E.B; // E.B
+    let v3 = c3; // E.B
+    const c4 = c1; // E.B
+    let v4 = c4; // E.B
 }
 function f2(cond) {
-    const c1 = cond ? E.A : E.B;
-    const c2 = c1;
-    const c3 = cond ? c1 : c2;
-    const c4 = cond ? c3 : E.C;
-    const c5 = c4;
-    let v1 = c1;
-    let v2 = c2;
-    let v3 = c3;
-    let v4 = c4;
-    let v5 = c5;
+    const c1 = cond ? E.A : E.B; // Fresh E.A | fresh E.B
+    const c2 = c1; // E.A | E.B
+    const c3 = cond ? c1 : c2; // E.A | E.B
+    const c4 = cond ? c3 : E.C; // E.A | E.B | fresh E.C
+    const c5 = c4; // E.A | E.B | E.C
+    let v1 = c1; // E
+    let v2 = c2; // E.A | E.B
+    let v3 = c3; // E.A | E.B
+    let v4 = c4; // E
+    let v5 = c5; // E.A | E.B | E.C
 }
 function f3() {
     const c1 = E.B;
-    let v1 = c1;
+    let v1 = c1; // E
     const c2 = E.B;
-    let v2 = c2;
+    let v2 = c2; // E.B
     const c3 = E.B;
-    let v3 = c3;
+    let v3 = c3; // E.B
     const c4 = E.B;
-    let v4 = c4;
+    let v4 = c4; // E.B
     const c5 = E.B;
-    let v5 = c5;
+    let v5 = c5; // E.B
 }
 function f4() {
-    const c1 = E2.B;
-    let v1 = E.B;
+    const c1 = E2.B; // Fresh E2.B
+    let v1 = E.B; // E2
 }
 const c1 = E.B;
 const c2 = E.B;
@@ -139,6 +139,7 @@ class C {
     p3 = E.B;
     p4 = E.B;
 }
+// Repro from #52531
 var MyEnum;
 (function (MyEnum) {
     MyEnum[MyEnum["A"] = 0] = "A";

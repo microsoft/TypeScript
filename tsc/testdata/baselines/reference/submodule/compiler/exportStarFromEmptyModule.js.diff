@@ -14,11 +14,8 @@
 +}
  exports.A = A;
  //// [exportStarFromEmptyModule_module2.js]
--// empty
- //// [exportStarFromEmptyModule_module3.js]
- "use strict";
- var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-@@= skipped -28, +25 lines =@@
+ // empty
+@@= skipped -28, +26 lines =@@
  exports.A = void 0;
  __exportStar(require("./exportStarFromEmptyModule_module2"), exports);
  __exportStar(require("./exportStarFromEmptyModule_module1"), exports);
@@ -38,7 +35,7 @@
 +const X = require("./exportStarFromEmptyModule_module3");
  var s;
  X.A.q;
--X.A.r; // Error
+ X.A.r; // Error
 -
 -
 -//// [exportStarFromEmptyModule_module1.d.ts]
@@ -54,4 +51,3 @@
 -}
 -//// [exportStarFromEmptyModule_module4.d.ts]
 -export {};
-+X.A.r;

@@ -27,8 +27,8 @@ class Derived extends Base {
     constructor(p) {
         this.p = p;
         super(p);
-        this.p;
+        this.p; // OK
     }
 }
 var d;
-d.p;
+d.p; // public, OK

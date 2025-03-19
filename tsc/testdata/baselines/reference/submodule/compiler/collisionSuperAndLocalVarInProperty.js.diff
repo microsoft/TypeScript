@@ -10,11 +10,11 @@
 -            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
 -            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
 -        return extendStatics(d, b);
-+var _super = 10;
++var _super = 10; // No Error
 +class Foo {
 +    prop1 = {
 +        doStuff: () => {
-+            var _super = 10;
++            var _super = 10; // No error
 +        }
      };
 -    return function (d, b) {
@@ -23,12 +23,12 @@
 -        extendStatics(d, b);
 -        function __() { this.constructor = d; }
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-+    _super = 10;
++    _super = 10; // No error
 +}
 +class b extends Foo {
 +    prop2 = {
 +        doStuff: () => {
-+            var _super = 10;
++            var _super = 10; // Should be error 
 +        }
      };
 -})();
@@ -58,5 +58,5 @@
 -    }
 -    return b;
 -}(Foo));
-+    _super = 10;
++    _super = 10; // No error
 +}

@@ -18,6 +18,7 @@ export function test(): TestSymb {
 
 
 //// [expandoFunctionSymbolProperty.js]
+// repro from https://github.com/microsoft/TypeScript/issues/54220
 const symb = Symbol();
 export function test() {
     function inner() { }

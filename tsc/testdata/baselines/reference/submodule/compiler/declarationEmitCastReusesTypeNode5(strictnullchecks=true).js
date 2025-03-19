@@ -33,8 +33,12 @@ exports.vNumberLiteral = null;
 exports.vStringLiteral = null;
 exports.vLiteral = null;
 class C {
+    // under !strictNullChecks all types can be reused from the assertion
+    // under strictNullChecks we need to add undefined, and we can't always know we can
+    // Can't know if references contain undefined, fall back to inference
     tsResolve = null;
     tsResolve2 = null;
+    // Simple type. we can add undefined
     reuseType = null;
     reuseType2 = null;
     reuseType3 = null;

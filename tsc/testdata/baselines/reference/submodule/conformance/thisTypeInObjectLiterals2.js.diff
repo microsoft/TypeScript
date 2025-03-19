@@ -5,8 +5,8 @@
  
  //// [thisTypeInObjectLiterals2.js]
 -"use strict";
--// In methods of an object literal with no contextual type, 'this' has the type
--// of the object literal.
+ // In methods of an object literal with no contextual type, 'this' has the type
+ // of the object literal.
 -var obj1 = {
 +let obj1 = {
      a: 1,
@@ -21,7 +21,7 @@
              this.g();
          }
      },
-@@= skipped -24, +21 lines =@@
+@@= skipped -24, +23 lines =@@
          this.b = value;
      }
  };
@@ -100,11 +100,9 @@
      data: { x: 0, y: 0 },
      methods: {
 -        moveBy: function (dx, dy) {
--            this.x += dx; // Strongly typed this
--            this.y += dy; // Strongly typed this
 +        moveBy(dx, dy) {
-+            this.x += dx;
-+            this.y += dy;
+             this.x += dx; // Strongly typed this
+             this.y += dy; // Strongly typed this
          }
      }
  });
@@ -113,11 +111,9 @@
      data: { x: 0, y: 0 },
      methods: {
 -        moveBy: function (dx, dy) {
--            this.x += dx; // Strongly typed this
--            this.y += dy; // Strongly typed this
 +        moveBy(dx, dy) {
-+            this.x += dx;
-+            this.y += dy;
+             this.x += dx; // Strongly typed this
+             this.y += dy; // Strongly typed this
          }
      }
  });

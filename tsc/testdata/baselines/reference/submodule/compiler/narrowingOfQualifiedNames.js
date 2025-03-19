@@ -91,9 +91,9 @@ function handleDogWorking(pet: Pet) {
 //// [narrowingOfQualifiedNames.js]
 function init(properties) {
     if (properties.foo) {
-        properties.foo;
+        properties.foo; // type is { aaa: string; bbb: string; }
         for (const x of [1, 2, 3]) {
-            properties.foo;
+            properties.foo; // type is { aaa: string; bbb: string; }
         }
     }
 }

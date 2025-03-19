@@ -9,6 +9,7 @@ class C {
 
 //// [parserComputedPropertyName27.js]
 class C {
+    // No ASI
     [e] = 0[e2];
     number;
 }

@@ -1,11 +1,6 @@
 --- old.declarationEmitFBoundedTypeParams.js
 +++ new.declarationEmitFBoundedTypeParams.js
-@@= skipped -9, +9 lines =@@
- 
- 
- //// [declarationEmitFBoundedTypeParams.js]
--// Repro from #6040
- function append(result, value) {
+@@= skipped -14, +14 lines =@@
      result.push(value);
      return result;
  }

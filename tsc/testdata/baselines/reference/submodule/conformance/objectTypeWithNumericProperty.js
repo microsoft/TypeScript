@@ -46,6 +46,7 @@ var r3 = b['1'];
 var r4 = b['1.1'];
 
 //// [objectTypeWithNumericProperty.js]
+// no errors here
 class C {
     1;
     1.1;

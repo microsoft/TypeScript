@@ -148,39 +148,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const foo = {
     type: "number",
     value: 10,
-    multipleOf: 5,
+    multipleOf: 5, // excess property
     format: "what?"
 };
+// This has excess error because variant three is the only applicable case.
 const a = {
     p1: 'left',
     p2: false,
     p3: 42,
     p4: "hello"
 };
+// This has excess error because variant two is not applicable.
 const b = {
     p1: 'left',
     p2: true,
     p3: 42,
     p4: "hello"
 };
+// This has excess error because variant two is the only applicable case
 const c = {
     p1: 'right',
     p2: false,
     p3: 42,
     p4: "hello"
 };
+// Should reject { b } because reduced to Common | (Common & A)
 const c1 = {
     type: "A",
     n: 1,
     a: 1,
-    b: 1
+    b: 1 // excess property
 };
+// Should still reject { b } because reduced to Common | A, even though these are now disjoint
 const c2 = {
     type: "A",
     n: 1,
     a: 1,
-    b: 1
+    b: 1 // excess property
 };
+// both should error due to excess properties
 const attributes = {
     type: 'string',
     autoIncrement: true,

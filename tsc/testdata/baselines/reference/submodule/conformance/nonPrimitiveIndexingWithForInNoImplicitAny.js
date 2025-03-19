@@ -11,5 +11,5 @@ for (var key in a) {
 //// [nonPrimitiveIndexingWithForInNoImplicitAny.js]
 var a;
 for (var key in a) {
-    var value = a[key];
+    var value = a[key]; // error
 }

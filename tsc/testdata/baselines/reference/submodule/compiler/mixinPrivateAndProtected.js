@@ -118,23 +118,25 @@ function mixC(Cls) {
 const AB2C = mixC(AB2), ABC = mixC(AB);
 const a = new A(), ab = new AB(), abc = new ABC(), ab2c = new AB2C();
 a.pb.toFixed();
-a.ptd.toFixed();
-a.pvt.toFixed();
+a.ptd.toFixed(); // Error
+a.pvt.toFixed(); // Error
 ab.pb.toFixed();
-ab.ptd.toFixed();
-ab.pvt.toFixed();
+ab.ptd.toFixed(); // Error
+ab.pvt.toFixed(); // Error
 abc.pb.toFixed();
-abc.ptd.toFixed();
-abc.pvt.toFixed();
+abc.ptd.toFixed(); // Error
+abc.pvt.toFixed(); // Error
 ab2c.pb.toFixed();
-ab2c.ptd.toFixed();
-ab2c.pvt.toFixed();
+ab2c.ptd.toFixed(); // Error
+ab2c.pvt.toFixed(); // Error
+// Repro from #13924
 class Person {
     name;
     constructor(name) {
         this.name = name;
     }
     myProtectedFunction() {
+        // do something
     }
 }
 function PersonMixin(Base) {
@@ -144,6 +146,7 @@ function PersonMixin(Base) {
         }
         myProtectedFunction() {
             super.myProtectedFunction();
+            // do more things
         }
     };
 }

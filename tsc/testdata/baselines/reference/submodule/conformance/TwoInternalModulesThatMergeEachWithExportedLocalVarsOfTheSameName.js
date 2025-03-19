@@ -50,6 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A;
 (function (A) {
+    // collision with 'Origin' var in other part of merged module
     A.Origin = { x: 0, y: 0 };
     let Utils;
     (function (Utils) {

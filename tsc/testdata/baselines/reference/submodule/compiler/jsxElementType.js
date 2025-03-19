@@ -117,6 +117,7 @@ declare global {
 //// [jsxElementType.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
 const React = require("react");
 let Component;
 const RenderElement = ({ title }) => <div>{title}</div>;
@@ -139,11 +140,13 @@ Component = RenderArray;
 <RenderArray />;
 <RenderArray title="react"/>;
 <RenderArray excessProp/>;
+// React Server Component
 const RenderPromise = async ({ title }) => "react";
 Component = RenderPromise;
 <RenderPromise />;
 <RenderPromise title="react"/>;
 <RenderPromise excessProp/>;
+// Class components still work
 class RenderStringClass extends React.Component {
     render() {
         return this.props.title;
@@ -153,14 +156,17 @@ Component = RenderStringClass;
 <RenderStringClass />;
 <RenderStringClass title="react"/>;
 <RenderStringClass excessProp/>;
+// Host element types still work
 <div />;
 <my-custom-element />;
+// Undeclared host element types are still rejected
 <boop />;
 <my-undeclared-custom-element />;
 function ReactNativeFlatList(props, ref) {
     return null;
 }
 <ReactNativeFlatList />;
+// testing higher-order component compat
 function f1(Component) {
     return <Component />;
 }

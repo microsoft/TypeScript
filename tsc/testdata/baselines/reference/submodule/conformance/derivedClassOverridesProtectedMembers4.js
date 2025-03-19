@@ -26,5 +26,5 @@ class Derived1 extends Base {
     a;
 }
 class Derived2 extends Derived1 {
-    a;
+    a; // Error, parent was public
 }

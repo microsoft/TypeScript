@@ -7,16 +7,11 @@
 -"use strict";
 -// Repro from #43493
  const bar = foo.flatMap(bar => bar);
--// Repros from comments in #43249
+ // Repros from comments in #43249
  const repro_43249 = (value) => {
-     if (typeof value !== "string") {
-         throw new Error("No");
-@@= skipped -13, +10 lines =@@
- };
- function f(x, y) {
+@@= skipped -15, +13 lines =@@
      x = y;
--    y = x; // Error
-+    y = x;
+     y = x; // Error
  }
 -
 -

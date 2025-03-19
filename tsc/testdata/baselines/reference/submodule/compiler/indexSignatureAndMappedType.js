@@ -36,15 +36,17 @@ interface IEntity<T extends string> extends IBaseEntity {
 
 
 //// [indexSignatureAndMappedType.js]
+// A mapped type { [P in K]: X }, where K is a generic type, is related to
+// { [key: string]: Y } if X is related to Y.
 function f1(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f2(x, y) {
     x = y;
     y = x;
 }
 function f3(x, y) {
-    x = y;
-    y = x;
+    x = y; // Error
+    y = x; // Error
 }

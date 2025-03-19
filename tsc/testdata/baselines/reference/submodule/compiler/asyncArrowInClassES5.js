@@ -10,6 +10,8 @@ class Test {
 
 
 //// [asyncArrowInClassES5.js]
+// https://github.com/Microsoft/TypeScript/issues/16924
+// Should capture `this`
 class Test {
     static member = async (x) => { };
 }

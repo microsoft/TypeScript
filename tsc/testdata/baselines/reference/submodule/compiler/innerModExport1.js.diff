@@ -1,11 +1,6 @@
 --- old.innerModExport1.js
 +++ new.innerModExport1.js
-@@= skipped -23, +23 lines =@@
- //// [innerModExport1.js]
- var Outer;
- (function (Outer) {
--    // inner mod 1
-     var non_export_var;
+@@= skipped -28, +28 lines =@@
      module;
      {
          var non_export_var = 0;

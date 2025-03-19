@@ -13,7 +13,7 @@
 -            value: 'yep'
 -        }); // error
 -    }
-+    p = 'yep';
++    p = 'yep'; // error
  }
  class C {
 -    constructor() {
@@ -38,5 +38,5 @@
 -            value: 101
 -        }); // error
 -    }
-+    p = 101;
++    p = 101; // error
  }

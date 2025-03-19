@@ -25,6 +25,10 @@ import "unaliasedModule2";
 //// [amdDependencyCommentName4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<amd-dependency path='aliasedModule5' name='n1'/>
+///<amd-dependency path='unaliasedModule3'/>
+///<amd-dependency path='aliasedModule6' name='n2'/>
+///<amd-dependency path='unaliasedModule4'/>
 require("unaliasedModule1");
 const r1 = require("aliasedModule1");
 r1;

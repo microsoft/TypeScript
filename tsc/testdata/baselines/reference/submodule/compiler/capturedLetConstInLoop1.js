@@ -141,6 +141,7 @@ for (let ix in iobj) {
 }
 
 //// [capturedLetConstInLoop1.js]
+//==== let
 for (let x in {}) {
     (function () { return x; });
     (() => x);
@@ -196,6 +197,7 @@ for (let y = 0; y < 1; use(() => y), ++y) {
 for (let y = (use(() => y), 0); use(() => y), y < 1; use(() => y), ++y) {
     use(() => y);
 }
+//=========const
 for (const x in {}) {
     (function () { return x; });
     (() => x);

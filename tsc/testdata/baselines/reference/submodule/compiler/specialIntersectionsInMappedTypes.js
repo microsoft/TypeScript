@@ -25,4 +25,4 @@ const a = {
     other: "align-other",
 };
 a.left.length;
-a.other.length;
+a.other.length; // Error expected here

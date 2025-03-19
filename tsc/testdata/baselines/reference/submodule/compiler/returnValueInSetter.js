@@ -12,6 +12,6 @@ class f {
 //// [returnValueInSetter.js]
 class f {
     set x(value) {
-        return null;
+        return null; // Should be an error
     }
 }

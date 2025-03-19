@@ -195,20 +195,20 @@ function f1() {
     x[0] = 5;
     x[1] = "hello";
     x[2] = true;
-    return x;
+    return x; // (string | number | boolean)[]
 }
 function f2() {
     let x = [];
     x.push(5);
     x.push("hello");
     x.push(true);
-    return x;
+    return x; // (string | number | boolean)[]
 }
 function f3() {
     let x;
     x = [];
     x.push(5, "hello");
-    return x;
+    return x; // (string | number)[]
 }
 function f4() {
     let x = [];
@@ -218,7 +218,7 @@ function f4() {
     else {
         x.push("hello");
     }
-    return x;
+    return x; // (string | number)[]
 }
 function f5() {
     let x;
@@ -230,7 +230,7 @@ function f5() {
         x = [];
         x.push("hello");
     }
-    return x;
+    return x; // (string | number)[]
 }
 function f6() {
     let x;
@@ -241,7 +241,7 @@ function f6() {
         x = [];
         x.push("hello");
     }
-    return x;
+    return x; // number | string[]
 }
 function f7() {
     let x = null;
@@ -251,50 +251,50 @@ function f7() {
             x.push("hello");
         }
     }
-    return x;
+    return x; // string[] | null
 }
 function f8() {
     let x = [];
     x.push(5);
     if (cond())
-        return x;
+        return x; // number[]
     x.push("hello");
     if (cond())
-        return x;
+        return x; // (string | number)[]
     x.push(true);
-    return x;
+    return x; // (string | number | boolean)[]
 }
 function f9() {
     let x = [];
     if (cond()) {
         x.push(5);
-        return x;
+        return x; // number[]
     }
     else {
         x.push("hello");
-        return x;
+        return x; // string[]
     }
 }
 function f10() {
     let x = [];
     if (cond()) {
         x.push(true);
-        x;
+        x; // boolean[]
     }
     else {
         x.push(5);
-        x;
+        x; // number[]
         while (cond()) {
             x.push("hello");
         }
-        x;
+        x; // (string | number)[]
     }
     x.push(99);
-    return x;
+    return x; // (string | number | boolean)[]
 }
 function f11() {
     let x = [];
-    if (x.length === 0) {
+    if (x.length === 0) { // x.length ok on implicit any[]
         x.push("hello");
     }
     return x;
@@ -302,7 +302,7 @@ function f11() {
 function f12() {
     let x;
     x = [];
-    if (x.length === 0) {
+    if (x.length === 0) { // x.length ok on implicit any[]
         x.push("hello");
     }
     return x;
@@ -312,14 +312,14 @@ function f13() {
     x.push(5);
     x.push("hello");
     x.push(true);
-    return x;
+    return x; // (string | number | boolean)[]
 }
 function f14() {
     const x = [];
     x.push(5);
     x.push("hello");
     x.push(true);
-    return x;
+    return x; // (string | number | boolean)[]
 }
 function f15() {
     let x = [];
@@ -327,7 +327,7 @@ function f15() {
         while (cond()) { }
         x.push("hello");
     }
-    return x;
+    return x; // string[]
 }
 function f16() {
     let x;
@@ -335,21 +335,21 @@ function f16() {
     (x = [], x).push(5);
     (x.push("hello"), x).push(true);
     ((x))[3] = { a: 1 };
-    return x;
+    return x; // (string | number | boolean | { a: number })[]
 }
 function f17() {
     let x = [];
     x.unshift(5);
     x.unshift("hello");
     x.unshift(true);
-    return x;
+    return x; // (string | number | boolean)[]
 }
 function f18() {
     let x = [];
     x.push(5);
     x.unshift("hello");
     x[2] = true;
-    return x;
+    return x; // (string | number | boolean)[]
 }
 let arr = [];
 arr.push({ val: 1, bar: 2 });

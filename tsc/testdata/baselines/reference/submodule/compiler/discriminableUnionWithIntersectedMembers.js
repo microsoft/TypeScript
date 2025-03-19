@@ -17,5 +17,7 @@ type Y =
 const y: Y = 4 as any as { x: 'x' | 'y', y: number };
 
 //// [discriminableUnionWithIntersectedMembers.js]
+// error
 const x = 4;
+// no  error
 const y = 4;

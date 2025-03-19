@@ -38,13 +38,13 @@ class MyClass {
 //// [typeParameterExplicitlyExtendsAny.js]
 function fee() {
     var t;
-    t.blah;
-    t.toString;
+    t.blah; // Error
+    t.toString; // ok
 }
 function fee2() {
     var t;
-    t.blah;
-    t.toString;
+    t.blah; // ok
+    t.toString; // ok
 }
 function f(x) {
     x.children;
@@ -55,6 +55,7 @@ function f(x) {
 }
 class MyClass {
     static displayTree1(tree) {
+        // error "Property 'children' does not exist on type 'T'"
         tree.children;
     }
 }

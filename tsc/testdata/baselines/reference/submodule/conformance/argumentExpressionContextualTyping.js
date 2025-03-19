@@ -21,17 +21,18 @@ baz(["string", 1, true, ...array]);  // Error
 foo(o);                              // Error because x has an array type namely (string|number)[]
 
 //// [argumentExpressionContextualTyping.js]
+// In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
 function foo({ x: [a, b], y: { c, d, e } }) { }
 function bar({ x: [a, b = 10], y: { c, d, e = { f: 1 } } }) { }
 function baz(x) { }
 var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 var o1 = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
-foo(o1);
-foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } });
+foo(o1); // Not error since x has contextual type of tuple namely [string, number]
+foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }); // Not error
 var array = ["string", 1, true];
 var tuple = ["string", 1, true];
 baz(tuple);
 baz(["string", 1, true]);
-baz(array);
-baz(["string", 1, true, ...array]);
-foo(o);
+baz(array); // Error
+baz(["string", 1, true, ...array]); // Error
+foo(o); // Error because x has an array type namely (string|number)[]

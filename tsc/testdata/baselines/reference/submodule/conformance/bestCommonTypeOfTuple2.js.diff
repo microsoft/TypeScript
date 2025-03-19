@@ -79,15 +79,3 @@
  var t1;
  var t2;
  var t3;
- var t4;
- var t5;
--var e11 = t1[4]; // base
--var e21 = t2[4]; // {}
--var e31 = t3[4]; // C1
--var e41 = t4[2]; // base1
--var e51 = t5[2]; // {}
-+var e11 = t1[4];
-+var e21 = t2[4];
-+var e31 = t3[4];
-+var e41 = t4[2];
-+var e51 = t5[2];

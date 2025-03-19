@@ -37,6 +37,7 @@ let render = (ctrl, model) =>
 
 
 //// [file.js]
+// A simple render function with nesting and control statements
 let render = (ctrl, model) => <section class="todoapp">
         <header class="header">
             <h1>todos &lt;x&gt;</h1>

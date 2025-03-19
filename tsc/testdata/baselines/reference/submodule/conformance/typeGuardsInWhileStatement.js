@@ -31,26 +31,26 @@ function c(x: string | number) {
 let cond;
 function a(x) {
     while (typeof x === "string") {
-        x;
+        x; // string
         x = undefined;
     }
-    x;
+    x; // number
 }
 function b(x) {
     while (typeof x === "string") {
         if (cond)
             continue;
-        x;
+        x; // string
         x = undefined;
     }
-    x;
+    x; // number
 }
 function c(x) {
     while (typeof x === "string") {
         if (cond)
             break;
-        x;
+        x; // string
         x = undefined;
     }
-    x;
+    x; // string | number
 }

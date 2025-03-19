@@ -46,9 +46,11 @@ interface I2 {
 }
 
 //// [constructorsWithSpecializedSignatures.js]
+// errors
 class D {
     constructor(x) { }
 }
+// overloads are ok
 class D2 {
-    constructor(x) { }
+    constructor(x) { } // error
 }

@@ -129,7 +129,10 @@ function t6() {
     const { a3, b3: { b31: { b311, b312 } }, c3, d3 } = { a3: 1, b3: { b31: { b311: 1, b312: 1 } }, c3: 1, d3: 1 };
 }
 function t7() {
+    // error
     const { _a1, _b1 } = { _a1: 1, _b1: 1 };
+    // ok
     const { a2: _a2, b2: _b2 } = { a2: 1, b2: 1 };
+    // ok
     const { _a3: _ignoreA3, _b3: _ignoreB3 } = { _a3: 1, _b3: 1 };
 }

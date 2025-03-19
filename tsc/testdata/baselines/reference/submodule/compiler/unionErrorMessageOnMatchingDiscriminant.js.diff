@@ -5,7 +5,7 @@
  
  //// [unionErrorMessageOnMatchingDiscriminant.js]
 -"use strict";
--// error
+ // error
 -var foo = {
 +const foo = {
      type: 'a',

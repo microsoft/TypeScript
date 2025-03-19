@@ -21,6 +21,6 @@ function makePoint(x) {
     };
 }
 ;
-var point = makePoint(2);
-var x = point.x;
-point.x = 30;
+var /*4*/ point = makePoint(2);
+var /*2*/ x = point.x;
+point. /*3*/x = 30;

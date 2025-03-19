@@ -81,10 +81,14 @@ async function main() {
         MaybePromise(true),
     ]);
 }
+// https://github.com/microsoft/TypeScript/issues/45924
 class Api {
+    // Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
     async post() { return this.request(); }
     async request() { throw new Error(); }
 }
 async function fn() {
+    // Per #45924, this was failing due to incorrect inference both above and here.
+    // Should not error.
     return api.post();
 }

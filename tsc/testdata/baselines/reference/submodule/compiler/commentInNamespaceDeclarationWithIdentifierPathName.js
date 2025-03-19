@@ -16,6 +16,7 @@ var hello;
         let world;
         (function (world) {
             function foo() { }
+            // TODO, blah
         })(world = hi.world || (hi.world = {}));
     })(hi = hello.hi || (hello.hi = {}));
 })(hello || (hello = {}));

@@ -75,23 +75,23 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 assign();
 assign();
 assign();
+assign(); // Error
+assign(); // Error
 assign();
 assign();
 assign();
-assign();
-assign();
-assign();
-assign();
-assign();
-assign();
-assign();
-assign();
-let e0 = t[0];
-let e1 = t[1];
-let e2 = t[2];
-let e3 = t[3];
-let ex = t[x];
-f0([]);
+assign(); // Error
+assign(); // Error
+assign(); // Error
+assign(); // Error
+assign(); // Error
+assign(); // Error
+let e0 = t[0]; // number
+let e1 = t[1]; // string
+let e2 = t[2]; // boolean
+let e3 = t[3]; // boolean
+let ex = t[x]; // number | string | boolean
+f0([]); // Error
 f0([1]);
 f0([1, 2, 3]);
 f0([1, "hello", true]);

@@ -33,8 +33,8 @@
 -    foo: function (x) {
 -        if (x === void 0) { x = 1; }
 -    },
-+    foo(x = 1) { },
-+    foo(x = 1) { },
++    foo(x = 1) { }, // error
++    foo(x = 1) { }, // error
  };
  b.foo();
  b.foo(1);

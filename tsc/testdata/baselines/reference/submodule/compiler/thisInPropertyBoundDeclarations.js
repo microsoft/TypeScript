@@ -81,6 +81,7 @@ class Bug {
         this.name = name;
     }
 }
+// Valid use of this in a property bound decl
 class A {
     prop1 = function () {
         this;

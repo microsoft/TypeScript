@@ -20,17 +20,17 @@ var f2NoError = () => {
 
 //// [collisionArgumentsArrowFunctions.js]
 var f1 = (i, ...arguments) => {
-    var arguments;
+    var arguments; // no error
 };
 var f12 = (arguments, ...rest) => {
-    var arguments = 10;
+    var arguments = 10; // no error
 };
 var f1NoError = (arguments) => {
-    var arguments = 10;
+    var arguments = 10; // no error
 };
 var f2 = (...restParameters) => {
-    var arguments = 10;
+    var arguments = 10; // No Error
 };
 var f2NoError = () => {
-    var arguments = 10;
+    var arguments = 10; // no error
 };

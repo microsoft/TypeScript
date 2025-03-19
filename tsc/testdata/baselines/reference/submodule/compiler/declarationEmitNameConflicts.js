@@ -96,11 +96,11 @@ var M;
             ;
         })(N = P.N || (P.N = {}));
         P.im = M.P.f;
-        P.a = M.a;
-        P.b = M.b;
-        P.c = M.c;
-        P.g = M.c.g;
-        P.d = M.d;
+        P.a = M.a; // emitted incorrectly as typeof f
+        P.b = M.b; // ok
+        P.c = M.c; // ok
+        P.g = M.c.g; // ok
+        P.d = M.d; // emitted incorrectly as typeof im
     })(P = M.P || (M.P = {}));
 })(M || (exports.M = M = {}));
 (function (M) {

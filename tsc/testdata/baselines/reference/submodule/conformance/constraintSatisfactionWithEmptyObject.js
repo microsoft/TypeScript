@@ -40,6 +40,8 @@ var i2: I2<{}>;
 
 
 //// [constraintSatisfactionWithEmptyObject.js]
+// valid uses of a basic object constraint, no errors expected
+// Object constraint
 function foo(x) { }
 var r = foo({});
 var a = {};
@@ -52,6 +54,7 @@ class C {
 }
 var r2 = new C({});
 var i;
+// {} constraint
 function foo2(x) { }
 var r = foo2({});
 var a = {};

@@ -21,6 +21,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [reuseInnerModuleMember_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='reuseInnerModuleMember_0.ts'/>
 var bar;
 (function (bar) {
     var x;

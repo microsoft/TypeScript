@@ -10,6 +10,7 @@ enum E {
 //// [parserComputedPropertyName26.js]
 var E;
 (function (E) {
+    // No ASI
     E[e] = 0[e2] = 1;
     if (typeof E[e] !== "string") E[E[e]] = e;
 })(E || (E = {}));

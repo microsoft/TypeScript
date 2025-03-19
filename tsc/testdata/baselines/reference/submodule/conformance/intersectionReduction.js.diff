@@ -1,26 +1,22 @@
 --- old.intersectionReduction.js
 +++ new.intersectionReduction.js
-@@= skipped -143, +143 lines =@@
- 
+@@= skipped -144, +144 lines =@@
  
  //// [intersectionReduction.js]
--ab.kind; // Error
+ ab.kind; // Error
 -var a = x;
 -var r1 = f10(a1); // unknown
 -var r2 = f10(a2); // string
--// Repro from #31663
++let a = x;
++let r1 = f10(a1); // unknown
++let r2 = f10(a2); // string
+ // Repro from #31663
 -var x1 = { a: 'foo', b: 42 };
 -var x2 = { a: 'foo', b: true };
--x1[k] = 'bar'; // Error
--x2[k] = 'bar'; // Error
-+ab.kind;
-+let a = x;
-+let r1 = f10(a1);
-+let r2 = f10(a2);
 +const x1 = { a: 'foo', b: 42 };
 +const x2 = { a: 'foo', b: true };
-+x1[k] = 'bar';
-+x2[k] = 'bar';
+ x1[k] = 'bar'; // Error
+ x2[k] = 'bar'; // Error
 +var Tag1;
 +(function (Tag1) {
 +})(Tag1 || (Tag1 = {}));
@@ -31,7 +27,7 @@
  s2 = s1;
  t1 = t2;
  t2 = t1;
--// Repro from #36736
+ // Repro from #36736
 -var f1 = function (t) { return t; };
 -var f2 = function (t) { return t; };
 -var f3 = function (t) { return t; };
@@ -41,7 +37,7 @@
 +const f2 = (t) => t;
 +const f3 = (t) => t;
 +const f4 = (t) => t;
-+const b = shouldBeB;
++const b = shouldBeB; // works
  function inGeneric(alsoShouldBeB) {
 -    var b = alsoShouldBeB;
 +    const b = alsoShouldBeB;

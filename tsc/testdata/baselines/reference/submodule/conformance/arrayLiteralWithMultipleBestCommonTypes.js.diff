@@ -1,24 +1,14 @@
 --- old.arrayLiteralWithMultipleBestCommonTypes.js
 +++ new.arrayLiteralWithMultipleBestCommonTypes.js
-@@= skipped -17, +17 lines =@@
- 
- 
- //// [arrayLiteralWithMultipleBestCommonTypes.js]
--// when multiple best common types exist we will choose the first candidate
- var a;
- var b;
- var c;
--var as = [a, b]; // { x: number; y?: number };[]
--var bs = [b, a]; // { x: number; z?: number };[]
--var cs = [a, b, c]; // { x: number; y?: number };[]
+@@= skipped -24, +24 lines =@@
+ var as = [a, b]; // { x: number; y?: number };[]
+ var bs = [b, a]; // { x: number; z?: number };[]
+ var cs = [a, b, c]; // { x: number; y?: number };[]
 -var ds = [function (x) { return 1; }, function (x) { return 2; }]; // { (x:Object) => number }[]
 -var es = [function (x) { return 2; }, function (x) { return 1; }]; // { (x:string) => number }[]
 -var fs = [function (a) { return 1; }, function (b) { return 2; }]; // (a: { x: number; y?: number }) => number[]
 -var gs = [function (b) { return 2; }, function (a) { return 1; }]; // (b: { x: number; z?: number }) => number[]
-+var as = [a, b];
-+var bs = [b, a];
-+var cs = [a, b, c];
-+var ds = [(x) => 1, (x) => 2];
-+var es = [(x) => 2, (x) => 1];
-+var fs = [(a) => 1, (b) => 2];
-+var gs = [(b) => 2, (a) => 1];
++var ds = [(x) => 1, (x) => 2]; // { (x:Object) => number }[]
++var es = [(x) => 2, (x) => 1]; // { (x:string) => number }[]
++var fs = [(a) => 1, (b) => 2]; // (a: { x: number; y?: number }) => number[]
++var gs = [(b) => 2, (a) => 1]; // (b: { x: number; z?: number }) => number[]

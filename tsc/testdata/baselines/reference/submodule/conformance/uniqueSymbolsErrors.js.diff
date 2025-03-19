@@ -1,10 +1,7 @@
 --- old.uniqueSymbolsErrors.js
 +++ new.uniqueSymbolsErrors.js
-@@= skipped -89, +89 lines =@@
- const shouldNotBeAssignable: string = Symbol();
- 
- //// [uniqueSymbolsErrors.js]
--// classes
+@@= skipped -92, +92 lines =@@
+ // classes
  class InvalidClass {
      constructor(invalidConstructorArgType) { }
 +    invalidReadonlyPropertyType;
@@ -12,7 +9,7 @@
      invalidArgType(arg) { return; }
      invalidRestArgType(...args) { return; }
      invalidReturnType() { return; }
-@@= skipped -12, +13 lines =@@
+@@= skipped -9, +11 lines =@@
      invalidTypeParameterDefault() { return; }
      get invalidGetter() { return; }
      set invalidSetter(arg) { return; }
@@ -20,10 +17,3 @@
      static invalidStaticArgType(arg) { return; }
      static invalidStaticRestArgType(...args) { return; }
      static invalidStaticReturnType() { return; }
-@@= skipped -10, +11 lines =@@
-     static get invalidStaticGetter() { return; }
-     static set invalidStaticSetter(arg) { return; }
- }
--// initializer assignability
--// https://github.com/Microsoft/TypeScript/issues/21584
- const shouldNotBeAssignable = Symbol();

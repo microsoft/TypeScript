@@ -35,6 +35,7 @@ class Derived4<T> extends Base2<T> {
 }
 
 //// [derivedClassConstructorWithoutSuperCall.js]
+// derived class constructors must contain a super call
 class Base {
     x;
 }
@@ -47,16 +48,16 @@ class Base2 {
 }
 class Derived2 extends Base2 {
     constructor() {
-        var r2 = () => super();
+        var r2 = () => super(); // error for misplaced super call (nested function)
     }
 }
 class Derived3 extends Base2 {
     constructor() {
-        var r = function () { super(); };
+        var r = function () { super(); }; // error
     }
 }
 class Derived4 extends Base2 {
     constructor() {
-        var r = super();
+        var r = super(); // ok
     }
 }

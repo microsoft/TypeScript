@@ -1,10 +1,9 @@
 --- old.derivedClassTransitivity4.js
 +++ new.derivedClassTransitivity4.js
-@@= skipped -22, +22 lines =@@
- var r2 = e.foo('');
+@@= skipped -23, +23 lines =@@
  
  //// [derivedClassTransitivity4.js]
--// subclassing is not transitive when you can remove required parameters and add optional parameters on protected members
+ // subclassing is not transitive when you can remove required parameters and add optional parameters on protected members
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -46,10 +45,10 @@
 +    foo(x) { }
 +}
 +class D extends C {
-+    foo() { }
++    foo() { } // ok to drop parameters
 +}
 +class E extends D {
-+    foo(x) { }
++    foo(x) { } // ok to add optional parameters
 +}
  var c;
  var d;

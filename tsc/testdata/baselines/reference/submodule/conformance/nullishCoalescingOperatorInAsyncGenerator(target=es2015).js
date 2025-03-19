@@ -11,6 +11,7 @@ async function* f(a: { b?: number }) {
 
 
 //// [nullishCoalescingOperatorInAsyncGenerator.js]
+// https://github.com/microsoft/TypeScript/issues/37686
 async function* f(a) {
     let c = a.b ?? 10;
     while (c) {

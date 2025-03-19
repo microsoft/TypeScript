@@ -145,6 +145,7 @@ for (const y = 0; y < 1;) {
 
 
 //// [capturedLetConstInLoop4_ES6.js]
+//======let
 export function exportedFoo() {
     return v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8;
 }
@@ -204,6 +205,7 @@ for (let y = 0; y < 1; ++y) {
     (function () { return x + y + v8; });
     (() => x + y);
 }
+//======const
 export function exportedFoo2() {
     return v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c + v8_c;
 }

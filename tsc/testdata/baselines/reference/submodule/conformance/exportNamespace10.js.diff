@@ -19,4 +19,4 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var _ = new ns.A(); // Error
-+let _ = new ns.A();
++let _ = new ns.A(); // Error

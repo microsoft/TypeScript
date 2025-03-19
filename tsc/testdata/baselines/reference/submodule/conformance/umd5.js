@@ -22,4 +22,5 @@ const Bar = require("./foo");
 Bar.fn();
 let x;
 let y = x.n;
+// should error
 let z = Foo;

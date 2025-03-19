@@ -1,10 +1,6 @@
 --- old.callSignaturesWithDuplicateParameters.js
 +++ new.callSignaturesWithDuplicateParameters.js
-@@= skipped -40, +40 lines =@@
- }
- 
- //// [callSignaturesWithDuplicateParameters.js]
--// Duplicate parameter names are always an error
+@@= skipped -44, +44 lines =@@
  function foo(x, x) { }
  var f = function foo(x, x) { };
  var f2 = function (x, x) { };

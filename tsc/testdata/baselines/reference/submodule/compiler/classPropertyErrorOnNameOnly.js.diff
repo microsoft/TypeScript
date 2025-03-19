@@ -5,7 +5,7 @@
  
  //// [classPropertyErrorOnNameOnly.js]
 -"use strict";
--// turn on strictNullChecks
+ // turn on strictNullChecks
 -var Example = /** @class */ (function () {
 -    function Example() {
 -        this.insideClass = function (val) {
@@ -40,17 +40,11 @@
 +                return "4";
 +            case 5:
 +                return "5";
++            // forgot case 6
 +        }
-+    };
++    }; // all the way to here
 +}
 +const outsideClass = function (val) {
      switch (val) {
          case 1:
              return "1";
-@@= skipped -34, +28 lines =@@
-             return "4";
-         case 5:
-             return "5";
--        // forgot case 6
-     }
- };

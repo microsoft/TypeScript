@@ -58,11 +58,10 @@
  y1.a;
  y2.a;
  y3.a;
-@@= skipped -19, +19 lines =@@
- y8.a;
+@@= skipped -20, +20 lines =@@
  y9.a;
  y0.a;
--// named import
+ // named import
 -var interface_1 = require("interface");
 -var variable_1 = require("variable");
 -var interface_variable_1 = require("interface-variable");
@@ -86,11 +85,10 @@
  interface_1.a;
  variable_1.a;
  interface_variable_1.a;
-@@= skipped -21, +20 lines =@@
- function_module_1.a;
+@@= skipped -21, +21 lines =@@
  class_1.a;
  class_module_1.a;
--// named export
+ // named export
 -var interface_2 = require("interface");
 +const interface_2 = require("interface");
  Object.defineProperty(exports, "a1", { enumerable: true, get: function () { return interface_2.a; } });
@@ -121,7 +119,5 @@
 -var class_module_2 = require("class-module");
 +const class_module_2 = require("class-module");
  Object.defineProperty(exports, "a0", { enumerable: true, get: function () { return class_module_2.a; } });
--// export-star
+ // export-star
  __exportStar(require("interface"), exports);
- __exportStar(require("variable"), exports);
- __exportStar(require("interface-variable"), exports);

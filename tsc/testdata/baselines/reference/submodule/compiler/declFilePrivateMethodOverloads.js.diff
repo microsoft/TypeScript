@@ -8,9 +8,11 @@
 -    function c1() {
 +class c1 {
 +    _forEachBindingContext(context, fn) {
++        // Function here
      }
 -    c1.prototype._forEachBindingContext = function (context, fn) {
--        // Function here
++    overloadWithArityDifference(context) {
+         // Function here
 -    };
 -    c1.prototype.overloadWithArityDifference = function (context) {
 -        // Function here
@@ -22,7 +24,6 @@
 -//// [declFilePrivateMethodOverloads.d.ts]
 -interface IContext {
 -    someMethod(): any;
-+    overloadWithArityDifference(context) {
 +    }
  }
 -declare class c1 {

@@ -82,7 +82,7 @@
 -        var _this = _super.call(this, "hello", _this.z) || this;
 -        _this.z = z;
 -        return _this;
-+}
++} // too few params
 +class E extends C {
 +    z;
 +    constructor(z) {
@@ -98,7 +98,7 @@
 +        this.z = z;
 +        super("hello", this.z);
 +    }
-+}
++} // first param type
  function f() {
      if (x < 10) {
          x = 11;

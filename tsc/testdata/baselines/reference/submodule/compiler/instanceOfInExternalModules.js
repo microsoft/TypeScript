@@ -22,6 +22,7 @@ exports.Foo = Foo;
 //// [instanceOfInExternalModules_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='instanceOfInExternalModules_require.ts'/>
 const Bar = require("instanceOfInExternalModules_require");
 function IsFoo(value) {
     return value instanceof Bar.Foo;

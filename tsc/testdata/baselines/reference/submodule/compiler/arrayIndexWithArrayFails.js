@@ -6,4 +6,4 @@ declare const arr2: number[];
 const j = arr2[arr1[0]]; // should error
 
 //// [arrayIndexWithArrayFails.js]
-const j = arr2[arr1[0]];
+const j = arr2[arr1[0]]; // should error

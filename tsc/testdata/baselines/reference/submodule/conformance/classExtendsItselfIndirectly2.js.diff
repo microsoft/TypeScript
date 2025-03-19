@@ -28,7 +28,7 @@
 -}(N.E)); // error
 +class C extends N.E {
 +    foo;
-+}
++} // error
  var M;
  (function (M) {
 -    var D = /** @class */ (function (_super) {
@@ -69,7 +69,7 @@
 -    var P;
 +    class C2 extends Q.E2 {
 +        foo;
-+    }
++    } // error
 +    let P;
      (function (P) {
 -        var D2 = /** @class */ (function (_super) {

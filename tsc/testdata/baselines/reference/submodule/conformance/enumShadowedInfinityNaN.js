@@ -19,6 +19,7 @@
 
 
 //// [enumShadowedInfinityNaN.js]
+// https://github.com/microsoft/TypeScript/issues/54981
 {
     let Infinity = {};
     let En;

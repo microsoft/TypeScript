@@ -61,6 +61,7 @@ class D5 extends getBadBase() {
 
 
 //// [classExtendingClassLikeType.js]
+// Error, no Base constructor function
 class D0 extends Base {
 }
 class D1 extends getBase() {
@@ -85,7 +86,9 @@ class D3 extends getBase() {
         this.y = 2;
     }
 }
+// Error, no constructors with three type arguments
 class D4 extends getBase() {
 }
+// Error, constructor return types differ
 class D5 extends getBadBase() {
 }

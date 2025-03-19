@@ -20,7 +20,7 @@ class C {
     [x];
     [y];
     m() {
-        this[x] = 0;
+        this[x] = 0; // write-only
         this[y];
     }
 }

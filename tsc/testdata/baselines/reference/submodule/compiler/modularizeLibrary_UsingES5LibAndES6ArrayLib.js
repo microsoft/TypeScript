@@ -9,6 +9,7 @@ function f(x: number, y: number, z: number) {
 f(1, 2, 3);
 
 //// [modularizeLibrary_UsingES5LibAndES6ArrayLib.js]
+// No error
 function f(x, y, z) {
     return Array.from(arguments);
 }

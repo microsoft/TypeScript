@@ -1,10 +1,9 @@
 --- old.propertyAccessOnTypeParameterWithConstraints2.js
 +++ new.propertyAccessOnTypeParameterWithConstraints2.js
-@@= skipped -83, +83 lines =@@
- var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error
+@@= skipped -84, +84 lines =@@
  
  //// [propertyAccessOnTypeParameterWithConstraints2.js]
--// generic types should behave as if they have properties of their constraint type
+ // generic types should behave as if they have properties of their constraint type
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -49,65 +48,28 @@
 +class C {
 +    f() {
          var x;
--        var a = x['foo'](); // should be string
-+        var a = x['foo']();
+         var a = x['foo'](); // should be string
          return a + x.foo();
 -    };
 -    C.prototype.g = function (x) {
--        var a = x['foo'](); // should be string
 +    }
 +    g(x) {
-+        var a = x['foo']();
+         var a = x['foo'](); // should be string
          return a + x.foo();
 -    };
 -    return C;
 -}());
--//class C<U extends T, T extends A> {
--//    f() {
--//        var x: U;
--//        var a = x['foo'](); // should be string
--//        return a + x.foo();
--//    }
--//    g(x: U) {
--//        var a = x['foo'](); // should be string
--//        return a + x.foo();
--//    }
--//}
 +    }
 +}
- var r1 = (new C()).f();
- var r1b = (new C()).g(new B());
--//interface I<U extends T, T extends A> {
--//    foo: U;
--//}
- var i;
- var r2 = i.foo.foo();
- var r2b = i.foo['foo']();
- var a;
--//var a: {
--//    <U extends T, T extends A>(): U;
--//    <U extends T, T extends A>(x: U): U;
--//    <U extends T, T extends A>(x: U, y: T): U;
--//}
- var r3 = a().foo();
- var r3b = a()['foo']();
--// parameter supplied for type argument inference to succeed
- var aB = new B();
+ //class C<U extends T, T extends A> {
+ //    f() {
+ //        var x: U;
+@@= skipped -77, +51 lines =@@
  var r3c = a(aB, aB).foo();
  var r3d = a(aB, aB)['foo']();
  var b = {
 -    foo: function (x, y) {
--        var a = x['foo'](); // should be string
 +    foo: (x, y) => {
-+        var a = x['foo']();
+         var a = x['foo'](); // should be string
          return a + x.foo();
      }
- };
--//var b = {
--//    foo: <U extends T, T extends A>(x: U, y: T) => {
--//        var a = x['foo'](); // should be string
--//        return a + x.foo();
--//    }
--//}
--var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error
-+var r4 = b.foo(aB, aB);

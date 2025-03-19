@@ -23,7 +23,7 @@ class C {
 class D extends C {
     y;
     constructor() {
-        super();
+        super(); // uses the type parameter type of the base class, ie string
     }
 }
 var d;

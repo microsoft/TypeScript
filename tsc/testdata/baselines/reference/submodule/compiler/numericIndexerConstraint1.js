@@ -11,4 +11,4 @@ class Foo {
     foo() { }
 }
 var x;
-var result = x["one"];
+var result = x["one"]; // error

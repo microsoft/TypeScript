@@ -7,7 +7,7 @@
 -"use strict";
 -var validate = function (x) { return (x === 'yes' || x === 'no') ? x : 'idk'; }; // No error
 -var u = undefined;
-+let validate = x => (x === 'yes' || x === 'no') ? x : 'idk';
++let validate = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
 +const u = undefined;
  if (u === 5) {
 -    var y = u.toString(10);
@@ -172,21 +172,7 @@
              break;
      }
  }
-@@= skipped -25, +25 lines =@@
-         case 'yes':
-         case 'no':
-         case 'maybe':
--            return x; // error
-+            return x;
-         default:
-             throw new Error('Can you repeat the question?');
-     }
- }
--// Repro from #33483
- function f2(x) {
-     if (x !== undefined && typeof x !== 'string') {
-         throw new Error();
-@@= skipped -15, +14 lines =@@
+@@= skipped -40, +40 lines =@@
  function notNotEquals(u) {
      if (u !== NumberEnum) { }
      else {
@@ -203,7 +189,7 @@
 -        var aOrB = u;
 +        const aOrB = u;
      }
--    // equivalent to
+     // equivalent to
      if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
      else {
 -        var aOrB = u;

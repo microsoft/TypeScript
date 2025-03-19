@@ -1,10 +1,9 @@
 --- old.invalidTypeNames.js
 +++ new.invalidTypeNames.js
-@@= skipped -6, +6 lines =@@
- 
+@@= skipped -7, +7 lines =@@
  
  //// [invalidTypeNames.js]
--// Refer to calling code - a real illegal name is subbed in here
+ // Refer to calling code - a real illegal name is subbed in here
 -var illegal_name_here = /** @class */ (function () {
 -    function illegal_name_here() {
 -    }

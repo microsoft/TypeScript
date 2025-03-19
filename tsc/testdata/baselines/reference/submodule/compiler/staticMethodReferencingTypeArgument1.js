@@ -31,7 +31,7 @@ var Editor;
             this.data = data;
         }
         static MakeHead() {
-            var entry = new List(true, null);
+            var entry = new List(true, null); // can't access T here
             entry.prev = entry;
             entry.next = entry;
             return entry;

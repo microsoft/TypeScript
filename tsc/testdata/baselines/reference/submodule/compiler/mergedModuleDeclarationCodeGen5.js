@@ -47,12 +47,13 @@ var M;
             let plop;
             (function (plop) {
             })(plop = plop_1.plop || (plop_1.plop = {}));
-            var v1 = gunk;
-            var v2 = buz;
-            plop_1.v3 = doom;
-            plop_1.v4 = M;
-            plop_1.v5 = fudge;
-            plop_1.v6 = plop;
+            // Emit these references as follows
+            var v1 = gunk; // gunk
+            var v2 = buz; // buz
+            plop_1.v3 = doom; // _plop.doom
+            plop_1.v4 = M; // _plop.M
+            plop_1.v5 = fudge; // fudge
+            plop_1.v6 = plop; // plop
         })(plop = buz_1.plop || (buz_1.plop = {}));
     })(buz = M.buz || (M.buz = {}));
 })(M || (M = {}));

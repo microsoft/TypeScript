@@ -24,10 +24,14 @@ const t2: T2 = null; // Assert that T2 is the null type.
 
 //// [typeAliasDeclareKeywordNewlines.js]
 var declare, type;
-const t1 = null;
+const t1 = null; // Assert that T1 is the null type.
 let T;
-declare;
-type;
+// The following should use a variable named 'declare', use a variable named
+// 'type', and assign to a variable named 'T'.
+declare; /*ASI*/
+type; /*ASI*/
 T = null;
-declare;
-const t2 = null;
+// The following should use a variable named 'declare' and declare a type alias
+// named 'T2':
+declare; /*ASI*/
+const t2 = null; // Assert that T2 is the null type.

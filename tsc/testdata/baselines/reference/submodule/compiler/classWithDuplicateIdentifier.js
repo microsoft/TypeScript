@@ -17,11 +17,11 @@ class D {
 
 //// [classWithDuplicateIdentifier.js]
 class C {
-    a() { return 0; }
+    a() { return 0; } // error: duplicate identifier
     a;
 }
 class K {
-    b;
+    b; // error: duplicate identifier
     b() { return 0; }
 }
 class D {

@@ -6,44 +6,40 @@
  function f1() {
 -    var x = []; // Implicit any[] error in some locations
 -    var y = x; // Implicit any[] error
-+    let x = [];
-+    let y = x;
++    let x = []; // Implicit any[] error in some locations
++    let y = x; // Implicit any[] error
      x.push(5);
 -    var z = x;
 +    let z = x;
  }
  function f2() {
 -    var x; // Implicit any[] error in some locations
-+    let x;
++    let x; // Implicit any[] error in some locations
      x = [];
 -    var y = x; // Implicit any[] error
-+    let y = x;
++    let y = x; // Implicit any[] error
      x.push(5);
 -    var z = x;
 +    let z = x;
  }
  function f3() {
 -    var x = []; // Implicit any[] error in some locations
-+    let x = [];
++    let x = []; // Implicit any[] error in some locations
      x.push(5);
      function g() {
--        x; // Implicit any[] error
-+        x;
+         x; // Implicit any[] error
      }
  }
  function f4() {
 -    var x;
--    x = [5, "hello"]; // Non-evolving array
--    x.push(true); // Error
 +    let x;
-+    x = [5, "hello"];
-+    x.push(true);
+     x = [5, "hello"]; // Non-evolving array
+     x.push(true); // Error
  }
  function f5() {
 -    var x = [5, "hello"]; // Non-evolving array
--    x.push(true); // Error
-+    let x = [5, "hello"];
-+    x.push(true);
++    let x = [5, "hello"]; // Non-evolving array
+     x.push(true); // Error
  }
  function f6() {
 -    var x;
@@ -51,34 +47,21 @@
      if (cond()) {
          x = [];
          x.push(5);
-         x.push("hello");
-     }
-     else {
--        x = [true]; // Non-evolving array
-+        x = [true];
-     }
--    x; // boolean[] | (string | number)[]
--    x.push(99); // Error
-+    x;
-+    x.push(99);
+@@= skipped -42, +42 lines =@@
+     x.push(99); // Error
  }
  function f7() {
 -    var x = []; // x has evolving array value
-+    let x = [];
++    let x = []; // x has evolving array value
      x.push(5);
 -    var y = x; // y has non-evolving array value
--    x.push("hello"); // Ok
--    y.push("hello"); // Error
-+    let y = x;
-+    x.push("hello");
-+    y.push("hello");
++    let y = x; // y has non-evolving array value
+     x.push("hello"); // Ok
+     y.push("hello"); // Error
  }
  function f8() {
 -    var x = []; // Implicit any[] error in some locations
-+    const x = [];
++    const x = []; // Implicit any[] error in some locations
      x.push(5);
      function g() {
--        x; // Implicit any[] error
-+        x;
-     }
- }
+         x; // Implicit any[] error

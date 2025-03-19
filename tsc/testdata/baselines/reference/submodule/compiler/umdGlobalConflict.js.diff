@@ -1,9 +1,8 @@
 --- old.umdGlobalConflict.js
 +++ new.umdGlobalConflict.js
-@@= skipped -19, +19 lines =@@
- "use strict";
+@@= skipped -20, +20 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  //// [global.js]
--// Should be OK, first in wins
+ // Should be OK, first in wins
 -var p = Alpha.x;
 +const p = Alpha.x;

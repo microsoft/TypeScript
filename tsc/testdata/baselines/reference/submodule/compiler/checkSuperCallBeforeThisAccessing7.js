@@ -18,6 +18,6 @@ class Base {
 }
 class Super extends Base {
     constructor() {
-        super((() => this));
+        super((() => this)); // No error
     }
 }

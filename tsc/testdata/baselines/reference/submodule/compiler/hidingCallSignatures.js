@@ -29,9 +29,9 @@ e(""); // {}
 
 //// [hidingCallSignatures.js]
 var d;
-d("");
-new d("");
+d(""); // number
+new d(""); // should be string
 var f;
-f("");
+f(""); // string
 var e;
-e("");
+e(""); // {}

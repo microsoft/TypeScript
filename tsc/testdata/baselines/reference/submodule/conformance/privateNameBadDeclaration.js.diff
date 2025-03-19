@@ -7,9 +7,9 @@
 -    : 1, // Error
 -    : function () { }, // Error
 -    get () { return ""; } // Error
-+    #x: 1,
-+    #m() { },
-+    get #p() { return ""; }
++    #x: 1, // Error
++    #m() { }, // Error
++    get #p() { return ""; } // Error
  };
 -var B = /** @class */ (function () {
 -    function B() {
@@ -22,9 +22,9 @@
 -    : 2, // Error
 -    : function () { }, // Error
 -    get () { return ""; } // Error
-+    #y: 2,
-+    #m() { },
-+    get #p() { return ""; }
++    #y: 2, // Error
++    #m() { }, // Error
++    get #p() { return ""; } // Error
  };
 -var C = /** @class */ (function () {
 -    function C() {

@@ -7,6 +7,7 @@
 -// Repro from #8801
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Form3 = void 0;
++// Repro from #8801
  function alert(s) { }
 -var parameterFn = function (props) { return alert(props.store); };
 -var brokenFunction = function (f) { return function (o) { return o; }; };

@@ -17,11 +17,13 @@ const foo3 = {
 
 
 //// [thisPredicateInObjectLiteral.js]
+// Should be OK
 const foo2 = {
     isNumber() {
         return true;
     },
 };
+// Still an error
 const foo3 = {
     isNumber(x) {
         return true;

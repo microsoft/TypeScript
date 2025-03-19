@@ -19,9 +19,9 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// expected error for all the LHS of assignments
+ // expected error for all the LHS of assignments
  var value;
--// this
+ // this
 -var C = /** @class */ (function () {
 -    function C() {
 -        this = value;
@@ -37,29 +37,14 @@
 +}
  function foo() { this = value; }
  this = value;
--// identifiers: module, class, enum, function
- var M;
- (function (M) {
- })(M || (M = {}));
-@@= skipped -39, +18 lines =@@
- })(E || (E = {}));
- E = value;
- foo = value;
--// literals
- null = value;
- true = value;
- false = value;
- 0 = value;
- '' = value;
- /d+/ = value;
--// object literals
- {
-     a: 0;
+ // identifiers: module, class, enum, function
+@@= skipped -52, +34 lines =@@
  }
  value;
--// array literals
+ // array literals
 -'' = value[0], '' = value[1];
--// super
++['', ''] = value;
+ // super
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
@@ -71,21 +56,16 @@
 -    Derived.sfoo = function () { _super. = value; };
 -    return Derived;
 -}(C));
--// function expression
-+['', ''] = value;
 +class Derived extends C {
 +    constructor() { super(); super. = value; }
 +    foo() { super. = value; }
 +    static sfoo() { super. = value; }
 +}
+ // function expression
  function bar() { }
  value;
 -(function () { });
 +() => { };
  value;
--// function calls
+ // function calls
  foo() = value;
--// parentheses, the containted expression is value
- (this) = value;
- (M) = value;
- (C) = value;

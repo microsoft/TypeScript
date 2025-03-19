@@ -88,6 +88,8 @@ class Base {
     static u;
     constructor(a) { }
 }
+// Errors
+// decrease visibility of all public members to protected
 class Derived1 extends Base {
     a;
     constructor(a) { super(a); }

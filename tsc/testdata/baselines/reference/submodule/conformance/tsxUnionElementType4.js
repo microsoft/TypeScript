@@ -65,6 +65,7 @@ class RC4 extends React.Component {
 var RCComp = RC1 || RC2;
 var EmptyRCComp = RC3 || RC4;
 var PartRCComp = RC1 || RC4;
+// Error
 let a = <RCComp x/>;
 let b = <PartRCComp x={10}/>;
 let c = <EmptyRCComp prop/>;

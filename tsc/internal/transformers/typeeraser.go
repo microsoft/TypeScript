@@ -32,11 +32,17 @@ func (tx *TypeEraserTransformer) popNode(grandparentNode *ast.Node) {
 	tx.parentNode = grandparentNode
 }
 
+func (tx *TypeEraserTransformer) elide(node *ast.Statement) *ast.Statement {
+	statement := tx.factory.NewNotEmittedStatement()
+	tx.emitContext.SetOriginal(statement, node)
+	statement.Loc = node.Loc
+	return statement
+}
+
 func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 	// !!! TransformFlags were traditionally used here to skip over subtrees that contain no TypeScript syntax
 	if ast.IsStatement(node) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) {
-		// !!! Use NotEmittedStatement to preserve comments
-		return nil
+		return tx.elide(node)
 	}
 
 	grandparentNode := tx.pushNode(node)
@@ -87,10 +93,12 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		return nil
 
 	case ast.KindTypeAliasDeclaration,
-		ast.KindInterfaceDeclaration,
-		ast.KindNamespaceExportDeclaration:
+		ast.KindInterfaceDeclaration:
 		// TypeScript type-only declarations are elided.
-		// !!! Use NotEmittedStatement to preserve comments
+		return tx.elide(node)
+
+	case ast.KindNamespaceExportDeclaration:
+		// TypeScript namespace export declarations are elided.
 		return nil
 
 	case ast.KindModuleDeclaration:
@@ -98,7 +106,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			!isInstantiatedModule(node, tx.compilerOptions.ShouldPreserveConstEnums()) ||
 			getInnermostModuleDeclarationFromDottedModule(node.AsModuleDeclaration()).Body == nil {
 			// TypeScript module declarations are elided if they are not instantiated or have no body
-			return nil
+			return tx.elide(node)
 		}
 		return tx.visitor.VisitEachChild(node)
 
@@ -170,7 +178,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		n := node.AsFunctionDeclaration()
 		if n.Body == nil {
 			// TypeScript overloads are elided
-			return nil
+			return tx.elide(node)
 		}
 		return tx.factory.UpdateFunctionDeclaration(n, tx.visitor.VisitModifiers(n.Modifiers()), n.AsteriskToken, tx.visitor.VisitNode(n.Name()), nil, tx.visitor.VisitNodes(n.Parameters), nil, tx.visitor.VisitNode(n.Body))
 

@@ -47,11 +47,11 @@ export {} from "./a";
 //// [c.js]
 import { AClass } from "./b";
 //// [main4.js]
-export default 1;
+export default 1; // ok
 //// [main5.js]
 export default class C {
-}
+} // ok
 //// [main6.js]
-export default I;
+export default I; // error
 //// [main7.js]
-export default C;
+export default C; // error

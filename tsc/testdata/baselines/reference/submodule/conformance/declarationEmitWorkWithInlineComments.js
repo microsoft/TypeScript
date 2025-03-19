@@ -51,7 +51,26 @@ class Foo {
     notInternal1;
     notInternal2;
     notInternal3;
-    constructor(isInternal1, isInternal2, isInternal3, isInternal4, isInternal5, isInternal6, isInternal7, notInternal1, notInternal2, notInternal3) {
+    constructor(
+    /** @internal */
+    isInternal1, 
+    /** @internal */ isInternal2, /** @internal */ isInternal3, 
+    // @internal
+    isInternal4, 
+    // nothing
+    /** @internal */
+    isInternal5, 
+    /* @internal */ isInternal6 /* trailing */, 
+    /* @internal */ isInternal7, /** @internal */ 
+    // not work
+    notInternal1, 
+    // @internal
+    /* not work */
+    notInternal2, 
+    /* not work */
+    // @internal
+    /* not work */
+    notInternal3) {
         this.isInternal1 = isInternal1;
         this.isInternal2 = isInternal2;
         this.isInternal3 = isInternal3;
@@ -67,14 +86,14 @@ class Foo {
 exports.Foo = Foo;
 class Bar {
     isInternal1;
-    constructor(isInternal1) {
+    constructor(/* @internal */ isInternal1) {
         this.isInternal1 = isInternal1;
     }
 }
 exports.Bar = Bar;
 class Baz {
     isInternal;
-    constructor(isInternal) {
+    constructor(/* @internal */ isInternal) {
         this.isInternal = isInternal;
     }
 }

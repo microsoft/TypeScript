@@ -43,4 +43,4 @@ var foo;
         test() { return true; }
     }
 })(foo || (foo = {}));
-var y = foo.g;
+var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.

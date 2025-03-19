@@ -95,6 +95,7 @@ const testRegExpUnicode = /abc/g.unicode;
 
 
 //// [doYouNeedToChangeYourTargetLibraryES2015.js]
+// es2015
 const noOp = () => { };
 const testReflectApply = Reflect.apply(noOp, this, []);
 const testReflectConstruct = Reflect.construct(noOp, []);

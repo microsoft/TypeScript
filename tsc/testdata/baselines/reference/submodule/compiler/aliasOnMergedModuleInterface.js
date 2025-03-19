@@ -26,5 +26,5 @@ var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be err
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var z;
-z.bar("hello");
-var x = foo.bar("hello");
+z.bar("hello"); // This should be ok
+var x = foo.bar("hello"); // foo.A should be ok but foo.bar should be error

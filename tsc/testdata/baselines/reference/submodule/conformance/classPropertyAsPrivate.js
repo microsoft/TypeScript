@@ -37,6 +37,7 @@ class C {
     static foo() { }
 }
 var c;
+// all errors
 c.x;
 c.y;
 c.y = 1;

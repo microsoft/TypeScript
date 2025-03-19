@@ -106,9 +106,11 @@ Object.defineProperties(IterableWeakMap.prototype, {
 
 
 //// [esNextWeakRefs_IterableWeakMap.js]
+/** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }) => {
     set.delete(ref);
 };
+// Based on: https://github.com/tc39/proposal-weakrefs/blob/master/README.md#iterable-weakmaps
 export class IterableWeakMap {
     #weakMap = new WeakMap();
     #refSet = new Set();

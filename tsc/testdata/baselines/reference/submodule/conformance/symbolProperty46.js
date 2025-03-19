@@ -18,6 +18,7 @@ class C {
     get [Symbol.hasInstance]() {
         return "";
     }
+    // Should take a string
     set [Symbol.hasInstance](x) {
     }
 }

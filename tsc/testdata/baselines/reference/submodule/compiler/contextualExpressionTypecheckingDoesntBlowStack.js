@@ -36,6 +36,7 @@ class Operation {
             const values = this.getValues();
             const innerResult = parameter.validate(values[parameter.oaParameter.name]);
             if (innerResult && innerResult.length > 0) {
+                // Commenting out this line will fix the problem.
                 result = (result || []).concat(innerResult);
             }
         }

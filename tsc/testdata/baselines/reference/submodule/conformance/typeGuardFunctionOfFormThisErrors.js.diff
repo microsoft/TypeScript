@@ -60,14 +60,13 @@
 -}(RoyalGuard));
 -var a = new FollowerGuard();
 -var b = new LeadGuard();
--// Mismatched guards shouldn't be assignable
 +}
 +let a = new FollowerGuard();
 +let b = new LeadGuard();
+ // Mismatched guards shouldn't be assignable
  b.isFollower = b.isLeader;
  b.isLeader = b.isFollower;
- a.isFollower = a.isLeader;
-@@= skipped -54, +25 lines =@@
+@@= skipped -54, +26 lines =@@
  function invalidGuard(c) {
      return false;
  }

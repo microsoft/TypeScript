@@ -48,14 +48,5 @@
 +    c;
 +}
  rra = ara;
--rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
-+rrb = arb;
+ rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
  rra = arb;
--rrb = ara; // error: 'A' is not assignable to 'B'
-+rrb = ara;
- rra = cra;
--rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
-+rra = crb;
- rrb = crb;
--rrb = cra; // error: 'A' is not assignable to 'B'
-+rrb = cra;

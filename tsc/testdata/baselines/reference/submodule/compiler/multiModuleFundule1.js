@@ -24,5 +24,5 @@ function C(x) { }
     C.foo = foo;
 })(C || (C = {}));
 var r = C(2);
-var r2 = new C(2);
+var r2 = new C(2); // using void returning function as constructor
 var r3 = C.foo();

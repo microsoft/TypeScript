@@ -87,12 +87,14 @@ a_2.default === a_3.default;
 a_3.default === a_3.default;
 a_3.default === self.default;
 self.default === self.def;
+// should all fail
 (0, a_1.default)();
 (0, a_2.default)();
 (0, a_3.default)();
 (0, a_3.default)();
 self.default();
 self.def();
+// should all work
 a_1.default.default();
 a_2.default.default();
 a_3.default.default();

@@ -5,4 +5,4 @@
  
  //// [subtypingWithCallSignaturesA.js]
 -var r5 = foo3(function (x) { return ''; }); // error
-+var r5 = foo3((x) => '');
++var r5 = foo3((x) => ''); // error

@@ -9,17 +9,16 @@
 -    }
 -    return C;
 -}());
--var v1;
--var y = v1.x; // should be 'string'
++class C {
++    x;
++}
+ var v1;
+ var y = v1.x; // should be 'string'
 -
 -
 -//// [genericClasses0.d.ts]
 -declare class C<T> {
 -    x: T;
-+class C {
-+    x;
- }
+-}
 -declare var v1: C<string>;
 -declare var y: string;
-+var v1;
-+var y = v1.x;

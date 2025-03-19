@@ -37,15 +37,20 @@ const fB = () => {
 const fC = () => {
     return {};
 };
+// These should all be OK, every type is identical
 accA(fA);
 accA(fB);
 accA(fC);
+//             ~~ previously an error
 accB(fA);
 accB(fB);
 accB(fC);
+//             OK
 accC(fA);
 accC(fB);
 accC(fC);
+//             ~~ previously an error
 accL(fA);
 accL(fB);
 accL(fC);
+//             ~~ previously an error

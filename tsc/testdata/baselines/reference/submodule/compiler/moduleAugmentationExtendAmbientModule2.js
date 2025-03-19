@@ -42,6 +42,7 @@ observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="observable.d.ts"/>
 const observable_1 = require("observable");
 require("./map");
 let x;

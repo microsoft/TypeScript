@@ -16,10 +16,10 @@ class C1 {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty9.js]
 class C1 {
-    a = "a";
-    b = "b";
-    c = "c";
-    d = "d";
+    a = "a"; // ok
+    b = "b"; // ok
+    c = "c"; // error unused prop
+    d = "d"; // error unused prop
     getValue(key) {
         return this[key];
     }

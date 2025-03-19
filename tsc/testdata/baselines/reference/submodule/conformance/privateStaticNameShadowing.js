@@ -22,9 +22,9 @@ class X {
         X.#m();
     }
     static #m() {
-        const X = {};
-        const _a = {};
-        X.#m();
+        const X = {}; // shadow the class
+        const _a = {}; // shadow the first generated var
+        X.#m(); // Should check with X as the receiver with _b as the class constructor 
         return 1;
     }
 }

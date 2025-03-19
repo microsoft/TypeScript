@@ -64,14 +64,30 @@ class T {
     prop;
 }
 x.prop;
-function f(x) { return x * 2; }
+// @param type has no effect.
+/**
+ * @param {number} x
+ * @returns string
+ */
+function f(x) { return x * 2; } // Should error
+// Should fail, because it takes a boolean and returns a number
 f(1);
 f(true).length;
+// @type has no effect either.
+/** @type {{ x?: number }} */
 const z = {};
-z.x = 1;
+z.x = 1; // Error
+/** @template T */
 function tem(t) { return {}; }
-let i;
+let i; // Should succeed thanks to type parameter default
+// Not legal JSDoc, but that shouldn't matter in TypeScript.
+/**
+ * @type {{foo: (function(string, string): string)}}
+ */
 const obj = { foo: (a, b) => a + b };
+/** @enum {string} */
 var E = {};
 E[""];
+// make sure import types in JSDoc are not resolved
+/** @type {import("should-not-be-resolved").Type} */
 var v = Promise.resolve(`${String()}`).then(s => require(s));

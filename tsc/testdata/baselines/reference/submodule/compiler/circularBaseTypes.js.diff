@@ -6,8 +6,7 @@
  //// [circularBaseTypes.js]
 -"use strict";
 -// Repro from #38098
--; // Error
-+;
+ ; // Error
  function f(m) {
      return m.value;
  }

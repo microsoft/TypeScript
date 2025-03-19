@@ -19,7 +19,7 @@
 +class publicClass {
 +}
  exports.publicClass = publicClass;
--// TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
+ // TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
 -var publicClassWithPrivateTypeParameters = /** @class */ (function () {
 -    function publicClassWithPrivateTypeParameters() {
 -    }

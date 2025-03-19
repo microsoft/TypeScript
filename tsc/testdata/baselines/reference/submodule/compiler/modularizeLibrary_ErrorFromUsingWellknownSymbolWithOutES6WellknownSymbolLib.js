@@ -13,6 +13,6 @@ a[Symbol.isConcatSpreadable] = false;
 function f(x, y, z) {
     return Array.from(arguments);
 }
-f(1, 2, 3);
+f(1, 2, 3); // no error
 let a = ['c', 'd'];
 a[Symbol.isConcatSpreadable] = false;

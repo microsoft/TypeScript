@@ -18,8 +18,8 @@ class Base {
     constructor() { }
 }
 class Derived extends Base {
-    static make() { new Base(); }
+    static make() { new Base(); } // ok
 }
 class Unrelated {
-    static fake() { new Base(); }
+    static fake() { new Base(); } // error
 }

@@ -21,3 +21,5 @@ type t3 = InferRecursive<Box<string | Box<number | boolean>>> // write t1 explic
   // They have same input type!
 
 //// [selfReferencingTypeReferenceInference.js]
+// Why is t2 and t3 different??
+// They have same input type!

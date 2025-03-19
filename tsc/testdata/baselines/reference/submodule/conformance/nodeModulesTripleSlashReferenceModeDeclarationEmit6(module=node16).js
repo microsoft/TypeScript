@@ -29,6 +29,7 @@ import obj from "./uses.js"
 export default (obj as typeof obj);
 
 //// [uses.js]
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 //// [index.js]
 import obj from "./uses.js";

@@ -1,14 +1,6 @@
 --- old.typeParameterUsedAsTypeParameterConstraint.js
 +++ new.typeParameterUsedAsTypeParameterConstraint.js
-@@= skipped -33, +33 lines =@@
- }
- 
- //// [typeParameterUsedAsTypeParameterConstraint.js]
--// Type parameters are in scope in their own and other type parameter lists
- function foo(x, y) {
-     x = y;
-     return y;
-@@= skipped -17, +16 lines =@@
+@@= skipped -50, +50 lines =@@
      x = y;
      return y;
  };

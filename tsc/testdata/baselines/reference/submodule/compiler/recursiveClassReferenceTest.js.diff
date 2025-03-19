@@ -69,7 +69,7 @@
 +                constructor(codeThing) {
                      this.codeThing = codeThing;
 -                    this.domNode = null;
--                    // scenario 1
+                     // scenario 1
                      codeThing.addWidget("addWidget", this);
                  }
 -                FindWidget.prototype.gar = function (runner) { if (true) {
@@ -135,12 +135,12 @@
 -                    function Mode() {
 -                        return _super !== null && _super.apply(this, arguments) || this;
                      }
--                    // scenario 2
--                    Mode.prototype.getInitialState = function () {
 +                    getMode() { return mode; }
 +                }
 +                PlainText.State = State;
 +                class Mode extends AbstractMode {
+                     // scenario 2
+-                    Mode.prototype.getInitialState = function () {
 +                    getInitialState() {
                          return new State(self);
 -                    };

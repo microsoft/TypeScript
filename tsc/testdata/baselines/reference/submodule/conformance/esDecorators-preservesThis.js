@@ -40,14 +40,17 @@ class D extends DecoratorProvider {
 
 
 //// [esDecorators-preservesThis.js]
+// preserve `this` for access
 class C {
     @instance.decorate
     method1() { }
     @(instance["decorate"])
     method2() { }
+    // even in parens
     @((instance.decorate))
     method3() { }
 }
+// preserve `this` for `super` access
 class D extends DecoratorProvider {
     m() {
         class C {

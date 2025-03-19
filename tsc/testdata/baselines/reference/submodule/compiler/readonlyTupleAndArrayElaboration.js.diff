@@ -1,11 +1,9 @@
 --- old.readonlyTupleAndArrayElaboration.js
 +++ new.readonlyTupleAndArrayElaboration.js
-@@= skipped -75, +75 lines =@@
- 
- 
+@@= skipped -77, +77 lines =@@
  //// [readonlyTupleAndArrayElaboration.js]
--// @strict
--// #Repro from #30839
+ // @strict
+ // #Repro from #30839
 -var point = [3, 4];
 -function distanceFromOrigin(_a) {
 -    var x = _a[0], y = _a[1];
@@ -16,7 +14,7 @@
  }
  distanceFromOrigin(point);
  arryFn(point);
-@@= skipped -13, +10 lines =@@
+@@= skipped -11, +10 lines =@@
  arryFn2(a);
  arryFn2(b);
  arryFn2(c);

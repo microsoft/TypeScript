@@ -8,6 +8,6 @@ class C {
 
 //// [propertyNamedPrototype.js]
 class C {
-    prototype;
-    static prototype;
+    prototype; // ok
+    static prototype; // error
 }

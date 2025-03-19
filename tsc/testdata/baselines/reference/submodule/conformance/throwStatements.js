@@ -139,8 +139,10 @@ var aClassInModule = new M.A();
 throw aClassInModule;
 var aFunctionInModule = M.F2;
 throw aFunctionInModule;
+// no initializer or annotation, so this is an 'any'
 var x;
 throw x;
+// literals
 throw 0.0;
 throw false;
 throw null;

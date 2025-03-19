@@ -1,11 +1,8 @@
 --- old.ts-expect-error-nocheck.js
 +++ new.ts-expect-error-nocheck.js
-@@= skipped -9, +9 lines =@@
- 
- 
- //// [ts-expect-error-nocheck.js]
--// @ts-nocheck
--// there should not be a "Unused @ts-expect-error" error due to the // @ts-nocheck
--// @ts-expect-error
+@@= skipped -12, +12 lines =@@
+ // @ts-nocheck
+ // there should not be a "Unused @ts-expect-error" error due to the // @ts-nocheck
+ // @ts-expect-error
 -var a = 1;
 +const a = 1;

@@ -1,10 +1,6 @@
 --- old.arrayFind.js
 +++ new.arrayFind.js
-@@= skipped -13, +13 lines =@@
- 
- 
- //// [arrayFind.js]
--// test fix for #18112, type guard predicates should narrow returned element
+@@= skipped -17, +17 lines =@@
  function isNumber(x) {
      return typeof x === "number";
  }

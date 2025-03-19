@@ -28,4 +28,5 @@ exports.inlined = inlined;
 exports.inlined.nun = 456;
 const ignoreJsdoc = () => true;
 exports.ignoreJsdoc = ignoreJsdoc;
+/** @type {string} make sure to ignore jsdoc! */
 exports.ignoreJsdoc.extra = 111;

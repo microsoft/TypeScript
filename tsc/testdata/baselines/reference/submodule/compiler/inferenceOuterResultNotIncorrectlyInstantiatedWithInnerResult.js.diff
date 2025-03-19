@@ -1,17 +1,15 @@
 --- old.inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.js
 +++ new.inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.js
-@@= skipped -40, +40 lines =@@
- }
- 
+@@= skipped -42, +42 lines =@@
  //// [inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.js]
--// simple example
+ // simple example
  export class Test {
 +    a;
 +    b;
      constructor(a, b) {
          this.a = a;
          this.b = b;
-@@= skipped -11, +12 lines =@@
+@@= skipped -9, +11 lines =@@
      }
  }
  export class Zip {

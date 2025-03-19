@@ -1,9 +1,8 @@
 --- old.typeInferenceTypePredicate.js
 +++ new.typeInferenceTypePredicate.js
-@@= skipped -6, +6 lines =@@
- 
+@@= skipped -7, +7 lines =@@
  
  //// [typeInferenceTypePredicate.js]
--// 'res' should be of type 'number'.
+ // 'res' should be of type 'number'.
 -var res = f(function (n) { return true; });
 +const res = f((n) => true);

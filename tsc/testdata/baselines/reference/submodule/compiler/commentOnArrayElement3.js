@@ -12,7 +12,11 @@ const array = [
 
 //// [commentOnArrayElement3.js]
 const array = [
-    1,
-    2,
+    /* element 1*/
+    1
+    /* end of element 1 */ ,
+    2
+    /* end of element 2 */ ,
     ,
+    /* extra comment */
 ];

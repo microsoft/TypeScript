@@ -10,5 +10,5 @@
 -readonlyArray.flatMap(function () { return []; }); // ok
 +const array = [];
 +const readonlyArray = [];
-+array.flatMap(() => []);
-+readonlyArray.flatMap(() => []);
++array.flatMap(() => []); // ok
++readonlyArray.flatMap(() => []); // ok

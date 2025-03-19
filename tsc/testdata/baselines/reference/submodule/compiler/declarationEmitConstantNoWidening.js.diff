@@ -18,6 +18,6 @@
 -export declare class Bar {
 -    readonly type = "FOO";
 +class Bar {
-+    type = exports.FOO;
++    type = exports.FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
  }
 +exports.Bar = Bar;

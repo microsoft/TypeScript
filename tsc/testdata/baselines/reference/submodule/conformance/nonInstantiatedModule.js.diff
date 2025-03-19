@@ -1,14 +1,6 @@
 --- old.nonInstantiatedModule.js
 +++ new.nonInstantiatedModule.js
-@@= skipped -51, +51 lines =@@
- (function (M) {
-     M.a = 1;
- })(M || (M = {}));
--// primary expression
- var m;
- var m = M;
- var a1;
-@@= skipped -9, +8 lines =@@
+@@= skipped -60, +60 lines =@@
  var a2 = m.a;
  var M2;
  (function (M2) {

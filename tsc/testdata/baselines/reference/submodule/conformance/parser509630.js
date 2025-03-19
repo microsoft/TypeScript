@@ -10,7 +10,7 @@ class Any extends Type {
 
 //// [parser509630.js]
 class Type {
-    examples = [];
+    examples = []; // typing here
 }
 class Any extends Type {
 }

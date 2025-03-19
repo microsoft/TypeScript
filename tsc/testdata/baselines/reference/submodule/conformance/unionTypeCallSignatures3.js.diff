@@ -28,5 +28,4 @@
 +function f6(s, ...n) { }
 +function f7(s, ...sRest) { }
  var fUnion;
--fUnion(""); // All constituents can be called by passing a single string.
-+fUnion("");
+ fUnion(""); // All constituents can be called by passing a single string.

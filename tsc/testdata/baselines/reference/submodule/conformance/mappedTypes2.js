@@ -121,11 +121,11 @@ function f2(shape) {
     var partial = {};
 }
 function f3(shape) {
-    const x = pick(shape, "name", "location");
+    const x = pick(shape, "name", "location"); // { name: string, location: Point }
 }
 function f4() {
     const rec = { foo: "hello", bar: "world", baz: "bye" };
-    const lengths = mapObject(rec, s => s.length);
+    const lengths = mapObject(rec, s => s.length); // { foo: number, bar: number, baz: number }
 }
 function f5(shape) {
     const p = proxify(shape);
@@ -133,7 +133,7 @@ function f5(shape) {
     p.width.set(42);
 }
 function f6(shape) {
-    let name = shape.name;
-    let location = shape.location;
-    let x = location.x;
+    let name = shape.name; // string
+    let location = shape.location; // DeepReadonly<Point>
+    let x = location.x; // number
 }

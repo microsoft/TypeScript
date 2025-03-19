@@ -26,3 +26,4 @@ declare module E {
 
 //// [a.js]
 //// [b.js]
+///<reference path="a.ts"/>

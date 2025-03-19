@@ -72,13 +72,14 @@ ab.y = 'hello';
 ab = {};
 function f1(node) {
     if (node instanceof A || node instanceof A) {
-        node;
+        node; // A
     }
     else {
-        node;
+        node; // B
     }
-    node;
+    node; // A | B
 }
+// Repro from #37659
 class ViewNode {
 }
 class ViewRefNode extends ViewNode {

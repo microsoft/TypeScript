@@ -14,6 +14,7 @@ export class C<TypeVariable> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
+// Unused, but could collide with the named type argument below.
 class TypeVariable {
 }
 class C {

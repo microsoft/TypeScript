@@ -18,6 +18,7 @@ class B extends A {
 //// [decoratorOnClass9.js]
 class A {
 }
+// https://github.com/Microsoft/TypeScript/issues/16417
 @dec
 class B extends A {
     static x = 1;

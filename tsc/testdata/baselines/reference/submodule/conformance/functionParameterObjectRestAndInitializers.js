@@ -13,6 +13,7 @@ function g({a, ...x}, b = ({a}, b = a) => {}) {
 
 
 //// [functionParameterObjectRestAndInitializers.js]
+// https://github.com/microsoft/TypeScript/issues/47079
 function f({ a, ...x }, b = a) {
     return b;
 }

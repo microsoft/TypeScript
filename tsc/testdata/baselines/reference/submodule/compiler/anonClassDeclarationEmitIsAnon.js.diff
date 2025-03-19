@@ -72,7 +72,7 @@
 -var wrapClass_1 = require("./wrapClass");
 +const wrapClass_1 = require("./wrapClass");
  exports.default = (0, wrapClass_1.wrapClass)(0);
--// Simple class
+ // Simple class
 -var User = /** @class */ (function () {
 -    function User() {
 -        this.name = '';
@@ -83,7 +83,7 @@
 +    name = '';
 +}
  exports.User = User;
--// User that is Timestamped
+ // User that is Timestamped
 -var TimestampedUser = /** @class */ (function (_super) {
 -    __extends(TimestampedUser, _super);
 -    function TimestampedUser() {

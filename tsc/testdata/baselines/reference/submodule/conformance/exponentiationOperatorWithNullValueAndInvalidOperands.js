@@ -26,9 +26,12 @@ var r1d2 = '' ** null;
 var r1d3 = {} ** null;
 
 //// [exponentiationOperatorWithNullValueAndInvalidOperands.js]
+// If one operand is the null or undefined value, it is treated as having the type of the
+// other operand.
 var a;
 var b;
 var c;
+// operator **
 var r1a1 = null ** a;
 var r1a2 = null ** b;
 var r1a3 = null ** c;

@@ -11,4 +11,4 @@ var c = new C(() => { return asdf; } ) // should error
 class C {
     constructor(x) { }
 }
-var c = new C(() => { return asdf; });
+var c = new C(() => { return asdf; }); // should error

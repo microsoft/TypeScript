@@ -20,4 +20,4 @@ exports.tabId = chrome.debugger.tabId;
 declare;
 namespace;
 debugger;
-{ }
+{ } // still an error

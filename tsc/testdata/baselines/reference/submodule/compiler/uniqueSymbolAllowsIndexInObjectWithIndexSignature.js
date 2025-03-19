@@ -17,6 +17,7 @@ let b: I = {[SYM]: 'str'}; // Expect error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SYM = void 0;
+// https://github.com/Microsoft/TypeScript/issues/21962
 exports.SYM = Symbol('a unique symbol');
-let a = { [exports.SYM]: 'sym' };
-let b = { [exports.SYM]: 'str' };
+let a = { [exports.SYM]: 'sym' }; // Expect ok
+let b = { [exports.SYM]: 'str' }; // Expect error

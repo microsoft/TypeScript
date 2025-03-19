@@ -26,21 +26,18 @@
 -}());
 +class C1 {
 +    a;
-+    b;
++    b; // Should yield error (a is not a value)
 +}
 +class C2 {
-+    c;
++    c; // Should yield error (d is not a value)
 +    d;
 +}
 +class C3 {
-+    e;
++    e; // Should yield error (e is not a value)
 +}
 +class ValidClass {
 +    x;
 +}
  var vcInstance = new ValidClass();
  var viInstance = vcInstance;
--var x1; // x1: string
--var x2; // x2: string
-+var x1;
-+var x2;
+ var x1; // x1: string

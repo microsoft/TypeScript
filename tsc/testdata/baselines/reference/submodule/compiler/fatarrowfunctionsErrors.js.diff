@@ -24,7 +24,8 @@
  var y = x, number;
  x * x;
 -false ? (function () { return null; }) : null;
--// missing fatarrow
++false ? (() => null) : null;
+ // missing fatarrow
 -var x1 = function () { };
 -var x2 = function (a) { };
 -var x3 = function (a) { };
@@ -34,7 +35,6 @@
 -        a[_i] = arguments[_i];
 -    }
 -};
-+false ? (() => null) : null;
 +var x1 = () => { };
 +var x2 = (a) => { };
 +var x3 = (a) => { };

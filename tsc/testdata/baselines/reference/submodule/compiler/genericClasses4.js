@@ -20,6 +20,7 @@ class Vec2_T<A>
 }
 
 //// [genericClasses4.js]
+// once caused stack overflow
 class Vec2_T {
     x;
     y;

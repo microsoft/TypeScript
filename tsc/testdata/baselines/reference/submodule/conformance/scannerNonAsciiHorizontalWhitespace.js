@@ -10,5 +10,7 @@
 
 
 //// [scannerNonAsciiHorizontalWhitespace.js]
+//// [scannerNonAsciiHorizontalWhitespace.ts]
 "  function f() {}";
+//// [scannerNonAsciiHorizontalWhitespace.js]
 "  function f() {}";

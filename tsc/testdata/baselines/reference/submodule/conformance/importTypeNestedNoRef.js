@@ -9,4 +9,4 @@ export const x: import(import("./a").LookAt).Value = "yes"; // expect outter imp
 
 
 //// [chainer.js]
-export const x = "yes";
+export const x = "yes"; // expect outter import to fail, since b.d.ts isn't in the build

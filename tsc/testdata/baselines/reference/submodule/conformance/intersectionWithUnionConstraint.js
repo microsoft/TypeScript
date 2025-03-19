@@ -44,15 +44,16 @@ type b<T> = { [K in a<T> & keyof T ]: 42 };
 
 //// [intersectionWithUnionConstraint.js]
 function f1(x) {
+    // Combined constraint of 'T & U' is 'string | number'
     let y = x;
 }
 function f2(x) {
-    let y1 = x;
-    let y2 = x;
+    let y1 = x; // Error
+    let y2 = x; // Error
     let y3 = x;
-    let y4 = x;
-    let y5 = x;
-    let y6 = x;
+    let y4 = x; // Error
+    let y5 = x; // Error
+    let y6 = x; // Error
 }
 function f3(x) {
     const y = x;

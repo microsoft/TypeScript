@@ -14,6 +14,8 @@ export = Foo;
 
 //// [amdModuleName2.js]
 "use strict";
+///<amd-module name='FirstModuleName'/>
+///<amd-module name='SecondModuleName'/>
 class Foo {
     x;
     constructor() {

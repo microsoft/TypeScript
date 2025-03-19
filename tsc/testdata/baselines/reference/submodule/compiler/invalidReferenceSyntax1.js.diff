@@ -1,10 +1,9 @@
 --- old.invalidReferenceSyntax1.js
 +++ new.invalidReferenceSyntax1.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
  
  //// [invalidReferenceSyntax1.js]
--/// <reference path="missingquote.ts />
+ /// <reference path="missingquote.ts />
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

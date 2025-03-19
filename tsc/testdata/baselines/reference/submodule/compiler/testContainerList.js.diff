@@ -1,10 +1,7 @@
 --- old.testContainerList.js
 +++ new.testContainerList.js
-@@= skipped -9, +9 lines =@@
- 
- 
- //// [testContainerList.js]
--// Regression test for #325
+@@= skipped -12, +12 lines =@@
+ // Regression test for #325
  var A;
  (function (A) {
 -    var C = /** @class */ (function () {

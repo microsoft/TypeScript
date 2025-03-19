@@ -42,6 +42,7 @@ var e = fun(x => x, x => x, 10);
 var f = fun((x => x), (x => x), 10);
 var g = fun(((x => x)), ((x => x)), 10);
 var h = fun((((x => x))), ((x => x)), 10);
+// Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);

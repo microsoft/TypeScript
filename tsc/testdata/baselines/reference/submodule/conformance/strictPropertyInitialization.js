@@ -163,22 +163,25 @@ class C13 {
 
 
 //// [strictPropertyInitialization.js]
+// Properties with non-undefined types require initialization
 class C1 {
-    a;
+    a; // Error
     b;
-    c;
+    c; // Error
     d;
-    #f;
+    #f; //Error
     #g;
-    #h;
+    #h; //Error
     #i;
 }
+// No strict initialization checks for static members
 class C3 {
     static a;
     static b;
     static c;
     static d;
 }
+// Initializer satisfies strict initialization check
 class C4 {
     a = 0;
     b = 0;
@@ -187,6 +190,7 @@ class C4 {
     #e = 0;
     #f = "abc";
 }
+// Assignment in constructor satisfies strict initialization check
 class C5 {
     a;
     #b;
@@ -195,8 +199,9 @@ class C5 {
         this.#b = 0;
     }
 }
+// All code paths must contain assignment
 class C6 {
-    a;
+    a; // Error
     #b;
     constructor(cond) {
         if (cond) {
@@ -219,26 +224,30 @@ class C7 {
         this.#b = 1;
     }
 }
+// Properties with string literal names aren't checked
 class C8 {
-    a;
+    a; // Error
     "b";
     0;
 }
+// No strict initialization checks for abstract members
 class C9 {
     a;
     b;
     c;
     d;
 }
+// Properties with non-undefined types must be assigned before they can be accessed
+// within their constructor
 class C10 {
     a;
     b;
     c;
     #d;
     constructor() {
-        let x = this.a;
-        this.a = this.b;
-        this.b = this.#d;
+        let x = this.a; // Error
+        this.a = this.b; // Error
+        this.b = this.#d; //Error
         this.b = x;
         this.#d = x;
         let y = this.c;

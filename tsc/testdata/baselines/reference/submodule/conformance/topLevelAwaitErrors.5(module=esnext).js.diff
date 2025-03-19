@@ -1,9 +1,0 @@
---- old.topLevelAwaitErrors.5(module=esnext).js
-+++ new.topLevelAwaitErrors.5(module=esnext).js
-@@= skipped -6, +6 lines =@@
- 
- 
- //// [topLevelAwaitErrors.5.js]
--// await in exported class name should fail
- export class await {
- }

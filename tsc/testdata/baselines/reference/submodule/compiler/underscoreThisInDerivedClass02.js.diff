@@ -1,10 +1,9 @@
 --- old.underscoreThisInDerivedClass02.js
 +++ new.underscoreThisInDerivedClass02.js
-@@= skipped -20, +20 lines =@@
- }
+@@= skipped -21, +21 lines =@@
  
  //// [underscoreThisInDerivedClass02.js]
--// @target es5
+ // @target es5
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -20,9 +19,9 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Original test intent:
--// Errors on '_this' should be reported in derived constructors,
--// even if 'super()' is not called.
+ // Original test intent:
+ // Errors on '_this' should be reported in derived constructors,
+ // even if 'super()' is not called.
 -var C = /** @class */ (function () {
 -    function C() {
 +class C {

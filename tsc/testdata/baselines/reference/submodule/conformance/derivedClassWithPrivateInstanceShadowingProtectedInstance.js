@@ -32,6 +32,7 @@ class Base {
     get a() { return 1; }
     set a(v) { }
 }
+// error, not a subtype
 class Derived extends Base {
     x;
     fn() {

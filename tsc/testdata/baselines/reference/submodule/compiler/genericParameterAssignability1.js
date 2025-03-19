@@ -8,4 +8,4 @@ r = f; // should be allowed
 //// [genericParameterAssignability1.js]
 function f(x) { return null; }
 var r = (x) => x;
-r = f;
+r = f; // should be allowed

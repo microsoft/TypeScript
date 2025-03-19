@@ -28,7 +28,7 @@ export { type };
 //// [imports.js]
 import { type } from "./exports.js";
 type;
-as;
-something;
-foo;
-bar;
+as; // Error (used in emitting position)
+something; // Error (used in emitting position)
+foo; // Error (used in emitting position)
+bar; // Error (used in emitting position)

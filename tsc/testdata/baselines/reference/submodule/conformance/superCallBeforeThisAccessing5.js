@@ -13,6 +13,6 @@ class D extends null {
 class D extends null {
     _t;
     constructor() {
-        this._t;
+        this._t; // No error
     }
 }

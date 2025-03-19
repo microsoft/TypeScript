@@ -1,10 +1,9 @@
 --- old.stringLiteralTypesAndTuples01.js
 +++ new.stringLiteralTypesAndTuples01.js
-@@= skipped -20, +20 lines =@@
- }
+@@= skipped -21, +21 lines =@@
  
  //// [stringLiteralTypesAndTuples01.js]
--// Should all be strings.
+ // Should all be strings.
 -var _a = ["Hello", "Brave", "New", "World"], hello = _a[0], brave = _a[1], newish = _a[2], world = _a[3];
 -var _b = ['I\'m', 'a', 't-rex'], im = _b[0], a = _b[1], dinosaur = _b[2];
 +let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
@@ -12,7 +11,7 @@
  rawr(dinosaur);
  function rawr(dino) {
      if (dino === "t-rex") {
-@@= skipped -13, +12 lines =@@
+@@= skipped -12, +12 lines =@@
      }
      throw "Unexpected " + dino;
  }

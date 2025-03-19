@@ -21,6 +21,23 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
+-    }
+-    return Base;
+-}());
+-var Derived = /** @class */ (function (_super) {
+-    __extends(Derived, _super);
+-    function Derived() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Derived;
+-}(Base));
+-var Derived2 = /** @class */ (function (_super) {
+-    __extends(Derived2, _super);
+-    function Derived2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Derived2;
+-}(Derived));
 +class Base {
 +    foo;
 +}
@@ -30,29 +47,33 @@
 +class Derived2 extends Derived {
 +    baz;
 +}
+ // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+ // foo properties are valid, bar properties cause errors in the derived class declarations
+-var A = /** @class */ (function () {
+-    function A() {
 +class A {
 +    foo;
 +    bar;
 +}
 +class B extends A {
-+    foo;
-+    bar;
++    foo; // ok
++    bar; // error
 +}
 +class A2 {
 +    1;
 +    2.0;
 +}
 +class B2 extends A2 {
-+    1;
-+    2;
++    1; // ok
++    2; // error
 +}
 +class A3 {
 +    '1';
 +    '2.0';
 +}
 +class B3 extends A3 {
-+    '1';
-+    '2.0';
++    '1'; // ok
++    '2.0'; // error
 +}
 +var TwoLevels;
 +(function (TwoLevels) {
@@ -60,53 +81,23 @@
 +        foo;
 +        bar;
      }
--    return Base;
--}());
--var Derived = /** @class */ (function (_super) {
--    __extends(Derived, _super);
--    function Derived() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    class B extends A {
-+        foo;
-+        bar;
-     }
--    return Derived;
--}(Base));
--var Derived2 = /** @class */ (function (_super) {
--    __extends(Derived2, _super);
--    function Derived2() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    class A2 {
-+        1;
-+        2.0;
-     }
--    return Derived2;
--}(Derived));
--// N and M have the same name, same accessibility, same optionality, and N is a subtype of M
--// foo properties are valid, bar properties cause errors in the derived class declarations
--var A = /** @class */ (function () {
--    function A() {
-+    class B2 extends A2 {
-+        1;
-+        2;
-     }
 -    return A;
 -}());
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    class A3 {
-+        '1';
-+        '2.0';
++    class B extends A {
++        foo; // ok
++        bar; // error
      }
 -    return B;
 -}(A));
 -var A2 = /** @class */ (function () {
 -    function A2() {
-+    class B3 extends A3 {
-+        '1';
-+        '2.0';
++    class A2 {
++        1;
++        2.0;
      }
 -    return A2;
 -}());
@@ -114,19 +105,28 @@
 -    __extends(B2, _super);
 -    function B2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
--    }
++    class B2 extends A2 {
++        1; // ok
++        2; // error
+     }
 -    return B2;
 -}(A2));
 -var A3 = /** @class */ (function () {
 -    function A3() {
--    }
++    class A3 {
++        '1';
++        '2.0';
+     }
 -    return A3;
 -}());
 -var B3 = /** @class */ (function (_super) {
 -    __extends(B3, _super);
 -    function B3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
--    }
++    class B3 extends A3 {
++        '1'; // ok
++        '2.0'; // error
+     }
 -    return B3;
 -}(A3));
 -var TwoLevels;

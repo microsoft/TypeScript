@@ -1,10 +1,9 @@
 --- old.esDecorators-classDeclaration-outerThisReference(target=es2021).js
 +++ new.esDecorators-classDeclaration-outerThisReference(target=es2021).js
-@@= skipped -37, +37 lines =@@
- }
+@@= skipped -38, +38 lines =@@
  
  //// [esDecorators-classDeclaration-outerThisReference.js]
--// `this` should point to the outer `this` in both cases.
+ // `this` should point to the outer `this` in both cases.
 -let A = (() => {
 -    let _outerThis = this;
 -    let _classDecorators = [dec(this)];
@@ -32,8 +31,13 @@
 -    })();
 -    return A = _classThis;
 -})();
--// `this` should point to the outer `this`, and maintain the correct evaluation order with respect to computed
--// property names.
++@dec(this)
++class A {
++    @dec(this)
++    b = 2;
++}
+ // `this` should point to the outer `this`, and maintain the correct evaluation order with respect to computed
+ // property names.
 -let B = (() => {
 -    var _a, _b;
 -    let _classDecorators = [dec(this)];
@@ -65,8 +69,17 @@
 -    })();
 -    return B = _classThis;
 -})();
--// The `this` transformation should ensure that decorators inside the class body have privileged access to
--// private names.
++@dec(this)
++class B {
++    // @ts-ignore
++    [f(this)] = 1;
++    @dec(this)
++    b = 2;
++    // @ts-ignore
++    [f(this)] = 3;
++}
+ // The `this` transformation should ensure that decorators inside the class body have privileged access to
+ // private names.
 -let C = (() => {
 -    var _C_a;
 -    let _outerThis_1 = this;
@@ -97,18 +110,6 @@
 -    })();
 -    return C = _classThis;
 -})();
-+@dec(this)
-+class A {
-+    @dec(this)
-+    b = 2;
-+}
-+@dec(this)
-+class B {
-+    [f(this)] = 1;
-+    @dec(this)
-+    b = 2;
-+    [f(this)] = 3;
-+}
 +@dec(this)
 +class C {
 +    #a = 1;

@@ -54,6 +54,6 @@ function f2(t) {
 }
 function test(label) {
     const extended = label.extend({ id: 67 }).extend({ tag: "hello" });
-    extended.id;
-    extended.tag;
+    extended.id; // Ok
+    extended.tag; // Ok
 }

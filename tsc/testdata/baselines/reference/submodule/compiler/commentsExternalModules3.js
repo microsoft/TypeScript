@@ -64,19 +64,25 @@ export var newVar2 = new extMod.m4.m2.c();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m4 = exports.m1 = void 0;
+/** Module comment*/
 var m1;
 (function (m1) {
+    /** foo's comment*/
     function foo() {
         return m1.b;
     }
+    /** m2 comments*/
     let m2;
     (function (m2) {
+        /** class comment;*/
         class c {
         }
         m2.c = c;
         ;
+        /** i*/
         m2.i = new c();
     })(m2 = m1.m2 || (m1.m2 = {}));
+    /** exported function*/
     function fooExport() {
         return foo();
     }
@@ -84,19 +90,27 @@ var m1;
 })(m1 || (exports.m1 = m1 = {}));
 m1.fooExport();
 var myvar = new m1.m2.c();
+/** Module comment */
 var m4;
 (function (m4) {
+    /** foo's comment
+    */
     function foo() {
         return m4.b;
     }
+    /** m2 comments
+    */
     let m2;
     (function (m2) {
+        /** class comment; */
         class c {
         }
         m2.c = c;
         ;
+        /** i */
         m2.i = new c();
     })(m2 = m4.m2 || (m4.m2 = {}));
+    /** exported function */
     function fooExport() {
         return foo();
     }
@@ -108,7 +122,8 @@ var myvar2 = new m4.m2.c();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newVar2 = exports.newVar = void 0;
-const extMod = require("./commentsExternalModules2_0");
+/**This is on import declaration*/
+const extMod = require("./commentsExternalModules2_0"); // trailing comment 1
 extMod.m1.fooExport();
 exports.newVar = new extMod.m1.m2.c();
 extMod.m4.fooExport();

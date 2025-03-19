@@ -19,6 +19,7 @@ function z(w3: WinJS) { }
 //// [staticInstanceResolution5_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// these 3 should be errors
 var x = (w1) => { };
 var y = function (w2) { };
 function z(w3) { }

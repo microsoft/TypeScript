@@ -44,17 +44,17 @@ class Test {
     set #valueCompound(v) { }
     m() {
         const foo = { bar: 1 };
-        console.log(this.#value);
-        this.#value = { foo };
-        this.#value = { foo };
-        this.#value.foo = foo;
-        ({ o: this.#value } = { o: { foo } });
-        ({ ...this.#value } = { foo });
-        ({ foo: this.#value.foo } = { foo });
+        console.log(this.#value); // error
+        this.#value = { foo }; // ok
+        this.#value = { foo }; // ok
+        this.#value.foo = foo; // error
+        ({ o: this.#value } = { o: { foo } }); //ok
+        ({ ...this.#value } = { foo }); //ok
+        ({ foo: this.#value.foo } = { foo }); //error
         ({
             foo: { ...this.#value.foo },
-        } = { foo });
-        let r = { o: this.#value };
+        } = { foo }); //error
+        let r = { o: this.#value }; //error
         [this.#valueOne, ...this.#valueRest] = [1, 2, 3];
         let arr = [
             this.#valueOne,

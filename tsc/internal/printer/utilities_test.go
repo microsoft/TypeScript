@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
 	"gotest.tools/v3/assert"
 )
 
@@ -83,6 +85,67 @@ func TestEscapeJsxAttributeString(t *testing.T) {
 		t.Run(fmt.Sprintf("[%d] escapeJsxAttributeString(%q, %v)", i, rec.s, rec.quoteChar), func(t *testing.T) {
 			t.Parallel()
 			actual := escapeJsxAttributeString(rec.s, rec.quoteChar)
+			assert.Equal(t, actual, rec.expected)
+		})
+	}
+}
+
+func TestIsRecognizedTripleSlashComment(t *testing.T) {
+	t.Parallel()
+	data := []struct {
+		s            string
+		commentRange ast.CommentRange
+		expected     bool
+	}{
+		{s: "", commentRange: ast.CommentRange{Kind: ast.KindMultiLineCommentTrivia}, expected: false},
+		{s: "", commentRange: ast.CommentRange{Kind: ast.KindSingleLineCommentTrivia}, expected: false},
+		{s: "/a", expected: false},
+		{s: "//", expected: false},
+		{s: "//a", expected: false},
+		{s: "///", expected: false},
+		{s: "///a", expected: false},
+		{s: "///<reference path=\"foo\" />", expected: true},
+		{s: "///<reference types=\"foo\" />", expected: true},
+		{s: "///<reference lib=\"foo\" />", expected: true},
+		{s: "///<reference no-default-lib=\"foo\" />", expected: true},
+		{s: "///<amd-dependency path=\"foo\" />", expected: true},
+		{s: "///<amd-module />", expected: true},
+		{s: "/// <reference path=\"foo\" />", expected: true},
+		{s: "/// <reference types=\"foo\" />", expected: true},
+		{s: "/// <reference lib=\"foo\" />", expected: true},
+		{s: "/// <reference no-default-lib=\"foo\" />", expected: true},
+		{s: "/// <amd-dependency path=\"foo\" />", expected: true},
+		{s: "/// <amd-module />", expected: true},
+		{s: "/// <reference path=\"foo\"/>", expected: true},
+		{s: "/// <reference types=\"foo\"/>", expected: true},
+		{s: "/// <reference lib=\"foo\"/>", expected: true},
+		{s: "/// <reference no-default-lib=\"foo\"/>", expected: true},
+		{s: "/// <amd-dependency path=\"foo\"/>", expected: true},
+		{s: "/// <amd-module/>", expected: true},
+		{s: "/// <reference path='foo' />", expected: true},
+		{s: "/// <reference types='foo' />", expected: true},
+		{s: "/// <reference lib='foo' />", expected: true},
+		{s: "/// <reference no-default-lib='foo' />", expected: true},
+		{s: "/// <amd-dependency path='foo' />", expected: true},
+		{s: "/// <reference path=\"foo\" />  ", expected: true},
+		{s: "/// <reference types=\"foo\" />  ", expected: true},
+		{s: "/// <reference lib=\"foo\" />  ", expected: true},
+		{s: "/// <reference no-default-lib=\"foo\" />  ", expected: true},
+		{s: "/// <amd-dependency path=\"foo\" />  ", expected: true},
+		{s: "/// <amd-module />  ", expected: true},
+		{s: "/// <foo />", expected: false},
+		{s: "/// <reference />", expected: false},
+		{s: "/// <amd-dependency />", expected: false},
+	}
+	for i, rec := range data {
+		t.Run(fmt.Sprintf("[%d] isRecognizedTripleSlashComment()", i), func(t *testing.T) {
+			t.Parallel()
+			commentRange := rec.commentRange
+			if commentRange.Kind == ast.KindUnknown {
+				commentRange.Kind = ast.KindSingleLineCommentTrivia
+				commentRange.TextRange = core.NewTextRange(0, len(rec.s))
+			}
+			actual := isRecognizedTripleSlashComment(rec.s, commentRange)
 			assert.Equal(t, actual, rec.expected)
 		})
 	}

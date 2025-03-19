@@ -125,21 +125,27 @@ function getSomeOtherTags(node: ts.Node) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ts = require("typescript");
+// excerpted from https://github.com/YousefED/typescript-json-schema
+// (converted from a method and modified; for example, `this: any` to compensate, among other changes)
 function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
     if (!symbol) {
         return;
     }
+    // the comments for a symbol
     let comments = symbol.getDocumentationComment(undefined);
     if (comments.length) {
         definition.description = comments.map(comment => comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n")).join("");
     }
+    // jsdocs are separate from comments
     const jsdocs = symbol.getJsDocTags(this.checker);
     jsdocs.forEach(doc => {
+        // if we have @TJS-... annotations, we have to parse them
         const { name, text } = doc;
         if (this.userValidationKeywords[name]) {
             definition[name] = this.parseValue(text);
         }
         else {
+            // special annotations
             otherAnnotations[doc.name] = true;
         }
     });
@@ -162,6 +168,7 @@ function getAnnotations(node) {
     }, {});
     return Object.keys(annotations).length ? annotations : undefined;
 }
+// these examples are artificial and mostly nonsensical
 function parseSpecificTags(node) {
     if (node.kind === ts.SyntaxKind.Parameter) {
         return ts.getJSDocParameterTags(node);

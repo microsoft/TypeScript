@@ -11,7 +11,7 @@ foo(); // Cannot find name since foo is block scoped
 //// [blockScopedFunctionDeclarationStrictES6.js]
 "use strict";
 if (true) {
-    function foo() { }
-    foo();
+    function foo() { } // Allowed to declare block scope function
+    foo(); // This call should be ok
 }
-foo();
+foo(); // Cannot find name since foo is block scoped

@@ -47,5 +47,6 @@ class c {
     }
 }
 //// [b.js]
+///<reference path='a.ts'/>
 function foo2(a) {
 }

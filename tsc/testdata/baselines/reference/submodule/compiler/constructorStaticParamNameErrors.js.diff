@@ -1,10 +1,9 @@
 --- old.constructorStaticParamNameErrors.js
 +++ new.constructorStaticParamNameErrors.js
-@@= skipped -8, +8 lines =@@
- 
+@@= skipped -9, +9 lines =@@
  //// [constructorStaticParamNameErrors.js]
  'use strict';
--// static as constructor parameter name should give error if 'use strict'
+ // static as constructor parameter name should give error if 'use strict'
 -var test = /** @class */ (function () {
 -    function test(static) {
 -    }

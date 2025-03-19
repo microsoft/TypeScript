@@ -1,10 +1,9 @@
 --- old.es5-asyncFunctionLongObjectLiteral.js
 +++ new.es5-asyncFunctionLongObjectLiteral.js
-@@= skipped -29, +29 lines =@@
- 
+@@= skipped -30, +30 lines =@@
  
  //// [es5-asyncFunctionLongObjectLiteral.js]
--// the generated code from both should be similar
+ // the generated code from both should be similar
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {

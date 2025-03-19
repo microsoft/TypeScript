@@ -17,12 +17,9 @@
  //// [b.js]
  import { a, A, AClass } from "./a";
  import {} from "./a";
-@@= skipped -16, +12 lines =@@
- //// [c.js]
- import { AClass } from "./b";
+@@= skipped -18, +14 lines =@@
  //// [main4.js]
--export default 1; // ok
-+export default 1;
+ export default 1; // ok
  //// [main5.js]
 -var C = /** @class */ (function () {
 -    function C() {
@@ -31,10 +28,7 @@
 -}()); // ok
 -export default C;
 +export default class C {
-+}
++} // ok
  //// [main6.js]
--export default I; // error
-+export default I;
+ export default I; // error
  //// [main7.js]
--export default C; // error
-+export default C;

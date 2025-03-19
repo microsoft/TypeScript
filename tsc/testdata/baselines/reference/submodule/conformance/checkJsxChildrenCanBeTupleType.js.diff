@@ -39,6 +39,7 @@
 -    react_1.default.createElement("div", null),
 -    react_1.default.createElement("div", null),
 -    react_1.default.createElement("div", null));
++/// <reference path="react16.d.ts" />
 +const react_1 = __importDefault(require("react"));
 +class ResizablePanel extends react_1.default.Component {
 +}

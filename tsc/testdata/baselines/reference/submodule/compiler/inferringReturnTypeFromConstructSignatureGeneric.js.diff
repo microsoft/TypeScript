@@ -51,7 +51,7 @@
 +const g3 = g(GenericNumberOrString);
  g3.give(1);
  g3.give('1');
--// repro from #35636
+ // repro from #35636
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

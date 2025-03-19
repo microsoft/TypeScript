@@ -5,7 +5,7 @@
  
  //// [callChainWithSuper.js]
 -"use strict";
--// GH#34952
+ // GH#34952
  class Base {
      method() { }
  }

@@ -1,10 +1,9 @@
 --- old.functionLiteralForOverloads2.js
 +++ new.functionLiteralForOverloads2.js
-@@= skipped -30, +30 lines =@@
- } = D;
+@@= skipped -31, +31 lines =@@
  
  //// [functionLiteralForOverloads2.js]
--// basic uses of function literals with constructor overloads
+ // basic uses of function literals with constructor overloads
 -var C = /** @class */ (function () {
 -    function C(x) {
 -    }

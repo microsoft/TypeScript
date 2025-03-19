@@ -28,10 +28,10 @@
  }
 -_a = A2, _A2_prop_get = function _A2_prop_get() { return ""; }, _A2_prop_set = function _A2_prop_set(param) { };
 -A2.; // Error
-+A2.#prop;
++A2.#prop; // Error
  function foo() {
 -    A2.; // Error
-+    A2.#prop;
++    A2.#prop; // Error
  }
  class B2 {
      m() {

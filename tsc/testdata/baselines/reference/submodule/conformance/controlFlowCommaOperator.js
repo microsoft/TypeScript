@@ -30,21 +30,21 @@ function f(x) {
     let y = false;
     let z = false;
     if (y = "", typeof x === "string") {
-        x;
-        y;
-        z;
+        x; // string
+        y; // string
+        z; // boolean
     }
     else if (z = 1, typeof x === "number") {
-        x;
-        y;
-        z;
+        x; // number
+        y; // string
+        z; // number
     }
     else {
-        x;
-        y;
-        z;
+        x; // boolean
+        y; // string
+        z; // number
     }
-    x;
-    y;
-    z;
+    x; // string | number | boolean
+    y; // string
+    z; // number | boolean
 }

@@ -46,16 +46,16 @@
 -    return OverWriteAttr;
 -}(React.Component));
 -var anyobj;
--// OK
++    }
++}
++let anyobj;
+ // OK
 -var x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1}/>;
 -var x1 = <OverWriteAttr {...obj1} {...obj3}/>;
 -var x2 = <OverWriteAttr x={3} overwrite="hi" {...obj1} {...{ y: true }}/>;
 -var x3 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{ y: true, x: 2, overwrite: "world" }}/>;
 -var x4 = <OverWriteAttr {...{ x: 2 }} {...{ overwrite: "world" }} {...{ y: true }}/>;
 -var x5 = <OverWriteAttr {...anyobj}/>;
-+    }
-+}
-+let anyobj;
 +let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1}/>;
 +let x1 = <OverWriteAttr {...obj1} {...obj3}/>;
 +let x2 = <OverWriteAttr x={3} overwrite="hi" {...obj1} {...{ y: true }}/>;

@@ -26,10 +26,6 @@
 -var combinedAfter = __assign(__assign(__assign({}, o), o2), { b: 'ok' });
 -var combinedNestedChangeType = __assign(__assign({}, __assign({ a: 1 }, { b: false, c: 'overriden' })), { c: -1 });
 -var propertyNested = { a: __assign({}, o) };
--// accessors don't copy the descriptor
--// (which means that readonly getters become read/write properties)
--var op = { get a() { return 6; } };
--var getter = __assign(__assign({}, op), { c: 7 });
 +let o = { a: 1, b: 'no' };
 +let o2 = { b: 'yes', c: true };
 +let swap = { a: 'yes', b: -1 };
@@ -41,10 +37,14 @@
 +let combinedAfter = { ...o, ...o2, b: 'ok' };
 +let combinedNestedChangeType = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 };
 +let propertyNested = { a: { ...o } };
+ // accessors don't copy the descriptor
+ // (which means that readonly getters become read/write properties)
+-var op = { get a() { return 6; } };
+-var getter = __assign(__assign({}, op), { c: 7 });
 +let op = { get a() { return 6; } };
 +let getter = { ...op, c: 7 };
  getter.a = 12;
--// functions result in { }
+ // functions result in { }
 -var spreadFunc = __assign({}, (function () { }));
 +let spreadFunc = { ...(function () { }) };
  function from16326(header, authToken) {
@@ -55,7 +55,7 @@
 +        ...authToken && { authToken }
 +    };
  }
--// boolean && T results in Partial<T>
+ // boolean && T results in Partial<T>
  function conditionalSpreadBoolean(b) {
 -    var o = { x: 12, y: 13 };
 -    o = __assign(__assign({}, o), b && { x: 14 });
@@ -92,10 +92,12 @@
 +    let o2 = { ...st && { x: st } };
      return o;
  }
--// any results in any
+ // any results in any
 -var anything;
 -var spreadAny = __assign({}, anything);
--// methods are not enumerable
++let anything;
++let spreadAny = { ...anything };
+ // methods are not enumerable
 -var C = /** @class */ (function () {
 -    function C() {
 -        this.p = 1;
@@ -105,47 +107,45 @@
 -}());
 -var c = new C();
 -var spreadC = __assign({}, c);
--// own methods are enumerable
--var cplus = __assign(__assign({}, c), { plus: function () { return this.p + 1; } });
-+let anything;
-+let spreadAny = { ...anything };
 +class C {
 +    p = 1;
 +    m() { }
 +}
 +let c = new C();
 +let spreadC = { ...c };
+ // own methods are enumerable
+-var cplus = __assign(__assign({}, c), { plus: function () { return this.p + 1; } });
 +let cplus = { ...c, plus() { return this.p + 1; } };
  cplus.plus();
--// new field's type conflicting with existing field is OK
+ // new field's type conflicting with existing field is OK
 -var changeTypeAfter = __assign(__assign({}, o), { a: 'wrong type?' });
 -var changeTypeBoth = __assign(__assign({}, o), swap);
--// optional
 +let changeTypeAfter = { ...o, a: 'wrong type?' };
 +let changeTypeBoth = { ...o, ...swap };
+ // optional
  function container(definiteBoolean, definiteString, optionalString, optionalNumber) {
 -    var _a, _b;
 -    var optionalUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), optionalNumber);
 -    var optionalUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), optionalString), optionalNumber);
 -    var allOptional = __assign(__assign({}, optionalString), optionalNumber);
--    // computed property
--    var computedFirst = __assign(__assign((_a = {}, _a['before everything'] = 12, _a), o), { b: 'yes' });
--    var computedAfter = __assign(__assign({}, o), (_b = { b: 'yeah' }, _b['at the end'] = 14, _b));
 +    let optionalUnionStops = { ...definiteBoolean, ...definiteString, ...optionalNumber };
 +    let optionalUnionDuplicates = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 +    let allOptional = { ...optionalString, ...optionalNumber };
+     // computed property
+-    var computedFirst = __assign(__assign((_a = {}, _a['before everything'] = 12, _a), o), { b: 'yes' });
+-    var computedAfter = __assign(__assign({}, o), (_b = { b: 'yeah' }, _b['at the end'] = 14, _b));
 +    let computedFirst = { ['before everything']: 12, ...o, b: 'yes' };
 +    let computedAfter = { ...o, b: 'yeah', ['at the end']: 14 };
  }
--// shortcut syntax
+ // shortcut syntax
 -var a = 12;
 -var shortCutted = __assign(__assign({}, o), { a: a });
--// non primitive
--var spreadNonPrimitive = __assign({}, {});
--// generic spreads
 +let a = 12;
 +let shortCutted = { ...o, a };
+ // non primitive
+-var spreadNonPrimitive = __assign({}, {});
 +let spreadNonPrimitive = { ...{} };
+ // generic spreads
  function f(t, u) {
 -    return __assign(__assign(__assign({}, t), u), { id: 'id' });
 +    return { ...t, ...u, id: 'id' };

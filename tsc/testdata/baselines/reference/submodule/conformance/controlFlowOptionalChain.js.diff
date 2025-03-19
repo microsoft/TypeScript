@@ -27,26 +27,20 @@
 +o?.x(d = 1);
  d.toString();
 -if (f === null || f === void 0 ? void 0 : f(x)) {
--    x; // number
--    f; // (x: any) => x is number
 +if (f?.(x)) {
-+    x;
-+    f;
+     x; // number
+     f; // (x: any) => x is number
      f(x);
- }
- else {
 @@= skipped -27, +25 lines =@@
  x;
  f;
  f(x);
 -if (o2 === null || o2 === void 0 ? void 0 : o2.f(x)) {
--    x; // number
--    o2.f; // (x: any) => x is number
++if (o2?.f(x)) {
+     x; // number
+     o2.f; // (x: any) => x is number
 -    o2 === null || o2 === void 0 ? void 0 : o2.f;
 -    o2 === null || o2 === void 0 ? void 0 : o2.f(x);
-+if (o2?.f(x)) {
-+    x;
-+    o2.f;
 +    o2?.f;
 +    o2?.f(x);
  }
@@ -80,13 +74,11 @@
 +o3?.x;
  o3.x;
 -if ((_a = o4.x) === null || _a === void 0 ? void 0 : _a.y) {
--    o4.x; // { y: boolean }
--    o4.x.y; // true
--    (_b = o4.x) === null || _b === void 0 ? void 0 : _b.y; // true
 +if (o4.x?.y) {
-+    o4.x;
-+    o4.x.y;
-+    o4.x?.y;
+     o4.x; // { y: boolean }
+     o4.x.y; // true
+-    (_b = o4.x) === null || _b === void 0 ? void 0 : _b.y; // true
++    o4.x?.y; // true
  }
  else {
      o4.x;
@@ -103,14 +95,13 @@
      o5.x;
      o5.x.y;
      o5.x.y.z;
--    o5.x.y.z.w; // true
+     o5.x.y.z.w; // true
 -    (_g = o5.x.y.z) === null || _g === void 0 ? void 0 : _g.w; // true
 -    (_h = o5.x) === null || _h === void 0 ? void 0 : _h.y.z.w; // true
 -    (_k = (_j = o5.x) === null || _j === void 0 ? void 0 : _j.y.z) === null || _k === void 0 ? void 0 : _k.w; // true
-+    o5.x.y.z.w;
-+    o5.x.y.z?.w;
-+    o5.x?.y.z.w;
-+    o5.x?.y.z?.w;
++    o5.x.y.z?.w; // true
++    o5.x?.y.z.w; // true
++    o5.x?.y.z?.w; // true
  }
  else {
      o5.x;
@@ -133,9 +124,8 @@
  o5.x.y;
  o5.x.y.z.w;
 -if (o6 === null || o6 === void 0 ? void 0 : o6.f()) {
--    o6; // Derived
 +if (o6?.f()) {
-+    o6;
+     o6; // Derived
      o6.f;
  }
  else {
@@ -225,34 +215,28 @@
  }
  function f12(o, value) {
 -    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
--        o.foo; // Error
 +    if (o?.foo === value) {
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o["foo"]) === value) {
--        o["foo"]; // Error
 +    if (o?.["foo"] === value) {
-+        o["foo"];
+         o["foo"]; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.bar()) === value) {
--        o.bar; // Error
 +    if (o?.bar() === value) {
-+        o.bar;
+         o.bar; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
--        o.foo; // Error
 +    if (o?.foo == value) {
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o["foo"]) == value) {
--        o["foo"]; // Error
 +    if (o?.["foo"] == value) {
-+        o["foo"];
+         o["foo"]; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.bar()) == value) {
--        o.bar; // Error
 +    if (o?.bar() == value) {
-+        o.bar;
+         o.bar; // Error
      }
  }
  function f12a(o, value) {
@@ -269,19 +253,16 @@
          o.bar;
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
--        o.foo; // Error
 +    if (o?.foo == value) {
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o["foo"]) == value) {
--        o["foo"]; // Error
 +    if (o?.["foo"] == value) {
-+        o["foo"];
+         o["foo"]; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.bar()) == value) {
--        o.bar; // Error
 +    if (o?.bar() == value) {
-+        o.bar;
+         o.bar; // Error
      }
  }
  function f13(o) {
@@ -312,19 +293,16 @@
  }
  function f13a(o) {
 -    if ((o === null || o === void 0 ? void 0 : o.foo) !== null) {
--        o.foo; // Error
 +    if (o?.foo !== null) {
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o["foo"]) !== null) {
--        o["foo"]; // Error
 +    if (o?.["foo"] !== null) {
-+        o["foo"];
+         o["foo"]; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.bar()) !== null) {
--        o.bar; // Error
 +    if (o?.bar() !== null) {
-+        o.bar;
+         o.bar; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) != null) {
 +    if (o?.foo != null) {
@@ -359,13 +337,11 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) !== value) {
--        o.foo; // Error
 +    if (o?.foo !== value) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
          o.foo;
@@ -375,61 +351,50 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) != value) {
--        o.foo; // Error
 +    if (o?.foo != value) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
-         o.foo;
+@@= skipped -254, +254 lines =@@
      }
  }
  function f15a(o, value) {
 -    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
--        o.foo; // Error
 +    if (o?.foo === value) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) !== value) {
--        o.foo; // Error
 +    if (o?.foo !== value) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
--        o.foo; // Error
 +    if (o?.foo == value) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) != value) {
--        o.foo; // Error
 +    if (o?.foo != value) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
--        o.foo; // Error
-+        o.foo;
+@@= skipped -26, +26 lines =@@
      }
  }
  function f16(o) {
 -    if ((o === null || o === void 0 ? void 0 : o.foo) === undefined) {
--        o.foo; // Error
 +    if (o?.foo === undefined) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
          o.foo;
@@ -439,13 +404,11 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if ((o === null || o === void 0 ? void 0 : o.foo) == undefined) {
--        o.foo; // Error
 +    if (o?.foo == undefined) {
-+        o.foo;
+         o.foo; // Error
      }
      else {
          o.foo;
@@ -455,8 +418,7 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
+@@= skipped -26, +26 lines =@@
      }
  }
  function f20(o) {
@@ -501,13 +463,11 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if (typeof (o === null || o === void 0 ? void 0 : o.foo) !== "number") {
--        o.foo; // Error
 +    if (typeof o?.foo !== "number") {
-+        o.foo;
+         o.foo; // Error
      }
      else {
          o.foo;
@@ -517,23 +477,20 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if (typeof (o === null || o === void 0 ? void 0 : o.foo) != "number") {
--        o.foo; // Error
 +    if (typeof o?.foo != "number") {
-+        o.foo;
+         o.foo; // Error
      }
      else {
-         o.foo;
+@@= skipped -54, +54 lines =@@
      }
  }
  function f23(o) {
 -    if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "undefined") {
--        o.foo; // Error
 +    if (typeof o?.foo === "undefined") {
-+        o.foo;
+         o.foo; // Error
      }
      else {
          o.foo;
@@ -543,13 +500,11 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
+         o.foo; // Error
      }
 -    if (typeof (o === null || o === void 0 ? void 0 : o.foo) == "undefined") {
--        o.foo; // Error
 +    if (typeof o?.foo == "undefined") {
-+        o.foo;
+         o.foo; // Error
      }
      else {
          o.foo;
@@ -559,9 +514,7 @@
          o.foo;
      }
      else {
--        o.foo; // Error
-+        o.foo;
-     }
+@@= skipped -27, +27 lines =@@
  }
  function f30(o) {
      if (!!true) {
@@ -591,17 +544,7 @@
          case "abc":
              o.foo;
              break;
-@@= skipped -412, +412 lines =@@
-             o.foo;
-             break;
-         case undefined:
--            o.foo; // Error
-+            o.foo;
-             break;
-         default:
--            o.foo; // Error
-+            o.foo;
-             break;
+@@= skipped -33, +33 lines =@@
      }
  }
  function f41(o) {
@@ -611,16 +554,6 @@
              o.foo;
              break;
 @@= skipped -16, +16 lines =@@
-             o.foo;
-             break;
-         case "undefined":
--            o.foo; // Error
-+            o.foo;
-             break;
-         default:
--            o.foo; // Error
-+            o.foo;
-             break;
      }
  }
  function getArea(shape) {
@@ -632,7 +565,7 @@
          case 'rectangle':
              return shape.width * shape.height;
          default:
-@@= skipped -18, +18 lines =@@
+@@= skipped -10, +10 lines =@@
      }
  }
  function extractCoordinates(f) {
@@ -649,9 +582,8 @@
 -    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== lastSomeProperty) {
 +    if (someOptionalObject?.someProperty !== lastSomeProperty) {
          console.log(someOptionalObject);
--        console.log(someOptionalObject.someProperty); // Error
+         console.log(someOptionalObject.someProperty); // Error
 -        lastSomeProperty = someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty;
-+        console.log(someOptionalObject.someProperty);
 +        lastSomeProperty = someOptionalObject?.someProperty;
      }
  }
@@ -661,7 +593,7 @@
  };
  someFunction(someObject);
  someFunction(undefined);
--// Repro from #35970
+ // Repro from #35970
 -var i = 0;
 -while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
 +let i = 0;

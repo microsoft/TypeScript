@@ -16,8 +16,8 @@ class c {
     method() {
         if (true) {
             function foo() { }
-            foo();
+            foo(); // ok
         }
-        foo();
+        foo(); // not ok
     }
 }

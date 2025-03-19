@@ -52,29 +52,36 @@ class BaseErrClass {
 }
 class ClassWithNoInitializer extends BaseErrClass {
     t;
+    //'this' in optional super call
     constructor() {
-        super(this);
+        super(this); // error: "super" has to be called before "this" accessing
     }
 }
 class ClassWithInitializer extends BaseErrClass {
     t = 4;
+    //'this' in required super call
     constructor() {
-        super(this);
+        super(this); // Error
     }
 }
 var M;
 (function (M) {
-    var x = this;
+    //'this' in module variable
+    var x = this; // Error
 })(M || (M = {}));
+//'this' as type parameter constraint
+// function fn<T extends this >() { } // Error
+//'this' as a type argument
 function genericFunc(x) { }
-genericFunc(undefined);
+genericFunc(undefined); // Should be an error
 class ErrClass3 extends this {
 }
+//'this' as a computed enum value
 var SomeEnum;
 (function (SomeEnum) {
     SomeEnum["A"] = this;
     if (typeof SomeEnum.A !== "string") SomeEnum[SomeEnum.A] = "A";
-    SomeEnum["B"] = this.spaaaace;
+    SomeEnum["B"] = this.spaaaace; // Also should not be allowed
     if (typeof SomeEnum.B !== "string") SomeEnum[SomeEnum.B] = "B";
 })(SomeEnum || (SomeEnum = {}));
 module.exports = this;

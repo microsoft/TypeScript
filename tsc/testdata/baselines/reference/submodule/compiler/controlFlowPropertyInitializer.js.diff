@@ -1,10 +1,9 @@
 --- old.controlFlowPropertyInitializer.js
 +++ new.controlFlowPropertyInitializer.js
-@@= skipped -9, +9 lines =@@
- }
+@@= skipped -10, +10 lines =@@
  
  //// [controlFlowPropertyInitializer.js]
--// Repro from #8967
+ // Repro from #8967
 -var LANG = "Turbo Pascal";
 -var BestLanguage = /** @class */ (function () {
 -    function BestLanguage() {

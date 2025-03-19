@@ -90,14 +90,14 @@ class A {
     m() { return 1; }
 }
 class B extends A {
-    property;
+    property; // error
 }
 class BD extends A {
 }
 class BDBang extends A {
 }
 class BOther extends A {
-    m() { return 2; }
+    m() { return 2; } // not allowed on methods
 }
 class U {
 }
@@ -105,7 +105,7 @@ class C {
     p;
 }
 class D extends C {
-    p;
+    p; // error
 }
 class DD extends C {
 }
@@ -126,9 +126,10 @@ class J {
     r = 5;
 }
 class K extends J {
-    q;
-    r;
+    q; // ok, extends a property from an interface
+    r; // error, from class
 }
+// #35327
 class L {
     a;
     constructor(arg) {
@@ -138,6 +139,6 @@ class L {
 class M extends L {
     constructor(arg) {
         super(arg);
-        console.log(this.a);
+        console.log(this.a); // should be OK, M.a is ambient
     }
 }

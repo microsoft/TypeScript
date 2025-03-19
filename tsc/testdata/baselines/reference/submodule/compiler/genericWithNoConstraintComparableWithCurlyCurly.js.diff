@@ -27,9 +27,8 @@
  }
  function no() {
 -    var x = {};
--    x; // should error
 +    let x = {};
-+    x;
+     x; // should error
  }
  function yes() {
 -    var x = {};

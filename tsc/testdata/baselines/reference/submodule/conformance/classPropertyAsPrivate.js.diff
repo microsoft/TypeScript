@@ -34,7 +34,5 @@
 +    static foo() { }
 +}
  var c;
--// all errors
+ // all errors
  c.x;
- c.y;
- c.y = 1;

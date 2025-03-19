@@ -6,8 +6,8 @@
  
 +//// [typescript.js]
  //// [parserRealSource11.js]
--// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
--// See LICENSE.txt in the project root for complete license information.
+ // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+ // See LICENSE.txt in the project root for complete license information.
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -23,7 +23,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--///<reference path='typescript.ts' />
+ ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
 -    var ASTSpan = /** @class */ (function () {
@@ -34,8 +34,8 @@
 -        return ASTSpan;
 -    }());
 +    class ASTSpan {
-+        minChar = -1;
-+        limChar = -1;
++        minChar = -1; // -1 = "undefined" or "compiler generated"
++        limChar = -1; // -1 = "undefined" or "compiler generated"   
 +    }
      TypeScript.ASTSpan = ASTSpan;
 -    var AST = /** @class */ (function (_super) {
@@ -55,6 +55,7 @@
 +        nodeType;
 +        type = null;
 +        flags = ASTFlags.Writeable;
++        // REVIEW: for diagnostic purposes
 +        passCreated = CompilerDiagnostics.analysisPass;
 +        preComments = null;
 +        postComments = null;
@@ -76,7 +77,7 @@
              switch (this.nodeType) {
                  case NodeType.Error:
                  case NodeType.EmptyExpr:
-@@= skipped -73, +51 lines =@@
+@@= skipped -73, +55 lines =@@
                      throw new Error("please implement in derived class");
              }
              return this;
@@ -114,9 +115,9 @@
              }
 -        };
 -        AST.prototype.addToControlFlow = function (context) {
--            // by default, AST adds itself to current basic block and does not check its children
 +        }
 +        addToControlFlow(context) {
+             // by default, AST adds itself to current basic block and does not check its children
              context.walker.options.goChildren = false;
              context.addContent(this);
 -        };
@@ -135,18 +136,8 @@
              if (!name)
                  return "";
              var resolved = "";
-             var start = 0;
-             var i = 0;
-             while (i <= name.length - 6) {
--                // Look for escape sequence \uxxxx
-                 if (name.charAt(i) == '\\' && name.charAt(i + 1) == 'u') {
-                     var charCode = parseInt(name.substr(i + 2, 4), 16);
-                     resolved += name.substr(start, i - start);
-@@= skipped -37, +35 lines =@@
-                 }
-                 i++;
-             }
--            // Append remaining string
+@@= skipped -40, +40 lines =@@
+             // Append remaining string
              resolved += name.substring(start);
              return resolved;
 -        };
@@ -190,7 +181,7 @@
              var len = this.members.length;
              for (var i = 0; i < len; i++) {
                  if (context.noContinuation) {
-@@= skipped -38, +31 lines =@@
+@@= skipped -35, +29 lines =@@
                  }
              }
              context.walker.options.goChildren = false;
@@ -237,18 +228,19 @@
      TypeScript.ASTList = ASTList;
 -    var Identifier = /** @class */ (function (_super) {
 -        __extends(Identifier, _super);
--        // 'actualText' is the text that the user has entered for the identifier. the text might 
--        // include any Unicode escape sequences (e.g.: \u0041 for 'A'). 'text', however, contains 
--        // the resolved value of any escape sequences in the actual text; so in the previous 
--        // example, actualText = '\u0041', text = 'A'.
--        //
--        // For purposes of finding a symbol, use text, as this will allow you to match all 
--        // variations of the variable text. For full-fidelity translation of the user input, such
--        // as emitting, use the actualText field.
--        // 
--        // Note: 
--        //    To change text, and to avoid running into a situation where 'actualText' does not 
--        //    match 'text', always use setText.
++    class Identifier extends AST {
++        actualText;
++        hasEscapeSequence;
++        sym = null;
++        cloId = -1;
++        text;
+         // 'actualText' is the text that the user has entered for the identifier. the text might 
+         // include any Unicode escape sequences (e.g.: \u0041 for 'A'). 'text', however, contains 
+         // the resolved value of any escape sequences in the actual text; so in the previous 
+@@= skipped -18, +21 lines =@@
+         // Note: 
+         //    To change text, and to avoid running into a situation where 'actualText' does not 
+         //    match 'text', always use setText.
 -        function Identifier(actualText, hasEscapeSequence) {
 -            var _this = _super.call(this, NodeType.Name) || this;
 -            _this.actualText = actualText;
@@ -257,12 +249,6 @@
 -            _this.cloId = -1;
 -            _this.setText(actualText, hasEscapeSequence);
 -            return _this;
-+    class Identifier extends AST {
-+        actualText;
-+        hasEscapeSequence;
-+        sym = null;
-+        cloId = -1;
-+        text;
 +        constructor(actualText, hasEscapeSequence) {
 +            this.actualText = actualText;
 +            this.hasEscapeSequence = hasEscapeSequence;
@@ -274,7 +260,7 @@
              this.actualText = actualText;
              if (hasEscapeSequence) {
                  this.text = AST.getResolvedIdentifierName(actualText);
-@@= skipped -35, +23 lines =@@
+@@= skipped -17, +14 lines =@@
              else {
                  this.text = actualText;
              }
@@ -331,12 +317,12 @@
              return true;
 -        };
 -        MissingIdentifier.prototype.emit = function (emitter, tokenId, startLine) {
--            // Emit nothing for a missing ID
++        }
++        emit(emitter, tokenId, startLine) {
+             // Emit nothing for a missing ID
 -        };
 -        return MissingIdentifier;
 -    }(Identifier));
-+        }
-+        emit(emitter, tokenId, startLine) {
 +        }
 +    }
      TypeScript.MissingIdentifier = MissingIdentifier;
@@ -365,7 +351,7 @@
              emitter.emitParensAndCommentsInPlace(this, true);
              emitter.recordSourceMappingStart(this);
              emitter.recordSourceMappingStart(this.id);
-@@= skipped -61, +56 lines =@@
+@@= skipped -61, +57 lines =@@
              emitter.writeLineToOutput(":");
              emitter.recordSourceMappingEnd(this);
              emitter.emitParensAndCommentsInPlace(this, false);
@@ -401,7 +387,7 @@
 -            return _this;
 +    class UnaryExpression extends Expression {
 +        operand;
-+        targetType = null;
++        targetType = null; // Target type for an object literal (null if no target type)
 +        castTerm = null;
 +        constructor(nodeType, operand) {
 +            this.operand = operand;
@@ -409,9 +395,9 @@
          }
 -        UnaryExpression.prototype.addToControlFlow = function (context) {
 -            _super.prototype.addToControlFlow.call(this, context);
--            // TODO: add successor as catch block/finally block if present
 +        addToControlFlow(context) {
 +            super.addToControlFlow(context);
+             // TODO: add successor as catch block/finally block if present
              if (this.nodeType == NodeType.Throw) {
                  context.returnStmt();
              }
@@ -422,17 +408,7 @@
              switch (this.nodeType) {
                  case NodeType.Not:
                      return typeFlow.typeCheckBitNot(this);
-@@= skipped -71, +66 lines =@@
-                     this.type = this.castTerm.type;
-                     return this;
-                 case NodeType.Void:
--                    // REVIEW - Although this is good to do for completeness's sake,
--                    // this shouldn't be strictly necessary from the void operator's
--                    // point of view
-                     this.operand = typeFlow.typeCheck(this.operand);
-                     this.type = typeFlow.checker.undefinedType;
-                     break;
-@@= skipped -10, +7 lines =@@
+@@= skipped -81, +77 lines =@@
                      throw new Error("please implement in derived class");
              }
              return this;
@@ -738,20 +714,9 @@
 -        ImportDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
 +        emit(emitter, tokenId, startLine) {
              var mod = this.alias.type;
--            // REVIEW: Only modules may be aliased for now, though there's no real
--            // restriction on what the type symbol may be
-             if (!this.isDynamicImport || (this.id.sym && !this.id.sym.onlyReferencedAsTypeRef)) {
-                 var prevModAliasId = emitter.modAliasId;
-                 var prevFirstModAlias = emitter.firstModAlias;
-@@= skipped -84, +75 lines =@@
-                 emitter.modAliasId = this.id.actualText;
-                 emitter.firstModAlias = this.firstAliasedModToString();
-                 emitter.emitJavascript(this.alias, TokenID.Tilde, false);
--                // the dynamic import case will insert the semi-colon automatically
-                 if (!this.isDynamicImport) {
-                     emitter.writeToOutput(";");
-                 }
-@@= skipped -9, +8 lines =@@
+             // REVIEW: Only modules may be aliased for now, though there's no real
+             // restriction on what the type symbol may be
+@@= skipped -93, +86 lines =@@
                  emitter.modAliasId = prevModAliasId;
                  emitter.firstModAlias = prevFirstModAlias;
              }
@@ -961,7 +926,7 @@
 +        leftCurlyCount = 0;
 +        rightCurlyCount = 0;
 +        returnStatementsWithExpressions = [];
-+        scopeType = null;
++        scopeType = null; // Type of the FuncDecl, before target typing
 +        endingToken = null;
 +        constructor(name, bod, isConstructor, arguments, vars, scopes, statics, nodeType) {
 +            this.name = name;
@@ -1149,6 +1114,7 @@
 +        rightCurlyCount = 0;
 +        vars;
 +        scopes;
++        // Remember if the script contains Unicode chars, that is needed when generating code for this script object to decide the output file correct encoding.
 +        containsUnicodeChar = false;
 +        containsUnicodeCharInComment = false;
 +        constructor(vars, scopes) {
@@ -1171,7 +1137,7 @@
              if (!this.isDeclareFile && !this.isResident && this.bod) {
                  for (var i = 0, len = this.bod.members.length; i < len; i++) {
                      var stmt = this.bod.members[i];
-@@= skipped -114, +114 lines =@@
+@@= skipped -114, +115 lines =@@
                  }
              }
              return false;
@@ -1237,6 +1203,7 @@
 +        amdDependencies = [];
 +        vars;
 +        scopes;
++        // Remember if the module contains Unicode chars, that is needed for dynamic module as we will generate a file for each.
 +        containsUnicodeChar = false;
 +        containsUnicodeCharInComment = false;
 +        constructor(name, members, vars, scopes, endingToken) {
@@ -1267,7 +1234,7 @@
              if (!hasFlag(this.modFlags, ModuleFlags.ShouldEmitModuleDecl)) {
                  emitter.emitParensAndCommentsInPlace(this, true);
                  emitter.recordSourceMappingStart(this);
-@@= skipped -49, +49 lines =@@
+@@= skipped -49, +50 lines =@@
                  emitter.recordSourceMappingEnd(this);
                  emitter.emitParensAndCommentsInPlace(this, false);
              }
@@ -1569,11 +1536,8 @@
              var loopHeader = context.current;
              var loopStart = new BasicBlock();
              var afterLoop = new BasicBlock();
-@@= skipped -26, +26 lines =@@
-             }
-             context.current = afterLoop;
-             condBlock.addSuccessor(afterLoop);
--            // TODO: check for while (true) and then only continue if afterLoop has predecessors
+@@= skipped -29, +29 lines =@@
+             // TODO: check for while (true) and then only continue if afterLoop has predecessors
              context.noContinuation = false;
              context.walker.options.goChildren = false;
 -        };
@@ -1604,7 +1568,7 @@
              emitter.emitParensAndCommentsInPlace(this, true);
              emitter.recordSourceMappingStart(this);
              var temp = emitter.setInObjectLiteral(false);
-@@= skipped -32, +28 lines =@@
+@@= skipped -29, +26 lines =@@
              emitter.setInObjectLiteral(temp);
              emitter.recordSourceMappingEnd(this);
              emitter.emitParensAndCommentsInPlace(this, false);
@@ -1620,15 +1584,7 @@
              var loopHeader = context.current;
              var loopStart = new BasicBlock();
              var afterLoop = new BasicBlock();
-@@= skipped -20, +20 lines =@@
-                 var loopEnd = context.current;
-                 loopEnd.addSuccessor(loopStart);
-                 context.addContent(this.cond);
--                // TODO: check for while (true) 
-                 context.current = afterLoop;
-                 loopEnd.addSuccessor(afterLoop);
-             }
-@@= skipped -8, +7 lines =@@
+@@= skipped -28, +28 lines =@@
                  context.addUnreachable(this.cond);
              }
              context.walker.options.goChildren = false;
@@ -1678,23 +1634,7 @@
              this.cond.addToControlFlow(context);
              var afterIf = new BasicBlock();
              var beforeIf = context.current;
-@@= skipped -18, +18 lines =@@
-                 context.current.addSuccessor(afterIf);
-             }
-             if (this.elseBod) {
--                // current block will be thenBod
-                 context.current = new BasicBlock();
-                 context.noContinuation = false;
-                 beforeIf.addSuccessor(context.current);
-@@= skipped -10, +9 lines =@@
-                     context.current.addSuccessor(afterIf);
-                 }
-                 else {
--                    // thenBod created continuation for if statement
-                     if (hasContinuation) {
-                         context.noContinuation = false;
-                     }
-@@= skipped -20, +19 lines =@@
+@@= skipped -48, +48 lines =@@
                  context.current = afterIf;
              }
              context.walker.options.goChildren = false;
@@ -1784,15 +1724,7 @@
              if (this.body) {
                  var singleItem = null;
                  if (this.body.nodeType == NodeType.List) {
-@@= skipped -44, +42 lines =@@
-                 else {
-                     singleItem = this.body;
-                 }
--                // match template for filtering 'own' properties from obj
-                 if (singleItem !== null) {
-                     if (singleItem.nodeType == NodeType.Block) {
-                         var block = singleItem;
-@@= skipped -37, +36 lines =@@
+@@= skipped -81, +79 lines =@@
                  }
              }
              return false;
@@ -1959,14 +1891,14 @@
              this.type = typeFlow.voidType;
              return this;
 -        };
--        // if there are break statements that match this switch, then just link cond block with block after switch
--        SwitchStatement.prototype.addToControlFlow = function (context) {
 +        }
+         // if there are break statements that match this switch, then just link cond block with block after switch
+-        SwitchStatement.prototype.addToControlFlow = function (context) {
 +        addToControlFlow(context) {
              var condBlock = context.current;
              context.addContent(this.val);
              var execBlock = new BasicBlock();
-@@= skipped -26, +25 lines =@@
+@@= skipped -26, +26 lines =@@
                  context.noContinuation = true;
              }
              context.walker.options.goChildren = false;
@@ -2006,18 +1938,15 @@
              this.type = typeFlow.voidType;
              return this;
 -        };
--        // TODO: more reasoning about unreachable cases (such as duplicate literals as case expressions)
--        // for now, assume all cases are reachable, regardless of whether some cases fall through
--        CaseStatement.prototype.addToControlFlow = function (context) {
 +        }
+         // TODO: more reasoning about unreachable cases (such as duplicate literals as case expressions)
+         // for now, assume all cases are reachable, regardless of whether some cases fall through
+-        CaseStatement.prototype.addToControlFlow = function (context) {
 +        addToControlFlow(context) {
              var execBlock = new BasicBlock();
              var sw = context.currentSwitch[context.currentSwitch.length - 1];
--            // TODO: fall-through from previous (+ to end of switch)
-             if (this.expr) {
-                 var exprBlock = new BasicBlock();
-                 context.current = exprBlock;
-@@= skipped -29, +26 lines =@@
+             // TODO: fall-through from previous (+ to end of switch)
+@@= skipped -29, +29 lines =@@
              }
              context.noContinuation = false;
              context.walker.options.goChildren = false;
@@ -2052,13 +1981,7 @@
              var prevInTCTR = typeFlow.inTypeRefTypeCheck;
              typeFlow.inTypeRefTypeCheck = true;
              var typeLink = getTypeLink(this, typeFlow.checker, true);
-@@= skipped -25, +24 lines =@@
-             }
-             typeFlow.checkForVoidConstructor(typeLink.type, this);
-             this.type = typeLink.type;
--            // in error recovery cases, there may not be a term
-             if (this.term) {
-                 this.term.type = this.type;
+@@= skipped -31, +30 lines =@@
              }
              typeFlow.inTypeRefTypeCheck = prevInTCTR;
              return this;
@@ -2106,7 +2029,7 @@
              var afterFinally = new BasicBlock();
              context.walk(this.tryNode, this);
              var finBlock = new BasicBlock();
-@@= skipped -52, +50 lines =@@
+@@= skipped -46, +45 lines =@@
              }
              context.popStatement();
              context.walker.options.goChildren = false;
@@ -2258,26 +2181,7 @@
              var prevScope = typeFlow.scope;
              typeFlow.scope = this.containedScope;
              this.param = typeFlow.typeCheck(this.param);
-@@= skipped -9, +9 lines =@@
-             var varSym = new VariableSymbol(this.param.id.text, this.param.minChar, typeFlow.checker.locationInfo.unitIndex, exceptVar);
-             exceptVar.symbol = varSym;
-             exceptVar.typeLink = new TypeLink();
--            // var type for now (add syntax for type annotation)
-             exceptVar.typeLink.type = typeFlow.anyType;
-             var thisFnc = typeFlow.thisFnc;
-             if (thisFnc && thisFnc.type) {
-@@= skipped -12, +11 lines =@@
-             this.param.sym = exceptVar.symbol;
-             typeFlow.scope.enter(exceptVar.symbol.container, this.param, exceptVar.symbol, typeFlow.checker.errorReporter, false, false, false);
-             this.body = typeFlow.typeCheck(this.body);
--            // if we're in provisional typecheck mode, clean up the symbol entry
--            // REVIEW: This is obviously bad form, since we're counting on the internal
--            // layout of the symbol table, but this is also the only place where we insert
--            // symbols during typecheck
-             if (typeFlow.checker.inProvisionalTypecheckMode()) {
-                 var table = typeFlow.scope.getTable();
-                 table.secondaryTable.table[exceptVar.symbol.name] = undefined;
-@@= skipped -11, +7 lines =@@
+@@= skipped -32, +32 lines =@@
              this.type = typeFlow.voidType;
              typeFlow.scope = prevScope;
              return this;

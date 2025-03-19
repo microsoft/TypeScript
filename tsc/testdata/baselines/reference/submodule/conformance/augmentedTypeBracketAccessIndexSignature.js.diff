@@ -1,10 +1,8 @@
 --- old.augmentedTypeBracketAccessIndexSignature.js
 +++ new.augmentedTypeBracketAccessIndexSignature.js
-@@= skipped -15, +15 lines =@@
- var b = (() => { })[0]; // Should be Bar
+@@= skipped -16, +16 lines =@@
  
  //// [augmentedTypeBracketAccessIndexSignature.js]
--var a = {}[0]; // Should be Foo
+ var a = {}[0]; // Should be Foo
 -var b = (function () { })[0]; // Should be Bar
-+var a = {}[0];
-+var b = (() => { })[0];
++var b = (() => { })[0]; // Should be Bar

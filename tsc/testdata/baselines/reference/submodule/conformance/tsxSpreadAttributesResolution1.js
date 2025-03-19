@@ -26,5 +26,6 @@ class Poisoned extends React.Component {
     }
 }
 const obj = {};
+// OK
 let p = <Poisoned {...obj}/>;
 let y = <Poisoned />;

@@ -1,10 +1,9 @@
 --- old.topLevelAmbientModule.js
 +++ new.topLevelAmbientModule.js
-@@= skipped -14, +14 lines =@@
- //// [foo_1.js]
+@@= skipped -15, +15 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="foo_0.ts"/>
+ /// <reference path="foo_0.ts"/>
 -var foo = require("foo");
 +const foo = require("foo");
  var z = foo.x + 10;

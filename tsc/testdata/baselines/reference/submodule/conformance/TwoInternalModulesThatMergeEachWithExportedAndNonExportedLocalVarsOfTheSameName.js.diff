@@ -9,11 +9,9 @@
      (function (Utils) {
          function mirror(p) {
              return { x: p.y, y: p.x };
-@@= skipped -12, +12 lines =@@
- //// [part2.js]
- var A;
+@@= skipped -14, +14 lines =@@
  (function (A) {
--    // not a collision, since we don't export
+     // not a collision, since we don't export
      var Origin = "0,0";
 -    var Utils;
 +    let Utils;
@@ -33,8 +31,3 @@
          Utils.Plane = Plane;
      })(Utils = A.Utils || (A.Utils = {}));
  })(A || (A = {}));
- //// [part3.js]
--// test the merging actually worked
- var o;
- var o;
- var o = A.Origin;

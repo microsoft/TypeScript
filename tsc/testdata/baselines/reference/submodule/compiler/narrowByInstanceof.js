@@ -75,22 +75,22 @@ function test(o: Person | Car) {
 //// [narrowByInstanceof.js]
 function foo(x, A, B, AB) {
     if (x instanceof A) {
-        x;
+        x; // A
     }
     else {
-        x;
+        x; // B | C
     }
     if (x instanceof B) {
-        x;
+        x; // B
     }
     else {
-        x;
+        x; // A | C
     }
     if (x instanceof AB) {
-        x;
+        x; // A | B
     }
     else {
-        x;
+        x; // A | B | C
     }
 }
 function bar(target, Promise) {
@@ -98,6 +98,7 @@ function bar(target, Promise) {
         target.__then();
     }
 }
+// Repro from #52571
 class PersonMixin extends Function {
     check(o) {
         return typeof o === "object" && o !== null && o instanceof Person;

@@ -34,4 +34,5 @@ class MyComponent {
     }
     props;
 }
+// Should be an OK
 var x = <MyComponent bar='world'/>;

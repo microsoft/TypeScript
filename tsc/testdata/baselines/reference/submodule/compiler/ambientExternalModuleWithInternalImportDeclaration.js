@@ -22,5 +22,6 @@ var c = new A();
 //// [ambientExternalModuleWithInternalImportDeclaration_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='ambientExternalModuleWithInternalImportDeclaration_0.ts'/>
 const A = require("M");
 var c = new A();

@@ -1,19 +1,9 @@
 --- old.exponentiationOperatorWithUndefinedValueAndValidOperands.js
 +++ new.exponentiationOperatorWithUndefinedValueAndValidOperands.js
-@@= skipped -22, +22 lines =@@
- var rk8 = E.b ** undefined;
- 
- //// [exponentiationOperatorWithUndefinedValueAndValidOperands.js]
--// If one operand is the undefined or undefined value, it is treated as having the type of the
--// other operand.
- var E;
- (function (E) {
-     E[E["a"] = 0] = "a";
-@@= skipped -9, +7 lines =@@
- })(E || (E = {}));
+@@= skipped -32, +32 lines =@@
  var a;
  var b;
--// operator *
+ // operator *
 -var rk1 = Math.pow(undefined, a);
 -var rk2 = Math.pow(undefined, b);
 -var rk3 = Math.pow(undefined, 1);

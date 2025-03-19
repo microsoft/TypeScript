@@ -20,6 +20,7 @@ class B extends A  {
 
 
 //// [constructorWithSuperAndPrologue.es5.js]
+// https://github.com/microsoft/TypeScript/issues/48761
 "use strict";
 class A {
     constructor() {

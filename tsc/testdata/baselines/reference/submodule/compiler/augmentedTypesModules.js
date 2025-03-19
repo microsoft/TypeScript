@@ -100,18 +100,18 @@ module m6 { export var y = 2; }
 
 
 //// [augmentedTypesModules.js]
-var m1 = 1;
+var m1 = 1; // Should be allowed
 var m1a;
 (function (m1a) {
     var y = 2;
-})(m1a || (m1a = {}));
-var m1a = 1;
+})(m1a || (m1a = {})); // error
+var m1a = 1; // error
 var m1b;
 (function (m1b) {
     m1b.y = 2;
-})(m1b || (m1b = {}));
-var m1b = 1;
-var m1c = 1;
+})(m1b || (m1b = {})); // error
+var m1b = 1; // error
+var m1c = 1; // Should be allowed
 var m1d;
 (function (m1d) {
     class I {
@@ -119,21 +119,22 @@ var m1d;
     }
     m1d.I = I;
 })(m1d || (m1d = {}));
-var m1d = 1;
+var m1d = 1; // error
 function m2() { }
-;
+; // ok since the module is not instantiated
 var m2a;
 (function (m2a) {
     var y = 2;
 })(m2a || (m2a = {}));
 function m2a() { }
-;
+; // error since the module is instantiated
 var m2b;
 (function (m2b) {
     m2b.y = 2;
 })(m2b || (m2b = {}));
 function m2b() { }
-;
+; // error since the module is instantiated
+// should be errors to have function first
 function m2c() { }
 ;
 (function (m2c) {
@@ -150,14 +151,14 @@ function m2g() { }
     m2g.C = C;
 })(m2g || (m2g = {}));
 class m3 {
-}
+} // ok since the module is not instantiated
 var m3a;
 (function (m3a) {
     var y = 2;
 })(m3a || (m3a = {}));
 class m3a {
     foo() { }
-}
+} // error, class isn't ambient or declared before the module
 class m3b {
     foo() { }
 }
@@ -215,11 +216,14 @@ var m4d;
 (function (m4d) {
     m4d[m4d["One"] = 0] = "One";
 })(m4d || (m4d = {}));
+//// module then module
 var m5;
 (function (m5) {
     m5.y = 2;
 })(m5 || (m5 = {}));
+// module then import
 var m6;
 (function (m6) {
     m6.y = 2;
 })(m6 || (m6 = {}));
+//import m6 = require('');

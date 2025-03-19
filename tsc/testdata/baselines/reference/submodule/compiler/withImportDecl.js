@@ -54,6 +54,7 @@ exports.A = A;
 //// [withImportDecl_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='withImportDecl_0.ts'/>
 var simpleVar;
 var anotherVar;
 var varWithSimpleType;

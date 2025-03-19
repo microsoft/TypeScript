@@ -6,12 +6,12 @@
  
 +//// [typescript.js]
  //// [parserRealSource5.js]
--// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
--// See LICENSE.txt in the project root for complete license information.
--///<reference path='typescript.ts' />
+ // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+ // See LICENSE.txt in the project root for complete license information.
+@@= skipped -7, +8 lines =@@
  var TypeScript;
  (function (TypeScript) {
--    // TODO: refactor indent logic for use in emit
+     // TODO: refactor indent logic for use in emit
 -    var PrintContext = /** @class */ (function () {
 -        function PrintContext(outfile, parser) {
 +    class PrintContext {
@@ -44,7 +44,7 @@
              if (this.builder.length > 0) {
                  CompilerDiagnostics.Alert(this.builder);
              }
-@@= skipped -35, +34 lines =@@
+@@= skipped -28, +30 lines =@@
                  this.indentStrings[this.indentAmt] = indentString;
              }
              this.builder += indentString;

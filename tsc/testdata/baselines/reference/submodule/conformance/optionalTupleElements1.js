@@ -50,17 +50,17 @@ t4 = [];
 //// [optionalTupleElements1.js]
 function f1(t1, t2, t3, t4) {
     t1 = t1;
-    t1 = t2;
-    t1 = t3;
-    t1 = t4;
+    t1 = t2; // Error
+    t1 = t3; // Error
+    t1 = t4; // Error
     t2 = t1;
     t2 = t2;
-    t2 = t3;
-    t2 = t4;
+    t2 = t3; // Error
+    t2 = t4; // Error
     t3 = t1;
     t3 = t2;
     t3 = t3;
-    t3 = t4;
+    t3 = t4; // Error
     t4 = t1;
     t4 = t2;
     t4 = t3;

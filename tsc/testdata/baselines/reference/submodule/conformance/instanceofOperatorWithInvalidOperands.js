@@ -53,6 +53,8 @@ class C {
     foo() { }
 }
 var x;
+// invalid left operand
+// the left operand is required to be of type Any, an object type, or a type parameter type
 var a1;
 var a2;
 var a3;
@@ -66,6 +68,8 @@ var ra6 = true instanceof x;
 var ra7 = '' instanceof x;
 var ra8 = null instanceof x;
 var ra9 = undefined instanceof x;
+// invalid right operand
+// the right operand to be of type Any or a subtype of the 'Function' interface type
 var b1;
 var b2;
 var b3;
@@ -83,4 +87,5 @@ var rb7 = x instanceof '';
 var rb8 = x instanceof o1;
 var rb9 = x instanceof o2;
 var rb10 = x instanceof o3;
+// both operands are invalid
 var rc1 = '' instanceof {};

@@ -58,6 +58,7 @@
 +class Test5 {
 +    no = 1;
 +    f = () => {
++        // should not capture this.
 +        let x = 1;
 +    };
 +}
@@ -148,11 +149,11 @@
          if (this.a) {
 -            var a_1 = undefined; // should narrow to { b?: string }
 -            var b = undefined;
-+            let a = undefined;
++            let a = undefined; // should narrow to { b?: string }
 +            let b = undefined;
              if (this.a.b) {
 -                var b_1 = undefined; // should narrow to string
-+                let b = undefined;
++                let b = undefined; // should narrow to string
              }
          }
 -    };
@@ -172,7 +173,7 @@
 +        let bar = {};
          if (o.this && o.this.x) {
 -            var y = o.this.x; // should narrow to string
-+            let y = o.this.x;
++            let y = o.this.x; // should narrow to string
          }
 -    };
 -    return Test11;

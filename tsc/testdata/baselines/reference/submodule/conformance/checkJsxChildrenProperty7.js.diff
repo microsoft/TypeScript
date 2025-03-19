@@ -39,10 +39,10 @@
  function AnotherButton(p) {
      return <h1>Just Another Button</h1>;
  }
- function Comp(p) {
+@@= skipped -34, +14 lines =@@
      return <div>{p.b}</div>;
  }
--// Error: whitespaces matters
+ // Error: whitespaces matters
 -var k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 -var k2 = <Comp a={10} b="hi"><Button />
 +let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;

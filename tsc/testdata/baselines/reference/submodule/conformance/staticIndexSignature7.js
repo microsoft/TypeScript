@@ -13,8 +13,8 @@ class Y {
 
 //// [staticIndexSignature7.js]
 class X {
-    static x = 12;
+    static x = 12; // Should error, incompatible with index signature
 }
 class Y {
-    static foo() { }
+    static foo() { } // should error, incompatible with index signature
 }

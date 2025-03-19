@@ -9,11 +9,8 @@
 -    }
 -    return A;
 -}());
--// var AA: typeof A;
 +class A {
 +}
+ // var AA: typeof A;
  var AAA;
--// AA = A; // okay
--AAA = A; // error. 
-+AAA = A;
- AAA = "asdf";
+ // AA = A; // okay

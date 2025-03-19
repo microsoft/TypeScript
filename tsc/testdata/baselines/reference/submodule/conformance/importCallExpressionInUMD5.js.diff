@@ -52,6 +52,7 @@
 -        });
 -    }
 -});
++// https://github.com/microsoft/TypeScript/issues/36780
 +async function func() {
 +    const packageName = '.';
 +    const packageJson = await Promise.resolve(`${packageName + '/package.json'}`).then(s => require(s));

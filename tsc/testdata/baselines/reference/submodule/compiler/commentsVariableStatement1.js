@@ -5,4 +5,5 @@
 var v = 1;
 
 //// [commentsVariableStatement1.js]
+/** Comment */
 var v = 1;

@@ -20,6 +20,8 @@ declare let dec: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.3.js]
+// 14.3.1.2 RS: Evaluation
+//   LexicalBinding : BindingIdentifier Initializer
 {
     let x = 
     @dec
@@ -44,6 +46,8 @@ declare let dec: any;
         y;
     };
 }
+// 14.3.2.1 RS: Evaluation
+//   VariableDeclaration : BindingIdentifier Initializer
 {
     var x2 = 
     @dec

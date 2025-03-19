@@ -9,6 +9,7 @@ Object.freeze({
 
 
 //// [contextualSignatureInObjectFreeze.js]
+// #49101
 Object.freeze({
     f: function () { }
 });

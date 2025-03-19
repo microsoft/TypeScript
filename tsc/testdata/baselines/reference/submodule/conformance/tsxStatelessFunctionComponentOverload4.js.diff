@@ -37,16 +37,19 @@
 +    yy1: "hello"
 +};
 +let obj2;
-+const c0 = <OneThing extraProp/>;
-+const c1 = <OneThing yy={10}/>;
-+const c2 = <OneThing {...obj} yy1/>;
-+const c3 = <OneThing {...obj} {...{ extra: "extra attr" }}/>;
-+const c4 = <OneThing {...obj} y1={10000}/>;
-+const c5 = <OneThing {...obj} {...{ yy: true }}/>;
-+const c6 = <OneThing {...obj2} {...{ extra: "extra attr" }}/>;
-+const c7 = <OneThing {...obj2} yy/>;
++// Error
++const c0 = <OneThing extraProp/>; // extra property;
++const c1 = <OneThing yy={10}/>; // missing property;
++const c2 = <OneThing {...obj} yy1/>; // type incompatible;
++const c3 = <OneThing {...obj} {...{ extra: "extra attr" }}/>; //  This is OK because all attribute are spread
++const c4 = <OneThing {...obj} y1={10000}/>; // extra property;
++const c5 = <OneThing {...obj} {...{ yy: true }}/>; // type incompatible;
++const c6 = <OneThing {...obj2} {...{ extra: "extra attr" }}/>; // Should error as there is extra attribute that doesn't match any. Current it is not
++const c7 = <OneThing {...obj2} yy/>; // Should error as there is extra attribute that doesn't match any. Current it is not
++// Error
 +const d1 = <TestingOneThing extra-data/>;
 +const d2 = <TestingOneThing yy="hello" direction="left"/>;
++// Error
 +const e1 = <TestingOptional y1 y3="hello"/>;
 +const e2 = <TestingOptional y1="hello" y2={1000} y3/>;
 +const e3 = <TestingOptional y1="hello" y2={1000} children="hi"/>;

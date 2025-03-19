@@ -15,7 +15,7 @@ console.log(new C().m());
 const C = class {
     set #x(x) { }
     m() {
-        this.#x += 2;
+        this.#x += 2; // Error
     }
 };
 console.log(new C().m());

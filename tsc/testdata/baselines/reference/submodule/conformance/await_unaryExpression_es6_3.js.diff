@@ -20,7 +20,7 @@
 -    });
 +async function bar1() {
 +    ++;
-+    await 42;
++    await 42; // Error
  }
 -function bar2() {
 -    return __awaiter(this, void 0, void 0, function* () {
@@ -29,7 +29,7 @@
 -    });
 +async function bar2() {
 +    --;
-+    await 42;
++    await 42; // Error
  }
 -function bar3() {
 -    return __awaiter(this, void 0, void 0, function* () {
@@ -38,7 +38,7 @@
 -    });
 +async function bar3() {
 +    var x = 42;
-+    await x++;
++    await x++; // OK but shouldn't need parenthesis
  }
 -function bar4() {
 -    return __awaiter(this, void 0, void 0, function* () {
@@ -47,5 +47,5 @@
 -    });
 +async function bar4() {
 +    var x = 42;
-+    await x--;
++    await x--; // OK but shouldn't need parenthesis
  }

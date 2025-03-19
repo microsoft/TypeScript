@@ -40,7 +40,7 @@
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
 -    }
 -};
--// Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
+ // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
 -(function () { return __awaiter(void 0, void 0, void 0, function () {
 -    var response, blob, size, image;
 -    return __generator(this, function (_a) {

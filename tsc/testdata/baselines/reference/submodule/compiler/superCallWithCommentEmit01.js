@@ -21,6 +21,7 @@ class A {
 }
 class B extends A {
     constructor(text) {
+        // this is subclass constructor
         super(text);
     }
 }

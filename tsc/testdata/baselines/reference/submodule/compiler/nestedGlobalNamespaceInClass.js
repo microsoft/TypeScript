@@ -8,6 +8,7 @@ class C {
 
 
 //// [nestedGlobalNamespaceInClass.js]
+// should not crash - from #35717
 class C {
 }
 x;

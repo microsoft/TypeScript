@@ -64,12 +64,14 @@ var _modes;
     }
     _modes.Mode = Mode;
 })(_modes || (_modes = {}));
+// _modes. // produces an internal error - please implement in derived class
 var editor;
 (function (editor) {
     var modes = _modes;
     var i;
+    // If you just use p1:modes, the compiler accepts it - should be an error
     class Bug {
-        constructor(p1, p2) { }
+        constructor(p1, p2) { } // should be an error on p2 - it's not exported
         foo(p1) {
         }
     }
@@ -78,7 +80,7 @@ var editor2;
 (function (editor2) {
     var i;
     class Bug {
-        constructor(p1, p2) { }
+        constructor(p1, p2) { } // no error here, since modesOuter is declared externally
     }
     let Foo;
     (function (Foo) {

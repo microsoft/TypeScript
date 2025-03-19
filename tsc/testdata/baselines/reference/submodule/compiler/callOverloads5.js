@@ -25,8 +25,10 @@ Foo("s");
 class Foo {
     bar1(a) { }
     constructor(x) {
+        // WScript.Echo("Constructor function has executed");
     }
 }
+//class Foo(s: String);
 var f1 = new Foo("hey");
 f1.bar1("a");
 Foo();

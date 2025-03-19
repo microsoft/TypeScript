@@ -30,6 +30,7 @@ e1 = e2;
 e2 = e1;
 
 //// [memberVariableDeclarations1.js]
+// from spec
 class Employee {
     name;
     address;

@@ -1,8 +1,0 @@
---- old.typeofUnknownSymbol.js
-+++ new.typeofUnknownSymbol.js
-@@= skipped -5, +5 lines =@@
- 
- 
- //// [typeofUnknownSymbol.js]
--// previously gave no error here
- var x = typeof whatsthis;

@@ -1,10 +1,8 @@
 --- old.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=esnext).js
 +++ new.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=esnext).js
-@@= skipped -8, +8 lines =@@
- 
- 
+@@= skipped -10, +10 lines =@@
  //// [exportNonInitializedVariablesInIfThenStatementNoCrash1.js]
--// https://github.com/microsoft/TypeScript/issues/59373
+ // https://github.com/microsoft/TypeScript/issues/59373
  if (true)
 -    export var cssExports;
 +    export const cssExports;

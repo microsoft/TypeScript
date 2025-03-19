@@ -22,7 +22,9 @@ mod;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
+// cjs format file
 exports.a = 1;
 //// [index.js]
+// esm format file
 import mod from "./subfolder/index.js";
 mod;

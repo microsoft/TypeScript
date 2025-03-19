@@ -43,7 +43,6 @@
 -    }
 -    return Derived;
 -}(Base));
--// Ok
 +class IBaseBase {
 +    constructor(x) { }
 +}
@@ -54,14 +53,6 @@
 +}
 +class Derived extends Base {
 +}
+ // Ok
  new Derived("", "");
  new Derived("", 3);
- new Derived("", 3, 3);
-@@= skipped -47, +17 lines =@@
- new Derived("", 3, "");
- new Derived("", "", 3);
- new Derived("", "", 3, 3);
--// Errors
- new Derived(3);
- new Derived("", 3, "", 3);
- new Derived("", 3, "", "");

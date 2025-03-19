@@ -14,5 +14,4 @@
 +    foo() { }
 +}
  var x;
--var result = x["one"]; // error
-+var result = x["one"];
+ var result = x["one"]; // error

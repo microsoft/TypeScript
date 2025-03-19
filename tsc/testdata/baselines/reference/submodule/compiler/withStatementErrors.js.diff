@@ -1,24 +1,14 @@
 --- old.withStatementErrors.js
 +++ new.withStatementErrors.js
-@@= skipped -20, +20 lines =@@
- 
- 
- //// [withStatementErrors.js]
--with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
--    bing = true; // no error
--    bang = true; // no error
--    function bar() { } // no error
--    bar(); // no error
+@@= skipped -25, +25 lines =@@
+     bang = true; // no error
+     function bar() { } // no error
+     bar(); // no error
 -    var C = /** @class */ (function () {
 -        function C() {
 -        }
 -        return C;
 -    }()); // error   
-+with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) {
-+    bing = true;
-+    bang = true;
-+    function bar() { }
-+    bar();
 +    class C {
-+    }
++    } // error   
  }

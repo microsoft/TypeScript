@@ -7,13 +7,13 @@
 -var TestFile = /** @class */ (function () {
 -    function TestFile(message) {
 -        var _this = this;
--        /// <summary>Test summary</summary>
--        /// <param name="message" type="String" />
--        var getMessage = function () { return message + _this.name; };
 +class TestFile {
 +    message;
 +    name;
 +    constructor(message) {
+         /// <summary>Test summary</summary>
+         /// <param name="message" type="String" />
+-        var getMessage = function () { return message + _this.name; };
 +        var getMessage = () => message + this.name;
          this.message = getMessage();
      }

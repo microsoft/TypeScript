@@ -39,6 +39,7 @@ var i2: I2<number>;
 var r7 = i2.f(1);
 
 //// [callGenericFunctionWithZeroTypeArguments.js]
+// valid invocations of generic functions with no explicit type arguments provided 
 function f(x) { return null; }
 var r = f(1);
 var f2 = (x) => { return null; };

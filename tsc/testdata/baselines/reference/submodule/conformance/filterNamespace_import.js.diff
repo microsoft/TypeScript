@@ -27,17 +27,13 @@
          nested.NestedClass = NestedClass;
      })(nested = ns.nested || (ns.nested = {}));
  })(ns || (ns = {}));
-@@= skipped -21, +16 lines =@@
- //// [a.js]
- "use strict";
+@@= skipped -23, +18 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
--ns.Class; // Error
--ns.Value; // Error
+ ns.Class; // Error
+ ns.Value; // Error
 -var c;
 -var t = "";
 -var n = { a: '' };
-+ns.Class;
-+ns.Value;
 +let c;
 +let t = "";
 +let n = { a: '' };

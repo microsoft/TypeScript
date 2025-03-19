@@ -18,10 +18,10 @@ z = false; // Error
 var x = { one: 1 };
 var y;
 var z;
-x = y;
-y = x;
-x = z;
-z = x;
-y = "foo";
-z = "foo";
-z = false;
+x = y; // Error
+y = x; // Ok because index signature type is any
+x = z; // Error
+z = x; // Ok because index signature type is any
+y = "foo"; // Error
+z = "foo"; // OK, string has numeric indexer
+z = false; // Error

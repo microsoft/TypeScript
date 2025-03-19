@@ -17,7 +17,7 @@ class C {
     set #foo(a) { }
     bar() {
         let x = (this.#foo = 42 * 2);
-        console.log(x);
+        console.log(x); // 84
     }
 }
 new C().bar();

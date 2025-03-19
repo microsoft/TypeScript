@@ -5,4 +5,4 @@ module A {}
 A = undefined; // invalid LHS
 
 //// [assignToModule.js]
-A = undefined;
+A = undefined; // invalid LHS

@@ -57,6 +57,7 @@ module.exports = "foo".length;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="declarations.d.ts" />
 const foobar_1 = require("foobar");
 const X2 = require("foobarx");
 const x = foobar_1.X;

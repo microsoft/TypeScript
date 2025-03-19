@@ -54,7 +54,7 @@ class D extends C {
         this.z = z;
         super(this.z);
     }
-}
+} // too few params
 class E extends C {
     z;
     constructor(z) {
@@ -68,7 +68,7 @@ class F extends C {
         this.z = z;
         super("hello", this.z);
     }
-}
+} // first param type
 function f() {
     if (x < 10) {
         x = 11;

@@ -1,10 +1,9 @@
 --- old.parameterPropertyInConstructorWithPrologues.js
 +++ new.parameterPropertyInConstructorWithPrologues.js
-@@= skipped -84, +84 lines =@@
- 
+@@= skipped -85, +85 lines =@@
  
  //// [parameterPropertyInConstructorWithPrologues.js]
--// https://github.com/microsoft/TypeScript/issues/48671
+ // https://github.com/microsoft/TypeScript/issues/48671
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

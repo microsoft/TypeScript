@@ -10,3 +10,4 @@ interface A {
 }
 
 //// [app.js]
+/// <reference types="lib" preserve="true" />

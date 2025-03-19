@@ -39,18 +39,18 @@ function f4(
 function f1(required = (() => {
     throw new Error("bad");
 })()) {
-    console.log("ok");
+    console.log("ok"); // should not trigger 'Unreachable code detected.'
 }
 function f2(a, required = (() => {
     a = 1;
 })()) {
-    a;
+    a; // should be number | string | undefined
 }
 function f3(a = 1, required = (() => {
     a = "";
 })()) {
-    a;
+    a; // should be number | string
 }
 function f4(a = 1, { [(a = "")]: b } = {}) {
-    a;
+    a; // should be string
 }

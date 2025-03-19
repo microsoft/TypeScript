@@ -39,6 +39,7 @@ var b: {
 }
 
 //// [constructSignatureWithAccessibilityModifiersOnParameters2.js]
+// Parameter properties are not valid in overloads of constructors
 class C {
     x;
     y;

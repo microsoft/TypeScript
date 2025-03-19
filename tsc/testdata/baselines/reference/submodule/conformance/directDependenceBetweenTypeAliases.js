@@ -47,6 +47,7 @@ var zz: { x: T11 }
 //// [directDependenceBetweenTypeAliases.js]
 class C {
 }
+// A type query directly depends on the type of the referenced entity.
 var x = [];
 class C1 {
 }

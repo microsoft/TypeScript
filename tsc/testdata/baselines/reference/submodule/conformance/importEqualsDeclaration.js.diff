@@ -27,9 +27,11 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var type = require("./b"); // Ok
--A.prototype; // Error
++const type = require("./b"); // Ok
+ A.prototype; // Error
 -var a = { a: 'a' }; // Ok
--void type; // Ok
++const a = { a: 'a' }; // Ok
+ void type; // Ok
 -
 -
 -//// [a.d.ts]
@@ -44,7 +46,3 @@
 -//// [c.d.ts]
 -import type A = require('./a');
 -export declare const AConstructor: typeof A;
-+const type = require("./b");
-+A.prototype;
-+const a = { a: 'a' };
-+void type;

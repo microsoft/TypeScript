@@ -26,8 +26,8 @@ function test(f1, f2) {
     f2?.("hello");
 }
 function f1(x) {
-    let z = x;
+    let z = x; // NonNullable<T>
 }
 function f2(x) {
-    let z = x;
+    let z = x; // NonNullable<T>
 }

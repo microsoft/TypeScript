@@ -1,8 +1,0 @@
---- old.doNotWidenAtObjectLiteralPropertyAssignment.js
-+++ new.doNotWidenAtObjectLiteralPropertyAssignment.js
-@@= skipped -13, +13 lines =@@
- 
- 
- //// [doNotWidenAtObjectLiteralPropertyAssignment.js]
--var test = [{ interval: { begin: 0 }, children: null }]; // was error here because best common type is {}
-+var test = [{ interval: { begin: 0 }, children: null }];

@@ -1,30 +1,6 @@
 --- old.nodeModulesDeclarationEmitWithPackageExports(module=nodenext).js
 +++ new.nodeModulesDeclarationEmitWithPackageExports(module=nodenext).js
-@@= skipped -91, +91 lines =@@
- }
- 
- //// [index.mjs]
--// esm format file
- import * as cjs from "package/cjs";
- import * as mjs from "package/mjs";
- import * as type from "package";
-@@= skipped -40, +39 lines =@@
- };
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
--// cjs format file
- const cjs = __importStar(require("package/cjs"));
- const mjs = __importStar(require("package/mjs"));
- const type = __importStar(require("package"));
-@@= skipped -14, +13 lines =@@
- exports.e = mjsi;
- exports.f = typei;
- //// [index.js]
--// esm format file
- import * as cjs from "package/cjs";
- import * as mjs from "package/mjs";
- import * as type from "package";
-@@= skipped -13, +12 lines =@@
+@@= skipped -158, +158 lines =@@
  export const d = cjsi;
  export const e = mjsi;
  export const f = typei;

@@ -1,27 +1,22 @@
 --- old.tsxGenericArrowFunctionParsing.js
 +++ new.tsxGenericArrowFunctionParsing.js
-@@= skipped -33, +33 lines =@@
- 
- //// [file.jsx]
- var T, T1, T2;
--// This is an element
+@@= skipped -37, +37 lines =@@
  var x1 = <T>() => </T>;
  x1.isElement;
--// This is a generic function
+ // This is a generic function
 -var x2 = function () { };
 +var x2 = () => { };
  x2();
--// This is a generic function
+ // This is a generic function
 -var x3 = function () { };
 +var x3 = () => { };
  x3();
--// This is an element
+ // This is an element
  var x4 = <T extends={true}>() => </T>;
- x4.isElement;
--// This is an element
+@@= skipped -12, +12 lines =@@
  var x5 = <T extends>() => </T>;
  x5.isElement;
--// This is a generic function
+ // This is a generic function
 -var x6 = function () { };
 +var x6 = () => { };
  x6();

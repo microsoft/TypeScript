@@ -5,48 +5,13 @@
  
  //// [intersectionNarrowing.js]
 -"use strict";
--// Repros from #43130
+ // Repros from #43130
  function f1(x) {
      if (x) {
--        x; // Should narrow to T & string
-+        x;
-     }
- }
- function f2(x) {
-     if (x !== undefined) {
--        x; // Should narrow to T & string
-+        x;
-     }
-     else {
--        x; // Should narrow to T & undefined
-+        x;
-     }
- }
- function f3(x) {
-     if (typeof x === "string") {
--        x; // Should narrow to T & string
-+        x;
-     }
-     else {
--        x; // Should narrow to T & number
-+        x;
-     }
- }
- function f4(x) {
-     switch (x) {
-         case 1:
-             x;
--            break; // T & 1
-+            break;
-         case 2:
-             x;
--            break; // T & 2
--        default: x; // Should narrow to never
-+            break;
-+        default: x;
+@@= skipped -35, +34 lines =@@
      }
  }
  function f5(x) {
 -    var t1 = x === "hello"; // Should be an error
-+    const t1 = x === "hello";
++    const t1 = x === "hello"; // Should be an error
  }

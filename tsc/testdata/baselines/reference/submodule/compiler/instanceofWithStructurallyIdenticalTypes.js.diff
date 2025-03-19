@@ -1,10 +1,9 @@
 --- old.instanceofWithStructurallyIdenticalTypes.js
 +++ new.instanceofWithStructurallyIdenticalTypes.js
-@@= skipped -72, +72 lines =@@
- 
+@@= skipped -73, +73 lines =@@
  
  //// [instanceofWithStructurallyIdenticalTypes.js]
--// Repro from #7271
+ // Repro from #7271
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -47,11 +46,10 @@
  function foo1(x) {
      if (x instanceof C1) {
          return x.item;
-@@= skipped -58, +36 lines =@@
-     }
+@@= skipped -58, +37 lines =@@
      return "error";
  }
--// More tests
+ // More tests
 -var A = /** @class */ (function () {
 -    function A() {
 -    }
@@ -89,35 +87,4 @@
 +}
  function goo(x) {
      if (x instanceof A) {
--        x; // A
-+        x;
-     }
-     else {
--        x; // never
-+        x;
-     }
-     if (x instanceof A1) {
--        x; // A1
-+        x;
-     }
-     else {
--        x; // A
-+        x;
-     }
-     if (x instanceof A2) {
--        x; // A2
-+        x;
-     }
-     else {
--        x; // A
-+        x;
-     }
-     if (x instanceof B) {
--        x; // B
-+        x;
-     }
-     else {
--        x; // A
-+        x;
-     }
- }
+         x; // A

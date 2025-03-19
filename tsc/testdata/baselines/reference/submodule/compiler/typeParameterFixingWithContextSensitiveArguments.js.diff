@@ -7,6 +7,6 @@
 -var d = f(b, function (x) { return x.a; }, a); // type [A, A]
 -var d2 = f(b, function (x) { return x.a; }, null); // type [B, A]
 -var d3 = f(b, function (x) { return x.b; }, null); // type [B, any]
-+var d = f(b, x => x.a, a);
-+var d2 = f(b, x => x.a, null);
-+var d3 = f(b, x => x.b, null);
++var d = f(b, x => x.a, a); // type [A, A]
++var d2 = f(b, x => x.a, null); // type [B, A]
++var d3 = f(b, x => x.b, null); // type [B, any]

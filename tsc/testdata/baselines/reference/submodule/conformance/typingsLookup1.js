@@ -9,4 +9,5 @@ $.x;
 
 
 //// [a.js]
+/// <reference types="jquery" />
 $.x;

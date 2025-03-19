@@ -8,7 +8,4 @@
 +const blah = [
      [[{
                  foo: 'asdf',
--                jj: 1 // intentional error
-+                jj: 1
-             }]]
- ];
+                 jj: 1 // intentional error

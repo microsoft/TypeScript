@@ -27,6 +27,8 @@ class BigGreeter extends React.Component {
     }
     greeting;
 }
+// Error
 let a = <BigGreeter prop1="hello"/>;
+// OK
 let b = <BigGreeter ref={(input) => { this.textInput = input; }}/>;
 let c = <BigGreeter data-extra="hi"/>;

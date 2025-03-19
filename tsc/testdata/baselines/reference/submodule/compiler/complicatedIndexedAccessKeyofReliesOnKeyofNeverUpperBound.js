@@ -54,6 +54,8 @@ function makeNewChannel(type) {
     return { type, localChannelId };
 }
 const newTextChannel = makeNewChannel('text');
+// This should work
 newTextChannel.phoneNumber = '613-555-1234';
 const newTextChannel2 = makeNewChannel('text');
+// Compare with this, which ofc works.
 newTextChannel2.phoneNumber = '613-555-1234';

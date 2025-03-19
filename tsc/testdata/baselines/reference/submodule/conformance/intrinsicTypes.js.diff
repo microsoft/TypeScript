@@ -8,13 +8,8 @@
  function foo1(s, x, y) {
      s = x;
      s = y;
--    x = s; // Error
-+    x = s;
-     x = y;
--    y = s; // Error
--    y = x; // Error
-+    y = s;
-+    y = x;
+@@= skipped -10, +9 lines =@@
+     y = x; // Error
  }
  function foo2(x) {
 -    var s = x;

@@ -26,6 +26,7 @@ bar; // bar should resolve while foo should not, since index.js is cjs
 export {};
 
 //// [index.js]
+/// <reference types="pkg" />
 foo;
-bar;
+bar; // bar should resolve while foo should not, since index.js is cjs
 export {};

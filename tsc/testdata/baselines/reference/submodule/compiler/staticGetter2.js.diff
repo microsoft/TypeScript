@@ -1,10 +1,9 @@
 --- old.staticGetter2.js
 +++ new.staticGetter2.js
-@@= skipped -9, +9 lines =@@
- }
+@@= skipped -10, +10 lines =@@
  
  //// [staticGetter2.js]
--// once caused stack overflow
+ // once caused stack overflow
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

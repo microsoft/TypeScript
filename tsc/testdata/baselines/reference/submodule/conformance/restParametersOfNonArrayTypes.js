@@ -28,6 +28,7 @@ var b = {
 }
 
 //// [restParametersOfNonArrayTypes.js]
+// Rest parameters must be an array type if they have a type annotation, so all these are errors
 function foo(...x) { }
 var f = function foo(...x) { };
 var f2 = (...x, ...y) => { };

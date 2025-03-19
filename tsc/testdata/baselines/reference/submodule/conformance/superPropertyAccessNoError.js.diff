@@ -1,15 +1,9 @@
 --- old.superPropertyAccessNoError.js
 +++ new.superPropertyAccessNoError.js
-@@= skipped -72, +72 lines =@@
- 
- 
- //// [superPropertyAccessNoError.js]
--//super.publicInstanceMemberFunction in constructor of derived class
--//super.publicInstanceMemberFunction in instance member function of derived class
--//super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class
--//super.publicInstanceMemberFunction in lambda in member function
--//super.publicStaticMemberFunction in static member function of derived class
--//super.publicStaticMemberFunction in static member accessor(get and set) of derived class
+@@= skipped -78, +78 lines =@@
+ //super.publicInstanceMemberFunction in lambda in member function
+ //super.publicStaticMemberFunction in static member function of derived class
+ //super.publicStaticMemberFunction in static member accessor(get and set) of derived class
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

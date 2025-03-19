@@ -16,6 +16,7 @@ function function1<T extends 'a' | 'b'>(key: T) {
 
 
 //// [switchWithConstrainedTypeVariable.js]
+// Repro from #20840
 function function1(key) {
     switch (key) {
         case 'a':

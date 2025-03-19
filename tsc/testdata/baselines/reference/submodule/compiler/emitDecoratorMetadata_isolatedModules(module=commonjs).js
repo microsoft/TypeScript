@@ -56,15 +56,15 @@ exports.C3 = C3;
 Object.defineProperty(exports, "__esModule", { value: true });
 class HelloWorld {
     @EventListener('1')
-    handleEvent1(event) { }
+    handleEvent1(event) { } // Error
     @EventListener('2')
-    handleEvent2(event) { }
+    handleEvent2(event) { } // Ok
     @EventListener('1')
-    p1;
+    p1; // Error
     @EventListener('1')
-    p1_ns;
+    p1_ns; // Ok
     @EventListener('2')
-    p2;
+    p2; // Ok
     @EventListener('3')
-    handleEvent3(event) { return undefined; }
+    handleEvent3(event) { return undefined; } // Ok, Error
 }

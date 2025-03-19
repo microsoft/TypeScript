@@ -1,10 +1,9 @@
 --- old.undefinedIsSubtypeOfEverything.js
 +++ new.undefinedIsSubtypeOfEverything.js
-@@= skipped -123, +123 lines =@@
- 
+@@= skipped -124, +124 lines =@@
  
  //// [undefinedIsSubtypeOfEverything.js]
--// undefined is a subtype of every other types, no errors expected below
+ // undefined is a subtype of every other types, no errors expected below
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -238,9 +237,18 @@
 -    }
 -    return D15;
 -}(Base));
--//class D15<T, U extends T> extends Base {
--//    foo: U;
--//}
++class D13 extends Base {
++    foo;
++}
++class D14 extends Base {
++    foo;
++}
++class D15 extends Base {
++    foo;
++}
+ //class D15<T, U extends T> extends Base {
+ //    foo: U;
+ //}
 -var D16 = /** @class */ (function (_super) {
 -    __extends(D16, _super);
 -    function D16() {
@@ -255,15 +263,6 @@
 -    }
 -    return D17;
 -}(Base));
-+class D13 extends Base {
-+    foo;
-+}
-+class D14 extends Base {
-+    foo;
-+}
-+class D15 extends Base {
-+    foo;
-+}
 +class D16 extends Base {
 +    foo;
 +}

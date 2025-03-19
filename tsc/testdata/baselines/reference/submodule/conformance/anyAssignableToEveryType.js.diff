@@ -15,12 +15,3 @@
  var ac;
  var ai;
  var E;
-@@= skipped -36, +34 lines =@@
-     y = a;
-     z = a;
- }
--//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
--//    x = a;
--//    y = a;
--//    z = a;
--//}

@@ -152,6 +152,15 @@ let t: UseQueryOptions<X, 'role.user.role'>
 //// [recursiveConditionalCrash3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * These two functions work as charm, also they are superfast and as expected they don't use additional Memory
+ */
 let y1;
 let y2;
+/**
+ * but as you can see here, the expansion of Interface X it's still working.
+ *
+ * If a memory is still high, it may need some seconds to show popup.
+ *
+ */
 let t;

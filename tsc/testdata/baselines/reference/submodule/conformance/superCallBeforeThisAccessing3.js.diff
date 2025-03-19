@@ -21,17 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base(c) {
-+class Base {
-+    constructor(c) { }
-+}
-+class D extends Base {
-+    _t;
-+    constructor() {
-+        let x = () => { this._t; };
-+        x();
-+        this._t;
-+        super(undefined);
-     }
+-    }
 -    return Base;
 -}());
 -var D = /** @class */ (function (_super) {
@@ -39,10 +29,19 @@
 -    function D() {
 -        var _this = this;
 -        var x = function () { _this._t; };
--        x(); // no error; we only check super is called before this when the container is a constructor
++class Base {
++    constructor(c) { }
++}
++class D extends Base {
++    _t;
++    constructor() {
++        let x = () => { this._t; };
+         x(); // no error; we only check super is called before this when the container is a constructor
 -        _this._t; // error
 -        return _this = _super.call(this, undefined) || this;
--    }
++        this._t; // error
++        super(undefined);
+     }
 -    return D;
 -}(Base));
 +}

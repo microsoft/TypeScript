@@ -26,5 +26,6 @@ interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
 
 
 //// [invariantGenericErrorElaboration.js]
+// Repro from #19746
 const wat = Num;
 const Foo = Obj({ foo: Num });

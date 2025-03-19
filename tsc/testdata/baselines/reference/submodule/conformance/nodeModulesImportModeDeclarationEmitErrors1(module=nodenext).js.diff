@@ -13,4 +13,5 @@
 -import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
 -export interface LocalInterface extends RequireInterface, ImportInterface {
 -}
++// not exclusively type-only
 +import "pkg" assert { "resolution-mode": "require" };

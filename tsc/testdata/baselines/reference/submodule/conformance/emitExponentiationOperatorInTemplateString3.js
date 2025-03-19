@@ -33,6 +33,7 @@ var s;
 var t1 = 10;
 var t2 = 10;
 var s;
+// With TemplateTail
 `${t1 ** t2} world`;
 `${t1 ** t2 ** t1} world`;
 `${t1 + t2 ** t1} world`;

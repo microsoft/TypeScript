@@ -1,9 +1,0 @@
---- old.argumentsBindsToFunctionScopeArgumentList.js
-+++ new.argumentsBindsToFunctionScopeArgumentList.js
-@@= skipped -8, +8 lines =@@
- //// [argumentsBindsToFunctionScopeArgumentList.js]
- var arguments = 10;
- function foo(a) {
--    arguments = 10; /// This shouldnt be of type number and result in error.
-+    arguments = 10;
- }

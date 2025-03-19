@@ -11,8 +11,7 @@
 +    let x;
      x = "";
      do {
--        x; // string
-+        x;
+         x; // string
      } while (cond);
  }
  function b() {
@@ -20,10 +19,8 @@
 +    let x;
      x = "";
      do {
--        x; // string
-+        x;
-         x = 42;
-         break;
+         x; // string
+@@= skipped -18, +18 lines =@@
      } while (cond);
  }
  function c() {
@@ -31,12 +28,8 @@
 +    let x;
      x = "";
      do {
--        x; // string
-+        x;
-         x = undefined;
-         if (typeof x === "string")
-             continue;
-@@= skipped -29, +29 lines =@@
+         x; // string
+@@= skipped -11, +11 lines =@@
      } while (cond);
  }
  function d() {
@@ -44,12 +37,9 @@
 +    let x;
      x = 1000;
      do {
--        x; // number
-+        x;
-         x = "";
-     } while (x = x.length);
--    x; // number
-+    x;
+         x; // number
+@@= skipped -9, +9 lines =@@
+     x; // number
  }
  function e() {
 -    var x;
@@ -57,9 +47,8 @@
      x = "";
      do {
          x = 42;
-     } while (cond);
--    x; // number
-+    x;
+@@= skipped -8, +8 lines =@@
+     x; // number
  }
  function f() {
 -    var x;
@@ -67,12 +56,8 @@
      x = "";
      do {
          if (cond) {
-@@= skipped -30, +30 lines =@@
-         }
-         x = /a/;
-     } while (cond);
--    x; // number | boolean | RegExp
-+    x;
+@@= skipped -16, +16 lines =@@
+     x; // number | boolean | RegExp
  }
  function g() {
 -    var x;
@@ -80,10 +65,3 @@
      x = "";
      do {
          if (cond) {
-@@= skipped -16, +16 lines =@@
-         }
-         x = /a/;
-     } while (true);
--    x; // number
-+    x;
- }

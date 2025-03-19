@@ -34,6 +34,7 @@ class C extends B {
     static y5 = this?.[("x")]();
     static z3 = super.f();
     static z4 = super["f"]();
+    // these should be unaffected
     x = 1;
     y = this.x;
     z = super.f();

@@ -23,6 +23,7 @@ exports.x = 0;
 //// [/app/bin/app/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="../types/bar.d.ts" preserve="true" />
 const foo_1 = require("foo");
 const bar_1 = require("bar");
 foo_1.x + bar_1.y;

@@ -1,9 +1,8 @@
 --- old.unicodeExtendedEscapesInTemplates14(target=es5).js
 +++ new.unicodeExtendedEscapesInTemplates14(target=es5).js
-@@= skipped -5, +5 lines =@@
- 
+@@= skipped -6, +6 lines =@@
  
  //// [unicodeExtendedEscapesInTemplates14.js]
--// Shouldn't work, negatives are not allowed.
+ // Shouldn't work, negatives are not allowed.
 -var x = "\\u{-DDDD}";
 +var x = `\u{-DDDD}`;

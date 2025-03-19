@@ -35,6 +35,7 @@ while (false)
 
 
 //// [constDeclarations-invalidContexts.js]
+// Errors, const must be defined inside a block
 if (true)
     const c1 = 0;
 else
@@ -46,7 +47,7 @@ do
 while (true);
 var obj;
 with (obj)
-    const c5 = 0;
+    const c5 = 0; // No  Error will be reported here since we turn off all type checking
 for (var i = 0; i < 10; i++)
     const c6 = 0;
 for (var i2 in {})

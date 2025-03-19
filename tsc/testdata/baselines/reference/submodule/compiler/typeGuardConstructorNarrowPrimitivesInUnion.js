@@ -22,16 +22,17 @@ if (var1.constructor === Array) {
 
 
 //// [typeGuardConstructorNarrowPrimitivesInUnion.js]
+// Union of primitives, number, arrays, and C1
 let var1;
 if (var1.constructor === Number) {
-    var1;
+    var1; // number
 }
 if (var1.constructor === String) {
-    var1;
+    var1; // "hello" | "world"
 }
 if (var1.constructor === Boolean) {
-    var1;
+    var1; // boolean
 }
 if (var1.constructor === Array) {
-    var1;
+    var1; // number[] | string[]
 }

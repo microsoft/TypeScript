@@ -5,4 +5,5 @@
 var x = (v => v) as (x: number) => string;
 
 //// [asOperatorContextualType.js]
+// should error
 var x = (v => v);

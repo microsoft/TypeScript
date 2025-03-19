@@ -14,13 +14,13 @@
 +const ts = require("typescript");
  function watch(rootFileNames, options) {
 -    var files = {};
--    // initialize the list of files
--    rootFileNames.forEach(function (fileName) {
 +    const files = {};
+     // initialize the list of files
+-    rootFileNames.forEach(function (fileName) {
 +    rootFileNames.forEach(fileName => {
          files[fileName] = { version: 0 };
      });
--    // Create the language service host to allow the LS to communicate with the host
+     // Create the language service host to allow the LS to communicate with the host
 -    var servicesHost = {
 -        getScriptFileNames: function () { return rootFileNames; },
 -        getScriptVersion: function (fileName) { return files[fileName] && files[fileName].version.toString(); },
@@ -45,25 +45,21 @@
 +        fileExists: fileName => fs.existsSync(fileName),
 +        readFile: fileName => fs.readFileSync(fileName),
      };
--    // Create the language service files
+     // Create the language service files
 -    var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
--    // Now let's watch the files
--    rootFileNames.forEach(function (fileName) {
--        // First time around, emit all files
 +    const services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
+     // Now let's watch the files
+-    rootFileNames.forEach(function (fileName) {
 +    rootFileNames.forEach(fileName => {
+         // First time around, emit all files
          emitFile(fileName);
--        // Add a watch on the file to handle next change
+         // Add a watch on the file to handle next change
 -        fs.watchFile(fileName, { persistent: true, interval: 250 }, function (curr, prev) {
--            // Check timestamp
 +        fs.watchFile(fileName, { persistent: true, interval: 250 }, (curr, prev) => {
+             // Check timestamp
              if (+curr.mtime <= +prev.mtime) {
                  return;
-             }
--            // Update the version to signal a change in the file
-             files[fileName].version++;
--            // write the changes to disk
-             emitFile(fileName);
+@@= skipped -48, +43 lines =@@
          });
      });
      function emitFile(fileName) {
@@ -105,10 +101,10 @@
          });
      }
  }
--// Initialize files constituting the program as all .ts files in the current directory
+ // Initialize files constituting the program as all .ts files in the current directory
 -var currentDirectoryFiles = fs.readdirSync(process.cwd()).
 -    filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
--// Start the watcher
 +const currentDirectoryFiles = fs.readdirSync(process.cwd()).
 +    filter(fileName => fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts");
+ // Start the watcher
  watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });

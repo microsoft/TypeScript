@@ -5,9 +5,9 @@
      };
      foo() {
 -        return (
--        /* TODO: please refactor */ this.client
++        return 
+         /* TODO: please refactor */ this.client
 -            .getThing());
-+        return this.client
 +            .getThing();
      }
  }

@@ -5,12 +5,12 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  function f(x) {
 -    var abc = x[fooProp]; // expected: 'T[typeof fooProp]'
--    /**
--     * Expected: no error
--     */
++    const abc = x[fooProp]; // expected: 'T[typeof fooProp]'
+     /**
+      * Expected: no error
+      */
 -    var def = x[fooProp];
 -    var def2 = x[barProp];
-+    const abc = x[fooProp];
 +    const def = x[fooProp];
 +    const def2 = x[barProp];
  }

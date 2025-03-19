@@ -9,10 +9,11 @@
 -var createScopedActionType = function (scope) { return function (type) { return "".concat(scope, "/").concat(type); }; };
 -var createActionInMyScope = createScopedActionType("MyScope"); // <T extends string>(type: T) => `MyScope/${T}`
 -var MY_ACTION = createActionInMyScope("MY_ACTION"); // 'MyScope/MY_ACTION'
--// Assignability
++// Template types example from #12754
 +const createScopedActionType = (scope) => (type) => `${scope}/${type}`;
-+const createActionInMyScope = createScopedActionType("MyScope");
-+const MY_ACTION = createActionInMyScope("MY_ACTION");
++const createActionInMyScope = createScopedActionType("MyScope"); // <T extends string>(type: T) => `MyScope/${T}`
++const MY_ACTION = createActionInMyScope("MY_ACTION"); // 'MyScope/MY_ACTION'
+ // Assignability
  function test(name) {
 -    var s1 = name;
 -    var s2 = name;
@@ -21,38 +22,29 @@
  }
  function fa1(x, y, z) {
      y = x;
--    z = x; // Error
-+    z = x;
- }
- function fa2(x, y) {
+@@= skipped -18, +18 lines =@@
      x = y;
--    y = x; // Error
-+    y = x;
+     y = x; // Error
  }
 -var p1 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a');
 -var p2 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a.b');
 -var p3 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a.b.d');
 -var obj = { a: { b: { c: 42, d: 'hello' } } };
--getPropValue(obj, 'a'); // { b: {c: number, d: string } }
--getPropValue(obj, 'a.b'); // {c: number, d: string }
--getPropValue(obj, 'a.b.d'); // string
--getPropValue(obj, 'a.b.x'); // unknown
--getPropValue(obj, s); // unknown
--var obj2 = {
 +let p1 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a');
 +let p2 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a.b');
 +let p3 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a.b.d');
 +const obj = { a: { b: { c: 42, d: 'hello' } } };
-+getPropValue(obj, 'a');
-+getPropValue(obj, 'a.b');
-+getPropValue(obj, 'a.b.d');
-+getPropValue(obj, 'a.b.x');
-+getPropValue(obj, s);
+ getPropValue(obj, 'a'); // { b: {c: number, d: string } }
+ getPropValue(obj, 'a.b'); // {c: number, d: string }
+ getPropValue(obj, 'a.b.d'); // string
+ getPropValue(obj, 'a.b.x'); // unknown
+ getPropValue(obj, s); // unknown
+-var obj2 = {
 +const obj2 = {
      name: 'John',
      age: 42,
      cars: [
-@@= skipped -35, +33 lines =@@
+@@= skipped -17, +17 lines =@@
          { make: 'Trabant', age: 35 }
      ]
  };
@@ -64,6 +56,6 @@
 -//// [templateLiteralTypes1.d.ts]
 -export type Spacing = `0` | `${number}px` | `${number}rem` | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
 -export type SpacingShorthand = `${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
-+let make = getProp2(obj2, 'cars.1.make');
++let make = getProp2(obj2, 'cars.1.make'); // 'Trabant'
 +const spacing = "s12";
 +const test1 = "0 0 0";

@@ -19,12 +19,12 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// all the following should be error
+ // all the following should be error
  function fn1() { }
  function fn2() { }
  function fn3() { }
  function fn4() { }
--function fn7() { } // should be valid: any includes void
+ function fn7() { } // should be valid: any includes void
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -38,7 +38,6 @@
 -    }
 -    return D;
 -}(C));
-+function fn7() { }
 +class C {
 +    id;
 +    dispose() { }

@@ -19,11 +19,9 @@
 +    class public1 {
 +    }
      m.public1 = public1;
--    // Directly using names from this module
+     // Directly using names from this module
      function foo1() {
-         return;
-     }
-@@= skipped -40, +33 lines =@@
+@@= skipped -40, +34 lines =@@
          return new public1();
      }
      m.foo14 = foo14;

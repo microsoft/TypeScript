@@ -28,6 +28,7 @@ class CharacterInfo {
 
 //// [References.js]
 //// [scannertest1.js]
+///<reference path='References.ts' />
 class CharacterInfo {
     static isDecimalDigit(c) {
         return c >= CharacterCodes._0 && c <= CharacterCodes._9;

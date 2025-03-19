@@ -44,7 +44,7 @@ function foo<T extends Foo | T["hello"]>() {
 //// [circularIndexedAccessErrors.js]
 let x2x = x2.x;
 class C1 {
-    x;
+    x; // Error
 }
 class C2 {
     x;

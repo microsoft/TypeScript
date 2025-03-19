@@ -1,10 +1,7 @@
 --- old.moduleClassArrayCodeGenTest.js
 +++ new.moduleClassArrayCodeGenTest.js
-@@= skipped -12, +12 lines =@@
- var t2: M.B[] = [];
- 
- //// [moduleClassArrayCodeGenTest.js]
--// Invalid code gen for Array of Module class
+@@= skipped -15, +15 lines =@@
+ // Invalid code gen for Array of Module class
  var M;
  (function (M) {
 -    var A = /** @class */ (function () {

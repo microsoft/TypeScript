@@ -38,6 +38,7 @@ class A {
     genericVar;
 }
 function B1() {
+    // class expression can use T
     return class extends A {
     };
 }
@@ -49,6 +50,7 @@ function B3() {
     return class Inner extends A {
     };
 }
+// extends can call B
 class K extends B1() {
     namae;
 }

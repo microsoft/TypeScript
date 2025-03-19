@@ -33,8 +33,8 @@ catch (e) {
 try { }
 catch (e) {
     var x;
-    function x() { }
-    function e() { }
+    function x() { } // error
+    function e() { } // error
     var p;
-    var p;
+    var p; // error
 }

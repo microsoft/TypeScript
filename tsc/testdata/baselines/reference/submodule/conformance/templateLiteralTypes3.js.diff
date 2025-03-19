@@ -15,7 +15,7 @@
 -    var x6 = foo1("*".concat(b, "*"));
 -    var x7 = foo1("*".concat(t, "*"));
 -    var x8 = foo1("**".concat(s, "**"));
-+    let x1 = foo1('hello');
++    let x1 = foo1('hello'); // Error
 +    let x2 = foo1('*hello*');
 +    let x3 = foo1('**hello**');
 +    let x4 = foo1(`*${s}*`);
@@ -35,9 +35,8 @@
  }
  function f3(s, n, b, t) {
 -    var x;
--    x = 'hello'; // Error
 +    let x;
-+    x = 'hello';
+     x = 'hello'; // Error
      x = '*hello*';
      x = '**hello**';
 -    x = "*".concat(s, "*");
@@ -53,68 +52,32 @@
  }
  function f4(s, n, b, t) {
 -    var x;
--    x = '123'; // Error
 +    let x;
-+    x = '123';
+     x = '123'; // Error
      x = '*123*';
--    x = '**123**'; // Error
+     x = '**123**'; // Error
 -    x = "*".concat(s, "*"); // Error
 -    x = "*".concat(n, "*");
 -    x = "*".concat(b, "*"); // Error
 -    x = "*".concat(t, "*");
-+    x = '**123**';
-+    x = `*${s}*`;
++    x = `*${s}*`; // Error
 +    x = `*${n}*`;
-+    x = `*${b}*`;
++    x = `*${b}*`; // Error
 +    x = `*${t}*`;
  }
 -var value1 = "abc";
 -var templated1 = "".concat(value1, " abc");
--// Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
--var value2 = "abc";
--var templated2 = "".concat(value2, " abc");
 +const value1 = "abc";
 +const templated1 = `${value1} abc`;
+ // Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
+-var value2 = "abc";
+-var templated2 = "".concat(value2, " abc");
 +const value2 = "abc";
 +const templated2 = `${value2} abc`;
  chain("a");
--// Repro from #46125
+ // Repro from #46125
  function ff1(x, y, z) {
-     if (x === y) {
--        x; // `foo-${string}`
-+        x;
-     }
--    if (x === z) { // Error
-+    if (x === z) {
-     }
- }
- function ff2(x, y, z) {
-     if (x === y) {
--        x; // `foo-${T}`
-+        x;
-     }
--    if (x === z) { // Error
-+    if (x === z) {
-     }
- }
- function ff3(x, y) {
-     if (x === y) {
--        x; // `foo-${string}` | 'bar'
-+        x;
-     }
- }
- function ff4(x, y) {
-     if (x === 'foo-test') {
--        x; // 'foo-test'
-+        x;
-     }
-     if (y === 'foo-test') {
--        y; // 'foo-test'
-+        y;
-     }
- }
- function reducer(action) {
-@@= skipped -60, +58 lines =@@
+@@= skipped -60, +60 lines =@@
          action.response;
      }
  }
@@ -133,7 +96,7 @@
 +    spread(`1.${u}.3`, `1.${u}.4`);
      spread(u1, u2);
  }
--// Repro from #56582
+ // Repro from #56582
  function a() {
 -    var x;
 +    let x;

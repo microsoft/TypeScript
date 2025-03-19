@@ -325,87 +325,90 @@ type K2 = keyof Rec2;  // Id
 
 
 //// [indexSignatures1.js]
+// Symbol index signature checking
 const sym = Symbol();
 function gg3(x, y, z) {
     x = z;
-    y = z;
+    y = z; // Error
 }
+// Overlapping index signatures
 function gg1(x, y) {
     x = y;
     y = x;
 }
 function gg2(x, y) {
-    x = y;
+    x = y; // Error
     y = x;
 }
-const x1 = combo['foo-test'];
-const x2 = combo['test-bar'];
-const x3 = combo['foo-test-bar'];
+const x1 = combo['foo-test']; // 'a' | 'b'
+const x2 = combo['test-bar']; // 'b' | 'c'
+const x3 = combo['foo-test-bar']; // 'b' (('a' | 'b') & ('b' | 'c'))
 const x4 = combo[`foo-${str}`];
 const x5 = combo[`${str}-bar`];
 const x6 = combo[`foo-${str}-bar`];
 const x7 = combo2['axxxbyyyc'];
 const x8 = combo2['ayyyxxxbc'];
-const x9 = combo2['axxxbbbyc'];
+const x9 = combo2['axxxbbbyc']; // Error
 const y1 = dom['data123'];
 const y2 = dom.data123;
+// Excess property checking for template pattern index signature
 dom = { data123: 'hello' };
-dom = { date123: 'hello' };
+dom = { date123: 'hello' }; // Error
 const funcs = {
-    sfoo: x => x.length,
-    nfoo: x => x * 2,
+    sfoo: x => x.length, // x: string
+    nfoo: x => x * 2, // n: number
 };
-i1[s0];
+i1[s0]; // Error
 i1[s1];
-i1[s2];
-i1[s3];
+i1[s2]; // Error
+i1[s3]; // Error
 i1[s4];
-i2[s0];
-i2[s1];
+i2[s0]; // Error
+i2[s1]; // Error
 i2[s2];
-i2[s3];
+i2[s3]; // Error
 i2[s4];
-i3[s0];
+i3[s0]; // Error
 i3[s1];
 i3[s2];
 i3[s3];
 i3[s4];
-i4[s0];
-i4[s1];
-i4[s2];
-i4[s3];
+i4[s0]; // Error
+i4[s1]; // Error
+i4[s2]; // Error
+i4[s3]; // Error
 i4[s4];
-i1 = i2;
+i1 = i2; // Error
 i1 = i3;
-i1 = i4;
-i2 = i1;
+i1 = i4; // Error
+i2 = i1; // Error
 i2 = i3;
-i2 = i4;
-i3 = i1;
-i3 = i2;
-i3 = i4;
+i2 = i4; // Error
+i3 = i1; // Error
+i3 = i2; // Error
+i3 = i4; // Error
 i4 = i1;
 i4 = i2;
 i4 = i3;
-o1[s0];
+o1[s0]; // Error
 o1[s1];
-o1[s2];
-o1[s3];
+o1[s2]; // Error
+o1[s3]; // Error
 o1[s4];
-o2[s0];
-o2[s1];
+o2[s0]; // Error
+o2[s1]; // Error
 o2[s2];
-o2[s3];
+o2[s3]; // Error
 o2[s4];
-o3[s0];
+o3[s0]; // Error
 o3[s1];
 o3[s2];
 o3[s3];
 o3[s4];
-o4[s0];
-o4[s1];
-o4[s2];
-o4[s3];
+o4[s0]; // Error
+o4[s1]; // Error
+o4[s2]; // Error
+o4[s3]; // Error
 o4[s4];
 o1 = o2;
 o1 = o3;
@@ -419,6 +422,7 @@ o3 = o4;
 o4 = o1;
 o4 = o2;
 o4 = o3;
+// Index signatures inferred from computed property names
 const obj10 = {
     ['x']: 0,
     ['a' + 'b']: 1,
@@ -439,6 +443,7 @@ const obj13 = {
     [sym]: 4,
     [Symbol()]: 5,
 };
+// Repros from #1863
 const system = Symbol('system');
 const SomeSytePlugin = Symbol('SomeSytePlugin');
 const plugins = {
@@ -450,6 +455,7 @@ plugins[system][SomeSytePlugin]();
 var theAnswer = Symbol('secret');
 var obj = {};
 obj[theAnswer] = 42;
+// Repro from #26470
 const directive = Symbol('directive');
 let case1 = foo({
     [directive]: (x) => 'str',
@@ -467,15 +473,15 @@ let case3 = foo({
     double: (x) => x + x,
 });
 const AmIPseudo1 = '&:test';
-const AmIPseudo = '&';
-const test = { 'someKey': 'someValue' };
+const AmIPseudo = '&'; // Error
+const test = { 'someKey': 'someValue' }; // Error
 const path1 = '/one';
-const path2 = 'two';
-const pathObject = 123;
+const path2 = 'two'; // Error
+const pathObject = 123; // Error
 const id = '0000-0000-0000-0001';
 const a = { [id]: 'test' };
 let aid = a[id];
 const aa = { [sym]: '123' };
 const obj1 = { [sym]: 'hello ' };
-const obj2 = { [sym]: 'hello ' };
-const obj3 = { [sym]: 'hello ' };
+const obj2 = { [sym]: 'hello ' }; // Permitted for backwards compatibility
+const obj3 = { [sym]: 'hello ' }; // Error

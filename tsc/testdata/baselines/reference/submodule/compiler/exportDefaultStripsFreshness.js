@@ -38,5 +38,5 @@ exports.q = {
 Object.defineProperty(exports, "__esModule", { value: true });
 const items_1 = require("./items");
 function nFoo(x) { }
-nFoo(items_1.q);
+nFoo(items_1.q); // for comparison
 nFoo(items_1.default);

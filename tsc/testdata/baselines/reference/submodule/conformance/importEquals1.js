@@ -68,16 +68,16 @@ module.exports = types;
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new types.A();
+new types.A(); // Error
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new types.A();
+new types.A(); // Error
 //// [f.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new types.A();
+new types.A(); // Error
 //// [g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new types.A();
+new types.A(); // Error

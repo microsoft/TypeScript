@@ -5,8 +5,7 @@
  
  //// [file.js]
 -React.createElement(React.Fragment, null, "hi");
--div > // Error
--    React.createElement(React.Fragment, null, "eof   // Error");
 +<>hi</>;
-+div >
+ div > // Error
+-    React.createElement(React.Fragment, null, "eof   // Error");
 +    <>eof   // Error</>;

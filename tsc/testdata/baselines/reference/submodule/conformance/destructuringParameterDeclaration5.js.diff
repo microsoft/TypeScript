@@ -80,11 +80,3 @@
  var obj = new Class();
  d0({ x: 1 });
  d0({ x: {} });
-@@= skipped -66, +33 lines =@@
- d2({ x: {} });
- d3({ y: new SubD() });
- d3({ y: new SubClass() });
--// Error
- d3({ y: new Class() });
- d3({});
- d3({ y: 1 });

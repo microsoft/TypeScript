@@ -21,9 +21,11 @@ self;
 }
 
 //// [index.js]
+// esm format file
 import * as self from "package";
 self;
 //// [index.mjs]
+// esm format file
 import * as self from "package";
 self;
 //// [index.cjs]
@@ -52,5 +54,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// esm format file
 const self = __importStar(require("package"));
 self;

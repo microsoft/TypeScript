@@ -74,21 +74,22 @@ function foo1(x = "string", b) {
     x.length;
 }
 function foo2(x = "string", b) {
-    x.length;
+    x.length; // ok, should be string
 }
 function foo3(x = "string", b) {
-    x.length;
+    x.length; // ok, should be string
     x = undefined;
 }
 function foo4(x = undefined, b) {
-    x;
+    x; // should be string | undefined
     x = undefined;
 }
 function allowsNull(val = "") {
     val = null;
     val = 'string and null are both ok';
 }
-allowsNull(null);
+allowsNull(null); // still allows passing null
+// .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);

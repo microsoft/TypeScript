@@ -44,6 +44,7 @@ var A;
     A.Point = Point;
 })(A || (A = {}));
 (function (A) {
+    // expected error
     class Point {
         origin;
         angle;
@@ -68,6 +69,7 @@ var X;
     (function (Y) {
         let Z;
         (function (Z) {
+            // expected error
             class Line {
                 name;
             }

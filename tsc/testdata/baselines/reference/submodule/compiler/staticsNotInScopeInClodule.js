@@ -14,5 +14,5 @@ class Clod {
     static x = 10;
 }
 (function (Clod) {
-    var p = x;
+    var p = x; // x isn't in scope here
 })(Clod || (Clod = {}));

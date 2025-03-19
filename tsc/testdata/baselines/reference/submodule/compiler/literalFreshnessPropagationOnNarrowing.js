@@ -67,32 +67,50 @@ function f5() {
 function f1() {
     let b = true;
     let obj = { b };
+    // Desired: OK
+    // 3.0: OK
+    // 3.1 as-is: OK
+    // 3.1 minus widening propagation: error
     obj.b = false;
 }
 function f2() {
     let el = null;
     let arr = null;
     let elOrA = null;
+    // Desired/actual: All OK
     let a1 = el;
     let a2 = arr;
     let a3 = [el];
     let a4 = Array.isArray(elOrA) ? elOrA : [elOrA];
+    // Desired: OK
+    // 3.0: Error
+    // 3.1: OK
     let a5 = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
 }
 function f3() {
     const x = 'x';
     let x2 = x;
+    // Desired: OK (up for debate?)
+    // 3.0: Error
+    // 3.1 as-is: OK
     x2 = 'y';
+    // Desired/actual: All OK
     let x3 = x;
     x3 = 'y';
 }
 function f4() {
     const x = true;
     let x1 = x;
+    // Desired: OK
+    // 3.0: OK
+    // 3.1: OK
+    // 3.1 minus widening propagation: error
     x1 = false;
 }
 function f5() {
     let arr = ['x'];
     arr = ['y'];
+    // Desired: OK
+    // Error in all extant branches
     arr = [...['y']];
 }

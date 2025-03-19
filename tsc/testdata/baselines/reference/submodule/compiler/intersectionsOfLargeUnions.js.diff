@@ -9,6 +9,7 @@
  exports.assertIsElement = assertIsElement;
  exports.assertNodeTagName = assertNodeTagName;
  exports.assertNodeProperty = assertNodeProperty;
++// Repro from #23977
  function assertIsElement(node) {
 -    var nodeType = node === null ? null : node.nodeType;
 +    let nodeType = node === null ? null : node.nodeType;

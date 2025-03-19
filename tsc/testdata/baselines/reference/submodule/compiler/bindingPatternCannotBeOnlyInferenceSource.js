@@ -29,17 +29,17 @@ const {} = useReduxDispatch1(
 
 
 //// [bindingPatternCannotBeOnlyInferenceSource.js]
-const {} = f();
-const { p1 } = f();
-const [] = f();
-const [e1, e2] = f();
+const {} = f(); // error (only in strictNullChecks)
+const { p1 } = f(); // error
+const [] = f(); // error
+const [e1, e2] = f(); // error
 const funcs1 = {
     funcA: (a) => { },
     funcB: (b, bb) => { },
     funcC: (c, cc, ccc) => { },
 };
 const {} = useReduxDispatch1((d, f) => ({
-    funcA: (...p) => d(f.funcA(...p)),
+    funcA: (...p) => d(f.funcA(...p)), // p should be inferrable
     funcB: (...p) => d(f.funcB(...p)),
     funcC: (...p) => d(f.funcC(...p)),
 }));

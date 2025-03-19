@@ -22,6 +22,7 @@ class Kasizz extends Mup {
 
 //// [overrideInterfaceProperty.js]
 class Sizz extends Mup {
+    // ok, because Mup is an interface
     get size() { return 0; }
 }
 class Kasizz extends Mup {

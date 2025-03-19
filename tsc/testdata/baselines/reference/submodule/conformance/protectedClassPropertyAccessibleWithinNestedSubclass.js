@@ -60,7 +60,7 @@ class C extends B {
                 var c2 = c.x;
                 var c3 = c.foo;
                 var c4 = c.bar;
-                var c5 = c.z;
+                var c5 = c.z; // error
                 var sc1 = C.x;
                 var sc2 = C.y;
                 var sc3 = C.foo;

@@ -1,9 +1,0 @@
---- old.parserGreaterThanTokenAmbiguity13.js
-+++ new.parserGreaterThanTokenAmbiguity13.js
-@@= skipped -3, +3 lines =@@
- 1 >>/**/= 2;
- 
- //// [parserGreaterThanTokenAmbiguity13.js]
--1 >> ; /**/
-+1 >> ;
- 2;

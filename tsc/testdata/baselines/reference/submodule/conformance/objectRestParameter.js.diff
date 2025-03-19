@@ -32,13 +32,13 @@
  class C {
 -    m(_a) {
 -        var { a } = _a, clone = __rest(_a, ["a"]);
--        // actually, never mind, don't clone
 +    m({ a, ...clone }) {
+         // actually, never mind, don't clone
      }
 -    set p(_a) {
 -        var { a } = _a, clone = __rest(_a, ["a"]);
--        // actually, never mind, don't clone
 +    set p({ a, ...clone }) {
+         // actually, never mind, don't clone
      }
  }
 -function foobar(_a = {}) {

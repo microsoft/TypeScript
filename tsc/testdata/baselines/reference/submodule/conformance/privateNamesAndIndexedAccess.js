@@ -20,8 +20,10 @@ class C {
     #bar = 3;
     constructor() {
         const ok = 3;
+        // not supported yet, could support in future:
         const badForNow, #bar;
-        3;
-        const badAlways = 3;
+        3; // Error
+        // will never use this syntax, already taken:
+        const badAlways = 3; // Error
     }
 }

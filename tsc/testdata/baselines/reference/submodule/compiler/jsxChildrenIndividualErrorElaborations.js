@@ -87,12 +87,15 @@ exports.Blah3 = Blah3;
 function Blah(props) {
     return <></>;
 }
+// Incompatible child.
 var a = <Blah>
   {x => x}
 </Blah>;
+// Blah components don't accept text as child elements
 var a = <Blah>
   Hello unexpected text!
 </Blah>;
+// Blah components don't accept multiple children.
 var a = <Blah>
   {x => "" + x}
   {x => "" + x}
@@ -100,12 +103,15 @@ var a = <Blah>
 function Blah2(props) {
     return <></>;
 }
+// Incompatible child.
 var a = <Blah2>
   {x => x}
 </Blah2>;
+// Blah2 components don't accept text as child elements
 var a = <Blah2>
   Hello unexpected text!
 </Blah2>;
+// Blah2 components don't accept multiple children of the wrong type.
 var a = <Blah2>
   {x => x}
   {x => x}
@@ -113,12 +119,15 @@ var a = <Blah2>
 function Blah3(props) {
     return <></>;
 }
+// Incompatible child.
 var a = <Blah3>
   {x => x}
 </Blah3>;
+// Blah3 components don't accept text as child elements
 var a = <Blah3>
   Hello unexpected text!
 </Blah3>;
+// Blah3 components don't accept multiple children of the wrong type.
 var a = <Blah3>
   {x => x}
   {x => x}

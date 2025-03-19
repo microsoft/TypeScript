@@ -299,6 +299,9 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource4.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     class BlockIntrinsics {
@@ -310,6 +313,7 @@ var TypeScript;
         propertyIsEnumerable = undefined;
         isPrototypeOf = undefined;
         constructor() {
+            // initialize the 'constructor' field
             this["constructor"] = undefined;
         }
     }
@@ -385,6 +389,9 @@ var TypeScript;
         }
     }
     TypeScript.StringHashTable = StringHashTable;
+    // The resident table is expected to reference the same table object, whereas the 
+    // transientTable may reference different objects over time
+    // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
     class DualStringHashTable {
         primaryTable;
         secondaryTable;
@@ -437,7 +444,7 @@ var TypeScript;
     }
     TypeScript.DualStringHashTable = DualStringHashTable;
     function numberHashFn(key) {
-        var c2 = 0x27d4eb2d;
+        var c2 = 0x27d4eb2d; // a prime or an odd constant
         key = (key ^ 61) ^ (key >>> 16);
         key = key + (key << 3);
         key = key ^ (key >>> 4);
@@ -525,6 +532,7 @@ var TypeScript;
         }
     }
     TypeScript.HashTable = HashTable;
+    // Simple Hash table with list of keys and values matching each other at the given index
     class SimpleHashTable {
         keys = [];
         values = [];

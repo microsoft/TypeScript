@@ -92,18 +92,18 @@ const TEST_VALUE: ExtendedValue = {
 
 
 //// [nestedExcessPropertyChecking.js]
-const ab1 = {};
-const ab2 = {};
+const ab1 = {}; // Error
+const ab2 = {}; // Error
 var E;
 (function (E) {
     E["A"] = "A";
 })(E || (E = {}));
-let x = E.A;
-let y = "A";
-const foo1 = { variables: { overrides: false } };
+let x = E.A; // Error
+let y = "A"; // Error
+const foo1 = { variables: { overrides: false } }; // Error
 const foo2 = {
     variables: {
-        overrides: false
+        overrides: false // Error
     }
 };
 const response = {

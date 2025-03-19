@@ -1,10 +1,9 @@
 --- old.downlevelLetConst12.js
 +++ new.downlevelLetConst12.js
-@@= skipped -13, +13 lines =@@
- 
+@@= skipped -14, +14 lines =@@
  //// [downlevelLetConst12.js]
  'use strict';
--// top level let\const should not be renamed
+ // top level let\const should not be renamed
 -var foo;
 -var bar = 1;
 -var baz = [][0];

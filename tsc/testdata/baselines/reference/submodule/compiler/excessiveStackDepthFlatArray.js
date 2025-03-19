@@ -44,12 +44,13 @@ const Component = () => {
 
 //// [index.js]
 configureStore({
-    middleware: [...defaultMiddleware],
+    middleware: [...defaultMiddleware], // Should not error
 });
 const Component = () => {
     const categories = ['Fruit', 'Vegetables'];
     return (<ul>
       <li>All</li>
-      {categories.map((category) => (<li key={category}>{category}</li>))}
+      {categories.map((category) => (<li key={category}>{category}</li> // Error about 'key' only
+        ))}
     </ul>);
 };

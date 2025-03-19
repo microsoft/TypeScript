@@ -11,6 +11,7 @@ function qux(bar: { value: number }) {
 
 
 //// [destructuringPropertyAssignmentNameIsNotAssignmentTarget.js]
+// test for #10668
 function qux(bar) {
     let foo;
     ({ value: foo } = bar);

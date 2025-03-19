@@ -46,17 +46,7 @@
  throw aLambda;
  throw aLambda(1);
  var aModule = M;
-@@= skipped -10, +10 lines =@@
- throw aClassInModule;
- var aFunctionInModule = M.F2;
- throw aFunctionInModule;
--// no initializer or annotation, so this is an 'any'
- var x;
- throw x;
--// literals
- throw 0.0;
- throw false;
- throw null;
+@@= skipped -20, +20 lines =@@
  throw undefined;
  throw 'a string';
  throw function () { return 'a string'; };

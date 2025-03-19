@@ -54,6 +54,7 @@ class privateClass {
 class publicClass {
 }
 exports.publicClass = publicClass;
+// TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
 class publicClassWithPrivateTypeParameters {
     myMethod(val) {
         return val;

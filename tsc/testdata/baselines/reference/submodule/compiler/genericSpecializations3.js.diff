@@ -35,16 +35,14 @@
 +}
  var stringFoo2;
  stringFoo2.foo("hm");
--intFoo = stringFoo2; // error
--stringFoo2 = intFoo; // error
+ intFoo = stringFoo2; // error
+ stringFoo2 = intFoo; // error
 -var StringFoo3 = /** @class */ (function () {
 -    function StringFoo3() {
 -    }
 -    StringFoo3.prototype.foo = function (x) { return null; };
 -    return StringFoo3;
 -}());
-+intFoo = stringFoo2;
-+stringFoo2 = intFoo;
 +class StringFoo3 {
 +    foo(x) { return null; }
 +}

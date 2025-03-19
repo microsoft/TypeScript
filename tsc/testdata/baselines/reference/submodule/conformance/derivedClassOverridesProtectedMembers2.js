@@ -81,6 +81,7 @@ class Base {
     static u;
     constructor(a) { }
 }
+// Increase visibility of all protected members to public
 class Derived extends Base {
     a;
     b(a) { }

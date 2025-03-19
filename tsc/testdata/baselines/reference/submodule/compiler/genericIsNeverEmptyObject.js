@@ -13,6 +13,7 @@ let o2: { b: string, x: number } = test(o1);
 
 
 //// [genericIsNeverEmptyObject.js]
+// Repro from #29067
 function test(obj) {
     let { a, ...rest } = obj;
     return { ...rest, b: a };

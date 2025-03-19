@@ -117,7 +117,7 @@ var m1;
         set p3_private(m1_c3_p3_arg) {
         }
         get p4_public() {
-            return new C2_private();
+            return new C2_private(); //error
         }
         set p4_public(m1_c3_p4_arg) {
         }

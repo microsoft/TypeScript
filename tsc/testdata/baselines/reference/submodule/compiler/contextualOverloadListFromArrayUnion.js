@@ -87,6 +87,8 @@ export function series(tasks, callback) {
                     callback(error, null);
                 }
                 else {
+                    // must use postfix-!, since `error` and `result` don't have a
+                    // causal relationship when the overloads are combined
                     results.push(result);
                     next();
                 }

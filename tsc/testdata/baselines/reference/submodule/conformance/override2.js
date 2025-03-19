@@ -36,7 +36,7 @@ class AD1 extends AB {
 class AD2 extends AB {
 }
 class AD3 extends AB {
-    foo(v) { }
+    foo(v) { } // need override?
     baz() { }
 }
 class D4 extends AB {

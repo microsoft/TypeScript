@@ -59,21 +59,21 @@ class A {
 class B {
     foo() { return this.bar(); }
 }
-new B;
+new B; // error
 var BB = B;
-var AA = BB;
+var AA = BB; // error, AA is not of abstract type.
 new AA;
 function constructB(Factory) {
-    new Factory;
+    new Factory; // error -- Factory is of type typeof B.
 }
 var BB = B;
-new BB;
+new BB; // error -- BB is of type typeof B.
 var x = C;
-new x;
+new x; // okay -- undefined behavior at runtime
 class C extends B {
-}
+} // error -- not declared abstract
 class D extends B {
-}
+} // okay
 class E extends B {
     bar() { return 1; }
 }

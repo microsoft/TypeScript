@@ -19,7 +19,7 @@ exports.x = void 0;
 class Foo {
     get foo() {
         var i;
-        return i;
+        return i; // Should be fine (previous bug report visibility error).
     }
 }
 exports.x = 5;

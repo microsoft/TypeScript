@@ -1,17 +1,7 @@
 --- old.declFileFunctions.js
 +++ new.declFileFunctions.js
-@@= skipped -87, +87 lines =@@
- exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
- exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
- exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;
--/** This comment should appear for foo*/
- function foo() {
- }
--/** This is comment for function signature*/
--function fooWithParameters(/** this is comment about a*/ a, 
--/** this is comment for b*/
--b) {
-+function fooWithParameters(a, b) {
+@@= skipped -96, +96 lines =@@
+ b) {
      var d = a;
  }
 -function fooWithRestParameters(a) {
@@ -23,7 +13,7 @@
      return a + rests.join("");
  }
  function fooWithOverloads(a) {
-@@= skipped -31, +23 lines =@@
+@@= skipped -22, +18 lines =@@
  function fooWithTypeTypePredicateAndGeneric(a) {
      return true;
  }
@@ -35,14 +25,9 @@
 +function fooWithTypeTypePredicateAndRestParam(a, ...rest) {
      return true;
  }
--/** This comment should appear for nonExportedFoo*/
- function nonExportedFoo() {
- }
--/** This is comment for function signature*/
--function nonExportedFooWithParameters(/** this is comment about a*/ a, 
--/** this is comment for b*/
--b) {
-+function nonExportedFooWithParameters(a, b) {
+ /** This comment should appear for nonExportedFoo*/
+@@= skipped -16, +12 lines =@@
+ b) {
      var d = a;
  }
 -function nonExportedFooWithRestParameters(a) {
@@ -54,17 +39,8 @@
      return a + rests.join("");
  }
  function nonExportedFooWithOverloads(a) {
-     return a;
- }
- //// [declFileFunctions_1.js]
--/** This comment should appear for foo*/
- function globalfoo() {
- }
--/** This is comment for function signature*/
--function globalfooWithParameters(/** this is comment about a*/ a, 
--/** this is comment for b*/
--b) {
-+function globalfooWithParameters(a, b) {
+@@= skipped -20, +16 lines =@@
+ b) {
      var d = a;
  }
 -function globalfooWithRestParameters(a) {

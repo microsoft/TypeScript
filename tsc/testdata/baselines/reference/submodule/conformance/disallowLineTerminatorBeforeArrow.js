@@ -89,11 +89,17 @@ var f9 = (a) => a;
 var f10 = (a) => a;
 var f11 = (a) => a;
 var f12 = (a) => a;
+// Should be valid.
 var f11 = (a) => a;
+// Should be valid.
 var f12 = (a) => a;
+// Should be valid.
 var f13 = (a) => a;
+// Should be valid.
 var f14 = () => { };
+// Should be valid.
 var f15 = (a) => a;
+// Should be valid.
 var f16 = (a, b = 10) => a + b;
 function foo(func) { }
 foo(() => true);

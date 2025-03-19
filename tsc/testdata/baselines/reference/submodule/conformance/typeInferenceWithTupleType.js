@@ -40,8 +40,8 @@ function combine(x, y) {
     return [x, y];
 }
 var combineResult = combine("string", 10);
-var combineEle1 = combineResult[0];
-var combineEle2 = combineResult[1];
+var combineEle1 = combineResult[0]; // string
+var combineEle2 = combineResult[1]; // number
 function zip(array1, array2) {
     if (array1.length != array2.length) {
         return [[undefined, undefined]];
@@ -54,8 +54,8 @@ function zip(array1, array2) {
     return zipResult;
 }
 var zipResult = zip(["foo", "bar"], [5, 6]);
-var zipResultEle = zipResult[0];
-var zipResultEleEle = zipResult[0][0];
+var zipResultEle = zipResult[0]; // [string, number]
+var zipResultEleEle = zipResult[0][0]; // string
 let expected;
 expected = f1(undefined);
 expected = f2(undefined);

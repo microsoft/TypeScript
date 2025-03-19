@@ -82,51 +82,53 @@ module m1 {
 }
 
 //// [typeGuardsInFunctionAndModuleBlock.js]
+// typeguards are scoped in function/module block
 function foo(x) {
     return typeof x === "string"
         ? x
         : function f() {
-            var b = x;
+            var b = x; // number | boolean
             return typeof x === "boolean"
-                ? x.toString()
-                : x.toString();
+                ? x.toString() // boolean
+                : x.toString(); // number
         }();
 }
 function foo2(x) {
     return typeof x === "string"
         ? x
         : function f(a) {
-            var b = x;
+            var b = x; // new scope - number | boolean
             return typeof x === "boolean"
-                ? x.toString()
-                : x.toString();
-        }(x);
+                ? x.toString() // boolean
+                : x.toString(); // number
+        }(x); // x here is narrowed to number | boolean
 }
 function foo3(x) {
     return typeof x === "string"
         ? x
         : (() => {
-            var b = x;
+            var b = x; // new scope - number | boolean
             return typeof x === "boolean"
-                ? x.toString()
-                : x.toString();
+                ? x.toString() // boolean
+                : x.toString(); // number
         })();
 }
 function foo4(x) {
     return typeof x === "string"
         ? x
         : ((a) => {
-            var b = x;
+            var b = x; // new scope - number | boolean
             return typeof x === "boolean"
-                ? x.toString()
-                : x.toString();
-        })(x);
+                ? x.toString() // boolean
+                : x.toString(); // number
+        })(x); // x here is narrowed to number | boolean
 }
+// Type guards do not affect nested function declarations
 function foo5(x) {
     if (typeof x === "string") {
-        var y = x;
+        var y = x; // string;
         function foo() {
-            var z = x;
+            var z = x; // string
         }
     }
 }
@@ -135,15 +137,15 @@ var m;
     var x;
     let m2;
     (function (m2) {
-        var b = x;
+        var b = x; // new scope - number | boolean | string
         var y;
         if (typeof x === "string") {
-            y = x;
+            y = x; // string;
         }
         else {
             y = typeof x === "boolean"
-                ? x.toString()
-                : x.toString();
+                ? x.toString() // boolean
+                : x.toString(); // number
         }
     })(m2 || (m2 = {}));
 })(m || (m = {}));
@@ -154,15 +156,15 @@ var m1;
     (function (m2) {
         let m3;
         (function (m3) {
-            var b = x;
+            var b = x; // new scope - number | boolean | string
             var y;
             if (typeof x === "string") {
-                y = x;
+                y = x; // string;
             }
             else {
                 y = typeof x === "boolean"
-                    ? x.toString()
-                    : x.toString();
+                    ? x.toString() // boolean
+                    : x.toString(); // number
             }
         })(m3 = m2.m3 || (m2.m3 = {}));
     })(m2 || (m2 = {}));

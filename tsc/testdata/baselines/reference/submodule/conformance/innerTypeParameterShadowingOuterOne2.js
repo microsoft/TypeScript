@@ -40,6 +40,8 @@ class C2<T extends Date, U extends Date> {
 //}
 
 //// [innerTypeParameterShadowingOuterOne2.js]
+// inner type parameters shadow outer ones of the same name
+// no errors expected
 class C {
     g() {
         var x;
@@ -60,3 +62,13 @@ class C2 {
         x.getDate();
     }
 }
+//class C2<T extends Date, U extends T> {
+//    g<T extends Number, U extends T>() {
+//        var x: U;
+//        x.toFixed();
+//    }
+//    h() {
+//        var x: U;
+//        x.getDate();
+//    }
+//}

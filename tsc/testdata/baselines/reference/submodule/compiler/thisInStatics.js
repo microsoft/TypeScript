@@ -15,10 +15,10 @@ class C {
 //// [thisInStatics.js]
 class C {
     static f() {
-        var y = this;
+        var y /*1*/ = this;
     }
     static get x() {
-        var y = this;
+        var y /*2*/ = this;
         return y;
     }
 }

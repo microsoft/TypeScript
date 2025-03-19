@@ -18,8 +18,8 @@ var s3 = s2.func(num => num.toString())
 
 //// [genericChainedCalls.js]
 var r1 = v1.func(num => num.toString())
-    .func(str => str.length)
+    .func(str => str.length) // error, number doesn't have a length
     .func(num => num.toString());
 var s1 = v1.func(num => num.toString());
-var s2 = s1.func(str => str.length);
+var s2 = s1.func(str => str.length); // should also error
 var s3 = s2.func(num => num.toString());

@@ -22,4 +22,4 @@ exports.tabId = chrome.debugger.tabId;
 declare;
 module;
 debugger;
-{ }
+{ } // still an error

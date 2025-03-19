@@ -52,26 +52,26 @@ export const something = 0;
 //// [a.js]
 import { type } from "./mod.js";
 type;
-as;
+as; // Error (used in emitting position)
 //// [b.js]
 import { type as as } from "./mod.js";
-type;
+type; // Error (cannot resolve name)
 as;
 //// [c.js]
-type;
-as;
+type; // Error (cannot resolve name)
+as; // Error (used in emitting position)
 export {};
 //// [d.js]
-import "./mod.js";
+import "./mod.js"; // Error
 //// [e.js]
 import { type as type } from "./mod.js";
 type;
-as;
+as; // Error (used in emitting position)
 //// [f.js]
-type;
-as;
-something;
-s;
+type; // Error (cannot resolve name)
+as; // Error (cannot resolve name)
+something; // Error (used in emitting position)
+s; // Error (used in emitting position)
 export {};
 //// [g.js]
 export {};

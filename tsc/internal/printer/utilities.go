@@ -740,3 +740,167 @@ func findSpanEnd[T any](array []T, test func(value T) bool, start int) int {
 	}
 	return i
 }
+
+func skipWhiteSpaceSingleLine(text string, pos *int) {
+	for *pos < len(text) {
+		ch, size := utf8.DecodeRuneInString(text[*pos:])
+		if !stringutil.IsWhiteSpaceSingleLine(ch) {
+			break
+		}
+		*pos += size
+	}
+}
+
+func matchWhiteSpaceSingleLine(text string, pos *int) bool {
+	startPos := *pos
+	skipWhiteSpaceSingleLine(text, pos)
+	return *pos != startPos
+}
+
+func matchRune(text string, pos *int, expected rune) bool {
+	ch, size := utf8.DecodeRuneInString(text[*pos:])
+	if ch == expected {
+		*pos += size
+		return true
+	}
+	return false
+}
+
+func matchString(text string, pos *int, expected string) bool {
+	textPos := *pos
+	expectedPos := 0
+	for expectedPos < len(expected) {
+		if textPos >= len(text) {
+			return false
+		}
+
+		expectedRune, expectedSize := utf8.DecodeRuneInString(expected[expectedPos:])
+		if !matchRune(text, &textPos, expectedRune) {
+			return false
+		}
+
+		expectedPos += expectedSize
+	}
+
+	*pos = textPos
+	return true
+}
+
+func matchQuotedString(text string, pos *int) bool {
+	textPos := *pos
+	var quoteChar rune
+	switch {
+	case matchRune(text, &textPos, '\''):
+		quoteChar = '\''
+	case matchRune(text, &textPos, '"'):
+		quoteChar = '"'
+	default:
+		return false
+	}
+	for textPos < len(text) {
+		ch, size := utf8.DecodeRuneInString(text[textPos:])
+		textPos += size
+		if ch == quoteChar {
+			*pos = textPos
+			return true
+		}
+	}
+	return false
+}
+
+// /// <reference path="..." />
+// /// <reference types="..." />
+// /// <reference lib="..." />
+// /// <reference no-default-lib="..." />
+// /// <amd-dependency path="..." />
+// /// <amd-module />
+func isRecognizedTripleSlashComment(text string, commentRange ast.CommentRange) bool {
+	if commentRange.Kind == ast.KindSingleLineCommentTrivia &&
+		commentRange.Len() > 2 &&
+		text[commentRange.Pos()+1] == '/' &&
+		text[commentRange.Pos()+2] == '/' {
+		text = text[commentRange.Pos()+3 : commentRange.End()]
+		pos := 0
+		skipWhiteSpaceSingleLine(text, &pos)
+		if !matchRune(text, &pos, '<') {
+			return false
+		}
+		switch {
+		case matchString(text, &pos, "reference"):
+			if !matchWhiteSpaceSingleLine(text, &pos) {
+				return false
+			}
+			if !matchString(text, &pos, "path") &&
+				!matchString(text, &pos, "types") &&
+				!matchString(text, &pos, "lib") &&
+				!matchString(text, &pos, "no-default-lib") {
+				return false
+			}
+			skipWhiteSpaceSingleLine(text, &pos)
+			if !matchRune(text, &pos, '=') {
+				return false
+			}
+			skipWhiteSpaceSingleLine(text, &pos)
+			if !matchQuotedString(text, &pos) {
+				return false
+			}
+		case matchString(text, &pos, "amd-dependency"):
+			if !matchWhiteSpaceSingleLine(text, &pos) {
+				return false
+			}
+			if !matchString(text, &pos, "path") {
+				return false
+			}
+			skipWhiteSpaceSingleLine(text, &pos)
+			if !matchRune(text, &pos, '=') {
+				return false
+			}
+			skipWhiteSpaceSingleLine(text, &pos)
+			if !matchQuotedString(text, &pos) {
+				return false
+			}
+		case matchString(text, &pos, "amd-module"):
+			skipWhiteSpaceSingleLine(text, &pos)
+		default:
+			return false
+		}
+		index := strings.Index(text[pos:], "/>")
+		return index != -1
+	}
+
+	return false
+}
+
+func isJSDocLikeText(text string, comment ast.CommentRange) bool {
+	return comment.Kind == ast.KindMultiLineCommentTrivia &&
+		comment.Len() > 5 &&
+		text[comment.Pos()+2] == '*' &&
+		text[comment.Pos()+3] != '/'
+}
+
+func isPinnedComment(text string, comment ast.CommentRange) bool {
+	return comment.Kind == ast.KindMultiLineCommentTrivia &&
+		comment.Len() > 5 &&
+		text[comment.Pos()+2] == '!'
+}
+
+func calculateIndent(text string, pos int, end int) int {
+	currentLineIndent := 0
+	indentSize := len(getIndentString(1))
+	for pos < end {
+		ch, size := utf8.DecodeRuneInString(text[pos:])
+		if !stringutil.IsWhiteSpaceSingleLine(ch) {
+			break
+		}
+		if ch == '\t' {
+			// Tabs = TabSize = indent size and go to next tabStop
+			currentLineIndent += indentSize - (currentLineIndent % indentSize)
+		} else {
+			// Single space
+			currentLineIndent++
+		}
+		pos += size
+	}
+
+	return currentLineIndent
+}

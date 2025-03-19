@@ -1,13 +1,9 @@
 --- old.declarationEmitDetachedComment1.js
 +++ new.declarationEmitDetachedComment1.js
-@@= skipped -31, +31 lines =@@
- 
- 
- //// [test1.js]
--/*! Copyright 2015 MyCompany Inc. */
--/**
-- * Hello class
-- */
+@@= skipped -35, +35 lines =@@
+ /**
+  * Hello class
+  */
 -var Hello = /** @class */ (function () {
 -    function Hello() {
 -    }
@@ -16,10 +12,10 @@
 +class Hello {
 +}
  //// [test2.js]
--/* A comment at the top of the file. */
--/**
-- * Hi class
-- */
+ /* A comment at the top of the file. */
+ /**
+  * Hi class
+  */
 -var Hi = /** @class */ (function () {
 -    function Hi() {
 -    }
@@ -28,10 +24,10 @@
 +class Hi {
 +}
  //// [test3.js]
--// A one-line comment at the top of the file.
--/**
-- * Hola class
-- */
+ // A one-line comment at the top of the file.
+ /**
+  * Hola class
+  */
 -var Hola = /** @class */ (function () {
 -    function Hola() {
 -    }

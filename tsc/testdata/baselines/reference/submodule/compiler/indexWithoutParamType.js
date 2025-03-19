@@ -4,4 +4,4 @@
 var y: { []; } // Error
 
 //// [indexWithoutParamType.js]
-var y;
+var y; // Error

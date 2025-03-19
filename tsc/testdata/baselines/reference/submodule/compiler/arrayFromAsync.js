@@ -80,6 +80,7 @@ const mapArr2 = await Array.fromAsync([0, 2, 4, 6], v => Promise.resolve(v ** 2)
 const mapArr3 = await Array.fromAsync([0, 2, 4, 6], v => v ** 2);
 const err = new Error;
 const badIterable = { [Symbol.iterator]() { throw err; } };
+// This returns a promise that will reject with `err`.
 const badArray = await Array.fromAsync(badIterable);
 const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
 export {};

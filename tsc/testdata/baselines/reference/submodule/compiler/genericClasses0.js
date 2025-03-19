@@ -14,4 +14,4 @@ class C {
     x;
 }
 var v1;
-var y = v1.x;
+var y = v1.x; // should be 'string'

@@ -34,6 +34,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let A;
 let B;
 let t = {
+    // error: while you can ask for `typeof types.A`,
+    // `typeof types` does not include `A`
     A: undefined,
     B: undefined,
 };

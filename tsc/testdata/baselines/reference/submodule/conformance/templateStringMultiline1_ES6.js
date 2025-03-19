@@ -7,6 +7,7 @@
 `
 
 //// [templateStringMultiline1_ES6.js]
+// newlines are <CR><LF>
 `
 \
 `;

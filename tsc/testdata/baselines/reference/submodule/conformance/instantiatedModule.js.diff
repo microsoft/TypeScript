@@ -1,24 +1,7 @@
 --- old.instantiatedModule.js
 +++ new.instantiatedModule.js
-@@= skipped -62, +62 lines =@@
- 
- 
- //// [instantiatedModule.js]
--// adding the var makes this an instantiated module
- var M;
- (function (M) {
-     M.Point = 1;
- })(M || (M = {}));
--// primary expression
- var m;
- var m = M;
- var a1;
-@@= skipped -13, +11 lines =@@
- var a1 = m.Point;
- var p1;
- var p1;
--// making the point a class instead of an interface 
--// makes this an instantiated mmodule
+@@= skipped -79, +79 lines =@@
+ // makes this an instantiated mmodule
  var M2;
  (function (M2) {
 -    var Point = /** @class */ (function () {
@@ -38,12 +21,7 @@
      M2.Point = Point;
  })(M2 || (M2 = {}));
  var m2;
- var m2 = M2;
--// static side of the class
- var a2;
- var a2 = m2.Point;
- var a2 = M2.Point;
-@@= skipped -27, +23 lines =@@
+@@= skipped -23, +22 lines =@@
  var p2 = new M2.Point();
  var M3;
  (function (M3) {

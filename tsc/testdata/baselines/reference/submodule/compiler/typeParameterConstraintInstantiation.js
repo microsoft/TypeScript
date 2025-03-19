@@ -13,4 +13,4 @@ var a = m.map((x: string) => x);  // string[]
 
 //// [typeParameterConstraintInstantiation.js]
 var m;
-var a = m.map((x) => x);
+var a = m.map((x) => x); // string[]

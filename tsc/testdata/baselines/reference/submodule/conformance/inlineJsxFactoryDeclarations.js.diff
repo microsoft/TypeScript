@@ -12,7 +12,7 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.prerendered = void 0;
--/** @jsx h */
+ /** @jsx h */
 -var renderer_1 = require("./renderer");
 -exports.prerendered = (0, renderer_1.dom)("h", null);
 +const renderer_1 = require("./renderer");
@@ -35,7 +35,7 @@
  //// [index.js]
  "use strict";
  var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-@@= skipped -40, +34 lines =@@
+@@= skipped -40, +35 lines =@@
      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
  };
  Object.defineProperty(exports, "__esModule", { value: true });

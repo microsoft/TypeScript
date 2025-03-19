@@ -118,15 +118,12 @@
 -    Thing3.prototype.test = function () {
 +    test() {
          this.print();
-+    }
-+}
-+const Timestamped = (Base) => {
-+    return class extends Base {
-+        timestamp = new Date();
-     };
+-    };
 -    return Thing3;
 -}(Thing2));
--// Repro from #13805
++    }
++}
+ // Repro from #13805
 -var Timestamped = function (Base) {
 -    return /** @class */ (function (_super) {
 -        __extends(class_2, _super);
@@ -137,4 +134,8 @@
 -        }
 -        return class_2;
 -    }(Base));
++const Timestamped = (Base) => {
++    return class extends Base {
++        timestamp = new Date();
++    };
  };

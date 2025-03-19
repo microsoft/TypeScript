@@ -19,11 +19,13 @@ const TestRender = () => <TestComponent />;
 //// [returnTypePredicateIsInstantiateInContextOfTarget.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
 const React = require("react");
 class TestComponent extends React.Component {
     static defaultProps = {
         isAny: TestComponent.isAny
     };
+    // Type guard is defined as a static class property
     static isAny(obj) {
         return true;
     }

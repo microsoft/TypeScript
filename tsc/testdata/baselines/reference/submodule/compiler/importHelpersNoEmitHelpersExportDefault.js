@@ -24,6 +24,7 @@ exports.default = {};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 const tslib_1 = require("tslib");
+// https://github.com/microsoft/TypeScript/issues/40328
 const other_1 = require("./other");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return tslib_1.__importDefault(other_1).default; } });
 //// [main2.js]

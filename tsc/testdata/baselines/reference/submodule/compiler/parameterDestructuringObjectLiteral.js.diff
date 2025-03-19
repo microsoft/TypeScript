@@ -1,10 +1,9 @@
 --- old.parameterDestructuringObjectLiteral.js
 +++ new.parameterDestructuringObjectLiteral.js
-@@= skipped -10, +10 lines =@@
- 
+@@= skipped -11, +11 lines =@@
  
  //// [parameterDestructuringObjectLiteral.js]
--// Repro from #22644
+ // Repro from #22644
 -var fn1 = function (options) { };
 +const fn1 = (options) => { };
  fn1({ headers: { foo: 1 } });

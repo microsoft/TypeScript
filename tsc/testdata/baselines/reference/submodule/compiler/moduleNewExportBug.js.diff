@@ -14,5 +14,4 @@
 +        moo() { }
 +    }
  })(mod1 || (mod1 = {}));
--var c; // ERROR: C should not be visible
-+var c;
+ var c; // ERROR: C should not be visible

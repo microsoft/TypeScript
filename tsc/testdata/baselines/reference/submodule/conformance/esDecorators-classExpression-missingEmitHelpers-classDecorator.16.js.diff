@@ -7,7 +7,7 @@
 -var _a;
  Object.defineProperty(exports, "__esModule", { value: true });
 -const tslib_1 = require("tslib");
--// uses __esDecorate, __runInitializers, __setFunctionName, __propKey
+ // uses __esDecorate, __runInitializers, __setFunctionName, __propKey
  class C {
 -    [_a = tslib_1.__propKey(x)] = (() => {
 -        let _classDecorators = [dec];

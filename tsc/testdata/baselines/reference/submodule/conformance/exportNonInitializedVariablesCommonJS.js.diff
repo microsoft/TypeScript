@@ -16,12 +16,7 @@
  var B;
  (function (B) {
      B.a = 1, B.c = 2;
-@@= skipped -14, +11 lines =@@
- (function (C) {
-     C.a = 1, C.c = 2;
- })(C || (C = {}));
--// Shouldn't be filtered
- exports.a1 = 1;
+@@= skipped -19, +16 lines =@@
  exports.b1 = 1;
  exports.c1 = 'a';
  exports.d1 = 1;

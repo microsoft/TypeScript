@@ -1,10 +1,9 @@
 --- old.nullishCoalescingOperatorInParameterBindingPattern(target=es5).js
 +++ new.nullishCoalescingOperatorInParameterBindingPattern(target=es5).js
-@@= skipped -5, +5 lines =@@
- (({ [a() ?? "d"]: c = "" }) => {})();
+@@= skipped -6, +6 lines =@@
  
  //// [nullishCoalescingOperatorInParameterBindingPattern.js]
--// https://github.com/microsoft/TypeScript/issues/36295
+ // https://github.com/microsoft/TypeScript/issues/36295
 -var a = function () { return undefined; };
 -(function (_a) {
 -    var _b;

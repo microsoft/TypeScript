@@ -1,12 +1,11 @@
 --- old.tsxAttributeResolution4.js
 +++ new.tsxAttributeResolution4.js
-@@= skipped -18, +18 lines =@@
- 
+@@= skipped -19, +19 lines =@@
  
  //// [file.jsx]
--// OK
+ // OK
 -<test1 {...{ x: function (n) { return 0; } }}/>;
--// Error, no member 'len' on 'string'
--<test1 {...{ x: function (n) { return n.len; } }}/>;
 +<test1 {...{ x: (n) => 0 }}/>;
+ // Error, no member 'len' on 'string'
+-<test1 {...{ x: function (n) { return n.len; } }}/>;
 +<test1 {...{ x: (n) => n.len }}/>;

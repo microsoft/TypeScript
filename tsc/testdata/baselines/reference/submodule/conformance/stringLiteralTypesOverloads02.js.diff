@@ -1,11 +1,6 @@
 --- old.stringLiteralTypesOverloads02.js
 +++ new.stringLiteralTypesOverloads02.js
-@@= skipped -62, +62 lines =@@
-     if (x === "boolean") {
-         return false;
-     }
--    // Should be unreachable.
-     throw "Invalid value";
+@@= skipped -67, +67 lines =@@
  }
  var Consts1;
  (function (Consts1) {

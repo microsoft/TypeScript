@@ -187,52 +187,52 @@ function area4(s) {
 }
 function f1(m) {
     if (m.kind === "A") {
-        m;
+        m; // { kind: "A", x: string }
     }
     else if (m.kind === "D") {
-        m;
+        m; // { kind: "D" }
     }
     else {
-        m;
+        m; // { kind: "B" | "C", y: number }
     }
 }
 function f2(m) {
     if (m.kind === "A") {
         return;
     }
-    m;
+    m; // { kind: "B" | "C", y: number } | { kind: "D" }
 }
 function f3(m) {
     if (m.kind === "X") {
-        m;
+        m; // never
     }
 }
 function f4(m, x) {
     if (m.kind == x) {
-        m;
+        m; // { kind: "A", x: string } | { kind: "D" }
     }
 }
 function f5(m) {
     switch (m.kind) {
         case "A":
-            m;
+            m; // { kind: "A", x: string }
             break;
         case "D":
-            m;
+            m; // { kind: "D" }
             break;
         default:
-            m;
+            m; // { kind: "B" | "C", y: number }
     }
 }
 function f6(m) {
     switch (m.kind) {
         case "A":
-            m;
+            m; // { kind: "A", x: string }
         case "D":
-            m;
+            m; // { kind: "A", x: string } | { kind: "D" }
             break;
         default:
-            m;
+            m; // { kind: "B" | "C", y: number }
     }
 }
 function f7(m) {
@@ -241,7 +241,7 @@ function f7(m) {
         case "B":
             return;
     }
-    m;
+    m; // { kind: "B" | "C", y: number } | { kind: "D" }
 }
 function f8(m) {
     switch (m.kind) {
@@ -250,5 +250,5 @@ function f8(m) {
         case "D":
             throw new Error();
     }
-    m;
+    m; // { kind: "B" | "C", y: number }
 }

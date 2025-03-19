@@ -5,7 +5,7 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -const tslib_1 = require("tslib");
--// needs: __esDecorate, __runInitializers, __setFunctionName
+ // needs: __esDecorate, __runInitializers, __setFunctionName
 -let C = (() => {
 -    var _C_foo;
 -    let _classDecorators = [dec];

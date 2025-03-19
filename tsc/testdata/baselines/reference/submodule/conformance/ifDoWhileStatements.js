@@ -197,6 +197,7 @@ var N;
     function F2(x) { return x.toString(); }
     N.F2 = F2;
 })(N || (N = {}));
+// literals
 if (true) { }
 while (true) { }
 do { } while (true);
@@ -239,6 +240,7 @@ do { } while (new C());
 if (new D()) { }
 while (new D()) { }
 do { } while (new D());
+// references
 var a = true;
 if (a) { }
 while (a) { }

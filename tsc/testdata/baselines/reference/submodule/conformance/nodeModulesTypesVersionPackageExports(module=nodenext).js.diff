@@ -1,22 +1,7 @@
 --- old.nodeModulesTypesVersionPackageExports(module=nodenext).js
 +++ new.nodeModulesTypesVersionPackageExports(module=nodenext).js
-@@= skipped -51, +51 lines =@@
- }
- 
- //// [index.js]
--// esm format file
- import * as mod from "inner";
- mod.correctVersionApplied;
- //// [index.mjs]
--// esm format file
- import * as mod from "inner";
- mod.correctVersionApplied;
- //// [index.cjs]
-@@= skipped -33, +31 lines =@@
-     return result;
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--// cjs format file
+@@= skipped -87, +87 lines =@@
+ // cjs format file
  const mod = __importStar(require("inner"));
  mod.correctVersionApplied;
 -

@@ -36,7 +36,7 @@ export function getAddress(): string {
 
 //// [index.js]
 import * as ip from 'ip';
-import nullthrows from 'nullthrows';
+import nullthrows from 'nullthrows'; // shouldn't be callable, `nullthrows` is a cjs package, so the `default` is the module itself
 export function getAddress() {
     return nullthrows(ip.address());
 }

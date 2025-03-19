@@ -50,13 +50,15 @@ var A;
     A.Point = Point;
     A.Origin = new Point(0, 0);
 })(A || (A = {}));
+// no code gen expected
 var C;
 (function (C) {
-    var a = A;
+    var a = A; //Error generates 'var <Alias> = <EntityName>;'
     var m;
     var p;
     var p = { x: 0, y: 0 };
 })(C || (C = {}));
+// code gen expected
 var D;
 (function (D) {
     var a = A;

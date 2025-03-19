@@ -10,8 +10,8 @@ foo3(); // error but shouldn't be
 
 //// [restParamsWithNonRestParams.js]
 function foo(...b) { }
-foo();
+foo(); // ok
 function foo2(a, ...b) { }
-foo2();
+foo2(); // should be an error
 function foo3(a, ...b) { }
-foo3();
+foo3(); // error but shouldn't be

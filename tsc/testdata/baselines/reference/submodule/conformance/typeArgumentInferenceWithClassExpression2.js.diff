@@ -16,7 +16,7 @@
 +}) {
      return undefined;
  }
--// Should not infer string because it is a static property
+ // Should not infer string because it is a static property
 -foo((_a = /** @class */ (function () {
 -        function class_2() {
 -        }

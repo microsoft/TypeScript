@@ -58,6 +58,7 @@ function j<T>(a: T) {
 }
 
 //// [assignEveryTypeToAny.js]
+// all of these are valid
 var x;
 x = 1;
 var a = 2;

@@ -52,6 +52,6 @@ class SomeClass2 {
         if (this.state.type === "numberVariant") {
             this.state.data;
         }
-        let n = this.state?.data;
+        let n = this.state?.data; // This should be an error
     }
 }

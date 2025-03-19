@@ -8,4 +8,7 @@ const test = (names: string[]) =>
 
 
 //// [optionalChainingInArrow.js]
-const test = (names) => names?.filter(x => x);
+// https://github.com/microsoft/TypeScript/issues/41814
+const test = (names) => 
+// single-line comment
+names?.filter(x => x);

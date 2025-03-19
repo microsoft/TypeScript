@@ -35,6 +35,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class U extends C {
-}
+} // Error
 class V extends types.C {
-}
+} // Error

@@ -23,10 +23,10 @@ class C {
     y = 'hello';
 }
 var c = new C();
-var c2 = new C(null);
+var c2 = new C(null); // error
 class D {
     x = 2;
     y = null;
 }
 var d = new D();
-var d2 = new D(null);
+var d2 = new D(null); // error

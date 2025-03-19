@@ -18,4 +18,4 @@ ab = {...a, y: (null as any as string | undefined)}; // Should be allowed, since
 
 
 //// [unionExcessPropsWithPartialMember.js]
-ab = { ...a, y: null };
+ab = { ...a, y: null }; // Should be allowed, since `y` is missing on `A`

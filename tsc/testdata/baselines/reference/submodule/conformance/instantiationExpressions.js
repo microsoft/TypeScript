@@ -177,94 +177,94 @@ type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 
 //// [instantiationExpressions.js]
 function f1() {
-    let f0 = fx;
-    let f1 = fx;
-    let f2 = fx;
-    let f3 = fx;
+    let f0 = fx; // Error
+    let f1 = fx; // { (x: string): string; (x: string, n: number): string; }
+    let f2 = fx; // (t: [string, number]) => [string, number]
+    let f3 = fx; // Error
 }
 function f2() {
-    const A0 = Array;
-    const A1 = Array;
-    const A2 = Array;
+    const A0 = Array; // Error
+    const A1 = Array; // new (...) => string[]
+    const A2 = Array; // Error
 }
 function f3() {
-    let c1 = C;
-    let f1 = C.f;
+    let c1 = C; // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
+    let f1 = C.f; // (x: string) => string[]
 }
 function f10(f) {
-    let fs = f;
+    let fs = f; // { (a: string): string; (a: string, b: number): string[]; }
 }
 function f11(f) {
-    let fs = f;
+    let fs = f; // (a: string) => string
 }
 function f12(f) {
-    let fs = f;
+    let fs = f; // { (a: string): string; x: string; }
 }
 function f13(f) {
-    let fs = f;
+    let fs = f; // Error, no applicable signatures
 }
 function f14(f) {
-    let fs = f;
+    let fs = f; // { new (a: string): string; new (a: string, b: number): string[]; }
 }
 function f15(f) {
-    let fs = f;
+    let fs = f; // { new (a: string): string; (a: string, b: number): string[]; }
 }
 function f16(f) {
-    let fs = f;
+    let fs = f; // new (a: string) => string
 }
 function f17(f) {
-    let fs = f;
+    let fs = f; // (a: string) => string
 }
 function f20(f) {
-    let fs = f;
+    let fs = f; // ((a: string) => string) & ((a: string, b: number) => string[]])
 }
 function f21(f) {
-    let fs = f;
+    let fs = f; // (a: string) => string
 }
 function f22(f) {
-    let fs = f;
+    let fs = f; // ((a: string) => string) & { x: string }
 }
 function f23(f) {
-    let fs = f;
+    let fs = f; // Error, no applicable signatures
 }
 function f24(f) {
-    let fs = f;
+    let fs = f; // (new (a: string) => string) & ((a: string, b: number) => string[]])
 }
 function f25(f) {
-    let fs = f;
+    let fs = f; // (new (a: string) => string) & ((a: string, b: number) => string[]])
 }
 function f26(f) {
-    let fs = f;
+    let fs = f; // new (a: string) => string
 }
 function f27(f) {
-    let fs = f;
+    let fs = f; // (a: string) => string
 }
 function f30(f) {
-    let fs = f;
+    let fs = f; // ((a: string) => string) | ((a: string, b: number) => string[]])
 }
 function f31(f) {
-    let fs = f;
+    let fs = f; // Error, '(a: string, b: number) => string[]' has no applicable signatures
 }
 function f32(f) {
-    let fs = f;
+    let fs = f; // ((a: string) => string) | { x: string }
 }
 function f33(f) {
-    let fs = f;
+    let fs = f; // Error, no applicable signatures
 }
 function f34(f) {
-    let fs = f;
+    let fs = f; // (new (a: string) => string) | ((a: string, b: number) => string[]])
 }
 function f35(f) {
-    let fs = f;
+    let fs = f; // (new (a: string) => string) | ((a: string, b: number) => string[]])
 }
 function f36(f) {
-    let fs = f;
+    let fs = f; // Error, '(a: string, b: number) => string[]' has no applicable signatures
 }
 function f37(f) {
-    let fs = f;
+    let fs = f; // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
 }
 function f38(f) {
-    let fs = f;
+    let fs = f; // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
 }
 function makeBox(value) {
     return { value };

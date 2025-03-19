@@ -15,5 +15,5 @@ if (foo !== undefined && foo[index] !== undefined && foo[index] >= 0) {
 const foo = [1, 2, 3];
 const index = 1;
 if (foo !== undefined && foo[index] !== undefined && foo[index] >= 0) {
-    foo[index];
+    foo[index]; // number
 }

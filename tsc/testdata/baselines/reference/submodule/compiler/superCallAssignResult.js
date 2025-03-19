@@ -18,7 +18,7 @@ class E {
 }
 class H extends E {
     constructor() {
-        var x = super(5);
+        var x = super(5); // Should be of type void, not E.
         x = 5;
     }
 }

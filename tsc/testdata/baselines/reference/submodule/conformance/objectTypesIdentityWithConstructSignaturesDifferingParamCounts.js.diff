@@ -1,10 +1,9 @@
 --- old.objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js
 +++ new.objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js
-@@= skipped -78, +78 lines =@@
- function foo15(x: any) { }
+@@= skipped -79, +79 lines =@@
  
  //// [objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js]
--// object types are identical structurally
+ // object types are identical structurally
 -var B = /** @class */ (function () {
 -    function B(x, y) {
 -        return null;
@@ -25,7 +24,7 @@
 +}
  var a;
 -var b = { new: function (x) { return ''; } }; // not a construct signature, function called new
-+var b = { new(x) { return ''; } };
++var b = { new(x) { return ''; } }; // not a construct signature, function called new
  function foo1b(x) { }
  function foo1c(x) { }
  function foo2(x) { }

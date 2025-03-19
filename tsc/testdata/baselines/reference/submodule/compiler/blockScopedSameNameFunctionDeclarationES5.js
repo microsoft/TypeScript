@@ -21,17 +21,17 @@ foo(); // not ok - needs number
 //// [blockScopedSameNameFunctionDeclarationES5.js]
 function foo(a) {
     if (a === 1) {
-        function foo() { }
+        function foo() { } // duplicate function
         foo();
-        foo(10);
+        foo(10); // not ok
     }
     else {
-        function foo() { }
+        function foo() { } // duplicate function
         foo();
-        foo(10);
+        foo(10); // not ok
     }
-    foo(10);
+    foo(10); // not ok
     foo();
 }
 foo(10);
-foo();
+foo(); // not ok - needs number

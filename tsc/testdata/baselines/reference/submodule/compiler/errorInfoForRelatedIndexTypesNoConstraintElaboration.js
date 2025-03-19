@@ -11,6 +11,7 @@ class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicEl
 }
 
 //// [errorInfoForRelatedIndexTypesNoConstraintElaboration.js]
+/// <reference path="react16.d.ts" />
 class I {
     M() {
         let c1 = {};

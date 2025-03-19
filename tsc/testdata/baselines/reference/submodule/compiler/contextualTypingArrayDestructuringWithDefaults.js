@@ -17,6 +17,7 @@ function foo() {
 let [c0 = { a: "a" }] = [];
 let [x1, c1 = { a: "a" }] = [1];
 let [c_ = { a: "a" }] = [];
+// not a great example, expect an error
 function foo() {
     let { length = { a: 1 } } = [1];
     return length;

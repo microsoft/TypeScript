@@ -10,23 +10,23 @@
 -var valueBacon = Meat[bacon];
 -var union = Meat.Bacon;
 -var valueUnion = Meat[union];
--//Avoiding a false positive
--var value = Meat[0];
--var valueUndefined = "testing";
--var value2 = Meat[valueUndefined];
 +const sausage = Meat.Sausage;
 +const valueSausage = Meat[sausage];
 +const bacon = Meat.Bacon;
 +const valueBacon = Meat[bacon];
 +const union = Meat.Bacon;
 +const valueUnion = Meat[union];
+ //Avoiding a false positive
+-var value = Meat[0];
+-var valueUndefined = "testing";
+-var value2 = Meat[valueUndefined];
 +const value = Meat[0];
 +const valueUndefined = "testing";
 +const value2 = Meat[valueUndefined];
  var A;
  (function (A) {
      A[A["a"] = 0] = "a";
-@@= skipped -22, +21 lines =@@
+@@= skipped -22, +22 lines =@@
      B[B["y"] = 1] = "y";
      B[B["z"] = 2] = "z";
  })(B || (B = {}));

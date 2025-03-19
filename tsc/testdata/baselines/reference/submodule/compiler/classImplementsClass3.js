@@ -27,6 +27,7 @@ class C {
 }
 class C2 extends A {
 }
+// no errors
 var c;
 var c2;
 c = c2;

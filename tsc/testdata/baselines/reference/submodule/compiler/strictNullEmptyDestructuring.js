@@ -27,6 +27,7 @@ let { } = Math.random() ? null : undefined;
 
 
 //// [strictNullEmptyDestructuring.js]
+// Repro from #20873
 let [] = null;
 let {} = null;
 ({} = null);

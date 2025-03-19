@@ -21,6 +21,7 @@
 });
 
 //// [circularInferredTypeOfVariable.js]
+// Repro from #14428
 (async () => {
     function foo(p) {
         return [];

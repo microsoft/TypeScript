@@ -1,10 +1,8 @@
 --- old.typeParameterExtendsPrimitive.js
 +++ new.typeParameterExtendsPrimitive.js
-@@= skipped -28, +28 lines =@@
- 
- 
+@@= skipped -30, +30 lines =@@
  //// [typeParameterExtendsPrimitive.js]
--// #14473
+ // #14473
  function f() {
 -    var _a;
      var t;
@@ -21,7 +19,7 @@
 +    const n = i.x;
      return i.x * 2;
  }
--// #17069
+ // #17069
  function h(array, prop) {
 -    var result = 0;
 -    for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {

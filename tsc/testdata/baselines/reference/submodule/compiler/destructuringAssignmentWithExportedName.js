@@ -32,6 +32,7 @@ export { exportedFoo as foo, nonexportedFoo as nfoo };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nfoo = exports.foo = exports.nonexportedFoo = exports.exportedFoo = void 0;
 let nonexportedFoo;
+// sanity checks
 exports.foo = exports.exportedFoo = null;
 exports.nfoo = exports.nonexportedFoo = nonexportedFoo = null;
 if (null) {

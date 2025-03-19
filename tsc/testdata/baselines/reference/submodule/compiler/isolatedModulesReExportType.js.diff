@@ -14,15 +14,14 @@
  exports.C = C;
  //// [reExportValueAsTypeOnly.js]
  "use strict";
-@@= skipped -13, +10 lines =@@
- "use strict";
+@@= skipped -14, +11 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.NS = exports.C = void 0;
--// OK, has a value side
+ // OK, has a value side
 -var exportValue_1 = require("./exportValue");
 +const exportValue_1 = require("./exportValue");
  Object.defineProperty(exports, "C", { enumerable: true, get: function () { return exportValue_1.C; } });
--// OK, even though the namespace it exports is only types.
+ // OK, even though the namespace it exports is only types.
 -var NS = require("./exportT");
 +const NS = require("./exportT");
  exports.NS = NS;

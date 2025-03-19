@@ -34,4 +34,4 @@
 -call(function (a) { return __generator(this, function (_a) {
 -    return [2 /*return*/];
 -}); }); // error, 2nd argument required
-+call(function* (a) { });
++call(function* (a) { }); // error, 2nd argument required

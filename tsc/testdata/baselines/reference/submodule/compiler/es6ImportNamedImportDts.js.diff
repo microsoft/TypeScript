@@ -148,7 +148,8 @@
 +const server_8 = require("./server");
  exports.z111 = new server_8.z1();
 -var server_9 = require("./server");
--exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error
++const server_9 = require("./server");
+ exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error
 -
 -
 -//// [server.d.ts]
@@ -202,5 +203,3 @@
 -export declare var z111: z1;
 -import { z2 as z3 } from "./server";
 -export declare var z2: z3;
-+const server_9 = require("./server");
-+exports.z2 = new server_9.z2();

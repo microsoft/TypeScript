@@ -21,5 +21,6 @@ var Mode;
 //// [enumFromExternalModule_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='enumFromExternalModule_0.ts'/>
 const f = require("./enumFromExternalModule_0");
 var x = f.Mode.Open;

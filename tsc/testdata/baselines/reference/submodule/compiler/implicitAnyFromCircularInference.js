@@ -51,16 +51,23 @@ class D {
 
 
 //// [implicitAnyFromCircularInference.js]
+// Error expected
 var a;
+// Error expected on b or c
 var b;
 var c;
+// Error expected
 var d;
 function f() { return f; }
+// Error expected
 function g() { return g(); }
+// Error expected
 var f1 = function () {
     return f1();
 };
+// Error expected
 var f2 = () => f2();
+// Error expected
 function h() {
     return foo();
     function foo() {
@@ -72,6 +79,7 @@ class C {
     s = foo(this);
 }
 class D {
+    // Error expected
     get x() {
         return this.x;
     }

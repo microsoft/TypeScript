@@ -20,6 +20,6 @@ let y: string;
 y.toLowerCase(); // strictNullChecks error
 
 //// [index.js]
-function f(x) { }
+function f(x) { } // noImplicitAny error
 let y;
-y.toLowerCase();
+y.toLowerCase(); // strictNullChecks error

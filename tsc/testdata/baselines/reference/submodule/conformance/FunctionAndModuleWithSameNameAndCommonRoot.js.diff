@@ -9,21 +9,3 @@
      (function (Point) {
          Point.Origin = { x: 0, y: 0 };
      })(Point = A.Point || (A.Point = {}));
-@@= skipped -10, +10 lines =@@
- var fn = A.Point;
- var cl;
- var cl = A.Point();
--var cl = A.Point.Origin; // not expected to be an error.
-+var cl = A.Point.Origin;
- //// [simple.js]
- var B;
- (function (B) {
-@@= skipped -13, +13 lines =@@
-     })(Point = B.Point || (B.Point = {}));
- })(B || (B = {}));
- var fn;
--var fn = B.Point; // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
-+var fn = B.Point;
- var cl;
- var cl = B.Point();
- var cl = B.Point.Origin;

@@ -5,5 +5,5 @@ function foo(/** nothing */) {
 }
 
 //// [commentInEmptyParameterList1.js]
-function foo() {
+function foo( /** nothing */ /** nothing */) {
 }

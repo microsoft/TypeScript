@@ -19,10 +19,10 @@ function foo13<T extends void>(test: T) { }
 function foo1(test) { }
 function foo2(test) { }
 function foo3(test) { }
-function foo4(test) { }
-function foo5(test) { }
+function foo4(test) { } // valid
+function foo5(test) { } // valid
 function foo6(test) { }
-function foo7(test) { }
+function foo7(test) { } // valid
 function foo8(test) { }
 function foo9(test) { }
 function foo10(test) { }

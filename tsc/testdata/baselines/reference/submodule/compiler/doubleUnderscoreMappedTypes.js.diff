@@ -1,19 +1,18 @@
 --- old.doubleUnderscoreMappedTypes.js
 +++ new.doubleUnderscoreMappedTypes.js
-@@= skipped -26, +26 lines =@@
- 
+@@= skipped -27, +27 lines =@@
  
  //// [doubleUnderscoreMappedTypes.js]
--// As expected, I can make an object satisfying this interface
+ // As expected, I can make an object satisfying this interface
 -var ok = {
 +const ok = {
      property1: "",
      __property2: ""
  };
 -var k = "__property2"; // ok
--// And should work with partial
++const k = "__property2"; // ok
+ // And should work with partial
 -var partial = {
-+const k = "__property2";
 +const partial = {
      property1: "",
      __property2: ""

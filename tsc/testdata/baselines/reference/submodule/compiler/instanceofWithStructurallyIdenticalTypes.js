@@ -73,6 +73,7 @@ function goo(x: A) {
 
 
 //// [instanceofWithStructurallyIdenticalTypes.js]
+// Repro from #7271
 class C1 {
     item;
 }
@@ -109,6 +110,7 @@ function foo2(x) {
     }
     return "error";
 }
+// More tests
 class A {
     a;
 }
@@ -122,27 +124,27 @@ class B extends A {
 }
 function goo(x) {
     if (x instanceof A) {
-        x;
+        x; // A
     }
     else {
-        x;
+        x; // never
     }
     if (x instanceof A1) {
-        x;
+        x; // A1
     }
     else {
-        x;
+        x; // A
     }
     if (x instanceof A2) {
-        x;
+        x; // A2
     }
     else {
-        x;
+        x; // A
     }
     if (x instanceof B) {
-        x;
+        x; // B
     }
     else {
-        x;
+        x; // A
     }
 }

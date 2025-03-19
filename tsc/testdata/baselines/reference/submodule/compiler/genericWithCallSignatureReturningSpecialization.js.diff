@@ -1,8 +1,0 @@
---- old.genericWithCallSignatureReturningSpecialization.js
-+++ new.genericWithCallSignatureReturningSpecialization.js
-@@= skipped -10, +10 lines =@@
- 
- //// [genericWithCallSignatureReturningSpecialization.js]
- var x;
--x(true); // was error
-+x(true);

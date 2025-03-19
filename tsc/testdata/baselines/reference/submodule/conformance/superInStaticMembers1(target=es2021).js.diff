@@ -22,99 +22,95 @@
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
--        var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
--        Reflect.get(_b, "w", _a).call(_a);
--    })(),
--    (() => {
--        var [Reflect] = [null]; // collision (es2015-es2021 only)
--        Reflect.get(_b, "w", _a).call(_a);
--    })(),
--    (() => {
 +class C extends B {
 +    static _ = [
 +        (() => {
-+            var Reflect;
++            var Reflect; // collision (es2015-es2021 only)
 +            super.w();
 +        })(),
 +        (() => {
-+            var { Reflect } = { Reflect: null };
++            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 +            super.w();
 +        })(),
 +        (() => {
-+            var [Reflect] = [null];
++            var [Reflect] = [null]; // collision (es2015-es2021 only)
 +            super.w();
 +        })(),
 +        (() => {
 +            class Reflect {
-+            }
++            } // collision (es2015-es2021 only)
 +            super.w();
 +        })(),
 +        (() => {
-+            function Reflect() { }
-+            super.w();
-+        })(),
-+        (() => {
-+            let Reflect;
-+            (function (Reflect) {
-+            })(Reflect || (Reflect = {}));
++            function Reflect() { } // collision (es2015-es2021 only)
 +            super.w();
 +        })(),
 +        (() => {
 +            let Reflect;
 +            (function (Reflect) {
-+            })(Reflect || (Reflect = {}));
++            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
++            super.w();
++        })(),
++        (() => {
++            let Reflect;
++            (function (Reflect) {
++            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +            super.w();
 +        })(),
 +        (() => {
 +            super.w();
 +        })(),
 +        (() => {
-+            ;
++            ; // no collision
 +            super.w();
 +        })(),
 +        (() => {
 +            (class Reflect {
-+            });
++            }); // no collision
 +            super.w();
 +        })(),
 +        (() => {
-+            (function Reflect() { });
++            (function Reflect() { }); // no collision
 +            super.w();
 +        })(),
 +    ];
 +    static {
-+        var { Reflect } = { Reflect: null };
+         var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+-        Reflect.get(_b, "w", _a).call(_a);
+-    })(),
+-    (() => {
 +        super.w();
 +    }
 +    static {
-+        var [Reflect] = [null];
+         var [Reflect] = [null]; // collision (es2015-es2021 only)
+-        Reflect.get(_b, "w", _a).call(_a);
+-    })(),
+-    (() => {
 +        super.w();
 +    }
 +    static {
-+        var Reflect;
++        var Reflect; // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {
          class Reflect {
--        } // collision (es2015-es2021 only)
+         } // collision (es2015-es2021 only)
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
--        function Reflect() { } // collision (es2015-es2021 only)
--        Reflect.get(_b, "w", _a).call(_a);
--    })(),
--    (() => {
-+        }
 +        super.w();
 +    }
 +    static {
-+        function Reflect() { }
+         function Reflect() { } // collision (es2015-es2021 only)
+-        Reflect.get(_b, "w", _a).call(_a);
+-    })(),
+-    (() => {
 +        super.w();
 +    }
 +    static {
          let Reflect;
          (function (Reflect) {
--        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
@@ -128,13 +124,12 @@
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
-+        })(Reflect || (Reflect = {}));
 +        super.w();
 +    }
 +    static {
 +        let Reflect;
 +        (function (Reflect) {
-+        })(Reflect || (Reflect = {}));
++        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {
@@ -145,11 +140,14 @@
 +    }
 +    static {
          (class Reflect {
--        }); // no collision
+         }); // no collision
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
--        (function Reflect() { }); // no collision
++        super.w();
++    }
++    static {
+         (function Reflect() { }); // no collision
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -];
@@ -198,20 +196,14 @@
 -    (function Reflect() { }); // no collision
 -    Reflect.get(_b, "w", _a).call(_a);
 -})();
-+        });
-+        super.w();
-+    }
-+    static {
-+        (function Reflect() { });
 +        super.w();
 +    }
 +}
  export {};
  //// [varInContainingScopeStaticField1.js]
 -var _a, _b;
--var Reflect = null; // collision (es2015-es2021 only)
+ var Reflect = null; // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+var Reflect = null;
 +class C extends B {
 +    static _ = super.w();
  }
@@ -220,9 +212,8 @@
  export {};
  //// [varInContainingScopeStaticField2.js]
 -var _a, _b;
--var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+ var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+var { Reflect } = { Reflect: null };
 +class C extends B {
 +    static _ = super.w();
  }
@@ -231,9 +222,8 @@
  export {};
  //// [varInContainingScopeStaticField3.js]
 -var _a, _b;
--var [Reflect] = [null]; // collision (es2015-es2021 only)
+ var [Reflect] = [null]; // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+var [Reflect] = [null];
 +class C extends B {
 +    static _ = super.w();
  }
@@ -242,9 +232,8 @@
  export {};
  //// [varInContainingScopeStaticBlock1.js]
 -var _a, _b;
--var Reflect = null; // collision (es2015-es2021 only)
+ var Reflect = null; // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+var Reflect = null;
 +class C extends B {
 +    static { super.w(); }
  }
@@ -255,9 +244,8 @@
  export {};
  //// [varInContainingScopeStaticBlock2.js]
 -var _a, _b;
--var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+ var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+var { Reflect } = { Reflect: null };
 +class C extends B {
 +    static { super.w(); }
  }
@@ -268,9 +256,8 @@
  export {};
  //// [varInContainingScopeStaticBlock3.js]
 -var _a, _b;
--var [Reflect] = [null]; // collision (es2015-es2021 only)
+ var [Reflect] = [null]; // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+var [Reflect] = [null];
 +class C extends B {
 +    static { super.w(); }
  }
@@ -282,34 +269,31 @@
  //// [classDeclInContainingScopeStaticField.js]
 -var _a, _b;
  class Reflect {
--} // collision (es2015-es2021 only)
+ } // collision (es2015-es2021 only)
 -class C extends (_b = B) {
++class C extends B {
++    static _ = super.w();
  }
 -_a = C;
 -C._ = Reflect.get(_b, "w", _a).call(_a);
-+class C extends B {
-+    static _ = super.w();
-+}
  export {};
  //// [classDeclInContainingScopeStaticBlock.js]
 -var _a, _b;
  class Reflect {
--} // collision (es2015-es2021 only)
+ } // collision (es2015-es2021 only)
 -class C extends (_b = B) {
++class C extends B {
++    static { super.w(); }
  }
 -_a = C;
 -(() => {
 -    Reflect.get(_b, "w", _a).call(_a);
 -})();
-+class C extends B {
-+    static { super.w(); }
-+}
  export {};
  //// [funcDeclInContainingScopeStaticField.js]
 -var _a, _b;
--function Reflect() { } // collision (es2015-es2021 only)
+ function Reflect() { } // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+function Reflect() { }
 +class C extends B {
 +    static _ = super.w();
  }
@@ -318,9 +302,8 @@
  export {};
  //// [funcDeclInContainingScopeStaticBlock.js]
 -var _a, _b;
--function Reflect() { } // collision (es2015-es2021 only)
+ function Reflect() { } // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+function Reflect() { }
 +class C extends B {
 +    static { super.w(); }
  }
@@ -353,9 +336,8 @@
 -var _a, _b;
  var Reflect;
  (function (Reflect) {
--})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+ })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+})(Reflect || (Reflect = {}));
 +class C extends B {
 +    static _ = super.w();
  }
@@ -366,9 +348,8 @@
 -var _a, _b;
  var Reflect;
  (function (Reflect) {
--})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+ })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -class C extends (_b = B) {
-+})(Reflect || (Reflect = {}));
 +class C extends B {
 +    static { super.w(); }
  }
@@ -382,7 +363,7 @@
 -class C extends (_b = B) {
 +var Reflect;
 +(function (Reflect) {
-+})(Reflect || (Reflect = {}));
++})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +class C extends B {
 +    static _ = super.w();
  }
@@ -394,7 +375,7 @@
 -class C extends (_b = B) {
 +var Reflect;
 +(function (Reflect) {
-+})(Reflect || (Reflect = {}));
++})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +class C extends B {
 +    static { super.w(); }
  }
@@ -585,9 +566,8 @@
  export {};
  //// [interfaceInContainingScopeStaticField.js]
 -var _a, _b;
--; // no collision
+ ; // no collision
 -class C extends (_b = B) {
-+;
 +class C extends B {
 +    static _ = super.w();
  }
@@ -596,9 +576,8 @@
  export {};
  //// [interfaceInContainingScopeStaticBlock.js]
 -var _a, _b;
--; // no collision
+ ; // no collision
 -class C extends (_b = B) {
-+;
 +class C extends B {
 +    static { super.w(); }
  }
@@ -609,9 +588,8 @@
  export {};
  //// [uninstantiatedNamespaceInContainingScopeStaticField.js]
 -var _a, _b;
--; // no collision
+ ; // no collision
 -class C extends (_b = B) {
-+;
 +class C extends B {
 +    static _ = super.w();
  }
@@ -620,9 +598,8 @@
  export {};
  //// [uninstantiatedNamespaceInContainingScopeStaticBlock.js]
 -var _a, _b;
--; // no collision
+ ; // no collision
 -class C extends (_b = B) {
-+;
 +class C extends B {
 +    static { super.w(); }
  }
@@ -634,9 +611,8 @@
  //// [classExprInContainingScopeStaticField.js]
 -var _a, _b;
  (class Reflect {
--}); // no collision
+ }); // no collision
 -class C extends (_b = B) {
-+});
 +class C extends B {
 +    static _ = super.w();
  }
@@ -646,9 +622,8 @@
  //// [classExprInContainingScopeStaticBlock.js]
 -var _a, _b;
  (class Reflect {
--}); // no collision
+ }); // no collision
 -class C extends (_b = B) {
-+});
 +class C extends B {
 +    static { super.w(); }
  }
@@ -699,9 +674,8 @@
  export {};
  //// [funcExprInContainingScopeStaticField.js]
 -var _a, _b;
--(function Reflect() { }); // no collision
+ (function Reflect() { }); // no collision
 -class C extends (_b = B) {
-+(function Reflect() { });
 +class C extends B {
 +    static _ = super.w();
  }
@@ -710,9 +684,8 @@
  export {};
  //// [funcExprInContainingScopeStaticBlock.js]
 -var _a, _b;
--(function Reflect() { }); // no collision
+ (function Reflect() { }); // no collision
 -class C extends (_b = B) {
-+(function Reflect() { });
 +class C extends B {
 +    static { super.w(); }
  }

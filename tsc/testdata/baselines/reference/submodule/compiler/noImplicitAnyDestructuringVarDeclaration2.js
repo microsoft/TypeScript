@@ -15,13 +15,13 @@ let {x4} = { x4: <any>undefined }, {y4} = { y4: <any>null }; // no error
 
 
 //// [noImplicitAnyDestructuringVarDeclaration2.js]
-let [a, b, c] = [1, 2, 3];
-let [a1 = 10, b1 = 10, c1 = 10] = [1, 2, 3];
-let [a2 = undefined, b2 = undefined, c2 = undefined] = [1, 2, 3];
-let [a3 = undefined, b3 = null, c3 = undefined] = [1, 2, 3];
-let [a4] = [undefined], [b4] = [null], c4 = undefined, d4 = null;
-let { x, y, z } = { x: 1, y: 2, z: 3 };
-let { x1 = 10, y1 = 10, z1 = 10 } = { x1: 1, y1: 2, z1: 3 };
-let { x2 = undefined, y2 = undefined, z2 = undefined } = { x2: 1, y2: 2, z2: 3 };
-let { x3 = undefined, y3 = null, z3 = undefined } = { x3: 1, y3: 2, z3: 3 };
-let { x4 } = { x4: undefined }, { y4 } = { y4: null };
+let [a, b, c] = [1, 2, 3]; // no error
+let [a1 = 10, b1 = 10, c1 = 10] = [1, 2, 3]; // no error
+let [a2 = undefined, b2 = undefined, c2 = undefined] = [1, 2, 3]; // no error
+let [a3 = undefined, b3 = null, c3 = undefined] = [1, 2, 3]; // no error
+let [a4] = [undefined], [b4] = [null], c4 = undefined, d4 = null; // no error
+let { x, y, z } = { x: 1, y: 2, z: 3 }; // no error
+let { x1 = 10, y1 = 10, z1 = 10 } = { x1: 1, y1: 2, z1: 3 }; // no error
+let { x2 = undefined, y2 = undefined, z2 = undefined } = { x2: 1, y2: 2, z2: 3 }; // no error
+let { x3 = undefined, y3 = null, z3 = undefined } = { x3: 1, y3: 2, z3: 3 }; // no error
+let { x4 } = { x4: undefined }, { y4 } = { y4: null }; // no error

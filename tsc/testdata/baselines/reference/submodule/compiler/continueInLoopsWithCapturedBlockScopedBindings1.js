@@ -20,6 +20,7 @@ function foo() {
         if (i === 0) {
             continue;
         }
+        // Trigger non-simple-loop emit
         (() => {
             return i;
         })();

@@ -10,4 +10,5 @@ declare module JSX {
 
 
 //// [file1.jsx]
+// OK, but implicit any
 <div n='x'/>;

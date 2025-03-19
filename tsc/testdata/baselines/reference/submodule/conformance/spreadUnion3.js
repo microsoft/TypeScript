@@ -23,12 +23,12 @@ var y = { ...nullAndUndefinedUnion };
 
 //// [spreadUnion3.js]
 function f(x) {
-    return { y: 123, ...x };
+    return { y: 123, ...x }; // y: string | number
 }
 f(undefined);
 function g(t) {
     let b = { ...t };
-    let c = b.a;
+    let c = b.a; // might not have 'a'
 }
 g();
 g(undefined);

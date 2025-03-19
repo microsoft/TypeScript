@@ -61,10 +61,10 @@ function foo4<U extends string>(x: Uppercase<U>) {
 function foo1(s, x, y) {
     s = x;
     s = y;
-    x = s;
+    x = s; // Error
     x = y;
-    y = s;
-    y = x;
+    y = s; // Error
+    y = x; // Error
 }
 function foo2(x) {
     let s = x;

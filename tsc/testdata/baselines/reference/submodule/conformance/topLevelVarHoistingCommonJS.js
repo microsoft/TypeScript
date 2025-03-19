@@ -143,6 +143,7 @@ label: {
     exports.x = x;
     break label;
 }
+// @ts-ignore
 with (_) {
     var y = _;
     exports.y = y;

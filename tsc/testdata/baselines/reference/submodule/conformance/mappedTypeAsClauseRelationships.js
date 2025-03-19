@@ -32,12 +32,12 @@ function fun2<T>(val: T) {
 
 //// [mappedTypeAsClauseRelationships.js]
 function fun(val) {
-    let x = val;
-    let y = val;
+    let x = val; // Ok
+    let y = val; // Error
 }
 function fun2(val) {
-    let x = val;
-    let y = val;
-    let z = val;
-    let w = val;
+    let x = val; // Ok
+    let y = val; // Ok
+    let z = val; // Error
+    let w = val; // Error
 }

@@ -17,7 +17,7 @@ class C {
     bar() {
         () => {
             var obj = {
-                [this.bar()]() { }
+                [this.bar()]() { } // needs capture
             };
         };
         return 0;

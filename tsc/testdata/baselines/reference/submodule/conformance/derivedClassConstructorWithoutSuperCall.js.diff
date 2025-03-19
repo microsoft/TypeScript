@@ -1,10 +1,9 @@
 --- old.derivedClassConstructorWithoutSuperCall.js
 +++ new.derivedClassConstructorWithoutSuperCall.js
-@@= skipped -34, +34 lines =@@
- }
+@@= skipped -35, +35 lines =@@
  
  //// [derivedClassConstructorWithoutSuperCall.js]
--// derived class constructors must contain a super call
+ // derived class constructors must contain a super call
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -41,7 +40,7 @@
 +}
 +class Derived2 extends Base2 {
 +    constructor() {
-+        var r2 = () => super();
++        var r2 = () => super(); // error for misplaced super call (nested function)
      }
 -    return Derived;
 -}(Base));
@@ -50,7 +49,7 @@
 +}
 +class Derived3 extends Base2 {
 +    constructor() {
-+        var r = function () { super(); };
++        var r = function () { super(); }; // error
      }
 -    return Base2;
 -}());
@@ -63,7 +62,7 @@
 +}
 +class Derived4 extends Base2 {
 +    constructor() {
-+        var r = super();
++        var r = super(); // ok
      }
 -    return Derived2;
 -}(Base2));

@@ -1,9 +1,0 @@
---- old.collisionRestParameterInType.js
-+++ new.collisionRestParameterInType.js
-@@= skipped -9, +9 lines =@@
- }
- 
- //// [collisionRestParameterInType.js]
--var v1; // no error - no code gen
-+var v1;
- var v2;

@@ -68,8 +68,13 @@
 -    };
 -    return C = _classThis;
 -})();
--C[Symbol.metadata].a; // 'x'
--C[Symbol.metadata].b; // 'y'
++@meta('a', 'x')
++class C {
++    @meta('b', 'y')
++    m() { }
++}
+ C[Symbol.metadata].a; // 'x'
+ C[Symbol.metadata].b; // 'y'
 -let D = (() => {
 -    let _classSuper = C;
 -    let _instanceExtraInitializers = [];
@@ -88,18 +93,9 @@
 -        }
 -    };
 -})();
--D[Symbol.metadata].a; // 'x'
--D[Symbol.metadata].b; // 'z'
-+@meta('a', 'x')
-+class C {
-+    @meta('b', 'y')
-+    m() { }
-+}
-+C[Symbol.metadata].a;
-+C[Symbol.metadata].b;
 +class D extends C {
 +    @meta('b', 'z')
 +    m() { }
 +}
-+D[Symbol.metadata].a;
-+D[Symbol.metadata].b;
+ D[Symbol.metadata].a; // 'x'
+ D[Symbol.metadata].b; // 'z'

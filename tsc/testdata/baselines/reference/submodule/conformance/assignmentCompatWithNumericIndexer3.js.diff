@@ -29,8 +29,8 @@
 +}
  var a;
  var b;
--a = b; // error
--b = a; // ok
+ a = b; // error
+ b = a; // ok
 -var B2 = /** @class */ (function (_super) {
 -    __extends(B2, _super);
 -    function B2() {
@@ -38,15 +38,11 @@
 -    }
 -    return B2;
 -}(A));
-+a = b;
-+b = a;
 +class B2 extends A {
 +}
  var b2;
--a = b2; // ok
--b2 = a; // error
-+a = b2;
-+b2 = a;
+ a = b2; // ok
+ b2 = a; // error
  var Generics;
  (function (Generics) {
 -    var A = /** @class */ (function () {
@@ -59,14 +55,3 @@
      function foo() {
          var a;
          var b;
--        a = b; // error
--        b = a; // ok
-+        a = b;
-+        b = a;
-         var b2;
--        a = b2; // ok
--        b2 = a; // ok
-+        a = b2;
-+        b2 = a;
-     }
- })(Generics || (Generics = {}));

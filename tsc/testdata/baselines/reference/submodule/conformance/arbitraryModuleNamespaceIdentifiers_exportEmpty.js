@@ -10,6 +10,8 @@ const bar: "type error expected here" = foo;
 
 
 //// [arbitraryModuleNamespaceIdentifiers_exportEmpty.js]
+// This should result in a type error. In particular, the empty string is a now
+// a valid module export name, and should be treated as such here.
 const empty = "empty";
 export { empty as "" };
 import { "" as foo } from "./arbitraryModuleNamespaceIdentifiers_exportEmpty";

@@ -27,7 +27,7 @@ module O {
 //// [classExtendsItselfIndirectly2.js]
 class C extends N.E {
     foo;
-}
+} // error
 var M;
 (function (M) {
     class D extends C {
@@ -46,7 +46,7 @@ var O;
 (function (O) {
     class C2 extends Q.E2 {
         foo;
-    }
+    } // error
     let P;
     (function (P) {
         class D2 extends C2 {

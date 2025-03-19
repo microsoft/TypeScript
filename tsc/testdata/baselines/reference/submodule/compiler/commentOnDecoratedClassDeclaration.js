@@ -19,9 +19,15 @@ class AnotherRomote {
 }
 
 //// [commentOnDecoratedClassDeclaration.js]
+/**
+ * Leading trivia
+ */
 @decorator("hello")
 class Remote {
 }
+/**
+ * Floating Comment
+ */
 @decorator("hi")
 class AnotherRomote {
     constructor() { }

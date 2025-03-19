@@ -21,13 +21,12 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
+-    }
+-    Base.staticMethod = function () {
 +class Base {
 +    static x;
 +    static staticMethod() {
-+        this.x;
-     }
--    Base.staticMethod = function () {
--        this.x; // OK, accessed within their declaring class
+         this.x; // OK, accessed within their declaring class
 -    };
 -    return Base;
 -}());
@@ -35,14 +34,12 @@
 -    __extends(Derived1, _super);
 -    function Derived1() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+     }
+-    Derived1.staticMethod1 = function () {
 +}
 +class Derived1 extends Base {
 +    static staticMethod1() {
-+        this.x;
-+        super.x;
-     }
--    Derived1.staticMethod1 = function () {
--        this.x; // OK, accessed within a class derived from their declaring class
+         this.x; // OK, accessed within a class derived from their declaring class
 -        _super.x; // Error, x is not public
 -    };
 -    return Derived1;
@@ -51,17 +48,18 @@
 -    __extends(Derived2, _super);
 -    function Derived2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
++        super.x; // Error, x is not public
+     }
+-    Derived2.staticMethod3 = function () {
 +}
 +class Derived2 extends Derived1 {
 +    static x;
 +    static staticMethod3() {
-+        this.x;
-+        super.x;
-     }
--    Derived2.staticMethod3 = function () {
--        this.x; // OK, accessed within a class derived from their declaring class
+         this.x; // OK, accessed within a class derived from their declaring class
 -        _super.x; // Error, x is not public
 -    };
 -    return Derived2;
 -}(Derived1));
++        super.x; // Error, x is not public
++    }
 +}

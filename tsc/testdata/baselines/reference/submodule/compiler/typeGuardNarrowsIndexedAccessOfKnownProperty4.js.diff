@@ -11,14 +11,11 @@
 +    x;
 +    constructor() {
          this.x = 5;
--        this.x; // number
--        this['x']; // number
+         this.x; // number
+         this['x']; // number
 -        var key = 'x';
--        this[key]; // number
-+        this.x;
-+        this['x'];
 +        const key = 'x';
-+        this[key];
+         this[key]; // number
      }
 -    return Foo;
 -}());

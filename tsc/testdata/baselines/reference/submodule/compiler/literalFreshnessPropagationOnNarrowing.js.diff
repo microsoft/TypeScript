@@ -16,46 +16,46 @@
  function f1() {
 -    var b = true;
 -    var obj = { b: b };
--    // Desired: OK
--    // 3.0: OK
--    // 3.1 as-is: OK
--    // 3.1 minus widening propagation: error
 +    let b = true;
 +    let obj = { b };
+     // Desired: OK
+     // 3.0: OK
+     // 3.1 as-is: OK
+@@= skipped -19, +10 lines =@@
      obj.b = false;
  }
  function f2() {
 -    var el = null;
 -    var arr = null;
 -    var elOrA = null;
--    // Desired/actual: All OK
++    let el = null;
++    let arr = null;
++    let elOrA = null;
+     // Desired/actual: All OK
 -    var a1 = el;
 -    var a2 = arr;
 -    var a3 = [el];
 -    var a4 = Array.isArray(elOrA) ? elOrA : [elOrA];
--    // Desired: OK
--    // 3.0: Error
--    // 3.1: OK
--    var a5 = __spreadArray([], Array.isArray(elOrA) ? elOrA : [elOrA], true);
-+    let el = null;
-+    let arr = null;
-+    let elOrA = null;
 +    let a1 = el;
 +    let a2 = arr;
 +    let a3 = [el];
 +    let a4 = Array.isArray(elOrA) ? elOrA : [elOrA];
+     // Desired: OK
+     // 3.0: Error
+     // 3.1: OK
+-    var a5 = __spreadArray([], Array.isArray(elOrA) ? elOrA : [elOrA], true);
 +    let a5 = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
  }
  function f3() {
 -    var x = 'x';
 -    var x2 = x;
--    // Desired: OK (up for debate?)
--    // 3.0: Error
--    // 3.1 as-is: OK
 +    const x = 'x';
 +    let x2 = x;
+     // Desired: OK (up for debate?)
+     // 3.0: Error
+     // 3.1 as-is: OK
      x2 = 'y';
--    // Desired/actual: All OK
+     // Desired/actual: All OK
 -    var x3 = x;
 +    let x3 = x;
      x3 = 'y';
@@ -63,20 +63,20 @@
  function f4() {
 -    var x = true;
 -    var x1 = x;
--    // Desired: OK
--    // 3.0: OK
--    // 3.1: OK
--    // 3.1 minus widening propagation: error
 +    const x = true;
 +    let x1 = x;
+     // Desired: OK
+     // 3.0: OK
+     // 3.1: OK
+@@= skipped -34, +34 lines =@@
      x1 = false;
  }
  function f5() {
 -    var arr = ['x'];
 +    let arr = ['x'];
      arr = ['y'];
--    // Desired: OK
--    // Error in all extant branches
+     // Desired: OK
+     // Error in all extant branches
 -    arr = ['y'];
 +    arr = [...['y']];
  }

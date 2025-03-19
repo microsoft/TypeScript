@@ -120,57 +120,87 @@ class G {
 
 
 //// [file1.js]
+/*1*/
 @dec
 @dec
+/*3*/
 class C {
+    /*4*/
     @dec
     @dec
+    /*6*/
     method() { }
+    /*7*/
     @dec
     @dec
+    /*9*/
     get x() { return 1; }
+    /*10*/
     @dec
     @dec
+    /*12*/
     set x(value) { }
+    /*13*/
     @dec
     @dec
+    /*15*/
     y = 1;
+    /*16*/
     @dec
     @dec
+    /*18*/
     accessor z = 1;
+    /*19*/
     @dec
     @dec
+    /*21*/
     static #method() { }
+    /*22*/
     @dec
     @dec
+    /*24*/
     static get #x() { return 1; }
+    /*25*/
     @dec
     @dec
+    /*27*/
     static set #x(value) { }
+    /*28*/
     @dec
     @dec
+    /*30*/
     static #y = 1;
+    /*31*/
     @dec
     @dec
+    /*33*/
     static accessor #z = 1;
 }
 //// [file2.js]
+/*34*/
 @dec
 @dec
+/*36*/
 export class D {
 }
+/*37*/
 @dec
 @dec
+/*39*/
 export default class E {
 }
 //// [file3.js]
+/*40*/
 export 
 @dec
 @dec
+/*43*/
 class F {
 }
+/*44*/
 export default 
 @dec
 @dec
+/*47*/
 class G {
 }

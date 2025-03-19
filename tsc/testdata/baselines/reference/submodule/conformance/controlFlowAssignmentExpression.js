@@ -25,10 +25,10 @@ let x;
 let obj;
 x = "";
 x = x.length;
-x;
+x; // number
 x = true;
 (x = "", obj).foo = (x = x.length);
-x;
+x; // number
 let o;
 if ((o = fn()).done) {
     const y = o.value;

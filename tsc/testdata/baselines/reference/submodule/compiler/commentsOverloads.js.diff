@@ -1,14 +1,6 @@
 --- old.commentsOverloads.js
 +++ new.commentsOverloads.js
-@@= skipped -181, +181 lines =@@
- }
- f1("hello");
- f1(10);
--/** this is f2 var comment*/
- function f2(aOrb) {
-     return 10;
- }
-@@= skipped -19, +18 lines =@@
+@@= skipped -200, +200 lines =@@
  var i1_i;
  var i2_i;
  var i3_i;
@@ -33,13 +25,13 @@
          return 10;
 -    };
 -    c.prototype.prop4 = function (aorb) {
+-        return 10;
+-    };
 +    }
+     /** Prop5 implementaion*/
+-    c.prototype.prop5 = function (aorb) {
 +    prop5(aorb) {
          return 10;
--    };
--    /** Prop5 implementaion*/
--    c.prototype.prop5 = function (aorb) {
--        return 10;
 -    };
 -    return c;
 -}());
@@ -65,32 +57,32 @@
 -    return c3;
 -}());
 -var c4 = /** @class */ (function () {
--    /** c4 3 */
--    function c4(aorb) {
 +}
 +class c3 {
++    constructor(aorb) {
++    }
++}
++class c4 {
+     /** c4 3 */
+-    function c4(aorb) {
 +    constructor(aorb) {
      }
 -    return c4;
 -}());
 -var c5 = /** @class */ (function () {
--    /** c5 implementation*/
--    function c5(aorb) {
 +}
-+class c4 {
++class c5 {
+     /** c5 implementation*/
+-    function c5(aorb) {
 +    constructor(aorb) {
      }
 -    return c5;
 -}());
 +}
-+class c5 {
-+    constructor(aorb) {
-+    }
-+}
  var c_i = new c();
  var c1_i_1 = new c1(10);
  var c1_i_2 = new c1("hello");
-@@= skipped -59, +48 lines =@@
+@@= skipped -59, +51 lines =@@
  var c4_i_2 = new c4("hello");
  var c5_i_1 = new c5(10);
  var c5_i_2 = new c5("hello");

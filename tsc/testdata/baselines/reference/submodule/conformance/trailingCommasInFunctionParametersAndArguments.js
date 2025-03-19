@@ -40,8 +40,10 @@ function f2(...args) { }
 f2(...[]);
 f3(1);
 f3(1, 2);
+// Works for constructors too
 class X {
     constructor(a) { }
+    // See trailingCommasInGetter.ts
     set x(value) { }
 }
 new X(1);

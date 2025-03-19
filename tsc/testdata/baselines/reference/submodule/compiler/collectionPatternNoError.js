@@ -60,6 +60,8 @@ class DataProvider {
         messageList.methodOnMessageList();
     }
 }
+// The same bug as the above but using indexed accesses
+// (won't surface directly unless unsound indexed access assignments are forbidden)
 function f(message, messageList) {
     fetchMsg(messageList).methodOnMessageList();
 }

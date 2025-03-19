@@ -1,11 +1,9 @@
 --- old.genericClassWithObjectTypeArgsAndConstraints.js
 +++ new.genericClassWithObjectTypeArgsAndConstraints.js
-@@= skipped -62, +62 lines =@@
- }
- 
+@@= skipped -64, +64 lines =@@
  //// [genericClassWithObjectTypeArgsAndConstraints.js]
--// Generic call with constraints infering type parameter from object member properties
--// No errors expected
+ // Generic call with constraints infering type parameter from object member properties
+ // No errors expected
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

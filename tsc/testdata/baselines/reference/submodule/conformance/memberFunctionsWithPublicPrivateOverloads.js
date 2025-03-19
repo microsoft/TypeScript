@@ -82,6 +82,6 @@ class D {
     static baz(x, y) { }
 }
 var c;
-var r = c.foo(1);
+var r = c.foo(1); // error
 var d;
-var r2 = d.foo(2);
+var r2 = d.foo(2); // error

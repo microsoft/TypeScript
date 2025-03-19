@@ -1,8 +1,0 @@
---- old.noDefaultLib.js
-+++ new.noDefaultLib.js
-@@= skipped -12, +12 lines =@@
- interface RegExp {}
- 
- //// [noDefaultLib.js]
--/// <reference no-default-lib="true"/>
- var x;

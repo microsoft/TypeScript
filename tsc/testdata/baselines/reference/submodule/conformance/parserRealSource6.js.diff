@@ -6,9 +6,9 @@
  
 +//// [typescript.js]
  //// [parserRealSource6.js]
--// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
--// See LICENSE.txt in the project root for complete license information.
--///<reference path='typescript.ts' />
+ // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+ // See LICENSE.txt in the project root for complete license information.
+ ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
 -    var TypeCollectionContext = /** @class */ (function () {
@@ -117,9 +117,8 @@
              if (this.scriptFragment == null) {
                  var ast = this.getScriptFragmentStartAST();
                  var minChar = ast.minChar;
-                 var limChar = (this.isMemberCompletion ? this.pos : this.pos + 1);
--                this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null /*errorCapture*/).Script;
-+                this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null).Script;
+@@= skipped -70, +81 lines =@@
+                 this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null /*errorCapture*/).Script;
              }
              return this.scriptFragment;
 -        };
@@ -130,40 +129,3 @@
      TypeScript.EnclosingScopeContext = EnclosingScopeContext;
      function preFindMemberScope(ast, parent, walker) {
          var memScope = walker.state;
-@@= skipped -104, +111 lines =@@
-         var context = walker.state;
-         var minChar = ast.minChar;
-         var limChar = ast.limChar;
--        // Account for the fact completion list may be called at the end of a file which
--        // is has not been fully re-parsed yet.
-         if (ast.nodeType == NodeType.Script && context.pos > limChar)
-             limChar = context.pos;
-         if ((minChar <= context.pos) &&
-@@= skipped -23, +21 lines =@@
-                     break;
-                 case NodeType.ObjectLit:
-                     var objectLit = ast;
--                    // Only consider target-typed object literals
-                     if (objectLit.targetType) {
-                         context.scopeGetter = function () {
-                             return objectLit.targetType.containedScope;
-@@= skipped -32, +31 lines =@@
-                         }
-                         else {
-                             context.scopeGetter = function () {
--                                // The scope of a class constructor is hidden somewhere we don't expect :-S
-                                 if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
-                                     if (ast.type && ast.type.enclosingType) {
-                                         return ast.type.enclosingType.constructorScope;
-@@= skipped -27, +26 lines =@@
-         return ast;
-     }
-     TypeScript.preFindEnclosingScope = preFindEnclosingScope;
--    //
--    // Find the enclosing scope context from a position inside a script AST.
--    // The "scopeStartAST" of the returned scope is always valid.
--    // Return "null" if the enclosing scope can't be found.
--    //
-     function findEnclosingScopeAt(logger, script, text, pos, isMemberCompletion) {
-         var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
-         TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);

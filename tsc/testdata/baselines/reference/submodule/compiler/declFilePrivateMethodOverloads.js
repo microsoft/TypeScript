@@ -27,7 +27,9 @@ declare class c2 {
 //// [declFilePrivateMethodOverloads.js]
 class c1 {
     _forEachBindingContext(context, fn) {
+        // Function here
     }
     overloadWithArityDifference(context) {
+        // Function here
     }
 }

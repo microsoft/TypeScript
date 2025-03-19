@@ -1,10 +1,8 @@
 --- old.missingAndExcessProperties.js
 +++ new.missingAndExcessProperties.js
-@@= skipped -36, +36 lines =@@
- 
- 
+@@= skipped -38, +38 lines =@@
  //// [missingAndExcessProperties.js]
--// Missing properties
+ // Missing properties
  function f1() {
 -    var _a = {}, x = _a.x, y = _a.y;
 -    var _b = {}, _c = _b.x, x = _c === void 0 ? 1 : _c, y = _b.y;
@@ -15,7 +13,7 @@
 +    var { x, y = 1 } = {};
 +    var { x = 1, y = 1 } = {};
  }
--// Missing properties
+ // Missing properties
  function f2() {
 -    var _a, _b, _c, _d, _e, _f, _g, _h;
      var x, y;
@@ -28,7 +26,7 @@
 +    ({ x, y: y = 1 } = {});
 +    ({ x: x = 1, y: y = 1 } = {});
  }
--// Excess properties
+ // Excess properties
  function f3() {
 -    var _a = { x: 0, y: 0 };
 -    var x = { x: 0, y: 0 }.x;
@@ -39,7 +37,7 @@
 +    var { y } = { x: 0, y: 0 };
 +    var { x, y } = { x: 0, y: 0 };
  }
--// Excess properties
+ // Excess properties
  function f4() {
 -    var _a;
      var x, y;

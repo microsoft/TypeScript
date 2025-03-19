@@ -18,6 +18,7 @@ class C3<T extends Date> {
 }
 
 //// [staticMembersUsingClassTypeParameter.js]
+// BUG 745747
 class C {
     static x;
     static f(x) { }

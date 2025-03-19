@@ -9,5 +9,5 @@ class Foo {
 //// [declarationEmitTypeofThisInClass.js]
 class Foo {
     foo;
-    bar;
+    bar; //Public property 'bar' of exported class has or is using private name 'this'.(4031)
 }

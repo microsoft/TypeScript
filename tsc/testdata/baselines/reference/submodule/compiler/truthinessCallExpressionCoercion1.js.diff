@@ -1,32 +1,13 @@
 --- old.truthinessCallExpressionCoercion1.js
 +++ new.truthinessCallExpressionCoercion1.js
-@@= skipped -90, +90 lines =@@
- 
- //// [truthinessCallExpressionCoercion1.js]
- function onlyErrorsWhenTestingNonNullableFunctionType(required, optional) {
--    // error
-     required ? console.log('required') : undefined;
--    // ok
-     optional ? console.log('optional') : undefined;
--    // ok
-     !!required ? console.log('not required') : undefined;
--    // ok
-     required() ? console.log('required call') : undefined;
- }
- function onlyErrorsWhenUnusedInBody() {
-     function test() { return Math.random() > 0.5; }
--    // error
-     test ? console.log('test') : undefined;
--    // ok
-     test ? console.log(test) : undefined;
--    // ok
+@@= skipped -109, +109 lines =@@
      test ? test() : undefined;
--    // ok
+     // ok
      test
 -        ? [function () { return null; }].forEach(function () { test(); })
 +        ? [() => null].forEach(() => { test(); })
          : undefined;
--    // error
+     // error
      test
 -        ? [function () { return null; }].forEach(function (test) { test(); })
 +        ? [() => null].forEach(test => { test(); })
@@ -40,9 +21,8 @@
 +            bar() { return true; }
          }
      };
--    // error
-     x.foo.bar ? console.log('x.foo.bar') : undefined;
--    // ok
+     // error
+@@= skipped -19, +19 lines =@@
      x.foo.bar ? x.foo.bar : undefined;
      var chrome = {
          platformKeys: {
@@ -56,9 +36,7 @@
                  };
              }
          }
-     };
--    // ok
-     if (chrome.platformKeys.subtleCrypto().exportKey) {
+@@= skipped -13, +13 lines =@@
          chrome.platformKeys.subtleCrypto().exportKey;
      }
  }
@@ -72,13 +50,12 @@
          return true;
 -    };
 -    Foo.prototype.test = function () {
--        // error
 +    }
 +    test() {
+         // error
          this.isUser ? console.log('this.isUser') : undefined;
--        // ok
-         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
--        // ok
+         // ok
+@@= skipped -15, +14 lines =@@
          if (this.isUser) {
              this.isUser();
          }

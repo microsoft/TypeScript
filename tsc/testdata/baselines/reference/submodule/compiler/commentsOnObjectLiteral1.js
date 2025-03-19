@@ -10,4 +10,8 @@ var Person = makeClass(
 );
 
 //// [commentsOnObjectLiteral1.js]
-var Person = makeClass({});
+var Person = makeClass(
+/**
+  @scope Person
+*/
+{});

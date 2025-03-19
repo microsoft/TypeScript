@@ -1,11 +1,9 @@
 --- old.exponentiationOperatorInTemplateStringWithSyntaxError1.js
 +++ new.exponentiationOperatorInTemplateStringWithSyntaxError1.js
-@@= skipped -31, +31 lines =@@
- var t1 = 10;
- var t2 = 10;
+@@= skipped -33, +33 lines =@@
  var s;
--// Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
--// TempateHead & TemplateTail are empty
+ // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+ // TempateHead & TemplateTail are empty
 -"".concat(1 + Math.pow(typeof t1, Math.pow(t2, t1)));
 -"".concat(Math.pow(-t1, t2) - t1);
 -"".concat(Math.pow(-++t1, t2) - t1);

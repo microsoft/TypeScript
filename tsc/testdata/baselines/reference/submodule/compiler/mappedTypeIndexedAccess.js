@@ -31,10 +31,12 @@ let pair2: Pairs<FooBar>[keyof FooBar] = {
 
 
 //// [mappedTypeIndexedAccess.js]
+// Error expected here
 let pair1 = {
     key: "foo",
     value: 3
 };
+// Error expected here
 let pair2 = {
     key: "foo",
     value: 3

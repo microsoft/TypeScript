@@ -65,6 +65,7 @@ var F;
     }
 })(F || (F = {}));
 (function (F) {
+    // Should not be an error
     class Helper {
     }
 })(F || (F = {}));
@@ -74,6 +75,7 @@ var Foo;
     }
 })(Foo || (Foo = {}));
 (function (Foo) {
+    // Should not be an error
     class Helper {
     }
 })(Foo || (Foo = {}));
@@ -85,6 +87,7 @@ var Gar;
         }
     })(Foo || (Foo = {}));
     (function (Foo) {
+        // Should not be an error
         class Helper {
         }
     })(Foo || (Foo = {}));

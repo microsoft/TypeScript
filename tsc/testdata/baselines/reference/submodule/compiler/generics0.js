@@ -11,4 +11,4 @@ var z = v2.x; // 'y' should be of type 'string'
 
 //// [generics0.js]
 var v2;
-var z = v2.x;
+var z = v2.x; // 'y' should be of type 'string'

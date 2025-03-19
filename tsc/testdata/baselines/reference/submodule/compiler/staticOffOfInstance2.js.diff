@@ -8,10 +8,9 @@
 -    function List() {
 -    }
 -    List.prototype.Blah = function () {
--        this.Foo(); // no error
 +class List {
 +    Blah() {
-+        this.Foo();
+         this.Foo(); // no error
          List.Foo();
 -    };
 -    List.Foo = function () { };

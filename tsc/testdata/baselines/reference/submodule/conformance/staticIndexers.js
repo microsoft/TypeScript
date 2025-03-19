@@ -16,6 +16,7 @@ class E<T> {
 }
 
 //// [staticIndexers.js]
+// static indexers not allowed
 class C {
 }
 class D {

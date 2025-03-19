@@ -21,26 +21,20 @@
 -})();
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+}
-+class B extends A {
-+    static s = 9;
-+    constructor() {
-+        var x = 1;
-+        super();
-     }
+-    }
 -    return A;
 -}());
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B() {
--        var x = 1; // should not error
--        return _super.call(this) || this;
++class A {
 +}
-+class C extends A {
-+    p = 10;
++class B extends A {
++    static s = 9;
 +    constructor() {
-+        var x = 1;
+         var x = 1; // should not error
+-        return _super.call(this) || this;
++        super();
      }
 -    B.s = 9;
 -    return B;
@@ -50,13 +44,12 @@
 -    function C() {
 -        var _this = this;
 -        _this.p = 10;
--        var x = 1; // should error
--        return _this;
 +}
-+class D extends A {
-+    p = 11;
++class C extends A {
++    p = 10;
 +    constructor() {
-+        var x = 1;
+         var x = 1; // should error
+-        return _this;
      }
 -    return C;
 -}(A));
@@ -65,13 +58,12 @@
 -    function D() {
 -        var _this = this;
 -        _this.p = 11;
--        var x = 1; // should error
--        return _this;
 +}
-+class E extends A {
-+    p = 12;
++class D extends A {
++    p = 11;
 +    constructor() {
-+        var x = 1;
+         var x = 1; // should error
+-        return _this;
      }
 -    return D;
 -}(A));
@@ -80,9 +72,13 @@
 -    function E() {
 -        var _this = this;
 -        _this.p = 12;
--        var x = 1; // should error
++}
++class E extends A {
++    p = 12;
++    constructor() {
+         var x = 1; // should error
 -        return _this;
--    }
+     }
 -    return E;
 -}(A));
 +}

@@ -5,7 +5,7 @@
  
  //// [narrowingConstrainedTypeVariable.js]
 -"use strict";
--// Repro from #20138
+ // Repro from #20138
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

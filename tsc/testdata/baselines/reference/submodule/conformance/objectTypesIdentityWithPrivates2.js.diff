@@ -1,10 +1,9 @@
 --- old.objectTypesIdentityWithPrivates2.js
 +++ new.objectTypesIdentityWithPrivates2.js
-@@= skipped -40, +40 lines =@@
- 
+@@= skipped -41, +41 lines =@@
  
  //// [objectTypesIdentityWithPrivates2.js]
--// object types are identical structurally
+ // object types are identical structurally
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

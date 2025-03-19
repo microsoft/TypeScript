@@ -10,5 +10,5 @@ class C implements I {
 
 //// [implementPublicPropertyAsPrivate.js]
 class C {
-    x = 0;
+    x = 0; // should raise error at class decl
 }

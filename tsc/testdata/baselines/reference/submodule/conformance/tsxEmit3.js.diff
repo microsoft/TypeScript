@@ -24,33 +24,33 @@
 +        class Bar {
 +        }
          S.Bar = Bar;
--        // Emit Foo
--        // Foo, <Foo />;
-     })(S = M.S || (M.S = {}));
+         // Emit Foo
+         // Foo, <Foo />;
+@@= skipped -20, +15 lines =@@
  })(M || (M = {}));
  (function (M) {
--    // Emit M.Foo
+     // Emit M.Foo
 -    M.Foo, <M.Foo />;
 -    var S;
 +    Foo, <Foo />;
 +    let S;
      (function (S) {
--        // Emit M.Foo
+         // Emit M.Foo
 -        M.Foo, <M.Foo />;
--        // Emit S.Bar
--        S.Bar, <S.Bar />;
 +        Foo, <Foo />;
+         // Emit S.Bar
+-        S.Bar, <S.Bar />;
 +        Bar, <Bar />;
      })(S = M.S || (M.S = {}));
  })(M || (M = {}));
  (function (M) {
--    // Emit M.S.Bar
+     // Emit M.S.Bar
 -    M.S.Bar, <M.S.Bar />;
 +    S.Bar, <S.Bar />;
  })(M || (M = {}));
  (function (M_1) {
      var M = 100;
--    // Emit M_1.Foo
+     // Emit M_1.Foo
 -    M_1.Foo, <M_1.Foo />;
 +    Foo, <Foo />;
  })(M || (M = {}));

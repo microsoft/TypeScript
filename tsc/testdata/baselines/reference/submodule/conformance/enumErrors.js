@@ -57,6 +57,7 @@ enum E14 { a, b: any "hello" += 1, c, d}
 
 
 //// [enumErrors.js]
+// Enum named with PredefinedTypes
 var any;
 (function (any) {
 })(any || (any = {}));
@@ -69,6 +70,7 @@ var string;
 var boolean;
 (function (boolean) {
 })(boolean || (boolean = {}));
+// Enum with computed member initializer of type Number
 var E5;
 (function (E5) {
     E5["C"] = new Number(30);
@@ -79,6 +81,8 @@ var E9;
     E9[E9["A"] = 0] = "A";
     E9[E9["B"] = 0] = "B";
 })(E9 || (E9 = {}));
+//Enum with computed member intializer of different enum type
+// Bug 707850: This should be allowed
 var E10;
 (function (E10) {
     E10["A"] = E9.A;
@@ -86,6 +90,7 @@ var E10;
     E10["B"] = E9.B;
     if (typeof E10.B !== "string") E10[E10.B] = "B";
 })(E10 || (E10 = {}));
+// Enum with computed member intializer of other types
 var E11;
 (function (E11) {
     E11["A"] = true;
@@ -99,6 +104,7 @@ var E11;
     E11["E"] = (() => 'foo')();
     if (typeof E11.E !== "string") E11[E11.E] = "E";
 })(E11 || (E11 = {}));
+// Enum with string valued member and computed member initializers
 var E12;
 (function (E12) {
     E12["A"] = "";
@@ -112,6 +118,7 @@ var E12;
     E12["F"] = (() => 'foo')();
     if (typeof E12.F !== "string") E12[E12.F] = "F";
 })(E12 || (E12 = {}));
+// Enum with incorrect syntax
 var E13;
 (function (E13) {
     E13[E13["postComma"] = 0] = "postComma";

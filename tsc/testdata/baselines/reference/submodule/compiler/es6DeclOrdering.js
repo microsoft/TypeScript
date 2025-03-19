@@ -20,10 +20,11 @@ class Bar {
 
 //// [es6DeclOrdering.js]
 class Bar {
+    //public bar() { }
     foo() {
         return this._store.length;
     }
     constructor(store) {
-        this._store = store;
+        this._store = store; // this is an error for some reason? Unresolved symbol store
     }
 }

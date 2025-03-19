@@ -15,11 +15,11 @@ class Foo extends base {
 
 //// [collisionSuperAndNameResolution.js]
 var console;
-var _super = 10;
+var _super = 10; // No error
 class base {
 }
 class Foo extends base {
     x() {
-        console.log(_super);
+        console.log(_super); // Error as this doesnt not resolve to user defined _super
     }
 }

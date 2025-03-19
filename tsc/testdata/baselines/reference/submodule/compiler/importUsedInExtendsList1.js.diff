@@ -31,7 +31,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--///<reference path='importUsedInExtendsList1_require.ts'/>
+ ///<reference path='importUsedInExtendsList1_require.ts'/>
 -var foo = require("./importUsedInExtendsList1_require");
 -var Sub = /** @class */ (function (_super) {
 -    __extends(Sub, _super);

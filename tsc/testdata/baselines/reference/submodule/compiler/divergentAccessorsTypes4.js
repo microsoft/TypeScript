@@ -44,9 +44,13 @@ class Two {
     get prop2() { return ""; }
     set prop2(s) { }
 }
+// "hello"
 i.prop1;
+// number | "hello"
 i.prop1 = 42;
 i.prop1 = "hello";
+// never
 i.prop2;
+// 42
 i.prop2 = 42;
-i.prop2 = "hello";
+i.prop2 = "hello"; // error

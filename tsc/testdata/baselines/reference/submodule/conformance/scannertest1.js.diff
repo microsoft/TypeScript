@@ -6,7 +6,7 @@
  
 +//// [References.js]
  //// [scannertest1.js]
--///<reference path='References.ts' />
+ ///<reference path='References.ts' />
 -var CharacterInfo = /** @class */ (function () {
 -    function CharacterInfo() {
 -    }

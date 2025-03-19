@@ -97,6 +97,7 @@ class Derived10<T> extends Base2<T> {
 }
 
 //// [derivedClassParameterProperties.js]
+// ordering of super calls in derived constructors matters depending on other class contents
 class Base {
     x;
 }
@@ -162,6 +163,7 @@ class Derived8 extends Base {
         this.b = 3;
     }
 }
+// generic cases of Derived7 and Derived8
 class Base2 {
     x;
 }

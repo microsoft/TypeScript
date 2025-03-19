@@ -25,9 +25,6 @@
 +    (function (A) {
 +    })(A || (A = {}));
  }
--// @ts-ignore suppress `with` statement error
--with (window)
--    ;
 +else {
 +    var B;
 +    (function (B) {
@@ -58,6 +55,9 @@
 +    (function (G) {
 +    })(G || (G = {}));
 +}
+ // @ts-ignore suppress `with` statement error
+-with (window)
+-    ;
 +with (window) {
 +    var H;
 +    (function (H) {

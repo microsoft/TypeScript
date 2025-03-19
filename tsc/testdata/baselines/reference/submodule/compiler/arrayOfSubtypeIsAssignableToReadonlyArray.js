@@ -32,10 +32,10 @@ class C extends Array {
     c;
 }
 rra = ara;
-rrb = arb;
+rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
 rra = arb;
-rrb = ara;
+rrb = ara; // error: 'A' is not assignable to 'B'
 rra = cra;
-rra = crb;
+rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
 rrb = crb;
-rrb = cra;
+rrb = cra; // error: 'A' is not assignable to 'B'

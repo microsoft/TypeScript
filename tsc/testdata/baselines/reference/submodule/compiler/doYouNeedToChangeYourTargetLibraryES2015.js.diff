@@ -8,7 +8,7 @@
 -    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
 -    return cooked;
 -};
--// es2015
+ // es2015
 -var noOp = function () { };
 -var testReflectApply = Reflect.apply(noOp, this, []);
 -var testReflectConstruct = Reflect.construct(noOp, []);

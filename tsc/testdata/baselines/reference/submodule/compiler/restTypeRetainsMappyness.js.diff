@@ -7,5 +7,5 @@
 -    var arr = {};
 -    fn.apply(void 0, arr); // Error: Argument of type 'any[]' is not assignable to parameter of type 'Foo<T>'
 +    const arr = {};
-+    fn(...arr);
++    fn(...arr); // Error: Argument of type 'any[]' is not assignable to parameter of type 'Foo<T>'
  }

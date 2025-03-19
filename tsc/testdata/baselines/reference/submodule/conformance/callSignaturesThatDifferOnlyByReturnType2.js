@@ -18,5 +18,6 @@ var r2 = x.foo(''); // error
 
 //// [callSignaturesThatDifferOnlyByReturnType2.js]
 var x;
-var r = x.foo(1);
-var r2 = x.foo('');
+// BUG 822524
+var r = x.foo(1); // no error
+var r2 = x.foo(''); // error

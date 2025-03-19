@@ -88,9 +88,13 @@ exports.fooWithTypePredicate = fooWithTypePredicate;
 exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
 exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
 exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;
+/** This comment should appear for foo*/
 function foo() {
 }
-function fooWithParameters(a, b) {
+/** This is comment for function signature*/
+function fooWithParameters(/** this is comment about a*/ a, 
+/** this is comment for b*/
+b) {
     var d = a;
 }
 function fooWithRestParameters(a, ...rests) {
@@ -114,9 +118,13 @@ function fooWithTypeTypePredicateAndGeneric(a) {
 function fooWithTypeTypePredicateAndRestParam(a, ...rest) {
     return true;
 }
+/** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
-function nonExportedFooWithParameters(a, b) {
+/** This is comment for function signature*/
+function nonExportedFooWithParameters(/** this is comment about a*/ a, 
+/** this is comment for b*/
+b) {
     var d = a;
 }
 function nonExportedFooWithRestParameters(a, ...rests) {
@@ -126,9 +134,13 @@ function nonExportedFooWithOverloads(a) {
     return a;
 }
 //// [declFileFunctions_1.js]
+/** This comment should appear for foo*/
 function globalfoo() {
 }
-function globalfooWithParameters(a, b) {
+/** This is comment for function signature*/
+function globalfooWithParameters(/** this is comment about a*/ a, 
+/** this is comment for b*/
+b) {
     var d = a;
 }
 function globalfooWithRestParameters(a, ...rests) {

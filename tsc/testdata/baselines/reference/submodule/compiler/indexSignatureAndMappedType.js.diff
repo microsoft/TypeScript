@@ -5,22 +5,12 @@
  
  //// [indexSignatureAndMappedType.js]
 -"use strict";
--// A mapped type { [P in K]: X }, where K is a generic type, is related to
--// { [key: string]: Y } if X is related to Y.
+ // A mapped type { [P in K]: X }, where K is a generic type, is related to
+ // { [key: string]: Y } if X is related to Y.
  function f1(x, y) {
-     x = y;
--    y = x; // Error
-+    y = x;
- }
- function f2(x, y) {
-     x = y;
-     y = x;
- }
- function f3(x, y) {
--    x = y; // Error
--    y = x; // Error
-+    x = y;
-+    y = x;
+@@= skipped -15, +14 lines =@@
+     x = y; // Error
+     y = x; // Error
  }
 -
 -

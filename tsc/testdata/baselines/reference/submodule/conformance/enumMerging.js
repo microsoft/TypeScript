@@ -69,6 +69,8 @@ module M6 {
 
 
 //// [enumMerging.js]
+// Enum with only constant members across 2 declarations with the same root module
+// Enum with initializer in all declarations with constant members with the same root module
 var M1;
 (function (M1) {
     let EImpl1;
@@ -95,6 +97,7 @@ var M1;
     })(EConst1 = M1.EConst1 || (M1.EConst1 = {}));
     var x = [EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F];
 })(M1 || (M1 = {}));
+// Enum with only computed members across 2 declarations with the same root module 
 var M2;
 (function (M2) {
     let EComp2;
@@ -116,6 +119,7 @@ var M2;
     })(EComp2 = M2.EComp2 || (M2.EComp2 = {}));
     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
 })(M2 || (M2 = {}));
+// Enum with initializer in only one of two declarations with constant members with the same root module
 var M3;
 (function (M3) {
     let EInit;
@@ -129,6 +133,7 @@ var M3;
         EInit[EInit["E"] = 3] = "E";
     })(EInit || (EInit = {}));
 })(M3 || (M3 = {}));
+// Enums with same name but different root module
 var M4;
 (function (M4) {
     let Color;

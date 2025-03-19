@@ -9,7 +9,7 @@ async function foo() {
 
 //// [awaitExpressionInnerCommentEmit.js]
 async function foo() {
-    await 1;
-    await 2;
-    await 3;
+    /*comment1*/ await 1;
+    await /*comment2*/ 2;
+    await 3; /*comment3*/
 }

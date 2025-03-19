@@ -22,11 +22,10 @@
 -var D = /** @class */ (function (_super) {
 -    __extends(D, _super);
 -    function D() {
--        this._t; // No error
 +class D extends null {
 +    _t;
 +    constructor() {
-+        this._t;
+         this._t; // No error
      }
 -    return D;
 -}(null));

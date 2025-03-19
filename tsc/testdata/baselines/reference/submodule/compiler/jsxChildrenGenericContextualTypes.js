@@ -33,6 +33,7 @@ const ElemLit = (p) => <div></div>;
 ElemLit({ prop: "x", children: () => "x" });
 const j = <ElemLit prop="x" children={() => "x"}/>;
 const jj = <ElemLit prop="x">{() => "x"}</ElemLit>;
+// Should error
 const arg = <ElemLit prop="x" children={p => "y"}/>;
 const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>;
 const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>;

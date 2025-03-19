@@ -12,5 +12,5 @@ class A {
 class A {
     #foo = this.#bar;
     #bar = this.#foo;
-    ["#baz"] = this["#baz"];
+    ["#baz"] = this["#baz"]; // Error (should *not* be private name error)
 }

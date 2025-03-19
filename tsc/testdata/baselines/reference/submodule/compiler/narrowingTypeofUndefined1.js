@@ -20,14 +20,14 @@ else {
 
 //// [narrowingTypeofUndefined1.js]
 if (typeof a.error === 'undefined') {
-    a.result.prop;
+    a.result.prop; // number
 }
 else {
-    a.error.prop;
+    a.error.prop; // string
 }
 if (typeof a.error !== 'undefined') {
-    a.error.prop;
+    a.error.prop; // string
 }
 else {
-    a.result.prop;
+    a.result.prop; // number
 }

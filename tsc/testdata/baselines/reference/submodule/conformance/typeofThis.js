@@ -175,6 +175,7 @@ function Test4() {
 class Test5 {
     no = 1;
     f = () => {
+        // should not capture this.
         let x = 1;
     };
 }
@@ -226,10 +227,10 @@ class Test10 {
     foo() {
         let a = undefined;
         if (this.a) {
-            let a = undefined;
+            let a = undefined; // should narrow to { b?: string }
             let b = undefined;
             if (this.a.b) {
-                let b = undefined;
+                let b = undefined; // should narrow to string
             }
         }
     }
@@ -240,7 +241,7 @@ class Test11 {
         const o = this;
         let bar = {};
         if (o.this && o.this.x) {
-            let y = o.this.x;
+            let y = o.this.x; // should narrow to string
         }
     }
 }

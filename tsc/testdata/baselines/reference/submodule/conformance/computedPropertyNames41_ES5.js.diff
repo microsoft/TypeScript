@@ -17,10 +17,6 @@
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
--    // Computed properties
--    C[""] = function () { return new Foo; };
--    return C;
--}());
 +class Foo {
 +    x;
 +}
@@ -29,5 +25,9 @@
 +    y;
 +}
 +class C {
+     // Computed properties
+-    C[""] = function () { return new Foo; };
+-    return C;
+-}());
 +    static [""]() { return new Foo; }
 +}

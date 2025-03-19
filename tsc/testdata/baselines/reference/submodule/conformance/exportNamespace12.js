@@ -24,5 +24,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const types = require("./types");
-console.log(c);
-console.log(types.c);
+console.log(c); // Fails as expected, import is still allowed though.
+console.log(types.c); // Expected an error here.

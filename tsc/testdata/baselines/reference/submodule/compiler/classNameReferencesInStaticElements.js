@@ -18,6 +18,7 @@ oldFoo.y();
 new oldFoo().x();
 
 //// [classNameReferencesInStaticElements.js]
+// https://github.com/microsoft/TypeScript/issues/54607
 class Foo {
     static { console.log(this, Foo); }
     static x = () => { console.log(this, Foo); };

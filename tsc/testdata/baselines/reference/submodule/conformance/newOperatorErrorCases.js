@@ -51,10 +51,13 @@ class T {
 var anyCtor;
 var anyCtor1;
 var nestedCtor;
+// Construct expression with no parentheses for construct signature with > 0 parameters
 var b = new C0;
-32, '';
+32, ''; // Parse error
+// Generic construct expression with no parentheses
 var c1 = new T;
 var c1;
-var c2 = new T;
+var c2 = new T; // Ok
+// Construct expression of non-void returning function
 function fnNumber() { return 32; }
-var s = new fnNumber();
+var s = new fnNumber(); // Error

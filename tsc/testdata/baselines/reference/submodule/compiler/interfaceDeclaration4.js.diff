@@ -1,11 +1,7 @@
 --- old.interfaceDeclaration4.js
 +++ new.interfaceDeclaration4.js
-@@= skipped -42, +42 lines =@@
- 
- 
- //// [interfaceDeclaration4.js]
--// Import this module when test harness supports external modules. Also remove the internal module below.
--// import Foo = require("interfaceDeclaration5")
+@@= skipped -46, +46 lines =@@
+ // import Foo = require("interfaceDeclaration5")
  var Foo;
  (function (Foo) {
 -    var C1 = /** @class */ (function () {
@@ -22,7 +18,10 @@
 -    }
 -    return C1;
 -}());
--// Err - not implemented item
++class C1 {
++    item;
++}
+ // Err - not implemented item
 -var C2 = /** @class */ (function () {
 -    function C2() {
 -    }
@@ -33,9 +32,6 @@
 -    }
 -    return C3;
 -}());
-+class C1 {
-+    item;
-+}
 +class C2 {
 +    token;
 +}

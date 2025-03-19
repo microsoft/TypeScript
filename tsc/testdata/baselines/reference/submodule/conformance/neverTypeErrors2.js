@@ -71,7 +71,7 @@ function f4() {
 for (const n of f4()) { }
 for (const n in f4()) { }
 function f5() {
-    let x = [];
+    let x = []; // Ok
 }
 function func() {
     return {

@@ -51,6 +51,8 @@ interface I extends B {
 }
 
 //// [callSignatureAssignabilityInInheritance5.js]
+// checking subtype relations for function types as it relates to contextual signature instantiation
+// same as subtypingWithCallSignatures2 just with an extra level of indirection in the inheritance chain
 class Base {
     foo;
 }

@@ -35,12 +35,12 @@
 -    return Poisoned;
 -}(React.Component));
 -var obj = {};
--// OK
 +    }
 +}
 +const obj = {};
+ // OK
  <Poisoned {...{ x: "ok", y: "2" }}/>;
--// Error
+ // Error
 -var p = <Poisoned {...obj}/>;
 -var y = <Poisoned />;
 -var z = <Poisoned x y/>;

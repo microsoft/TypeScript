@@ -1,30 +1,6 @@
 --- old.nodeModulesConditionalPackageExports(module=node16).js
 +++ new.nodeModulesConditionalPackageExports(module=node16).js
-@@= skipped -122, +122 lines =@@
- }
- 
- //// [index.mjs]
--// esm format file
- import * as cjs from "package/cjs";
- import * as mjs from "package/mjs";
- import * as type from "package";
-@@= skipped -41, +40 lines =@@
-     return result;
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--// cjs format file
- const cjs = __importStar(require("package/cjs"));
- const mjs = __importStar(require("package/mjs"));
- const type = __importStar(require("package"));
-@@= skipped -16, +15 lines =@@
- typei.implicitCjsSource;
- ts.cjsSource;
- //// [index.js]
--// esm format file
- import * as cjs from "package/cjs";
- import * as mjs from "package/mjs";
- import * as type from "package";
-@@= skipped -15, +14 lines =@@
+@@= skipped -194, +194 lines =@@
  mjsi.mjsSource;
  typei.mjsSource;
  ts.mjsSource;

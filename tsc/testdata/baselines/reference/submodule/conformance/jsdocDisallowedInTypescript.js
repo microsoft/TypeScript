@@ -27,6 +27,7 @@ var anys: Array<*>;
 
 
 //// [jsdocDisallowedInTypescript.js]
+// grammar error from checker
 var ara = [1, 2, 3];
 function f(x, y) {
     return x ? x + y[1] : y[0];

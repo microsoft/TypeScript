@@ -1,8 +1,0 @@
---- old.reverseInferenceInContextualInstantiation.js
-+++ new.reverseInferenceInContextualInstantiation.js
-@@= skipped -8, +8 lines =@@
- //// [reverseInferenceInContextualInstantiation.js]
- function compare(a, b) { return 0; }
- var x;
--x.sort(compare); // Error, but shouldn't be
-+x.sort(compare);

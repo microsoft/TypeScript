@@ -36,6 +36,7 @@
  };
  Object.defineProperty(exports, "__esModule", { value: true });
 -var react_1 = __importDefault(require("react"));
++/// <reference path="react16.d.ts" />
 +const react_1 = __importDefault(require("react"));
  function test(wrappedProps) {
 -    var MySFC = function (props) {
@@ -61,8 +62,8 @@
 -    var z = react_1.default.createElement(MySFC, __assign({}, wrappedProps)); // should work
 -    var q = react_1.default.createElement(MyComponent, __assign({}, wrappedProps)); // should work
 +    }
-+    let x = <MySFC />;
-+    let y = <MyComponent />;
-+    let z = <MySFC {...wrappedProps}/>;
-+    let q = <MyComponent {...wrappedProps}/>;
++    let x = <MySFC />; // should error
++    let y = <MyComponent />; // should error
++    let z = <MySFC {...wrappedProps}/>; // should work
++    let q = <MyComponent {...wrappedProps}/>; // should work
  }

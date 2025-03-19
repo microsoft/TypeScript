@@ -14,8 +14,3 @@
  var x;
  x.toString();
  var i;
--i.toString(); // used to be an error
-+i.toString();
- var c;
--c.toString(); // used to be an error
-+c.toString();

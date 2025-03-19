@@ -59,22 +59,20 @@
              entry.next = this.next;
              entry.prev = this;
              this.next = entry;
--            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
 -        };
 -        List.prototype.push = function (data) {
-+            entry.next.prev = entry;
 +        }
 +        push(data) {
              var entry = this.listFactory.MakeEntry(data);
              entry.data = data;
              entry.isHead = false;
-             entry.next = this.next;
+@@= skipped -27, +27 lines =@@
              entry.prev = this;
              this.next = entry;
--            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
 -        };
 -        List.prototype.popEntry = function (head) {
-+            entry.next.prev = entry;
 +        }
 +        popEntry(head) {
              if (this.next.isHead) {
@@ -101,8 +99,7 @@
              entry.next = this.next;
              entry.prev = this;
              this.next = entry;
--            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
-+            entry.next.prev = entry;
+             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
              return entry;
 -        };
 -        List.prototype.insertEntryBefore = function (entry) {
@@ -150,12 +147,7 @@
              if (entry == null) {
                  return null;
              }
-             else if (entry.isHead) {
--                // Can't remove the head of a list!
-                 return null;
-             }
-             else {
-@@= skipped -94, +90 lines =@@
+@@= skipped -67, +64 lines =@@
                  entry.prev.next = entry.next;
                  return entry;
              }

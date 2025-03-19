@@ -7,10 +7,9 @@
 -var C = /** @class */ (function () {
 -    function C() {
 -        this.x = new A().p; // should also be ok
--        new A().p; // ok
 +class C {
 +    constructor() {
-+        new A().p;
+         new A().p; // ok
      }
 -    return C;
 -}());
@@ -20,7 +19,7 @@
 -    }
 -    return A;
 -}());
-+    x = new A().p;
++    x = new A().p; // should also be ok
 +}
 +class A {
 +    p = '';

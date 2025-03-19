@@ -24,7 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Component = Component;
 function Component() {
     const [state, setState] = useState(() => ({
-        value: "string",
+        value: "string", // this should be a number
         foo: (arg) => setState(arg),
         bar: (arg) => setState(arg),
     }));

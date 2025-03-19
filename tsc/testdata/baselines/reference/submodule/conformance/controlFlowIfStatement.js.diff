@@ -9,31 +9,19 @@
 +let x;
 +let cond;
  x = /a/;
--if (x /* RegExp */, (x = true)) {
--    x; // boolean
-+if (x, (x = true)) {
-+    x;
-     x = "";
+ if (x /* RegExp */, (x = true)) {
+     x; // boolean
+@@= skipped -13, +13 lines =@@
  }
- else {
--    x; // boolean
-+    x;
-     x = 42;
- }
--x; // string | number
-+x;
+ x; // string | number
  function a() {
 -    var x;
 +    let x;
      if (cond) {
          x = 42;
      }
-@@= skipped -21, +21 lines =@@
-         x = "";
-         return;
-     }
--    x; // number
-+    x;
+@@= skipped -11, +11 lines =@@
+     x; // number
  }
  function b() {
 -    var x;
@@ -41,16 +29,7 @@
      if (cond) {
          x = 42;
          throw "";
-@@= skipped -11, +11 lines =@@
-     else {
-         x = "";
-     }
--    x; // string
-+    x;
- }
- function c(data) {
-     if (typeof data === 'string') {
-@@= skipped -20, +20 lines =@@
+@@= skipped -28, +28 lines =@@
  }
  function e(x) {
      if (x.p === "A") {

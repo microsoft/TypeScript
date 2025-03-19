@@ -44,11 +44,11 @@ function f8(foo1: string, bar = foo1) { }
 let foo = "";
 function f1(bar = foo) {
     var foo = 2;
-    return bar;
+    return bar; // returns 1
 }
 function f2(bar = (baz = foo) => baz) {
     var foo = 2;
-    return bar();
+    return bar(); // returns 1
 }
 function f3(bar = foo, foo = 2) {
     return bar;

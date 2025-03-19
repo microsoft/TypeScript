@@ -44,6 +44,7 @@ module templa.dom.mvc.composite {
 
 
 //// [declFileGenericType2.js]
+// Module
 var templa;
 (function (templa) {
     let dom;
@@ -59,6 +60,7 @@ var templa;
         })(mvc = dom.mvc || (dom.mvc = {}));
     })(dom = templa.dom || (templa.dom = {}));
 })(templa || (templa = {}));
+// Module
 (function (templa) {
     let dom;
     (function (dom) {

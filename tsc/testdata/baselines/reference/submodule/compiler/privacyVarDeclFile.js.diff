@@ -25,9 +25,9 @@
 -    return publicClassWithWithPrivatePropertyTypes;
 -}());
 +class publicClassWithWithPrivatePropertyTypes {
-+    static myPublicStaticProperty;
++    static myPublicStaticProperty; // Error
 +    static myPrivateStaticProperty;
-+    myPublicProperty;
++    myPublicProperty; // Error
 +    myPrivateProperty;
 +}
  exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
@@ -73,8 +73,8 @@
 -    return publicClassWithPrivateModulePropertyTypes;
 -}());
 +class publicClassWithPrivateModulePropertyTypes {
-+    static myPublicStaticProperty;
-+    myPublicProperty;
++    static myPublicStaticProperty; // Error
++    myPublicProperty; // Error
 +}
  exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
 -var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
@@ -110,9 +110,9 @@
 -        return publicClassWithWithPrivatePropertyTypes;
 -    }());
 +    class publicClassWithWithPrivatePropertyTypes {
-+        static myPublicStaticProperty;
++        static myPublicStaticProperty; // Error
 +        static myPrivateStaticProperty;
-+        myPublicProperty;
++        myPublicProperty; // Error
 +        myPrivateProperty;
 +    }
      publicModule.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
@@ -158,8 +158,8 @@
 -        return publicClassWithPrivateModulePropertyTypes;
 -    }());
 +    class publicClassWithPrivateModulePropertyTypes {
-+        static myPublicStaticProperty;
-+        myPublicProperty;
++        static myPublicStaticProperty; // Error
++        myPublicProperty; // Error
 +    }
      publicModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
 -    var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
@@ -590,9 +590,9 @@
 +        var privateVarWithPrivateModulePropertyTypes;
 +    })(privateModule || (privateModule = {}));
 +    class publicClassWithWithPrivatePropertyTypes {
-+        static myPublicStaticProperty;
++        static myPublicStaticProperty; // Error
 +        static myPrivateStaticProperty;
-+        myPublicProperty;
++        myPublicProperty; // Error
 +        myPrivateProperty;
      }
 -    export interface publicInterfaceWithPrivatePropertyTypes {
@@ -632,8 +632,8 @@
 +    var privateVarWithPrivatePropertyTypes;
 +    var privateVarWithPublicPropertyTypes;
 +    class publicClassWithPrivateModulePropertyTypes {
-+        static myPublicStaticProperty;
-+        myPublicProperty;
++        static myPublicStaticProperty; // Error
++        myPublicProperty; // Error
      }
 -    export var publicVarWithPrivatePropertyTypes: privateClass;
 -    export var publicVarWithPublicPropertyTypes: publicClass;

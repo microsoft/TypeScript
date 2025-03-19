@@ -38,6 +38,7 @@ class A {
         if (Math.random() > 0.5) {
             return '';
         }
+        // it does error here as expected
     }
 }
 class B {
@@ -45,6 +46,7 @@ class B {
         if (Math.random() > 0.5) {
             return '';
         }
+        // it should error here because it returns undefined
     }
 }
 class C {
@@ -52,6 +54,7 @@ class C {
         if (Math.random() > 0.5) {
             return 0;
         }
+        // it should error here because it returns undefined
     }
     set a(value) {
     }

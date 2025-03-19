@@ -534,12 +534,15 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource12.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     class AstWalkOptions {
         goChildren = true;
         goNextSibling = true;
-        reverseSiblings = false;
+        reverseSiblings = false; // visit siblings in reverse execution order
         stopWalk(stop = true) {
             this.goChildren = !stop;
             this.goNextSibling = !stop;
@@ -567,10 +570,12 @@ var TypeScript;
             if (this.options.goChildren) {
                 var svGoSib = this.options.goNextSibling;
                 this.options.goNextSibling = true;
+                // Call the "walkChildren" function corresponding to "nodeType".
                 this.childrenWalkers[ast.nodeType](ast, parent, this);
                 this.options.goNextSibling = svGoSib;
             }
             else {
+                // no go only applies to children of node issuing it
                 this.options.goChildren = true;
             }
             if (this.post) {
@@ -710,6 +715,7 @@ var TypeScript;
             this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone;
+            // Verify the code is up to date with the enum
             for (var e in NodeType._map) {
                 if (this.childrenWalkers[e] === undefined) {
                     throw new Error("initWalkers function is not up to date with enum content!");
@@ -729,6 +735,7 @@ var TypeScript;
     let ChildrenWalkers;
     (function (ChildrenWalkers) {
         function walkNone(preAst, parent, walker) {
+            // Nothing to do
         }
         ChildrenWalkers.walkNone = walkNone;
         function walkListChildren(preAst, parent, walker) {
@@ -981,6 +988,7 @@ var TypeScript;
         ChildrenWalkers.walkScriptChildren = walkScriptChildren;
         function walkTypeDeclChildren(preAst, parent, walker) {
             walkNamedTypeChildren(preAst, parent, walker);
+            // walked arguments as part of members
             if (walker.options.goNextSibling && preAst.extendsList) {
                 preAst.extendsList = walker.walk(preAst.extendsList, preAst);
             }
@@ -1012,6 +1020,7 @@ var TypeScript;
         }
         ChildrenWalkers.walkWithStatementChildren = walkWithStatementChildren;
         function walkLabelChildren(preAst, parent, walker) {
+            //TODO: Walk "id"?
         }
         ChildrenWalkers.walkLabelChildren = walkLabelChildren;
         function walkLabeledStatementChildren(preAst, parent, walker) {

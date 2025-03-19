@@ -33,5 +33,5 @@ class C {
 @appendMeta('a', 'z')
 class D extends C {
 }
-C[Symbol.metadata].a;
-D[Symbol.metadata].a;
+C[Symbol.metadata].a; // ['x']
+D[Symbol.metadata].a; // ['x', 'z']

@@ -179,22 +179,24 @@ var k;
 var decl;
 var merged;
 var merged2;
-abc = secondAbc;
-abc = secondAbcd;
-abc = secondAb;
-abc = secondCd;
-abc = nope;
-abc = decl;
-secondAbc = abc;
-secondAbcd = abc;
-secondAb = abc;
-secondCd = abc;
-nope = abc;
-decl = abc;
+abc = secondAbc; // ok
+abc = secondAbcd; // missing 'd'
+abc = secondAb; // ok
+abc = secondCd; // missing 'd'
+abc = nope; // nope!
+abc = decl; // bad - value of 'c' differs between these enums
+secondAbc = abc; // ok
+secondAbcd = abc; // ok
+secondAb = abc; // missing 'c'
+secondCd = abc; // missing 'a' and 'b'
+nope = abc; // nope!
+decl = abc; // bad - value of 'c' differs between these enums
+// const is only assignable to itself
 k = k;
-abc = k;
+abc = k; // error
 k = abc;
-abc = merged;
-merged = abc;
-abc = merged2;
-merged2 = abc;
+// merged enums compare all their members
+abc = merged; // missing 'd'
+merged = abc; // bad - value of 'c' differs between these enums
+abc = merged2; // ok
+merged2 = abc; // ok

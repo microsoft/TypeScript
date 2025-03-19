@@ -63,11 +63,11 @@ if (NaN == NaN) { }
 if (NaN != NaN) { }
 if (NaN === y[0][1]) { }
 function t1(value, NaN) {
-    return value === NaN;
+    return value === NaN; // ok
 }
 function t2(value, NaN) {
-    return NaN == value;
+    return NaN == value; // ok
 }
 function t3(NaN) {
-    return NaN === NaN;
+    return NaN === NaN; // ok
 }

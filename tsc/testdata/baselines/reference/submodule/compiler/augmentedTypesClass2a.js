@@ -7,8 +7,9 @@ function c2() { } // error
 var c2 = () => { }
 
 //// [augmentedTypesClass2a.js]
+//// class then function
 class c2 {
     foo() { }
-}
-function c2() { }
+} // error
+function c2() { } // error
 var c2 = () => { };

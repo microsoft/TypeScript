@@ -1,32 +1,29 @@
 --- old.augmentedTypesClass.js
 +++ new.augmentedTypesClass.js
-@@= skipped -9, +9 lines =@@
- enum c4 { One } // error
+@@= skipped -10, +10 lines =@@
  
  //// [augmentedTypesClass.js]
--//// class then var
+ //// class then var
 -var c1 = /** @class */ (function () {
 -    function c1() {
 -    }
 -    c1.prototype.foo = function () { };
 -    return c1;
 -}());
--var c1 = 1; // error
--//// class then enum
++class c1 {
++    foo() { }
++}
+ var c1 = 1; // error
+ //// class then enum
 -var c4 = /** @class */ (function () {
 -    function c4() {
 -    }
 -    c4.prototype.foo = function () { };
 -    return c4;
 -}());
-+class c1 {
-+    foo() { }
-+}
-+var c1 = 1;
 +class c4 {
 +    foo() { }
 +}
  (function (c4) {
      c4[c4["One"] = 0] = "One";
--})(c4 || (c4 = {})); // error
-+})(c4 || (c4 = {}));
+ })(c4 || (c4 = {})); // error

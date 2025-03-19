@@ -29,18 +29,23 @@ else {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.var2 = void 0;
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+// local variable in external module
 var num;
 var var1;
 if (typeof var1 === "string") {
-    num = var1.length;
+    num = var1.length; // string
 }
 else {
-    num = var1;
+    num = var1; // number
 }
+// exported variable in external module
 var strOrNum;
 if (typeof exports.var2 === "string") {
-    strOrNum = exports.var2;
+    // export makes the var property and not variable
+    strOrNum = exports.var2; // string | number
 }
 else {
-    strOrNum = exports.var2;
+    strOrNum = exports.var2; // number | string
 }

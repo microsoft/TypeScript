@@ -1,15 +1,6 @@
 --- old.nodeModulesTopLevelAwait(module=node16).js
 +++ new.nodeModulesTopLevelAwait(module=node16).js
-@@= skipped -24, +24 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--// cjs format file
- const x = await 1;
- exports.x = x;
- for await (const y of []) { }
- //// [index.js]
--// esm format file
+@@= skipped -33, +33 lines =@@
  const x = await 1;
  export { x };
  for await (const y of []) { }

@@ -5,9 +5,9 @@
  //// [index.js]
  import { createRequire as _createRequire } from "module";
 -var __require = _createRequire(import.meta.url);
--/// <reference path="./mod.d.ts" />
--// This should emit a call to createRequire(import.meta.url)
--var foo = __require("foo");
 +const __require = _createRequire(import.meta.url);
+ /// <reference path="./mod.d.ts" />
+ // This should emit a call to createRequire(import.meta.url)
+-var foo = __require("foo");
 +const foo = __require("foo");
  foo;

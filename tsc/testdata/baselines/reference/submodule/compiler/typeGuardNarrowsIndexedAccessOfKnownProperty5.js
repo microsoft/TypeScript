@@ -27,15 +27,15 @@ if (c[cIndex].x) {
 const a = {};
 const aIndex = "key";
 if (a[aIndex] && a[aIndex].x) {
-    a[aIndex].x;
+    a[aIndex].x; // number
 }
 const b = { key: {} };
 const bIndex = "key";
 if (b[bIndex].x) {
-    b[bIndex].x;
+    b[bIndex].x; // number
 }
 const c = [];
 const cIndex = 1;
 if (c[cIndex].x) {
-    c[cIndex].x;
+    c[cIndex].x; // number
 }

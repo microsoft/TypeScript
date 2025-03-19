@@ -11,8 +11,7 @@
 +class C {
 +    f() {
          var x;
--        var a = x['notHere'](); // should be string
-+        var a = x['notHere']();
+         var a = x['notHere'](); // should be string
          return a + x.notHere();
 -    };
 -    return C;
@@ -27,9 +26,7 @@
  var r3b = a()['notHere']();
  var b = {
 -    foo: function (x) {
--        var a = x['notHere'](); // should be string
 +    foo: (x) => {
-+        var a = x['notHere']();
+         var a = x['notHere'](); // should be string
          return a + x.notHere();
      },
-     bar: b.foo().notHere()

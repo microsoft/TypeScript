@@ -14,6 +14,6 @@ if (foo[key]) {
 const foo = {};
 const key = 'key';
 if (foo[key]) {
-    foo[key];
-    foo.key;
+    foo[key]; // number
+    foo.key; // number
 }

@@ -25,12 +25,9 @@
 +}
  function f10(obj) {
      if (obj instanceof Object) {
--        obj; // A & { x: string } | B
-+        obj;
-     }
-     else {
--        obj; // Error
-+        obj;
+         obj; // A & { x: string } | B
+@@= skipped -21, +14 lines =@@
+         obj; // Error
      }
  }
 -var instance = {};

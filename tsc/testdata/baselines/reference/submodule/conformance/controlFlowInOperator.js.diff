@@ -11,30 +11,9 @@
 +const b = 'b';
 +const d = 'd';
  if ('a' in c) {
--    c; // A
--    c['a']; // number;
-+    c;
-+    c['a'];
- }
- if ('d' in c) {
--    c; // never
-+    c;
- }
- if (a in c) {
--    c; // A
--    c[a]; // number;
-+    c;
-+    c[a];
- }
- if (d in c) {
--    c; // never
-+    c;
- }
--// repro from https://github.com/microsoft/TypeScript/issues/54790
- function uniqueID_54790(id, seenIDs) {
-     if (id === undefined) {
-         id = "1";
-@@= skipped -25, +24 lines =@@
+     c; // A
+     c['a']; // number;
+@@= skipped -25, +25 lines =@@
      if (!(id in seenIDs)) {
          return id;
      }

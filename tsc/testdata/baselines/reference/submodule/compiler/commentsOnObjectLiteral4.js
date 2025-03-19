@@ -13,6 +13,9 @@ var v = {
 
 //// [commentsOnObjectLiteral4.js]
 var v = {
+    /**
+     * @type {number}
+     */
     get bar() {
         return 12;
     }

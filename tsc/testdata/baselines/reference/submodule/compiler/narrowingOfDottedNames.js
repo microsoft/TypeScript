@@ -94,6 +94,7 @@ while (target) {
 
 
 //// [narrowingOfDottedNames.js]
+// Repro from #8383
 class A {
     prop;
 }
@@ -126,18 +127,20 @@ function f2(x) {
         }
     }
 }
+// Repro from #28100
 class Foo1 {
-    x;
+    x; // Error
     constructor() {
         if (this instanceof Boolean) {
         }
     }
 }
 class Foo2 {
-    x;
+    x; // Error
     constructor() {
     }
 }
+// Repro from  #29513
 class AInfo {
     a_count = 1;
 }

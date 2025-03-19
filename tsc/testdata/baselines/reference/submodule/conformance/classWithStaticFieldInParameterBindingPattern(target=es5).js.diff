@@ -1,10 +1,9 @@
 --- old.classWithStaticFieldInParameterBindingPattern(target=es5).js
 +++ new.classWithStaticFieldInParameterBindingPattern(target=es5).js
-@@= skipped -4, +4 lines =@@
- (({ [class { static x = 1 }.x]: b = "" }) => {})();
+@@= skipped -5, +5 lines =@@
  
  //// [classWithStaticFieldInParameterBindingPattern.js]
--// https://github.com/microsoft/TypeScript/issues/36295
+ // https://github.com/microsoft/TypeScript/issues/36295
 -(function (_a) {
 -    var _b;
 -    var _c = (_b = /** @class */ (function () {

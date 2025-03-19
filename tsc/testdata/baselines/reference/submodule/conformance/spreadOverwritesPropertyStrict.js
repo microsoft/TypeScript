@@ -37,32 +37,32 @@ function m(anyoptional: { a?: any }) {
 
 
 //// [spreadOverwritesPropertyStrict.js]
-var unused1 = { b: 1, ...ab };
-var unused2 = { ...ab, ...ab };
-var unused3 = { b: 1, ...abq };
-var unused4 = { ...ab, b: 1 };
-var unused5 = { ...abq, b: 1 };
+var unused1 = { b: 1, ...ab }; // error
+var unused2 = { ...ab, ...ab }; // ok, overwritten error doesn't apply to spreads
+var unused3 = { b: 1, ...abq }; // ok, abq might have b: undefined
+var unused4 = { ...ab, b: 1 }; // ok, we don't care that b in ab is overwritten
+var unused5 = { ...abq, b: 1 }; // ok
 function g(obj) {
-    return { x: 1, ...obj };
+    return { x: 1, ...obj }; // ok, obj might have x: undefined
 }
 function f(obj) {
-    return { x: 1, ...obj };
+    return { x: 1, ...obj }; // ok, obj might be undefined
 }
 function h(obj) {
-    return { x: 1, ...obj };
+    return { x: 1, ...obj }; // error
 }
 function i(b, t) {
-    return { command: "hi", ...(b ? t : {}) };
+    return { command: "hi", ...(b ? t : {}) }; // ok
 }
 function j() {
-    return { ...{ command: "hi" }, ...{ command: "bye" } };
+    return { ...{ command: "hi" }, ...{ command: "bye" } }; // ok
 }
 function k(t) {
-    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t };
+    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t }; // error
 }
 function l(anyrequired) {
-    return { a: 'zzz', ...anyrequired };
+    return { a: 'zzz', ...anyrequired }; // error
 }
 function m(anyoptional) {
-    return { a: 'zzz', ...anyoptional };
+    return { a: 'zzz', ...anyoptional }; // ok
 }

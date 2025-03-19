@@ -5,7 +5,7 @@
  
  //// [privateNameComputedPropertyName4.js]
 -var _a, _C1_qux, _b, _C2_qux, _c, _C3_qux;
--// https://github.com/microsoft/TypeScript/issues/44113
+ // https://github.com/microsoft/TypeScript/issues/44113
  class C1 {
 +    static #qux = 42;
      ["bar"]() { }

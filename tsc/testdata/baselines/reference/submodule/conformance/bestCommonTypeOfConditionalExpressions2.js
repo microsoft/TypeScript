@@ -27,6 +27,8 @@ function foo3<T extends U, U extends V, V>(t: T, u: U) {
 }
 
 //// [bestCommonTypeOfConditionalExpressions2.js]
+// conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+// these are errors
 class Base {
     foo;
 }
@@ -45,7 +47,7 @@ function foo(t, u) {
     return true ? t : u;
 }
 function foo2(t, u) {
-    return true ? t : u;
+    return true ? t : u; // Ok because BCT(T, U) = U
 }
 function foo3(t, u) {
     return true ? t : u;

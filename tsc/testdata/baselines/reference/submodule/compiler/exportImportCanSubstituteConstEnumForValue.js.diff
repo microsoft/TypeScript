@@ -41,13 +41,16 @@
      (function (ViewModels) {
 -        var SomeUsagesOfTheseConsts = /** @class */ (function () {
 -            function SomeUsagesOfTheseConsts() {
--                // these do get replaced by the const value
--                var value1 = 1 /* ReExportedEnum.Cancel */;
 +        ViewModels.ReExportedEnum = Dialogs.DialogResult;
++        /**
++         * Not exported to show difference. No javascript is emmitted (as expected)
++         */
 +        var DialogButtons = Dialogs.MessageBoxButtons;
 +        ViewModels.Callback = Dialogs.DialogResultCallback;
 +        class SomeUsagesOfTheseConsts {
 +            constructor() {
+                 // these do get replaced by the const value
+-                var value1 = 1 /* ReExportedEnum.Cancel */;
 +                const value1 = ViewModels.ReExportedEnum.Cancel;
                  console.log(value1);
 -                var value2 = 2 /* DialogButtons.OKCancel */;

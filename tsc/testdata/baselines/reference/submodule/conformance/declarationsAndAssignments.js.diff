@@ -34,17 +34,17 @@
 -    var x = { x: 5, y: "hello" }.x; // Error, no y in target
 -    var y = { x: 5, y: "hello" }.y; // Error, no x in target
 -    var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;
-+    var {} = { x: 5, y: "hello" };
-+    var { x } = { x: 5, y: "hello" };
-+    var { y } = { x: 5, y: "hello" };
++    var {} = { x: 5, y: "hello" }; // Ok, empty binding pattern means nothing
++    var { x } = { x: 5, y: "hello" }; // Error, no y in target
++    var { y } = { x: 5, y: "hello" }; // Error, no x in target
 +    var { x, y } = { x: 5, y: "hello" };
      var x;
      var y;
 -    var a = { x: 5, y: "hello" }.x; // Error, no y in target
 -    var b = { x: 5, y: "hello" }.y; // Error, no x in target
 -    var _c = { x: 5, y: "hello" }, a = _c.x, b = _c.y;
-+    var { x: a } = { x: 5, y: "hello" };
-+    var { y: b } = { x: 5, y: "hello" };
++    var { x: a } = { x: 5, y: "hello" }; // Error, no y in target
++    var { y: b } = { x: 5, y: "hello" }; // Error, no x in target
 +    var { x: a, y: b } = { x: 5, y: "hello" };
      var a;
      var b;
@@ -71,29 +71,29 @@
  }
  function f7() {
 -    var _a = [1, "hello"], _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? 1 : _c; // Error, initializer for y must be string
-+    var [x = 0, y = 1] = [1, "hello"];
++    var [x = 0, y = 1] = [1, "hello"]; // Error, initializer for y must be string
      var x;
      var y;
  }
  function f8() {
 -    var _a = [], a = _a[0], b = _a[1], c = _a[2]; // Error, [] is an empty tuple
 -    var _b = [1], d = _b[0], e = _b[1], f = _b[2]; // Error, [1] is a tuple
-+    var [a, b, c] = [];
-+    var [d, e, f] = [1];
++    var [a, b, c] = []; // Error, [] is an empty tuple
++    var [d, e, f] = [1]; // Error, [1] is a tuple
  }
  function f9() {
 -    var _a = {}, a = _a[0], b = _a[1]; // Error, not array type
 -    var _b = { 0: 10, 1: 20 }, c = _b[0], d = _b[1]; // Error, not array type
 -    var _c = [10, 20], e = _c[0], f = _c[1];
-+    var [a, b] = {};
-+    var [c, d] = { 0: 10, 1: 20 };
++    var [a, b] = {}; // Error, not array type
++    var [c, d] = { 0: 10, 1: 20 }; // Error, not array type
 +    var [e, f] = [10, 20];
  }
  function f10() {
 -    var _a = {}, a = _a.a, b = _a.b; // Error
 -    var _b = [], a = _b.a, b = _b.b; // Error
-+    var { a, b } = {};
-+    var { a, b } = [];
++    var { a, b } = {}; // Error
++    var { a, b } = []; // Error
  }
  function f11() {
 -    var _a = { x: 10, y: "hello" }, a = _a.x, b = _a.y;
@@ -127,11 +127,8 @@
      var a;
      var b;
      var c;
- }
- f14([2, ["abc", { x: 0, y: true }]]);
- f14([2, ["abc", { x: 0 }]]);
--f14([2, ["abc", { y: false }]]); // Error, no x
-+f14([2, ["abc", { y: false }]]);
+@@= skipped -95, +94 lines =@@
+ f14([2, ["abc", { y: false }]]); // Error, no x
  var M;
  (function (M) {
 -    var _a;
@@ -170,7 +167,7 @@
 +    ({ a, b } = { a, b });
 +    ({ a, b } = { b, a });
 +    [aa[0], b] = [a, b];
-+    [a, b] = [b, a];
++    [a, b] = [b, a]; // Error
 +    [a = 1, b = "abc"] = [2, "def"];
  }
  function f19() {
@@ -189,7 +186,7 @@
  }
  function f20(v) {
      var x;
-@@= skipped -142, +137 lines =@@
+@@= skipped -47, +43 lines =@@
      var a1;
      var a2;
      var a3;

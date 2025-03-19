@@ -144,6 +144,7 @@ module m3 {
 }
 
 //// [letDeclarations-validContexts.js]
+// Control flow statements with blocks
 if (true) {
     let l1 = 0;
 }
@@ -172,6 +173,7 @@ if (true) {
 while (false) {
     label2: label3: label4: let l9 = 0;
 }
+// Try/catch/finally
 try {
     let l10 = 0;
 }
@@ -181,6 +183,7 @@ catch (e) {
 finally {
     let l12 = 0;
 }
+// Switch
 switch (0) {
     case 0:
         let l13 = 0;
@@ -189,6 +192,7 @@ switch (0) {
         let l14 = 0;
         break;
 }
+// blocks
 {
     let l15 = 0;
     {
@@ -196,7 +200,9 @@ switch (0) {
         label17: let l17 = 0;
     }
 }
+// global
 let l18 = 0;
+// functions
 function F() {
     let l19 = 0;
 }
@@ -206,6 +212,7 @@ var F2 = () => {
 var F3 = function () {
     let l21 = 0;
 };
+// modules
 var m;
 (function (m) {
     let l22 = 0;
@@ -213,6 +220,7 @@ var m;
         let l23 = 0;
     }
 })(m || (m = {}));
+// methods
 class C {
     constructor() {
         let l24 = 0;
@@ -228,6 +236,7 @@ class C {
         let l27 = value;
     }
 }
+// object literals
 var o = {
     f() {
         let l28 = 0;
@@ -236,6 +245,7 @@ var o = {
         let l29 = 0;
     }
 };
+// labels
 label: let l30 = 0;
 {
     label2: let l31 = 0;

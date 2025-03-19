@@ -1,9 +1,0 @@
---- old.templateStringWithEmbeddedYieldKeywordES6.js
-+++ new.templateStringWithEmbeddedYieldKeywordES6.js
-@@= skipped -8, +8 lines =@@
- 
- //// [templateStringWithEmbeddedYieldKeywordES6.js]
- function* gen() {
--    // Once this is supported, yield *must* be parenthesized.
-     var x = `abc${yield 10}def`;
- }

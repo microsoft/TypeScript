@@ -24,6 +24,7 @@ class Comp<T extends Foo, S> extends Component<S & State<T>>
 //// [indexedAccessRelation.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Repro from #14723
 class Component {
     setState(state) { }
 }

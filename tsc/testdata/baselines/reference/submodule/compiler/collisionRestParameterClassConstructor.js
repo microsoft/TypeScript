@@ -69,47 +69,48 @@ declare class c6NoError {
 }
 
 //// [collisionRestParameterClassConstructor.js]
+// Constructors
 class c1 {
     constructor(_i, ...restParameters) {
-        var _i = 10;
+        var _i = 10; // no error
     }
 }
 class c1NoError {
     constructor(_i) {
-        var _i = 10;
+        var _i = 10; // no error
     }
 }
 class c2 {
     constructor(...restParameters) {
-        var _i = 10;
+        var _i = 10; // no error
     }
 }
 class c2NoError {
     constructor() {
-        var _i = 10;
+        var _i = 10; // no error
     }
 }
 class c3 {
     _i;
     constructor(_i, ...restParameters) {
         this._i = _i;
-        var _i = 10;
+        var _i = 10; // no error
     }
 }
 class c3NoError {
     _i;
     constructor(_i) {
         this._i = _i;
-        var _i = 10;
+        var _i = 10; // no error
     }
 }
 class c5 {
     constructor(_i, ...rest) {
-        var _i;
+        var _i; // no error
     }
 }
 class c5NoError {
     constructor(_i) {
-        var _i;
+        var _i; // no error
     }
 }

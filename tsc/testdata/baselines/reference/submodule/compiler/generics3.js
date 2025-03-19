@@ -15,4 +15,4 @@ class C {
 }
 var a;
 var b;
-a = b;
+a = b; // Ok - should be identical

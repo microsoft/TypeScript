@@ -20,7 +20,9 @@ export { B }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
+// https://github.com/microsoft/TypeScript/issues/55038
 var A;
+// https://github.com/microsoft/TypeScript/issues/55038
 (function (A_1) {
     A_1.A = 0;
 })(A || (exports.A = A = {}));

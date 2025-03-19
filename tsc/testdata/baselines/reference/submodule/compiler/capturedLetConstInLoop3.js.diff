@@ -171,7 +171,7 @@
      }
      use(v);
  }
--//===const
+ //===const
  function foo0_c(x) {
 -    var _loop_11 = function (x_11) {
 -        v = x_11;

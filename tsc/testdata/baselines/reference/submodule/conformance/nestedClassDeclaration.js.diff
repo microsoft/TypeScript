@@ -1,10 +1,9 @@
 --- old.nestedClassDeclaration.js
 +++ new.nestedClassDeclaration.js
-@@= skipped -20, +20 lines =@@
- 
+@@= skipped -21, +21 lines =@@
  
  //// [nestedClassDeclaration.js]
--// nested classes are not allowed
+ // nested classes are not allowed
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

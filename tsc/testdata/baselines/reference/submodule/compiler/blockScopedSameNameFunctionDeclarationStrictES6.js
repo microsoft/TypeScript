@@ -25,15 +25,15 @@ function foo(a) {
     if (a === 10) {
         function foo() { }
         foo();
-        foo(10);
+        foo(10); // not ok
     }
     else {
         function foo() { }
         foo();
-        foo(10);
+        foo(10); // not ok
     }
     foo(10);
-    foo();
+    foo(); // not ok
 }
 foo(10);
-foo();
+foo(); // not ok - needs number

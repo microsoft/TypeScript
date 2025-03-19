@@ -17,8 +17,8 @@ if(typeof y !== "undefined") {
 const x = undefined;
 const y = undefined;
 if (typeof x === "undefined") {
-    x;
+    x; // no error: assume x2 is initialised
 }
 if (typeof y !== "undefined") {
-    y;
+    y; // no error: do not narrow void
 }

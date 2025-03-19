@@ -25,4 +25,4 @@ let a: x.A; // should not work
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("file2");
-let a;
+let a; // should not work

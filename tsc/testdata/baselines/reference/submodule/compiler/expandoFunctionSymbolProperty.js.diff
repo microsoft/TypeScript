@@ -1,13 +1,6 @@
 --- old.expandoFunctionSymbolProperty.js
 +++ new.expandoFunctionSymbolProperty.js
-@@= skipped -17, +17 lines =@@
- 
- 
- //// [expandoFunctionSymbolProperty.js]
--// repro from https://github.com/microsoft/TypeScript/issues/54220
- const symb = Symbol();
- export function test() {
-     function inner() { }
+@@= skipped -24, +24 lines =@@
      inner[symb] = true;
      return inner;
  }

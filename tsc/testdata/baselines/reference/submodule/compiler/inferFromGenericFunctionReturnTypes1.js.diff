@@ -1,11 +1,9 @@
 --- old.inferFromGenericFunctionReturnTypes1.js
 +++ new.inferFromGenericFunctionReturnTypes1.js
-@@= skipped -73, +73 lines =@@
- 
- 
+@@= skipped -75, +75 lines =@@
  //// [inferFromGenericFunctionReturnTypes1.js]
--// Repro from #15680
--// This is a contrived class. We could do the same thing with Observables, etc.
+ // Repro from #15680
+ // This is a contrived class. We could do the same thing with Observables, etc.
 -var SetOf = /** @class */ (function () {
 -    function SetOf() {
 -    }
@@ -36,6 +34,7 @@
 +        this._store.forEach((a, i) => fn(a, i));
 +    }
  }
++/* ... etc ... */
 +function compose(...fns) {
 +    return (x) => fns.reduce((prev, fn) => fn(prev), x);
 +}
@@ -70,6 +69,7 @@
 -testSet.transform(compose(filter(function (x) { return x % 1 === 0; }), map(function (x) { return x + x; }), map(function (x) { return x + '!!!'; }), map(function (x) { return x.toUpperCase(); })));
 -testSet.transform(compose(filter(function (x) { return x % 1 === 0; }), map(function (x) { return x + x; }), map(function (x) { return 123; }), // Whoops a bug
 -map(function (x) { return x.toUpperCase(); }) // causes an error!
--));
 +testSet.transform(compose(filter(x => x % 1 === 0), map(x => x + x), map(x => x + '!!!'), map(x => x.toUpperCase())));
-+testSet.transform(compose(filter(x => x % 1 === 0), map(x => x + x), map(x => 123), map(x => x.toUpperCase())));
++testSet.transform(compose(filter(x => x % 1 === 0), map(x => x + x), map(x => 123), // Whoops a bug
++map(x => x.toUpperCase()) // causes an error!
+ ));

@@ -1,8 +1,0 @@
---- old.globalThis.js
-+++ new.globalThis.js
-@@= skipped -3, +3 lines =@@
- var __e = Math.E;  // should not generate 'this.Math.E'
- 
- //// [globalThis.js]
--var __e = Math.E; // should not generate 'this.Math.E'
-+var __e = Math.E;

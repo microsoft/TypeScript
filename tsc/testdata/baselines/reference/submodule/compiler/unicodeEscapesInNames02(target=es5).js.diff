@@ -1,17 +1,15 @@
 --- old.unicodeEscapesInNames02(target=es5).js
 +++ new.unicodeEscapesInNames02(target=es5).js
-@@= skipped -30, +30 lines =@@
- 
- 
+@@= skipped -32, +32 lines =@@
  //// [extendedEscapesForAstralsInVarsAndClasses.js]
--// U+102A7 CARIAN LETTER A2
+ // U+102A7 CARIAN LETTER A2
  var string;
 -var u, A7 = (void 0)[102];
 +var u, { 102: A7 };
  if (Math.random()) {
      "hello";
  }
-@@= skipped -14, +13 lines =@@
+@@= skipped -12, +12 lines =@@
      }
      "hallo";
  }

@@ -22,76 +22,9 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  function fail(message) {
      throw new Error(message);
-@@= skipped -22, +7 lines =@@
- function f01(x) {
-     if (x === undefined)
-         fail("undefined argument");
--    x.length; // string
-+    x.length;
- }
- function f02(x) {
-     if (x >= 0)
-         return x;
-     fail("negative number");
--    x; // Unreachable
-+    x;
- }
- function f03(x) {
--    x; // string
-+    x;
-     fail();
--    x; // Unreachable
-+    x;
- }
- function f11(x, fail) {
-     if (x === undefined)
-         fail("undefined argument");
--    x.length; // string
-+    x.length;
- }
- function f12(x, fail) {
-     if (x >= 0)
-         return x;
-     fail("negative number");
--    x; // Unreachable
-+    x;
- }
- function f13(x, fail) {
--    x; // string
-+    x;
-     fail();
--    x; // Unreachable
-+    x;
- }
- var Debug;
- (function (Debug) {
-@@= skipped -35, +35 lines =@@
- function f21(x) {
-     if (x === undefined)
-         Debug.fail("undefined argument");
--    x.length; // string
-+    x.length;
- }
- function f22(x) {
-     if (x >= 0)
-         return x;
-     Debug.fail("negative number");
--    x; // Unreachable
-+    x;
- }
- function f23(x) {
--    x; // string
-+    x;
-     Debug.fail();
--    x; // Unreachable
-+    x;
- }
- function f24(x) {
--    x; // string
-+    x;
+@@= skipped -75, +60 lines =@@
      ((Debug).fail)();
--    x; // Unreachable
-+    x;
+     x; // Unreachable
  }
 -var Test = /** @class */ (function () {
 -    function Test() {
@@ -106,123 +39,40 @@
 +    f1(x) {
          if (x === undefined)
              this.fail("undefined argument");
--        x.length; // string
+         x.length; // string
 -    };
 -    Test.prototype.f2 = function (x) {
-+        x.length;
 +    }
 +    f2(x) {
          if (x >= 0)
              return x;
          this.fail("negative number");
--        x; // Unreachable
+         x; // Unreachable
 -    };
 -    Test.prototype.f3 = function (x) {
--        x; // string
-+        x;
 +    }
 +    f3(x) {
-+        x;
+         x; // string
          this.fail();
--        x; // Unreachable
+         x; // Unreachable
 -    };
 -    return Test;
 -}());
-+        x;
 +    }
 +}
  function f30(x) {
      if (typeof x === "string") {
          fail();
--        x; // Unreachable
-+        x;
-     }
-     else {
--        x; // number | undefined
-+        x;
-         if (x !== undefined) {
--            x; // number
-+            x;
-             fail();
--            x; // Unreachable
-+            x;
-         }
-         else {
--            x; // undefined
-+            x;
-             fail();
--            x; // Unreachable
-+            x;
-         }
--        x; // Unreachable
-+        x;
-     }
--    x; // Unreachable
-+    x;
- }
- function f31(x) {
-     if (typeof x.a === "string") {
-         fail();
--        x; // Unreachable
--        x.a; // Unreachable
-+        x;
-+        x.a;
-     }
--    x; // { a: string | number }
--    x.a; // number
-+    x;
-+    x.a;
- }
- function f40(x) {
-     try {
-         x;
-         fail();
--        x; // Unreachable
-+        x;
-     }
-     finally {
-         x;
-         fail();
--        x; // Unreachable
-+        x;
-     }
--    x; // Unreachable
-+    x;
- }
- function f41(x) {
-     try {
-@@= skipped -92, +89 lines =@@
-     finally {
-         x;
-         fail();
--        x; // Unreachable
-+        x;
-     }
--    x; // Unreachable
-+    x;
- }
- function f42(x) {
-     try {
-         x;
-         fail();
--        x; // Unreachable
-+        x;
-     }
-     finally {
-         x;
-     }
--    x; // Unreachable
-+    x;
+@@= skipped -90, +87 lines =@@
+     x; // Unreachable
  }
  function f43() {
 -    var fail = function () { throw new Error(); };
 -    var f = [fail];
--    fail(); // No effect (missing type annotation)
--    f[0](); // No effect (not a dotted name)
 +    const fail = () => { throw new Error(); };
 +    const f = [fail];
-+    fail();
-+    f[0]();
+     fail(); // No effect (missing type annotation)
+     f[0](); // No effect (not a dotted name)
      f;
  }
 -var Component = registerComponent('test-component', {
@@ -249,17 +99,17 @@
 -    pause: function () { },
 -    play: function () { },
 -    multiply: function (f) {
--        // Reference to system because both were registered with the same name.
 +    update() { },
 +    tick() { },
 +    remove() { },
 +    pause() { },
 +    play() { },
 +    multiply(f) {
+         // Reference to system because both were registered with the same name.
          return f * this.data.num * this.system.data.counter;
      }
  });
--// Repro from #36147
+ // Repro from #36147
 -var MyThrowable = /** @class */ (function () {
 -    function MyThrowable() {
 -    }
@@ -294,7 +144,7 @@
  function foo(services, s) {
      if (s === null) {
          services.panic("ouch");
-@@= skipped -77, +67 lines =@@
+@@= skipped -61, +53 lines =@@
          return s;
      }
  }

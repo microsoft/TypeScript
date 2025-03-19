@@ -16,4 +16,4 @@
 -    return __assign.apply(this, arguments);
 -};
 -var a = __assign({}, x).a; // error
-+const { a } = { ...x };
++const { a } = { ...x }; // error

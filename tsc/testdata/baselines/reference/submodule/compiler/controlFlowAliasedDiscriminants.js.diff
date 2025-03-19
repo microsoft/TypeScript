@@ -18,22 +18,16 @@
 +const { data: data2, isSuccess: isSuccess2 } = useQuery();
 +const { data: data3, isSuccess: isSuccess3 } = useQuery();
  if (isSuccess1 && isSuccess2 && isSuccess3) {
--    data1.toExponential(); // should ok
--    data2.toExponential(); // should ok
--    data3.toExponential(); // should ok
-+    data1.toExponential();
-+    data2.toExponential();
-+    data3.toExponential();
+     data1.toExponential(); // should ok
+     data2.toExponential(); // should ok
+     data3.toExponential(); // should ok
  }
 -var areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
 +const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
  if (areSuccess) {
--    data1.toExponential(); // should ok
--    data2.toExponential(); // should ok
--    data3.toExponential(); // should ok
-+    data1.toExponential();
-+    data2.toExponential();
-+    data3.toExponential();
+     data1.toExponential(); // should ok
+     data2.toExponential(); // should ok
+     data3.toExponential(); // should ok
  }
  {
 -    var _d = useQuery(), data1_1 = _d.data, isSuccess1_1 = _d.isSuccess;
@@ -49,9 +43,9 @@
 +    const { data: data3, isSuccess: isSuccess3 } = useQuery();
 +    const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
 +    if (areSuccess) {
-+        data1.toExponential();
-+        data2.toExponential();
-+        data3.toExponential();
++        data1.toExponential(); // should error
++        data2.toExponential(); // should error
++        data3.toExponential(); // should ok
      }
  }
  {
@@ -64,12 +58,9 @@
 +    const [foo3, bar3] = getArrayResult();
 +    const arrayAllSuccess = foo1 && foo2 && foo3;
      if (arrayAllSuccess) {
--        bar1.toExponential(); // should ok
--        bar2.toExponential(); // should ok
--        bar3.toExponential(); // should ok
-+        bar1.toExponential();
-+        bar2.toExponential();
-+        bar3.toExponential();
+         bar1.toExponential(); // should ok
+         bar2.toExponential(); // should ok
+@@= skipped -44, +43 lines =@@
      }
  }
  {
@@ -82,12 +73,9 @@
 +    let [foo3, bar3] = getArrayResult();
 +    const arrayAllSuccess = foo1 && foo2 && foo3;
      if (arrayAllSuccess) {
--        bar1.toExponential(); // should ok
--        bar2.toExponential(); // should error
--        bar3.toExponential(); // should error
-+        bar1.toExponential();
-+        bar2.toExponential();
-+        bar3.toExponential();
+         bar1.toExponential(); // should ok
+         bar2.toExponential(); // should error
+@@= skipped -11, +11 lines =@@
      }
  }
  {
@@ -98,7 +86,7 @@
      if (type === 'string') {
          data;
      }
-@@= skipped -65, +64 lines =@@
+@@= skipped -10, +10 lines =@@
      }
  }
  {

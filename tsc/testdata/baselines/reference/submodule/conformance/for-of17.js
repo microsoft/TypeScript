@@ -29,4 +29,4 @@ class NumberIterator {
     }
 }
 var v;
-for (v of new NumberIterator) { }
+for (v of new NumberIterator) { } // Should succeed

@@ -7,4 +7,4 @@
 -var x = q1.each(function (x) { return c.log(x); });
 +var x = q1.each(x => c.log(x));
  //// [file2.js]
--///<reference path='file1.ts'/>
+ ///<reference path='file1.ts'/>

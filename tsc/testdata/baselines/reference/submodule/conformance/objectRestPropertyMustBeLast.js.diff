@@ -20,7 +20,7 @@
 -(_a = { x: 1 }, x = _a.x); // Error, rest must be last property
 -var _d = { x: 1 }, x = _d.x, b = __rest(_d, ["a", "x"]); // Error, rest must be last property
 -(_b = { x: 1 }, x = _b.x, b = __rest(_b, ["x"])); // Error, rest must be last property
-+var { ...a, x } = { x: 1 };
-+({ ...a, x } = { x: 1 });
-+var { ...a, x, ...b } = { x: 1 };
-+({ ...a, x, ...b } = { x: 1 });
++var { ...a, x } = { x: 1 }; // Error, rest must be last property
++({ ...a, x } = { x: 1 }); // Error, rest must be last property
++var { ...a, x, ...b } = { x: 1 }; // Error, rest must be last property
++({ ...a, x, ...b } = { x: 1 }); // Error, rest must be last property

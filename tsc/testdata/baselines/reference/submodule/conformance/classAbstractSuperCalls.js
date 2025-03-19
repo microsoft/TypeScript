@@ -38,7 +38,7 @@ class B extends A {
 }
 class C extends B {
     foo() { return 2; }
-    qux() { return super.foo() || super.foo; }
+    qux() { return super.foo() || super.foo; } // 2 errors, foo is abstract
     norf() { return super.bar(); }
 }
 class AA {

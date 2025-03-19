@@ -35,8 +35,11 @@ function VerticalNavMenuItem(prop) {
 }
 function VerticalNav() {
     return (<div>
-      <VerticalNavMenuItem primaryText={2}/>  // error
-      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"}/>  // ok
-      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"}/>  // error
+      <VerticalNavMenuItem primaryText={2}/> // error
+      // error
+      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"}/> // ok
+      // ok
+      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"}/> // error
+      // error
     </div>);
 }

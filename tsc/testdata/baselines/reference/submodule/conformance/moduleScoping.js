@@ -23,16 +23,16 @@ var x = v2; // Should be global v2 of type number again
 
 
 //// [file1.js]
-var v1 = "sausages";
+var v1 = "sausages"; // Global scope
 //// [file2.js]
-var v2 = 42;
+var v2 = 42; // Global scope
 var v4 = () => 5;
 //// [file3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.v3 = void 0;
 exports.v3 = true;
-var v2 = [1, 2, 3];
+var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
 //// [file4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -40,6 +40,6 @@ const file3 = require("./file3");
 var t1 = v1;
 var t2 = v2;
 var t3 = file3.v3;
-var v4 = { a: true, b: NaN };
+var v4 = { a: true, b: NaN }; // Should shadow global v2 in this module
 //// [file5.js]
-var x = v2;
+var x = v2; // Should be global v2 of type number again

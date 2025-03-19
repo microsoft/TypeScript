@@ -9,11 +9,9 @@
      (function (Utils) {
          function mirror(p) {
              return { x: p.y, y: p.x };
-@@= skipped -15, +15 lines =@@
- exports.A = void 0;
- var A;
+@@= skipped -17, +17 lines =@@
  (function (A) {
--    // collision with 'Origin' var in other part of merged module
+     // collision with 'Origin' var in other part of merged module
      A.Origin = { x: 0, y: 0 };
 -    var Utils;
 +    let Utils;

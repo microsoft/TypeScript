@@ -68,15 +68,15 @@ function e(x: I<"A" | "B">) {
 let x;
 let cond;
 x = /a/;
-if (x, (x = true)) {
-    x;
+if (x /* RegExp */, (x = true)) {
+    x; // boolean
     x = "";
 }
 else {
-    x;
+    x; // boolean
     x = 42;
 }
-x;
+x; // string | number
 function a() {
     let x;
     if (cond) {
@@ -86,7 +86,7 @@ function a() {
         x = "";
         return;
     }
-    x;
+    x; // number
 }
 function b() {
     let x;
@@ -97,7 +97,7 @@ function b() {
     else {
         x = "";
     }
-    x;
+    x; // string
 }
 function c(data) {
     if (typeof data === 'string') {

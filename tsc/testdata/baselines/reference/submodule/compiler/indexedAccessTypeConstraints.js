@@ -62,6 +62,7 @@ class Bar extends Parent {
     }
 }
 exports.Bar = Bar;
+// Repro from #14557
 function foo(x, y) {
     x = y;
 }

@@ -10,111 +10,57 @@
 -var a1b = [ra1, ru1]; // { [x: string]: any }[]
 -var a2a = [ru2, ra2]; // { [x: string]: any }[]
 -var a2b = [ra2, ru2]; // { [x: string]: any }[]
--// Check that `{}` is strict supertype of any non-empty object
++const a1a = [ru1, ra1]; // { [x: string]: any }[]
++const a1b = [ra1, ru1]; // { [x: string]: any }[]
++const a2a = [ru2, ra2]; // { [x: string]: any }[]
++const a2b = [ra2, ru2]; // { [x: string]: any }[]
+ // Check that `{}` is strict supertype of any non-empty object
 -var c3 = {};
 -var a3a = [c3, r3]; // {}[]
 -var a3b = [r3, c3]; // {}[]
 -var c4 = {};
 -var a4a = [c4, r4]; // {}[]
 -var a4b = [r4, c4]; // {}[]
-+const a1a = [ru1, ra1];
-+const a1b = [ra1, ru1];
-+const a2a = [ru2, ra2];
-+const a2b = [ra2, ru2];
 +const c3 = {};
-+const a3a = [c3, r3];
-+const a3b = [r3, c3];
++const a3a = [c3, r3]; // {}[]
++const a3b = [r3, c3]; // {}[]
 +const c4 = {};
-+const a4a = [c4, r4];
-+const a4b = [r4, c4];
++const a4a = [c4, r4]; // {}[]
++const a4b = [r4, c4]; // {}[]
  function gg1(x) {
      if (isObject1(x)) {
--        x; // Record<string, unknown>
-+        x;
-     }
-     else {
--        x; // {}
-+        x;
-     }
--    x; // {}
-+    x;
- }
- function gg2(x) {
-     if (isObject2(x)) {
--        x; // Record<string, unknown>
-+        x;
-     }
-     else {
--        x; // never
-+        x;
-     }
--    x; // Record<string, unknown>
-+    x;
- }
- function gg3(x) {
-     if (isObject3(x)) {
--        x; // Record<string, any>
-+        x;
-     }
-     else {
--        x; // {}
-+        x;
-     }
--    x; // {}
-+    x;
- }
- function gg4(x) {
-     if (isObject4(x)) {
--        x; // Record<string, any>
-+        x;
-     }
-     else {
--        x; // never
-+        x;
-     }
--    x; // Record<string, any>
-+    x;
- }
- function is(value) {
-     return true;
-@@= skipped -61, +58 lines =@@
-     if (is(x)) { }
-     if (is(x)) { }
-     if (is(x)) { }
--    x; // Union
-+    x;
- }
+         x; // Record<string, unknown>
+@@= skipped -66, +64 lines =@@
  function checksArrayOrObject1(obj) {
--    // "accidentally" guards the first branch on the length
+     // "accidentally" guards the first branch on the length
      if (Array.isArray(obj) && obj.length) {
 -        for (var key in obj) {
 +        for (let key in obj) {
              if (obj[key] !== undefined) {
                  console.log(obj[key]);
              }
-         }
+@@= skipped -8, +8 lines =@@
      }
      else {
--        // 'obj' should probably not include an array type here.
+         // 'obj' should probably not include an array type here.
 -        for (var key in obj) {
 +        for (let key in obj) {
              if (obj[key] !== undefined) {
                  console.log(obj[key]);
              }
-@@= skipped -22, +20 lines =@@
- }
+@@= skipped -10, +10 lines =@@
  function checksArrayOrObject2(obj) {
      if (Array.isArray(obj)) {
--        // obj should only be an array type here
+         // obj should only be an array type here
 -        for (var key in obj) {
 +        for (let key in obj) {
              if (obj[key] !== undefined) {
                  console.log(obj[key]);
              }
-         }
+@@= skipped -8, +8 lines =@@
      }
      else {
--        // 'obj' should probably not include an array type here.
+         // 'obj' should probably not include an array type here.
 -        for (var key in obj) {
 +        for (let key in obj) {
              if (obj[key] !== undefined) {

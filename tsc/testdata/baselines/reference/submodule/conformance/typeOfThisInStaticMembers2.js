@@ -11,8 +11,8 @@ class C2<T> {
 
 //// [typeOfThisInStaticMembers2.js]
 class C {
-    static foo = this;
+    static foo = this; // ok
 }
 class C2 {
-    static foo = this;
+    static foo = this; // ok
 }

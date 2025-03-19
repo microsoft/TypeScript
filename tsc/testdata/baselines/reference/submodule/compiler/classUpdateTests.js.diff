@@ -19,9 +19,9 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--//
--// test codegen for instance properties
--//
+ //
+ // test codegen for instance properties
+ //
 -var A = /** @class */ (function () {
 -    function A() {
 -        this.p1 = 0;
@@ -61,35 +61,35 @@
      }
 -    return C;
 -}());
--//
--// test requirements for super calls
--//
++}
+ //
+ // test requirements for super calls
+ //
 -var D = /** @class */ (function () {
 -    function D() {
-+}
 +class D {
 +}
 +class E extends D {
 +    p1 = 0;
 +}
 +class F extends E {
-+    constructor() { }
++    constructor() { } // ERROR - super call required
 +}
 +class G extends D {
 +    p1 = 0;
-+    constructor() { super(); }
++    constructor() { super(); } // NO ERROR
 +}
 +class H {
-+    constructor() { super(); }
++    constructor() { super(); } // ERROR - no super call allowed
 +}
 +class I extends Object {
-+    constructor() { super(); }
++    constructor() { super(); } // ERROR - no super call allowed
 +}
 +class J extends G {
 +    p1;
 +    constructor(p1) {
 +        this.p1 = p1;
-+        super();
++        super(); // NO ERROR
      }
 -    return D;
 -}());
@@ -169,7 +169,7 @@
 +    p1;
 +    constructor(p1) {
 +        this.p1 = p1;
-+        super();
++        super(); // NO ERROR
      }
 -    return L;
 -}(G));
@@ -190,14 +190,14 @@
      }
 -    return M;
 -}(G));
--//
--// test this reference in field initializers
--//
++}
+ //
+ // test this reference in field initializers
+ //
 -var N = /** @class */ (function () {
 -    function N() {
 -        this.p1 = 0;
 -        this.p2 = this.p1;
-+}
 +class N {
 +    p1 = 0;
 +    p2 = this.p1;
@@ -206,13 +206,13 @@
      }
 -    return N;
 -}());
--//
--// test error on property declarations within class constructors
--//
++}
+ //
+ // test error on property declarations within class constructors
+ //
 -var O = /** @class */ (function () {
 -    function O() {
 -        this.p1 = 0; // ERROR
-+}
 +class O {
 +    constructor() {
      }
@@ -221,7 +221,7 @@
 -var P = /** @class */ (function () {
 -    function P() {
 -        this.p1 = 0; // ERROR
-+    p1 = 0;
++    p1 = 0; // ERROR
 +}
 +class P {
 +    constructor() {
@@ -231,7 +231,7 @@
 -var Q = /** @class */ (function () {
 -    function Q() {
 -        this.p1 = 0; // ERROR
-+    p1 = 0;
++    p1 = 0; // ERROR
 +}
 +class Q {
 +    constructor() {
@@ -242,7 +242,7 @@
 -    function R() {
 -        this.p1 = 0; // ERROR
 +    this;
-+    p1 = 0;
++    p1 = 0; // ERROR
 +}
 +class R {
 +    constructor() {
@@ -250,5 +250,5 @@
 -    return R;
 -}());
 +    this;
-+    p1 = 0;
++    p1 = 0; // ERROR
 +}

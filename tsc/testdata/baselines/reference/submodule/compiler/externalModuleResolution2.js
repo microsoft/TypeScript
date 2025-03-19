@@ -28,4 +28,4 @@ module.exports = M2;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const x = require("./foo");
-x.X;
+x.X; // .ts should be picked

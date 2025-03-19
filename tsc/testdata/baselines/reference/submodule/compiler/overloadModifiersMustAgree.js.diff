@@ -11,6 +11,6 @@
 -    return baz;
 -}());
 +class baz {
-+    foo(bar) { }
++    foo(bar) { } // error - access modifiers do not agree
 +}
  function bar(s) { }

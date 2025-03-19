@@ -10,10 +10,10 @@ var x: (...y: string[]) => void = function (.../*3*/y) {
 };
 
 //// [contextuallyTypingRestParameters.js]
-var x = function (...y) {
+var x = function (... /*3*/y) {
     var t = y;
-    var x2 = t;
-    var x3 = t;
-    var y2 = y;
-    var y3 = y;
+    var x2 = t; // This should be error
+    var x3 = t; // No error
+    var y2 = y; // This should be error
+    var y3 = y; // No error
 };

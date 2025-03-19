@@ -21,6 +21,7 @@ var x = {
 
 
 //// [nestedClassDeclaration.js]
+// nested classes are not allowed
 class C {
     x;
 }

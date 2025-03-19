@@ -30,7 +30,10 @@
 -    };
 -    return Bar;
 -}());
--// new-style class
++    }
++    constructor(n) { }
++}
+ // new-style class
 -var Foo = /** @class */ (function (_super) {
 -    __extends(Foo, _super);
 -    function Foo(x, y, z) {
@@ -43,14 +46,6 @@
 -        _this.x = x;
 -        _this.gar = 5;
 -        return _this;
-     }
--    Foo.prototype.bar = function () { return 0; };
--    Foo.prototype.boo = function (x) { return x; };
--    Foo.statVal = 0;
--    return Foo;
--}(Bar));
-+    constructor(n) { }
-+}
 +class Foo extends Bar {
 +    y;
 +    z;
@@ -67,33 +62,13 @@
 +        super(x);
 +        this.x = x;
 +        this.gar = 5;
-+    }
+     }
+-    Foo.prototype.bar = function () { return 0; };
+-    Foo.prototype.boo = function (x) { return x; };
+-    Foo.statVal = 0;
+-    return Foo;
+-}(Bar));
 +}
  var f = new Foo();
--//class GetSetMonster {
--//  // attack(target) {
--//  //     WScript.Echo("Attacks " + target);
--//  // }
--//  // The contextual keyword "get" followed by an identifier and
--//  // a curly body defines a getter in the same way that "get"
--//  // defines one in an object literal.
--//  // get isAlive() {
--//  //   return this.health > 0;
--//  // }
--//  // Likewise, "set" can be used to define setters.
--//  set health(value:number) {
--//    if (value < 0) {
--//      throw new Error('Health must be non-negative.')
--//    }
--//    this.health = value
--//  }
--//  get health() { return 0; }
--//  constructor(this.name: string, health: number) {
--//    this.health = 0;
--//  }
--//}
--//class bar {
--//   static fnOverload( );
--//   static fnOverload(foo: string){ } // no error
--//   constructor(){};    
--//}
+ //class GetSetMonster {
+ //  // attack(target) {

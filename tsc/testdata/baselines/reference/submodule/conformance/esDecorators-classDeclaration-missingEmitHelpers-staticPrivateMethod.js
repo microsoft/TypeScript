@@ -17,6 +17,7 @@ export {}
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// needs: __esDecorate, __runInitializers, __setFunctionName
 class C {
     @dec
     static #foo() { }

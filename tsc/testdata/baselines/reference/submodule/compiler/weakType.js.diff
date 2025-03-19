@@ -1,10 +1,8 @@
 --- old.weakType.js
 +++ new.weakType.js
-@@= skipped -70, +70 lines =@@
-     return { timeout: 1000 };
- }
+@@= skipped -72, +72 lines =@@
  function doSomething(settings) { }
--// forgot to call `getDefaultSettings`
+ // forgot to call `getDefaultSettings`
  doSomething(getDefaultSettings);
 -doSomething(function () { return ({ timeout: 1000 }); });
 +doSomething(() => ({ timeout: 1000 }));

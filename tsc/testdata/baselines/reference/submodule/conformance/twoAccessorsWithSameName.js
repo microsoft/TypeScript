@@ -39,11 +39,11 @@ var y = {
 //// [twoAccessorsWithSameName.js]
 class C {
     get x() { return 1; }
-    get x() { return 1; }
+    get x() { return 1; } // error
 }
 class D {
     set x(v) { }
-    set x(v) { }
+    set x(v) { } // error
 }
 class E {
     get x() {
@@ -55,6 +55,7 @@ var x = {
     get x() {
         return 1;
     },
+    // error
     get x() {
         return 1;
     }

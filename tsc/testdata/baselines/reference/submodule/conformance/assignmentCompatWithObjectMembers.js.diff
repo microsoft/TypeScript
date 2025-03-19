@@ -1,11 +1,7 @@
 --- old.assignmentCompatWithObjectMembers.js
 +++ new.assignmentCompatWithObjectMembers.js
-@@= skipped -87, +87 lines =@@
- }
- 
- //// [assignmentCompatWithObjectMembers.js]
--// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
--// no errors expected
+@@= skipped -91, +91 lines =@@
+ // no errors expected
  var SimpleTypes;
  (function (SimpleTypes) {
 -    var S = /** @class */ (function () {
@@ -27,7 +23,7 @@
      var s;
      var t;
      var s2;
-@@= skipped -44, +38 lines =@@
+@@= skipped -40, +36 lines =@@
  })(SimpleTypes || (SimpleTypes = {}));
  var ObjectTypes;
  (function (ObjectTypes) {

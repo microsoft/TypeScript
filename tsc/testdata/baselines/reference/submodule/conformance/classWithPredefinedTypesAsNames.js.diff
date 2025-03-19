@@ -1,10 +1,9 @@
 --- old.classWithPredefinedTypesAsNames.js
 +++ new.classWithPredefinedTypesAsNames.js
-@@= skipped -8, +8 lines =@@
- class string { }
+@@= skipped -9, +9 lines =@@
  
  //// [classWithPredefinedTypesAsNames.js]
--// classes cannot use predefined types as names
+ // classes cannot use predefined types as names
 -var any = /** @class */ (function () {
 -    function any() {
 -    }

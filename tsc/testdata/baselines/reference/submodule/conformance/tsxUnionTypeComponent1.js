@@ -35,7 +35,9 @@ class MyComponent extends React.Component {
         return (<AnyComponent />);
     }
 }
+// Stateless Component As Props
 <MyComponent AnyComponent={() => <button>test</button>}/>;
+// Component Class as Props
 class MyButtonComponent extends React.Component {
 }
 <MyComponent AnyComponent={MyButtonComponent}/>;

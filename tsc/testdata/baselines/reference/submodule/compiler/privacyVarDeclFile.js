@@ -434,9 +434,9 @@ class publicClass {
 }
 exports.publicClass = publicClass;
 class publicClassWithWithPrivatePropertyTypes {
-    static myPublicStaticProperty;
+    static myPublicStaticProperty; // Error
     static myPrivateStaticProperty;
-    myPublicProperty;
+    myPublicProperty; // Error
     myPrivateProperty;
 }
 exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
@@ -462,8 +462,8 @@ class privateClassWithWithPublicPropertyTypes {
 var privateVarWithPrivatePropertyTypes;
 var privateVarWithPublicPropertyTypes;
 class publicClassWithPrivateModulePropertyTypes {
-    static myPublicStaticProperty;
-    myPublicProperty;
+    static myPublicStaticProperty; // Error
+    myPublicProperty; // Error
 }
 exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
 class privateClassWithPrivateModulePropertyTypes {
@@ -479,9 +479,9 @@ var publicModule;
     }
     publicModule.publicClass = publicClass;
     class publicClassWithWithPrivatePropertyTypes {
-        static myPublicStaticProperty;
+        static myPublicStaticProperty; // Error
         static myPrivateStaticProperty;
-        myPublicProperty;
+        myPublicProperty; // Error
         myPrivateProperty;
     }
     publicModule.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
@@ -507,8 +507,8 @@ var publicModule;
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
     class publicClassWithPrivateModulePropertyTypes {
-        static myPublicStaticProperty;
-        myPublicProperty;
+        static myPublicStaticProperty; // Error
+        myPublicProperty; // Error
     }
     publicModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
     class privateClassWithPrivateModulePropertyTypes {
@@ -627,9 +627,9 @@ var publicModuleInGlobal;
         var privateVarWithPrivateModulePropertyTypes;
     })(privateModule || (privateModule = {}));
     class publicClassWithWithPrivatePropertyTypes {
-        static myPublicStaticProperty;
+        static myPublicStaticProperty; // Error
         static myPrivateStaticProperty;
-        myPublicProperty;
+        myPublicProperty; // Error
         myPrivateProperty;
     }
     publicModuleInGlobal.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
@@ -655,8 +655,8 @@ var publicModuleInGlobal;
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
     class publicClassWithPrivateModulePropertyTypes {
-        static myPublicStaticProperty;
-        myPublicProperty;
+        static myPublicStaticProperty; // Error
+        myPublicProperty; // Error
     }
     publicModuleInGlobal.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
     class privateClassWithPrivateModulePropertyTypes {

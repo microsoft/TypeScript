@@ -11,9 +11,11 @@ class X {
 (readonly) => 0;
 
 //// [readonlyInNonPropertyParameters.js]
+// `readonly` won't work outside of property parameters
 class X {
     method(x) { }
     set x(value) { }
 }
 (x) => 0;
+// OK to use `readonly` as a name
 (readonly) => 0;

@@ -18,8 +18,7 @@
 -        // https://tc39.es/proposal-class-fields/#prod-ClassBody
 -    }
      #foo = 1;
--    static #foo = true; // error (duplicate)
-+    static #foo = true;
+     static #foo = true; // error (duplicate)
  }
 -_a = A, _A_foo = new WeakMap();
 -_A_foo_1 = { value: true }; // error (duplicate)
@@ -27,7 +26,7 @@
 +    static #foo = true;
      test(x) {
 -        __classPrivateFieldGet(x, _b, "f", _B_foo); // error (#foo is a static property on B, not an instance property)
-+        x.#foo;
++        x.#foo; // error (#foo is a static property on B, not an instance property)
      }
  }
 -_b = B;

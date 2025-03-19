@@ -11,6 +11,6 @@ module M {
 var M;
 (function (M) {
     class C {
-    }
+    } // this should be an unresolved symbol I error
     M.C = C;
 })(M || (M = {}));

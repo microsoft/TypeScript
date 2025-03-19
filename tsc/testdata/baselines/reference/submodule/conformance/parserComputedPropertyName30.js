@@ -10,6 +10,7 @@ enum E {
 //// [parserComputedPropertyName30.js]
 var E;
 (function (E) {
+    // no ASI, comma expected
     E[e] = id++;
     if (typeof E[e] !== "string") E[E[e]] = e;
     E[E[e2] = 1] = e2;

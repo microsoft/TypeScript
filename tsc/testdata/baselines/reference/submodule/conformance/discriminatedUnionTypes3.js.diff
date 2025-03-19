@@ -9,6 +9,5 @@
 -var example = {};
 +const example = {};
  if (example.err === undefined) {
--    example.property; // true
-+    example.property;
+     example.property; // true
  }

@@ -130,6 +130,6 @@ function f6(x) {
         }
     }
     if (typeof x === 'object') {
-        obj(x);
+        obj(x); // Error
     }
 }

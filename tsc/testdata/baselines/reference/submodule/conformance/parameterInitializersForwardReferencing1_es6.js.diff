@@ -1,20 +1,6 @@
 --- old.parameterInitializersForwardReferencing1_es6.js
 +++ new.parameterInitializersForwardReferencing1_es6.js
-@@= skipped -43, +43 lines =@@
- let foo = "";
- function f1(bar = foo) {
-     var foo = 2;
--    return bar; // returns 1
-+    return bar;
- }
- function f2(bar = (baz = foo) => baz) {
-     var foo = 2;
--    return bar(); // returns 1
-+    return bar();
- }
- function f3(bar = foo, foo = 2) {
-     return bar;
-@@= skipped -22, +22 lines =@@
+@@= skipped -65, +65 lines =@@
      let foo = 2;
  }
  class Foo {

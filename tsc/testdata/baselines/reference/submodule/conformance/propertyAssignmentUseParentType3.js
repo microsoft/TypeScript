@@ -25,6 +25,7 @@ foo4.x = "456";
 
 
 //// [propertyAssignmentUseParentType3.js]
+// don't use the parent type if it's a function declaration (#33741)
 function foo1() {
     return 123;
 }

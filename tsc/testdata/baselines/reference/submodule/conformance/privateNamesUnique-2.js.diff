@@ -26,14 +26,10 @@
 +    #x;
      copy(other) {
 -        __classPrivateFieldGet(other, _Foo_x, "f"); // error
-+        other.#x;
++        other.#x; // error
      }
  }
 -_Foo_x = new WeakMap();
  //// [main.js]
  import { Foo as A } from "./a";
  import { Foo as B } from "./b";
- const a = new A();
- const b = new B();
--a.copy(b); // error
-+a.copy(b);

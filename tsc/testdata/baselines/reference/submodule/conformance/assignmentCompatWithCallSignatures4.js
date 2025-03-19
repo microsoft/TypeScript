@@ -101,6 +101,7 @@ module Errors {
 }
 
 //// [assignmentCompatWithCallSignatures4.js]
+// These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 var Errors;
 (function (Errors) {
     class Base {
@@ -117,6 +118,7 @@ var Errors;
     }
     let WithNonGenericSignaturesInBaseType;
     (function (WithNonGenericSignaturesInBaseType) {
+        // target type with non-generic call signatures
         var a2;
         var a7;
         var a8;
@@ -134,8 +136,8 @@ var Errors;
         a7 = b7;
         b7 = a7;
         var b8;
-        a8 = b8;
-        b8 = a8;
+        a8 = b8; // error, { foo: number } and Base are incompatible
+        b8 = a8; // error, { foo: number } and Base are incompatible
         var b10;
         a10 = b10;
         b10 = a10;
@@ -160,10 +162,12 @@ var Errors;
     })(WithNonGenericSignaturesInBaseType || (WithNonGenericSignaturesInBaseType = {}));
     let WithGenericSignaturesInBaseType;
     (function (WithGenericSignaturesInBaseType) {
+        // target type has generic call signature
         var a2;
         var b2;
         a2 = b2;
         b2 = a2;
+        // target type has generic call signature
         var a3;
         var b3;
         a3 = b3;

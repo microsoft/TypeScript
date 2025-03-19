@@ -36,9 +36,9 @@
 -    };
 -    return FetchUser;
 -}(React.Component));
--// Ok
 +    }
 +}
+ // Ok
  function UserName0() {
      return (<FetchUser>
 -            {function (user) { return (<h1>{user.Name}</h1>); }}

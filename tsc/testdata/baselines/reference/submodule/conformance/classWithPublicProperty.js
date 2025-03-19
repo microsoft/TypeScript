@@ -34,6 +34,7 @@ class C {
     static f() { return ''; }
     static g = () => '';
 }
+// all of these are valid
 var c = new C();
 var r1 = c.x;
 var r2 = c.a;

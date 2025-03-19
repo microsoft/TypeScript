@@ -21,9 +21,9 @@
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.Serializable = void 0;
--/**
-- * Plain mixin where the superclass must be Initable
-- */
+ /**
+  * Plain mixin where the superclass must be Initable
+  */
 -var Serializable = function (SuperClass) {
 -    var LocalMixin = function (InnerSuperClass) {
 -        return /** @class */ (function (_super) {

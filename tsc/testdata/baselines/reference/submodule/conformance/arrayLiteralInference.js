@@ -38,6 +38,7 @@ let b2: boolean[][] = foo([true], [false]);
 
 //// [arrayLiteralInference.js]
 export { AppType };
+// Repro from #31204
 var AppType;
 (function (AppType) {
     AppType["HeaderDetail"] = "HeaderDetail";

@@ -45,6 +45,14 @@ const a = new tag `${100} ${200}`("hello", "world");
 const b = new tag `${"hello"} ${"world"}`(100, 200);
 const c = new tag `${100} ${200}`("hello", "world");
 const d = new tag `${"hello"} ${"world"}`(100, 200);
+/**
+ * Testing ASI. This should never parse as
+ *
+ * ```ts
+ * new tag<number>;
+ * `hello${369}`();
+ * ```
+ */
 const e = new tag `hello`();
 class SomeBase {
     a;

@@ -35,6 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 class Button extends React.Component {
     render() {
+        // Error children are specified twice
         return (<InnerButton {...this.props} children="hi">
             <div>Hello World</div>
             </InnerButton>);

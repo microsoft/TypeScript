@@ -11,6 +11,7 @@ class Employee {
 }
 
 //// [unusedSetterInClass2.js]
+// Unlike everything else, a setter without a getter is used by a write access.
 class Employee {
     set p(_) { }
     m() {

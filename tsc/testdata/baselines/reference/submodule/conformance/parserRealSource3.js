@@ -123,8 +123,12 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource3.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
+    // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
     let NodeType;
     (function (NodeType) {
         NodeType[NodeType["None"] = 0] = "None";

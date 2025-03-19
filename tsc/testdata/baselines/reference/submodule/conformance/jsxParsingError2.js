@@ -30,6 +30,7 @@ let x5 = <div><span>
 
 //// [file.jsx]
 //// [Error1.jsx]
+// Issue error about missing span closing tag, not missing div closing tag
 let x1 = <div><span></></div>;
 //// [Error2.jsx]
 let x2 = <div></span>;

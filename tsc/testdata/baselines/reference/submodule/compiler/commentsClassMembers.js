@@ -220,39 +220,53 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 
 //// [commentsClassMembers.js]
+/** This is comment for c1*/
 class c1 {
+    /** p1 is property of c1*/
     p1;
-    p2(b) {
+    /** sum with property*/
+    p2(/** number to add*/ b) {
         return this.p1 + b;
-    }
+    } /* trailing comment of method*/
+    /** getter property*/
     get p3() {
         return this.p2(this.p1);
-    }
-    set p3(value) {
+    } // trailing comment Getter
+    /** setter property*/
+    set p3(/** this is value*/ value) {
         this.p1 = this.p2(value);
-    }
+    } // trailing comment Setter
+    /** pp1 is property of c1*/
     pp1;
-    pp2(b) {
+    /** sum with property*/
+    pp2(/** number to add*/ b) {
         return this.p1 + b;
-    }
+    } // trailing comment of method
+    /** getter property*/
     get pp3() {
         return this.pp2(this.pp1);
     }
-    set pp3(value) {
+    /** setter property*/
+    set pp3(/** this is value*/ value) {
         this.pp1 = this.pp2(value);
     }
+    /** Constructor method*/
     constructor() {
     }
+    /** s1 is static property of c1*/
     static s1;
-    static s2(b) {
+    /** static sum with property*/
+    static s2(/** number to add*/ b) {
         return c1.s1 + b;
     }
+    /** static getter property*/
     static get s3() {
         return c1.s2(c1.s1);
-    }
-    static set s3(value) {
+    } /*trailing comment 1 getter*/
+    /** setter property*/
+    static set s3(/** this is value*/ value) {
         c1.s1 = c1.s2(value);
-    }
+    } /*trailing comment 2 */ /*setter*/
     nc_p1;
     nc_p2(b) {
         return this.nc_p1 + b;
@@ -283,64 +297,91 @@ class c1 {
     static set nc_s3(value) {
         c1.nc_s1 = c1.nc_s2(value);
     }
+    // p1 is property of c1
     a_p1;
+    // sum with property
     a_p2(b) {
         return this.a_p1 + b;
     }
+    // getter property
     get a_p3() {
         return this.a_p2(this.a_p1);
     }
+    // setter property
     set a_p3(value) {
         this.a_p1 = this.a_p2(value);
     }
+    // pp1 is property of c1
     a_pp1;
+    // sum with property
     a_pp2(b) {
         return this.a_p1 + b;
     }
+    // getter property
     get a_pp3() {
         return this.a_pp2(this.a_pp1);
     }
+    // setter property
     set a_pp3(value) {
         this.a_pp1 = this.a_pp2(value);
     }
+    // s1 is static property of c1
     static a_s1;
+    // static sum with property
     static a_s2(b) {
         return c1.a_s1 + b;
     }
+    // static getter property
     static get a_s3() {
         return c1.s2(c1.s1);
     }
+    // setter property
     static set a_s3(value) {
         c1.a_s1 = c1.a_s2(value);
     }
+    /** p1 is property of c1 */
     b_p1;
+    /** sum with property */
     b_p2(b) {
         return this.b_p1 + b;
     }
+    /** getter property */
     get b_p3() {
         return this.b_p2(this.b_p1);
     }
+    /** setter property */
     set b_p3(value) {
         this.b_p1 = this.b_p2(value);
     }
+    /** pp1 is property of c1 */
     b_pp1;
+    /** sum with property */
     b_pp2(b) {
         return this.b_p1 + b;
     }
+    /** getter property */
     get b_pp3() {
         return this.b_pp2(this.b_pp1);
     }
+    /** setter property */
     set b_pp3(value) {
         this.b_pp1 = this.b_pp2(value);
     }
+    /** s1 is static property of c1 */
     static b_s1;
+    /** static sum with property */
     static b_s2(b) {
         return c1.b_s1 + b;
     }
+    /** static getter property
+    */
     static get b_s3() {
         return c1.s2(c1.s1);
     }
+    /** setter property
+    */
     static set b_s3(value) {
+        /** setter */
         c1.b_s1 = c1.b_s2(value);
     }
 }
@@ -368,20 +409,22 @@ c1.nc_s3 = i1_s_ncprop;
 var i1_c = c1;
 class cProperties {
     val;
+    /** getter only property*/
     get p1() {
         return this.val;
-    }
+    } // trailing comment of only getter
     get nc_p1() {
         return this.val;
     }
+    /**setter only property*/
     set p2(value) {
         this.val = value;
     }
     set nc_p2(value) {
         this.val = value;
-    }
-    x = 10;
-    y = 10;
+    } /* trailing comment of setter only*/
+    x = 10; /*trailing comment for property*/
+    y = 10; // trailing comment of // style
 }
 var cProperties_i = new cProperties();
 cProperties_i.p2 = cProperties_i.p1;

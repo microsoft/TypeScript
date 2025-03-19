@@ -37,6 +37,8 @@ class T5 {
 }
 class T6 extends T5 {
     constructor() {
+        // Should error; base constructor has type T for first arg,
+        // which is instantiated with 'number' in the extends clause
         super("hi");
         var x = this.foo;
     }

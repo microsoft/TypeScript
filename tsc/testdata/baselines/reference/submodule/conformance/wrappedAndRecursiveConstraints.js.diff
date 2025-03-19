@@ -1,10 +1,9 @@
 --- old.wrappedAndRecursiveConstraints.js
 +++ new.wrappedAndRecursiveConstraints.js
-@@= skipped -18, +18 lines =@@
- var r = c.foo(y);
+@@= skipped -19, +19 lines =@@
  
  //// [wrappedAndRecursiveConstraints.js]
--// no errors expected
+ // no errors expected
 -var C = /** @class */ (function () {
 -    function C(data) {
 +class C {

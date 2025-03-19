@@ -258,7 +258,7 @@ function f1(x) {
             case 1: return 'a';
             case 2: return 'b';
         }
-        x;
+        x; // Unreachable
     }
     else {
         throw 0;
@@ -274,15 +274,17 @@ function f2(x) {
             z = 20;
             break;
     }
-    z;
+    z; // Definitely assigned
 }
 function f3(x) {
     switch (x) {
         case 1: return 10;
         case 2: return 20;
+        // Default considered reachable to allow defensive coding
         default: throw new Error("Bad input");
     }
 }
+// Repro from #11572
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -333,6 +335,7 @@ function areaWrapped(s) {
     })();
     return area;
 }
+// Repro from #13241
 var MyEnum;
 (function (MyEnum) {
     MyEnum[MyEnum["A"] = 0] = "A";
@@ -371,6 +374,7 @@ function good2(e) {
         case MyEnum.B: return "it was B";
     }
 }
+// Repro from #18362
 var Level;
 (function (Level) {
     Level[Level["One"] = 0] = "One";
@@ -416,6 +420,7 @@ function withoutDefault(s1, s2) {
             }
     }
 }
+// Repro from #20823
 function test4(value) {
     let x;
     switch (value) {
@@ -428,6 +433,7 @@ function test4(value) {
     }
     return x;
 }
+// Repro from #34661
 var Animal;
 (function (Animal) {
     Animal[Animal["DOG"] = 0] = "DOG";
@@ -439,6 +445,7 @@ function expression() {
         case Animal.CAT: return Animal.CAT;
     }
 }
+// Repro from #34840
 function foo() {
     const foo = 0;
     while (true) {
@@ -454,7 +461,7 @@ function ff(o, k) {
         case 'c':
             k = 'a';
     }
-    k === 'c';
+    k === 'c'; // Error
     return o[k];
 }
 function f35431(a) {
@@ -462,6 +469,6 @@ function f35431(a) {
         case "abc":
         case "def": return;
         default:
-            a.kind;
+            a.kind; // Error expected
     }
 }

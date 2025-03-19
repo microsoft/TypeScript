@@ -1,11 +1,8 @@
 --- old.esDecorators-classExpression-namedEvaluation.3.js
 +++ new.esDecorators-classExpression-namedEvaluation.3.js
-@@= skipped -19, +19 lines =@@
- 
- 
- //// [esDecorators-classExpression-namedEvaluation.3.js]
--// 14.3.1.2 RS: Evaluation
--//   LexicalBinding : BindingIdentifier Initializer
+@@= skipped -22, +22 lines =@@
+ // 14.3.1.2 RS: Evaluation
+ //   LexicalBinding : BindingIdentifier Initializer
  {
 -    let x = (() => {
 -        let _classDecorators = [dec];
@@ -102,8 +99,8 @@
 +        y;
 +    };
  }
--// 14.3.2.1 RS: Evaluation
--//   VariableDeclaration : BindingIdentifier Initializer
+ // 14.3.2.1 RS: Evaluation
+ //   VariableDeclaration : BindingIdentifier Initializer
  {
 -    var x2 = (() => {
 -        let _classDecorators = [dec];

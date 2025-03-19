@@ -10,6 +10,7 @@
 -        // yes ASI
 -        this[_a] = id++;
 -    }
++    // yes ASI
 +    [e] = id++;
 +    [e2];
  }

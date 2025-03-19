@@ -15,7 +15,6 @@
 -var b3 = (_b = x.a) !== null && _b !== void 0 ? _b : 2;
 -var b4 = (_c = x.a) !== null && _c !== void 0 ? _c : 2;
 -var _g = {}.bar, bar = _g === void 0 ? 'yo' : _g;
--bar; // "yo" | "ha"
 +let { a: a1 } = x;
 +let { a: a2 = 0 } = x;
 +let { a: a3 = 2 } = x;
@@ -25,4 +24,4 @@
 +let b3 = x.a ?? 2;
 +let b4 = x.a ?? 2;
 +let { bar = 'yo' } = {};
-+bar;
+ bar; // "yo" | "ha"

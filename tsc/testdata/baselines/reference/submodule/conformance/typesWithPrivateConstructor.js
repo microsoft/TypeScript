@@ -20,10 +20,10 @@ var r2: (x: number) => void = c2.constructor;
 class C {
     constructor() { }
 }
-var c = new C();
+var c = new C(); // error C is private
 var r = c.constructor;
 class C2 {
     constructor(x) { }
 }
-var c2 = new C2();
+var c2 = new C2(); // error C2 is private
 var r2 = c2.constructor;

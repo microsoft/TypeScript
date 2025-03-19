@@ -1,10 +1,9 @@
 --- old.ambientShorthand.js
 +++ new.ambientShorthand.js
-@@= skipped -15, +15 lines =@@
- //// [user.js]
+@@= skipped -16, +16 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--///<reference path="declarations.d.ts"/>
+ ///<reference path="declarations.d.ts"/>
 -var jquery_1 = require("jquery");
 -var baz = require("fs");
 -var boom = require("jquery");

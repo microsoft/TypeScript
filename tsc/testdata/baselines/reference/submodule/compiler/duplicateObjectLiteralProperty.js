@@ -23,12 +23,12 @@ var y = {
 //// [duplicateObjectLiteralProperty.js]
 var x = {
     a: 1,
-    b: true,
-    a: 56,
-    \u0061: "ss",
+    b: true, // OK
+    a: 56, // Duplicate
+    \u0061: "ss", // Duplicate
     a: {
         c: 1,
-        "c": 56,
+        "c": 56, // Duplicate
     }
 };
 var y = {

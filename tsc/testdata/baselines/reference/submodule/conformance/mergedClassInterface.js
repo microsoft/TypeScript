@@ -55,6 +55,7 @@ class C3 {
 }
 class C4 {
 }
+// checks if properties actually were merged
 var c5;
 c5.x1;
 c5.x2;

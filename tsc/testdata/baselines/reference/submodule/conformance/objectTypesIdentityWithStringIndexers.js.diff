@@ -1,10 +1,9 @@
 --- old.objectTypesIdentityWithStringIndexers.js
 +++ new.objectTypesIdentityWithStringIndexers.js
-@@= skipped -124, +124 lines =@@
- 
+@@= skipped -125, +125 lines =@@
  
  //// [objectTypesIdentityWithStringIndexers.js]
--// object types are identical structurally
+ // object types are identical structurally
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

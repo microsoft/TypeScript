@@ -44,6 +44,8 @@ class Base {
     static get a() { return 1; }
     static set a(v) { }
 }
+// BUG 847404
+// should be error
 class Derived extends Base {
     static x;
     static fn() {
@@ -52,11 +54,11 @@ class Derived extends Base {
     static get a() { return 1; }
     static set a(v) { }
 }
-var r = Base.x;
-var r2 = Derived.x;
-var r3 = Base.fn();
-var r4 = Derived.fn();
-var r5 = Base.a;
-Base.a = 2;
-var r6 = Derived.a;
-Derived.a = 2;
+var r = Base.x; // ok
+var r2 = Derived.x; // error
+var r3 = Base.fn(); // ok
+var r4 = Derived.fn(); // error
+var r5 = Base.a; // ok
+Base.a = 2; // ok
+var r6 = Derived.a; // error
+Derived.a = 2; // error

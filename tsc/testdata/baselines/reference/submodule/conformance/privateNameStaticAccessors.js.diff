@@ -27,7 +27,7 @@
 -        console.log(__classPrivateFieldGet(_a, _a, "a", _A1_prop_get));
 -        console.log(__classPrivateFieldGet(_a, _a, "a", _A1_roProp_get));
 +        A1.#prop = "";
-+        A1.#roProp = "";
++        A1.#roProp = ""; // Error
 +        console.log(A1.#prop);
 +        console.log(A1.#roProp);
      }

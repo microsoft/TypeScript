@@ -22,7 +22,7 @@ class Derived extends Base {
 class Base {
     static #prop = 123;
     static method(x) {
-        Derived.#derivedProp;
+        Derived.#derivedProp; // error
         Base.#prop = 10;
     }
 }
@@ -30,6 +30,6 @@ class Derived extends Base {
     static #derivedProp = 10;
     static method(x) {
         Derived.#derivedProp;
-        Base.#prop = 10;
+        Base.#prop = 10; // error
     }
 }

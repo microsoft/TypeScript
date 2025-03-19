@@ -27,7 +27,7 @@
 +}
 +class Derived extends Base {
 +    constructor() {
-+        super(this);
++        super(this); // ok
      }
 -    return Base;
 -}());
@@ -41,7 +41,7 @@
 +    a;
 +    constructor(a) {
 +        this.a = a;
-+        super(this);
++        super(this); // error
      }
 -    return Derived;
 -}(Base));
@@ -56,7 +56,7 @@
 +    a;
 +    constructor(a) {
 +        this.a = a;
-+        super(() => this);
++        super(() => this); // error
      }
 -    return Derived2;
 -}(Base));
@@ -71,7 +71,7 @@
 +    a;
 +    constructor(a) {
 +        this.a = a;
-+        super(function () { return this; });
++        super(function () { return this; }); // ok
      }
 -    return Derived3;
 -}(Base));

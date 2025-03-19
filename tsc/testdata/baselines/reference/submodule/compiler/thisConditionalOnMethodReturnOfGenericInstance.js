@@ -33,4 +33,4 @@ class C extends B {
     marker;
 }
 const x = new C();
-const y = x.method();
+const y = x.method(); // usage flags `method` in `B` as circular and marks `y` as the error-any type

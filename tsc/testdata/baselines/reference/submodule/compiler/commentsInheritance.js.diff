@@ -21,11 +21,10 @@
 -})();
 -var c1 = /** @class */ (function () {
 -    function c1() {
+-    }
 +class c1 {
 +    i1_p1;
-+    i1_f1() {
-     }
--    // i1_f1
+     // i1_f1
 -    c1.prototype.i1_f1 = function () {
 -    };
 -    c1.prototype.i1_nc_f1 = function () {
@@ -38,54 +37,15 @@
 -    };
 -    return c1;
 -}());
-+    i1_l1;
-+    i1_nc_p1;
-+    i1_nc_f1() {
-+    }
-+    i1_nc_l1;
-+    p1;
-+    f1() {
-+    }
-+    l1;
-+    nc_p1;
-+    nc_f1() {
-+    }
-+    nc_l1;
-+}
- var i1_i;
- var c1_i = new c1();
+-var i1_i;
+-var c1_i = new c1();
 -// assign to interface
- i1_i = c1_i;
+-i1_i = c1_i;
 -var c2 = /** @class */ (function () {
 -    /** c2 constructor*/
 -    function c2(a) {
-+class c2 {
-+    c2_p1;
-+    c2_f1() {
-+    }
-+    get c2_prop() {
-+        return 10;
-+    }
-+    c2_nc_p1;
-+    c2_nc_f1() {
-+    }
-+    get c2_nc_prop() {
-+        return 10;
-+    }
-+    p1;
-+    f1() {
-+    }
-+    get prop() {
-+        return 10;
-+    }
-+    nc_p1;
-+    nc_f1() {
-+    }
-+    get nc_prop() {
-+        return 10;
-+    }
-+    constructor(a) {
-         this.c2_p1 = a;
+-        this.c2_p1 = a;
++    i1_f1() {
      }
 -    /** c2 c2_f1*/
 -    c2.prototype.c2_f1 = function () {
@@ -133,10 +93,9 @@
 -    __extends(c3, _super);
 -    function c3() {
 -        return _super.call(this, 10) || this;
-+}
-+class c3 extends c2 {
-+    constructor() {
-+        super(10);
++    i1_l1;
++    i1_nc_p1;
++    i1_nc_f1() {
      }
 -    /** c3 f1*/
 -    c3.prototype.f1 = function () {
@@ -160,23 +119,10 @@
 -    });
 -    return c3;
 -}(c2));
-+    p1;
-+    f1() {
-+    }
-+    get prop() {
-+        return 10;
-+    }
-+    nc_p1;
-+    nc_f1() {
-+    }
-+    get nc_prop() {
-+        return 10;
-+    }
-+}
- var c2_i = new c2(10);
- var c3_i = new c3();
+-var c2_i = new c2(10);
+-var c3_i = new c3();
 -// assign
- c2_i = c3_i;
+-c2_i = c3_i;
 -var c4 = /** @class */ (function (_super) {
 -    __extends(c4, _super);
 -    function c4() {
@@ -184,13 +130,11 @@
 -    }
 -    return c4;
 -}(c2));
-+class c4 extends c2 {
-+}
- var c4_i = new c4(10);
- var i2_i;
- var i3_i;
+-var c4_i = new c4(10);
+-var i2_i;
+-var i3_i;
 -// assign to interface
- i2_i = i3_i;
+-i2_i = i3_i;
 -
 -
 -//// [commentsInheritance.d.ts]
@@ -219,59 +163,121 @@
 -    i1_nc_p1: number;
 -    i1_nc_f1(): void;
 -    i1_nc_l1: () => void;
--    /** c1_p1*/
++    i1_nc_l1;
+     /** c1_p1*/
 -    p1: number;
--    /** c1_f1*/
++    p1;
+     /** c1_f1*/
 -    f1(): void;
--    /** c1_l1*/
++    f1() {
++    }
+     /** c1_l1*/
 -    l1: () => void;
--    /** c1_nc_p1*/
++    l1;
+     /** c1_nc_p1*/
 -    nc_p1: number;
--    /** c1_nc_f1*/
++    nc_p1;
+     /** c1_nc_f1*/
 -    nc_f1(): void;
--    /** c1_nc_l1*/
++    nc_f1() {
++    }
+     /** c1_nc_l1*/
 -    nc_l1: () => void;
--}
++    nc_l1;
+ }
 -declare var i1_i: i1;
 -declare var c1_i: c1;
 -declare class c2 {
--    /** c2 c2_p1*/
++var i1_i;
++var c1_i = new c1();
++// assign to interface
++i1_i = c1_i;
++class c2 {
+     /** c2 c2_p1*/
 -    c2_p1: number;
--    /** c2 c2_f1*/
++    c2_p1;
+     /** c2 c2_f1*/
 -    c2_f1(): void;
--    /** c2 c2_prop*/
++    c2_f1() {
++    }
+     /** c2 c2_prop*/
 -    get c2_prop(): number;
 -    c2_nc_p1: number;
 -    c2_nc_f1(): void;
 -    get c2_nc_prop(): number;
--    /** c2 p1*/
++    get c2_prop() {
++        return 10;
++    }
++    c2_nc_p1;
++    c2_nc_f1() {
++    }
++    get c2_nc_prop() {
++        return 10;
++    }
+     /** c2 p1*/
 -    p1: number;
--    /** c2 f1*/
++    p1;
+     /** c2 f1*/
 -    f1(): void;
--    /** c2 prop*/
++    f1() {
++    }
+     /** c2 prop*/
 -    get prop(): number;
 -    nc_p1: number;
 -    nc_f1(): void;
 -    get nc_prop(): number;
--    /** c2 constructor*/
++    get prop() {
++        return 10;
++    }
++    nc_p1;
++    nc_f1() {
++    }
++    get nc_prop() {
++        return 10;
++    }
+     /** c2 constructor*/
 -    constructor(a: number);
--}
++    constructor(a) {
++        this.c2_p1 = a;
++    }
+ }
 -declare class c3 extends c2 {
 -    constructor();
--    /** c3 p1*/
++class c3 extends c2 {
++    constructor() {
++        super(10);
++    }
+     /** c3 p1*/
 -    p1: number;
--    /** c3 f1*/
++    p1;
+     /** c3 f1*/
 -    f1(): void;
--    /** c3 prop*/
++    f1() {
++    }
+     /** c3 prop*/
 -    get prop(): number;
 -    nc_p1: number;
 -    nc_f1(): void;
 -    get nc_prop(): number;
--}
++    get prop() {
++        return 10;
++    }
++    nc_p1;
++    nc_f1() {
++    }
++    get nc_prop() {
++        return 10;
++    }
+ }
 -declare var c2_i: c2;
 -declare var c3_i: c3;
 -declare class c4 extends c2 {
--}
++var c2_i = new c2(10);
++var c3_i = new c3();
++// assign
++c2_i = c3_i;
++class c4 extends c2 {
+ }
 -declare var c4_i: c4;
 -interface i2 {
 -    /** i2_p1*/
@@ -308,3 +314,8 @@
 -}
 -declare var i2_i: i2;
 -declare var i3_i: i3;
++var c4_i = new c4(10);
++var i2_i;
++var i3_i;
++// assign to interface
++i2_i = i3_i;

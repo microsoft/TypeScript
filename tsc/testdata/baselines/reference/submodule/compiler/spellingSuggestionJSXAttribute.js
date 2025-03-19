@@ -21,6 +21,7 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 //// [spellingSuggestionJSXAttribute.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
 const React = require("react");
 function MyComp2(props) {
     return null;
@@ -28,7 +29,7 @@ function MyComp2(props) {
 class MyComp extends React.Component {
 }
 <a class=""/>;
-<a for=""/>;
+<a for=""/>; // should have no fix
 <label for=""/>;
 <label for="" class=""/>;
 <MyComp class=""/>;

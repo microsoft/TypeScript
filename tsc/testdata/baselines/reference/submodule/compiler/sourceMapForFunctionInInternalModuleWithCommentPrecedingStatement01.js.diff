@@ -1,10 +1,6 @@
 --- old.sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js
 +++ new.sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js
-@@= skipped -11, +11 lines =@@
- var Q;
- (function (Q) {
-     function P() {
--        // Test this
+@@= skipped -15, +15 lines =@@
          var a = 1;
      }
  })(Q || (Q = {}));

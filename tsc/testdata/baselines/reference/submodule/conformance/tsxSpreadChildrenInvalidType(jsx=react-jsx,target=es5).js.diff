@@ -41,9 +41,9 @@
  }
 -function TodoListNoError(_a) {
 -    var todos = _a.todos;
--    // any is not checked
--    return (0, jsx_runtime_1.jsxs)("div", { children: __spreadArray([], (0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
 +function TodoListNoError({ todos }) {
+     // any is not checked
+-    return (0, jsx_runtime_1.jsxs)("div", { children: __spreadArray([], (0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
 +    return <div>
 +        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
 +    </div>;

@@ -1,10 +1,9 @@
 --- old.selfReferencingFile3.js
 +++ new.selfReferencingFile3.js
-@@= skipped -7, +7 lines =@@
- }
+@@= skipped -8, +8 lines =@@
  
  //// [selfReferencingFile3.js]
--///<reference path='./selfReferencingFile3.ts'/>
+ ///<reference path='./selfReferencingFile3.ts'/>
 -var selfReferencingFile3 = /** @class */ (function () {
 -    function selfReferencingFile3() {
 -    }

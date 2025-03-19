@@ -24,5 +24,6 @@ exports.y = 5;
 Object.defineProperty(exports, "__esModule", { value: true });
 const foo = require("./foo");
 function f(map) {
+    // ...
 }
 f(foo);

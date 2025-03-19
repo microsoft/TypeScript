@@ -19,11 +19,11 @@ class A3 {
     #method() { }
     ;
     constructor(a, b) {
-        this.#method = () => { };
-        a.#method = () => { };
-        b.#method = () => { };
-        ({ x: this.#method } = { x: () => { } });
+        this.#method = () => { }; // Error, not writable 
+        a.#method = () => { }; // Error, not writable 
+        b.#method = () => { }; //Error, not writable 
+        ({ x: this.#method } = { x: () => { } }); //Error, not writable 
         let x = this.#method;
-        b.#method++;
+        b.#method++; //Error, not writable 
     }
 }

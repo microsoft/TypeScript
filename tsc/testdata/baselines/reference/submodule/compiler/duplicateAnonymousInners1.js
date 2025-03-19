@@ -34,9 +34,13 @@ var Foo;
     }
     class Inner {
     }
+    // Inner should show up in intellisense
     Foo.Outer = 0;
 })(Foo || (Foo = {}));
 (function (Foo) {
+    // Should not be an error
     class Helper {
     }
+    // Inner should not show up in intellisense
+    // Outer should show up in intellisense
 })(Foo || (Foo = {}));

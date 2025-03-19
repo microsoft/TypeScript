@@ -1,9 +1,8 @@
 --- old.inferenceFromParameterlessLambda.js
 +++ new.inferenceFromParameterlessLambda.js
-@@= skipped -13, +13 lines =@@
- 
+@@= skipped -14, +14 lines =@@
  //// [inferenceFromParameterlessLambda.js]
  function foo(o, i) { }
--// Infer string from second argument because it isn't context sensitive
+ // Infer string from second argument because it isn't context sensitive
 -foo(function (n) { return n.length; }, function () { return 'hi'; });
 +foo(n => n.length, () => 'hi');

@@ -18,6 +18,7 @@ const Foo = class {
 
 
 //// [esDecoratorsClassFieldsCrash.js]
+// https://github.com/microsoft/TypeScript/issues/58436
 const dec = (x, y, z, t) => (_, ctx) => { };
 const Foo = class {
     @dec(1, 3, 3, 1)

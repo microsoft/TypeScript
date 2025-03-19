@@ -297,6 +297,7 @@ async function I() {
         return Promise.reject(Error());
     }
 }
+// addresses github issue #4903:
 const p00 = p.catch();
 const p01 = p.then();
 const p10 = p.catch(undefined);

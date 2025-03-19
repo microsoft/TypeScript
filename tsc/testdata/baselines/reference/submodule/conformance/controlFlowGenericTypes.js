@@ -262,12 +262,12 @@ function g2(x) {
 }
 function g3(x) {
     if (!isBox(x)) {
-        unbox(x);
+        unbox(x); // Error
     }
 }
 function g4(x) {
     if (isUndefined(x)) {
-        unbox(x);
+        unbox(x); // Error
     }
 }
 function bounceAndTakeIfA(value) {
@@ -280,7 +280,7 @@ function bounceAndTakeIfA(value) {
     }
 }
 const fn = (value) => {
-    value.foo;
+    value.foo; // Error
     if ('foo' in value) {
         value.foo;
     }
@@ -289,7 +289,7 @@ const fn = (value) => {
     }
 };
 const fn2 = (value) => {
-    value.foo;
+    value.foo; // Error
     if ('foo' in value) {
         value.foo;
     }
@@ -311,6 +311,7 @@ function get(key, obj) {
     return 0;
 }
 ;
+// Repro from #44093
 class EventEmitter {
     off(...args) { }
 }
@@ -318,6 +319,9 @@ function once(emittingObject, eventName) {
     emittingObject.off(eventName, 0);
     emittingObject.off(eventName, 0);
 }
+// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
+// a generic type without a nullable constraint and x is a generic type. This is because when both obj
+// and x are of generic types T and K, we want the resulting type to be T[K].
 function fx1(obj, key) {
     const x1 = obj[key];
     const x2 = obj && obj[key];
@@ -327,14 +331,15 @@ function fx2(obj, key) {
     const x2 = obj && obj[key];
 }
 function fx3(obj, key) {
-    const x1 = obj[key];
+    const x1 = obj[key]; // Error
     const x2 = obj && obj[key];
 }
+// Repro from #44166
 class TableBaseEnum {
     m() {
         let iSpec = null;
-        iSpec[null];
-        iSpec[null];
+        iSpec[null]; // Error, object possibly undefined
+        iSpec[null]; // Error, object possibly undefined
         if (iSpec === undefined) {
             return;
         }
@@ -342,6 +347,7 @@ class TableBaseEnum {
         iSpec[null];
     }
 }
+// Repros from #45145
 function f10(x, y) {
     y = x;
 }

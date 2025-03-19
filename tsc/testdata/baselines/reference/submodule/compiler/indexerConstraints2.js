@@ -90,14 +90,17 @@ class A {
 class B extends A {
     b;
 }
+// Inheritance
 class F {
 }
 class G extends F {
 }
+// Other way
 class H {
 }
 class I extends H {
 }
+// With hidden indexer
 class J {
 }
 class K extends J {

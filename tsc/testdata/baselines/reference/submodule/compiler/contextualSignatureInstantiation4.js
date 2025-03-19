@@ -22,8 +22,8 @@ const banana5 = fruitFactory5(Banana) // Banana<"foo">
 
 
 //// [contextualSignatureInstantiation4.js]
-const banana1 = fruitFactory1(Banana);
-const banana2 = fruitFactory2(Banana);
-const banana3 = fruitFactory3(Banana);
-const banana4 = fruitFactory4(Banana);
-const banana5 = fruitFactory5(Banana);
+const banana1 = fruitFactory1(Banana); // Banana<any>
+const banana2 = fruitFactory2(Banana); // Banana<any>
+const banana3 = fruitFactory3(Banana); // Banana<"foo">
+const banana4 = fruitFactory4(Banana); // Banana<"foo">
+const banana5 = fruitFactory5(Banana); // Banana<"foo">

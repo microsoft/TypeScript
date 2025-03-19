@@ -7,13 +7,12 @@
 -// object types can define string indexers that are more specific than the default 'any' that would be returned
 -// no errors expected below 
  var o = {};
--var r = o['']; // should be Object
+ var r = o['']; // should be Object
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    return C;
 -}());
-+var r = o[''];
 +class C {
 +    foo;
 +}

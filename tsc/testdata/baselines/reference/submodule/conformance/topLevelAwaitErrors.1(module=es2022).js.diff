@@ -1,18 +1,9 @@
 --- old.topLevelAwaitErrors.1(module=es2022).js
 +++ new.topLevelAwaitErrors.1(module=es2022).js
-@@= skipped -46, +46 lines =@@
- 
- 
- //// [topLevelAwaitErrors.1.js]
--// reparse call as invalid await should error
- await (1, );
- await , string > (1);
--// reparse tagged template as invalid await should error
- await , string > ``;
--// reparse class extends clause should fail
+@@= skipped -55, +55 lines =@@
  class C extends string {
  }
--// await in class decorators should fail
+ // await in class decorators should fail
 -let C1 = class C1 {
 -};
 -C1 = __decorate([
@@ -27,7 +18,6 @@
 -};
 -C3 = __decorate([
 -], C3);
--// await in member decorators should fail
 +@(await )
 +class C1 {
 +}
@@ -37,6 +27,7 @@
 +@
 +class C3 {
 +}
+ // await in member decorators should fail
  class C4 {
 +    @
      ["foo"]() { }
@@ -57,7 +48,7 @@
 -__decorate([
 -    (await )
 -], C6.prototype, "foo", null);
--// await in parameter decorators should fail
+ // await in parameter decorators should fail
  class C7 {
      method1([x]) { }
      method2([x]) { }

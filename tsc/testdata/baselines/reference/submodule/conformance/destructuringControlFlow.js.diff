@@ -10,8 +10,8 @@
          obj = {};
 -        var a1 = obj["a"]; // string | undefined
 -        var a2 = obj.a; // string | undefined
-+        let a1 = obj["a"];
-+        let a2 = obj.a;
++        let a1 = obj["a"]; // string | undefined
++        let a2 = obj.a; // string | undefined
      }
  }
  function f2(obj) {
@@ -19,8 +19,8 @@
 -    var a1 = obj[1]; // string | null
 -    var b0 = obj[0], b1 = obj[1];
 -    (a0 = obj[0], a1 = obj[1]);
-+    let a0 = obj[0];
-+    let a1 = obj[1];
++    let a0 = obj[0]; // number | null
++    let a1 = obj[1]; // string | null
 +    let [b0, b1] = obj;
 +    ([a0, a1] = obj);
      if (obj[0] && obj[1]) {
@@ -28,8 +28,8 @@
 -        var c1 = obj[1]; // string
 -        var d0 = obj[0], d1 = obj[1];
 -        (c0 = obj[0], c1 = obj[1]);
-+        let c0 = obj[0];
-+        let c1 = obj[1];
++        let c0 = obj[0]; // number
++        let c1 = obj[1]; // string
 +        let [d0, d1] = obj;
 +        ([c0, c1] = obj);
      }
@@ -38,7 +38,7 @@
      if (obj.a && obj.b) {
 -        var a = obj.a, b = obj.b; // number, string
 -        (a = obj.a, b = obj.b);
-+        let { a, b } = obj;
++        let { a, b } = obj; // number, string
 +        ({ a, b } = obj);
      }
  }
@@ -49,11 +49,10 @@
 -    (x = 0["x"]); // Error
 -    (_a = 0, _b = "x" + "", x = _a[_b]); // Errpr
 +    let x;
-+    ({ x } = 0);
-+    ({ ["x"]: x } = 0);
-+    ({ ["x" + ""]: x } = 0);
++    ({ x } = 0); // Error
++    ({ ["x"]: x } = 0); // Error
++    ({ ["x" + ""]: x } = 0); // Errpr
  }
 -var _a = ["foo"], key = _a[0], value = _a[1];
--value.toUpperCase(); // Error
 +let [key, value] = ["foo"];
-+value.toUpperCase();
+ value.toUpperCase(); // Error

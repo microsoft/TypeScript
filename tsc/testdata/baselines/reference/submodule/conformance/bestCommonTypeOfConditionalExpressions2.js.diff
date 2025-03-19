@@ -1,11 +1,9 @@
 --- old.bestCommonTypeOfConditionalExpressions2.js
 +++ new.bestCommonTypeOfConditionalExpressions2.js
-@@= skipped -26, +26 lines =@@
- }
- 
+@@= skipped -28, +28 lines =@@
  //// [bestCommonTypeOfConditionalExpressions2.js]
--// conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
--// these are errors
+ // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+ // these are errors
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -52,12 +50,3 @@
  var base;
  var derived;
  var derived2;
-@@= skipped -45, +18 lines =@@
-     return true ? t : u;
- }
- function foo2(t, u) {
--    return true ? t : u; // Ok because BCT(T, U) = U
-+    return true ? t : u;
- }
- function foo3(t, u) {
-     return true ? t : u;

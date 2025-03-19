@@ -98,23 +98,23 @@ declare function f4(_this: string); // no code gen - no error
 //// [collisionThisExpressionAndParameter.js]
 class Foo {
     x() {
-        var _this = 10;
+        var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture into function inner
         }
     }
     y() {
         var lamda = (_this) => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
     z(_this) {
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
     x1() {
-        var _this = 10;
+        var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
         }
     }
@@ -149,7 +149,7 @@ class Foo3 {
     }
     z(_this) {
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
 }

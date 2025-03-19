@@ -100,5 +100,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function foo(arg) {
     return arg;
 }
-product.users;
+product.users; // (Transform<User> | Transform<Guest>)[]
 x.type;

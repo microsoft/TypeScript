@@ -1,10 +1,8 @@
 --- old.destructuringPropertyAssignmentNameIsNotAssignmentTarget.js
 +++ new.destructuringPropertyAssignmentNameIsNotAssignmentTarget.js
-@@= skipped -10, +10 lines =@@
- 
- 
+@@= skipped -12, +12 lines =@@
  //// [destructuringPropertyAssignmentNameIsNotAssignmentTarget.js]
--// test for #10668
+ // test for #10668
  function qux(bar) {
 -    var foo;
 -    (foo = bar.value);

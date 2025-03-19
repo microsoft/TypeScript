@@ -21,7 +21,9 @@ function f2() {
 
 
 //// [bestChoiceType.js]
+// Repro from #10041
 (''.match(/ /) || []).map(s => s.toLowerCase());
+// Similar cases
 function f1() {
     let x = ''.match(/ /);
     let y = x || [];

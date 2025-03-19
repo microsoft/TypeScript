@@ -7,9 +7,10 @@ class c3 { public bar() { } } // error
 
 
 //// [augmentedTypesClass4.js]
+//// class then class
 class c3 {
     foo() { }
-}
+} // error
 class c3 {
     bar() { }
-}
+} // error

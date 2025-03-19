@@ -16,6 +16,7 @@ export let y = () => x
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = exports.$ = void 0;
+/// <reference types="lib"/>
 exports.$ = 1;
 let y = () => exports.x;
 exports.y = y;

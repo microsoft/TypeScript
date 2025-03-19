@@ -38,7 +38,7 @@ function MyComp3(props, context, bad) {
 function MyComp2(props, context) {
     return <div></div>;
 }
-const a = <MyComp4 x={2}/>;
-const b = <MyComp3 x={2}/>;
-const c = <MyComp2 x={2}/>;
-const d = <MyTagWithOptionalNonJSXBits x={2}/>;
+const a = <MyComp4 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+const b = <MyComp3 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+const c = <MyComp2 x={2}/>; // Should be OK, `context` is allowed, per react rules
+const d = <MyTagWithOptionalNonJSXBits x={2}/>; // Technically OK, but probably questionable

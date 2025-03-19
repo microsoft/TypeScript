@@ -10,5 +10,8 @@ class C {
 
 //// [commentOnClassAccessor1.js]
 class C {
+    /**
+     * @type {number}
+     */
     get bar() { return 1; }
 }

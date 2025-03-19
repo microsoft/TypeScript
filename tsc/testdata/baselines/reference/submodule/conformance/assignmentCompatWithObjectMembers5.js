@@ -22,5 +22,5 @@ class C {
 }
 var c;
 var i;
-c = i;
-i = c;
+c = i; // error
+i = c; // error

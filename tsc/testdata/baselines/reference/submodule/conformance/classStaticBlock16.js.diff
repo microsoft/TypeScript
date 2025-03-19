@@ -25,6 +25,7 @@
 +        this.#x = x;
      }
 +    static {
++        // getX has privileged access to #x
 +        getX = (obj) => obj.#x;
 +        getY = (obj) => obj.#y;
 +    }
@@ -41,6 +42,7 @@
 -        _D_y.set(this, 1);
 +    #y = 1;
 +    static {
++        // getY has privileged access to y
 +        getX = (obj) => obj.#x;
 +        getY = (obj) => obj.#y;
      }

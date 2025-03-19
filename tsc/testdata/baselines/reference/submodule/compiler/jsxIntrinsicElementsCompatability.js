@@ -16,6 +16,7 @@ function Test<T extends 'button' | 'a'>(el: T) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function SomeComponent(props) {
+    // Just so the return value is RectElement, the rendered element doesnt matter
     return <div />;
 }
 function Test(el) {

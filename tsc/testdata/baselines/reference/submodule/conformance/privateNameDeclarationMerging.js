@@ -25,8 +25,8 @@ class C {
     #x;
     foo() {
         const c = new C();
-        c.#x;
+        c.#x; // OK
         const d = new C();
-        d.#x;
+        d.#x; // Error
     }
 }

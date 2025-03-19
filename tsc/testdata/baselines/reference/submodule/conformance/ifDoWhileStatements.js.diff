@@ -77,12 +77,7 @@
      N.A = A;
      function F2(x) { return x.toString(); }
      N.F2 = F2;
- })(N || (N = {}));
--// literals
- if (true) { }
- while (true) { }
- do { } while (true);
-@@= skipped -90, +65 lines =@@
+@@= skipped -90, +66 lines =@@
  if ({ x: 1, y: 'a' }) { }
  while ({ x: 1, y: 'a' }) { }
  do { } while ({ x: 1, y: 'a' });
@@ -95,10 +90,3 @@
  if (new C()) { }
  while (new C()) { }
  do { } while (new C());
- if (new D()) { }
- while (new D()) { }
- do { } while (new D());
--// references
- var a = true;
- if (a) { }
- while (a) { }

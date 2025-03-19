@@ -1,11 +1,9 @@
 --- old.instantiateGenericClassWithWrongNumberOfTypeArguments.js
 +++ new.instantiateGenericClassWithWrongNumberOfTypeArguments.js
-@@= skipped -18, +18 lines =@@
- var d = new D<number>();
- 
+@@= skipped -20, +20 lines =@@
  //// [instantiateGenericClassWithWrongNumberOfTypeArguments.js]
--// it is always an error to provide a type argument list whose count does not match the type parameter list
--// both of these attempts to construct a type is an error
+ // it is always an error to provide a type argument list whose count does not match the type parameter list
+ // both of these attempts to construct a type is an error
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -20,9 +18,9 @@
 -    }
 -    return D;
 -}());
--// BUG 794238
 +class D {
 +    x;
 +    y;
 +}
+ // BUG 794238
  var d = new D();

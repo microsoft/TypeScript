@@ -1,10 +1,9 @@
 --- old.exponentiationOperatorWithAnyAndNumber.js
 +++ new.exponentiationOperatorWithAnyAndNumber.js
-@@= skipped -16, +16 lines =@@
- //// [exponentiationOperatorWithAnyAndNumber.js]
+@@= skipped -17, +17 lines =@@
  var a;
  var b;
--// operator **
+ // operator **
 -var r1 = Math.pow(a, a);
 -var r2 = Math.pow(a, b);
 -var r3 = Math.pow(a, 0);

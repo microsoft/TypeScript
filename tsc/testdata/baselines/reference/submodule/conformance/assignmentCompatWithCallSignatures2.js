@@ -70,12 +70,14 @@ t = { f(x) { return ''; } };
 a = { f: () => 1 };
 a = { f: (x) => 1 };
 a = { f: function (x) { return ''; } };
+// errors
 t = () => 1;
 t = function (x) { return ''; };
 a = () => 1;
 a = function (x) { return ''; };
 var s2;
 var a3;
+// these are errors
 t = s2;
 t = a3;
 t = (x) => 1;

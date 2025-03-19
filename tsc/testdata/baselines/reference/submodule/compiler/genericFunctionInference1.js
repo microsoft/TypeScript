@@ -289,7 +289,7 @@ const f31 = pipe3(box, list);
 const f32 = pipe3(list, list);
 const f40 = pipe4([list, box]);
 const f41 = pipe4([box, list]);
-const f50 = pipe5(list);
+const f50 = pipe5(list); // No higher order inference
 let f60 = wrap3(baz);
 let f70 = pipe(list2, box);
 let f71 = pipe(box, list2);
@@ -303,16 +303,19 @@ const p2 = newPoint(10, 20);
 const bag1 = new Bag(1, 2, 3);
 const bag2 = newBag('a', 'b', 'c');
 const GenericComp2 = myHoc(GenericComp);
+// #417
 function mirror(f) { return f; }
 var identityM = mirror(identity);
 var x = 1;
 var y = identity(x);
 var z = identityM(x);
+// #3038
 export function keyOf(value) {
     return value.key;
 }
 var data = [];
-toKeys(data, keyOf);
+toKeys(data, keyOf); // Error
+// #9366
 function flip(f) {
     return (b, a) => f(a, b);
 }
@@ -321,16 +324,19 @@ function zip(x, y) {
 }
 var expected = flip(zip);
 var actual = flip(zip);
+// #9366
 const map = (transform) => (arr) => arr.map(transform);
 const identityStr = (t) => t;
 const arr = map(identityStr)(['a']);
 const arr1 = map(identity)(['a']);
+// #9949
 function of2(one, two) {
     return [one, two];
 }
 const flipped = flip(of2);
 const enhance = pipe(myHoc1, myHoc2);
 const MyComponent2 = enhance(MyComponent1);
+// #29904.2
 const fn20 = pipe((_a) => 1);
 const fn30 = pipe(x => x + 1, x => x * 2);
 const promise = Promise.resolve(1);
@@ -342,4 +348,4 @@ const fn62 = pipe(getArray, x => x, x => first(x));
 foo2(() => { });
 foo2(identity);
 foo2(identity, 1);
-const a2 = times(identity)(5);
+const a2 = times(identity)(5); // => [0, 1, 2, 3, 4]

@@ -22,6 +22,7 @@ foo((x = 0) => { return x; });
 var y = x, number;
 x * x;
 false ? (() => null) : null;
+// missing fatarrow
 var x1 = () => { };
 var x2 = (a) => { };
 var x3 = (a) => { };

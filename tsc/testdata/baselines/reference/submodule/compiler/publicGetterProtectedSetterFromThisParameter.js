@@ -51,6 +51,7 @@ class B {
     get u() { return 0; }
     set u(v) { }
     foo(a, b) {
+        // Should have no errors in this block
         this.x = 0;
         this.y = 0;
         a.x = 0;
@@ -64,6 +65,7 @@ function bar(a, b) {
     this.y = 0;
     a.x = 0;
     a.y = 0;
+    // These should error
     b.q = 0;
     b.u = 0;
 }

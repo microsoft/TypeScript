@@ -1,14 +1,6 @@
 --- old.uniqueSymbolsDeclarationsErrors.js
 +++ new.uniqueSymbolsDeclarationsErrors.js
-@@= skipped -65, +65 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.ClassWithPrivateNamedAccessors = exports.ClassWithPrivateNamedMethods = exports.ClassWithPrivateNamedProperties = exports.classExpression = exports.obj = void 0;
- exports.funcInferredReturnType = funcInferredReturnType;
--// not allowed when emitting declarations
- exports.obj = {
-     method1(p) {
-         return p;
-@@= skipped -22, +21 lines =@@
+@@= skipped -87, +87 lines =@@
      return obj;
  }
  class ClassWithPrivateNamedProperties {

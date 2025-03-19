@@ -30,12 +30,8 @@
  var a;
  var b;
  a = b;
--b = a; // error
-+b = a;
- var b2;
- a = b2;
--b2 = a; // error
-+b2 = a;
+@@= skipped -30, +11 lines =@@
+ b2 = a; // error
  var Generics;
  (function (Generics) {
 -    var A = /** @class */ (function () {
@@ -57,19 +53,3 @@
      function foo() {
          var a;
          var b;
--        a = b; // error
--        b = a; // error
-+        a = b;
-+        b = a;
-         var b2;
--        a = b2; // error
--        b2 = a; // error
-+        a = b2;
-+        b2 = a;
-         var b3;
--        a = b3; // ok
--        b3 = a; // ok
-+        a = b3;
-+        b3 = a;
-     }
- })(Generics || (Generics = {}));

@@ -54,14 +54,17 @@ class Doing {
     }
 }
 class Other extends Doing {
+    // in static method
     static staticMethod() {
         super.staticMethod();
     }
+    // in a lambda inside a static method
     static lambdaInsideAStaticMethod() {
         () => {
             super.staticMethod();
         };
     }
+    // in an object literal inside a static method
     static objectLiteralInsideAStaticMethod() {
         return {
             a: () => {
@@ -70,13 +73,16 @@ class Other extends Doing {
             b: super.staticMethod()
         };
     }
+    // in a getter
     static get staticGetter() {
         super.staticMethod();
         return 0;
     }
+    // in a setter
     static set staticGetter(value) {
         super.staticMethod();
     }
+    // in static method
     static initializerInAStaticMethod(a = super.staticMethod()) {
         super.staticMethod();
     }

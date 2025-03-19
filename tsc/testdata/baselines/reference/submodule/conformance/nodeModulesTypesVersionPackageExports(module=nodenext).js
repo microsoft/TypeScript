@@ -52,9 +52,11 @@ export const futureVersionApplied = true;
 }
 
 //// [index.js]
+// esm format file
 import * as mod from "inner";
 mod.correctVersionApplied;
 //// [index.mjs]
+// esm format file
 import * as mod from "inner";
 mod.correctVersionApplied;
 //// [index.cjs]
@@ -83,5 +85,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// cjs format file
 const mod = __importStar(require("inner"));
 mod.correctVersionApplied;

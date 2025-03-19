@@ -27,20 +27,20 @@ class C {
 
 
 //// [esDecorators-privateFieldAccess.js]
-@dec(x => x.#foo)
+@dec(x => x.#foo) // error
 class A {
     #foo = 3;
-    @dec(this, (x) => x.#foo)
+    @dec(this, (x) => x.#foo) // ok
     m() { }
 }
-@dec((x) => x.#foo)
+@dec((x) => x.#foo) // error
 class B {
     #foo = 3;
 }
 class C {
     #foo = 2;
     m() {
-        @dec(() => this.#foo)
+        @dec(() => this.#foo) // ok
         class D {
         }
         return D;

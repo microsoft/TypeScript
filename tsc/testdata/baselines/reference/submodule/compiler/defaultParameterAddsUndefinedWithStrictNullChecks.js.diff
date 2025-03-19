@@ -24,22 +24,19 @@
  }
 -function foo2(x, b) {
 -    if (x === void 0) { x = "string"; }
--    x.length; // ok, should be string
 +function foo2(x = "string", b) {
-+    x.length;
+     x.length; // ok, should be string
  }
 -function foo3(x, b) {
 -    if (x === void 0) { x = "string"; }
--    x.length; // ok, should be string
 +function foo3(x = "string", b) {
-+    x.length;
+     x.length; // ok, should be string
      x = undefined;
  }
 -function foo4(x, b) {
 -    if (x === void 0) { x = undefined; }
--    x; // should be string | undefined
 +function foo4(x = undefined, b) {
-+    x;
+     x; // should be string | undefined
      x = undefined;
  }
 -function allowsNull(val) {
@@ -48,10 +45,7 @@
      val = null;
      val = 'string and null are both ok';
  }
--allowsNull(null); // still allows passing null
--// .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
-+allowsNull(null);
- foo1(undefined, 1);
+@@= skipped -39, +32 lines =@@
  foo2(undefined, 1);
  foo3(undefined, 1);
  foo4(undefined, 1);
@@ -68,7 +62,7 @@
      if (y !== undefined) {
          if (y === false) {
              return y;
-@@= skipped -54, +44 lines =@@
+@@= skipped -15, +13 lines =@@
      }
      return true;
  }

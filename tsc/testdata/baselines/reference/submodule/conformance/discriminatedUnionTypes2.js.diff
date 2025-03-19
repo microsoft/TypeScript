@@ -8,21 +8,7 @@
  function f10(x) {
      if (x.kind === false) {
          x.a;
-@@= skipped -25, +24 lines =@@
-     }
- }
- function f13(x) {
--    x = { a: null, b: "foo", c: 4 }; // Error
-+    x = { a: null, b: "foo", c: 4 };
- }
- function f14(x) {
-     if (x.a === 0) {
--        x.b; // Error
-+        x.b;
-     }
- }
- function f15(x) {
-@@= skipped -19, +19 lines =@@
+@@= skipped -44, +43 lines =@@
  f15({ error: new Error("boom") });
  function f20(carrier) {
      if (carrier.error === null) {
@@ -39,25 +25,3 @@
      }
  }
  function f30(foo) {
-@@= skipped -34, +34 lines =@@
- }
- function foo1(x) {
-     if (x.type === 'number') {
--        x.value; // number
-+        x.value;
-     }
-     else {
--        x.value; // number
-+        x.value;
-     }
- }
- function foo2(x) {
-     if (x.type === 'number') {
--        x.value; // number
-+        x.value;
-     }
-     else {
--        x.value; // string
-+        x.value;
-     }
- }

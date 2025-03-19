@@ -36,27 +36,27 @@
 -        _A_baz.set(this, 3); // Error
 -        _A_qux.set(this, 3); // OK
 -    }
-+    #foo = 3;
-+    #bar = 3;
-+    #baz = 3;
-+    #qux = 3;
-+    #fooMethod() { return 3; }
-+    #barMethod() { return 3; }
-+    #bazMethod() { return 3; }
-+    #quxMethod() { return 3; }
-+    async #asyncMethod() { return 1; }
-+    *#genMethod() { return 1; }
-+    async *#asyncGenMethod() { return 1; }
-+    get #fooProp() { return 3; }
-+    set #fooProp(value) { }
-+    get #barProp() { return 3; }
-+    set #barProp(value) { }
-+    get #bazProp() { return 3; }
-+    set #bazProp(value) { }
-+    get #quxProp() { return 3; }
-+    set #quxProp(value) { }
-+    async get #asyncProp() { return 1; }
-+    async set #asyncProp(value) { }
++    #foo = 3; // Error
++    #bar = 3; // Error
++    #baz = 3; // Error
++    #qux = 3; // OK
++    #fooMethod() { return 3; } // Error
++    #barMethod() { return 3; } // Error
++    #bazMethod() { return 3; } // Error
++    #quxMethod() { return 3; } // Error
++    async #asyncMethod() { return 1; } //OK
++    *#genMethod() { return 1; } //OK
++    async *#asyncGenMethod() { return 1; } //OK
++    get #fooProp() { return 3; } // Error
++    set #fooProp(value) { } // Error
++    get #barProp() { return 3; } // Error
++    set #barProp(value) { } // Error
++    get #bazProp() { return 3; } // Error
++    set #bazProp(value) { } // Error
++    get #quxProp() { return 3; } // Error
++    set #quxProp(value) { } // Error
++    async get #asyncProp() { return 1; } // Error
++    async set #asyncProp(value) { } // Error
  }
 -_A_foo = new WeakMap(), _A_bar = new WeakMap(), _A_baz = new WeakMap(), _A_qux = new WeakMap(), _A_instances = new WeakSet(), _A_fooMethod = function _A_fooMethod() { return 3; }, _A_barMethod = function _A_barMethod() { return 3; }, _A_bazMethod = function _A_bazMethod() { return 3; }, _A_quxMethod = function _A_quxMethod() { return 3; }, _A_asyncMethod = function _A_asyncMethod() {
 -    return __awaiter(this, void 0, void 0, function* () { return 1; });
@@ -66,5 +66,5 @@
 -    return __awaiter(this, void 0, void 0, function* () { });
 -};
  class B {
-+    #quux = 3;
++    #quux = 3; // Error
  }

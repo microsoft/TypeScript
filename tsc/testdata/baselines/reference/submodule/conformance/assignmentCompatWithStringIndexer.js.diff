@@ -29,15 +29,9 @@
 +}
  var a;
  var b;
--a = b; // ok
--b = a; // error
-+a = b;
-+b = a;
- var b2;
--a = b2; // ok
--b2 = a; // error
-+a = b2;
-+b2 = a;
+ a = b; // ok
+@@= skipped -30, +11 lines =@@
+ b2 = a; // error
  var Generics;
  (function (Generics) {
 -    var A = /** @class */ (function () {
@@ -58,8 +52,8 @@
 +    }
      var b1;
      var a1;
--    a1 = b1; // ok
--    b1 = a1; // error
+     a1 = b1; // ok
+     b1 = a1; // error
 -    var B2 = /** @class */ (function (_super) {
 -        __extends(B2, _super);
 -        function B2() {
@@ -67,26 +61,8 @@
 -        }
 -        return B2;
 -    }(A));
-+    a1 = b1;
-+    b1 = a1;
 +    class B2 extends A {
 +    }
      var b2;
--    a1 = b2; // ok
--    b2 = a1; // error
-+    a1 = b2;
-+    b2 = a1;
-     function foo() {
-         var b3;
-         var a3;
--        a3 = b3; // error
--        b3 = a3; // error
-+        a3 = b3;
-+        b3 = a3;
-         var b4;
--        a3 = b4; // error
--        b4 = a3; // error
-+        a3 = b4;
-+        b4 = a3;
-     }
- })(Generics || (Generics = {}));
+     a1 = b2; // ok
+     b2 = a1; // error

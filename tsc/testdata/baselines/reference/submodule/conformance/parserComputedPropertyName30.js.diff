@@ -1,10 +1,9 @@
 --- old.parserComputedPropertyName30.js
 +++ new.parserComputedPropertyName30.js
-@@= skipped -9, +9 lines =@@
- //// [parserComputedPropertyName30.js]
+@@= skipped -10, +10 lines =@@
  var E;
  (function (E) {
--    // no ASI, comma expected
+     // no ASI, comma expected
 -    E[E[e] = id++] = e;
 +    E[e] = id++;
 +    if (typeof E[e] !== "string") E[E[e]] = e;

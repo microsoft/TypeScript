@@ -9,7 +9,6 @@
 -    constructor() {
 -        _A_instances.add(this);
 -    }
--    #constructor() { } // Error: `#constructor` is a reserved word.
-+    #constructor() { }
+     #constructor() { } // Error: `#constructor` is a reserved word.
  }
 -_A_instances = new WeakSet();

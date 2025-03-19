@@ -27,10 +27,10 @@
  }
 -_A2_instances = new WeakSet(), _A2_method = function _A2_method() { return ""; };
 -new A2().(); // Error
-+new A2().#method();
++new A2().#method(); // Error
  function foo() {
 -    new A2().(); // Error
-+    new A2().#method();
++    new A2().#method(); // Error
  }
  class B2 {
      m() {

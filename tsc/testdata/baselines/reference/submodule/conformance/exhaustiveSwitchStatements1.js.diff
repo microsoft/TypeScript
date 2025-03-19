@@ -8,14 +8,7 @@
  function f1(x) {
      if (!!true) {
          switch (x) {
-             case 1: return 'a';
-             case 2: return 'b';
-         }
--        x; // Unreachable
-+        x;
-     }
-     else {
-         throw 0;
+@@= skipped -14, +13 lines =@@
      }
  }
  function f2(x) {
@@ -24,26 +17,7 @@
      switch (x) {
          case 1:
              z = 10;
-@@= skipped -23, +22 lines =@@
-             z = 20;
-             break;
-     }
--    z; // Definitely assigned
-+    z;
- }
- function f3(x) {
-     switch (x) {
-         case 1: return 10;
-         case 2: return 20;
--        // Default considered reachable to allow defensive coding
-         default: throw new Error("Bad input");
-     }
- }
--// Repro from #11572
- var E;
- (function (E) {
-     E[E["A"] = 0] = "A";
-@@= skipped -32, +30 lines =@@
+@@= skipped -41, +41 lines =@@
          }
  }
  function area(s) {
@@ -63,14 +37,7 @@
          switch (s.kind) {
              case "square": return s.size * s.size;
              case "rectangle": return s.width * s.height;
-@@= skipped -11, +11 lines =@@
-     })();
-     return area;
- }
--// Repro from #13241
- var MyEnum;
- (function (MyEnum) {
-     MyEnum[MyEnum["A"] = 0] = "A";
+@@= skipped -18, +18 lines =@@
      MyEnum[MyEnum["B"] = 1] = "B";
  })(MyEnum || (MyEnum = {}));
  function thisGivesError(e) {
@@ -79,7 +46,7 @@
      switch (e) {
          case MyEnum.A:
              s = "it was A";
-@@= skipped -19, +18 lines =@@
+@@= skipped -12, +12 lines =@@
      return s;
  }
  function good1(e) {
@@ -88,13 +55,7 @@
      switch (e) {
          case MyEnum.A:
              s = "it was A";
-@@= skipped -20, +20 lines =@@
-         case MyEnum.B: return "it was B";
-     }
- }
--// Repro from #18362
- var Level;
- (function (Level) {
+@@= skipped -26, +26 lines =@@
      Level[Level["One"] = 0] = "One";
      Level[Level["Two"] = 1] = "Two";
  })(Level || (Level = {}));
@@ -105,25 +66,16 @@
      switch (level) {
          case Level.One:
              next = Level.Two;
-@@= skipped -46, +45 lines =@@
-             }
-     }
+@@= skipped -42, +42 lines =@@
  }
--// Repro from #20823
+ // Repro from #20823
  function test4(value) {
 -    var x;
 +    let x;
      switch (value) {
          case 1:
              x = "one";
-@@= skipped -13, +12 lines =@@
-     }
-     return x;
- }
--// Repro from #34661
- var Animal;
- (function (Animal) {
-     Animal[Animal["DOG"] = 0] = "DOG";
+@@= skipped -18, +18 lines =@@
      Animal[Animal["CAT"] = 1] = "CAT";
  })(Animal || (Animal = {}));
  function expression() {
@@ -134,7 +86,7 @@
          case Animal.CAT: return Animal.CAT;
      }
  }
--// Repro from #34840
+ // Repro from #34840
  function foo() {
 -    var foo = 0;
 +    const foo = 0;
@@ -144,21 +96,8 @@
          switch (stats) {
              case 1: break;
              case 2: break;
-@@= skipped -29, +26 lines =@@
-         case 'c':
-             k = 'a';
-     }
--    k === 'c'; // Error
-+    k === 'c';
-     return o[k];
- }
- function f35431(a) {
-@@= skipped -8, +8 lines =@@
-         case "abc":
-         case "def": return;
-         default:
--            a.kind; // Error expected
-+            a.kind;
+@@= skipped -33, +32 lines =@@
+             a.kind; // Error expected
      }
  }
 -

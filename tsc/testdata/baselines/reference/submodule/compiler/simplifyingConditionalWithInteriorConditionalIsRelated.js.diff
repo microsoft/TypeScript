@@ -8,19 +8,9 @@
  function ConditionalOrUndefined() {
      return 0;
  }
- function JustConditional() {
--    return ConditionalOrUndefined(); // shouldn't error
-+    return ConditionalOrUndefined();
+@@= skipped -16, +15 lines =@@
  }
--// For comparison...
- function genericOrUndefined() {
-     return 0;
- }
- function JustGeneric() {
--    return genericOrUndefined(); // no error
-+    return genericOrUndefined();
- }
--// Simplified example:
+ // Simplified example:
  function f() {
 -    var x = null;
 +    const x = null;

@@ -43,6 +43,7 @@ var ABC;
     ABC[ABC["A"] = 0] = "A";
     ABC[ABC["B"] = 1] = "B";
 })(ABC || (ABC = {}));
+// 'a' and 'b' properties required !?!?
 const gen2TypeA = { v: "I am A", a: "" };
 const gen2TypeB = { v: "I am B", b: "" };
 a = b;

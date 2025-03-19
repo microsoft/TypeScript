@@ -1,10 +1,7 @@
 --- old.functionConstraintSatisfaction.js
 +++ new.functionConstraintSatisfaction.js
-@@= skipped -63, +63 lines =@@
- //}
- 
- //// [functionConstraintSatisfaction.js]
--// satisfaction of a constraint to Function, no errors expected
+@@= skipped -66, +66 lines =@@
+ // satisfaction of a constraint to Function, no errors expected
  function foo(x) { return x; }
  var i;
 -var C = /** @class */ (function () {
@@ -26,7 +23,7 @@
  var r3 = foo(function (x) { return x; });
  var r4 = foo(function (x) { return x; });
  var r5 = foo(i);
-@@= skipped -21, +18 lines =@@
+@@= skipped -18, +16 lines =@@
  var r7 = foo(b);
  var r8 = foo(c);
  var i2;
@@ -51,11 +48,3 @@
  var r13 = foo(i2);
  var r14 = foo(C2);
  var r15 = foo(b2);
-@@= skipped -22, +20 lines =@@
-     foo(x);
-     foo(y);
- }
--//function foo2<T extends { (): void }, U extends T>(x: T, y: U) {
--//    foo(x);
--//    foo(y);
--//}

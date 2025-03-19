@@ -1,11 +1,9 @@
 --- old.declFileObjectLiteralWithOnlySetter.js
 +++ new.declFileObjectLiteralWithOnlySetter.js
-@@= skipped -17, +17 lines =@@
-     };
- }
+@@= skipped -19, +19 lines =@@
  ;
--var /*3*/ point = makePoint(2);
--point. /*2*/x = 30;
+ var /*3*/ point = makePoint(2);
+ point. /*2*/x = 30;
 -
 -
 -//// [declFileObjectLiteralWithOnlySetter.d.ts]
@@ -17,5 +15,3 @@
 -    b: number;
 -    x: number;
 -};
-+var point = makePoint(2);
-+point.x = 30;

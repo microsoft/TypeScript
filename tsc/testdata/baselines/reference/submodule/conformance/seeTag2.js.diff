@@ -1,22 +1,27 @@
 --- old.seeTag2.js
 +++ new.seeTag2.js
-@@= skipped -23, +23 lines =@@
- 
+@@= skipped -24, +24 lines =@@
  
  //// [seeTag2.js]
--/** @see {} empty*/
+ /** @see {} empty*/
 -var a = "";
--/** @see {aaaaaa} unknown name*/
++const a = "";
+ /** @see {aaaaaa} unknown name*/
 -var b = "";
--/** @see {?????} invalid */
++const b = "";
+ /** @see {?????} invalid */
 -var c = "";
--/** @see c without brace */
++const c = "";
+ /** @see c without brace */
 -var d = "";
--/** @see ?????? wowwwwww*/
++const d = "";
+ /** @see ?????? wowwwwww*/
 -var e = "";
--/** @see {}*/
++const e = "";
+ /** @see {}*/
 -var f = "";
--/** @see */
++const f = "";
+ /** @see */
 -var g = "";
 -
 -
@@ -35,10 +40,4 @@
 -declare const f = "";
 -/** @see */
 -declare const g = "";
-+const a = "";
-+const b = "";
-+const c = "";
-+const d = "";
-+const e = "";
-+const f = "";
 +const g = "";

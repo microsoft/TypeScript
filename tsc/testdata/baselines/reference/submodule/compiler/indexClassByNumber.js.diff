@@ -1,10 +1,9 @@
 --- old.indexClassByNumber.js
 +++ new.indexClassByNumber.js
-@@= skipped -9, +9 lines =@@
- f[0] = 4; // Shouldn't be allowed
+@@= skipped -10, +10 lines =@@
  
  //// [indexClassByNumber.js]
--// Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
+ // Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
 -var foo = /** @class */ (function () {
 -    function foo() {
 -    }
@@ -13,5 +12,4 @@
 +class foo {
 +}
  var f = new foo();
--f[0] = 4; // Shouldn't be allowed
-+f[0] = 4;
+ f[0] = 4; // Shouldn't be allowed

@@ -47,6 +47,7 @@ var X;
 (function (X) {
     let Y;
     (function (Y) {
+        // duplicate identifier
         class Point {
             constructor(x, y) {
                 this.x = x;
@@ -63,6 +64,7 @@ var A;
 (function (A) {
     A.Instance = new A();
 })(A || (A = {}));
+// duplicate identifier
 class A {
     id;
 }

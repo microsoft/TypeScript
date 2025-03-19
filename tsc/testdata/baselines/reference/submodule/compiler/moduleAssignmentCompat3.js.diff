@@ -1,9 +1,0 @@
---- old.moduleAssignmentCompat3.js
-+++ new.moduleAssignmentCompat3.js
-@@= skipped -26, +26 lines =@@
- })(B || (B = {}));
- var a;
- var b;
--// both errors
- a = b;
- b = a;

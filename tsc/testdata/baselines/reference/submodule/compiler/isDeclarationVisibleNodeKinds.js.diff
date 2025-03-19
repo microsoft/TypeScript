@@ -1,18 +1,9 @@
 --- old.isDeclarationVisibleNodeKinds.js
 +++ new.isDeclarationVisibleNodeKinds.js
-@@= skipped -70, +70 lines =@@
- }
- 
- //// [isDeclarationVisibleNodeKinds.js]
--// Function types
- var schema;
- (function (schema_1) {
-     function createValidator1(schema) {
-@@= skipped -8, +7 lines =@@
-     }
+@@= skipped -79, +79 lines =@@
      schema_1.createValidator1 = createValidator1;
  })(schema || (schema = {}));
--// Constructor types
+ // Constructor types
 -(function (schema_2) {
 +(function (schema_1) {
      function createValidator2(schema) {
@@ -21,7 +12,7 @@
 -    schema_2.createValidator2 = createValidator2;
 +    schema_1.createValidator2 = createValidator2;
  })(schema || (schema = {}));
--// union types
+ // union types
 -(function (schema_3) {
 +(function (schema_1) {
      function createValidator3(schema) {
@@ -30,7 +21,7 @@
 -    schema_3.createValidator3 = createValidator3;
 +    schema_1.createValidator3 = createValidator3;
  })(schema || (schema = {}));
--// Array types
+ // Array types
 -(function (schema_4) {
 +(function (schema_1) {
      function createValidator4(schema) {
@@ -39,7 +30,7 @@
 -    schema_4.createValidator4 = createValidator4;
 +    schema_1.createValidator4 = createValidator4;
  })(schema || (schema = {}));
--// TypeLiterals
+ // TypeLiterals
 -(function (schema_5) {
 +(function (schema_1) {
      function createValidator5(schema) {
@@ -48,7 +39,7 @@
 -    schema_5.createValidator5 = createValidator5;
 +    schema_1.createValidator5 = createValidator5;
  })(schema || (schema = {}));
--// Tuple types
+ // Tuple types
 -(function (schema_6) {
 +(function (schema_1) {
      function createValidator6(schema) {
@@ -57,7 +48,7 @@
 -    schema_6.createValidator6 = createValidator6;
 +    schema_1.createValidator6 = createValidator6;
  })(schema || (schema = {}));
--// Paren Types
+ // Paren Types
 -(function (schema_7) {
 +(function (schema_1) {
      function createValidator7(schema) {
@@ -66,7 +57,7 @@
 -    schema_7.createValidator7 = createValidator7;
 +    schema_1.createValidator7 = createValidator7;
  })(schema || (schema = {}));
--// Type reference
+ // Type reference
 -(function (schema_8) {
 +(function (schema_1) {
      function createValidator8(schema) {

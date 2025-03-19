@@ -17,6 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
 function foo() { return "foo"; }
 //// [1.js]
+// https://github.com/microsoft/TypeScript/issues/36780
 async function func() {
     const packageName = '.';
     const packageJson = await Promise.resolve(`${packageName + '/package.json'}`).then(s => require(s));

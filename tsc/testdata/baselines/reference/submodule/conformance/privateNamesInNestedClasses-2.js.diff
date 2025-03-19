@@ -22,7 +22,7 @@
                  class C {
                      constructor() {
 -                        __classPrivateFieldGet(_a, _B_x, "f"); // error
-+                        A.#x;
++                        A.#x; // error
                      }
                  }
              }

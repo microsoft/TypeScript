@@ -21,7 +21,7 @@ class E2<T> extends D2<T> { baz: T; }
 //// [classExtendsItselfIndirectly_file1.js]
 class C extends E {
     foo;
-}
+} // error
 //// [classExtendsItselfIndirectly_file2.js]
 class D extends C {
     bar;
@@ -33,7 +33,7 @@ class E extends D {
 //// [classExtendsItselfIndirectly_file4.js]
 class C2 extends E2 {
     foo;
-}
+} // error
 //// [classExtendsItselfIndirectly_file5.js]
 class D2 extends C2 {
     bar;

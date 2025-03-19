@@ -203,6 +203,7 @@ class Abstract {
 }
 const z1 = ex.customClass;
 const z2 = ex.obj.nested.attr;
+// Repros from #26856
 function invoker(key, ...args) {
     return (obj) => obj[key](...args);
 }

@@ -29,6 +29,7 @@ class B {
 
 
 //// [thisInGenericStaticMembers.js]
+// this.call in static generic method not resolved correctly
 class A {
     static one(source, value) {
         return source;

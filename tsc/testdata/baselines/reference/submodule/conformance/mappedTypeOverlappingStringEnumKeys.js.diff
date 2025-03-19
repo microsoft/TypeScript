@@ -1,14 +1,6 @@
 --- old.mappedTypeOverlappingStringEnumKeys.js
 +++ new.mappedTypeOverlappingStringEnumKeys.js
-@@= skipped -39, +39 lines =@@
- 
- 
- //// [mappedTypeOverlappingStringEnumKeys.js]
--// #37859
- var TerrestrialAnimalTypes;
- (function (TerrestrialAnimalTypes) {
-     TerrestrialAnimalTypes["CAT"] = "cat";
-@@= skipped -12, +11 lines =@@
+@@= skipped -51, +51 lines =@@
      AlienAnimalTypes["CAT"] = "cat";
  })(AlienAnimalTypes || (AlienAnimalTypes = {}));
  ;

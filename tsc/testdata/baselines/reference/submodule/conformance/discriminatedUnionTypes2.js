@@ -171,11 +171,11 @@ function f11(x) {
     }
 }
 function f13(x) {
-    x = { a: null, b: "foo", c: 4 };
+    x = { a: null, b: "foo", c: 4 }; // Error
 }
 function f14(x) {
     if (x.a === 0) {
-        x.b;
+        x.b; // Error
     }
 }
 function f15(x) {
@@ -224,17 +224,17 @@ function f(problem) {
 }
 function foo1(x) {
     if (x.type === 'number') {
-        x.value;
+        x.value; // number
     }
     else {
-        x.value;
+        x.value; // number
     }
 }
 function foo2(x) {
     if (x.type === 'number') {
-        x.value;
+        x.value; // number
     }
     else {
-        x.value;
+        x.value; // string
     }
 }

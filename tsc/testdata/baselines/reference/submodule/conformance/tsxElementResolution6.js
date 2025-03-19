@@ -13,4 +13,5 @@ var div: any;
 
 //// [file.jsx]
 var div;
+// Still an error
 <div n='x'/>;

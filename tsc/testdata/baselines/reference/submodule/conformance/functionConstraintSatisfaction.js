@@ -64,6 +64,7 @@ function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 //}
 
 //// [functionConstraintSatisfaction.js]
+// satisfaction of a constraint to Function, no errors expected
 function foo(x) { return x; }
 var i;
 class C {
@@ -102,3 +103,7 @@ function foo2(x, y) {
     foo(x);
     foo(y);
 }
+//function foo2<T extends { (): void }, U extends T>(x: T, y: U) {
+//    foo(x);
+//    foo(y);
+//}

@@ -1,12 +1,11 @@
 --- old.libTypeScriptSubfileResolving.js
 +++ new.libTypeScriptSubfileResolving.js
-@@= skipped -12, +12 lines =@@
- window.localStorage
+@@= skipped -13, +13 lines =@@
  
  //// [index.js]
--/// <reference lib="dom.iterable" />
+ /// <reference lib="dom.iterable" />
 -var a = { abc: "Hello" };
--// This should fail because libdom has been replaced
--// by the module above ^
 +const a = { abc: "Hello" };
+ // This should fail because libdom has been replaced
+ // by the module above ^
  window.localStorage;

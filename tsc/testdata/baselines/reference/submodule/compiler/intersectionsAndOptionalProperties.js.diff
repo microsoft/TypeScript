@@ -5,19 +5,15 @@
  
  //// [intersectionsAndOptionalProperties.js]
 -"use strict";
--x = y; // Error
--x = z; // Error
-+x = y;
-+x = z;
+ x = y; // Error
+ x = z; // Error
  function foo(v) {
 -    var x;
--    x = v; // Error
--    x.field = v.field; // Error
 +    let x;
-+    x = v;
-+    x.field = v.field;
+     x = v; // Error
+     x.field = v.field; // Error
  }
--// Repro from #38348
+ // Repro from #38348
 -var yy = [1];
 -var xx = yy;
 +const yy = [1];

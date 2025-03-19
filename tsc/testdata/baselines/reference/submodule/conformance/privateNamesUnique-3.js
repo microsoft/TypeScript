@@ -19,11 +19,11 @@ class B {
 //// [privateNamesUnique-3.js]
 class A {
     #foo = 1;
-    static #foo = true;
+    static #foo = true; // error (duplicate)
 }
 class B {
     static #foo = true;
     test(x) {
-        x.#foo;
+        x.#foo; // error (#foo is a static property on B, not an instance property)
     }
 }

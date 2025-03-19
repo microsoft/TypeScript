@@ -48,11 +48,14 @@ exports.HereIsTheError = HereIsTheError;
 function ComponentWithUnion(props) {
     return <h1></h1>;
 }
+// Usage with React tsx
 function HereIsTheError() {
-    return (<ComponentWithUnion multi={false} value={'s'} onChange={val => console.log(val)}/>);
+    return (<ComponentWithUnion multi={false} value={'s'} onChange={val => console.log(val)} // <- this throws an error
+    />);
 }
+// Usage with pure TypeScript
 ComponentWithUnion({
     multi: false,
     value: 's',
-    onChange: val => console.log(val)
+    onChange: val => console.log(val) // <- this works fine
 });

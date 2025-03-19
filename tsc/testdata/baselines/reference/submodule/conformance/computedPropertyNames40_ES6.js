@@ -21,6 +21,7 @@ class Foo2 {
     y;
 }
 class C {
+    // Computed properties
     [""]() { return new Foo; }
     [""]() { return new Foo2; }
 }

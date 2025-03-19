@@ -97,7 +97,7 @@ function f5(x) {
     if (x) {
         doSomething(() => x.length);
     }
-    x = "abc";
+    x = "abc"; // causes x to be considered non-const
 }
 function f6(x) {
     const y = x || "";

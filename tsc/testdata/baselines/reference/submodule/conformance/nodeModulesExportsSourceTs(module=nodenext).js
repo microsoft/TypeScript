@@ -30,6 +30,7 @@ export const x: () => Thing = null as any;
 //// [other.js]
 export const x = null;
 //// [index.js]
+// esm format file
 export { x } from "./other.js";
 //// [index.js]
 export const a = (await import("inner")).x();

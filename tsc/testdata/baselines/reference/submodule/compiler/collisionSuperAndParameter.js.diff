@@ -24,7 +24,7 @@
 +class Foo {
 +    a() {
 +        var lamda = (_super) => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
 +        };
      }
 -    Foo.prototype.a = function () {
@@ -33,7 +33,7 @@
 -            return function (x) { return _this; }; // New scope.  So should inject new _this capture
 +    b(_super) {
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
 -    };
 -    Foo.prototype.b = function (_super) {
@@ -47,7 +47,7 @@
 +class Foo2 extends Foo {
 +    x() {
 +        var lamda = (_super) => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
 -    };
 -    Object.defineProperty(Foo.prototype, "c", {
@@ -74,7 +74,7 @@
 -            return function (x) { return _this; }; // New scope.  So should inject new _this capture
 +    y(_super) {
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
 +    }
 +    set z(_super) {
@@ -116,7 +116,7 @@
 +    }
 +    y(_super) {
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
 -    };
 -    return Foo4;

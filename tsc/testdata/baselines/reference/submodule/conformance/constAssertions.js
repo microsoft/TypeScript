@@ -160,7 +160,7 @@ let o5 = { ...o4 };
 let o6 = { ...o5 };
 let o7 = { ...d };
 let o8 = { ...o7 };
-let o9 = { x: 10, foo() { this.x = 20; } };
+let o9 = { x: 10, foo() { this.x = 20; } }; // Error
 let p1 = (10);
 let p2 = ((-10));
 let p3 = ([(10)]);
@@ -171,9 +171,9 @@ let q2 = 'abc';
 let q3 = true;
 let q4 = [1, 2, 3];
 let q5 = { x: 10, y: 20 };
-let e1 = v1;
-let e2 = (true ? 1 : 0);
-let e3 = id(1);
+let e1 = v1; // Error
+let e2 = (true ? 1 : 0); // Error
+let e3 = id(1); // Error
 let t1 = 'foo';
 let t2 = 'bar';
 let t3 = `${t1}-${t2}`;

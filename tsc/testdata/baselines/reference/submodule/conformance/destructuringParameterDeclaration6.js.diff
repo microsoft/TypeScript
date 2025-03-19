@@ -1,13 +1,9 @@
 --- old.destructuringParameterDeclaration6.js
 +++ new.destructuringParameterDeclaration6.js
-@@= skipped -23, +23 lines =@@
- 
- 
- //// [destructuringParameterDeclaration6.js]
--// A parameter declaration may specify either an identifier or a binding pattern.
--// Reserved words are not allowed to be used as an identifier in parameter declaration
+@@= skipped -27, +27 lines =@@
+ // Reserved words are not allowed to be used as an identifier in parameter declaration
  "use strict";
--// Error
+ // Error
 -function a(_a) {
 -    var  = _a.while;
 -}
@@ -45,7 +41,7 @@
 +function a6(...public) { }
 +function a7(...a) { }
  a({ while: 1 });
--// No Error
+ // No Error
 -function b1(_a) {
 -    var x = _a.public;
 -}

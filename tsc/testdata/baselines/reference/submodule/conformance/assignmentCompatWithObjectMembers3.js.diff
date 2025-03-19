@@ -1,11 +1,9 @@
 --- old.assignmentCompatWithObjectMembers3.js
 +++ new.assignmentCompatWithObjectMembers3.js
-@@= skipped -44, +44 lines =@@
- 
- 
+@@= skipped -46, +46 lines =@@
  //// [assignmentCompatWithObjectMembers3.js]
--// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
--// additional optional properties do not cause errors
+ // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
+ // additional optional properties do not cause errors
 -var S = /** @class */ (function () {
 -    function S() {
 -    }

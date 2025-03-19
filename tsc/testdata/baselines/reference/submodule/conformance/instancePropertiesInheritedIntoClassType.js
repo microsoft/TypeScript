@@ -69,7 +69,7 @@ var NonGeneric;
     var r2 = r.x;
     var r3 = r.y;
     r.y = 4;
-    var r6 = d.y();
+    var r6 = d.y(); // error
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
@@ -95,5 +95,5 @@ var Generic;
     var r2 = r.x;
     var r3 = r.y;
     r.y = '';
-    var r6 = d.y();
+    var r6 = d.y(); // error
 })(Generic || (Generic = {}));

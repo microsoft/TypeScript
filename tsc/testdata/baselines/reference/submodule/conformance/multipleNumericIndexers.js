@@ -35,6 +35,7 @@ interface I<T> {
 
 
 //// [multipleNumericIndexers.js]
+// Multiple indexers of the same type are an error
 class C {
 }
 var a;

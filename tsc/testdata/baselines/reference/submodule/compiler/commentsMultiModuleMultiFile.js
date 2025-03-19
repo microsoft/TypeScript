@@ -39,11 +39,14 @@ new multiM.d();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiM = void 0;
+/** this is multi module 3 comment*/
 var multiM;
 (function (multiM) {
+    /** class d comment*/
     class d {
     }
     multiM.d = d;
+    /// class f comment
     class f {
     }
     multiM.f = f;

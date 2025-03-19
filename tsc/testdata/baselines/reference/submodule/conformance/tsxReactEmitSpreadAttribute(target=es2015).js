@@ -55,6 +55,7 @@ export function T12(a: any, b: any, c: any, d: any) {
 
 
 //// [test.js]
+/// <reference path="react16.d.ts" />
 export function T1(a) {
     return <div className={"T1"} {...a}>T1</div>;
 }

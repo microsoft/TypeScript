@@ -47,27 +47,28 @@ declare function f6(arguments: number); // no codegen no error
 declare function f6(arguments: string); // no codegen no error
 
 //// [collisionArgumentsFunction.js]
+// Functions
 function f1(arguments, ...restParameters) {
-    var arguments = 10;
+    var arguments = 10; // no error
 }
 function f12(i, ...arguments) {
-    var arguments;
+    var arguments; // no error
 }
 function f1NoError(arguments) {
-    var arguments = 10;
+    var arguments = 10; // no error
 }
 function f3(...restParameters) {
-    var arguments = 10;
+    var arguments = 10; // no error
 }
 function f3NoError() {
-    var arguments = 10;
+    var arguments = 10; // no error
 }
 function f4(arguments, ...rest) {
-    var arguments;
+    var arguments; // No error
 }
 function f42(i, ...arguments) {
-    var arguments;
+    var arguments; // No error
 }
 function f4NoError(arguments) {
-    var arguments;
+    var arguments; // No error
 }

@@ -15,7 +15,7 @@
 -};
  configureStore({
 -    middleware: __spreadArray([], defaultMiddleware, true), // Should not error
-+    middleware: [...defaultMiddleware],
++    middleware: [...defaultMiddleware], // Should not error
  });
 -var Component = function () {
 -    var categories = ['Fruit', 'Vegetables'];
@@ -27,6 +27,7 @@
 +    const categories = ['Fruit', 'Vegetables'];
 +    return (<ul>
 +      <li>All</li>
-+      {categories.map((category) => (<li key={category}>{category}</li>))}
++      {categories.map((category) => (<li key={category}>{category}</li> // Error about 'key' only
++        ))}
 +    </ul>);
  };

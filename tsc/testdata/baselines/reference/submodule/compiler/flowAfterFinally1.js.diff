@@ -1,8 +1,0 @@
---- old.flowAfterFinally1.js
-+++ new.flowAfterFinally1.js
-@@= skipped -23, +23 lines =@@
- finally {
-     closeFile();
- }
--result; // should not error here
-+result;

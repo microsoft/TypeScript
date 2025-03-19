@@ -37,25 +37,26 @@ var x = 10;
 switch (x) {
     case 1:
     case 2:
-    default:
+    default: // No issues.
         break;
-    default:
-    default:
+    default: // Error; second 'default' clause.
+    default: // Error; third 'default' clause.
     case 3:
         x *= x;
 }
 switch (x) {
-    default:
+    default: // No issues.
         break;
     case 100:
         switch (x * x) {
-            default:
-            default:
+            default: // No issues.
+            default: // Error; second 'default' clause.
                 break;
             case 10000:
                 x /= x;
-            default:
-            default:
+            default: // Error, third 'default' clause
+            default: // Error, fourth 'default' clause.
+            // Errors on fifth-seventh
             default: return;
             default:
             default:

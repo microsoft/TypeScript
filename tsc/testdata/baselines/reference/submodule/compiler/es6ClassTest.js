@@ -94,6 +94,7 @@ class Bar {
     }
     constructor(n) { }
 }
+// new-style class
 class Foo extends Bar {
     y;
     z;
@@ -113,3 +114,30 @@ class Foo extends Bar {
     }
 }
 var f = new Foo();
+//class GetSetMonster {
+//  // attack(target) {
+//  //     WScript.Echo("Attacks " + target);
+//  // }
+//  // The contextual keyword "get" followed by an identifier and
+//  // a curly body defines a getter in the same way that "get"
+//  // defines one in an object literal.
+//  // get isAlive() {
+//  //   return this.health > 0;
+//  // }
+//  // Likewise, "set" can be used to define setters.
+//  set health(value:number) {
+//    if (value < 0) {
+//      throw new Error('Health must be non-negative.')
+//    }
+//    this.health = value
+//  }
+//  get health() { return 0; }
+//  constructor(this.name: string, health: number) {
+//    this.health = 0;
+//  }
+//}
+//class bar {
+//   static fnOverload( );
+//   static fnOverload(foo: string){ } // no error
+//   constructor(){};    
+//}

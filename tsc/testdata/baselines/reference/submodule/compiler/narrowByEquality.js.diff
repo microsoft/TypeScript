@@ -8,20 +8,12 @@
  if (x == n) {
      x;
  }
-@@= skipped -32, +31 lines =@@
-     x;
-     xAndObj;
- }
--// Repro from #24991
+@@= skipped -35, +34 lines =@@
+ // Repro from #24991
  function test(level) {
      if (level == +level) {
 -        var q2 = level; // error
-+        const q2 = level;
++        const q2 = level; // error
          return level;
      }
      return 0;
- }
--// From issue #32798
- if (xUnknown == null) {
-     xUnknown;
- }

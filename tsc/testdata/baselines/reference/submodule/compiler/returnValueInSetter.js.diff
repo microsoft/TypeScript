@@ -8,7 +8,7 @@
 -    function f() {
 +class f {
 +    set x(value) {
-+        return null;
++        return null; // Should be an error
      }
 -    Object.defineProperty(f.prototype, "x", {
 -        set: function (value) {

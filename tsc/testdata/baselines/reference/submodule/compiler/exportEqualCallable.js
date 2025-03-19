@@ -19,5 +19,6 @@ module.exports = server;
 //// [exportEqualCallable_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='exportEqualCallable_0.ts'/>
 const connect = require("exportEqualCallable_0");
 connect();

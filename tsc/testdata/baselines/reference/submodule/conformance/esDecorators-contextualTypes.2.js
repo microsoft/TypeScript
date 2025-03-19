@@ -34,7 +34,7 @@ function boundMethodLogger<This, Args extends any[], Return>(source: string, bou
 
 //// [esDecorators-contextualTypes.2.js]
 class C {
-    @boundMethodLogger("Yadda", true)
+    @boundMethodLogger("Yadda", /*bound*/ true)
     foo() {
         this.fooHelper();
     }

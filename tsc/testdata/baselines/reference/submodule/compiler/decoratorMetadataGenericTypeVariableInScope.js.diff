@@ -15,7 +15,7 @@
 -};
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C = void 0;
--// Unused, but could collide with the named type argument below.
+ // Unused, but could collide with the named type argument below.
 -var TypeVariable = /** @class */ (function () {
 -    function TypeVariable() {
 -    }

@@ -13,6 +13,7 @@ f({ x: (() => 1)(), ...{ y: 1 } })``;
 
 
 //// [taggedTemplateStringsWithCurriedFunction.js]
+// Originated from #38558
 const f = _ => (..._) => "";
 f({ ...{ x: 0 } }) ``;
 f({ ...{ x: 0 } }) `x`;

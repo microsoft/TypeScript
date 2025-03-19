@@ -4,9 +4,11 @@
  greeter.start();
  
  //// [copyrightWithNewLine1.js]
--/*****************************
--* (c) Copyright - Important
--****************************/
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ /*****************************
+ * (c) Copyright - Important
+ ****************************/
 -define(["require", "exports", "./greeter"], function (require, exports, model) {
 -    "use strict";
 -    Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,9 +17,8 @@
 -    /** things */
 -    greeter.start();
 -});
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
 +const model = require("./greeter");
 +var el = document.getElementById('content');
 +var greeter = new model.Greeter(el);
++/** things */
 +greeter.start();

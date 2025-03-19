@@ -17,16 +17,16 @@
          foo: PropTypes.string,
          bar: PropTypes.number.isRequired
      })];
--// TS checking
+ // TS checking
 -var propTypes = {
 +const propTypes = {
      any: PropTypes.any,
      array: PropTypes.array.isRequired,
      bool: PropTypes.bool.isRequired,
-     shape: PropTypes.shape(innerProps).isRequired,
+@@= skipped -19, +19 lines =@@
      oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
  };
--// JS checking
+ // JS checking
 -var propTypesWithoutAnnotation = {
 +const propTypesWithoutAnnotation = {
      any: PropTypes.any,

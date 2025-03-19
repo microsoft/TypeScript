@@ -10,7 +10,7 @@
 -    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 -};
 -var _Foo_instances, _a, _Foo_x;
--// https://github.com/microsoft/TypeScript/issues/54607
+ // https://github.com/microsoft/TypeScript/issues/54607
  class Foo {
 -    constructor() {
 -        _Foo_instances.add(this);

@@ -21,7 +21,7 @@
      static method(x) {
 -        Derived.; // error
 -        __classPrivateFieldSet(_a, _a, 10, "f", _Base_prop);
-+        Derived.#derivedProp;
++        Derived.#derivedProp; // error
 +        Base.#prop = 10;
      }
  }
@@ -33,7 +33,7 @@
 -        __classPrivateFieldGet(_b, _b, "f", _Derived_derivedProp);
 -        Base. = 10; // error
 +        Derived.#derivedProp;
-+        Base.#prop = 10;
++        Base.#prop = 10; // error
      }
  }
 -_b = Derived;

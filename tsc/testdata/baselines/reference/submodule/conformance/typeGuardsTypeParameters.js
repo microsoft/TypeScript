@@ -37,6 +37,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 
 
 //// [typeGuardsTypeParameters.js]
+// Type guards involving type parameters produce intersection types
 class C {
     prop;
 }
@@ -54,6 +55,7 @@ function f2(x) {
         x.length;
     }
 }
+// Repro from #13872
 function fun(item) {
     const strings = [];
     for (const key in item) {

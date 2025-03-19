@@ -1,10 +1,8 @@
 --- old.mappedTypeAsStringTemplate.js
 +++ new.mappedTypeAsStringTemplate.js
-@@= skipped -10, +10 lines =@@
- 
- 
+@@= skipped -12, +12 lines =@@
  //// [mappedTypeAsStringTemplate.js]
--// Repro from #44220
+ // Repro from #44220
  function foo(foox) { }
 -var c = { x: 1 };
 +const c = { x: 1 };

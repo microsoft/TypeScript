@@ -25,6 +25,7 @@ const foo: Union = {
 };
 
 //// [unionErrorMessageOnMatchingDiscriminant.js]
+// error
 const foo = {
     type: 'a',
     data: null

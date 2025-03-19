@@ -48,6 +48,7 @@ module M {
 }
 
 //// [typeOfThisInFunctionExpression.js]
+// type of 'this' in FunctionExpression is Any
 function fn() {
     var p = this;
     var p;

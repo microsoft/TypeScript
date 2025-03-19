@@ -8,17 +8,14 @@
 -    function DebugClass() {
 -    }
 -    DebugClass.debugFunc = function () {
--        // Start Debugger Test Code
 +class DebugClass {
 +    static debugFunc() {
+         // Start Debugger Test Code
          var i = 0;
          i++;
+@@= skipped -17, +15 lines =@@
          i++;
-@@= skipped -15, +12 lines =@@
-         i++;
-         i++;
-         i++;
--        // End Debugger Test Code
+         // End Debugger Test Code
          return true;
 -    };
 -    return DebugClass;

@@ -10,7 +10,8 @@ function foo<T extends "a" | "b">(t: T) {
 
 
 //// [compareTypeParameterConstrainedByLiteralToLiteral.js]
+// Test for #26758
 function foo(t) {
-    t === "a";
-    t === "x";
+    t === "a"; // Should be allowed
+    t === "x"; // Should be error
 }

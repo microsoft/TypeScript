@@ -28,8 +28,8 @@ var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>; // parenthesized first type 
 //// [declarationEmitFirstTypeArgumentGenericFunctionType.js]
 class X {
 }
-var prop11;
-var prop12;
+var prop11; // spaces before the first type argument
+var prop12; // spaces before the first type argument
 function f1() {
     return prop11;
 }
@@ -44,7 +44,7 @@ function f4() {
 }
 class Y {
 }
-var prop2;
-var prop2;
-var prop3;
-var prop4;
+var prop2; // No space after second type argument
+var prop2; // space after second type argument
+var prop3; // space before first type argument
+var prop4; // parenthesized first type argument

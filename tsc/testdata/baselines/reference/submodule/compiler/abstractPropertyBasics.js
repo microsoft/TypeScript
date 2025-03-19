@@ -34,6 +34,6 @@ class C extends B {
     set prop(v) { }
     raw = "edge";
     ro = "readonly please";
-    readonlyProp;
+    readonlyProp; // don't have to give a value, in fact
     m() { }
 }

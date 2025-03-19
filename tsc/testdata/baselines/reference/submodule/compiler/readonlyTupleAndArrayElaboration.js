@@ -76,6 +76,8 @@ const at8: [1] = at7;
 
 
 //// [readonlyTupleAndArrayElaboration.js]
+// @strict
+// #Repro from #30839
 let point = [3, 4];
 function distanceFromOrigin([x, y]) {
     return Math.sqrt(x ** 2 + y ** 2);

@@ -57,13 +57,13 @@
 -        });
 -    });
 +async function fn() {
-+    const req = await Promise.resolve().then(() => require('./test'));
++    const req = await Promise.resolve().then(() => require('./test')); // ONE
  }
 -var cl1 = /** @class */ (function () {
 -    function cl1() {
 +class cl1 {
 +    async m() {
-+        const req = await Promise.resolve().then(() => require('./test'));
++        const req = await Promise.resolve().then(() => require('./test')); // TWO
      }
 -    cl1.prototype.m = function () {
 -        return __awaiter(this, void 0, void 0, function () {
@@ -115,7 +115,7 @@
 -            }); }
 -        };
 +    m: async () => {
-+        const req = await Promise.resolve().then(() => require('./test'));
++        const req = await Promise.resolve().then(() => require('./test')); // THREE
      }
 -    return cl2;
 -}());
@@ -133,7 +133,7 @@
 +class cl2 {
 +    p = {
 +        m: async () => {
-+            const req = await Promise.resolve().then(() => require('./test'));
++            const req = await Promise.resolve().then(() => require('./test')); // FOUR
          }
 -    });
 -}); };
@@ -141,6 +141,6 @@
 +}
 +exports.cl2 = cl2;
 +const l = async () => {
-+    const req = await Promise.resolve().then(() => require('./test'));
++    const req = await Promise.resolve().then(() => require('./test')); // FIVE
 +};
  exports.l = l;

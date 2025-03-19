@@ -9,7 +9,7 @@
 -        return _super.call(this) || this; // error
 +class Foo {
 +    constructor() {
-+        super();
++        super(); // error
      }
 -    return Foo;
 -}());

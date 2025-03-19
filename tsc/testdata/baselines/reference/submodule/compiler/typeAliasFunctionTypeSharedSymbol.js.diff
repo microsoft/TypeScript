@@ -1,10 +1,9 @@
 --- old.typeAliasFunctionTypeSharedSymbol.js
 +++ new.typeAliasFunctionTypeSharedSymbol.js
-@@= skipped -15, +15 lines =@@
- 
+@@= skipped -16, +16 lines =@@
  
  //// [typeAliasFunctionTypeSharedSymbol.js]
--// Repro from comment in #21496
+ // Repro from comment in #21496
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

@@ -158,6 +158,9 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource1.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     let CompilerDiagnostics;
@@ -246,28 +249,28 @@ var TypeScript;
         var addChar = (index) => {
             var ch = value.charCodeAt(index);
             switch (ch) {
-                case 0x09:
+                case 0x09: // tab
                     result += "\\t";
                     break;
-                case 0x0a:
+                case 0x0a: // line feed
                     result += "\\n";
                     break;
-                case 0x0b:
+                case 0x0b: // vertical tab
                     result += "\\v";
                     break;
-                case 0x0c:
+                case 0x0c: // form feed
                     result += "\\f";
                     break;
-                case 0x0d:
+                case 0x0d: // carriage return
                     result += "\\r";
                     break;
-                case 0x22:
+                case 0x22: // double quote
                     result += "\\\"";
                     break;
-                case 0x27:
+                case 0x27: // single quote
                     result += "\\\'";
                     break;
-                case 0x5c:
+                case 0x5c: // Backslash
                     result += "\\";
                     break;
                 default:

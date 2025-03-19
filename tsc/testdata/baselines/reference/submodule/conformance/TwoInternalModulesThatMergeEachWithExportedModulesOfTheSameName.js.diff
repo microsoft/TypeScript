@@ -15,8 +15,7 @@
      (function (B) {
      })(B || (B = {}));
  })(A || (A = {}));
--// ensure the right var decl is exported
- var x;
+@@= skipped -14, +14 lines =@@
  var x = A.B.x;
  var X;
  (function (X) {
@@ -56,7 +55,3 @@
              Z.Line = Line;
          })(Z || (Z = {}));
      })(Y = X.Y || (X.Y = {}));
- })(X || (X = {}));
--// make sure merging works as expected
- var l;
- var l;

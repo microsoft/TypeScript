@@ -115,14 +115,14 @@ function a() {
     let x;
     x = "";
     while (cond) {
-        x;
+        x; // string
     }
 }
 function b() {
     let x;
     x = "";
     while (cond) {
-        x;
+        x; // string
         x = 42;
         break;
     }
@@ -131,7 +131,7 @@ function c() {
     let x;
     x = "";
     while (cond) {
-        x;
+        x; // string
         x = undefined;
         if (typeof x === "string")
             continue;
@@ -142,7 +142,7 @@ function d() {
     let x;
     x = "";
     while (x = x.length) {
-        x;
+        x; // number
         x = "";
     }
 }
@@ -150,11 +150,11 @@ function e() {
     let x;
     x = "";
     while (cond) {
-        x;
+        x; // string | number
         x = 42;
-        x;
+        x; // number
     }
-    x;
+    x; // string | number
 }
 function f() {
     let x;
@@ -170,7 +170,7 @@ function f() {
         }
         x = /a/;
     }
-    x;
+    x; // string | number | boolean | RegExp
 }
 function g() {
     let x;
@@ -186,33 +186,33 @@ function g() {
         }
         x = /a/;
     }
-    x;
+    x; // number
 }
 function h1() {
     let x;
     x = "";
     while (x > 1) {
-        x;
+        x; // string | number
         x = 1;
-        x;
+        x; // number
     }
-    x;
+    x; // string | number
 }
 function h2() {
     let x;
     x = "";
     while (cond) {
         x = len(x);
-        x;
+        x; // number
     }
-    x;
+    x; // string | number
 }
 function h3() {
     let x;
     x = "";
     while (cond) {
-        x;
+        x; // string | number
         x = len(x);
     }
-    x;
+    x; // string | number
 }

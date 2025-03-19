@@ -7,6 +7,7 @@
 -/// <reference types="lib"/>
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.y = exports.x = exports.$ = void 0;
++/// <reference types="lib"/>
  exports.$ = 1;
 -var y = function () { return exports.x; };
 +let y = () => exports.x;

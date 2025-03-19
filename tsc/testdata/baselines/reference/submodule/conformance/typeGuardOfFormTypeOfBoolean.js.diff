@@ -15,94 +15,27 @@
  ;
  var str;
  var bool;
-@@= skipped -17, +15 lines =@@
- var numOrC;
- var boolOrC;
- var c;
--//	A type guard of the form typeof x === s, 
--//  where s is a string literal with the value 'string', 'number', or 'boolean',
--//  - when true, narrows the type of x to the given primitive type, or
--//  - when false, removes the primitive type from the type of x.
- if (typeof strOrBool === "boolean") {
--    bool = strOrBool; // boolean
-+    bool = strOrBool;
- }
- else {
--    str = strOrBool; // string
-+    str = strOrBool;
- }
- if (typeof numOrBool === "boolean") {
--    bool = numOrBool; // boolean
-+    bool = numOrBool;
- }
- else {
--    num = numOrBool; // number
-+    num = numOrBool;
- }
- if (typeof strOrNumOrBool === "boolean") {
--    bool = strOrNumOrBool; // boolean
-+    bool = strOrNumOrBool;
- }
- else {
--    strOrNum = strOrNumOrBool; // string | number
-+    strOrNum = strOrNumOrBool;
- }
- if (typeof boolOrC === "boolean") {
--    bool = boolOrC; // boolean
-+    bool = boolOrC;
- }
- else {
--    c = boolOrC; // C
-+    c = boolOrC;
+@@= skipped -46, +44 lines =@@
+     c = boolOrC; // C
  }
  if (typeof strOrNum === "boolean") {
 -    var z1 = strOrNum; // {}
-+    let z1 = strOrNum;
++    let z1 = strOrNum; // {}
  }
  else {
 -    var z2 = strOrNum; // string | number
-+    let z2 = strOrNum;
++    let z2 = strOrNum; // string | number
  }
--// A type guard of the form typeof x !== s, where s is a string literal,
--//  - when true, narrows the type of x by typeof x === s when false, or
--//  - when false, narrows the type of x by typeof x === s when true.
- if (typeof strOrBool !== "boolean") {
--    str = strOrBool; // string
-+    str = strOrBool;
- }
- else {
--    bool = strOrBool; // boolean
-+    bool = strOrBool;
- }
- if (typeof numOrBool !== "boolean") {
--    num = numOrBool; // number
-+    num = numOrBool;
- }
- else {
--    bool = numOrBool; // boolean
-+    bool = numOrBool;
- }
- if (typeof strOrNumOrBool !== "boolean") {
--    strOrNum = strOrNumOrBool; // string | number
-+    strOrNum = strOrNumOrBool;
- }
- else {
--    bool = strOrNumOrBool; // boolean
-+    bool = strOrNumOrBool;
- }
- if (typeof boolOrC !== "boolean") {
--    c = boolOrC; // C
-+    c = boolOrC;
- }
- else {
--    bool = boolOrC; // boolean
-+    bool = boolOrC;
+ // A type guard of the form typeof x !== s, where s is a string literal,
+ //  - when true, narrows the type of x by typeof x === s when false, or
+@@= skipped -33, +33 lines =@@
+     bool = boolOrC; // boolean
  }
  if (typeof strOrNum !== "boolean") {
 -    var z1 = strOrNum; // string | number
-+    let z1 = strOrNum;
++    let z1 = strOrNum; // string | number
  }
  else {
 -    var z2 = strOrNum; // {}
-+    let z2 = strOrNum;
++    let z2 = strOrNum; // {}
  }

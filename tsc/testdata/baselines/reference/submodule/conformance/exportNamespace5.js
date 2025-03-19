@@ -48,9 +48,9 @@ Object.defineProperty(exports, "X", { enumerable: true, get: function () { retur
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const b_1 = require("./b");
-let _ = new A();
-let __ = new C();
-let ___ = new b_1.X();
+let _ = new A(); // Error
+let __ = new C(); // Error
+let ___ = new b_1.X(); // Ok
 //// [d.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -73,6 +73,6 @@ __exportStar(require("./a"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const d_1 = require("./d");
-let _ = new d_1.A();
-let __ = new d_1.B();
-let ___ = new d_1.X();
+let _ = new d_1.A(); // Ok
+let __ = new d_1.B(); // Ok
+let ___ = new d_1.X(); // Ok

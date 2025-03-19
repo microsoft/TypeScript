@@ -1,10 +1,8 @@
 --- old.typeArgumentInferenceWithObjectLiteral.js
 +++ new.typeArgumentInferenceWithObjectLiteral.js
-@@= skipped -40, +40 lines =@@
- //// [typeArgumentInferenceWithObjectLiteral.js]
- function foo(x) { }
+@@= skipped -42, +42 lines =@@
  var s;
--// Calls below should infer string for T and then assign that type to the value parameter
+ // Calls below should infer string for T and then assign that type to the value parameter
  foo({
 -    read: function () { return s; },
 -    write: function (value) { return s = value; }
@@ -19,7 +17,7 @@
  });
  var E1;
  (function (E1) {
-@@= skipped -18, +17 lines =@@
+@@= skipped -16, +16 lines =@@
      E2[E2["X"] = 0] = "X";
  })(E2 || (E2 = {}));
  var v1;
@@ -33,4 +31,4 @@
 -var v2 = f1({ w: function (x) { return x; }, r: function () { return E1.X; } }, E1.X);
 -var v3 = f1({ w: function (x) { return x; }, r: function () { return E1.X; } }, E2.X); // Error
 +var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);
-+var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);
++var v3 = f1({ w: x => x, r: () => E1.X }, E2.X); // Error

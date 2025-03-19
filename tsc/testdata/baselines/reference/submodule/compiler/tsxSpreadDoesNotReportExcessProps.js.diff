@@ -40,6 +40,7 @@
 -    __extends(MyComponent, _super);
 -    function MyComponent() {
 -        return _super !== null && _super.apply(this, arguments) || this;
++/// <reference path="react16.d.ts" />
 +const react_1 = __importDefault(require("react"));
 +class MyComponent extends react_1.default.Component {
 +    render() {

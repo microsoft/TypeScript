@@ -37,76 +37,71 @@
 +const isNumClass = (item) => {
      return (item instanceof NumClass);
  };
--/**
-- * An example with one dimensional dictionary. Everything worked ok here, even in prior
-- * versions.
-- */
+ /**
+  * An example with one dimensional dictionary. Everything worked ok here, even in prior
+  * versions.
+  */
 -var SimpleStore = /** @class */ (function () {
 -    function SimpleStore() {
 -        this.entries = {};
 -    }
 -    SimpleStore.prototype.get = function (entryId) {
 -        var entry = this.entries[entryId];
--        entry.numExclusive(); // error - expected.
 +class SimpleStore {
 +    entries = {};
 +    get(entryId) {
 +        let entry = this.entries[entryId];
-+        entry.numExclusive();
+         entry.numExclusive(); // error - expected.
          if (isNumClass(entry)) {
--            entry.numExclusive(); // works
-+            entry.numExclusive();
+             entry.numExclusive(); // works
              return entry;
          }
--        return entry; // type is Entries[EntryId] - all fine
+         return entry; // type is Entries[EntryId] - all fine
 -    };
 -    return SimpleStore;
 -}());
--/**
-- * A an example with 2-dimensional dictionary.
-- *
-- * In v4.1 the `isNumClass` type guard doesn't work at all.
-- * In v4.2 or later, `isNumClass` type guard leaks outside its
-- * scope.
-- */
++    }
++}
+ /**
+  * A an example with 2-dimensional dictionary.
+  *
+@@= skipped -47, +40 lines =@@
+  * In v4.2 or later, `isNumClass` type guard leaks outside its
+  * scope.
+  */
 -var ComplexStore = /** @class */ (function () {
 -    function ComplexStore() {
 -        this.slices = {};
-+        return entry;
-     }
+-    }
 -    ComplexStore.prototype.get = function (sliceId, sliceKey) {
 -        var item = this.slices[sliceId][sliceKey];
-+}
 +class ComplexStore {
 +    slices = {};
 +    get(sliceId, sliceKey) {
 +        let item = this.slices[sliceId][sliceKey];
          if (isNumClass(item)) {
--            item.numExclusive(); // works only since version 4.2
-+            item.numExclusive();
+             item.numExclusive(); // works only since version 4.2
          }
-         item.get();
--        // unfortunately, doesn't work completely.
--        // it seems like item's predicated type leaks outside the bracket...
--        return item; // type is Extract ...
+@@= skipped -13, +11 lines =@@
+         // unfortunately, doesn't work completely.
+         // it seems like item's predicated type leaks outside the bracket...
+         return item; // type is Extract ...
 -    };
 -    ComplexStore.prototype.get2 = function (sliceId, sliceKey) {
 -        var item = this.slices[sliceId][sliceKey];
-+        return item;
 +    }
 +    get2(sliceId, sliceKey) {
 +        let item = this.slices[sliceId][sliceKey];
          if (isNumClass(item)) {
              return item;
          }
--        // it seems like the compiler asumes the above condition is always
--        // truthy
+@@= skipped -10, +10 lines =@@
+         // truthy
          item.get();
--        return item; // type is never
+         return item; // type is never
 -    };
 -    return ComplexStore;
 -}());
-+        return item;
 +    }
 +}
  function listFiles(program) {

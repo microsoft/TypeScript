@@ -1,10 +1,9 @@
 --- old.unusedSetterInClass2.js
 +++ new.unusedSetterInClass2.js
-@@= skipped -10, +10 lines =@@
- }
+@@= skipped -11, +11 lines =@@
  
  //// [unusedSetterInClass2.js]
--// Unlike everything else, a setter without a getter is used by a write access.
+ // Unlike everything else, a setter without a getter is used by a write access.
 -var Employee = /** @class */ (function () {
 -    function Employee() {
 -    }

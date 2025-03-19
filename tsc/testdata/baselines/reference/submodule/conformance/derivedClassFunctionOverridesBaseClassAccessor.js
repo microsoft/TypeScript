@@ -24,6 +24,7 @@ class Base {
     set x(v) {
     }
 }
+// error
 class Derived extends Base {
     x() {
         return 1;

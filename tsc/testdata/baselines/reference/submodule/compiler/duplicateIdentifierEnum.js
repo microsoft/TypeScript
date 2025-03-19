@@ -62,6 +62,7 @@ var D;
 class E {
     foo;
 }
+// also make sure the error appears when trying to merge an enum in a separate file.
 //// [duplicateIdentifierEnum_B.js]
 function D() {
     return 0;

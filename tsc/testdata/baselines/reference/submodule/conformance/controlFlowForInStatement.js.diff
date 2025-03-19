@@ -16,9 +16,3 @@
      x = y;
      if (cond) {
          x = 42;
-@@= skipped -15, +15 lines =@@
-         break;
-     }
- }
--x; // RegExp | string | number | boolean
-+x;

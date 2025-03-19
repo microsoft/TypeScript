@@ -31,11 +31,11 @@
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B(text) {
--        // this is subclass constructor
--        return _super.call(this, text) || this;
 +}
 +class B extends A {
 +    constructor(text) {
+         // this is subclass constructor
+-        return _super.call(this, text) || this;
 +        super(text);
      }
 -    return B;

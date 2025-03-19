@@ -6,22 +6,17 @@
  //// [component.js]
 -var _a;
  const o = {
--    [onInit]: 0 // Error
-+    [onInit]: 0
+     [onInit]: 0 // Error
  };
  class C {
-+    [onInit];
++    [onInit]; // Error (because class fields)
  }
  class D {
 -    constructor() {
 -        this[_a] = 0; // Error
 -    }
 -    static { _a = onInit; }
-+    [onInit] = 0;
++    [onInit] = 0; // Error
  }
  class E {
--    [onInit]() { } // Error
-+    [onInit]() { }
- }
- class F {
- }
+     [onInit]() { } // Error

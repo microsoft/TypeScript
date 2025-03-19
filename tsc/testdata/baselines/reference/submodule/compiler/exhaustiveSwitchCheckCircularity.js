@@ -49,7 +49,7 @@ function f() {
         if (foo === "aaa") {
             foo = "bbb";
         }
-        else if (isNever(foo)) {
+        else if (isNever(foo)) { // Error expected
             break;
         }
     }

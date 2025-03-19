@@ -186,6 +186,7 @@ var Enum1;
     Enum1[Enum1["A0"] = 100] = "A0";
 })(Enum1 || (Enum1 = {}));
 (function (Enum1) {
+    // correct cases
     Enum1[Enum1["A"] = 0] = "A";
     Enum1[Enum1["B"] = 1] = "B";
     Enum1[Enum1["C"] = 10] = "C";
@@ -210,6 +211,7 @@ var Enum1;
     Enum1[Enum1["U"] = 11] = "U";
     Enum1[Enum1["V"] = 11] = "V";
     Enum1[Enum1["W"] = 11] = "W";
+    // correct cases: reference to the enum member from different enum declaration
     Enum1["W1"] = A0;
     if (typeof Enum1.W1 !== "string") Enum1[Enum1.W1] = "W1";
     Enum1["W2"] = Enum1.A0;
@@ -233,6 +235,7 @@ var A2;
 (function (A2) {
     let B;
     (function (B) {
+        // module C will be classified as value
         let C;
         (function (C) {
             var x = 1;

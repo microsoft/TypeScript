@@ -1,11 +1,6 @@
 --- old.libMembers.js
 +++ new.libMembers.js
-@@= skipped -20, +20 lines =@@
- var s = "hello";
- s.substring(0);
- s.substring(3, 4);
--s.subby(12); // error unresolved
-+s.subby(12);
+@@= skipped -24, +24 lines =@@
  String.fromCharCode(12);
  var M;
  (function (M) {

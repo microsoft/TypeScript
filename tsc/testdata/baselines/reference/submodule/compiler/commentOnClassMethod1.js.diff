@@ -6,14 +6,15 @@
  //// [commentOnClassMethod1.js]
 -var WebControls = /** @class */ (function () {
 -    function WebControls() {
+-    }
 +class WebControls {
-+    createControl() {
-     }
--    /**
--     * Render a control
--     */
+     /**
+      * Render a control
+      */
 -    WebControls.prototype.createControl = function () {
 -    };
 -    return WebControls;
 -}());
++    createControl() {
++    }
 +}

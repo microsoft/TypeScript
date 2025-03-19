@@ -26,8 +26,10 @@ class Base {
     static foo;
 }
 class Derived extends Base {
+    // ok
     static foo;
 }
 class Derived2 extends Base {
+    // ok, use assignability here
     static foo;
 }

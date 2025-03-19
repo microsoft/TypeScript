@@ -188,6 +188,7 @@ function test16(a: boolean | number | void) {
 
 
 //// [typeGuardTypeOfUndefined.js]
+// undefined type guard adds no new type information
 function test1(a) {
     if (typeof a !== "undefined") {
         if (typeof a === "boolean") {

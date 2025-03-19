@@ -36,8 +36,3 @@
          C.X = X;
      })(C = M.C || (M.C = {}));
      var g1 = new G();
--    g1.bar(null).foo(); // no error
-+    g1.bar(null).foo();
- })(M || (M = {}));
- var N;
- (function (N) {

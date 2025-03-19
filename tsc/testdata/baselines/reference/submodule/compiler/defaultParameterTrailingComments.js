@@ -9,6 +9,6 @@ function foo(defaultParam = 10 /*emit only once*/) {}
 
 //// [defaultParameterTrailingComments.js]
 class C {
-    constructor(defaultParam = false) { }
+    constructor(defaultParam = false /* Emit only once*/) { }
 }
-function foo(defaultParam = 10) { }
+function foo(defaultParam = 10 /*emit only once*/) { }

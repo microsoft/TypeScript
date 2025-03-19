@@ -18,4 +18,4 @@ function SFC<T>(props: Record<string, T>) {
 function SFC(props) {
     return '';
 }
-<SFC prop={1}></SFC>;
+<SFC prop={1}></SFC>; // should error

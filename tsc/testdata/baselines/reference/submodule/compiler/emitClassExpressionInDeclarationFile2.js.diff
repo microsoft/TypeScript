@@ -38,7 +38,13 @@
 -    __setFunctionName(_a, "noPrivates"),
 -    _a.ps = -1,
 -    _a);
--// altered repro from #15066 to add private property
++var noPrivates = class {
++    static getTags() { }
++    tags() { }
++    static ps = -1;
++    p = 12;
++}
+ // altered repro from #15066 to add private property
 -var FooItem = /** @class */ (function () {
 -    function FooItem() {
 -        this.property = "capitalism";
@@ -46,13 +52,9 @@
 -    FooItem.prototype.foo = function () { };
 -    return FooItem;
 -}());
-+var noPrivates = class {
-+    static getTags() { }
-+    tags() { }
-+    static ps = -1;
-+    p = 12;
-+};
++;
 +exports.noPrivates = noPrivates;
++// altered repro from #15066 to add private property
 +class FooItem {
 +    foo() { }
 +    name;

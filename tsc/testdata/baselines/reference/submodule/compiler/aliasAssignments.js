@@ -26,6 +26,6 @@ exports.someClass = someClass;
 Object.defineProperty(exports, "__esModule", { value: true });
 const moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
-x = 1;
+x = 1; // Should be error
 var y = 1;
-y = moduleA;
+y = moduleA; // should be error

@@ -136,7 +136,9 @@ var x =
 </Composite>;
 var x = <div attr1={"foo" + "bar"} attr2={"foo" + "bar" +
         "baz" + "bug"} attr3={"foo" + "bar" +
-        "baz" + "bug"} attr4="baz">
+        "baz" + "bug"
+    // Extra line here.
+    } attr4="baz">
   </div>;
 (<div>
     
@@ -149,8 +151,12 @@ var x = <div attr1={"foo" + "bar"} attr2={"foo" + "bar" +
     
     
   </div>);
-(<div attr1="foo">
-    <span attr2="bar"/>
+(<div 
+/* a multi-line
+   comment */
+attr1="foo">
+    <span // a double-slash comment
+ attr2="bar"/>
   </div>);
 <div>&nbsp;</div>;
 <div>&nbsp; </div>;

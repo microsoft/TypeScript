@@ -15,6 +15,7 @@ function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string
 //// [reactReadonlyHOCAssignabilityReal.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
 const React = require("react");
 function myHigherOrderComponent(Inner) {
     return class OuterComponent extends React.Component {

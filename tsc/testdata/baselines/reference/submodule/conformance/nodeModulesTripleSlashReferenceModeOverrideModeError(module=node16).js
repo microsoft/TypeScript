@@ -26,6 +26,7 @@ bar;
 export {};
 
 //// [index.js]
-foo;
+/// <reference types="pkg" resolution-mode="esm"/>
+foo; // bad resolution mode, which resolves is arbitrary
 bar;
 export {};

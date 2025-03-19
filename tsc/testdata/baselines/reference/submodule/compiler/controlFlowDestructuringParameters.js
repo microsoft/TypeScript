@@ -10,4 +10,5 @@
 
 
 //// [controlFlowDestructuringParameters.js]
+// Repro for #8376
 [{ x: 1 }].map(({ x }) => x);

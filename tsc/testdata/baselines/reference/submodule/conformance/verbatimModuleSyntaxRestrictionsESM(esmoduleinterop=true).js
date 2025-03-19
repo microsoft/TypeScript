@@ -30,8 +30,8 @@ export namespace ns {
 //// [types.js]
 export {};
 //// [main.js]
-import CJSy3 from "./decl";
-import * as types from "./types";
+import CJSy3 from "./decl"; // ok in esModuleInterop
+import * as types from "./types"; // ok
 CJSy;
 //// [ns.js]
 export { ns };

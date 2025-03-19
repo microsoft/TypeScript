@@ -1,7 +1,0 @@
---- old.library-reference-scoped-packages.js
-+++ new.library-reference-scoped-packages.js
-@@= skipped -7, +7 lines =@@
- 
- 
- //// [a.js]
--/// <reference types="@beep/boop" />

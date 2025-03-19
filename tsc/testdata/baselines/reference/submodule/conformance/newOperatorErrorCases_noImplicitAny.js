@@ -13,8 +13,8 @@ new functionVoidNoThis(); // Error
 
 //// [newOperatorErrorCases_noImplicitAny.js]
 function fnNumber() { return 90; }
-new fnNumber();
+new fnNumber(); // Error
 function fnVoid() { }
-new fnVoid();
+new fnVoid(); // Error
 function functionVoidNoThis() { }
-new functionVoidNoThis();
+new functionVoidNoThis(); // Error

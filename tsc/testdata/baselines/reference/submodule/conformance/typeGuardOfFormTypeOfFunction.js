@@ -91,58 +91,59 @@ function f101(x: string | Record<string, any>) {
 //// [typeGuardOfFormTypeOfFunction.js]
 function f1(x) {
     if (typeof x === "function") {
-        x;
+        x; // any
     }
 }
 function f2(x) {
     if (typeof x === "function") {
-        x;
+        x; // Function
     }
 }
 function f3(x) {
     if (typeof x === "function") {
-        x;
+        x; // Function
     }
 }
 function f4(x) {
     if (typeof x === "function") {
-        x;
+        x; // T & Function
     }
 }
 function f5(x) {
     if (typeof x === "function") {
-        x;
+        x; // never
     }
 }
 function f6(x) {
     if (typeof x === "function") {
-        x;
+        x; // () => string
     }
 }
 function f10(x) {
     if (typeof x === "function") {
-        x;
+        x; // () => string
     }
     else {
-        x;
+        x; // string
     }
 }
 function f11(x) {
     if (typeof x === "function") {
-        x;
+        x; // () => string
     }
     else {
-        x;
+        x; // { s: string }
     }
 }
 function f12(x) {
     if (typeof x === "function") {
-        x;
+        x; // never
     }
     else {
-        x;
+        x; // { s: string } | { n: number }
     }
 }
+// Repro from #18238
 function f100(obj, keys) {
     for (const k of keys) {
         const item = obj[k];
@@ -150,6 +151,7 @@ function f100(obj, keys) {
             item.call(obj);
     }
 }
+// Repro from #49316
 function configureStore(reducer) {
     let rootReducer;
     if (typeof reducer === 'function') {

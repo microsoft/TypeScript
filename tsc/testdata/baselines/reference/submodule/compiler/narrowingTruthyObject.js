@@ -56,6 +56,7 @@ function foo(x, b) {
         x.toString();
     }
 }
+// Repro from #36870
 function f1(x) {
     return x && typeof x === 'object' && x.hasOwnProperty('x');
 }

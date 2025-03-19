@@ -52,6 +52,7 @@ module clodule4 {
 
 
 //// [ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js]
+// all expected to be errors
 class clodule1 {
     id;
     value;

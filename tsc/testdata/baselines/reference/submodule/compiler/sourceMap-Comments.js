@@ -34,8 +34,11 @@ var sas;
                     case 1:
                         break;
                     case 2:
+                        //line comment 1
+                        //line comment 2
                         break;
                     case 3:
+                        //a comment
                         break;
                 }
             }

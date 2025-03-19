@@ -23,6 +23,8 @@ var rk7 = 0 ** undefined;
 var rk8 = E.b ** undefined;
 
 //// [exponentiationOperatorWithUndefinedValueAndValidOperands.js]
+// If one operand is the undefined or undefined value, it is treated as having the type of the
+// other operand.
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
@@ -30,6 +32,7 @@ var E;
 })(E || (E = {}));
 var a;
 var b;
+// operator *
 var rk1 = undefined ** a;
 var rk2 = undefined ** b;
 var rk3 = undefined ** 1;

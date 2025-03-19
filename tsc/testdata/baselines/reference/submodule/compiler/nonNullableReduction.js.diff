@@ -14,9 +14,9 @@
  }
  function f1(x) {
 -    var z = x; // NonNullable<T>
-+    let z = x;
++    let z = x; // NonNullable<T>
  }
  function f2(x) {
 -    var z = x; // NonNullable<T>
-+    let z = x;
++    let z = x; // NonNullable<T>
  }

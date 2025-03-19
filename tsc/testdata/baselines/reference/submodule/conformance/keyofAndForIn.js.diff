@@ -1,10 +1,8 @@
 --- old.keyofAndForIn.js
 +++ new.keyofAndForIn.js
-@@= skipped -36, +36 lines =@@
- }
- 
+@@= skipped -38, +38 lines =@@
  //// [keyofAndForIn.js]
--// Repro from #12513
+ // Repro from #12513
  function f1(obj, k) {
 -    var b = k in obj;
 -    var k1;

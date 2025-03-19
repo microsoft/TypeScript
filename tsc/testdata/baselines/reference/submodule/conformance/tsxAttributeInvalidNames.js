@@ -14,6 +14,7 @@ declare module JSX {
 <test2 -data={32} />;
 
 //// [file.jsx]
+// Invalid names
 <test1 />;
 32;
 data = { 32:  } /  > ;

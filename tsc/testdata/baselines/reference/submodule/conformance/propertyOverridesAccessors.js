@@ -22,7 +22,7 @@ class A {
     get p() { return 'oh no'; }
 }
 class B extends A {
-    p = 'yep';
+    p = 'yep'; // error
 }
 class C {
     _secret = 11;
@@ -30,5 +30,5 @@ class C {
     set p(value) { this._secret = value; }
 }
 class D extends C {
-    p = 101;
+    p = 101; // error
 }

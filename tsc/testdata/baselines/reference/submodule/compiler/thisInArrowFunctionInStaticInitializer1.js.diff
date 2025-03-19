@@ -10,10 +10,10 @@
 -    var _a;
 -    _a = Vector;
 -    Vector.foo = function () {
--        // 'this' should be allowed in a static initializer.
--        log(_a);
 +class Vector {
 +    static foo = () => {
+         // 'this' should be allowed in a static initializer.
+-        log(_a);
 +        log(this);
      };
 -    return Vector;

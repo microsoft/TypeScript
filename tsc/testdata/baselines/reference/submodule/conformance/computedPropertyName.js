@@ -47,16 +47,16 @@ declare class H {
 export const onInit = Symbol("onInit");
 //// [component.js]
 const o = {
-    [onInit]: 0
+    [onInit]: 0 // Error
 };
 class C {
-    [onInit];
+    [onInit]; // Error (because class fields)
 }
 class D {
-    [onInit] = 0;
+    [onInit] = 0; // Error
 }
 class E {
-    [onInit]() { }
+    [onInit]() { } // Error
 }
 class F {
 }

@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// No errors
+ // No errors
 -var Constraint = /** @class */ (function () {
 -    function Constraint() {
 -    }

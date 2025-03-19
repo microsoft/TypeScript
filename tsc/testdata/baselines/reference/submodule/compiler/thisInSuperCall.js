@@ -30,19 +30,19 @@ class Base {
 }
 class Foo extends Base {
     constructor() {
-        super(this);
+        super(this); // error: "super" has to be called before "this" accessing
     }
 }
 class Foo2 extends Base {
     p = 0;
     constructor() {
-        super(this);
+        super(this); // error
     }
 }
 class Foo3 extends Base {
     p;
     constructor(p) {
         this.p = p;
-        super(this);
+        super(this); // error
     }
 }

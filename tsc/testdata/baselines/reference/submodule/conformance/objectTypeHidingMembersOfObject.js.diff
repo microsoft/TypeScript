@@ -1,10 +1,9 @@
 --- old.objectTypeHidingMembersOfObject.js
 +++ new.objectTypeHidingMembersOfObject.js
-@@= skipped -29, +29 lines =@@
- var r4: void = b.valueOf();
+@@= skipped -30, +30 lines =@@
  
  //// [objectTypeHidingMembersOfObject.js]
--// all of these valueOf calls should return the type shown in the overriding signatures here
+ // all of these valueOf calls should return the type shown in the overriding signatures here
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

@@ -1,11 +1,9 @@
 --- old.apparentTypeSupertype.js
 +++ new.apparentTypeSupertype.js
-@@= skipped -13, +13 lines =@@
- }
- 
+@@= skipped -15, +15 lines =@@
  //// [apparentTypeSupertype.js]
--// subtype checks use the apparent type of the target type
--// S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
+ // subtype checks use the apparent type of the target type
+ // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -26,7 +24,10 @@
 -    }
 -    return Base;
 -}());
--// is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
++class Base {
++    x;
++}
+ // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
@@ -34,9 +35,6 @@
 -    }
 -    return Derived;
 -}(Base));
-+class Base {
-+    x;
-+}
 +class Derived extends Base {
 +    x;
 +}

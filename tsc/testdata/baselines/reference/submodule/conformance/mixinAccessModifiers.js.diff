@@ -102,30 +102,12 @@
 +    static s;
 +}
  function f1(x) {
--    x.p; // Error, private constituent makes property inaccessible
-+    x.p;
+     x.p; // Error, private constituent makes property inaccessible
  }
- function f2(x) {
--    x.p; // Error, private constituent makes property inaccessible
-+    x.p;
+@@= skipped -88, +47 lines =@@
+     x.p; // Ok, public if any constituent is public
  }
- function f3(x) {
--    x.p; // Error, private constituent makes property inaccessible
-+    x.p;
- }
- function f4(x) {
--    x.p; // Error, protected when all constituents are protected
-+    x.p;
- }
- function f5(x) {
--    x.p; // Ok, public if any constituent is public
-+    x.p;
- }
- function f6(x) {
--    x.p; // Ok, public if any constituent is public
-+    x.p;
- }
--// Can't derive from type with inaccessible properties
+ // Can't derive from type with inaccessible properties
 -var C1 = /** @class */ (function (_super) {
 -    __extends(C1, _super);
 -    function C1() {
@@ -180,19 +162,17 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
      }
 -    C5.prototype.f = function (c4, c5, c6) {
--        c4.p; // Error, not in class deriving from Protected2
 +}
 +class C5 extends Mix(Protected, Public) {
 +    f(c4, c5, c6) {
-+        c4.p;
+         c4.p; // Error, not in class deriving from Protected2
          c5.p;
          c6.p;
 -    };
 -    C5.g = function () {
--        C4.s; // Error, not in class deriving from Protected2
 +    }
 +    static g() {
-+        C4.s;
+         C4.s; // Error, not in class deriving from Protected2
          C5.s;
          C6.s;
 -    };
@@ -204,19 +184,17 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
      }
 -    C6.prototype.f = function (c4, c5, c6) {
--        c4.p; // Error, not in class deriving from Protected2
 +}
 +class C6 extends Mix(Public, Public2) {
 +    f(c4, c5, c6) {
-+        c4.p;
+         c4.p; // Error, not in class deriving from Protected2
          c5.p;
          c6.p;
 -    };
 -    C6.g = function () {
--        C4.s; // Error, not in class deriving from Protected2
 +    }
 +    static g() {
-+        C4.s;
+         C4.s; // Error, not in class deriving from Protected2
          C5.s;
          C6.s;
 -    };
@@ -246,22 +224,11 @@
 +    protectedMethod() { }
 +}
  function f7(x) {
--    x.privateMethod(); // Error, private constituent makes method inaccessible
--    x.protectedMethod(); // Error, protected when all constituents are protected
-+    x.privateMethod();
-+    x.protectedMethod();
- }
- function f8(x) {
--    x.privateMethod(); // Error, private constituent makes method inaccessible
--    x.protectedMethod(); // Error, protected when all constituents are protected
-+    x.privateMethod();
-+    x.protectedMethod();
- }
- function f9(x) {
--    x.privateMethod(); // Error, private constituent makes method inaccessible
--    x.protectedMethod(); // Error, protected when all constituents are protected
-+    x.privateMethod();
-+    x.protectedMethod();
+     x.privateMethod(); // Error, private constituent makes method inaccessible
+     x.protectedMethod(); // Error, protected when all constituents are protected
+@@= skipped -98, +62 lines =@@
+     x.privateMethod(); // Error, private constituent makes method inaccessible
+     x.protectedMethod(); // Error, protected when all constituents are protected
  }
 -
 -

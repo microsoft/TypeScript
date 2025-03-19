@@ -13,4 +13,6 @@ Foo.bar = () => { };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
 function Foo() { }
+// This comment should have no effect; this is a TS file.
+/** @type {never} */
 Foo.bar = () => { };

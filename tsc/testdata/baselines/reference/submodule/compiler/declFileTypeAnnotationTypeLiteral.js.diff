@@ -29,11 +29,10 @@
 +    }
      m.c = c;
  })(m || (m = {}));
--// Object literal with everything
- var x;
--// Function type
+ // Object literal with everything
+@@= skipped -25, +16 lines =@@
  var y;
--// constructor type
+ // constructor type
  var z;
 -
 -

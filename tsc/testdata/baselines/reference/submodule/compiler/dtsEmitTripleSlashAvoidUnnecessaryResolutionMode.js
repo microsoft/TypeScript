@@ -22,5 +22,6 @@ export async function drainStream(stream: NodeJS.ReadableStream): Promise<void> 
 
 
 //// [app.mjs]
+/// <reference types="node" preserve="true" />
 export async function drainStream(stream) {
 }

@@ -30,32 +30,23 @@
      entry: "foo",
      states: {
          a: {
-@@= skipped -9, +9 lines =@@
-     },
+@@= skipped -10, +10 lines =@@
      extra: 12,
  });
--// -----------------------------------------------------------------------------------------
+ // -----------------------------------------------------------------------------------------
 -var checkType = function () { return function (value) { return value; }; };
 -var checked = checkType()({
 +const checkType = () => (value) => value;
 +const checked = checkType()({
      x: 1,
      y: "y",
--    z: "z", // undesirable property z is *not* allowed
-+    z: "z",
- });
- checked;
- function doStuffWithStuff(s) {
-@@= skipped -29, +28 lines =@@
-     { field: 1, anotherField: 'a', extra: 123 },
- ]);
- function bar(props) {
--    return foo(props); // no error because lack of excess property check by design
-+    return foo(props);
+     z: "z", // undesirable property z is *not* allowed
+@@= skipped -31, +31 lines =@@
+     return foo(props); // no error because lack of excess property check by design
  }
  foo({ x: 1, y: 'foo' });
 -foo(__assign({ x: 1, y: 'foo' })); // no error because lack of excess property check by design
-+foo({ ...{ x: 1, y: 'foo' } });
++foo({ ...{ x: 1, y: 'foo' } }); // no error because lack of excess property check by design
  baz({ x: 1 });
  baz({ x: 1, z: 123 });
  baz({ x: 1, y: 'foo' });

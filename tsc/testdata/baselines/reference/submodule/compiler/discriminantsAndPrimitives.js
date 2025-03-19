@@ -115,6 +115,7 @@ function f4(x) {
         }
     }
 }
+// Repro from #31319
 var EnumTypeNode;
 (function (EnumTypeNode) {
     EnumTypeNode["Pattern"] = "Pattern";
@@ -125,5 +126,5 @@ if (n.type === "Disjunction") {
     n.alternatives.slice();
 }
 else {
-    n.elements.slice();
+    n.elements.slice(); // n should be narrowed to Pattern
 }

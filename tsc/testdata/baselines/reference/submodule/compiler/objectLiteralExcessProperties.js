@@ -63,13 +63,20 @@ var b6 = { foreword: "hi", color: "blue", price: 10.99 };
 var b7 = { foreword: "hi", price: 10.99 };
 var b8 = { couleur: "non" };
 var b9 = { forewarned: "still no" };
-var b10 = { 0: {}, '1': {} };
-var b11 = { 0: { colour: "blue" } };
+var b10 = { 0: {}, '1': {} }; // ok
+var b11 = { 0: { colour: "blue" } }; // nested object literal still errors
+// Repros inspired by #28752
 function test() {
+    // No excess property checks on generic types
     const obj1 = { name: "test" };
+    // No excess property checks on intersections involving generics
     const obj2 = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
     const obj3 = { name: "test", prop: true };
+    // Excess property checks only on non-generic parts of unions
     const obj4 = { name: "test", prop: true };
+    // No excess property checks when union includes 'object' type
     const obj5 = { z: 'abc' };
+    // The 'object' type has no effect on intersections
     const obj6 = { z: 'abc' };
 }

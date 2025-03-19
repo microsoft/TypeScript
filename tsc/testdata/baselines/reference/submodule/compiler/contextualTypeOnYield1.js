@@ -9,5 +9,5 @@ const f: FuncOrGeneratorFunc = function*() {
 
 //// [contextualTypeOnYield1.js]
 const f = function* () {
-    yield (num) => console.log(num);
+    yield (num) => console.log(num); // `num` should be inferred to have type `number`.
 };

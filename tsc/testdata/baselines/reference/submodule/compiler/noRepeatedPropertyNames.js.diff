@@ -1,10 +1,9 @@
 --- old.noRepeatedPropertyNames.js
 +++ new.noRepeatedPropertyNames.js
-@@= skipped -11, +11 lines =@@
- 
+@@= skipped -12, +12 lines =@@
  
  //// [noRepeatedPropertyNames.js]
--// https://github.com/microsoft/TypeScript/issues/46815
+ // https://github.com/microsoft/TypeScript/issues/46815
 -var first = { a: 1, a: 2 };
 -var C = /** @class */ (function () {
 -    function C() {

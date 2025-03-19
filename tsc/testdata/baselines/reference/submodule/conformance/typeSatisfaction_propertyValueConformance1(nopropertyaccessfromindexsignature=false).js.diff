@@ -8,16 +8,15 @@
 +const x = {
      m: true
  };
--// Should be OK
- checkTruths(x);
--// Should be OK
+ // Should be OK
+@@= skipped -9, +9 lines =@@
  checkM(x);
--// Should fail under --noPropertyAccessFromIndexSignature
+ // Should fail under --noPropertyAccessFromIndexSignature
  console.log(x.z);
 -var m = x.m;
--// Should be able to detect a failure here
--var x2 = {
 +const m = x.m;
+ // Should be able to detect a failure here
+-var x2 = {
 +const x2 = {
      m: true,
      s: "false"

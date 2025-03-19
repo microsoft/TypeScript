@@ -10007,6 +10007,8 @@ data[0] = 0;
 
 
 //// [largeControlFlowGraph.js]
+// The control flow graph for the following statement block is 10000 nodes deep. Check that
+// we gracefully handle this, possibly by issuing an error.
 const data = [];
 data[0] = 0;
 data[0] = 0;

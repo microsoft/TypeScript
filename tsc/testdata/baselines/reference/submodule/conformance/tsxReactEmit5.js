@@ -23,5 +23,7 @@ var spread1 = <div x='' {...foo} y='' />;
 //// [react-consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Should emit test_1.React.createElement
+//  and React.__spread
 var foo;
 var spread1 = <div x='' {...foo} y=''/>;

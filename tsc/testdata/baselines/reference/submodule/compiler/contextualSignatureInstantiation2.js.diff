@@ -1,10 +1,8 @@
 --- old.contextualSignatureInstantiation2.js
 +++ new.contextualSignatureInstantiation2.js
-@@= skipped -7, +7 lines =@@
- var r23 = dot(id)(id);
- 
+@@= skipped -9, +9 lines =@@
  //// [contextualSignatureInstantiation2.js]
--// dot f g x = f(g(x))
+ // dot f g x = f(g(x))
  var dot;
 -dot = function (f) { return function (g) { return function (x) { return f(g(x)); }; }; };
 +dot = (f) => (g) => (x) => f(g(x));

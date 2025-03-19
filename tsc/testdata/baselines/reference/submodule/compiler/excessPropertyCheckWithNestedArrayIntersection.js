@@ -29,7 +29,7 @@ const repro: BugRepro = {
 const repro = {
     dataType: {
         fields: [{
-                key: 'bla',
+                key: 'bla', // should be OK: Not excess
                 value: null,
             }],
     }

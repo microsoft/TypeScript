@@ -25,5 +25,6 @@ exports.Promise = Promise;
 //// [staticInstanceResolution3_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='staticInstanceResolution3_0.ts'/>
 const WinJS = require("./staticInstanceResolution3_0");
 WinJS.Promise.timeout(10);

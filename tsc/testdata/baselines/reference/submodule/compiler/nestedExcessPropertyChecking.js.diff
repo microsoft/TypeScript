@@ -7,8 +7,8 @@
 -"use strict";
 -var ab1 = {}; // Error
 -var ab2 = {}; // Error
-+const ab1 = {};
-+const ab2 = {};
++const ab1 = {}; // Error
++const ab2 = {}; // Error
  var E;
  (function (E) {
      E["A"] = "A";
@@ -17,13 +17,12 @@
 -var y = "A"; // Error
 -var foo1 = { variables: { overrides: false } }; // Error
 -var foo2 = {
-+let x = E.A;
-+let y = "A";
-+const foo1 = { variables: { overrides: false } };
++let x = E.A; // Error
++let y = "A"; // Error
++const foo1 = { variables: { overrides: false } }; // Error
 +const foo2 = {
      variables: {
--        overrides: false // Error
-+        overrides: false
+         overrides: false // Error
      }
  };
 -var response = {

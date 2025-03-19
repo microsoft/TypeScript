@@ -29,6 +29,7 @@ const h: typeof g = f;
 
 
 //// [higherOrderMappedIndexLookupInference.js]
+// @strict
 function f1(a, b) {
     a = b;
     b = a;

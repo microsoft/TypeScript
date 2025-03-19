@@ -34,19 +34,11 @@
 -            for (var _i = 1; _i < arguments.length; _i++) {
 -                restGreetings[_i - 1] = arguments[_i];
 -            }
--            var greeters = []; /* inline block comment */
-+        function foo2(greeting, ...restGreetings) {
-+            var greeters = [];
++        function foo2(greeting, ...restGreetings /* more greeting */) {
+             var greeters = []; /* inline block comment */
              greeters[0] = new Greeter(greeting);
              for (var i = 0; i < restGreetings.length; i++) {
-                 greeters.push(new Greeter(restGreetings[i]));
-@@= skipped -30, +27 lines =@@
-             return greeters;
-         }
-         var b = foo2("Hello", "World", "!");
--        // This is simple signle line comment
-         for (var j = 0; j < b.length; j++) {
-             b[j].greet();
+@@= skipped -36, +33 lines =@@
          }
      })(Bar = Foo.Bar || (Foo.Bar = {}));
  })(Foo || (Foo = {}));

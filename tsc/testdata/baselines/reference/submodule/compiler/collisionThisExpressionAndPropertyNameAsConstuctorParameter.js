@@ -41,7 +41,7 @@ class Foo5 {
 class Foo2 {
     constructor(_this) {
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
 }
@@ -50,14 +50,14 @@ class Foo3 {
     constructor(_this) {
         this._this = _this;
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
 }
 class Foo4 {
     constructor(_this) {
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
 }
@@ -66,7 +66,7 @@ class Foo5 {
     constructor(_this) {
         this._this = _this;
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
 }

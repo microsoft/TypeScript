@@ -1,10 +1,9 @@
 --- old.typeReferenceDirectives1.js
 +++ new.typeReferenceDirectives1.js
-@@= skipped -9, +9 lines =@@
- }
+@@= skipped -10, +10 lines =@@
  
  //// [app.js]
--/// <reference types="lib" preserve="true" />
+ /// <reference types="lib" preserve="true" />
 -
 -
 -//// [app.d.ts]

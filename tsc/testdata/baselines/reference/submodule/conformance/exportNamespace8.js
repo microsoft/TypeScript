@@ -56,11 +56,11 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./b"), exports);
+__exportStar(require("./b"), exports); // Collision error
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const c_1 = require("./c");
-let _ = new A();
-let __ = new c_1.B();
-let ___ = new c_1.C();
+let _ = new A(); // Error
+let __ = new c_1.B(); // Ok
+let ___ = new c_1.C(); // Ok

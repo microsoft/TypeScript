@@ -1,12 +1,9 @@
 --- old.constEnumPropertyAccess1.js
 +++ new.constEnumPropertyAccess1.js
-@@= skipped -32, +32 lines =@@
- 
- 
- //// [constEnumPropertyAccess1.js]
--// constant enum declarations are completely erased in the emitted JavaScript code.
--// it is an error to reference a constant enum object in any other context
--// than a property access that selects one of the enum's members
+@@= skipped -35, +35 lines =@@
+ // constant enum declarations are completely erased in the emitted JavaScript code.
+ // it is an error to reference a constant enum object in any other context
+ // than a property access that selects one of the enum's members
 +var G;
 +(function (G) {
 +    G[G["A"] = 1] = "A";

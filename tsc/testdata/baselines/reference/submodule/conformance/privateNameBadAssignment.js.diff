@@ -12,22 +12,22 @@
 -};
 -var _C_bar;
 -exports. = 1; // Error (outside class body)
-+exports.#nope = 1;
++exports.#nope = 1; // Error (outside class body)
  function A() { }
 -A.prototype. = 2; // Error (outside class body)
-+A.prototype.#no = 2;
++A.prototype.#no = 2; // Error (outside class body)
  class B {
  }
 -B. = 3; // Error (outside class body)
-+B.#foo = 3;
++B.#foo = 3; // Error (outside class body)
  class C {
 +    #bar = 6;
      constructor() {
 -        _C_bar.set(this, 6);
 -        __classPrivateFieldSet(exports, _C_bar, 6, "f"); // Error
 -        this. = 3; // Error (undeclared)
-+        exports.#bar = 6;
-+        this.#foo = 3;
++        exports.#bar = 6; // Error
++        this.#foo = 3; // Error (undeclared)
      }
  }
 -_C_bar = new WeakMap();

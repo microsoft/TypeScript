@@ -14,7 +14,4 @@
 +}
  var c;
  var i;
--c = i; // error
--i = c; // error
-+c = i;
-+i = c;
+ c = i; // error

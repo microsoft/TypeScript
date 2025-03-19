@@ -39,6 +39,7 @@ declare global {
 const { a, b, c } = import.meta.wellKnownProperty;
 
 //// [example.js]
+// Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
 (async () => {
     const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
     const blob = await response.blob();

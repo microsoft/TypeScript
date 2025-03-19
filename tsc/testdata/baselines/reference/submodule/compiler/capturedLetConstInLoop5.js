@@ -282,6 +282,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop5.js]
+//====let
 function foo0(x) {
     for (let x of []) {
         var v = x;
@@ -399,6 +400,7 @@ function foo8(x) {
     }
     use(v);
 }
+//====const
 function foo0_c(x) {
     for (const x of []) {
         var v = x;

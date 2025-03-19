@@ -16,6 +16,7 @@ type Crashes = number & Mixin;
 
 
 //// [typeAliasFunctionTypeSharedSymbol.js]
+// Repro from comment in #21496
 function Mixin(Base) {
     return class extends Base {
     };

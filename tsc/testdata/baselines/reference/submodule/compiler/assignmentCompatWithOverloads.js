@@ -38,12 +38,12 @@ function f2(x) { return null; }
 function f3(x) { return null; }
 function f4(x) { return undefined; }
 var g;
-g = f1;
-g = f2;
-g = f3;
-g = f4;
+g = f1; // OK 
+g = f2; // Error
+g = f3; // Error
+g = f4; // Error
 class C {
     constructor(x) { }
 }
 var d;
-d = C;
+d = C; // Error

@@ -12,6 +12,6 @@ class C {
 class C {
     constructor() {
     }
-    static p1 = 0;
-    static m1() { }
+    static p1 = 0; // ERROR
+    static m1() { } // ERROR
 }

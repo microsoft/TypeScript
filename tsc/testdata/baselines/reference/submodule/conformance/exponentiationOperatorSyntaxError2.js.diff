@@ -1,10 +1,8 @@
 --- old.exponentiationOperatorSyntaxError2.js
 +++ new.exponentiationOperatorSyntaxError2.js
-@@= skipped -69, +69 lines =@@
- <number>temp-- ** 3;
- 
+@@= skipped -71, +71 lines =@@
  //// [exponentiationOperatorSyntaxError2.js]
--// Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+ // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
  var temp;
 -Math.pow(delete --temp, 3);
 -Math.pow(delete ++temp, 3);

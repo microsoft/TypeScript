@@ -30,6 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+// OK
 let k = <Comp a={10} b="hi" children="lol"/>;
 let k1 = <Comp a={10} b="hi">
         hi hi hi!

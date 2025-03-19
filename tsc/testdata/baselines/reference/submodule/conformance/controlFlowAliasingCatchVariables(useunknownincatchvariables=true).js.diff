@@ -7,13 +7,9 @@
 -    var isString = typeof e === 'string';
 +    const isString = typeof e === 'string';
      if (isString) {
--        e.toUpperCase(); // e string
-+        e.toUpperCase();
+         e.toUpperCase(); // e string
      }
-     if (typeof e === 'string') {
--        e.toUpperCase(); // e string
-+        e.toUpperCase();
-     }
+@@= skipped -10, +10 lines =@@
  }
  try { }
  catch (e) {
@@ -21,11 +17,4 @@
 +    const isString = typeof e === 'string';
      e = 1;
      if (isString) {
--        e.toUpperCase(); // e any/unknown
-+        e.toUpperCase();
-     }
-     if (typeof e === 'string') {
--        e.toUpperCase(); // e string
-+        e.toUpperCase();
-     }
- }
+         e.toUpperCase(); // e any/unknown

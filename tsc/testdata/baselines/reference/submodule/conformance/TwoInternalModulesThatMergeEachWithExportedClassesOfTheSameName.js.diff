@@ -16,7 +16,7 @@
      A.Point = Point;
  })(A || (A = {}));
  (function (A) {
--    // expected error
+     // expected error
 -    var Point = /** @class */ (function () {
 -        function Point() {
 -        }
@@ -55,7 +55,7 @@
 -        var Z;
 +        let Z;
          (function (Z) {
--            // expected error
+             // expected error
 -            var Line = /** @class */ (function () {
 -                function Line() {
 -                }

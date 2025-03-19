@@ -1,10 +1,9 @@
 --- old.multipleNumericIndexers.js
 +++ new.multipleNumericIndexers.js
-@@= skipped -34, +34 lines =@@
- 
+@@= skipped -35, +35 lines =@@
  
  //// [multipleNumericIndexers.js]
--// Multiple indexers of the same type are an error
+ // Multiple indexers of the same type are an error
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

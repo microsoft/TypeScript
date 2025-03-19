@@ -85,6 +85,7 @@ namespace Test {
 
 
 //// [typeGuardOfFormThisMember.js]
+// There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 var Test;
 (function (Test) {
     class FileSystemObject {
@@ -94,6 +95,7 @@ var Test;
             return this instanceof File;
         }
         set isFile(param) {
+            // noop
         }
         get isDirectory() {
             return this instanceof Directory;

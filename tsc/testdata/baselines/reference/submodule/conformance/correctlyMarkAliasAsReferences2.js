@@ -15,6 +15,7 @@ let k = <button {...buttonProps}>
 
 
 //// [0.js]
+///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 let buttonProps;
 let k = <button {...buttonProps}>

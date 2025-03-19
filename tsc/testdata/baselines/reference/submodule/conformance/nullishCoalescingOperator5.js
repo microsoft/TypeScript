@@ -43,15 +43,27 @@ a && (b ?? c);
 
 
 //// [nullishCoalescingOperator5.js]
+// should be a syntax error
 a ?? (b || c);
+// should be a syntax error
 (a || b) ?? c;
+// should be a syntax error
 a ?? (b && c);
+// should be a syntax error
 (a && b) ?? c;
+// Valid according to spec
 a ?? (b || c);
+// Valid according to spec
 (a ?? b) || c;
+// Valid according to spec
 (a || b) ?? c;
+// Valid according to spec
 a || (b ?? c);
+// Valid according to spec
 a ?? (b && c);
+// Valid according to spec
 (a ?? b) && c;
+// Valid according to spec
 (a && b) ?? c;
+// Valid according to spec
 a && (b ?? c);

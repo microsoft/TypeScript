@@ -88,30 +88,39 @@ exports.C2 = exports.C1 = void 0;
 class C1 {
 }
 exports.C1 = C1;
+// merged with a namespace
 class C2 {
 }
 exports.C2 = C2;
+// merged with a namespace, multiple overloads
 class C3 {
 }
+// static methods, multiple overloads
 class C4 {
 }
+// static methods, multiple overloads
 class C5 {
 }
+// merged with namespace, static methods
 class C6 {
 }
+// merged with namespace, static methods, multiple overloads
 class C7 {
 }
+// merged with namespace, static methods, duplicate declarations
 class C8 {
 }
 (function (C8) {
     function m(a, b) { }
     C8.m = m;
 })(C8 || (C8 = {}));
+// merged with namespace, static methods, duplicate declarations
 class C9 {
     static m(a) { }
 }
 (function (C9) {
 })(C9 || (C9 = {}));
+// merged namespaces
 var N10;
 (function (N10) {
 })(N10 || (N10 = {}));
@@ -119,6 +128,7 @@ var N10;
     function m(a) { }
     N10.m = m;
 })(N10 || (N10 = {}));
+// merged namespaces, duplicate defintions
 var N12;
 (function (N12) {
     function m(a) { }

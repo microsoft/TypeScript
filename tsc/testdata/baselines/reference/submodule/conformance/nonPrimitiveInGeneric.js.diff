@@ -1,45 +1,9 @@
 --- old.nonPrimitiveInGeneric.js
 +++ new.nonPrimitiveInGeneric.js
-@@= skipped -47, +47 lines =@@
- 
- //// [nonPrimitiveInGeneric.js]
- function generic(t) {
--    var o = t; // expect error
-+    var o = t;
- }
- var a = {};
- var b = "42";
- generic({});
- generic(a);
--generic(123); // expect error
--generic(b); // expect error
-+generic(123);
-+generic(b);
- function bound(t) {
--    var o = t; // ok
-+    var o = t;
- }
- bound({});
- bound(a);
--bound(123); // expect error
--bound(b); // expect error
-+bound(123);
-+bound(b);
- function bound2() { }
- bound2();
- bound2();
--bound2(); // expect error
--bound2(); // expect error
-+bound2();
-+bound2();
- function bound3(t) {
--    var o = t; // ok
-+    var o = t;
- }
--var x; // error
--var y; // ok
--var z; // ok
--var u; // ok
+@@= skipped -74, +74 lines =@@
+ var y; // ok
+ var z; // ok
+ var u; // ok
 -
 -
 -//// [nonPrimitiveInGeneric.d.ts]
@@ -58,7 +22,3 @@
 -    foo: number;
 -}
 -declare var u: Proxy<Blah>;
-+var x;
-+var y;
-+var z;
-+var u;

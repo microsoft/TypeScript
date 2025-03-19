@@ -1,10 +1,9 @@
 --- old.overloadsWithComputedNames.js
 +++ new.overloadsWithComputedNames.js
-@@= skipped -63, +63 lines =@@
- }
+@@= skipped -64, +64 lines =@@
  
  //// [overloadsWithComputedNames.js]
--// https://github.com/microsoft/TypeScript/issues/52329
+ // https://github.com/microsoft/TypeScript/issues/52329
 -var Person = /** @class */ (function () {
 -    function Person() {
 -    }
@@ -21,7 +20,7 @@
 +let p = new Person();
  p.A(0);
  p.B(0);
--// https://github.com/microsoft/TypeScript/issues/17345
+ // https://github.com/microsoft/TypeScript/issues/17345
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

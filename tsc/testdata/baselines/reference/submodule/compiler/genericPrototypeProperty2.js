@@ -28,5 +28,5 @@ class BaseEventWrapper {
     t;
 }
 class MyEventWrapper extends BaseEventWrapper {
-    t;
+    t; // any satisfies constraint and passes assignability check between 'target' properties
 }

@@ -36,6 +36,7 @@ class B3 extends A3 {
 }
 
 //// [subtypingWithObjectMembersAccessibility.js]
+// Derived member is private, base member is not causes errors
 class Base {
     foo;
 }
@@ -46,17 +47,17 @@ class A {
     foo;
 }
 class B extends A {
-    foo;
+    foo; // error
 }
 class A2 {
     1;
 }
 class B2 extends A2 {
-    1;
+    1; // error
 }
 class A3 {
     '1';
 }
 class B3 extends A3 {
-    '1';
+    '1'; // error
 }

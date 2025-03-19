@@ -182,6 +182,7 @@ function f1(aOrb) {
 }
 f1("hello");
 f1(10);
+/** this is f2 var comment*/
 function f2(aOrb) {
     return 10;
 }
@@ -213,6 +214,7 @@ class c {
     prop4(aorb) {
         return 10;
     }
+    /** Prop5 implementaion*/
     prop5(aorb) {
         return 10;
     }
@@ -230,10 +232,12 @@ class c3 {
     }
 }
 class c4 {
+    /** c4 3 */
     constructor(aorb) {
     }
 }
 class c5 {
+    /** c5 implementation*/
     constructor(aorb) {
     }
 }

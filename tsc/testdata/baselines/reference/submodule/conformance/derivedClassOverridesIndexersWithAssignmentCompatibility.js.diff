@@ -24,7 +24,9 @@
 -    }
 -    return Base;
 -}());
--// ok, use assignment compatibility
++class Base {
++}
+ // ok, use assignment compatibility
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
@@ -37,7 +39,11 @@
 -    }
 -    return Base2;
 -}());
--// ok, use assignment compatibility
++class Derived extends Base {
++}
++class Base2 {
++}
+ // ok, use assignment compatibility
 -var Derived2 = /** @class */ (function (_super) {
 -    __extends(Derived2, _super);
 -    function Derived2() {
@@ -45,11 +51,5 @@
 -    }
 -    return Derived2;
 -}(Base2));
-+class Base {
-+}
-+class Derived extends Base {
-+}
-+class Base2 {
-+}
 +class Derived2 extends Base2 {
 +}

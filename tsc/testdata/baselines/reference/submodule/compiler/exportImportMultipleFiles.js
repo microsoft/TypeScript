@@ -16,9 +16,9 @@ lib.math.add(3, 4); // Shouldnt be error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.math = require("exportImportMultipleFiles_math");
-exports.math.add(3, 4);
+exports.math.add(3, 4); // OK
 //// [exportImportMultipleFiles_userCode.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib = require("./exportImportMultipleFiles_library");
-lib.math.add(3, 4);
+lib.math.add(3, 4); // Shouldnt be error

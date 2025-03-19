@@ -31,7 +31,7 @@
 +    yadda() { }
 +}
  exports.NonAmbientClass = NonAmbientClass;
--/////
+ /////
 -var NonAmbientBase = /** @class */ (function () {
 -    function NonAmbientBase() {
 -    }

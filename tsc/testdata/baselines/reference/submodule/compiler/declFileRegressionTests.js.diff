@@ -1,11 +1,9 @@
 --- old.declFileRegressionTests.js
 +++ new.declFileRegressionTests.js
-@@= skipped -7, +7 lines =@@
- 
- 
+@@= skipped -9, +9 lines =@@
  //// [declFileRegressionTests.js]
--// 'null' not converted to 'any' in d.ts
--// function types not piped through correctly
+ // 'null' not converted to 'any' in d.ts
+ // function types not piped through correctly
 -var n = { w: null, x: '', y: function () { }, z: 32 };
 -
 -

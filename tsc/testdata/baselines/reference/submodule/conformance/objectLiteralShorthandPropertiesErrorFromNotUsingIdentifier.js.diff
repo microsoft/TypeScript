@@ -5,11 +5,10 @@
  
  //// [objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.js]
 -var _a;
--// errors
+ // errors
  var y = {
      "stringLiteral": ,
-     42: ,
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +12 lines =@@
      class: ,
      typeof: 
  };
@@ -22,10 +21,9 @@
 -    _a.a = a,
 -    _a[1] = ,
 -    _a);
--var v = { class:  }; // error
 +var x = {
 +    a, : .b,
 +    a, ["ss"]: ,
 +    a, [1]: ,
 +};
-+var v = { class:  };
+ var v = { class:  }; // error

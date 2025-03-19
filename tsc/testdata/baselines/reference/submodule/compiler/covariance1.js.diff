@@ -17,10 +17,3 @@
      M.XX = XX;
      function f(y) { }
      M.f = f;
-     var a;
--    f({ x: a }); // ok
-+    f({ x: a });
-     var b;
--    f({ x: b }); // ok covariant subtype
-+    f({ x: b });
- })(M || (M = {}));

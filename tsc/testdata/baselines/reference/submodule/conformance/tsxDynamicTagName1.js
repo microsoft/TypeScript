@@ -6,4 +6,4 @@ var CustomTag = "h1";
 
 //// [tsxDynamicTagName1.jsx]
 var CustomTag = "h1";
-<CustomTag> Hello World </CustomTag>;
+<CustomTag> Hello World </CustomTag>; // No error

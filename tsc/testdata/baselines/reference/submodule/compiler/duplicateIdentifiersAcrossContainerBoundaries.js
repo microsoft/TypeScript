@@ -67,7 +67,7 @@ var M;
 })(M || (M = {}));
 (function (M) {
     class f {
-    }
+    } // error
     M.f = f;
 })(M || (M = {}));
 (function (M) {
@@ -75,7 +75,7 @@ var M;
 })(M || (M = {}));
 (function (M) {
     class g {
-    }
+    } // no error
     M.g = g;
 })(M || (M = {}));
 (function (M) {
@@ -84,13 +84,13 @@ var M;
     M.C = C;
 })(M || (M = {}));
 (function (M) {
-    function C() { }
+    function C() { } // no error
 })(M || (M = {}));
 (function (M) {
     M.v = 3;
 })(M || (M = {}));
 (function (M) {
-    v = 3;
+    v = 3; // error for redeclaring var in a different parent
 })(M || (M = {}));
 class Foo {
     static x;

@@ -21,6 +21,7 @@ function rawr(dino: RexOrRaptor) {
 }
 
 //// [stringLiteralTypesAndTuples01.js]
+// Should all be strings.
 let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 let [im, a, dinosaur] = ['I\'m', 'a', 't-rex'];
 rawr(dinosaur);

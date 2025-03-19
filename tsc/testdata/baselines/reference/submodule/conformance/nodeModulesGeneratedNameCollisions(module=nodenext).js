@@ -30,6 +30,7 @@ export {require, exports, Object};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Object = exports.exports = exports.__esModule = void 0;
 exports.require = require;
+// cjs format file
 function require() { }
 const exports = {};
 exports.exports = exports;
@@ -38,6 +39,7 @@ class Object {
 exports.Object = Object;
 exports.__esModule = false;
 //// [index.js]
+// esm format file
 function require() { }
 const exports = {};
 class Object {

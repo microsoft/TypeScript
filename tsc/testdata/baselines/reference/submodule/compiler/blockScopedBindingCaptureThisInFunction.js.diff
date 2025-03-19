@@ -1,10 +1,9 @@
 --- old.blockScopedBindingCaptureThisInFunction.js
 +++ new.blockScopedBindingCaptureThisInFunction.js
-@@= skipped -9, +9 lines =@@
- };
+@@= skipped -10, +10 lines =@@
  
  //// [blockScopedBindingCaptureThisInFunction.js]
--// https://github.com/Microsoft/TypeScript/issues/11038
+ // https://github.com/Microsoft/TypeScript/issues/11038
 -(function () { return function () {
 -    var _loop_1 = function (someKey) {
 -        this_1.helloWorld();

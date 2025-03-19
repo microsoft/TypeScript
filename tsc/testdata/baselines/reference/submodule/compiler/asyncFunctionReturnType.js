@@ -79,9 +79,11 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
 
 //// [asyncFunctionReturnType.js]
 async function fAsync() {
+    // Without explicit type annotation, this is just an array.
     return [1, true];
 }
 async function fAsyncExplicit() {
+    // This is contextually typed as a tuple.
     return [1, true];
 }
 async function fIndexedTypeForStringProp(obj) {

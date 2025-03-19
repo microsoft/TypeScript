@@ -9,27 +9,27 @@
 -    }
 -    return C;
 -}());
--var c = new C(); // error C is private
 +class C {
 +    constructor() { }
 +}
-+var c = new C();
+ var c = new C(); // error C is private
  var r = c.constructor;
 -var C2 = /** @class */ (function () {
 -    function C2(x) {
 -    }
 -    return C2;
 -}());
--var c2 = new C2(); // error C2 is private
--var r2 = c2.constructor;
++class C2 {
++    constructor(x) { }
++}
+ var c2 = new C2(); // error C2 is private
+ var r2 = c2.constructor;
 -
 -
 -//// [typesWithPrivateConstructor.d.ts]
 -declare class C {
 -    private constructor();
-+class C2 {
-+    constructor(x) { }
- }
+-}
 -declare var c: any;
 -declare var r: () => void;
 -declare class C2 {
@@ -37,5 +37,3 @@
 -}
 -declare var c2: any;
 -declare var r2: (x: number) => void;
-+var c2 = new C2();
-+var r2 = c2.constructor;

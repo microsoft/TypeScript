@@ -202,6 +202,7 @@ class InMemberOfClass {
         }
     }
 }
+// added for completeness
 class SelfAssert {
     a;
     inThis() {

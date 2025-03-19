@@ -5,19 +5,16 @@
  
  //// [intersectionReductionStrict.js]
 -"use strict";
--ab.kind; // Error
+ ab.kind; // Error
 -var a = x;
--// Repro from #31663
++let a = x;
+ // Repro from #31663
 -var x1 = { a: 'foo', b: 42 };
 -var x2 = { a: 'foo', b: true };
--x1[k] = 'bar'; // Error
--x2[k] = 'bar'; // Error
-+ab.kind;
-+let a = x;
 +const x1 = { a: 'foo', b: 42 };
 +const x2 = { a: 'foo', b: true };
-+x1[k] = 'bar';
-+x2[k] = 'bar';
+ x1[k] = 'bar'; // Error
+ x2[k] = 'bar'; // Error
 +var Tag1;
 +(function (Tag1) {
 +})(Tag1 || (Tag1 = {}));
@@ -28,7 +25,7 @@
  s2 = s1;
  t1 = t2;
  t2 = t1;
--// Repro from #36736
+ // Repro from #36736
 -var f1 = function (t) { return t; };
 -var f2 = function (t) { return t; };
 -var f3 = function (t) { return t; };

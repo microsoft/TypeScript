@@ -49,5 +49,5 @@ __exportStar(require("./b"), exports);
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let _ = new A();
-let __ = new B();
+let _ = new A(); // Error
+let __ = new B(); // Error

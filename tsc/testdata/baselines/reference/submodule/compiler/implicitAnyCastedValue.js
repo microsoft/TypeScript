@@ -82,44 +82,44 @@ var array = <any>[null, undefined];
 
 //// [implicitAnyCastedValue.js]
 var x = function () {
-    return 0;
+    return 0; // this should not be an error
 };
 function foo() {
-    return "hello world";
+    return "hello world"; // this should not be an error
 }
 class C {
-    bar = null;
-    foo = undefined;
+    bar = null; // this should be an error
+    foo = undefined; // this should be an error
     get tempVar() {
-        return 0;
+        return 0; // this should not be an error
     }
     returnBarWithCase() {
         return this.bar;
     }
     returnFooWithCase() {
-        return this.foo;
+        return this.foo; // this should not be an error
     }
 }
 class C1 {
-    getValue = null;
+    getValue = null; // this should be an error
     get castedGet() {
-        return this.getValue;
+        return this.getValue; // this should not be an error
     }
     get notCastedGet() {
-        return this.getValue;
+        return this.getValue; // this should not be an error
     }
 }
 function castedNull() {
-    return null;
+    return null; // this should not be an error
 }
 function notCastedNull() {
-    return null;
+    return null; // this should be an error
 }
 function returnTypeBar() {
-    return null;
+    return null; // this should not be an error
 }
 function undefinedBar() {
-    return undefined;
+    return undefined; // this should not be an error
 }
 function multipleRets1(x) {
     if (x) {
@@ -140,6 +140,7 @@ function multipleRets2(x) {
         return undefined;
     }
 }
+// this should not be an error
 var bar1 = null;
 var bar2 = undefined;
 var bar3 = 0;

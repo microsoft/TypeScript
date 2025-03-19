@@ -32,7 +32,7 @@
 +    case ((x) => '')(2):
      default:
  }
--// basic assignable check, rest covered in tests for 'assignment compatibility'
+ // basic assignable check, rest covered in tests for 'assignment compatibility'
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -54,7 +54,7 @@
  switch (new C()) {
      case new D():
      case { id: 12, name: '' }:
-@@= skipped -46, +39 lines =@@
+@@= skipped -46, +40 lines =@@
  }
  switch (['a']) {
  }

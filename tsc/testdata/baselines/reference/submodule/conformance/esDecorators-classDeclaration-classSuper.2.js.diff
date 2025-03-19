@@ -1,10 +1,9 @@
 --- old.esDecorators-classDeclaration-classSuper.2.js
 +++ new.esDecorators-classDeclaration-classSuper.2.js
-@@= skipped -28, +28 lines =@@
- 
+@@= skipped -29, +29 lines =@@
  
  //// [esDecorators-classDeclaration-classSuper.2.js]
--// class expression in extends should not get an assigned name
+ // class expression in extends should not get an assigned name
 -let C1 = (() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;
@@ -29,7 +28,14 @@
 -    };
 -    return C1 = _classThis;
 -})();
--// function expression in extends should not get an assigned name
++@dec
++class C1 extends class {
++} {
++    static {
++        super.name;
++    }
++}
+ // function expression in extends should not get an assigned name
 -let C2 = (() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;
@@ -53,7 +59,13 @@
 -    };
 -    return C2 = _classThis;
 -})();
--// arrow function in extends should not get an assigned name
++@dec
++class C2 extends function () { } {
++    static {
++        super.name;
++    }
++}
+ // arrow function in extends should not get an assigned name
 -let C3 = (() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;
@@ -77,19 +89,6 @@
 -    };
 -    return C3 = _classThis;
 -})();
-+@dec
-+class C1 extends class {
-+} {
-+    static {
-+        super.name;
-+    }
-+}
-+@dec
-+class C2 extends function () { } {
-+    static {
-+        super.name;
-+    }
-+}
 +@dec
 +class C3 extends (() => { }) {
 +    static {

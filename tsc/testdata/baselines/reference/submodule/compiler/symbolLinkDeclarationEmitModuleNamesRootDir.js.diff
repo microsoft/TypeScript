@@ -5,7 +5,8 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.CONTROLLER_CLASS = void 0;
 -var context_1 = require("@loopback/context");
--exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
++const context_1 = require("@loopback/context");
+ exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 -
 -
 -//// [application.d.ts]
@@ -15,5 +16,3 @@
 -import { ControllerClass } from './application';
 -import { BindingKey } from '@loopback/context';
 -export declare const CONTROLLER_CLASS: BindingKey<ControllerClass>;
-+const context_1 = require("@loopback/context");
-+exports.CONTROLLER_CLASS = context_1.BindingKey.create(null);

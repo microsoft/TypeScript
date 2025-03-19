@@ -17,6 +17,9 @@ const enum E {
 }
 
 //// [constEnum1.js]
+// An enum declaration that specifies a const modifier is a constant enum declaration.
+// In a constant enum declaration, all members must have constant values and
+// it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
 var E;
 (function (E) {
     E[E["a"] = 10] = "a";

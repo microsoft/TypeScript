@@ -1,9 +1,0 @@
---- old.umd9.js
-+++ new.umd9.js
-@@= skipped -15, +15 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--/// <reference path="foo.d.ts" />
--exports.x = Foo; // OK in value position because allowUmdGlobalAccess: true
-+exports.x = Foo;

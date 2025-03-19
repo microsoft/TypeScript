@@ -46,7 +46,7 @@ class C {
         function let() { }
         var z = function let() { };
     }
-    pulbic() { }
+    pulbic() { } // No Error;
 }
 class D {
 }

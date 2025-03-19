@@ -1,8 +1,0 @@
---- old.genericArrayMethods1.js
-+++ new.genericArrayMethods1.js
-@@= skipped -4, +4 lines =@@
- 
- 
- //// [genericArrayMethods1.js]
--var x = [0, 1].slice(0); // this should be an error
-+var x = [0, 1].slice(0);

@@ -268,116 +268,117 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
 //// [narrowingUnionToUnion.js]
 function fx1(x) {
     if (isFalsy(x)) {
-        x;
+        x; // "" | 0 | undefined
     }
 }
 function fx2(x) {
     if (isFalsy(x)) {
-        x;
+        x; // T & Falsy | undefined
     }
 }
 function fx3(x) {
     if (isFalsy(x)) {
-        x;
+        x; // T & "" | T & 0
     }
 }
 function fx4(obj) {
     if (isA(obj)) {
-        obj;
+        obj; // { b: 0 }
     }
 }
 function fx5(obj, c) {
     if (obj instanceof c) {
-        obj;
+        obj; // XS | YS
     }
     if (isXSorY(obj)) {
-        obj;
+        obj; // XS | YS
     }
 }
 function fx10(s) {
     if (isEmptyStrOrUndefined(s)) {
-        s;
+        s; // "" | undefined
         if (s == undefined) {
-            s;
+            s; // undefined
         }
         else {
-            s;
+            s; // ""
         }
     }
 }
+// Repro from #37807
 function f1(x) { }
 let v1;
 f1(v1);
-v1;
+v1; // number | undefined
 function f2(x) { }
 let v2;
 f2(v2);
-v2;
+v2; // 6 | undefined
 const TEST_CASES = [
     (value) => {
         if (isEmptyString(value)) {
-            value;
+            value; // ""
         }
         else {
-            value;
+            value; // string
         }
         if (isMaybeEmptyString(value)) {
-            value;
+            value; // ""
         }
         else {
-            value;
+            value; // string
         }
     },
     (value) => {
         if (isMaybeEmptyString(value)) {
-            value;
+            value; // "" | undefined
         }
         else {
-            value;
+            value; // string
         }
     },
     (value) => {
         if (isZero(value)) {
-            value;
+            value; // 0
         }
         else {
-            value;
+            value; // number
         }
         if (isMaybeZero(value)) {
-            value;
+            value; // 0
         }
         else {
-            value;
+            value; // number
         }
     },
     (value) => {
         if (isMaybeZero(value)) {
-            value;
+            value; // 0 | undefined
         }
         else {
-            value;
+            value; // number
         }
     },
     (value) => {
         if (isEmptyArray(value)) {
-            value;
+            value; // []
         }
         else {
-            value;
+            value; // string[]
         }
         if (isMaybeEmptyArray(value)) {
-            value;
+            value; // []
         }
         else {
-            value;
+            value; // string[]
         }
     },
     (value) => {
         if (isMaybeEmptyArray(value)) {
-            value;
+            value; // [] | undefined
         }
         else {
-            value;
+            value; // string[]
         }
     },
 ];
@@ -386,12 +387,13 @@ function isEmpty(value) {
 }
 let test;
 if (isEmpty(test)) {
-    test;
+    test; // EmptyString
 }
 function test1(foo) {
     assert(foo);
-    foo;
+    foo; // string | 1
 }
+// Repro from #46909
 function check1(x) {
     return typeof x === "string" || x === 0;
 }
@@ -400,22 +402,23 @@ function check2(x) {
 }
 function test3(x) {
     if (typeof x === "string" || x === 0) {
-        x;
+        x; // string | 0
         if (x === "hello" || x === 0) {
-            x;
+            x; // 0 | "hello"
         }
     }
     if (check1(x)) {
-        x;
+        x; // string | 0
         if (check2(x)) {
-            x;
+            x; // 0 | "hello"
         }
     }
 }
+// Repro from #49588
 function assertRelationIsNullOrStringArray(v) { }
 function f1x(obj) {
     assertRelationIsNullOrStringArray(obj);
-    obj;
+    obj; // string[] | null
 }
 isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
 isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;

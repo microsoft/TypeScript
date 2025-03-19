@@ -5,7 +5,6 @@
  
  //// [switchWithConstrainedTypeVariable.js]
 -"use strict";
--// Repro from #20840
+ // Repro from #20840
  function function1(key) {
      switch (key) {
-         case 'a':

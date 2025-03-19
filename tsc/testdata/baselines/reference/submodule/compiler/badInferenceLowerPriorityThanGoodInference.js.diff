@@ -13,7 +13,7 @@
 +    b: x => { }
 +}));
  result.BLAH;
--// Repro from #26629
+ // Repro from #26629
  function goofus(f) { }
 -goofus(function (a) { return ({ dog: function () { return a; } }); });
 -goofus(function (a) { return ({ dog: function () { return a; } }); });

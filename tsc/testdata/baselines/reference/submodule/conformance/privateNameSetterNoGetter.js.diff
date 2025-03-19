@@ -11,7 +11,7 @@
 +const C = class {
 +    set #x(x) { }
 +    m() {
-+        this.#x += 2;
++        this.#x += 2; // Error
 +    }
  };
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {

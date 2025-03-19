@@ -10,16 +10,14 @@
 -    var x;
 +    let x;
      for (x = ""; cond; x = 5) {
--        x; // string | number
-+        x;
+         x; // string | number
      }
  }
  function b() {
 -    var x;
 +    let x;
      for (x = 5; cond; x = x.length) {
--        x; // number
-+        x;
+         x; // number
          x = "";
      }
  }
@@ -27,36 +25,26 @@
 -    var x;
 +    let x;
      for (x = 5; x = x.toExponential(); x = 5) {
--        x; // string
-+        x;
+         x; // string
      }
  }
  function d() {
 -    var x;
 +    let x;
      for (x = ""; typeof x === "string"; x = 5) {
--        x; // string
-+        x;
+         x; // string
      }
  }
  function e() {
 -    var x;
 +    let x;
      for (x = "" || 0; typeof x !== "string"; x = "" || true) {
--        x; // number | boolean
-+        x;
+         x; // number | boolean
      }
  }
  function f() {
 -    var x;
 +    let x;
      for (; typeof x !== "string";) {
--        x; // number | boolean
-+        x;
+         x; // number | boolean
          if (typeof x === "number")
-             break;
-         x = undefined;
-     }
--    x; // string | number
-+    x;
- }

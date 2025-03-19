@@ -34,8 +34,8 @@
 -    };
 -    return Poisoned;
 -}(React.Component));
--// Error
--var p = <Poisoned x/>;
 +    }
 +}
+ // Error
+-var p = <Poisoned x/>;
 +let p = <Poisoned x/>;

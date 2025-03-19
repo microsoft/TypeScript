@@ -1,22 +1,7 @@
 --- old.nodePackageSelfName(module=node16).js
 +++ new.nodePackageSelfName(module=node16).js
-@@= skipped -20, +20 lines =@@
- }
- 
- //// [index.js]
--// esm format file
- import * as self from "package";
- self;
- //// [index.mjs]
--// esm format file
- import * as self from "package";
- self;
- //// [index.cjs]
-@@= skipped -33, +31 lines =@@
-     return result;
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--// esm format file
+@@= skipped -56, +56 lines =@@
+ // esm format file
  const self = __importStar(require("package"));
  self;
 -

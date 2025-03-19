@@ -18,6 +18,4 @@
 +}
  var b = new BiMap();
  var r1 = b.get('');
--var i = b.inverse(); // used to get the type wrong here.
-+var i = b.inverse();
- var r2b = i.get(1);
+ var i = b.inverse(); // used to get the type wrong here.

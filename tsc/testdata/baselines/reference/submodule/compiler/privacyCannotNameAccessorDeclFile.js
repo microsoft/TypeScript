@@ -166,6 +166,7 @@ exports.createExportedWidget1 = createExportedWidget1;
 exports.createExportedWidget2 = createExportedWidget2;
 exports.createExportedWidget3 = createExportedWidget3;
 exports.createExportedWidget4 = createExportedWidget4;
+///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 const Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 const Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {

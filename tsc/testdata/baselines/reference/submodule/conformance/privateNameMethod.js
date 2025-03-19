@@ -21,7 +21,7 @@ class A1 {
     }
     constructor(name) {
         this.#method("");
-        this.#method(1);
-        this.#method();
+        this.#method(1); // Error
+        this.#method(); // Error 
     }
 }

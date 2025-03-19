@@ -8,4 +8,4 @@ var a = new _this(); // Error
 
 //// [collisionThisExpressionAndAmbientClassInGlobal.js]
 var f = () => this;
-var a = new _this();
+var a = new _this(); // Error

@@ -80,6 +80,7 @@ class Left {
     constructor(value) {
         this.value = value;
     }
+    /** The given function is applied if this is a `Right` */
     map(f) {
         return this;
     }
@@ -110,19 +111,28 @@ class Type {
     _A;
     _O;
     _I;
-    constructor(name, is, validate, encode) {
+    constructor(
+    /** a unique name for this codec */
+    name, 
+    /** a custom type guard */
+    is, 
+    /** succeeds if a value of type I can be decoded to a value of type A */
+    validate, 
+    /** converts a value of type A to a value of type O */
+    encode) {
         this.name = name;
         this.is = is;
         this.validate = validate;
         this.encode = encode;
     }
+    /** a version of `validate` with a default context */
     decode(i) { return null; }
 }
 const tmp1 = null;
 function tmp2(n) { }
-tmp2(tmp1);
+tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ??
 class Server {
 }
 class MyServer extends Server {
-}
+} // not assignable error at `MyInfo`
 exports.MyServer = MyServer;

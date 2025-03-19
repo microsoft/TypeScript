@@ -12,6 +12,6 @@ function f(a: A, b: B) {
 
 //// [noStrictGenericChecks.js]
 function f(a, b) {
-    a = b;
-    b = a;
+    a = b; // Error disabled here
+    b = a; // Ok
 }

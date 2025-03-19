@@ -48,5 +48,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const a_1 = require("a");
 const b_1 = require("b");
 const c_1 = require("c");
-(0, a_1.a)(b_1.b);
-(0, a_1.a)(c_1.c);
+(0, a_1.a)(b_1.b); // Works
+(0, a_1.a)(c_1.c); // Error, these are from different versions of the library.

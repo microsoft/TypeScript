@@ -1,16 +1,15 @@
 --- old.externalModuleImmutableBindings.js
 +++ new.externalModuleImmutableBindings.js
-@@= skipped -57, +57 lines =@@
- //// [f2.js]
+@@= skipped -58, +58 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--// all mutations below are illegal and should be fixed
+ // all mutations below are illegal and should be fixed
 -var stuff = require("./f1");
 +const stuff = require("./f1");
  var n = 'baz';
  stuff.x = 0;
  stuff['x'] = 1;
-@@= skipped -20, +19 lines =@@
+@@= skipped -19, +19 lines =@@
  (stuff['blah'])++;
  (stuff[n])++;
  for (stuff.x in []) { }

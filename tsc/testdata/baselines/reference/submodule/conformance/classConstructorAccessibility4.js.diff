@@ -25,15 +25,14 @@
 -    A.prototype.method = function () {
 -        var B = /** @class */ (function () {
 -            function B() {
+-            }
+-            B.prototype.method = function () {
 +class A {
 +    constructor() { }
 +    method() {
 +        class B {
 +            method() {
-+                new A();
-             }
--            B.prototype.method = function () {
--                new A(); // OK
+                 new A(); // OK
 -            };
 -            return B;
 -        }());
@@ -41,7 +40,7 @@
 -            __extends(C, _super);
 -            function C() {
 -                return _super !== null && _super.apply(this, arguments) || this;
--            }
+             }
 -            return C;
 -        }(A));
 -    };
@@ -56,16 +55,15 @@
 -    D.prototype.method = function () {
 -        var E = /** @class */ (function () {
 -            function E() {
+-            }
+-            E.prototype.method = function () {
 +}
 +class D {
 +    constructor() { }
 +    method() {
 +        class E {
 +            method() {
-+                new D();
-             }
--            E.prototype.method = function () {
--                new D(); // OK
+                 new D(); // OK
 -            };
 -            return E;
 -        }());
@@ -73,7 +71,7 @@
 -            __extends(F, _super);
 -            function F() {
 -                return _super !== null && _super.apply(this, arguments) || this;
--            }
+             }
 -            return F;
 -        }(D));
 -    };

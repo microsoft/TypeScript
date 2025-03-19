@@ -40,8 +40,21 @@
 -    });
 -    return Base;
 -}());
--// Errors
--// decrease visibility of all public members to protected
++class Base {
++    a;
++    b(a) { }
++    get c() { return x; }
++    set c(v) { }
++    d;
++    static r;
++    static s(a) { }
++    static get t() { return x; }
++    static set t(v) { }
++    static u;
++    constructor(a) { }
++}
+ // Errors
+ // decrease visibility of all public members to protected
 -var Derived1 = /** @class */ (function (_super) {
 -    __extends(Derived1, _super);
 -    function Derived1(a) {
@@ -134,19 +147,6 @@
 -    }
 -    return Derived10;
 -}(Base));
-+class Base {
-+    a;
-+    b(a) { }
-+    get c() { return x; }
-+    set c(v) { }
-+    d;
-+    static r;
-+    static s(a) { }
-+    static get t() { return x; }
-+    static set t(v) { }
-+    static u;
-+    constructor(a) { }
-+}
 +class Derived1 extends Base {
 +    a;
 +    constructor(a) { super(a); }

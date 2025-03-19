@@ -26,6 +26,7 @@ function f<U>() {
 
 
 //// [nonGenericTypeReferenceWithTypeArguments.js]
+// Check that errors are reported for non-generic types with type arguments
 class C {
 }
 var E;

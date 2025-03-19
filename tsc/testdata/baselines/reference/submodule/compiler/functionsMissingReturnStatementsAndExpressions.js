@@ -159,92 +159,123 @@ class C {
 
 //// [functionsMissingReturnStatementsAndExpressions.js]
 function f1() {
+    // errors because there are no return statements
 }
 function f2() {
+    // Permissible; returns undefined.
     return;
 }
 function f3() {
     return "Okay, because this is a return expression.";
 }
 function f4() {
+    // Fine since we are typed void.
 }
 function f5() {
+    // Fine since we are typed void.
     return;
 }
 function f6() {
+    // Fine since we are typed void and return undefined
     return undefined;
 }
 function f7() {
+    // Fine since we are typed void and return null
     return null;
 }
 function f8() {
+    // Fine since are typed any.
     return;
 }
 function f9() {
+    // Fine since we are typed any and return undefined
     return undefined;
 }
 function f10() {
+    // Fine since we are typed any and return null
     return null;
 }
 function f11() {
+    // Fine since we consist of a single throw statement.
     throw undefined;
 }
 function f12() {
+    // Fine since we consist of a single throw statement.
     throw undefined;
 }
 function f13() {
+    // Fine since we consist of a single throw statement.
     throw undefined;
 }
 function f14() {
+    // Not fine, since we can *only* consist of a single throw statement
+    // if no return statements are present but we are annotated.
     throw undefined;
     throw null;
 }
 function f15() {
+    // Fine, since we have a return statement somewhere.
     throw undefined;
     throw null;
     return;
 }
 function f16() {
+    // Okay; not type annotated.
 }
 function f17() {
+    // Okay; not type annotated.
     return;
 }
 function f18() {
     return "Okay, not type annotated.";
 }
 function f19() {
+    // Okay; function return type is union containing void
 }
 function f20() {
+    // Okay; function return type is union containing any
 }
 function f21() {
+    // Not okay; union does not contain void or any
 }
 function f22() {
+    // Okay; return type allows implicit return of undefined
 }
 function f23() {
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
 const f30 = () => {
+    // Ok, contextual type for implicit return is `undefined`
 };
 const f31 = () => {
+    // Ok, contextual type for expression-less return is `undefined`
     return;
 };
 const f32 = () => {
+    // Error, contextual type for implicit return isn't just `undefined`
 };
 const f33 = () => {
+    // Error, contextual type for expression-less return isn't just `undefined`
     return;
 };
 class C {
     get m1() {
+        // Errors; get accessors must return a value.
     }
     get m2() {
+        // Permissible; returns undefined.
         return;
     }
     get m3() {
         return "Okay, because this is a return expression.";
     }
     get m4() {
+        // Fine since this consists of a single throw statement.
         throw null;
     }
     get m5() {
+        // Not fine, since we can *only* consist of a single throw statement
+        // if no return statements are present but we are a get accessor.
         throw null;
         throw undefined.
         ;

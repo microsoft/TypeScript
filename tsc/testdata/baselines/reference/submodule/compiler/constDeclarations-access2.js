@@ -43,6 +43,7 @@ x.toString();
 
 //// [constDeclarations-access2.js]
 const x = 0;
+// Errors
 x = 1;
 x += 2;
 x -= 3;
@@ -60,6 +61,7 @@ x--;
 ++x;
 --x;
 ++((x));
+// OK
 var a = x + 1;
 function f(v) { }
 f(x);

@@ -14,6 +14,7 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 
 
 //// [arrayFind.js]
+// test fix for #18112, type guard predicates should narrow returned element
 function isNumber(x) {
     return typeof x === "number";
 }

@@ -30,14 +30,14 @@ var V;
 })(V || (V = {}));
 let x;
 if (typeof x === "number") {
-    x;
+    x; // number|E|V
 }
 else {
-    x;
+    x; // string
 }
 if (typeof x !== "number") {
-    x;
+    x; // string
 }
 else {
-    x;
+    x; // number|E|V
 }

@@ -9,4 +9,4 @@ var x: number[];
 //// [restElementWithInitializer2.js]
 var a;
 var x;
-[...x = a] = a;
+[...x = a] = a; // Error, rest element cannot have initializer

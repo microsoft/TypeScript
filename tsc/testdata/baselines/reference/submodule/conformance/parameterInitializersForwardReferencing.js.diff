@@ -52,9 +52,7 @@
 -function defaultArgArrow(a, b) {
 -    if (a === void 0) { a = function () { return function () { return b; }; }; }
 -    if (b === void 0) { b = 3; }
-+var x = (a = b, b = c, c = d) => { var d; };
-+function f(a, b = function () { return c; }, c = b()) {
- }
+-}
 -var C = /** @class */ (function () {
 -    function C(a, b) {
 -        if (a === void 0) { a = b; }
@@ -66,15 +64,17 @@
 -    };
 -    return C;
 -}());
--// Function expressions
+ // Function expressions
 -var x = function (a, b, c) {
 -    if (a === void 0) { a = b; }
 -    if (b === void 0) { b = c; }
 -    if (c === void 0) { c = d; }
 -    var d;
 -};
--// Should not produce errors - can reference later parameters if they occur within a function expression initializer.
++var x = (a = b, b = c, c = d) => { var d; };
+ // Should not produce errors - can reference later parameters if they occur within a function expression initializer.
 -function f(a, b, c) {
 -    if (b === void 0) { b = function () { return c; }; }
 -    if (c === void 0) { c = b(); }
--}
++function f(a, b = function () { return c; }, c = b()) {
+ }

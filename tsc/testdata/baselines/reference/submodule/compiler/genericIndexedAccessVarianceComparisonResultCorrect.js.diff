@@ -18,7 +18,6 @@
 -    }
 -    return B;
 -}());
--b = a; // should be no error
 +class A {
 +    x = 'A';
 +    y = 0;
@@ -27,5 +26,5 @@
 +    x = 'B';
 +    z = true;
 +}
-+b = a;
+ b = a; // should be no error
  c = d;

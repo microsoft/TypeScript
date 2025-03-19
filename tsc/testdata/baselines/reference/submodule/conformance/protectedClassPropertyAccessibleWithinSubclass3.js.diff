@@ -21,13 +21,12 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
+-    }
+-    Base.prototype.method = function () {
 +class Base {
 +    x;
 +    method() {
-+        this.x;
-     }
--    Base.prototype.method = function () {
--        this.x; // OK, accessed within their declaring class
+         this.x; // OK, accessed within their declaring class
 -    };
 -    return Base;
 -}());
@@ -35,16 +34,16 @@
 -    __extends(Derived, _super);
 -    function Derived() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+     }
+-    Derived.prototype.method1 = function () {
 +}
 +class Derived extends Base {
 +    method1() {
-+        this.x;
-+        super.x;
-     }
--    Derived.prototype.method1 = function () {
--        this.x; // OK, accessed within a subclass of the declaring class
+         this.x; // OK, accessed within a subclass of the declaring class
 -        _super.prototype.x; // Error, x is not public
 -    };
 -    return Derived;
 -}(Base));
++        super.x; // Error, x is not public
++    }
 +}

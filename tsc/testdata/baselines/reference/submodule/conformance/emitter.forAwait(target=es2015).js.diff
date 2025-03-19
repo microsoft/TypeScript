@@ -192,7 +192,7 @@
 -    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
 -    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 -};
--// https://github.com/Microsoft/TypeScript/issues/21363
+ // https://github.com/Microsoft/TypeScript/issues/21363
 -function f5() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        var _a, e_1, _b, _c;
@@ -240,7 +240,7 @@
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 -};
--// https://github.com/Microsoft/TypeScript/issues/21363
+ // https://github.com/Microsoft/TypeScript/issues/21363
 -function f6() {
 -    return __asyncGenerator(this, arguments, function* f6_1() {
 -        var _a, e_1, _b, _c;
@@ -288,7 +288,7 @@
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 -};
--// https://github.com/microsoft/TypeScript/issues/36166
+ // https://github.com/microsoft/TypeScript/issues/36166
 -function f7() {
 -    return __asyncGenerator(this, arguments, function* f7_1() {
 -        var _a, e_1, _b, _c;

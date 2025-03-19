@@ -79,13 +79,11 @@
 -    };
 -    return D = _classThis;
 -})();
--C[Symbol.metadata].a; // ['x']
--D[Symbol.metadata].a; // ['x', 'z']
 +@appendMeta('a', 'x')
 +class C {
 +}
 +@appendMeta('a', 'z')
 +class D extends C {
 +}
-+C[Symbol.metadata].a;
-+D[Symbol.metadata].a;
+ C[Symbol.metadata].a; // ['x']
+ D[Symbol.metadata].a; // ['x', 'z']

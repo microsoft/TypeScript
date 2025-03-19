@@ -1,31 +1,21 @@
 --- old.commentsemitComments.js
 +++ new.commentsemitComments.js
-@@= skipped -89, +89 lines =@@
- 
- 
- //// [commentsemitComments.js]
--/** Variable comments*/
- var myVariable = 10;
--/** function comments*/
--function foo(/** parameter comment*/ p) {
-+function foo(p) {
- }
--/** variable with function type comment*/
- var fooVar;
+@@= skipped -99, +99 lines =@@
  foo(50);
  fooVar();
--/**class comment*/
+ /**class comment*/
 -var c = /** @class */ (function () {
--    /** constructor comment*/
++class c {
+     /** constructor comment*/
 -    function c() {
 -        /** property comment */
 -        this.b = 10;
-+class c {
 +    constructor() {
      }
--    /** function comment */
--    c.prototype.myFoo = function () {
++    /** property comment */
 +    b = 10;
+     /** function comment */
+-    c.prototype.myFoo = function () {
 +    myFoo() {
          return this.b;
 -    };
@@ -41,30 +31,31 @@
 -        enumerable: false,
 -        configurable: true
 -    });
--    /** overload implementation signature*/
--    c.prototype.foo1 = function (aOrb) {
 +    }
++    /** getter comment*/
 +    get prop1() {
 +        return this.b;
 +    }
++    /** setter comment*/
 +    set prop1(val) {
 +        this.b = val;
 +    }
+     /** overload implementation signature*/
+-    c.prototype.foo1 = function (aOrb) {
 +    foo1(aOrb) {
          return aOrb.toString();
 -    };
 -    return c;
 -}());
--/**instance comment*/
 +    }
 +}
+ /**instance comment*/
  var i = new c();
--/**interface instance comments*/
- var i1_i;
--/** this is module comment*/
+ /**interface instance comments*/
+@@= skipped -36, +31 lines =@@
  var m1;
  (function (m1) {
--    /** class b */
+     /** class b */
 -    var b = /** @class */ (function () {
 -        function b(x) {
 +    class b {

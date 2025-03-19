@@ -5,11 +5,11 @@
  
  //// [classVarianceCircularity.js]
 -"use strict";
--// Issue #52813
+ // Issue #52813
  function f() {
 -    var b = new Bar();
--    // Uncomment to create error
 +    const b = new Bar();
+     // Uncomment to create error
      console.log(b.Value);
  }
 -var Bar = /** @class */ (function () {
@@ -22,6 +22,7 @@
 -}());
 +class Bar {
 +    num;
++    // Or swap these two lines
 +    Field = this.num;
 +    Value = this.num;
 +}

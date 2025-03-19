@@ -21,7 +21,7 @@ export class ParentThing implements ParentThing {}
 child1(ParentThing.prototype);
 
 //// [parent.js]
-import { child1 } from './child1';
+import { child1 } from './child1'; // this import should still exist in some form in the output, since it augments this module
 export class ParentThing {
 }
 child1(ParentThing.prototype);

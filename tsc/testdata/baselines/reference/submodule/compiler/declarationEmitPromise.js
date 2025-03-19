@@ -36,12 +36,12 @@ exports.bluebird = bluebird;
 async function runSampleWorks(a, b, c, d, e) {
     let result = await bluebird.all([a, b, c, d, e].filter(el => !!el));
     let func = (f) => f.apply(this, result);
-    let rfunc = func;
+    let rfunc = func; // <- This is the only difference
     return rfunc;
 }
 async function runSampleBreaks(a, b, c, d, e) {
     let result = await bluebird.all([a, b, c, d, e].filter(el => !!el));
     let func = (f) => f.apply(this, result);
-    let rfunc = func;
+    let rfunc = func; // <- This is the only difference
     return rfunc;
 }

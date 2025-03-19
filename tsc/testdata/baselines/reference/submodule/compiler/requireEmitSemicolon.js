@@ -34,7 +34,8 @@ var Models;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = void 0;
-const P = require("requireEmitSemicolon_0");
+///<reference path='requireEmitSemicolon_0.ts'/>
+const P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
 var Database;
 (function (Database) {
     class DB {

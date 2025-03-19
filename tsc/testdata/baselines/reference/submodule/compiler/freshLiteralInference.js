@@ -18,9 +18,9 @@ let x3 = obj3.value;  // before: string, after: "1"
 
 
 //// [freshLiteralInference.js]
-const value = f1("1");
-let x1 = value;
-const obj2 = f2({ value: "1" });
-let x2 = obj2.value;
-const obj3 = f3({ value: "1" });
-let x3 = obj3.value;
+const value = f1("1"); // regular "1"
+let x1 = value; // regular "1"
+const obj2 = f2({ value: "1" }); // { value: regular "1" }
+let x2 = obj2.value; // regular "1"
+const obj3 = f3({ value: "1" }); // before: { value: fresh "1" }
+let x3 = obj3.value; // before: string, after: "1"

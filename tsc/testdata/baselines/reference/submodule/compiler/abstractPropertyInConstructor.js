@@ -104,9 +104,11 @@ class AbstractClass {
             this.prop = "Hello World";
         }
         this.cb(str);
+        // OK, reference is inside function
         const innerFunction = () => {
             return this.prop;
         };
+        // OK, references are to another instance
         other.cb(other.prop);
     }
     prop;
@@ -121,8 +123,10 @@ class DerivedAbstractClass extends AbstractClass {
     cb = (s) => { };
     constructor(str, other, yetAnother) {
         super(str, other);
+        // there is no implementation of 'prop' in any base class
         this.cb(this.prop.toLowerCase());
         this.method(1);
+        // OK, references are to another instance
         other.cb(other.prop);
         yetAnother.cb(yetAnother.prop);
     }
@@ -150,17 +154,17 @@ class C1 {
     x;
     y;
     constructor() {
-        let self = this;
-        let { x, y: y1 } = this;
-        ({ x, y: y1, "y": y1 } = this);
+        let self = this; // ok
+        let { x, y: y1 } = this; // error
+        ({ x, y: y1, "y": y1 } = this); // error
     }
 }
 class C2 {
     x;
     y;
     constructor() {
-        let self = this;
-        let { x, y: y1 } = this;
-        ({ x, y: y1, "y": y1 } = this);
+        let self = this; // ok
+        let { x, y: y1 } = this; // ok
+        ({ x, y: y1, "y": y1 } = this); // ok
     }
 }

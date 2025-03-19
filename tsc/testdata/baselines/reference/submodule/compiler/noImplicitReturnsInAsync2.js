@@ -38,26 +38,31 @@ async function test7(isError: boolean = true) {
 }
 
 //// [noImplicitReturnsInAsync2.js]
+// Should be an error, Promise<number>, currently retorted correctly 
 async function test3(isError = true) {
     if (isError === true) {
         return 6;
     }
 }
+// Should not be an error, Promise<any>, currently **not** working
 async function test4(isError = true) {
     if (isError === true) {
         return undefined;
     }
 }
+// should not be error, Promise<any> currently working correctly 
 async function test5(isError = true) {
     if (isError === true) {
         return undefined;
     }
 }
+// should be error, currently reported correctly 
 async function test6(isError = true) {
     if (isError === true) {
         return undefined;
     }
 }
+// infered to be Promise<void>, should not be an error, currently reported correctly 
 async function test7(isError = true) {
     if (isError === true) {
         return;

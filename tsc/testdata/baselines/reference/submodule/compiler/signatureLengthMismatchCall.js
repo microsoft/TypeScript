@@ -10,5 +10,6 @@ takesCallback((a: number, b: number) => {});
 
 //// [signatureLengthMismatchCall.js]
 function takesCallback(fn) {
+    // ...
 }
 takesCallback((a, b) => { });

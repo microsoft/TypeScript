@@ -27,8 +27,8 @@ exports.main = 10;
 //// [elidingImportNames_test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = require("./elidingImportNames_main");
+const a = require("./elidingImportNames_main"); // alias used in typeof
 var b = a;
 var x;
-const a2 = require("./elidingImportNames_main1");
+const a2 = require("./elidingImportNames_main1"); // alias not used in typeof
 var b2 = a2;

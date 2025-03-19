@@ -109,6 +109,7 @@ let a3 = ["a", "b"].map(wrap(arrayize(s => s.length)));
 let a4 = ["a", "b"].map(combine(wrap(s => s.length), wrap(n => n > 10)));
 let a5 = ["a", "b"].map(combine(identity, wrap(s => s.length)));
 let a6 = ["a", "b"].map(combine(wrap(s => s.length), identity));
+// This is a contrived class. We could do the same thing with Observables, etc.
 class SetOf {
     _store;
     add(a) {
@@ -121,6 +122,7 @@ class SetOf {
         this._store.forEach((a, i) => fn(a, i));
     }
 }
+/* ... etc ... */
 function compose(...fns) {
     return (x) => fns.reduce((prev, fn) => fn(prev), x);
 }

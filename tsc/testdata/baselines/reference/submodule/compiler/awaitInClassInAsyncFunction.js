@@ -15,6 +15,7 @@ async function foo() {
 
 
 //// [awaitInClassInAsyncFunction.js]
+// https://github.com/microsoft/TypeScript/issues/34887
 async function bar() {
     return 2;
 }

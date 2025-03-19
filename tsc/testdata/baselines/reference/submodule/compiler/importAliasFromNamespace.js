@@ -37,6 +37,7 @@ var My;
     })(Internal = My.Internal || (My.Internal = {}));
 })(My || (My = {}));
 //// [usage.js]
+/// <reference path="./internal.ts" preserve="true" />
 var SomeOther;
 (function (SomeOther) {
     let Thing;

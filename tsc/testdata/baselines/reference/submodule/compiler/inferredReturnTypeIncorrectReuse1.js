@@ -35,5 +35,7 @@ export const out2 = t2.pipe(s => parseInt(s))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.out2 = exports.out = void 0;
+/** Type<(In: string) => number> */
 exports.out = t.pipe(s => parseInt(s));
+/** Type<(In: string) => number> */
 exports.out2 = t2.pipe(s => parseInt(s));

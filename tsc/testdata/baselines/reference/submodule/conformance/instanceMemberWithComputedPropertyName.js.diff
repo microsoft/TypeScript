@@ -1,10 +1,8 @@
 --- old.instanceMemberWithComputedPropertyName.js
 +++ new.instanceMemberWithComputedPropertyName.js
-@@= skipped -11, +11 lines =@@
- }
- 
+@@= skipped -13, +13 lines =@@
  //// [instanceMemberWithComputedPropertyName.js]
--// https://github.com/microsoft/TypeScript/issues/30953
+ // https://github.com/microsoft/TypeScript/issues/30953
  "use strict";
 -var _a;
 -var x = 1;

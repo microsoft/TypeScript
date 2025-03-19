@@ -10,4 +10,5 @@ export {};
 //// [jsxJsxsCjsTransformChildren.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
 const a = <div>text</div>;

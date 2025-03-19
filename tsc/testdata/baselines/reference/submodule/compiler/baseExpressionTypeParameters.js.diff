@@ -1,10 +1,9 @@
 --- old.baseExpressionTypeParameters.js
 +++ new.baseExpressionTypeParameters.js
-@@= skipped -15, +15 lines =@@
- <string>Spec.prop;
+@@= skipped -16, +16 lines =@@
  
  //// [baseExpressionTypeParameters.js]
--// Repro from #17829
+ // Repro from #17829
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -46,7 +45,7 @@
 -    return Spec;
 -}(Gen));
 +class Gen extends base() {
-+}
++} // Error, T not in scope
 +class Spec extends Gen {
 +}
  Spec.prop;

@@ -25,6 +25,6 @@ module.exports = Foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const foo = require("./foo_0");
-var x = new foo(true);
-var y = new foo({ a: "test", b: 42 });
+var x = new foo(true); // Should error
+var y = new foo({ a: "test", b: 42 }); // Should be OK
 var z = y.test.b;

@@ -87,8 +87,10 @@ foo.of = 1;
 
 //// [nullPropertyName.js]
 function foo() { }
+// properties
 foo.x = 1;
 foo.y = 1;
+// keywords
 foo.break = 1;
 foo.case = 1;
 foo.catch = 1;

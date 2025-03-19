@@ -9,6 +9,6 @@ I           // This should be the identifier 'I'
 
 //// [asiPreventsParsingAsInterface01.js]
 var interface, I;
-interface;
-I;
-{ }
+interface; // This should be the identifier 'interface'
+I; // This should be the identifier 'I'
+{ } // This should be a block body

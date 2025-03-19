@@ -28,6 +28,7 @@ export class ParseThemeData {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParseThemeData = void 0;
+// https://github.com/microsoft/TypeScript/issues/59345
 class ParseThemeData {
     parseButton(button) {
         const { type, size } = button;

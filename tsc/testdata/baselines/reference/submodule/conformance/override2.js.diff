@@ -78,7 +78,7 @@
 -    abstract bar(): void;
 -    baz(): void;
 +class AD3 extends AB {
-+    foo(v) { }
++    foo(v) { } // need override?
 +    baz() { }
  }
 -declare class D4 extends AB {

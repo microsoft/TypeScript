@@ -41,6 +41,7 @@ var temp = 10;
 
 
 //// [exponentiationOperatorSyntaxError1.js]
+// Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 (-1) ** 2;
 (+1) ** 2;
 1 ** (-2) ** 3;

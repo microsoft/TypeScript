@@ -38,22 +38,13 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--///<reference path='..\compiler\io.ts'/>
--///<reference path='..\compiler\typescript.ts'/>
--///<reference path='..\services\typescriptServices.ts' />
--///<reference path='diff.ts'/>
- function switchToForwardSlashes(path) {
-     return path.replace(/\\/g, "/");
- }
-@@= skipped -57, +28 lines =@@
- }
- var Harness;
- (function (Harness) {
--    // Settings 
-     Harness.userSpecifiedroot = "";
+ ///<reference path='..\compiler\io.ts'/>
+ ///<reference path='..\compiler\typescript.ts'/>
+ ///<reference path='..\services\typescriptServices.ts' />
+@@= skipped -62, +37 lines =@@
      var global = Function("return this").call(null);
      Harness.usePull = false;
--    // Assert functions
+     // Assert functions
 -    var Assert;
 +    let Assert;
      (function (Assert) {
@@ -62,14 +53,8 @@
 +        Assert.throwAssertError = (error) => {
              throw error;
          };
--        // Marks that the current scenario is impacted by a bug
-         function bug(id) {
-             if (Assert.bugIds.indexOf(id) < 0) {
-                 Assert.bugIds.push(id);
-             }
-         }
-         Assert.bug = bug;
--        // If there are any bugs in the test code, mark the scenario as impacted appropriately
+         // Marks that the current scenario is impacted by a bug
+@@= skipped -17, +17 lines =@@
          function bugs(content) {
              var bugs = content.match(/\bbug (\d+)/i);
              if (bugs) {
@@ -78,7 +63,7 @@
              }
          }
          Assert.bugs = bugs;
-@@= skipped -35, +31 lines =@@
+@@= skipped -13, +13 lines =@@
          function arrayLengthIs(arr, length) {
              if (arr.length != length) {
                  var actual = '';
@@ -96,27 +81,7 @@
                      actual = actual + '\n     ' + err.toString();
                  });
                  Assert.throwAssertError(new Error("Expected compiler warning at (" + line + ", " + column + "): " + desc + "\nActual errors follow: " + actual));
-@@= skipped -54, +54 lines =@@
-         }
-         Assert.arrayContainsOnce = arrayContainsOnce;
-     })(Assert = Harness.Assert || (Harness.Assert = {}));
--    /** Splits the given string on \r\n or on only \n if that fails */
-     function splitContentByNewlines(content) {
--        // Split up the input file by line
--        // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
--        // we have to string-based splitting instead and try to figure out the delimiting chars
-         var lines = content.split('\r\n');
-         if (lines.length === 1) {
-             lines = content.split('\n');
-@@= skipped -12, +8 lines =@@
-         return lines;
-     }
-     Harness.splitContentByNewlines = splitContentByNewlines;
--    /** Reads a file under /tests */
-     function readFile(path) {
-         if (path.indexOf('tests') < 0) {
-             path = "tests/" + path;
-@@= skipped -12, +11 lines =@@
+@@= skipped -78, +78 lines =@@
          return content;
      }
      Harness.readFile = readFile;
@@ -150,9 +115,9 @@
 +        verify(test, passed, actual, expected, message) { }
 +    }
      Harness.Logger = Logger;
--    // Logger-related functions
+     // Logger-related functions
      var loggers = [];
-     function registerLogger(logger) {
+@@= skipped -23, +20 lines =@@
          loggers.push(logger);
      }
      Harness.registerLogger = registerLogger;
@@ -165,7 +130,7 @@
          for (var i = 0; i < loggers.length; i++) {
              if (typeof loggers[i][field] === 'function') {
                  loggers[i][field].apply(loggers[i], params);
-@@= skipped -35, +27 lines =@@
+@@= skipped -12, +8 lines =@@
          }
      }
      Harness.emitLog = emitLog;
@@ -187,39 +152,30 @@
 -            this.children = [];
          }
 -        Runnable.prototype.addChild = function (child) {
++        // The current stack of Runnable objects
 +        static currentStack = [];
++        // The error, if any, that occurred when running 'block'
 +        error = null;
++        // Whether or not this object has any failures (including in its descendants)
 +        passed = null;
++        // A list of bugs impacting this object
 +        bugs = [];
++        // A list of all our child Runnables
 +        children = [];
 +        addChild(child) {
              this.children.push(child);
 -        };
--        /** Call function fn, which may take a done function and may possibly execute
--         *  asynchronously, calling done when finished. Returns true or false depending
--         *  on whether the function was asynchronous or not.
--         */
--        Runnable.prototype.call = function (fn, done) {
 +        }
+         /** Call function fn, which may take a done function and may possibly execute
+          *  asynchronously, calling done when finished. Returns true or false depending
+          *  on whether the function was asynchronous or not.
+          */
+-        Runnable.prototype.call = function (fn, done) {
 +        call(fn, done) {
              var isAsync = true;
              try {
                  if (fn.length === 0) {
--                    // No async.
-                     fn();
-                     done();
-                     return false;
-                 }
-                 else {
--                    // Possibly async
-                     Runnable.pushGlobalErrorHandler(done);
-                     fn(function () {
--                        isAsync = false; // If we execute synchronously, this will get called before the return below.
-+                        isAsync = false;
-                         Runnable.popGlobalErrorHandler();
-                         done();
-                     });
-@@= skipped -44, +37 lines =@@
+@@= skipped -44, +48 lines =@@
                  done(e);
                  return false;
              }
@@ -288,14 +244,14 @@
 +        addChild(child) {
              throw new Error("Testcases may not be nested inside other testcases");
 -        };
--        /** Run the test case block and fail the test if it raised an error. If no error is raised, the test passes. */
--        TestCase.prototype.run = function (done) {
 +        }
+         /** Run the test case block and fail the test if it raised an error. If no error is raised, the test passes. */
+-        TestCase.prototype.run = function (done) {
 +        run(done) {
              var that = this;
              Runnable.currentStack.push(this);
              emitLog('testStart', { desc: this.description });
-@@= skipped -62, +57 lines =@@
+@@= skipped -62, +58 lines =@@
                      done();
                  });
              }
@@ -320,45 +276,41 @@
 +            this.description = description;
 +            this.block = block;
          }
--        /** Run the block, and if the block doesn't raise an error, run the children. */
+         /** Run the block, and if the block doesn't raise an error, run the children. */
 -        Scenario.prototype.run = function (done) {
 +        run(done) {
              var that = this;
              Runnable.currentStack.push(this);
              emitLog('scenarioStart', { desc: this.description });
-@@= skipped -23, +21 lines =@@
-                     that.passed = false;
+@@= skipped -24, +23 lines =@@
                      that.error = e;
                      var metadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
--                    // Report all bugs affecting this scenario
+                     // Report all bugs affecting this scenario
 -                    assert.bugIds.forEach(function (desc) { return emitLog('bug', metadata, desc); });
 +                    assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));
                      emitLog('scenarioEnd', metadata, e);
                      done();
                  }
-                 else {
--                    that.passed = true; // so far so good.
-+                    that.passed = true;
+@@= skipped -9, +9 lines =@@
                      that.runChildren(done);
                  }
              });
 -        };
--        /** Run the children of the scenario (other scenarios and test cases). If any fail,
--         *  set this scenario to failed. Synchronous tests will run synchronously without
--         *  adding stack frames.
--         */
++        }
+         /** Run the children of the scenario (other scenarios and test cases). If any fail,
+          *  set this scenario to failed. Synchronous tests will run synchronously without
+          *  adding stack frames.
+          */
 -        Scenario.prototype.runChildren = function (done, index) {
 -            if (index === void 0) { index = 0; }
-+        }
 +        runChildren(done, index = 0) {
              var that = this;
              var async = false;
              for (; index < this.children.length; index++) {
-@@= skipped -29, +23 lines =@@
-                     return;
+@@= skipped -20, +19 lines =@@
              }
              var metadata = { id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds };
--            // Report all bugs affecting this scenario
+             // Report all bugs affecting this scenario
 -            assert.bugIds.forEach(function (desc) { return emitLog('bug', metadata, desc); });
 +            assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));
              emitLog('scenarioEnd', metadata);
@@ -389,11 +341,7 @@
              var async = false;
              var that = this;
              for (; index < this.children.length; index++) {
--                // Clear out bug descriptions
-                 assert.bugIds = [];
-                 async = this.runChild(index, function (e) {
-                     if (async) {
-@@= skipped -35, +30 lines =@@
+@@= skipped -34, +31 lines =@@
              }
              Perf.runBenchmarks();
              emitLog('end');
@@ -403,7 +351,7 @@
 +        }
 +    }
      Harness.Run = Run;
--    // Performance test
+     // Performance test
 -    var Perf;
 +    let Perf;
      (function (Perf) {
@@ -411,11 +359,8 @@
 +        let Clock;
          (function (Clock) {
              if (typeof WScript !== "undefined" && typeof global['WScript'].InitializeProjection !== "undefined") {
--                // Running in JSHost.
-                 global['WScript'].InitializeProjection();
-                 Clock.now = function () {
-                     return TestUtilities.QueryPerformanceCounter();
-@@= skipped -24, +21 lines =@@
+                 // Running in JSHost.
+@@= skipped -24, +23 lines =@@
                  Clock.resolution = 1000;
              }
          })(Clock = Perf.Clock || (Perf.Clock = {}));
@@ -432,9 +377,9 @@
                  this.startTime = Clock.now();
 -            };
 -            Timer.prototype.end = function () {
--                // Set time to MS.
 +            }
 +            end() {
+                 // Set time to MS.
                  this.time = (Clock.now() - this.startTime) / Clock.resolution * 1000;
 -            };
 -            return Timer;
@@ -467,7 +412,7 @@
                  var min = this.data[0];
                  for (var i = 1; i < this.data.length; i++) {
                      if (this.data[i] < min) {
-@@= skipped -37, +32 lines =@@
+@@= skipped -37, +33 lines =@@
                      }
                  }
                  return min;
@@ -495,22 +440,22 @@
 -            };
 -            return Dataset;
 -        }());
--        Perf.Dataset = Dataset;
--        // Base benchmark class with some defaults.
++            }
++        }
+         Perf.Dataset = Dataset;
+         // Base benchmark class with some defaults.
 -        var Benchmark = /** @class */ (function () {
 -            function Benchmark() {
 -                this.iterations = 10;
 -                this.description = "";
 -                this.results = {};
-             }
+-            }
 -            Benchmark.prototype.bench = function (subBench) { };
 -            Benchmark.prototype.before = function () { };
 -            Benchmark.prototype.beforeEach = function () { };
 -            Benchmark.prototype.after = function () { };
 -            Benchmark.prototype.afterEach = function () { };
 -            Benchmark.prototype.addTimingFor = function (name, timing) {
-+        }
-+        Perf.Dataset = Dataset;
 +        class Benchmark {
 +            iterations = 10;
 +            description = "";
@@ -539,25 +484,16 @@
              var t = new Timer();
              t.start();
              var subBenchmark = function (name, f) {
-@@= skipped -73, +65 lines =@@
-             }
-         }
-         Perf.runBenchmarks = runBenchmarks;
--        // Replace with better type when classes are assignment compatible with
--        // the below type.
--        // export function addBenchmark(BenchmarkClass: {new(): Benchmark;}) {
-         function addBenchmark(BenchmarkClass) {
-             Perf.benchmarks.push(BenchmarkClass);
-         }
+@@= skipped -82, +75 lines =@@
          Perf.addBenchmark = addBenchmark;
      })(Perf = Harness.Perf || (Harness.Perf = {}));
--    /** Functionality for compiling TypeScript code */
+     /** Functionality for compiling TypeScript code */
 -    var Compiler;
 +    let Compiler;
      (function (Compiler) {
--        /** Aggregate various writes into a single array of lines. Useful for passing to the
--         *  TypeScript compiler to fill with source code or errors.
--         */
+         /** Aggregate various writes into a single array of lines. Useful for passing to the
+          *  TypeScript compiler to fill with source code or errors.
+          */
 -        var WriterAggregator = /** @class */ (function () {
 -            function WriterAggregator() {
 -                this.lines = [];
@@ -592,18 +528,18 @@
 -            };
 -            return WriterAggregator;
 -        }());
--        Compiler.WriterAggregator = WriterAggregator;
--        /** Mimics having multiple files, later concatenated to a single file. */
++            }
++        }
+         Compiler.WriterAggregator = WriterAggregator;
+         /** Mimics having multiple files, later concatenated to a single file. */
 -        var EmitterIOHost = /** @class */ (function () {
 -            function EmitterIOHost() {
 -                this.fileCollection = {};
-             }
--            /** create file gets the whole path to create, so this works as expected with the --out parameter */
--            EmitterIOHost.prototype.createFile = function (s, useUTF8) {
-+        }
-+        Compiler.WriterAggregator = WriterAggregator;
+-            }
 +        class EmitterIOHost {
 +            fileCollection = {};
+             /** create file gets the whole path to create, so this works as expected with the --out parameter */
+-            EmitterIOHost.prototype.createFile = function (s, useUTF8) {
 +            createFile(s, useUTF8) {
                  if (this.fileCollection[s]) {
                      return this.fileCollection[s];
@@ -626,7 +562,7 @@
                  var result = [];
                  for (var p in this.fileCollection) {
                      if (this.fileCollection.hasOwnProperty(p)) {
-@@= skipped -71, +57 lines =@@
+@@= skipped -62, +57 lines =@@
                      }
                  }
                  return result;
@@ -638,27 +574,10 @@
          Compiler.EmitterIOHost = EmitterIOHost;
          var libFolder = global['WScript'] ? TypeScript.filePath(global['WScript'].ScriptFullName) : (__dirname + '/');
          Compiler.libText = IO ? IO.readFile(libFolder + "lib.d.ts") : '';
-@@= skipped -30, +29 lines =@@
-         Compiler.makeDefaultCompilerForTest = makeDefaultCompilerForTest;
-         var compiler;
-         recreate();
--        // pullUpdateUnit is sufficient if an existing unit is updated, if a new unit is added we need to do a full typecheck
-         var needsFullTypeCheck = true;
-         function compile(code, filename) {
-             if (Harness.usePull) {
-@@= skipped -9, +8 lines =@@
-                     needsFullTypeCheck = false;
-                 }
-                 else {
--                    // requires unit to already exist in the compiler
-                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true);
-                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), filename, true);
-                 }
-@@= skipped -10, +9 lines =@@
-             }
+@@= skipped -50, +49 lines =@@
          }
          Compiler.compile = compile;
--        // Types
+         // Types
 -        var Type = /** @class */ (function () {
 -            function Type(type, code, identifier) {
 +        class Type {
@@ -691,28 +610,20 @@
                  var testCode = 'class __test1__ {\n';
                  testCode += '    public test() {\n';
                  testCode += '        ' + other.code + ';\n';
-@@= skipped -33, +35 lines =@@
+@@= skipped -32, +35 lines =@@
                  testCode += '    }\n';
                  testCode += '}\n';
                  return this.compilesOk(testCode);
 -            };
--            // TODO: Find an implementation of isIdenticalTo that works.
--            //public isIdenticalTo(other: Type) {
--            //    var testCode = 'module __test1__ {\n';
--            //    testCode += '    ' + this.code + ';\n';
--            //    testCode += '    export var __val__ = ' + this.identifier + ';\n';
--            //    testCode += '}\n';
--            //    testCode += 'var __test1__val__ = __test1__.__val__;\n';
--            //    testCode += 'module __test2__ {\n';
--            //    testCode += '    ' + other.code + ';\n';
--            //    testCode += '    export var __val__ = ' + other.identifier + ';\n';
--            //    testCode += '}\n';
--            //    testCode += 'var __test2__val__ = __test2__.__val__;\n';
--            //    testCode += 'function __test__function__() { if(true) { return __test1__val__ }; return __test2__val__; }';
--            //    return this.compilesOk(testCode);
--            //}
--            Type.prototype.assertSubtypeOf = function (others) {
 +            }
+             // TODO: Find an implementation of isIdenticalTo that works.
+             //public isIdenticalTo(other: Type) {
+             //    var testCode = 'module __test1__ {\n';
+@@= skipped -16, +16 lines =@@
+             //    testCode += 'function __test__function__() { if(true) { return __test1__val__ }; return __test2__val__; }';
+             //    return this.compilesOk(testCode);
+             //}
+-            Type.prototype.assertSubtypeOf = function (others) {
 +            assertSubtypeOf(others) {
                  others = this.normalizeToArray(others);
                  for (var i = 0; i < others.length; i++) {
@@ -731,23 +642,20 @@
                      }
                  }
 -            };
--            //public assertIdenticalTo(other: Type) {
--            //    if (!this.isIdenticalTo(other)) {
--            //        throw new Error("Expected " + this.type + " to be identical to " + other.type);
--            //    }
--            //}
--            //public assertNotIdenticalTo(other: Type) {
--            //    if (!this.isIdenticalTo(other)) {
--            //        throw new Error("Expected " + this.type + " to not be identical to " + other.type);
--            //    }
--            //}
--            Type.prototype.isAssignmentCompatibleWith = function (other) {
 +            }
+             //public assertIdenticalTo(other: Type) {
+             //    if (!this.isIdenticalTo(other)) {
+             //        throw new Error("Expected " + this.type + " to be identical to " + other.type);
+@@= skipped -26, +26 lines =@@
+             //        throw new Error("Expected " + this.type + " to not be identical to " + other.type);
+             //    }
+             //}
+-            Type.prototype.isAssignmentCompatibleWith = function (other) {
 +            isAssignmentCompatibleWith(other) {
                  var testCode = 'module __test1__ {\n';
                  testCode += '    ' + this.code + ';\n';
                  testCode += '    export var __val__ = ' + this.identifier + ';\n';
-@@= skipped -55, +30 lines =@@
+@@= skipped -13, +13 lines =@@
                  testCode += 'var __test2__val__ = __test2__.__val__;\n';
                  testCode += '__test2__val__ = __test1__val__;';
                  return this.compilesOk(testCode);
@@ -812,17 +720,7 @@
                  var targetIdentifier = '';
                  var targetPosition = -1;
                  if (typeof target === "string") {
-@@= skipped -40, +42 lines =@@
-                     throw new Error("Type definition contains errors: " + errors.join(","));
-                 var matchingIdentifiers = [];
-                 if (!Harness.usePull) {
--                    // This will find the requested identifier in the first script where it's present, a naive search of each member in each script,
--                    // which means this won't play nicely if the same identifier is used in multiple units, but it will enable this to work on multi-file tests.
--                    // m = 1 because the first script will always be lib.d.ts which we don't want to search.                                
-                     for (var m = 1; m < compiler.scripts.members.length; m++) {
-                         var script = compiler.scripts.members[m];
-                         var enclosingScopeContext = TypeScript.findEnclosingScopeAt(new TypeScript.NullLogger(), script, new TypeScript.StringSourceText(code), 0, false);
-@@= skipped -22, +19 lines =@@
+@@= skipped -62, +64 lines =@@
                                  var tyInfo = compiler.pullGetTypeInfoAtPosition(targetPosition, script2);
                                  var name = this.getTypeInfoName(tyInfo.ast);
                                  var foundValue = new Type(tyInfo.typeInfo, code, name);
@@ -850,30 +748,8 @@
 +            getTypeInfoName(ast) {
                  var name = '';
                  switch (ast.nodeType) {
--                    case TypeScript.NodeType.Name: // Type Name?
-+                    case TypeScript.NodeType.Name:
-                     case TypeScript.NodeType.Null:
-                     case TypeScript.NodeType.List:
-                     case TypeScript.NodeType.Empty:
-@@= skipped -28, +28 lines =@@
-                         name = ast.text;
-                         break;
-                     case TypeScript.NodeType.Return:
--                        //name = (<TypeScript.ReturnStatement>tyInfo.ast).returnExpression.actualText; // why is this complaining?
-                         break;
-                     case TypeScript.NodeType.InterfaceDeclaration:
-                         name = ast.name.actualText;
-@@= skipped -12, +11 lines =@@
-                         name = ast.name.actualText;
-                         break;
-                     case TypeScript.NodeType.FuncDecl:
--                        name = !ast.name ? "" : ast.name.actualText; // name == null for lambdas
-+                        name = !ast.name ? "" : ast.name.actualText;
-                         break;
-                     default:
--                        // TODO: is there a reason to mess with all the special cases above and not just do this (ie take whatever property is there and works?)
-                         var a = ast;
-                         name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '';
+                     case TypeScript.NodeType.Name: // Type Name?
+@@= skipped -49, +49 lines =@@
                          break;
                  }
                  return name;
@@ -891,16 +767,9 @@
 +            }
 +        }
          Compiler.TypeFactory = TypeFactory;
--        /** Generates a .d.ts file for the given code
--          * @param verifyNoDeclFile pass true when the given code should generate no decl file, false otherwise
--          * @param unitName add the given code under thie name, else use '0.ts'
--          * @param compilationContext a set of functions to be run before and after compiling this code for doing things like adding dependencies first
--          * @param references the set of referenced files used by the given code
--          */
-         function generateDeclFile(code, verifyNoDeclFile, unitName, compilationContext, references) {
-             reset();
-             compiler.settings.generateDeclarationFiles = true;
-@@= skipped -39, +31 lines =@@
+         /** Generates a .d.ts file for the given code
+           * @param verifyNoDeclFile pass true when the given code should generate no decl file, false otherwise
+@@= skipped -30, +29 lines =@@
                  var outputs = {};
                  compiler.settings.outputOption = "";
                  compiler.parseEmitOption({
@@ -918,19 +787,18 @@
                  });
                  compiler.emitDeclarations();
                  var results = null;
-@@= skipped -40, +40 lines =@@
-             return '';
+@@= skipped -41, +41 lines =@@
          }
          Compiler.generateDeclFile = generateDeclFile;
--        /** Contains the code and errors of a compilation and some helper methods to check its status. */
+         /** Contains the code and errors of a compilation and some helper methods to check its status. */
 -        var CompilerResult = /** @class */ (function () {
--            /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
--            function CompilerResult(fileResults, errorLines, scripts) {
 +        class CompilerResult {
 +            fileResults;
 +            scripts;
 +            code;
 +            errors;
+             /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
+-            function CompilerResult(fileResults, errorLines, scripts) {
 +            constructor(fileResults, errorLines, scripts) {
                  this.fileResults = fileResults;
                  this.scripts = scripts;
@@ -940,13 +808,7 @@
                  this.code = lines.join("\n");
                  this.errors = [];
                  for (var i = 0; i < errorLines.length; i++) {
-                     if (Harness.usePull) {
--                        var err = errorLines[i]; // TypeScript.PullError
-+                        var err = errorLines[i];
-                         this.errors.push(new CompilerError(err.filename, 0, 0, err.message));
-                     }
-                     else {
-@@= skipped -26, +28 lines =@@
+@@= skipped -25, +29 lines =@@
                      }
                  }
              }
@@ -963,7 +825,7 @@
 +            }
 +        }
          Compiler.CompilerResult = CompilerResult;
--        // Compiler Error.
+         // Compiler Error.
 -        var CompilerError = /** @class */ (function () {
 -            function CompilerError(file, line, column, message) {
 +        class CompilerError {
@@ -986,11 +848,9 @@
 +            }
 +        }
          Compiler.CompilerError = CompilerError;
--        /** Create a new instance of the compiler with default settings and lib.d.ts, then typecheck */
+         /** Create a new instance of the compiler with default settings and lib.d.ts, then typecheck */
          function recreate() {
-             compiler = makeDefaultCompilerForTest();
-             if (Harness.usePull) {
-@@= skipped -38, +38 lines =@@
+@@= skipped -38, +40 lines =@@
          function reset() {
              stdout.reset();
              stderr.reset();
@@ -999,76 +859,15 @@
              for (var i = 0; i < files.length; i++) {
                  var fname = files[i];
                  if (fname !== 'lib.d.ts') {
-@@= skipped -20, +20 lines =@@
-                 }
-             }
-             if (!script) {
--                // TODO: make this toggleable, shouldn't be necessary once typecheck bugs are cleaned up
--                // but without it subsequent tests are treated as edits, making for somewhat useful stress testing
--                // of persistent typecheck state
--                //compiler.addUnit("", uName, isResident, references); // equivalent to compiler.deleteUnit(...)
-                 script = compiler.addUnit(code, uName, isResident, references);
-                 needsFullTypeCheck = true;
-             }
-@@= skipped -27, +23 lines =@@
-         }
-         Compiler.compileFile = compileFile;
-         function compileUnit(code, filename, callback, settingsCallback, context, references) {
--            // not recursive
--            function clone /* <T> */(source, target) {
-+            function clone(source, target) {
-                 for (var prop in source) {
-                     target[prop] = source[prop];
-                 }
-@@= skipped -19, +18 lines =@@
-                 compileString(code, filename, callback, context, references);
-             }
-             finally {
--                // If settingsCallback exists, assume that it modified the global compiler instance's settings in some way.
--                // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
-                 if (settingsCallback) {
-                     compiler.settings = oldCompilerSettings;
-                     compiler.emitSettings = oldEmitSettings;
-@@= skipped -33, +31 lines =@@
-                 context.preCompile();
-             }
-             var isDeclareFile = Harness.Compiler.isDeclareFile(unitName);
--            // for single file tests just add them as using the old '0.ts' naming scheme
-             var uName = context ? unitName : ((isDeclareFile) ? '0.d.ts' : '0.ts');
-             scripts.push(addUnit(code, uName, false, isDeclareFile, references));
-             compile(code, uName);
-             var errors;
-             if (Harness.usePull) {
--                // TODO: no emit support with pull yet
-                 errors = compiler.pullGetErrorsForFile(uName);
-                 emit(stdout, true);
-             }
-             else {
-                 errors = stderr.lines;
-                 emit(stdout, false);
--                //output decl file
-                 compiler.emitDeclarations();
-             }
-             if (context) {
-@@= skipped -22, +19 lines =@@
-             callback(new CompilerResult(stdout.toArray(), errors, scripts));
-         }
-         Compiler.compileString = compileString;
--        /** Returns a set of functions which can be later executed to add and remove given dependencies to the compiler so that
--         *  a file can be successfully compiled. These functions will add/remove named units and code to the compiler for each dependency.
--         */
-         function defineCompilationContextForTest(filename, dependencies) {
--            // if the given file has no dependencies, there is no context to return, it can be compiled without additional work
-             if (dependencies.length == 0) {
-                 return null;
+@@= skipped -131, +131 lines =@@
              }
              else {
                  var addedFiles = [];
 -                var precompile = function () {
--                    // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?
--                    // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
--                    dependencies.forEach(function (dep) {
 +                var precompile = () => {
+                     // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?
+                     // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
+-                    dependencies.forEach(function (dep) {
 +                    dependencies.forEach(dep => {
                          addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
                          addedFiles.push(dep.name);
@@ -1081,97 +880,16 @@
                          updateUnit('', file);
                      });
                  };
-@@= skipped -33, +27 lines =@@
-         }
-         Compiler.defineCompilationContextForTest = defineCompilationContextForTest;
-     })(Compiler = Harness.Compiler || (Harness.Compiler = {}));
--    /** Parses the test cases files
--     *  extracts options and individual files in a multifile test
--     */
+@@= skipped -26, +26 lines =@@
+     /** Parses the test cases files
+      *  extracts options and individual files in a multifile test
+      */
 -    var TestCaseParser;
 +    let TestCaseParser;
      (function (TestCaseParser) {
--        optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm; // multiple matches on multiple lines
--        // List of allowed metadata names
-+        optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm;
-         var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out"];
-         function extractCompilerSettings(content) {
-             var opts = [];
-@@= skipped -16, +12 lines =@@
-             }
-             return opts;
-         }
--        /** Given a test file containing // @Filename directives, return an array of named units of code to be added to an existing compiler instance */
-         function makeUnitsFromTest(code, filename) {
-             var settings = extractCompilerSettings(code);
--            // List of all the subfiles we've parsed out
-             var files = [];
-             var lines = splitContentByNewlines(code);
--            // Stuff related to the subfile we're parsing
-             var currentFileContent = null;
-             var currentFileOptions = {};
-             var currentFileName = null;
-@@= skipped -15, +12 lines =@@
-                 var line = lines[i];
-                 var isTripleSlashReference = /[\/]{3}\s*<reference path/.test(line);
-                 var testMetaData = optionRegex.exec(line);
--                // Triple slash references need to be tracked as they are added to the compiler as an additional parameter to addUnit
-                 if (isTripleSlashReference) {
-                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
-                     if (isRef) {
-@@= skipped -16, +15 lines =@@
-                     }
-                 }
-                 else if (testMetaData) {
--                    // Comment line, check for global/file @options and record them
-                     optionRegex.lastIndex = 0;
-                     var fileNameIndex = fileMetadataNames.indexOf(testMetaData[1].toLowerCase());
-                     if (fileNameIndex == -1) {
-@@= skipped -12, +11 lines =@@
-                     else {
-                         continue;
-                     }
--                    // New metadata statement after having collected some code to go with the previous metadata
-                     if (currentFileName) {
--                        // Store result file
-                         var newTestFile = {
-                             content: currentFileContent,
-                             name: currentFileName,
-@@= skipped -11, +9 lines =@@
-                             references: refs
-                         };
-                         files.push(newTestFile);
--                        // Reset local data
-                         currentFileContent = null;
-                         currentFileOptions = {};
-                         currentFileName = testMetaData[2];
-                         refs = [];
-                     }
-                     else {
--                        // First metadata marker in the file
-                         currentFileName = testMetaData[2];
-                     }
-                 }
-                 else {
--                    // Subfile content line
--                    // Append to the current subfile content, inserting a newline needed
-                     if (currentFileContent === null) {
-                         currentFileContent = '';
-                     }
-                     else {
--                        // End-of-line
-                         currentFileContent = currentFileContent + '\n';
-                     }
-                     currentFileContent = currentFileContent + line;
-                 }
-             }
--            // normalize the filename for the single file case
-             currentFileName = files.length > 0 ? currentFileName : '0.ts';
--            // EOF, push whatever remains
-             var newTestFile = {
-                 content: currentFileContent || '',
-                 name: currentFileName,
-@@= skipped -39, +32 lines =@@
+         optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm; // multiple matches on multiple lines
+         // List of allowed metadata names
+@@= skipped -106, +106 lines =@@
          }
          TestCaseParser.makeUnitsFromTest = makeUnitsFromTest;
      })(TestCaseParser = Harness.TestCaseParser || (Harness.TestCaseParser = {}));
@@ -1200,34 +918,23 @@
              this.version++;
 -        };
 -        ScriptInfo.prototype.editContent = function (minChar, limChar, newText) {
--            // Apply edits
 +        }
 +        editContent(minChar, limChar, newText) {
+             // Apply edits
              var prefix = this.content.substring(0, minChar);
              var middle = newText;
-             var suffix = this.content.substring(limChar);
-             this.content = prefix + middle + suffix;
--            // Store edit range + new length of script
-             this.editRanges.push({
-                 length: this.content.length,
-                 editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)
-@@= skipped -29, +32 lines =@@
-             if (this.editRanges.length > this.maxScriptVersions) {
-                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
+@@= skipped -31, +36 lines =@@
              }
--            // Update version #
+             // Update version #
              this.version++;
 -        };
 -        ScriptInfo.prototype.getEditRangeSinceVersion = function (version) {
 +        }
 +        getEditRangeSinceVersion(version) {
              if (this.version == version) {
--                // No edits!
+                 // No edits!
                  return null;
-             }
-             var initialEditRangeIndex = this.editRanges.length - (this.version - version);
-             if (initialEditRangeIndex < 0 || initialEditRangeIndex >= this.editRanges.length) {
--                // Too far away from what we know
+@@= skipped -12, +12 lines =@@
                  return TypeScript.ScriptEditRange.unknown();
              }
              var entries = this.editRanges.slice(initialEditRangeIndex);
@@ -1279,7 +986,7 @@
              for (var i = 0; i < this.scripts.length; i++) {
                  if (this.scripts[i].name == name) {
                      this.scripts[i].updateContent(content, isResident);
-@@= skipped -50, +41 lines =@@
+@@= skipped -36, +30 lines =@@
                  }
              }
              this.addScript(name, content, isResident);
@@ -1300,35 +1007,34 @@
 +        getScriptContent(scriptIndex) {
              return this.scripts[scriptIndex].content;
 -        };
--        //////////////////////////////////////////////////////////////////////
--        // ILogger implementation
--        //
++        }
+         //////////////////////////////////////////////////////////////////////
+         // ILogger implementation
+         //
 -        TypeScriptLS.prototype.information = function () { return false; };
 -        TypeScriptLS.prototype.debug = function () { return true; };
 -        TypeScriptLS.prototype.warning = function () { return true; };
 -        TypeScriptLS.prototype.error = function () { return true; };
 -        TypeScriptLS.prototype.fatal = function () { return true; };
 -        TypeScriptLS.prototype.log = function (s) {
--            // For debugging...
--            //IO.printLine("TypeScriptLS:" + s);
--        };
--        //////////////////////////////////////////////////////////////////////
--        // ILanguageServiceShimHost implementation
--        //
--        TypeScriptLS.prototype.getCompilationSettings = function () {
--            return ""; // i.e. default settings
--        };
--        TypeScriptLS.prototype.getScriptCount = function () {
-+        }
 +        information() { return false; }
 +        debug() { return true; }
 +        warning() { return true; }
 +        error() { return true; }
 +        fatal() { return true; }
 +        log(s) {
+             // For debugging...
+             //IO.printLine("TypeScriptLS:" + s);
+-        };
 +        }
+         //////////////////////////////////////////////////////////////////////
+         // ILanguageServiceShimHost implementation
+         //
+-        TypeScriptLS.prototype.getCompilationSettings = function () {
 +        getCompilationSettings() {
-+            return "";
+             return ""; // i.e. default settings
+-        };
+-        TypeScriptLS.prototype.getScriptCount = function () {
 +        }
 +        getScriptCount() {
              return this.scripts.length;
@@ -1365,20 +1071,20 @@
              var result = (range.minChar + "," + range.limChar + "," + range.delta);
              return result;
 -        };
--        /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
--         *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
--         */
--        TypeScriptLS.prototype.getLanguageService = function () {
 +        }
+         /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
+          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
+          */
+-        TypeScriptLS.prototype.getLanguageService = function () {
 +        getLanguageService() {
              var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
              ls.refresh(true);
              this.ls = ls;
              return ls;
 -        };
--        /** Parse file given its source text */
--        TypeScriptLS.prototype.parseSourceText = function (fileName, sourceText) {
 +        }
+         /** Parse file given its source text */
+-        TypeScriptLS.prototype.parseSourceText = function (fileName, sourceText) {
 +        parseSourceText(fileName, sourceText) {
              var parser = new TypeScript.Parser();
              parser.setErrorRecovery(null);
@@ -1387,19 +1093,19 @@
              var script = parser.parse(sourceText, fileName, 0);
              return script;
 -        };
--        /** Parse a file on disk given its filename */
--        TypeScriptLS.prototype.parseFile = function (fileName) {
 +        }
+         /** Parse a file on disk given its filename */
+-        TypeScriptLS.prototype.parseFile = function (fileName) {
 +        parseFile(fileName) {
              var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName));
              return this.parseSourceText(fileName, sourceText);
 -        };
--        /**
--         * @param line 1 based index
--         * @param col 1 based index
--        */
--        TypeScriptLS.prototype.lineColToPosition = function (fileName, line, col) {
 +        }
+         /**
+          * @param line 1 based index
+          * @param col 1 based index
+         */
+-        TypeScriptLS.prototype.lineColToPosition = function (fileName, line, col) {
 +        lineColToPosition(fileName, line, col) {
              var script = this.ls.languageService.getScriptAST(fileName);
              assert.notNull(script);
@@ -1408,12 +1114,12 @@
              assert.is(line <= script.locationInfo.lineMap.length);
              return TypeScript.getPositionFromZeroBasedLineColumn(script, line - 1, col - 1);
 -        };
--        /**
--         * @param line 0 based index
--         * @param col 0 based index
--        */
--        TypeScriptLS.prototype.positionToZeroBasedLineCol = function (fileName, position) {
 +        }
+         /**
+          * @param line 0 based index
+          * @param col 0 based index
+         */
+-        TypeScriptLS.prototype.positionToZeroBasedLineCol = function (fileName, position) {
 +        positionToZeroBasedLineCol(fileName, position) {
              var script = this.ls.languageService.getScriptAST(fileName);
              assert.notNull(script);
@@ -1422,9 +1128,9 @@
              assert.is(result.col >= 0);
              return result;
 -        };
--        /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
--        TypeScriptLS.prototype.checkEdits = function (sourceFileName, baselineFileName, edits) {
 +        }
+         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
+-        TypeScriptLS.prototype.checkEdits = function (sourceFileName, baselineFileName, edits) {
 +        checkEdits(sourceFileName, baselineFileName, edits) {
              var script = readFile(sourceFileName);
              var formattedScript = this.applyEdits(script, edits);
@@ -1432,50 +1138,26 @@
              assert.noDiff(formattedScript, baseline);
              assert.equal(formattedScript, baseline);
 -        };
--        /** Apply an array of text edits to a string, and return the resulting string. */
--        TypeScriptLS.prototype.applyEdits = function (content, edits) {
 +        }
+         /** Apply an array of text edits to a string, and return the resulting string. */
+-        TypeScriptLS.prototype.applyEdits = function (content, edits) {
 +        applyEdits(content, edits) {
              var result = content;
              edits = this.normalizeEdits(edits);
              for (var i = edits.length - 1; i >= 0; i--) {
-@@= skipped -111, +88 lines =@@
+@@= skipped -111, +111 lines =@@
                  result = prefix + middle + suffix;
              }
              return result;
 -        };
--        /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
--        TypeScriptLS.prototype.normalizeEdits = function (edits) {
 +        }
+         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
+-        TypeScriptLS.prototype.normalizeEdits = function (edits) {
 +        normalizeEdits(edits) {
              var result = [];
              function mapEdits(edits) {
                  var result = [];
-@@= skipped -21, +20 lines =@@
-             var next = 1;
-             while (current < temp.length) {
-                 var currentEdit = temp[current].edit;
--                // Last edit
-                 if (next >= temp.length) {
-                     result.push(currentEdit);
-                     current++;
-@@= skipped -8, +7 lines =@@
-                 }
-                 var nextEdit = temp[next].edit;
-                 var gap = nextEdit.minChar - currentEdit.limChar;
--                // non-overlapping edits
-                 if (gap >= 0) {
-                     result.push(currentEdit);
-                     current = next;
-                     next++;
-                     continue;
-                 }
--                // overlapping edits: for now, we only support ignoring an next edit 
--                // entirely contained in the current edit.
-                 if (currentEdit.limChar >= nextEdit.limChar) {
-                     next++;
-                     continue;
-@@= skipped -18, +15 lines =@@
+@@= skipped -47, +47 lines =@@
                  }
              }
              return result;
@@ -1490,89 +1172,27 @@
 +        }
 +    }
      Harness.TypeScriptLS = TypeScriptLS;
--    // Describe/it definitions
+     // Describe/it definitions
      function describe(description, block) {
-         var newScenario = new Scenario(description, block);
-         if (Runnable.currentStack.length === 0) {
-@@= skipped -29, +27 lines =@@
-         currentRun.run();
+@@= skipped -30, +29 lines =@@
      }
      Harness.run = run;
--    /** Runs TypeScript or Javascript code. */
+     /** Runs TypeScript or Javascript code. */
 -    var Runner;
 +    let Runner;
      (function (Runner) {
          function runCollateral(path, callback) {
              path = switchToForwardSlashes(path);
-@@= skipped -9, +8 lines =@@
-         }
-         Runner.runCollateral = runCollateral;
-         function runJSString(code, callback) {
--            // List of names that get overriden by various test code we eval
-             var dangerNames = ['Array'];
-             var globalBackup = {};
-             var n = null;
-@@= skipped -29, +28 lines =@@
-         }
+@@= skipped -38, +38 lines =@@
          Runner.runString = runString;
      })(Runner = Harness.Runner || (Harness.Runner = {}));
--    /** Support class for baseline files */
+     /** Support class for baseline files */
 -    var Baseline;
 +    let Baseline;
      (function (Baseline) {
          var reportFilename = 'baseline-report.html';
          var firstRun = true;
-@@= skipped -41, +40 lines =@@
-         Baseline.reset = reset;
-         function prepareBaselineReport() {
-             var reportContent = htmlLeader;
--            // Delete the baseline-report.html file if needed
-             if (IO.fileExists(reportFilename)) {
-                 reportContent = IO.readFile(reportFilename);
-                 reportContent = reportContent.replace(htmlTrailer, '');
-@@= skipped -11, +10 lines =@@
-             return reportContent;
-         }
-         function generateActual(actualFilename, generateContent) {
--            // Create folders if needed
-             IO.createDirectory(IO.dirName(IO.dirName(actualFilename)));
-             IO.createDirectory(IO.dirName(actualFilename));
--            // Delete the actual file in case it fails
-             if (IO.fileExists(actualFilename)) {
-                 IO.deleteFile(actualFilename);
-             }
-@@= skipped -11, +9 lines =@@
-             if (actual === undefined) {
-                 throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
-             }
--            // Store the content in the 'local' folder so we
--            // can accept it later (manually)
-             if (actual !== null) {
-                 IO.writeFile(actualFilename, actual);
-             }
-             return actual;
-         }
-         function compareToBaseline(actual, relativeFilename, opts) {
--            // actual is now either undefined (the generator had an error), null (no file requested),
--            // or some real output of the function
-             if (actual === undefined) {
--                // Nothing to do
-                 return;
-             }
-             var refFilename = referencePath(relativeFilename);
-@@= skipped -31, +26 lines =@@
-         }
-         function writeComparison(expected, actual, relativeFilename, actualFilename, descriptionForDescribe) {
-             if (expected != actual) {
--                // Overwrite & issue error
-                 var errMsg = 'The baseline file ' + relativeFilename + ' has changed. Please refer to baseline-report.html and ';
-                 errMsg += 'either fix the regression (if unintended) or run nmake baseline-accept (if intended).';
-                 var refFilename = referencePath(relativeFilename);
--                // Append diff to the report
-                 var diff = new Diff.StringDiff(expected, actual);
-                 var header = '<h2>' + descriptionForDescribe + '</h2>';
-                 header += '<h4>Left file: ' + actualFilename + '; Right file: ' + refFilename + '</h4>';
-@@= skipped -15, +13 lines =@@
+@@= skipped -108, +108 lines =@@
                  throw new Error(errMsg);
              }
          }

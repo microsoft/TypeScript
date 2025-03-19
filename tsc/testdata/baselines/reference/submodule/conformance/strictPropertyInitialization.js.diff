@@ -5,7 +5,7 @@
  
  //// [strictPropertyInitialization.js]
 -"use strict";
--// Properties with non-undefined types require initialization
+ // Properties with non-undefined types require initialization
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -25,24 +25,24 @@
 -        _C1_h.set(this, void 0); //Error
 -        _C1_i.set(this, void 0);
 -    }
-+    a;
++    a; // Error
 +    b;
-+    c;
++    c; // Error
 +    d;
-+    #f;
++    #f; //Error
 +    #g;
-+    #h;
++    #h; //Error
 +    #i;
  }
 -_C1_f = new WeakMap(), _C1_g = new WeakMap(), _C1_h = new WeakMap(), _C1_i = new WeakMap();
--// No strict initialization checks for static members
+ // No strict initialization checks for static members
  class C3 {
 +    static a;
 +    static b;
 +    static c;
 +    static d;
  }
--// Initializer satisfies strict initialization check
+ // Initializer satisfies strict initialization check
  class C4 {
 -    constructor() {
 -        this.a = 0;
@@ -60,7 +60,7 @@
 +    #f = "abc";
  }
 -_C4_d = new WeakMap(), _C4_e = new WeakMap(), _C4_f = new WeakMap();
--// Assignment in constructor satisfies strict initialization check
+ // Assignment in constructor satisfies strict initialization check
  class C5 {
 +    a;
 +    #b;
@@ -72,9 +72,9 @@
      }
  }
 -_C5_b = new WeakMap();
--// All code paths must contain assignment
+ // All code paths must contain assignment
  class C6 {
-+    a;
++    a; // Error
 +    #b;
      constructor(cond) {
 -        _C6_b.set(this, void 0);
@@ -104,21 +104,21 @@
      }
  }
 -_C7_b = new WeakMap();
--// Properties with string literal names aren't checked
+ // Properties with string literal names aren't checked
  class C8 {
-+    a;
++    a; // Error
 +    "b";
 +    0;
  }
--// No strict initialization checks for abstract members
+ // No strict initialization checks for abstract members
  class C9 {
 +    a;
 +    b;
 +    c;
 +    d;
  }
--// Properties with non-undefined types must be assigned before they can be accessed
--// within their constructor
+ // Properties with non-undefined types must be assigned before they can be accessed
+ // within their constructor
  class C10 {
 +    a;
 +    b;
@@ -126,12 +126,10 @@
 +    #d;
      constructor() {
 -        _C10_d.set(this, void 0);
--        let x = this.a; // Error
--        this.a = this.b; // Error
+         let x = this.a; // Error
+         this.a = this.b; // Error
 -        this.b = __classPrivateFieldGet(this, _C10_d, "f"); //Error
-+        let x = this.a;
-+        this.a = this.b;
-+        this.b = this.#d;
++        this.b = this.#d; //Error
          this.b = x;
 -        __classPrivateFieldSet(this, _C10_d, x, "f");
 +        this.#d = x;
@@ -159,7 +157,7 @@
      constructor() {
          this[a] = 1;
          this[b] = 1;
-@@= skipped -115, +107 lines =@@
+@@= skipped -115, +116 lines =@@
      E["B"] = "B";
  })(E || (E = {}));
  class C13 {

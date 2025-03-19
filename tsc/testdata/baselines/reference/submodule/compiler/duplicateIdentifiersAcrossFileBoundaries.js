@@ -52,10 +52,10 @@ var N;
 })(N || (N = {}));
 //// [file2.js]
 class I {
-}
-function C2() { }
+} // error -- cannot merge interface with non-ambient class
+function C2() { } // error -- cannot merge function with non-ambient class
 class f {
-}
+} // error -- cannot merge function with non-ambient class
 var v = 3;
 var Foo;
 (function (Foo) {

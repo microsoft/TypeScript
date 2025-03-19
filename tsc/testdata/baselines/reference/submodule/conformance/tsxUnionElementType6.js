@@ -39,6 +39,7 @@ function SFC2(prop) {
 }
 var EmptySFCComp = EmptySFC1 || EmptySFC2;
 var SFC2AndEmptyComp = SFC2 || EmptySFC1;
+// Error
 let a = <EmptySFCComp x/>;
 let b = <SFC2AndEmptyComp x="hi"/>;
 let c = <SFC2AndEmptyComp />;

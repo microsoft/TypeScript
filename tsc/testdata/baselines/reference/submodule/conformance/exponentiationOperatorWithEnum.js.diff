@@ -1,18 +1,9 @@
 --- old.exponentiationOperatorWithEnum.js
 +++ new.exponentiationOperatorWithEnum.js
-@@= skipped -26, +26 lines =@@
- var r12 = 1 ** E.b;
- 
- //// [exponentiationOperatorWithEnum.js]
--// operands of an enum type are treated as having the primitive type Number.
- var E;
- (function (E) {
-     E[E["a"] = 0] = "a";
-@@= skipped -9, +8 lines =@@
- var a;
+@@= skipped -36, +36 lines =@@
  var b;
  var c;
--// operator **
+ // operator **
 -var r1 = Math.pow(c, a);
 -var r2 = Math.pow(c, b);
 -var r3 = Math.pow(c, c);

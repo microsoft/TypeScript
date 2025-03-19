@@ -5,4 +5,5 @@
 /*1*/ with /*2*/ ( /*3*/ false /*4*/ ) /*5*/ {}
 
 //// [withStatementInternalComments.js]
-with (false) { }
+// @ts-ignore
+/*1*/ with /*2*/ ( /*3*/false /*4*/) /*5*/ { }

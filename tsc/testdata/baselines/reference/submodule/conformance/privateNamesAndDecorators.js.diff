@@ -14,8 +14,8 @@
 -}());
 -_A_foo = new WeakMap(), _A_instances = new WeakSet(), _A_bar = function _A_bar() { };
 +class A {
-+    @dec
++    @dec // Error
 +    #foo = 1;
-+    @dec
++    @dec // Error
 +    #bar() { }
 +}

@@ -332,6 +332,7 @@ function f21() {
 
 
 //// [tryCatchFinallyControlFlow.js]
+// Repro from #34797
 function f1() {
     let a = null;
     try {
@@ -356,9 +357,9 @@ function f2() {
         throw e;
     }
     finally {
-        x;
+        x; // 0 | 1 | 2
     }
-    x;
+    x; // 1
 }
 function f3() {
     let x = 0;
@@ -370,9 +371,9 @@ function f3() {
         return;
     }
     finally {
-        x;
+        x; // 0 | 1 | 2
     }
-    x;
+    x; // 1
 }
 function f4() {
     let x = 0;
@@ -383,9 +384,9 @@ function f4() {
         x = 2;
     }
     finally {
-        x;
+        x; // 0 | 1 | 2
     }
-    x;
+    x; // 1 | 2
 }
 function f5() {
     let x = 0;
@@ -397,9 +398,9 @@ function f5() {
         x = 2;
     }
     finally {
-        x;
+        x; // 0 | 1 | 2
     }
-    x;
+    x; // 2
 }
 function f6() {
     let x = 0;
@@ -411,9 +412,9 @@ function f6() {
         return;
     }
     finally {
-        x;
+        x; // 0 | 1 | 2
     }
-    x;
+    x; // 1
 }
 function f7() {
     let x = 0;
@@ -426,9 +427,9 @@ function f7() {
         return;
     }
     finally {
-        x;
+        x; // 0 | 1 | 2
     }
-    x;
+    x; // Unreachable
 }
 function f8() {
     let x = 0;
@@ -438,11 +439,11 @@ function f8() {
             return;
         }
         finally {
-            x;
+            x; // 0 | 1
         }
-        x;
+        x; // Unreachable
     })();
-    x;
+    x; // 1
 }
 function f9() {
     let x = 0;
@@ -454,12 +455,12 @@ function f9() {
             }
         }
         finally {
-            x;
+            x; // 0 | 1
         }
-        x;
+        x; // 0
         x = 2;
     })();
-    x;
+    x; // 1 | 2
 }
 function f10() {
     let x = 0;
@@ -472,12 +473,12 @@ function f10() {
             x = 2;
         }
         finally {
-            x;
+            x; // 0 | 1 | 2
         }
-        x;
+        x; // 2
         x = 3;
     })();
-    x;
+    x; // 1 | 3
 }
 function f11() {
     let x = 0;
@@ -493,19 +494,19 @@ function f11() {
             }
         }
         catch (e) {
-            x;
+            x; // 0 | 1 | 2
             x = 3;
         }
         finally {
-            x;
+            x; // 0 | 1 | 2 | 3
             if (!!true) {
                 x = 4;
             }
         }
-        x;
+        x; // 0 | 3 | 4
         x = 5;
     })();
-    x;
+    x; // 1 | 4 | 5
 }
 function f12() {
     let x = 0;
@@ -521,11 +522,11 @@ function f12() {
             }
         }
         catch (e) {
-            x;
+            x; // 0 | 1 | 2
             x = 3;
         }
         finally {
-            x;
+            x; // 0 | 1 | 2 | 3
             if (!!true) {
                 x = 4;
                 return;
@@ -536,13 +537,14 @@ function f12() {
             }
             x = 6;
             return;
-            x;
+            x; // unreachable
         }
-        x;
-        x = 7;
+        x; // unreachable
+        x = 7; // no effect
     })();
-    x;
+    x; // 4 | 5 | 6
 }
+// Repro from #35644
 const main = () => {
     let hoge = undefined;
     try {
@@ -559,6 +561,7 @@ const main = () => {
         return;
     }
 };
+// Repro from #36828
 function t1() {
     const x = (() => {
         try {
@@ -567,9 +570,9 @@ function t1() {
         catch (e) {
             return null;
         }
-        x;
+        x; // Unreachable
     })();
-    x;
+    x; // Reachable
 }
 function notallowed(arg) {
     let state = { tag: "one" };
@@ -600,19 +603,19 @@ function f20() {
                 if (!!true)
                     x = 4;
             }
-            x;
+            x; // 3 | 4
         }
         finally {
             if (!!true)
                 x = 5;
         }
-        x;
+        x; // 3 | 4 | 5
     }
     finally {
         if (!!true)
             x = 6;
     }
-    x;
+    x; // 3 | 4 | 5 | 6
 }
 function f21() {
     let x = 0;
@@ -627,15 +630,15 @@ function f21() {
                 if (!!true)
                     x = 4;
             }
-            x;
+            x; // 3 | 4
         }
         finally {
             if (!!true)
                 x = 5;
         }
-        x;
+        x; // 3 | 4 | 5
     }
     catch (e) {
-        x;
+        x; // 0 | 1 | 2 | 3 | 4 | 5
     }
 }

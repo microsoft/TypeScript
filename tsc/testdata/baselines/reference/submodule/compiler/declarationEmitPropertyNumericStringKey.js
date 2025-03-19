@@ -15,6 +15,7 @@ const obj2 = { [hundredNum]: "bar" };
 
 
 //// [declarationEmitPropertyNumericStringKey.js]
+// https://github.com/microsoft/TypeScript/issues/55292
 const STATUS = {
     ["404"]: "not found",
 };

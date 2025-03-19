@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Derived class with different structures
+ // Derived class with different structures
 -var C1 = /** @class */ (function () {
 -    function C1() {
 -    }
@@ -41,18 +41,12 @@
 +}
 +let var1;
  if (var1.constructor === C1) {
--    var1; // never
--    var1.property1; // error
-+    var1;
-+    var1.property1;
+     var1; // never
+     var1.property1; // error
+@@= skipped -38, +17 lines =@@
+     var1.property1; // number
  }
- if (var1.constructor === C2) {
--    var1; // C2
--    var1.property1; // number
-+    var1;
-+    var1.property1;
- }
--// Derived classes with the same structure
+ // Derived classes with the same structure
 -var C3 = /** @class */ (function () {
 -    function C3() {
 -    }
@@ -72,14 +66,12 @@
 +}
 +let var2;
  if (var2.constructor === C3) {
--    var2; // never
-+    var2;
+     var2; // never
  }
- if (var2.constructor === C4) {
--    var2; // C4
-+    var2;
+@@= skipped -20, +12 lines =@@
+     var2; // C4
  }
--// Disjointly structured classes
+ // Disjointly structured classes
 -var C5 = /** @class */ (function () {
 -    function C5() {
 -    }
@@ -99,14 +91,12 @@
 +}
 +let let3;
  if (let3.constructor === C5) {
--    let3; // never
-+    let3;
+     let3; // never
  }
- if (let3.constructor === C6) {
--    let3; // C6
-+    let3;
+@@= skipped -18, +14 lines =@@
+     let3; // C6
  }
--// Classes with the same structure
+ // Classes with the same structure
 -var C7 = /** @class */ (function () {
 -    function C7() {
 -    }
@@ -126,10 +116,5 @@
 +}
 +let let4;
  if (let4.constructor === C7) {
--    let4; // never
-+    let4;
- }
- if (let4.constructor === C8) {
--    let4; // C8
-+    let4;
+     let4; // never
  }

@@ -16,4 +16,4 @@ var Obj1: Obj1type;
 
 //// [file.jsx]
 var Obj1;
-<Obj1 x={10}/>;
+<Obj1 x={10}/>; // Error

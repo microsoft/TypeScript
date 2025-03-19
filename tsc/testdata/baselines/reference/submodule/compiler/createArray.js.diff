@@ -14,9 +14,3 @@
  new C[];
  var ba = new boolean[];
  var sa = new string[];
-@@= skipped -14, +11 lines =@@
- if (ba[14]) {
-     na[2] = f(sa[3]);
- }
--new C[1]; // not an error
-+new C[1];

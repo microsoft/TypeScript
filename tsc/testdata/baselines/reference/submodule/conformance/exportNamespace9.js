@@ -45,7 +45,7 @@ exports.A = A;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const c_1 = require("./c");
-c_1.A;
+c_1.A; // Ok
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

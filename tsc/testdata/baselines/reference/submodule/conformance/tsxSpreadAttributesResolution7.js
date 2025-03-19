@@ -35,6 +35,7 @@ class TextComponent extends React.Component {
         return <span>Some Text..</span>;
     }
 }
+// OK
 const textPropsFalse = {
     editable: false
 };

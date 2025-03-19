@@ -38,6 +38,7 @@ const obj = {};
 const obj1 = {
     x: 2
 };
+// Error
 let y = <Opt {...obj} x={3}/>;
 let y1 = <Opt {...obj1} x="Hi"/>;
 let y2 = <Opt {...obj1} x={3}/>;

@@ -11,6 +11,7 @@ for (const comp of list) {
 }
 
 //// [optionalChainingInLoop.js]
+// https://github.com/microsoft/TypeScript/issues/40643
 const list = [];
 for (const comp of list) {
     comp.sp.y = comp.sp.r.find((k) => k.c == (comp.xp ? '1' : '0'));

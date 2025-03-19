@@ -324,39 +324,48 @@ export {x};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+// cjs format file
 const x = 1;
 exports.x = x;
 //// [index.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+// cjs format file
 const x = 1;
 exports.x = x;
 //// [index.mjs]
+// esm format file
 const x = 1;
 export { x };
 //// [index.js]
+// cjs format file
 const x = 1;
 export { x };
 //// [index.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+// cjs format file
 const x = 1;
 exports.x = x;
 //// [index.mjs]
+// esm format file
 const x = 1;
 export { x };
 //// [index.js]
+// esm format file
 const x = 1;
 export { x };
 //// [index.mjs]
+// esm format file
 const x = 1;
 export { x };
 //// [index.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+// cjs format file
 const x = 1;
 exports.x = x;
 //// [index.cjs]
@@ -386,6 +395,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+// ESM-format imports below should issue errors
 const m1 = __importStar(require("./index.js"));
 const m2 = __importStar(require("./index.mjs"));
 const m3 = __importStar(require("./index.cjs"));
@@ -398,6 +408,7 @@ const m9 = __importStar(require("./subfolder2/index.cjs"));
 const m10 = __importStar(require("./subfolder2/another/index.js"));
 const m11 = __importStar(require("./subfolder2/another/index.mjs"));
 const m12 = __importStar(require("./subfolder2/another/index.cjs"));
+// The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
 const m13 = __importStar(require("./"));
 const m14 = __importStar(require("./index"));
 const m15 = __importStar(require("./subfolder"));
@@ -432,6 +443,7 @@ void m20;
 void m21;
 void m22;
 void m23;
+// These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 const m24 = require("./");
 const m25 = require("./index");
 const m26 = require("./subfolder");
@@ -454,6 +466,7 @@ void m31;
 void m32;
 void m33;
 void m34;
+// These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 const _m36 = import("./index");
 const _m37 = import("./subfolder");
@@ -465,6 +478,7 @@ const _m42 = import("./subfolder2/index");
 const _m43 = import("./subfolder2/another");
 const _m44 = import("./subfolder2/another/");
 const _m45 = import("./subfolder2/another/index");
+// cjs format file
 const x = 1;
 exports.x = x;
 //// [index.js]
@@ -482,6 +496,7 @@ import * as m9 from "./subfolder2/index.cjs";
 import * as m10 from "./subfolder2/another/index.js";
 import * as m11 from "./subfolder2/another/index.mjs";
 import * as m12 from "./subfolder2/another/index.cjs";
+// The next ones shouldn't all work - esm format files have no index resolution or extension resolution
 import * as m13 from "./";
 import * as m14 from "./index";
 import * as m15 from "./subfolder";
@@ -516,6 +531,7 @@ void m20;
 void m21;
 void m22;
 void m23;
+// These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 const m24 = __require("./");
 const m25 = __require("./index");
 const m26 = __require("./subfolder");
@@ -538,6 +554,7 @@ void m31;
 void m32;
 void m33;
 void m34;
+// These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 const _m36 = import("./index");
 const _m37 = import("./subfolder");
@@ -549,6 +566,7 @@ const _m42 = import("./subfolder2/index");
 const _m43 = import("./subfolder2/another");
 const _m44 = import("./subfolder2/another/");
 const _m45 = import("./subfolder2/another/index");
+// esm format file
 const x = 1;
 export { x };
 //// [index.mjs]
@@ -566,6 +584,7 @@ import * as m9 from "./subfolder2/index.cjs";
 import * as m10 from "./subfolder2/another/index.js";
 import * as m11 from "./subfolder2/another/index.mjs";
 import * as m12 from "./subfolder2/another/index.cjs";
+// The next ones should all fail - esm format files have no index resolution or extension resolution
 import * as m13 from "./";
 import * as m14 from "./index";
 import * as m15 from "./subfolder";
@@ -600,6 +619,7 @@ void m20;
 void m21;
 void m22;
 void m23;
+// These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 const m24 = __require("./");
 const m25 = __require("./index");
 const m26 = __require("./subfolder");
@@ -622,6 +642,7 @@ void m31;
 void m32;
 void m33;
 void m34;
+// These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 const _m36 = import("./index");
 const _m37 = import("./subfolder");
@@ -633,5 +654,6 @@ const _m42 = import("./subfolder2/index");
 const _m43 = import("./subfolder2/another");
 const _m44 = import("./subfolder2/another/");
 const _m45 = import("./subfolder2/another/index");
+// esm format file
 const x = 1;
 export { x };

@@ -1,10 +1,9 @@
 --- old.objectTypeWithNumericProperty.js
 +++ new.objectTypeWithNumericProperty.js
-@@= skipped -45, +45 lines =@@
- var r4 = b['1.1'];
+@@= skipped -46, +46 lines =@@
  
  //// [objectTypeWithNumericProperty.js]
--// no errors here
+ // no errors here
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

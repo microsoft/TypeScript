@@ -134,15 +134,26 @@ foo(
 );
 
 //// [fatarrowfunctionsOptionalArgs.js]
+// valid
+// no params
 () => 1;
+// one param, no type
 (arg) => 2;
+// one param, no type
 arg => 2;
+// one param, no type with default value
 (arg = 1) => 3;
+// one param, no type, optional
 (arg) => 4;
+// typed param
 (arg) => 5;
+// typed param with default value
 (arg = 0) => 6;
+// optional param
 (arg) => 7;
+// var arg param
 (...arg) => 8;
+// multiple arguments
 (arg1, arg2) => 12;
 (arg1 = 1, arg2 = 3) => 13;
 (arg1, arg2) => 14;
@@ -151,6 +162,7 @@ arg => 2;
 (arg1, arg2) => 17;
 (arg1, ...arg2) => 18;
 (arg1, arg2) => 19;
+// in paren
 (() => 21);
 ((arg) => 22);
 ((arg = 1) => 23);
@@ -159,7 +171,9 @@ arg => 2;
 ((arg = 0) => 26);
 ((arg) => 27);
 ((...arg) => 28);
+// in multiple paren
 (((((arg) => { return 32; }))));
+// in ternary exression
 false ? () => 41 : null;
 false ? (arg) => 42 : null;
 false ? (arg = 1) => 43 : null;
@@ -168,6 +182,7 @@ false ? (arg) => 45 : null;
 false ? (arg) => 46 : null;
 false ? (arg = 0) => 47 : null;
 false ? (...arg) => 48 : null;
+// in ternary exression within paren
 false ? (() => 51) : null;
 false ? ((arg) => 52) : null;
 false ? ((arg = 1) => 53) : null;
@@ -176,6 +191,7 @@ false ? ((arg) => 55) : null;
 false ? ((arg) => 56) : null;
 false ? ((arg = 0) => 57) : null;
 false ? ((...arg) => 58) : null;
+// ternary exression's else clause
 false ? null : () => 61;
 false ? null : (arg) => 62;
 false ? null : (arg = 1) => 63;
@@ -184,10 +200,13 @@ false ? null : (arg) => 65;
 false ? null : (arg) => 66;
 false ? null : (arg = 0) => 67;
 false ? null : (...arg) => 68;
+// nested ternary expressions
 ((a) => { return a; }) ? (b) => { return b; } : (c) => { return c; };
+//multiple levels
 (a) => { return a; };
 (b) => (c) => 81;
 (c) => (d) => 82;
+// In Expressions
 ((arg) => 90) instanceof Function;
 ((arg = 1) => 91) instanceof Function;
 ((arg) => 92) instanceof Function;
@@ -205,6 +224,7 @@ false ? null : (...arg) => 68;
 ((...arg) => 0) + '' + ((...arg) => 107);
 ((arg1, arg2) => 0) + '' + ((arg1, arg2) => 108);
 ((arg1, ...arg2) => 0) + '' + ((arg1, ...arg2) => 108);
+// Function Parameters
 function foo(...arg) { }
 foo((a) => 110, ((a) => 111), (a) => {
     return 112;

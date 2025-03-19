@@ -14,6 +14,7 @@ function foo(x = class {
 }) {
     return undefined;
 }
+// Should not infer string because it is a static property
 foo(class {
     static prop = "hello";
 }).length;

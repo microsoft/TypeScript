@@ -36,4 +36,4 @@ for (let y in obj) {
         break;
     }
 }
-x;
+x; // RegExp | string | number | boolean

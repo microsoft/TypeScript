@@ -26,7 +26,7 @@
 +}
 +class Foo extends Base {
 +    constructor() {
-+        super(this);
++        super(this); // error: "super" has to be called before "this" accessing
      }
 -    return Base;
 -}());
@@ -39,7 +39,7 @@
 +class Foo2 extends Base {
 +    p = 0;
 +    constructor() {
-+        super(this);
++        super(this); // error
      }
 -    return Foo;
 -}(Base));
@@ -54,7 +54,7 @@
 +    p;
 +    constructor(p) {
 +        this.p = p;
-+        super(this);
++        super(this); // error
      }
 -    return Foo2;
 -}(Base));

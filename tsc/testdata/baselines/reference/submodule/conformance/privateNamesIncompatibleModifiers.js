@@ -38,28 +38,28 @@ abstract class B {
 
 //// [privateNamesIncompatibleModifiers.js]
 class A {
-    #foo = 3;
-    #bar = 3;
-    #baz = 3;
-    #qux = 3;
-    #fooMethod() { return 3; }
-    #barMethod() { return 3; }
-    #bazMethod() { return 3; }
-    #quxMethod() { return 3; }
-    async #asyncMethod() { return 1; }
-    *#genMethod() { return 1; }
-    async *#asyncGenMethod() { return 1; }
-    get #fooProp() { return 3; }
-    set #fooProp(value) { }
-    get #barProp() { return 3; }
-    set #barProp(value) { }
-    get #bazProp() { return 3; }
-    set #bazProp(value) { }
-    get #quxProp() { return 3; }
-    set #quxProp(value) { }
-    async get #asyncProp() { return 1; }
-    async set #asyncProp(value) { }
+    #foo = 3; // Error
+    #bar = 3; // Error
+    #baz = 3; // Error
+    #qux = 3; // OK
+    #fooMethod() { return 3; } // Error
+    #barMethod() { return 3; } // Error
+    #bazMethod() { return 3; } // Error
+    #quxMethod() { return 3; } // Error
+    async #asyncMethod() { return 1; } //OK
+    *#genMethod() { return 1; } //OK
+    async *#asyncGenMethod() { return 1; } //OK
+    get #fooProp() { return 3; } // Error
+    set #fooProp(value) { } // Error
+    get #barProp() { return 3; } // Error
+    set #barProp(value) { } // Error
+    get #bazProp() { return 3; } // Error
+    set #bazProp(value) { } // Error
+    get #quxProp() { return 3; } // Error
+    set #quxProp(value) { } // Error
+    async get #asyncProp() { return 1; } // Error
+    async set #asyncProp(value) { } // Error
 }
 class B {
-    #quux = 3;
+    #quux = 3; // Error
 }

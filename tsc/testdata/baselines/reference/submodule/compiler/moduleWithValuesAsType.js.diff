@@ -1,8 +1,0 @@
---- old.moduleWithValuesAsType.js
-+++ new.moduleWithValuesAsType.js
-@@= skipped -11, +11 lines =@@
- (function (A) {
-     var b = 1;
- })(A || (A = {}));
--var a; // no error
-+var a;

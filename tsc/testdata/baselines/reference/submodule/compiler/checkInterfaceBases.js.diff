@@ -1,7 +1,0 @@
---- old.checkInterfaceBases.js
-+++ new.checkInterfaceBases.js
-@@= skipped -15, +15 lines =@@
- 
- 
- //// [app.js]
--///<reference path='jquery.d.ts' />

@@ -18,5 +18,5 @@ class BiMap {
     inverse() { return null; }
 }
 var b = new BiMap();
-var i = b.inverse();
+var i = b.inverse(); // used to get the type wrong here.
 var r2b = i.get(1);

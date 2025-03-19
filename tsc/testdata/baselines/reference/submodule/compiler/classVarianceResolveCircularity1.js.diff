@@ -5,7 +5,7 @@
  
  //// [classVarianceResolveCircularity1.js]
 -"use strict";
--// Issue #52813
+ // Issue #52813
 -var Bar = /** @class */ (function () {
 -    function Bar() {
 -        this.Value = callme(this).num;

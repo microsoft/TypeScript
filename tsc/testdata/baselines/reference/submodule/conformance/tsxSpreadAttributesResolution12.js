@@ -52,6 +52,7 @@ class OverWriteAttr extends React.Component {
     }
 }
 let anyobj;
+// Error
 let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1}/>;
 let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{ y: true }}/>;
 let x2 = <OverWriteAttr {...anyobj} x={3}/>;

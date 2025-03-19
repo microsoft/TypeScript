@@ -1,13 +1,9 @@
 --- old.unionTypeFromArrayLiteral.js
 +++ new.unionTypeFromArrayLiteral.js
-@@= skipped -25, +25 lines =@@
- var arr9 = [e, f]; // (E|F)[]
- 
- //// [unionTypeFromArrayLiteral.js]
--// The resulting type an array literal expression is determined as follows:
--// If the array literal is empty, the resulting type is an array type with the element type Undefined.
--// Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.
--// Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
+@@= skipped -29, +29 lines =@@
+ // If the array literal is empty, the resulting type is an array type with the element type Undefined.
+ // Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.
+ // Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -23,16 +19,12 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--var arr1 = [1, 2]; // number[]
--var arr2 = ["hello", true]; // (string | number)[]
--var arr3Tuple = [3, "three"]; // [number, string]
--var arr4Tuple = [3, "three", "hello"]; // [number, string, string]
-+var arr1 = [1, 2];
-+var arr2 = ["hello", true];
-+var arr3Tuple = [3, "three"];
-+var arr4Tuple = [3, "three", "hello"];
+ var arr1 = [1, 2]; // number[]
+ var arr2 = ["hello", true]; // (string | number)[]
+ var arr3Tuple = [3, "three"]; // [number, string]
+ var arr4Tuple = [3, "three", "hello"]; // [number, string, string]
  var arrEmpty = [];
--var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
+ var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -61,7 +53,6 @@
 -    F.prototype.foo4 = function () { };
 -    return F;
 -}(C));
-+var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"];
 +class C {
 +    foo() { }
 +}
@@ -75,11 +66,5 @@
 +    foo4() { }
 +}
  var c, d, e, f;
--var arr6 = [c, d]; // (C | D)[]
--var arr7 = [c, d, e]; // (C | D)[]
--var arr8 = [c, e]; // C[]
--var arr9 = [e, f]; // (E|F)[]
-+var arr6 = [c, d];
-+var arr7 = [c, d, e];
-+var arr8 = [c, e];
-+var arr9 = [e, f];
+ var arr6 = [c, d]; // (C | D)[]
+ var arr7 = [c, d, e]; // (C | D)[]

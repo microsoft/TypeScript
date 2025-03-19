@@ -12,4 +12,4 @@ new A().#foo = 4;               // Error
 class A {
     #foo = 3;
 }
-new A().#foo = 4;
+new A().#foo = 4; // Error

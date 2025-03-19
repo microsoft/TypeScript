@@ -1,11 +1,9 @@
 --- old.asyncArrowInClassES5.js
 +++ new.asyncArrowInClassES5.js
-@@= skipped -9, +9 lines =@@
- 
- 
+@@= skipped -11, +11 lines =@@
  //// [asyncArrowInClassES5.js]
--// https://github.com/Microsoft/TypeScript/issues/16924
--// Should capture `this`
+ // https://github.com/Microsoft/TypeScript/issues/16924
+ // Should capture `this`
 -var Test = /** @class */ (function () {
 -    function Test() {
 -    }

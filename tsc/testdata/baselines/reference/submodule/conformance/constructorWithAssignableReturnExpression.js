@@ -38,6 +38,7 @@ class G<T> {
 }
 
 //// [constructorWithAssignableReturnExpression.js]
+// a class constructor may return an expression, it must be assignable to the class instance type to be valid
 class C {
     constructor() {
         return 1;
@@ -46,7 +47,7 @@ class C {
 class D {
     x;
     constructor() {
-        return 1;
+        return 1; // error
     }
 }
 class E {
@@ -58,7 +59,7 @@ class E {
 class F {
     x;
     constructor() {
-        return { x: 1 };
+        return { x: 1 }; // error
     }
 }
 class G {

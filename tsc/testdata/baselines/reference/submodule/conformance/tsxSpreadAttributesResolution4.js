@@ -49,12 +49,14 @@ const obj = {
     x: "hello world",
     y: 2
 };
+// OK
 let p = <Poisoned {...obj}/>;
 class EmptyProp extends React.Component {
     render() {
         return <div>Default hi</div>;
     }
 }
+// OK
 let j;
 let e1 = <EmptyProp {...{}}/>;
 let e2 = <EmptyProp {...j}/>;

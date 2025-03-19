@@ -70,8 +70,12 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource5.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
+    // TODO: refactor indent logic for use in emit
     class PrintContext {
         outfile;
         parser;

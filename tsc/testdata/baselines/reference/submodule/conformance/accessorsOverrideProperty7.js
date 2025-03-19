@@ -14,5 +14,5 @@ class A {
     p = 'yep';
 }
 class B extends A {
-    get p() { return 'oh no'; }
+    get p() { return 'oh no'; } // error
 }

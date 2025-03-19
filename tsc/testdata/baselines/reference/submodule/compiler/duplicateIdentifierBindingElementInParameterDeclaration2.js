@@ -20,4 +20,4 @@ function f3([c, [c], [[c]]]) { }
 function f4({ d, d: { d } }) { }
 function f5({ e, e: { e } }, { e }, [d, e, [[e]]], ...e) { }
 function f6([f, ...f]) { }
-function f7(a, func = (a) => { return 1; }) { }
+function f7(a, func = (a) => { return 1; }) { } // not error

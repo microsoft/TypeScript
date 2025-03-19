@@ -44,19 +44,19 @@ class C1 {
     static s;
     constructor() {
         var v = 0;
-        s = 1;
-        C1.s = 1;
-        b();
-        C1.b();
+        s = 1; // should be error
+        C1.s = 1; // should be ok
+        b(); // should be error
+        C1.b(); // should be ok
     }
     static b() {
-        v = 1;
-        this.p = 0;
-        C1.s = 1;
+        v = 1; // should be error
+        this.p = 0; // should be error
+        C1.s = 1; // should be ok
     }
 }
 class C2 {
     barback = "";
-    static get Bar() { return "bar"; }
-    static set Bar(bar) { barback = bar; }
+    static get Bar() { return "bar"; } // ok
+    static set Bar(bar) { barback = bar; } // not ok
 }

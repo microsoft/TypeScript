@@ -14,6 +14,7 @@ const c = new C();
 c.dynamic();
 
 //// [dynamicImportWithNestedThis_es2015.js]
+// https://github.com/Microsoft/TypeScript/issues/17564
 class C {
     _path = './other';
     dynamic() {

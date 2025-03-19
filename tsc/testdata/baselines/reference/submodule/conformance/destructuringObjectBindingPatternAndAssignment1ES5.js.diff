@@ -1,25 +1,21 @@
 --- old.destructuringObjectBindingPatternAndAssignment1ES5.js
 +++ new.destructuringObjectBindingPatternAndAssignment1ES5.js
-@@= skipped -56, +56 lines =@@
- var {"prop2": d1} = foo1();
- 
- //// [destructuringObjectBindingPatternAndAssignment1ES5.js]
--// In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
--// An expression of type S is considered assignable to an assignment target V if one of the following is true
--// V is an object assignment pattern and, for each assignment property P in V,
--//      S is the type Any, or
+@@= skipped -60, +60 lines =@@
+ // An expression of type S is considered assignable to an assignment target V if one of the following is true
+ // V is an object assignment pattern and, for each assignment property P in V,
+ //      S is the type Any, or
 -var a1 = undefined.a1;
 -var a2 = {}.a2;
--// V is an object assignment pattern and, for each assignment property P in V,
--//      S has an apparent property with the property name specified in
--//          P of a type that is assignable to the target given in P, or
++var { a1 } = undefined;
++var { a2 } = {};
+ // V is an object assignment pattern and, for each assignment property P in V,
+ //      S has an apparent property with the property name specified in
+ //          P of a type that is assignable to the target given in P, or
 -var b1 = { b1: 1, }.b1;
 -var _a = { b2: { b21: "world" } }.b2, _b = _a === void 0 ? { b21: "string" } : _a, b21 = _b.b21;
 -var b3 = { 1: "string" }[1];
 -var _c = { b4: 100000 }.b4, b4 = _c === void 0 ? 1 : _c;
 -var b52 = { b5: { b52: b52 } }.b5.b52;
-+var { a1 } = undefined;
-+var { a2 } = {};
 +var { b1, } = { b1: 1, };
 +var { b2: { b21 } = { b21: "string" } } = { b2: { b21: "world" } };
 +var { 1: b3 } = { 1: "string" };
@@ -28,7 +24,7 @@
  function foo() {
      return {
          1: true
-@@= skipped -24, +17 lines =@@
+@@= skipped -20, +20 lines =@@
          2: true
      };
  }

@@ -47,7 +47,7 @@ export enum Utensils { // Shouldn't error
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Utensils = exports.Pot = exports.Kettle = exports.FooBar = exports.Foo = void 0;
 exports.Foo = 2;
-exports.Foo = 42;
+exports.Foo = 42; // Should error
 var FooBar;
 (function (FooBar) {
     FooBar.member1 = 2;
@@ -64,7 +64,7 @@ class Kettle {
 }
 exports.Kettle = Kettle;
 exports.Pot = 2;
-exports.Pot = 42;
+exports.Pot = 42; // Shouldn't error
 var Utensils;
 (function (Utensils) {
     Utensils[Utensils["Spoon"] = 0] = "Spoon";

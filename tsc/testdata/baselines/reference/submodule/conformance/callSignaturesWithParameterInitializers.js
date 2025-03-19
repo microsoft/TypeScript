@@ -60,6 +60,7 @@ b.b(1);
 
 
 //// [callSignaturesWithParameterInitializers.js]
+// Optional parameters allow initializers only in implementation signatures
 function foo(x = 1) { }
 var f = function foo(x = 1) { };
 var f2 = (x, y = 1) => { };
@@ -80,6 +81,7 @@ i();
 i(1);
 i.foo(1);
 i.foo(1, 2);
+// these are errors
 var a;
 a();
 a(1);

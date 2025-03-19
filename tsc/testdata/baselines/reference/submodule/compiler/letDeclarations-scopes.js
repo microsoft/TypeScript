@@ -159,8 +159,10 @@ var o = {
 }
 
 //// [letDeclarations-scopes.js]
+// global
 let l = "string";
 var n;
+// Control flow statements with blocks
 if (true) {
     let l = 0;
     n = l;
@@ -204,6 +206,7 @@ for (let l = 0; n = l; l++) {
 }
 for (let l in {}) {
 }
+// Try/catch/finally
 try {
     let l = 0;
     n = l;
@@ -216,12 +219,14 @@ finally {
     let l = 0;
     n = l;
 }
+// Switch
 switch (0) {
     case 0:
         let l = 0;
         n = l;
         break;
 }
+// blocks
 {
     let l = 0;
     n = l;
@@ -230,6 +235,7 @@ switch (0) {
         var b = l;
     }
 }
+// functions
 function F() {
     let l = 0;
     n = l;
@@ -242,6 +248,7 @@ var F3 = function () {
     let l = 0;
     n = l;
 };
+// modules
 var m;
 (function (m) {
     let l = 0;
@@ -252,6 +259,7 @@ var m;
     }
     lable: let l2 = 0;
 })(m || (m = {}));
+// methods
 class C {
     constructor() {
         let l = 0;
@@ -271,6 +279,7 @@ class C {
         n = l;
     }
 }
+// object literals
 var o = {
     f() {
         let l = 0;

@@ -58,23 +58,24 @@ simple({
 //// [thisTypeInFunctions2.js]
 extend1({
     init() {
-        this;
+        this; // this: IndexedWithThis because of contextual typing.
+        // this.mine
         this.willDestroy;
     },
     mine: 12,
     foo() {
-        this.url;
+        this.url; // this: any because 'foo' matches the string indexer
         this.willDestroy;
     }
 });
 extend2({
     init() {
-        this;
+        this; // this: IndexedWithoutThis because of contextual typing
         this.mine;
     },
     mine: 13,
     foo() {
-        this;
+        this; // this: IndexedWithoutThis because of contextual typing
         this.mine;
     }
 });

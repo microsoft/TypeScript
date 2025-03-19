@@ -16,5 +16,6 @@ var z: { foo: string bar: string }
 
 //// [objectTypeLiteralSyntax2.js]
 var x;
+// ASI makes this work
 var y;
 var z;

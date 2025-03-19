@@ -25,10 +25,12 @@ isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
 const x = {
     y: {},
 };
+// type guard
 function isNotNull(x) {
     return x !== null && x !== undefined;
 }
+// function which I want to call in the result of the expression
 function title(str) {
     return str.length > 0 ? "Dear " + str : "Dear nobody";
 }
-isNotNull(x?.y?.z) ? title(x.y.z) : null;
+isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error

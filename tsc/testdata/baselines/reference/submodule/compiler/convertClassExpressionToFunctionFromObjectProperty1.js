@@ -244,12 +244,14 @@ foo.of = class {
 
 //// [convertClassExpressionToFunctionFromObjectProperty1.js]
 const foo = {};
+// properties
 foo.x = class {
     constructor() { }
 };
 foo.y = class {
     constructor() { }
 };
+// keywords
 foo.break = class {
     constructor() { }
 };

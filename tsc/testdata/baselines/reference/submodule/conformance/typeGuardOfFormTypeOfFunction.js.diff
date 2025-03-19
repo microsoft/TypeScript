@@ -1,74 +1,8 @@
 --- old.typeGuardOfFormTypeOfFunction.js
 +++ new.typeGuardOfFormTypeOfFunction.js
-@@= skipped -90, +90 lines =@@
- //// [typeGuardOfFormTypeOfFunction.js]
- function f1(x) {
-     if (typeof x === "function") {
--        x; // any
-+        x;
-     }
+@@= skipped -144, +144 lines =@@
  }
- function f2(x) {
-     if (typeof x === "function") {
--        x; // Function
-+        x;
-     }
- }
- function f3(x) {
-     if (typeof x === "function") {
--        x; // Function
-+        x;
-     }
- }
- function f4(x) {
-     if (typeof x === "function") {
--        x; // T & Function
-+        x;
-     }
- }
- function f5(x) {
-     if (typeof x === "function") {
--        x; // never
-+        x;
-     }
- }
- function f6(x) {
-     if (typeof x === "function") {
--        x; // () => string
-+        x;
-     }
- }
- function f10(x) {
-     if (typeof x === "function") {
--        x; // () => string
-+        x;
-     }
-     else {
--        x; // string
-+        x;
-     }
- }
- function f11(x) {
-     if (typeof x === "function") {
--        x; // () => string
-+        x;
-     }
-     else {
--        x; // { s: string }
-+        x;
-     }
- }
- function f12(x) {
-     if (typeof x === "function") {
--        x; // never
-+        x;
-     }
-     else {
--        x; // { s: string } | { n: number }
-+        x;
-     }
- }
--// Repro from #18238
+ // Repro from #18238
  function f100(obj, keys) {
 -    for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
 -        var k = keys_1[_i];
@@ -79,7 +13,7 @@
              item.call(obj);
      }
  }
--// Repro from #49316
+ // Repro from #49316
  function configureStore(reducer) {
 -    var rootReducer;
 +    let rootReducer;

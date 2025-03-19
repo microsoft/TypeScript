@@ -34,6 +34,7 @@ class Derived extends Base {
 }
 
 //// [derivedClassSuperCallsInNonConstructorMembers.js]
+// error to use super calls outside a constructor
 class Base {
     x;
 }

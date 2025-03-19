@@ -25,4 +25,6 @@ declare global {
 export interface LocalInterface extends ImportInterface, RequireInterface {}
 
 //// [index.js]
+/// <reference types="pkg" resolution-mode="import" preserve="true" />
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 export {};

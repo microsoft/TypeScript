@@ -1,8 +1,0 @@
---- old.alwaysStrictModule6.js
-+++ new.alwaysStrictModule6.js
-@@= skipped -7, +7 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.a = void 0;
--// Targeting ES5
- exports.a = 1;

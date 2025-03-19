@@ -79,8 +79,9 @@ function F() {
 
 
 //// [letDeclarations-scopes-duplicates.js]
+// Errors: redeclaration
 let var1 = 0;
-let var1 = 0;
+let var1 = 0; // error
 let var2 = 0;
 const var2 = 0;
 const var3 = 0;
@@ -116,6 +117,7 @@ function F1() {
     let var12;
     let var12;
 }
+// OK
 var var20 = 0;
 var var20 = 0;
 {

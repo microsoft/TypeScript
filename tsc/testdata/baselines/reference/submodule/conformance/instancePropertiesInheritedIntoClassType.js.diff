@@ -61,10 +61,7 @@
      var d = new D(1, 2);
      var r = d.fn();
      var r2 = r.x;
-     var r3 = r.y;
-     r.y = 4;
--    var r6 = d.y(); // error
-+    var r6 = d.y();
+@@= skipped -49, +28 lines =@@
  })(NonGeneric || (NonGeneric = {}));
  var Generic;
  (function (Generic) {
@@ -108,8 +105,3 @@
      var d = new D(1, '');
      var r = d.fn();
      var r2 = r.x;
-     var r3 = r.y;
-     r.y = '';
--    var r6 = d.y(); // error
-+    var r6 = d.y();
- })(Generic || (Generic = {}));

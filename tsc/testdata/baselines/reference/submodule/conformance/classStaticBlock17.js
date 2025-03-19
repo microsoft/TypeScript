@@ -53,8 +53,8 @@ class A {
 ;
 class B {
     constructor(a) {
-        const x = friendA.getX(a);
-        friendA.setX(a, x + 1);
+        const x = friendA.getX(a); // ok
+        friendA.setX(a, x + 1); // ok
     }
 }
 ;

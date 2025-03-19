@@ -13,6 +13,7 @@ var obj1 = {
 
 
 //// [binaryIntegerLiteralError.js]
+// error
 var bin1 = 0B110;
 2110;
 var bin1 = 0b110;

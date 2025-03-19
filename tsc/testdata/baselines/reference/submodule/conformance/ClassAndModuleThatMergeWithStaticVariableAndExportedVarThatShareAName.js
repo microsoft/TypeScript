@@ -35,7 +35,7 @@ class Point {
     static Origin = { x: 0, y: 0 };
 }
 (function (Point) {
-    Point.Origin = "";
+    Point.Origin = ""; //expected duplicate identifier error
 })(Point || (Point = {}));
 var A;
 (function (A) {
@@ -50,6 +50,6 @@ var A;
     }
     A.Point = Point;
     (function (Point) {
-        Point.Origin = "";
+        Point.Origin = ""; //expected duplicate identifier error
     })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));

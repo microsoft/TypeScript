@@ -12,7 +12,7 @@
          ab.foo;
      }
  }
--// Repro from #11185
+ // Repro from #11185
 -var Square = /** @class */ (function () {
 -    function Square() {
 -    }

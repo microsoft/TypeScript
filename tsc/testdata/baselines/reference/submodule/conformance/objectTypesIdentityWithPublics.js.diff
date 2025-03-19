@@ -1,10 +1,9 @@
 --- old.objectTypesIdentityWithPublics.js
 +++ new.objectTypesIdentityWithPublics.js
-@@= skipped -90, +90 lines =@@
- function foo14(x: any) { }
+@@= skipped -91, +91 lines =@@
  
  //// [objectTypesIdentityWithPublics.js]
--// object types are identical structurally
+ // object types are identical structurally
 -var A = /** @class */ (function () {
 -    function A() {
 -    }

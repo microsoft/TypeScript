@@ -1,11 +1,9 @@
 --- old.bestCommonTypeOfConditionalExpressions.js
 +++ new.bestCommonTypeOfConditionalExpressions.js
-@@= skipped -28, +28 lines =@@
- }
- 
+@@= skipped -30, +30 lines =@@
  //// [bestCommonTypeOfConditionalExpressions.js]
--// conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
--// no errors expected here
+ // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+ // no errors expected here
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -54,22 +52,16 @@
  var base;
  var derived;
  var derived2;
- var r = true ? 1 : 2;
+@@= skipped -43, +18 lines =@@
  var r3 = true ? 1 : {};
--var r4 = true ? a : b; // typeof a
--var r5 = true ? b : a; // typeof b
+ var r4 = true ? a : b; // typeof a
+ var r5 = true ? b : a; // typeof b
 -var r6 = true ? function (x) { } : function (x) { }; // returns number => void
 -var r7 = true ? function (x) { } : function (x) { };
 -var r8 = true ? function (x) { } : function (x) { }; // returns Object => void
--var r10 = true ? derived : derived2; // no error since we use the contextual type in BCT
-+var r4 = true ? a : b;
-+var r5 = true ? b : a;
-+var r6 = true ? (x) => { } : (x) => { };
++var r6 = true ? (x) => { } : (x) => { }; // returns number => void
 +var r7 = true ? (x) => { } : (x) => { };
-+var r8 = true ? (x) => { } : (x) => { };
-+var r10 = true ? derived : derived2;
++var r8 = true ? (x) => { } : (x) => { }; // returns Object => void
+ var r10 = true ? derived : derived2; // no error since we use the contextual type in BCT
  var r11 = true ? base : derived2;
  function foo5(t, u) {
--    return true ? t : u; // BCT is Object
-+    return true ? t : u;
- }

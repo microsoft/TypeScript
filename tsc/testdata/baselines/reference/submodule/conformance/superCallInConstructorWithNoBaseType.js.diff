@@ -9,7 +9,7 @@
 -        return _super.call(this) || this; // error
 +class C {
 +    constructor() {
-+        super();
++        super(); // error
      }
 -    return C;
 -}());
@@ -22,7 +22,7 @@
 +    constructor(x) {
          this.x = x;
 -        return _this;
-+        super();
++        super(); // error
      }
 -    return D;
 -}());

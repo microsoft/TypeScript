@@ -22,8 +22,8 @@
 -    Foo2.Foo2 = function () { return 0; }; // should not be an error
 -    return Foo2;
 -}());
-+    _store = store;
++    _store = store; // should be an error.
 +}
 +class Foo2 {
-+    static Foo2() { return 0; }
++    static Foo2() { return 0; } // should not be an error
 +}

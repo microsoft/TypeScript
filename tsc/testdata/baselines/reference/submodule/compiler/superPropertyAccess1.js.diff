@@ -49,7 +49,7 @@
 +class D extends C {
 +    foo() {
 +        super.bar();
-+        super.x;
++        super.x; // error
      }
 -    D.prototype.foo = function () {
 -        _super.prototype.bar.call(this);
@@ -69,11 +69,11 @@
 +    constructor() {
 +        super();
 +        super.bar();
-+        super.x;
++        super.x; // error
 +    }
 +    get y() {
 +        super.bar();
-+        super.x;
++        super.x; // error
 +        return 1;
 +    }
 +}

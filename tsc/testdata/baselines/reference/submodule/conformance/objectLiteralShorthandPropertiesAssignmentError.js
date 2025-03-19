@@ -15,8 +15,8 @@ bar({ name, id });  // error
 //// [objectLiteralShorthandPropertiesAssignmentError.js]
 var id = 10000;
 var name = "my name";
-var person = { name, id };
-var person1;
-function foo(name, id) { return { name, id }; }
+var person = { name, id }; // error
+var person1; // ok
+function foo(name, id) { return { name, id }; } // error
 function bar(obj) { }
-bar({ name, id });
+bar({ name, id }); // error

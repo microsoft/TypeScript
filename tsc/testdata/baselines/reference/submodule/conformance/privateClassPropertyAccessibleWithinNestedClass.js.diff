@@ -1,10 +1,9 @@
 --- old.privateClassPropertyAccessibleWithinNestedClass.js
 +++ new.privateClassPropertyAccessibleWithinNestedClass.js
-@@= skipped -39, +39 lines =@@
- }
+@@= skipped -40, +40 lines =@@
  
  //// [privateClassPropertyAccessibleWithinNestedClass.js]
--// no errors
+ // no errors
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -46,7 +45,7 @@
                  var x1 = x.foo;
                  var x2 = x.bar;
                  var x3 = x.x;
-@@= skipped -33, +22 lines =@@
+@@= skipped -32, +22 lines =@@
                  var sx2 = C.y;
                  var sx3 = C.bar;
                  var sx4 = C.foo;

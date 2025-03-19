@@ -85,6 +85,9 @@ function foo15(x: C<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.js]
+// Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
+// parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
+// optional or rest) and types, and identical return types.
 class B {
     constructor(x) { return null; }
 }
@@ -92,7 +95,7 @@ class C {
     constructor(x) { return null; }
 }
 var a;
-var b = { new(x) { return null; } };
+var b = { new(x) { return null; } }; // not a construct signature, function called new
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

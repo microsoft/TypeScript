@@ -29,5 +29,5 @@ var Color;
 (function (Color) {
 })(Color || (Color = {}));
 var a = Color.namedColors["azure"];
-var a = Color.namedColors.blue;
-var a = Color.namedColors["pale blue"];
+var a = Color.namedColors.blue; // Should not error
+var a = Color.namedColors["pale blue"]; // should not error

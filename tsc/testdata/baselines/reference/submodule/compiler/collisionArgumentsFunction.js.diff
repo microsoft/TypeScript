@@ -1,64 +1,53 @@
 --- old.collisionArgumentsFunction.js
 +++ new.collisionArgumentsFunction.js
-@@= skipped -46, +46 lines =@@
- declare function f6(arguments: string); // no codegen no error
+@@= skipped -47, +47 lines =@@
  
  //// [collisionArgumentsFunction.js]
--// Functions
+ // Functions
 -function f1(arguments) {
 -    var restParameters = [];
 -    for (var _i = 1; _i < arguments.length; _i++) {
 -        restParameters[_i - 1] = arguments[_i];
 -    }
--    var arguments = 10; // no error
 +function f1(arguments, ...restParameters) {
-+    var arguments = 10;
+     var arguments = 10; // no error
  }
 -function f12(i) {
 -    var arguments = [];
 -    for (var _i = 1; _i < arguments.length; _i++) {
 -        arguments[_i - 1] = arguments[_i];
 -    }
--    var arguments; // no error
 +function f12(i, ...arguments) {
-+    var arguments;
+     var arguments; // no error
  }
  function f1NoError(arguments) {
--    var arguments = 10; // no error
-+    var arguments = 10;
+     var arguments = 10; // no error
  }
 -function f3() {
 -    var restParameters = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        restParameters[_i] = arguments[_i];
 -    }
--    var arguments = 10; // no error
 +function f3(...restParameters) {
-+    var arguments = 10;
+     var arguments = 10; // no error
  }
  function f3NoError() {
--    var arguments = 10; // no error
-+    var arguments = 10;
+     var arguments = 10; // no error
  }
 -function f4(arguments) {
 -    var rest = [];
 -    for (var _i = 1; _i < arguments.length; _i++) {
 -        rest[_i - 1] = arguments[_i];
 -    }
--    var arguments; // No error
 +function f4(arguments, ...rest) {
-+    var arguments;
+     var arguments; // No error
  }
 -function f42(i) {
 -    var arguments = [];
 -    for (var _i = 1; _i < arguments.length; _i++) {
 -        arguments[_i - 1] = arguments[_i];
 -    }
--    var arguments; // No error
 +function f42(i, ...arguments) {
-+    var arguments;
+     var arguments; // No error
  }
  function f4NoError(arguments) {
--    var arguments; // No error
-+    var arguments;
- }

@@ -34,10 +34,10 @@ class AbstractA {
 class AbstractB {
     b;
 }
-new cls1();
-new cls2();
-new cls3();
-[ConcreteA, AbstractA, AbstractB].map(cls => new cls());
-[AbstractA, AbstractB, ConcreteA].map(cls => new cls());
-[ConcreteA, ConcreteB].map(cls => new cls());
-[AbstractA, AbstractB].map(cls => new cls());
+new cls1(); // should error
+new cls2(); // should error
+new cls3(); // should work
+[ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
+[AbstractA, AbstractB, ConcreteA].map(cls => new cls()); // should error
+[ConcreteA, ConcreteB].map(cls => new cls()); // should work
+[AbstractA, AbstractB].map(cls => new cls()); // should error

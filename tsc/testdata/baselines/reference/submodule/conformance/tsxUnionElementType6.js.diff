@@ -19,7 +19,7 @@
  }
  var EmptySFCComp = EmptySFC1 || EmptySFC2;
  var SFC2AndEmptyComp = SFC2 || EmptySFC1;
--// Error
+ // Error
 -var a = React.createElement(EmptySFCComp, { x: true });
 -var b = React.createElement(SFC2AndEmptyComp, { x: "hi" });
 -var c = React.createElement(SFC2AndEmptyComp, null);

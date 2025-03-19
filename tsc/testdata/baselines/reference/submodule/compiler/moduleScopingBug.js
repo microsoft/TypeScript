@@ -36,15 +36,15 @@ var M;
 (function (M) {
     var outer;
     function f() {
-        var inner = outer;
+        var inner = outer; // Ok
     }
     class C {
         constructor() {
-            var inner = outer;
+            var inner = outer; // Ok
         }
     }
     let X;
     (function (X) {
-        var inner = outer;
+        var inner = outer; // Error: outer not visible
     })(X || (X = {}));
 })(M || (M = {}));

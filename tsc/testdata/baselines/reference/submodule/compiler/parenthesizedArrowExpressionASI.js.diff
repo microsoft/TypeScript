@@ -5,6 +5,7 @@
  
  //// [parenthesizedArrowExpressionASI.js]
 -var x = function (a) { return (
--// comment
++const x = (a) => 
+ // comment
 -undefined); };
-+const x = (a) => undefined;
++undefined;

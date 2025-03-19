@@ -157,9 +157,12 @@ let combined = { ...o, ...o2 };
 let combinedAfter = { ...o, ...o2, b: 'ok' };
 let combinedNestedChangeType = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 };
 let propertyNested = { a: { ...o } };
+// accessors don't copy the descriptor
+// (which means that readonly getters become read/write properties)
 let op = { get a() { return 6; } };
 let getter = { ...op, c: 7 };
 getter.a = 12;
+// functions result in { }
 let spreadFunc = { ...(function () { }) };
 function from16326(header, authToken) {
     return {
@@ -168,6 +171,7 @@ function from16326(header, authToken) {
         ...authToken && { authToken }
     };
 }
+// boolean && T results in Partial<T>
 function conditionalSpreadBoolean(b) {
     let o = { x: 12, y: 13 };
     o = {
@@ -195,28 +199,37 @@ function conditionalSpreadString(st) {
     let o2 = { ...st && { x: st } };
     return o;
 }
+// any results in any
 let anything;
 let spreadAny = { ...anything };
+// methods are not enumerable
 class C {
     p = 1;
     m() { }
 }
 let c = new C();
 let spreadC = { ...c };
+// own methods are enumerable
 let cplus = { ...c, plus() { return this.p + 1; } };
 cplus.plus();
+// new field's type conflicting with existing field is OK
 let changeTypeAfter = { ...o, a: 'wrong type?' };
 let changeTypeBoth = { ...o, ...swap };
+// optional
 function container(definiteBoolean, definiteString, optionalString, optionalNumber) {
     let optionalUnionStops = { ...definiteBoolean, ...definiteString, ...optionalNumber };
     let optionalUnionDuplicates = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
     let allOptional = { ...optionalString, ...optionalNumber };
+    // computed property
     let computedFirst = { ['before everything']: 12, ...o, b: 'yes' };
     let computedAfter = { ...o, b: 'yeah', ['at the end']: 14 };
 }
+// shortcut syntax
 let a = 12;
 let shortCutted = { ...o, a };
+// non primitive
 let spreadNonPrimitive = { ...{} };
+// generic spreads
 function f(t, u) {
     return { ...t, ...u, id: 'id' };
 }

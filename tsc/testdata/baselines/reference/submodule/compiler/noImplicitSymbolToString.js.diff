@@ -1,10 +1,9 @@
 --- old.noImplicitSymbolToString.js
 +++ new.noImplicitSymbolToString.js
-@@= skipped -49, +49 lines =@@
- 
+@@= skipped -50, +50 lines =@@
  
  //// [noImplicitSymbolToString.js]
--// Fix #19666
+ // Fix #19666
 -var symbol;
 -var str = "hello ";
 -var templateStr = "hello ".concat(symbol);

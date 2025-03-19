@@ -35,6 +35,7 @@ if (a.stringOrUndefined) {
 
 
 //// [narrowingOrderIndependent.js]
+// Repro from #36709
 class A {
     stringOrUndefined;
     constructor(stringOrUndefined) {

@@ -89,57 +89,58 @@ declare class c6NoError {
 }
 
 //// [collisionArgumentsClassConstructor.js]
+// Constructors
 class c1 {
     constructor(i, ...arguments) {
-        var arguments;
+        var arguments; // no error
     }
 }
 class c12 {
     constructor(arguments, ...rest) {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
 }
 class c1NoError {
     constructor(arguments) {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
 }
 class c2 {
     constructor(...restParameters) {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
 }
 class c2NoError {
     constructor() {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
 }
 class c3 {
     arguments;
     constructor(arguments, ...restParameters) {
         this.arguments = arguments;
-        var arguments = 10;
+        var arguments = 10; // no error
     }
 }
 class c3NoError {
     arguments;
     constructor(arguments) {
         this.arguments = arguments;
-        var arguments = 10;
+        var arguments = 10; // no error
     }
 }
 class c5 {
     constructor(i, ...arguments) {
-        var arguments;
+        var arguments; // no error
     }
 }
 class c52 {
     constructor(arguments, ...rest) {
-        var arguments;
+        var arguments; // no error
     }
 }
 class c5NoError {
     constructor(arguments) {
-        var arguments;
+        var arguments; // no error
     }
 }

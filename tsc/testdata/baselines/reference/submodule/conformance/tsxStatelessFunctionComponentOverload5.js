@@ -80,12 +80,13 @@ function MainButton(props) {
     }
     return this._buildMainButton(props);
 }
-const b0 = <MainButton to='/some/path' onClick={(e) => { }}>GO</MainButton>;
-const b1 = <MainButton onClick={(e) => { }} {...obj0}>Hello world</MainButton>;
-const b2 = <MainButton {...{ to: "10000" }} {...obj2}/>;
-const b3 = <MainButton {...{ to: "10000" }} {...{ onClick: (k) => { } }}/>;
-const b4 = <MainButton {...obj3} to/>;
-const b5 = <MainButton {...{ onClick(e) { } }} {...obj0}/>;
-const b6 = <MainButton {...{ onClick(e) { } }} children={10}/>;
-const b7 = <MainButton {...{ onClick(e) { } }} children="hello" className/>;
-const b8 = <MainButton data-format/>;
+// Error
+const b0 = <MainButton to='/some/path' onClick={(e) => { }}>GO</MainButton>; // extra property;
+const b1 = <MainButton onClick={(e) => { }} {...obj0}>Hello world</MainButton>; // extra property;
+const b2 = <MainButton {...{ to: "10000" }} {...obj2}/>; // extra property
+const b3 = <MainButton {...{ to: "10000" }} {...{ onClick: (k) => { } }}/>; // extra property
+const b4 = <MainButton {...obj3} to/>; // Should error because Incorrect type; but attributes are any so everything is allowed
+const b5 = <MainButton {...{ onClick(e) { } }} {...obj0}/>; // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
+const b6 = <MainButton {...{ onClick(e) { } }} children={10}/>; // incorrect type for optional attribute
+const b7 = <MainButton {...{ onClick(e) { } }} children="hello" className/>; // incorrect type for optional attribute
+const b8 = <MainButton data-format/>; // incorrect type for specified hyphanated name

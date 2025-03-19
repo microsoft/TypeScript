@@ -53,6 +53,7 @@ var b: {
 var r6 = new b(1, '');
 
 //// [constructSignaturesWithOverloads.js]
+// No errors expected for basic overloads of construct signatures
 class C {
     constructor(x) { }
 }

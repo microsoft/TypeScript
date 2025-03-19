@@ -28,6 +28,7 @@ let test2: Test2<number>;
 
 
 //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js]
+// implement
 class Identity {
     item;
     constructor(value) {

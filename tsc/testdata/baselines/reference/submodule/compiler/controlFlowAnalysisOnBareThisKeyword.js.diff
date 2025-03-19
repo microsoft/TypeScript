@@ -7,9 +7,8 @@
 -"use strict";
  function bigger() {
      if (isBig(this)) {
--        this.big; // Expect property to exist
-+        this.big;
-     }
+         this.big; // Expect property to exist
+@@= skipped -8, +7 lines =@@
  }
  function bar() {
      if (typeof this === "string") {

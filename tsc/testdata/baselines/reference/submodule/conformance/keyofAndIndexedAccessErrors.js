@@ -187,27 +187,27 @@ function setProperty(obj, key, value) {
 }
 function f10(shape) {
     let x1 = getProperty(shape, "name");
-    let x2 = getProperty(shape, "size");
-    let x3 = getProperty(shape, cond ? "name" : "size");
+    let x2 = getProperty(shape, "size"); // Error
+    let x3 = getProperty(shape, cond ? "name" : "size"); // Error
     setProperty(shape, "name", "rectangle");
-    setProperty(shape, "size", 10);
-    setProperty(shape, cond ? "name" : "size", 10);
+    setProperty(shape, "size", 10); // Error
+    setProperty(shape, cond ? "name" : "size", 10); // Error
 }
 function f20(x, y, k1, k2, k3, k4) {
     x[k1];
     x[k2];
-    x[k3];
-    x[k4];
+    x[k3]; // Error
+    x[k4]; // Error
     y[k1];
     y[k2];
     y[k3];
     y[k4];
     k1 = k2;
-    k1 = k3;
-    k1 = k4;
+    k1 = k3; // Error
+    k1 = k4; // Error
     k2 = k1;
-    k2 = k3;
-    k2 = k4;
+    k2 = k3; // Error
+    k2 = k4; // Error
     k3 = k1;
     k3 = k2;
     k3 = k4;
@@ -215,46 +215,50 @@ function f20(x, y, k1, k2, k3, k4) {
     k4 = k2;
     k4 = k3;
 }
+// Repro from #17166
 function f3(t, k, tk, u, j, uk, tj, uj) {
     for (let key in t) {
-        key = k;
-        k = key;
-        t[key] = tk;
-        tk = t[key];
+        key = k; // ok, K ==> keyof T
+        k = key; // error, keyof T =/=> K
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+        tk = t[key]; // error, T[keyof T] =/=> T[K]
     }
     tk = uk;
-    uk = tk;
+    uk = tk; // error
     tj = uj;
-    uj = tj;
+    uj = tj; // error
     tk = tj;
-    tj = tk;
+    tj = tk; // error
     tk = uj;
-    uj = tk;
+    uj = tk; // error
 }
+// The constraint of 'keyof T' is 'keyof T'
 function f4(k) {
-    k = 42;
-    k = "hello";
+    k = 42; // error
+    k = "hello"; // error
 }
-const a1 = 'a';
+const a1 = 'a'; // Error
 const b1 = 'b';
 function test1(t, k) {
-    t[k] = 42;
-    t[k] = "hello";
-    t[k] = [10, 20];
+    t[k] = 42; // Error
+    t[k] = "hello"; // Error
+    t[k] = [10, 20]; // Error
 }
+// Repro from #28839
 function f30() {
     let x = "hello";
 }
 function f31() {
     let x = "hello";
 }
+// Repro from #51069
 class Test {
     testy;
     constructor(t) {
         this.testy = t;
     }
     t(key) {
-        this.testy[key] += 1;
+        this.testy[key] += 1; // Error
         return this.testy[key];
     }
 }

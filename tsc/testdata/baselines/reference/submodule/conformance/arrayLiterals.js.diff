@@ -1,10 +1,9 @@
 --- old.arrayLiterals.js
 +++ new.arrayLiterals.js
-@@= skipped -38, +38 lines =@@
- 
+@@= skipped -39, +39 lines =@@
  
  //// [arrayLiterals.js]
--// Empty array literal with no contextual type has type Undefined[]
+ // Empty array literal with no contextual type has type Undefined[]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -22,8 +21,8 @@
 -})();
  var arr1 = [[], [1], ['']];
  var arr2 = [[null], [1], ['']];
--// Array literal with elements of only EveryType E has type E[]
- var stringArrArr = [[''], [""]];
+ // Array literal with elements of only EveryType E has type E[]
+@@= skipped -22, +7 lines =@@
  var stringArr = ['', ""];
  var numberArr = [0, 0.0, 0x00, 1e1];
  var boolArr = [false, true, false, true];
@@ -37,12 +36,11 @@
 +}
  var classArr = [new C(), new C()];
  var classTypeArray = [C, C, C];
--var classTypeArray; // Should OK, not be a parse error
--// Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
-+var classTypeArray;
+ var classTypeArray; // Should OK, not be a parse error
+@@= skipped -12, +10 lines =@@
  var context1 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
  var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
--// Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
+ // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 -var Base = /** @class */ (function () {
 -    function Base() {
 -    }
@@ -74,5 +72,4 @@
 +}
  ;
  var context3 = [new Derived1(), new Derived2()];
--// Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]
- var context4 = [new Derived1(), new Derived1()];
+ // Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]

@@ -19,9 +19,9 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// expected error for all the LHS of compound assignments (arithmetic and addition)
+ // expected error for all the LHS of compound assignments (arithmetic and addition)
  var value;
--// this
+ // this
 -var C = /** @class */ (function () {
 -    function C() {
 +class C {
@@ -47,37 +47,10 @@
  function foo() {
      this *= value;
      this += value;
- }
- this *= value;
- this += value;
--// identifiers: module, class, enum, function
- var M;
- (function (M) {
- })(M || (M = {}));
-@@= skipped -54, +35 lines =@@
- E += value;
- foo *= value;
- foo += value;
--// literals
- null *= value;
- null += value;
- true *= value;
-@@= skipped -13, +12 lines =@@
- '' += value;
- /d+/ *= value;
- /d+/ += value;
--// object literals
- {
-     a: 0;
- }
-@@= skipped -9, +8 lines =@@
-     a: 0;
- }
- value;
--// array literals
+@@= skipped -80, +64 lines =@@
  ['', ''] *= value;
  ['', ''] += value;
--// super
+ // super
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
@@ -101,7 +74,6 @@
 -    };
 -    return Derived;
 -}(C));
--// function expression
 +    foo() {
 +        super. *= value;
 +        super. += value;
@@ -111,6 +83,7 @@
 +        super. += value;
 +    }
 +}
+ // function expression
  function bar1() { }
  value;
  function bar2() { }
@@ -121,10 +94,5 @@
 -(function () { });
 +() => { };
  value;
--// function calls
+ // function calls
  foo() *= value;
- foo() += value;
--// parentheses, the containted expression is value
- (this) *= value;
- (this) += value;
- (M) *= value;

@@ -111,6 +111,7 @@ export { type };
 } 
 
 //// [index.js]
+// esm format file
 import * as cjsi from "inner/cjs/exclude/index";
 import * as mjsi from "inner/mjs/exclude/index";
 import * as typei from "inner/js/exclude/index";
@@ -124,6 +125,7 @@ cjsi2;
 mjsi2;
 typei2;
 //// [index.mjs]
+// esm format file
 import * as cjsi from "inner/cjs/exclude/index";
 import * as mjsi from "inner/mjs/exclude/index";
 import * as typei from "inner/js/exclude/index";
@@ -162,6 +164,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// cjs format file
 const cjsi = __importStar(require("inner/cjs/exclude/index"));
 const mjsi = __importStar(require("inner/mjs/exclude/index"));
 const typei = __importStar(require("inner/js/exclude/index"));

@@ -1,16 +1,9 @@
 --- old.genericDefaultsErrors.js
 +++ new.genericDefaultsErrors.js
-@@= skipped -44, +44 lines =@@
- interface SelfReference<T = SelfReference> {}
- 
- //// [genericDefaultsErrors.js]
--f11(); // ok
--f11(); // error
--f11(); // ok
--f11(); // ok
--f11(); // error
--f12(); // ok
--f12("a"); // error
+@@= skipped -51, +51 lines =@@
+ f11(); // error
+ f12(); // ok
+ f12("a"); // error
 -
 -
 -//// [genericDefaultsErrors.d.ts]
@@ -53,10 +46,3 @@
 -}
 -interface SelfReference<T = SelfReference> {
 -}
-+f11();
-+f11();
-+f11();
-+f11();
-+f11();
-+f12();
-+f12("a");

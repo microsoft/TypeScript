@@ -21,7 +21,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
+ // https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
 -var BaseClass = /** @class */ (function () {
 -    function BaseClass() {
 -    }
@@ -41,9 +41,8 @@
      }
 -    return Klass;
 -}(BaseClass));
--m.child; // ok
 +}
 +class Klass extends BaseClass {
 +    child = true;
 +}
-+m.child;
+ m.child; // ok

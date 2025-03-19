@@ -10,5 +10,6 @@ if (ArrayBuffer.isView(obj)) {
 //// [arrayBufferIsViewNarrowsType.js]
 var obj;
 if (ArrayBuffer.isView(obj)) {
+    // isView should be a guard that narrows type to ArrayBufferView.
     var ab = obj;
 }

@@ -27,11 +27,13 @@ const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow 
 
 //// [file.jsx]
 let obj2;
+// OK
 const two1 = <ZeroThingOrTwoThing />;
 const two2 = <ZeroThingOrTwoThing yy={100} yy1="hello"/>;
-const two3 = <ZeroThingOrTwoThing {...obj2}/>;
-const two4 = <ZeroThingOrTwoThing yy={1000} {...obj2}/>;
-const two5 = <ZeroThingOrTwoThing {...obj2} yy={1000}/>;
+const two3 = <ZeroThingOrTwoThing {...obj2}/>; // it is just any so we allow it to pass through
+const two4 = <ZeroThingOrTwoThing yy={1000} {...obj2}/>; // it is just any so we allow it to pass through
+const two5 = <ZeroThingOrTwoThing {...obj2} yy={1000}/>; // it is just any so we allow it to pass through
+// OK
 const three1 = <ThreeThing yy={99} yy1="hello world"/>;
 const three2 = <ThreeThing y2="Bye"/>;
-const three3 = <ThreeThing {...obj2} y2={10}/>;
+const three3 = <ThreeThing {...obj2} y2={10}/>; // it is just any so we allow it to pass through

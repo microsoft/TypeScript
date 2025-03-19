@@ -31,6 +31,7 @@ bar; // bar should resolve while foo should not, since even though index.js is e
 export {};
 
 //// [index.js]
+/// <reference types="pkg" resolution-mode="require" />
 foo;
-bar;
+bar; // bar should resolve while foo should not, since even though index.js is esm, the reference is cjs
 export {};

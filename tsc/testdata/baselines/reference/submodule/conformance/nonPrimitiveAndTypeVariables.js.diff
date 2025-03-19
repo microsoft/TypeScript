@@ -13,6 +13,6 @@
  function foo(x) {
 -    var a = x; // Error
 -    var b = x; // Error
-+    let a = x;
-+    let b = x;
++    let a = x; // Error
++    let b = x; // Error
  }

@@ -1,19 +1,17 @@
 --- old.staticAutoAccessors(target=es2022).js
 +++ new.staticAutoAccessors(target=es2022).js
-@@= skipped -13, +13 lines =@@
- 
- 
+@@= skipped -15, +15 lines =@@
  //// [staticAutoAccessors.js]
--// https://github.com/microsoft/TypeScript/issues/53752
+ // https://github.com/microsoft/TypeScript/issues/53752
  class A {
 -    static #x_accessor_storage = 1;
--    // uses class reference
+     // uses class reference
 -    static get x() { return A.#x_accessor_storage; }
 -    static set x(value) { A.#x_accessor_storage = value; }
 -    #y_accessor_storage = 2;
--    // uses 'this'
++    static accessor x = 1;
+     // uses 'this'
 -    get y() { return this.#y_accessor_storage; }
 -    set y(value) { this.#y_accessor_storage = value; }
-+    static accessor x = 1;
 +    accessor y = 2;
  }

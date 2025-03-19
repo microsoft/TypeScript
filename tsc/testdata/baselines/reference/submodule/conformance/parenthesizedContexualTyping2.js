@@ -50,6 +50,7 @@ var e = fun(x => { x(undefined); return x; }, x => { x(undefined); return x; }, 
 var f = fun((x => { x(undefined); return x; }), (x => { x(undefined); return x; }), 10);
 var g = fun(((x => { x(undefined); return x; })), ((x => { x(undefined); return x; })), 10);
 var h = fun((((x => { x(undefined); return x; }))), ((x => { x(undefined); return x; })), 10);
+// Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => { x(undefined); return x; } : x => undefined), 10);
 var j = fun((Math.random() < 0.5 ? (x => { x(undefined); return x; }) : (x => undefined)), 10);
 var k = fun((Math.random() < 0.5 ? (x => { x(undefined); return x; }) : (x => undefined)), x => { x(undefined); return x; }, 10);

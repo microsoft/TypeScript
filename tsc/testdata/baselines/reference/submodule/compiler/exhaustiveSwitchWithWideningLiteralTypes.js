@@ -19,11 +19,12 @@ function f(value: A | B): number {
 }
 
 //// [exhaustiveSwitchWithWideningLiteralTypes.js]
+// Repro from #12529
 class A {
-    kind = "A";
+    kind = "A"; // (property) A.kind: "A"
 }
 class B {
-    kind = "B";
+    kind = "B"; // (property) B.kind: "B"
 }
 function f(value) {
     switch (value.kind) {

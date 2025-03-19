@@ -110,7 +110,7 @@ function f8(x: X | N | null) {
 //// [controlFlowOptionalChain2.js]
 function funcTwo(arg) {
     if (arg?.type === 'B') {
-        arg;
+        arg; // `B`
         return;
     }
     arg;
@@ -118,7 +118,7 @@ function funcTwo(arg) {
 }
 function funcThree(arg) {
     if (arg?.type === 'B') {
-        arg;
+        arg; // `B`
         return;
     }
     arg;
@@ -126,65 +126,65 @@ function funcThree(arg) {
 }
 function f1(x) {
     if (x?.kind === undefined) {
-        x;
+        x; // U | undefined
     }
     else {
-        x;
+        x; // X
     }
 }
 function f2(x) {
     if (x?.kind === undefined) {
-        x;
+        x; // undefined
     }
     else {
-        x;
+        x; // X | N
     }
 }
 function f3(x) {
     if (x?.kind === undefined) {
-        x;
+        x; // U | null
     }
     else {
-        x;
+        x; // X
     }
 }
 function f4(x) {
     if (x?.kind === undefined) {
-        x;
+        x; // null
     }
     else {
-        x;
+        x; // X | N
     }
 }
 function f5(x) {
     if (x?.kind === null) {
-        x;
+        x; // never
     }
     else {
-        x;
+        x; // X | U | undefined
     }
 }
 function f6(x) {
     if (x?.kind === null) {
-        x;
+        x; // N
     }
     else {
-        x;
+        x; // X | undefined
     }
 }
 function f7(x) {
     if (x?.kind === null) {
-        x;
+        x; // never
     }
     else {
-        x;
+        x; // X | U | null
     }
 }
 function f8(x) {
     if (x?.kind === null) {
-        x;
+        x; // N
     }
     else {
-        x;
+        x; // X | null
     }
 }

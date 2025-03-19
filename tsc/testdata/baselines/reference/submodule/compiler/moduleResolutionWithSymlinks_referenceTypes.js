@@ -12,3 +12,5 @@ declare class MyClass { private x: number; }
 
 
 //// [/app.js]
+/// <reference types="library-a" />
+/// <reference types="library-b" />

@@ -37,4 +37,4 @@
 -    return C;
 -}(x)); // error, could not find symbol xs
 +class C extends x {
-+}
++} // error, could not find symbol xs

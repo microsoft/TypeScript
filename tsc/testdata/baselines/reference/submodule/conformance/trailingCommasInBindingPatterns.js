@@ -21,6 +21,7 @@ const { ...b, } = {};
 let c, d;
 ([...c,] = []);
 ({ ...d, } = {});
+// Allowed for non-rest elements
 const [e,] = [];
 const { f, } = {};
 let g, h;

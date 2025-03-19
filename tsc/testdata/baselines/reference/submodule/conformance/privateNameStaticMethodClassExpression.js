@@ -23,5 +23,5 @@ const C = class D {
     ;
 };
 console.log(C.getClass().getField());
-C.getClass().#method;
-C.getClass().#field;
+C.getClass().#method; // Error
+C.getClass().#field; // Error

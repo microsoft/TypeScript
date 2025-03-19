@@ -1,10 +1,9 @@
 --- old.classImplementsPrimitive.js
 +++ new.classImplementsPrimitive.js
-@@= skipped -7, +7 lines =@@
- class C3 implements boolean { }
+@@= skipped -8, +8 lines =@@
  
  //// [classImplementsPrimitive.js]
--// classes cannot implement primitives
+ // classes cannot implement primitives
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

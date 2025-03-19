@@ -1,10 +1,8 @@
 --- old.capturedLetConstInLoop5.js
 +++ new.capturedLetConstInLoop5.js
-@@= skipped -281, +281 lines =@@
- }
- 
+@@= skipped -283, +283 lines =@@
  //// [capturedLetConstInLoop5.js]
--//====let
+ //====let
  function foo0(x) {
 -    var _loop_1 = function (x_1) {
 -        v = x_1;
@@ -248,7 +246,7 @@
      }
      use(v);
  }
--//====const
+ //====const
  function foo0_c(x) {
 -    var _loop_11 = function (x_11) {
 -        v = x_11;

@@ -7,4 +7,4 @@
 
 
 //// [parserSkippedTokens10.js]
-;
+/*existing trivia*/ ;

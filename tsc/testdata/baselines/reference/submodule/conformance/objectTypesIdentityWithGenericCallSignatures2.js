@@ -103,6 +103,7 @@ function foo15(x: C<string, number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithGenericCallSignatures2.js]
+// object types are identical structurally
 class A {
     foo(x, y) { return null; }
 }

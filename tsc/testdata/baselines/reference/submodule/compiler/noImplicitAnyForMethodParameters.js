@@ -18,8 +18,8 @@ class D {
 
 //// [noImplicitAnyForMethodParameters.js]
 class C {
-    foo(a) { }
+    foo(a) { } // OK - non-ambient class and private method - error
 }
 class D {
-    foo(a) { }
+    foo(a) { } // OK - non-ambient class and public method - error
 }

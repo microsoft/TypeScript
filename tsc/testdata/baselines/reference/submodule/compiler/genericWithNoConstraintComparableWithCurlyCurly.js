@@ -50,7 +50,7 @@ function bat() {
 }
 function no() {
     let x = {};
-    x;
+    x; // should error
 }
 function yes() {
     let x = {};

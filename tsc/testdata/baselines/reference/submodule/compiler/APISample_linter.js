@@ -116,6 +116,8 @@ function delint(sourceFile) {
 }
 const fileNames = process.argv.slice(2);
 fileNames.forEach(fileName => {
-    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, true);
+    // Parse a file
+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
+    // delint it
     delint(sourceFile);
 });

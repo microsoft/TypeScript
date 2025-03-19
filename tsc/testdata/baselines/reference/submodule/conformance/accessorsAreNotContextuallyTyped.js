@@ -16,6 +16,7 @@ var c: C;
 var r = c.x(''); // string
 
 //// [accessorsAreNotContextuallyTyped.js]
+// accessors are not contextually typed
 class C {
     set x(v) {
     }
@@ -24,4 +25,4 @@ class C {
     }
 }
 var c;
-var r = c.x('');
+var r = c.x(''); // string

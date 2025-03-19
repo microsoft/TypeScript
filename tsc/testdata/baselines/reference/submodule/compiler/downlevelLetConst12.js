@@ -14,6 +14,7 @@ const {a: baz4} = { a: 1 };
 
 //// [downlevelLetConst12.js]
 'use strict';
+// top level let\const should not be renamed
 let foo;
 const bar = 1;
 let [baz] = [];

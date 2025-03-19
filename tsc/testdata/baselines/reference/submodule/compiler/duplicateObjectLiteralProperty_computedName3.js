@@ -50,17 +50,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const keys = require("./a");
 const t1 = {
     [keys.n]: 1,
-    [keys.n]: 1,
+    [keys.n]: 1, // duplicate
 };
 const t2 = {
     [keys.s]: 1,
-    [keys.s]: 1,
+    [keys.s]: 1, // duplicate
 };
 const t3 = {
     [keys.E1.A]: 1,
-    [keys.E1.A]: 1,
+    [keys.E1.A]: 1, // duplicate
 };
 const t4 = {
     [keys.E2.B]: 1,
-    [keys.E2.B]: 1,
+    [keys.E2.B]: 1, // duplicate
 };

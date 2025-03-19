@@ -8,6 +8,7 @@
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
 -        if (v !== undefined) module.exports = v;
++// https://github.com/Microsoft/TypeScript/issues/17564
 +class C {
 +    _path = './other';
 +    dynamic() {

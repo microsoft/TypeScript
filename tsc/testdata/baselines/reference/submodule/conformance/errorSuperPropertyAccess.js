@@ -131,6 +131,9 @@ var obj = { n: super.wat, p: super.foo() };
 
 
 //// [errorSuperPropertyAccess.js]
+//super property access in constructor of class with no base type
+//super property access in instance member function of class with no base type
+//super property access in instance member accessor(get and set) of class with no base type
 class NoBase {
     constructor() {
         var a = super.prototype;
@@ -142,6 +145,8 @@ class NoBase {
     }
     m = super.prototype;
     n = super.hasOwnProperty('');
+    //super static property access in static member function of class with no base type
+    //super static property access in static member accessor(get and set) of class with no base type
     static static1() {
         super.hasOwnProperty('');
     }
@@ -163,6 +168,10 @@ class SomeBase {
     static publicStaticFunc() { }
     static publicStaticMember = 0;
 }
+//super.publicInstanceMemberNotFunction in constructor of derived class
+//super.publicInstanceMemberNotFunction in instance member function of derived class
+//super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
+//super property access only available with typed this
 class SomeDerived1 extends SomeBase {
     constructor() {
         super();
@@ -187,6 +196,9 @@ class SomeDerived1 extends SomeBase {
         };
     }
 }
+//super.privateProperty in constructor of derived class
+//super.privateProperty in instance member function of derived class
+//super.privateProperty in instance member accessor(get and set) of derived class
 class SomeDerived2 extends SomeBase {
     constructor() {
         super();
@@ -203,6 +215,10 @@ class SomeDerived2 extends SomeBase {
         n = super.privateMember;
     }
 }
+//super.publicStaticMemberNotFunction in static member function of derived class
+//super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
+//super.privateStaticProperty in static member function of derived class
+//super.privateStaticProperty in static member accessor(get and set) of derived class
 class SomeDerived3 extends SomeBase {
     static fn() {
         super.publicStaticMember = 3;
@@ -221,4 +237,5 @@ class SomeDerived3 extends SomeBase {
         super.privateStaticFunc();
     }
 }
+// In object literal
 var obj = { n: super.wat, p: super.foo() };

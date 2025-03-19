@@ -34,10 +34,12 @@
 +suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
 +class C {
 +    m({ a, ...clone }) {
++        // actually, never mind, don't clone
      }
 -    C.prototype.m = function (_a) {
 -        var a = _a.a, clone = __rest(_a, ["a"]);
--        // actually, never mind, don't clone
++    set p({ a, ...clone }) {
+         // actually, never mind, don't clone
 -    };
 -    Object.defineProperty(C.prototype, "p", {
 -        set: function (_a) {
@@ -52,7 +54,6 @@
 -function foobar(_a) {
 -    if (_a === void 0) { _a = {}; }
 -    var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
-+    set p({ a, ...clone }) {
 +    }
  }
 +function foobar({ bar = {}, ...opts } = {}) {

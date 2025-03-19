@@ -1,25 +1,16 @@
 --- old.assignmentCompatWithOverloads.js
 +++ new.assignmentCompatWithOverloads.js
-@@= skipped -37, +37 lines =@@
- function f3(x) { return null; }
- function f4(x) { return undefined; }
- var g;
--g = f1; // OK 
--g = f2; // Error
--g = f3; // Error
--g = f4; // Error
+@@= skipped -41, +41 lines =@@
+ g = f2; // Error
+ g = f3; // Error
+ g = f4; // Error
 -var C = /** @class */ (function () {
 -    function C(x) {
 -    }
 -    return C;
 -}());
-+g = f1;
-+g = f2;
-+g = f3;
-+g = f4;
 +class C {
 +    constructor(x) { }
 +}
  var d;
--d = C; // Error
-+d = C;
+ d = C; // Error

@@ -25,6 +25,5 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var a = require("./b");
--new a.A(); // Error
 +const a = require("./b");
-+new a.A();
+ new a.A(); // Error

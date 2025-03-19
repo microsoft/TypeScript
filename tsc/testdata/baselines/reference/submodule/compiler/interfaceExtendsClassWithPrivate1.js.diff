@@ -48,12 +48,3 @@
  var c;
  var i;
  var d;
- c = i;
--i = c; // error
-+i = c;
- i = d;
--d = i; // error
-+d = i;
- c = d;
--d = c; // error
-+d = c;

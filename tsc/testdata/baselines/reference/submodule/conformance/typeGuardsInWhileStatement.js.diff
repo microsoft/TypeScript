@@ -8,32 +8,4 @@
 +let cond;
  function a(x) {
      while (typeof x === "string") {
--        x; // string
-+        x;
-         x = undefined;
-     }
--    x; // number
-+    x;
- }
- function b(x) {
-     while (typeof x === "string") {
-         if (cond)
-             continue;
--        x; // string
-+        x;
-         x = undefined;
-     }
--    x; // number
-+    x;
- }
- function c(x) {
-     while (typeof x === "string") {
-         if (cond)
-             break;
--        x; // string
-+        x;
-         x = undefined;
-     }
--    x; // string | number
-+    x;
- }
+         x; // string

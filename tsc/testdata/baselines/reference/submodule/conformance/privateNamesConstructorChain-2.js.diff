@@ -19,8 +19,8 @@
      accessChildProps() {
 -        __classPrivateFieldGet(new Child(), _Parent_foo, "f"); // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
 -        __classPrivateFieldGet(Child, _a, "f", _Parent_bar); // Error: not found
-+        new Child().#foo;
-+        Child.#bar;
++        new Child().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
++        Child.#bar; // Error: not found
      }
  }
 -_a = Parent, _Parent_foo = new WeakMap();
@@ -31,8 +31,8 @@
 -        _Child_foo.set(this, "foo"); // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
 -        _Child_bar.set(this, "bar"); // OK
 -    }
-+    #foo = "foo";
-+    #bar = "bar";
++    #foo = "foo"; // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
++    #bar = "bar"; // OK
  }
 -_Child_foo = new WeakMap(), _Child_bar = new WeakMap();
  new Parent().accessChildProps();

@@ -494,9 +494,10 @@ function f12({ kind, payload }) {
             payload.toUpperCase();
             break;
         default:
-            payload;
+            payload; // never
     }
 }
+// repro #50206
 function f13({ kind, payload }) {
     if (kind === 'A') {
         payload.toFixed();
@@ -556,25 +557,25 @@ function f23({ kind, payload }) {
                 payload.toUpperCase();
                 break;
             default:
-                payload;
+                payload; // never
         }
     }
 }
 function f30({ kind, isA }) {
     if (kind === 'A') {
-        isA;
+        isA; // true
     }
     if (kind === 'B') {
-        isA;
+        isA; // false
     }
     if (kind === 'C') {
-        isA;
+        isA; // false
     }
     if (isA) {
-        kind;
+        kind; // 'A'
     }
     else {
-        kind;
+        kind; // 'B' | 'C'
     }
 }
 function f40(...[kind, data]) {
@@ -604,7 +605,7 @@ const reducerBroken = (state, { type, payload }) => {
 };
 const { value, done } = it.next();
 if (!done) {
-    value;
+    value; // number
 }
 f50((kind, data) => {
     if (kind === 'A') {
@@ -627,7 +628,7 @@ const f52 = (kind, payload) => {
         payload.toFixed();
     }
     else {
-        payload;
+        payload; // undefined
     }
 };
 readFile('hello', (err, data) => {
@@ -692,23 +693,25 @@ let fooAsyncGenM = {
 };
 const f60 = (kind, payload) => {
     if (kind === "a") {
-        payload.toFixed();
+        payload.toFixed(); // error
     }
     if (kind === "b") {
-        payload.toUpperCase();
+        payload.toUpperCase(); // error
     }
 };
+// Repro from #48902
 function foo({ value1, test1 = value1.test1, test2 = value1.test2, test3 = value1.test3, test4 = value1.test4, test5 = value1.test5, test6 = value1.test6, test7 = value1.test7, test8 = value1.test8, test9 = value1.test9 }) { }
+// Repro from #49772
 function fa1(x) {
     const [guard, value] = x;
     if (guard) {
         for (;;) {
-            value;
+            value; // number
         }
     }
     else {
         while (!!true) {
-            value;
+            value; // string
         }
     }
 }
@@ -716,61 +719,64 @@ function fa2(x) {
     const { guard, value } = x;
     if (guard) {
         for (;;) {
-            value;
+            value; // number
         }
     }
     else {
         while (!!true) {
-            value;
+            value; // string
         }
     }
 }
 const fa3 = (guard, value) => {
     if (guard) {
         for (;;) {
-            value;
+            value; // number
         }
     }
     else {
         while (!!true) {
-            value;
+            value; // string
         }
     }
 };
 const bot = new Client();
 bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
 bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+// Destructuring tuple types with different arities
 function fz1([x, y]) {
     if (y === 2) {
-        x;
+        x; // 1
     }
     if (y === 4) {
-        x;
+        x; // 3
     }
     if (y === undefined) {
-        x;
+        x; // 5
     }
     if (x === 1) {
-        y;
+        y; // 2
     }
     if (x === 3) {
-        y;
+        y; // 4
     }
     if (x === 5) {
-        y;
+        y; // undefined
     }
 }
+// Repro from #55661
 function tooNarrow([x, y]) {
     if (y === undefined) {
-        const shouldNotBeOk = x;
+        const shouldNotBeOk = x; // Error
     }
 }
+// https://github.com/microsoft/TypeScript/issues/56312
 function parameterReassigned1([x, y]) {
     if (Math.random()) {
         x = 1;
     }
     if (y === 2) {
-        x;
+        x; // 1 | 3
     }
 }
 function parameterReassigned2([x, y]) {
@@ -778,14 +784,15 @@ function parameterReassigned2([x, y]) {
         y = 2;
     }
     if (y === 2) {
-        x;
+        x; // 1 | 3
     }
 }
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
 const parameterReassignedContextualRest1 = (x, y) => {
     if (Math.random()) {
         y = 2;
     }
     if (y === 2) {
-        x;
+        x; // 1 | 3
     }
 };

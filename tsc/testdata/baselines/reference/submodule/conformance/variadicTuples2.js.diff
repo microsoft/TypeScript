@@ -18,51 +18,13 @@
  tt1 = [5];
  tt1 = ['abc', 5];
  tt1 = ['abc', 'def', 5];
--tt1 = ['abc', 'def', 5, 6]; // Error
-+tt1 = ['abc', 'def', 5, 6];
- ft1(5);
- ft1('abc', 5);
- ft1('abc', 'def', 5);
--ft1('abc', 'def', 5, 6); // Error
--tt2 = [0]; // Error
-+ft1('abc', 'def', 5, 6);
-+tt2 = [0];
- tt2 = [0, 1];
--tt2 = [0, 1, 2]; // Error
-+tt2 = [0, 1, 2];
- tt2 = [0, 'abc', 1];
- tt2 = [0, 'abc', 'def', 1];
--tt2 = [0, 'abc', 1, 'def']; // Error
--tt2 = [true, 'abc', 'def', 1]; // Error
--tt2 = [0, 'abc', 'def', true]; // Error
--ft2(0); // Error
-+tt2 = [0, 'abc', 1, 'def'];
-+tt2 = [true, 'abc', 'def', 1];
-+tt2 = [0, 'abc', 'def', true];
-+ft2(0);
- ft2(0, 1);
--ft2(0, 1, 2); // Error
-+ft2(0, 1, 2);
- ft2(0, 'abc', 1);
- ft2(0, 'abc', 'def', 1);
--ft2(0, 'abc', 1, 'def'); // Error
--ft2(true, 'abc', 'def', 1); // Error
--ft2(0, 'abc', 'def', true); // Error
-+ft2(0, 'abc', 1, 'def');
-+ft2(true, 'abc', 'def', 1);
-+ft2(0, 'abc', 'def', true);
- function ft3(x, y, z) {
--    x = y; // Error
--    x = z; // Error
--    y = x; // Error
--    z = x; // Error
-+    x = y;
-+    x = z;
-+    y = x;
-+    z = x;
+@@= skipped -41, +30 lines =@@
+     y = x; // Error
+     z = x; // Error
  }
 -var tt4 = tt3; // Error
--// Inference
++let tt4 = tt3; // Error
+ // Inference
 -function pipe() {
 -    var args = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
@@ -71,29 +33,24 @@
 -    var callback = args[args.length - 1];
 -    var values = args.slice(0, -1);
 -    callback.apply(void 0, values);
-+let tt4 = tt3;
 +function pipe(...args) {
 +    const callback = args[args.length - 1];
 +    const values = args.slice(0, -1);
 +    callback(...values);
  }
 -pipe("foo", 123, true, function (a, b, c) {
--    a; // string
--    b; // number
--    c; // boolean
 +pipe("foo", 123, true, (a, b, c) => {
-+    a;
-+    b;
-+    c;
+     a; // string
+     b; // number
+     c; // boolean
  });
 -pipe("foo", 123, true, function () {
 -    var x = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        x[_i] = arguments[_i];
 -    }
--    x; // [string, number, boolean]
 +pipe("foo", 123, true, (...x) => {
-+    x;
+     x; // [string, number, boolean]
  });
 -pipe.apply(void 0, __spreadArray(__spreadArray([], sa, false), [function () {
 -        var x = [];
@@ -111,16 +68,24 @@
 -        var qq = x[x.length - 1];
 -        var ww = x[0];
 -    }], false));
--pipe(1, 2, 3, 4); // Error
++pipe(...sa, (...x) => {
++    x; // string[]
++});
++pipe(1, ...sa, 2, (...x) => {
++    x; // [number, ...string[], number]
++    let qq = x[x.length - 1];
++    let ww = x[0];
++});
+ pipe(1, 2, 3, 4); // Error
 -pipe.apply(void 0, sa); // Error
--fn1([]); // Error
--fn1([1]); // Error
--fn1([1, 'abc']); // [number, string]
--fn1([1, 'abc', true]); // [string, boolean]
--fn2([]); // Error
--fn2([1]); // Error
--fn2([1, 'abc']); // [number, string]
--fn2([1, 'abc', true]); // [number, boolean]
++pipe(...sa); // Error
+ fn1([]); // Error
+ fn1([1]); // Error
+ fn1([1, 'abc']); // [number, string]
+@@= skipped -49, +33 lines =@@
+ fn2([1]); // Error
+ fn2([1, 'abc']); // [number, string]
+ fn2([1, 'abc', true]); // [number, boolean]
 -var a1 = foo('blah1', 1);
 -var b1 = foo('blah1', 'blah2', 1);
 -var c1 = foo(1); // Error
@@ -174,26 +139,8 @@
 -declare const c1: [string, ...string[], number];
 -declare const d1: [string, ...string[], number];
 -declare const e1: [string, ...string[], number];
-+pipe(...sa, (...x) => {
-+    x;
-+});
-+pipe(1, ...sa, 2, (...x) => {
-+    x;
-+    let qq = x[x.length - 1];
-+    let ww = x[0];
-+});
-+pipe(1, 2, 3, 4);
-+pipe(...sa);
-+fn1([]);
-+fn1([1]);
-+fn1([1, 'abc']);
-+fn1([1, 'abc', true]);
-+fn2([]);
-+fn2([1]);
-+fn2([1, 'abc']);
-+fn2([1, 'abc', true]);
 +const a1 = foo('blah1', 1);
 +const b1 = foo('blah1', 'blah2', 1);
-+const c1 = foo(1);
-+const d1 = foo(1, 2);
-+const e1 = foo('blah1', 'blah2', 1, 2, 3);
++const c1 = foo(1); // Error
++const d1 = foo(1, 2); // Error
++const e1 = foo('blah1', 'blah2', 1, 2, 3); // Error

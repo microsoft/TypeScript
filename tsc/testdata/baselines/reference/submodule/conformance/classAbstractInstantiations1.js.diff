@@ -1,12 +1,9 @@
 --- old.classAbstractInstantiations1.js
 +++ new.classAbstractInstantiations1.js
-@@= skipped -25, +25 lines =@@
- 
- 
- //// [classAbstractInstantiations1.js]
--//
--// Calling new with (non)abstract classes.
--//
+@@= skipped -28, +28 lines =@@
+ //
+ // Calling new with (non)abstract classes.
+ //
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -48,8 +45,5 @@
 +class C extends B {
 +}
  new A;
--new A(1); // should report 1 error
-+new A(1);
+ new A(1); // should report 1 error
  new B;
- new C;
- var a;

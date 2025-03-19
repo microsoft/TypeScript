@@ -51,6 +51,6 @@ class FooClass {
 class Test2 {
     attrs;
     m() {
-        return this.attrs.params;
+        return this.attrs.params; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
     }
 }

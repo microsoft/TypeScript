@@ -1,10 +1,9 @@
 --- old.thisInGenericStaticMembers.js
 +++ new.thisInGenericStaticMembers.js
-@@= skipped -28, +28 lines =@@
- 
+@@= skipped -29, +29 lines =@@
  
  //// [thisInGenericStaticMembers.js]
--// this.call in static generic method not resolved correctly
+ // this.call in static generic method not resolved correctly
 -var A = /** @class */ (function () {
 -    function A() {
 -    }

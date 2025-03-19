@@ -50,18 +50,31 @@ module M {
 //// [noImplicitAnyParametersInModule.js]
 var M;
 (function (M) {
+    // No implicit-'any' errors.
     function m_f1() { }
+    // Implicit-'any' error for x.
     function m_f2(x) { }
+    // No implicit-'any' errors.
     function m_f3(x) { }
+    // Implicit-'any' errors for x, y, and z.
     function m_f4(x, y, z) { }
+    // Implicit-'any' errors for x and z.
     function m_f5(x, y, z) { }
+    // Implicit-'any[]' error for r.
     function m_f6(...r) { }
+    // Implicit-'any'/'any[]' errors for x and r.
     function m_f7(x, ...r) { }
     function m_f8(x3, y3) { }
+    // No implicit-'any' errors.
     var m_f9 = () => "";
+    // Implicit-'any' error for x.
     var m_f10 = (x) => "";
+    // Implicit-'any' errors for x, y, and z.
     var m_f11 = (x, y, z) => "";
+    // Implicit-'any' errors for x and z.
     var m_f12 = (x, y, z) => "";
+    // Implicit-'any[]' errors for r.
     var m_f13 = (...r) => "";
+    // Implicit-'any'/'any[]' errors for x and r.
     var m_f14 = (x, ...r) => "";
 })(M || (M = {}));

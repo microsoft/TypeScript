@@ -1,20 +1,11 @@
 --- old.arrayLiteralComments.js
 +++ new.arrayLiteralComments.js
-@@= skipped -17, +17 lines =@@
- 
- //// [arrayLiteralComments.js]
+@@= skipped -19, +19 lines =@@
  var testArrayWithFunc = [
--    // Function comment
+     // Function comment
      function () {
 -        var x = 1;
 +        let x = 1;
      },
--    // String comment
+     // String comment
      '1',
--    // Numeric comment
-     2,
--    // Object comment
-     { a: 1 },
--    // Array comment
-     [1, 2, 3]
- ];

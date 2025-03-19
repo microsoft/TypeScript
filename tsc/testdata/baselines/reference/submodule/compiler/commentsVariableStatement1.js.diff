@@ -1,10 +1,8 @@
 --- old.commentsVariableStatement1.js
 +++ new.commentsVariableStatement1.js
-@@= skipped -4, +4 lines =@@
- var v = 1;
- 
+@@= skipped -6, +6 lines =@@
  //// [commentsVariableStatement1.js]
--/** Comment */
+ /** Comment */
  var v = 1;
 -
 -

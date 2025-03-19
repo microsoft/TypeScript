@@ -15,6 +15,4 @@
 +    for (x of obj) {
          x = x.toExponential();
      }
--    x; // string | boolean
-+    x;
- }
+     x; // string | boolean

@@ -129,12 +129,13 @@ if (nonNull == undefined) {
 else {
     nonNull;
 }
+// Repro from #50567
 const foo = (value) => {
     if (!value) {
         return 'foo';
     }
     if (value === 'xyz') {
-        return value;
+        return value; // Type '{}' is not assignable to type 'string'.
     }
     return '';
 };

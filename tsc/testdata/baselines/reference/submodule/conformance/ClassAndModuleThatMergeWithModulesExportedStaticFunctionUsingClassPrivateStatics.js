@@ -24,6 +24,7 @@ class clodule {
     static sfn(id) { return 42; }
 }
 (function (clodule) {
+    // error: duplicate identifier expected
     function fn(x, y) {
         return clodule.sfn('a');
     }

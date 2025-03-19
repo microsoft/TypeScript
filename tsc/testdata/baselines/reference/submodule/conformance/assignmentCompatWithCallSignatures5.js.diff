@@ -1,10 +1,9 @@
 --- old.assignmentCompatWithCallSignatures5.js
 +++ new.assignmentCompatWithCallSignatures5.js
-@@= skipped -67, +67 lines =@@
- 
+@@= skipped -68, +68 lines =@@
  
  //// [assignmentCompatWithCallSignatures5.js]
--// checking assignment compat for function types. No errors in this file
+ // checking assignment compat for function types. No errors in this file
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -61,61 +60,3 @@
  var a;
  var a2;
  var a3;
-@@= skipped -54, +24 lines =@@
- var a17;
- var a18;
- var b;
--a = b; // ok
--b = a; // ok
-+a = b;
-+b = a;
- var b2;
--a2 = b2; // ok
--b2 = a2; // ok
-+a2 = b2;
-+b2 = a2;
- var b3;
--a3 = b3; // ok
--b3 = a3; // ok
-+a3 = b3;
-+b3 = a3;
- var b4;
--a4 = b4; // ok
--b4 = a4; // ok
-+a4 = b4;
-+b4 = a4;
- var b5;
--a5 = b5; // ok
--b5 = a5; // ok
-+a5 = b5;
-+b5 = a5;
- var b6;
--a6 = b6; // ok
--b6 = a6; // ok
-+a6 = b6;
-+b6 = a6;
- var b11;
--a11 = b11; // ok
--b11 = a11; // ok
-+a11 = b11;
-+b11 = a11;
- var b15;
--a15 = b15; // ok, T = U, T = V
--b15 = a15; // ok
-+a15 = b15;
-+b15 = a15;
- var b16;
--a15 = b16; // ok
--b15 = a16; // ok
-+a15 = b16;
-+b15 = a16;
- var b17;
--a17 = b17; // ok
--b17 = a17; // ok
-+a17 = b17;
-+b17 = a17;
- var b18;
--a18 = b18; // ok
--b18 = a18; // ok
-+a18 = b18;
-+b18 = a18;

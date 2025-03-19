@@ -37,15 +37,21 @@ switch (params.tag) {
 
 //// [genericObjectSpreadResultInSwitch.js]
 const getType = (params) => {
-    const { foo, ...rest } = params;
+    const { 
+    // Omit
+    foo, ...rest } = params;
     return rest;
 };
 switch (params.tag) {
     case 'a': {
+        // TS 4.2: number
+        // TS 4.3: string | number
         const result = getType(params).type;
         break;
     }
     case 'b': {
+        // TS 4.2: string
+        // TS 4.3: string | number
         const result = getType(params).type;
         break;
     }

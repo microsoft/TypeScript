@@ -78,7 +78,7 @@ class A {
 class B {
     foo() { }
     constructor() {
-        return 1;
+        return 1; // error
     }
 }
 class C {
@@ -90,7 +90,7 @@ class C {
 class D {
     foo() { }
     constructor() {
-        return "test";
+        return "test"; // error
     }
 }
 class E {
@@ -102,7 +102,7 @@ class E {
 class F {
     foo;
     constructor() {
-        return { foo: 1 };
+        return { foo: 1 }; //error
     }
 }
 class G {
@@ -116,7 +116,7 @@ class G {
 class H extends F {
     constructor() {
         super();
-        return new G();
+        return new G(); //error
     }
 }
 class I extends G {

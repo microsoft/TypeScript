@@ -91,6 +91,7 @@ function foo14(x: typeof b); // error
 function foo14(x: any) { }
 
 //// [objectTypesIdentityWithPublics.js]
+// object types are identical structurally
 class A {
     foo;
 }

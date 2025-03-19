@@ -72,21 +72,10 @@
  if (b.isLeader()) {
      b.lead();
  }
- else if (b.isFollower()) {
-     b.follow();
- }
--// if (((a.isLeader)())) {
--//     a.lead();
--// }
--// else if (((a).isFollower())) {
--//     a.follow();
--// }
--// if (((a["isLeader"])())) {
--//     a.lead();
--// }
--// else if (((a)["isFollower"]())) {
--//     a.follow();
--// }
+@@= skipped -70, +42 lines =@@
+ // else if (((a)["isFollower"]())) {
+ //     a.follow();
+ // }
 -var holder2 = { a: a };
 +var holder2 = { a };
  if (holder2.a.isLeader()) {
@@ -150,10 +139,8 @@
  if (crate.isSundries()) {
      crate.contents.broken = true;
  }
- else if (crate.isSupplies()) {
-     crate.contents.spoiled = true;
- }
--// Matching guards should be assignable
+@@= skipped -52, +38 lines =@@
+ // Matching guards should be assignable
  a.isFollower = b.isFollower;
  a.isLeader = b.isLeader;
 -var MimicGuard = /** @class */ (function () {

@@ -1,10 +1,9 @@
 --- old.subtypesOfTypeParameterWithConstraints4.js
 +++ new.subtypesOfTypeParameterWithConstraints4.js
-@@= skipped -80, +80 lines =@@
- }
+@@= skipped -81, +81 lines =@@
  
  //// [subtypesOfTypeParameterWithConstraints4.js]
--// checking whether other types are subtypes of type parameters with constraints
+ // checking whether other types are subtypes of type parameters with constraints
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -29,22 +28,9 @@
 +    foo;
 +}
  function f(t, u, v) {
--    // ok
+     // ok
      var r = true ? t : u;
-     var r = true ? u : t;
--    // ok
-     var r2 = true ? t : v;
-     var r2 = true ? v : t;
--    // ok
-     var r3 = true ? v : u;
-     var r3 = true ? u : v;
--    // ok
-     var r4 = true ? t : new Foo();
-     var r4 = true ? new Foo() : t;
--    // ok
-     var r5 = true ? u : new Foo();
-     var r5 = true ? new Foo() : u;
--    // ok
+@@= skipped -40, +23 lines =@@
      var r6 = true ? v : new Foo();
      var r6 = true ? new Foo() : v;
  }
@@ -120,29 +106,29 @@
 +    foo;
 +}
 +class D1 extends B1 {
-+    foo;
++    foo; // ok
 +}
 +class D2 extends B1 {
-+    foo;
++    foo; // ok
 +}
 +class D3 extends B1 {
-+    foo;
++    foo; // error
 +}
 +class D4 extends B1 {
-+    foo;
++    foo; // ok
 +}
 +class D5 extends B1 {
-+    foo;
++    foo; // error
 +}
 +class D6 extends B1 {
-+    foo;
++    foo; // error
 +}
 +class D7 extends B1 {
-+    foo;
++    foo; // error
 +}
 +class D8 extends B1 {
-+    foo;
++    foo; // ok
 +}
 +class D9 extends B1 {
-+    foo;
++    foo; // error
 +}

@@ -1,11 +1,9 @@
 --- old.genericTypeReferenceWithoutTypeArgument.js
 +++ new.genericTypeReferenceWithoutTypeArgument.js
-@@= skipped -39, +39 lines =@@
- var k = <M.E>null;
- 
+@@= skipped -41, +41 lines =@@
  //// [genericTypeReferenceWithoutTypeArgument.js]
--// it is an error to use a generic type without type arguments
--// all of these are errors 
+ // it is an error to use a generic type without type arguments
+ // all of these are errors 
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

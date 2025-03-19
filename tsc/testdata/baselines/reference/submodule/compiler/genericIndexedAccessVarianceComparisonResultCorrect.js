@@ -37,5 +37,5 @@ class B {
     x = 'B';
     z = true;
 }
-b = a;
+b = a; // should be no error
 c = d;

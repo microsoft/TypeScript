@@ -35,7 +35,7 @@
 +    class PullSymbol {
 +        constructor(name, declKind) {
          }
--        // link methods
+         // link methods
 -        PullSymbol.prototype.addOutgoingLink = function (linkTo, kind) {
 -        };
 -        PullSymbol.prototype.getType = function () {

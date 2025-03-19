@@ -31,12 +31,15 @@ class B {
     b;
 }
 ;
+// OK
 class X {
     f() { return undefined; }
-}
+} // { f: () => { b; } }
+// OK
 class Y {
     f() { return undefined; }
-}
+} // { f: () => { a; } }
+// OK
 class Z {
     f() { return undefined; }
-}
+} // { f: <T>() => T } 

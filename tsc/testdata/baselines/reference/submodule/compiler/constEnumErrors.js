@@ -56,8 +56,11 @@ var E;
 })(E || (E = {}));
 var E1;
 (function (E1) {
+    // illegal case
+    // forward reference to the element of the same enum
     E1["X"] = E1.Y;
     if (typeof E1.X !== "string") E1[E1.X] = "X";
+    // forward reference to the element of the same enum
     E1["Y"] = E1.Z;
     if (typeof E1.Y !== "string") E1[E1.Y] = "Y";
     E1["Y1"] = E1["Z"];
@@ -85,5 +88,5 @@ var NaNOrInfinity;
     NaNOrInfinity[NaNOrInfinity["E"] = 1.876879207201175e+255] = "E";
     NaNOrInfinity[NaNOrInfinity["F"] = NaNOrInfinity.E * NaNOrInfinity.E] = "F";
     NaNOrInfinity[NaNOrInfinity["G"] = 1 / 0] = "G";
-    NaNOrInfinity[NaNOrInfinity["H"] = 0 / 0] = "H";
+    NaNOrInfinity[NaNOrInfinity["H"] = 0 / 0] = "H"; // NaN
 })(NaNOrInfinity || (NaNOrInfinity = {}));

@@ -80,7 +80,7 @@
  var RCComp = RC1 || RC2;
  var EmptyRCComp = RC3 || RC4;
  var PartRCComp = RC1 || RC4;
--// Error
+ // Error
 -var a = React.createElement(RCComp, { x: true });
 -var b = React.createElement(PartRCComp, { x: 10 });
 -var c = React.createElement(EmptyRCComp, { prop: true });

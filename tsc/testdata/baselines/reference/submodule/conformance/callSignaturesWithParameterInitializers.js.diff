@@ -1,10 +1,9 @@
 --- old.callSignaturesWithParameterInitializers.js
 +++ new.callSignaturesWithParameterInitializers.js
-@@= skipped -59, +59 lines =@@
- 
+@@= skipped -60, +60 lines =@@
  
  //// [callSignaturesWithParameterInitializers.js]
--// Optional parameters allow initializers only in implementation signatures
+ // Optional parameters allow initializers only in implementation signatures
 -function foo(x) {
 -    if (x === void 0) { x = 1; }
 -}
@@ -37,14 +36,7 @@
  var c;
  c.foo();
  c.foo(1);
-@@= skipped -32, +20 lines =@@
- i(1);
- i.foo(1);
- i.foo(1, 2);
--// these are errors
- var a;
- a();
- a(1);
+@@= skipped -38, +27 lines =@@
  a.foo();
  a.foo(1);
  var b = {

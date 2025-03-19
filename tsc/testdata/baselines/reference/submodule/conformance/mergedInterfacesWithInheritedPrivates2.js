@@ -51,5 +51,5 @@ class E extends C2 {
     z;
 }
 var a;
-var r = a.x;
-var r2 = a.w;
+var r = a.x; // error
+var r2 = a.w; // error

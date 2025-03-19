@@ -26,6 +26,10 @@ let c = <ruhroh />;
 //// [jsxElementTypeLiteral.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// should be fine - `ElementType` accepts `div`
 let a = <div />;
+// should be an error - `ElementType` does not accept `span`
 let b = <span />;
+// Should be an error.
+// `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
 let c = <ruhroh />;

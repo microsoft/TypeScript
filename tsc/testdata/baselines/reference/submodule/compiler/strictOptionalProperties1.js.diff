@@ -19,76 +19,32 @@
  function f1(obj) {
 -    var a = obj.a; // string | undefined
 -    var b = obj.b; // string | undefined
-+    let a = obj.a;
-+    let b = obj.b;
++    let a = obj.a; // string | undefined
++    let b = obj.b; // string | undefined
      obj.a = 'hello';
      obj.b = 'hello';
--    obj.a = undefined; // Error
-+    obj.a = undefined;
-     obj.b = undefined;
- }
- function f2(obj) {
-     obj = obj;
--    obj.a = obj.a; // Error
-+    obj.a = obj.a;
-     obj.b = obj.b;
-     if ('a' in obj) {
-         obj.a;
-@@= skipped -30, +18 lines =@@
-     }
-     else {
-         obj.a;
--        obj.a = obj.a; // Error
-+        obj.a = obj.a;
-     }
-     if (obj.hasOwnProperty('a')) {
-         obj.a;
-@@= skipped -8, +8 lines =@@
-     }
-     else {
-         obj.a;
--        obj.a = obj.a; // Error
-+        obj.a = obj.a;
-     }
-     if ('b' in obj) {
-         obj.b;
-@@= skipped -20, +20 lines =@@
+     obj.a = undefined; // Error
+@@= skipped -58, +46 lines =@@
      }
  }
  function f3(obj) {
 -    var a = obj.a; // string | undefined
 -    var b = obj.b; // string | undefined
-+    let a = obj.a;
-+    let b = obj.b;
++    let a = obj.a; // string | undefined
++    let b = obj.b; // string | undefined
      obj.a = 'hello';
      obj.b = 'hello';
--    obj.a = undefined; // Error
-+    obj.a = undefined;
+     obj.a = undefined; // Error
      obj.b = undefined;
  }
  function f4(t) {
 -    var x = t[0]; // string | undefined
-+    let x = t[0];
++    let x = t[0]; // string | undefined
      t[0] = 'hello';
--    t[0] = undefined; // Error
-+    t[0] = undefined;
+     t[0] = undefined; // Error
  }
- function f4a(t1, t2) {
--    t1 = t2; // Wasn't an error, but should be
-+    t1 = t2;
- }
- function f5(t) {
-     t = [42];
-@@= skipped -21, +21 lines =@@
-     t = [42, 'abc', true];
-     t = [42, ,];
-     t = [42, , ,];
--    t = [42, , , ,]; // Error
--    t = [, , true]; // Error
--    t = [42, undefined, true]; // Error
-+    t = [42, , , ,];
-+    t = [, , true];
-+    t = [42, undefined, true];
+@@= skipped -26, +26 lines =@@
+     t = [42, undefined, true]; // Error
  }
  function f6() {
 -    var t1 = [1, 2];
@@ -105,59 +61,27 @@
 -var defaultProps = { foo: 'foo' };
 -var inputProps = { foo: undefined, bar: 'bar' };
 -var completeProps = __assign(__assign({}, defaultProps), inputProps);
--// Example from #13195
++const defaultProps = { foo: 'foo' };
++const inputProps = { foo: undefined, bar: 'bar' };
++const completeProps = { ...defaultProps, ...inputProps };
+ // Example from #13195
 -var t1 = [1];
 -var t2 = [1, undefined];
 -var t3 = [1, "string", undefined];
 -var t4 = [1, undefined, undefined];
--// Example from #13195
--var x = { foo: undefined };
--var y = __assign({ foo: 123 }, x);
--f11(ox1); // string
--f11(ox2); // string | undefined
--f11(ox3); // string
--f11(ox4); // string | undefined
--f12(tx1); // string
--f12(tx2); // string | undefined
--f12(tx3); // string
--f12(tx4); // string | undefined
--f13(ox1); // { p: string }
--f13(ox2); // { p: string | undefined }
--f13(ox3); // { p: string }
--f13(ox4); // { p: string | undefined }
--f13(tx1); // [string]
--f13(tx2); // [string | undefined]
--f13(tx3); // [string]
--f13(tx4); // [string | undefined]
-+const defaultProps = { foo: 'foo' };
-+const inputProps = { foo: undefined, bar: 'bar' };
-+const completeProps = { ...defaultProps, ...inputProps };
 +const t1 = [1];
 +const t2 = [1, undefined];
 +const t3 = [1, "string", undefined];
 +const t4 = [1, undefined, undefined];
+ // Example from #13195
+-var x = { foo: undefined };
+-var y = __assign({ foo: 123 }, x);
 +const x = { foo: undefined };
 +const y = { foo: 123, ...x };
-+f11(ox1);
-+f11(ox2);
-+f11(ox3);
-+f11(ox4);
-+f12(tx1);
-+f12(tx2);
-+f12(tx3);
-+f12(tx4);
-+f13(ox1);
-+f13(ox2);
-+f13(ox3);
-+f13(ox4);
-+f13(tx1);
-+f13(tx2);
-+f13(tx3);
-+f13(tx4);
- function expectNotUndefined(value) {
-     if (value === undefined) {
-         throw new TypeError('value is undefined');
-@@= skipped -45, +43 lines =@@
+ f11(ox1); // string
+ f11(ox2); // string | undefined
+ f11(ox3); // string
+@@= skipped -40, +40 lines =@@
      return value;
  }
  function aa(input) {
@@ -165,18 +89,11 @@
 +    const notUndefinedVal = expectNotUndefined(input.bar);
      bb(notUndefinedVal);
  }
--u1.email = e; // error, but only because boolean isn't in email's type
--u2.email = e; // error, and suggest adding undefined
-+u1.email = e;
-+u2.email = e;
- u2 = {
-     name: 'hi',
-     email: undefined
- };
- a = b;
+ u1.email = e; // error, but only because boolean isn't in email's type
+@@= skipped -13, +13 lines =@@
  a = c;
--a = d; // Error
--a = e; // Error
+ a = d; // Error
+ a = e; // Error
 -
 -
 -//// [strictOptionalProperties1.d.ts]
@@ -295,5 +212,3 @@
 -    x?: never;
 -}['x'];
 -type UC = UA & UB;
-+a = d;
-+a = e;

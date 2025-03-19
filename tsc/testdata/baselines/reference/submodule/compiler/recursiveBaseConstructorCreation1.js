@@ -14,4 +14,4 @@ class C1 {
 }
 class C2 extends C1 {
 }
-var x = new C2();
+var x = new C2(); // Valid

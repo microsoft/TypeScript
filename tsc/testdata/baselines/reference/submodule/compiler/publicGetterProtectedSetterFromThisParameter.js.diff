@@ -37,7 +37,6 @@
 -        configurable: true
 -    });
 -    B.prototype.foo = function (a, b) {
--        // Should have no errors in this block
 +class A {
 +    get x() { return 0; }
 +    set x(v) { }
@@ -50,9 +49,10 @@
 +    get u() { return 0; }
 +    set u(v) { }
 +    foo(a, b) {
+         // Should have no errors in this block
          this.x = 0;
          this.y = 0;
-         a.x = 0;
+@@= skipped -40, +19 lines =@@
          a.y = 0;
          b.q = 0;
          b.u = 0;
@@ -64,9 +64,3 @@
  function bar(a, b) {
      this.x = 0;
      this.y = 0;
-     a.x = 0;
-     a.y = 0;
--    // These should error
-     b.q = 0;
-     b.u = 0;
- }

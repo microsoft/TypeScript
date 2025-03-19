@@ -29,4 +29,4 @@ class MyStringIterator {
     }
 }
 var v;
-for (v of new MyStringIterator) { }
+for (v of new MyStringIterator) { } // Should succeed

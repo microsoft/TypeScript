@@ -16,6 +16,7 @@ interface String {}
 
 
 //// [declarationEmitPreservesHasNoDefaultLibDirective.js]
+/// <reference no-default-lib="true"/>
 class Foo {
     public;
 }

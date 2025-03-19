@@ -33,11 +33,11 @@
 -    };
 -    return class_1;
 -}());
--// No error, but definition is wrong. 
 +    }
 +    _assertIsStripped() {
 +    }
 +};
+ // No error, but definition is wrong. 
  exports.default = mix(DisposableMixin);
 -var Monitor = /** @class */ (function (_super) {
 -    __extends(Monitor, _super);

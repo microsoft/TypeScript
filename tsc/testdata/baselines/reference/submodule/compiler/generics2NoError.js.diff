@@ -1,12 +1,9 @@
 --- old.generics2NoError.js
 +++ new.generics2NoError.js
-@@= skipped -19, +19 lines =@@
- var v4: G<G<A, B>, C>;         // Ok
- 
- //// [generics2NoError.js]
--var v1; // Ok
--var v2; // Ok, equivalent to G<A, C>
--var v4; // Ok
+@@= skipped -22, +22 lines =@@
+ var v1; // Ok
+ var v2; // Ok, equivalent to G<A, C>
+ var v4; // Ok
 -
 -
 -//// [generics2NoError.d.ts]
@@ -37,6 +34,3 @@
 -    a: string;
 -}, C>;
 -declare var v4: G<G<A, B>, C>;
-+var v1;
-+var v2;
-+var v4;

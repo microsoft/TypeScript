@@ -11,10 +11,10 @@ let g: any = /* comment2 */ d(e);
 
 
 //// [emitOneLineVariableDeclarationRemoveCommentsFalse.js]
-let a = {};
+let a = /*[[${something}]]*/ {};
 let b = {};
 let c = { hoge: true };
 let d = {};
-let e = {};
-let f = d(e);
+let e /*[[${something}]]*/ = {};
+let f = /* comment1 */ d(e);
 let g = d(e);

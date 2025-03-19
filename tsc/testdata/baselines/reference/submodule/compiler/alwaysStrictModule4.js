@@ -8,4 +8,5 @@ export const a = 1
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
+// Module commonjs
 exports.a = 1;

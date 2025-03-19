@@ -38,7 +38,7 @@ class Bar {
 //// [initializerWithThisPropertyAccess.js]
 class A {
     a;
-    b = this.a;
+    b = this.a; // Error
     c = () => this.a;
     d = (new A()).a;
     constructor() {
@@ -52,6 +52,7 @@ class C {
     a;
     b = this.a;
 }
+// Repro from #37979
 class Foo {
     bar;
     barProp = this.bar.prop;

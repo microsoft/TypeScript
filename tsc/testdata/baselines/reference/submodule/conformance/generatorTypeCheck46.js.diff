@@ -1,8 +1,0 @@
---- old.generatorTypeCheck46.js
-+++ new.generatorTypeCheck46.js
-@@= skipped -17, +17 lines =@@
-             yield x => x.length;
-         }
-     };
--}, p => undefined); // T is fixed, should be string
-+}, p => undefined);

@@ -194,9 +194,13 @@ interface I2 {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c1 = void 0;
 class c1 {
+    /** This comment should appear for foo*/
     foo() {
     }
-    fooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     fooWithRestParameters(a, ...rests) {
@@ -205,9 +209,13 @@ class c1 {
     fooWithOverloads(a) {
         return a;
     }
+    /** This comment should appear for privateFoo*/
     privateFoo() {
     }
-    privateFooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    privateFooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     privateFooWithRestParameters(a, ...rests) {
@@ -216,9 +224,13 @@ class c1 {
     privateFooWithOverloads(a) {
         return a;
     }
+    /** This comment should appear for static foo*/
     static staticFoo() {
     }
-    static staticFooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     static staticFooWithRestParameters(a, ...rests) {
@@ -227,9 +239,13 @@ class c1 {
     static staticFooWithOverloads(a) {
         return a;
     }
+    /** This comment should appear for privateStaticFoo*/
     static privateStaticFoo() {
     }
-    static privateStaticFooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    static privateStaticFooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     static privateStaticFooWithRestParameters(a, ...rests) {
@@ -242,9 +258,13 @@ class c1 {
 exports.c1 = c1;
 //// [declFileMethods_1.js]
 class c2 {
+    /** This comment should appear for foo*/
     foo() {
     }
-    fooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     fooWithRestParameters(a, ...rests) {
@@ -253,9 +273,13 @@ class c2 {
     fooWithOverloads(a) {
         return a;
     }
+    /** This comment should appear for privateFoo*/
     privateFoo() {
     }
-    privateFooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    privateFooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     privateFooWithRestParameters(a, ...rests) {
@@ -264,9 +288,13 @@ class c2 {
     privateFooWithOverloads(a) {
         return a;
     }
+    /** This comment should appear for static foo*/
     static staticFoo() {
     }
-    static staticFooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     static staticFooWithRestParameters(a, ...rests) {
@@ -275,9 +303,13 @@ class c2 {
     static staticFooWithOverloads(a) {
         return a;
     }
+    /** This comment should appear for privateStaticFoo*/
     static privateStaticFoo() {
     }
-    static privateStaticFooWithParameters(a, b) {
+    /** This is comment for function signature*/
+    static privateStaticFooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
         var d = a;
     }
     static privateStaticFooWithRestParameters(a, ...rests) {

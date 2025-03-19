@@ -209,28 +209,35 @@ function hasNonMathcingGenericType(a) {
 }
 let a;
 let b;
+// Passed argument is not the same as the one being guarded.
 if (isB(b)) {
     a.propB;
 }
+// Parameter index and argument index for the type guard target is not matching.
 if (funA(0, a)) {
-    a.propB;
+    a.propB; // Error
 }
+// No type guard in if statement
 if (hasNoTypeGuard(a)) {
     a.propB;
 }
 acceptingDifferentSignatureTypeGuardFunction(isC);
+// Boolean not assignable to type guard
 var assign1;
 assign1 = function (p1, p2) {
     return true;
 };
+// Must have matching parameter index
 var assign2;
 assign2 = function (p1, p2) {
     return true;
 };
+// No matching signature
 var assign3;
 assign3 = function (p1, p2, p3) {
     return true;
 };
+// Type predicates in non-return type positions
 var b1, is, A;
 function b2(a, is, A) { }
 ;
@@ -241,6 +248,7 @@ A;
     return true;
 }
 ;
+// Non-compatiable type predicate positions for signature declarations
 class D {
     constructor(p1) {
         return true;
@@ -254,9 +262,11 @@ class D {
 }
 is;
 C;
+// Reference to rest parameter
 function b4(...a) {
     return true;
 }
+// Reference to binding pattern
 function b5({ a, b, p1 }, p2, p3) {
     return true;
 }
@@ -266,6 +276,7 @@ function b6([a, b, p1], p2, p3) {
 function b7({ a, b, c: { p1 } }, p2, p3) {
     return true;
 }
+// Should not crash the compiler
 var x;
 if (hasMissingParameter()) {
     x.propA;

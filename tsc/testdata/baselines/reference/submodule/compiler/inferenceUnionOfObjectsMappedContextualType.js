@@ -22,5 +22,5 @@ const test: RowRenderer<Entity> = {
 const test = {
     key: 'someDate',
     caption: 'My Date',
-    formatter: (value) => value ? value.toString() : '-'
+    formatter: (value) => value ? value.toString() : '-' // value: any
 };

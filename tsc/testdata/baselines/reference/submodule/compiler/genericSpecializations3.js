@@ -53,8 +53,8 @@ class StringFoo2 {
 }
 var stringFoo2;
 stringFoo2.foo("hm");
-intFoo = stringFoo2;
-stringFoo2 = intFoo;
+intFoo = stringFoo2; // error
+stringFoo2 = intFoo; // error
 class StringFoo3 {
     foo(x) { return null; }
 }

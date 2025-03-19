@@ -16,7 +16,7 @@
 -    return t;
 -};
 -var _a, _b;
--// https://github.com/microsoft/TypeScript/issues/43400
+ // https://github.com/microsoft/TypeScript/issues/43400
  var x, y;
 -[_a] = [{ abc: 1 }], x = __rest(_a, []);
 -for (let _c of [[{ abc: 1 }]]) {

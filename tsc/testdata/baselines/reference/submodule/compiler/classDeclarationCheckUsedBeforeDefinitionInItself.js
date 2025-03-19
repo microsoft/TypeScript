@@ -7,5 +7,5 @@ class C3 {
 
 //// [classDeclarationCheckUsedBeforeDefinitionInItself.js]
 class C3 {
-    static intance = new C3();
+    static intance = new C3(); // ok
 }

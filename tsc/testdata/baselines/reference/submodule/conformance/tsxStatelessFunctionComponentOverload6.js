@@ -78,15 +78,16 @@ function MainButton(props) {
     }
     return this._buildMainButton(props);
 }
+// OK
 const b0 = <MainButton to='/some/path'>GO</MainButton>;
 const b1 = <MainButton onClick={(e) => { }}>Hello world</MainButton>;
 const b2 = <MainButton {...obj}/>;
 const b3 = <MainButton {...{ to: 10000 }} {...obj}/>;
-const b4 = <MainButton {...obj1}/>;
-const b5 = <MainButton {...obj1} to="/to/somewhere"/>;
+const b4 = <MainButton {...obj1}/>; // any; just pick the first overload
+const b5 = <MainButton {...obj1} to="/to/somewhere"/>; // should pick the second overload
 const b6 = <MainButton {...obj2}/>;
 const b7 = <MainButton {...{ onClick: () => { console.log("hi"); } }}/>;
-const b8 = <MainButton {...{ onClick() { } }}/>;
+const b8 = <MainButton {...{ onClick() { } }}/>; // OK; method declaration get retained (See GitHub #13365)
 const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
 const b10 = <MainButton to='/some/path' children="hi"></MainButton>;
 const b11 = <MainButton onClick={(e) => { }} className="hello" data-format>Hello world</MainButton>;

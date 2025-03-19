@@ -36,7 +36,7 @@ class C1 {
     }
 }
 var c1;
-c1.x;
+c1.x; // OK
 class C2 {
     p;
     constructor(p) {
@@ -44,7 +44,7 @@ class C2 {
     }
 }
 var c2;
-c2.p;
+c2.p; // private, error
 class C3 {
     p;
     constructor(p) {
@@ -52,10 +52,10 @@ class C3 {
     }
 }
 var c3;
-c3.p;
+c3.p; // protected, error
 class Derived extends C3 {
     constructor(p) {
         super(p);
-        this.p;
+        this.p; // OK
     }
 }

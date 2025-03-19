@@ -1,10 +1,9 @@
 --- old.nullishCoalescingOperatorInAsyncGenerator(target=es5).js
 +++ new.nullishCoalescingOperatorInAsyncGenerator(target=es5).js
-@@= skipped -10, +10 lines =@@
- 
+@@= skipped -11, +11 lines =@@
  
  //// [nullishCoalescingOperatorInAsyncGenerator.js]
--// https://github.com/microsoft/TypeScript/issues/37686
+ // https://github.com/microsoft/TypeScript/issues/37686
 -function f(a) {
 -    return __asyncGenerator(this, arguments, function f_1() {
 -        var c;

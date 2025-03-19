@@ -30,9 +30,11 @@ let value;
 //// [destructuringAssignmentWithDefault2.js]
 const a = {};
 let x;
+// Should not error out
 ({ x = 0 } = a);
 ({ x: x = 0 } = a);
 ({ y: x = 0 } = a);
+// Should be error
 ({ x = undefined } = a);
 ({ x: x = undefined } = a);
 ({ y: x = undefined } = a);

@@ -10,30 +10,25 @@
 -            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
 -            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
 -        return extendStatics(d, b);
-+class A {
-+    genericVar;
-+}
-+function B1() {
-+    return class extends A {
-     };
+-    };
 -    return function (d, b) {
 -        if (typeof b !== "function" && b !== null)
 -            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
 -        extendStatics(d, b);
 -        function __() { this.constructor = d; }
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-+}
-+class B2 {
-+    anon = class extends A {
-     };
+-    };
 -})();
 -var A = /** @class */ (function () {
 -    function A() {
 -    }
 -    return A;
 -}());
--function B1() {
--    // class expression can use T
++class A {
++    genericVar;
++}
+ function B1() {
+     // class expression can use T
 -    return /** @class */ (function (_super) {
 -        __extends(class_1, _super);
 -        function class_1() {
@@ -41,6 +36,8 @@
 -        }
 -        return class_1;
 -    }(A));
++    return class extends A {
++    };
  }
 -var B2 = /** @class */ (function () {
 -    function B2() {
@@ -54,6 +51,10 @@
 -    }
 -    return B2;
 -}());
++class B2 {
++    anon = class extends A {
++    };
++}
  function B3() {
 -    return /** @class */ (function (_super) {
 -        __extends(Inner, _super);
@@ -65,7 +66,7 @@
 +    return class Inner extends A {
 +    };
  }
--// extends can call B
+ // extends can call B
 -var K = /** @class */ (function (_super) {
 -    __extends(K, _super);
 -    function K() {

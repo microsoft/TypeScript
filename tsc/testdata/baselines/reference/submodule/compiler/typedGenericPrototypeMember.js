@@ -12,4 +12,4 @@ List.prototype.add("abc"); // Valid because T is instantiated to any
 class List {
     add(item) { }
 }
-List.prototype.add("abc");
+List.prototype.add("abc"); // Valid because T is instantiated to any

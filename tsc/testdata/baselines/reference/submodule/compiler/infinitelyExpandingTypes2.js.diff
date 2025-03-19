@@ -1,8 +1,0 @@
---- old.infinitelyExpandingTypes2.js
-+++ new.infinitelyExpandingTypes2.js
-@@= skipped -22, +22 lines =@@
-     console.log(p);
- }
- var v = null;
--f(v); // should not error
-+f(v);

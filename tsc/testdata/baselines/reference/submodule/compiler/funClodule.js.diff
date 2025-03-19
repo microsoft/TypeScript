@@ -10,4 +10,4 @@
 -    return foo3;
 -}()); // Should error
 +class foo3 {
-+}
++} // Should error

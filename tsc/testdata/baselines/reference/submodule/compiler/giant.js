@@ -688,6 +688,19 @@ export declare module eaM {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.eM = exports.eC = exports.eV = void 0;
 exports.eF = eF;
+/*
+    Prefixes
+    p -> public
+    r -> private
+    i -> import
+    e -> export
+    a -> ambient
+    t -> static
+    s -> set
+    g -> get
+
+    MAX DEPTH 3 LEVELS
+*/
 const p = "propName";
 var V;
 function F() { }

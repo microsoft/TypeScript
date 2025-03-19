@@ -1,8 +1,0 @@
---- old.nodeModulesImportAssertions(module=node16).js
-+++ new.nodeModulesImportAssertions(module=node16).js
-@@= skipped -16, +16 lines =@@
- //// [otherc.cjs]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
-+const json2 = import("./package.json", { assert: { type: "json" } });

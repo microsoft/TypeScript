@@ -28,6 +28,7 @@ c = i;
 i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface.js]
+// no errors expected
 class C {
     x;
     y(a) { return null; }

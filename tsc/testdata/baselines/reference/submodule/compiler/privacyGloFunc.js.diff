@@ -175,9 +175,8 @@
              return new C2_private();
          }
 -        function f8_public() {
--            return new C2_private(); // error
 +        f8_public() {
-+            return new C2_private();
+             return new C2_private(); // error
          }
 -        m1.f8_public = f8_public;
 -        function f9_private() {
@@ -194,9 +193,8 @@
              return new C2_private();
          }
 -        function f12_public() {
--            return new C2_private(); //error
 +        f12_public() {
-+            return new C2_private();
+             return new C2_private(); //error
          }
 -        m1.f12_public = f12_public;
 -    })(m1 || (exports.m1 = m1 = {}));
@@ -396,7 +394,7 @@
 +        return new C2_private();
 +    }
 +    function f8_public() {
-+        return new C2_private();
++        return new C2_private(); // error
 +    }
 +    m1.f8_public = f8_public;
 +    function f9_private() {
@@ -410,7 +408,7 @@
 +        return new C2_private();
 +    }
 +    function f12_public() {
-+        return new C2_private();
++        return new C2_private(); //error
 +    }
 +    m1.f12_public = f12_public;
 +})(m1 || (exports.m1 = m1 = {}));
@@ -648,38 +646,29 @@
 +        return new m2_C1_public();
 +    }
      function f6_public() {
--        return new C6_public();
 +        return new m2_C1_public();
-     }
--    function f7_private() {
--        return new C5_private();
++    }
 +    m2.f6_public = f6_public;
 +    function f7_public() {
 +        return new m2_C2_private();
-     }
-     function f8_public() {
--        return new C5_private(); //error
++    }
++    function f8_public() {
 +        return new m2_C2_private();
-     }
++    }
 +    m2.f8_public = f8_public;
-     function f9_private() {
--        return new C6_public();
++    function f9_private() {
 +        return new m2_C1_public();
-     }
-     function f10_public() {
--        return new C6_public();
++    }
++    function f10_public() {
 +        return new m2_C1_public();
-     }
++    }
 +    m2.f10_public = f10_public;
-     function f11_private() {
--        return new C5_private();
++    function f11_private() {
 +        return new m2_C2_private();
-     }
-     function f12_public() {
--        return new C5_private(); //error
++    }
++    function f12_public() {
 +        return new m2_C2_private();
-     }
--});
++    }
 +    m2.f12_public = f12_public;
 +})(m2 || (m2 = {}));
 +class C5_private {
@@ -701,29 +690,36 @@
 +    f4_public(c7_f4_arg) {
 +    }
 +    f5_private() {
-+        return new C6_public();
-+    }
+         return new C6_public();
+     }
+-    function f7_private() {
 +    f6_public() {
 +        return new C6_public();
 +    }
 +    f7_private() {
-+        return new C5_private();
-+    }
+         return new C5_private();
+     }
+-    function f8_public() {
 +    f8_public() {
-+        return new C5_private();
-+    }
+         return new C5_private(); //error
+     }
+-    function f9_private() {
 +    f9_private() {
-+        return new C6_public();
-+    }
+         return new C6_public();
+     }
+-    function f10_public() {
 +    f10_public() {
-+        return new C6_public();
-+    }
+         return new C6_public();
+     }
+-    function f11_private() {
 +    f11_private() {
-+        return new C5_private();
-+    }
+         return new C5_private();
+     }
+-    function f12_public() {
 +    f12_public() {
-+        return new C5_private();
-+    }
+         return new C5_private(); //error
+     }
+-});
 +}
 +exports.C7_public = C7_public;
 +class C8_private {
@@ -798,7 +794,7 @@
 +    return new C5_private();
 +}
 +function f8_public() {
-+    return new C5_private();
++    return new C5_private(); //error
 +}
 +function f9_private() {
 +    return new C6_public();
@@ -810,5 +806,5 @@
 +    return new C5_private();
 +}
 +function f12_public() {
-+    return new C5_private();
++    return new C5_private(); //error
 +}

@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Case 5
+ // Case 5
 -var Base5 = /** @class */ (function () {
 -    function Base5() {
 -    }
@@ -74,6 +74,7 @@
 +        return super.y();
 +    }
 +}
++// Case 6
 +class Base6 {
 +    x() {
          return "BaseX";

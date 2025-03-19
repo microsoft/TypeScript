@@ -10,6 +10,7 @@
  exports.isSome = isSome;
  exports.fn = fn;
 -var cond;
++// Repro from #8513
 +let cond;
  exports.none = { none: '' };
  function isSome(value) {
@@ -21,109 +22,66 @@
  }
  function fn(makeSome) {
 -    var result = exports.none;
--    result; // None
 +    let result = exports.none;
-+    result;
+     result; // None
      while (cond) {
--        result; // Some<r> | None
-+        result;
-         result = someFrom(isSome(result) ? result.some : makeSome());
--        result; // Some<r>
-+        result;
+         result; // Some<r> | None
+@@= skipped -23, +23 lines =@@
      }
  }
  function foo1() {
 -    var x = 0;
--    x; // number
 +    let x = 0;
-+    x;
+     x; // number
      while (cond) {
--        x; // number, then string | number
-+        x;
-         x = typeof x === "string" ? x.slice() : "abc";
--        x; // string
-+        x;
-     }
+         x; // number, then string | number
+@@= skipped -10, +10 lines =@@
      x;
  }
  function foo2() {
 -    var x = 0;
--    x; // number
 +    let x = 0;
-+    x;
+     x; // number
      while (cond) {
--        x; // number, then string | number
-+        x;
-         if (typeof x === "string") {
-             x = x.slice();
-         }
-         else {
-             x = "abc";
-         }
--        x; // string
-+        x;
-     }
-     x;
+         x; // number, then string | number
+@@= skipped -16, +16 lines =@@
  }
--// Type guards as assertions
+ // Type guards as assertions
  function f1() {
 -    var x = undefined;
--    x; // undefined
 +    let x = undefined;
-+    x;
+     x; // undefined
      if (x) {
--        x; // string | number (guard as assertion)
-+        x;
-     }
--    x; // string | number | undefined
-+    x;
+         x; // string | number (guard as assertion)
+@@= skipped -8, +8 lines =@@
+     x; // string | number | undefined
  }
  function f2() {
 -    var x = undefined;
--    x; // undefined
 +    let x = undefined;
-+    x;
+     x; // undefined
      if (typeof x === "string") {
--        x; // string (guard as assertion)
-+        x;
-     }
--    x; // string | undefined
-+    x;
+         x; // string (guard as assertion)
+@@= skipped -8, +8 lines =@@
+     x; // string | undefined
  }
  function f3() {
 -    var x = undefined;
--    x; // undefined
 +    let x = undefined;
-+    x;
+     x; // undefined
      if (!x) {
          return;
-     }
--    x; // string | number (guard as assertion)
-+    x;
+@@= skipped -8, +8 lines =@@
+     x; // string | number (guard as assertion)
  }
  function f4() {
 -    var x = undefined;
--    x; // undefined
 +    let x = undefined;
-+    x;
+     x; // undefined
      if (typeof x === "boolean") {
--        x; // nothing (boolean not in declared type)
-+        x;
-     }
--    x; // undefined
-+    x;
- }
- function f5(x) {
-     if (typeof x === "string" && typeof x === "number") {
--        x; // number (guard as assertion)
-+        x;
-     }
-     else {
--        x; // string | number
-+        x;
-     }
--    x; // string | number
-+    x;
+         x; // nothing (boolean not in declared type)
+@@= skipped -17, +17 lines =@@
+     x; // string | number
  }
  function f6() {
 -    var x;
@@ -131,7 +89,7 @@
      x.slice();
      x = "";
      x.slice();
-@@= skipped -106, +104 lines =@@
+@@= skipped -16, +16 lines =@@
      x.slice();
  }
  function f7() {

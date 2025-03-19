@@ -25,22 +25,23 @@ if (var1.constructor === BigInt) {
 
 
 //// [typeGuardConstructorNarrowAny.js]
+// Narrowing any to primitives
 let var1;
 if (var1.constructor === String) {
-    var1;
+    var1; // String
 }
 if (var1.constructor === Number) {
-    var1;
+    var1; // Number
 }
 if (var1.constructor === Boolean) {
-    var1;
+    var1; // Boolean
 }
 if (var1.constructor === Array) {
-    var1;
+    var1; // any[]
 }
 if (var1.constructor === Symbol) {
-    var1;
+    var1; // Symbol
 }
 if (var1.constructor === BigInt) {
-    var1;
+    var1; // BigInt
 }

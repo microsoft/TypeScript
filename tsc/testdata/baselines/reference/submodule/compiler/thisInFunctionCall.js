@@ -55,12 +55,16 @@ class Test {
         });
     }
     forEacher() {
-        this.data.forEach(function (d) {
+        this.data.forEach(
+        /** @this {Test} */
+        function (d) {
             console.log(d === this.data.length);
         }, this);
     }
     finder() {
-        this.data.find(function (d) {
+        this.data.find(
+        /** @this {Test} */
+        function (d) {
             return d === this.data.length;
         }, this);
     }

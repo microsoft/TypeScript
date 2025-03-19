@@ -13,7 +13,7 @@
 +    }
  })(F || (F = {}));
  (function (F) {
--    // Should not be an error
+     // Should not be an error
 -    var Helper = /** @class */ (function () {
 -        function Helper() {
 -        }
@@ -33,7 +33,7 @@
 +    }
  })(Foo || (Foo = {}));
  (function (Foo) {
--    // Should not be an error
+     // Should not be an error
 -    var Helper = /** @class */ (function () {
 -        function Helper() {
 -        }
@@ -56,7 +56,7 @@
 +        }
      })(Foo || (Foo = {}));
      (function (Foo) {
--        // Should not be an error
+         // Should not be an error
 -        var Helper = /** @class */ (function () {
 -            function Helper() {
 -            }

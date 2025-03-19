@@ -23,10 +23,10 @@
 -var Table = /** @class */ (function () {
 -    function Table() {
 -    }
--    // Removing this line, removes the error 
--    Table.prototype.getRows = function () {
 +class Table {
 +    __schema;
+     // Removing this line, removes the error 
+-    Table.prototype.getRows = function () {
 +    getRows() {
          return null;
 -    };

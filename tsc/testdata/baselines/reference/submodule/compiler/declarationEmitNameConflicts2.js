@@ -45,10 +45,10 @@ var X;
         (function (base) {
             let Z;
             (function (Z) {
-                Z.f = X.Y.base.f;
-                Z.C = X.Y.base.C;
-                Z.M = X.Y.base.M;
-                Z.E = X.Y.base.E;
+                Z.f = X.Y.base.f; // Should be base.f
+                Z.C = X.Y.base.C; // Should be base.C
+                Z.M = X.Y.base.M; // Should be base.M
+                Z.E = X.Y.base.E; // Should be base.E
             })(Z = base.Z || (base.Z = {}));
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));

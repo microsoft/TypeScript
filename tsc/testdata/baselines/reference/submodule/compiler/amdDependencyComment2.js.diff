@@ -4,13 +4,13 @@
  m1.f();
  
  //// [amdDependencyComment2.js]
--///<amd-dependency path='bar'/>
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ ///<amd-dependency path='bar'/>
 -define(["require", "exports", "m2", "bar"], function (require, exports, m1) {
 -    "use strict";
 -    Object.defineProperty(exports, "__esModule", { value: true });
 -    m1.f();
 -});
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
 +const m1 = require("m2");
 +m1.f();

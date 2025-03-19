@@ -8,6 +8,7 @@
 -    function C() {
 +class C {
 +    static {
++        // something
      }
 -    return C;
 -}());

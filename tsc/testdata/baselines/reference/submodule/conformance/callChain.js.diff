@@ -41,9 +41,6 @@
 -(_m = o3["b"]) === null || _m === void 0 ? void 0 : _m.call.apply(_m, __spreadArray(__spreadArray([o3, 1], [2, 3], false), [4], false)).c;
 -var v = o4 === null || o4 === void 0 ? void 0 : o4(incr);
 -(_o = o5()) === null || _o === void 0 ? void 0 : _o();
--// GH#36031
--o2 === null || o2 === void 0 ? void 0 : o2.b().toString;
--o2 === null || o2 === void 0 ? void 0 : o2.b().toString;
 +o1?.();
 +o1?.(1);
 +o1?.(...[1, 2]);
@@ -70,5 +67,8 @@
 +o3["b"]?.(1, ...[2, 3], 4).c;
 +const v = o4?.(incr);
 +o5()?.();
+ // GH#36031
+-o2 === null || o2 === void 0 ? void 0 : o2.b().toString;
+-o2 === null || o2 === void 0 ? void 0 : o2.b().toString;
 +o2?.b().toString;
 +o2?.b().toString;

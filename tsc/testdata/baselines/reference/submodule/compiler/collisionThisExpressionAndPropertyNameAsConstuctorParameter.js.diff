@@ -12,7 +12,7 @@
 +class Foo2 {
 +    constructor(_this) {
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
      }
 -    return Foo2;
@@ -28,7 +28,7 @@
 -        var lambda = function () {
 -            return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
      }
 -    return Foo3;
@@ -42,7 +42,7 @@
 +class Foo4 {
 +    constructor(_this) {
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
      }
 -    return Foo4;
@@ -58,7 +58,7 @@
 -        var lambda = function () {
 -            return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
      }
 -    return Foo5;

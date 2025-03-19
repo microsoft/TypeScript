@@ -5,7 +5,7 @@
  
  //// [narrowingOfDottedNames.js]
 -"use strict";
--// Repro from #8383
+ // Repro from #8383
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -40,15 +40,14 @@
  function isA(x) {
      return x instanceof A;
  }
-@@= skipped -53, +32 lines =@@
-         }
+@@= skipped -54, +34 lines =@@
      }
  }
--// Repro from #28100
+ // Repro from #28100
 -var Foo1 = /** @class */ (function () {
 -    function Foo1() {
 +class Foo1 {
-+    x;
++    x; // Error
 +    constructor() {
          if (this instanceof Boolean) {
          }
@@ -59,12 +58,13 @@
 -    function Foo2() {
 +}
 +class Foo2 {
-+    x;
++    x; // Error
 +    constructor() {
      }
 -    return Foo2;
 -}());
--// Repro from  #29513
++}
+ // Repro from  #29513
 -var AInfo = /** @class */ (function () {
 -    function AInfo() {
 -        this.a_count = 1;
@@ -98,7 +98,6 @@
 -    return B2;
 -}(Base));
 -var target = null;
-+}
 +class AInfo {
 +    a_count = 1;
 +}

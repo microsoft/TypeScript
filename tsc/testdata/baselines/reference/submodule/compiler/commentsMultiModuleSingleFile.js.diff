@@ -1,13 +1,9 @@
 --- old.commentsMultiModuleSingleFile.js
 +++ new.commentsMultiModuleSingleFile.js
-@@= skipped -25, +25 lines =@@
- new multiM.c();
- 
- //// [commentsMultiModuleSingleFile.js]
--/** this is multi declare module*/
+@@= skipped -29, +29 lines =@@
  var multiM;
  (function (multiM) {
--    /** class b*/
+     /** class b*/
 -    var b = /** @class */ (function () {
 -        function b() {
 -        }
@@ -16,7 +12,7 @@
 +    class b {
 +    }
      multiM.b = b;
--    // class d
+     // class d
 -    var d = /** @class */ (function () {
 -        function d() {
 -        }
@@ -26,9 +22,9 @@
 +    }
      multiM.d = d;
  })(multiM || (multiM = {}));
--/// this is multi module 2
+ /// this is multi module 2
  (function (multiM) {
--    /** class c comment*/
+     /** class c comment*/
 -    var c = /** @class */ (function () {
 -        function c() {
 -        }
@@ -37,7 +33,7 @@
 +    class c {
 +    }
      multiM.c = c;
--    /// class e
+     /// class e
 -    var e = /** @class */ (function () {
 -        function e() {
 -        }

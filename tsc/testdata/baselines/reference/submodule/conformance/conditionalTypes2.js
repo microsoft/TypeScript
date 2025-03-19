@@ -250,16 +250,17 @@ type Huh = Wat<"y">;  // true
 //// [conditionalTypes2.js]
 function f1(a, b) {
     a = b;
-    b = a;
+    b = a; // Error
 }
 function f2(a, b) {
-    a = b;
+    a = b; // Error
     b = a;
 }
 function f3(a, b) {
-    a = b;
-    b = a;
+    a = b; // Error
+    b = a; // Error
 }
+// Extract<T, Function> is a T that is known to be a Function
 function isFunction(value) {
     return typeof value === "function";
 }
@@ -281,7 +282,7 @@ function f11(x) {
     }
 }
 function f12(x) {
-    const f = getFunction(x);
+    const f = getFunction(x); // () => string
     f();
 }
 function f20(x, y, z) {
@@ -290,10 +291,11 @@ function f20(x, y, z) {
     fooBar(z);
 }
 function f21(x, y, z) {
-    fooBat(x);
-    fooBat(y);
-    fooBat(z);
+    fooBat(x); // Error
+    fooBat(y); // Error
+    fooBat(z); // Error
 }
+// Repros from #22860
 class Opt {
     toVector() {
         return undefined;

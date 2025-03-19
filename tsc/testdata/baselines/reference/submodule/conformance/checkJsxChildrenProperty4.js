@@ -57,6 +57,7 @@ class FetchUser extends React.Component {
             : null;
     }
 }
+// Error
 function UserName() {
     return (<FetchUser>
             {user => (<h1>{user.NAme}</h1>)}

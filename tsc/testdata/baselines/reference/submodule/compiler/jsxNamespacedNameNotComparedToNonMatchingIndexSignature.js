@@ -13,4 +13,5 @@ declare module "react" {
 export const tag = <div ns:thing="a"/>
 
 //// [jsxNamespacedNameNotComparedToNonMatchingIndexSignature.js]
+/// <reference path="react16.d.ts" />
 export const tag = <div ns:thing="a"/>;

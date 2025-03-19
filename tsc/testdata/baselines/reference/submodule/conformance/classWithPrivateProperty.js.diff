@@ -1,10 +1,9 @@
 --- old.classWithPrivateProperty.js
 +++ new.classWithPrivateProperty.js
-@@= skipped -24, +24 lines =@@
- var r8: string = C.g();
+@@= skipped -25, +25 lines =@@
  
  //// [classWithPrivateProperty.js]
--// accessing any private outside the class is an error
+ // accessing any private outside the class is an error
 -var C = /** @class */ (function () {
 -    function C() {
 -        this.a = '';

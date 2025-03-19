@@ -44,6 +44,7 @@ function TodoList({ todos }) {
     </div>;
 }
 function TodoListNoError({ todos }) {
+    // any is not checked
     return <div>
         {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
     </div>;

@@ -38,5 +38,5 @@ b = boo;
 const bboo = boo;
 if (typeof c === 'string') {
     const boo1 = { bar: 'works' };
-    const boo2 = { bar: 1 };
+    const boo2 = { bar: 1 }; // should error
 }

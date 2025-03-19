@@ -1,10 +1,9 @@
 --- old.strictNullLogicalAndOr.js
 +++ new.strictNullLogicalAndOr.js
-@@= skipped -15, +15 lines =@@
- sq(3);
+@@= skipped -16, +16 lines =@@
  
  //// [strictNullLogicalAndOr.js]
--// Repro from #9113
+ // Repro from #9113
 -var sinOrCos = Math.random() < .5;
 -var choice = sinOrCos && Math.sin || Math.cos;
 +let sinOrCos = Math.random() < .5;

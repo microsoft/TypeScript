@@ -33,6 +33,7 @@ const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
 function ShouldInferFromData(props) {
     return <div />;
 }
+// Sanity check: function call equivalent versions work fine
 ShouldInferFromData({ data: "1" });
 ShouldInferFromData({ data: "1", convert: n => "" + n });
 ShouldInferFromData({ data: 2, convert: n => "" + n });

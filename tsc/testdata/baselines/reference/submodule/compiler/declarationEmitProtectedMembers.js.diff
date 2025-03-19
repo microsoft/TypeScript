@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Class with protected members
+ // Class with protected members
 -var C1 = /** @class */ (function () {
 -    function C1() {
 -    }
@@ -55,11 +55,18 @@
 -    });
 -    return C1;
 -}());
--// Derived class overriding protected members
++    }
++    static set staticSetter(a) { }
++    static get staticGetter() { return 0; }
++}
+ // Derived class overriding protected members
 -var C2 = /** @class */ (function (_super) {
 -    __extends(C2, _super);
 -    function C2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
++class C2 extends C1 {
++    f() {
++        return super.f() + this.x;
      }
 -    C2.prototype.f = function () {
 -        return _super.prototype.f.call(this) + this.x;
@@ -69,17 +76,20 @@
 -    };
 -    return C2;
 -}(C1));
--// Derived class making protected members public
++    static sf() {
++        return super.sf() + this.sx;
++    }
++}
+ // Derived class making protected members public
 -var C3 = /** @class */ (function (_super) {
 -    __extends(C3, _super);
 -    function C3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    static set staticSetter(a) { }
-+    static get staticGetter() { return 0; }
-+}
-+class C2 extends C1 {
++class C3 extends C2 {
++    x;
++    static sx;
 +    f() {
-+        return super.f() + this.x;
++        return super.f();
      }
 -    C3.prototype.f = function () {
 -        return _super.prototype.f.call(this);
@@ -94,24 +104,14 @@
 -    });
 -    return C3;
 -}(C2));
--// Protected properties in constructors
--var C4 = /** @class */ (function () {
--    function C4(a, b) {
-+    static sf() {
-+        return super.sf() + this.sx;
-+    }
-+}
-+class C3 extends C2 {
-+    x;
-+    static sx;
-+    f() {
-+        return super.f();
-+    }
 +    static sf() {
 +        return super.sf();
 +    }
 +    static get staticGetter() { return 1; }
 +}
+ // Protected properties in constructors
+-var C4 = /** @class */ (function () {
+-    function C4(a, b) {
 +class C4 {
 +    a;
 +    b;

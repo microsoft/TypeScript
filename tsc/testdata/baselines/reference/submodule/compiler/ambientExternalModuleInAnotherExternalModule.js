@@ -16,6 +16,7 @@ var x = ext;
 "use strict";
 class D {
 }
+// Cannot resolve this ext module reference
 const ext = require("ext");
 var x = ext;
 module.exports = D;

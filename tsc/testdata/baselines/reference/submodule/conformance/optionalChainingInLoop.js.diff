@@ -5,7 +5,7 @@
  
  //// [optionalChainingInLoop.js]
 -var _a;
--// https://github.com/microsoft/TypeScript/issues/40643
+ // https://github.com/microsoft/TypeScript/issues/40643
 -var list = [];
 -var _loop_1 = function (comp) {
 -    comp.sp.y = comp.sp.r.find(function (k) { return k.c == (comp.xp ? '1' : '0'); });

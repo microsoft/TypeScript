@@ -37,24 +37,24 @@ function foo2(x: A | B): any {
 function isA(x) { return x.type === 'A'; }
 function isB(x) { return x.type === 'B'; }
 function foo1(x) {
-    x;
+    x; // A | B
     if (isA(x)) {
-        return x;
+        return x; // A
     }
-    x;
+    x; // B
     if (isB(x)) {
-        return x;
+        return x; // B
     }
-    x;
+    x; // never
 }
 function foo2(x) {
-    x;
+    x; // A | B
     if (x.type === 'A') {
-        return x;
+        return x; // A
     }
-    x;
+    x; // B
     if (x.type === 'B') {
-        return x;
+        return x; // B
     }
-    x;
+    x; // never
 }

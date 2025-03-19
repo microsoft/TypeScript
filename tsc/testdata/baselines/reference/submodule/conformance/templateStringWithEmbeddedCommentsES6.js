@@ -15,6 +15,14 @@ middle${
 tail`;
 
 //// [templateStringWithEmbeddedCommentsES6.js]
-`head${10}
-middle${20}
+`head${ // single line comment
+10}
+middle${
+/* Multi-
+ * line
+ * comment
+ */
+20
+// closing comment
+}
 tail`;

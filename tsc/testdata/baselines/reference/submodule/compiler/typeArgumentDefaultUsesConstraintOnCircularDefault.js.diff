@@ -6,7 +6,9 @@
  //// [typeArgumentDefaultUsesConstraintOnCircularDefault.js]
 -var zz = { foo: "abc" }; // should error on comparison with Test<string>
 -var zzy = { value: {} };
--// Simplified repro from #28873
++let zz = { foo: "abc" }; // should error on comparison with Test<string>
++let zzy = { value: {} };
+ // Simplified repro from #28873
 -var C1 = /** @class */ (function () {
 -    function C1() {
 -    }
@@ -17,8 +19,6 @@
 -    }
 -    return C2;
 -}());
-+let zz = { foo: "abc" };
-+let zzy = { value: {} };
 +class C1 {
 +}
 +class C2 {

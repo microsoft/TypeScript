@@ -1,8 +1,0 @@
---- old.nodeModulesImportAttributes(module=nodenext).js
-+++ new.nodeModulesImportAttributes(module=nodenext).js
-@@= skipped -17, +17 lines =@@
- //// [otherc.cjs]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
-+const json2 = import("./package.json", { with: { type: "json" } });

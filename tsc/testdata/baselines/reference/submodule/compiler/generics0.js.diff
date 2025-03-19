@@ -1,10 +1,9 @@
 --- old.generics0.js
 +++ new.generics0.js
-@@= skipped -10, +10 lines =@@
- 
+@@= skipped -11, +11 lines =@@
  //// [generics0.js]
  var v2;
--var z = v2.x; // 'y' should be of type 'string'
+ var z = v2.x; // 'y' should be of type 'string'
 -
 -
 -//// [generics0.d.ts]
@@ -13,4 +12,3 @@
 -}
 -declare var v2: G<string>;
 -declare var z: string;
-+var z = v2.x;

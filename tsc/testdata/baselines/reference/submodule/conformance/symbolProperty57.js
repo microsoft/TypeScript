@@ -12,4 +12,5 @@ obj[Symbol["nonsense"]];
 var obj = {
     [Symbol.iterator]: 0
 };
+// Should give type 'any'.
 obj[Symbol["nonsense"]];

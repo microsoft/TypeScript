@@ -82,17 +82,16 @@
 -    var name = getProperty(shape, "name"); // string
 -    var widthOrHeight = getProperty(shape, cond ? "width" : "height"); // number
 -    var nameOrVisible = getProperty(shape, cond ? "name" : "visible"); // string | boolean
-+    let name = getProperty(shape, "name");
-+    let widthOrHeight = getProperty(shape, cond ? "width" : "height");
-+    let nameOrVisible = getProperty(shape, cond ? "name" : "visible");
++    let name = getProperty(shape, "name"); // string
++    let widthOrHeight = getProperty(shape, cond ? "width" : "height"); // number
++    let nameOrVisible = getProperty(shape, cond ? "name" : "visible"); // string | boolean
      setProperty(shape, "name", "rectangle");
      setProperty(shape, cond ? "width" : "height", 10);
--    setProperty(shape, cond ? "name" : "visible", true); // Technically not safe
-+    setProperty(shape, cond ? "name" : "visible", true);
+     setProperty(shape, cond ? "name" : "visible", true); // Technically not safe
  }
  function f11(a) {
 -    var len = getProperty(a, "length"); // number
-+    let len = getProperty(a, "length");
++    let len = getProperty(a, "length"); // number
      setProperty(a, "length", len);
  }
  function f12(t) {
@@ -100,16 +99,16 @@
 -    var s2 = getProperty(t, "0"); // Shape
 -    var b2 = getProperty(t, "1"); // boolean
 +    let len = getProperty(t, "length");
-+    let s2 = getProperty(t, "0");
-+    let b2 = getProperty(t, "1");
++    let s2 = getProperty(t, "0"); // Shape
++    let b2 = getProperty(t, "1"); // boolean
  }
  function f13(foo, bar) {
 -    var x = getProperty(foo, "x"); // any
 -    var y = getProperty(foo, "100"); // any
 -    var z = getProperty(foo, bar); // any
-+    let x = getProperty(foo, "x");
-+    let y = getProperty(foo, "100");
-+    let z = getProperty(foo, bar);
++    let x = getProperty(foo, "x"); // any
++    let y = getProperty(foo, "100"); // any
++    let z = getProperty(foo, bar); // any
  }
 -var Component = /** @class */ (function () {
 -    function Component() {
@@ -133,13 +132,12 @@
 -    var name = component.getProperty("name"); // string
 -    var widthOrHeight = component.getProperty(cond ? "width" : "height"); // number
 -    var nameOrVisible = component.getProperty(cond ? "name" : "visible"); // string | boolean
-+    let name = component.getProperty("name");
-+    let widthOrHeight = component.getProperty(cond ? "width" : "height");
-+    let nameOrVisible = component.getProperty(cond ? "name" : "visible");
++    let name = component.getProperty("name"); // string
++    let widthOrHeight = component.getProperty(cond ? "width" : "height"); // number
++    let nameOrVisible = component.getProperty(cond ? "name" : "visible"); // string | boolean
      component.setProperty("name", "rectangle");
      component.setProperty(cond ? "width" : "height", 10);
--    component.setProperty(cond ? "name" : "visible", true); // Technically not safe
-+    component.setProperty(cond ? "name" : "visible", true);
+     component.setProperty(cond ? "name" : "visible", true); // Technically not safe
  }
  function pluck(array, key) {
 -    return array.map(function (x) { return x[key]; });
@@ -149,21 +147,19 @@
 -    var names = pluck(shapes, "name"); // string[]
 -    var widths = pluck(shapes, "width"); // number[]
 -    var nameOrVisibles = pluck(shapes, cond ? "name" : "visible"); // (string | boolean)[]
-+    let names = pluck(shapes, "name");
-+    let widths = pluck(shapes, "width");
-+    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible");
++    let names = pluck(shapes, "name"); // string[]
++    let widths = pluck(shapes, "width"); // number[]
++    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible"); // (string | boolean)[]
  }
  function f31(key) {
 -    var shape = { name: "foo", width: 5, height: 10, visible: true };
--    return shape[key]; // Shape[K]
 +    const shape = { name: "foo", width: 5, height: 10, visible: true };
-+    return shape[key];
+     return shape[key]; // Shape[K]
  }
  function f32(key) {
 -    var shape = { name: "foo", width: 5, height: 10, visible: true };
--    return shape[key]; // Shape[K]
 +    const shape = { name: "foo", width: 5, height: 10, visible: true };
-+    return shape[key];
+     return shape[key]; // Shape[K]
  }
  function f33(shape, key) {
 -    var name = getProperty(shape, "name");
@@ -183,13 +179,13 @@
 -    }
 -    return C;
 -}());
--// Indexed access expressions have always permitted access to private and protected members.
--// For consistency we also permit such access in indexed access types.
 +class C {
 +    x;
 +    y;
 +    z;
 +}
+ // Indexed access expressions have always permitted access to private and protected members.
+ // For consistency we also permit such access in indexed access types.
  function f40(c) {
 -    var x = c["x"];
 -    var y = c["y"];
@@ -246,40 +242,37 @@
          target[k] = source[k];
      }
  }
-@@= skipped -116, +112 lines =@@
+@@= skipped -116, +114 lines =@@
      func('a', 'c');
  }
  function f71(func) {
 -    var x = func({ a: 1, b: "hello" }, { c: true });
--    x.a; // number | undefined
--    x.b; // string | undefined
--    x.c; // boolean | undefined
 +    let x = func({ a: 1, b: "hello" }, { c: true });
-+    x.a;
-+    x.b;
-+    x.c;
+     x.a; // number | undefined
+     x.b; // string | undefined
+     x.c; // boolean | undefined
  }
  function f72(func) {
 -    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
 -    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
 -    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
-+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');
-+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');
-+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');
++    let a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
++    let b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
++    let c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
  }
  function f73(func) {
 -    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
 -    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
 -    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
-+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');
-+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');
-+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');
++    let a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
++    let b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
++    let c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
  }
  function f74(func) {
 -    var a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
 -    var b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
-+    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');
-+    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');
++    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
++    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
  }
  function f80(obj) {
 -    var a1 = obj.a; // { x: any }
@@ -288,12 +281,12 @@
 -    var x1 = obj.a.x; // any
 -    var x2 = obj['a']['x']; // any
 -    var x3 = obj['a']['x']; // T["a"]["x"]
-+    let a1 = obj.a;
-+    let a2 = obj['a'];
-+    let a3 = obj['a'];
-+    let x1 = obj.a.x;
-+    let x2 = obj['a']['x'];
-+    let x3 = obj['a']['x'];
++    let a1 = obj.a; // { x: any }
++    let a2 = obj['a']; // { x: any }
++    let a3 = obj['a']; // T["a"]
++    let x1 = obj.a.x; // any
++    let x2 = obj['a']['x']; // any
++    let x3 = obj['a']['x']; // T["a"]["x"]
  }
  function f81(obj) {
      return obj['a']['x'];
@@ -301,8 +294,8 @@
  function f82() {
 -    var x1 = f81({ a: { x: "hello" } }); // string
 -    var x2 = f81({ a: { x: 42 } }); // number
-+    let x1 = f81({ a: { x: "hello" } });
-+    let x2 = f81({ a: { x: 42 } });
++    let x1 = f81({ a: { x: "hello" } }); // string
++    let x2 = f81({ a: { x: 42 } }); // number
  }
  function f83(obj, key) {
      return obj[key]['x'];
@@ -310,8 +303,8 @@
  function f84() {
 -    var x1 = f83({ foo: { x: "hello" } }, "foo"); // string
 -    var x2 = f83({ bar: { x: 42 } }, "bar"); // number
-+    let x1 = f83({ foo: { x: "hello" } }, "foo");
-+    let x2 = f83({ bar: { x: 42 } }, "bar");
++    let x1 = f83({ foo: { x: "hello" } }, "foo"); // string
++    let x2 = f83({ bar: { x: 42 } }, "bar"); // number
  }
 -var C1 = /** @class */ (function () {
 -    function C1() {
@@ -334,10 +327,10 @@
 -        var x4 = getProperty(this, "x"); // this["x"]
 +    }
 +    foo() {
-+        let x1 = this.x;
-+        let x2 = this["x"];
-+        let x3 = this.get("x");
-+        let x4 = getProperty(this, "x");
++        let x1 = this.x; // number
++        let x2 = this["x"]; // number
++        let x3 = this.get("x"); // this["x"]
++        let x4 = getProperty(this, "x"); // this["x"]
          this.x = 42;
          this["x"] = 42;
          this.set("x", 42);
@@ -367,7 +360,7 @@
      a = y;
      a = z;
  }
--// Repros from #12011
+ // Repros from #12011
 -var Base = /** @class */ (function () {
 -    function Base() {
 -    }
@@ -439,12 +432,12 @@
 -    var x2 = path(thing, 'a', 'y'); // string
 -    var x3 = path(thing, 'b'); // boolean
 -    var x4 = path.apply(void 0, __spreadArray([thing], ['a', 'x'], false)); // any
-+    let x1 = path(thing, 'a');
-+    let x2 = path(thing, 'a', 'y');
-+    let x3 = path(thing, 'b');
-+    let x4 = path(thing, ...['a', 'x']);
++    let x1 = path(thing, 'a'); // { x: number, y: string }
++    let x2 = path(thing, 'a', 'y'); // string
++    let x3 = path(thing, 'b'); // boolean
++    let x4 = path(thing, ...['a', 'x']); // any
  }
--// Repro from comment in #12114
+ // Repro from comment in #12114
 -var assignTo2 = function (object, key1, key2) {
 -    return function (value) { return object[key1][key2] = value; };
 -};
@@ -453,9 +446,9 @@
 -var hashOfEmpty2 = on({ test: function (x) { } }); // { test: boolean }
 -var c1 = new Component1({
 +const assignTo2 = (object, key1, key2) => (value) => object[key1][key2] = value;
-+var empty = one(() => { });
-+var hashOfEmpty1 = on({ test: () => { } });
-+var hashOfEmpty2 = on({ test: (x) => { } });
++var empty = one(() => { }); // inferred as {}, expected
++var hashOfEmpty1 = on({ test: () => { } }); // {}
++var hashOfEmpty2 = on({ test: (x) => { } }); // { test: boolean }
 +let c1 = new Component1({
      data: {
          hello: ""
@@ -464,9 +457,8 @@
  c1.get("hello");
  function f(p) {
 -    var a;
--    a[p].add; // any
 +    let a;
-+    a[p].add;
+     a[p].add; // any
  }
 -var result = dispatchMethod("someMethod", ["hello", 35]);
 -var MyThingy;
@@ -475,10 +467,9 @@
  function addToMyThingy(key) {
      MyThingy[key].push("a");
  }
- function onChangeGenericFunction(handler) {
-     handler.onChange('preset');
+@@= skipped -89, +77 lines =@@
  }
--// Repro from #13285
+ // Repro from #13285
  function updateIds(obj, idFields, idMapping) {
 -    for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
 -        var idField = idFields_1[_i];
@@ -488,16 +479,10 @@
          if (newId) {
              obj[idField] = newId;
          }
-     }
-     return obj;
+@@= skipped -15, +14 lines =@@
+     stringMap[x]; // Should be OK.
  }
--// Repro from #13285
- function updateIds2(obj, key, stringMap) {
-     var x = obj[key];
--    stringMap[x]; // Should be OK.
-+    stringMap[x];
- }
--// Repro from #13604
+ // Repro from #13604
 -var A = /** @class */ (function () {
 -    function A() {
 -    }
@@ -524,6 +509,7 @@
      }
 -    Form.prototype.set = function (prop, value) {
 +}
++// Repro from #13749
 +class Form {
 +    childFormFactories;
 +    set(prop, value) {
@@ -531,11 +517,11 @@
 -    };
 -    return Form;
 -}());
--// Repro from #13787
--var SampleClass = /** @class */ (function () {
--    function SampleClass(props) {
 +    }
 +}
+ // Repro from #13787
+-var SampleClass = /** @class */ (function () {
+-    function SampleClass(props) {
 +class SampleClass {
 +    props;
 +    constructor(props) {
@@ -563,22 +549,17 @@
 +    }
 +}
  new AnotherSampleClass({});
--// Positive repro from #17166
+ // Positive repro from #17166
  function f3(t, k, tk) {
 -    for (var key in t) {
--        key = k; // ok, K ==> keyof T
--        t[key] = tk; // ok, T[K] ==> T[keyof T]
 +    for (let key in t) {
-+        key = k;
-+        t[key] = tk;
+         key = k; // ok, K ==> keyof T
+         t[key] = tk; // ok, T[K] ==> T[keyof T]
      }
- }
- var Flag;
-@@= skipped -169, +137 lines =@@
-     take(o[k]);
+@@= skipped -66, +55 lines =@@
      take(o[k]);
  }
--// Repro from #23133
+ // Repro from #23133
 -var Unbounded = /** @class */ (function () {
 -    function Unbounded() {
 +class Unbounded {
@@ -599,7 +580,7 @@
 +    const d = dd[k1];
      return d[k2];
  }
--// Repro from #26409
+ // Repro from #26409
 -var cf1 = function (t, k) {
 -    var s = t[k];
 +const cf1 = (t, k) => {

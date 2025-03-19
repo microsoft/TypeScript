@@ -38,6 +38,7 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    Comp.prototype.foo = function (a) {
++// Repro from #14723
 +class Component {
 +    setState(state) { }
 +}

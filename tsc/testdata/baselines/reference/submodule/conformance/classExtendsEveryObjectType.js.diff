@@ -34,9 +34,9 @@
 -    return C2;
 -}({ foo: string })); // error
 +class C extends I {
-+}
++} // error
 +class C2 extends { foo: string, } {
-+}
++} // error
  var x;
 -var C3 = /** @class */ (function (_super) {
 -    __extends(C3, _super);
@@ -46,7 +46,7 @@
 -    return C3;
 -}(x)); // error
 +class C3 extends x {
-+}
++} // error
  var M;
  (function (M) {
      M.x = 1;
@@ -59,7 +59,7 @@
 -    return C4;
 -}(M)); // error
 +class C4 extends M {
-+}
++} // error
  function foo() { }
 -var C5 = /** @class */ (function (_super) {
 -    __extends(C5, _super);
@@ -76,6 +76,6 @@
 -    return C6;
 -}([])); // error
 +class C5 extends foo {
-+}
++} // error
 +class C6 extends [] {
-+}
++} // error

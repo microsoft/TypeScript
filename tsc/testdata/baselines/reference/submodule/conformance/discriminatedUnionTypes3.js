@@ -22,5 +22,5 @@ if (example.err === undefined) {
 //// [discriminatedUnionTypes3.js]
 const example = {};
 if (example.err === undefined) {
-    example.property;
+    example.property; // true
 }

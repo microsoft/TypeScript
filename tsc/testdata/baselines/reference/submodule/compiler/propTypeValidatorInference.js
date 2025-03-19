@@ -102,6 +102,7 @@ const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
         foo: PropTypes.string,
         bar: PropTypes.number.isRequired
     })];
+// TS checking
 const propTypes = {
     any: PropTypes.any,
     array: PropTypes.array.isRequired,
@@ -109,6 +110,7 @@ const propTypes = {
     shape: PropTypes.shape(innerProps).isRequired,
     oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 };
+// JS checking
 const propTypesWithoutAnnotation = {
     any: PropTypes.any,
     array: PropTypes.array.isRequired,

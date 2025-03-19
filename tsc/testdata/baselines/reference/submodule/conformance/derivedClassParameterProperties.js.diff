@@ -1,10 +1,9 @@
 --- old.derivedClassParameterProperties.js
 +++ new.derivedClassParameterProperties.js
-@@= skipped -96, +96 lines =@@
- }
+@@= skipped -97, +97 lines =@@
  
  //// [derivedClassParameterProperties.js]
--// ordering of super calls in derived constructors matters depending on other class contents
+ // ordering of super calls in derived constructors matters depending on other class contents
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -158,10 +157,10 @@
      }
 -    return Derived8;
 -}(Base));
--// generic cases of Derived7 and Derived8
++}
+ // generic cases of Derived7 and Derived8
 -var Base2 = /** @class */ (function () {
 -    function Base2() {
-+}
 +class Base2 {
 +    x;
 +}

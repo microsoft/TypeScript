@@ -41,7 +41,7 @@
      x: "hello world",
      y: 2
  };
--// OK
+ // OK
 -var p = <Poisoned {...obj}/>;
 -var y = <Poisoned x="hi" y={2}/>;
 +let p = <Poisoned {...obj}/>;

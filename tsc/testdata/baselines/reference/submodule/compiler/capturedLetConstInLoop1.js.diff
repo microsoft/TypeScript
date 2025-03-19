@@ -5,17 +5,15 @@
  
  //// [capturedLetConstInLoop1.js]
 -var _loop_1 = function (x) {
-+for (let x in {}) {
-     (function () { return x; });
+-    (function () { return x; });
 -    (function () { return x; });
 -};
--//==== let
+ //==== let
 -for (var x in {}) {
 -    _loop_1(x);
-+    (() => x);
- }
+-}
 -var _loop_2 = function (x) {
-+for (let x of []) {
++for (let x in {}) {
      (function () { return x; });
 -    (function () { return x; });
 -};
@@ -25,7 +23,7 @@
 +    (() => x);
  }
 -var _loop_3 = function (x) {
-+for (let x = 0; x < 1; ++x) {
++for (let x of []) {
      (function () { return x; });
 -    (function () { return x; });
 -};
@@ -35,14 +33,17 @@
  }
 -var _loop_4 = function () {
 -    var x;
--    (function () { return x; });
++for (let x = 0; x < 1; ++x) {
+     (function () { return x; });
 -    (function () { return x; });
 -};
- while (1 === 1) {
+-while (1 === 1) {
 -    _loop_4();
--}
++    (() => x);
+ }
 -var _loop_5 = function () {
 -    var x;
++while (1 === 1) {
 +    let x;
      (function () { return x; });
 -    (function () { return x; });
@@ -172,17 +173,15 @@
 +    use(() => y);
  }
 -var _loop_14 = function (x) {
-+for (const x in {}) {
-     (function () { return x; });
+-    (function () { return x; });
 -    (function () { return x; });
 -};
--//=========const
+ //=========const
 -for (var x in {}) {
 -    _loop_14(x);
-+    (() => x);
- }
+-}
 -var _loop_15 = function (x) {
-+for (const x of []) {
++for (const x in {}) {
      (function () { return x; });
 -    (function () { return x; });
 -};
@@ -192,7 +191,7 @@
 +    (() => x);
  }
 -var _loop_16 = function (x) {
-+for (const x = 0; x < 1;) {
++for (const x of []) {
      (function () { return x; });
 -    (function () { return x; });
 -};
@@ -202,14 +201,17 @@
  }
 -var _loop_17 = function () {
 -    var x = 1;
--    (function () { return x; });
++for (const x = 0; x < 1;) {
+     (function () { return x; });
 -    (function () { return x; });
 -};
- while (1 === 1) {
+-while (1 === 1) {
 -    _loop_17();
--}
++    (() => x);
+ }
 -var _loop_18 = function () {
 -    var x = 1;
++while (1 === 1) {
 +    const x = 1;
      (function () { return x; });
 -    (function () { return x; });

@@ -21,9 +21,9 @@ class Foo {
     x;
     constructor() {
         this.x = 5;
-        this.x;
-        this['x'];
+        this.x; // number
+        this['x']; // number
         const key = 'x';
-        this[key];
+        this[key]; // number
     }
 }

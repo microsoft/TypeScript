@@ -20,3 +20,5 @@ declare var alpha: any;
 
 
 //// [root.js]
+/// <reference types="foo" />
+/// <reference types="bar" />

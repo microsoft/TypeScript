@@ -38,6 +38,7 @@
 +exports.await = void 0;
 +const _await = 1;
 +exports.await = _await;
++// for-await-of
 +const arr = [Promise.resolve()];
 +for await (const item of arr) {
 +    item;
@@ -106,14 +107,17 @@
 +exports.x = void 0;
 +exports.x = 1;
 +await exports.x;
++// reparse element access as await
 +await [exports.x];
 +await [exports.x, exports.x];
 +await (exports.x);
 +await (f(), exports.x);
 +await (exports.x);
 +await (f(), exports.x);
++// reparse tagged template as await
 +await ``;
 +await ``;
++// member names should be ok
 +class C1 {
 +    await() { }
 +}
@@ -134,10 +138,15 @@
 +({
 +    await: 1
 +});
++// property access name should be ok
 +C1.prototype.await;
 +@(await dec)
 +class C {
 +}
++// newlines
++// await in throw
 +throw await 1;
++// await in var
 +let y = await 1;
++// await in expression statement;
 +await 1;

@@ -306,6 +306,7 @@ function foo8(x) {
     }
     use(v);
 }
+//===const
 function foo0_c(x) {
     for (const x of []) {
         var v = x;

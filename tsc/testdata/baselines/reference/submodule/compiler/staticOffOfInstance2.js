@@ -13,7 +13,7 @@ class List<T> {
 //// [staticOffOfInstance2.js]
 class List {
     Blah() {
-        this.Foo();
+        this.Foo(); // no error
         List.Foo();
     }
     static Foo() { }

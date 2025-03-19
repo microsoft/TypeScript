@@ -1,11 +1,9 @@
 --- old.assignmentCompatWithObjectMembersOptionality2.js
 +++ new.assignmentCompatWithObjectMembersOptionality2.js
-@@= skipped -92, +92 lines =@@
- 
- 
+@@= skipped -94, +94 lines =@@
  //// [assignmentCompatWithObjectMembersOptionality2.js]
--// M is optional and S contains no property with the same name as M
--// N is optional and T contains no property with the same name as N
+ // M is optional and S contains no property with the same name as M
+ // N is optional and T contains no property with the same name as N
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -52,50 +50,3 @@
  var TargetHasOptional;
  (function (TargetHasOptional) {
      var c;
-@@= skipped -44, +17 lines =@@
-     var d;
-     var e;
-     var f;
--    // disallowed by weak type checking
-     c = d;
-     c = e;
-     c = f;
-@@= skipped -10, +9 lines =@@
-     b = d;
-     b = e;
-     b = f;
--    // ok
-     c = a;
-     a = c;
-     b = a;
-@@= skipped -14, +13 lines =@@
-     var d;
-     var e;
-     var f;
--    c = d; // error
--    c = e; // error
--    c = f; // error
--    c = a; // ok
--    a = d; // error
--    a = e; // error
--    a = f; // error
--    a = c; // ok
--    b = d; // error
--    b = e; // error
--    b = f; // error
--    b = a; // ok
--    b = c; // ok
-+    c = d;
-+    c = e;
-+    c = f;
-+    c = a;
-+    a = d;
-+    a = e;
-+    a = f;
-+    a = c;
-+    b = d;
-+    b = e;
-+    b = f;
-+    b = a;
-+    b = c;
- })(SourceHasOptional || (SourceHasOptional = {}));

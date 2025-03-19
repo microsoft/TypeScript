@@ -8,7 +8,9 @@
 -    function C() {
 -    }
 -    C.prototype.foo = function () { };
--    // @internal
++class C {
++    foo() { }
+     // @internal
 -    C.prototype.bar = function () { };
 -    return C;
 -}());
@@ -17,7 +19,5 @@
 -//// [stripInternal1.d.ts]
 -declare class C {
 -    foo(): void;
-+class C {
-+    foo() { }
 +    bar() { }
  }

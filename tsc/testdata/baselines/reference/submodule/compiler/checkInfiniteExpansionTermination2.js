@@ -22,5 +22,6 @@ function fn<T>() {
 //// [checkInfiniteExpansionTermination2.js]
 function fn() {
     var values = [];
+    // Hang when using <T>, but not <any>
     combineLatest(values);
 }

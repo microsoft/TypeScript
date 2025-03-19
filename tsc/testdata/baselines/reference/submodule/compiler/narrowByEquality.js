@@ -107,13 +107,15 @@ if (x == xAndObj) {
     x;
     xAndObj;
 }
+// Repro from #24991
 function test(level) {
     if (level == +level) {
-        const q2 = level;
+        const q2 = level; // error
         return level;
     }
     return 0;
 }
+// From issue #32798
 if (xUnknown == null) {
     xUnknown;
 }

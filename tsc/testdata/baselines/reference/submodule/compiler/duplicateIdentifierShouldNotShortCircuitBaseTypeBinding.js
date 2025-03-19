@@ -30,3 +30,8 @@ var Shapes;
     Shapes.Point = Point;
 })(Shapes || (exports.Shapes = Shapes = {}));
 //// [duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_1.js]
+//var x = new Shapes.Point();
+//interface IPoint {}
+//module Shapes {
+//    export class Point implements IPoint {}
+//}

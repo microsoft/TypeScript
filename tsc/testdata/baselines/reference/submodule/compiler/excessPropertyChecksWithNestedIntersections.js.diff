@@ -13,26 +13,17 @@
 -var d = { a: { x: 'hello' }, c: 5 }; // ok
 -var e = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
 -var f = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
-+let a = { a: { x: 'hello' } };
-+let b = { a: { x: 2 } };
-+let c = { a: { x: 'hello', y: 2 } };
-+let d = { a: { x: 'hello' }, c: 5 };
-+let e = { a: { x: 2 }, c: 5 };
-+let f = { a: { x: 'hello', y: 2 }, c: 5 };
++let a = { a: { x: 'hello' } }; // ok
++let b = { a: { x: 2 } }; // error - types of property x are incompatible
++let c = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
++let d = { a: { x: 'hello' }, c: 5 }; // ok
++let e = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
++let f = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
  exports.photo = {
      id: 1,
      url: '',
--    xyz: 1 // Great! This causes an error!
-+    xyz: 1
- };
- exports.myInstance = {
-     id: 1,
-@@= skipped -20, +19 lines =@@
-     photo: {
-         id: 1,
-         url: '',
--        xyz: 2 // This should also be an error
-+        xyz: 2
+@@= skipped -23, +22 lines =@@
+         xyz: 2 // This should also be an error
      }
  };
 -var test;

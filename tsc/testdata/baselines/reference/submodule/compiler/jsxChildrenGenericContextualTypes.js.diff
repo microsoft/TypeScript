@@ -13,10 +13,6 @@
 -ElemLit({ prop: "x", children: function () { return "x"; } });
 -var j = <ElemLit prop="x" children={function () { return "x"; }}/>;
 -var jj = <ElemLit prop="x">{function () { return "x"; }}</ElemLit>;
--// Should error
--var arg = <ElemLit prop="x" children={function (p) { return "y"; }}/>;
--var argchild = <ElemLit prop="x">{function (p) { return "y"; }}</ElemLit>;
--var mismatched = <ElemLit prop="x">{function () { return 12; }}</ElemLit>;
 +const Elem = (p) => <div></div>;
 +Elem({ prop: { a: "x" }, children: i => ({ a: "z" }) });
 +const q = <Elem prop={{ a: "x" }} children={i => ({ a: "z" })}/>;
@@ -25,6 +21,10 @@
 +ElemLit({ prop: "x", children: () => "x" });
 +const j = <ElemLit prop="x" children={() => "x"}/>;
 +const jj = <ElemLit prop="x">{() => "x"}</ElemLit>;
+ // Should error
+-var arg = <ElemLit prop="x" children={function (p) { return "y"; }}/>;
+-var argchild = <ElemLit prop="x">{function (p) { return "y"; }}</ElemLit>;
+-var mismatched = <ElemLit prop="x">{function () { return 12; }}</ElemLit>;
 +const arg = <ElemLit prop="x" children={p => "y"}/>;
 +const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>;
 +const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>;

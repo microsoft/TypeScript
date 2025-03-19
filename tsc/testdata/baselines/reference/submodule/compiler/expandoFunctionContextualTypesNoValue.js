@@ -13,6 +13,7 @@ Foo.bar = () => { };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
+// GH #38532
 const blah_1 = require("blah");
 function Foo() { }
 blah_1.default.bar = () => { };

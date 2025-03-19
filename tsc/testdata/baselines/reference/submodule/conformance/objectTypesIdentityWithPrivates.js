@@ -123,6 +123,7 @@ function foo16(x: any) { }
 
 
 //// [objectTypesIdentityWithPrivates.js]
+// object types are identical structurally
 class A {
     foo;
 }

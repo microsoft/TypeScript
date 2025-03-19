@@ -30,6 +30,7 @@ var Bugs;
 (function (Bugs) {
     class A {
     }
+    // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
     function bug2(message, ...args) {
         var result = message.replace(/\{(\d+)\}/g, function (match, ...rest) {
             var index = rest[0];

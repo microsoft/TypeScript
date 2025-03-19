@@ -1,8 +1,0 @@
---- old.tsxElementResolution6.js
-+++ new.tsxElementResolution6.js
-@@= skipped -12, +12 lines =@@
- 
- //// [file.jsx]
- var div;
--// Still an error
- <div n='x'/>;

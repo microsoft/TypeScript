@@ -91,10 +91,10 @@ function f2(x: A | B) {
 function insertInterface(callbackType) {
     for (const memberType of callbackType.members) {
         if (memberType.type === "const") {
-            memberType.idlType;
+            memberType.idlType; // string
         }
         else if (memberType.type === "operation") {
-            memberType.idlType.origin;
+            memberType.idlType.origin; // string
             memberType.idlType;
         }
     }
@@ -102,16 +102,16 @@ function insertInterface(callbackType) {
 function insertInterface2(callbackType) {
     for (const memberType of callbackType.members) {
         if (memberType.type === "operation") {
-            memberType.idlType.origin;
+            memberType.idlType.origin; // string
         }
     }
 }
 function foo(memberType) {
     if (memberType.type === "const") {
-        memberType.idlType;
+        memberType.idlType; // string
     }
     else if (memberType.type === "operation") {
-        memberType.idlType.origin;
+        memberType.idlType.origin; // string
     }
 }
 function f1(x) {

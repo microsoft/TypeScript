@@ -1,10 +1,9 @@
 --- old.restParameterInDownlevelGenerator.js
 +++ new.restParameterInDownlevelGenerator.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
  
  //// [restParameterInDownlevelGenerator.js]
--// https://github.com/Microsoft/TypeScript/issues/30653
+ // https://github.com/Microsoft/TypeScript/issues/30653
 -function mergeStringLists() {
 -    var _i, strings_1, strings_1_1, str;
 -    var e_1, _a;

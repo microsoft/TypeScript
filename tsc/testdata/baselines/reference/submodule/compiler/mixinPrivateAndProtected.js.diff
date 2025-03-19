@@ -86,39 +86,25 @@
 +const AB2C = mixC(AB2), ABC = mixC(AB);
 +const a = new A(), ab = new AB(), abc = new ABC(), ab2c = new AB2C();
  a.pb.toFixed();
--a.ptd.toFixed(); // Error
--a.pvt.toFixed(); // Error
-+a.ptd.toFixed();
-+a.pvt.toFixed();
- ab.pb.toFixed();
--ab.ptd.toFixed(); // Error
--ab.pvt.toFixed(); // Error
-+ab.ptd.toFixed();
-+ab.pvt.toFixed();
- abc.pb.toFixed();
--abc.ptd.toFixed(); // Error
--abc.pvt.toFixed(); // Error
-+abc.ptd.toFixed();
-+abc.pvt.toFixed();
- ab2c.pb.toFixed();
--ab2c.ptd.toFixed(); // Error
--ab2c.pvt.toFixed(); // Error
--// Repro from #13924
+ a.ptd.toFixed(); // Error
+ a.pvt.toFixed(); // Error
+@@= skipped -75, +38 lines =@@
+ ab2c.ptd.toFixed(); // Error
+ ab2c.pvt.toFixed(); // Error
+ // Repro from #13924
 -var Person = /** @class */ (function () {
 -    function Person(name) {
-+ab2c.ptd.toFixed();
-+ab2c.pvt.toFixed();
 +class Person {
 +    name;
 +    constructor(name) {
          this.name = name;
      }
 -    Person.prototype.myProtectedFunction = function () {
--        // do something
++    myProtectedFunction() {
+         // do something
 -    };
 -    return Person;
 -}());
-+    myProtectedFunction() {
 +    }
 +}
  function PersonMixin(Base) {
@@ -136,12 +122,12 @@
          }
 -        class_4.prototype.myProtectedFunction = function () {
 -            _super.prototype.myProtectedFunction.call(this);
--            // do more things
++        myProtectedFunction() {
++            super.myProtectedFunction();
+             // do more things
 -        };
 -        return class_4;
 -    }(Base));
-+        myProtectedFunction() {
-+            super.myProtectedFunction();
 +        }
 +    };
  }

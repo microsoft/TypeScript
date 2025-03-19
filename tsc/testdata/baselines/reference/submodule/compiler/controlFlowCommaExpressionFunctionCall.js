@@ -17,8 +17,9 @@ if (isNumber((otherValue(), value))) {
 const otherValue = () => true;
 const value = null;
 function isNumber(obj) {
-    return true;
+    return true; // method implementation irrelevant
 }
+// Bad case - fails
 if (isNumber((otherValue(), value))) {
-    const b = value;
+    const b = value; // string | number , but should be number
 }

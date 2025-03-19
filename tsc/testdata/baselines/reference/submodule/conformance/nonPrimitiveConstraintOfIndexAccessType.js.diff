@@ -5,7 +5,6 @@
  
  //// [nonPrimitiveConstraintOfIndexAccessType.js]
 -"use strict";
--// test for #15371
+ // test for #15371
  function f(s, tp) {
      tp = s;
- }

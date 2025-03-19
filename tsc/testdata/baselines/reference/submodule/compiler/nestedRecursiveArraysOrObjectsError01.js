@@ -20,6 +20,6 @@ const blah: Style = [
 const blah = [
     [[{
                 foo: 'asdf',
-                jj: 1
+                jj: 1 // intentional error
             }]]
 ];

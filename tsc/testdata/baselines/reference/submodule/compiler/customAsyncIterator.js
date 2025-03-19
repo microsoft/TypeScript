@@ -14,6 +14,7 @@ class ConstantIterator<T> implements AsyncIterator<T, void, T | undefined> {
 }
 
 //// [customAsyncIterator.js]
+// GH: https://github.com/microsoft/TypeScript/issues/33239
 class ConstantIterator {
     constant;
     constructor(constant) {

@@ -6,19 +6,28 @@
  //// [instantiationExpressionErrors.js]
 -"use strict";
 -var _a, _b, _c;
--// Type arguments in member expressions
+ // Type arguments in member expressions
 -var a1 = (f); // { (): number; g<U>(): U; }
 -var a2 = (f.g); // () => number
 -var a3 = f.g; // <U>() => U
 -var a4 = (f.g); // () => number
 -var a5 = (f['g']); // () => number
--// `[` is an expression starter and cannot immediately follow a type argument list
++const a1 = f; // { (): number; g<U>(): U; }
++const a2 = f.g; // () => number
++const a3 = f.g; // <U>() => U
++const a4 = f.g; // () => number
++const a5 = f['g']; // () => number
+ // `[` is an expression starter and cannot immediately follow a type argument list
 -var a6 = f < number > ['g']; // Error
 -var a7 = (f)['g'];
--// An `<` cannot immediately follow a type argument list
++const a6 = f < number > ['g']; // Error
++const a7 = (f)['g'];
+ // An `<` cannot immediately follow a type argument list
 -var a8 = f < number > ; // Relational operator error
 -var a9 = ((f)); // Error, no applicable signatures
--// Type arguments with `?.` token
++const a8 = f < number > ; // Relational operator error
++const a9 = (f); // Error, no applicable signatures
+ // Type arguments with `?.` token
 -var b1 = f === null || f === void 0 ? void 0 : f(); // Error, `(` expected
 -var b2 = f === null || f === void 0 ? void 0 : f();
 -var b3 = (_a = (f)) === null || _a === void 0 ? void 0 : _a();
@@ -26,34 +35,25 @@
 -var c1 = (g) || (function (x) { return x; });
 -var c2 = (_c = (g)) !== null && _c !== void 0 ? _c : (function (x) { return x; });
 -var c3 = (g) && (function (x) { return x; });
--// Parsed as function call, even though this differs from JavaScript
--var x1 = f(true);
--// Parsed as relational expressions
--var r1 = f < true > true;
--var r2 = f < true > +1;
--var r3 = f < true > -1;
--// All of the following are parsed as instantiation expressions
--var x2 = (f);
-+const a1 = f;
-+const a2 = f.g;
-+const a3 = f.g;
-+const a4 = f.g;
-+const a5 = f['g'];
-+const a6 = f < number > ['g'];
-+const a7 = (f)['g'];
-+const a8 = f < number > ;
-+const a9 = (f);
-+const b1 = f?.();
++const b1 = f?.(); // Error, `(` expected
 +const b2 = f?.();
 +const b3 = f?.();
-+const b4 = f?.();
++const b4 = f?.(); // Error, expected no type arguments
 +const c1 = g || ((x) => x);
 +const c2 = g ?? ((x) => x);
 +const c3 = g && ((x) => x);
+ // Parsed as function call, even though this differs from JavaScript
+-var x1 = f(true);
 +const x1 = f(true);
+ // Parsed as relational expressions
+-var r1 = f < true > true;
+-var r2 = f < true > +1;
+-var r3 = f < true > -1;
 +const r1 = f < true > true;
 +const r2 = f < true > +1;
 +const r3 = f < true > -1;
+ // All of the following are parsed as instantiation expressions
+-var x2 = (f);
 +const x2 = f;
  true;
 -var x3 = (f);
@@ -241,6 +241,7 @@
 -}
 -declare let ver: number;
 -declare const a: boolean;
++// Repro from #49551
 +var MyVer;
 +(function (MyVer) {
 +    MyVer[MyVer["v1"] = 1] = "v1";

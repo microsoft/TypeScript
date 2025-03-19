@@ -1,11 +1,9 @@
 --- old.esDecorators-classExpression-namedEvaluation.8.js
 +++ new.esDecorators-classExpression-namedEvaluation.8.js
-@@= skipped -16, +16 lines =@@
- export default (class { @dec y: any });
- 
+@@= skipped -18, +18 lines =@@
  //// [a.js]
--// 16.2.3.7 RS: Evaluation
--//   ExportDeclaration : `export` `default` AssignmentExpression `;` 
+ // 16.2.3.7 RS: Evaluation
+ //   ExportDeclaration : `export` `default` AssignmentExpression `;` 
 -export default ((() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;
@@ -29,8 +27,8 @@
 +class {
 +});
  //// [b.js]
--// 16.2.3.7 RS: Evaluation
--//   ExportDeclaration : `export` `default` AssignmentExpression `;` 
+ // 16.2.3.7 RS: Evaluation
+ //   ExportDeclaration : `export` `default` AssignmentExpression `;` 
 -export default ((() => {
 -    let _y_decorators;
 -    let _y_initializers = [];

@@ -262,6 +262,7 @@ y7.a;
 y8.a;
 y9.a;
 y0.a;
+// named import
 const interface_1 = require("interface");
 const variable_1 = require("variable");
 const interface_variable_1 = require("interface-variable");
@@ -282,6 +283,7 @@ function_1.a;
 function_module_1.a;
 class_1.a;
 class_module_1.a;
+// named export
 const interface_2 = require("interface");
 Object.defineProperty(exports, "a1", { enumerable: true, get: function () { return interface_2.a; } });
 const variable_2 = require("variable");
@@ -302,6 +304,7 @@ const class_2 = require("class");
 Object.defineProperty(exports, "a9", { enumerable: true, get: function () { return class_2.a; } });
 const class_module_2 = require("class-module");
 Object.defineProperty(exports, "a0", { enumerable: true, get: function () { return class_module_2.a; } });
+// export-star
 __exportStar(require("interface"), exports);
 __exportStar(require("variable"), exports);
 __exportStar(require("interface-variable"), exports);

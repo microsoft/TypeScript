@@ -8,3 +8,4 @@ export const y = 0;
 
 
 //// [a.js]
+/// <reference types="@beep/boop" />

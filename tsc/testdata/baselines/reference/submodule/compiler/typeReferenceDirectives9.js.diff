@@ -18,6 +18,7 @@
 -/// <reference types="lib" />
  Object.defineProperty(exports, "__esModule", { value: true });
 -var main_1 = require("./main");
++/// <reference types="lib" />
 +const main_1 = require("./main");
  main_1.Cls.prototype.foo = function () { return undefined; };
  //// [mod2.js]

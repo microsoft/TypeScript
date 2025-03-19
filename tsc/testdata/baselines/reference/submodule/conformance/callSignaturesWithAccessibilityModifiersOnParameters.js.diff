@@ -1,10 +1,6 @@
 --- old.callSignaturesWithAccessibilityModifiersOnParameters.js
 +++ new.callSignaturesWithAccessibilityModifiersOnParameters.js
-@@= skipped -40, +40 lines =@@
- }
- 
- //// [callSignaturesWithAccessibilityModifiersOnParameters.js]
--// Call signature parameters do not allow accessibility modifiers
+@@= skipped -44, +44 lines =@@
  function foo(x, y) { }
  var f = function foo(x, y) { };
  var f2 = function (x, y) { };

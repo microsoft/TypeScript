@@ -1,12 +1,9 @@
 --- old.callSignatureAssignabilityInInheritance6.js
 +++ new.callSignatureAssignabilityInInheritance6.js
-@@= skipped -52, +52 lines =@@
- }
- 
- //// [callSignatureAssignabilityInInheritance6.js]
--// checking subtype relations for function types as it relates to contextual signature instantiation
--// same as subtypingWithCallSignatures4 but using class type parameters instead of generic signatures
--// all are errors
+@@= skipped -55, +55 lines =@@
+ // checking subtype relations for function types as it relates to contextual signature instantiation
+ // same as subtypingWithCallSignatures4 but using class type parameters instead of generic signatures
+ // all are errors
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

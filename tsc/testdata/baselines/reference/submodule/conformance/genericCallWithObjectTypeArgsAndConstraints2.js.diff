@@ -1,11 +1,9 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints2.js
 +++ new.genericCallWithObjectTypeArgsAndConstraints2.js
-@@= skipped -40, +40 lines =@@
- 
- 
+@@= skipped -42, +42 lines =@@
  //// [genericCallWithObjectTypeArgsAndConstraints2.js]
--// Generic call with constraints infering type parameter from object member properties
--// No errors expected
+ // Generic call with constraints infering type parameter from object member properties
+ // No errors expected
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -42,15 +40,14 @@
  function f(x) {
      var r;
      return r;
-@@= skipped -44, +21 lines =@@
+@@= skipped -42, +21 lines =@@
  function f3(x, y) {
      return y(null);
  }
 -var r4 = f3(new Base(), function (x) { return x; });
 -var r5 = f3(new Derived(), function (x) { return x; });
--var r6 = f3(null, null); // any
--var r7 = f3(null, function (x) { return x; }); // any
 +var r4 = f3(new Base(), x => x);
 +var r5 = f3(new Derived(), x => x);
-+var r6 = f3(null, null);
-+var r7 = f3(null, x => x);
+ var r6 = f3(null, null); // any
+-var r7 = f3(null, function (x) { return x; }); // any
++var r7 = f3(null, x => x); // any

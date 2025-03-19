@@ -14,4 +14,5 @@ foo(n => n.length, () => 'hi');
 
 //// [inferenceFromParameterlessLambda.js]
 function foo(o, i) { }
+// Infer string from second argument because it isn't context sensitive
 foo(n => n.length, () => 'hi');

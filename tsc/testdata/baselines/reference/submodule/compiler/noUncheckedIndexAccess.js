@@ -41,6 +41,7 @@ const bacon = Meat.Bacon;
 const valueBacon = Meat[bacon];
 const union = Meat.Bacon;
 const valueUnion = Meat[union];
+//Avoiding a false positive
 const value = Meat[0];
 const valueUndefined = "testing";
 const value2 = Meat[valueUndefined];

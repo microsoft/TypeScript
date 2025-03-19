@@ -69,58 +69,58 @@ function f8(x: number | "foo" | "bar") {
 //// [literalTypes3.js]
 function f1(s) {
     if (s === "foo") {
-        s;
+        s; // "foo"
     }
     if (s === "foo" || s === "bar") {
-        s;
+        s; // "foo" | "bar"
     }
 }
 function f2(s) {
     switch (s) {
         case "foo":
         case "bar":
-            s;
+            s; // "foo" | "bar"
         case "baz":
-            s;
+            s; // "foo" | "bar" | "baz"
             break;
         default:
-            s;
+            s; // string
     }
 }
 function f3(s) {
-    return s === "foo" || s === "bar" ? s : undefined;
+    return s === "foo" || s === "bar" ? s : undefined; // "foo" | "bar" | undefined
 }
 function f4(x) {
     if (x === 1 || x === 2) {
-        return x;
+        return x; // 1 | 2
     }
     throw new Error();
 }
 function f5(x, y) {
     if (x === 0 || x === y) {
-        x;
+        x; // 0 | 1 | 2
     }
 }
 function f6(x, y) {
     if (y === x || 0 === x) {
-        x;
+        x; // 0 | 1 | 2
     }
 }
 function f7(x, y) {
     if (x === y) {
-        x;
+        x; // "foo" | "bar" | 1 | 2
     }
 }
 function f8(x) {
     switch (x) {
         case 1:
         case 2:
-            x;
+            x; // 1 | 2
             break;
         case "foo":
-            x;
+            x; // "foo"
             break;
         default:
-            x;
+            x; // number | "bar"
     }
 }

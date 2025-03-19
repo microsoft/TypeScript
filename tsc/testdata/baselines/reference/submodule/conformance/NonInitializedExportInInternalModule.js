@@ -52,6 +52,7 @@ var Inner;
     (function (C) {
         C.a = 1, C.c = 2;
     })(C || (C = {}));
+    // Shouldn't be filtered
     Inner.a1 = 1;
     Inner.b1 = 1;
     Inner.c1 = 'a';

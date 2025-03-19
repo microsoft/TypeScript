@@ -28,5 +28,5 @@
  Object.defineProperty(exports, "__esModule", { value: true });
 -var _ = new A(); // Error
 -var __ = new B(); // Error
-+let _ = new A();
-+let __ = new B();
++let _ = new A(); // Error
++let __ = new B(); // Error

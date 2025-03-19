@@ -1,12 +1,6 @@
 --- old.implicitAnyInCatch.js
 +++ new.implicitAnyInCatch.js
-@@= skipped -16, +16 lines =@@
- 
- 
- //// [implicitAnyInCatch.js]
--// this should not be an error
- try { }
- catch (error) {
+@@= skipped -22, +22 lines =@@
      if (error.number === -2147024809) { }
  }
  for (var key in this) { }

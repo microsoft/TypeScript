@@ -50,7 +50,7 @@
 +    retrieveGeneric: parameter => 5,
 +    operateWithGeneric: generic => generic.toFixed()
  });
--// Repro #38623
+ // Repro #38623
  function make(o) { }
  make({
      mutations: {
@@ -100,7 +100,7 @@
 +        const x = b;
      }
  });
--// Repro from #41712
+ // Repro from #41712
 -var Wrapper = /** @class */ (function () {
 -    function Wrapper() {
 -    }
@@ -115,7 +115,7 @@
          return {
              inputs: {
                  num: new Wrapper(),
-@@= skipped -88, +71 lines =@@
+@@= skipped -88, +73 lines =@@
              }
          };
      },
@@ -123,12 +123,8 @@
 +    map(inputs) {
          return {
              bool: inputs.nonexistent,
--            str: inputs.num, // Causes error
-+            str: inputs.num,
-         };
-     }
- });
--// Repro from #48279
+             str: inputs.num, // Causes error
+@@= skipped -11, +11 lines =@@
  function simplified(props) { }
  function whatIWant(props) { }
  function nonObject(generator, receiver) { }

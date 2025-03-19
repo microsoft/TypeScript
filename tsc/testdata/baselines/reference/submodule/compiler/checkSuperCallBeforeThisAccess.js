@@ -89,9 +89,9 @@ class A {
 }
 class C1 extends A {
     constructor(n) {
-        let a1 = this;
-        let a2 = this.x;
-        let a3 = super.x;
+        let a1 = this; // Error
+        let a2 = this.x; // Error
+        let a3 = super.x; // Error
         let a4 = () => this;
         let a5 = () => this.x;
         let a6 = () => super.x;
@@ -102,9 +102,9 @@ class C1 extends A {
             let b3 = super.x;
         }
         else {
-            let c1 = this;
-            let c2 = this.x;
-            let c3 = super.x;
+            let c1 = this; // Error
+            let c2 = this.x; // Error
+            let c3 = super.x; // Error
         }
         if (!!true) {
             switch (n) {
@@ -112,7 +112,7 @@ class C1 extends A {
                     super();
                     let d1 = this.x;
                 case 2:
-                    let d2 = this.x;
+                    let d2 = this.x; // Error
                 default:
                     super();
                     let d3 = this.x;
@@ -121,15 +121,16 @@ class C1 extends A {
         }
         if (!!true) {
             let e1 = { w: !!true ? super() : 0 };
-            let e2 = this.x;
+            let e2 = this.x; // Error
             let e3 = { w: !!true ? super() : super() };
             let e4 = this.x;
         }
-        let f1 = this;
-        let f2 = this.x;
-        let f3 = super.x;
+        let f1 = this; // Error
+        let f2 = this.x; // Error
+        let f3 = super.x; // Error
     }
 }
+// Repro from #38512
 export class Foo {
     constructor(value) {
     }
@@ -137,7 +138,7 @@ export class Foo {
 export class BarCorrectlyFails extends Foo {
     constructor(something) {
         if (!something) {
-            const value = this.bar();
+            const value = this.bar(); // Error
             super(value);
         }
         else {
@@ -152,7 +153,7 @@ export class BarIncorrectlyWorks extends Foo {
             super(1337);
         }
         else {
-            const value = this.bar();
+            const value = this.bar(); // Error
             super(value);
         }
     }

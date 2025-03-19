@@ -1,10 +1,7 @@
 --- old.noImplicitThisBigThis.js
 +++ new.noImplicitThisBigThis.js
-@@= skipped -50, +50 lines =@@
- 
- 
- //// [noImplicitThisBigThis.js]
--// https://github.com/microsoft/TypeScript/issues/29902
+@@= skipped -53, +53 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/29902
  function createObj() {
      return {
 -        func1: function () {

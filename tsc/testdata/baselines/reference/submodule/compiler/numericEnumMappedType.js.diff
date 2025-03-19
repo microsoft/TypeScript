@@ -5,10 +5,10 @@
  
  //// [numericEnumMappedType.js]
 -"use strict";
--// Repro from #31771
+ // Repro from #31771
  var E1;
  (function (E1) {
-     E1[E1["ONE"] = 0] = "ONE";
+@@= skipped -8, +7 lines =@@
      E1[E1["TWO"] = 1] = "TWO";
      E1[E1["THREE"] = 2] = "THREE";
  })(E1 || (E1 = {}));

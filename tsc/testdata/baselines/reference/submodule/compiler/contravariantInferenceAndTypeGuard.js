@@ -32,10 +32,10 @@ const x: List<Test> = filter1; // $ExpectType List<Test>
 //// [contravariantInferenceAndTypeGuard.js]
 const list2 = new List();
 const filter1 = list2.filter(function (item, node, list) {
-    this.b;
-    item;
-    node;
-    list;
+    this.b; // $ExpectType string
+    item; // $ExpectType Test | null
+    node; // $ExpectType ListItem<Test | null>
+    list; // $ExpectType List<Test | null>
     return !!item;
 }, { b: 'c' });
-const x = filter1;
+const x = filter1; // $ExpectType List<Test>

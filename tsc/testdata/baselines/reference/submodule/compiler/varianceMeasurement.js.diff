@@ -15,18 +15,6 @@
 -var f32 = f30;
 -var f41 = f40;
 -var f42 = f40;
--// Contravariant in A
--var fn1 = fn; // Error
--var fn2 = fn;
--// Covariant in B
--var fn3 = fn;
--var fn4 = fn; // Error
--var C = /** @class */ (function () {
--    function C() {
--    }
--    return C;
--}());
--var c1 = new C(); // Error
 +const f11 = f10;
 +const f12 = f10;
 +const f21 = f20;
@@ -35,10 +23,22 @@
 +const f32 = f30;
 +const f41 = f40;
 +const f42 = f40;
-+const fn1 = fn;
+ // Contravariant in A
+-var fn1 = fn; // Error
+-var fn2 = fn;
++const fn1 = fn; // Error
 +const fn2 = fn;
+ // Covariant in B
+-var fn3 = fn;
+-var fn4 = fn; // Error
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var c1 = new C(); // Error
 +const fn3 = fn;
-+const fn4 = fn;
++const fn4 = fn; // Error
 +class C {
 +}
-+const c1 = new C();
++const c1 = new C(); // Error

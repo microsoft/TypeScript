@@ -1,24 +1,23 @@
 --- old.constructorsWithSpecializedSignatures.js
 +++ new.constructorsWithSpecializedSignatures.js
-@@= skipped -45, +45 lines =@@
- }
+@@= skipped -46, +46 lines =@@
  
  //// [constructorsWithSpecializedSignatures.js]
--// errors
+ // errors
 -var D = /** @class */ (function () {
 -    function D(x) {
 -    }
 -    return D;
 -}());
--// overloads are ok
++class D {
++    constructor(x) { }
++}
+ // overloads are ok
 -var D2 = /** @class */ (function () {
 -    function D2(x) {
 -    } // error
 -    return D2;
 -}());
-+class D {
-+    constructor(x) { }
-+}
 +class D2 {
-+    constructor(x) { }
++    constructor(x) { } // error
 +}

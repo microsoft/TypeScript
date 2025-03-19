@@ -1,10 +1,9 @@
 --- old.constructSignaturesWithOverloads.js
 +++ new.constructSignaturesWithOverloads.js
-@@= skipped -52, +52 lines =@@
- var r6 = new b(1, '');
+@@= skipped -53, +53 lines =@@
  
  //// [constructSignaturesWithOverloads.js]
--// No errors expected for basic overloads of construct signatures
+ // No errors expected for basic overloads of construct signatures
 -var C = /** @class */ (function () {
 -    function C(x) {
 -    }

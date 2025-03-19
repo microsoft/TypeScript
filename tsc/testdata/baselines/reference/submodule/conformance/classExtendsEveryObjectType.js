@@ -20,20 +20,20 @@ class C6 extends []{ } // error
 
 //// [classExtendsEveryObjectType.js]
 class C extends I {
-}
+} // error
 class C2 extends { foo: string, } {
-}
+} // error
 var x;
 class C3 extends x {
-}
+} // error
 var M;
 (function (M) {
     M.x = 1;
 })(M || (M = {}));
 class C4 extends M {
-}
+} // error
 function foo() { }
 class C5 extends foo {
-}
+} // error
 class C6 extends [] {
-}
+} // error

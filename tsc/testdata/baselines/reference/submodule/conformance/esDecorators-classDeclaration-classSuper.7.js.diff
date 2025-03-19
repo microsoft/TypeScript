@@ -39,10 +39,10 @@
  function foo(method, _context) {
      return function () {
          method.call(this);
-     };
+@@= skipped -28, +18 lines =@@
  }
  new B();
--// https://github.com/microsoft/TypeScript/issues/53448
+ // https://github.com/microsoft/TypeScript/issues/53448
 -let C = (() => {
 -    let _instanceExtraInitializers = [];
 -    let _get_val_decorators;

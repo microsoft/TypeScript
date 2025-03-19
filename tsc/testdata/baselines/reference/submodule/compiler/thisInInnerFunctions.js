@@ -24,8 +24,8 @@ class Foo {
     x = "hello";
     bar() {
         function inner() {
-            this.y = "hi";
-            var f = () => this.y;
+            this.y = "hi"; // 'this' should be not type to 'Foo' either
+            var f = () => this.y; // 'this' should be not type to 'Foo' either
         }
     }
 }

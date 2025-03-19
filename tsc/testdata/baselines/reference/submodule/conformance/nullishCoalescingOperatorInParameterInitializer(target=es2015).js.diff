@@ -1,10 +1,8 @@
 --- old.nullishCoalescingOperatorInParameterInitializer(target=es2015).js
 +++ new.nullishCoalescingOperatorInParameterInitializer(target=es2015).js
-@@= skipped -5, +5 lines =@@
- ((b = a() ?? "d") => {})();
- 
+@@= skipped -7, +7 lines =@@
  //// [nullishCoalescingOperatorInParameterInitializer.js]
--// https://github.com/microsoft/TypeScript/issues/36295
+ // https://github.com/microsoft/TypeScript/issues/36295
  const a = () => undefined;
 -((b) => { var _a; if (b === void 0) { b = (_a = a()) !== null && _a !== void 0 ? _a : "d"; } })();
 +((b = a() ?? "d") => { })();

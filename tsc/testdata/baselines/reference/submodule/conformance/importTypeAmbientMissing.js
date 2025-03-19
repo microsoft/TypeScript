@@ -13,4 +13,4 @@ const x: import("fo") = { x: 0, y: 0 }; // typo, error
 
 
 //// [importTypeAmbientMissing.js]
-const x = { x: 0, y: 0 };
+const x = { x: 0, y: 0 }; // typo, error

@@ -52,4 +52,5 @@ class C {
 }
 exports.C = C;
 exports.default = null;
+// allows `undefined` on the input side, thanks to the initializer
 function fnWithPartialAnnotationOnDefaultparam(x = null, b) { }

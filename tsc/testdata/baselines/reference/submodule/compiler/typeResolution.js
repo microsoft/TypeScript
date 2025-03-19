@@ -124,6 +124,7 @@ var TopLevelModule1;
         (function (SubSubModule1) {
             class ClassA {
                 AisIn1_1_1() {
+                    // Try all qualified names of this type
                     var a1;
                     a1.AisIn1_1_1();
                     var a2;
@@ -132,12 +133,15 @@ var TopLevelModule1;
                     a3.AisIn1_1_1();
                     var a4;
                     a4.AisIn1_1_1();
+                    // Two variants of qualifying a peer type
                     var b1;
                     b1.BisIn1_1_1();
                     var b2;
                     b2.BisIn1_1_1();
+                    // Type only accessible from the root
                     var c1;
                     c1.AisIn1_2_2();
+                    // Interface reference
                     var d1;
                     d1.XisIn1_1_1();
                     var d2;
@@ -147,6 +151,8 @@ var TopLevelModule1;
             SubSubModule1.ClassA = ClassA;
             class ClassB {
                 BisIn1_1_1() {
+                    /** Exactly the same as above in AisIn1_1_1 **/
+                    // Try all qualified names of this type
                     var a1;
                     a1.AisIn1_1_1();
                     var a2;
@@ -155,14 +161,17 @@ var TopLevelModule1;
                     a3.AisIn1_1_1();
                     var a4;
                     a4.AisIn1_1_1();
+                    // Two variants of qualifying a peer type
                     var b1;
                     b1.BisIn1_1_1();
                     var b2;
                     b2.BisIn1_1_1();
+                    // Type only accessible from the root
                     var c1;
                     c1.AisIn1_2_2();
                     var c2;
                     c2.AisIn2_3();
+                    // Interface reference
                     var d1;
                     d1.XisIn1_1_1();
                     var d2;
@@ -173,6 +182,7 @@ var TopLevelModule1;
             class NonExportedClassQ {
                 constructor() {
                     function QQ() {
+                        /* Sampling of stuff from AisIn1_1_1 */
                         var a4;
                         a4.AisIn1_1_1();
                         var c1;
@@ -185,6 +195,7 @@ var TopLevelModule1;
                 }
             }
         })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
+        // Should have no effect on S1.SS1.ClassA above because it is not exported
         class ClassA {
             constructor() {
                 function AA() {
@@ -194,6 +205,7 @@ var TopLevelModule1;
                     a3.AisIn1_1_1();
                     var a4;
                     a4.AisIn1_1_1();
+                    // Interface reference
                     var d2;
                     d2.XisIn1_1_1();
                 }
@@ -204,6 +216,7 @@ var TopLevelModule1;
     (function (SubModule2) {
         let SubSubModule2;
         (function (SubSubModule2) {
+            // No code here since these are the mirror of the above calls
             class ClassA {
                 AisIn1_2_2() { }
             }

@@ -29,6 +29,7 @@ function getResults2(value: Results | { data: Results }): Results {
 }
 
 //// [typePredicateStructuralMatch.js]
+// Repro from #12235
 getResults1([]);
 getResults1({ data: [] });
 getResults2([]);

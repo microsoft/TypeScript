@@ -7,5 +7,6 @@ class C {
 }
 
 //// [invalidReferenceSyntax1.js]
+/// <reference path="missingquote.ts />
 class C {
 }

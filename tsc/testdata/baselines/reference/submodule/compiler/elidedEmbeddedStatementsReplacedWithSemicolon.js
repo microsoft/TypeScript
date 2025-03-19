@@ -62,6 +62,7 @@ for (let _ of []) {
     (function (G) {
     })(G || (G = {}));
 }
+// @ts-ignore suppress `with` statement error
 with (window) {
     var H;
     (function (H) {

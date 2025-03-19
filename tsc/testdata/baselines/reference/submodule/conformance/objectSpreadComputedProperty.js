@@ -13,6 +13,7 @@ function f() {
 
 
 //// [objectSpreadComputedProperty.js]
+// fixes #12200
 function f() {
     let n = 12;
     let m = 13;

@@ -7,108 +7,61 @@
 -"use strict";
  function f1(x, y) {
      x = y;
--    y = x; // Error
-+    y = x;
- }
+     y = x; // Error
+@@= skipped -8, +7 lines =@@
  function f2(x, y) {
      x = y;
--    y = x; // Error
+     y = x; // Error
 -    var s1 = x; // Error
 -    var s2 = y;
-+    y = x;
-+    let s1 = x;
++    let s1 = x; // Error
 +    let s2 = y;
  }
  function f3(x, y) {
      x = y;
--    y = x; // Error
-+    y = x;
- }
+@@= skipped -10, +10 lines =@@
  function f4(x, y) {
      x = y;
--    y = x; // Error
+     y = x; // Error
 -    var s1 = x; // Error
 -    var s2 = y;
-+    y = x;
-+    let s1 = x;
++    let s1 = x; // Error
 +    let s2 = y;
  }
 -var x0 = f5("a"); // { k: "a", a: number }
-+let x0 = f5("a");
++let x0 = f5("a"); // { k: "a", a: number }
  function f7(x, y, z) {
--    x = y; // Error
--    x = z; // Error
-+    x = y;
-+    x = z;
-     y = x;
--    y = z; // Error
-+    y = z;
-     z = x;
--    z = y; // Error
-+    z = y;
- }
- function f8(x, y, z) {
-     x = y;
-     x = z;
--    y = x; // Error
--    y = z; // Error
--    z = x; // Error
--    z = y; // Error
-+    y = x;
-+    y = z;
-+    z = x;
-+    z = y;
+     x = y; // Error
+     x = z; // Error
+@@= skipped -21, +21 lines =@@
+     z = y; // Error
  }
  function f10(part) {
 -    var name = part.name;
 -    var id = part.subparts[0].id;
--    part.id = part.id; // Error
--    part.subparts[0] = part.subparts[0]; // Error
--    part.subparts[0].id = part.subparts[0].id; // Error
--    part.updatePart("hello"); // Error
 +    let name = part.name;
 +    let id = part.subparts[0].id;
-+    part.id = part.id;
-+    part.subparts[0] = part.subparts[0];
-+    part.subparts[0].id = part.subparts[0].id;
-+    part.updatePart("hello");
- }
- function zeroOf(value) {
-     return (typeof value === "number" ? 0 : typeof value === "string" ? "" : false);
- }
- function f20(n, b, x, y) {
--    zeroOf(5); // 0
--    zeroOf("hello"); // ""
--    zeroOf(true); // false
--    zeroOf(n); // 0
--    zeroOf(b); // False
--    zeroOf(x); // 0 | false
--    zeroOf(y); // ZeroOf<T>
-+    zeroOf(5);
-+    zeroOf("hello");
-+    zeroOf(true);
-+    zeroOf(n);
-+    zeroOf(b);
-+    zeroOf(x);
-+    zeroOf(y);
+     part.id = part.id; // Error
+     part.subparts[0] = part.subparts[0]; // Error
+     part.subparts[0].id = part.subparts[0].id; // Error
+@@= skipped -20, +20 lines =@@
+     zeroOf(y); // ZeroOf<T>
  }
  function f21(x, y) {
 -    var z1 = y;
 -    var z2 = y;
--    x = y; // Error
--    y = x; // Error
 +    let z1 = y;
 +    let z2 = y;
-+    x = y;
-+    y = x;
+     x = y; // Error
+     y = x; // Error
  }
  function f22(x) {
 -    var e = x[0]; // {}
-+    let e = x[0];
++    let e = x[0]; // {}
  }
  function f23(x) {
 -    var e = x[0]; // string
-+    let e = x[0];
++    let e = x[0]; // string
  }
 -var convert = function (value) { return value; };
 -var convert2 = function (value) { return value; };
@@ -117,13 +70,7 @@
  function f31() {
      var x;
      var x;
- }
- function f32() {
-     var z;
--    var z; // Error, T2 is distributive, T1 isn't
-+    var z;
- }
- function f33() {
+@@= skipped -25, +25 lines =@@
      var z;
      var z;
  }
@@ -133,13 +80,13 @@
 -var f43 = function (a) { return a; };
 -var f44 = function (value) { return value; };
 -var f45 = function (value) { return value; }; // Error
--// Repro from #21863
 +const f40 = (a) => a;
 +const f41 = (a) => a;
 +const f42 = (a) => a;
 +const f43 = (a) => a;
 +const f44 = (value) => value;
-+const f45 = (value) => value;
++const f45 = (value) => value; // Error
+ // Repro from #21863
  function f50() {
  }
  var a = { o: 1, b: 2, c: [{ a: 1, c: '213' }] };

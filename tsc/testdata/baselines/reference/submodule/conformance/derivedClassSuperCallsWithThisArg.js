@@ -37,27 +37,27 @@ class Base {
 }
 class Derived extends Base {
     constructor() {
-        super(this);
+        super(this); // ok
     }
 }
 class Derived2 extends Base {
     a;
     constructor(a) {
         this.a = a;
-        super(this);
+        super(this); // error
     }
 }
 class Derived3 extends Base {
     a;
     constructor(a) {
         this.a = a;
-        super(() => this);
+        super(() => this); // error
     }
 }
 class Derived4 extends Base {
     a;
     constructor(a) {
         this.a = a;
-        super(function () { return this; });
+        super(function () { return this; }); // ok
     }
 }

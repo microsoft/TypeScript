@@ -40,6 +40,8 @@ var Test1;
     let a1;
     let a2;
     let a3;
+    //let b1: (typeof Color).Red.toString;
+    //let b2: (typeof Color).Red["toString"];
     let b3;
     let c1;
     let c2;

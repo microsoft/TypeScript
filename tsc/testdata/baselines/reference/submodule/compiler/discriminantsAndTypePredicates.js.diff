@@ -8,34 +8,3 @@
  function isA(x) { return x.type === 'A'; }
  function isB(x) { return x.type === 'B'; }
  function foo1(x) {
--    x; // A | B
-+    x;
-     if (isA(x)) {
--        return x; // A
-+        return x;
-     }
--    x; // B
-+    x;
-     if (isB(x)) {
--        return x; // B
-+        return x;
-     }
--    x; // never
-+    x;
- }
- function foo2(x) {
--    x; // A | B
-+    x;
-     if (x.type === 'A') {
--        return x; // A
-+        return x;
-     }
--    x; // B
-+    x;
-     if (x.type === 'B') {
--        return x; // B
-+        return x;
-     }
--    x; // never
-+    x;
- }

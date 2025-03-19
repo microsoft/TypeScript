@@ -52,13 +52,14 @@ async function i(): Promise<string> {
 
 //// [truthinessPromiseCoercion.js]
 async function f() {
-    if (p) { }
-    if (!!p) { }
-    if (p2) { }
+    if (p) { } // err
+    if (!!p) { } // no err
+    if (p2) { } // no err
     p ? f.arguments : f.arguments;
     !!p ? f.arguments : f.arguments;
     p2 ? f.arguments : f.arguments;
 }
+// all ok
 async function g() {
     if (p) {
         p;
@@ -73,17 +74,17 @@ async function g() {
     }
 }
 async function h() {
-    if (obj.p) { }
-    if (obj.p) {
+    if (obj.p) { } // error
+    if (obj.p) { // ok
         await obj.p;
     }
-    if (obj.p && await obj.p) { }
+    if (obj.p && await obj.p) { } // ok
 }
 async function i() {
-    if (pf()) {
+    if (pf()) { // error
         return "true";
     }
-    if (pf()) {
+    if (pf()) { // error
         pf().then();
     }
     return "false";

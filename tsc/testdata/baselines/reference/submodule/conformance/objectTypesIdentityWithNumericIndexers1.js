@@ -125,6 +125,7 @@ function foo16(x: any) { }
 
 
 //// [objectTypesIdentityWithNumericIndexers1.js]
+// object types are identical structurally
 class A {
 }
 class B {

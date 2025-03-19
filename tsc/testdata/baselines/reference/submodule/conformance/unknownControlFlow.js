@@ -455,215 +455,216 @@ function fx20(value: Either) {
 
 //// [unknownControlFlow.js]
 function f01(u) {
-    let x1 = u;
+    let x1 = u; // Error
     let x2 = u;
     let x3 = u;
     let x4 = u;
 }
 function f10(x) {
     if (x) {
-        x;
+        x; // {}
     }
     else {
-        x;
+        x; // unknown
     }
     if (!x) {
-        x;
+        x; // unknown
     }
     else {
-        x;
+        x; // {}
     }
 }
 function f11(x) {
     if (x) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
     if (!x) {
-        x;
+        x; // T
     }
     else {
-        x;
+        x; // T & {}
     }
 }
 function f12(x) {
     if (x) {
-        x;
+        x; // T
     }
     else {
-        x;
+        x; // T
     }
 }
 function f20(x) {
     if (x !== undefined) {
-        x;
+        x; // {} | null
     }
     else {
-        x;
+        x; // undefined
     }
     if (x !== null) {
-        x;
+        x; // {} | undefined
     }
     else {
-        x;
+        x; // null
     }
     if (x !== undefined && x !== null) {
-        x;
+        x; // {}
     }
     else {
-        x;
+        x; // null | undefined
     }
     if (x != undefined) {
-        x;
+        x; // {}
     }
     else {
-        x;
+        x; // null | undefined
     }
     if (x != null) {
-        x;
+        x; // {}
     }
     else {
-        x;
+        x; // null | undefined
     }
 }
 function f21(x) {
     if (x !== undefined) {
-        x;
+        x; // T & ({} | null)
     }
     else {
-        x;
+        x; // T
     }
     if (x !== null) {
-        x;
+        x; // T & ({} | undefined)
     }
     else {
-        x;
+        x; // T
     }
     if (x !== undefined && x !== null) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
     if (x != undefined) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
     if (x != null) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
 }
 function f22(x) {
     if (x !== undefined) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
     if (x !== null) {
-        x;
+        x; // T
     }
     else {
-        x;
+        x; // T
     }
     if (x !== undefined && x !== null) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
     if (x != undefined) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
     if (x != null) {
-        x;
+        x; // T & {}
     }
     else {
-        x;
+        x; // T
     }
 }
 function f23(x) {
     if (x !== undefined) {
-        x;
+        x; // T & {} | null
     }
     if (x !== null) {
-        x;
+        x; // T & {} | undefined
     }
     if (x != undefined) {
-        x;
+        x; // T & {}
     }
     if (x != null) {
-        x;
+        x; // T & {}
     }
 }
 function f30(x) {
     if (typeof x === "object") {
-        x;
+        x; // object
     }
 }
 function f31(x) {
     if (typeof x === "object") {
-        x;
+        x; // T & object | T & null
     }
     if (x && typeof x === "object") {
-        x;
+        x; // T & object
     }
     if (typeof x === "object" && x) {
-        x;
+        x; // T & object
     }
 }
 function f32(x) {
     if (typeof x === "object") {
-        x;
+        x; // T & object
     }
 }
 function possiblyNull(x) {
-    return !!true ? x : null;
+    return !!true ? x : null; // T | null
 }
 function possiblyUndefined(x) {
-    return !!true ? x : undefined;
+    return !!true ? x : undefined; // T | undefined
 }
 function possiblyNullOrUndefined(x) {
-    return possiblyUndefined(possiblyNull(x));
+    return possiblyUndefined(possiblyNull(x)); // T | null | undefined
 }
 function ensureNotNull(x) {
     if (x === null)
         throw Error();
-    return x;
+    return x; // T & ({} | undefined)
 }
 function ensureNotUndefined(x) {
     if (x === undefined)
         throw Error();
-    return x;
+    return x; // T & ({} | null)
 }
 function ensureNotNullOrUndefined(x) {
-    return ensureNotUndefined(ensureNotNull(x));
+    return ensureNotUndefined(ensureNotNull(x)); // T & {}
 }
 function f40(a, b) {
-    let a1 = ensureNotNullOrUndefined(a);
-    let b1 = ensureNotNullOrUndefined(b);
+    let a1 = ensureNotNullOrUndefined(a); // string
+    let b1 = ensureNotNullOrUndefined(b); // number
 }
 function f41(a) {
-    let a1 = ensureNotUndefined(ensureNotNull(a));
-    let a2 = ensureNotNull(ensureNotUndefined(a));
-    let a3 = ensureNotNull(ensureNotNull(a));
-    let a4 = ensureNotUndefined(ensureNotUndefined(a));
-    let a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a));
-    let a6 = ensureNotNull(possiblyNullOrUndefined(a));
-    let a7 = ensureNotUndefined(possiblyNullOrUndefined(a));
-    let a8 = ensureNotNull(possiblyUndefined(a));
-    let a9 = ensureNotUndefined(possiblyNull(a));
+    let a1 = ensureNotUndefined(ensureNotNull(a)); // T & {}
+    let a2 = ensureNotNull(ensureNotUndefined(a)); // T & {}
+    let a3 = ensureNotNull(ensureNotNull(a)); // T & {} | T & undefined
+    let a4 = ensureNotUndefined(ensureNotUndefined(a)); // T & {} | T & null
+    let a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a)); // T & {}
+    let a6 = ensureNotNull(possiblyNullOrUndefined(a)); // T & {} | undefined
+    let a7 = ensureNotUndefined(possiblyNullOrUndefined(a)); // T & {} | null
+    let a8 = ensureNotNull(possiblyUndefined(a)); // T & {} | undefined
+    let a9 = ensureNotUndefined(possiblyNull(a)); // T & {} | null
 }
+// Repro from #48468
 function deepEquals(a, b) {
     if (typeof a !== 'object' || typeof b !== 'object' || !a || !b) {
         return false;
@@ -671,17 +672,21 @@ function deepEquals(a, b) {
     if (Array.isArray(a) || Array.isArray(b)) {
         return false;
     }
-    if (Object.keys(a).length !== Object.keys(b).length) {
+    if (Object.keys(a).length !== Object.keys(b).length) { // Error here
         return false;
     }
     return true;
 }
+// Repro from #49386
 function foo(x) {
     let y = x;
     if (y !== null) {
         y;
     }
 }
+// We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
+// without a check that the object is non-undefined and non-null. This is safe because `keyof T`
+// is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
 function ff1(t, k) {
     t[k];
 }
@@ -689,77 +694,80 @@ function ff2(t, k) {
     t[k];
 }
 function ff3(t, k) {
-    t[k];
+    t[k]; // Error
 }
 function ff4(t, k) {
     t[k];
 }
-ff1(null, 'foo');
-ff2(null, 'foo');
+ff1(null, 'foo'); // Error
+ff2(null, 'foo'); // Error
 ff3(null, 'foo');
-ff4(null, 'foo');
+ff4(null, 'foo'); // Error
+// Generics and intersections with {}
 function fx0(value) {
     if (value === 42) {
-        value;
+        value; // T & {}
     }
     else {
-        value;
+        value; // T & ({} | null)
     }
 }
 function fx1(value) {
     if (value === 42) {
-        value;
+        value; // T & {}
     }
     else {
-        value;
+        value; // T & ({} | null)
     }
 }
 function fx2(value) {
     if (value === 42) {
-        value;
+        value; // T & {}
     }
     else {
-        value;
+        value; // T & ({} | null)
     }
 }
 function fx3(value) {
     if (value === 42) {
-        value;
+        value; // T & {}
     }
     else {
-        value;
+        value; // T & ({} | null)
     }
 }
 function fx4(value) {
     if (value === 42) {
-        value;
+        value; // T & {}
     }
     else {
-        value;
+        value; // T & ({} | null)
     }
 }
 function fx5(value) {
     if (value === 42) {
-        value;
+        value; // T & {}
     }
     else {
-        value;
+        value; // T & ({} | null)
     }
 }
+// Double-equals narrowing
 function fx10(x, y) {
     if (x == y) {
-        x;
+        x; // string | number
     }
     else {
-        x;
+        x; // string | number
     }
     if (x != y) {
-        x;
+        x; // string | number
     }
     else {
-        x;
+        x; // string | number
     }
 }
+// Repros from #50706
 function SendBlob(encoding) {
     if (encoding !== undefined && encoding !== 'utf8') {
         throw new Error('encoding');

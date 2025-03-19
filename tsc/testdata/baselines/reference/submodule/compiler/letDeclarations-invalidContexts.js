@@ -35,6 +35,7 @@ while (false)
 
 
 //// [letDeclarations-invalidContexts.js]
+// Errors, let must be defined inside a block
 if (true)
     let l1 = 0;
 else

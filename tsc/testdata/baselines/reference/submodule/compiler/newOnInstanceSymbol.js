@@ -8,5 +8,5 @@ new x(); // should error
 //// [newOnInstanceSymbol.js]
 class C {
 }
-var x = new C();
-new x();
+var x = new C(); // should be ok
+new x(); // should error

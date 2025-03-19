@@ -68,6 +68,7 @@ var A;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A || (A = {}));
 //// [part3.js]
+// test the merging actually worked
 var o;
 var o;
 var o = A.Origin;

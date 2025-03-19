@@ -30,7 +30,7 @@ export class Foo {
 export class Foo {
     #x;
     copy(other) {
-        other.#x;
+        other.#x; // error
     }
 }
 //// [main.js]
@@ -38,4 +38,4 @@ import { Foo as A } from "./a";
 import { Foo as B } from "./b";
 const a = new A();
 const b = new B();
-a.copy(b);
+a.copy(b); // error

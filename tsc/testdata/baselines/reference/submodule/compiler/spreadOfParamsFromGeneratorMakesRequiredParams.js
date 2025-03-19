@@ -9,4 +9,4 @@ declare function call<Fn extends (...args: any[]) => any>(
 call(function* (a: 'a') { }); // error, 2nd argument required
 
 //// [spreadOfParamsFromGeneratorMakesRequiredParams.js]
-call(function* (a) { });
+call(function* (a) { }); // error, 2nd argument required

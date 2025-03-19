@@ -9,5 +9,6 @@ class selfReferencingFile2 {
 
 //// [selfReferencingFile2.js]
 //// [selfReferencingFile2.js]
+///<reference path='../selfReferencingFile2.ts'/>
 class selfReferencingFile2 {
 }

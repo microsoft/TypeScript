@@ -1,9 +1,8 @@
 --- old.tripleSlashTypesReferenceWithMissingExports(module=commonjs).js
 +++ new.tripleSlashTypesReferenceWithMissingExports(module=commonjs).js
-@@= skipped -13, +13 lines =@@
- const a: GlobalThing = { a: 0 };
+@@= skipped -14, +14 lines =@@
  
  //// [usage.js]
--/// <reference types="pkg" />
+ /// <reference types="pkg" />
 -var a = { a: 0 };
 +const a = { a: 0 };

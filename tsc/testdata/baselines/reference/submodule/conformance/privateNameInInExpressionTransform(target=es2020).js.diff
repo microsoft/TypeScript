@@ -23,25 +23,25 @@
 -        __classPrivateFieldIn(_Foo_instances, v); // expect Foo's 'instances' WeakSet
 -        __classPrivateFieldIn(_a, v); // expect Foo's constructor
 -        __classPrivateFieldIn(_a, v); // expect Foo's constructor
-+        #field in v;
-+        #method in v;
-+        #staticField in v;
-+        #staticMethod in v;
++        #field in v; // expect Foo's 'field' WeakMap
++        #method in v; // expect Foo's 'instances' WeakSet
++        #staticField in v; // expect Foo's constructor
++        #staticMethod in v; // expect Foo's constructor
      }
      precedence(v) {
--        // '==' and '||' have lower precedence than 'in'
--        // 'in'  naturally has same precedence as 'in'
--        // '<<' has higher precedence than 'in'
+         // '==' and '||' have lower precedence than 'in'
+         // 'in'  naturally has same precedence as 'in'
+         // '<<' has higher precedence than 'in'
 -        v == __classPrivateFieldIn(_Foo_field, v) || v; // Good precedence: (v == (#field in v)) || v
 -        v <<  in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
 -        v <<  in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
 -        v == __classPrivateFieldIn(_Foo_field, v) in v; // Good precedence: v == ((#field in v) in v)
 -        __classPrivateFieldIn(_Foo_field, v) && __classPrivateFieldIn(_Foo_field, v); // Good precedence: (#field in v) && (#field in v)
-+        v == #field in v || v;
-+        v << #field in v << v;
-+        v << #field in v == v;
-+        v == #field in v in v;
-+        #field in v && #field in v;
++        v == #field in v || v; // Good precedence: (v == (#field in v)) || v
++        v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
++        v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
++        v == #field in v in v; // Good precedence: v == ((#field in v) in v)
++        #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
      }
      invalidLHS(v) {
          'prop' in v;
@@ -60,12 +60,12 @@
 +    #field = 1;
      check(v) {
 -        __classPrivateFieldIn(_Bar_field, v); // expect Bar's 'field' WeakMap
-+        #field in v;
++        #field in v; // expect Bar's 'field' WeakMap
      }
  }
 -_Bar_field = new WeakMap();
  function syntaxError(v) {
 -    return  in v; // expect `return in v` so runtime will have a syntax error
-+    return #field in v;
++    return #field in v; // expect `return in v` so runtime will have a syntax error
  }
  export {};

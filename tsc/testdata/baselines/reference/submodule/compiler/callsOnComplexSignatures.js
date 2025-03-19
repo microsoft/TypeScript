@@ -109,9 +109,10 @@ function test5() {
 //// [callsOnComplexSignatures.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Simple calls from real usecases
 function test1() {
     function test(t) {
-        const z = t.getValue("bar");
+        const z = t.getValue("bar"); // Should be fine
     }
 }
 function test2() {
@@ -143,15 +144,19 @@ function test4(arg1, arg2, arg3, arg4, arg5, arg6) {
     arg6({ x: 0, y: 0 }, { x: 0, y: 0 });
     arg6({ x: 0, y: 0 }, { x: 0, y: 0 }, { y: 0 });
 }
+// JSX Tag names
 function test5() {
+    // Pair of non-like intrinsics
     function render(url) {
         const Tag = url ? 'a' : 'button';
         return <Tag>test</Tag>;
     }
+    // Union of all intrinsics and components of `any`
     function App(props) {
         const Comp = props.component;
         return (<Comp />);
     }
+    // custom components with non-subset props
     function render2() {
         var C = null;
         const a = <C p={true}/>;

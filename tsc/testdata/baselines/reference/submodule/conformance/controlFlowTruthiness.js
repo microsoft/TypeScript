@@ -101,85 +101,85 @@ function f9<T extends object>(x: T) {
 function f1() {
     let x = foo();
     if (x) {
-        x;
+        x; // string
     }
     else {
-        x;
+        x; // string | undefined
     }
 }
 function f2() {
     let x;
     x = foo();
     if (x) {
-        x;
+        x; // string
     }
     else {
-        x;
+        x; // string | undefined
     }
 }
 function f3() {
     let x;
     if (x = foo()) {
-        x;
+        x; // string
     }
     else {
-        x;
+        x; // string | undefined
     }
 }
 function f4() {
     let x;
     if (!(x = foo())) {
-        x;
+        x; // string | undefined
     }
     else {
-        x;
+        x; // string
     }
 }
 function f5() {
     let x;
     let y;
     if (x = y = foo()) {
-        x;
-        y;
+        x; // string
+        y; // string | undefined
     }
     else {
-        x;
-        y;
+        x; // string | undefined
+        y; // string | undefined
     }
 }
 function f6() {
     let x;
     let y;
     if (x = foo(), y = foo()) {
-        x;
-        y;
+        x; // string | undefined
+        y; // string
     }
     else {
-        x;
-        y;
+        x; // string | undefined
+        y; // string | undefined
     }
 }
 function f7(x) {
     if (x) {
-        x;
+        x; // {}
     }
     else {
-        x;
+        x; // {}
     }
 }
 function f8(x) {
     if (x) {
-        x;
+        x; // {}
     }
     else {
-        x;
+        x; // {}
     }
 }
 function f9(x) {
     if (x) {
-        x;
+        x; // {}
     }
     else {
-        x;
+        x; // never
     }
 }

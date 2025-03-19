@@ -7,6 +7,5 @@
 -var array = [
 +const array = [
      ,
--    , /* comment */
-+    ,
+     , /* comment */
  ];

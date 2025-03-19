@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// There should be no errors in this file
+ // There should be no errors in this file
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {

@@ -1,10 +1,9 @@
 --- old.objectTypeWithRecursiveWrappedProperty2.js
 +++ new.objectTypeWithRecursiveWrappedProperty2.js
-@@= skipped -15, +15 lines =@@
- list1 = list3; // error
+@@= skipped -16, +16 lines =@@
  
  //// [objectTypeWithRecursiveWrappedProperty2.js]
--// Basic recursive type
+ // Basic recursive type
 -var List = /** @class */ (function () {
 -    function List() {
 -    }
@@ -17,7 +16,3 @@
  var list1 = new List();
  var list2 = new List();
  var list3 = new List();
--list1 = list2; // ok
--list1 = list3; // error
-+list1 = list2;
-+list1 = list3;

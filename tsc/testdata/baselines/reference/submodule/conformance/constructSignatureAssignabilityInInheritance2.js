@@ -72,6 +72,7 @@ interface I extends A {
 }
 
 //// [constructSignatureAssignabilityInInheritance2.js]
+// checking subtype relations for function types as it relates to contextual signature instantiation
 class Base {
     foo;
 }

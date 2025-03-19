@@ -34,11 +34,11 @@
 -    };
 -    return TextComponent;
 -}(React.Component));
--// Error
--var x = <TextComponent editable={true}/>;
--var textProps = {
 +    }
 +}
+ // Error
+-var x = <TextComponent editable={true}/>;
+-var textProps = {
 +let x = <TextComponent editable={true}/>;
 +const textProps = {
      editable: false

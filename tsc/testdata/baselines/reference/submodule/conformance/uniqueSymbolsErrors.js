@@ -90,6 +90,7 @@ declare const invalidIntersection: unique symbol | unique symbol;
 const shouldNotBeAssignable: string = Symbol();
 
 //// [uniqueSymbolsErrors.js]
+// classes
 class InvalidClass {
     constructor(invalidConstructorArgType) { }
     invalidReadonlyPropertyType;
@@ -114,4 +115,6 @@ class InvalidClass {
     static get invalidStaticGetter() { return; }
     static set invalidStaticSetter(arg) { return; }
 }
+// initializer assignability
+// https://github.com/Microsoft/TypeScript/issues/21584
 const shouldNotBeAssignable = Symbol();

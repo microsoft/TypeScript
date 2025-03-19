@@ -177,6 +177,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop2.js]
+// ========let
 function foo0(x) {
     for (let x of []) {
         let a = arguments.length;
@@ -252,6 +253,7 @@ function foo8(x) {
         (() => x + y + a);
     }
 }
+///=======const
 function foo0_c(x) {
     for (const x of []) {
         const a = arguments.length;

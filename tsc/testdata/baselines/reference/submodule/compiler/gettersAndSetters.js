@@ -53,16 +53,17 @@ if (typeof x === "string") {
 
 
 //// [gettersAndSetters.js]
+// classes
 class C {
     fooBack = "";
     static barBack = "";
     bazBack = "";
-    get Foo() { return this.fooBack; }
-    set Foo(foo) { this.fooBack = foo; }
-    static get Bar() { return C.barBack; }
-    static set Bar(bar) { C.barBack = bar; }
-    get = function () { };
-    set = function () { };
+    get Foo() { return this.fooBack; } // ok
+    set Foo(foo) { this.fooBack = foo; } // ok
+    static get Bar() { return C.barBack; } // ok
+    static set Bar(bar) { C.barBack = bar; } // ok
+    get = function () { }; // ok
+    set = function () { }; // ok
 }
 var c = new C();
 var foo = c.Foo;
@@ -71,10 +72,12 @@ var bar = C.Bar;
 C.Bar = "barv";
 var baz = c.Baz;
 c.Baz = "bazv";
-var o = { get Foo() { return 0; }, set Foo(val) { val; } };
+// The Foo accessors' return and param types should be contextually typed to the Foo field
+var o = { get Foo() { return 0; }, set Foo(val) { val; } }; // o
 var ofg = o.Foo;
 o.Foo = 0;
 var i = function (n) { return n; };
+// Repro from #45006
 const x = Math.random() < 0.5 ? "str" : 123;
 if (typeof x === "string") {
     let obj = {

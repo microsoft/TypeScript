@@ -27,22 +27,22 @@ async function fn19() { await thenable; } // error
 
 
 //// [asyncFunctionDeclaration15_es5.js]
-async function fn1() { }
-async function fn2() { }
-async function fn3() { }
-async function fn4() { }
-async function fn5() { }
-async function fn6() { }
-async function fn7() { return; }
-async function fn8() { return 1; }
-async function fn9() { return null; }
-async function fn10() { return undefined; }
-async function fn11() { return a; }
-async function fn12() { return obj; }
-async function fn13() { return thenable; }
-async function fn14() { await 1; }
-async function fn15() { await null; }
-async function fn16() { await undefined; }
-async function fn17() { await a; }
-async function fn18() { await obj; }
-async function fn19() { await thenable; }
+async function fn1() { } // valid: Promise<void>
+async function fn2() { } // error
+async function fn3() { } // error
+async function fn4() { } // error
+async function fn5() { } // error
+async function fn6() { } // error
+async function fn7() { return; } // valid: Promise<void>
+async function fn8() { return 1; } // valid: Promise<number>
+async function fn9() { return null; } // valid: Promise<any>
+async function fn10() { return undefined; } // valid: Promise<any>
+async function fn11() { return a; } // valid: Promise<any>
+async function fn12() { return obj; } // valid: Promise<{ then: string; }>
+async function fn13() { return thenable; } // error
+async function fn14() { await 1; } // valid: Promise<void>
+async function fn15() { await null; } // valid: Promise<void>
+async function fn16() { await undefined; } // valid: Promise<void>
+async function fn17() { await a; } // valid: Promise<void>
+async function fn18() { await obj; } // valid: Promise<void>
+async function fn19() { await thenable; } // error

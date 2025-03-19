@@ -5,7 +5,7 @@
  
  //// [expressionWithJSDocTypeArguments.js]
 -"use strict";
--// Repro from #51802
+ // Repro from #51802
  function foo(x) { return x; }
 -var Bar = /** @class */ (function () {
 -    function Bar(x) {
@@ -16,7 +16,8 @@
      }
 -    return Bar;
 -}());
--// Errors expected on all of the following
++}
+ // Errors expected on all of the following
 -var WhatFoo = foo<?>;
 -var HuhFoo = foo<?string>;
 -var NopeFoo = foo<?string>;
@@ -25,7 +26,6 @@
 -var HuhBar = Bar<?string>;
 -var NopeBar = Bar<?string>;
 -var ComeOnBar = Bar<??string>;
-+}
 +const WhatFoo = foo;
 +const HuhFoo = foo < string ?  >  : ;
 +const NopeFoo = foo;

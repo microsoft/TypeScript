@@ -1,10 +1,9 @@
 --- old.genericCallWithFunctionTypedArguments4.js
 +++ new.genericCallWithFunctionTypedArguments4.js
-@@= skipped -24, +24 lines =@@
- var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
+@@= skipped -25, +25 lines =@@
  
  //// [genericCallWithFunctionTypedArguments4.js]
--// No inference is made from function typed arguments which have multiple call signatures
+ // No inference is made from function typed arguments which have multiple call signatures
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -24,10 +23,3 @@
  var a;
  function foo4(cb) {
      var u;
-     return u;
- }
--var r = foo4(a); // T is {} (candidates boolean and string), U is {} (candidates C and D)
-+var r = foo4(a);
- var b;
--var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
-+var r2 = foo4(b);

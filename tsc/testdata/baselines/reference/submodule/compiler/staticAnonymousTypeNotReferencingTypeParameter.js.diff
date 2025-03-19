@@ -1,11 +1,8 @@
 --- old.staticAnonymousTypeNotReferencingTypeParameter.js
 +++ new.staticAnonymousTypeNotReferencingTypeParameter.js
-@@= skipped -143, +143 lines =@@
- }
- 
- //// [staticAnonymousTypeNotReferencingTypeParameter.js]
--// This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
--// this would cause the compiler to run out of memory.
+@@= skipped -146, +146 lines =@@
+ // This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
+ // this would cause the compiler to run out of memory.
  function outer(x) {
 -    var Inner = /** @class */ (function () {
 -        function Inner() {
@@ -37,11 +34,9 @@
 +}
  var tessst;
  (function (tessst) {
--    /**
--     * Iterates through 'array' by index and performs the callback on each element of array until the callback
--     * returns a truthy value, then returns that value.
--     * If no such value is found, the callback is applied to each element of array and undefined is returned.
--     */
+     /**
+@@= skipped -28, +22 lines =@@
+      */
      function funkyFor(array, callback) {
          if (array) {
 -            for (var i = 0, len = array.length; i < len; i++) {
@@ -51,20 +46,20 @@
                  if (result) {
                      return result;
                  }
-@@= skipped -42, +29 lines =@@
+@@= skipped -11, +11 lines =@@
      }
      tessst.funkyFor = funkyFor;
  })(tessst || (tessst = {}));
 -var ListWrapper = /** @class */ (function () {
 -    function ListWrapper() {
 -    }
--    // JS has no way to express a statically fixed size list, but dart does so we
--    // keep both methods.
++class ListWrapper {
+     // JS has no way to express a statically fixed size list, but dart does so we
+     // keep both methods.
 -    ListWrapper.createFixedSize = function (dit, size) { return new Array(size); };
 -    ListWrapper.createGrowableSize = function (dit, size) { return new Array(size); };
 -    ListWrapper.clone = function (dit, array) { return array.slice(0); };
 -    ListWrapper.forEachWithIndex = function (dit, array, fn) {
-+class ListWrapper {
 +    static createFixedSize(dit, size) { return new Array(size); }
 +    static createGrowableSize(dit, size) { return new Array(size); }
 +    static clone(dit, array) { return array.slice(0); }
@@ -152,7 +147,7 @@
          if (a.length != b.length)
              return false;
          for (var i = 0; i < a.length; ++i) {
-@@= skipped -70, +63 lines =@@
+@@= skipped -70, +65 lines =@@
                  return false;
          }
          return true;

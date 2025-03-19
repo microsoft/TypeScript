@@ -84,12 +84,14 @@ switch (tmp.get('t')) {
     case 'A': break;
     case 'B': break;
 }
-const arr = [];
+// from https://github.com/microsoft/TypeScript/issues/36390
+const arr = []; // Works with Array<number | string>
 const arr1 = [];
 const arr2 = [];
 arr.map((a, index) => {
     return index;
 });
+// This case still doesn't work because `reduce` has multiple overloads :(
 arr.reduce((acc, a, index) => {
     return [];
 }, []);
@@ -114,5 +116,7 @@ arr2.reduce((acc, a, index) => {
 arr2.forEach((a, index) => {
     return index;
 });
+// note, you must annotate `result` for now
 a.doThing().then((result) => {
+    // whatever
 });

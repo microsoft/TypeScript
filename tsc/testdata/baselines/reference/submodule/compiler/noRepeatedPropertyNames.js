@@ -12,6 +12,7 @@ class C {
 
 
 //// [noRepeatedPropertyNames.js]
+// https://github.com/microsoft/TypeScript/issues/46815
 const first = { a: 1, a: 2 };
 class C {
     m() {

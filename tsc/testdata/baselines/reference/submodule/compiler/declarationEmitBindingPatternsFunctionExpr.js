@@ -17,9 +17,13 @@ let value = "";
 const shadowedVariable = ({ value: alias }: { value: string }): typeof value => value;
 
 //// [declarationEmitBindingPatternsFunctionExpr.js]
+// Tempting to remove alias if unused 
 let notReferenced = ({ name: alias }) => { };
+// Resons we can't remove aliases that are not used in the function signature: 
+// 1.Causes duplicate identifier if we remove alias
 const duplicateIndetifiers = ({ name: alias, name: alias2 }) => { };
 const duplicateIndetifiers2 = (name, { name: alias }) => { };
 const duplicateIndetifiers3 = ({ name: alias }, { name: alias2 }) => { };
 let value = "";
+// 2.Can change in meaning for typeof value if we remove alias
 const shadowedVariable = ({ value: alias }) => value;

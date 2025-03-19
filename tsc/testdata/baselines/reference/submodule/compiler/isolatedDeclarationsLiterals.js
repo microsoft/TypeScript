@@ -67,17 +67,28 @@ export const mutableObject = {
 
 //// [file1.js]
 export const constObject = {
+    /** Value Of 1 */
     one: 1,
+    /** Value Of 0o1 */
     oneOctal: 0o1,
+    /** Value Of 0x1 */
     oneHex: 0x1,
+    /** Value Of +1 */
     pOne: +1,
+    /** Value Of -1 */
     mOne: -1,
     array: [1, -1, 1n, -1n],
+    /** Value Of 1n */
     onen: 1n,
+    /** Value Of -1n */
     mOnen: -1n,
+    /** Value Of "1" */
     oneStrDoubleQuote: "1",
+    /** Value Of '1' */
     oneStrSingleQuote: '1',
+    /** Value Of `1` */
     oneStrTemplate: `1`,
+    /** A method */
     method() {
     },
 };
@@ -92,13 +103,21 @@ export const oneStrDoubleQuote = "1";
 export const oneStrSingleQuote = '1';
 export const oneStrTemplate = `1`;
 export const mutableObject = {
+    /** Value Of 1 */
     one: 1,
+    /** Value Of 0o1 */
     oneOctal: 0o1,
+    /** Value Of 0x1 */
     oneHex: 0x1,
+    /** Value Of +1 */
     pOne: +1,
+    /** Value Of -1 */
     mOne: -1,
+    /** Value Of 1n */
     onen: 1n,
+    /** Value Of -1n */
     mOnen: -1n,
+    /** A method */
     method() {
     },
 };

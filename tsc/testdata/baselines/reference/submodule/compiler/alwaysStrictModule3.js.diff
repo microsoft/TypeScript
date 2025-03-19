@@ -1,9 +1,8 @@
 --- old.alwaysStrictModule3.js
 +++ new.alwaysStrictModule3.js
-@@= skipped -4, +4 lines =@@
- export const a = 1;
+@@= skipped -5, +5 lines =@@
  
  //// [alwaysStrictModule3.js]
--// module ES2015
+ // module ES2015
 -export var a = 1;
 +export const a = 1;

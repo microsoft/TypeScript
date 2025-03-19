@@ -1,14 +1,6 @@
 --- old.shadowedInternalModule.js
 +++ new.shadowedInternalModule.js
-@@= skipped -67, +67 lines =@@
- 
- 
- //// [shadowedInternalModule.js]
--// all errors imported modules conflict with local variables
- var A;
- (function (A) {
-     A.Point = { x: 0, y: 0 };
-@@= skipped -8, +7 lines =@@
+@@= skipped -75, +75 lines =@@
  var B;
  (function (B) {
      var A = { x: 0, y: 0 };
@@ -35,11 +27,9 @@
  (function (b) {
 +    b.A = a.A;
  })(b || (b = {}));
--//
+ //
  var q;
- (function (q) {
-     q.Q = {};
-@@= skipped -28, +28 lines =@@
+@@= skipped -28, +29 lines =@@
  })(r || (r = {}));
  var s;
  (function (s) {

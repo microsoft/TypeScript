@@ -5,7 +5,7 @@
  
  //// [controlFlowNullishCoalesce.js]
 -"use strict";
--// assignments in shortcutting rhs
+ // assignments in shortcutting rhs
 -var a;
 -o !== null && o !== void 0 ? o : (a = 1);
 +let a;

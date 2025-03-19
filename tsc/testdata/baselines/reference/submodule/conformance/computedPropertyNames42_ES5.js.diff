@@ -27,5 +27,6 @@
 +    y;
 +}
 +class C {
++    // Computed properties
 +    [""];
 +}

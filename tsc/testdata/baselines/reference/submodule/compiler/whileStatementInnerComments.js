@@ -7,5 +7,5 @@
 
 
 //// [whileStatementInnerComments.js]
-while (false) { }
-do { } while (true);
+/*a*/ while /*b*/ ( /*c*/false /*d*/) /*e*/ { }
+/*a*/ do /*b*/ { } /*c*/ while /*d*/ ( /*e*/true /*f*/);

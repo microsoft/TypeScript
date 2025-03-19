@@ -1,29 +1,7 @@
 --- old.typeGuardIntersectionTypes.js
 +++ new.typeGuardIntersectionTypes.js
-@@= skipped -121, +121 lines =@@
-         obj;
-     }
- }
--// a type guard for B
- function isB(toTest) {
-     return toTest && toTest.b;
- }
--// a function that turns an A into an A & B
- function union(a) {
-     if (isB(a)) {
-         return a;
-@@= skipped -13, +11 lines =@@
-         return null;
-     }
- }
--// Beast feature detection via user-defined type guards
- function hasLegs(x) { return x && typeof x.legs === 'number'; }
- function hasWings(x) { return x && !!x.wings; }
--// Function to identify a given beast by detecting its features
- function identifyBeast(beast) {
--    // All beasts with legs
-     if (hasLegs(beast)) {
--        // All winged beasts with legs
+@@= skipped -144, +144 lines =@@
+         // All winged beasts with legs
          if (hasWings(beast)) {
              if (beast.legs === 4) {
 -                log("pegasus - 4 legs, wings");
@@ -38,13 +16,13 @@
 +                log(`unknown - ${beast.legs} legs, wings`);
              }
          }
--        // All non-winged beasts with legs
+         // All non-winged beasts with legs
          else {
 -            log("manbearpig - ".concat(beast.legs, " legs, no wings"));
 +            log(`manbearpig - ${beast.legs} legs, no wings`);
          }
      }
--    // All beasts without legs    
+     // All beasts without legs    
      else {
          if (hasWings(beast)) {
 -            log("quetzalcoatl - no legs, wings");
@@ -54,18 +32,5 @@
 -            log("snake - no legs, no wings");
 +            log(`snake - no legs, no wings`);
          }
-     }
- }
- function beastFoo(beast) {
-     if (hasWings(beast) && hasLegs(beast)) {
--        beast; // Winged & Legged
-+        beast;
-     }
-     else {
-         beast;
-     }
-     if (hasLegs(beast) && hasWings(beast)) {
--        beast; // Legged & Winged
-+        beast;
      }
  }

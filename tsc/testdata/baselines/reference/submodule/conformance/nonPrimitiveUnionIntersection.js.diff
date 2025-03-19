@@ -1,14 +1,9 @@
 --- old.nonPrimitiveUnionIntersection.js
 +++ new.nonPrimitiveUnionIntersection.js
-@@= skipped -11, +11 lines =@@
- 
- 
- //// [nonPrimitiveUnionIntersection.js]
--var a = ""; // error
--var b = ""; // ok
--var c = 123; // error
--a = b; // error
--b = a; // ok
+@@= skipped -16, +16 lines =@@
+ var c = 123; // error
+ a = b; // error
+ b = a; // ok
 -var foo = { bar: 'bar' }; // ok
 -var bar = { bar: 'bar' }; // error
 -
@@ -21,10 +16,5 @@
 -declare const bar: object & {
 -    err: string;
 -};
-+var a = "";
-+var b = "";
-+var c = 123;
-+a = b;
-+b = a;
-+const foo = { bar: 'bar' };
-+const bar = { bar: 'bar' };
++const foo = { bar: 'bar' }; // ok
++const bar = { bar: 'bar' }; // error

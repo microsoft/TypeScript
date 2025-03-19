@@ -60,6 +60,7 @@ function AnotherButton(p) {
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+// Ok
 let k1 = <Comp a={10} b="hi">
         <Button />
         <AnotherButton />

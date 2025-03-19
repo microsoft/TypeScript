@@ -1,14 +1,6 @@
 --- old.enumLiteralUnionNotWidened.js
 +++ new.enumLiteralUnionNotWidened.js
-@@= skipped -22, +22 lines =@@
- function fn2(x: D): List<D> { return asList(x); }
- 
- //// [enumLiteralUnionNotWidened.js]
--// repro from #22093
- var A;
- (function (A) {
-     A["one"] = "one";
-@@= skipped -13, +12 lines =@@
+@@= skipped -35, +35 lines =@@
      B["bar"] = "bar";
  })(B || (B = {}));
  ;
@@ -22,8 +14,5 @@
 +    items = [];
 +}
  function asList(arg) { return new List(); }
--// TypeScript incorrectly infers the return type of "asList(x)" to be "List<A | B>"
--// The correct type is "List<A | B.foo>"
- function fn1(x) { return asList(x); }
--// If we use the literal "foo" instead of B.foo, the correct type is inferred
- function fn2(x) { return asList(x); }
+ // TypeScript incorrectly infers the return type of "asList(x)" to be "List<A | B>"
+ // The correct type is "List<A | B.foo>"

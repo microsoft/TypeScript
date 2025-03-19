@@ -28,23 +28,23 @@ function c(x: string | number) {
 let cond;
 function a(x) {
     for (x = undefined; typeof x !== "number"; x = undefined) {
-        x;
+        x; // string
     }
-    x;
+    x; // number
 }
 function b(x) {
     for (x = undefined; typeof x !== "number"; x = undefined) {
-        x;
+        x; // string
         if (cond)
             continue;
     }
-    x;
+    x; // number
 }
 function c(x) {
     for (x = undefined; typeof x !== "number"; x = undefined) {
-        x;
+        x; // string
         if (cond)
             break;
     }
-    x;
+    x; // string | number
 }

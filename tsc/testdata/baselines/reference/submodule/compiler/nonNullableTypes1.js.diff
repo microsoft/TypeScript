@@ -7,7 +7,7 @@
 -"use strict";
  function f1(x) {
 -    var y = x || "hello"; // NonNullable<T> | string
-+    let y = x || "hello";
++    let y = x || "hello"; // NonNullable<T> | string
  }
  function error() {
      throw new Error();
@@ -16,23 +16,20 @@
  }
  function f3(x) {
 -    var y = x; // {}
-+    let y = x;
++    let y = x; // {}
  }
  function f4(obj) {
 -    if ((obj === null || obj === void 0 ? void 0 : obj.x) === "hello") {
--        obj; // NonNullable<T>
 +    if (obj?.x === "hello") {
-+        obj;
+         obj; // NonNullable<T>
      }
 -    if (obj === null || obj === void 0 ? void 0 : obj.x) {
--        obj; // NonNullable<T>
 +    if (obj?.x) {
-+        obj;
+         obj; // NonNullable<T>
      }
 -    if (typeof (obj === null || obj === void 0 ? void 0 : obj.x) === "string") {
--        obj; // NonNullable<T>
 +    if (typeof obj?.x === "string") {
-+        obj;
+         obj; // NonNullable<T>
      }
  }
 -var A = /** @class */ (function () {
@@ -41,7 +38,7 @@
 +class A {
 +    x = "hello";
 +    foo() {
-+        let zz = this?.x;
++        let zz = this?.x; // string
      }
 -    A.prototype.foo = function () {
 -        var zz = this === null || this === void 0 ? void 0 : this.x; // string

@@ -17,6 +17,7 @@ class A {
 }
 
 //// [decoratorChecksFunctionBodies.js]
+// from #2971
 function func(s) {
 }
 class A {

@@ -19,7 +19,9 @@ var A;
     }
     A.B = B;
 })(A || (A = {}));
+// ok
 class C1 extends (A?.B) {
 }
+// error
 class C2 {
 }

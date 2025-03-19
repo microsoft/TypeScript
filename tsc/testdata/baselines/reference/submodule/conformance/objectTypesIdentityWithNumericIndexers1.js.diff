@@ -1,10 +1,9 @@
 --- old.objectTypesIdentityWithNumericIndexers1.js
 +++ new.objectTypesIdentityWithNumericIndexers1.js
-@@= skipped -124, +124 lines =@@
- 
+@@= skipped -125, +125 lines =@@
  
  //// [objectTypesIdentityWithNumericIndexers1.js]
--// object types are identical structurally
+ // object types are identical structurally
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

@@ -17,7 +17,7 @@ function bar(this: string | number) {
 //// [controlFlowAnalysisOnBareThisKeyword.js]
 function bigger() {
     if (isBig(this)) {
-        this.big;
+        this.big; // Expect property to exist
     }
 }
 function bar() {

@@ -35,4 +35,4 @@
 +    t;
 +}
 +class Bar extends Foo {
-+}
++} // Valid

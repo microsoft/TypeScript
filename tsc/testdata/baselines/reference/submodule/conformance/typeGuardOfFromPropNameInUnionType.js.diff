@@ -158,6 +158,7 @@
      }
 -    SelfAssert.prototype.inThis = function () {
 +}
++// added for completeness
 +class SelfAssert {
 +    a;
 +    inThis() {

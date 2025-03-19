@@ -24,4 +24,4 @@ try {
 finally {
     closeFile();
 }
-result;
+result; // should not error here

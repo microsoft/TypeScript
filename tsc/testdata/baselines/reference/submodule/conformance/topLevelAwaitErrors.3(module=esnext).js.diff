@@ -1,9 +1,0 @@
---- old.topLevelAwaitErrors.3(module=esnext).js
-+++ new.topLevelAwaitErrors.3(module=esnext).js
-@@= skipped -7, +7 lines =@@
- 
- 
- //// [topLevelAwaitErrors.3.js]
--// reparse binding pattern as await should fail
- var { await } = { await: 1 };
- export {};

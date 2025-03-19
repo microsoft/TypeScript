@@ -54,4 +54,4 @@ exports.default = <h></h>;
 Object.defineProperty(exports, "__esModule", { value: true });
 const component_1 = require("./component");
 let elem = component_1.default;
-elem = <h></h>;
+elem = <h></h>; // Expect assignability error here

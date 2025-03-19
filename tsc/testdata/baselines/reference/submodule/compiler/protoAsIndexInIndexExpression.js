@@ -24,6 +24,7 @@ class C {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 //// [protoAsIndexInIndexExpression_1.js]
+///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;
 var WorkspacePrototype = {
     serialize: function () {

@@ -40,21 +40,6 @@
 -var f10 = function (a) { return a; };
 -var f11 = function (a) { return a; };
 -var f12 = function (a) { return a; };
--// Should be valid.
--var f11 = function (a) { return a; };
--// Should be valid.
--var f12 = function (a) { return a; };
--// Should be valid.
--var f13 = function (a) { return a; };
--// Should be valid.
--var f14 = function () { };
--// Should be valid.
--var f15 = function (a) { return a; };
--// Should be valid.
--var f16 = function (a, b) {
--    if (b === void 0) { b = 10; }
--    return a + b;
--};
 +var f1 = () => { };
 +var f2 = (x, y) => { };
 +var f3 = (x, y, ...rest) => { };
@@ -67,11 +52,26 @@
 +var f10 = (a) => a;
 +var f11 = (a) => a;
 +var f12 = (a) => a;
+ // Should be valid.
+-var f11 = function (a) { return a; };
 +var f11 = (a) => a;
+ // Should be valid.
+-var f12 = function (a) { return a; };
 +var f12 = (a) => a;
+ // Should be valid.
+-var f13 = function (a) { return a; };
 +var f13 = (a) => a;
+ // Should be valid.
+-var f14 = function () { };
 +var f14 = () => { };
+ // Should be valid.
+-var f15 = function (a) { return a; };
 +var f15 = (a) => a;
+ // Should be valid.
+-var f16 = function (a, b) {
+-    if (b === void 0) { b = 10; }
+-    return a + b;
+-};
 +var f16 = (a, b = 10) => a + b;
  function foo(func) { }
 -foo(function () { return true; });

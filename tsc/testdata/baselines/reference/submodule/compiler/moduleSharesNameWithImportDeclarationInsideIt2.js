@@ -32,6 +32,6 @@ var A;
         function bar() {
         }
         M.bar = bar;
-        M.M.bar();
+        M.M.bar(); // Should call Z.M.bar
     })(M = A.M || (A.M = {}));
 })(A || (A = {}));

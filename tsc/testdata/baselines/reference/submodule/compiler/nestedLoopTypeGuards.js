@@ -34,14 +34,17 @@ function f2() {
 }
 
 //// [nestedLoopTypeGuards.js]
+// Repros from #10378
 function f1() {
     var a;
     if (typeof a !== 'boolean') {
+        // a is narrowed to "number | string"
         for (var i = 0; i < 1; i++) {
             for (var j = 0; j < 1; j++) { }
             if (typeof a === 'string') {
+                // a is narrowed to "string'
                 for (var j = 0; j < 1; j++) {
-                    a.length;
+                    a.length; // Should not error here
                 }
             }
         }
@@ -54,7 +57,7 @@ function f2() {
             while (1) { }
             if (typeof a === 'string') {
                 while (1) {
-                    a.length;
+                    a.length; // Should not error here
                 }
             }
         }

@@ -5,7 +5,7 @@
  
  //// [divergentAccessors1.js]
 -"use strict";
--// Accessors in interfaces/types
+ // Accessors in interfaces/types
  {
 -    var ihgs = null;
 +    const ihgs = null;

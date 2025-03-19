@@ -25,8 +25,8 @@
 -        __classPrivateFieldGet(B, _a, "f", _A_foo); // Error
 -        __classPrivateFieldGet(B, _a, "f", _A_bar); // Error
 +        A.#foo = 3;
-+        B.#foo;
-+        B.#bar;
++        B.#foo; // Error
++        B.#bar; // Error
      }
  }
 -_a = A;
@@ -42,8 +42,6 @@
  }
 -_b = B;
 -_B_foo = { value: void 0 };
--// We currently filter out static private identifier fields in `getUnmatchedProperties`.
--// We will need a more robust solution when we support static fields
+ // We currently filter out static private identifier fields in `getUnmatchedProperties`.
+ // We will need a more robust solution when we support static fields
  const willErrorSomeDay = class {
--}; // OK for now
-+};

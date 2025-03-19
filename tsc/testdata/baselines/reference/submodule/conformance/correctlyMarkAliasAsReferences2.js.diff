@@ -1,10 +1,8 @@
 --- old.correctlyMarkAliasAsReferences2.js
 +++ new.correctlyMarkAliasAsReferences2.js
-@@= skipped -14, +14 lines =@@
- 
- 
+@@= skipped -16, +16 lines =@@
  //// [0.js]
--///<reference path="declaration.d.ts" />
+ ///<reference path="declaration.d.ts" />
  import * as cx from 'classnames';
 -import * as React from "react";
  let buttonProps;

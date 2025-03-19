@@ -19,12 +19,12 @@ class Derived extends Base {
 class Base {
     x;
     method() {
-        this.x;
+        this.x; // OK, accessed within their declaring class
     }
 }
 class Derived extends Base {
     method1() {
-        this.x;
-        super.x;
+        this.x; // OK, accessed within a subclass of the declaring class
+        super.x; // Error, x is not public
     }
 }

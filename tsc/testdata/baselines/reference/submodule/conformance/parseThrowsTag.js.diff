@@ -1,8 +1,0 @@
---- old.parseThrowsTag.js
-+++ new.parseThrowsTag.js
-@@= skipped -5, +5 lines =@@
- 
- 
- //// [parseThrowsTag.js]
--/** @throws {Error} comment */
- function f() { }

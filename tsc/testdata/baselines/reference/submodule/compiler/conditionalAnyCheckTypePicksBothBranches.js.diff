@@ -7,10 +7,8 @@
 -var x;
 +let x;
  x = 1;
--x = 0; // not an error
+ x = 0; // not an error
 -var y;
-+x = 0;
 +let y;
  y = 1;
--y = 0; // error
-+y = 0;
+ y = 0; // error

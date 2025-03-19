@@ -11,4 +11,4 @@ global.x // should suggest `globals` (GH#42209)
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const globals = { x: true };
-global.x;
+global.x; // should suggest `globals` (GH#42209)

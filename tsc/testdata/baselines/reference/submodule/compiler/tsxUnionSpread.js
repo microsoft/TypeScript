@@ -31,6 +31,7 @@ function AnimalComponent(info) {
     return undefined;
 }
 function getProps() {
+    // this may be from server or whatever ...
     return { type: 'Cat', subType: 'Large' };
 }
 var props = getProps();

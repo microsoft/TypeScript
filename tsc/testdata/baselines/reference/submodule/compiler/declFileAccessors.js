@@ -104,21 +104,28 @@ class c2 {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c1 = void 0;
+/** This is comment for c1*/
 class c1 {
+    /** getter property*/
     get p3() {
         return 10;
     }
-    set p3(value) {
+    /** setter property*/
+    set p3(/** this is value*/ value) {
     }
+    /** private getter property*/
     get pp3() {
         return 10;
     }
-    set pp3(value) {
+    /** private setter property*/
+    set pp3(/** this is value*/ value) {
     }
+    /** static getter property*/
     static get s3() {
         return 10;
     }
-    static set s3(value) {
+    /** setter property*/
+    static set s3(/** this is value*/ value) {
     }
     get nc_p3() {
         return 10;
@@ -135,29 +142,38 @@ class c1 {
     }
     static set nc_s3(value) {
     }
+    // Only getter property
     get onlyGetter() {
         return 10;
     }
+    // Only setter property
     set onlySetter(value) {
     }
 }
 exports.c1 = c1;
 //// [declFileAccessors_1.js]
+/** This is comment for c2 - the global class*/
 class c2 {
+    /** getter property*/
     get p3() {
         return 10;
     }
-    set p3(value) {
+    /** setter property*/
+    set p3(/** this is value*/ value) {
     }
+    /** private getter property*/
     get pp3() {
         return 10;
     }
-    set pp3(value) {
+    /** private setter property*/
+    set pp3(/** this is value*/ value) {
     }
+    /** static getter property*/
     static get s3() {
         return 10;
     }
-    static set s3(value) {
+    /** setter property*/
+    static set s3(/** this is value*/ value) {
     }
     get nc_p3() {
         return 10;
@@ -174,9 +190,11 @@ class c2 {
     }
     static set nc_s3(value) {
     }
+    // Only getter property
     get onlyGetter() {
         return 10;
     }
+    // Only setter property
     set onlySetter(value) {
     }
 }

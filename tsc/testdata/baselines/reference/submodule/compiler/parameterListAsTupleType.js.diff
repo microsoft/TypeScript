@@ -11,8 +11,8 @@
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        args[_i] = arguments[_i];
 +const x = (a) => 5;
-+const a = ['should-not-work'];
-+function t(...args) { }
++const a = ['should-not-work']; // works, but shouldn't
++function t(...args) { } // should work
 +class C {
 +    constructor(a, b) {
      }

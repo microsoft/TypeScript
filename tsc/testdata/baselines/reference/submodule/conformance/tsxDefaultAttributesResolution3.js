@@ -24,4 +24,5 @@ class Poisoned extends React.Component {
         return <div>Hello</div>;
     }
 }
+// Error
 let p = <Poisoned x/>;

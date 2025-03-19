@@ -1,10 +1,8 @@
 --- old.invalidImportAliasIdentifiers.js
 +++ new.invalidImportAliasIdentifiers.js
-@@= skipped -26, +26 lines =@@
- 
- 
+@@= skipped -28, +28 lines =@@
  //// [invalidImportAliasIdentifiers.js]
--// none of these should work, since non are actually modules
+ // none of these should work, since non are actually modules
  var V = 12;
 -var v = V;
 -var C = /** @class */ (function () {

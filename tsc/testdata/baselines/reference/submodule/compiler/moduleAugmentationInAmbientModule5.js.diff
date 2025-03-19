@@ -1,10 +1,8 @@
 --- old.moduleAugmentationInAmbientModule5.js
 +++ new.moduleAugmentationInAmbientModule5.js
-@@= skipped -24, +24 lines =@@
- //// [f.js]
- "use strict";
+@@= skipped -26, +26 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="array.d.ts"/>
+ /// <reference path="array.d.ts"/>
  require("array");
 -var x = [1];
 -var y = x.getA().x;

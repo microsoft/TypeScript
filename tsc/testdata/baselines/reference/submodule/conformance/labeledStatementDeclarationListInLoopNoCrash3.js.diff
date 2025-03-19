@@ -9,6 +9,7 @@
  exports.ParseThemeData = void 0;
 -var ParseThemeData = /** @class */ (function () {
 -    function ParseThemeData() {
++// https://github.com/microsoft/TypeScript/issues/59345
 +class ParseThemeData {
 +    parseButton(button) {
 +        const { type, size } = button;

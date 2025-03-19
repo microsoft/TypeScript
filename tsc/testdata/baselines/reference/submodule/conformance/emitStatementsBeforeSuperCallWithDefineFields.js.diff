@@ -4,8 +4,8 @@
  class Base {
  }
  class Sub extends Base {
--    // @ts-ignore
 +    p;
+     // @ts-ignore
      constructor(p) {
 +        this.p = p;
          console.log('hi');
@@ -26,9 +26,9 @@
 +    field = 0;
  }
  class Test extends Base {
--    // @ts-ignore
 +    p;
 +    prop;
+     // @ts-ignore
      constructor(p) {
 +        this.p = p;
          1;

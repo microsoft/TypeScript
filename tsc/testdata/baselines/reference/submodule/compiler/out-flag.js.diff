@@ -1,22 +1,22 @@
 --- old.out-flag.js
 +++ new.out-flag.js
-@@= skipped -19, +19 lines =@@
- 
- 
+@@= skipped -21, +21 lines =@@
  //// [out-flag.js]
--//// @outFile: bin\
--// my class comments
+ //// @outFile: bin\
+ // my class comments
 -var MyClass = /** @class */ (function () {
 -    function MyClass() {
 -    }
--    // my function comments
--    MyClass.prototype.Count = function () {
 +class MyClass {
+     // my function comments
+-    MyClass.prototype.Count = function () {
 +    Count() {
          return 42;
 -    };
 -    MyClass.prototype.SetCount = function (value) {
--        //
++    }
++    SetCount(value) {
+         //
 -    };
 -    return MyClass;
 -}());
@@ -26,7 +26,5 @@
 -declare class MyClass {
 -    Count(): number;
 -    SetCount(value: number): void;
-+    }
-+    SetCount(value) {
 +    }
  }

@@ -35,6 +35,6 @@ exports.B = B;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let t = {
-    A: undefined,
+    A: undefined, // ok
     B: undefined,
 };

@@ -10,4 +10,5 @@ const y = x + 3;
 //// [c.js]
 const x = 5;
 //// [d.js]
+/// <reference path="C:\a\b\c.ts" />
 const y = x + 3;

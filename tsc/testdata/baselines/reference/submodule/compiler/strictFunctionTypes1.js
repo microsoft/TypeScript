@@ -53,13 +53,13 @@ const t6: A[] = coAndContraArray([], acceptA);
 
 
 //// [strictFunctionTypes1.js]
-const x1 = f1(fo, fs);
-const x2 = f2("abc", fo, fs);
-const x3 = f3("abc", fo, fx);
-const x4 = f4(fo, fs);
-const x10 = f2(never, fo, fs);
-const x11 = f3(never, fo, fx);
-let x = foo([]);
+const x1 = f1(fo, fs); // (x: string) => void
+const x2 = f2("abc", fo, fs); // "abc"
+const x3 = f3("abc", fo, fx); // "abc" | "def"
+const x4 = f4(fo, fs); // Func<string>
+const x10 = f2(never, fo, fs); // string
+const x11 = f3(never, fo, fx); // "def"
+let x = foo([]); // never
 const t1 = coAndContra(a, acceptUnion);
 const t2 = coAndContra(b, acceptA);
 const t3 = coAndContra(never, acceptA);

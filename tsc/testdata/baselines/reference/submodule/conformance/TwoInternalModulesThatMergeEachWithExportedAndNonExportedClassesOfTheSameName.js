@@ -58,6 +58,7 @@ var A;
         }
     }
 })(A || (A = {}));
+// ensure merges as expected
 var p;
 var p;
 var X;
@@ -84,5 +85,6 @@ var X;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
+// ensure merges as expected
 var l;
 var l;

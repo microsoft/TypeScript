@@ -21,12 +21,16 @@
 //// [restElementAssignable.js]
 {
     const { ...props } = {};
+    // Use to fail
     const t1 = props;
+    // Working equivalent
     const t2 = {};
 }
 {
     const { ...props } = { a: 1, b: false, c: "str" };
+    // Use to fail
     const t1 = props;
+    // Working equivalent
     const t2 = { a: 1, b: false, c: "str" };
     ;
 }

@@ -85,19 +85,19 @@ function foo(v) {
     }
     class C {
         static {
-            outer: break outer;
+            outer: break outer; // valid
             loop: while (v) {
                 if (v === 1)
-                    break loop;
+                    break loop; // valid
                 if (v === 2)
-                    continue loop;
+                    continue loop; // valid
                 if (v === 3)
-                    break;
+                    break; // valid
                 if (v === 4)
-                    continue;
+                    continue; // valid
             }
             switch (v) {
-                default: break;
+                default: break; // valid
             }
         }
     }

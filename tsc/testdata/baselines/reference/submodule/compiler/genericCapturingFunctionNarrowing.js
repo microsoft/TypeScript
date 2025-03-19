@@ -21,7 +21,8 @@ function needsToNarrowTheType(thing) {
         console.log(thing.foo);
     }
     else {
-        console.log(thing.bar);
+        // I would expect this to work because the type should be narrowed in this branch to `Second`
+        console.log(thing.bar); // Error: Property 'bar' does not exist on type 'First | Second'.
     }
     function hasAFoo(value) {
         return "foo" in value;

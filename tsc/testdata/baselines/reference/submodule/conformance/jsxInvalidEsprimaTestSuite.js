@@ -117,10 +117,10 @@ a['foo'] > ;
 //// [17.jsx]
 <a b=>;</>;
 //// [18.jsx]
-var x = (<div>one</div>, <div>two</div>);
+var x = /* Leading trivia */ (<div>one</div>, <div>two</div>);
 ;
 //// [19.jsx]
-var x = (<div>one</div>, <div>two</div>);
+var x = (<div>one</div> /* intervening comment */, <div>two</div>);
 ;
 //// [20.jsx]
 <a>{"str"};}</a>;

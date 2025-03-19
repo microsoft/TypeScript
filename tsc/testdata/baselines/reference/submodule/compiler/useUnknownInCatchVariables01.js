@@ -37,12 +37,16 @@ catch (e: any) {
 
 //// [useUnknownInCatchVariables01.js]
 try {
+    // ...
 }
 catch (e) {
+    // error!
     void e.toUpperCase();
     void e++;
     void e();
     if (typeof e === "string") {
+        // works!
+        // We've narrowed 'e' down to the type 'string'.
         console.log(e.toUpperCase());
     }
     if (e instanceof Error) {
@@ -54,8 +58,10 @@ catch (e) {
     }
 }
 try {
+    // ...
 }
 catch (e) {
+    // All are allowed.
     void e.toUpperCase();
     void e.toExponential();
     void e();

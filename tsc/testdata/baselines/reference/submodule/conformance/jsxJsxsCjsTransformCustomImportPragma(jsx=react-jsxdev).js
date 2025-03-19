@@ -25,6 +25,8 @@ export {};
 //// [preact.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
 const a = <>
   <p></p>
   text
@@ -33,6 +35,8 @@ const a = <>
 //// [react.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
 require("./preact");
 const a = <>
   <p></p>

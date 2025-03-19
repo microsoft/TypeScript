@@ -36,11 +36,15 @@ typeof itemWithTSError // :(
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const itemId = 'some-id';
+// --- test on first level ---
 const items = {};
 const { [itemId]: itemOk1 } = items;
-typeof itemOk1;
+typeof itemOk1; // pass
 const objWithItems = { items: {} };
 const itemOk2 = objWithItems.items[itemId];
-typeof itemOk2;
-const { items: { [itemId]: itemWithTSError } = {} } = objWithItems;
-typeof itemWithTSError;
+typeof itemOk2; // pass
+const { items: { [itemId]: itemWithTSError } = {} /*happens when default value is provided*/ } = objWithItems;
+// in order to re-produce the error, uncomment next line:
+typeof itemWithTSError; // :(
+// will result in:
+// Error from compilation: TypeError: Cannot read property 'charCodeAt' of undefined  TypeError: Cannot read property 'charCodeAt' of undefined

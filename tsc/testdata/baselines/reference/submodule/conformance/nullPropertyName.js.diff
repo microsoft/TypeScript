@@ -1,17 +1,6 @@
 --- old.nullPropertyName.js
 +++ new.nullPropertyName.js
-@@= skipped -86, +86 lines =@@
- 
- //// [nullPropertyName.js]
- function foo() { }
--// properties
- foo.x = 1;
- foo.y = 1;
--// keywords
- foo.break = 1;
- foo.case = 1;
- foo.catch = 1;
-@@= skipped -80, +78 lines =@@
+@@= skipped -166, +166 lines =@@
  foo.global = 1;
  foo.bigint = 1;
  foo.of = 1;

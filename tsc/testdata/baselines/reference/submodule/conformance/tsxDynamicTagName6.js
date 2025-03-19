@@ -13,4 +13,4 @@ const foo = <t.tag/>  // No error
 
 //// [tsxDynamicTagName6.jsx]
 const t = { tag: 'h1' };
-const foo = <t.tag />;
+const foo = <t.tag />; // No error

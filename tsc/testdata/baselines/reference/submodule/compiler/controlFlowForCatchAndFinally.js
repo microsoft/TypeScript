@@ -54,10 +54,10 @@ async function test() {
     }
     finally {
         if (page) {
-            await page.close();
+            await page.close(); // ok
         }
         if (browser) {
-            await browser.close();
+            await browser.close(); // ok
         }
     }
 }
@@ -74,7 +74,7 @@ class Foo {
         }
         catch (error) {
             if (this.abortController !== undefined) {
-                this.abortController.abort();
+                this.abortController.abort(); // ok
             }
         }
     }

@@ -35,11 +35,12 @@ class A {
     bar = 3;
     baz = 3;
 }
-let k = "bar";
-k = "baz";
-k = "#fooField";
-k = "#fooMethod";
-k = "#fooProp";
-k = "fooField";
-k = "fooMethod";
-k = "fooProp";
+// `keyof A` should not include '#foo*'
+let k = "bar"; // OK
+k = "baz"; // OK
+k = "#fooField"; // Error
+k = "#fooMethod"; // Error
+k = "#fooProp"; // Error
+k = "fooField"; // Error
+k = "fooMethod"; // Error
+k = "fooProp"; // Error

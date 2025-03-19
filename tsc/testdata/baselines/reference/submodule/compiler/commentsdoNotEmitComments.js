@@ -96,7 +96,7 @@ var shade: color = color.green;
 
 //// [commentsdoNotEmitComments.js]
 var myVariable = 10;
-function foo(p) {
+function foo(/** parameter comment*/ p) {
 }
 var fooVar;
 foo(50);

@@ -25,5 +25,5 @@ function genericFunction(object, callback) {
     callback(object.payload);
 }
 genericFunction(genericObject, ({ greeting }) => {
-    var s = greeting.toLocaleLowerCase();
+    var s = greeting.toLocaleLowerCase(); // Greeting should be of type string
 });

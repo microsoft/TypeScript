@@ -174,6 +174,18 @@ if (b.isLeader()) {
 else if (b.isFollower()) {
     b.follow();
 }
+// if (((a.isLeader)())) {
+//     a.lead();
+// }
+// else if (((a).isFollower())) {
+//     a.follow();
+// }
+// if (((a["isLeader"])())) {
+//     a.lead();
+// }
+// else if (((a)["isFollower"]())) {
+//     a.follow();
+// }
 var holder2 = { a };
 if (holder2.a.isLeader()) {
     holder2.a;
@@ -209,6 +221,7 @@ if (crate.isSundries()) {
 else if (crate.isSupplies()) {
     crate.contents.spoiled = true;
 }
+// Matching guards should be assignable
 a.isFollower = b.isFollower;
 a.isLeader = b.isLeader;
 class MimicGuard {

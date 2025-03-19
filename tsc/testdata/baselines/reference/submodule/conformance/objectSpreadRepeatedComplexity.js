@@ -88,11 +88,14 @@ function f(cnd: Record<number, boolean>){
 
 //// [objectSpreadRepeatedComplexity.js]
 function f(cnd) {
+    // Type is a union of 2^(n-1) members, where n is the number of spread objects
     return {
+        // Without this one, it collapses to {} ?
         ...(cnd[1] &&
             cnd[2] && {
             prop0: 0,
         }),
+        // With one prop each, it collapses to a single object (#34853?)
         ...(cnd[3] && {
             prop3a: 1,
             prop3b: 1,

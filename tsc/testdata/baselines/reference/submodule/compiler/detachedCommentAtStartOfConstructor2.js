@@ -18,6 +18,8 @@ class TestFile {
     message;
     name;
     constructor(message) {
+        /// <summary>Test summary</summary>
+        /// <param name="message" type="String" />
         var getMessage = () => message + this.name;
         this.message = getMessage();
     }

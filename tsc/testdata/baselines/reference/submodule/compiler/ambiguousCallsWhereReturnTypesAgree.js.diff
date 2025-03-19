@@ -12,14 +12,13 @@
 -    TestClass.prototype.bar = function (x) {
 -    };
 -    TestClass.prototype.foo = function (x) {
--        this.bar(x); // should not error
++    foo(x) {
+         this.bar(x); // should not error
 -    };
 -    return TestClass;
 -}());
 -var TestClass2 = /** @class */ (function () {
 -    function TestClass2() {
-+    foo(x) {
-+        this.bar(x);
      }
 -    TestClass2.prototype.bar = function (x) {
 +}
@@ -28,12 +27,11 @@
          return 0;
 -    };
 -    TestClass2.prototype.foo = function (x) {
--        return this.bar(x); // should not error
++    }
++    foo(x) {
+         return this.bar(x); // should not error
 -    };
 -    return TestClass2;
 -}());
-+    }
-+    foo(x) {
-+        return this.bar(x);
 +    }
 +}

@@ -144,14 +144,15 @@ function bar<T extends CA | CB>(x: T & CA) {
 
 
 //// [intersectionReduction.js]
-ab.kind;
+ab.kind; // Error
 let a = x;
-let r1 = f10(a1);
-let r2 = f10(a2);
+let r1 = f10(a1); // unknown
+let r2 = f10(a2); // string
+// Repro from #31663
 const x1 = { a: 'foo', b: 42 };
 const x2 = { a: 'foo', b: true };
-x1[k] = 'bar';
-x2[k] = 'bar';
+x1[k] = 'bar'; // Error
+x2[k] = 'bar'; // Error
 var Tag1;
 (function (Tag1) {
 })(Tag1 || (Tag1 = {}));
@@ -162,11 +163,12 @@ s1 = s2;
 s2 = s1;
 t1 = t2;
 t2 = t1;
+// Repro from #36736
 const f1 = (t) => t;
 const f2 = (t) => t;
 const f3 = (t) => t;
 const f4 = (t) => t;
-const b = shouldBeB;
+const b = shouldBeB; // works
 function inGeneric(alsoShouldBeB) {
     const b = alsoShouldBeB;
 }

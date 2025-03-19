@@ -267,17 +267,20 @@ function f6(s) {
     let x = v[s];
 }
 function f10(foo) {
-    let x = validate(foo);
-    let y = clone(foo);
-    let z = validateAndClone(foo);
+    let x = validate(foo); // { a: number, readonly b: string }
+    let y = clone(foo); // { a?: number, b: string }
+    let z = validateAndClone(foo); // { a: number, b: string }
 }
+// Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
 var g1 = applySpec({
     sum: (a) => 3,
     nested: {
         mul: (b) => "n"
     }
 });
+// Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: (x) => true } } });
+// Repro from #12633
 const foo = (object, partial) => object;
 let o = { a: 5, b: 7 };
 foo(o, { b: 9 });
@@ -287,6 +290,7 @@ let x1 = f21({ foo: 42, bar: "hello" });
 let x2 = f22({ foo: { value: 42 }, bar: { value: "hello" } });
 let x3 = f23({ foo: 42, bar: "hello" });
 let x4 = f24({ foo: 42, bar: "hello" });
+// Repro from #29765
 function getProps(obj, list) {
     return {};
 }

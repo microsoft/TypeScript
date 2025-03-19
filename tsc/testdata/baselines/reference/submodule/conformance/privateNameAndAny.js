@@ -35,10 +35,10 @@ class A {
     static #baz = 10;
     static #m() { }
     method(thing) {
-        thing.#foo;
+        thing.#foo; // OK
         thing.#m();
         thing.#baz;
-        thing.#bar;
+        thing.#bar; // Error
         thing.#foo();
     }
     methodU(thing) {

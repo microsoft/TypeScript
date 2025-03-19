@@ -10,5 +10,6 @@ m1.f();
 //// [umdDependencyComment2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<amd-dependency path='bar'/>
 const m1 = require("m2");
 m1.f();

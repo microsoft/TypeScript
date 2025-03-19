@@ -34,16 +34,20 @@ fn(a => { });
 
 //// [assignmentCompatability_checking-apply-member-off-of-function-interface.js]
 var x;
+// Should fail
 x = '';
 x = [''];
 x = 4;
 x = {};
+// Should work
 function f() { }
 ;
 x = f;
 function fn(c) { }
+// Should Fail
 fn('');
 fn(['']);
 fn(4);
 fn({});
+// Should work
 fn(a => { });

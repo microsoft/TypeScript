@@ -17,5 +17,6 @@ use(x);
 //// [f.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="f.d.ts"/>
 const test_1 = require("test");
 use(test_1.x);

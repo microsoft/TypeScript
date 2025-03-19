@@ -24,6 +24,7 @@ class Wat {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = void 0;
+// from #3108
 exports.test = 'abc';
 //// [b.js]
 "use strict";
@@ -31,10 +32,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const a_1 = require("./a");
 function filter(handler) {
     return function (target, propertyKey) {
+        // ...
     };
 }
 class Wat {
     @filter(() => a_1.test == 'abc')
     static whatever() {
+        // ...
     }
 }

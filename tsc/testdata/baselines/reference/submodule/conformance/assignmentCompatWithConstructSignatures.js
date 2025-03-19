@@ -51,6 +51,7 @@ a = s;
 a = a2;
 var s2;
 var a3;
+// these are errors
 t = s2;
 t = a3;
 t = (x) => 1;

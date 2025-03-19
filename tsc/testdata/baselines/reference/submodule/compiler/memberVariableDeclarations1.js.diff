@@ -1,10 +1,9 @@
 --- old.memberVariableDeclarations1.js
 +++ new.memberVariableDeclarations1.js
-@@= skipped -29, +29 lines =@@
- e2 = e1;
+@@= skipped -30, +30 lines =@@
  
  //// [memberVariableDeclarations1.js]
--// from spec
+ // from spec
 -var Employee = /** @class */ (function () {
 -    function Employee() {
 +class Employee {

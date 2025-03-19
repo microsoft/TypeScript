@@ -19,7 +19,7 @@ class T {
 }
 class T2 extends T {
     f() {
-        super.field();
+        super.field(); // error
     }
 }
 new T2().f();

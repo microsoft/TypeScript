@@ -20,9 +20,9 @@ class C {
         C.foo = () => { };
     }
     static bar(x) {
-        C.bar = () => { };
-        C.bar = (x) => x;
-        C.bar = (x) => 1;
+        C.bar = () => { }; // error
+        C.bar = (x) => x; // ok
+        C.bar = (x) => 1; // ok
         return 1;
     }
 }

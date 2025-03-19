@@ -69,12 +69,12 @@ exports.default = types;
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new types.A();
+new types.A(); // Error
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const types = require("./b");
-new types.A();
+new types.A(); // Error
 //// [f.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -102,8 +102,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const types = __importStar(require("./b"));
-new types.default.A();
+new types.default.A(); // Error
 //// [g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new types.A();
+new types.A(); // Error

@@ -1,10 +1,9 @@
 --- old.restParameterWithoutAnnotationIsAnyArray.js
 +++ new.restParameterWithoutAnnotationIsAnyArray.js
-@@= skipped -28, +28 lines =@@
- 
+@@= skipped -29, +29 lines =@@
  
  //// [restParameterWithoutAnnotationIsAnyArray.js]
--// Rest parameters without type annotations are 'any', errors only for the functions with 2 rest params
+ // Rest parameters without type annotations are 'any', errors only for the functions with 2 rest params
 -function foo() {
 -    var x = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {

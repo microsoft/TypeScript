@@ -32,4 +32,4 @@ var A;
         B.x = 1;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-var b;
+var b; // ok

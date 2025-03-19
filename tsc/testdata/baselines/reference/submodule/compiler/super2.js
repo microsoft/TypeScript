@@ -53,6 +53,7 @@ results1.x() + results1.y() + results2.y();
 
 
 //// [super2.js]
+// Case 5
 class Base5 {
     x() {
         return "BaseX";
@@ -74,6 +75,7 @@ class SubSub5 extends Sub5 {
         return super.y();
     }
 }
+// Case 6
 class Base6 {
     x() {
         return "BaseX";

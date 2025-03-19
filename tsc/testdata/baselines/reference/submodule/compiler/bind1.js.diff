@@ -10,6 +10,6 @@
 -        return C;
 -    }()); // this should be an unresolved symbol I error
 +    class C {
-+    }
++    } // this should be an unresolved symbol I error
      M.C = C;
  })(M || (M = {}));

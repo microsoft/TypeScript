@@ -7,18 +7,5 @@
 -var x;
 +let x;
  if (typeof x === "number") {
--    x; // number|E|V
-+    x;
- }
- else {
--    x; // string
-+    x;
- }
- if (typeof x !== "number") {
--    x; // string
-+    x;
- }
- else {
--    x; // number|E|V
-+    x;
+     x; // number|E|V
  }

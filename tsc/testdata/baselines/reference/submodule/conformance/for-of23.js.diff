@@ -1,9 +1,0 @@
---- old.for-of23.js
-+++ new.for-of23.js
-@@= skipped -32, +32 lines =@@
-     }
- }
- for (const v of new FooIterator) {
--    const v = 0; // new scope
-+    const v = 0;
- }

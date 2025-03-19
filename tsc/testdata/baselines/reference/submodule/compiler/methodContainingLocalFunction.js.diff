@@ -1,10 +1,9 @@
 --- old.methodContainingLocalFunction.js
 +++ new.methodContainingLocalFunction.js
-@@= skipped -52, +52 lines =@@
- }
+@@= skipped -53, +53 lines =@@
  
  //// [methodContainingLocalFunction.js]
--// The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
+ // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 -var BugExhibition = /** @class */ (function () {
 -    function BugExhibition() {
 +class BugExhibition {
@@ -71,7 +70,7 @@
  var M;
  (function (M) {
      function exhibitBug() {
-@@= skipped -57, +40 lines =@@
+@@= skipped -56, +40 lines =@@
  })(M || (M = {}));
  var E;
  (function (E) {

@@ -17,17 +17,3 @@
      // Another not Comment
  </div>;
  <div>
-     // Not Comment
--    {
--    //Comment just Fine
--    "Hi"}
-+    {"Hi"}
-     // Another not Comment
- </div>;
- <div>
-     /* Not Comment */
--    {
--    //Comment just Fine
--    "Hi"}
-+    {"Hi"}
- </div>;

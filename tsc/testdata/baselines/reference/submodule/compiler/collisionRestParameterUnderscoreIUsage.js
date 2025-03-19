@@ -14,7 +14,7 @@ new Foo();
 var _i = "This is what I'd expect to see";
 class Foo {
     constructor(...args) {
-        console.log(_i);
+        console.log(_i); // This should result in error
     }
 }
 new Foo();

@@ -87,8 +87,8 @@ class DerivedB extends BaseB {
         super(x);
     }
     createInstance() { new DerivedB(7); }
-    createBaseInstance() { new BaseB(8); }
-    static staticBaseInstance() { new BaseB(9); }
+    createBaseInstance() { new BaseB(8); } // ok
+    static staticBaseInstance() { new BaseB(9); } // ok
 }
 class DerivedC extends BaseC {
     x;
@@ -97,12 +97,12 @@ class DerivedC extends BaseC {
         super(x);
     }
     createInstance() { new DerivedC(9); }
-    createBaseInstance() { new BaseC(10); }
-    static staticBaseInstance() { new BaseC(11); }
+    createBaseInstance() { new BaseC(10); } // error
+    static staticBaseInstance() { new BaseC(11); } // error
 }
 var ba = new BaseA(1);
-var bb = new BaseB(1);
-var bc = new BaseC(1);
+var bb = new BaseB(1); // error
+var bc = new BaseC(1); // error
 var da = new DerivedA(1);
 var db = new DerivedB(1);
 var dc = new DerivedC(1);

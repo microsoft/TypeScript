@@ -22,11 +22,11 @@ let d2 = { a: 123, ...(t ? d : {}) };  // string | number
 
 
 //// [spreadDuplicate.js]
-let a1 = { a: 123, ...a };
-let b1 = { a: 123, ...b };
-let c1 = { a: 123, ...c };
-let d1 = { a: 123, ...d };
-let a2 = { a: 123, ...(t ? a : {}) };
-let b2 = { a: 123, ...(t ? b : {}) };
-let c2 = { a: 123, ...(t ? c : {}) };
-let d2 = { a: 123, ...(t ? d : {}) };
+let a1 = { a: 123, ...a }; // string (Error)
+let b1 = { a: 123, ...b }; // string | number
+let c1 = { a: 123, ...c }; // string | undefined (Error)
+let d1 = { a: 123, ...d }; // string | number
+let a2 = { a: 123, ...(t ? a : {}) }; // string | number
+let b2 = { a: 123, ...(t ? b : {}) }; // string | number
+let c2 = { a: 123, ...(t ? c : {}) }; // string | number
+let d2 = { a: 123, ...(t ? d : {}) }; // string | number

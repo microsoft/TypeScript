@@ -11,6 +11,9 @@ const array = [
 
 //// [commentOnArrayElement1.js]
 const array = [
-    1,
+    /* element 1*/
+    1
+    /* end of element 1 */ ,
     2
+    /* end of element 2 */
 ];

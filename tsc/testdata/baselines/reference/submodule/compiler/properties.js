@@ -20,5 +20,6 @@ class MyClass {
         return 42;
     }
     set Count(value) {
+        //
     }
 }

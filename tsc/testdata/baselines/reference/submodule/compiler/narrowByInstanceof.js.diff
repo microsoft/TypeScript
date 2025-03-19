@@ -22,36 +22,11 @@
 -})();
  function foo(x, A, B, AB) {
      if (x instanceof A) {
--        x; // A
-+        x;
-     }
-     else {
--        x; // B | C
-+        x;
-     }
-     if (x instanceof B) {
--        x; // B
-+        x;
-     }
-     else {
--        x; // A | C
-+        x;
-     }
-     if (x instanceof AB) {
--        x; // A | B
-+        x;
-     }
-     else {
--        x; // A | B | C
-+        x;
+         x; // A
+@@= skipped -42, +26 lines =@@
      }
  }
- function bar(target, Promise) {
-@@= skipped -41, +25 lines =@@
-         target.__then();
-     }
- }
--// Repro from #52571
+ // Repro from #52571
 -var PersonMixin = /** @class */ (function (_super) {
 -    __extends(PersonMixin, _super);
 -    function PersonMixin() {

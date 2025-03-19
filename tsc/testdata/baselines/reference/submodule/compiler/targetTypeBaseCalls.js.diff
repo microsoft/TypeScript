@@ -25,8 +25,11 @@
 -    }
 -    return Foo;
 -}());
--foo(function (s) { s = 5; }); // Error, can’t assign number to string
--new Foo(function (s) { s = 5; }); // error, if types are applied correctly
++class Foo {
++    constructor(x) { }
++}
+ foo(function (s) { s = 5; }); // Error, can’t assign number to string
+ new Foo(function (s) { s = 5; }); // error, if types are applied correctly
 -var Bar = /** @class */ (function (_super) {
 -    __extends(Bar, _super);
 -    function Bar() {
@@ -34,11 +37,6 @@
 -    }
 -    return Bar;
 -}(Foo)); // error, if types are applied correctly
-+class Foo {
-+    constructor(x) { }
-+}
-+foo(function (s) { s = 5; });
-+new Foo(function (s) { s = 5; });
 +class Bar extends Foo {
 +    constructor() { super(function (s) { s = 5; }); }
-+}
++} // error, if types are applied correctly

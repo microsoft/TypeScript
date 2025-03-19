@@ -1,7 +1,0 @@
---- old.sourceFileMergeWithFunction.js
-+++ new.sourceFileMergeWithFunction.js
-@@= skipped -10, +10 lines =@@
- 
- 
- //// [foo.js]
--/// <reference path="types.d.ts" />

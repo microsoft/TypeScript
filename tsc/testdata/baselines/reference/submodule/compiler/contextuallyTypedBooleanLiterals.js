@@ -30,8 +30,8 @@ const x: Observable<boolean> = observable(false);
 
 
 //// [contextuallyTypedBooleanLiterals.js]
-const bn1 = box(0);
-const bn2 = box(0);
-const bb1 = box(false);
-const bb2 = box(false);
+const bn1 = box(0); // Box<number>
+const bn2 = box(0); // Ok
+const bb1 = box(false); // Box<boolean>
+const bb2 = box(false); // Error, box<false> not assignable to Box<boolean>
 const x = observable(false);

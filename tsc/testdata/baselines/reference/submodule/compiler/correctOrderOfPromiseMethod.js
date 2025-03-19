@@ -47,4 +47,5 @@ async function countEverything() {
     }
     return 0;
 }
+// #31179
 const expected = Promise.all(undefined);

@@ -1,14 +1,13 @@
 --- old.typeSatisfaction_optionalMemberConformance.js
 +++ new.typeSatisfaction_optionalMemberConformance.js
-@@= skipped -10, +10 lines =@@
- 
+@@= skipped -11, +11 lines =@@
  
  //// [typeSatisfaction_optionalMemberConformance.js]
--// Undesirable behavior today with type annotation
+ // Undesirable behavior today with type annotation
 -var a = { x: 10 };
--// Should OK
 +const a = { x: 10 };
+ // Should OK
  console.log(a.x.toFixed());
--// Should error
+ // Should error
 -var p = a.y;
 +let p = a.y;

@@ -49,12 +49,14 @@ b === c;
 c === d;
 d === self.default;
 self.default === self.def;
+// should all fail
 a();
 b();
 c();
 d();
 self.default();
 self.def();
+// should all work
 a.default();
 b.default();
 c.default();

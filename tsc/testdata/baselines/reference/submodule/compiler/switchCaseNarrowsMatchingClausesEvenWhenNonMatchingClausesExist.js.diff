@@ -8,11 +8,8 @@
 +const narrowToLiterals = (str) => {
      switch (str) {
          case 'abc': {
--            // inferred type as `abc`
-             return str;
-         }
-         default:
-@@= skipped -11, +10 lines =@@
+             // inferred type as `abc`
+@@= skipped -11, +11 lines =@@
      }
  };
  exports.narrowToLiterals = narrowToLiterals;
@@ -20,15 +17,8 @@
 +const narrowToString = (str, someOtherStr) => {
      switch (str) {
          case 'abc': {
--            // inferred type should be `abc`
-             return str;
-         }
-         case someOtherStr: {
--            // `string`
-             return str;
-         }
-         default:
-@@= skipped -15, +13 lines =@@
+             // inferred type should be `abc`
+@@= skipped -15, +15 lines =@@
      }
  };
  exports.narrowToString = narrowToString;
@@ -36,11 +26,4 @@
 +const narrowToStringOrNumber = (str, someNumber) => {
      switch (str) {
          case 'abc': {
--            // inferred type should be `abc`
-             return str;
-         }
-         case someNumber: {
--            // inferred type should be `number`
-             return str;
-         }
-         default:
+             // inferred type should be `abc`

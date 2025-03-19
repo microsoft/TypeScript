@@ -220,15 +220,14 @@
 +    let x;
  }
  function foo15() {
--    // https://github.com/microsoft/TypeScript/issues/42678
+     // https://github.com/microsoft/TypeScript/issues/42678
 -    var _a = (function () {
 -        (function () { return console.log(a); })(); // should error
--        console.log(a); // should error
--        var b = function () { return a; }; // should be ok
 +    const [a, b,] = (() => {
-+        (() => console.log(a))();
-+        console.log(a);
-+        const b = () => a;
++        (() => console.log(a))(); // should error
+         console.log(a); // should error
+-        var b = function () { return a; }; // should be ok
++        const b = () => a; // should be ok
          return [
              0,
              0,
@@ -267,7 +266,7 @@
 +    })();
 +    const foo = 1;
  }
--// #30907
+ // #30907
  function wrapI1() {
 -    var iter = (function foo() {
 -        return __generator(this, function (_a) {

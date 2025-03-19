@@ -1,11 +1,7 @@
 --- old.genericClassWithFunctionTypedMemberArguments.js
 +++ new.genericClassWithFunctionTypedMemberArguments.js
-@@= skipped -66, +66 lines =@@
- }
- 
- //// [genericClassWithFunctionTypedMemberArguments.js]
--// Generic functions used as arguments for function typed parameters are not used to make inferences from
--// Using function arguments, no errors expected
+@@= skipped -70, +70 lines =@@
+ // Using function arguments, no errors expected
  var ImmediatelyFix;
  (function (ImmediatelyFix) {
 -    var C = /** @class */ (function () {
@@ -28,9 +24,9 @@
 -        C2.prototype.foo = function (x) {
 +    }
 +    var c = new C();
-+    var r = c.foo((x) => '');
-+    var r2 = c.foo((x) => '');
-+    var r3 = c.foo(x => '');
++    var r = c.foo((x) => ''); // {}
++    var r2 = c.foo((x) => ''); // string 
++    var r3 = c.foo(x => ''); // {}
 +    class C2 {
 +        foo(x) {
              return x(null);
@@ -42,8 +38,8 @@
      var c2 = new C2();
 -    var ra = c2.foo(function (x) { return 1; }); // number
 -    var r3a = c2.foo(function (x) { return 1; }); // number
-+    var ra = c2.foo((x) => 1);
-+    var r3a = c2.foo(x => 1);
++    var ra = c2.foo((x) => 1); // number
++    var r3a = c2.foo(x => 1); // number
  })(ImmediatelyFix || (ImmediatelyFix = {}));
  var WithCandidates;
  (function (WithCandidates) {
@@ -57,36 +53,34 @@
 -        };
 -        return C;
 -    }());
--    var c;
--    var r4 = c.foo2(1, function (a) { return ''; }); // string, contextual signature instantiation is applied to generic functions
++        }
++    }
+     var c;
+     var r4 = c.foo2(1, function (a) { return ''; }); // string, contextual signature instantiation is applied to generic functions
 -    var r5 = c.foo2(1, function (a) { return ''; }); // string
 -    var r6 = c.foo2('', function (a) { return 1; }); // number
 -    var C2 = /** @class */ (function () {
 -        function C2() {
-         }
+-        }
 -        C2.prototype.foo3 = function (x, cb, y) {
-+    }
-+    var c;
-+    var r4 = c.foo2(1, function (a) { return ''; });
-+    var r5 = c.foo2(1, (a) => '');
-+    var r6 = c.foo2('', (a) => 1);
++    var r5 = c.foo2(1, (a) => ''); // string
++    var r6 = c.foo2('', (a) => 1); // number
 +    class C2 {
 +        foo3(x, cb, y) {
              return cb(x);
 -        };
 -        return C2;
 -    }());
--    var c2;
++        }
++    }
+     var c2;
 -    var r7 = c2.foo3(1, function (a) { return ''; }, ''); // string
--    var r8 = c2.foo3(1, function (a) { return ''; }, ''); // string
++    var r7 = c2.foo3(1, (a) => '', ''); // string
+     var r8 = c2.foo3(1, function (a) { return ''; }, ''); // string
 -    var C3 = /** @class */ (function () {
 -        function C3() {
-         }
+-        }
 -        C3.prototype.foo3 = function (x, cb, y) {
-+    }
-+    var c2;
-+    var r7 = c2.foo3(1, (a) => '', '');
-+    var r8 = c2.foo3(1, function (a) { return ''; }, '');
 +    class C3 {
 +        foo3(x, cb, y) {
              return cb(x);
@@ -101,11 +95,10 @@
 -        var r10 = c.foo2(1, function (x) { return ''; }); // string
 -        var r11 = c3.foo3(1, function (x) { return ''; }, ''); // error
 -        var r11b = c3.foo3(1, function (x) { return ''; }, 1); // error
--        var r12 = c3.foo3(1, function (a) { return ''; }, 1); // error
-+        var r10 = c.foo2(1, (x) => '');
-+        var r10 = c.foo2(1, (x) => '');
-+        var r11 = c3.foo3(1, (x) => '', '');
-+        var r11b = c3.foo3(1, (x) => '', 1);
-+        var r12 = c3.foo3(1, function (a) { return ''; }, 1);
++        var r10 = c.foo2(1, (x) => ''); // error
++        var r10 = c.foo2(1, (x) => ''); // string
++        var r11 = c3.foo3(1, (x) => '', ''); // error
++        var r11b = c3.foo3(1, (x) => '', 1); // error
+         var r12 = c3.foo3(1, function (a) { return ''; }, 1); // error
      }
  })(WithCandidates || (WithCandidates = {}));

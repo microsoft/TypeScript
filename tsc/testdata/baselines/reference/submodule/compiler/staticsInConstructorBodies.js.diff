@@ -13,6 +13,6 @@
 -    C.p1 = 0; // ERROR
 -    return C;
 -}());
-+    static p1 = 0;
-+    static m1() { }
++    static p1 = 0; // ERROR
++    static m1() { } // ERROR
 +}

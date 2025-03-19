@@ -21,7 +21,8 @@ function mkdirSync(path, mode) { }
 //// [voidAsNonAmbiguousReturnType_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
 const fs = require("./voidAsNonAmbiguousReturnType_0");
 function main() {
-    fs.mkdirSync('test');
+    fs.mkdirSync('test'); // should not error - return types are the same
 }

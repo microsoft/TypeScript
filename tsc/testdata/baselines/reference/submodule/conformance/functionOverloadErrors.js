@@ -136,10 +136,12 @@ function fn9() { }
 function fn10() { }
 function fn11() { }
 function fn12() { }
+//Function overloads that differ by accessibility
 class cls {
     f() { }
     g() { }
 }
+//Function overloads with differing export
 var M;
 (function (M) {
     function fn1() { }

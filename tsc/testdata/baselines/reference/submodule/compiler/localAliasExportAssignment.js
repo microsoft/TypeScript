@@ -23,5 +23,6 @@ module.exports = server;
 //// [localAliasExportAssignment_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='localAliasExportAssignment_0.ts'/>
 const connect = require("./localAliasExportAssignment_0");
 connect();

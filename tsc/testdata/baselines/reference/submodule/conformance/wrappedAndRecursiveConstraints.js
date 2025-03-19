@@ -19,6 +19,7 @@ var c = new C(y);
 var r = c.foo(y);
 
 //// [wrappedAndRecursiveConstraints.js]
+// no errors expected
 class C {
     data;
     constructor(data) {

@@ -2088,6 +2088,10 @@ module Harness {
 //// [typescriptServices.js]
 //// [diff.js]
 //// [parserharness.js]
+///<reference path='..\compiler\io.ts'/>
+///<reference path='..\compiler\typescript.ts'/>
+///<reference path='..\services\typescriptServices.ts' />
+///<reference path='diff.ts'/>
 function switchToForwardSlashes(path) {
     return path.replace(/\\/g, "/");
 }
@@ -2111,21 +2115,25 @@ else {
 }
 var Harness;
 (function (Harness) {
+    // Settings 
     Harness.userSpecifiedroot = "";
     var global = Function("return this").call(null);
     Harness.usePull = false;
+    // Assert functions
     let Assert;
     (function (Assert) {
         Assert.bugIds = [];
         Assert.throwAssertError = (error) => {
             throw error;
         };
+        // Marks that the current scenario is impacted by a bug
         function bug(id) {
             if (Assert.bugIds.indexOf(id) < 0) {
                 Assert.bugIds.push(id);
             }
         }
         Assert.bug = bug;
+        // If there are any bugs in the test code, mark the scenario as impacted appropriately
         function bugs(content) {
             var bugs = content.match(/\bbug (\d+)/i);
             if (bugs) {
@@ -2222,7 +2230,11 @@ var Harness;
         }
         Assert.arrayContainsOnce = arrayContainsOnce;
     })(Assert = Harness.Assert || (Harness.Assert = {}));
+    /** Splits the given string on \r\n or on only \n if that fails */
     function splitContentByNewlines(content) {
+        // Split up the input file by line
+        // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
+        // we have to string-based splitting instead and try to figure out the delimiting chars
         var lines = content.split('\r\n');
         if (lines.length === 1) {
             lines = content.split('\n');
@@ -2230,6 +2242,7 @@ var Harness;
         return lines;
     }
     Harness.splitContentByNewlines = splitContentByNewlines;
+    /** Reads a file under /tests */
     function readFile(path) {
         if (path.indexOf('tests') < 0) {
             path = "tests/" + path;
@@ -2255,6 +2268,7 @@ var Harness;
         verify(test, passed, actual, expected, message) { }
     }
     Harness.Logger = Logger;
+    // Logger-related functions
     var loggers = [];
     function registerLogger(logger) {
         loggers.push(logger);
@@ -2275,26 +2289,37 @@ var Harness;
             this.description = description;
             this.block = block;
         }
+        // The current stack of Runnable objects
         static currentStack = [];
+        // The error, if any, that occurred when running 'block'
         error = null;
+        // Whether or not this object has any failures (including in its descendants)
         passed = null;
+        // A list of bugs impacting this object
         bugs = [];
+        // A list of all our child Runnables
         children = [];
         addChild(child) {
             this.children.push(child);
         }
+        /** Call function fn, which may take a done function and may possibly execute
+         *  asynchronously, calling done when finished. Returns true or false depending
+         *  on whether the function was asynchronous or not.
+         */
         call(fn, done) {
             var isAsync = true;
             try {
                 if (fn.length === 0) {
+                    // No async.
                     fn();
                     done();
                     return false;
                 }
                 else {
+                    // Possibly async
                     Runnable.pushGlobalErrorHandler(done);
                     fn(function () {
-                        isAsync = false;
+                        isAsync = false; // If we execute synchronously, this will get called before the return below.
                         Runnable.popGlobalErrorHandler();
                         done();
                     });
@@ -2343,6 +2368,7 @@ var Harness;
         addChild(child) {
             throw new Error("Testcases may not be nested inside other testcases");
         }
+        /** Run the test case block and fail the test if it raised an error. If no error is raised, the test passes. */
         run(done) {
             var that = this;
             Runnable.currentStack.push(this);
@@ -2373,6 +2399,7 @@ var Harness;
             this.description = description;
             this.block = block;
         }
+        /** Run the block, and if the block doesn't raise an error, run the children. */
         run(done) {
             var that = this;
             Runnable.currentStack.push(this);
@@ -2383,16 +2410,21 @@ var Harness;
                     that.passed = false;
                     that.error = e;
                     var metadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
+                    // Report all bugs affecting this scenario
                     assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));
                     emitLog('scenarioEnd', metadata, e);
                     done();
                 }
                 else {
-                    that.passed = true;
+                    that.passed = true; // so far so good.
                     that.runChildren(done);
                 }
             });
         }
+        /** Run the children of the scenario (other scenarios and test cases). If any fail,
+         *  set this scenario to failed. Synchronous tests will run synchronously without
+         *  adding stack frames.
+         */
         runChildren(done, index = 0) {
             var that = this;
             var async = false;
@@ -2406,6 +2438,7 @@ var Harness;
                     return;
             }
             var metadata = { id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds };
+            // Report all bugs affecting this scenario
             assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));
             emitLog('scenarioEnd', metadata);
             done();
@@ -2424,6 +2457,7 @@ var Harness;
             var async = false;
             var that = this;
             for (; index < this.children.length; index++) {
+                // Clear out bug descriptions
                 assert.bugIds = [];
                 async = this.runChild(index, function (e) {
                     if (async) {
@@ -2439,11 +2473,13 @@ var Harness;
         }
     }
     Harness.Run = Run;
+    // Performance test
     let Perf;
     (function (Perf) {
         let Clock;
         (function (Clock) {
             if (typeof WScript !== "undefined" && typeof global['WScript'].InitializeProjection !== "undefined") {
+                // Running in JSHost.
                 global['WScript'].InitializeProjection();
                 Clock.now = function () {
                     return TestUtilities.QueryPerformanceCounter();
@@ -2465,6 +2501,7 @@ var Harness;
                 this.startTime = Clock.now();
             }
             end() {
+                // Set time to MS.
                 this.time = (Clock.now() - this.startTime) / Clock.resolution * 1000;
             }
         }
@@ -2509,6 +2546,7 @@ var Harness;
             }
         }
         Perf.Dataset = Dataset;
+        // Base benchmark class with some defaults.
         class Benchmark {
             iterations = 10;
             description = "";
@@ -2563,13 +2601,20 @@ var Harness;
             }
         }
         Perf.runBenchmarks = runBenchmarks;
+        // Replace with better type when classes are assignment compatible with
+        // the below type.
+        // export function addBenchmark(BenchmarkClass: {new(): Benchmark;}) {
         function addBenchmark(BenchmarkClass) {
             Perf.benchmarks.push(BenchmarkClass);
         }
         Perf.addBenchmark = addBenchmark;
     })(Perf = Harness.Perf || (Harness.Perf = {}));
+    /** Functionality for compiling TypeScript code */
     let Compiler;
     (function (Compiler) {
+        /** Aggregate various writes into a single array of lines. Useful for passing to the
+         *  TypeScript compiler to fill with source code or errors.
+         */
         class WriterAggregator {
             lines = [];
             currentLine = "";
@@ -2592,8 +2637,10 @@ var Harness;
             }
         }
         Compiler.WriterAggregator = WriterAggregator;
+        /** Mimics having multiple files, later concatenated to a single file. */
         class EmitterIOHost {
             fileCollection = {};
+            /** create file gets the whole path to create, so this works as expected with the --out parameter */
             createFile(s, useUTF8) {
                 if (this.fileCollection[s]) {
                     return this.fileCollection[s];
@@ -2649,6 +2696,7 @@ var Harness;
         Compiler.makeDefaultCompilerForTest = makeDefaultCompilerForTest;
         var compiler;
         recreate();
+        // pullUpdateUnit is sufficient if an existing unit is updated, if a new unit is added we need to do a full typecheck
         var needsFullTypeCheck = true;
         function compile(code, filename) {
             if (Harness.usePull) {
@@ -2657,6 +2705,7 @@ var Harness;
                     needsFullTypeCheck = false;
                 }
                 else {
+                    // requires unit to already exist in the compiler
                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true);
                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), filename, true);
                 }
@@ -2666,6 +2715,7 @@ var Harness;
             }
         }
         Compiler.compile = compile;
+        // Types
         class Type {
             type;
             code;
@@ -2702,6 +2752,21 @@ var Harness;
                 testCode += '}\n';
                 return this.compilesOk(testCode);
             }
+            // TODO: Find an implementation of isIdenticalTo that works.
+            //public isIdenticalTo(other: Type) {
+            //    var testCode = 'module __test1__ {\n';
+            //    testCode += '    ' + this.code + ';\n';
+            //    testCode += '    export var __val__ = ' + this.identifier + ';\n';
+            //    testCode += '}\n';
+            //    testCode += 'var __test1__val__ = __test1__.__val__;\n';
+            //    testCode += 'module __test2__ {\n';
+            //    testCode += '    ' + other.code + ';\n';
+            //    testCode += '    export var __val__ = ' + other.identifier + ';\n';
+            //    testCode += '}\n';
+            //    testCode += 'var __test2__val__ = __test2__.__val__;\n';
+            //    testCode += 'function __test__function__() { if(true) { return __test1__val__ }; return __test2__val__; }';
+            //    return this.compilesOk(testCode);
+            //}
             assertSubtypeOf(others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
@@ -2718,6 +2783,16 @@ var Harness;
                     }
                 }
             }
+            //public assertIdenticalTo(other: Type) {
+            //    if (!this.isIdenticalTo(other)) {
+            //        throw new Error("Expected " + this.type + " to be identical to " + other.type);
+            //    }
+            //}
+            //public assertNotIdenticalTo(other: Type) {
+            //    if (!this.isIdenticalTo(other)) {
+            //        throw new Error("Expected " + this.type + " to not be identical to " + other.type);
+            //    }
+            //}
             isAssignmentCompatibleWith(other) {
                 var testCode = 'module __test1__ {\n';
                 testCode += '    ' + this.code + ';\n';
@@ -2791,6 +2866,9 @@ var Harness;
                     throw new Error("Type definition contains errors: " + errors.join(","));
                 var matchingIdentifiers = [];
                 if (!Harness.usePull) {
+                    // This will find the requested identifier in the first script where it's present, a naive search of each member in each script,
+                    // which means this won't play nicely if the same identifier is used in multiple units, but it will enable this to work on multi-file tests.
+                    // m = 1 because the first script will always be lib.d.ts which we don't want to search.                                
                     for (var m = 1; m < compiler.scripts.members.length; m++) {
                         var script = compiler.scripts.members[m];
                         var enclosingScopeContext = TypeScript.findEnclosingScopeAt(new TypeScript.NullLogger(), script, new TypeScript.StringSourceText(code), 0, false);
@@ -2847,7 +2925,7 @@ var Harness;
             getTypeInfoName(ast) {
                 var name = '';
                 switch (ast.nodeType) {
-                    case TypeScript.NodeType.Name:
+                    case TypeScript.NodeType.Name: // Type Name?
                     case TypeScript.NodeType.Null:
                     case TypeScript.NodeType.List:
                     case TypeScript.NodeType.Empty:
@@ -2871,6 +2949,7 @@ var Harness;
                         name = ast.text;
                         break;
                     case TypeScript.NodeType.Return:
+                        //name = (<TypeScript.ReturnStatement>tyInfo.ast).returnExpression.actualText; // why is this complaining?
                         break;
                     case TypeScript.NodeType.InterfaceDeclaration:
                         name = ast.name.actualText;
@@ -2882,9 +2961,10 @@ var Harness;
                         name = ast.name.actualText;
                         break;
                     case TypeScript.NodeType.FuncDecl:
-                        name = !ast.name ? "" : ast.name.actualText;
+                        name = !ast.name ? "" : ast.name.actualText; // name == null for lambdas
                         break;
                     default:
+                        // TODO: is there a reason to mess with all the special cases above and not just do this (ie take whatever property is there and works?)
                         var a = ast;
                         name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '';
                         break;
@@ -2899,6 +2979,12 @@ var Harness;
             }
         }
         Compiler.TypeFactory = TypeFactory;
+        /** Generates a .d.ts file for the given code
+          * @param verifyNoDeclFile pass true when the given code should generate no decl file, false otherwise
+          * @param unitName add the given code under thie name, else use '0.ts'
+          * @param compilationContext a set of functions to be run before and after compiling this code for doing things like adding dependencies first
+          * @param references the set of referenced files used by the given code
+          */
         function generateDeclFile(code, verifyNoDeclFile, unitName, compilationContext, references) {
             reset();
             compiler.settings.generateDeclarationFiles = true;
@@ -2953,11 +3039,13 @@ var Harness;
             return '';
         }
         Compiler.generateDeclFile = generateDeclFile;
+        /** Contains the code and errors of a compilation and some helper methods to check its status. */
         class CompilerResult {
             fileResults;
             scripts;
             code;
             errors;
+            /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
             constructor(fileResults, errorLines, scripts) {
                 this.fileResults = fileResults;
                 this.scripts = scripts;
@@ -2967,7 +3055,7 @@ var Harness;
                 this.errors = [];
                 for (var i = 0; i < errorLines.length; i++) {
                     if (Harness.usePull) {
-                        var err = errorLines[i];
+                        var err = errorLines[i]; // TypeScript.PullError
                         this.errors.push(new CompilerError(err.filename, 0, 0, err.message));
                     }
                     else {
@@ -2990,6 +3078,7 @@ var Harness;
             }
         }
         Compiler.CompilerResult = CompilerResult;
+        // Compiler Error.
         class CompilerError {
             file;
             line;
@@ -3006,6 +3095,7 @@ var Harness;
             }
         }
         Compiler.CompilerError = CompilerError;
+        /** Create a new instance of the compiler with default settings and lib.d.ts, then typecheck */
         function recreate() {
             compiler = makeDefaultCompilerForTest();
             if (Harness.usePull) {
@@ -3039,6 +3129,10 @@ var Harness;
                 }
             }
             if (!script) {
+                // TODO: make this toggleable, shouldn't be necessary once typecheck bugs are cleaned up
+                // but without it subsequent tests are treated as edits, making for somewhat useful stress testing
+                // of persistent typecheck state
+                //compiler.addUnit("", uName, isResident, references); // equivalent to compiler.deleteUnit(...)
                 script = compiler.addUnit(code, uName, isResident, references);
                 needsFullTypeCheck = true;
             }
@@ -3062,7 +3156,8 @@ var Harness;
         }
         Compiler.compileFile = compileFile;
         function compileUnit(code, filename, callback, settingsCallback, context, references) {
-            function clone(source, target) {
+            // not recursive
+            function clone /* <T> */(source, target) {
                 for (var prop in source) {
                     target[prop] = source[prop];
                 }
@@ -3080,6 +3175,8 @@ var Harness;
                 compileString(code, filename, callback, context, references);
             }
             finally {
+                // If settingsCallback exists, assume that it modified the global compiler instance's settings in some way.
+                // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
                 if (settingsCallback) {
                     compiler.settings = oldCompilerSettings;
                     compiler.emitSettings = oldEmitSettings;
@@ -3111,17 +3208,20 @@ var Harness;
                 context.preCompile();
             }
             var isDeclareFile = Harness.Compiler.isDeclareFile(unitName);
+            // for single file tests just add them as using the old '0.ts' naming scheme
             var uName = context ? unitName : ((isDeclareFile) ? '0.d.ts' : '0.ts');
             scripts.push(addUnit(code, uName, false, isDeclareFile, references));
             compile(code, uName);
             var errors;
             if (Harness.usePull) {
+                // TODO: no emit support with pull yet
                 errors = compiler.pullGetErrorsForFile(uName);
                 emit(stdout, true);
             }
             else {
                 errors = stderr.lines;
                 emit(stdout, false);
+                //output decl file
                 compiler.emitDeclarations();
             }
             if (context) {
@@ -3130,13 +3230,19 @@ var Harness;
             callback(new CompilerResult(stdout.toArray(), errors, scripts));
         }
         Compiler.compileString = compileString;
+        /** Returns a set of functions which can be later executed to add and remove given dependencies to the compiler so that
+         *  a file can be successfully compiled. These functions will add/remove named units and code to the compiler for each dependency.
+         */
         function defineCompilationContextForTest(filename, dependencies) {
+            // if the given file has no dependencies, there is no context to return, it can be compiled without additional work
             if (dependencies.length == 0) {
                 return null;
             }
             else {
                 var addedFiles = [];
                 var precompile = () => {
+                    // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?
+                    // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
                     dependencies.forEach(dep => {
                         addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
                         addedFiles.push(dep.name);
@@ -3157,9 +3263,13 @@ var Harness;
         }
         Compiler.defineCompilationContextForTest = defineCompilationContextForTest;
     })(Compiler = Harness.Compiler || (Harness.Compiler = {}));
+    /** Parses the test cases files
+     *  extracts options and individual files in a multifile test
+     */
     let TestCaseParser;
     (function (TestCaseParser) {
-        optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm;
+        optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm; // multiple matches on multiple lines
+        // List of allowed metadata names
         var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out"];
         function extractCompilerSettings(content) {
             var opts = [];
@@ -3169,10 +3279,13 @@ var Harness;
             }
             return opts;
         }
+        /** Given a test file containing // @Filename directives, return an array of named units of code to be added to an existing compiler instance */
         function makeUnitsFromTest(code, filename) {
             var settings = extractCompilerSettings(code);
+            // List of all the subfiles we've parsed out
             var files = [];
             var lines = splitContentByNewlines(code);
+            // Stuff related to the subfile we're parsing
             var currentFileContent = null;
             var currentFileOptions = {};
             var currentFileName = null;
@@ -3181,6 +3294,7 @@ var Harness;
                 var line = lines[i];
                 var isTripleSlashReference = /[\/]{3}\s*<reference path/.test(line);
                 var testMetaData = optionRegex.exec(line);
+                // Triple slash references need to be tracked as they are added to the compiler as an additional parameter to addUnit
                 if (isTripleSlashReference) {
                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
                     if (isRef) {
@@ -3196,6 +3310,7 @@ var Harness;
                     }
                 }
                 else if (testMetaData) {
+                    // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     var fileNameIndex = fileMetadataNames.indexOf(testMetaData[1].toLowerCase());
                     if (fileNameIndex == -1) {
@@ -3207,7 +3322,9 @@ var Harness;
                     else {
                         continue;
                     }
+                    // New metadata statement after having collected some code to go with the previous metadata
                     if (currentFileName) {
+                        // Store result file
                         var newTestFile = {
                             content: currentFileContent,
                             name: currentFileName,
@@ -3216,26 +3333,33 @@ var Harness;
                             references: refs
                         };
                         files.push(newTestFile);
+                        // Reset local data
                         currentFileContent = null;
                         currentFileOptions = {};
                         currentFileName = testMetaData[2];
                         refs = [];
                     }
                     else {
+                        // First metadata marker in the file
                         currentFileName = testMetaData[2];
                     }
                 }
                 else {
+                    // Subfile content line
+                    // Append to the current subfile content, inserting a newline needed
                     if (currentFileContent === null) {
                         currentFileContent = '';
                     }
                     else {
+                        // End-of-line
                         currentFileContent = currentFileContent + '\n';
                     }
                     currentFileContent = currentFileContent + line;
                 }
             }
+            // normalize the filename for the single file case
             currentFileName = files.length > 0 ? currentFileName : '0.ts';
+            // EOF, push whatever remains
             var newTestFile = {
                 content: currentFileContent || '',
                 name: currentFileName,
@@ -3269,10 +3393,12 @@ var Harness;
             this.version++;
         }
         editContent(minChar, limChar, newText) {
+            // Apply edits
             var prefix = this.content.substring(0, minChar);
             var middle = newText;
             var suffix = this.content.substring(limChar);
             this.content = prefix + middle + suffix;
+            // Store edit range + new length of script
             this.editRanges.push({
                 length: this.content.length,
                 editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)
@@ -3280,14 +3406,17 @@ var Harness;
             if (this.editRanges.length > this.maxScriptVersions) {
                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
             }
+            // Update version #
             this.version++;
         }
         getEditRangeSinceVersion(version) {
             if (this.version == version) {
+                // No edits!
                 return null;
             }
             var initialEditRangeIndex = this.editRanges.length - (this.version - version);
             if (initialEditRangeIndex < 0 || initialEditRangeIndex >= this.editRanges.length) {
+                // Too far away from what we know
                 return TypeScript.ScriptEditRange.unknown();
             }
             var entries = this.editRanges.slice(initialEditRangeIndex);
@@ -3334,15 +3463,23 @@ var Harness;
         getScriptContent(scriptIndex) {
             return this.scripts[scriptIndex].content;
         }
+        //////////////////////////////////////////////////////////////////////
+        // ILogger implementation
+        //
         information() { return false; }
         debug() { return true; }
         warning() { return true; }
         error() { return true; }
         fatal() { return true; }
         log(s) {
+            // For debugging...
+            //IO.printLine("TypeScriptLS:" + s);
         }
+        //////////////////////////////////////////////////////////////////////
+        // ILanguageServiceShimHost implementation
+        //
         getCompilationSettings() {
-            return "";
+            return ""; // i.e. default settings
         }
         getScriptCount() {
             return this.scripts.length;
@@ -3367,12 +3504,16 @@ var Harness;
             var result = (range.minChar + "," + range.limChar + "," + range.delta);
             return result;
         }
+        /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
+         *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
+         */
         getLanguageService() {
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
             ls.refresh(true);
             this.ls = ls;
             return ls;
         }
+        /** Parse file given its source text */
         parseSourceText(fileName, sourceText) {
             var parser = new TypeScript.Parser();
             parser.setErrorRecovery(null);
@@ -3380,10 +3521,15 @@ var Harness;
             var script = parser.parse(sourceText, fileName, 0);
             return script;
         }
+        /** Parse a file on disk given its filename */
         parseFile(fileName) {
             var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName));
             return this.parseSourceText(fileName, sourceText);
         }
+        /**
+         * @param line 1 based index
+         * @param col 1 based index
+        */
         lineColToPosition(fileName, line, col) {
             var script = this.ls.languageService.getScriptAST(fileName);
             assert.notNull(script);
@@ -3392,6 +3538,10 @@ var Harness;
             assert.is(line <= script.locationInfo.lineMap.length);
             return TypeScript.getPositionFromZeroBasedLineColumn(script, line - 1, col - 1);
         }
+        /**
+         * @param line 0 based index
+         * @param col 0 based index
+        */
         positionToZeroBasedLineCol(fileName, position) {
             var script = this.ls.languageService.getScriptAST(fileName);
             assert.notNull(script);
@@ -3400,6 +3550,7 @@ var Harness;
             assert.is(result.col >= 0);
             return result;
         }
+        /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
         checkEdits(sourceFileName, baselineFileName, edits) {
             var script = readFile(sourceFileName);
             var formattedScript = this.applyEdits(script, edits);
@@ -3407,6 +3558,7 @@ var Harness;
             assert.noDiff(formattedScript, baseline);
             assert.equal(formattedScript, baseline);
         }
+        /** Apply an array of text edits to a string, and return the resulting string. */
         applyEdits(content, edits) {
             var result = content;
             edits = this.normalizeEdits(edits);
@@ -3419,6 +3571,7 @@ var Harness;
             }
             return result;
         }
+        /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
         normalizeEdits(edits) {
             var result = [];
             function mapEdits(edits) {
@@ -3438,6 +3591,7 @@ var Harness;
             var next = 1;
             while (current < temp.length) {
                 var currentEdit = temp[current].edit;
+                // Last edit
                 if (next >= temp.length) {
                     result.push(currentEdit);
                     current++;
@@ -3445,12 +3599,15 @@ var Harness;
                 }
                 var nextEdit = temp[next].edit;
                 var gap = nextEdit.minChar - currentEdit.limChar;
+                // non-overlapping edits
                 if (gap >= 0) {
                     result.push(currentEdit);
                     current = next;
                     next++;
                     continue;
                 }
+                // overlapping edits: for now, we only support ignoring an next edit 
+                // entirely contained in the current edit.
                 if (currentEdit.limChar >= nextEdit.limChar) {
                     next++;
                     continue;
@@ -3466,6 +3623,7 @@ var Harness;
         }
     }
     Harness.TypeScriptLS = TypeScriptLS;
+    // Describe/it definitions
     function describe(description, block) {
         var newScenario = new Scenario(description, block);
         if (Runnable.currentStack.length === 0) {
@@ -3487,6 +3645,7 @@ var Harness;
         currentRun.run();
     }
     Harness.run = run;
+    /** Runs TypeScript or Javascript code. */
     let Runner;
     (function (Runner) {
         function runCollateral(path, callback) {
@@ -3495,6 +3654,7 @@ var Harness;
         }
         Runner.runCollateral = runCollateral;
         function runJSString(code, callback) {
+            // List of names that get overriden by various test code we eval
             var dangerNames = ['Array'];
             var globalBackup = {};
             var n = null;
@@ -3523,6 +3683,7 @@ var Harness;
         }
         Runner.runString = runString;
     })(Runner = Harness.Runner || (Harness.Runner = {}));
+    /** Support class for baseline files */
     let Baseline;
     (function (Baseline) {
         var reportFilename = 'baseline-report.html';
@@ -3563,6 +3724,7 @@ var Harness;
         Baseline.reset = reset;
         function prepareBaselineReport() {
             var reportContent = htmlLeader;
+            // Delete the baseline-report.html file if needed
             if (IO.fileExists(reportFilename)) {
                 reportContent = IO.readFile(reportFilename);
                 reportContent = reportContent.replace(htmlTrailer, '');
@@ -3573,8 +3735,10 @@ var Harness;
             return reportContent;
         }
         function generateActual(actualFilename, generateContent) {
+            // Create folders if needed
             IO.createDirectory(IO.dirName(IO.dirName(actualFilename)));
             IO.createDirectory(IO.dirName(actualFilename));
+            // Delete the actual file in case it fails
             if (IO.fileExists(actualFilename)) {
                 IO.deleteFile(actualFilename);
             }
@@ -3582,13 +3746,18 @@ var Harness;
             if (actual === undefined) {
                 throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
             }
+            // Store the content in the 'local' folder so we
+            // can accept it later (manually)
             if (actual !== null) {
                 IO.writeFile(actualFilename, actual);
             }
             return actual;
         }
         function compareToBaseline(actual, relativeFilename, opts) {
+            // actual is now either undefined (the generator had an error), null (no file requested),
+            // or some real output of the function
             if (actual === undefined) {
+                // Nothing to do
                 return;
             }
             var refFilename = referencePath(relativeFilename);
@@ -3608,9 +3777,11 @@ var Harness;
         }
         function writeComparison(expected, actual, relativeFilename, actualFilename, descriptionForDescribe) {
             if (expected != actual) {
+                // Overwrite & issue error
                 var errMsg = 'The baseline file ' + relativeFilename + ' has changed. Please refer to baseline-report.html and ';
                 errMsg += 'either fix the regression (if unintended) or run nmake baseline-accept (if intended).';
                 var refFilename = referencePath(relativeFilename);
+                // Append diff to the report
                 var diff = new Diff.StringDiff(expected, actual);
                 var header = '<h2>' + descriptionForDescribe + '</h2>';
                 header += '<h4>Left file: ' + actualFilename + '; Right file: ' + refFilename + '</h4>';

@@ -1,10 +1,9 @@
 --- old.circularImportAlias.js
 +++ new.circularImportAlias.js
-@@= skipped -21, +21 lines =@@
- 
+@@= skipped -22, +22 lines =@@
  
  //// [circularImportAlias.js]
--// expected no error
+ // expected no error
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

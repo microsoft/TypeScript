@@ -22,11 +22,11 @@ class Base {
     x;
 }
 class Derived extends Base {
-    x;
+    x; // error
 }
 class Base2 {
     static y;
 }
 class Derived2 extends Base2 {
-    static y;
+    static y; // error
 }

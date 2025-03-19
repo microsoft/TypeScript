@@ -37,7 +37,7 @@ var r4 = b.foo(1);
 class C {
     f() {
         var x;
-        var a = x['toString']();
+        var a = x['toString'](); // should be string
         return a + x.toString();
     }
 }
@@ -50,7 +50,7 @@ var r3 = a().toString();
 var r3b = a()['toString']();
 var b = {
     foo: (x) => {
-        var a = x['toString']();
+        var a = x['toString'](); // should be string
         return a + x.toString();
     }
 };

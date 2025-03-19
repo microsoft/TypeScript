@@ -22,5 +22,6 @@ b = a;
 //// [assignmentCompatWithGenericCallSignatures2.js]
 var a;
 var b;
+// Both errors
 a = b;
 b = a;

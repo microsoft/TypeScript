@@ -25,8 +25,8 @@ class A {
     static _b = 2;
 }
 const a = new A();
-a["\""];
-a['y'];
-a.y;
-A._b;
+a["\""]; // Error
+a['y']; // Error
+a.y; // Error
+A._b; // Error
 A.a;

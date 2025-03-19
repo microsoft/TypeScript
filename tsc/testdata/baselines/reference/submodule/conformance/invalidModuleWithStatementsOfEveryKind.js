@@ -81,6 +81,7 @@ module YYY4 {
 
 
 //// [invalidModuleWithStatementsOfEveryKind.js]
+// All of these should be an error
 var Y;
 (function (Y) {
     class A {

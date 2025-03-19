@@ -1,8 +1,0 @@
---- old.alwaysStrictModule5.js
-+++ new.alwaysStrictModule5.js
-@@= skipped -4, +4 lines =@@
- export const a = 1; 
- 
- //// [alwaysStrictModule5.js]
--// Targeting ES6
- export const a = 1;

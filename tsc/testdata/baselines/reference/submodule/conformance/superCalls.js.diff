@@ -32,17 +32,17 @@
  function v() { }
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
--    //super call in class constructor of derived type
++class Derived extends Base {
++    q;
+     //super call in class constructor of derived type
 -    function Derived(q) {
 -        var _this = _super.call(this, '') || this;
 -        _this.q = q;
--        //type of super call expression is void
--        var p = _this = _super.call(this, '') || this;
-+class Derived extends Base {
-+    q;
 +    constructor(q) {
 +        this.q = q;
 +        super('');
+         //type of super call expression is void
+-        var p = _this = _super.call(this, '') || this;
 +        var p = super('');
          var p = v();
 -        return _this;

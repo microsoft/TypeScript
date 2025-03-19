@@ -16,7 +16,7 @@
 +    </div>;
  }
  function TodoListNoError({ todos }) {
--    // any is not checked
+     // any is not checked
 -    return _jsxs("div", { children: [..._jsx(Todo, { todo: todos[0].todo }, todos[0].id)] });
 +    return <div>
 +        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}

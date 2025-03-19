@@ -9,6 +9,7 @@ async function test() {
 
 
 //// [awaitUsingDeclarationsInForAwaitOf.2.js]
+// https://github.com/microsoft/TypeScript/issues/55555
 async function test() {
     for await (await using of of of) { }
     ;

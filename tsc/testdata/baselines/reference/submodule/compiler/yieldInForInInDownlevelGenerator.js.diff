@@ -29,14 +29,9 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+function* gen() {
-+    var obj = { foo: 1, bar: 2 };
-+    for (var key in obj) {
-+        yield key;
-+        delete obj.bar;
-     }
+-    }
 -};
--// https://github.com/microsoft/TypeScript/issues/49808
+ // https://github.com/microsoft/TypeScript/issues/49808
 -function gen() {
 -    var obj, _a, _b, _c, _i, key;
 -    return __generator(this, function (_d) {
@@ -65,4 +60,10 @@
 -            case 4: return [2 /*return*/];
 -        }
 -    });
++function* gen() {
++    var obj = { foo: 1, bar: 2 };
++    for (var key in obj) {
++        yield key;
++        delete obj.bar;
++    }
  }

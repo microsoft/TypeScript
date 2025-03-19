@@ -45,6 +45,7 @@ module M2 {
 
 
 //// [enumMergingErrors.js]
+// Enum with constant, computed, constant members split across 3 declarations with the same root module
 var M;
 (function (M) {
     let E1;
@@ -91,6 +92,7 @@ var M;
         if (typeof E3.B !== "string") E3[E3.B] = "B";
     })(E3 = M.E3 || (M.E3 = {}));
 })(M || (M = {}));
+// Enum with no initializer in either declaration with constant members with the same root module
 var M1;
 (function (M1) {
     let E1;
@@ -110,6 +112,7 @@ var M1;
         E1[E1["C"] = 0] = "C";
     })(E1 = M1.E1 || (M1.E1 = {}));
 })(M1 || (M1 = {}));
+// Enum with initializer in only one of three declarations with constant members with the same root module
 var M2;
 (function (M2) {
     let E1;

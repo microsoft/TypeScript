@@ -1,9 +1,0 @@
---- old.moduleKeywordRepeatError.js
-+++ new.moduleKeywordRepeatError.js
-@@= skipped -5, +5 lines =@@
- module.module { }
- 
- //// [moduleKeywordRepeatError.js]
--// "module.module { }" should raise a syntax error
- module.module;
- { }

@@ -18,4 +18,4 @@ export {};
 //// [otherc.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const json2 = import("./package.json", { with: { type: "json" } });
+const json2 = import("./package.json", { with: { type: "json" } }); // should be fine

@@ -207,7 +207,7 @@ function a<T extends {id: string}>() {
 
 //// [templateLiteralTypes3.js]
 function f1(s, n, b, t) {
-    let x1 = foo1('hello');
+    let x1 = foo1('hello'); // Error
     let x2 = foo1('*hello*');
     let x3 = foo1('**hello**');
     let x4 = foo1(`*${s}*`);
@@ -229,7 +229,7 @@ function f2() {
 }
 function f3(s, n, b, t) {
     let x;
-    x = 'hello';
+    x = 'hello'; // Error
     x = '*hello*';
     x = '**hello**';
     x = `*${s}*`;
@@ -240,44 +240,46 @@ function f3(s, n, b, t) {
 }
 function f4(s, n, b, t) {
     let x;
-    x = '123';
+    x = '123'; // Error
     x = '*123*';
-    x = '**123**';
-    x = `*${s}*`;
+    x = '**123**'; // Error
+    x = `*${s}*`; // Error
     x = `*${n}*`;
-    x = `*${b}*`;
+    x = `*${b}*`; // Error
     x = `*${t}*`;
 }
 const value1 = "abc";
 const templated1 = `${value1} abc`;
+// Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
 const value2 = "abc";
 const templated2 = `${value2} abc`;
 chain("a");
+// Repro from #46125
 function ff1(x, y, z) {
     if (x === y) {
-        x;
+        x; // `foo-${string}`
     }
-    if (x === z) {
+    if (x === z) { // Error
     }
 }
 function ff2(x, y, z) {
     if (x === y) {
-        x;
+        x; // `foo-${T}`
     }
-    if (x === z) {
+    if (x === z) { // Error
     }
 }
 function ff3(x, y) {
     if (x === y) {
-        x;
+        x; // `foo-${string}` | 'bar'
     }
 }
 function ff4(x, y) {
     if (x === 'foo-test') {
-        x;
+        x; // 'foo-test'
     }
     if (y === 'foo-test') {
-        y;
+        y; // 'foo-test'
     }
 }
 function reducer(action) {
@@ -295,6 +297,7 @@ function ft1(t, u, u1, u2) {
     spread(`1.${u}.3`, `1.${u}.4`);
     spread(u1, u2);
 }
+// Repro from #56582
 function a() {
     let x;
     x = "id";

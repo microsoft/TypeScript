@@ -18,21 +18,21 @@
 -        !(yield 42); // OK
 -    });
 +async function bar() {
-+    !await 42;
++    !await 42; // OK
  }
 -function bar1() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        delete (yield 42); // OK
 -    });
 +async function bar1() {
-+    delete await 42;
++    delete await 42; // OK
  }
 -function bar2() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        delete (yield 42); // OK
 -    });
 +async function bar2() {
-+    delete await 42;
++    delete await 42; // OK
  }
 -function bar3() {
 -    return __awaiter(this, void 0, void 0, function* () {

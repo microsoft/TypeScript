@@ -49,6 +49,8 @@ function getComp() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
 const get_comp_1 = require("./get-comp");
+// this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
+// This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
 exports.obj = {
     comp: (0, get_comp_1.getComp)()
 };

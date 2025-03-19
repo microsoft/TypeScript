@@ -6,9 +6,9 @@
  
 +//// [typescript.js]
  //// [parserRealSource1.js]
--// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
--// See LICENSE.txt in the project root for complete license information.
--///<reference path='typescript.ts' />
+ // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+ // See LICENSE.txt in the project root for complete license information.
+ ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
 -    var CompilerDiagnostics;
@@ -16,7 +16,7 @@
      (function (CompilerDiagnostics) {
          CompilerDiagnostics.debug = false;
          CompilerDiagnostics.diagnosticWriter = null;
-@@= skipped -32, +30 lines =@@
+@@= skipped -32, +33 lines =@@
          }
          CompilerDiagnostics.assert = assert;
      })(CompilerDiagnostics = TypeScript.CompilerDiagnostics || (TypeScript.CompilerDiagnostics = {}));
@@ -112,36 +112,4 @@
 +        var addChar = (index) => {
              var ch = value.charCodeAt(index);
              switch (ch) {
--                case 0x09: // tab
-+                case 0x09:
-                     result += "\\t";
-                     break;
--                case 0x0a: // line feed
-+                case 0x0a:
-                     result += "\\n";
-                     break;
--                case 0x0b: // vertical tab
-+                case 0x0b:
-                     result += "\\v";
-                     break;
--                case 0x0c: // form feed
-+                case 0x0c:
-                     result += "\\f";
-                     break;
--                case 0x0d: // carriage return
-+                case 0x0d:
-                     result += "\\r";
-                     break;
--                case 0x22: // double quote
-+                case 0x22:
-                     result += "\\\"";
-                     break;
--                case 0x27: // single quote
-+                case 0x27:
-                     result += "\\\'";
-                     break;
--                case 0x5c: // Backslash
-+                case 0x5c:
-                     result += "\\";
-                     break;
-                 default:
+                 case 0x09: // tab

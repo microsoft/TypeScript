@@ -8,11 +8,8 @@
  var t;
  var a;
  t = a;
-@@= skipped -13, +12 lines =@@
- a = a2;
- var s2;
- var a3;
--// these are errors
+@@= skipped -16, +15 lines =@@
+ // these are errors
  t = s2;
  t = a3;
 -t = function (x) { return 1; };

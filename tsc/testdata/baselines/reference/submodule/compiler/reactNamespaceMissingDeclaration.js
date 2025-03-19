@@ -5,4 +5,5 @@
 <foo data/>
 
 //// [reactNamespaceMissingDeclaration.js]
+// Error myReactLib not declared
 <foo data/>;

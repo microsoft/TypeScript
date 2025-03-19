@@ -6,16 +6,15 @@
  exports.foo1 = foo1;
 -var Foo = /** @class */ (function () {
 -    function Foo(
--    // Type node is accurate, preserve
--    reuseTypeNode, reuseTypeNode2, 
--    // Resolve type node, requires adding | undefined
--    resolveType) {
 +class Foo {
 +    reuseTypeNode;
 +    reuseTypeNode2;
 +    resolveType;
-+    constructor(reuseTypeNode, reuseTypeNode2, resolveType) {
-         this.reuseTypeNode = reuseTypeNode;
++    constructor(
+     // Type node is accurate, preserve
+     reuseTypeNode, reuseTypeNode2, 
+     // Resolve type node, requires adding | undefined
+@@= skipped -10, +13 lines =@@
          this.reuseTypeNode2 = reuseTypeNode2;
          this.resolveType = resolveType;
      }
@@ -23,15 +22,16 @@
 -}());
 +}
  exports.Foo = Foo;
--function foo1(
--// Type node is accurate, preserve
+ function foo1(
+ // Type node is accurate, preserve
 -reuseTypeNode, reuseTypeNode2, 
--// Resolve type node, requires adding | undefined
++reuseTypeNode = {}, reuseTypeNode2 = {}, 
+ // Resolve type node, requires adding | undefined
 -resolveType, requiredParam) {
 -    if (reuseTypeNode === void 0) { reuseTypeNode = {}; }
 -    if (reuseTypeNode2 === void 0) { reuseTypeNode2 = {}; }
 -    if (resolveType === void 0) { resolveType = {}; }
-+function foo1(reuseTypeNode = {}, reuseTypeNode2 = {}, resolveType = {}, requiredParam) {
++resolveType = {}, requiredParam) {
  }
 -
 -

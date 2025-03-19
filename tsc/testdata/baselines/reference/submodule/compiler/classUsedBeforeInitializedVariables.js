@@ -79,6 +79,7 @@ class Test {
     withinClassDeclarationExtension = (class extends this.withinClassDeclarationExtension {
     });
     fromOptional = this.p5;
+    // These error cases are ignored (not checked by control flow analysis)
     assignedByArrowFunction = (() => this.assignedByFunction)();
     assignedByFunction = (function () {
         return this.assignedByFunction;

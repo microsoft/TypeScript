@@ -37,12 +37,13 @@ exports.C = C;
 //// [externalModuleAssignToVar_core.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='externalModuleAssignToVar_core_require.ts'/>
 const ext = require("externalModuleAssignToVar_core_require");
 var y1 = ext;
-y1 = ext;
+y1 = ext; // ok
 const ext2 = require("externalModuleAssignToVar_core_require2");
 var y2 = ext2;
-y2 = ext2;
+y2 = ext2; // ok
 const ext3 = require("externalModuleAssignToVar_ext");
 var y3 = ext3;
-y3 = ext3;
+y3 = ext3; // ok

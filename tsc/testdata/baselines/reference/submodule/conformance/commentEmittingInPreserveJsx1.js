@@ -45,10 +45,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 </div>;
 <div>
     // Not Comment
-    {"Hi"}
+    {
+    //Comment just Fine
+    "Hi"}
     // Another not Comment
 </div>;
 <div>
     /* Not Comment */
-    {"Hi"}
+    {
+    //Comment just Fine
+    "Hi"}
 </div>;

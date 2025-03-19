@@ -5,4 +5,4 @@
  function f(y, y1, p, p1) { return [y, p1(y)]; }
  var a, b;
 -var d = f(a, b, function (x) { return x; }, function (x) { return x; }); // Type [A, B]
-+var d = f(a, b, x => x, x => x);
++var d = f(a, b, x => x, x => x); // Type [A, B]

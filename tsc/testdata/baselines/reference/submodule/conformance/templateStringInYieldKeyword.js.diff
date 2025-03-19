@@ -1,9 +1,0 @@
---- old.templateStringInYieldKeyword.js
-+++ new.templateStringInYieldKeyword.js
-@@= skipped -8, +8 lines =@@
- 
- //// [templateStringInYieldKeyword.js]
- function* gen() {
--    // Once this is supported, the inner expression does not need to be parenthesized.
-     var x = yield `abc${x}def`;
- }

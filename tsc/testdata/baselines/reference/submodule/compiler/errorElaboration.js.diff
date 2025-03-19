@@ -8,11 +8,11 @@
 -var a;
 +let a;
  foo(a);
--// Repro for #25498
+ // Repro for #25498
  function test() {
      return { foo: "bar" };
  }
--// Repro for #32358
+ // Repro for #32358
 -var foo = { bar: 'a' };
 -var x = function (_a) {
 -    var _b = foo.bar, c = _a[_b];

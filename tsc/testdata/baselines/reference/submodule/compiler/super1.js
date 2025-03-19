@@ -69,6 +69,7 @@ module Base4 {
 
 
 //// [super1.js]
+// Case 1
 class Base1 {
     foo() {
         return "base";
@@ -84,6 +85,7 @@ class SubSub1 extends Sub1 {
         return super.super.foo;
     }
 }
+// Case 2
 class Base2 {
     foo() {
         return "base";
@@ -94,6 +96,7 @@ class SubE2 extends Base2 {
         return super.prototype.foo = null;
     }
 }
+// Case 3
 class Base3 {
     foo() {
         return "base";
@@ -104,6 +107,7 @@ class SubE3 extends Base3 {
         return super.bar();
     }
 }
+// Case 4
 var Base4;
 (function (Base4) {
     class Sub4 {

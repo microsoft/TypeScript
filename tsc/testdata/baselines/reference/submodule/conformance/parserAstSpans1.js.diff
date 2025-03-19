@@ -29,50 +29,47 @@
 -    };
 -    c1.prototype.i1_nc_f1 = function () {
 -    };
--    /** c1_f1*/
--    c1.prototype.f1 = function () {
--    };
--    /** c1_nc_f1*/
--    c1.prototype.nc_f1 = function () {
--    };
--    return c1;
--}());
 +    i1_l1;
 +    i1_nc_p1;
 +    i1_nc_f1() {
 +    }
 +    i1_nc_l1;
++    /** c1_p1*/
 +    p1;
+     /** c1_f1*/
+-    c1.prototype.f1 = function () {
+-    };
 +    f1() {
 +    }
++    /** c1_l1*/
 +    l1;
++    /** c1_nc_p1*/
 +    nc_p1;
+     /** c1_nc_f1*/
+-    c1.prototype.nc_f1 = function () {
+-    };
+-    return c1;
+-}());
 +    nc_f1() {
 +    }
++    /** c1_nc_l1*/
 +    nc_l1;
 +}
  var i1_i;
  i1_i.i1_f1();
  i1_i.i1_nc_f1();
-@@= skipped -48, +36 lines =@@
- c1_i.i1_nc_l1();
- c1_i.l1();
- c1_i.nc_l1();
--// assign to interface
- i1_i = c1_i;
- i1_i.i1_f1();
- i1_i.i1_nc_f1();
-@@= skipped -10, +9 lines =@@
+@@= skipped -58, +52 lines =@@
  i1_i.i1_nc_l1();
  i1_i.l1();
  i1_i.nc_l1();
 -var c2 = /** @class */ (function () {
--    /** c2 constructor*/
--    function c2(a) {
 +class c2 {
++    /** c2 c2_p1*/
 +    c2_p1;
++    /** c2 c2_f1*/
 +    c2_f1() {
 +    }
++    /** c2 c2_prop*/
 +    get c2_prop() {
 +        return 10;
 +    }
@@ -82,9 +79,12 @@
 +    get c2_nc_prop() {
 +        return 10;
 +    }
++    /** c2 p1*/
 +    p1;
++    /** c2 f1*/
 +    f1() {
 +    }
++    /** c2 prop*/
 +    get prop() {
 +        return 10;
 +    }
@@ -94,6 +94,8 @@
 +    get nc_prop() {
 +        return 10;
 +    }
+     /** c2 constructor*/
+-    function c2(a) {
 +    constructor(a) {
          this.c2_p1 = a;
      }
@@ -151,7 +153,9 @@
 +        super(10);
 +        this.p1 = super.c2_p1;
      }
--    /** c3 f1*/
++    /** c3 p1*/
++    p1;
+     /** c3 f1*/
 -    c3.prototype.f1 = function () {
 -    };
 -    Object.defineProperty(c3.prototype, "prop", {
@@ -173,9 +177,9 @@
 -    });
 -    return c3;
 -}(c2));
-+    p1;
 +    f1() {
 +    }
++    /** c3 prop*/
 +    get prop() {
 +        return 10;
 +    }
@@ -189,13 +193,7 @@
  var c2_i = new c2(10);
  var c3_i = new c3();
  c2_i.c2_f1();
-@@= skipped -86, +57 lines =@@
- c3_i.c2_nc_f1();
- c3_i.f1();
- c3_i.nc_f1();
--// assign
- c2_i = c3_i;
- c2_i.c2_f1();
+@@= skipped -92, +73 lines =@@
  c2_i.c2_nc_f1();
  c2_i.f1();
  c2_i.nc_f1();
@@ -211,19 +209,10 @@
  var c4_i = new c4(10);
  var i2_i;
  var i3_i;
-@@= skipped -32, +26 lines =@@
- i3_i.i2_nc_l1();
- i3_i.l1();
- i3_i.nc_l1();
--// assign to interface
- i2_i = i3_i;
- i2_i.i2_f1();
- i2_i.i2_nc_f1();
-@@= skipped -10, +9 lines =@@
- i2_i.i2_nc_l1();
+@@= skipped -37, +32 lines =@@
  i2_i.l1();
  i2_i.nc_l1();
--/**c5 class*/
+ /**c5 class*/
 -var c5 = /** @class */ (function () {
 -    function c5() {
 +class c5 {

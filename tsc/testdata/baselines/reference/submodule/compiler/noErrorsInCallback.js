@@ -17,7 +17,7 @@ class Bar {
         this.foo = foo;
     }
 }
-var one = new Bar({});
+var one = new Bar({}); // Error
 [].forEach(() => {
-    var two = new Bar({});
+    var two = new Bar({}); // No error?
 });

@@ -68,12 +68,12 @@ class Foo4 extends Foo {
 class Foo {
     a() {
         var lamda = (_super) => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
     b(_super) {
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
     set c(_super) {
@@ -82,12 +82,12 @@ class Foo {
 class Foo2 extends Foo {
     x() {
         var lamda = (_super) => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
     y(_super) {
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
     set z(_super) {
@@ -107,7 +107,7 @@ class Foo4 extends Foo {
     }
     y(_super) {
         var lambda = () => {
-            return x => this;
+            return x => this; // New scope.  So should inject new _this capture
         };
     }
 }

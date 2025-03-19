@@ -29,8 +29,10 @@ const x = ({ [foo.bar]: c }) => undefined;
 //// [errorElaboration.js]
 let a;
 foo(a);
+// Repro for #25498
 function test() {
     return { foo: "bar" };
 }
+// Repro for #32358
 const foo = { bar: 'a' };
 const x = ({ [foo.bar]: c }) => undefined;

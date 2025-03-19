@@ -1,12 +1,9 @@
 --- old.arrayAssignmentTest3.js
 +++ new.arrayAssignmentTest3.js
-@@= skipped -16, +16 lines =@@
- 
- 
- //// [arrayAssignmentTest3.js]
--// The following gives no error
--// Michal saw no error if he used number instead of B, 
--// but I do...
+@@= skipped -19, +19 lines =@@
+ // The following gives no error
+ // Michal saw no error if he used number instead of B, 
+ // but I do...
 -var B = /** @class */ (function () {
 -    function B() {
 -    }

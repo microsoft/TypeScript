@@ -85,22 +85,22 @@ class OkClass2<T> {
 
 
 //// [noInfer.js]
-foo1('foo', 'foo');
-foo1('foo', 'bar');
-foo2('foo', ['bar']);
-foo3('foo', ['bar']);
-foo4('foo', { x: 'bar' });
-foo5('foo', { x: 'bar' });
-doSomething(new Animal(), () => new Animal());
-doSomething(new Animal(), () => new Dog());
-doSomething(new Dog(), () => new Animal());
-assertEqual({ x: 1 }, { x: 3 });
+foo1('foo', 'foo'); // ok
+foo1('foo', 'bar'); // error
+foo2('foo', ['bar']); // error
+foo3('foo', ['bar']); // error
+foo4('foo', { x: 'bar' }); // error
+foo5('foo', { x: 'bar' }); // error
+doSomething(new Animal(), () => new Animal()); // ok
+doSomething(new Animal(), () => new Dog()); // ok
+doSomething(new Dog(), () => new Animal()); // error
+assertEqual({ x: 1 }, { x: 3 }); // ok
 const g = { x: 3, y: 2 };
-assertEqual(g, { x: 3 });
-invoke(test, { x: 1, y: 2 });
-test({ x: 1, y: 2 });
-doWork(comp, { foo: 42 });
-doWork(comp, {});
+assertEqual(g, { x: 3 }); // error
+invoke(test, { x: 1, y: 2 }); // error
+test({ x: 1, y: 2 }); // error
+doWork(comp, { foo: 42 }); // ok
+doWork(comp, {}); // error
 const mutate1 = mutate((a, b) => b);
 class OkClass {
     clazz;
@@ -110,7 +110,7 @@ class OkClass {
         this._value = _value;
     }
     get value() {
-        return this._value;
+        return this._value; // ok
     }
 }
 class OkClass2 {

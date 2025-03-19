@@ -26,17 +26,17 @@
 -                __setFunctionName(_b, "c"),
 -                _b.bar = 2,
 -                (function () {
--                    // do
--                })(),
--                _b);
--        })(),
--        _a;
 +    return class {
 +        static foo = 1;
 +        static {
 +            const c = class {
 +                static bar = 2;
 +                static {
+                     // do
+-                })(),
+-                _b);
+-        })(),
+-        _a;
 +                }
 +            };
 +        }

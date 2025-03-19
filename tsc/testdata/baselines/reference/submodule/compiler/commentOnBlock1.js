@@ -7,6 +7,7 @@ function f() {
 }
 
 //// [commentOnBlock1.js]
+// asdf
 function f() {
-    { }
+    /*asdf*/ { }
 }

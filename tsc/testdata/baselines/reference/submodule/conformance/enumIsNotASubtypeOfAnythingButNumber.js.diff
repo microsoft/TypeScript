@@ -1,11 +1,6 @@
 --- old.enumIsNotASubtypeOfAnythingButNumber.js
 +++ new.enumIsNotASubtypeOfAnythingButNumber.js
-@@= skipped -132, +132 lines =@@
- }
- 
- //// [enumIsNotASubtypeOfAnythingButNumber.js]
--// enums are only subtypes of number, any and no other types
- var E;
+@@= skipped -137, +137 lines =@@
  (function (E) {
      E[E["A"] = 0] = "A";
  })(E || (E = {}));
@@ -28,7 +23,7 @@
  var E2;
  (function (E2) {
      E2[E2["A"] = 0] = "A";
-@@= skipped -23, +18 lines =@@
+@@= skipped -18, +14 lines =@@
  (function (f) {
      f.bar = 1;
  })(f || (f = {}));

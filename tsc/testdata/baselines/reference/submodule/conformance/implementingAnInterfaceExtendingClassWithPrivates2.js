@@ -102,6 +102,7 @@ class Bar3 extends Foo {
     x;
     y;
 }
+// another level of indirection
 var M;
 (function (M) {
     class Foo {
@@ -123,6 +124,7 @@ var M;
         y;
     }
 })(M || (M = {}));
+// two levels of privates
 var M2;
 (function (M2) {
     class Foo {
@@ -136,8 +138,8 @@ var M2;
     }
     var b;
     var r1 = b.z;
-    var r2 = b.x;
-    var r3 = b.y;
+    var r2 = b.x; // error
+    var r3 = b.y; // error
     class Bar2 extends Foo {
         x;
         z;

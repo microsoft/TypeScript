@@ -34,6 +34,7 @@ class C2 {
 
 
 //// [privateClassPropertyAccessibleWithinClass.js]
+// no errors
 class C {
     x;
     get y() { return this.x; }
@@ -45,6 +46,7 @@ class C {
     static foo() { return this.foo; }
     static bar() { this.foo(); }
 }
+// added level of function nesting
 class C2 {
     x;
     get y() { () => this.x; return null; }

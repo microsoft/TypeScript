@@ -17,6 +17,7 @@ module m {
 
 
 //// [objectLiteralShorthandPropertiesWithModule.js]
+// module export
 var m;
 (function (m) {
 })(m || (m = {}));

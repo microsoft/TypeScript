@@ -42,6 +42,7 @@ var a: typeof a;
 
 
 //// [validMultipleVariableDeclarations.js]
+// all expected to be valid
 var x;
 var x = 2;
 if (true) {
@@ -49,6 +50,7 @@ if (true) {
     for (var x = 0;;) { }
 }
 var x = undefined;
+// new declaration space, making redeclaring x as a string valid
 function declSpace() {
     var x = 'this is a string';
 }

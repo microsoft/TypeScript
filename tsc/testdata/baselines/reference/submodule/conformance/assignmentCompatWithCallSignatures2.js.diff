@@ -24,7 +24,7 @@
 +a = { f: () => 1 };
 +a = { f: (x) => 1 };
  a = { f: function (x) { return ''; } };
--// errors
+ // errors
 -t = function () { return 1; };
 +t = () => 1;
  t = function (x) { return ''; };
@@ -33,7 +33,7 @@
  a = function (x) { return ''; };
  var s2;
  var a3;
--// these are errors
+ // these are errors
  t = s2;
  t = a3;
 -t = function (x) { return 1; };

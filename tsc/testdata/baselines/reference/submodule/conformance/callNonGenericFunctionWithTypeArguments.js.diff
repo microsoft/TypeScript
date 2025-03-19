@@ -1,11 +1,7 @@
 --- old.callNonGenericFunctionWithTypeArguments.js
 +++ new.callNonGenericFunctionWithTypeArguments.js
-@@= skipped -45, +45 lines =@@
- var r8 = a2<number>();
- 
- //// [callNonGenericFunctionWithTypeArguments.js]
--// it is always illegal to provide type arguments to a non-generic function
--// all invocations here are illegal
+@@= skipped -49, +49 lines =@@
+ // all invocations here are illegal
  function f(x) { return null; }
  var r = f(1);
 -var f2 = function (x) { return null; };

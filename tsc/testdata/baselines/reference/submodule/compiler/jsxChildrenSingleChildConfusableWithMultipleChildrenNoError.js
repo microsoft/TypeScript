@@ -30,6 +30,7 @@ export class App extends React.Component<{}> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
+/// <reference path="react16.d.ts" />
 const React = require("react");
 function TabLayout(props) {
     return <div />;

@@ -5,28 +5,29 @@
  
  //// [definiteAssignmentAssertions.js]
 -"use strict";
--// Suppress strict property initialization check
+ // Suppress strict property initialization check
 -var C1 = /** @class */ (function () {
 -    function C1() {
+-    }
+-    return C1;
+-}());
 +class C1 {
 +    a;
-+    b;
++    b; // Error
 +}
+ // Suppress definite assignment check in constructor
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-        var x = this.a;
 +class C2 {
 +    a;
 +    constructor() {
 +        let x = this.a;
      }
--    return C1;
--}());
--// Suppress definite assignment check in constructor
--var C2 = /** @class */ (function () {
--    function C2() {
--        var x = this.a;
--    }
 -    return C2;
 -}());
--// Definite assignment assertion requires type annotation, no initializer, no static modifier
++}
+ // Definite assignment assertion requires type annotation, no initializer, no static modifier
 -var C3 = /** @class */ (function () {
 -    function C3() {
 -        this.a = 1;
@@ -34,23 +35,22 @@
 -    }
 -    return C3;
 -}());
--// Definite assignment assertion not permitted on abstract property
--var C5 = /** @class */ (function () {
--    function C5() {
--    }
--    return C5;
--}());
--// Suppress definite assignment check for variable
-+}
 +class C3 {
 +    a = 1;
 +    b = 1;
 +    static c;
 +    d;
 +}
+ // Definite assignment assertion not permitted on abstract property
+-var C5 = /** @class */ (function () {
+-    function C5() {
+-    }
+-    return C5;
+-}());
 +class C5 {
 +    a;
 +}
+ // Suppress definite assignment check for variable
  function f1() {
 -    var x;
 -    var y = x;
@@ -82,7 +82,7 @@
 -    var y = x;
 +    let y = x;
  }
--// Definite assignment assertion requires type annotation and no initializer
+ // Definite assignment assertion requires type annotation and no initializer
  function f4() {
 -    var a;
 -    var b = 1;

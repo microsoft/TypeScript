@@ -125,6 +125,7 @@ function getObject(id: string | number) {
 //// [controlFlowSelfReferentialLoop.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Repro from #12319
 function md5(string) {
     function FF(a, b, c, d, x, s, ac) {
         return 0;

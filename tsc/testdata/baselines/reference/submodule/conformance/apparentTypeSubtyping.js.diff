@@ -1,11 +1,9 @@
 --- old.apparentTypeSubtyping.js
 +++ new.apparentTypeSubtyping.js
-@@= skipped -23, +23 lines =@@
- }
- 
+@@= skipped -25, +25 lines =@@
  //// [apparentTypeSubtyping.js]
--// subtype checks use the apparent type of the target type
--// S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
+ // subtype checks use the apparent type of the target type
+ // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -26,7 +24,10 @@
 -    }
 -    return Base;
 -}());
--// is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
++class Base {
++    x;
++}
+ // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
@@ -39,17 +40,6 @@
 -    }
 -    return Base2;
 -}());
--// is U extends String (S) a subtype of String (T)? Apparent type of U is String so it succeeds
--var Derived2 = /** @class */ (function (_super) {
--    __extends(Derived2, _super);
--    function Derived2() {
--        return _super !== null && _super.apply(this, arguments) || this;
--    }
--    return Derived2;
--}(Base2));
-+class Base {
-+    x;
-+}
 +class Derived extends Base {
 +    x;
 +}
@@ -57,6 +47,14 @@
 +    x;
 +    static s;
 +}
+ // is U extends String (S) a subtype of String (T)? Apparent type of U is String so it succeeds
+-var Derived2 = /** @class */ (function (_super) {
+-    __extends(Derived2, _super);
+-    function Derived2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Derived2;
+-}(Base2));
 +class Derived2 extends Base2 {
 +    x;
 +}

@@ -1,10 +1,9 @@
 --- old.mergedInterfacesWithMultipleBases4.js
 +++ new.mergedInterfacesWithMultipleBases4.js
-@@= skipped -36, +36 lines =@@
- }
+@@= skipped -37, +37 lines =@@
  
  //// [mergedInterfacesWithMultipleBases4.js]
--// merged interfaces behave as if all extends clauses from each declaration are merged together
+ // merged interfaces behave as if all extends clauses from each declaration are merged together
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

@@ -12,14 +12,7 @@
      while (true) {
          switch (foo) {
              case "aaa":
-@@= skipped -11, +9 lines =@@
-         if (foo === "aaa") {
-             foo = "bbb";
-         }
--        else if (isNever(foo)) { // Error expected
-+        else if (isNever(foo)) {
-             break;
-         }
+@@= skipped -17, +15 lines =@@
      }
  }
  function functionC() {

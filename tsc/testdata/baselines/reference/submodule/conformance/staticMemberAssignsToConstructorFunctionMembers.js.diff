@@ -18,9 +18,9 @@
 -        C.bar = function (x) { return x; }; // ok
 -        C.bar = function (x) { return 1; }; // ok
 +    static bar(x) {
-+        C.bar = () => { };
-+        C.bar = (x) => x;
-+        C.bar = (x) => 1;
++        C.bar = () => { }; // error
++        C.bar = (x) => x; // ok
++        C.bar = (x) => 1; // ok
          return 1;
 -    };
 -    return C;

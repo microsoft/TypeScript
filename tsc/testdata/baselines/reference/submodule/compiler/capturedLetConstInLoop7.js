@@ -378,6 +378,7 @@ for (const y = 0; y < 1;) {
 }
 
 //// [capturedLetConstInLoop7.js]
+//===let
 l0: for (let x of []) {
     (function () { return x; });
     (() => x);
@@ -544,6 +545,7 @@ l8: for (let y = 0; y < 1; ++y) {
         continue l8;
     }
 }
+//===const
 l0_c: for (const x of []) {
     (function () { return x; });
     (() => x);

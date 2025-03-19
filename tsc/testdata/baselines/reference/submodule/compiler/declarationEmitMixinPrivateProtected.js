@@ -45,6 +45,7 @@ const DisposableMixin = class {
     _assertIsStripped() {
     }
 };
+// No error, but definition is wrong. 
 exports.default = mix(DisposableMixin);
 class Monitor extends mix(DisposableMixin) {
     _onDispose() {

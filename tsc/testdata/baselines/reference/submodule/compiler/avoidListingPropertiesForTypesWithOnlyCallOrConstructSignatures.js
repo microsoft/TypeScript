@@ -15,3 +15,4 @@ export let x:Dog = getRover;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = getRover;
+// export let x: Dog = getRover; 

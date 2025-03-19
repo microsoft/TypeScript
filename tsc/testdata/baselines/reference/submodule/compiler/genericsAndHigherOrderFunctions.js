@@ -20,5 +20,6 @@ var foo: <K, N>(g: (x: K) => N) =>
             <R>(f: (_: N) => (_: R) => R) => h(combine(f)(g))
 
 //// [genericsAndHigherOrderFunctions.js]
+// no errors expected
 var combine = (f) => (g) => (x) => f(g(x));
 var foo = (g) => (h) => (f) => h(combine(f)(g));

@@ -8,11 +8,3 @@
  function foo(x, b) {
      if (typeof x === 'object') {
          x.toString();
-@@= skipped -24, +23 lines =@@
-         x.toString();
-     }
- }
--// Repro from #36870
- function f1(x) {
-     return x && typeof x === 'object' && x.hasOwnProperty('x');
- }

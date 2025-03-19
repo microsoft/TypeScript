@@ -21,7 +21,8 @@ class Chain {
     }
     then(cb) {
         var result = cb(this.value);
-        var z = this.then(x => result).then(x => "abc").then(x => x.length);
+        // should get a fresh type parameter which each then call
+        var z = this.then(x => result) /*S*/.then(x => "abc") /*string*/.then(x => x.length) /*number*/; // No error
         return new Chain(result);
     }
 }

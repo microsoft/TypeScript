@@ -17,5 +17,5 @@ var E;
     E[E["B"] = 1] = "B";
 })(E || (E = {}));
 if (m[E.A] !== null) {
-    m[E.A].toString();
+    m[E.A].toString(); // string
 }

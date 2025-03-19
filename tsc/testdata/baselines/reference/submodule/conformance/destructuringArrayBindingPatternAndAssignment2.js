@@ -37,19 +37,26 @@ function foo(idx: number): F {
 var [c4, c5, c6] = foo(1);  // Error
 
 //// [destructuringArrayBindingPatternAndAssignment2.js]
-var [[a0], [[a1]]] = [];
-var [[a2], [[a3]]] = undefined;
-var [b0, b1, b2] = [1, 2, "string"];
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is the type Any, or
+var [[a0], [[a1]]] = []; // Error
+var [[a2], [[a3]]] = undefined; // Error
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
+//        where N is the numeric index of E in the array assignment pattern, or
+var [b0, b1, b2] = [1, 2, "string"]; // Error
 function bar() {
     return [1, 2, 3];
 }
-var [b3 = "string", b4, b5] = bar();
+var [b3 = "string", b4, b5] = bar(); // Error
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var [c0, c1] = [...temp];
-var [c2, c3] = [...temp];
+var [c0, c1] = [...temp]; // Error
+var [c2, c3] = [...temp]; // Error
 function foo(idx) {
     return {
         2: true
     };
 }
-var [c4, c5, c6] = foo(1);
+var [c4, c5, c6] = foo(1); // Error

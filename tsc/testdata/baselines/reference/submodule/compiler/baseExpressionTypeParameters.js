@@ -16,6 +16,7 @@ class Spec extends Gen<string> {}
 <string>Spec.prop;
 
 //// [baseExpressionTypeParameters.js]
+// Repro from #17829
 function base() {
     class Base {
         static prop;
@@ -23,7 +24,7 @@ function base() {
     return Base;
 }
 class Gen extends base() {
-}
+} // Error, T not in scope
 class Spec extends Gen {
 }
 Spec.prop;

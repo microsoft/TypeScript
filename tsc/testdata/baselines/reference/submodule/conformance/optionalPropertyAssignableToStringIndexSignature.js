@@ -22,11 +22,11 @@ function f<T>() {
 
 
 //// [optionalPropertyAssignableToStringIndexSignature.js]
-stringDictionary = optionalProperties;
-stringDictionary = undefinedProperties;
-probablyArray = numberLiteralKeys;
-let dict = optionalUndefined;
+stringDictionary = optionalProperties; // ok
+stringDictionary = undefinedProperties; // error
+probablyArray = numberLiteralKeys; // error
+let dict = optionalUndefined; // error
 function f() {
     let optional = undefined;
-    let dict = optional;
+    let dict = optional; // ok
 }

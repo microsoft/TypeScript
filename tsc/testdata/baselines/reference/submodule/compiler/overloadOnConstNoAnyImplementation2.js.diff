@@ -14,11 +14,10 @@
          callback('bye');
          var hm = "hm";
          callback(hm);
--        callback(1); // error
+         callback(1); // error
 -    };
 -    return C;
 -}());
-+        callback(1);
 +    }
 +}
  var c;

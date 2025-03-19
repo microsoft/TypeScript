@@ -49,12 +49,15 @@ import obj2 from "./sub2/uses.js"
 export default [obj1, obj2.default] as const;
 
 //// [uses.js]
+/// <reference types="pkg" preserve="true" />
 export default getInterI();
 //// [uses.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference types="pkg" preserve="true" />
 exports.default = getInterR();
 //// [index.js]
+// only an esm file can `import` both kinds of files
 import obj1 from "./sub1/uses.js";
 import obj2 from "./sub2/uses.js";
 export default [obj1, obj2.default];

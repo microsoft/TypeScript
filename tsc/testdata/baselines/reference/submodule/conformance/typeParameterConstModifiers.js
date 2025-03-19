@@ -219,9 +219,10 @@ set(obj, ['a', 'b', 'c'], value);
 const test = inners(1, 2, 3, 4, 5);
 const test2 = inners2([1, 2, 3, 4, 5]);
 const thing = (o) => o;
-const t = thing({ foo: '' });
+const t = thing({ foo: '' }); // readonly { foo: "" }
 const thingMapped = (o) => o;
-const tMapped = thingMapped({ foo: '' });
+const tMapped = thingMapped({ foo: '' }); // { foo: "" }
+// repro from https://github.com/microsoft/TypeScript/issues/55033
 function factory_55033_minimal(cb) {
     return {};
 }
@@ -233,6 +234,7 @@ function factory_55033(cb) {
 }
 const t1_55033 = factory_55033((a, b) => { })({ test: 123 }, "some string");
 const t2_55033 = factory_55033((a, b) => { })({ test: 123 }, "some string");
+// Same with non-readonly constraint
 function factory_55033_2(cb) {
     return function call(...args) {
         return {};

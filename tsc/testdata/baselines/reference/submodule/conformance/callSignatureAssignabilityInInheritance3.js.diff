@@ -1,11 +1,9 @@
 --- old.callSignatureAssignabilityInInheritance3.js
 +++ new.callSignatureAssignabilityInInheritance3.js
-@@= skipped -115, +115 lines =@@
- }
- 
+@@= skipped -117, +117 lines =@@
  //// [callSignatureAssignabilityInInheritance3.js]
--// checking subtype relations for function types as it relates to contextual signature instantiation
--// error cases
+ // checking subtype relations for function types as it relates to contextual signature instantiation
+ // error cases
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

@@ -28,6 +28,7 @@ new Bar();
 
 
 //// [nestedSuperCallEmit.js]
+// https://github.com/microsoft/TypeScript/issues/55646
 class Foo {
     constructor(shouldThrow) {
         if (shouldThrow) {
@@ -45,6 +46,7 @@ class Bar extends Foo {
         }
         catch (e) {
             console.log('Error: ' + e.message);
+            // retry
             super(false);
         }
     }

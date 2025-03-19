@@ -198,6 +198,7 @@ const defaultState = {
 const NON_VOID_ACTION = 'NON_VOID_ACTION', VOID_ACTION = 'VOID_ACTION';
 createReducer(defaultState, handler(NON_VOID_ACTION, (state, _payload) => state), handler(VOID_ACTION, state => state));
 x.on('a', a => { });
+// #29775
 var N1;
 (function (N1) {
     class InferFunctionTypes extends Component {
@@ -233,5 +234,5 @@ let xx = invoke(() => 1);
 let obj = {
     foo(bar) { }
 };
-assignPartial(obj, { foo(...args) { } });
+assignPartial(obj, { foo(...args) { } }); // args has type [string]
 export {};

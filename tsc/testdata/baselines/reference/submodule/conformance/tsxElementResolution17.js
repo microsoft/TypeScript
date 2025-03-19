@@ -30,5 +30,7 @@ import s2 = require('elements2');
 //// [consumer.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path="file.tsx" />
+// Should keep s1 and elide s2
 const s1 = require("elements1");
 <s1.MyElement />;

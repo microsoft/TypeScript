@@ -11,6 +11,7 @@ function test24554(x: Test24554) {
 
 
 //// [accessorAccidentalCallDiagnostic.js]
+// https://github.com/microsoft/TypeScript/issues/24554
 class Test24554 {
     get property() { return 1; }
 }

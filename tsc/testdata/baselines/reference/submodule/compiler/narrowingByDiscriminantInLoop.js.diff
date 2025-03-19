@@ -10,14 +10,9 @@
 -        var memberType = _a[_i];
 +    for (const memberType of callbackType.members) {
          if (memberType.type === "const") {
--            memberType.idlType; // string
-+            memberType.idlType;
+             memberType.idlType; // string
          }
-         else if (memberType.type === "operation") {
--            memberType.idlType.origin; // string
-+            memberType.idlType.origin;
-             memberType.idlType;
-         }
+@@= skipped -14, +12 lines =@@
      }
  }
  function insertInterface2(callbackType) {
@@ -25,19 +20,5 @@
 -        var memberType = _a[_i];
 +    for (const memberType of callbackType.members) {
          if (memberType.type === "operation") {
--            memberType.idlType.origin; // string
-+            memberType.idlType.origin;
+             memberType.idlType.origin; // string
          }
-     }
- }
- function foo(memberType) {
-     if (memberType.type === "const") {
--        memberType.idlType; // string
-+        memberType.idlType;
-     }
-     else if (memberType.type === "operation") {
--        memberType.idlType.origin; // string
-+        memberType.idlType.origin;
-     }
- }
- function f1(x) {

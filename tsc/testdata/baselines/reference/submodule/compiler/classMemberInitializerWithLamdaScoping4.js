@@ -29,7 +29,7 @@ class Test1 {
         this.field1 = field1;
     }
     messageHandler = () => {
-        console.log(field1);
+        console.log(field1); // Should be error that couldnt find symbol field1
     };
 }
 exports.Test1 = Test1;

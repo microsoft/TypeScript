@@ -23,29 +23,21 @@
  exports.default = types;
  //// [d.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--new types.A(); // Error
-+new types.A();
+@@= skipped -9, +9 lines =@@
  //// [e.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var types = require("./b");
--new types.A(); // Error
 +const types = require("./b");
-+new types.A();
+ new types.A(); // Error
  //// [f.js]
  "use strict";
- var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-@@= skipped -37, +37 lines =@@
+@@= skipped -28, +28 lines =@@
      return result;
  };
  Object.defineProperty(exports, "__esModule", { value: true });
 -var types = __importStar(require("./b"));
--new types.default.A(); // Error
 +const types = __importStar(require("./b"));
-+new types.default.A();
+ new types.default.A(); // Error
  //// [g.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--new types.A(); // Error
-+new types.A();

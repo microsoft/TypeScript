@@ -12,34 +12,14 @@
 -//  Assign to a variable
 -//  Assign to a parameter
 -//  Assign to an interface
--M = null; // Error
+ M = null; // Error
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    return C;
 -}());
--C = null; // Error
-+M = null;
 +class C {
 +}
-+C = null;
+ C = null; // Error
  var E;
  (function (E) {
-     E[E["A"] = 0] = "A";
- })(E || (E = {}));
--E = null; // Error
--E.A = null; // OK per spec, Error per implementation (509581)
-+E = null;
-+E.A = null;
- function fn() { }
--fn = null; // Should be error
-+fn = null;
- var v;
--v = null; // OK
-+v = null;
- function fn2(p) {
--    p = null; // OK
-+    p = null;
- }
--I = null; // Error
-+I = null;

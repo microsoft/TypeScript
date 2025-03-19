@@ -8,7 +8,7 @@
 -    function C() {
 +class C {
 +    get x() {
-+        var r = this;
++        var r = this; // C
 +        return 1;
      }
 -    Object.defineProperty(C.prototype, "x", {
@@ -32,7 +32,7 @@
 -var D = /** @class */ (function () {
 -    function D() {
 +    static get y() {
-+        var r2 = this;
++        var r2 = this; // typeof C
 +        return 1;
      }
 -    Object.defineProperty(D.prototype, "x", {
@@ -57,18 +57,14 @@
 +class D {
 +    a;
 +    get x() {
-+        var r = this;
++        var r = this; // D<T>
 +        return 1;
 +    }
 +    static get y() {
-+        var r2 = this;
++        var r2 = this; // typeof D
 +        return 1;
 +    }
 +}
  var x = {
      get a() {
--        var r3 = this; // any
-+        var r3 = this;
-         return 1;
-     }
- };
+         var r3 = this; // any

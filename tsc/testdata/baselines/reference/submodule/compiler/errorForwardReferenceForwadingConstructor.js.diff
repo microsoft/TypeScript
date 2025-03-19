@@ -1,10 +1,9 @@
 --- old.errorForwardReferenceForwadingConstructor.js
 +++ new.errorForwardReferenceForwadingConstructor.js
-@@= skipped -12, +12 lines =@@
- 
+@@= skipped -13, +13 lines =@@
  
  //// [errorForwardReferenceForwadingConstructor.js]
--// Error forward referencing derived class with forwarding constructor
+ // Error forward referencing derived class with forwarding constructor
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

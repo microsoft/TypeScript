@@ -1,8 +1,0 @@
---- old.mappedTypeWithAsClauseAndLateBoundProperty.js
-+++ new.mappedTypeWithAsClauseAndLateBoundProperty.js
-@@= skipped -6, +6 lines =@@
- 
- 
- //// [mappedTypeWithAsClauseAndLateBoundProperty.js]
--tgt2 = src2; // Should error
-+tgt2 = src2;

@@ -64,6 +64,7 @@ interface I3 {
 }
 
 //// [overloadsWithComputedNames.js]
+// https://github.com/microsoft/TypeScript/issues/52329
 class Person {
     ["A"](a) {
         return 0;
@@ -72,6 +73,7 @@ class Person {
 let p = new Person();
 p.A(0);
 p.B(0);
+// https://github.com/microsoft/TypeScript/issues/17345
 class C {
     ["foo"]() {
         return 0;

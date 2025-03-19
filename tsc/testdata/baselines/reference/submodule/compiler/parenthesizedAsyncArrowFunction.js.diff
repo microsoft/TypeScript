@@ -1,10 +1,9 @@
 --- old.parenthesizedAsyncArrowFunction.js
 +++ new.parenthesizedAsyncArrowFunction.js
-@@= skipped -6, +6 lines =@@
- 
+@@= skipped -7, +7 lines =@@
  
  //// [parenthesizedAsyncArrowFunction.js]
--// Repro from #20096
+ // Repro from #20096
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {

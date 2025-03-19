@@ -8,4 +8,6 @@ const x = (a: any[]) => (
 
 
 //// [parenthesizedArrowExpressionASI.js]
-const x = (a) => undefined;
+const x = (a) => 
+// comment
+undefined;

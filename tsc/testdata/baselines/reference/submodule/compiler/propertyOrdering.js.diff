@@ -10,22 +10,21 @@
 +class Foo {
 +    constructor(store) { }
 +    foo() {
-+        return this._store.length;
++        return this._store.length; // shouldn't be an error
      }
 -    Foo.prototype.foo = function () {
--        return this._store.length; // shouldn't be an error
++    _store = store; // no repro if this is first line in class body
++    bar() { return this.store; } // should be an error
++}
++class Bar {
++    foo() {
+         return this._store.length; // shouldn't be an error
 -    };
 -    Foo.prototype.bar = function () { return this.store; }; // should be an error
 -    return Foo;
 -}());
 -var Bar = /** @class */ (function () {
 -    function Bar(store) {
-+    _store = store;
-+    bar() { return this.store; }
-+}
-+class Bar {
-+    foo() {
-+        return this._store.length;
 +    }
 +    constructor(store) {
          this._store = store;

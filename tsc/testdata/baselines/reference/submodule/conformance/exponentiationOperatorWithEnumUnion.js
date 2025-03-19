@@ -31,6 +31,7 @@ var r11 = b ** E.b;
 var r12 = 1 ** E.b;
 
 //// [exponentiationOperatorWithEnumUnion.js]
+// operands of an enum type are treated as having the primitive type Number.
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
@@ -44,6 +45,7 @@ var F;
 var a;
 var b;
 var c;
+// operator **
 var r1 = c ** a;
 var r2 = c ** b;
 var r3 = c ** c;

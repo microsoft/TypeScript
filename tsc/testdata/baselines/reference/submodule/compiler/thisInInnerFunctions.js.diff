@@ -14,10 +14,9 @@
 +    bar() {
          function inner() {
 -            var _this = this;
--            this.y = "hi"; // 'this' should be not type to 'Foo' either
+             this.y = "hi"; // 'this' should be not type to 'Foo' either
 -            var f = function () { return _this.y; }; // 'this' should be not type to 'Foo' either
-+            this.y = "hi";
-+            var f = () => this.y;
++            var f = () => this.y; // 'this' should be not type to 'Foo' either
          }
 -    };
 -    return Foo;

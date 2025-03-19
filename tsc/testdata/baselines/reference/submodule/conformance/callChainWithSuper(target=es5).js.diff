@@ -20,7 +20,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// GH#34952
+ // GH#34952
 -var Base = /** @class */ (function () {
 -    function Base() {
 -    }

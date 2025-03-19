@@ -1,24 +1,9 @@
 --- old.declarationEmitFirstTypeArgumentGenericFunctionType.js
 +++ new.declarationEmitFirstTypeArgumentGenericFunctionType.js
-@@= skipped -27, +27 lines =@@
- //// [declarationEmitFirstTypeArgumentGenericFunctionType.js]
- class X {
- }
--var prop11; // spaces before the first type argument
--var prop12; // spaces before the first type argument
-+var prop11;
-+var prop12;
- function f1() {
-     return prop11;
- }
-@@= skipped -16, +16 lines =@@
- }
- class Y {
- }
--var prop2; // No space after second type argument
--var prop2; // space after second type argument
--var prop3; // space before first type argument
--var prop4; // parenthesized first type argument
+@@= skipped -47, +47 lines =@@
+ var prop2; // space after second type argument
+ var prop3; // space before first type argument
+ var prop4; // parenthesized first type argument
 -
 -
 -//// [declarationEmitFirstTypeArgumentGenericFunctionType.d.ts]
@@ -36,7 +21,3 @@
 -declare var prop2: Y<string[], <Tany>() => Tany>;
 -declare var prop3: Y<(<Tany>() => Tany), <Tany>() => Tany>;
 -declare var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>;
-+var prop2;
-+var prop2;
-+var prop3;
-+var prop4;

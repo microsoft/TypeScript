@@ -21,6 +21,7 @@
 -    }
 -    export = SubModule;
 +class MainModule {
++    // public static SubModule: SubModule;
 +    SubModule;
 +    constructor() { }
  }

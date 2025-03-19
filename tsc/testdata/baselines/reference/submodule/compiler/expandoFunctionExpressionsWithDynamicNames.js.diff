@@ -9,6 +9,7 @@
  exports.expr2 = exports.expr = void 0;
 -var s = "X";
 -var expr = function () { };
++// https://github.com/microsoft/TypeScript/issues/54809
 +const s = "X";
 +const expr = () => { };
  exports.expr = expr;

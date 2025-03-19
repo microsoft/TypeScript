@@ -1,14 +1,6 @@
 --- old.declarationEmitLateBoundAssignments2.js
 +++ new.declarationEmitLateBoundAssignments2.js
-@@= skipped -70, +70 lines =@@
- 
- 
- //// [declarationEmitLateBoundAssignments2.js]
--// https://github.com/microsoft/TypeScript/issues/54811
- const c = "C";
- const num = 1;
- const numStr = "10";
-@@= skipped -46, +45 lines =@@
+@@= skipped -116, +116 lines =@@
  arrow9["🤪"] = 0;
  export const arrow10 = () => { };
  arrow10[emoji] = 0;

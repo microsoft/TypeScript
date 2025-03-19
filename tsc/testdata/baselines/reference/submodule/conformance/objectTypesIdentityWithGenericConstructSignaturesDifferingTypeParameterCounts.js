@@ -75,6 +75,7 @@ function foo14(x: typeof b); // ok
 function foo14(x: any) { }
 
 //// [objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.js]
+// object types are identical structurally
 class B {
     constructor(x) { return null; }
 }

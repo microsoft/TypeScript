@@ -18,11 +18,10 @@
 -};
 -var obj = { a: { x: 'hello', y: 2 }, c: 5 }; // Nested excess property
 -var weak = wrong; // Nested weak object type
-+let obj = { a: { x: 'hello', y: 2 }, c: 5 };
-+let weak = wrong;
++let obj = { a: { x: 'hello', y: 2 }, c: 5 }; // Nested excess property
++let weak = wrong; // Nested weak object type
  function foo(x, y) {
--    x = y; // Mismatched property in source intersection
-+    x = y;
+     x = y; // Mismatched property in source intersection
  }
  function test(value) {
 -    return __assign(__assign({}, value), { hi: true });

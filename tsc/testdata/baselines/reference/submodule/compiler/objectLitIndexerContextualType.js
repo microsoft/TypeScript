@@ -29,14 +29,14 @@ y = {
 var x;
 var y;
 x = {
-    s: t => t * t,
+    s: t => t * t, // Should error
 };
 x = {
-    0: t => t * t,
+    0: t => t * t, // Should error
 };
 y = {
-    s: t => t * t,
+    s: t => t * t, // Should error
 };
 y = {
-    0: t => t * t,
+    0: t => t * t, // Should error
 };

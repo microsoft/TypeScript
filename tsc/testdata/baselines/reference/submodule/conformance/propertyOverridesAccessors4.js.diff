@@ -34,5 +34,5 @@
 -    return Lion;
 -}(Animal));
 +class Lion extends Animal {
-+    sound = 'RAWR!';
++    sound = 'RAWR!'; // error here
 +}

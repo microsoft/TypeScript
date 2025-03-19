@@ -1,14 +1,8 @@
 --- old.logicalOrExpressionIsNotContextuallyTyped.js
 +++ new.logicalOrExpressionIsNotContextuallyTyped.js
-@@= skipped -12, +12 lines =@@
- var r = a || ((a) => a.toLowerCase());
- 
- //// [logicalOrExpressionIsNotContextuallyTyped.js]
--// The || operator permits the operands to be of any type.
--// If the || expression is not contextually typed, the right operand is contextually typed
--// by the type of the left operand and the result is of the best common type of the two
--// operand types.
+@@= skipped -18, +18 lines =@@
+ // operand types.
  var a;
--// bug 786110
+ // bug 786110
 -var r = a || (function (a) { return a.toLowerCase(); });
 +var r = a || ((a) => a.toLowerCase());

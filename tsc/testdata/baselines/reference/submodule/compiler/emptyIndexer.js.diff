@@ -1,8 +1,0 @@
---- old.emptyIndexer.js
-+++ new.emptyIndexer.js
-@@= skipped -15, +15 lines =@@
- 
- //// [emptyIndexer.js]
- var x;
--var n = x[''].m(); // should not crash compiler
-+var n = x[''].m();

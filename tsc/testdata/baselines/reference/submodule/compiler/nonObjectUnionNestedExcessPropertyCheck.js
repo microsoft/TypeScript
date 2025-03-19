@@ -23,6 +23,9 @@ const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share
 
 
 //// [nonObjectUnionNestedExcessPropertyCheck.js]
+// These are the types of errors we want:
 const propB1 = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
+// Nested typing works here and we also get an expected error:
 const propB2 = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
+// Want an error generated here but there isn't one.
 const propA1 = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };

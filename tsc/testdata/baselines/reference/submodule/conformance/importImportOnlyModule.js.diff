@@ -33,7 +33,7 @@
 -});
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
-+var answer = 42;
++var answer = 42; // No exports
  //// [foo_2.js]
 -define(["require", "exports", "./foo_1"], function (require, exports, foo) {
 -    "use strict";
@@ -43,4 +43,4 @@
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +const foo = require("./foo_1");
-+var x = foo;
++var x = foo; // Cause a runtime dependency

@@ -1,12 +1,9 @@
 --- old.constEnum1.js
 +++ new.constEnum1.js
-@@= skipped -16, +16 lines =@@
- }
- 
- //// [constEnum1.js]
--// An enum declaration that specifies a const modifier is a constant enum declaration.
--// In a constant enum declaration, all members must have constant values and
--// it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
+@@= skipped -19, +19 lines =@@
+ // An enum declaration that specifies a const modifier is a constant enum declaration.
+ // In a constant enum declaration, all members must have constant values and
+ // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
 -
 -
 -//// [constEnum1.d.ts]

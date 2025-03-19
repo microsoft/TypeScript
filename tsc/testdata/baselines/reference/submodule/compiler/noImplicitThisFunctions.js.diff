@@ -6,18 +6,12 @@
  //// [noImplicitThisFunctions.js]
 -var _this = this;
  function f1(x) {
--    // implicit any is still allowed
+     // implicit any is still allowed
      return x + 1;
- }
- function f2(y) {
--    // ok: no reference to this
-     return y + 1;
- }
- function f3(z) {
--    // error: this is implicitly any
+@@= skipped -14, +13 lines =@@
      return this.a + z;
  }
--// error: `this` is `window`, but is still of type `any`
+ // error: `this` is `window`, but is still of type `any`
 -var f4 = function (b) { return _this.c + b; };
 -var f5 = function () { return function () { return _this; }; };
 -var f6 = function () {

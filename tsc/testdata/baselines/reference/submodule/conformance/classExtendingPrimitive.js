@@ -17,6 +17,7 @@ enum E { A }
 class C8 extends E { }
 
 //// [classExtendingPrimitive.js]
+// classes cannot extend primitives
 class C extends number {
 }
 class C2 extends string {

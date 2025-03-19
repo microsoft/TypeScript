@@ -59,25 +59,36 @@ if (x && z) {
 
 //// [uncalledFunctionChecksInConditional.js]
 if (isFoo) {
+    // error on isFoo
 }
 if (isFoo || isBar) {
+    // error on isFoo, isBar
 }
 if (isFoo || isFoo()) {
+    // error on isFoo
 }
 if (isUndefinedFoo || isFoo()) {
+    // no error
 }
 if (isFoo && isFoo()) {
+    // no error
 }
 if (x || isFoo) {
+    // error on isFoo
 }
 if (isFoo || x) {
+    // error on isFoo
 }
 if (x || y || z() || isFoo) {
+    // error on isFoo
 }
 if (x || uy || z || isUndefinedFoo) {
+    // error on z
 }
 if (ux || y || uz || isFoo) {
+    // error on isFoo
 }
 if (x && z) {
+    // no error
     z();
 }

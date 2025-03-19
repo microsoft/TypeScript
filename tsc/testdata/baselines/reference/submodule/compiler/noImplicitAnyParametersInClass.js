@@ -95,32 +95,59 @@ class C {
 
 //// [noImplicitAnyParametersInClass.js]
 class C {
+    // No implicit-'any' errors.
     pub_f1() { }
+    // Implicit-'any' errors for x.
     pub_f2(x) { }
+    // No implicit-'any' errors.
     pub_f3(x) { }
+    // Implicit-'any' errors for x, y, and z.
     pub_f4(x, y, z) { }
+    // Implicit-'any' errors for x, and z.
     pub_f5(x, y, z) { }
+    // Implicit-'any[]' errors for r.
     pub_f6(...r) { }
+    // Implicit-'any'/'any[]' errors for x, r.
     pub_f7(x, ...r) { }
     pub_f8(x3, y3) { }
+    // No implicit-'any' errors.
     pub_f9 = () => "";
+    // Implicit-'any' errors for x.
     pub_f10 = (x) => "";
+    // Implicit-'any' errors for x, y, and z.
     pub_f11 = (x, y, z) => "";
+    // Implicit-'any' errors for x and z.
     pub_f12 = (x, y, z) => "";
+    // Implicit-'any[]' error for r.
     pub_f13 = (...r) => "";
+    // Implicit-'any'/'any[]' errors for x, r.
     pub_f14 = (x, ...r) => "";
+    ///////////////////////////////////////////
+    // No implicit-'any' errors.
     priv_f1() { }
+    // Implicit-'any' errors for x.
     priv_f2(x) { }
+    // No implicit-'any' errors.
     priv_f3(x) { }
+    // Implicit-'any' errors for x, y, and z.
     priv_f4(x, y, z) { }
+    // Implicit-'any' errors for x, and z.
     priv_f5(x, y, z) { }
+    // Implicit-'any[]' errors for r.
     priv_f6(...r) { }
+    // Implicit-'any'/'any[]' errors for x, r.
     priv_f7(x, ...r) { }
     priv_f8(x3, y3) { }
+    // No implicit-'any' errors.
     priv_f9 = () => "";
+    // Implicit-'any' errors for x.
     priv_f10 = (x) => "";
+    // Implicit-'any' errors for x, y, and z.
     priv_f11 = (x, y, z) => "";
+    // Implicit-'any' errors for x and z.
     priv_f12 = (x, y, z) => "";
+    // Implicit-'any[]' error for r.
     priv_f13 = (...r) => "";
+    // Implicit-'any'/'any[]' errors for x, r.
     priv_f14 = (x, ...r) => "";
 }

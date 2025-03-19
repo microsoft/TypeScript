@@ -80,7 +80,7 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 app({
     state: 100,
     actions: {
-        foo: s => s
+        foo: s => s // Should be typed number => number
     },
     view: (s, a) => undefined,
 });
@@ -91,15 +91,15 @@ const y = foo({
 app2({
     state: 100,
     actions: {
-        foo: s => s
+        foo: s => s // Should be typed number => number
     },
     view: (s, a) => undefined,
 });
 app3({
     state: 100,
     actions: [
-        s => s
+        s => s // Should be typed number => number
     ],
     view: (s, a) => undefined,
 });
-const a = <App4 state={100} foo={s => s}/>;
+const a = <App4 state={100} foo={s => s}/>; // TODO: should be number => number, but JSX resolution is missing an inferential pass

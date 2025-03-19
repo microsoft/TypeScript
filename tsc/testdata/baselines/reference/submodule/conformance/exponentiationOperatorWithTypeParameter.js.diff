@@ -1,13 +1,6 @@
 --- old.exponentiationOperatorWithTypeParameter.js
 +++ new.exponentiationOperatorWithTypeParameter.js
-@@= skipped -22, +22 lines =@@
- }
- 
- //// [exponentiationOperatorWithTypeParameter.js]
--// type parameter type is not valid for arithmetic operand
- function foo(t) {
-     var a;
-     var b;
+@@= skipped -29, +29 lines =@@
      var c;
      var d;
      var e;

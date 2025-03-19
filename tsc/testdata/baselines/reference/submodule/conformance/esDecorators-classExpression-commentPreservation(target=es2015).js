@@ -85,38 +85,61 @@ class C {
 
 
 //// [esDecorators-classExpression-commentPreservation.js]
+/*1*/
 (
+/*2*/
 @dec
 @dec
+/*4*/
 class C {
+    /*5*/
     @dec
     @dec
+    /*7*/
     method() { }
+    /*8*/
     @dec
     @dec
+    /*10*/
     get x() { return 1; }
+    /*11*/
     @dec
     @dec
+    /*13*/
     set x(value) { }
+    /*14*/
     @dec
     @dec
+    /*16*/
     y = 1;
+    /*17*/
     @dec
     @dec
+    /*19*/
     accessor z = 1;
+    /*20*/
     @dec
     @dec
+    /*22*/
     static #method() { }
+    /*23*/
     @dec
     @dec
+    /*25*/
     static get #x() { return 1; }
+    /*26*/
     @dec
     @dec
+    /*28*/
     static set #x(value) { }
+    /*29*/
     @dec
     @dec
+    /*31*/
     static #y = 1;
+    /*32*/
     @dec
     @dec
+    /*34*/
     static accessor #z = 1;
 });

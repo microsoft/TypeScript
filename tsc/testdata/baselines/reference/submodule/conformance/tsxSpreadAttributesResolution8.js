@@ -45,5 +45,6 @@ class OverWriteAttr extends React.Component {
         return <div>Hello</div>;
     }
 }
+// OK
 let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1}/>;
 let x1 = <OverWriteAttr {...obj1} {...obj3}/>;

@@ -1,12 +1,8 @@
 --- old.exportDefaultExpressionComments.js
 +++ new.exportDefaultExpressionComments.js
-@@= skipped -9, +9 lines =@@
- //// [exportDefaultExpressionComments.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--/**
-- * JSDoc Comments
-- */
+@@= skipped -13, +13 lines =@@
+  * JSDoc Comments
+  */
  exports.default = null;
 -
 -

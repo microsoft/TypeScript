@@ -30,4 +30,4 @@ var s = entityList.next.next.name;
 var s = entityList.next.next.next.name;
 var productList;
 entityList = productList;
-productList = entityList;
+productList = entityList; // Error

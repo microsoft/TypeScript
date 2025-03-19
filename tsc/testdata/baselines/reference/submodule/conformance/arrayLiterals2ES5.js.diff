@@ -1,14 +1,9 @@
 --- old.arrayLiterals2ES5.js
 +++ new.arrayLiterals2ES5.js
-@@= skipped -58, +58 lines =@@
- var d9 = [[...temp1], ...["hello"]];
- 
- //// [arrayLiterals2ES5.js]
--// ElementList:  ( Modified )
--//      Elisionopt   AssignmentExpression
--//      Elisionopt   SpreadElement
--//      ElementList, Elisionopt   AssignmentExpression
--//      ElementList, Elisionopt   SpreadElement
+@@= skipped -63, +63 lines =@@
+ //      Elisionopt   SpreadElement
+ //      ElementList, Elisionopt   AssignmentExpression
+ //      ElementList, Elisionopt   SpreadElement
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 -        if (ar || !(i in from)) {
@@ -18,39 +13,33 @@
 -    }
 -    return to.concat(ar || Array.prototype.slice.call(from));
 -};
--// SpreadElement:
--//      ...   AssignmentExpression
+ // SpreadElement:
+ //      ...   AssignmentExpression
  var a0 = [, , 2, 3, 4];
  var a1 = ["hello", "world"];
 -var a2 = __spreadArray(__spreadArray([, , ,], a0, true), ["hello"], false);
 -var a3 = __spreadArray([, ,], a0, true);
 -var a4 = [function () { return 1; },];
 -var a5 = __spreadArray(__spreadArray([], a0, true), [,], false);
--// Each element expression in a non-empty array literal is processed as follows:
--//    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
--//      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
--//      the element expression is contextually typed by the type of that property.
--// The resulting type an array literal expression is determined as follows:
--//     - If the array literal contains no spread elements and is contextually typed by a tuple-like type,
--//       the resulting type is a tuple type constructed from the types of the element expressions.
 +var a2 = [, , , ...a0, "hello"];
 +var a3 = [, , ...a0];
 +var a4 = [() => 1,];
 +var a5 = [...a0, ,];
- var b0 = [undefined, null, undefined];
- var b1 = [[1, 2, 3], ["hello", "string"]];
--// The resulting type an array literal expression is determined as follows:
--//     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
--//       the resulting type is a tuple type constructed from the types of the element expressions.
+ // Each element expression in a non-empty array literal is processed as follows:
+ //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
+ //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
+@@= skipped -29, +20 lines =@@
+ // The resulting type an array literal expression is determined as follows:
+ //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
+ //       the resulting type is a tuple type constructed from the types of the element expressions.
 -var _a = [1, 2], c0 = _a[0], c1 = _a[1]; // tuple type [number, number]
 -var _b = [1, 2, true], c2 = _b[0], c3 = _b[1]; // tuple type [number, number, boolean]
--// The resulting type an array literal expression is determined as follows:
--//      - the resulting type is an array type with an element type that is the union of the types of the
--//        non - spread element expressions and the numeric index signature types of the spread element expressions
-+var [c0, c1] = [1, 2];
-+var [c2, c3] = [1, 2, true];
- var temp = ["s", "t", "r"];
- var temp1 = [1, 2, 3];
++var [c0, c1] = [1, 2]; // tuple type [number, number]
++var [c2, c3] = [1, 2, true]; // tuple type [number, number, boolean]
+ // The resulting type an array literal expression is determined as follows:
+ //      - the resulting type is an array type with an element type that is the union of the types of the
+ //        non - spread element expressions and the numeric index signature types of the spread element expressions
+@@= skipped -10, +10 lines =@@
  var temp2 = [[1, 2, 3], ["hello", "string"]];
  var temp3 = [undefined, null, undefined];
  var temp4 = [];
@@ -64,8 +53,8 @@
 -var d7 = __spreadArray([], temp1, true);
 -var d8 = [__spreadArray([], temp1, true)];
 -var d9 = __spreadArray([__spreadArray([], temp1, true)], ["hello"], false);
-+var d0 = [1, true, ...temp,];
-+var d1 = [...temp];
++var d0 = [1, true, ...temp,]; // has type (string|number|boolean)[]
++var d1 = [...temp]; // has type string[]
 +var d2 = [...temp1];
 +var d3 = [...temp1];
 +var d4 = [...temp, ...temp1];

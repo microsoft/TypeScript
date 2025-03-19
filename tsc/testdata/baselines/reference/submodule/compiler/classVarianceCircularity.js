@@ -17,12 +17,15 @@ class Bar<T> {
 }
 
 //// [classVarianceCircularity.js]
+// Issue #52813
 function f() {
     const b = new Bar();
+    // Uncomment to create error
     console.log(b.Value);
 }
 class Bar {
     num;
+    // Or swap these two lines
     Field = this.num;
     Value = this.num;
 }

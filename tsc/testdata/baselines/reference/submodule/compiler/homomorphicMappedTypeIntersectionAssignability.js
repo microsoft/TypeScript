@@ -12,6 +12,6 @@ function f<TType>(
 
 //// [homomorphicMappedTypeIntersectionAssignability.js]
 function f(a, b, c) {
-    c = a;
-    b = a;
+    c = a; // Works
+    b = a; // Should also work
 }

@@ -20,11 +20,11 @@ class Base {
     foo;
 }
 class Derived extends Base {
-    x = super.foo;
+    x = super.foo; // error
     y() {
-        return super.foo;
+        return super.foo; // error
     }
-    z;
+    z; // error
     a;
-    foo;
+    foo; // error
 }

@@ -1305,6 +1305,10 @@ func (n *Node) AsEnumDeclaration() *EnumDeclaration {
 	return n.data.(*EnumDeclaration)
 }
 
+func (n *Node) AsNotEmittedStatement() *NotEmittedStatement {
+	return n.data.(*NotEmittedStatement)
+}
+
 func (n *Node) AsJSDoc() *JSDoc {
 	return n.data.(*JSDoc)
 }
@@ -3444,7 +3448,28 @@ func IsModuleDeclaration(node *Node) bool {
 	return node.Kind == KindModuleDeclaration
 }
 
-// ModuleEqualsDeclaration
+// NotEmittedStatement
+
+// Represents a statement that is elided as part of a transformation to emit comments on a
+// not-emitted node.
+type NotEmittedStatement struct {
+	StatementBase
+}
+
+func (f *NodeFactory) NewNotEmittedStatement() *Node {
+	data := &NotEmittedStatement{}
+	return newNode(KindNotEmittedStatement, data, f.hooks)
+}
+
+func (node *NotEmittedStatement) Clone(f *NodeFactory) *Node {
+	return cloneNode(f.NewNotEmittedStatement(), node.AsNode(), f.hooks)
+}
+
+func IsNotEmittedStatement(node *Node) bool {
+	return node.Kind == KindNotEmittedStatement
+}
+
+// ImportEqualsDeclaration
 
 type ImportEqualsDeclaration struct {
 	StatementBase

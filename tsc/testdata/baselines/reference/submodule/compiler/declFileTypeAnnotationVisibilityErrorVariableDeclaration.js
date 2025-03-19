@@ -42,6 +42,7 @@ var m;
     class public1 {
     }
     m.public1 = public1;
+    // Directly using names from this module
     var x;
     var y = new private1();
     m.l = new private1();

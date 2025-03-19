@@ -67,11 +67,7 @@
                  var c = new C();
                  var c1 = c.y;
                  var c2 = c.x;
-                 var c3 = c.foo;
-                 var c4 = c.bar;
--                var c5 = c.z; // error
-+                var c5 = c.z;
-                 var sc1 = C.x;
+@@= skipped -55, +25 lines =@@
                  var sc2 = C.y;
                  var sc3 = C.foo;
                  var sc4 = C.bar;

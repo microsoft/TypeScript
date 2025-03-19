@@ -31,7 +31,13 @@
 -    }
 -    return B;
 -}(A));
--// Inheritance
++class A {
++    a;
++}
++class B extends A {
++    b;
++}
+ // Inheritance
 -var F = /** @class */ (function () {
 -    function F() {
 -    }
@@ -44,7 +50,11 @@
 -    }
 -    return G;
 -}(F));
--// Other way
++class F {
++}
++class G extends F {
++}
+ // Other way
 -var H = /** @class */ (function () {
 -    function H() {
 -    }
@@ -57,7 +67,11 @@
 -    }
 -    return I;
 -}(H));
--// With hidden indexer
++class H {
++}
++class I extends H {
++}
+ // With hidden indexer
 -var J = /** @class */ (function () {
 -    function J() {
 -    }
@@ -70,20 +84,6 @@
 -    }
 -    return K;
 -}(J));
-+class A {
-+    a;
-+}
-+class B extends A {
-+    b;
-+}
-+class F {
-+}
-+class G extends F {
-+}
-+class H {
-+}
-+class I extends H {
-+}
 +class J {
 +}
 +class K extends J {

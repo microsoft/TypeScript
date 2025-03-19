@@ -90,7 +90,7 @@
 +    { name: "click", callback: ev => console.log(ev) },
 +    { name: "scroll", callback: ev => console.log(ev) },
  ]);
--// --------
+ // --------
  function ff1() {
 -    var funs = {
 -        sum: function (a, b) { return a + b; },
@@ -120,7 +120,7 @@
  }
  function f2(funcs, key, arg) {
 -    var func = funcs[key]; // Type Funcs[K]
-+    const func = funcs[key];
++    const func = funcs[key]; // Type Funcs[K]
      func(arg);
  }
  function f3(funcs, key, arg) {
@@ -147,7 +147,7 @@
      if (myObj2) {
          return myObj2.name;
      }
-@@= skipped -80, +69 lines =@@
+@@= skipped -80, +70 lines =@@
  function foo(prop, f) {
      bar(f[prop]);
  }

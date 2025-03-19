@@ -1,11 +1,9 @@
 --- old.esDecorators-classExpression-namedEvaluation.6.js
 +++ new.esDecorators-classExpression-namedEvaluation.6.js
-@@= skipped -10, +10 lines =@@
- 
- 
+@@= skipped -12, +12 lines =@@
  //// [esDecorators-classExpression-namedEvaluation.6.js]
--// 13.15.5.6 RS: KeyedDestructuringAssignmentEvaluation
--//   AssignmentElement : DestructuringAssignmentTarget Initializer?
+ // 13.15.5.6 RS: KeyedDestructuringAssignmentEvaluation
+ //   AssignmentElement : DestructuringAssignmentTarget Initializer?
 -({ y: x = (() => {
 -        let _classDecorators = [dec];
 -        let _classDescriptor;

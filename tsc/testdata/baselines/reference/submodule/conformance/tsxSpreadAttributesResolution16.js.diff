@@ -6,10 +6,9 @@
  exports.default = Component;
 -var React = require("react");
  function Component(props) {
--    return (
--    // Error: missing property
--    <AnotherComponent {...props}/>);
-+    return (<AnotherComponent {...props}/>);
+     return (
+     // Error: missing property
+     <AnotherComponent {...props}/>);
  }
 -function AnotherComponent(_a) {
 -    var property1 = _a.property1;

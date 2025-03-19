@@ -37,5 +37,4 @@
 +    x;
 +}
  var x;
--var t = f(x, x); // Not an error
-+var t = f(x, x);
+ var t = f(x, x); // Not an error

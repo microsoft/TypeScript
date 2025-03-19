@@ -1,107 +1,104 @@
 --- old.esDecorators-classDeclaration-commentPreservation(module=esnext,target=esnext).js
 +++ new.esDecorators-classDeclaration-commentPreservation(module=esnext,target=esnext).js
-@@= skipped -119, +119 lines =@@
- 
- 
+@@= skipped -121, +121 lines =@@
  //// [file1.js]
--/*1*/
+ /*1*/
  @dec
 -/*2*/
  @dec
--/*3*/
+ /*3*/
  class C {
--    /*4*/
+     /*4*/
      @dec
 -    /*5*/
      @dec
--    /*6*/
+     /*6*/
      method() { }
--    /*7*/
+     /*7*/
      @dec
 -    /*8*/
      @dec
--    /*9*/
+     /*9*/
      get x() { return 1; }
--    /*10*/
+     /*10*/
      @dec
 -    /*11*/
      @dec
--    /*12*/
+     /*12*/
      set x(value) { }
--    /*13*/
+     /*13*/
      @dec
 -    /*14*/
      @dec
--    /*15*/
+     /*15*/
      y = 1;
--    /*16*/
+     /*16*/
      @dec
 -    /*17*/
      @dec
--    /*18*/
+     /*18*/
      accessor z = 1;
--    /*19*/
+     /*19*/
      @dec
 -    /*20*/
      @dec
--    /*21*/
+     /*21*/
      static #method() { }
--    /*22*/
+     /*22*/
      @dec
 -    /*23*/
      @dec
--    /*24*/
+     /*24*/
      static get #x() { return 1; }
--    /*25*/
+     /*25*/
      @dec
 -    /*26*/
      @dec
--    /*27*/
+     /*27*/
      static set #x(value) { }
--    /*28*/
+     /*28*/
      @dec
 -    /*29*/
      @dec
--    /*30*/
+     /*30*/
      static #y = 1;
--    /*31*/
+     /*31*/
      @dec
 -    /*32*/
      @dec
--    /*33*/
+     /*33*/
      static accessor #z = 1;
- }
+@@= skipped -68, +57 lines =@@
  //// [file2.js]
--/*34*/
+ /*34*/
  @dec
 -/*35*/
  @dec
--/*36*/
+ /*36*/
  export class D {
  }
--/*37*/
+ /*37*/
  @dec
 -/*38*/
  @dec
--/*39*/
+ /*39*/
  export default class E {
- }
+@@= skipped -15, +13 lines =@@
  //// [file3.js]
--/*40*/
+ /*40*/
  export 
 -/*41*/
  @dec
 -/*42*/
  @dec
--/*43*/
+ /*43*/
  class F {
  }
--/*44*/
+ /*44*/
  export default 
 -/*45*/
  @dec
 -/*46*/
  @dec
--/*47*/
+ /*47*/
  class G {
- }

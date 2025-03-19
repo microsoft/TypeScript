@@ -11,8 +11,7 @@
 +    let x;
      x = "";
      while (cond) {
--        x; // string
-+        x;
+         x; // string
      }
  }
  function b() {
@@ -20,10 +19,8 @@
 +    let x;
      x = "";
      while (cond) {
--        x; // string
-+        x;
-         x = 42;
-         break;
+         x; // string
+@@= skipped -18, +18 lines =@@
      }
  }
  function c() {
@@ -31,12 +28,8 @@
 +    let x;
      x = "";
      while (cond) {
--        x; // string
-+        x;
-         x = undefined;
-         if (typeof x === "string")
-             continue;
-@@= skipped -29, +29 lines =@@
+         x; // string
+@@= skipped -11, +11 lines =@@
      }
  }
  function d() {
@@ -44,9 +37,8 @@
 +    let x;
      x = "";
      while (x = x.length) {
--        x; // number
-+        x;
-         x = "";
+         x; // number
+@@= skipped -8, +8 lines =@@
      }
  }
  function e() {
@@ -54,14 +46,9 @@
 +    let x;
      x = "";
      while (cond) {
--        x; // string | number
-+        x;
-         x = 42;
--        x; // number
-+        x;
-     }
--    x; // string | number
-+    x;
+         x; // string | number
+@@= skipped -10, +10 lines =@@
+     x; // string | number
  }
  function f() {
 -    var x;
@@ -69,12 +56,8 @@
      x = "";
      while (cond) {
          if (cond) {
-@@= skipped -31, +31 lines =@@
-         }
-         x = /a/;
-     }
--    x; // string | number | boolean | RegExp
-+    x;
+@@= skipped -16, +16 lines =@@
+     x; // string | number | boolean | RegExp
  }
  function g() {
 -    var x;
@@ -83,25 +66,16 @@
      while (true) {
          if (cond) {
 @@= skipped -16, +16 lines =@@
-         }
-         x = /a/;
-     }
--    x; // number
-+    x;
+     x; // number
  }
  function h1() {
 -    var x;
 +    let x;
      x = "";
      while (x > 1) {
--        x; // string | number
-+        x;
-         x = 1;
--        x; // number
-+        x;
-     }
--    x; // string | number
-+    x;
+         x; // string | number
+@@= skipped -10, +10 lines =@@
+     x; // string | number
  }
  function h2() {
 -    var x;
@@ -109,21 +83,12 @@
      x = "";
      while (cond) {
          x = len(x);
--        x; // number
-+        x;
-     }
--    x; // string | number
-+    x;
+@@= skipped -9, +9 lines =@@
+     x; // string | number
  }
  function h3() {
 -    var x;
 +    let x;
      x = "";
      while (cond) {
--        x; // string | number
-+        x;
-         x = len(x);
-     }
--    x; // string | number
-+    x;
- }
+         x; // string | number

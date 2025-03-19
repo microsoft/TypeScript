@@ -1,10 +1,9 @@
 --- old.jsxParsingError2.js
 +++ new.jsxParsingError2.js
-@@= skipped -29, +29 lines =@@
- 
+@@= skipped -30, +30 lines =@@
  //// [file.jsx]
  //// [Error1.jsx]
--// Issue error about missing span closing tag, not missing div closing tag
+ // Issue error about missing span closing tag, not missing div closing tag
 -var x1 = <div><span></></div>;
 +let x1 = <div><span></></div>;
  //// [Error2.jsx]

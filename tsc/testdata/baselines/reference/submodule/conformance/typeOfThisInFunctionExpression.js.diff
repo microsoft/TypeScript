@@ -1,14 +1,6 @@
 --- old.typeOfThisInFunctionExpression.js
 +++ new.typeOfThisInFunctionExpression.js
-@@= skipped -47, +47 lines =@@
- }
- 
- //// [typeOfThisInFunctionExpression.js]
--// type of 'this' in FunctionExpression is Any
- function fn() {
-     var p = this;
-     var p;
-@@= skipped -13, +12 lines =@@
+@@= skipped -60, +60 lines =@@
      var x = this;
      var x;
  };

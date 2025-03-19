@@ -73,19 +73,20 @@ const a = 'a';
 const b = 'b';
 const d = 'd';
 if ('a' in c) {
-    c;
-    c['a'];
+    c; // A
+    c['a']; // number;
 }
 if ('d' in c) {
-    c;
+    c; // never
 }
 if (a in c) {
-    c;
-    c[a];
+    c; // A
+    c[a]; // number;
 }
 if (d in c) {
-    c;
+    c; // never
 }
+// repro from https://github.com/microsoft/TypeScript/issues/54790
 function uniqueID_54790(id, seenIDs) {
     if (id === undefined) {
         id = "1";

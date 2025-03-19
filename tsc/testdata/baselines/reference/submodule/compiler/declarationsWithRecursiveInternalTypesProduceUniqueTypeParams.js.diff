@@ -39,7 +39,7 @@
 +    return reduce(t, (t) => t);
  };
  exports.updateIfChanged = updateIfChanged;
--// example from https://github.com/microsoft/TypeScript/issues/31605
+ // example from https://github.com/microsoft/TypeScript/issues/31605
 -var testRecFun = function (parent) {
 +const testRecFun = (parent) => {
      return {

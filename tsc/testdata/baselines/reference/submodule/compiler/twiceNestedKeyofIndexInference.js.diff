@@ -13,4 +13,4 @@
      d: false,
  };
 -var newState = set(state, ["a", 'b'], 'why'); // shouldn't be an error
-+const newState = set(state, ["a", 'b'], 'why');
++const newState = set(state, ["a", 'b'], 'why'); // shouldn't be an error

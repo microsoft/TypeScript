@@ -1,25 +1,11 @@
 --- old.assignmentToExpandingArrayType.js
 +++ new.assignmentToExpandingArrayType.js
-@@= skipped -29, +29 lines =@@
- 
+@@= skipped -30, +30 lines =@@
  
  //// [assignmentToExpandingArrayType.js]
--// Fixes exponential time/space in #14628
+ // Fixes exponential time/space in #14628
 -var x = [];
 +let x = [];
  x[0] = { foo: 'hi' };
  x[0] = { foo: 'hi' };
  x[0] = { foo: 'hi' };
-@@= skipped -14, +13 lines =@@
- x[0] = { foo: 'hi' };
- x[0] = { foo: 'hi' };
- x[0] = { foo: 'hi' };
--x[0] = { foo: 'hi' }; // previously ran out of memory here
- x[0] = { foo: 'hi' };
- x[0] = { foo: 'hi' };
- x[0] = { foo: 'hi' };
-@@= skipped -12, +11 lines =@@
- x[0] = { foo: 'hi' };
- x[0] = { foo: 'hi' };
- x[0] = { foo: 'hi' };
-+x[0] = { foo: 'hi' };

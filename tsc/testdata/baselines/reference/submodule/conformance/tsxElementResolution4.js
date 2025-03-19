@@ -20,6 +20,9 @@ declare module JSX {
 
 
 //// [file.jsx]
+// OK
 <div n='x'/>;
+// OK
 <span m='ok'/>;
+// Error
 <span q=''/>;

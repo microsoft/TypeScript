@@ -30,6 +30,7 @@ const fooLong = async () => {
 
 
 //// [es5-asyncFunctionLongObjectLiteral.js]
+// the generated code from both should be similar
 const fooShort = async () => {
     return {
         a: await Promise.resolve(0),

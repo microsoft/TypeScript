@@ -23,17 +23,17 @@
 -            _Inner_foo.set(this, 10);
 -        }
 +    #prop = 0;
-+    static dd = new TestWithStatics().#prop;
++    static dd = new TestWithStatics().#prop; // OK
 +    static ["X_ z_ zz"] = class Inner {
 +        #foo = 10;
          m() {
 -            __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
-+            new TestWithStatics().#prop;
++            new TestWithStatics().#prop; // OK
          }
 +        static C = class InnerInner {
 +            m() {
-+                new TestWithStatics().#prop;
-+                new Inner().#foo;
++                new TestWithStatics().#prop; // OK
++                new Inner().#foo; // OK
 +            }
 +        };
          static M() {
@@ -41,8 +41,8 @@
                  m() {
 -                    __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
 -                    __classPrivateFieldGet(new _a(), _Inner_foo, "f"); // OK
-+                    new TestWithStatics().#prop;
-+                    new Inner().#foo;
++                    new TestWithStatics().#prop; // OK
++                    new Inner().#foo; // OK
                  }
              };
          }
@@ -53,13 +53,13 @@
 +}
 +class TestNonStatics {
 +    #prop = 0;
-+    dd = new TestNonStatics().#prop;
++    dd = new TestNonStatics().#prop; // OK
 +    ["X_ z_ zz"] = class Inner {
 +        #foo = 10;
          m() {
 -            __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
 -            __classPrivateFieldGet(new _a(), _Inner_foo, "f"); // OK
-+            new TestNonStatics().#prop;
++            new TestNonStatics().#prop; // Ok
          }
 -    },
 -    _a);
@@ -80,16 +80,16 @@
 -                }
 +        C = class InnerInner {
 +            m() {
-+                new TestNonStatics().#prop;
-+                new Inner().#foo;
++                new TestNonStatics().#prop; // Ok
++                new Inner().#foo; // Ok
 +            }
 +        };
 +        static M() {
 +            return class {
                  m() {
 -                    __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // Ok
-+                    new TestNonStatics().#prop;
-+                    new Inner().#foo;
++                    new TestNonStatics().#prop; // OK
++                    new Inner().#foo; // OK
                  }
 -                static M() {
 -                    return class {

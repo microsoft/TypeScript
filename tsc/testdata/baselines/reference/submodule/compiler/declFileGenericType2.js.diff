@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Module
+ // Module
  var templa;
  (function (templa) {
 -    var dom;
@@ -43,7 +43,7 @@
          })(mvc = dom.mvc || (dom.mvc = {}));
      })(dom = templa.dom || (templa.dom = {}));
  })(templa || (templa = {}));
--// Module
+ // Module
  (function (templa) {
 -    var dom;
 +    let dom;

@@ -78,7 +78,7 @@
 +    }
 +}
  var c;
--// BUG 820454
+ // BUG 820454
  var r1;
  var r2;
 -var D = /** @class */ (function () {

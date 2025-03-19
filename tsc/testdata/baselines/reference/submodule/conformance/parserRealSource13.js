@@ -150,6 +150,9 @@ module TypeScript.AstWalkerWithDetailCallback {
 
 //// [typescript.js]
 //// [parserRealSource13.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     let AstWalkerWithDetailCallback;
@@ -168,6 +171,7 @@ var TypeScript;
         }
         AstWalkerWithDetailCallback.walk = walk;
         function AstWalkerCallback(pre, ast, callback) {
+            // See if the Callback needs to be handled using specific one or default one
             var nodeType = ast.nodeType;
             var callbackString = NodeType._map[nodeType] + "Callback";
             if (callback[callbackString]) {

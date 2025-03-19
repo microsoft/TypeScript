@@ -1,11 +1,8 @@
 --- old.inferrenceInfiniteLoopWithSubtyping.js
 +++ new.inferrenceInfiniteLoopWithSubtyping.js
-@@= skipped -40, +40 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -42, +42 lines =@@
  User.addResolver({
--    type: User, // `User as any` fix the problem
-+    type: User,
+     type: User, // `User as any` fix the problem
  });
 -
 -

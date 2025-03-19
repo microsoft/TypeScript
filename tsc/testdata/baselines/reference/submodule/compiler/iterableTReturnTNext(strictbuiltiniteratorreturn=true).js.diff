@@ -5,28 +5,6 @@
  
  //// [iterableTReturnTNext.js]
 -"use strict";
--// based on:
--// - https://github.com/apollographql/apollo-client/blob/8740f198805a99e01136617c4055d611b92cc231/src/react/hooks/__tests__/useMutation.test.tsx#L2328
--// - https://github.com/continuedev/continue/blob/046bca088a833f8b3620412ff64e4b6f41fbb959/extensions/vscode/src/autocomplete/lsp.ts#L60
--const r1 = map.values().next().value; // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
--const r2 = map.values().next(); // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
--// based on: https://github.com/graphql/graphql-js/blob/e15c3ec4dc21d9fd1df34fe9798cadf3bf02c6ea/src/execution/__tests__/mapAsyncIterable-test.ts#L175
-+const r1 = map.values().next().value;
-+const r2 = map.values().next();
- async function* source() { yield 1; yield 2; yield 3; }
- const doubles = source();
- doubles.return();
--// based on: https://github.com/backstage/backstage/blob/85d9346ef11c1c20e4405102b4f5d93afb1292c1/packages/core-app-api/src/routing/RouteTracker.tsx#L62
- const r3 = set.values().next().value;
--// based on: https://github.com/microsoft/TypeScript/blob/15f67e0b482faf9f6a3ab9965f3c11196bf3e99b/src/harness/compilerImpl.ts#L77
- class MyMap {
-     clear() { }
-     delete(key) { return false; }
-@@= skipped -23, +16 lines =@@
-     entries() { throw new Error("Method not implemented."); }
-     keys() { throw new Error("Method not implemented."); }
-     [Symbol.iterator]() { throw new Error("Method not implemented."); }
--    // error when strictBuiltinIteratorReturn is true because values() has implicit `void` return, which isn't assignable to `undefined`
-     *values() {
-         yield* this._values;
-     }
+ // based on:
+ // - https://github.com/apollographql/apollo-client/blob/8740f198805a99e01136617c4055d611b92cc231/src/react/hooks/__tests__/useMutation.test.tsx#L2328
+ // - https://github.com/continuedev/continue/blob/046bca088a833f8b3620412ff64e4b6f41fbb959/extensions/vscode/src/autocomplete/lsp.ts#L60

@@ -15,5 +15,6 @@ var x: Promise<string, boolean>;
 //// [promiseIdentityWithConstraints.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Error because constraint V doesn't match
 var x;
 var x;

@@ -1,64 +1,17 @@
 --- old.inferFromGenericFunctionReturnTypes3.js
 +++ new.inferFromGenericFunctionReturnTypes3.js
-@@= skipped -202, +202 lines =@@
- 
- 
- //// [inferFromGenericFunctionReturnTypes3.js]
--// Repros from #5487
- function truePromise() {
-     return Promise.resolve(true);
- }
-@@= skipped -18, +17 lines =@@
-     const inferred = wrapBar(value);
-     const literal = wrapBar('bar');
-     const value2 = 'bar';
--    const literal2 = wrapBar(value2); // Error
-+    const literal2 = wrapBar(value2);
-     return wrap(value);
- }
- function wrappedBaz() {
-@@= skipped -9, +9 lines =@@
- }
- let a = [];
- a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
--// Repro from #11312
- let arr = [[1, 2]];
+@@= skipped -234, +234 lines =@@
  let mappedArr = arr.map(([x, y]) => {
      return [x, y];
  });
--// Repro from #13594
--export var DiagnosticSeverity;
 +export { DiagnosticSeverity };
+ // Repro from #13594
+-export var DiagnosticSeverity;
 +var DiagnosticSeverity;
  (function (DiagnosticSeverity) {
      DiagnosticSeverity.Error = 1;
      DiagnosticSeverity.Warning = 2;
-@@= skipped -22, +21 lines =@@
-         };
-     });
- }
--// Repro from #22870
- function objectToMap(obj) {
-     return new Map(Object.keys(obj).map(key => [key, obj[key]]));
- }
-@@= skipped -40, +39 lines =@@
-         }
-     ]);
- };
--let res = foldLeft(true, (acc, t) => acc && t); // Error
-+let res = foldLeft(true, (acc, t) => acc && t);
- var State;
- (function (State) {
-     State[State["A"] = 0] = "A";
-     State[State["B"] = 1] = "B";
- })(State || (State = {}));
--let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); // Error
--// Repros from #31443
-+let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);
- var Enum;
- (function (Enum) {
-     Enum[Enum["A"] = 0] = "A";
-@@= skipped -20, +19 lines =@@
+@@= skipped -77, +78 lines =@@
  function fn(arg, f) { }
  fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
  baz(makeFoo(Enum.A), makeFoo(Enum.A));

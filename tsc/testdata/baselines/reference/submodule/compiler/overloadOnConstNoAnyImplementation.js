@@ -24,9 +24,9 @@ function x1(a, cb) {
     var hm = 'hm';
     cb(hm);
     cb('uh');
-    cb(1);
+    cb(1); // error
 }
 var cb = (x) => 1;
 x1(1, cb);
-x1(1, (x) => 1);
+x1(1, (x) => 1); // error
 x1(1, (x) => 1);

@@ -47,6 +47,8 @@ var r7 = i2.f<number>(1, '');
 var r7b = i2.f<number, string, number>(1, '');
 
 //// [callGenericFunctionWithIncorrectNumberOfTypeArguments.js]
+// type parameter lists must exactly match type argument lists
+// all of these invocations are errors
 function f(x, y) { return null; }
 var r1 = f(1, '');
 var r1b = f(1, '');

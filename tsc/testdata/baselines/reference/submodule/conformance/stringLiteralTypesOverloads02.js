@@ -63,6 +63,7 @@ function getFalsyPrimitive(x) {
     if (x === "boolean") {
         return false;
     }
+    // Should be unreachable.
     throw "Invalid value";
 }
 var Consts1;

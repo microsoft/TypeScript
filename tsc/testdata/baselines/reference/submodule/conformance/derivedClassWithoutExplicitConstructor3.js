@@ -49,6 +49,7 @@ var d2 = new D2(new Date()); // error
 var d3 = new D2(new Date(), new Date()); // ok
 
 //// [derivedClassWithoutExplicitConstructor3.js]
+// automatic constructors with a class hieararchy of depth > 2
 class Base {
     a = 1;
     constructor(x) { this.a = x; }
@@ -64,8 +65,8 @@ class Derived2 extends Derived {
     x = 1;
     y = 'hello';
 }
-var r = new Derived();
-var r2 = new Derived2(1);
+var r = new Derived(); // error
+var r2 = new Derived2(1); // error
 var r3 = new Derived('', '');
 class Base2 {
     a;
@@ -82,6 +83,6 @@ class D2 extends D {
     x = 2;
     y = null;
 }
-var d = new D2();
-var d2 = new D2(new Date());
-var d3 = new D2(new Date(), new Date());
+var d = new D2(); // error
+var d2 = new D2(new Date()); // error
+var d3 = new D2(new Date(), new Date()); // ok

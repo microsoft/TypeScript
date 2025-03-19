@@ -48,18 +48,18 @@ function booleanFixed(wrapped: WrappedStringOr<boolean> | null) {
 //// [narrowingTypeofDiscriminant.js]
 function f1(obj) {
     if (typeof obj.kind === "string") {
-        obj;
+        obj; // { kind: 'a', data: string }
     }
     else {
-        obj;
+        obj; // { kind: 1, data: number }
     }
 }
 function f2(obj) {
     if (typeof obj?.kind === "string") {
-        obj;
+        obj; // { kind: 'a', data: string }
     }
     else {
-        obj;
+        obj; // { kind: 1, data: number } | undefined
     }
 }
 function numberOk(wrapped) {

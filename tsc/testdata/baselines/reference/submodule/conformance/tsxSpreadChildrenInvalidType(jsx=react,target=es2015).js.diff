@@ -14,7 +14,7 @@
 +    </div>;
  }
  function TodoListNoError({ todos }) {
--    // any is not checked
+     // any is not checked
 -    return React.createElement("div", null, ...React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
 +    return <div>
 +        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}

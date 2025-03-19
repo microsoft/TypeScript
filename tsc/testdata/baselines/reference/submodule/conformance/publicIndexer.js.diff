@@ -1,10 +1,9 @@
 --- old.publicIndexer.js
 +++ new.publicIndexer.js
-@@= skipped -15, +15 lines =@@
- }
+@@= skipped -16, +16 lines =@@
  
  //// [publicIndexer.js]
--// public indexers not allowed
+ // public indexers not allowed
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

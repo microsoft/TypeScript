@@ -122,6 +122,8 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
     }];
 
 //// [contextualTypeWithUnionTypeMembers.js]
+// Let S be the set of types in U that has a property P.
+// If S is not empty, U has a property P of a union type of the types of P from each type in S.
 var i1;
 var i2;
 var i1Ori2 = i1;
@@ -176,6 +178,7 @@ var i21;
 var i11Ori21 = i11;
 var i11Ori21 = i21;
 var i11Ori21 = {
+    // Like i1
     commonMethodDifferentReturnType: (a, b) => {
         var z = a.charAt(b);
         return z;
@@ -183,6 +186,7 @@ var i11Ori21 = {
     commonPropertyDifferentType: "hello",
 };
 var i11Ori21 = {
+    // Like i2
     commonMethodDifferentReturnType: (a, b) => {
         var z = a.charCodeAt(b);
         return z;
@@ -190,12 +194,14 @@ var i11Ori21 = {
     commonPropertyDifferentType: 10,
 };
 var arrayOrI11OrI21 = [i11, i21, i11 || i21, {
+        // Like i1
         commonMethodDifferentReturnType: (a, b) => {
             var z = a.charAt(b);
             return z;
         },
         commonPropertyDifferentType: "hello",
     }, {
+        // Like i2
         commonMethodDifferentReturnType: (a, b) => {
             var z = a.charCodeAt(b);
             return z;

@@ -41,5 +41,5 @@ User.addResolver({
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 User.addResolver({
-    type: User,
+    type: User, // `User as any` fix the problem
 });

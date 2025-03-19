@@ -77,6 +77,8 @@ export {};
 const sym = Symbol("");
 x = sym;
 x = "str";
+// type Oops = typeof sym <-- what happened to "str"?
+// equivalently, with an unresolved generic (no `exclude` shenanigans, since conditions won't execute):
 function f() {
     let a;
     a = "str";
@@ -86,6 +88,7 @@ function f() {
     x = sym;
     x = "str";
 }
+// and another generic case with a _distributive_ mapping, to trigger a different branch in `getIndexType`
 function g() {
     let a;
     a = "str";

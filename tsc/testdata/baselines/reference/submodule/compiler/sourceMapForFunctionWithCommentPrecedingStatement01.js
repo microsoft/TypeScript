@@ -8,5 +8,6 @@ function P() {
 
 //// [sourceMapForFunctionWithCommentPrecedingStatement01.js]
 function P() {
+    // Test this
     var a = 1;
 }

@@ -15,9 +15,9 @@ class A {
 //// [scopeCheckClassProperty.js]
 class C {
     constructor() {
-        new A().p;
+        new A().p; // ok
     }
-    x = new A().p;
+    x = new A().p; // should also be ok
 }
 class A {
     p = '';

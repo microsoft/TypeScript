@@ -8,5 +8,5 @@ class A {
 
 //// [privateNameConstructorReserved.js]
 class A {
-    #constructor() { }
+    #constructor() { } // Error: `#constructor` is a reserved word.
 }

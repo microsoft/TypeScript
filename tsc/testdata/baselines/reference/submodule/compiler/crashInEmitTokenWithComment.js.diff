@@ -1,10 +1,9 @@
 --- old.crashInEmitTokenWithComment.js
 +++ new.crashInEmitTokenWithComment.js
-@@= skipped -7, +7 lines =@@
- fn(({[foo.bar]: c}) => undefined);
+@@= skipped -8, +8 lines =@@
  
  //// [crashInEmitTokenWithComment.js]
--// GH#32358
+ // GH#32358
 -var fn = function (param) { return undefined; };
 -var foo = { bar: 'a' };
 -fn(function (_a) {

@@ -5,62 +5,11 @@
  
  //// [inDoesNotOperateOnPrimitiveTypes.js]
 -var validHasKey = function (thing, key) {
--    return key in thing; // Ok
 +const validHasKey = (thing, key) => {
-+    return key in thing;
+     return key in thing; // Ok
  };
 -var alsoValidHasKey = function (thing, key) {
--    return key in thing; // Ok (as T may be instantiated with a valid type)
 +const alsoValidHasKey = (thing, key) => {
-+    return key in thing;
+     return key in thing; // Ok (as T may be instantiated with a valid type)
  };
  function invalidHasKey(thing, key) {
--    return key in thing; // Error (because all possible instantiations are errors)
-+    return key in thing;
- }
- function union1(thing) {
--    "key" in thing; // Error (because all possible instantiations are errors)
-+    "key" in thing;
- }
- function union2(thing) {
--    "key" in thing; // Error (because narrowing is possible)
-+    "key" in thing;
-     if (typeof thing === "object") {
--        "key" in thing; // Ok
-+        "key" in thing;
-     }
- }
- function union3(thing) {
--    "key" in thing; // Error (because narrowing is possible)
-+    "key" in thing;
-     if (typeof thing !== "string" && typeof thing !== "number") {
--        "key" in thing; // Ok (because further narrowing is impossible)
-+        "key" in thing;
-     }
- }
- function union4(thing) {
--    "key" in thing; // Ok (because narrowing is impossible)
-+    "key" in thing;
- }
- function union5(p) {
--    // For consistency, this should probably not be an error, because useful
--    // narrowing is impossible. However, this is exceptionally strange input,
--    // and it adds a lot of complexity to distinguish between a `T | U` where
--    // one constraint is non-primitive and the other is primitive and a `T | U`
--    // like this where both constraints have primitive and non-primitive
--    // constitutents. Also, the strictly sound behavior would be to error
--    // here, which is what's happening, so "fixing" this by suppressing the
--    // error seems very low-value.
-     "key" in p;
-     if (typeof p === "object") {
-         "key" in p;
-     }
- }
- function intersection1(thing) {
--    "key" in thing; // Error (because all possible instantiations are errors)
-+    "key" in thing;
- }
- function intersection2(thing) {
--    "key" in thing; // Error (because all possible instantations are errors)
-+    "key" in thing;
- }

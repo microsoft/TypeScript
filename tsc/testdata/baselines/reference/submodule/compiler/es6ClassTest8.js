@@ -47,7 +47,7 @@ function f1(x) { return x; }
 class C {
     constructor() {
         var bar = (function () {
-            return bar;
+            return bar; // 'bar' should be resolvable
         });
         var b = f1(f1(bar));
     }

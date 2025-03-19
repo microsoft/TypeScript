@@ -55,6 +55,7 @@ var b2 = {
 }
 
 //// [restParametersWithArrayTypeAnnotations.js]
+// Rest parameters must be an array type if they have a type annotation, errors only for the functions with 2 rest params
 function foo(...x) { }
 var f = function foo(...x) { };
 var f2 = (...x, ...y) => { };

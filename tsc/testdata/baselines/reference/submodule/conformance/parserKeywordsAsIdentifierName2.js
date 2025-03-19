@@ -5,4 +5,5 @@
 a.public /*
 
 //// [parserKeywordsAsIdentifierName2.js]
-a.public;
+// 'public' should be marked unusable, should complain on trailing /*
+a.public; /*

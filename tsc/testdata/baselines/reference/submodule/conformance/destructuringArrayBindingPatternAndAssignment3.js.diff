@@ -9,9 +9,9 @@
 -var _f = [1], f = _f[0], _g = _f[1], g = _g === void 0 ? f : _g, _h = _f[2], h = _h === void 0 ? i : _h, _j = _f[3], i = _j === void 0 ? f : _j; // error for h = i
 -(function (_a) {
 -    var a = _a[0], _b = _a[1], b = _b === void 0 ? a : _b;
-+const [a, b = a] = [1];
-+const [c, d = c, e = e] = [1];
-+const [f, g = f, h = i, i = f] = [1];
++const [a, b = a] = [1]; // ok
++const [c, d = c, e = e] = [1]; // error for e = e
++const [f, g = f, h = i, i = f] = [1]; // error for h = i
 +(function ([a, b = a]) {
  })([1]);
 -(function (_a) {

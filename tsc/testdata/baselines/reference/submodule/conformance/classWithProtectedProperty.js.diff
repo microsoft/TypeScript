@@ -1,10 +1,9 @@
 --- old.classWithProtectedProperty.js
 +++ new.classWithProtectedProperty.js
-@@= skipped -29, +29 lines =@@
- }
+@@= skipped -30, +30 lines =@@
  
  //// [classWithProtectedProperty.js]
--// accessing any protected outside the class is an error
+ // accessing any protected outside the class is an error
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -37,7 +36,6 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    D.prototype.method = function () {
--        // No errors
 +class C {
 +    x;
 +    a = '';
@@ -50,10 +48,10 @@
 +}
 +class D extends C {
 +    method() {
+         // No errors
          var d = new D();
          var r1 = d.x;
-         var r2 = d.a;
-@@= skipped -43, +21 lines =@@
+@@= skipped -42, +22 lines =@@
          var r6 = C.e;
          var r7 = C.f();
          var r8 = C.g();

@@ -8,7 +8,7 @@
 -    function Greeter() {
 +class Greeter {
 +    get greet() {
-+        throw '';
++        throw ''; // should not raise an error
      }
 -    Object.defineProperty(Greeter.prototype, "greet", {
 -        get: function () {
@@ -18,11 +18,10 @@
 -        configurable: true
 -    });
 -    Greeter.prototype.greeting = function () {
--        throw ''; // should not raise an error
++    greeting() {
+         throw ''; // should not raise an error
 -    };
 -    return Greeter;
 -}());
-+    greeting() {
-+        throw '';
 +    }
 +}

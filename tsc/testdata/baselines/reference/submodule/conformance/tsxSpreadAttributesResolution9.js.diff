@@ -42,7 +42,7 @@
 +const obj1 = {
      x: 2
  };
--// OK
+ // OK
 -var p = <Opt />;
 -var y = <Opt {...obj}/>;
 -var y1 = <Opt {...obj1}/>;

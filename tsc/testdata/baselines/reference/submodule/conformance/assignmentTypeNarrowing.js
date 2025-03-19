@@ -40,22 +40,22 @@ arr.push({ x: "ok" });
 //// [assignmentTypeNarrowing.js]
 let x;
 x = "";
-x;
+x; // string
 [x] = [true];
-x;
+x; // boolean
 [x = ""] = [1];
-x;
+x; // string | number
 ({ x } = { x: true });
-x;
+x; // boolean
 ({ y: x } = { y: 1 });
-x;
+x; // number
 ({ x = "" } = { x: true });
-x;
+x; // string | boolean
 ({ y: x = /a/ } = { y: 1 });
-x;
+x; // number | RegExp
 let a;
 for (x of a) {
-    x;
+    x; // string
 }
-const arr = [{ x: "ok" }];
+const arr = [{ x: "ok" }]; // weak type
 arr.push({ x: "ok" });

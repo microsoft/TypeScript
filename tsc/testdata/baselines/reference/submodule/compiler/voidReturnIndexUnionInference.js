@@ -30,6 +30,7 @@ function bad<P extends Props>(props: Readonly<P>) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.safeInvoke = safeInvoke;
+// repro from https://github.com/Microsoft/TypeScript/issues/25274
 function safeInvoke(func, arg1) {
     if (func) {
         return func(arg1);
@@ -40,5 +41,7 @@ function safeInvoke(func, arg1) {
 }
 function bad(props) {
     safeInvoke(props.onFoo, "blah");
+    // ERROR HERE!!!
+    // Type R in signature of safeInvoke incorrectly inferred as {} instead of void!
     safeInvoke(props.onBar, "blah");
 }

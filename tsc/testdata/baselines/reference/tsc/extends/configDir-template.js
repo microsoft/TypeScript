@@ -74,12 +74,14 @@ Found 1 error in src/secondary.ts[90m:4[0m
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
+// some comment
 exports.y = 10;
 
 //// [/home/src/projects/myproject/outDir/src/secondary.js] new file
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = void 0;
+// some comment
 exports.z = 10;
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js] new file

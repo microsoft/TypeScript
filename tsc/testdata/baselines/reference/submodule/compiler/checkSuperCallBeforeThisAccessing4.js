@@ -28,13 +28,13 @@ class Derived extends Based {
     x;
     constructor() {
         (() => {
-            this;
+            this; // No error
         });
         () => {
-            this;
+            this; // No error
         };
         (() => {
-            this;
+            this; // No error
         })();
         super();
         super();

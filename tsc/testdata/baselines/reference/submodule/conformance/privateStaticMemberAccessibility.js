@@ -15,6 +15,6 @@ class Base {
     static foo;
 }
 class Derived extends Base {
-    static bar = Base.foo;
-    bing = () => Base.foo;
+    static bar = Base.foo; // error
+    bing = () => Base.foo; // error
 }

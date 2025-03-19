@@ -12,5 +12,5 @@ const tag = <div></div>;
 //// [jsxImportForSideEffectsNonExtantNoError.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./App.css");
+require("./App.css"); // doesn't actually exist
 const tag = <div></div>;

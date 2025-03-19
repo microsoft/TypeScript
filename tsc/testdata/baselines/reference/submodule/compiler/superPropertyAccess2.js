@@ -39,17 +39,17 @@ class C {
 }
 class D extends C {
     static foo() {
-        super.bar();
-        super.x;
+        super.bar(); // OK
+        super.x; // error
     }
     constructor() {
         super();
-        super.bar();
-        super.x;
+        super.bar(); // error
+        super.x; // error
     }
     static get y() {
-        super.bar();
-        super.x;
+        super.bar(); // OK
+        super.x; // error
         return 1;
     }
 }

@@ -10,10 +10,10 @@
 +    return { type, localChannelId };
  }
 -var newTextChannel = makeNewChannel('text');
--// This should work
 +const newTextChannel = makeNewChannel('text');
+ // This should work
  newTextChannel.phoneNumber = '613-555-1234';
 -var newTextChannel2 = makeNewChannel('text');
--// Compare with this, which ofc works.
 +const newTextChannel2 = makeNewChannel('text');
+ // Compare with this, which ofc works.
  newTextChannel2.phoneNumber = '613-555-1234';

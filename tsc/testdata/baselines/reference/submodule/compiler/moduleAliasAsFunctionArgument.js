@@ -21,8 +21,9 @@ exports.x = void 0;
 //// [moduleAliasAsFunctionArgument_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='moduleAliasAsFunctionArgument_0.ts'/>
 const a = require("moduleAliasAsFunctionArgument_0");
 function fn(arg) {
 }
-a.x;
-fn(a);
+a.x; // OK
+fn(a); // Error: property 'x' is missing from 'a'

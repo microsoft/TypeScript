@@ -9,4 +9,4 @@ x.sort(compare); // Error, but shouldn't be
 //// [reverseInferenceInContextualInstantiation.js]
 function compare(a, b) { return 0; }
 var x;
-x.sort(compare);
+x.sort(compare); // Error, but shouldn't be

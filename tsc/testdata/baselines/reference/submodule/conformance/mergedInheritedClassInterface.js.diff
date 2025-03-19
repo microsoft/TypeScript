@@ -46,7 +46,6 @@
 -    }
 -    return Grandchild;
 -}(ChildNoBaseClass));
--// checks if properties actually were merged
 +class BaseClass {
 +    baseMethod() { }
 +    baseNumber;
@@ -61,6 +60,6 @@
 +}
 +class Grandchild extends ChildNoBaseClass {
 +}
+ // checks if properties actually were merged
  var child;
  child.required;
- child.optional;

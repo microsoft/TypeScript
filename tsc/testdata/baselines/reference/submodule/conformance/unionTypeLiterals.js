@@ -18,6 +18,7 @@ var unionOfConstructorType: { new (): string } | { new (): number };
 var unionOfConstructorType: new () => string | number;
 
 //// [unionTypeLiterals.js]
+// basic valid forms of union literals
 var simpleUnion;
 var unionOfUnion;
 var arrayOfUnions;

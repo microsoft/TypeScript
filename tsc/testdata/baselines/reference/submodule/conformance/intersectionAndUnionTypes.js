@@ -52,13 +52,13 @@ var cnd;
 var cod;
 var x;
 var y;
-a = anb;
-b = anb;
+a = anb; // Ok
+b = anb; // Ok
 anb = a;
 anb = b;
-x = anb;
+x = anb; // Ok
 x = aob;
-x = cnd;
+x = cnd; // Ok
 x = cod;
 anb = x;
 aob = x;
@@ -69,6 +69,6 @@ y = aob;
 y = cnd;
 y = cod;
 anb = y;
-aob = y;
+aob = y; // Ok
 cnd = y;
-cod = y;
+cod = y; // Ok

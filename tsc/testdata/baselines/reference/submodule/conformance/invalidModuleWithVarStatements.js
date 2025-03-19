@@ -30,6 +30,7 @@ module YY3 {
 
 
 //// [invalidModuleWithVarStatements.js]
+// All of these should be an error
 var Y;
 (function (Y) {
     var x = 0;

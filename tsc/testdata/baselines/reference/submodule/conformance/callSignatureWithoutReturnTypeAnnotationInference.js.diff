@@ -1,23 +1,6 @@
 --- old.callSignatureWithoutReturnTypeAnnotationInference.js
 +++ new.callSignatureWithoutReturnTypeAnnotationInference.js
-@@= skipped -122, +122 lines =@@
- var r15 = foo15();
- 
- //// [callSignatureWithoutReturnTypeAnnotationInference.js]
--// Call signatures without a return type should infer one from the function body (if present)
--// Simple types
- function foo(x) {
-     return 1;
- }
-@@= skipped -42, +40 lines =@@
-     return typeof x;
- }
- var r7 = foo7(1);
--// object types
- function foo8(x) {
-     return { x: x };
- }
-@@= skipped -10, +9 lines =@@
+@@= skipped -174, +174 lines =@@
      return i;
  }
  var r9 = foo9(1);

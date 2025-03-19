@@ -17,13 +17,13 @@ class Foo<__proto__> { }
 var foo: (__proto__: number) => void;
 
 //// [intrinsics.js]
-var hasOwnProperty;
+var hasOwnProperty; // Error
 var m1;
 (function (m1) {
     class C {
     }
 })(m1 || (m1 = {}));
-__proto__ = 0;
+__proto__ = 0; // Error, __proto__ not defined
 m1.__proto__ = 0;
 class Foo {
 }

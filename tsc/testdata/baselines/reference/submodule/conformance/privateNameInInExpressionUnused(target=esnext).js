@@ -14,9 +14,10 @@ class Foo {
 
 //// [privateNameInInExpressionUnused.js]
 class Foo {
-    #unused;
-    #brand;
+    #unused; // expect unused error
+    #brand; // expect no error
     isFoo(v) {
+        // This should count as using/reading '#brand'
         return #brand in v;
     }
 }

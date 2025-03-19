@@ -43,4 +43,4 @@ class E {
     z;
 }
 var a;
-var r = a.x;
+var r = a.x; // error

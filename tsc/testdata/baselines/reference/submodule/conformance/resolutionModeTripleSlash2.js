@@ -33,8 +33,9 @@ function foo() {
 }
 
 //// [app.js]
-MODULE;
-SCRIPT;
+/// <reference types="foo" resolution-mode="require" />
+MODULE; // error
+SCRIPT; // ok
 function foo() {
     return SCRIPT;
 }

@@ -6,4 +6,5 @@ var x = 0;
 
 //// [invalid.js]
 //// [declarationEmitInvalidReference2.js]
+/// <reference path="invalid.ts" />
 var x = 0;

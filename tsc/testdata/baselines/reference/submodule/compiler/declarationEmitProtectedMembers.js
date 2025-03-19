@@ -52,6 +52,7 @@ class C4 {
 }
 
 //// [declarationEmitProtectedMembers.js]
+// Class with protected members
 class C1 {
     x;
     f() {
@@ -66,6 +67,7 @@ class C1 {
     static set staticSetter(a) { }
     static get staticGetter() { return 0; }
 }
+// Derived class overriding protected members
 class C2 extends C1 {
     f() {
         return super.f() + this.x;
@@ -74,6 +76,7 @@ class C2 extends C1 {
         return super.sf() + this.sx;
     }
 }
+// Derived class making protected members public
 class C3 extends C2 {
     x;
     static sx;
@@ -85,6 +88,7 @@ class C3 extends C2 {
     }
     static get staticGetter() { return 1; }
 }
+// Protected properties in constructors
 class C4 {
     a;
     b;

@@ -88,7 +88,9 @@ foo() **= value;
 (foo()) **= value;
 
 //// [compoundExponentiationAssignmentLHSIsValue.js]
+// expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
+// this
 class C {
     constructor() {
         this **= value;
@@ -104,6 +106,7 @@ function foo() {
     this **= value;
 }
 this **= value;
+// identifiers: module, class, enum, function
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -114,17 +117,21 @@ var E;
 })(E || (E = {}));
 E **= value;
 foo **= value;
+// literals
 null **= value;
 true **= value;
 false **= value;
 0 **= value;
 '' **= value;
 /d+/ **= value;
+// object literals
 {
     a: 0;
 }
 value;
+// array literals
 ['', ''] **= value;
+// super
 class Derived extends C {
     constructor() {
         super();
@@ -137,11 +144,14 @@ class Derived extends C {
         super. **= value;
     }
 }
+// function expression
 function bar1() { }
 value;
 () => { };
 value;
+// function calls
 foo() **= value;
+// parentheses, the containted expression is value
 (this) **= value;
 (M) **= value;
 (C) **= value;

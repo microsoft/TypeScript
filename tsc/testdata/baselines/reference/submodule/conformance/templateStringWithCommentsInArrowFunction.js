@@ -17,5 +17,9 @@ const f2 = () =>
 
 //// [templateStringWithCommentsInArrowFunction.js]
 const a = 1;
-const f1 = () => `${a}a`;
-const f2 = () => `${a}`;
+const f1 = () => `${
+// a
+a}a`;
+const f2 = () => `${
+// a
+a}`;

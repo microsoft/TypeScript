@@ -57,15 +57,15 @@ function strategy(stratName, gen) {
     };
 }
 exports.Nothing = strategy("Nothing", function* (state) {
-    yield 1;
-    return state;
+    yield 1; // number isn't a `State`, so this should error.
+    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });
 exports.Nothing1 = strategy("Nothing", function* (state) {
 });
 exports.Nothing2 = strategy("Nothing", function* (state) {
-    return 1;
+    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });
 exports.Nothing3 = strategy("Nothing", function* (state) {
     yield state;
-    return 1;
+    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });

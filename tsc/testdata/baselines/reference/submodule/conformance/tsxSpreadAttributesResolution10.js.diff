@@ -42,7 +42,7 @@
 +const obj1 = {
      x: 2
  };
--// Error
+ // Error
 -var y = <Opt {...obj} x={3}/>;
 -var y1 = <Opt {...obj1} x="Hi"/>;
 -var y2 = <Opt {...obj1} x={3}/>;

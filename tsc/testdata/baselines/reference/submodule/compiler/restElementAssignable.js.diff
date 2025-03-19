@@ -18,22 +18,22 @@
 -};
  {
 -    var props = __rest({}, []);
--    // Use to fail
--    var t1 = props;
--    // Working equivalent
--    var t2 = {};
 +    const { ...props } = {};
+     // Use to fail
+-    var t1 = props;
 +    const t1 = props;
+     // Working equivalent
+-    var t2 = {};
 +    const t2 = {};
  }
  {
 -    var props = __rest({ a: 1, b: false, c: "str" }, []);
--    // Use to fail
--    var t1 = props;
--    // Working equivalent
--    var t2 = { a: 1, b: false, c: "str" };
 +    const { ...props } = { a: 1, b: false, c: "str" };
+     // Use to fail
+-    var t1 = props;
 +    const t1 = props;
+     // Working equivalent
+-    var t2 = { a: 1, b: false, c: "str" };
 +    const t2 = { a: 1, b: false, c: "str" };
      ;
  }

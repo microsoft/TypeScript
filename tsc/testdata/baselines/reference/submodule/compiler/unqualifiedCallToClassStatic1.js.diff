@@ -8,9 +8,9 @@
 -    function Vector() {
 -    }
 -    Vector.foo = function () {
--        // 'foo' cannot be called in an unqualified manner.
 +class Vector {
 +    static foo = () => {
+         // 'foo' cannot be called in an unqualified manner.
          foo();
      };
 -    return Vector;

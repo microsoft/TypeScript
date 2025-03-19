@@ -19,15 +19,13 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// all the following should be valid
+ // all the following should be valid
  function fn1() { return 1; }
  function fn2() { return ''; }
- function fn3() { return undefined; }
-@@= skipped -23, +7 lines =@@
- function fn5() { return true; }
+@@= skipped -24, +9 lines =@@
  function fn6() { return new Date(12); }
  function fn7() { return null; }
--function fn8() { return; } // OK, eq. to 'return undefined'
+ function fn8() { return; } // OK, eq. to 'return undefined'
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -41,7 +39,6 @@
 -    }
 -    return D;
 -}(C));
-+function fn8() { return; }
 +class C {
 +    id;
 +    dispose() { }

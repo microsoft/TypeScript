@@ -42,17 +42,16 @@
 -    }
 -    return I;
 -}()); // error -- cannot merge interface with non-ambient class
--function C2() { } // error -- cannot merge function with non-ambient class
++class I {
++} // error -- cannot merge interface with non-ambient class
+ function C2() { } // error -- cannot merge function with non-ambient class
 -var f = /** @class */ (function () {
 -    function f() {
 -    }
 -    return f;
 -}()); // error -- cannot merge function with non-ambient class
-+class I {
-+}
-+function C2() { }
 +class f {
-+}
++} // error -- cannot merge function with non-ambient class
  var v = 3;
  var Foo;
  (function (Foo) {

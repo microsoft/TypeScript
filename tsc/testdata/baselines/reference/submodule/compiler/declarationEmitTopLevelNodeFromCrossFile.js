@@ -27,6 +27,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.m = void 0;
 const a_1 = require("./a");
 exports.m = {
+    /**
+    * leading doc for prop
+    */
     prop: 1
 };
 exports.x = { p: a_1.fn };

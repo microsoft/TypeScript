@@ -7,10 +7,8 @@
 -// Derived type indexer must be subtype of base type indexer
  var a;
  var b1;
--a = b1; // error
--b1 = a; // error
-+a = b1;
-+b1 = a;
+ a = b1; // error
+ b1 = a; // error
  var Generics;
  (function (Generics) {
 -    var A = /** @class */ (function () {
@@ -23,9 +21,3 @@
      function foo() {
          var a;
          var b;
--        a = b; // error
--        b = a; // error
-+        a = b;
-+        b = a;
-     }
- })(Generics || (Generics = {}));

@@ -11,4 +11,4 @@ declare var a: number;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.j = void 0;
-exports.j = "hello";
+exports.j = "hello"; // error

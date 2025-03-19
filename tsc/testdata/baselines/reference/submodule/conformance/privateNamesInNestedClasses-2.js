@@ -27,7 +27,7 @@ class A {
             constructor() {
                 class C {
                     constructor() {
-                        A.#x;
+                        A.#x; // error
                     }
                 }
             }

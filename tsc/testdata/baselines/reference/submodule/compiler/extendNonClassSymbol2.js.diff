@@ -22,7 +22,7 @@
  function Foo() {
      this.x = 1;
  }
--var x = new Foo(); // legal, considered a constructor function
+ var x = new Foo(); // legal, considered a constructor function
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -30,6 +30,5 @@
 -    }
 -    return C;
 -}(Foo)); // error, could not find symbol Foo
-+var x = new Foo();
 +class C extends Foo {
-+}
++} // error, could not find symbol Foo

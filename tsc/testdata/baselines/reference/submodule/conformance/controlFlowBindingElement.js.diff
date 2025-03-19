@@ -6,20 +6,18 @@
  {
 -    var data = { param: 'value' };
 -    var _a = data.param, param = _a === void 0 ? (function () { throw new Error('param is not defined'); })() : _a;
--    console.log(param); // should not trigger 'Unreachable code detected.'    
 +    const data = { param: 'value' };
 +    const { param = (() => { throw new Error('param is not defined'); })(), } = data;
-+    console.log(param);
+     console.log(param); // should not trigger 'Unreachable code detected.'    
  }
  {
 -    var data = { param: 'value' };
 -    var foo = "";
 -    var _b = data.param, param = _b === void 0 ? (function () { throw new Error('param is not defined'); })() : _b;
--    foo; // should be string  
 +    const data = { param: 'value' };
 +    let foo = "";
 +    const { param = (() => { throw new Error('param is not defined'); })(), } = data;
-+    foo;
+     foo; // should be string  
  }
  {
 -    var data = { param: 'value' };
@@ -29,17 +27,16 @@
 +    const data = { param: 'value' };
 +    let foo = "";
 +    const { param = (() => { foo = undefined; })(), } = data;
-+    foo;
++    foo; // should be string | undefined
  }
  {
 -    var data = { param: 'value' };
 -    var foo = "";
 -    var _d = data.param, param = _d === void 0 ? (function () { return "" + 1; })() : _d;
--    foo; // should be string
 +    const data = { param: 'value' };
 +    let foo = "";
 +    const { param = (() => { return "" + 1; })(), } = data;
-+    foo;
+     foo; // should be string
  }
  {
 -    var foo_2;
@@ -51,7 +48,7 @@
 +    let window = {};
 +    window.window = window;
 +    const { [(() => { foo = ""; return 'window'; })()]: { [(() => { return 'window'; })()]: bar } } = window;
-+    foo;
++    foo; // should be string
  }
  {
 -    var foo_3;
@@ -63,7 +60,7 @@
 +    let window = {};
 +    window.window = window;
 +    const { [(() => { return 'window'; })()]: { [(() => { foo = ""; return 'window'; })()]: bar } } = window;
-+    foo;
++    foo; // should be string
  }
  {
 -    var foo_4;
@@ -75,5 +72,5 @@
 +    let window = {};
 +    window.window = window;
 +    const { [(() => { return 'window'; })()]: { [(() => { return 'window'; })()]: bar = (() => { foo = ""; return window; })() } } = window;
-+    foo;
++    foo; // should be string | undefined
  }

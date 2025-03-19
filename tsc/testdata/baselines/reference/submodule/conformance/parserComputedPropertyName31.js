@@ -9,6 +9,7 @@ class C {
 
 //// [parserComputedPropertyName31.js]
 class C {
+    // yes ASI
     [e];
     [e2];
 }

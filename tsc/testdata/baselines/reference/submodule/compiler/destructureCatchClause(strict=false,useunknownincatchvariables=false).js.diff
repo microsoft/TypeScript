@@ -1,10 +1,8 @@
 --- old.destructureCatchClause(strict=false,useunknownincatchvariables=false).js
 +++ new.destructureCatchClause(strict=false,useunknownincatchvariables=false).js
-@@= skipped -38, +38 lines =@@
- 
- 
+@@= skipped -40, +40 lines =@@
  //// [destructureCatchClause.js]
--// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
+ // These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
  try { }
 -catch (_a) {
 -    var x = _a.x;

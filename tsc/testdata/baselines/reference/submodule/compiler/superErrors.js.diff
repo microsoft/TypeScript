@@ -20,7 +20,7 @@
 -    };
 -})();
  function foo() {
--    // super in a non class context
+     // super in a non class context
 -    var x = _super.;
 -    var y = function () { return _super.; };
 -    var z = function () { return function () { return function () { return _super.; }; }; };
@@ -31,12 +31,12 @@
 -var User = /** @class */ (function () {
 -    function User() {
 -        this.name = "Bob";
+-    }
+-    User.prototype.sayHello = function () {
 +class User {
 +    name = "Bob";
 +    sayHello() {
-     }
--    User.prototype.sayHello = function () {
--        //console.log("Hello, " + this.name);
+         //console.log("Hello, " + this.name);
 -    };
 -    return User;
 -}());
@@ -45,52 +45,53 @@
 -    function RegisteredUser() {
 -        var _this = _super.call(this) || this;
 -        _this.name = "Frank";
--        // super call in an inner function in a constructor
++    }
 +}
 +class RegisteredUser extends User {
 +    name = "Frank";
 +    constructor() {
 +        super();
+         // super call in an inner function in a constructor
          function inner() {
 -            _super.sayHello.call(this);
 +            super.sayHello();
          }
--        // super call in a lambda in an inner function in a constructor 
+         // super call in a lambda in an inner function in a constructor 
          function inner2() {
 -            var _this = this;
 -            var x = function () { return _super.sayHello.call(_this); };
 +            var x = () => super.sayHello();
          }
--        // super call in a lambda in a function expression in a constructor 
+         // super call in a lambda in a function expression in a constructor 
 -        (function () { return function () { return _super.; }; })();
 -        return _this;
 +        (function () { return () => super.; })();
      }
 -    RegisteredUser.prototype.sayHello = function () {
--        // super call in a method
--        _super.prototype.sayHello.call(this);
--        // super call in a lambda in an inner function in a method
 +    sayHello() {
+         // super call in a method
+-        _super.prototype.sayHello.call(this);
 +        super.sayHello();
+         // super call in a lambda in an inner function in a method
          function inner() {
 -            var _this = this;
 -            var x = function () { return _super.sayHello.call(_this); };
 +            var x = () => super.sayHello();
          }
--        // super call in a lambda in a function expression in a constructor 
+         // super call in a lambda in a function expression in a constructor 
 -        (function () { return function () { return _super.; }; })();
 -    };
 -    RegisteredUser.staticFunction = function () {
--        // super in static functions
++        (function () { return () => super.; })();
++    }
++    static staticFunction() {
+         // super in static functions
 -        var s = _super.;
 -        var x = function () { return _super.; };
 -        var y = function () { return function () { return function () { return _super.; }; }; };
 -    };
 -    return RegisteredUser;
 -}(User));
-+        (function () { return () => super.; })();
-+    }
-+    static staticFunction() {
 +        var s = super.;
 +        var x = () => super.;
 +        var y = () => () => () => super.;

@@ -16,8 +16,7 @@
 -    var foo;
 +    let foo;
      if ((foo = getFooOrNull()) !== null) {
--        foo; // Foo
-+        foo;
+         foo; // Foo
      }
  }
  function f2() {
@@ -26,10 +25,8 @@
 +    let foo1;
 +    let foo2;
      if ((foo1 = getFooOrNull(), foo2 = foo1) !== null) {
--        foo1; // Foo | null
--        foo2; // Foo
-+        foo1;
-+        foo2;
+         foo1; // Foo | null
+         foo2; // Foo
      }
  }
  function f3() {
@@ -46,7 +43,7 @@
          x;
      }
  }
--// Repro from #8851
+ // Repro from #8851
 -var re = /./g;
 -var match;
 +const re = /./g;

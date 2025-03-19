@@ -249,6 +249,7 @@
     y: class {
         constructor() { }
     },
+    // keywords
     break: class {
         constructor() { }
     },

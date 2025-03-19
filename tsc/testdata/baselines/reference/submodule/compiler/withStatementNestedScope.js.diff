@@ -1,9 +1,0 @@
---- old.withStatementNestedScope.js
-+++ new.withStatementNestedScope.js
-@@= skipped -15, +15 lines =@@
-     function f(a) {
-         return 1;
-     }
--    // should be any
-     var r = f(1);
- }

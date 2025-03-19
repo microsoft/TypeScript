@@ -33,6 +33,7 @@ eacher((a, b) => {
     a;
     b;
 });
+// TODO: https://github.com/microsoft/TypeScript/issues/53255
 eacher((...args) => {
     const [a, b] = args;
     a;

@@ -15,4 +15,4 @@ class C {
 }
 var a;
 var b;
-a = b;
+a = b; // Not ok - return types of "f" are different

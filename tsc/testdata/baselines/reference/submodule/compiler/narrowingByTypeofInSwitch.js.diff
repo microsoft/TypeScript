@@ -8,27 +8,7 @@
  function assertNever(x) {
      return x;
  }
-@@= skipped -113, +112 lines =@@
-             assertUndefined(x);
-             return;
-     }
--    assertAll(x); // is any
-+    assertAll(x);
- }
- function a1(x) {
-     return x;
-@@= skipped -89, +89 lines =@@
-     switch (typeof x) {
-         case 'number': return x.toString(2);
-         case 'string': return x;
--        case 'function': return x(42); // Can't narrow generic
--        case 'object': return x.x; // Can't narrow generic
-+        case 'function': return x(42);
-+        case 'object': return x.x;
-     }
- }
- function multipleGeneric(xy) {
-@@= skipped -116, +116 lines =@@
+@@= skipped -318, +317 lines =@@
              assertSymbol(x);
              return;
          case 'object':
@@ -64,7 +44,7 @@
              return;
      }
  }
--/* Template literals */
+ /* Template literals */
  function testUnionWithTempalte(x) {
      switch (typeof x) {
 -        case "number":
@@ -96,7 +76,7 @@
              assertUndefined(x);
              return;
      }
-@@= skipped -33, +32 lines =@@
+@@= skipped -33, +33 lines =@@
  }
  function fallThroughTestWithTempalte(x) {
      switch (typeof x) {
@@ -135,9 +115,8 @@
              assertString(k);
              assertKeyofS(k);
              return;
-     }
- }
--/* Both string literals and template literals */
+@@= skipped -17, +17 lines =@@
+ /* Both string literals and template literals */
  function multipleGenericFuseWithBoth(xy) {
      switch (typeof xy) {
 -        case "function": return [xy, 1];

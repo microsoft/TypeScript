@@ -11,5 +11,6 @@ export const fun = (
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fun = void 0;
+// This function's type is changed on declaration
 const fun = (subFun) => { };
 exports.fun = fun;

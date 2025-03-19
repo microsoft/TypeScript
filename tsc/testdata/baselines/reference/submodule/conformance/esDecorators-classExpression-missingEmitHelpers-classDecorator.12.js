@@ -14,6 +14,7 @@ export {}
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// uses __esDecorate, __runInitializers, __setFunctionName
 function f(C = 
 @dec
 class {

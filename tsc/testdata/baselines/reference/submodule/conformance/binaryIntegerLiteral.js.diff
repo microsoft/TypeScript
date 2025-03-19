@@ -34,39 +34,18 @@
 +    b: 0B11010,
 +    0B11111111111111111111111111111111111111111111111101001010100000010111110001111111111: false,
  };
++obj1[0b11010]; // string
+ obj1[26]; // string
 -obj1[26]; // string
--obj1[26]; // string
--obj1["26"]; // string
--obj1["0b11010"]; // any
--obj1["a"]; // number
--obj1["b"]; // number
--obj1["bin1"]; // number
--obj1["Infinity"]; // boolean
+ obj1["26"]; // string
+ obj1["0b11010"]; // any
+ obj1["a"]; // number
+ obj1["b"]; // number
+ obj1["bin1"]; // number
+ obj1["Infinity"]; // boolean
++obj2[0B11010]; // string
+ obj2[26]; // string
 -obj2[26]; // string
--obj2[26]; // string
--obj2["26"]; // string
--obj2["0B11010"]; // any
--obj2["a"]; // number
--obj2["b"]; // number
--obj2["bin2"]; // number
--obj2[9.671406556917009e+24]; // boolean
--obj2["9.671406556917009e+24"]; // boolean
--obj2["Infinity"]; // any
-+obj1[0b11010];
-+obj1[26];
-+obj1["26"];
-+obj1["0b11010"];
-+obj1["a"];
-+obj1["b"];
-+obj1["bin1"];
-+obj1["Infinity"];
-+obj2[0B11010];
-+obj2[26];
-+obj2["26"];
-+obj2["0B11010"];
-+obj2["a"];
-+obj2["b"];
-+obj2["bin2"];
-+obj2[9.671406556917009e+24];
-+obj2["9.671406556917009e+24"];
-+obj2["Infinity"];
+ obj2["26"]; // string
+ obj2["0B11010"]; // any
+ obj2["a"]; // number

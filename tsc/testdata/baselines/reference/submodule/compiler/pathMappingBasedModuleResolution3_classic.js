@@ -30,8 +30,8 @@ exports.x = 1;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-const file3_1 = require("./file3");
-const file4_1 = require("file4");
+const file3_1 = require("./file3"); // found with baseurl
+const file4_1 = require("file4"); // found with fallback
 exports.x = file3_1.x + file4_1.y;
 //// [file4.js]
 "use strict";

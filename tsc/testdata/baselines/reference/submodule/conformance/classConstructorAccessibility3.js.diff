@@ -43,24 +43,21 @@
      }
 -    return Qux;
 -}());
--// b is public
--var a = Foo;
 +}
+ // b is public
+-var a = Foo;
 +let a = Foo;
  a = Bar;
--a = Baz; // error Baz is protected
--a = Qux; // error Qux is private
--// b is protected
+ a = Baz; // error Baz is protected
+ a = Qux; // error Qux is private
+ // b is protected
 -var b = Baz;
-+a = Baz;
-+a = Qux;
 +let b = Baz;
  b = Foo;
  b = Bar;
--b = Qux; // error Qux is private
--// c is private
+ b = Qux; // error Qux is private
+ // c is private
 -var c = Qux;
-+b = Qux;
 +let c = Qux;
  c = Foo;
  c = Bar;

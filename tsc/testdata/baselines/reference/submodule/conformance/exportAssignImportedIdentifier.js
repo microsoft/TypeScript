@@ -30,4 +30,4 @@ module.exports = x;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const foo2 = require("./foo2");
-var x = foo2();
+var x = foo2(); // should be boolean

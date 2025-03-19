@@ -69,26 +69,26 @@ yy["foo"] = "abc";
 
 //// [readonlyMembers.js]
 var x = { a: 0 };
-x.a = 1;
-x.b = 1;
+x.a = 1; // Error
+x.b = 1; // Error
 class C {
     a;
     b = 1;
     get c() { return 1; }
     constructor() {
-        this.a = 1;
-        this.b = 1;
-        this.c = 1;
+        this.a = 1; // Ok
+        this.b = 1; // Ok
+        this.c = 1; // Error
         const f = () => {
-            this.a = 1;
-            this.b = 1;
-            this.c = 1;
+            this.a = 1; // Error
+            this.b = 1; // Error
+            this.c = 1; // Error
         };
     }
     foo() {
-        this.a = 1;
-        this.b = 1;
-        this.c = 1;
+        this.a = 1; // Error
+        this.b = 1; // Error
+        this.c = 1; // Error
     }
 }
 var o = {
@@ -96,10 +96,10 @@ var o = {
     get b() { return 1; },
     set b(value) { }
 };
-o.a = 1;
+o.a = 1; // Error
 o.b = 1;
 var p = { a: 1, b: 1 };
-p.a = 1;
+p.a = 1; // Error
 p.b = 1;
 var q = p;
 q.a = 1;
@@ -110,19 +110,19 @@ var E;
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
 })(E || (E = {}));
-E.A = 1;
+E.A = 1; // Error
 var N;
 (function (N) {
     N.a = 1;
     N.b = 1;
     N.c = 1;
 })(N || (N = {}));
-N.a = 1;
+N.a = 1; // Error
 N.b = 1;
 N.c = 1;
 let xx;
 let s = xx["foo"];
-xx["foo"] = "abc";
+xx["foo"] = "abc"; // Error
 let yy;
-yy[1] = "abc";
+yy[1] = "abc"; // Error
 yy["foo"] = "abc";

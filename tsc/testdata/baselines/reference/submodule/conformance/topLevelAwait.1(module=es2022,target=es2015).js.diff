@@ -6,9 +6,9 @@
  //// [other.js]
 -var _a, e_1, _b, _c;
  const _await = 1;
--// await allowed in aliased export
+ // await allowed in aliased export
  export { _await as await };
--// for-await-of
+ // for-await-of
  const arr = [Promise.resolve()];
 -try {
 -    for (var _d = true, arr_1 = __asyncValues(arr), arr_1_1; arr_1_1 = await arr_1.next(), _a = arr_1_1.done, !_a; _d = true) {
@@ -30,21 +30,7 @@
  //// [index.js]
  export const x = 1;
  await x;
--// reparse element access as await
- await [x];
- await [x, x];
- await (x);
- await (f(), x);
- await (x);
- await (f(), x);
--// reparse tagged template as await
- await ``;
- await ``;
--// member names should be ok
- class C1 {
-     await() { }
- }
-@@= skipped -43, +25 lines =@@
+@@= skipped -43, +30 lines =@@
      set await(value) { }
  }
  class C3 {
@@ -55,24 +41,18 @@
  }
  ({
      await() { }
-@@= skipped -14, +12 lines =@@
- ({
-     await: 1
+@@= skipped -16, +14 lines =@@
  });
--// property access name should be ok
+ // property access name should be ok
  C1.prototype.await;
 -let C = class C {
 -};
 -C = __decorate([
 -    (await dec)
 -], C);
--// newlines
--// await in throw
 +@(await dec)
 +class C {
 +}
+ // newlines
+ // await in throw
  throw await 1;
--// await in var
- let y = await 1;
--// await in expression statement;
- await 1;

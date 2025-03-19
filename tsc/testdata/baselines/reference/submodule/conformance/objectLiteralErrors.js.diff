@@ -1,14 +1,6 @@
 --- old.objectLiteralErrors.js
 +++ new.objectLiteralErrors.js
-@@= skipped -54, +54 lines =@@
- 
- 
- //// [objectLiteralErrors.js]
--// Multiple properties with the same name
- var e1 = { a: 0, a: 0 };
- var e2 = { a: '', a: '' };
- var e3 = { a: 0, a: '' };
-@@= skipped -15, +14 lines =@@
+@@= skipped -69, +69 lines =@@
  var e12 = { 0: 0, 0: 0 };
  var e13 = { 0: 0, 0: 0 };
  var e14 = { 0: 0, 0x0: 0 };
@@ -17,19 +9,9 @@
  var e15 = { "100": 0, 1e2: 0 };
  var e16 = { 0x20: 0, 3.2e1: 0 };
  var e17 = { a: 0, b: 1, a: 0 };
--// Accessor and property with the same name
- var f1 = { a: 0, get a() { return 0; } };
- var f2 = { a: '', get a() { return ''; } };
- var f3 = { a: 0, get a() { return ''; } };
-@@= skipped -23, +22 lines =@@
- var f15 = { "100": 0, get 1e2() { return 0; } };
- var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
- var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
--// Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)
- var g1 = { get a() { return 4; }, set a(n) { } };
- var g2 = { get a() { return 4; }, set a(n) { } };
+@@= skipped -29, +29 lines =@@
  var g3 = { get a() { return undefined; }, set a(n) { } };
--// did you mean colon errors
+ // did you mean colon errors
  var h1 = {
 -    x: x,
 -    y: y,

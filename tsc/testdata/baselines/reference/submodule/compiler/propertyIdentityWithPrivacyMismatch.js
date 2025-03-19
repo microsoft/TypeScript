@@ -32,7 +32,7 @@ var y: Foo2;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var x;
-var x;
+var x; // Should be error (mod1.Foo !== mod2.Foo)
 class Foo1 {
     n;
 }

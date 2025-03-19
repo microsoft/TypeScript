@@ -49,6 +49,7 @@ exports.narrowToStringOrNumber = exports.narrowToString = exports.narrowToLitera
 const narrowToLiterals = (str) => {
     switch (str) {
         case 'abc': {
+            // inferred type as `abc`
             return str;
         }
         default:
@@ -59,9 +60,11 @@ exports.narrowToLiterals = narrowToLiterals;
 const narrowToString = (str, someOtherStr) => {
     switch (str) {
         case 'abc': {
+            // inferred type should be `abc`
             return str;
         }
         case someOtherStr: {
+            // `string`
             return str;
         }
         default:
@@ -72,9 +75,11 @@ exports.narrowToString = narrowToString;
 const narrowToStringOrNumber = (str, someNumber) => {
     switch (str) {
         case 'abc': {
+            // inferred type should be `abc`
             return str;
         }
         case someNumber: {
+            // inferred type should be `number`
             return str;
         }
         default:

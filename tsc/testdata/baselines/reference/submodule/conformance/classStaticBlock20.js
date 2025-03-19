@@ -19,9 +19,12 @@ class C {
 //// [classStaticBlock20.js]
 class C {
     static {
+        // something
     }
     static {
+        // something
     }
     static {
+        // something
     }
 }

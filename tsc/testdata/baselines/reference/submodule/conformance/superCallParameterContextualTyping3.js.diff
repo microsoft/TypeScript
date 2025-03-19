@@ -31,25 +31,25 @@
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
--        // Should be okay.
--        // 'p' should have type 'string'.
--        var _this = _super.call(this, {
--            method: function (p) {
 +    foo(param) {
 +    }
 +}
 +class C extends CBase {
 +    constructor() {
+         // Should be okay.
+         // 'p' should have type 'string'.
+-        var _this = _super.call(this, {
+-            method: function (p) {
 +        super({
 +            method(p) {
                  p.length;
              }
 -        }) || this;
--        // Should be okay.
--        // 'p' should have type 'string'.
++        });
+         // Should be okay.
+         // 'p' should have type 'string'.
 -        _super.prototype.foo.call(_this, {
 -            method: function (p) {
-+        });
 +        super.foo({
 +            method(p) {
                  p.length;

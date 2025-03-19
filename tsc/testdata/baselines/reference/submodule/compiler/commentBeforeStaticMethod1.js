@@ -12,6 +12,9 @@ class C {
 
 //// [commentBeforeStaticMethod1.js]
 class C {
+    /**
+     * Returns bar
+     */
     static foo() {
         return "bar";
     }

@@ -13,36 +13,16 @@
  //// [a.js]
  import { type } from "./mod.js";
  type;
--as; // Error (used in emitting position)
-+as;
- //// [b.js]
- import { type as as } from "./mod.js";
--type; // Error (cannot resolve name)
-+type;
- as;
- //// [c.js]
--type; // Error (cannot resolve name)
--as; // Error (used in emitting position)
-+type;
-+as;
+@@= skipped -16, +16 lines =@@
+ as; // Error (used in emitting position)
  export {};
  //// [d.js]
 -export {};
-+import "./mod.js";
++import "./mod.js"; // Error
  //// [e.js]
  import { type as type } from "./mod.js";
  type;
--as; // Error (used in emitting position)
-+as;
- //// [f.js]
--type; // Error (cannot resolve name)
--as; // Error (cannot resolve name)
--something; // Error (used in emitting position)
--s; // Error (used in emitting position)
-+type;
-+as;
-+something;
-+s;
+@@= skipped -13, +13 lines =@@
  export {};
  //// [g.js]
  export {};

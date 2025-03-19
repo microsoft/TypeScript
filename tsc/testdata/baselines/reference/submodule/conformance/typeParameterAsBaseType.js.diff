@@ -1,11 +1,9 @@
 --- old.typeParameterAsBaseType.js
 +++ new.typeParameterAsBaseType.js
-@@= skipped -12, +12 lines =@@
- 
- 
+@@= skipped -14, +14 lines =@@
  //// [typeParameterAsBaseType.js]
--// type parameters cannot be used as base types
--// these are all errors
+ // type parameters cannot be used as base types
+ // these are all errors
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

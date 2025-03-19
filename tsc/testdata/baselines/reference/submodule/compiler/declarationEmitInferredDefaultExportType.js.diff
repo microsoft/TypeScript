@@ -1,12 +1,6 @@
 --- old.declarationEmitInferredDefaultExportType.js
 +++ new.declarationEmitInferredDefaultExportType.js
-@@= skipped -10, +10 lines =@@
- //// [declarationEmitInferredDefaultExportType.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--// test.ts
- exports.default = {
-     foo: [],
+@@= skipped -16, +16 lines =@@
      bar: undefined,
      baz: null
  };

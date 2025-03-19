@@ -37,7 +37,7 @@ var r4 = f.y; // error
 //// [constructorParameterProperties2.js]
 class C {
     y;
-    constructor(y) { }
+    constructor(y) { } // ok
 }
 var c;
 var r = c.y;
@@ -46,7 +46,7 @@ class D {
     y;
     constructor(y) {
         this.y = y;
-    }
+    } // error
 }
 var d;
 var r2 = d.y;
@@ -55,16 +55,16 @@ class E {
     y;
     constructor(y) {
         this.y = y;
-    }
+    } // error
 }
 var e;
-var r3 = e.y;
+var r3 = e.y; // error
 class F {
     y;
     y;
     constructor(y) {
         this.y = y;
-    }
+    } // error
 }
 var f;
-var r4 = f.y;
+var r4 = f.y; // error

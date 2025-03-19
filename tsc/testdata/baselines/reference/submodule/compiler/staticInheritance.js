@@ -17,10 +17,10 @@ doThing(B); //OK
 function doThing(x) { }
 class A {
     static n;
-    p = doThing(A);
+    p = doThing(A); // OK
 }
 class B extends A {
-    p1 = doThing(A);
-    p2 = doThing(B);
+    p1 = doThing(A); // OK
+    p2 = doThing(B); // OK
 }
-doThing(B);
+doThing(B); //OK

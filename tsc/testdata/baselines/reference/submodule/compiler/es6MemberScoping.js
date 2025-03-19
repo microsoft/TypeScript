@@ -23,8 +23,8 @@ class Foo {
     foo() {
         return this._store.length;
     }
-    _store = store;
+    _store = store; // should be an error.
 }
 class Foo2 {
-    static Foo2() { return 0; }
+    static Foo2() { return 0; } // should not be an error
 }

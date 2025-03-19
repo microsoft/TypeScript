@@ -1,10 +1,9 @@
 --- old.letInLetConstDeclOfForOfAndForIn_ES5.js
 +++ new.letInLetConstDeclOfForOfAndForIn_ES5.js
-@@= skipped -22, +22 lines =@@
- 
+@@= skipped -23, +23 lines =@@
  
  //// [letInLetConstDeclOfForOfAndForIn_ES5.js]
--// Should be an error
+ // Should be an error
 -for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
 -    var let = _a[_i];
 -}

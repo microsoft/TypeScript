@@ -22,5 +22,5 @@ class Base {
 class Derived extends Base {
     x = 1;
 }
-const obj = new Derived();
-console.log(obj.x);
+const obj = new Derived(); // prints 'x was set to 1'
+console.log(obj.x); // 2

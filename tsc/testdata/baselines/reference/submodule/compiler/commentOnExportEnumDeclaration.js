@@ -12,6 +12,9 @@ export enum Color {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Color = void 0;
+/**
+ * comment
+ */
 var Color;
 (function (Color) {
     Color[Color["r"] = 0] = "r";

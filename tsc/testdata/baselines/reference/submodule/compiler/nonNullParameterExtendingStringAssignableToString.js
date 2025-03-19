@@ -15,5 +15,5 @@ function fn(one, two) {
     let three = Boolean() ? one : two;
     foo(one);
     foo(two);
-    foo(three);
+    foo(three); // this line is the important one
 }

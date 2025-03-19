@@ -122,6 +122,7 @@ class Thing3 extends Thing2 {
         this.print();
     }
 }
+// Repro from #13805
 const Timestamped = (Base) => {
     return class extends Base {
         timestamp = new Date();

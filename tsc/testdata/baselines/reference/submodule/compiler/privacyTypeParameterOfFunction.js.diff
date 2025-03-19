@@ -6,39 +6,41 @@
  exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
 -var privateClass = /** @class */ (function () {
 -    function privateClass() {
-+class privateClass {
-+}
-+class publicClass {
-+}
-+exports.publicClass = publicClass;
-+class publicClassWithWithPrivateTypeParameters {
-+    static myPublicStaticMethod() {
-     }
+-    }
 -    return privateClass;
 -}());
 -var publicClass = /** @class */ (function () {
 -    function publicClass() {
-+    static myPrivateStaticMethod() {
-     }
+-    }
 -    return publicClass;
 -}());
--exports.publicClass = publicClass;
++class privateClass {
++}
++class publicClass {
++}
+ exports.publicClass = publicClass;
 -var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
 -    function publicClassWithWithPrivateTypeParameters() {
-+    myPublicMethod() {
-     }
--    // TypeParameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_type_1
+-    }
++class publicClassWithWithPrivateTypeParameters {
+     // TypeParameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_type_1
 -    publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
 -    };
 -    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
 -    };
--    // TypeParameter_0_of_public_method_from_exported_class_has_or_is_using_private_type_1
++    static myPublicStaticMethod() {
++    }
++    static myPrivateStaticMethod() {
++    }
+     // TypeParameter_0_of_public_method_from_exported_class_has_or_is_using_private_type_1
 -    publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
 -    };
 -    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
 -    };
 -    return publicClassWithWithPrivateTypeParameters;
 -}());
++    myPublicMethod() {
++    }
 +    myPrivateMethod() {
 +    }
 +}
@@ -95,7 +97,6 @@
 -    };
 -    return privateClassWithWithPublicTypeParameters;
 -}());
--// TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
 +    myPublicMethod() {
 +    }
 +    myPrivateMethod() {
@@ -111,10 +112,10 @@
 +    myPrivateMethod() {
 +    }
 +}
+ // TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
  function publicFunctionWithPrivateTypeParameters() {
  }
- function publicFunctionWithPublicTypeParameters() {
-@@= skipped -76, +55 lines =@@
+@@= skipped -76, +58 lines =@@
  }
  function privateFunctionWithPublicTypeParameters() {
  }

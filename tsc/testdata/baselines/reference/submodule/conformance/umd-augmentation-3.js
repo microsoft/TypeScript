@@ -47,6 +47,7 @@ var t = p.x;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="math2d-augment.d.ts" />
 const m = require("math2d");
 let v = new m.Vector(3, 2);
 let magnitude = m.getLength(v);

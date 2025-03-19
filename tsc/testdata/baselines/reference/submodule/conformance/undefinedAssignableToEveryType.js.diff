@@ -15,12 +15,3 @@
  var ac;
  var ai;
  var E;
-@@= skipped -36, +34 lines =@@
-     y = undefined;
-     z = undefined;
- }
--//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
--//    x = undefined;
--//    y = undefined;
--//    z = undefined;
--//}

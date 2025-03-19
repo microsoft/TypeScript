@@ -35,5 +35,5 @@ exports.C2 = C2;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cVal = void 0;
-const server_1 = require("./server");
+const server_1 = require("./server"); // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 exports.cVal = new server_1.C();

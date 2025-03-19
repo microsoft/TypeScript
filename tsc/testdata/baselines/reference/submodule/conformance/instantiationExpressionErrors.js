@@ -107,26 +107,33 @@ const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
 
 
 //// [instantiationExpressionErrors.js]
-const a1 = f;
-const a2 = f.g;
-const a3 = f.g;
-const a4 = f.g;
-const a5 = f['g'];
-const a6 = f < number > ['g'];
+// Type arguments in member expressions
+const a1 = f; // { (): number; g<U>(): U; }
+const a2 = f.g; // () => number
+const a3 = f.g; // <U>() => U
+const a4 = f.g; // () => number
+const a5 = f['g']; // () => number
+// `[` is an expression starter and cannot immediately follow a type argument list
+const a6 = f < number > ['g']; // Error
 const a7 = (f)['g'];
-const a8 = f < number > ;
-const a9 = (f);
-const b1 = f?.();
+// An `<` cannot immediately follow a type argument list
+const a8 = f < number > ; // Relational operator error
+const a9 = (f); // Error, no applicable signatures
+// Type arguments with `?.` token
+const b1 = f?.(); // Error, `(` expected
 const b2 = f?.();
 const b3 = f?.();
-const b4 = f?.();
+const b4 = f?.(); // Error, expected no type arguments
 const c1 = g || ((x) => x);
 const c2 = g ?? ((x) => x);
 const c3 = g && ((x) => x);
+// Parsed as function call, even though this differs from JavaScript
 const x1 = f(true);
+// Parsed as relational expressions
 const r1 = f < true > true;
 const r2 = f < true > +1;
 const r3 = f < true > -1;
+// All of the following are parsed as instantiation expressions
 const x2 = f;
 true;
 const x3 = f;
@@ -163,6 +170,7 @@ class C4 {
     specialFoo = f;
     bar = 123;
 }
+// Repro from #49551
 var MyVer;
 (function (MyVer) {
     MyVer[MyVer["v1"] = 1] = "v1";

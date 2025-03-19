@@ -20,12 +20,12 @@
 -    };
 -})();
 -var _this = this;
--// Arrow function used in with statement
+ // Arrow function used in with statement
  with (window) {
 -    var p = function () { return _this; };
 +    var p = () => this;
  }
--// Arrow function as argument to super call
+ // Arrow function as argument to super call
 -var Base = /** @class */ (function () {
 -    function Base(n) {
 +class Base {
@@ -45,20 +45,18 @@
 -    }
 -    return Derived;
 -}(Base));
--// Arrow function as function argument
--window.setTimeout(function () { return null; }, 100);
--// Arrow function as value in array literal
--var obj = function (n) { return ''; };
--var obj; // OK
--var arr = [function (n) { return ''; }];
--var arr; // Incorrect error here (bug 829597)
--// Arrow function as enum value
 +}
+ // Arrow function as function argument
+-window.setTimeout(function () { return null; }, 100);
 +window.setTimeout(() => null, 100);
+ // Arrow function as value in array literal
+-var obj = function (n) { return ''; };
 +var obj = (n) => '';
-+var obj;
+ var obj; // OK
+-var arr = [function (n) { return ''; }];
 +var arr = [(n) => ''];
-+var arr;
+ var arr; // Incorrect error here (bug 829597)
+ // Arrow function as enum value
  var E;
  (function (E) {
 -    var _this = this;
@@ -66,10 +64,10 @@
 -    E[E["y"] = (function () { return _this; }).length] = "y"; // error, can't use this in enum
 +    E["x"] = () => 4;
 +    if (typeof E.x !== "string") E[E.x] = "x";
-+    E["y"] = (() => this).length;
++    E["y"] = (() => this).length; // error, can't use this in enum
 +    if (typeof E.y !== "string") E[E.y] = "y";
  })(E || (E = {}));
--// Arrow function as module variable initializer
+ // Arrow function as module variable initializer
  var M;
  (function (M) {
 -    M.a = function (s) { return ''; };
@@ -77,16 +75,16 @@
 +    M.a = (s) => '';
 +    var b = (s) => s;
  })(M || (M = {}));
--// Repeat above for module members that are functions? (necessary to redo all of them?)
+ // Repeat above for module members that are functions? (necessary to redo all of them?)
  var M2;
  (function (M2) {
 -    var _this = this;
--    // Arrow function used in with statement
+     // Arrow function used in with statement
      with (window) {
 -        var p = function () { return _this; };
 +        var p = () => this;
      }
--    // Arrow function as argument to super call
+     // Arrow function as argument to super call
 -    var Base = /** @class */ (function () {
 -        function Base(n) {
 +    class Base {
@@ -106,21 +104,19 @@
 -        }
 -        return Derived;
 -    }(Base));
--    // Arrow function as function argument
--    window.setTimeout(function () { return null; }, 100);
--    // Arrow function as value in array literal
--    var obj = function (n) { return ''; };
--    var obj; // OK
--    var arr = [function (n) { return ''; }];
--    var arr; // Incorrect error here (bug 829597)
--    // Arrow function as enum value
--    var E;
 +    }
+     // Arrow function as function argument
+-    window.setTimeout(function () { return null; }, 100);
 +    window.setTimeout(() => null, 100);
+     // Arrow function as value in array literal
+-    var obj = function (n) { return ''; };
 +    var obj = (n) => '';
-+    var obj;
+     var obj; // OK
+-    var arr = [function (n) { return ''; }];
 +    var arr = [(n) => ''];
-+    var arr;
+     var arr; // Incorrect error here (bug 829597)
+     // Arrow function as enum value
+-    var E;
 +    let E;
      (function (E) {
 -        var _this = this;
@@ -131,7 +127,7 @@
 +        E["y"] = (() => this).length;
 +        if (typeof E.y !== "string") E[E.y] = "y";
      })(E || (E = {}));
--    // Arrow function as module variable initializer
+     // Arrow function as module variable initializer
 -    var M;
 +    let M;
      (function (M) {
@@ -141,15 +137,14 @@
 +        var b = (s) => s;
      })(M || (M = {}));
  })(M2 || (M2 = {}));
--// <Identifier>(ParamList) => { ... } is a generic arrow function
+ // <Identifier>(ParamList) => { ... } is a generic arrow function
 -var generic1 = function (n) { return [n]; };
--var generic1; // Incorrect error, Bug 829597
--var generic2 = function (n) { return [n]; };
 +var generic1 = (n) => [n];
-+var generic1;
+ var generic1; // Incorrect error, Bug 829597
+-var generic2 = function (n) { return [n]; };
 +var generic2 = (n) => { return [n]; };
  var generic2;
--// <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
+ // <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
 -var asserted1 = (function (n) { return [n]; });
 +var asserted1 = ((n) => [n]);
  var asserted1;

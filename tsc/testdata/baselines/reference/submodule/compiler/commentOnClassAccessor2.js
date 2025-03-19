@@ -15,6 +15,12 @@ class C {
 
 //// [commentOnClassAccessor2.js]
 class C {
+    /**
+     * Getter.
+     */
     get bar() { return 1; }
+    /**
+     * Setter.
+     */
     set bar(v) { }
 }

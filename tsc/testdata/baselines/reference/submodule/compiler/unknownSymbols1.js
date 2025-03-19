@@ -41,7 +41,7 @@ function foo(x, y) { }
 function foo2() {
     return asdf;
 }
-var z = x;
+var z = x; // should be an error
 class C {
     foo;
     bar;
@@ -56,7 +56,7 @@ class C4 extends C3 {
         super(asdf);
     }
 }
-var x2 = this.asdf;
+var x2 = this.asdf; // no error, this is any
 class C5 {
     constructor() {
         this.asdf = asdf;

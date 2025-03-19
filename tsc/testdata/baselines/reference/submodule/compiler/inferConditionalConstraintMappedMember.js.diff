@@ -1,9 +1,0 @@
---- old.inferConditionalConstraintMappedMember.js
-+++ new.inferConditionalConstraintMappedMember.js
-@@= skipped -17, +17 lines =@@
- //// [inferConditionalConstraintMappedMember.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--// ERROR:
--// Type 'KeysWithoutStringIndex<T>' does not satisfy the constraint 'keyof T'.
--//  Type 'unknown' is not assignable to type 'keyof T'.(2344)

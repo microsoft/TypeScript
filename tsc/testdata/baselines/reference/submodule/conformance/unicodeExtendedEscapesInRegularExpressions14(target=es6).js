@@ -6,4 +6,5 @@ var x = /\u{-DDDD}/gu;
 
 
 //// [unicodeExtendedEscapesInRegularExpressions14.js]
+// Shouldn't work, negatives are not allowed.
 var x = /\u{-DDDD}/gu;

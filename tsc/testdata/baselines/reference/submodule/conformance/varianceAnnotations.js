@@ -179,25 +179,26 @@ let OuterC = class C<out T> {
 
 //// [varianceAnnotations.js]
 super_covariant = sub_covariant;
-sub_covariant = super_covariant;
-super_contravariant = sub_contravariant;
+sub_covariant = super_covariant; // Error
+super_contravariant = sub_contravariant; // Error
 sub_contravariant = super_contravariant;
-super_invariant = sub_invariant;
-sub_invariant = super_invariant;
+super_invariant = sub_invariant; // Error
+sub_invariant = super_invariant; // Error
 class C {
-    in a = 0;
-    out b = 0;
+    in a = 0; // Error
+    out b = 0; // Error
 }
-baz1 = baz2;
-baz2 = baz1;
+baz1 = baz2; // Error
+baz2 = baz1; // Error
 function fn(inp) {
     const a = inp;
 }
 const pu = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
-const notString = pu;
+const notString = pu; // Error
 const machine = createMachine({});
 interpret(machine);
-createMachine(qq);
+createMachine(qq); // Error
+// Repros from #48618
 let Anon = class {
     foo() {
         return this;

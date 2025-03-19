@@ -69,23 +69,23 @@ class A {
 class B extends A {
     s = 9;
     constructor() {
-        "use strict";
-        "use strict";
+        "use strict"; // No error
+        "use strict"; // No error
         super();
     }
 }
 class C extends A {
     s = 9;
     constructor() {
-        super();
+        super(); // No error
         "use strict";
     }
 }
 class D extends A {
     s = 9;
     constructor() {
-        var x = 1;
-        var y = this.s;
+        var x = 1; // No error
+        var y = this.s; // Error
         super();
         "use strict";
     }
@@ -93,22 +93,22 @@ class D extends A {
 class Bs extends A {
     static s = 9;
     constructor() {
-        "use strict";
-        "use strict";
+        "use strict"; // No error
+        "use strict"; // No error
         super();
     }
 }
 class Cs extends A {
     static s = 9;
     constructor() {
-        super();
+        super(); // No error
         "use strict";
     }
 }
 class Ds extends A {
     static s = 9;
     constructor() {
-        var x = 1;
+        var x = 1; // no Error
         super();
         "use strict";
     }

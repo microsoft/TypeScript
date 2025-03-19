@@ -43,6 +43,7 @@ var M;
         _subscribe(viewModel) {
             var f = (newValue) => { };
             var v = viewModel.value;
+            // both of these should work
             v.subscribe(f);
             v.subscribe((newValue) => { });
         }

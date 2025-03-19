@@ -82,6 +82,11 @@ enum E20 {
 
 
 //// [enumClassification.js]
+// An enum type where each member has no initializer or an initializer that specififes
+// a numeric literal, a string literal, or a single identifier naming another member in
+// the enum type is classified as a literal enum type. An enum type that doesn't adhere
+// to this pattern is classified as a numeric enum type.
+// Examples of literal enum types
 var E01;
 (function (E01) {
     E01[E01["A"] = 0] = "A";
@@ -129,6 +134,7 @@ var E08;
     E08["D"] = "hello";
     E08[E08["E"] = 10] = "E";
 })(E08 || (E08 = {}));
+// Examples of numeric enum types with only constant members
 var E10;
 (function (E10) {
 })(E10 || (E10 = {}));
@@ -144,6 +150,7 @@ var E12;
     E12[E12["B"] = 2] = "B";
     E12[E12["C"] = 4] = "C";
 })(E12 || (E12 = {}));
+// Examples of numeric enum types with constant and computed members
 var E20;
 (function (E20) {
     E20["A"] = "foo".length;

@@ -1,30 +1,6 @@
 --- old.escapedReservedCompilerNamedIdentifier.js
 +++ new.escapedReservedCompilerNamedIdentifier.js
-@@= skipped -32, +32 lines =@@
- var b5 = o5["_proto__"];
- 
- //// [escapedReservedCompilerNamedIdentifier.js]
--// double underscores
- var __proto__ = 10;
- var o = {
-     "__proto__": 0
-@@= skipped -10, +9 lines =@@
-     __proto__: 0
- };
- var b1 = o1["__proto__"];
--// Triple underscores
- var ___proto__ = 10;
- var o2 = {
-     "___proto__": 0
-@@= skipped -10, +9 lines =@@
-     ___proto__: 0
- };
- var b3 = o3["___proto__"];
--// One underscore
- var _proto__ = 10;
- var o4 = {
-     "_proto__": 0
-@@= skipped -10, +9 lines =@@
+@@= skipped -62, +62 lines =@@
      _proto__: 0
  };
  var b5 = o5["_proto__"];

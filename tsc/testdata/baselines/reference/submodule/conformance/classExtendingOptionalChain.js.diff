@@ -30,7 +30,7 @@
 +    }
      A.B = B;
  })(A || (A = {}));
--// ok
+ // ok
 -var C1 = /** @class */ (function (_super) {
 -    __extends(C1, _super);
 -    function C1() {
@@ -38,13 +38,13 @@
 -    }
 -    return C1;
 -}((A === null || A === void 0 ? void 0 : A.B)));
--// error
++class C1 extends (A?.B) {
++}
+ // error
 -var C2 = /** @class */ (function () {
 -    function C2() {
 -    }
 -    return C2;
 -}());
-+class C1 extends (A?.B) {
-+}
 +class C2 {
 +}

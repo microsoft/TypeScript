@@ -30,6 +30,8 @@ function overrr() {
 
 
 //// [functionNameConflicts.js]
+//Function and variable of the same name in same declaration space
+//Function overload with different name from implementation signature 
 var M;
 (function (M) {
     function fn1() { }

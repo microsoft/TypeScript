@@ -5,4 +5,4 @@
  //// [assignmentRestElementWithErrorSourceType.js]
  var tuple;
 -c = tupel.slice(0); // intentionally misspelled
-+[...c] = tupel;
++[...c] = tupel; // intentionally misspelled

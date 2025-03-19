@@ -101,32 +101,32 @@ interface Nested {
 
 //// [truthinessCallExpressionCoercion.js]
 function onlyErrorsWhenTestingNonNullableFunctionType(required, optional) {
-    if (required) {
+    if (required) { // error
     }
-    if (optional) {
+    if (optional) { // ok
     }
-    if (!!required) {
+    if (!!required) { // ok
     }
-    if (required()) {
+    if (required()) { // ok
     }
 }
 function onlyErrorsWhenUnusedInBody() {
     function test() { return Math.random() > 0.5; }
-    if (test) {
+    if (test) { // error
         console.log('test');
     }
-    if (test) {
+    if (test) { // ok
         console.log(test);
     }
-    if (test) {
+    if (test) { // ok
         test();
     }
-    if (test) {
+    if (test) { // ok
         [() => null].forEach(() => {
             test();
         });
     }
-    if (test) {
+    if (test) { // error
         [() => null].forEach(test => {
             test();
         });
@@ -138,9 +138,9 @@ function checksPropertyAccess() {
             bar() { return true; }
         }
     };
-    if (x.foo.bar) {
+    if (x.foo.bar) { // error
     }
-    if (x.foo.bar) {
+    if (x.foo.bar) { // ok
         x.foo.bar;
     }
 }
@@ -150,22 +150,23 @@ class Foo {
         return true;
     }
     test() {
-        if (this.isUser) {
+        if (this.isUser) { // error
         }
-        if (this.maybeIsUser) {
+        if (this.maybeIsUser) { // ok
         }
     }
 }
+// Test for GH-35557 where ids were not assigned for a symbol.
 function A(stats) {
-    if (stats.isDirectory) {
+    if (stats.isDirectory) { // err
         console.log(`[Directory] ${stats.ctime}`);
     }
 }
 function B(a, b) {
-    if (a.stats.isDirectory) {
+    if (a.stats.isDirectory) { // err
         b.stats.isDirectory();
     }
-    if (a.stats.isDirectory) {
+    if (a.stats.isDirectory) { // ok
         a.stats.isDirectory();
     }
 }

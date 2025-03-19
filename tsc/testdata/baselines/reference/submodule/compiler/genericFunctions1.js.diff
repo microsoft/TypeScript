@@ -1,13 +1,11 @@
 --- old.genericFunctions1.js
 +++ new.genericFunctions1.js
-@@= skipped -6, +6 lines =@@
- 
+@@= skipped -7, +7 lines =@@
  //// [genericFunctions1.js]
  function foo(x) { return x; }
--var x = foo(5); // 'x' should be number
+ var x = foo(5); // 'x' should be number
 -
 -
 -//// [genericFunctions1.d.ts]
 -declare function foo<T>(x: T): T;
 -declare var x: number;
-+var x = foo(5);

@@ -7,5 +7,6 @@
 -///<amd-dependency path='bar'/>
  Object.defineProperty(exports, "__esModule", { value: true });
 -var m1 = require("m2");
++///<amd-dependency path='bar'/>
 +const m1 = require("m2");
  m1.f();

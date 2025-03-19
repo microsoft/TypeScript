@@ -17,6 +17,7 @@ async function* g() {
 }
 
 //// [crashInYieldStarInAsyncFunction.js]
+// https://github.com/microsoft/TypeScript/issues/53145
 var obj = {
     [Symbol.asyncIterator]() {
         return {

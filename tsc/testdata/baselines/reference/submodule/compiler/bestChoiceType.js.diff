@@ -1,13 +1,12 @@
 --- old.bestChoiceType.js
 +++ new.bestChoiceType.js
-@@= skipped -20, +20 lines =@@
- 
+@@= skipped -21, +21 lines =@@
  
  //// [bestChoiceType.js]
--// Repro from #10041
+ // Repro from #10041
 -(''.match(/ /) || []).map(function (s) { return s.toLowerCase(); });
--// Similar cases
 +(''.match(/ /) || []).map(s => s.toLowerCase());
+ // Similar cases
  function f1() {
 -    var x = ''.match(/ /);
 -    var y = x || [];

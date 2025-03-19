@@ -1,12 +1,6 @@
 --- old.awaitInClassInAsyncFunction.js
 +++ new.awaitInClassInAsyncFunction.js
-@@= skipped -14, +14 lines =@@
- 
- 
- //// [awaitInClassInAsyncFunction.js]
--// https://github.com/microsoft/TypeScript/issues/34887
- async function bar() {
-     return 2;
+@@= skipped -20, +20 lines =@@
  }
  async function foo() {
      return new class {

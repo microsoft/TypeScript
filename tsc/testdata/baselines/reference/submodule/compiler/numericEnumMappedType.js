@@ -40,6 +40,7 @@ const x: E.ONE = e;
 
 
 //// [numericEnumMappedType.js]
+// Repro from #31771
 var E1;
 (function (E1) {
     E1[E1["ONE"] = 0] = "ONE";

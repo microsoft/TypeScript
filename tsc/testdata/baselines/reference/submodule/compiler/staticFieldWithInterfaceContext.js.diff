@@ -7,9 +7,7 @@
 -var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
 -    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
-+let c = class {
-+    static x = { a: "a" };
- };
+-};
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
 -var c = (_a = /** @class */ (function () {
 -        function class_1() {
@@ -17,9 +15,12 @@
 -        return class_1;
 -    }()),
 -    __setFunctionName(_a, "c"),
--    // should typecheck the same as the last line
++let c = class {
+     // should typecheck the same as the last line
 -    _a.x = { a: "a" },
 -    _a);
++    static x = { a: "a" };
++};
  c.x = { a: "a" };
 -var ex = "x";
 -var c2 = (_b = /** @class */ (function () {

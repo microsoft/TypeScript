@@ -85,14 +85,14 @@ function a() {
     let x;
     x = "";
     do {
-        x;
+        x; // string
     } while (cond);
 }
 function b() {
     let x;
     x = "";
     do {
-        x;
+        x; // string
         x = 42;
         break;
     } while (cond);
@@ -101,7 +101,7 @@ function c() {
     let x;
     x = "";
     do {
-        x;
+        x; // string
         x = undefined;
         if (typeof x === "string")
             continue;
@@ -112,10 +112,10 @@ function d() {
     let x;
     x = 1000;
     do {
-        x;
+        x; // number
         x = "";
     } while (x = x.length);
-    x;
+    x; // number
 }
 function e() {
     let x;
@@ -123,7 +123,7 @@ function e() {
     do {
         x = 42;
     } while (cond);
-    x;
+    x; // number
 }
 function f() {
     let x;
@@ -139,7 +139,7 @@ function f() {
         }
         x = /a/;
     } while (cond);
-    x;
+    x; // number | boolean | RegExp
 }
 function g() {
     let x;
@@ -155,5 +155,5 @@ function g() {
         }
         x = /a/;
     } while (true);
-    x;
+    x; // number
 }

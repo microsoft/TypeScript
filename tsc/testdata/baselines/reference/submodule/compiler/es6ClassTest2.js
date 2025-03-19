@@ -169,6 +169,7 @@ class BasicMonster {
         this.health = health;
     }
     attack(target) {
+        // WScript.Echo("Attacks " + target);
     }
     isAlive = true;
 }
@@ -185,10 +186,15 @@ class GetSetMonster {
         this._health = _health;
     }
     attack(target) {
+        // WScript.Echo("Attacks " + target);
     }
+    // The contextual keyword "get" followed by an identifier and
+    // a curly body defines a getter in the same way that "get"
+    // defines one in an object literal.
     get isAlive() {
         return this._health > 0;
     }
+    // Likewise, "set" can be used to define setters.
     set health(value) {
         if (value < 0) {
             throw new Error('Health must be non-negative.');
@@ -209,6 +215,7 @@ class OverloadedMonster {
         this.health = health;
     }
     attack(target) {
+        //WScript.Echo("Attacks " + target);
     }
     isAlive = true;
 }
@@ -281,6 +288,7 @@ class BaseClassWithConstructor {
         this.s = s;
     }
 }
+// used to test codegen
 class ChildClassWithoutConstructor extends BaseClassWithConstructor {
 }
 var ccwc = new ChildClassWithoutConstructor(1, "s");

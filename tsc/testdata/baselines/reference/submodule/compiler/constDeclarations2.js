@@ -10,6 +10,7 @@ module M {
 
 
 //// [constDeclarations2.js]
+// No error
 var M;
 (function (M) {
     M.c1 = false;

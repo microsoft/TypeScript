@@ -13,4 +13,6 @@ Foo(() =>
 //// [lambdaASIEmit.js]
 function Foo(x) {
 }
-Foo(() => 127);
+Foo(() => 
+// do something
+127);

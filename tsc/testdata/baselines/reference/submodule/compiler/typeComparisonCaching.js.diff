@@ -8,7 +8,3 @@
  var a;
  var b;
  var c;
- var d;
- a = b;
--c = d; // Should not be allowed
-+c = d;

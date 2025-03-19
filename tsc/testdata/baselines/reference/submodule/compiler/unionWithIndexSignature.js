@@ -36,7 +36,7 @@ exports.foo = foo;
 exports.isTypedArray = isTypedArray;
 exports.flatten = flatten;
 function foo(arr) {
-    let zz = arr[1];
+    let zz = arr[1]; // Error
 }
 function isTypedArray(a) {
     return a instanceof Int32Array || a instanceof Uint8Array;

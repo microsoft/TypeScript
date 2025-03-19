@@ -18,8 +18,8 @@ export { Lib }
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var x;
-Library.foo;
+var x; // should work
+Library.foo; // should be an error
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -28,5 +28,5 @@ var Lib;
 (function (Lib) {
     Lib.foo = "";
 })(Lib || (exports.Lib = Lib = {}));
-Lib.foo;
-var x;
+Lib.foo; // should work
+var x; // should be an error

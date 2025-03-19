@@ -30,7 +30,7 @@ class C {
         callback('bye');
         var hm = "hm";
         callback(hm);
-        callback(1);
+        callback(1); // error
     }
 }
 var c;

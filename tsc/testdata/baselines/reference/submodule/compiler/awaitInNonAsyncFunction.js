@@ -43,6 +43,7 @@ for await (const _ of []);
 await null;
 
 //// [awaitInNonAsyncFunction.js]
+// https://github.com/Microsoft/TypeScript/issues/26586
 function normalFunc(p) {
     for await (const _ of [])
         ;

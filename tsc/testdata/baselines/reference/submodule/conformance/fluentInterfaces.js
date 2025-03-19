@@ -16,4 +16,4 @@ var z = c.foo().bar().baz();  // Fluent pattern
 
 //// [fluentInterfaces.js]
 var c;
-var z = c.foo().bar().baz();
+var z = c.foo().bar().baz(); // Fluent pattern

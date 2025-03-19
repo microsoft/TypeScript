@@ -38,6 +38,7 @@ var x = {
         throw 10;
     },
     set [1 + 1]() {
+        // just throw
         throw 10;
     },
     get [1 + 1]() {

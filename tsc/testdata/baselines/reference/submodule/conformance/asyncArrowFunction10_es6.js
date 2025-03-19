@@ -9,5 +9,6 @@ var foo = async (): Promise<void> => {
 
 //// [asyncArrowFunction10_es6.js]
 var foo = async () => {
+    // Legal to use 'await' in a type context.
     var v;
 };

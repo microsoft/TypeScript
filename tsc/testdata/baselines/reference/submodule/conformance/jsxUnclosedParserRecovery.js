@@ -141,6 +141,7 @@ function noSelfcloseTypeArgAttrsTrailingText() { }
 
 
 //// [jsxParserRecovery.jsx]
+// should have no errors here; all these functions should parse and resolve
 noName();
 noClose();
 noCloseTypeArg();
@@ -156,14 +157,14 @@ noCloseTypeArgTrailingTag();
 noCloseAttrsTrailingTag();
 noCloseTypeArgAttrsTrailingTag();
 noCloseBracketTrailingTag();
-noCloseBracketTypeArgAttrsTrailingTag();
+noCloseBracketTypeArgAttrsTrailingTag(); // noSelfcloseTrailingTag(); noSelfcloseTypeArgAttrsTrailingTag();
 noNameTrailingText();
 noCloseTrailingText();
 noCloseTypeArgTrailingText();
 noCloseAttrsTrailingText();
 noCloseTypeArgAttrsTrailingText();
 noCloseBracketTrailingText();
-noCloseBracketTypeArgAttrsTrailingText();
+noCloseBracketTypeArgAttrsTrailingText(); // noSelfcloseTrailingText(); noSelfcloseTypeArgAttrsTrailingText();
 function diddy() {
     return null;
 }

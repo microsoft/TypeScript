@@ -37,12 +37,14 @@ function f4() {
 
 
 //// [missingAndExcessProperties.js]
+// Missing properties
 function f1() {
     var { x, y } = {};
     var { x = 1, y } = {};
     var { x, y = 1 } = {};
     var { x = 1, y = 1 } = {};
 }
+// Missing properties
 function f2() {
     var x, y;
     ({ x, y } = {});
@@ -50,12 +52,14 @@ function f2() {
     ({ x, y: y = 1 } = {});
     ({ x: x = 1, y: y = 1 } = {});
 }
+// Excess properties
 function f3() {
     var {} = { x: 0, y: 0 };
     var { x } = { x: 0, y: 0 };
     var { y } = { x: 0, y: 0 };
     var { x, y } = { x: 0, y: 0 };
 }
+// Excess properties
 function f4() {
     var x, y;
     ({} = { x: 0, y: 0 });

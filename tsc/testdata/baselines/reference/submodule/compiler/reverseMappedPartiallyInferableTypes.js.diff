@@ -23,18 +23,17 @@
                  return x.valid;
              }
          }
-@@= skipped -22, +21 lines =@@
- r.notResolved;
+@@= skipped -23, +22 lines =@@
  r.explicit.required;
  r.notResolved.required;
--// All properties have inferable types
+ // All properties have inferable types
 -var obj1 = id({
 +const obj1 = id({
      foo: {
          contents: ""
      }
  });
--// Some properties have inferable types
+ // Some properties have inferable types
 -var obj2 = id({
 +const obj2 = id({
      foo: {
@@ -45,7 +44,7 @@
          }
      }
  });
--// No properties have inferable types
+ // No properties have inferable types
 -var obj3 = id({
 +const obj3 = id({
      foo: {

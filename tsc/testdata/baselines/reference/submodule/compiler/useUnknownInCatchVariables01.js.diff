@@ -6,16 +6,9 @@
  //// [useUnknownInCatchVariables01.js]
 -var _a;
  try {
--    // ...
+     // ...
  }
- catch (e) {
--    // error!
-     void e.toUpperCase();
-     void e++;
-     void e();
-     if (typeof e === "string") {
--        // works!
--        // We've narrowed 'e' down to the type 'string'.
+@@= skipped -15, +14 lines =@@
          console.log(e.toUpperCase());
      }
      if (e instanceof Error) {
@@ -24,14 +17,3 @@
      }
      if (typeof e === "number") {
          e.toExponential();
-@@= skipped -23, +18 lines =@@
-     }
- }
- try {
--    // ...
- }
- catch (e) {
--    // All are allowed.
-     void e.toUpperCase();
-     void e.toExponential();
-     void e();

@@ -138,6 +138,7 @@ function* g311() { // Generator<undefined, void, string>
 //// [generatorReturnTypeInference.js]
 function* g000() {
 }
+// 'yield' iteration type inference
 function* g001() {
     yield;
 }
@@ -160,6 +161,7 @@ function* g006() {
 function* g007() {
     yield never;
 }
+// 'return' iteration type inference
 function* g102() {
     return 1;
 }
@@ -171,6 +173,7 @@ function* g103() {
 function* g104() {
     return never;
 }
+// 'next' iteration type inference
 function* g201() {
     let a = yield 1;
 }
@@ -184,6 +187,7 @@ function* g203() {
 function* g204() {
     const x = f2(yield 1);
 }
+// mixed iteration types inference
 function* g301() {
     yield;
     return;

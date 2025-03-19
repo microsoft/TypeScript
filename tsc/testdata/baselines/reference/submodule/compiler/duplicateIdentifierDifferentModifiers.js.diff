@@ -1,24 +1,23 @@
 --- old.duplicateIdentifierDifferentModifiers.js
 +++ new.duplicateIdentifierDifferentModifiers.js
-@@= skipped -24, +24 lines =@@
- 
+@@= skipped -25, +25 lines =@@
  
  //// [duplicateIdentifierDifferentModifiers.js]
--// OK
+ // OK
 -var A = /** @class */ (function () {
 -    function A() {
 -    }
 -    return A;
 -}());
--// Not OK
++class A {
++    y;
++}
+ // Not OK
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    return C;
 -}());
-+class A {
-+    y;
-+}
 +class C {
 +    y;
 +}

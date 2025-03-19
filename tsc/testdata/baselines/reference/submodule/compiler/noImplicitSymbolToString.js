@@ -50,6 +50,7 @@ function getKey2<S extends string>(key: S) {
 
 
 //// [noImplicitSymbolToString.js]
+// Fix #19666
 let symbol;
 let str = "hello ";
 const templateStr = `hello ${symbol}`;

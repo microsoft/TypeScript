@@ -27,8 +27,8 @@
  //// [typeofAmbientExternalModules_2.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--///<reference path='typeofAmbientExternalModules_0.ts'/>
--///<reference path='typeofAmbientExternalModules_1.ts'/>
+ ///<reference path='typeofAmbientExternalModules_0.ts'/>
+ ///<reference path='typeofAmbientExternalModules_1.ts'/>
 -var ext = require("./typeofAmbientExternalModules_0");
 -var exp = require("./typeofAmbientExternalModules_1");
 +const ext = require("./typeofAmbientExternalModules_0");

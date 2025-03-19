@@ -110,8 +110,9 @@ func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	}
 
 	printerOptions := printer.PrinterOptions{
-		NewLine:       options.NewLine,
-		NoEmitHelpers: options.NoEmitHelpers.IsTrue(),
+		NewLine:        options.NewLine,
+		NoEmitHelpers:  options.NoEmitHelpers.IsTrue(),
+		RemoveComments: options.RemoveComments.IsTrue(),
 		// !!!
 	}
 

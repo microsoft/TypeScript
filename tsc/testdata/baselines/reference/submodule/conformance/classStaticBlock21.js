@@ -11,6 +11,8 @@ class C {
 
 //// [classStaticBlock21.js]
 class C {
+    /* jsdocs */
     static {
+        // something
     }
 }

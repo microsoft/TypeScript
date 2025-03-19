@@ -1,10 +1,7 @@
 --- old.overload2.js
 +++ new.overload2.js
-@@= skipped -24, +24 lines =@@
- var B;
- (function (B) {
- })(B || (B = {}));
--// should be ok
+@@= skipped -27, +27 lines =@@
+ // should be ok
  function foo(x) {
  }
 -var C = /** @class */ (function () {
@@ -12,8 +9,8 @@
 -    }
 -    return C;
 -}());
--// should be ok
 +class C {
 +}
+ // should be ok
  function foo1(x) {
  }

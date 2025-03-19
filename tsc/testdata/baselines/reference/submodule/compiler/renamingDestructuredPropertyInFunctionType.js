@@ -69,6 +69,7 @@ const f11 =  ({ [2]: string }) => { };
 function f12({ a: string = "" }: O): typeof string { return "a"; }
 
 //// [renamingDestructuredPropertyInFunctionType.js]
+// Below are OK but renaming should be removed from declaration emit
 function f1({ a: string }) { }
 const f2 = function ({ a: string }) { };
 const f3 = ({ a: string, b, c }) => { };
@@ -88,4 +89,5 @@ function f9({ 2: string }) { }
 function f10({ ["a"]: string }) { }
 ;
 const f11 = ({ [2]: string }) => { };
+// In below case `string` should be kept because it is used
 function f12({ a: string = "" }) { return "a"; }

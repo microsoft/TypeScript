@@ -1,10 +1,9 @@
 --- old.localAliasExportAssignment.js
 +++ new.localAliasExportAssignment.js
-@@= skipped -22, +22 lines =@@
- //// [localAliasExportAssignment_1.js]
+@@= skipped -23, +23 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--///<reference path='localAliasExportAssignment_0.ts'/>
+ ///<reference path='localAliasExportAssignment_0.ts'/>
 -var connect = require("./localAliasExportAssignment_0");
 +const connect = require("./localAliasExportAssignment_0");
  connect();

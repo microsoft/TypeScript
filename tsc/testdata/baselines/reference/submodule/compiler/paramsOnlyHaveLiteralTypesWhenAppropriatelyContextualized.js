@@ -43,8 +43,9 @@ function appendToOptionalArray(object, key, value) {
         object[key] = [value];
     }
 }
+// e.g.
 const foo = {};
-appendToOptionalArray(foo, 'x', 123);
-appendToOptionalArray(foo, 'y', 'bar');
-appendToOptionalArray(foo, 'y', 12);
-appendToOptionalArray(foo, 'x', "no");
+appendToOptionalArray(foo, 'x', 123); // ok
+appendToOptionalArray(foo, 'y', 'bar'); // ok
+appendToOptionalArray(foo, 'y', 12); // should fail
+appendToOptionalArray(foo, 'x', "no"); // should fail

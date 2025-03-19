@@ -84,6 +84,7 @@ function f(b) {
     if (b) {
         d.q = false;
     }
+    // error d.q might not be assigned
     d.q;
     if (b) {
         d.q = false;
@@ -104,6 +105,7 @@ function f(b) {
     }
     return d;
 }
+// OK to access possibly-unassigned properties outside the initialising scope
 var test = f(true).s;
 function d() {
 }
@@ -127,12 +129,13 @@ else {
     d.r = 2;
 }
 d.r;
+// test function expressions too
 const g = function () {
 };
 if (!!false) {
     g.expando = 1;
 }
-g.expando;
+g.expando; // error
 if (!!false) {
     g.both = 'hi';
 }

@@ -1,14 +1,6 @@
 --- old.assignEveryTypeToAny.js
 +++ new.assignEveryTypeToAny.js
-@@= skipped -57, +57 lines =@@
- }
- 
- //// [assignEveryTypeToAny.js]
--// all of these are valid
- var x;
- x = 1;
- var a = 2;
-@@= skipped -26, +25 lines =@@
+@@= skipped -83, +83 lines =@@
  x = f;
  var g;
  x = g;

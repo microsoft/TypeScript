@@ -124,6 +124,7 @@ class D17 extends Base {
 
 
 //// [undefinedIsSubtypeOfEverything.js]
+// undefined is a subtype of every other types, no errors expected below
 class Base {
     foo;
 }
@@ -201,6 +202,9 @@ class D14 extends Base {
 class D15 extends Base {
     foo;
 }
+//class D15<T, U extends T> extends Base {
+//    foo: U;
+//}
 class D16 extends Base {
     foo;
 }

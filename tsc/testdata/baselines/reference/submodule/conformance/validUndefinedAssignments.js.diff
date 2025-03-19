@@ -1,16 +1,14 @@
 --- old.validUndefinedAssignments.js
 +++ new.validUndefinedAssignments.js
-@@= skipped -31, +31 lines =@@
- var c = x;
+@@= skipped -32, +32 lines =@@
  var d = x;
  var e = x;
--e = x; // should work
+ e = x; // should work
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    return C;
 -}());
-+e = x;
 +class C {
 +    foo;
 +}

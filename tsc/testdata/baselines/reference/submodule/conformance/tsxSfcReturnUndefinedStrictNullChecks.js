@@ -19,5 +19,6 @@ const Foo = (props) => undefined;
 function Greet(x) {
     return undefined;
 }
+// Error
 const foo = <Foo />;
 const G = <Greet />;

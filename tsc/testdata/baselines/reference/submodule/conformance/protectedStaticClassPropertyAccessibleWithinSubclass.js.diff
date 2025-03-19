@@ -21,19 +21,15 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
+-    }
+-    Base.staticMethod = function () {
 +class Base {
 +    static x;
 +    static staticMethod() {
-+        Base.x;
-+        Derived1.x;
-+        Derived2.x;
-+        Derived3.x;
-     }
--    Base.staticMethod = function () {
--        Base.x; // OK, accessed within their declaring class
--        Derived1.x; // OK, accessed within their declaring class
--        Derived2.x; // OK, accessed within their declaring class
--        Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+         Base.x; // OK, accessed within their declaring class
+         Derived1.x; // OK, accessed within their declaring class
+         Derived2.x; // OK, accessed within their declaring class
+         Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
 -    };
 -    return Base;
 -}());
@@ -41,19 +37,15 @@
 -    __extends(Derived1, _super);
 -    function Derived1() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+     }
+-    Derived1.staticMethod1 = function () {
 +}
 +class Derived1 extends Base {
 +    static staticMethod1() {
-+        Base.x;
-+        Derived1.x;
-+        Derived2.x;
-+        Derived3.x;
-     }
--    Derived1.staticMethod1 = function () {
--        Base.x; // OK, accessed within a class derived from their declaring class
--        Derived1.x; // OK, accessed within a class derived from their declaring class
--        Derived2.x; // OK, accessed within a class derived from their declaring class
--        Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+         Base.x; // OK, accessed within a class derived from their declaring class
+         Derived1.x; // OK, accessed within a class derived from their declaring class
+         Derived2.x; // OK, accessed within a class derived from their declaring class
+         Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
 -    };
 -    return Derived1;
 -}(Base));
@@ -61,19 +53,15 @@
 -    __extends(Derived2, _super);
 -    function Derived2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+     }
+-    Derived2.staticMethod2 = function () {
 +}
 +class Derived2 extends Base {
 +    static staticMethod2() {
-+        Base.x;
-+        Derived1.x;
-+        Derived2.x;
-+        Derived3.x;
-     }
--    Derived2.staticMethod2 = function () {
--        Base.x; // OK, accessed within a class derived from their declaring class
--        Derived1.x; // OK, accessed within a class derived from their declaring class
--        Derived2.x; // OK, accessed within a class derived from their declaring class
--        Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+         Base.x; // OK, accessed within a class derived from their declaring class
+         Derived1.x; // OK, accessed within a class derived from their declaring class
+         Derived2.x; // OK, accessed within a class derived from their declaring class
+         Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
 -    };
 -    return Derived2;
 -}(Base));
@@ -81,29 +69,21 @@
 -    __extends(Derived3, _super);
 -    function Derived3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+     }
+-    Derived3.staticMethod3 = function () {
 +}
 +class Derived3 extends Derived1 {
 +    static x;
 +    static staticMethod3() {
-+        Base.x;
-+        Derived1.x;
-+        Derived2.x;
-+        Derived3.x;
-     }
--    Derived3.staticMethod3 = function () {
--        Base.x; // OK, accessed within a class derived from their declaring class
--        Derived1.x; // OK, accessed within a class derived from their declaring class
--        Derived2.x; // OK, accessed within a class derived from their declaring class
--        Derived3.x; // OK, accessed within their declaring class
+         Base.x; // OK, accessed within a class derived from their declaring class
+         Derived1.x; // OK, accessed within a class derived from their declaring class
+         Derived2.x; // OK, accessed within a class derived from their declaring class
+         Derived3.x; // OK, accessed within their declaring class
 -    };
 -    return Derived3;
 -}(Derived1));
--Base.x; // Error, neither within their declaring class nor classes derived from their declaring class
--Derived1.x; // Error, neither within their declaring class nor classes derived from their declaring class
--Derived2.x; // Error, neither within their declaring class nor classes derived from their declaring class
--Derived3.x; // Error, neither within their declaring class nor classes derived from their declaring class
++    }
 +}
-+Base.x;
-+Derived1.x;
-+Derived2.x;
-+Derived3.x;
+ Base.x; // Error, neither within their declaring class nor classes derived from their declaring class
+ Derived1.x; // Error, neither within their declaring class nor classes derived from their declaring class
+ Derived2.x; // Error, neither within their declaring class nor classes derived from their declaring class

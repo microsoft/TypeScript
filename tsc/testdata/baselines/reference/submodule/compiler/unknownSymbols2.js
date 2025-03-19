@@ -37,14 +37,14 @@ var M;
 (function (M) {
     var x;
     var y = x + asdf;
-    var z = x;
+    var z = x; // should be an error
     if (asdf) {
     }
     else if (qwerty) {
     }
     try {
     }
-    catch (asdf) {
+    catch (asdf) { // no error
     }
     switch (asdf) {
         case qwerty:

@@ -1,10 +1,6 @@
 --- old.exportImportAlias.js
 +++ new.exportImportAlias.js
-@@= skipped -70, +70 lines =@@
- var p: M.D.Point;
- 
- //// [exportImportAlias.js]
--// expect no errors here
+@@= skipped -74, +74 lines =@@
  var A;
  (function (A) {
      A.x = 'hello world';
@@ -23,7 +19,7 @@
      A.Point = Point;
  })(A || (A = {}));
  var C;
-@@= skipped -28, +28 lines =@@
+@@= skipped -24, +25 lines =@@
      }
      X.Y = Y;
      (function (Y) {

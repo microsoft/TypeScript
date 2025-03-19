@@ -6,9 +6,11 @@
  "use strict";
 -// Repro from #12319
  Object.defineProperty(exports, "__esModule", { value: true });
++// Repro from #12319
  function md5(string) {
      function FF(a, b, c, d, x, s, ac) {
-@@= skipped -106, +105 lines =@@
+         return 0;
+@@= skipped -106, +106 lines =@@
      return {};
  }
  ;

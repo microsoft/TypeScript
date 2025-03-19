@@ -11,6 +11,6 @@ abstract class A {
 
 //// [classAbstractAccessor.js]
 class A {
-    get aa() { return 1; }
-    set bb(x) { }
+    get aa() { return 1; } // error
+    set bb(x) { } // error
 }

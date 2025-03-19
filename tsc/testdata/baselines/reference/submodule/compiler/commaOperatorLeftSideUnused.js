@@ -64,14 +64,18 @@ var yy;
 function fn() {
     let arr = [];
     switch (arr.length) {
+        // Should error
         case 0, 1:
             return 'zero or one';
         default:
             return 'more than one';
     }
 }
+// Should error
 let x = Math.pow((3, 5), 2);
+// Should error
 let a = [(3 + 4), ((1 + 1, 8) * 4)];
+// Error cases
 xx = (1, 2);
 xx = ('', xx);
 xx = (/323/, 5);
@@ -93,6 +97,7 @@ xx = (~xx, 10);
 xx = (-xx, 10);
 xx = (+xx, 10);
 xx = (0, xx)();
+// OK cases
 xx = (xx ? x++ : 4, 10);
 xx = (--xx, 3);
 xx = (xx = 3, 1);

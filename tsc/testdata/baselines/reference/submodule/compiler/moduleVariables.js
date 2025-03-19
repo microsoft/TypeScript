@@ -24,12 +24,12 @@ var x = 1;
 var M;
 (function (M) {
     M.x = 2;
-    console.log(M.x);
+    console.log(M.x); // 2
 })(M || (M = {}));
 (function (M) {
-    console.log(x);
+    console.log(x); // 2
 })(M || (M = {}));
 (function (M) {
     var x = 3;
-    console.log(x);
+    console.log(x); // 3
 })(M || (M = {}));

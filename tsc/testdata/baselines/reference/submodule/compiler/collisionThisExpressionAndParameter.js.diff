@@ -8,14 +8,13 @@
 -    function Foo() {
 -    }
 -    Foo.prototype.x = function () {
--        var _this = 10; // Local var. No this capture in x(), so no conflict.
 +class Foo {
 +    x() {
-+        var _this = 10;
+         var _this = 10; // Local var. No this capture in x(), so no conflict.
          function inner(_this) {
 -            var _this_1 = this;
 -            return function (x) { return _this_1; }; // New scope.  So should inject new _this capture into function inner
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture into function inner
          }
 -    };
 -    Foo.prototype.y = function () {
@@ -25,7 +24,7 @@
 +    }
 +    y() {
 +        var lamda = (_this) => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
 -    };
 -    Foo.prototype.z = function (_this) {
@@ -35,14 +34,13 @@
 +    }
 +    z(_this) {
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
 -    };
 -    Foo.prototype.x1 = function () {
--        var _this = 10; // Local var. No this capture in x(), so no conflict.
 +    }
 +    x1() {
-+        var _this = 10;
+         var _this = 10; // Local var. No this capture in x(), so no conflict.
          function inner(_this) {
          }
 -    };
@@ -106,7 +104,7 @@
 -            return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
 +    z(_this) {
 +        var lambda = () => {
-+            return x => this;
++            return x => this; // New scope.  So should inject new _this capture
          };
 -    };
 -    return Foo3;

@@ -22,13 +22,13 @@ if (isNumber((otherValue(), value).inner)) {
 const otherValue = () => true;
 const value = null;
 function isNumber(obj) {
-    return true;
+    return true; // method implementation irrelevant
 }
 if (typeof (otherValue(), value).inner === 'number') {
-    const a = value.inner;
-    const b = (otherValue(), value).inner;
+    const a = value.inner; // number
+    const b = (otherValue(), value).inner; // string | number , but should be number
 }
 if (isNumber((otherValue(), value).inner)) {
-    const a = value.inner;
-    const b = (otherValue(), value).inner;
+    const a = value.inner; // number
+    const b = (otherValue(), value).inner; // string | number , but should be number
 }

@@ -1,11 +1,9 @@
 --- old.propertyAccessOnTypeParameterWithConstraints.js
 +++ new.propertyAccessOnTypeParameterWithConstraints.js
-@@= skipped -36, +36 lines =@@
- var r4 = b.foo(new Date());
- 
+@@= skipped -38, +38 lines =@@
  //// [propertyAccessOnTypeParameterWithConstraints.js]
--// generic types should behave as if they have properties of their constraint type
--// no errors expected 
+ // generic types should behave as if they have properties of their constraint type
+ // no errors expected 
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -13,8 +11,7 @@
 +class C {
 +    f() {
          var x;
--        var a = x['getDate'](); // number
-+        var a = x['getDate']();
+         var a = x['getDate'](); // number
          return a + x.getDate();
 -    };
 -    return C;
@@ -24,14 +21,12 @@
  var r = (new C()).f();
  var i;
  var r2 = i.foo.getDate();
-@@= skipped -20, +15 lines =@@
+@@= skipped -18, +15 lines =@@
  var r3 = a().getDate();
  var r3b = a()['getDate']();
  var b = {
 -    foo: function (x) {
--        var a = x['getDate'](); // number
 +    foo: (x) => {
-+        var a = x['getDate']();
+         var a = x['getDate'](); // number
          return a + x.getDate();
      }
- };

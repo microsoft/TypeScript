@@ -1,10 +1,7 @@
 --- old.callSignaturesWithOptionalParameters.js
 +++ new.callSignaturesWithOptionalParameters.js
-@@= skipped -57, +57 lines =@@
- 
- 
- //// [callSignaturesWithOptionalParameters.js]
--// Optional parameters should be valid in all the below casts
+@@= skipped -60, +60 lines =@@
+ // Optional parameters should be valid in all the below casts
  function foo(x) { }
  var f = function foo(x) { };
 -var f2 = function (x, y) { };
@@ -27,7 +24,7 @@
  var c;
  c.foo();
  c.foo(1);
-@@= skipped -30, +26 lines =@@
+@@= skipped -27, +24 lines =@@
  a.foo();
  a.foo(1);
  var b = {

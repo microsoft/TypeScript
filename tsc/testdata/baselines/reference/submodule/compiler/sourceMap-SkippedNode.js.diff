@@ -1,12 +1,7 @@
 --- old.sourceMap-SkippedNode.js
 +++ new.sourceMap-SkippedNode.js
-@@= skipped -8, +8 lines =@@
- 
- //// [sourceMap-SkippedNode.js]
- try {
--    // ...
- }
+@@= skipped -13, +13 lines =@@
  finally {
--    // N.B. No 'catch' block
+     // N.B. No 'catch' block
  }
 -//# sourceMappingURL=sourceMap-SkippedNode.js.map

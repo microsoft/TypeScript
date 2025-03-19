@@ -25,6 +25,9 @@ class C extends Base {
         super();
         () => {
             var obj = {
+                // Ideally, we would capture this. But the reference is
+                // illegal, and not capturing this is consistent with
+                //treatment of other similar violations.
                 [(super(), "prop")]() { }
             };
         };

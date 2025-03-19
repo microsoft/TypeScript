@@ -30,6 +30,7 @@ export default { a: 1 };
 import a from "./a";
 const b1 = {};
 ({
+    // @ts-ignore
     ...b1,
     a
 });
@@ -37,6 +38,7 @@ const b1 = {};
 import a from "./a";
 const b2 = {};
 ({
+    // @ts-ignore
     ...b2,
     a
 });

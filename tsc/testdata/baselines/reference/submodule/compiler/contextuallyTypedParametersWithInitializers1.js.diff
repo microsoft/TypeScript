@@ -104,7 +104,6 @@
 -    }
 -    return 0;
 -}); // []
--// Repro from #28816
 +const f10 = function ({ foo = 42 }) { return foo; };
 +const f11 = id1(function ({ foo = 42 }) { return foo; });
 +const f12 = id2(function ({ foo = 42 }) { return foo; });
@@ -114,22 +113,23 @@
 +const f21 = id1(function (foo = 42) { return foo; });
 +const f22 = id2(function (foo = 42) { return foo; });
 +const f25 = id5(function (foo = 42) { return foo; });
-+const f1 = (x = 1) => 0;
-+const f2 = (x = 1) => 0;
-+const f3 = (x = 1) => 0;
-+const f4 = (x = 1) => 0;
-+const f5 = (x = 1) => 0;
-+const f6 = (x = 1) => 0;
-+const f7 = (x) => 0;
-+const f8 = (...x) => 0;
-+g1((x = 1) => 0);
-+g2((x = 1) => 0);
-+g3((x = 1) => 0);
-+g4((x = 1) => 0);
-+g5((x = 1) => 0);
-+g6((x = 1) => 0);
-+g6((x) => 0);
-+g6((...x) => 0);
++const f1 = (x = 1) => 0; // number
++const f2 = (x = 1) => 0; // number
++const f3 = (x = 1) => 0; // number
++const f4 = (x = 1) => 0; // number
++const f5 = (x = 1) => 0; // any
++const f6 = (x = 1) => 0; // number
++const f7 = (x) => 0; // Implicit any error
++const f8 = (...x) => 0; // []
++g1((x = 1) => 0); // number
++g2((x = 1) => 0); // number
++g3((x = 1) => 0); // number
++g4((x = 1) => 0); // number
++g5((x = 1) => 0); // any
++g6((x = 1) => 0); // number
++g6((x) => 0); // Implicit any error
++g6((...x) => 0); // []
+ // Repro from #28816
  function id(input) { return input; }
 -function getFoo(_a) {
 -    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;

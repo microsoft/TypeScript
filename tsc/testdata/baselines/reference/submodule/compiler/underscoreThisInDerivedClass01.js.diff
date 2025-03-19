@@ -1,10 +1,9 @@
 --- old.underscoreThisInDerivedClass01.js
 +++ new.underscoreThisInDerivedClass01.js
-@@= skipped -27, +27 lines =@@
- }
+@@= skipped -28, +28 lines =@@
  
  //// [underscoreThisInDerivedClass01.js]
--// @target es5
+ // @target es5
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -20,14 +19,13 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Original test intent:
--// When arrow functions capture 'this', the lexical 'this' owner
--// currently captures 'this' using a variable named '_this'.
--// That means that '_this' becomes a reserved identifier in certain places.
--//
--// Constructors have adopted the same identifier name ('_this')
--// for capturing any potential return values from super calls,
--// so we expect the same behavior.
+ // Original test intent:
+ // When arrow functions capture 'this', the lexical 'this' owner
+ // currently captures 'this' using a variable named '_this'.
+@@= skipped -23, +8 lines =@@
+ // Constructors have adopted the same identifier name ('_this')
+ // for capturing any potential return values from super calls,
+ // so we expect the same behavior.
 -var C = /** @class */ (function () {
 -    function C() {
 +class C {

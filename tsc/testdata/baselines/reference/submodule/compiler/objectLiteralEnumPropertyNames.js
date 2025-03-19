@@ -56,6 +56,7 @@ const um = {
 
 
 //// [objectLiteralEnumPropertyNames.js]
+// Fixes #16887
 var Strs;
 (function (Strs) {
     Strs["A"] = "a";

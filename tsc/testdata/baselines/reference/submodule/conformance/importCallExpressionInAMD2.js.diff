@@ -32,6 +32,7 @@
 -    }
 -    foo(new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }));
 -});
++// We use Promise<any> for now as there is no way to specify shape of module object
 +function foo(x) {
 +    x.then(value => {
 +        let b = new value.B();

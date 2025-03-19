@@ -34,10 +34,12 @@ var _modes;
     class Mode {
     }
 })(_modes || (_modes = {}));
+//_modes. // produces an internal error - please implement in derived class
 var editor;
 (function (editor) {
     var modes = _modes;
     var i;
+    // If you just use p1:modes, the compiler accepts it - should be an error
     class Bug {
         constructor(p1, p2) {
             var x;

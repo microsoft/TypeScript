@@ -5,6 +5,6 @@
  
  //// [usage.js]
 -"use strict";
--/// <reference types="pkg" />
+ /// <reference types="pkg" />
 -Object.defineProperty(exports, "__esModule", { value: true });
  const a = { a: 0 };

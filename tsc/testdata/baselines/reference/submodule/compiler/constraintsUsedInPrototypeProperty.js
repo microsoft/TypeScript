@@ -7,4 +7,4 @@ Foo.prototype; // Foo<any, any, any>
 //// [constraintsUsedInPrototypeProperty.js]
 class Foo {
 }
-Foo.prototype;
+Foo.prototype; // Foo<any, any, any>

@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
 const react_1 = __importDefault(require("react"));
 function test(wrappedProps) {
     let MySFC = function (props) {
@@ -37,8 +38,8 @@ function test(wrappedProps) {
             return <>hello</>;
         }
     }
-    let x = <MySFC />;
-    let y = <MyComponent />;
-    let z = <MySFC {...wrappedProps}/>;
-    let q = <MyComponent {...wrappedProps}/>;
+    let x = <MySFC />; // should error
+    let y = <MyComponent />; // should error
+    let z = <MySFC {...wrappedProps}/>; // should work
+    let q = <MyComponent {...wrappedProps}/>; // should work
 }

@@ -147,10 +147,12 @@ class publicClass {
 }
 exports.publicClass = publicClass;
 class publicClassWithWithPrivateTypeParameters {
+    // TypeParameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_type_1
     static myPublicStaticMethod() {
     }
     static myPrivateStaticMethod() {
     }
+    // TypeParameter_0_of_public_method_from_exported_class_has_or_is_using_private_type_1
     myPublicMethod() {
     }
     myPrivateMethod() {
@@ -188,6 +190,7 @@ class privateClassWithWithPublicTypeParameters {
     myPrivateMethod() {
     }
 }
+// TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
 function publicFunctionWithPrivateTypeParameters() {
 }
 function publicFunctionWithPublicTypeParameters() {

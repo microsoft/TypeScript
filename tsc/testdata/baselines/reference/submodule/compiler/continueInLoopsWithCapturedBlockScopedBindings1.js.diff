@@ -10,7 +10,7 @@
 -            return "continue";
 +            continue;
          }
--        // Trigger non-simple-loop emit
+         // Trigger non-simple-loop emit
 -        (function () {
 +        (() => {
              return i;

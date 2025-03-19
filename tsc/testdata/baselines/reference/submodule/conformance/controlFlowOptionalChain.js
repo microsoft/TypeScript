@@ -623,8 +623,8 @@ let d;
 o?.x(d = 1);
 d.toString();
 if (f?.(x)) {
-    x;
-    f;
+    x; // number
+    f; // (x: any) => x is number
     f(x);
 }
 else {
@@ -636,8 +636,8 @@ x;
 f;
 f(x);
 if (o2?.f(x)) {
-    x;
-    o2.f;
+    x; // number
+    o2.f; // (x: any) => x is number
     o2?.f;
     o2?.f(x);
 }
@@ -665,9 +665,9 @@ o3;
 o3?.x;
 o3.x;
 if (o4.x?.y) {
-    o4.x;
-    o4.x.y;
-    o4.x?.y;
+    o4.x; // { y: boolean }
+    o4.x.y; // true
+    o4.x?.y; // true
 }
 else {
     o4.x;
@@ -681,10 +681,10 @@ if (o5.x?.y.z?.w) {
     o5.x;
     o5.x.y;
     o5.x.y.z;
-    o5.x.y.z.w;
-    o5.x.y.z?.w;
-    o5.x?.y.z.w;
-    o5.x?.y.z?.w;
+    o5.x.y.z.w; // true
+    o5.x.y.z?.w; // true
+    o5.x?.y.z.w; // true
+    o5.x?.y.z?.w; // true
 }
 else {
     o5.x;
@@ -701,7 +701,7 @@ o5.x?.y.z?.w;
 o5.x.y;
 o5.x.y.z.w;
 if (o6?.f()) {
-    o6;
+    o6; // Derived
     o6.f;
 }
 else {
@@ -773,22 +773,22 @@ function f11(o, value) {
 }
 function f12(o, value) {
     if (o?.foo === value) {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.["foo"] === value) {
-        o["foo"];
+        o["foo"]; // Error
     }
     if (o?.bar() === value) {
-        o.bar;
+        o.bar; // Error
     }
     if (o?.foo == value) {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.["foo"] == value) {
-        o["foo"];
+        o["foo"]; // Error
     }
     if (o?.bar() == value) {
-        o.bar;
+        o.bar; // Error
     }
 }
 function f12a(o, value) {
@@ -802,13 +802,13 @@ function f12a(o, value) {
         o.bar;
     }
     if (o?.foo == value) {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.["foo"] == value) {
-        o["foo"];
+        o["foo"]; // Error
     }
     if (o?.bar() == value) {
-        o.bar;
+        o.bar; // Error
     }
 }
 function f13(o) {
@@ -833,13 +833,13 @@ function f13(o) {
 }
 function f13a(o) {
     if (o?.foo !== null) {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.["foo"] !== null) {
-        o["foo"];
+        o["foo"]; // Error
     }
     if (o?.bar() !== null) {
-        o.bar;
+        o.bar; // Error
     }
     if (o?.foo != null) {
         o.foo;
@@ -867,10 +867,10 @@ function f15(o, value) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.foo !== value) {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -879,10 +879,10 @@ function f15(o, value) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.foo != value) {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -890,33 +890,33 @@ function f15(o, value) {
 }
 function f15a(o, value) {
     if (o?.foo === value) {
-        o.foo;
+        o.foo; // Error
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.foo !== value) {
-        o.foo;
+        o.foo; // Error
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.foo == value) {
-        o.foo;
+        o.foo; // Error
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.foo != value) {
-        o.foo;
+        o.foo; // Error
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
 }
 function f16(o) {
     if (o?.foo === undefined) {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -925,10 +925,10 @@ function f16(o) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (o?.foo == undefined) {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -937,7 +937,7 @@ function f16(o) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
 }
 function f20(o) {
@@ -973,10 +973,10 @@ function f22(o) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (typeof o?.foo !== "number") {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -985,10 +985,10 @@ function f22(o) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (typeof o?.foo != "number") {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -996,7 +996,7 @@ function f22(o) {
 }
 function f23(o) {
     if (typeof o?.foo === "undefined") {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -1005,10 +1005,10 @@ function f23(o) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
     if (typeof o?.foo == "undefined") {
-        o.foo;
+        o.foo; // Error
     }
     else {
         o.foo;
@@ -1017,7 +1017,7 @@ function f23(o) {
         o.foo;
     }
     else {
-        o.foo;
+        o.foo; // Error
     }
 }
 function f30(o) {
@@ -1047,10 +1047,10 @@ function f40(o) {
             o.foo;
             break;
         case undefined:
-            o.foo;
+            o.foo; // Error
             break;
         default:
-            o.foo;
+            o.foo; // Error
             break;
     }
 }
@@ -1063,10 +1063,10 @@ function f41(o) {
             o.foo;
             break;
         case "undefined":
-            o.foo;
+            o.foo; // Error
             break;
         default:
-            o.foo;
+            o.foo; // Error
             break;
     }
 }
@@ -1090,7 +1090,7 @@ let lastSomeProperty;
 function someFunction(someOptionalObject) {
     if (someOptionalObject?.someProperty !== lastSomeProperty) {
         console.log(someOptionalObject);
-        console.log(someOptionalObject.someProperty);
+        console.log(someOptionalObject.someProperty); // Error
         lastSomeProperty = someOptionalObject?.someProperty;
     }
 }
@@ -1099,6 +1099,7 @@ const someObject = {
 };
 someFunction(someObject);
 someFunction(undefined);
+// Repro from #35970
 let i = 0;
 while (arr[i]?.tag === "left") {
     i += 1;

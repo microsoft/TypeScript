@@ -44,8 +44,8 @@ exports.default = ns;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-ns.Class;
-ns.Value;
+ns.Class; // Error
+ns.Value; // Error
 let c;
 let t = "";
 let n = { a: '' };

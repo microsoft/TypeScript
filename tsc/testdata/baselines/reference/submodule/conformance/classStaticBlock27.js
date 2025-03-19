@@ -20,6 +20,7 @@ void class Foo {
 }
 
 //// [classStaticBlock27.js]
+// https://github.com/microsoft/TypeScript/issues/44872
 void class Foo {
     static prop = 1;
     static {

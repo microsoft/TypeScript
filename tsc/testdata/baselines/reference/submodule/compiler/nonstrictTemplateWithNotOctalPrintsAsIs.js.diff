@@ -1,9 +1,8 @@
 --- old.nonstrictTemplateWithNotOctalPrintsAsIs.js
 +++ new.nonstrictTemplateWithNotOctalPrintsAsIs.js
-@@= skipped -5, +5 lines =@@
- 
+@@= skipped -6, +6 lines =@@
  
  //// [nonstrictTemplateWithNotOctalPrintsAsIs.js]
--// https://github.com/Microsoft/TypeScript/issues/21828
+ // https://github.com/Microsoft/TypeScript/issues/21828
 -var d2 = "\\0041";
 +const d2 = `\\0041`;

@@ -10,13 +10,15 @@ class c4 { public foo() { } }
 enum c4 { One } // error
 
 //// [augmentedTypesClass.js]
+//// class then var
 class c1 {
     foo() { }
 }
-var c1 = 1;
+var c1 = 1; // error
+//// class then enum
 class c4 {
     foo() { }
 }
 (function (c4) {
     c4[c4["One"] = 0] = "One";
-})(c4 || (c4 = {}));
+})(c4 || (c4 = {})); // error

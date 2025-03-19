@@ -1,13 +1,6 @@
 --- old.nodeModulesSynchronousCallErrors(module=node16).js
 +++ new.nodeModulesSynchronousCallErrors(module=node16).js
-@@= skipped -43, +43 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.f = f;
--// cjs format file
- const index_js_1 = require("../index.js");
- async function f() {
-     const mod3 = await import("../index.js");
+@@= skipped -50, +50 lines =@@
      const mod4 = await import("./index.js");
      (0, index_js_1.h)();
  }

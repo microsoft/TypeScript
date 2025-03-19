@@ -19,11 +19,10 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// FunctionExpression with no return type annotation with multiple return statements with unrelated types
+ // FunctionExpression with no return type annotation with multiple return statements with unrelated types
  var f1 = function () {
      return '';
-     return 3;
-@@= skipped -24, +8 lines =@@
+@@= skipped -24, +9 lines =@@
      return '';
      return 3;
  };
@@ -32,32 +31,23 @@
      return '';
      return 3;
  };
--// FunctionExpression with no return type annotation with return branch of number[] and other of string[]
- var f4 = function () {
-     if (true) {
-         return [''];
-@@= skipped -13, +12 lines =@@
-         return [1];
-     }
- };
--// Function implemetnation with non -void return type annotation with no return
- function f5() {
+@@= skipped -18, +18 lines =@@
  }
  var m;
--// Function signature with parameter initializer referencing in scope local variable
+ // Function signature with parameter initializer referencing in scope local variable
 -function f6(n) {
 -    if (n === void 0) { n = m; }
 +function f6(n = m) {
      var m = 4;
  }
--// Function signature with initializer referencing other parameter to the right
+ // Function signature with initializer referencing other parameter to the right
 -function f7(n, m) {
 -    if (n === void 0) { n = m; }
 +function f7(n = m, m) {
  }
--// FunctionExpression with non -void return type annotation with a throw, no return, and other code
--// Should be error but isn't
- undefined === function () {
+ // FunctionExpression with non -void return type annotation with a throw, no return, and other code
+ // Should be error but isn't
+@@= skipped -14, +12 lines =@@
      throw undefined;
      var x = 4;
  };
@@ -100,7 +90,7 @@
  function f8() {
      return new Derived1();
      return new Derived2();
-@@= skipped -51, +32 lines =@@
+@@= skipped -32, +20 lines =@@
      return new Derived1();
      return new Derived2();
  };

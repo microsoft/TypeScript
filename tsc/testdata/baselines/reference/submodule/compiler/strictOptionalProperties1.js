@@ -239,16 +239,16 @@ type UC = UA & UB;  // undefined
 
 //// [strictOptionalProperties1.js]
 function f1(obj) {
-    let a = obj.a;
-    let b = obj.b;
+    let a = obj.a; // string | undefined
+    let b = obj.b; // string | undefined
     obj.a = 'hello';
     obj.b = 'hello';
-    obj.a = undefined;
+    obj.a = undefined; // Error
     obj.b = undefined;
 }
 function f2(obj) {
     obj = obj;
-    obj.a = obj.a;
+    obj.a = obj.a; // Error
     obj.b = obj.b;
     if ('a' in obj) {
         obj.a;
@@ -256,7 +256,7 @@ function f2(obj) {
     }
     else {
         obj.a;
-        obj.a = obj.a;
+        obj.a = obj.a; // Error
     }
     if (obj.hasOwnProperty('a')) {
         obj.a;
@@ -264,7 +264,7 @@ function f2(obj) {
     }
     else {
         obj.a;
-        obj.a = obj.a;
+        obj.a = obj.a; // Error
     }
     if ('b' in obj) {
         obj.b;
@@ -284,20 +284,20 @@ function f2(obj) {
     }
 }
 function f3(obj) {
-    let a = obj.a;
-    let b = obj.b;
+    let a = obj.a; // string | undefined
+    let b = obj.b; // string | undefined
     obj.a = 'hello';
     obj.b = 'hello';
-    obj.a = undefined;
+    obj.a = undefined; // Error
     obj.b = undefined;
 }
 function f4(t) {
-    let x = t[0];
+    let x = t[0]; // string | undefined
     t[0] = 'hello';
-    t[0] = undefined;
+    t[0] = undefined; // Error
 }
 function f4a(t1, t2) {
-    t1 = t2;
+    t1 = t2; // Wasn't an error, but should be
 }
 function f5(t) {
     t = [42];
@@ -305,9 +305,9 @@ function f5(t) {
     t = [42, 'abc', true];
     t = [42, ,];
     t = [42, , ,];
-    t = [42, , , ,];
-    t = [, , true];
-    t = [42, undefined, true];
+    t = [42, , , ,]; // Error
+    t = [, , true]; // Error
+    t = [42, undefined, true]; // Error
 }
 function f6() {
     const t1 = [1, 2];
@@ -319,28 +319,30 @@ function f6() {
 const defaultProps = { foo: 'foo' };
 const inputProps = { foo: undefined, bar: 'bar' };
 const completeProps = { ...defaultProps, ...inputProps };
+// Example from #13195
 const t1 = [1];
 const t2 = [1, undefined];
 const t3 = [1, "string", undefined];
 const t4 = [1, undefined, undefined];
+// Example from #13195
 const x = { foo: undefined };
 const y = { foo: 123, ...x };
-f11(ox1);
-f11(ox2);
-f11(ox3);
-f11(ox4);
-f12(tx1);
-f12(tx2);
-f12(tx3);
-f12(tx4);
-f13(ox1);
-f13(ox2);
-f13(ox3);
-f13(ox4);
-f13(tx1);
-f13(tx2);
-f13(tx3);
-f13(tx4);
+f11(ox1); // string
+f11(ox2); // string | undefined
+f11(ox3); // string
+f11(ox4); // string | undefined
+f12(tx1); // string
+f12(tx2); // string | undefined
+f12(tx3); // string
+f12(tx4); // string | undefined
+f13(ox1); // { p: string }
+f13(ox2); // { p: string | undefined }
+f13(ox3); // { p: string }
+f13(ox4); // { p: string | undefined }
+f13(tx1); // [string]
+f13(tx2); // [string | undefined]
+f13(tx3); // [string]
+f13(tx4); // [string | undefined]
 function expectNotUndefined(value) {
     if (value === undefined) {
         throw new TypeError('value is undefined');
@@ -351,13 +353,13 @@ function aa(input) {
     const notUndefinedVal = expectNotUndefined(input.bar);
     bb(notUndefinedVal);
 }
-u1.email = e;
-u2.email = e;
+u1.email = e; // error, but only because boolean isn't in email's type
+u2.email = e; // error, and suggest adding undefined
 u2 = {
     name: 'hi',
     email: undefined
 };
 a = b;
 a = c;
-a = d;
-a = e;
+a = d; // Error
+a = e; // Error

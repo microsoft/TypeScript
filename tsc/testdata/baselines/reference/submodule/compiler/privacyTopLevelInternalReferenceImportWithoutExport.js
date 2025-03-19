@@ -105,6 +105,7 @@ export var publicUse_im_private_mu_public: im_private_mu_public.i;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicUse_im_private_mu_public = exports.publicUse_im_private_mi_public = exports.publicUse_im_private_i_public = exports.publicUse_im_private_v_public = exports.publicUse_im_private_f_public = exports.publicUse_im_private_e_public = exports.publicUse_im_private_c_public = exports.publicUse_im_private_mu_private = exports.publicUse_im_private_mi_private = exports.publicUse_im_private_i_private = exports.publicUse_im_private_v_private = exports.publicUse_im_private_f_private = exports.publicUse_im_private_e_private = exports.publicUse_im_private_c_private = exports.m_public = void 0;
+// private elements
 var m_private;
 (function (m_private) {
     class c_private {
@@ -127,6 +128,7 @@ var m_private;
         mi_private.c = c;
     })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
 })(m_private || (m_private = {}));
+// Public elements
 var m_public;
 (function (m_public) {
     class c_public {
@@ -149,6 +151,7 @@ var m_public;
         mi_public.c = c;
     })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
 })(m_public || (exports.m_public = m_public = {}));
+// Usage of above decls
 var privateUse_im_private_c_private = new im_private_c_private();
 exports.publicUse_im_private_c_private = new im_private_c_private();
 var privateUse_im_private_e_private = im_private_e_private.Happy;
@@ -161,6 +164,7 @@ var privateUse_im_private_i_private;
 var privateUse_im_private_mi_private = new im_private_mi_private.c();
 exports.publicUse_im_private_mi_private = new im_private_mi_private.c();
 var privateUse_im_private_mu_private;
+// Usage of above decls
 var privateUse_im_private_c_public = new im_private_c_public();
 exports.publicUse_im_private_c_public = new im_private_c_public();
 var privateUse_im_private_e_public = im_private_e_public.Happy;

@@ -9,5 +9,6 @@ m1.f();
 //// [amdDependencyCommentName1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<amd-dependency path='bar' name='b'/>
 const m1 = require("m2");
 m1.f();

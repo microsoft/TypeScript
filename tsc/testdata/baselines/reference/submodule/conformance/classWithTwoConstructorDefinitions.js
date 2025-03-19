@@ -13,10 +13,10 @@ class D<T> {
 
 //// [classWithTwoConstructorDefinitions.js]
 class C {
-    constructor() { }
-    constructor(x) { }
+    constructor() { } // error
+    constructor(x) { } // error
 }
 class D {
-    constructor(x) { }
-    constructor(x, y) { }
+    constructor(x) { } // error
+    constructor(x, y) { } // error
 }

@@ -1,70 +1,21 @@
 --- old.nodeModulesForbidenSyntax(module=node16).js
 +++ new.nodeModulesForbidenSyntax(module=node16).js
-@@= skipped -69, +69 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--// cjs format file
- const x = () => (void 0);
- exports.x = x;
- //// [index.cjs]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--// cjs format file
- const x = () => (void 0);
- exports.x = x;
- //// [index.mjs]
--// esm format file
+@@= skipped -84, +84 lines =@@
  const x = () => (void 0);
  export { x };
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });
 -exports.x = void 0;
--// cjs format file
+ // cjs format file
  const x = () => (void 0);
 -exports.x = x;
 +export { x };
  //// [index.cjs]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--// cjs format file
- const x = () => (void 0);
- exports.x = x;
- //// [index.mjs]
--// esm format file
- const x = () => (void 0);
- export { x };
- //// [index.js]
--// esm format file
- const x = () => (void 0);
- export { x };
- //// [index.mjs]
--// esm format file
- const x = () => (void 0);
- export { x };
- //// [index.cjs]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--// cjs format file
- const x = () => (void 0);
- exports.x = x;
- //// [index.mjs]
--// esm format file
- const x = () => (void 0);
- export { x };
- //// [index.cjs]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.x = void 0;
--// cjs format file
- const x = () => (void 0);
- exports.x = x;
- //// [index.js]
--// esm format file
+@@= skipped -47, +44 lines =@@
+ // esm format file
  const x = () => (void 0);
  export { x };
 -

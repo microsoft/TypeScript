@@ -1,10 +1,9 @@
 --- old.staticMembersUsingClassTypeParameter.js
 +++ new.staticMembersUsingClassTypeParameter.js
-@@= skipped -17, +17 lines =@@
- }
+@@= skipped -18, +18 lines =@@
  
  //// [staticMembersUsingClassTypeParameter.js]
--// BUG 745747
+ // BUG 745747
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

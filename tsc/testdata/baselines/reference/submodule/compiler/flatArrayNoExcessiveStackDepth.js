@@ -26,6 +26,7 @@ function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) 
 
 //// [flatArrayNoExcessiveStackDepth.js]
 const bar = foo.flatMap(bar => bar);
+// Repros from comments in #43249
 const repro_43249 = (value) => {
     if (typeof value !== "string") {
         throw new Error("No");
@@ -35,5 +36,5 @@ const repro_43249 = (value) => {
 };
 function f(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }

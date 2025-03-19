@@ -1,8 +1,0 @@
---- old.recursiveBaseConstructorCreation2.js
-+++ new.recursiveBaseConstructorCreation2.js
-@@= skipped -16, +16 lines =@@
- 
- 
- //// [recursiveBaseConstructorCreation2.js]
--var bar = new xyz(); // Error: Invalid 'new' expression.
-+var bar = new xyz();

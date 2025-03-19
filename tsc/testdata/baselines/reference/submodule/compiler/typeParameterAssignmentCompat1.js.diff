@@ -1,11 +1,7 @@
 --- old.typeParameterAssignmentCompat1.js
 +++ new.typeParameterAssignmentCompat1.js
-@@= skipped -24, +24 lines =@@
- function f() {
-     var x;
-     var y;
--    x = y; // should be an error
-+    x = y;
+@@= skipped -27, +27 lines =@@
+     x = y; // should be an error
      return x;
  }
 -var C = /** @class */ (function () {
@@ -16,8 +12,7 @@
 +    f() {
          var x;
          var y;
--        x = y; // should be an error
-+        x = y;
+         x = y; // should be an error
          return x;
 -    };
 -    return C;

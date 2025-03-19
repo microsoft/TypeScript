@@ -1,10 +1,7 @@
 --- old.duplicateStringIndexers.js
 +++ new.duplicateStringIndexers.js
-@@= skipped -36, +36 lines =@@
- 
- 
- //// [duplicateStringIndexers.js]
--// it is an error to have duplicate index signatures of the same kind in a type
+@@= skipped -39, +39 lines =@@
+ // it is an error to have duplicate index signatures of the same kind in a type
  var test;
  (function (test) {
 -    var C = /** @class */ (function () {

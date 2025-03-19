@@ -1,10 +1,9 @@
 --- old.numericIndexerConstrainsPropertyDeclarations2.js
 +++ new.numericIndexerConstrainsPropertyDeclarations2.js
-@@= skipped -47, +47 lines =@@
- }
+@@= skipped -48, +48 lines =@@
  
  //// [numericIndexerConstrainsPropertyDeclarations2.js]
--// String indexer providing a constraint of a user defined type
+ // String indexer providing a constraint of a user defined type
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -46,14 +45,12 @@
 +    bar() { return ''; }
 +}
 +class Foo {
-+    1.0;
-+    2.0;
-+    "2.5";
-+    3.0;
-+    "4.0";
++    1.0; // ok
++    2.0; // ok
++    "2.5"; // ok
++    3.0; // error
++    "4.0"; // error
 +}
  var a;
--// error
+ // error
  var b = {
-     1.0: new A(),
-     2.0: new B(),

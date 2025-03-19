@@ -45,54 +45,57 @@ function fn(x: boolean) {
 
 //// [catchClauseWithTypeAnnotation.js]
 function fn(x) {
+    // no type annotation allowed other than `any` and `unknown`
     try { }
-    catch (x) { }
+    catch (x) { } // should be OK
     try { }
-    catch (x) { }
+    catch (x) { } // should be OK
     try { }
-    catch (x) { }
+    catch (x) { } // should be OK
     try { }
-    catch (x) { }
+    catch (x) { } // should be OK
     try { }
-    catch (x) { }
-    try { }
-    catch (x) {
-        x.foo;
-    }
+    catch (x) { } // should be OK
     try { }
     catch (x) {
         x.foo;
-    }
+    } // should be OK
     try { }
     catch (x) {
         x.foo;
-    }
+    } // should be OK
+    try { }
+    catch (x) {
+        x.foo;
+    } // should be OK
     try { }
     catch (x) {
         console.log(x);
-    }
+    } // should be OK
     try { }
     catch (x) {
         console.log(x);
-    }
+    } // should be OK
     try { }
     catch (x) {
         x.foo;
-    }
+    } // error in the body
     try { }
     catch (x) {
         x.foo;
-    }
+    } // error in the body
     try { }
-    catch (x) { }
+    catch (x) { } // error in the type
     try { }
-    catch (x) { }
+    catch (x) { } // error in the type
     try {
         console.log();
     }
-    catch (e) {
+    // @ts-ignore
+    catch (e) { // e should not be a `number`
         console.log(e.toLowerCase());
     }
+    // minor bug: shows that the `catch` argument is skipped when checking scope
     try { }
     catch (x) {
         let x;
@@ -106,25 +109,25 @@ function fn(x) {
         var x;
     }
     try { }
-    catch ({ x }) { }
+    catch ({ x }) { } // should be OK
     try { }
     catch ({ x }) {
         x.foo;
-    }
+    } // should be OK
     try { }
     catch ({ x }) {
         x.foo;
-    }
+    } // should be OK
     try { }
     catch ({ x }) {
         console.log(x);
-    }
+    } // error in the destructure
     try { }
     catch ({ x }) {
         console.log(x);
-    }
+    } // error in the destructure
     try { }
-    catch ({ x }) { }
+    catch ({ x }) { } // error in the type
     try { }
-    catch ({ x }) { }
+    catch ({ x }) { } // error in the type
 }

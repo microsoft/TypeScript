@@ -6,14 +6,15 @@
  //// [jsdocParameterParsingInvalidName.js]
 -var c = /** @class */ (function () {
 -    function c() {
+-    }
 +class c {
-+    method(foo) {
-     }
--    /**
--     * @param {string} [`foo]
--     */
+     /**
+      * @param {string} [`foo]
+      */
 -    c.prototype.method = function (foo) {
 -    };
 -    return c;
 -}());
++    method(foo) {
++    }
 +}

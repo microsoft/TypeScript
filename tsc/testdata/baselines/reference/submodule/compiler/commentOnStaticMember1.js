@@ -9,6 +9,7 @@ class Greeter {
 
 //// [commentOnStaticMember1.js]
 class Greeter {
+    //Hello World
     static foo() {
     }
 }

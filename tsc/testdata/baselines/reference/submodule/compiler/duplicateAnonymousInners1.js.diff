@@ -14,22 +14,22 @@
 -        }
 -        return Inner;
 -    }());
--    // Inner should show up in intellisense
 +    class Helper {
 +    }
 +    class Inner {
 +    }
+     // Inner should show up in intellisense
      Foo.Outer = 0;
  })(Foo || (Foo = {}));
  (function (Foo) {
--    // Should not be an error
+     // Should not be an error
 -    var Helper = /** @class */ (function () {
 -        function Helper() {
 -        }
 -        return Helper;
 -    }());
--    // Inner should not show up in intellisense
--    // Outer should show up in intellisense
 +    class Helper {
 +    }
+     // Inner should not show up in intellisense
+     // Outer should show up in intellisense
  })(Foo || (Foo = {}));

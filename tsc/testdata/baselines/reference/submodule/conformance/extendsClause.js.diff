@@ -48,6 +48,6 @@
 -    return V;
 -}(types.C)); // Error
 +class U extends C {
-+}
++} // Error
 +class V extends types.C {
-+}
++} // Error

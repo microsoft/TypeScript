@@ -82,7 +82,9 @@ for await (const item of arr) {
 
 //// [other.js]
 const _await = 1;
+// await allowed in aliased export
 export { _await as await };
+// for-await-of
 const arr = [Promise.resolve()];
 for await (const item of arr) {
     item;
@@ -90,14 +92,17 @@ for await (const item of arr) {
 //// [index.js]
 export const x = 1;
 await x;
+// reparse element access as await
 await [x];
 await [x, x];
 await (x);
 await (f(), x);
 await (x);
 await (f(), x);
+// reparse tagged template as await
 await ``;
 await ``;
+// member names should be ok
 class C1 {
     await() { }
 }
@@ -118,10 +123,15 @@ class C3 {
 ({
     await: 1
 });
+// property access name should be ok
 C1.prototype.await;
 @(await dec)
 class C {
 }
+// newlines
+// await in throw
 throw await 1;
+// await in var
 let y = await 1;
+// await in expression statement;
 await 1;

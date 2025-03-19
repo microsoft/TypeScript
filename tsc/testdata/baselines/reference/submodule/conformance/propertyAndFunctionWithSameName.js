@@ -22,5 +22,5 @@ class C {
 }
 class D {
     x;
-    x(v) { }
+    x(v) { } // error
 }

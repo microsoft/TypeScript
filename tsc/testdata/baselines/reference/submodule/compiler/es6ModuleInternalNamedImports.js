@@ -37,20 +37,26 @@ export module M {
 export { M };
 var M;
 (function (M) {
+    // variable
     M.M_V = 0;
+    //calss
     class M_C {
     }
     M.M_C = M_C;
+    // instantiated module
     let M_M;
     (function (M_M) {
         var x;
     })(M_M = M.M_M || (M.M_M = {}));
+    // function
     function M_F() { }
     M.M_F = M_F;
+    // enum
     let M_E;
     (function (M_E) {
     })(M_E = M.M_E || (M.M_E = {}));
     M.M_A = M_M;
+    // Reexports
     export { M_V as v };
     export { M_I as i };
     export { M_C as c };

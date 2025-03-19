@@ -39,7 +39,7 @@ var foo;
 })(foo || (foo = {}));
 var p = new provide.Provide();
 function use() {
-    var p1;
+    var p1; // error here, but should be okay
     var p2;
     var p3;
     var p22 = new provide.Provide();

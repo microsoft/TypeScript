@@ -23,6 +23,7 @@ const x: { [sym: symbol]: (p: string) => void } = { [A]: s => s.length };
 
 
 //// [contextuallyTypedSymbolNamedProperties.js]
+// Repros from #43628
 const A = Symbol("A");
 const B = Symbol("B");
 f(ab, {

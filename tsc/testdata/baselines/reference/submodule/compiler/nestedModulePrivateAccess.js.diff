@@ -7,7 +7,5 @@
 -    var b;
 +    let b;
      (function (b) {
--        var y = x; // should not be an error
-+        var y = x;
+         var y = x; // should not be an error
      })(b || (b = {}));
- })(a || (a = {}));

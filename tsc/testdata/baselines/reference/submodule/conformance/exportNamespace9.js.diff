@@ -11,12 +11,10 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var c_1 = require("./c");
--c_1.A; // Ok
 +const c_1 = require("./c");
-+c_1.A;
+ c_1.A; // Ok
  //// [e.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
 @@= skipped -33, +33 lines =@@
  //// [g.js]
  "use strict";

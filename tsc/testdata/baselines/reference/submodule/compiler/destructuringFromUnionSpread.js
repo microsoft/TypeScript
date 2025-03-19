@@ -9,4 +9,4 @@ const { a } = { ...x } // error
 
 
 //// [destructuringFromUnionSpread.js]
-const { a } = { ...x };
+const { a } = { ...x }; // error

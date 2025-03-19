@@ -29,4 +29,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./file2");
-let a;
+let a; // should not work

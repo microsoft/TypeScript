@@ -60,11 +60,12 @@ var array = [1, 2, 3];
 var array2 = [true, false, "hello"];
 a2([...array]);
 a1(...array);
-a9([1, 2, [["string"]], false, true]);
-a10([1, 2, [["string"]], false, true]);
-a10([1, 2, 3, false, true]);
-a10([1, 2]);
-a11([1, 2]);
+a9([1, 2, [["string"]], false, true]); // Parameter type is [any, any, [[any]]]
+a10([1, 2, [["string"]], false, true]); // Parameter type is any[]
+a10([1, 2, 3, false, true]); // Parameter type is any[]
+a10([1, 2]); // Parameter type is any[]
+a11([1, 2]); // Parameter type is number[]
+// Rest parameter with generic
 function foo(...a) { }
 foo("hello", 1, 2);
 foo("hello", "world");

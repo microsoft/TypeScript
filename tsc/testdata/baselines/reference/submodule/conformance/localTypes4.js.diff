@@ -1,24 +1,6 @@
 --- old.localTypes4.js
 +++ new.localTypes4.js
-@@= skipped -41, +41 lines =@@
- 
- //// [localTypes4.js]
- function f1() {
--    // Type parameters are in scope in parameters and return types
-     function f(x) {
-         return undefined;
-     }
- }
- function f2() {
--    // Local types are not in scope in parameters and return types
-     function f(x) {
-         return undefined;
-     }
- }
- function f3() {
--    // Type parameters and top-level local types are in same declaration space
-     function f() {
-         return undefined;
+@@= skipped -59, +59 lines =@@
      }
  }
  function f4() {

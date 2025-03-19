@@ -21,11 +21,11 @@ function foo<T>(a: T) {
 //// [inlineConditionalHasSimilarAssignability.js]
 function foo(a) {
     const b = 0;
-    a = b;
+    a = b; // ok
     const c = 0;
     a = c;
     const d = 0;
-    a = d;
+    a = d; // ok
     const e = 0;
     a = e;
 }

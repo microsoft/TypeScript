@@ -24,10 +24,10 @@
 -        __classPrivateFieldGet(thing, _a, "f", _A_baz);
 -        thing.; // Error
 -        __classPrivateFieldGet(thing, _A_foo, "f").call(thing);
-+        thing.#foo;
++        thing.#foo; // OK
 +        thing.#m();
 +        thing.#baz;
-+        thing.#bar;
++        thing.#bar; // Error
 +        thing.#foo();
      }
      methodU(thing) {

@@ -71,6 +71,7 @@ module schema {
 }
 
 //// [isDeclarationVisibleNodeKinds.js]
+// Function types
 var schema;
 (function (schema_1) {
     function createValidator1(schema) {
@@ -78,42 +79,49 @@ var schema;
     }
     schema_1.createValidator1 = createValidator1;
 })(schema || (schema = {}));
+// Constructor types
 (function (schema_1) {
     function createValidator2(schema) {
         return undefined;
     }
     schema_1.createValidator2 = createValidator2;
 })(schema || (schema = {}));
+// union types
 (function (schema_1) {
     function createValidator3(schema) {
         return undefined;
     }
     schema_1.createValidator3 = createValidator3;
 })(schema || (schema = {}));
+// Array types
 (function (schema_1) {
     function createValidator4(schema) {
         return undefined;
     }
     schema_1.createValidator4 = createValidator4;
 })(schema || (schema = {}));
+// TypeLiterals
 (function (schema_1) {
     function createValidator5(schema) {
         return undefined;
     }
     schema_1.createValidator5 = createValidator5;
 })(schema || (schema = {}));
+// Tuple types
 (function (schema_1) {
     function createValidator6(schema) {
         return undefined;
     }
     schema_1.createValidator6 = createValidator6;
 })(schema || (schema = {}));
+// Paren Types
 (function (schema_1) {
     function createValidator7(schema) {
         return undefined;
     }
     schema_1.createValidator7 = createValidator7;
 })(schema || (schema = {}));
+// Type reference
 (function (schema_1) {
     function createValidator8(schema) {
         return undefined;

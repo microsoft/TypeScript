@@ -1,44 +1,33 @@
 --- old.sourceMap-FileWithComments.js
 +++ new.sourceMap-FileWithComments.js
-@@= skipped -37, +37 lines =@@
- var dist = p.getDist();
- 
- //// [sourceMap-FileWithComments.js]
--// Module
+@@= skipped -41, +41 lines =@@
  var Shapes;
  (function (Shapes) {
--    // Class
+     // Class
 -    var Point = /** @class */ (function () {
--        // Constructor
--        function Point(x, y) {
 +    class Point {
 +        x;
 +        y;
+         // Constructor
+-        function Point(x, y) {
 +        constructor(x, y) {
              this.x = x;
              this.y = y;
          }
--        // Instance member
+         // Instance member
 -        Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };
--        // Static member
++        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+         // Static member
 -        Point.origin = new Point(0, 0);
 -        return Point;
 -    }());
-+        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
 +        static origin = new Point(0, 0);
 +    }
      Shapes.Point = Point;
--    // Variable comment after class
+     // Variable comment after class
      var a = 10;
-     function foo() {
-     }
-     Shapes.foo = foo;
--    /**  comment after function
--    * this is another comment
--    */
-     var b = 10;
- })(Shapes || (Shapes = {}));
--/** Local Variable */
+@@= skipped -26, +27 lines =@@
+ /** Local Variable */
  var p = new Shapes.Point(3, 4);
  var dist = p.getDist();
 -//# sourceMappingURL=sourceMap-FileWithComments.js.map

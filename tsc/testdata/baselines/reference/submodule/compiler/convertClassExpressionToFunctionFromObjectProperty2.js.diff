@@ -14,7 +14,13 @@
 -        }
 -        return y;
 -    }()),
--    // keywords
++    x: class {
++        constructor() { }
++    },
++    y: class {
++        constructor() { }
++    },
+     // keywords
 -    break: /** @class */ (function () {
 -        function break_1() {
 -        }
@@ -395,12 +401,6 @@
 -        }
 -        return of;
 -    }())
-+    x: class {
-+        constructor() { }
-+    },
-+    y: class {
-+        constructor() { }
-+    },
 +    break: class {
 +        constructor() { }
 +    },

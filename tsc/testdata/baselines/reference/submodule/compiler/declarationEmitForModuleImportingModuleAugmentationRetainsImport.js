@@ -24,7 +24,7 @@ child1(ParentThing.prototype);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParentThing = void 0;
-const child1_1 = require("./child1");
+const child1_1 = require("./child1"); // this import should still exist in some form in the output, since it augments this module
 class ParentThing {
 }
 exports.ParentThing = ParentThing;

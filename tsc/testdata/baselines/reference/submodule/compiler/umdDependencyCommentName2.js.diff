@@ -4,9 +4,11 @@
  
  
  //// [umdDependencyCommentName2.js]
--///<amd-dependency path='bar' name='b'/>
--///<amd-dependency path='foo'/>
--///<amd-dependency path='goo' name='c'/>
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ ///<amd-dependency path='bar' name='b'/>
+ ///<amd-dependency path='foo'/>
+ ///<amd-dependency path='goo' name='c'/>
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
@@ -21,7 +23,5 @@
 -    var m1 = require("m2");
 -    m1.f();
 -});
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
 +const m1 = require("m2");
 +m1.f();

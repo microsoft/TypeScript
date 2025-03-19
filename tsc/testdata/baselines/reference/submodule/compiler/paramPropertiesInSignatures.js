@@ -18,5 +18,5 @@ class C1 {
     p3;
     constructor(p3) {
         this.p3 = p3;
-    }
+    } // OK
 }

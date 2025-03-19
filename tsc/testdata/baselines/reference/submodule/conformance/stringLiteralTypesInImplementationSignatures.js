@@ -29,6 +29,7 @@ var b = {
 
 
 //// [stringLiteralTypesInImplementationSignatures.js]
+// String literal types are only valid in overload signatures
 function foo(x) { }
 var f = function foo(x) { };
 var f2 = (x, y) => { };

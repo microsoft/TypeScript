@@ -355,6 +355,7 @@ const myGeneric = inferTypeFn({
     retrieveGeneric: parameter => 5,
     operateWithGeneric: generic => generic.toFixed()
 });
+// Repro #38623
 function make(o) { }
 make({
     mutations: {
@@ -389,6 +390,7 @@ test({
         const x = b;
     }
 });
+// Repro from #41712
 class Wrapper {
     value;
 }
@@ -408,10 +410,11 @@ createMappingComponent({
     map(inputs) {
         return {
             bool: inputs.nonexistent,
-            str: inputs.num,
+            str: inputs.num, // Causes error
         };
     }
 });
+// Repro from #48279
 function simplified(props) { }
 function whatIWant(props) { }
 function nonObject(generator, receiver) { }

@@ -21,6 +21,8 @@ interface Attribs1 {
 
 
 //// [file.jsx]
-<test1 c1={(x) => x.length}/>;
-<test1 data-c1={(x) => x.leng}/>;
-<test1 c1={(x) => x.leng}/>;
+// OK
+<test1 c1={(x) => x.length}/>; // OK
+<test1 data-c1={(x) => x.leng}/>; // OK
+// Errors
+<test1 c1={(x) => x.leng}/>; // Error, no leng on 'string'

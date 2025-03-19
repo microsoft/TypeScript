@@ -18,5 +18,6 @@ let obj = true;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.v = void 0;
+//let v2: Z.Data;
 let v = "str" || true;
 exports.v = v;

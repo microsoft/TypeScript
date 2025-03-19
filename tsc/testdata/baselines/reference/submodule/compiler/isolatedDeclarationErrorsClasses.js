@@ -82,6 +82,7 @@ let noParamAnnotationStringName = "noParamAnnotationStringName";
 const noAnnotationLiteralName = "noAnnotationLiteralName";
 const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
 export class C {
+    // Should not be reported as an isolated declaration error
     [missing] = 1;
     [noAnnotationLiteralName]() { }
     [noParamAnnotationLiteralName](v) { }

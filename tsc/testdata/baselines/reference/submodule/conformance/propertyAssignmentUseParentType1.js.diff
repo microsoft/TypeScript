@@ -15,5 +15,5 @@
 -var ignoreJsdoc = function () { return true; };
 +const ignoreJsdoc = () => true;
  exports.ignoreJsdoc = ignoreJsdoc;
--/** @type {string} make sure to ignore jsdoc! */
+ /** @type {string} make sure to ignore jsdoc! */
  exports.ignoreJsdoc.extra = 111;

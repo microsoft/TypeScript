@@ -22,10 +22,10 @@ function test<T extends object>(value: T): Test {
 
 
 //// [intersectionPropertyCheck.js]
-let obj = { a: { x: 'hello', y: 2 }, c: 5 };
-let weak = wrong;
+let obj = { a: { x: 'hello', y: 2 }, c: 5 }; // Nested excess property
+let weak = wrong; // Nested weak object type
 function foo(x, y) {
-    x = y;
+    x = y; // Mismatched property in source intersection
 }
 function test(value) {
     return { ...value, hi: true };

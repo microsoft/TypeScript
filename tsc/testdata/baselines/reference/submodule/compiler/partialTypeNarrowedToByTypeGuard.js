@@ -28,6 +28,10 @@ function getUserName(obj: Obj) {
 }
 
 //// [partialTypeNarrowedToByTypeGuard.js]
+// type PartialUser = {
+//   email?: string;
+//   name?: string;
+// };
 function isUser(obj) {
     return true;
 }

@@ -15,7 +15,7 @@
 -    };
 -    return __assign.apply(this, arguments);
 -};
--// fixes #12200
+ // fixes #12200
  function f() {
 -    var _a, _b, _c, _d, _e;
 -    var n = 12;

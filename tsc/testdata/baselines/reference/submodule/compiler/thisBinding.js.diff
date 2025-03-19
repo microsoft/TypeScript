@@ -7,21 +7,21 @@
 -    var C = /** @class */ (function () {
 -        function C() {
 -            this.x = 0;
+-            ({ z: 10, f: this.f }).f(({}));
+-        }
+-        C.prototype.f = function (x) {
 +    class C {
 +        x = 0;
 +        f(x) {
-+            x.e;
-+            x.z;
-+        }
-+        constructor() {
-             ({ z: 10, f: this.f }).f(({}));
-         }
--        C.prototype.f = function (x) {
--            x.e; // e not found
--            x.z; // ok 
+             x.e; // e not found
+             x.z; // ok 
 -        };
 -        return C;
 -    }());
++        }
++        constructor() {
++            ({ z: 10, f: this.f }).f(({}));
++        }
 +    }
      M.C = C;
  })(M || (M = {}));

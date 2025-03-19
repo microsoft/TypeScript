@@ -45,10 +45,9 @@
      }
 -    return C2;
 -}(A));
--// no errors
 +}
 +class C2 extends A {
 +}
+ // no errors
  var c;
  var c2;
- c = c2;

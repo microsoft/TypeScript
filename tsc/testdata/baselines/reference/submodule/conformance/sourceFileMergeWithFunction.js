@@ -11,3 +11,4 @@ declare function foo(): any;
 
 
 //// [foo.js]
+/// <reference path="types.d.ts" />

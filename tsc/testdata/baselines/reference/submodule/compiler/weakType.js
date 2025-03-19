@@ -71,6 +71,7 @@ function getDefaultSettings() {
     return { timeout: 1000 };
 }
 function doSomething(settings) { }
+// forgot to call `getDefaultSettings`
 doSomething(getDefaultSettings);
 doSomething(() => ({ timeout: 1000 }));
 doSomething(null);

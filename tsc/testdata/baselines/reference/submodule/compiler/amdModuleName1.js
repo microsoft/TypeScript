@@ -13,6 +13,7 @@ export = Foo;
 
 //// [amdModuleName1.js]
 "use strict";
+///<amd-module name='NamedModule'/>
 class Foo {
     x;
     constructor() {

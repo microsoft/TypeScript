@@ -17,6 +17,7 @@ class MyStringIterator {
 for (var v of new MyStringIterator) { }
 
 //// [ES5For-ofTypeCheck10.js]
+// In ES3/5, you cannot for...of over an arbitrary iterable.
 class MyStringIterator {
     next() {
         return {

@@ -1,19 +1,6 @@
 --- old.multiline.js
 +++ new.multiline.js
-@@= skipped -57, +57 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.texts = void 0;
- exports.texts = [];
--/**
-- @ts-ignore */
- exports.texts.push(100);
--/**
-- @ts-expect-error */
- exports.texts.push(100);
--/**
-- @ts-expect-error */
- exports.texts.push("100");
- //// [b.js]
+@@= skipped -70, +70 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.MyComponent = MyComponent;

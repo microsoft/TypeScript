@@ -1,19 +1,6 @@
 --- old.sourceMap-Comments2.js
 +++ new.sourceMap-Comments2.js
-@@= skipped -24, +24 lines =@@
- function foo(str, num) {
-     return;
- }
--/**
-- * some sort of block quote
-- */
- function bar(str, num) {
-     return;
- }
--// some sort of comment
- function baz(str, num) {
-     return;
- }
+@@= skipped -37, +37 lines =@@
  function qat(str, num) {
      return;
  }

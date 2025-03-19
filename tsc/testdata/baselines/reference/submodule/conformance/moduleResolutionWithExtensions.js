@@ -28,9 +28,11 @@ import j from "./jquery.js"
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = 0;
+// No extension: '.ts' added
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// '.js' extension: stripped and replaced with '.ts'
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

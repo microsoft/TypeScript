@@ -1,10 +1,9 @@
 --- old.exhaustiveSwitchWithWideningLiteralTypes.js
 +++ new.exhaustiveSwitchWithWideningLiteralTypes.js
-@@= skipped -18, +18 lines =@@
- }
+@@= skipped -19, +19 lines =@@
  
  //// [exhaustiveSwitchWithWideningLiteralTypes.js]
--// Repro from #12529
+ // Repro from #12529
 -var A = /** @class */ (function () {
 -    function A() {
 -        this.kind = "A"; // (property) A.kind: "A"
@@ -18,10 +17,10 @@
 -    return B;
 -}());
 +class A {
-+    kind = "A";
++    kind = "A"; // (property) A.kind: "A"
 +}
 +class B {
-+    kind = "B";
++    kind = "B"; // (property) B.kind: "B"
 +}
  function f(value) {
      switch (value.kind) {

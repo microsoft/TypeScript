@@ -15,9 +15,3 @@
  var f;
  C = x;
  var g;
-@@= skipped -16, +14 lines =@@
- })(M || (M = {}));
- M = x;
- function i(a) { }
--// BUG 767030
- i = x;

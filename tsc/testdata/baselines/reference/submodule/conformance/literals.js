@@ -41,6 +41,12 @@ var r = /\\\\/;
 
 
 //// [literals.js]
+//typeof null is Null
+//typeof true is Boolean
+//typeof false is Boolean
+//typeof numeric literal is Number
+//typeof string literal is String
+//typeof regex literal is Regex
 var nu = null / null;
 var u = undefined / undefined;
 var b;
@@ -50,12 +56,12 @@ var n;
 var n = 1;
 var n = 1.0;
 var n = 1e4;
-var n = 1;
+var n = 1; // Error in ES5
 var n = 0x1;
 var n = -1;
 var n = -1.0;
 var n = -1e-4;
-var n = -3;
+var n = -3; // Error in ES5
 var n = -0x1;
 var s;
 var s = '';

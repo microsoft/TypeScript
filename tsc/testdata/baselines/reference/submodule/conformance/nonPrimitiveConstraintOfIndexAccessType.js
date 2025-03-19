@@ -35,6 +35,7 @@ function n<T extends { [s: string]: number }, P extends keyof T>(s: string, tp: 
 
 
 //// [nonPrimitiveConstraintOfIndexAccessType.js]
+// test for #15371
 function f(s, tp) {
     tp = s;
 }

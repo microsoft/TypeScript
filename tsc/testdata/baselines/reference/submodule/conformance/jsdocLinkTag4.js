@@ -19,4 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
+/**
+ * @param {number} a - see {@link a.A}
+ */
 function foo(a) { }

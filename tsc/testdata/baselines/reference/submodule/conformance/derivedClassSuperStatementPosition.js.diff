@@ -79,21 +79,20 @@
 -    __extends(DerivedComments, _super);
 -    function DerivedComments() {
 -        var _this = this;
--        // c1
--        console.log(); // c2
--        // c3
--        _this = _super.call(this) || this; // c4
--        // c5
--        _this.x = null; // c6
--        return _this;
--        // c7
 +}
 +class DerivedComments extends Object {
 +    x;
 +    constructor() {
-+        console.log();
-+        super();
-+        this.x = null;
+         // c1
+         console.log(); // c2
+         // c3
+-        _this = _super.call(this) || this; // c4
++        super(); // c4
+         // c5
+-        _this.x = null; // c6
+-        return _this;
++        this.x = null; // c6
+         // c7
      }
 -    return DerivedComments;
 -}(Object));
@@ -101,24 +100,23 @@
 -    __extends(DerivedCommentsInvalidThis, _super);
 -    function DerivedCommentsInvalidThis() {
 -        var _this = this;
--        // c0
--        _this;
--        // c1
--        console.log(); // c2
--        // c3
--        _this = _super.call(this) || this; // c4
--        // c5
--        _this.x = null; // c6
--        return _this;
--        // c7
 +}
 +class DerivedCommentsInvalidThis extends Object {
 +    x;
 +    constructor() {
+         // c0
+-        _this;
 +        this;
-+        console.log();
-+        super();
-+        this.x = null;
+         // c1
+         console.log(); // c2
+         // c3
+-        _this = _super.call(this) || this; // c4
++        super(); // c4
+         // c5
+-        _this.x = null; // c6
+-        return _this;
++        this.x = null; // c6
+         // c7
      }
 -    return DerivedCommentsInvalidThis;
 -}(Object));

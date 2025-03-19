@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Case 1
+ // Case 1
 -var Base1 = /** @class */ (function () {
 -    function Base1() {
 -    }
@@ -63,6 +63,7 @@
      }
 -    Base2.prototype.foo = function () {
 +}
++// Case 2
 +class Base2 {
 +    foo() {
          return "base";
@@ -89,6 +90,7 @@
      }
 -    Base3.prototype.foo = function () {
 +}
++// Case 3
 +class Base3 {
 +    foo() {
          return "base";
@@ -105,13 +107,13 @@
 -    };
 -    return SubE3;
 -}(Base3));
--// Case 4
 +}
 +class SubE3 extends Base3 {
 +    bar() {
 +        return super.bar();
 +    }
 +}
+ // Case 4
  var Base4;
  (function (Base4) {
 -    var Sub4 = /** @class */ (function () {

@@ -8,12 +8,8 @@
  function f1(x) {
      if (!x) {
          return;
-@@= skipped -59, +58 lines =@@
-         }
-     }
-     if (typeof x === 'object') {
--        obj(x); // Error
-+        obj(x);
+@@= skipped -62, +61 lines =@@
+         obj(x); // Error
      }
  }
 -

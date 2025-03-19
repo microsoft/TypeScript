@@ -1,10 +1,9 @@
 --- old.typesWithPublicConstructor.js
 +++ new.typesWithPublicConstructor.js
-@@= skipped -18, +18 lines =@@
- var r2: (x: number) => void = c2.constructor;
+@@= skipped -19, +19 lines =@@
  
  //// [typesWithPublicConstructor.js]
--// public is allowed on a constructor but is not meaningful
+ // public is allowed on a constructor but is not meaningful
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

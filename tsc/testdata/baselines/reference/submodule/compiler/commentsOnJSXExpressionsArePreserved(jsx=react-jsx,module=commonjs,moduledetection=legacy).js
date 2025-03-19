@@ -27,7 +27,7 @@ class Component {
     render() {
         return <div>
             
-            {null}
+            {null /* preserved */}
             
             
             

@@ -5,15 +5,12 @@
  
  //// [renamingDestructuredPropertyInFunctionType.js]
 -// GH#37454, GH#41044
--// Below are OK but renaming should be removed from declaration emit
+ // Below are OK but renaming should be removed from declaration emit
  function f1({ a: string }) { }
  const f2 = function ({ a: string }) { };
- const f3 = ({ a: string, b, c }) => { };
-@@= skipped -21, +19 lines =@@
- function f10({ ["a"]: string }) { }
- ;
+@@= skipped -23, +22 lines =@@
  const f11 = ({ [2]: string }) => { };
--// In below case `string` should be kept because it is used
+ // In below case `string` should be kept because it is used
  function f12({ a: string = "" }) { return "a"; }
 -
 -

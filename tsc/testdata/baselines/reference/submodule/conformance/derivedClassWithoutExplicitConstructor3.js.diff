@@ -1,10 +1,9 @@
 --- old.derivedClassWithoutExplicitConstructor3.js
 +++ new.derivedClassWithoutExplicitConstructor3.js
-@@= skipped -48, +48 lines =@@
- var d3 = new D2(new Date(), new Date()); // ok
+@@= skipped -49, +49 lines =@@
  
  //// [derivedClassWithoutExplicitConstructor3.js]
--// automatic constructors with a class hieararchy of depth > 2
+ // automatic constructors with a class hieararchy of depth > 2
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -56,15 +55,13 @@
 -    }
 -    return Derived2;
 -}(Derived));
--var r = new Derived(); // error
--var r2 = new Derived2(1); // error
 +}
 +class Derived2 extends Derived {
 +    x = 1;
 +    y = 'hello';
 +}
-+var r = new Derived();
-+var r2 = new Derived2(1);
+ var r = new Derived(); // error
+ var r2 = new Derived2(1); // error
  var r3 = new Derived('', '');
 -var Base2 = /** @class */ (function () {
 -    function Base2(x) {
@@ -101,14 +98,11 @@
 -    }
 -    return D2;
 -}(D));
--var d = new D2(); // error
--var d2 = new D2(new Date()); // error
--var d3 = new D2(new Date(), new Date()); // ok
 +}
 +class D2 extends D {
 +    x = 2;
 +    y = null;
 +}
-+var d = new D2();
-+var d2 = new D2(new Date());
-+var d3 = new D2(new Date(), new Date());
+ var d = new D2(); // error
+ var d2 = new D2(new Date()); // error
+ var d3 = new D2(new Date(), new Date()); // ok

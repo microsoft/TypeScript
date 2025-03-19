@@ -12,6 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = exports.FOO = void 0;
 exports.FOO = 'FOO';
 class Bar {
-    type = exports.FOO;
+    type = exports.FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
 }
 exports.Bar = Bar;

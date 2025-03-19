@@ -56,6 +56,7 @@
 +(function (C) {
 +    C.a = 1, C.c = 2;
 +})(C || (C = {}));
++// Shouldn't be filtered
 +exports.a1 = 1;
 +exports.b1 = 1;
 +exports.c1 = 'a';

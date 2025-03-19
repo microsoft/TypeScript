@@ -44,7 +44,7 @@ const rightOrphaned = orphaned(right)
 function foo(obj) {
     return unboxify(obj);
 }
-let qq = foo({ u: { value: 10 }, v: { value: 'hello' } });
+let qq = foo({ u: { value: 10 }, v: { value: 'hello' } }); // { u: U, v: V } but should be { u: number, v: string }
 const left = {};
 const right = {};
 const ok = (at) => ({ lr: at.lr(at.str, at.num) });

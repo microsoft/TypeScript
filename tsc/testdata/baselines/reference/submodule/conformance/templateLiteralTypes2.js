@@ -136,26 +136,26 @@ function ft2(s) {
     return `abc${s}`;
 }
 function ft10(s) {
-    const c1 = `abc${s}`;
-    let v1 = c1;
-    const c2 = c1;
-    let v2 = c2;
+    const c1 = `abc${s}`; // Type string
+    let v1 = c1; // Type string
+    const c2 = c1; // Type string
+    let v2 = c2; // Type string
     const c3 = `abc${s}`;
-    let v3 = c3;
-    const c4 = c1;
-    let v4 = c4;
+    let v3 = c3; // Type `abc${string}`
+    const c4 = c1; // Type `abc${string}`
+    let v4 = c4; // Type `abc${string}`
 }
 function ft11(s, cond) {
-    const c1 = cond ? `foo${s}` : `bar${s}`;
-    const c2 = c1;
-    const c3 = cond ? c1 : c2;
-    const c4 = cond ? c3 : `baz${s}`;
-    const c5 = c4;
-    let v1 = c1;
-    let v2 = c2;
-    let v3 = c3;
-    let v4 = c4;
-    let v5 = c5;
+    const c1 = cond ? `foo${s}` : `bar${s}`; // string
+    const c2 = c1; // `foo${string}` | `bar${string}`
+    const c3 = cond ? c1 : c2; // string
+    const c4 = cond ? c3 : `baz${s}`; // string
+    const c5 = c4; // `foo${string}` | `bar${string}` | `baz${string}`
+    let v1 = c1; // string
+    let v2 = c2; // `foo${string}` | `bar${string}`
+    let v3 = c3; // string
+    let v4 = c4; // string
+    let v5 = c5; // `foo${string}` | `bar${string}` | `baz${string}`
 }
 function ft12(s) {
     const c1 = `foo${s}`;
@@ -183,22 +183,25 @@ function ft14(t) {
     let x6 = t;
 }
 function ft20(s) {
-    let x1 = g1(`xyz-${s}`);
-    let x2 = g2(`xyz-${s}`);
+    let x1 = g1(`xyz-${s}`); // string
+    let x2 = g2(`xyz-${s}`); // `xyz-${string}`
 }
-const t1 = takesLiteral("foo.bar.baz");
+const t1 = takesLiteral("foo.bar.baz"); // "baz"
 const id2 = "foo.bar.baz";
-const t2 = takesLiteral(id2);
-const t3 = takesLiteral(`foo.bar.${someString}`);
+const t2 = takesLiteral(id2); // "baz"
+const t3 = takesLiteral(`foo.bar.${someString}`); // string
 const id4 = `foo.bar.${someString}`;
-const t4 = takesLiteral(id4);
-const t5 = takesLiteral(`foo.bar.${someUnion}`);
+const t4 = takesLiteral(id4); // unknown
+const t5 = takesLiteral(`foo.bar.${someUnion}`); // "abc" | "def" | "ghi"
+// Repro from #41732
 const pixelValue = 22;
 const pixelString = `22px`;
 const pixelStringWithTemplate = `${pixelValue}px`;
+// Repro from #43143
 function getCardTitle(title) {
     return `test-${title}`;
 }
+// Repro from #43424
 const interpolatedStyle = { rotate: 12 };
 function C2(transform) { return 12; }
 C2(`rotate(${interpolatedStyle.rotate}dig)`);

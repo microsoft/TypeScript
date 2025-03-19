@@ -31,16 +31,16 @@
 -    }
 -    return D;
 -}(C));
--// more args
--testError(function (t1, t2, t3) { });
--testError(function (t1, t2, t3) { });
--testError(function (t1, t2, t3) { });
 +class C {
 +    test;
 +}
 +class D extends C {
 +    test2;
 +}
+ // more args
+-testError(function (t1, t2, t3) { });
+-testError(function (t1, t2, t3) { });
+-testError(function (t1, t2, t3) { });
 +testError((t1, t2, t3) => { });
 +testError((t1, t2, t3) => { });
 +testError((t1, t2, t3) => { });

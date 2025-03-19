@@ -42,7 +42,7 @@
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
 -    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 -};
--// https://github.com/microsoft/TypeScript/issues/58436
+ // https://github.com/microsoft/TypeScript/issues/58436
  const dec = (x, y, z, t) => (_, ctx) => { };
 -const Foo = (() => {
 -    let _static_field_decorators;

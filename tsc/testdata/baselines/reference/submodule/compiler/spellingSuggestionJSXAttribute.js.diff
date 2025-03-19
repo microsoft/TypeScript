@@ -20,7 +20,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var React = require("react");
 +const React = require("react");
  function MyComp2(props) {
@@ -44,7 +44,7 @@
 +class MyComp extends React.Component {
 +}
 +<a class=""/>;
-+<a for=""/>;
++<a for=""/>; // should have no fix
 +<label for=""/>;
 +<label for="" class=""/>;
 +<MyComp class=""/>;

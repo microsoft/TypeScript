@@ -30,8 +30,10 @@ declare module "tslib" {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fs = void 0;
 const tslib_1 = require("tslib");
+// cjs format file
 tslib_1.__exportStar(require("fs"), exports);
 exports.fs = tslib_1.__importStar(require("fs"));
 //// [index.js]
+// esm format file
 export * from "fs";
 export * as fs from "fs";

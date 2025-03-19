@@ -12,6 +12,6 @@ class C {
 class C {
     static s;
     a() {
-        s = 1;
+        s = 1; // ERR
     }
 }

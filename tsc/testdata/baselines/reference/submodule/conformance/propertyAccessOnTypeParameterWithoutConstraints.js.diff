@@ -11,8 +11,7 @@
 +class C {
 +    f() {
          var x;
--        var a = x['toString'](); // should be string
-+        var a = x['toString']();
+         var a = x['toString'](); // should be string
          return a + x.toString();
 -    };
 -    return C;
@@ -27,9 +26,7 @@
  var r3b = a()['toString']();
  var b = {
 -    foo: function (x) {
--        var a = x['toString'](); // should be string
 +    foo: (x) => {
-+        var a = x['toString']();
+         var a = x['toString'](); // should be string
          return a + x.toString();
      }
- };

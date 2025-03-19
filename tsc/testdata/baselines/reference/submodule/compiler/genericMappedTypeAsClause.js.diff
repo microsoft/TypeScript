@@ -8,7 +8,7 @@
 -var foo1 = { aFoo: 'test', bFoo: 42 };
 -var foo2 = { bFoo: 'bar' }; // Error
 +const foo1 = { aFoo: 'test', bFoo: 42 };
-+const foo2 = { bFoo: 'bar' };
++const foo2 = { bFoo: 'bar' }; // Error
  function f1() {
 -    var x1 = 42; // Error
 -    var x2 = 'test'; // Error
@@ -16,10 +16,10 @@
 -    var x4 = false; // Error
 -    var x5 = { a: 'bar', b: 42 }; // Error
 -    var x6 = undefined; // Error
-+    const x1 = 42;
-+    const x2 = 'test';
-+    const x3 = [1, 2, 3];
-+    const x4 = false;
-+    const x5 = { a: 'bar', b: 42 };
-+    const x6 = undefined;
++    const x1 = 42; // Error
++    const x2 = 'test'; // Error
++    const x3 = [1, 2, 3]; // Error
++    const x4 = false; // Error
++    const x5 = { a: 'bar', b: 42 }; // Error
++    const x6 = undefined; // Error
  }

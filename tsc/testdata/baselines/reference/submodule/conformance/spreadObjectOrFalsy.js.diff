@@ -18,7 +18,7 @@
 -};
  function f1(a) {
 -    return __assign({}, a); // Error
-+    return { ...a };
++    return { ...a }; // Error
  }
  function f2(a) {
 -    return __assign({}, a);
@@ -26,7 +26,7 @@
  }
  function f3(a) {
 -    return __assign({}, a); // Error
-+    return { ...a };
++    return { ...a }; // Error
  }
  function f4(a) {
 -    return __assign({}, a);
@@ -40,7 +40,7 @@
 -    return __assign({}, a);
 +    return { ...a };
  }
--// Repro from #46976
+ // Repro from #46976
  function g1(a) {
 -    var z = a.z;
 -    return __assign({}, z);

@@ -46,6 +46,7 @@ exports.Button = Button;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const React = require("react");
+// Should see var button_1 = require('./button') here
 const button_1 = require("./button");
 class App extends React.Component {
     render() {

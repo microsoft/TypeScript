@@ -1,75 +1,70 @@
 --- old.esDecorators-classExpression-commentPreservation(target=esnext).js
 +++ new.esDecorators-classExpression-commentPreservation(target=esnext).js
-@@= skipped -84, +84 lines =@@
- 
- 
- //// [esDecorators-classExpression-commentPreservation.js]
--/*1*/
+@@= skipped -88, +88 lines =@@
  (
--/*2*/
+ /*2*/
  @dec
 -/*3*/
  @dec
--/*4*/
+ /*4*/
  class C {
--    /*5*/
+     /*5*/
      @dec
 -    /*6*/
      @dec
--    /*7*/
+     /*7*/
      method() { }
--    /*8*/
+     /*8*/
      @dec
 -    /*9*/
      @dec
--    /*10*/
+     /*10*/
      get x() { return 1; }
--    /*11*/
+     /*11*/
      @dec
 -    /*12*/
      @dec
--    /*13*/
+     /*13*/
      set x(value) { }
--    /*14*/
+     /*14*/
      @dec
 -    /*15*/
      @dec
--    /*16*/
+     /*16*/
      y = 1;
--    /*17*/
+     /*17*/
      @dec
 -    /*18*/
      @dec
--    /*19*/
+     /*19*/
      accessor z = 1;
--    /*20*/
+     /*20*/
      @dec
 -    /*21*/
      @dec
--    /*22*/
+     /*22*/
      static #method() { }
--    /*23*/
+     /*23*/
      @dec
 -    /*24*/
      @dec
--    /*25*/
+     /*25*/
      static get #x() { return 1; }
--    /*26*/
+     /*26*/
      @dec
 -    /*27*/
      @dec
--    /*28*/
+     /*28*/
      static set #x(value) { }
--    /*29*/
+     /*29*/
      @dec
 -    /*30*/
      @dec
--    /*31*/
+     /*31*/
      static #y = 1;
--    /*32*/
+     /*32*/
      @dec
 -    /*33*/
      @dec
--    /*34*/
+     /*34*/
      static accessor #z = 1;
- });

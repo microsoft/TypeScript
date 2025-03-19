@@ -38,7 +38,7 @@
 +    y;
 +}
  var c1;
--c1; // Should succeed (private x originates in the same declaration)
+ c1; // Should succeed (private x originates in the same declaration)
 -var C3 = /** @class */ (function () {
 -    function C3() {
 -    }
@@ -51,13 +51,11 @@
 -    }
 -    return C4;
 -}(C3));
-+c1;
 +class C3 {
-+    x;
++    x; // This T is the difference between C3 and C1
 +}
 +class C4 extends C3 {
 +    y;
 +}
  var c3;
--c3; // Should fail (private x originates in the same declaration, but different types)
-+c3;
+ c3; // Should fail (private x originates in the same declaration, but different types)

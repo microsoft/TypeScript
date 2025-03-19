@@ -10,6 +10,7 @@ module A {
 
 
 //// [testContainerList.js]
+// Regression test for #325
 var A;
 (function (A) {
     class C {

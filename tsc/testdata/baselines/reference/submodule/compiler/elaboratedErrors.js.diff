@@ -1,10 +1,9 @@
 --- old.elaboratedErrors.js
 +++ new.elaboratedErrors.js
-@@= skipped -29, +29 lines =@@
- 
+@@= skipped -30, +30 lines =@@
  //// [elaboratedErrors.js]
  function fn(s) { }
--// This should issue a large error, not a small one
+ // This should issue a large error, not a small one
 -var WorkerFS = /** @class */ (function () {
 -    function WorkerFS() {
 -    }
@@ -15,9 +14,4 @@
 +}
  var x;
  var y;
--// Only one of these errors should be large
- x = y;
- x = y;
--// Only one of these errors should be large
- y = x;
- y = x;
+ // Only one of these errors should be large

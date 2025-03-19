@@ -12,7 +12,7 @@
 +class foo {
 +}
  new foo();
--// https://github.com/microsoft/TypeScript/issues/33041
+ // https://github.com/microsoft/TypeScript/issues/33041
 -var noParams = /** @class */ (function () {
 -    function noParams() {
 -    }

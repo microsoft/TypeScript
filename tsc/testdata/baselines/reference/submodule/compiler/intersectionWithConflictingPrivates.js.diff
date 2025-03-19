@@ -15,23 +15,7 @@
  }
  ab.y = 'hello';
  ab = {};
- function f1(node) {
-     if (node instanceof A || node instanceof A) {
--        node; // A
-+        node;
-     }
-     else {
--        node; // B
-+        node;
-     }
--    node; // A | B
-+    node;
- }
--// Repro from #37659
- class ViewNode {
- }
- class ViewRefNode extends ViewNode {
-@@= skipped -24, +26 lines =@@
+@@= skipped -24, +27 lines =@@
  class ViewRefFileNode extends ViewRefNode {
  }
  class CommitFileNode extends ViewRefFileNode {

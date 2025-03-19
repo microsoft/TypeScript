@@ -36,6 +36,7 @@ var x = {
         return 10;
     },
     set [1 + 1]() {
+        // just throw
         throw 10;
     },
     get foo() {

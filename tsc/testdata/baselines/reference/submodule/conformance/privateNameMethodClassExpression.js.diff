@@ -32,5 +32,5 @@
  console.log(C.getInstance().getField());
 -C.getInstance().; // Error
 -C.getInstance().; // Error
-+C.getInstance().#method;
-+C.getInstance().#field;
++C.getInstance().#method; // Error
++C.getInstance().#field; // Error

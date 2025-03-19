@@ -30,6 +30,7 @@ let b = x.b;
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="file1.d.ts"/>
 const x = require("file1");
 x.b = 1;
 //// [file3.js]

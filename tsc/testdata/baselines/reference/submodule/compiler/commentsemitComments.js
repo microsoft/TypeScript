@@ -90,33 +90,47 @@ declare var x;
 
 
 //// [commentsemitComments.js]
+/** Variable comments*/
 var myVariable = 10;
-function foo(p) {
+/** function comments*/
+function foo(/** parameter comment*/ p) {
 }
+/** variable with function type comment*/
 var fooVar;
 foo(50);
 fooVar();
+/**class comment*/
 class c {
+    /** constructor comment*/
     constructor() {
     }
+    /** property comment */
     b = 10;
+    /** function comment */
     myFoo() {
         return this.b;
     }
+    /** getter comment*/
     get prop1() {
         return this.b;
     }
+    /** setter comment*/
     set prop1(val) {
         this.b = val;
     }
+    /** overload implementation signature*/
     foo1(aOrb) {
         return aOrb.toString();
     }
 }
+/**instance comment*/
 var i = new c();
+/**interface instance comments*/
 var i1_i;
+/** this is module comment*/
 var m1;
 (function (m1) {
+    /** class b */
     class b {
         x;
         constructor(x) {

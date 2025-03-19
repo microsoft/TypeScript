@@ -26,6 +26,7 @@ var m = <div x-y="val"></div>;
 var n = <div xx-y="val"></div>;
 var o = <div x-yy="val"></div>;
 var p = <div xx-yy="val"></div>;
+// Investigation
 var a = <div x="val"></div>;
 var b = <div xx="val"></div>;
 var c = <div xxx="val"></div>;

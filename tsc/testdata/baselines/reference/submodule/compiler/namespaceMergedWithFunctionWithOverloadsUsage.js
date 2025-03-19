@@ -20,4 +20,4 @@ X(0); // shouldn't cause a crash
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const X = require("./file");
-X(0);
+X(0); // shouldn't cause a crash

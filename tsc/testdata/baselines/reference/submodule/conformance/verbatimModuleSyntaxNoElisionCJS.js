@@ -54,3 +54,4 @@ module.exports = J;
 const I = {};
 module.exports = I;
 //// [z.js]
+// test harness is weird if the last file includs a require >:(

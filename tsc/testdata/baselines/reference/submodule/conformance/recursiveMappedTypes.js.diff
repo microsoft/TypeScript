@@ -9,8 +9,7 @@
  function foo(arg) {
      return arg;
  }
--product.users; // (Transform<User> | Transform<Guest>)[]
-+product.users;
+ product.users; // (Transform<User> | Transform<Guest>)[]
  x.type;
 -
 -

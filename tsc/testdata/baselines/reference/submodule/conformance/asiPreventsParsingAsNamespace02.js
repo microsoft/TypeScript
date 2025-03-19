@@ -11,6 +11,6 @@ m            // this is the identifier 'm'
 //// [asiPreventsParsingAsNamespace02.js]
 var module;
 var m;
-module;
-m;
-{ }
+module; // this is the identifier 'namespace'
+m; // this is the identifier 'm'
+{ } // this is a block body

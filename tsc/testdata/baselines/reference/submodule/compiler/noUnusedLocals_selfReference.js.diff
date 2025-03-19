@@ -30,7 +30,7 @@
 +    m() { this.m; }
 +}
  P;
--// Does not detect mutual recursion.
+ // Does not detect mutual recursion.
  function g() { D; }
 -var D = /** @class */ (function () {
 -    function D() {

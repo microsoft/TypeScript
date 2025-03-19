@@ -8,7 +8,7 @@
  function Comp(p) {
      return <div>{p.b}</div>;
  }
--// Error: missing children
+ // Error: missing children
 -var k = <Comp a={10} b="hi"/>;
 -var k0 = <Comp a={10} b="hi" children="Random">
 +let k = <Comp a={10} b="hi"/>;
@@ -23,7 +23,7 @@
 +let k1 = <Comp a={10} b="hi" {...o}>
          hi hi hi!
      </Comp>;
--// Error: incorrect type
+ // Error: incorrect type
 -var k2 = <Comp a={10} b="hi">
 +let k2 = <Comp a={10} b="hi">
          <div> My Div </div>

@@ -1,10 +1,8 @@
 --- old.es5-yieldFunctionObjectLiterals.js
 +++ new.es5-yieldFunctionObjectLiterals.js
-@@= skipped -64, +64 lines =@@
- 
- 
+@@= skipped -66, +66 lines =@@
  //// [es5-yieldFunctionObjectLiterals.js]
--// mainly to verify indentation of emitted code
+ // mainly to verify indentation of emitted code
  function g() { return "g"; }
 -function objectLiteral1() {
 -    var x, _a;

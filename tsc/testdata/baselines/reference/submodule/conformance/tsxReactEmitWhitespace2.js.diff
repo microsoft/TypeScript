@@ -1,22 +1,21 @@
 --- old.tsxReactEmitWhitespace2.js
 +++ new.tsxReactEmitWhitespace2.js
-@@= skipped -18, +18 lines =@@
- 
+@@= skipped -19, +19 lines =@@
  
  //// [file.js]
--// Emit ' word' in the last string
+ // Emit ' word' in the last string
 -React.createElement("div", null,
 -    "word ",
 -    React.createElement("code", null, "code"),
 -    " word");
--// Same here
++<div>word <code>code</code> word</div>;
+ // Same here
 -React.createElement("div", null,
 -    React.createElement("code", null, "code"),
 -    " word");
--// And here
++<div><code>code</code> word</div>;
+ // And here
 -React.createElement("div", null,
 -    React.createElement("code", null),
 -    " word");
-+<div>word <code>code</code> word</div>;
-+<div><code>code</code> word</div>;
 +<div><code /> word</div>;

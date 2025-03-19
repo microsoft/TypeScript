@@ -151,6 +151,7 @@ function f5(obj, key) {
         obj[key];
     }
 }
+// https://github.com/microsoft/TypeScript/issues/57381
 function f6(a) {
     if (typeof a !== "string") {
         new a();

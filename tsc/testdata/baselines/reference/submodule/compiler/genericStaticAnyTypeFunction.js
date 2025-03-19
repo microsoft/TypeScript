@@ -27,6 +27,6 @@ class A {
     }
     static goo() { return 0; }
     static two(source) {
-        return this.one(source, 42);
+        return this.one(source, 42); // should not error
     }
 }

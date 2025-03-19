@@ -43,6 +43,7 @@ const enum E6 {
 
 
 //// [enumConstantMembers.js]
+// Constant members allow negatives, but not decimals. Also hex literals are allowed
 var E1;
 (function (E1) {
     E1[E1["a"] = 1] = "a";
@@ -56,7 +57,7 @@ var E2;
 var E3;
 (function (E3) {
     E3[E3["a"] = 0.1] = "a";
-    E3[E3["b"] = 1.1] = "b";
+    E3[E3["b"] = 1.1] = "b"; // Error because 0.1 is not a constant
 })(E3 || (E3 = {}));
 var E5;
 (function (E5) {

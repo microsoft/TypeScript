@@ -127,15 +127,15 @@ const { data: data1, isSuccess: isSuccess1 } = useQuery();
 const { data: data2, isSuccess: isSuccess2 } = useQuery();
 const { data: data3, isSuccess: isSuccess3 } = useQuery();
 if (isSuccess1 && isSuccess2 && isSuccess3) {
-    data1.toExponential();
-    data2.toExponential();
-    data3.toExponential();
+    data1.toExponential(); // should ok
+    data2.toExponential(); // should ok
+    data3.toExponential(); // should ok
 }
 const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
 if (areSuccess) {
-    data1.toExponential();
-    data2.toExponential();
-    data3.toExponential();
+    data1.toExponential(); // should ok
+    data2.toExponential(); // should ok
+    data3.toExponential(); // should ok
 }
 {
     let { data: data1, isSuccess: isSuccess1 } = useQuery();
@@ -143,9 +143,9 @@ if (areSuccess) {
     const { data: data3, isSuccess: isSuccess3 } = useQuery();
     const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
     if (areSuccess) {
-        data1.toExponential();
-        data2.toExponential();
-        data3.toExponential();
+        data1.toExponential(); // should error
+        data2.toExponential(); // should error
+        data3.toExponential(); // should ok
     }
 }
 {
@@ -154,9 +154,9 @@ if (areSuccess) {
     const [foo3, bar3] = getArrayResult();
     const arrayAllSuccess = foo1 && foo2 && foo3;
     if (arrayAllSuccess) {
-        bar1.toExponential();
-        bar2.toExponential();
-        bar3.toExponential();
+        bar1.toExponential(); // should ok
+        bar2.toExponential(); // should ok
+        bar3.toExponential(); // should ok
     }
 }
 {
@@ -165,9 +165,9 @@ if (areSuccess) {
     let [foo3, bar3] = getArrayResult();
     const arrayAllSuccess = foo1 && foo2 && foo3;
     if (arrayAllSuccess) {
-        bar1.toExponential();
-        bar2.toExponential();
-        bar3.toExponential();
+        bar1.toExponential(); // should ok
+        bar2.toExponential(); // should error
+        bar3.toExponential(); // should error
     }
 }
 {

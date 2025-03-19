@@ -5,6 +5,5 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var globals = { x: true };
--global.x; // should suggest `globals` (GH#42209)
 +const globals = { x: true };
-+global.x;
+ global.x; // should suggest `globals` (GH#42209)

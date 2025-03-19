@@ -1,18 +1,7 @@
 --- old.nodeModulesImportResolutionIntoExport(module=node16).js
 +++ new.nodeModulesImportResolutionIntoExport(module=node16).js
-@@= skipped -48, +48 lines =@@
-     return result;
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--// esm format file
- const type = __importStar(require("#type"));
- type;
- //// [index.js]
--// esm format file
- import * as type from "#type";
- type;
- //// [index.mjs]
--// esm format file
+@@= skipped -59, +59 lines =@@
+ // esm format file
  import * as type from "#type";
  type;
 -

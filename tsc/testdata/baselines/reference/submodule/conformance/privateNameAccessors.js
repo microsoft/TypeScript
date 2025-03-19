@@ -23,7 +23,7 @@ class A1 {
     get #roProp() { return ""; }
     constructor(name) {
         this.#prop = "";
-        this.#roProp = "";
+        this.#roProp = ""; // Error
         console.log(this.#prop);
         console.log(this.#roProp);
     }

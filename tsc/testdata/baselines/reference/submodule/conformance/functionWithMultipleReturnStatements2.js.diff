@@ -1,44 +1,7 @@
 --- old.functionWithMultipleReturnStatements2.js
 +++ new.functionWithMultipleReturnStatements2.js
-@@= skipped -93, +93 lines =@@
- }
- 
- //// [functionWithMultipleReturnStatements2.js]
--// return type of a function with multiple returns is the BCT of each return statement
--// no errors expected here
- function f1() {
-     if (true) {
-         return 1;
-@@= skipped -44, +42 lines =@@
-         return null;
-     }
- }
--//function f7<T extends U, U>(x: T, y: U) {
--//    if (true) {
--//        return x;
--//    } else {
--//        return y;
--//    }
--//}
- var a;
- var b;
--// returns typeof a
- function f9() {
-     if (true) {
-         return a;
-@@= skipped -18, +10 lines =@@
-         return b;
-     }
- }
--// returns typeof b
- function f10() {
-     if (true) {
-         return b;
-@@= skipped -9, +8 lines =@@
-         return a;
-     }
- }
--// returns number => void
+@@= skipped -167, +167 lines =@@
+ // returns number => void
  function f11() {
      if (true) {
 -        return function (x) { };
@@ -49,7 +12,7 @@
 +        return (x) => { };
      }
  }
--// returns Object => void
+ // returns Object => void
  function f12() {
      if (true) {
 -        return function (x) { };

@@ -85,4 +85,5 @@ var aLambda = (x) => 2;
 var aModule = M;
 var aClassInModule = new M.A();
 var aFunctionInModule = M.F2;
+// no initializer or annotation, so this is an 'any'
 var x;

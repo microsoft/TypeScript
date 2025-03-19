@@ -24,7 +24,10 @@ b2({ while: 1 });
 
 
 //// [destructuringParameterDeclaration6.js]
+// A parameter declaration may specify either an identifier or a binding pattern.
+// Reserved words are not allowed to be used as an identifier in parameter declaration
 "use strict";
+// Error
 function a({ while:  }) { }
 function a1({ public }) { }
 function a4([]) { }
@@ -37,6 +40,7 @@ while () { }
 function a6(...public) { }
 function a7(...a) { }
 a({ while: 1 });
+// No Error
 function b1({ public: x }) { }
 function b2({ while: y }) { }
 b1({ public: 1 });

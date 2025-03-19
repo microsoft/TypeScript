@@ -30,7 +30,12 @@ exports.subject1 = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.subject1 = exports.subject = void 0;
+/* blah0 */
+// blah 
+// blah 
+// blah 
 const _0_1 = require("./0");
 Object.defineProperty(exports, "subject", { enumerable: true, get: function () { return _0_1.subject; } });
+/* blah1 */
 const _1_1 = require("./1");
 Object.defineProperty(exports, "subject1", { enumerable: true, get: function () { return _1_1.subject1; } });

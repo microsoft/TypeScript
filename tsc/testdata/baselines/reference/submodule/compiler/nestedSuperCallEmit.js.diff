@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// https://github.com/microsoft/TypeScript/issues/55646
+ // https://github.com/microsoft/TypeScript/issues/55646
 -var Foo = /** @class */ (function () {
 -    function Foo(shouldThrow) {
 +class Foo {
@@ -27,7 +27,7 @@
          if (shouldThrow) {
              throw new Error('Please retry');
          }
-@@= skipped -25, +9 lines =@@
+@@= skipped -25, +10 lines =@@
              console.log('OK');
          }
      }
@@ -46,7 +46,7 @@
          }
          catch (e) {
              console.log('Error: ' + e.message);
--            // retry
+             // retry
 -            _this = _super.call(this, false) || this;
 +            super(false);
          }

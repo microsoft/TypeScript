@@ -9,4 +9,5 @@ export { a, b };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
+// issue: https://github.com/Microsoft/TypeScript/issues/10778
 const [a, , b] = [1, 2, 3];

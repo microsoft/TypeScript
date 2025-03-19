@@ -1,32 +1,11 @@
 --- old.invalidForInBreakStatements.js
 +++ new.invalidForInBreakStatements.js
-@@= skipped -40, +40 lines =@@
- }
- 
- //// [invalidForInBreakStatements.js]
--// All errors
--// naked break not allowed
- break;
--// non-existent label
- ONE: for (var x in {})
+@@= skipped -48, +48 lines =@@
      break TWO;
--// break from inside function
+ // break from inside function
  TWO: for (var x in {}) {
 -    var fn = function () {
 +    var fn = () => {
          break TWO;
      };
  }
-@@= skipped -17, +13 lines =@@
-         break THREE;
-     };
- }
--// break forward
- for (var x in {}) {
-     break FIVE;
-     FIVE: for (var x in {}) { }
- }
--// label on non-loop statement
- NINE: var y = 12;
- for (var x in {}) {
-     break NINE;

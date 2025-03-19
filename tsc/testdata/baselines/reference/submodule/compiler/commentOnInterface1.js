@@ -21,3 +21,4 @@ interface I3 {
 
 //// [a.js]
 //// [b.js]
+///<reference path='a.ts'/>

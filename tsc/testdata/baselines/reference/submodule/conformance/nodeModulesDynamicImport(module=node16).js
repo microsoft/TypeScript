@@ -27,10 +27,12 @@ declare module "fs";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = main;
+// cjs format file
 async function main() {
     const { readFile } = await import("fs");
 }
 //// [index.js]
+// esm format file
 export async function main() {
     const { readFile } = await import("fs");
 }

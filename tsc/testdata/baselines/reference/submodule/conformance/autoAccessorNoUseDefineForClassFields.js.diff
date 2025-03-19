@@ -1,14 +1,6 @@
 --- old.autoAccessorNoUseDefineForClassFields.js
 +++ new.autoAccessorNoUseDefineForClassFields.js
-@@= skipped -40, +40 lines =@@
- 
- 
- //// [file1.js]
--// https://github.com/microsoft/TypeScript/issues/51528
- class C1 {
-     static accessor x = 0;
- }
-@@= skipped -18, +17 lines =@@
+@@= skipped -58, +58 lines =@@
  }
  //// [file5.js]
  class C5 {

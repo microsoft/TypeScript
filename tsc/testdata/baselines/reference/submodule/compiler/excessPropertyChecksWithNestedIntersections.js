@@ -77,16 +77,16 @@ test = { foo: true, bar: { foo: true, bar: true, boo: true } }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.myInstance = exports.photo = exports.obj = void 0;
-let a = { a: { x: 'hello' } };
-let b = { a: { x: 2 } };
-let c = { a: { x: 'hello', y: 2 } };
-let d = { a: { x: 'hello' }, c: 5 };
-let e = { a: { x: 2 }, c: 5 };
-let f = { a: { x: 'hello', y: 2 }, c: 5 };
+let a = { a: { x: 'hello' } }; // ok
+let b = { a: { x: 2 } }; // error - types of property x are incompatible
+let c = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
+let d = { a: { x: 'hello' }, c: 5 }; // ok
+let e = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
+let f = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
 exports.photo = {
     id: 1,
     url: '',
-    xyz: 1
+    xyz: 1 // Great! This causes an error!
 };
 exports.myInstance = {
     id: 1,
@@ -94,7 +94,7 @@ exports.myInstance = {
     photo: {
         id: 1,
         url: '',
-        xyz: 2
+        xyz: 2 // This should also be an error
     }
 };
 let test;

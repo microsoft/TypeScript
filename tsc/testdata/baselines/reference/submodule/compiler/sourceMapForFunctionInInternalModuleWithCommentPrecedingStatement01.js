@@ -12,6 +12,7 @@ module Q {
 var Q;
 (function (Q) {
     function P() {
+        // Test this
         var a = 1;
     }
 })(Q || (Q = {}));

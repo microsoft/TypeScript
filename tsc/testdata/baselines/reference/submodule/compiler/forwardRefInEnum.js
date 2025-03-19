@@ -19,10 +19,13 @@ enum E1 {
 //// [forwardRefInEnum.js]
 var E1;
 (function (E1) {
+    // illegal case
+    // forward reference to the element of the same enum
     E1["X"] = E1.Y;
     if (typeof E1.X !== "string") E1[E1.X] = "X";
     E1["X1"] = E1["Y"];
     if (typeof E1.X1 !== "string") E1[E1.X1] = "X1";
+    // forward reference to the element of the same enum
     E1["Y"] = E1.Z;
     if (typeof E1.Y !== "string") E1[E1.Y] = "Y";
     E1["Y1"] = E1["Z"];

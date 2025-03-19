@@ -1,15 +1,9 @@
 --- old.exponentiationOperatorWithNullValueAndInvalidOperands.js
 +++ new.exponentiationOperatorWithNullValueAndInvalidOperands.js
-@@= skipped -25, +25 lines =@@
- var r1d3 = {} ** null;
- 
- //// [exponentiationOperatorWithNullValueAndInvalidOperands.js]
--// If one operand is the null or undefined value, it is treated as having the type of the
--// other operand.
- var a;
+@@= skipped -31, +31 lines =@@
  var b;
  var c;
--// operator **
+ // operator **
 -var r1a1 = Math.pow(null, a);
 -var r1a2 = Math.pow(null, b);
 -var r1a3 = Math.pow(null, c);

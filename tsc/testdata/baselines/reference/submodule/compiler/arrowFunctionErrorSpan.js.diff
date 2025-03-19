@@ -1,51 +1,51 @@
 --- old.arrowFunctionErrorSpan.js
 +++ new.arrowFunctionErrorSpan.js
-@@= skipped -57, +57 lines =@@
- 
+@@= skipped -58, +58 lines =@@
  //// [arrowFunctionErrorSpan.js]
  function f(a) { }
--// oneliner
+ // oneliner
 -f(function () { });
--// multiline, body
--f(function () {
 +f(() => { });
-+f(() => {
- });
--// multiline 2, body
+ // multiline, body
 -f(function () {
 +f(() => {
  });
--// multiline 3, arrow on a new line
+ // multiline 2, body
+-f(function () {
++f(() => {
+ });
+ // multiline 3, arrow on a new line
 -f(function () { });
--// multiline 4, arguments
++f(() => { });
+ // multiline 4, arguments
 -f(function (a, b, c, d) { });
--// single line with a comment
--f(/*
--    */ function () { });
--// multi line with a comment
--f(/*
--    */ function () { });
--// multi line with a comment 2
--f(/*
--    */ function () {
-+f(() => { });
 +f((a, b, c, d) => { });
-+f(() => { });
-+f(() => { });
-+f(() => {
+ // single line with a comment
+ f(/*
+-    */ function () { });
++    */ () => { });
+ // multi line with a comment
+ f(/*
+-    */ function () { });
++    */ () => { });
+ // multi line with a comment 2
+ f(/*
+-    */ function () {
++    */ () => {
  });
--// multi line with a comment 3
--f(// comment 1
--// comment 2
+ // multi line with a comment 3
+ f(// comment 1
+ // comment 2
 -function () {
--    // comment 4
--}
--// comment 5
--);
--// body is not a block
++() => 
++// comment 3
++{
+     // comment 4
+ }
+ // comment 5
+ );
+ // body is not a block
 -f(function (_) { return 1 +
 -    2; });
-+f(() => {
-+});
 +f(_ => 1 +
 +    2);

@@ -18,4 +18,4 @@ ohno.a // oh no
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-ohno.a;
+ohno.a; // oh no

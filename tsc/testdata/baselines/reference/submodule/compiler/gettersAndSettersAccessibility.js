@@ -10,5 +10,5 @@ class C99 {
 //// [gettersAndSettersAccessibility.js]
 class C99 {
     get Baz() { return 0; }
-    set Baz(n) { }
+    set Baz(n) { } // error - accessors do not agree in visibility
 }

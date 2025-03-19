@@ -35,8 +35,8 @@ class C {
 }
 var c;
 var r = c.y;
-var r2 = c.x;
-var r3 = c.z;
+var r2 = c.x; // error
+var r3 = c.z; // error
 class D {
     x;
     z;
@@ -48,6 +48,6 @@ class D {
 }
 var d;
 var r = d.y;
-var r2 = d.x;
-var r3 = d.a;
-var r4 = d.z;
+var r2 = d.x; // error
+var r3 = d.a; // error
+var r4 = d.z; // error

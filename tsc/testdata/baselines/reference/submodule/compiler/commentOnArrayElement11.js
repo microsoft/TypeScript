@@ -8,5 +8,5 @@ const array = [
 
 //// [commentOnArrayElement11.js]
 const array = [
-    ,
+    , /* comment */
 ];

@@ -103,10 +103,11 @@ function useState(initial) {
     return null;
 }
 function readSegment([length, count]) { }
+// documenting binding pattern behavior (currently does _not_ generate tuple names)
 exports.val = null;
 q = r;
 r = q;
 x = y;
 y = x;
-exports.argumentsOfGAsFirstArgument = f(getArgsForInjection(g));
-exports.argumentsOfG = f(...getArgsForInjection(g));
+exports.argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
+exports.argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread

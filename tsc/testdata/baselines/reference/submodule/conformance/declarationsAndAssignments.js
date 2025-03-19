@@ -208,14 +208,14 @@ function f1() {
     var z;
 }
 function f2() {
-    var {} = { x: 5, y: "hello" };
-    var { x } = { x: 5, y: "hello" };
-    var { y } = { x: 5, y: "hello" };
+    var {} = { x: 5, y: "hello" }; // Ok, empty binding pattern means nothing
+    var { x } = { x: 5, y: "hello" }; // Error, no y in target
+    var { y } = { x: 5, y: "hello" }; // Error, no x in target
     var { x, y } = { x: 5, y: "hello" };
     var x;
     var y;
-    var { x: a } = { x: 5, y: "hello" };
-    var { y: b } = { x: 5, y: "hello" };
+    var { x: a } = { x: 5, y: "hello" }; // Error, no y in target
+    var { y: b } = { x: 5, y: "hello" }; // Error, no x in target
     var { x: a, y: b } = { x: 5, y: "hello" };
     var a;
     var b;
@@ -238,22 +238,22 @@ function f6() {
     var y;
 }
 function f7() {
-    var [x = 0, y = 1] = [1, "hello"];
+    var [x = 0, y = 1] = [1, "hello"]; // Error, initializer for y must be string
     var x;
     var y;
 }
 function f8() {
-    var [a, b, c] = [];
-    var [d, e, f] = [1];
+    var [a, b, c] = []; // Error, [] is an empty tuple
+    var [d, e, f] = [1]; // Error, [1] is a tuple
 }
 function f9() {
-    var [a, b] = {};
-    var [c, d] = { 0: 10, 1: 20 };
+    var [a, b] = {}; // Error, not array type
+    var [c, d] = { 0: 10, 1: 20 }; // Error, not array type
     var [e, f] = [10, 20];
 }
 function f10() {
-    var { a, b } = {};
-    var { a, b } = [];
+    var { a, b } = {}; // Error
+    var { a, b } = []; // Error
 }
 function f11() {
     var { x: a, y: b } = { x: 10, y: "hello" };
@@ -281,7 +281,7 @@ function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 }
 f14([2, ["abc", { x: 0, y: true }]]);
 f14([2, ["abc", { x: 0 }]]);
-f14([2, ["abc", { y: false }]]);
+f14([2, ["abc", { y: false }]]); // Error, no x
 var M;
 (function (M) {
     [M.a, M.b] = [1, 2];
@@ -308,7 +308,7 @@ function f18() {
     ({ a, b } = { a, b });
     ({ a, b } = { b, a });
     [aa[0], b] = [a, b];
-    [a, b] = [b, a];
+    [a, b] = [b, a]; // Error
     [a = 1, b = "abc"] = [2, "def"];
 }
 function f19() {

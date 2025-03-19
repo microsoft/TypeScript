@@ -133,7 +133,7 @@ var WinJS;
 })(WinJS || (WinJS = {}));
 var Errors;
 (function (Errors) {
-    class ConnectionError {
+    class ConnectionError /* extends Error */ {
         constructor(request) {
         }
     }
@@ -150,7 +150,7 @@ class FileService {
             data: "someData"
         }).then((response) => {
             var result = {
-                stat: this.jsonToStat(newFilePath, "someString"),
+                stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
                 isNew: response.status === 201
             };
             return WinJS.TPromise.as(result);

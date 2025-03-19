@@ -32,7 +32,8 @@
 +const server_8 = require("./server");
  exports.z111 = server_8.z1;
 -var server_9 = require("./server");
--exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
++const server_9 = require("./server");
+ exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
 -
 -
 -//// [server.d.ts]
@@ -57,5 +58,3 @@
 -export declare var xxxx: number;
 -export declare var z111: number;
 -export declare var z2: number;
-+const server_9 = require("./server");
-+exports.z2 = server_9.z2;

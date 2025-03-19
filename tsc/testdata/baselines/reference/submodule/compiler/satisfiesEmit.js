@@ -9,5 +9,6 @@ const p = a satisfies bleh;
 //// [satisfiesEmit.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// This import should not be elided in the emitted JS
 const a = require("foo");
 const p = a;

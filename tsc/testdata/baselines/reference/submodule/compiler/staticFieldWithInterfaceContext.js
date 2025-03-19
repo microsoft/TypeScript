@@ -30,6 +30,7 @@ let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a
 
 //// [staticFieldWithInterfaceContext.js]
 let c = class {
+    // should typecheck the same as the last line
     static x = { a: "a" };
 };
 c.x = { a: "a" };

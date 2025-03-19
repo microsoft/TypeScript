@@ -1,10 +1,9 @@
 --- old.constructorWithParameterPropertiesAndPrivateFields.es2015.js
 +++ new.constructorWithParameterPropertiesAndPrivateFields.es2015.js
-@@= skipped -31, +31 lines =@@
- 
+@@= skipped -32, +32 lines =@@
  
  //// [constructorWithParameterPropertiesAndPrivateFields.es2015.js]
--// https://github.com/microsoft/TypeScript/issues/48771
+ // https://github.com/microsoft/TypeScript/issues/48771
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");

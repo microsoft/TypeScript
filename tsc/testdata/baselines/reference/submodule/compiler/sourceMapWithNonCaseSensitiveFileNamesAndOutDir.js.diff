@@ -1,11 +1,9 @@
 --- old.sourceMapWithNonCaseSensitiveFileNamesAndOutDir.js
 +++ new.sourceMapWithNonCaseSensitiveFileNamesAndOutDir.js
-@@= skipped -10, +10 lines =@@
- }
- 
+@@= skipped -12, +12 lines =@@
  //// [app.js]
--// Note in the out result we are using same folder name only different in casing
--// Since this is non case sensitive, the relative paths should be just app.ts and app2.ts in the sourcemap
+ // Note in the out result we are using same folder name only different in casing
+ // Since this is non case sensitive, the relative paths should be just app.ts and app2.ts in the sourcemap
 -var c = /** @class */ (function () {
 -    function c() {
 -    }

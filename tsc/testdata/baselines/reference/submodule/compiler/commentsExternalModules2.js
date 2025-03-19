@@ -64,7 +64,8 @@ export var newVar2 = new extMod.m4.m2.c();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newVar2 = exports.newVar = void 0;
-const extMod = require("commentsExternalModules2_0");
+/**This is on import declaration*/
+const extMod = require("commentsExternalModules2_0"); // trailing comment 1
 extMod.m1.fooExport();
 exports.newVar = new extMod.m1.m2.c();
 extMod.m4.fooExport();

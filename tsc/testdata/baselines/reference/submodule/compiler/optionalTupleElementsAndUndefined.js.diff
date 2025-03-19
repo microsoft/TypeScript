@@ -6,7 +6,6 @@
  //// [optionalTupleElementsAndUndefined.js]
 -"use strict";
 -// Repro from #50753
--// Types in the following declarations should be identical
- var v;
+ // Types in the following declarations should be identical
  var v;
  var v;

@@ -71,11 +71,3 @@
  function f1(obj) {
      if (obj) {
          obj.x;
-@@= skipped -80, +58 lines =@@
-         obj[key];
-     }
- }
--// https://github.com/microsoft/TypeScript/issues/57381
- function f6(a) {
-     if (typeof a !== "string") {
-         new a();

@@ -1,11 +1,9 @@
 --- old.umd-augmentation-4.js
 +++ new.umd-augmentation-4.js
-@@= skipped -44, +44 lines =@@
- 
- 
+@@= skipped -46, +46 lines =@@
  //// [a.js]
--/// <reference path="node_modules/math2d/index.d.ts" />
--/// <reference path="math2d-augment.d.ts" />
+ /// <reference path="node_modules/math2d/index.d.ts" />
+ /// <reference path="math2d-augment.d.ts" />
 -var v = new Math2d.Vector(3, 2);
 -var magnitude = Math2d.getLength(v);
 -var p = v.translate(5, 5);

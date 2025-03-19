@@ -1,9 +1,0 @@
---- old.library-reference-8.js
-+++ new.library-reference-8.js
-@@= skipped -15, +15 lines =@@
- 
- 
- //// [foo.js]
--/// <reference types="alpha" />
--/// <reference types="beta" />
- var x = alpha.a + beta.b;

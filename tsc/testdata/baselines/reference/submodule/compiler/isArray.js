@@ -14,8 +14,8 @@ else {
 //// [isArray.js]
 var maybeArray;
 if (Array.isArray(maybeArray)) {
-    maybeArray.length;
+    maybeArray.length; // OK
 }
 else {
-    maybeArray.toFixed();
+    maybeArray.toFixed(); // OK
 }

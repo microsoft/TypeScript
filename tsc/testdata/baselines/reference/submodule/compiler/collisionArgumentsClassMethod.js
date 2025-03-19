@@ -53,29 +53,29 @@ class c3 {
 //// [collisionArgumentsClassMethod.js]
 class c1 {
     foo(i, ...arguments) {
-        var arguments;
+        var arguments; // no error
     }
     foo1(arguments, ...rest) {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
     fooNoError(arguments) {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
     f4(i, ...arguments) {
-        var arguments;
+        var arguments; // no error
     }
     f41(arguments, ...rest) {
-        var arguments;
+        var arguments; // no error
     }
     f4NoError(arguments) {
-        var arguments;
+        var arguments; // no error
     }
 }
 class c3 {
     foo(...restParameters) {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
     fooNoError() {
-        var arguments = 10;
+        var arguments = 10; // no error
     }
 }

@@ -40,6 +40,7 @@ var temp: any;
 
 //// [exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.js]
 var temp;
+// Error: incorrect type on left-hand side 
 (!--temp) ** 3;
 (!temp--) ** 3;
 (!3) ** 4;

@@ -1,10 +1,9 @@
 --- old.typeInferenceLiteralUnion.js
 +++ new.typeInferenceLiteralUnion.js
-@@= skipped -41, +41 lines =@@
- "use strict";
+@@= skipped -42, +42 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.extent = extent;
--// Not very useful, but meets Numeric
+ // Not very useful, but meets Numeric
 -var NumCoercible = /** @class */ (function () {
 -    function NumCoercible(a) {
 +class NumCoercible {
@@ -18,11 +17,11 @@
 -    };
 -    return NumCoercible;
 -}());
--/**
-- * Return the min and max simultaneously.
-- */
 +    }
 +}
+ /**
+  * Return the min and max simultaneously.
+  */
  function extent(array) {
      return [undefined, undefined];
  }

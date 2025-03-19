@@ -14,7 +14,8 @@
 +    render() {
          return <div>
 -            {/* missing */}
--            {null /* preserved */}
++            
+             {null /* preserved */}
 -            {
 -            // ??? 1
 -            }
@@ -25,8 +26,6 @@
 -            {
 -            // ??? 4
 -            /* ??? 5 */ }
-+            
-+            {null}
 +            
 +            
 +            

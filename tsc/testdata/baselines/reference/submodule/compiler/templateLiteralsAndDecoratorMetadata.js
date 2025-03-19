@@ -13,6 +13,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Greeter = void 0;
 class Greeter {
     @format("Hello, %s")
-    greeting = `employee`;
+    greeting = `employee`; //template literals on this line cause the issue
 }
 exports.Greeter = Greeter;

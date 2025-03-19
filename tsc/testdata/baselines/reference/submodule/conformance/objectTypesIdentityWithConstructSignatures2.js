@@ -79,6 +79,7 @@ function foo15(x: C<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignatures2.js]
+// object types are identical structurally
 class B {
     constructor(x) { return null; }
 }
@@ -86,7 +87,7 @@ class C {
     constructor(x) { return null; }
 }
 var a;
-var b = { new(x) { return ''; } };
+var b = { new(x) { return ''; } }; // not a construct signature, function called new
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

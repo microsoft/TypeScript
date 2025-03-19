@@ -1,40 +1,45 @@
 --- old.declarationEmitRetainsJsdocyComments.js
 +++ new.declarationEmitRetainsJsdocyComments.js
-@@= skipped -49, +49 lines =@@
+@@= skipped -48, +48 lines =@@
+ //// [declarationEmitRetainsJsdocyComments.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
- exports.someMethod = exports.Foo = exports.foo = void 0;
--/**
-- * comment1
-- * @param p
-- */
+-exports.someMethod = exports.Foo = exports.foo = void 0;
++exports.
+ /**
++* comment5
++*/
++someMethod = exports.Foo = exports.foo = void 0;
++/**
+  * comment1
+  * @param p
+  */
 -var foo = function (p) {
 +const foo = (p) => {
      return {
--        /**
--         * comment2
--         * @param s
--         */
+         /**
+          * comment2
+          * @param s
+          */
 -        bar: function (s) { },
--        /**
--         * comment3
--         * @param s
--         */
--        bar2: function (s) { },
 +        bar: (s) => { },
+         /**
+          * comment3
+          * @param s
+          */
+-        bar2: function (s) { },
 +        bar2(s) { },
      };
  };
  exports.foo = foo;
 -var Foo = /** @class */ (function () {
 -    function Foo() {
+-    }
 +class Foo {
-+    bar(s) {
-     }
--    /**
--     * comment4
--     * @param s
--     */
+     /**
+      * comment4
+      * @param s
+      */
 -    Foo.prototype.bar = function (s) {
 -    };
 -    return Foo;
@@ -69,7 +74,7 @@
 -     * @param s
 -     */
 -    bar(s: number): void;
- }
+-}
 -export declare let 
 -/**
 -* comment5
@@ -81,7 +86,12 @@
 -        * comment6
 -        */
 -        someMethod(collection: any[]): boolean;
--    }
--}
++    bar(s) {
+     }
+ }
 +exports.Foo = Foo;
-+({ someMethod: exports.someMethod } = null);
++({ 
++    /**
++    * comment5
++    */
++    someMethod: exports.someMethod } = null);

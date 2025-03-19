@@ -70,6 +70,8 @@ module M2 {
 }
 
 //// [mergeThreeInterfaces2.js]
+// two interfaces with the same root module should merge
+// root module now multiple module declarations
 var M2;
 (function (M2) {
     var a;
@@ -82,6 +84,7 @@ var M2;
     var r2 = a.bar;
     var r3 = a.baz;
 })(M2 || (M2 = {}));
+// same as above but with an additional level of nesting and third module declaration
 (function (M2) {
     let M3;
     (function (M3) {

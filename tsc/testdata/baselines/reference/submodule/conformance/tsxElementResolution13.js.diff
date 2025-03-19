@@ -1,8 +1,0 @@
---- old.tsxElementResolution13.js
-+++ new.tsxElementResolution13.js
-@@= skipped -14, +14 lines =@@
- 
- //// [file.jsx]
- var obj1;
--<obj1 x={10}/>; // Error
-+<obj1 x={10}/>;

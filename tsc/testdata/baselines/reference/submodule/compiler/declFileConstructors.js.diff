@@ -5,9 +5,9 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.ConstructorWithParameterInitializer = exports.ConstructorWithOptionalParameterProperty = exports.ConstructorWithPrivateParameterProperty = exports.ConstructorWithPublicParameterProperty = exports.ConstructorWithOverloads = exports.ConstructorWithRestParamters = exports.ConstructorWithParameters = exports.SimpleConstructor = void 0;
 -var SimpleConstructor = /** @class */ (function () {
--    /** This comment should appear for foo*/
--    function SimpleConstructor() {
 +class SimpleConstructor {
+     /** This comment should appear for foo*/
+-    function SimpleConstructor() {
 +    constructor() {
      }
 -    return SimpleConstructor;
@@ -15,12 +15,12 @@
 +}
  exports.SimpleConstructor = SimpleConstructor;
 -var ConstructorWithParameters = /** @class */ (function () {
--    /** This is comment for function signature*/
--    function ConstructorWithParameters(/** this is comment about a*/ a, 
--    /** this is comment for b*/
--    b) {
 +class ConstructorWithParameters {
-+    constructor(a, b) {
+     /** This is comment for function signature*/
+-    function ConstructorWithParameters(/** this is comment about a*/ a, 
++    constructor(/** this is comment about a*/ a, 
+     /** this is comment for b*/
+     b) {
          var d = a;
      }
 -    return ConstructorWithParameters;
@@ -97,21 +97,21 @@
  exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
  //// [declFileConstructors_1.js]
 -var GlobalSimpleConstructor = /** @class */ (function () {
--    /** This comment should appear for foo*/
--    function GlobalSimpleConstructor() {
 +class GlobalSimpleConstructor {
+     /** This comment should appear for foo*/
+-    function GlobalSimpleConstructor() {
 +    constructor() {
      }
 -    return GlobalSimpleConstructor;
 -}());
 -var GlobalConstructorWithParameters = /** @class */ (function () {
--    /** This is comment for function signature*/
--    function GlobalConstructorWithParameters(/** this is comment about a*/ a, 
--    /** this is comment for b*/
--    b) {
 +}
 +class GlobalConstructorWithParameters {
-+    constructor(a, b) {
+     /** This is comment for function signature*/
+-    function GlobalConstructorWithParameters(/** this is comment about a*/ a, 
++    constructor(/** this is comment about a*/ a, 
+     /** this is comment for b*/
+     b) {
          var d = a;
      }
 -    return GlobalConstructorWithParameters;

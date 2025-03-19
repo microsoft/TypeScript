@@ -8,14 +8,14 @@
 +//// [/app/bin/node_modules/foo/index.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="../types/bar.d.ts" preserve="true" />
--var foo_1 = require("foo");
--var bar_1 = require("bar");
 +exports.x = void 0;
 +exports.x = 0;
 +//// [/app/bin/app/index.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
+ /// <reference path="../types/bar.d.ts" preserve="true" />
+-var foo_1 = require("foo");
+-var bar_1 = require("bar");
 +const foo_1 = require("foo");
 +const bar_1 = require("bar");
  foo_1.x + bar_1.y;

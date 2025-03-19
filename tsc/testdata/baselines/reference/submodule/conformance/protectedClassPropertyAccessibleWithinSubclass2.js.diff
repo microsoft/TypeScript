@@ -29,13 +29,10 @@
          var b;
          var d1;
          var d2;
-         var d3;
-         var d4;
--        b.x; // OK, accessed within their declaring class
--        d1.x; // OK, accessed within their declaring class
--        d2.x; // OK, accessed within their declaring class
--        d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--        d4.x; // OK, accessed within their declaring class
+@@= skipped -29, +13 lines =@@
+         d2.x; // OK, accessed within their declaring class
+         d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+         d4.x; // OK, accessed within their declaring class
 -    };
 -    return Base;
 -}());
@@ -43,11 +40,6 @@
 -    __extends(Derived1, _super);
 -    function Derived1() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+        b.x;
-+        d1.x;
-+        d2.x;
-+        d3.x;
-+        d4.x;
      }
 -    Derived1.prototype.method1 = function () {
 +}
@@ -56,13 +48,10 @@
          var b;
          var d1;
          var d2;
-         var d3;
-         var d4;
--        b.x; // Error, isn't accessed through an instance of the enclosing class
--        d1.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
--        d2.x; // Error, isn't accessed through an instance of the enclosing class
--        d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--        d4.x; // Error, isn't accessed through an instance of the enclosing class
+@@= skipped -19, +14 lines =@@
+         d2.x; // Error, isn't accessed through an instance of the enclosing class
+         d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+         d4.x; // Error, isn't accessed through an instance of the enclosing class
 -    };
 -    return Derived1;
 -}(Base));
@@ -70,11 +59,6 @@
 -    __extends(Derived2, _super);
 -    function Derived2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+        b.x;
-+        d1.x;
-+        d2.x;
-+        d3.x;
-+        d4.x;
      }
 -    Derived2.prototype.method2 = function () {
 +}
@@ -83,13 +67,10 @@
          var b;
          var d1;
          var d2;
-         var d3;
-         var d4;
--        b.x; // Error, isn't accessed through an instance of the enclosing class
--        d1.x; // Error, isn't accessed through an instance of the enclosing class
--        d2.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
--        d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--        d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
+@@= skipped -19, +14 lines =@@
+         d2.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+         d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+         d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
 -    };
 -    return Derived2;
 -}(Base));
@@ -97,11 +78,6 @@
 -    __extends(Derived3, _super);
 -    function Derived3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+        b.x;
-+        d1.x;
-+        d2.x;
-+        d3.x;
-+        d4.x;
      }
 -    Derived3.prototype.method3 = function () {
 +}
@@ -111,13 +87,10 @@
          var b;
          var d1;
          var d2;
-         var d3;
-         var d4;
--        b.x; // Error, isn't accessed through an instance of the enclosing class
--        d1.x; // Error, isn't accessed through an instance of the enclosing class
--        d2.x; // Error, isn't accessed through an instance of the enclosing class
--        d3.x; // OK, accessed within their declaring class
--        d4.x; // Error, isn't accessed through an instance of the enclosing class
+@@= skipped -19, +15 lines =@@
+         d2.x; // Error, isn't accessed through an instance of the enclosing class
+         d3.x; // OK, accessed within their declaring class
+         d4.x; // Error, isn't accessed through an instance of the enclosing class
 -    };
 -    return Derived3;
 -}(Derived1));
@@ -125,11 +98,6 @@
 -    __extends(Derived4, _super);
 -    function Derived4() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+        b.x;
-+        d1.x;
-+        d2.x;
-+        d3.x;
-+        d4.x;
      }
 -    Derived4.prototype.method4 = function () {
 +}
@@ -138,35 +106,15 @@
          var b;
          var d1;
          var d2;
-         var d3;
-         var d4;
--        b.x; // Error, isn't accessed through an instance of the enclosing class
--        d1.x; // Error, isn't accessed through an instance of the enclosing class
--        d2.x; // Error, isn't accessed through an instance of the enclosing class
--        d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
--        d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+@@= skipped -19, +14 lines =@@
+         d2.x; // Error, isn't accessed through an instance of the enclosing class
+         d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+         d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
 -    };
 -    return Derived4;
 -}(Derived2));
-+        b.x;
-+        d1.x;
-+        d2.x;
-+        d3.x;
-+        d4.x;
 +    }
 +}
  var b;
  var d1;
  var d2;
- var d3;
- var d4;
--b.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d1.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d2.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d3.x; // Error, neither within their declaring class nor classes derived from their declaring class
--d4.x; // Error, neither within their declaring class nor classes derived from their declaring class
-+b.x;
-+d1.x;
-+d2.x;
-+d3.x;
-+d4.x;

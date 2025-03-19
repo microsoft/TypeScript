@@ -40,7 +40,7 @@ function someDecorator(target) {
 }
 @someDecorator
 class MyClass {
-    db;
+    db; //error
     constructor(db) {
         this.db = db;
         this.db.doSomething();

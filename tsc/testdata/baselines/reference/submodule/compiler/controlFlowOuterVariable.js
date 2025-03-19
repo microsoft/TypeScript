@@ -15,6 +15,7 @@ const helper = function<T>(t: T[]) {
 }
 
 //// [controlFlowOuterVariable.js]
+// Repros from #10641
 const CONFIG = {
     foo: '',
     setFoo: function (foo) {

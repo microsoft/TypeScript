@@ -8,3 +8,6 @@ var bar;
 
 //// [commentEmitWithCommentOnLastLine.js]
 var x;
+/*
+var bar;
+*/ 

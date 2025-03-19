@@ -23,7 +23,9 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Foo = (props) => <div />;
+// Should be OK
 const foo = <Foo />;
+// Should be OK
 var MainMenu = (props) => (<div>
     <h3>Main Menu</h3>
 </div>);

@@ -10,10 +10,5 @@
 +const x = undefined;
 +const y = undefined;
  if (typeof x === "undefined") {
--    x; // no error: assume x2 is initialised
-+    x;
- }
- if (typeof y !== "undefined") {
--    y; // no error: do not narrow void
-+    y;
+     x; // no error: assume x2 is initialised
  }

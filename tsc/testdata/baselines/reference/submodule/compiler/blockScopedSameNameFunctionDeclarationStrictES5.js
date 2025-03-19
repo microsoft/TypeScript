@@ -23,17 +23,17 @@ foo(); // not ok - needs number
 "use strict";
 function foo(a) {
     if (a === 1) {
-        function foo() { }
+        function foo() { } // Error to declare function in block scope
         foo();
-        foo(10);
+        foo(10); // not ok
     }
     else {
-        function foo() { }
+        function foo() { } // Error to declare function in block scope
         foo();
-        foo(10);
+        foo(10); // not ok
     }
     foo(10);
-    foo();
+    foo(); // not ok - needs number
 }
 foo(10);
-foo();
+foo(); // not ok - needs number

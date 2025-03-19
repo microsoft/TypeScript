@@ -9,6 +9,7 @@
 
 
 //// [awaitUsingDeclarationsInForOf.4.js]
+// https://github.com/microsoft/TypeScript/issues/55555
 {
     for (await using of of of) { }
     ;

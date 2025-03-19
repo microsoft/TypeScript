@@ -9,4 +9,5 @@ $.foo();
 
 
 //// [consumer.js]
+/// <reference types="jquery" />
 $.foo();

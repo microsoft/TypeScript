@@ -41,6 +41,7 @@ class C6 {
 
 
 //// [file1.js]
+// https://github.com/microsoft/TypeScript/issues/51528
 class C1 {
     static accessor x = 0;
 }

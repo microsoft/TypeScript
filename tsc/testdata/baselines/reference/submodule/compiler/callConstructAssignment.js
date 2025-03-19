@@ -11,5 +11,5 @@ bar = foo; // error
 //// [callConstructAssignment.js]
 var foo;
 var bar;
-foo = bar;
-bar = foo;
+foo = bar; // error
+bar = foo; // error

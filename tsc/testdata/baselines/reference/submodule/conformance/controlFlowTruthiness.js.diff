@@ -7,12 +7,9 @@
 -    var x = foo();
 +    let x = foo();
      if (x) {
--        x; // string
-+        x;
+         x; // string
      }
-     else {
--        x; // string | undefined
-+        x;
+@@= skipped -9, +9 lines =@@
      }
  }
  function f2() {
@@ -20,36 +17,26 @@
 +    let x;
      x = foo();
      if (x) {
--        x; // string
-+        x;
-     }
-     else {
--        x; // string | undefined
-+        x;
+         x; // string
+@@= skipped -10, +10 lines =@@
      }
  }
  function f3() {
 -    var x;
 +    let x;
      if (x = foo()) {
--        x; // string
-+        x;
+         x; // string
      }
-     else {
--        x; // string | undefined
-+        x;
+@@= skipped -9, +9 lines =@@
      }
  }
  function f4() {
 -    var x;
 +    let x;
      if (!(x = foo())) {
--        x; // string | undefined
-+        x;
+         x; // string | undefined
      }
-     else {
--        x; // string
-+        x;
+@@= skipped -9, +9 lines =@@
      }
  }
  function f5() {
@@ -58,16 +45,9 @@
 +    let x;
 +    let y;
      if (x = y = foo()) {
--        x; // string
--        y; // string | undefined
-+        x;
-+        y;
-     }
-     else {
--        x; // string | undefined
--        y; // string | undefined
-+        x;
-+        y;
+         x; // string
+         y; // string | undefined
+@@= skipped -12, +12 lines =@@
      }
  }
  function f6() {
@@ -76,45 +56,5 @@
 +    let x;
 +    let y;
      if (x = foo(), y = foo()) {
--        x; // string | undefined
--        y; // string
-+        x;
-+        y;
-     }
-     else {
--        x; // string | undefined
--        y; // string | undefined
-+        x;
-+        y;
-     }
- }
- function f7(x) {
-     if (x) {
--        x; // {}
-+        x;
-     }
-     else {
--        x; // {}
-+        x;
-     }
- }
- function f8(x) {
-     if (x) {
--        x; // {}
-+        x;
-     }
-     else {
--        x; // {}
-+        x;
-     }
- }
- function f9(x) {
-     if (x) {
--        x; // {}
-+        x;
-     }
-     else {
--        x; // never
-+        x;
-     }
- }
+         x; // string | undefined
+         y; // string

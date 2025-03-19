@@ -5,7 +5,7 @@
  
  //// [narrowingOrderIndependent.js]
 -"use strict";
--// Repro from #36709
+ // Repro from #36709
 -var A = /** @class */ (function () {
 -    function A(stringOrUndefined) {
 +class A {

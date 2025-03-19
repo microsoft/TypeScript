@@ -1,10 +1,9 @@
 --- old.classWithOnlyPublicMembersEquivalentToInterface2.js
 +++ new.classWithOnlyPublicMembersEquivalentToInterface2.js
-@@= skipped -29, +29 lines =@@
- i = c;
+@@= skipped -30, +30 lines =@@
  
  //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
--// no errors expected
+ // no errors expected
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -23,7 +22,7 @@
 +    get z() { return 1; }
 +    set z(v) { }
 +    0;
-+    static foo;
++    static foo; // doesn't effect equivalence
 +}
  var c;
  var i;

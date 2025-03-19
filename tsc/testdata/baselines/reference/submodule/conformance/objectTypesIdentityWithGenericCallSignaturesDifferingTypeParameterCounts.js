@@ -103,6 +103,7 @@ function foo15(x: C<number, B<string, string>, B<number, string>>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.js]
+// object types are identical structurally
 class A {
     foo(x) { return null; }
 }

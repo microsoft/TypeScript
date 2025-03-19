@@ -26,13 +26,13 @@
 -    }
 -    return 104;
 -});
--// Uninitialized parameter makes the initialized one required
--(function (arg1, arg2) {
--    if (arg1 === void 0) { arg1 = 1; }
--    return 1;
--});
 +(arg1, arg2) => 101;
 +(...arg) => 102;
 +(...arg) => 103;
 +(...arg = []) => 104;
+ // Uninitialized parameter makes the initialized one required
+-(function (arg1, arg2) {
+-    if (arg1 === void 0) { arg1 = 1; }
+-    return 1;
+-});
 +(arg1 = 1, arg2) => 1;

@@ -20,8 +20,10 @@ var z1: A & typeof bc;
 
 
 //// [intersectionTypeEquivalence.js]
+// A & B is equivalent to B & A.
 var y;
 var y;
+// AB & C is equivalent to A & BC, where AB is A & B and BC is B & C.
 var z;
 var z;
 var z;

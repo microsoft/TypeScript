@@ -22,12 +22,12 @@ var f2 = new Foo2();
 
 //// [varAsID.js]
 class Foo {
-    var;
+    var; // ok
     x = 1;
 }
 var f = new Foo();
 class Foo2 {
-    var;
+    var; // not an error, because of ASI.
     x = 1;
 }
 var f2 = new Foo2();

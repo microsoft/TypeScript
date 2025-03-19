@@ -1,10 +1,6 @@
 --- old.nodeModulesExportsSourceTs(module=nodenext).js
 +++ new.nodeModulesExportsSourceTs(module=nodenext).js
-@@= skipped -29, +29 lines =@@
- //// [other.js]
- export const x = null;
- //// [index.js]
--// esm format file
+@@= skipped -33, +33 lines =@@
  export { x } from "./other.js";
  //// [index.js]
  export const a = (await import("inner")).x();

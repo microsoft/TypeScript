@@ -17,4 +17,4 @@
 -    return __assign.apply(this, arguments);
 -};
 -ab = __assign(__assign({}, a), { y: null }); // Should be allowed, since `y` is missing on `A`
-+ab = { ...a, y: null };
++ab = { ...a, y: null }; // Should be allowed, since `y` is missing on `A`

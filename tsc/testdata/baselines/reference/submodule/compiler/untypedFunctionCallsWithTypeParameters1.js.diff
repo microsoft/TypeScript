@@ -19,13 +19,13 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// none of these function calls should be allowed
+ // none of these function calls should be allowed
  var x = function () { return; };
  var r1 = x();
- var y = x;
+@@= skipped -22, +7 lines =@@
  var r2 = y();
  var c;
--var r3 = c(); // should be an error
+ var r3 = c(); // should be an error
 -var C = /** @class */ (function () {
 -    function C() {
 -        this.prototype = null;
@@ -35,7 +35,6 @@
 -    }
 -    return C;
 -}());
-+var r3 = c();
 +class C {
 +    prototype = null;
 +    length = 1;
@@ -43,7 +42,7 @@
 +    caller = () => { };
 +}
  var c2;
--var r4 = c2(); // should be an error
+ var r4 = c2(); // should be an error
 -var C2 = /** @class */ (function (_super) {
 -    __extends(C2, _super);
 -    function C2() {
@@ -51,17 +50,8 @@
 -    }
 -    return C2;
 -}(Function)); // error
-+var r4 = c2();
 +class C2 extends Function {
-+}
++} // error
  var c3;
--var r5 = c3(); // error
-+var r5 = c3();
+ var r5 = c3(); // error
  var z;
--var r6 = z(1); // error
-+var r6 = z(1);
- var c4;
- c4(1);
- var c5;
--c5(1); // error
-+c5(1);

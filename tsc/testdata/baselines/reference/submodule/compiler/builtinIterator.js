@@ -101,9 +101,11 @@ class GoodIterator extends Iterator {
         return { done: false, value: 0 };
     }
 }
+// error cases
 new Iterator();
 class C extends Iterator {
 }
+// it's unfortunate that these are an error
 class BadIterator1 extends Iterator {
     next() {
         if (Math.random() < .5) {

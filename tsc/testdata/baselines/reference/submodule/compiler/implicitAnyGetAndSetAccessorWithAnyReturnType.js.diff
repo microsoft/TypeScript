@@ -1,15 +1,14 @@
 --- old.implicitAnyGetAndSetAccessorWithAnyReturnType.js
 +++ new.implicitAnyGetAndSetAccessorWithAnyReturnType.js
-@@= skipped -25, +25 lines =@@
- }
+@@= skipped -26, +26 lines =@@
  
  //// [implicitAnyGetAndSetAccessorWithAnyReturnType.js]
--// these should be errors
+ // these should be errors
 -var GetAndSet = /** @class */ (function () {
 -    function GetAndSet() {
 -        this.getAndSet = null; // error at "getAndSet"
 +class GetAndSet {
-+    getAndSet = null;
++    getAndSet = null; // error at "getAndSet"
 +    get haveGetAndSet() {
 +        return this.getAndSet;
      }
@@ -28,6 +27,7 @@
 -}());
 -var SetterOnly = /** @class */ (function () {
 -    function SetterOnly() {
++    // this shouldn't be an error
 +    set haveGetAndSet(value) {
 +        this.getAndSet = value;
      }

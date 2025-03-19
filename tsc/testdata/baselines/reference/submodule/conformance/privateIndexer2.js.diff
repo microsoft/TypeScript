@@ -1,10 +1,9 @@
 --- old.privateIndexer2.js
 +++ new.privateIndexer2.js
-@@= skipped -11, +11 lines =@@
- }
+@@= skipped -12, +12 lines =@@
  
  //// [privateIndexer2.js]
--// private indexers not allowed
+ // private indexers not allowed
 -var _a;
 -var x = (_a = {},
 -    _a[x] = string,

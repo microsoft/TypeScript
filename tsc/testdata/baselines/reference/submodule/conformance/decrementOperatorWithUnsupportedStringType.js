@@ -68,6 +68,7 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithUnsupportedStringType.js]
+// -- operator on string type
 var STRING;
 var STRING1 = ["", ""];
 function foo() { return ""; }
@@ -79,16 +80,19 @@ var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+// string type var
 var ResultIsNumber1 = --STRING;
 var ResultIsNumber2 = --STRING1;
 var ResultIsNumber3 = STRING--;
 var ResultIsNumber4 = STRING1--;
+// string type literal
 var ResultIsNumber5 = --"";
 var ResultIsNumber6 = --{ x: "", y: "" };
 var ResultIsNumber7 = --{ x: "", y: (s) => { return s; } };
 var ResultIsNumber8 = ""--;
 var ResultIsNumber9 = { x: "", y: "" }--;
 var ResultIsNumber10 = { x: "", y: (s) => { return s; } }--;
+// string type expressions
 var ResultIsNumber11 = --objA.a;
 var ResultIsNumber12 = --M.n;
 var ResultIsNumber13 = --STRING1[0];
@@ -101,6 +105,7 @@ var ResultIsNumber19 = STRING1[0]--;
 var ResultIsNumber20 = foo()--;
 var ResultIsNumber21 = A.foo()--;
 var ResultIsNumber22 = (STRING + STRING)--;
+// miss assignment operators
 --"";
 --STRING;
 --STRING1;

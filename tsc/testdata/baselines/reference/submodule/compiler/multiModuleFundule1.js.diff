@@ -1,9 +1,0 @@
---- old.multiModuleFundule1.js
-+++ new.multiModuleFundule1.js
-@@= skipped -23, +23 lines =@@
-     C.foo = foo;
- })(C || (C = {}));
- var r = C(2);
--var r2 = new C(2); // using void returning function as constructor
-+var r2 = new C(2);
- var r3 = C.foo();

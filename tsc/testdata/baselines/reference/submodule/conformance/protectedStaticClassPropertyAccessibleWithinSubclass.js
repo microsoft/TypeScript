@@ -49,38 +49,38 @@ Derived3.x;     // Error, neither within their declaring class nor classes deriv
 class Base {
     static x;
     static staticMethod() {
-        Base.x;
-        Derived1.x;
-        Derived2.x;
-        Derived3.x;
+        Base.x; // OK, accessed within their declaring class
+        Derived1.x; // OK, accessed within their declaring class
+        Derived2.x; // OK, accessed within their declaring class
+        Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
     }
 }
 class Derived1 extends Base {
     static staticMethod1() {
-        Base.x;
-        Derived1.x;
-        Derived2.x;
-        Derived3.x;
+        Base.x; // OK, accessed within a class derived from their declaring class
+        Derived1.x; // OK, accessed within a class derived from their declaring class
+        Derived2.x; // OK, accessed within a class derived from their declaring class
+        Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
     }
 }
 class Derived2 extends Base {
     static staticMethod2() {
-        Base.x;
-        Derived1.x;
-        Derived2.x;
-        Derived3.x;
+        Base.x; // OK, accessed within a class derived from their declaring class
+        Derived1.x; // OK, accessed within a class derived from their declaring class
+        Derived2.x; // OK, accessed within a class derived from their declaring class
+        Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
     }
 }
 class Derived3 extends Derived1 {
     static x;
     static staticMethod3() {
-        Base.x;
-        Derived1.x;
-        Derived2.x;
-        Derived3.x;
+        Base.x; // OK, accessed within a class derived from their declaring class
+        Derived1.x; // OK, accessed within a class derived from their declaring class
+        Derived2.x; // OK, accessed within a class derived from their declaring class
+        Derived3.x; // OK, accessed within their declaring class
     }
 }
-Base.x;
-Derived1.x;
-Derived2.x;
-Derived3.x;
+Base.x; // Error, neither within their declaring class nor classes derived from their declaring class
+Derived1.x; // Error, neither within their declaring class nor classes derived from their declaring class
+Derived2.x; // Error, neither within their declaring class nor classes derived from their declaring class
+Derived3.x; // Error, neither within their declaring class nor classes derived from their declaring class

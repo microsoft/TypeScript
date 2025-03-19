@@ -34,27 +34,27 @@ class C {
 //// [classStaticBlock26.js]
 class C {
     static {
-        await ;
+        await ; // illegal
     }
     static {
-        await (1);
+        await (1); // illegal
     }
     static {
-        ({ [await ]: 1 });
+        ({ [await ]: 1 }); // illegal
     }
     static {
         class D {
-            [await ] = 1;
+            [await ] = 1; // illegal (computed property names are evaluated outside of a class body
         }
         ;
     }
     static {
-        ({ await:  });
+        ({ await:  }); // illegal short-hand property reference
     }
     static {
         await ;
         break ;
-        await ;
+        await ; // illegal, 'await' cannot be used as a label
     }
     static {
         function f(await) { }

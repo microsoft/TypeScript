@@ -15,12 +15,12 @@
 +}
  function createClass(f) {
 -    return new GenericClass( /* ... use f */);
-+    return new GenericClass();
++    return new GenericClass( /* ... use f */ /* ... use f */);
  }
  function consumeClass(c) { }
--// should work
+ // should work
 -consumeClass(createClass(function (str) { return console.log(str.length); }));
--// should work
--consumeClass(createClass(function (str, _unused_num) { return console.log(str.length); }));
 +consumeClass(createClass(str => console.log(str.length)));
+ // should work
+-consumeClass(createClass(function (str, _unused_num) { return console.log(str.length); }));
 +consumeClass(createClass((str, _unused_num) => console.log(str.length)));

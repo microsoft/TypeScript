@@ -19,4 +19,4 @@ class A {
 class B {
     #foo;
 }
-const b = new B();
+const b = new B(); // Error: Property #foo is missing

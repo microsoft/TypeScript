@@ -47,24 +47,10 @@
 +}
  var a;
  var b;
--// Basic
- if (isC(a)) {
-     a.propC;
+ // Basic
+@@= skipped -53, +30 lines =@@
  }
--// Sub type
- var subType;
- if (isA(subType)) {
-     subType.propC;
- }
--// Union type
- var union;
- if (isA(union)) {
-     union.propA;
-@@= skipped -51, +25 lines =@@
- if (isC_multipleParams(a, 0)) {
-     a.propC;
- }
--// Methods
+ // Methods
  var obj;
 -var D = /** @class */ (function () {
 -    function D() {
@@ -76,18 +62,18 @@
 -    };
 -    return D;
 -}());
--// Arrow function
--var f1 = function (p1) { return false; };
--// Function expressions
 +    }
 +}
+ // Arrow function
+-var f1 = function (p1) { return false; };
 +let f1 = (p1) => false;
+ // Function expressions
  f2(function (p1) {
      return true;
- });
+@@= skipped -17, +14 lines =@@
  acceptingBoolean(isA(a));
  acceptingTypeGuardFunction(isA);
--// Binary expressions
+ // Binary expressions
 -var union2;
 -var union3 = isA(union2) || union2;
 +let union2;

@@ -42,10 +42,10 @@ function createSerialNo() {
 }
 let map1 = {};
 let guid = createGuid();
-map1[guid] = 123;
+map1[guid] = 123; // Can with tagged string
 let map2 = {};
 let serialNo = createSerialNo();
-map2[serialNo] = "hello";
+map2[serialNo] = "hello"; // Can index with tagged number
 const s1 = "{" + guid + "}";
 const s2 = guid.toLowerCase();
 const s3 = guid + guid;

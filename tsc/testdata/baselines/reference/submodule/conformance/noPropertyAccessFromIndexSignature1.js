@@ -45,15 +45,21 @@ d?.["bar"];
 
 
 //// [noPropertyAccessFromIndexSignature1.js]
+// access property
 a.foo;
 a["foo"];
+// access index signature
 b.foo;
 b["foo"];
+// access property
 c.foo;
 c["foo"];
+// access index signature
 c.bar;
 c["bar"];
+// optional access property
 d?.foo;
 d?.["foo"];
+// optional access index signature
 d?.bar;
 d?.["bar"];

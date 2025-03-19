@@ -6,6 +6,6 @@
  //// [parameterReferenceInInitializer2.js]
 -function Example(x) {
 -    if (x === void 0) { x = function (x) { return x; }; }
--    // referenced in its initializer
 +function Example(x = function (x) { return x; }) {
+     // referenced in its initializer
  }

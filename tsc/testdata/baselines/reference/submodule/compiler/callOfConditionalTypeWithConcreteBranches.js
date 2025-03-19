@@ -47,13 +47,18 @@ export type AddFirstParameterToFunctions<Target> = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function fn(arg) {
+    // Expected: OK
+    // Actual: Cannot convert 10 to number & T
     arg(10);
 }
+// Legal invocations are not problematic
 fn(m => m.toFixed());
 fn(m => m.toFixed());
 function fn2(arg) {
     function useT(_arg) { }
+    // Expected: OK
     arg(arg => useT(arg));
 }
+// Legal invocations are not problematic
 fn2(m => m(42));
 fn2(m => m(42));

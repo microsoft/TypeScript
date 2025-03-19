@@ -16,6 +16,7 @@ class E<T> {
 }
 
 //// [publicIndexer.js]
+// public indexers not allowed
 class C {
 }
 class D {

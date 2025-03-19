@@ -15,6 +15,7 @@ const typedArray9: BigUint64Array = (new BigUint64Array()).valueOf();
 
 
 //// [valueOfTypedArray.js]
+// All declarations should pass, as valueOf has been specialized for all TypedArrays
 const typedArray0 = (new Int8Array()).valueOf();
 const typedArray1 = (new Uint8Array()).valueOf();
 const typedArray2 = (new Int16Array()).valueOf();

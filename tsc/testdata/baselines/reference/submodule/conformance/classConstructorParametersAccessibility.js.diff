@@ -30,10 +30,9 @@
 -}());
 +}
  var c1;
--c1.x; // OK
+ c1.x; // OK
 -var C2 = /** @class */ (function () {
 -    function C2(p) {
-+c1.x;
 +class C2 {
 +    p;
 +    constructor(p) {
@@ -43,10 +42,9 @@
 -}());
 +}
  var c2;
--c2.p; // private, error
+ c2.p; // private, error
 -var C3 = /** @class */ (function () {
 -    function C3(p) {
-+c2.p;
 +class C3 {
 +    p;
 +    constructor(p) {
@@ -56,18 +54,17 @@
 -}());
 +}
  var c3;
--c3.p; // protected, error
+ c3.p; // protected, error
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived(p) {
 -        var _this = _super.call(this, p) || this;
 -        _this.p; // OK
 -        return _this;
-+c3.p;
 +class Derived extends C3 {
 +    constructor(p) {
 +        super(p);
-+        this.p;
++        this.p; // OK
      }
 -    return Derived;
 -}(C3));

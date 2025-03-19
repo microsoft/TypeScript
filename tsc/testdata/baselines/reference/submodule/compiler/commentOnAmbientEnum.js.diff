@@ -9,4 +9,4 @@
 -   =========
 -*/
  //// [b.js]
--///<reference path="a.ts"/>
+ ///<reference path="a.ts"/>

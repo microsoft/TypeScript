@@ -11,6 +11,7 @@ function* f() {
 //// [castOfYield.js]
 function* f() {
     (yield 0);
+    // Unlike await, yield is not allowed to appear in a simple unary expression.
     ;
     yield 0;
 }

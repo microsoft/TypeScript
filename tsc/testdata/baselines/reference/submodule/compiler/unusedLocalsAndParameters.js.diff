@@ -1,27 +1,17 @@
 --- old.unusedLocalsAndParameters.js
 +++ new.unusedLocalsAndParameters.js
-@@= skipped -90, +90 lines =@@
- //// [unusedLocalsAndParameters.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--// function declaration paramter
- function f(a) {
- }
- f(0);
--// function expression paramter
- var fexp = function (a) {
+@@= skipped -99, +99 lines =@@
  };
  fexp(0);
--// arrow function paramter
+ // arrow function paramter
 -var farrow = function (a) {
 +var farrow = (a) => {
  };
 -var C = /** @class */ (function () {
 -    function C() {
+-    }
 +class C {
-+    method(a) {
-     }
--    // Method declaration paramter
+     // Method declaration paramter
 -    C.prototype.method = function (a) {
 -    };
 -    Object.defineProperty(C.prototype, "x", {
@@ -35,9 +25,14 @@
 -}());
 -var E = /** @class */ (function () {
 -    function class_1() {
-+    set x(v) {
++    method(a) {
      }
--    // Method declaration paramter
++    // Accessor declaration paramter
++    set x(v) {
++    }
++}
++var E = class {
+     // Method declaration paramter
 -    class_1.prototype.method = function (a) {
 -    };
 -    Object.defineProperty(class_1.prototype, "x", {
@@ -49,44 +44,43 @@
 -    });
 -    return class_1;
 -}());
-+}
-+var E = class {
 +    method(a) {
 +    }
++    // Accessor declaration paramter
 +    set x(v) {
 +    }
 +};
  var o = {
--    // Object literal method declaration paramter
+     // Object literal method declaration paramter
 -    method: function (a) {
 +    method(a) {
      },
--    // Accessor declaration paramter
+     // Accessor declaration paramter
      set x(v) {
-     }
+@@= skipped -42, +28 lines =@@
  };
  o;
--// in a for..in statment
+ // in a for..in statment
 -for (var i in o) {
 +for (let i in o) {
  }
--// in a for..of statment
+ // in a for..of statment
 -for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
 -    var i = _a[_i];
 +for (let i of [1, 2, 3]) {
  }
--// in a for. statment
+ // in a for. statment
 -for (var i = 0, n = void 0; i < 10; i++) {
 +for (let i = 0, n; i < 10; i++) {
  }
--// in a block
+ // in a block
 -var condition = false;
 +const condition = false;
  if (condition) {
 -    var c = 0;
 +    const c = 0;
  }
--// in try/catch/finally
+ // in try/catch/finally
  try {
 -    var a = 0;
 +    const a = 0;
@@ -99,7 +93,7 @@
 -    var c = 0;
 +    const c = 0;
  }
--// in a namespace
+ // in a namespace
  var N;
  (function (N) {
      var x;

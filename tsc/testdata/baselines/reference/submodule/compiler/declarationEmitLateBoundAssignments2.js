@@ -71,6 +71,7 @@ arrow10[emoji] = 0
 
 
 //// [declarationEmitLateBoundAssignments2.js]
+// https://github.com/microsoft/TypeScript/issues/54811
 const c = "C";
 const num = 1;
 const numStr = "10";

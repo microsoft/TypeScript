@@ -17,12 +17,7 @@
      (function (Color) {
          Color.Blue = 4;
      })(Color = M.Color || (M.Color = {}));
- })(M || (M = {}));
--var p = M.Color.Blue; // ok
-+var p = M.Color.Blue;
- (function (M) {
-     function foo() {
-     }
+@@= skipped -19, +19 lines =@@
      M.foo = foo;
  })(M || (M = {}));
  (function (M) {
@@ -45,12 +40,3 @@
      (function (foo) {
          foo.z = 1;
      })(foo || (foo = {}));
- })(M || (M = {}));
--M.foo(); // ok
--M.foo.x; // error
--M.foo.y; // ok
--M.foo.z; // error
-+M.foo();
-+M.foo.x;
-+M.foo.y;
-+M.foo.z;

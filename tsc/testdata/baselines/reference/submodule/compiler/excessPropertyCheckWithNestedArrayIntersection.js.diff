@@ -8,8 +8,4 @@
 +const repro = {
      dataType: {
          fields: [{
--                key: 'bla', // should be OK: Not excess
-+                key: 'bla',
-                 value: null,
-             }],
-     }
+                 key: 'bla', // should be OK: Not excess

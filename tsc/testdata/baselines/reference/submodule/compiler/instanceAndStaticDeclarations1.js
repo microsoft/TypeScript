@@ -15,6 +15,7 @@ class Point {
 }
 
 //// [instanceAndStaticDeclarations1.js]
+// from spec
 class Point {
     x;
     y;

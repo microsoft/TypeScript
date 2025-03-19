@@ -1,8 +1,0 @@
---- old.unicodeExtendedEscapesInRegularExpressions14(target=es5).js
-+++ new.unicodeExtendedEscapesInRegularExpressions14(target=es5).js
-@@= skipped -5, +5 lines =@@
- 
- 
- //// [unicodeExtendedEscapesInRegularExpressions14.js]
--// Shouldn't work, negatives are not allowed.
- var x = /\u{-DDDD}/gu;

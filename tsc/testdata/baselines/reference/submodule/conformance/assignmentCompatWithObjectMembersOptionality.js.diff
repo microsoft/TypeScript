@@ -1,10 +1,9 @@
 --- old.assignmentCompatWithObjectMembersOptionality.js
 +++ new.assignmentCompatWithObjectMembersOptionality.js
-@@= skipped -90, +90 lines =@@
- }
+@@= skipped -91, +91 lines =@@
  
  //// [assignmentCompatWithObjectMembersOptionality.js]
--// Derived member is not optional but base member is, should be ok
+ // Derived member is not optional but base member is, should be ok
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -51,42 +50,3 @@
  var TargetHasOptional;
  (function (TargetHasOptional) {
      var c;
-@@= skipped -43, +17 lines =@@
-     var d;
-     var e;
-     var f;
--    // all ok
-     c = d;
-     c = e;
-     c = f;
-@@= skipped -23, +22 lines =@@
-     var d;
-     var e;
-     var f;
--    c = d; // error
--    c = e; // error
--    c = f; // ok
--    c = a; // ok
--    a = d; // error
--    a = e; // error
--    a = f; // ok
--    a = c; // ok
--    b = d; // error
--    b = e; // error
--    b = f; // ok
--    b = a; // ok
--    b = c; // ok
-+    c = d;
-+    c = e;
-+    c = f;
-+    c = a;
-+    a = d;
-+    a = e;
-+    a = f;
-+    a = c;
-+    b = d;
-+    b = e;
-+    b = f;
-+    b = a;
-+    b = c;
- })(SourceHasOptional || (SourceHasOptional = {}));

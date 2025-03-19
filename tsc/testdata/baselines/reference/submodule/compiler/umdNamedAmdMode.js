@@ -8,4 +8,5 @@ export const a = 1;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
+/// <amd-module name="a"/>
 exports.a = 1;

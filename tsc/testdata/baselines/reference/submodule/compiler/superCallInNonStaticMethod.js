@@ -58,14 +58,17 @@ class Doing {
     }
 }
 class Other extends Doing {
+    // in instance method
     instanceMethod() {
         super.instanceMethod();
     }
+    // in a lambda inside a instance method
     lambdaInsideAnInstanceMethod() {
         () => {
             super.instanceMethod();
         };
     }
+    // in an object literal inside a instance method
     objectLiteralInsideAnInstanceMethod() {
         return {
             a: () => {
@@ -74,10 +77,12 @@ class Other extends Doing {
             b: super.instanceMethod()
         };
     }
+    // in a getter
     get accessor() {
         super.instanceMethod();
         return 0;
     }
+    // in a setter
     set accessor(value) {
         super.instanceMethod();
     }

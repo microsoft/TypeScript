@@ -122,6 +122,13 @@ exports.d3 = d3;
 exports.d4 = d4;
 exports.fromParameter = fromParameter;
 exports.explicitlyTypedFunction = explicitlyTypedFunction;
+// Adding this makes tooltips fail too.
+// declare global {
+//     namespace isNaN {
+//         const prop: number;
+//     }
+// }
+// Broken inference cases.
 const a1 = (isNaN) => isNaN;
 exports.a1 = a1;
 const a2 = (isNaN, bar) => bar ?? isNaN;
@@ -186,6 +193,7 @@ exports.A = A;
 function fromParameter(isNaN, bar) {
     return function () { return { bar }; };
 }
+// Non-inference cases.
 const explicitlyTypedVariable = (isNaN) => isNaN;
 exports.explicitlyTypedVariable = explicitlyTypedVariable;
 function explicitlyTypedFunction(isNaN) {

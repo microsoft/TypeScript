@@ -1,10 +1,7 @@
 --- old.moduleMerge.js
 +++ new.moduleMerge.js
-@@= skipped -25, +25 lines =@@
- }
- 
- //// [moduleMerge.js]
--// This should not compile both B classes are in the same module this should be a collission
+@@= skipped -28, +28 lines =@@
+ // This should not compile both B classes are in the same module this should be a collission
  var A;
  (function (A) {
 -    var B = /** @class */ (function () {

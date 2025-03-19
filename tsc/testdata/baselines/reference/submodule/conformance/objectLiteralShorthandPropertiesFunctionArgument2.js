@@ -15,4 +15,4 @@ var id = 10000;
 var name = "my name";
 var person = { name, id };
 function foo(p) { }
-foo(person);
+foo(person); // error

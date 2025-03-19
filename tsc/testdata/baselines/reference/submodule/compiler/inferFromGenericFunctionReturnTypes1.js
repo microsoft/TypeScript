@@ -74,6 +74,8 @@ testSet.transform(
 
 
 //// [inferFromGenericFunctionReturnTypes1.js]
+// Repro from #15680
+// This is a contrived class. We could do the same thing with Observables, etc.
 class SetOf {
     _store;
     add(a) {
@@ -86,6 +88,7 @@ class SetOf {
         this._store.forEach((a, i) => fn(a, i));
     }
 }
+/* ... etc ... */
 function compose(...fns) {
     return (x) => fns.reduce((prev, fn) => fn(prev), x);
 }
@@ -111,4 +114,6 @@ testSet.add(1);
 testSet.add(2);
 testSet.add(3);
 testSet.transform(compose(filter(x => x % 1 === 0), map(x => x + x), map(x => x + '!!!'), map(x => x.toUpperCase())));
-testSet.transform(compose(filter(x => x % 1 === 0), map(x => x + x), map(x => 123), map(x => x.toUpperCase())));
+testSet.transform(compose(filter(x => x % 1 === 0), map(x => x + x), map(x => 123), // Whoops a bug
+map(x => x.toUpperCase()) // causes an error!
+));

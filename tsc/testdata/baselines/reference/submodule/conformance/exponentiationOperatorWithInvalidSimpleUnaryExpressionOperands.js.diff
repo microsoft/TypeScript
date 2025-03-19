@@ -1,10 +1,9 @@
 --- old.exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.js
 +++ new.exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.js
-@@= skipped -39, +39 lines =@@
- 
+@@= skipped -40, +40 lines =@@
  //// [exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.js]
  var temp;
--// Error: incorrect type on left-hand side 
+ // Error: incorrect type on left-hand side 
 -Math.pow((!--temp), 3);
 -Math.pow((!temp--), 3);
 -Math.pow((!3), 4);

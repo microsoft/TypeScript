@@ -7,11 +7,11 @@
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
--    /**
--     * Returns bar
--     */
--    C.foo = function () {
 +class C {
+     /**
+      * Returns bar
+      */
+-    C.foo = function () {
 +    static foo() {
          return "bar";
 -    };

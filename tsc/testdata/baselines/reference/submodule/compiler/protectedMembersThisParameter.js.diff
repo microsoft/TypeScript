@@ -32,7 +32,6 @@
 -    MessageWrapper.prototype.wrap = function () {
 -        var m = this.message;
 -        var f = function () {
--            m.secret(); // should error
 +class Message {
 +    secret() { }
 +}
@@ -41,7 +40,7 @@
 +    wrap() {
 +        let m = this.message;
 +        let f = function () {
-+            m.secret();
+             m.secret(); // should error
          };
 -    };
 -    return MessageWrapper;
@@ -90,76 +89,48 @@
  function bA(arg) {
      this.a();
      arg.a();
--    arg.b(); // should error to avoid cross-hierarchy protected access https://www.typescriptlang.org/docs/handbook/2/classes.html#cross-hierarchy-protected-access
-+    arg.b();
- }
- function bB(arg) {
-     this.a();
-@@= skipped -75, +38 lines =@@
- function bC(arg) {
-     this.a();
-     this.c();
--    arg.a(); // should error
--    arg.b(); // should error
-+    arg.a();
-+    arg.b();
- }
- function bZ(arg) {
-     this.z();
--    arg.a(); // should error
--    arg.b(); // should error
-+    arg.a();
-+    arg.b();
- }
- function bString(arg) {
-     this.toLowerCase();
--    arg.a(); // should error
--    arg.b(); // should error
-+    arg.a();
-+    arg.b();
- }
- function bAny(arg) {
--    arg.a(); // should error
--    arg.b(); // should error
-+    arg.a();
-+    arg.b();
+@@= skipped -92, +55 lines =@@
+     arg.a(); // should error
+     arg.b(); // should error
  }
 -var D = /** @class */ (function () {
 -    function D() {
+-    }
+-    D.prototype.d = function () { };
+-    D.prototype.derived1 = function (arg) {
 +class D {
 +    d() { }
 +    derived1(arg) {
-+        arg.d();
-+        arg.d1();
-     }
--    D.prototype.d = function () { };
--    D.prototype.derived1 = function (arg) {
-+    derived1ThisD(arg) {
          arg.d();
--        arg.d1(); // should error
+         arg.d1(); // should error
 -    };
 -    D.prototype.derived1ThisD = function (arg) {
-+        arg.d1();
++    }
++    derived1ThisD(arg) {
+         arg.d();
+         arg.d1(); // should error
+-    };
+-    D.prototype.derived1ThisD1 = function (arg) {
 +    }
 +    derived1ThisD1(arg) {
          arg.d();
--        arg.d1(); // should error
--    };
--    D.prototype.derived1ThisD1 = function (arg) {
--        arg.d();
          arg.d1();
 -    };
 -    D.prototype.derived2 = function (arg) {
--        arg.d(); // should error because of overridden method in D2
--        arg.d2(); // should error
++    }
++    derived2(arg) {
+         arg.d(); // should error because of overridden method in D2
+         arg.d2(); // should error
 -    };
 -    D.prototype.derived2ThisD = function (arg) {
--        arg.d(); // should error because of overridden method in D2
--        arg.d2(); // should error
++    }
++    derived2ThisD(arg) {
+         arg.d(); // should error because of overridden method in D2
+         arg.d2(); // should error
 -    };
 -    D.prototype.derived2ThisD2 = function (arg) {
 +    }
-+    derived2(arg) {
++    derived2ThisD2(arg) {
          arg.d();
          arg.d2();
 -    };
@@ -177,18 +148,11 @@
 -    __extends(D2, _super);
 -    function D2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    derived2ThisD(arg) {
-+        arg.d();
-+        arg.d2();
-     }
+-    }
 -    D2.prototype.d = function () { };
 -    D2.prototype.d2 = function () { };
 -    return D2;
 -}(D));
-+    derived2ThisD2(arg) {
-+        arg.d();
-+        arg.d2();
-+    }
 +}
 +class D1 extends D {
 +    d1() { }

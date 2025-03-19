@@ -22,7 +22,9 @@ export const asdf = 123;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.asdf = void 0;
-const { children, active: _a, ...rest } = props;
+const { children, // here!
+active: _a, // here!
+...rest } = props;
 function foo() {
     const { children, active: _a, ...rest } = props;
 }

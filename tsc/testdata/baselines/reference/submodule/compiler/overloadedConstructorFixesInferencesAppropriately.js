@@ -40,4 +40,4 @@ function load() {
 new AsyncLoader({
     asyncLoad: load,
     children: result => result.success,
-});
+}); // should work fine

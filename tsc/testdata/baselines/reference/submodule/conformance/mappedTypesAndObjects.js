@@ -60,6 +60,7 @@ function f3(x) {
     x = {};
 }
 ;
+// Repro from #13747
 class Form {
     values = {};
 }

@@ -124,10 +124,13 @@ interface ReferencedInSignartureInterface {
 }
 
 //// [declarationEmitBindingPatternsUnused.js]
+// Resons we can't remove aliases that are not used in the function signature: 
+// 1.Causes duplicate identifier if we remove alias
 function duplicateIndetifiers({ name: alias, name: alias2 }) { }
 function duplicateIndetifiers2(name, { name: alias }) { }
 function duplicateIndetifiers3({ name: alias }, { name: alias2 }) { }
 let value = "";
+// 2.Can change in meaning for typeof value if we remove alias
 function shadowedVariable({ value: alias }) { return value; }
 function notReferenced({ name: alias }) {
 }

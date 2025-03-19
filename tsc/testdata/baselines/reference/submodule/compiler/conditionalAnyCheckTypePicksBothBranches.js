@@ -14,7 +14,7 @@ y = 0; // error
 //// [conditionalAnyCheckTypePicksBothBranches.js]
 let x;
 x = 1;
-x = 0;
+x = 0; // not an error
 let y;
 y = 1;
-y = 0;
+y = 0; // error

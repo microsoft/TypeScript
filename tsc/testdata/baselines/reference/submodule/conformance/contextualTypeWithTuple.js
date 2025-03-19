@@ -39,6 +39,7 @@ const withExtra: MyEmptyTuple = []
 
 
 //// [contextualTypeWithTuple.js]
+// no error
 var numStrTuple = [5, "hello"];
 var numStrTuple2 = [5, "foo", true];
 var numStrBoolTuple = [5, "foo", true];
@@ -54,6 +55,7 @@ var unionTuple2 = [new C(), "foo", new D()];
 var unionTuple3 = [10, "foo"];
 numStrTuple = numStrTuple2;
 numStrTuple = numStrBoolTuple;
+// error
 objNumTuple = [{}, 5];
 numStrBoolTuple = numStrTuple;
 var strStrTuple = ["foo", "bar", 5];

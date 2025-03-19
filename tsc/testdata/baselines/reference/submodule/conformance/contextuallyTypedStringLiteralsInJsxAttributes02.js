@@ -52,11 +52,11 @@ function MainButton(props) {
     }
     return this._buildMainButton(props);
 }
-const b0 = <MainButton {...{ onClick: (k) => { console.log(k); } }} extra/>;
-const b2 = <MainButton onClick={(k) => { console.log(k); }} extra/>;
-const b3 = <MainButton {...{ goTo: "home" }} extra/>;
-const b4 = <MainButton goTo="home" extra/>;
+const b0 = <MainButton {...{ onClick: (k) => { console.log(k); } }} extra/>; // k has type "left" | "right"
+const b2 = <MainButton onClick={(k) => { console.log(k); }} extra/>; // k has type "left" | "right"
+const b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
+const b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
 function NoOverload(buttonProps) { return undefined; }
-const c1 = <NoOverload {...{ onClick: (k) => { console.log(k); } }} extra/>;
+const c1 = <NoOverload {...{ onClick: (k) => { console.log(k); } }} extra/>; // k has type any
 function NoOverload1(linkProps) { return undefined; }
-const d1 = <NoOverload1 {...{ goTo: "home" }} extra/>;
+const d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"

@@ -197,6 +197,7 @@ function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; }
 
 
 //// [thisTypeInFunctions.js]
+// body checking
 class B {
     n;
 }
@@ -228,7 +229,7 @@ function implicitThis(n) {
 }
 let impl = {
     a: 12,
-    explicitVoid2: () => this.a,
+    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)
     explicitVoid1() { return 12; },
     explicitStructural() {
         return this.a;
@@ -247,6 +248,7 @@ impl.explicitInterface = function () { return this.a; };
 impl.explicitStructural = () => 12;
 impl.explicitInterface = () => 12;
 impl.explicitThis = function () { return this.a; };
+// parameter checking
 let ok = { y: 12, f: explicitStructural };
 let implicitAnyOk = { notSpecified: 12, f: implicitThis };
 ok.f(13);
@@ -272,7 +274,8 @@ reconstructed.explicitThis(10);
 reconstructed.explicitProperty(11);
 let explicitVoid = reconstructed.explicitVoid;
 explicitVoid(12);
-let unboundToSpecified = x => x + this.y;
+// assignment checking
+let unboundToSpecified = x => x + this.y; // ok, this:any
 let specifiedToSpecified = explicitStructural;
 let anyToSpecified = function (x) { return x + 12; };
 let unspecifiedLambda = x => x + 12;
@@ -286,20 +289,29 @@ c.explicitC = function (m) { return this.n + m; };
 c.explicitProperty = explicitPropertyFunction;
 c.explicitProperty = function (m) { return this.n + m; };
 c.explicitProperty = reconstructed.explicitProperty;
+// lambdas are assignable to anything
 c.explicitC = m => m;
 c.explicitThis = m => m;
 c.explicitProperty = m => m;
+// this inside lambdas refer to outer scope
+// the outer-scoped lambda at top-level is still just `any`
 c.explicitC = m => m + this.n;
 c.explicitThis = m => m + this.n;
 c.explicitProperty = m => m + this.n;
+//NOTE: this=C here, I guess?
 c.explicitThis = explicitCFunction;
 c.explicitThis = function (m) { return this.n + m; };
+// this:any compatibility
 c.explicitC = function (m) { return this.n + m; };
 c.explicitProperty = function (m) { return this.n + m; };
 c.explicitThis = function (m) { return this.n + m; };
+// this: contextual typing
 c.explicitThis = function (m) { return this.n + m; };
+// this: superclass compatibility
 c.explicitC = function (m) { return this.n + m; };
+// this:void compatibility
 c.explicitVoid = n => n;
+// class-based assignability
 class Base1 {
     x;
     polymorphic() { return this.x; }
@@ -322,12 +334,14 @@ let b1 = new Base1();
 let b2 = new Base2();
 let d1 = new Derived1();
 let d2 = new Derived2();
-d2.polymorphic = d1.polymorphic;
-d1.polymorphic = d2.polymorphic;
-d1.polymorphic = b2.polymorphic;
-d2.polymorphic = d1.explicit;
-b1.polymorphic = d2.polymorphic;
-b1.explicit = d2.polymorphic;
+d2.polymorphic = d1.polymorphic; // ok, 'x' and 'y' in { x, y }
+d1.polymorphic = d2.polymorphic; // ok, 'x' and 'y' in { x, y }
+// bivariance-allowed cases
+d1.polymorphic = b2.polymorphic; // ok, 'y' in D: { x, y }
+d2.polymorphic = d1.explicit; // ok, 'y' in { x, y }
+b1.polymorphic = d2.polymorphic; // ok, 'x' and 'y' not in Base1: { x }
+b1.explicit = d2.polymorphic; // ok, 'x' and 'y' not in Base1: { x }
+////// use this-type for construction with new ////
 function InterfaceThis() {
     this.a = 12;
 }

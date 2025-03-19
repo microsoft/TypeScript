@@ -1,10 +1,9 @@
 --- old.promiseChaining1.js
 +++ new.promiseChaining1.js
-@@= skipped -12, +12 lines =@@
- }
+@@= skipped -13, +13 lines =@@
  
  //// [promiseChaining1.js]
--// same example but with constraints on each type parameter
+ // same example but with constraints on each type parameter
 -var Chain2 = /** @class */ (function () {
 -    function Chain2(value) {
 +class Chain2 {
@@ -15,9 +14,9 @@
 -    Chain2.prototype.then = function (cb) {
 +    then(cb) {
          var result = cb(this.value);
--        // should get a fresh type parameter which each then call
+         // should get a fresh type parameter which each then call
 -        var z = this.then(function (x) { return result; }) /*S*/.then(function (x) { return "abc"; }) /*Function*/.then(function (x) { return x.length; }) /*number*/; // Should error on "abc" because it is not a Function
-+        var z = this.then(x => result).then(x => "abc").then(x => x.length);
++        var z = this.then(x => result) /*S*/.then(x => "abc") /*Function*/.then(x => x.length) /*number*/; // Should error on "abc" because it is not a Function
          return new Chain2(result);
 -    };
 -    return Chain2;

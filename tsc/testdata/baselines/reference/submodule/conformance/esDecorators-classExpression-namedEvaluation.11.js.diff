@@ -1,10 +1,9 @@
 --- old.esDecorators-classExpression-namedEvaluation.11.js
 +++ new.esDecorators-classExpression-namedEvaluation.11.js
-@@= skipped -14, +14 lines =@@
- 
+@@= skipped -15, +15 lines =@@
  
  //// [esDecorators-classExpression-namedEvaluation.11.js]
--// No NamedEvaluation, no class name
+ // No NamedEvaluation, no class name
 -((() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;
@@ -40,7 +39,15 @@
 -        }
 -    };
 -})());
--// No NamedEvaluation, class name
++(
++@dec
++class {
++});
++(class {
++    @dec
++    y;
++});
+ // No NamedEvaluation, class name
 -((() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;
@@ -75,14 +82,6 @@
 -        }
 -    };
 -})());
-+(
-+@dec
-+class {
-+});
-+(class {
-+    @dec
-+    y;
-+});
 +(
 +@dec
 +class C {

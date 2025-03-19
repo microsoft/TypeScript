@@ -17,5 +17,6 @@ class Employee {
     get fullName() {
         return this._fullName;
     }
+    // Will not also error on the setter
     set fullName(_) { }
 }

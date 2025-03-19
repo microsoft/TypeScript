@@ -1,10 +1,8 @@
 --- old.nonNullFullInference.js
 +++ new.nonNullFullInference.js
-@@= skipped -35, +35 lines =@@
- }
- 
+@@= skipped -37, +37 lines =@@
  //// [nonNullFullInference.js]
--// https://github.com/microsoft/TypeScript/issues/19577
+ // https://github.com/microsoft/TypeScript/issues/19577
  function testNonNullInference(numbers) {
 -    var last;
 -    for (var _i = 0, numbers_1 = numbers; _i < numbers_1.length; _i++) {
@@ -14,7 +12,7 @@
          if (n % 2) {
              return n;
          }
-@@= skipped -14, +12 lines =@@
+@@= skipped -12, +11 lines =@@
      last;
  }
  function testNonNullInferenceWithArrays(numbers) {

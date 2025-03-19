@@ -54,15 +54,15 @@ class Foo {
 function f1() {
     let foo;
     if ((foo = getFooOrNull()) !== null) {
-        foo;
+        foo; // Foo
     }
 }
 function f2() {
     let foo1;
     let foo2;
     if ((foo1 = getFooOrNull(), foo2 = foo1) !== null) {
-        foo1;
-        foo2;
+        foo1; // Foo | null
+        foo2; // Foo
     }
 }
 function f3() {
@@ -77,6 +77,7 @@ function f4() {
         x;
     }
 }
+// Repro from #8851
 const re = /./g;
 let match;
 while ((match = re.exec("xxx")) != null) {

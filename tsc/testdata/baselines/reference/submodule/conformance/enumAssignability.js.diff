@@ -1,46 +1,17 @@
 --- old.enumAssignability.js
 +++ new.enumAssignability.js
-@@= skipped -56, +56 lines =@@
- }
- 
- //// [enumAssignability.js]
--// enums assignable to number, any, Object, errors unless otherwise noted
- var E;
- (function (E) {
-     E[E["A"] = 0] = "A";
-@@= skipped -13, +12 lines =@@
- var f = F.B;
- e = f;
- f = e;
--e = 1; // ok
--f = 1; // ok
--var x = e; // ok
--x = f; // ok
-+e = 1;
-+f = 1;
-+var x = e;
-+x = f;
+@@= skipped -76, +76 lines =@@
  var Others;
  (function (Others) {
--    var a = e; // ok
+     var a = e; // ok
 -    var C = /** @class */ (function () {
 -        function C() {
 -        }
 -        return C;
 -    }());
-+    var a = e;
 +    class C {
 +        foo;
 +    }
      var ac;
      var ai;
--    var b = e; // ok
-+    var b = e;
-     var c = e;
-     var d = e;
-     var ee = e;
--    var f = e; // ok
-+    var f = e;
-     var g = e;
-     var h = e;
-     var i = e;
+     var b = e; // ok

@@ -36,5 +36,6 @@ const obj = {
     x: "hello world",
     y: 2
 };
+// OK
 let p = <Poisoned {...obj}/>;
 let y = <Poisoned x="hi" y={2}/>;

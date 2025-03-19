@@ -25,6 +25,7 @@ class TestComponent extends React.Component<any, {}> {
 //// [consumer.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="component.d.ts" />
 const BaseComponent = require("BaseComponent");
 class TestComponent extends React.Component {
     render() {

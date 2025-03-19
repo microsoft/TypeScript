@@ -1,20 +1,20 @@
 --- old.contextuallyTypedIife.js
 +++ new.contextuallyTypedIife.js
-@@= skipped -35, +35 lines =@@
- 
+@@= skipped -36, +36 lines =@@
  
  //// [contextuallyTypedIife.js]
--// arrow
+ // arrow
 -(function (jake) { })("build");
--// function expression
 +(jake => { })("build");
+ // function expression
  (function (cats) { })("lol");
--// Lots of Irritating Superfluous Parentheses
+ // Lots of Irritating Superfluous Parentheses
  (function (x) { }("!"));
  ((((function (y) { }))))("-");
--// multiple arguments
+ // multiple arguments
 -(function (a, b, c) { })("foo", 101, false);
--// default parameters
++((a, b, c) => { })("foo", 101, false);
+ // default parameters
 -(function (m) {
 -    if (m === void 0) { m = 10; }
 -    return m + 1;
@@ -23,11 +23,16 @@
 -    if (n === void 0) { n = 10; }
 -    return n + 1;
 -})();
--// optional parameters
++((m = 10) => m + 1)(12);
++((n = 10) => n + 1)();
+ // optional parameters
 -(function (j) { return j + 1; })(12);
 -(function (k) { return k + 1; })();
 -(function (l, o) { return l + o; })(12); // o should be any
--// rest parameters
++((j) => j + 1)(12);
++((k) => k + 1)();
++((l, o) => l + o)(12); // o should be any
+ // rest parameters
 -(function () {
 -    var numbers = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
@@ -56,7 +61,11 @@
 -    }
 -    return first ? [] : rest.map(function (n) { return n > 0; });
 -})(8, 9, 10);
--// destructuring parameters (with defaults too!)
++((...numbers) => numbers.every(n => n > 0))(5, 6, 7);
++((...mixed) => mixed.every(n => !!n))(5, 'oops', 'oh no');
++((...noNumbers) => noNumbers.some(n => n > 0))();
++((first, ...rest) => first ? [] : rest.map(n => n > 0))(8, 9, 10);
+ // destructuring parameters (with defaults too!)
 -(function (_a) {
 -    var q = _a.q;
 -    return q;
@@ -73,26 +82,16 @@
 -    var _b = _a === void 0 ? { u: 23 } : _a, _c = _b.u, u = _c === void 0 ? 22 : _c;
 -    return u;
 -})();
--// contextually typed parameters.
--var twelve = (function (f) { return f(12); })(function (i) { return i; });
--var eleven = (function (o) { return o.a(11); })({ a: function (n) { return n; } });
--// missing arguments
-+((a, b, c) => { })("foo", 101, false);
-+((m = 10) => m + 1)(12);
-+((n = 10) => n + 1)();
-+((j) => j + 1)(12);
-+((k) => k + 1)();
-+((l, o) => l + o)(12);
-+((...numbers) => numbers.every(n => n > 0))(5, 6, 7);
-+((...mixed) => mixed.every(n => !!n))(5, 'oops', 'oh no');
-+((...noNumbers) => noNumbers.some(n => n > 0))();
-+((first, ...rest) => first ? [] : rest.map(n => n > 0))(8, 9, 10);
 +(({ q }) => q)({ q: 13 });
 +(({ p = 14 }) => p)({ p: 15 });
 +(({ r = 17 } = { r: 18 }) => r)({ r: 19 });
 +(({ u = 22 } = { u: 23 }) => u)();
+ // contextually typed parameters.
+-var twelve = (function (f) { return f(12); })(function (i) { return i; });
+-var eleven = (function (o) { return o.a(11); })({ a: function (n) { return n; } });
 +let twelve = (f => f(12))(i => i);
 +let eleven = (o => o.a(11))({ a: function (n) { return n; } });
+ // missing arguments
  (function (x, undefined) { return x; })(42);
 -(function (x, y, z) { return 42; })();
 +((x, y, z) => 42)();

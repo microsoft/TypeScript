@@ -80,7 +80,7 @@
  var EmptyRCComp = RC3 || RC4;
  var PartRCComp = RC1 || RC4;
  var RCComp = RC1 || RC2;
--// OK
+ // OK
 -var a = React.createElement(RCComp, { x: "Hi" });
 -var a1 = React.createElement(EmptyRCComp, null);
 -var a2 = React.createElement(EmptyRCComp, { "data-prop": "hello" });

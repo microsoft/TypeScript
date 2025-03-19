@@ -62,6 +62,7 @@ function foo(method, _context) {
     };
 }
 new B();
+// https://github.com/microsoft/TypeScript/issues/53448
 class C {
     constructor() {
         this.val;

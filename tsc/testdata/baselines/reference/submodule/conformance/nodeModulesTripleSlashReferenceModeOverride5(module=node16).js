@@ -29,6 +29,10 @@ bar;
 export {};
 
 //// [index.js]
+/// <reference types="pkg" resolution-mode="import" />
+/// <reference types="pkg" resolution-mode="require" />
+// Both `foo` and `bar` should resolve, as _both_ entrypoints are included by the two
+// references above.
 foo;
 bar;
 export {};

@@ -41,10 +41,10 @@ class B {
 }
 function f10(obj) {
     if (obj instanceof Object) {
-        obj;
+        obj; // A & { x: string } | B
     }
     else {
-        obj;
+        obj; // Error
     }
 }
 const instance = {};

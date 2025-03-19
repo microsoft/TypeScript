@@ -30,8 +30,10 @@ suddenly(({ x: a, ...rest }) => rest.y);
 suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
 class C {
     m({ a, ...clone }) {
+        // actually, never mind, don't clone
     }
     set p({ a, ...clone }) {
+        // actually, never mind, don't clone
     }
 }
 function foobar({ bar = {}, ...opts } = {}) {

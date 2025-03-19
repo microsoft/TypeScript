@@ -19,13 +19,16 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// Derived1 is assignable to, but not a subtype of, Base
+ // Derived1 is assignable to, but not a subtype of, Base
 -var Derived1 = /** @class */ (function () {
 -    function Derived1() {
 -    }
 -    return Derived1;
 -}());
--// Derived2 is a subtype of Base that is not assignable to Derived1
++class Derived1 {
++    foo;
++}
+ // Derived2 is a subtype of Base that is not assignable to Derived1
 -var Derived2 = /** @class */ (function () {
 -    function Derived2() {
 -    }
@@ -50,9 +53,6 @@
 -    }
 -    return Giraffe;
 -}(Mammal));
-+class Derived1 {
-+    foo;
-+}
 +class Derived2 {
 +    foo;
 +    optional;
@@ -68,56 +68,56 @@
 +}
  function fn1(x) {
      if (x instanceof Array) {
--        // 1.5: y: Array<number>|Array<string>
--        // Want: y: Array<number>|Array<string>
+         // 1.5: y: Array<number>|Array<string>
+         // Want: y: Array<number>|Array<string>
 -        var y = x;
 +        let y = x;
      }
  }
  function fn2(x) {
      if (x instanceof Derived1) {
--        // 1.5: y: Base
--        // Want: y: Derived1
+         // 1.5: y: Base
+         // Want: y: Derived1
 -        var y = x;
 +        let y = x;
      }
  }
  function fn3(x) {
      if (x instanceof Derived2) {
--        // 1.5: y: Derived2
--        // Want: Derived2
+         // 1.5: y: Derived2
+         // Want: Derived2
 -        var y = x;
 +        let y = x;
      }
  }
  function fn4(x) {
      if (x instanceof Derived1) {
--        // 1.5: y: {}
--        // Want: Derived1
+         // 1.5: y: {}
+         // Want: Derived1
 -        var y = x;
 +        let y = x;
      }
  }
  function fn5(x) {
      if (x instanceof Derived2) {
--        // 1.5: y: Derived1
--        // Want: ???
+         // 1.5: y: Derived1
+         // Want: ???
 -        var y = x;
 +        let y = x;
      }
  }
  function fn6(x) {
      if (x instanceof Giraffe) {
--        // 1.5: y: Derived1
--        // Want: ???
+         // 1.5: y: Derived1
+         // Want: ???
 -        var y = x;
 +        let y = x;
      }
  }
  function fn7(x) {
      if (x instanceof Array) {
--        // 1.5: y: Array<number>|Array<string>
--        // Want: y: Array<number>|Array<string>
+         // 1.5: y: Array<number>|Array<string>
+         // Want: y: Array<number>|Array<string>
 -        var y = x;
 +        let y = x;
      }

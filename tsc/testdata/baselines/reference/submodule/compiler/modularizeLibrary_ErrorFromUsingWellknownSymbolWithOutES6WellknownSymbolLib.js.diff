@@ -1,11 +1,9 @@
 --- old.modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.js
 +++ new.modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.js
-@@= skipped -12, +12 lines =@@
- function f(x, y, z) {
+@@= skipped -13, +13 lines =@@
      return Array.from(arguments);
  }
--f(1, 2, 3); // no error
+ f(1, 2, 3); // no error
 -var a = ['c', 'd'];
-+f(1, 2, 3);
 +let a = ['c', 'd'];
  a[Symbol.isConcatSpreadable] = false;

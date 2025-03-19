@@ -56,6 +56,7 @@ class P {
     m() { this.m; }
 }
 P;
+// Does not detect mutual recursion.
 function g() { D; }
 class D {
     m() { g; }

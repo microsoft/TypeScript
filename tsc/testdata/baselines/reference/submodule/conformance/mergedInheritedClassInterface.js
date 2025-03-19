@@ -63,6 +63,7 @@ class ChildNoBaseClass {
 }
 class Grandchild extends ChildNoBaseClass {
 }
+// checks if properties actually were merged
 var child;
 child.required;
 child.optional;

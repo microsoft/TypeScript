@@ -1,30 +1,6 @@
 --- old.nodeModulesPackageExports(module=node16).js
 +++ new.nodeModulesPackageExports(module=node16).js
-@@= skipped -88, +88 lines =@@
- }
- 
- //// [index.mjs]
--// esm format file
- import * as cjs from "package/cjs";
- import * as mjs from "package/mjs";
- import * as type from "package";
-@@= skipped -39, +38 lines =@@
-     return result;
- };
- Object.defineProperty(exports, "__esModule", { value: true });
--// cjs format file
- const cjs = __importStar(require("package/cjs"));
- const mjs = __importStar(require("package/mjs"));
- const type = __importStar(require("package"));
-@@= skipped -14, +13 lines =@@
- mjsi;
- typei;
- //// [index.js]
--// esm format file
- import * as cjs from "package/cjs";
- import * as mjs from "package/mjs";
- import * as type from "package";
-@@= skipped -13, +12 lines =@@
+@@= skipped -154, +154 lines =@@
  cjsi;
  mjsi;
  typei;

@@ -11,5 +11,6 @@ class Foo {
 //// [missingReturnStatement1.js]
 class Foo {
     foo() {
+        //return 4;
     }
 }

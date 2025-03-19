@@ -29,5 +29,7 @@ export {};
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference types="pkg" resolution-mode="require" />
+/// <reference types="pkg" resolution-mode="import" />
 foo;
 bar;

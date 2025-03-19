@@ -57,5 +57,7 @@ class C2 {
 }
 const c1 = new C1();
 const c2 = new C2();
+// no error
 c1.name;
+// no error
 c2.name;

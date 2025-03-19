@@ -6,14 +6,5 @@
  //// [typeGuardNarrowsIndexedAccessOfKnownProperty9.js]
 -"use strict";
  class C1 {
--    a = "a"; // ok
--    b = "b"; // ok
--    c = "c"; // error unused prop
--    d = "d"; // error unused prop
-+    a = "a";
-+    b = "b";
-+    c = "c";
-+    d = "d";
-     getValue(key) {
-         return this[key];
-     }
+     a = "a"; // ok
+     b = "b"; // ok

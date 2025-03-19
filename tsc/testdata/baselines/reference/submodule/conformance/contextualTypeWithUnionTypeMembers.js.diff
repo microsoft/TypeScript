@@ -1,14 +1,6 @@
 --- old.contextualTypeWithUnionTypeMembers.js
 +++ new.contextualTypeWithUnionTypeMembers.js
-@@= skipped -121, +121 lines =@@
-     }];
- 
- //// [contextualTypeWithUnionTypeMembers.js]
--// Let S be the set of types in U that has a property P.
--// If S is not empty, U has a property P of a union type of the types of P from each type in S.
- var i1;
- var i2;
- var i1Ori2 = i1;
+@@= skipped -129, +129 lines =@@
  var i1Ori2 = i2;
  var i1Ori2 = {
      commonPropertyType: "hello",
@@ -76,29 +68,28 @@
          propertyOnlyInI2: "Hello",
      }];
  var i11;
-@@= skipped -56, +54 lines =@@
- var i11Ori21 = i11;
+@@= skipped -49, +49 lines =@@
  var i11Ori21 = i21;
  var i11Ori21 = {
--    // Like i1
+     // Like i1
 -    commonMethodDifferentReturnType: function (a, b) {
 +    commonMethodDifferentReturnType: (a, b) => {
          var z = a.charAt(b);
          return z;
      },
-     commonPropertyDifferentType: "hello",
+@@= skipped -8, +8 lines =@@
  };
  var i11Ori21 = {
--    // Like i2
+     // Like i2
 -    commonMethodDifferentReturnType: function (a, b) {
 +    commonMethodDifferentReturnType: (a, b) => {
          var z = a.charCodeAt(b);
          return z;
      },
-     commonPropertyDifferentType: 10,
+@@= skipped -8, +8 lines =@@
  };
  var arrayOrI11OrI21 = [i11, i21, i11 || i21, {
--        // Like i1
+         // Like i1
 -        commonMethodDifferentReturnType: function (a, b) {
 +        commonMethodDifferentReturnType: (a, b) => {
              var z = a.charAt(b);
@@ -106,7 +97,7 @@
          },
          commonPropertyDifferentType: "hello",
      }, {
--        // Like i2
+         // Like i2
 -        commonMethodDifferentReturnType: function (a, b) {
 +        commonMethodDifferentReturnType: (a, b) => {
              var z = a.charCodeAt(b);

@@ -85,25 +85,30 @@ declare namespace foo {
 
 
 //// [definiteAssignmentAssertions.js]
+// Suppress strict property initialization check
 class C1 {
     a;
-    b;
+    b; // Error
 }
+// Suppress definite assignment check in constructor
 class C2 {
     a;
     constructor() {
         let x = this.a;
     }
 }
+// Definite assignment assertion requires type annotation, no initializer, no static modifier
 class C3 {
     a = 1;
     b = 1;
     static c;
     d;
 }
+// Definite assignment assertion not permitted on abstract property
 class C5 {
     a;
 }
+// Suppress definite assignment check for variable
 function f1() {
     let x;
     let y = x;
@@ -127,6 +132,7 @@ function f3() {
     g();
     let y = x;
 }
+// Definite assignment assertion requires type annotation and no initializer
 function f4() {
     let a;
     let b = 1;

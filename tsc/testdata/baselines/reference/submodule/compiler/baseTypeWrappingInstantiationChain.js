@@ -46,7 +46,7 @@ class C extends CBase {
         new CBaseBase(this);
     }
     alsoWorks() {
-        new CBase(this);
+        new CBase(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
     }
     method(t) { }
 }

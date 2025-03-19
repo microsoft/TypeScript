@@ -40,4 +40,5 @@ class B extends A {
 class C extends B {
     z;
 }
+// Ok to go down the chain, but error to try to climb back up
 (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);

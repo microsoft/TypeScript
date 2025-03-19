@@ -190,7 +190,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;
+            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
         }
         push(data) {
             var entry = this.listFactory.MakeEntry(data);
@@ -199,7 +199,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;
+            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
         }
         popEntry(head) {
             if (this.next.isHead) {
@@ -222,7 +222,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;
+            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
             return entry;
         }
         insertEntryBefore(entry) {
@@ -256,6 +256,7 @@ var Editor;
                 return null;
             }
             else if (entry.isHead) {
+                // Can't remove the head of a list!
                 return null;
             }
             else {

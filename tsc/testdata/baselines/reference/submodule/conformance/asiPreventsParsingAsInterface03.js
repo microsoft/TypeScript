@@ -13,7 +13,7 @@ namespace n {
 var interface, I;
 var n;
 (function (n) {
-    interface;
-    I;
-    { }
+    interface; // This should be the identifier 'interface'
+    I; // This should be the identifier 'I'
+    { } // This should be a block body
 })(n || (n = {}));

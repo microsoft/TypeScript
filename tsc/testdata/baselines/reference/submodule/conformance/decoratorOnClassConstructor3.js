@@ -30,6 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 const _0_1 = require("./0");
 const _0_2 = require("./0");
+/* Comment on the Class Declaration */
 class C extends _0_1.base {
     constructor(prop) {
         super();

@@ -1,10 +1,8 @@
 --- old.umd1.js
 +++ new.umd1.js
-@@= skipped -13, +13 lines =@@
- 
- 
+@@= skipped -15, +15 lines =@@
  //// [a.js]
--/// <reference path="foo.d.ts" />
+ /// <reference path="foo.d.ts" />
  Foo.fn();
 -var x;
 -var y = x.n;

@@ -1,11 +1,6 @@
 --- old.cloduleWithPriorInstantiatedModule.js
 +++ new.cloduleWithPriorInstantiatedModule.js
-@@= skipped -18, +18 lines =@@
- }
- 
- //// [cloduleWithPriorInstantiatedModule.js]
--// Non-ambient & instantiated module.
- var Moclodule;
+@@= skipped -23, +23 lines =@@
  (function (Moclodule) {
      var x = 10;
  })(Moclodule || (Moclodule = {}));
@@ -14,9 +9,9 @@
 -    }
 -    return Moclodule;
 -}());
--// Instantiated module.
 +class Moclodule {
 +}
+ // Instantiated module.
  (function (Moclodule) {
 -    var Manager = /** @class */ (function () {
 -        function Manager() {

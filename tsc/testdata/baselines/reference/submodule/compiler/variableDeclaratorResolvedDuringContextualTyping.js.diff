@@ -6,7 +6,7 @@
  (function (Errors) {
 -    var ConnectionError /* extends Error */ = /** @class */ (function () {
 -        function ConnectionError(request) {
-+    class ConnectionError {
++    class ConnectionError /* extends Error */ {
 +        constructor(request) {
          }
 -        return ConnectionError;
@@ -32,7 +32,7 @@
 +        }).then((response) => {
              var result = {
 -                stat: _this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
-+                stat: this.jsonToStat(newFilePath, "someString"),
++                stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
                  isNew: response.status === 201
              };
              return WinJS.TPromise.as(result);

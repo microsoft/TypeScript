@@ -46,6 +46,7 @@ exports.circularReference = class C {
     static getTags(c) { return c; }
     tags(c) { return c; }
 };
+// repro from #15066
 class FooItem {
     foo() { }
     name;

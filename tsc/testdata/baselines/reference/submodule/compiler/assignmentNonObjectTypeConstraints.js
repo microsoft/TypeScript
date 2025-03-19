@@ -29,7 +29,7 @@ var E;
     E[E["C"] = 2] = "C";
 })(E || (E = {}));
 function foo(x) {
-    var y = x;
+    var y = x; // Ok
 }
 foo(5);
 foo(E.A);
@@ -40,7 +40,7 @@ class B {
     b;
 }
 function bar(x) {
-    var y = x;
+    var y = x; // Ok
 }
 bar(new A);
 bar(new B);

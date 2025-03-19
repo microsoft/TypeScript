@@ -12,10 +12,12 @@ export module outerModule.InnerModule {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.outerModule = void 0;
+/** this is multi declare module*/
 var outerModule;
 (function (outerModule) {
     let InnerModule;
     (function (InnerModule) {
+        /// class b comment
         class b {
         }
         InnerModule.b = b;

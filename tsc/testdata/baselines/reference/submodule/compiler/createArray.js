@@ -30,4 +30,4 @@ function f(s) {
 if (ba[14]) {
     na[2] = f(sa[3]);
 }
-new C[1];
+new C[1]; // not an error

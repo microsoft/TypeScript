@@ -49,6 +49,7 @@ var otherRoot;
 (function (otherRoot) {
     let A;
     (function (A) {
+        // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };
         let Utils;
         (function (Utils) {

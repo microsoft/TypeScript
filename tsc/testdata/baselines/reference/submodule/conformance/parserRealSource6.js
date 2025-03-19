@@ -225,6 +225,9 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource6.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     class TypeCollectionContext {
@@ -298,7 +301,7 @@ var TypeScript;
                 var ast = this.getScriptFragmentStartAST();
                 var minChar = ast.minChar;
                 var limChar = (this.isMemberCompletion ? this.pos : this.pos + 1);
-                this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null).Script;
+                this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null /*errorCapture*/).Script;
             }
             return this.scriptFragment;
         }
@@ -334,6 +337,8 @@ var TypeScript;
         var context = walker.state;
         var minChar = ast.minChar;
         var limChar = ast.limChar;
+        // Account for the fact completion list may be called at the end of a file which
+        // is has not been fully re-parsed yet.
         if (ast.nodeType == NodeType.Script && context.pos > limChar)
             limChar = context.pos;
         if ((minChar <= context.pos) &&
@@ -355,6 +360,7 @@ var TypeScript;
                     break;
                 case NodeType.ObjectLit:
                     var objectLit = ast;
+                    // Only consider target-typed object literals
                     if (objectLit.targetType) {
                         context.scopeGetter = function () {
                             return objectLit.targetType.containedScope;
@@ -386,6 +392,7 @@ var TypeScript;
                         }
                         else {
                             context.scopeGetter = function () {
+                                // The scope of a class constructor is hidden somewhere we don't expect :-S
                                 if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
                                     if (ast.type && ast.type.enclosingType) {
                                         return ast.type.enclosingType.constructorScope;
@@ -412,6 +419,11 @@ var TypeScript;
         return ast;
     }
     TypeScript.preFindEnclosingScope = preFindEnclosingScope;
+    //
+    // Find the enclosing scope context from a position inside a script AST.
+    // The "scopeStartAST" of the returned scope is always valid.
+    // Return "null" if the enclosing scope can't be found.
+    //
     function findEnclosingScopeAt(logger, script, text, pos, isMemberCompletion) {
         var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
         TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);

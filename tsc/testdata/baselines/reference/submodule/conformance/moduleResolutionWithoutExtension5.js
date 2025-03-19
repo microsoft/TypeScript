@@ -5,4 +5,5 @@
 import("./foo").then(x => x); // should error, ask for extension
 
 //// [buzz.mjs]
-import("./foo").then(x => x);
+// Extensionless relative path dynamic import in an ES module
+import("./foo").then(x => x); // should error, ask for extension

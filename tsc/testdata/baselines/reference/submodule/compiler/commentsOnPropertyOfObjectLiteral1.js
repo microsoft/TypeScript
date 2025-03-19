@@ -19,7 +19,13 @@ var resolve = {
 var resolve = {
     id: (details) => details.id,
     id1: "hello",
-    id2: (details) => details.id,
-    id3: (details) => details.id,
-    id4: (details) => details.id,
+    id2: 
+    /*! @ngInject */ (details) => details.id,
+    id3: 
+    /*! @ngInject */
+    (details) => details.id,
+    id4: 
+    /*! @ngInject */
+    /* C2 */
+    (details) => details.id,
 };

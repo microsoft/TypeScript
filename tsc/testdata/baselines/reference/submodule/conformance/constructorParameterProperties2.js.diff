@@ -11,7 +11,7 @@
 -}());
 +class C {
 +    y;
-+    constructor(y) { }
++    constructor(y) { } // ok
 +}
  var c;
  var r = c.y;
@@ -22,10 +22,9 @@
 +    y;
 +    constructor(y) {
          this.y = y;
--    } // error
+     } // error
 -    return D;
 -}());
-+    }
 +}
  var d;
  var r2 = d.y;
@@ -36,26 +35,22 @@
 +    y;
 +    constructor(y) {
          this.y = y;
--    } // error
+     } // error
 -    return E;
 -}());
-+    }
 +}
  var e;
--var r3 = e.y; // error
+ var r3 = e.y; // error
 -var F = /** @class */ (function () {
 -    function F(y) {
-+var r3 = e.y;
 +class F {
 +    y;
 +    y;
 +    constructor(y) {
          this.y = y;
--    } // error
+     } // error
 -    return F;
 -}());
-+    }
 +}
  var f;
--var r4 = f.y; // error
-+var r4 = f.y;
+ var r4 = f.y; // error

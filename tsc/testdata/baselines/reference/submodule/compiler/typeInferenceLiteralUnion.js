@@ -42,6 +42,7 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extent = extent;
+// Not very useful, but meets Numeric
 class NumCoercible {
     a;
     constructor(a) {
@@ -51,6 +52,9 @@ class NumCoercible {
         return this.a;
     }
 }
+/**
+ * Return the min and max simultaneously.
+ */
 function extent(array) {
     return [undefined, undefined];
 }

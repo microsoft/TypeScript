@@ -7,5 +7,5 @@
 
 //// [objectTypeWithOptionalProperty1.js]
 var b = {
-    x: 1
+    x: 1 // error
 };

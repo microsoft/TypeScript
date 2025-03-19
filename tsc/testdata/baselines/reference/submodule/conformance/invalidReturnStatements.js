@@ -23,11 +23,12 @@ function fn11(): D { return new C(); }
 
 
 //// [invalidReturnStatements.js]
+// all the following should be error
 function fn1() { }
 function fn2() { }
 function fn3() { }
 function fn4() { }
-function fn7() { }
+function fn7() { } // should be valid: any includes void
 class C {
     id;
     dispose() { }

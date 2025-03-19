@@ -21,7 +21,8 @@ export class Foo {
         getThing: () => Promise.resolve('')
     };
     foo() {
-        return this.client
+        return 
+        /* TODO: Avoid using type assertions, please refactor. */ this.client
             .getThing();
     }
 }

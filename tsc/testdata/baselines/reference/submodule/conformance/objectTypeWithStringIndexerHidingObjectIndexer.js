@@ -35,7 +35,7 @@ var r4: string = o2[''];
 
 //// [objectTypeWithStringIndexerHidingObjectIndexer.js]
 var o = {};
-var r = o[''];
+var r = o['']; // should be Object
 class C {
     foo;
 }

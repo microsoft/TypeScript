@@ -8,4 +8,6 @@
 -    // do something
 -    return 127;
 -});
-+Foo(() => 127);
++Foo(() => 
++// do something
++127);

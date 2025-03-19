@@ -41,6 +41,7 @@ m.child; // ok
 
 
 //// [inferTypeParameterConstraints.js]
+// https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
 class BaseClass {
     fake() {
         throw new Error("");
@@ -49,4 +50,4 @@ class BaseClass {
 class Klass extends BaseClass {
     child = true;
 }
-m.child;
+m.child; // ok

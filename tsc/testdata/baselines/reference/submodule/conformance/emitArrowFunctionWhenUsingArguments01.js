@@ -35,11 +35,11 @@ function bar() {
 
 //// [emitArrowFunctionWhenUsingArguments01.js]
 var a = () => {
-    var arg = arguments[0];
+    var arg = arguments[0]; // error
 };
 var b = function () {
     var a = () => {
-        var arg = arguments[0];
+        var arg = arguments[0]; // error
     };
 };
 function baz() {
@@ -49,13 +49,13 @@ function baz() {
 }
 function foo(inputFunc) { }
 foo(() => {
-    var arg = arguments[0];
+    var arg = arguments[0]; // error
 });
 function bar() {
-    var arg = arguments[0];
+    var arg = arguments[0]; // no error
 }
 () => {
     function foo() {
-        var arg = arguments[0];
+        var arg = arguments[0]; // no error
     }
 };

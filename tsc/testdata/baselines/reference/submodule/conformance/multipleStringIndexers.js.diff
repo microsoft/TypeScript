@@ -1,10 +1,9 @@
 --- old.multipleStringIndexers.js
 +++ new.multipleStringIndexers.js
-@@= skipped -33, +33 lines =@@
- }
+@@= skipped -34, +34 lines =@@
  
  //// [multipleStringIndexers.js]
--// Multiple indexers of the same type are an error
+ // Multiple indexers of the same type are an error
 -var C = /** @class */ (function () {
 -    function C() {
 -    }

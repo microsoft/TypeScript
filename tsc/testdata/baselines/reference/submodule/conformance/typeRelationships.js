@@ -51,16 +51,16 @@ class C {
     }
     f1() {
         this.c = this.self;
-        this.self = this.c;
+        this.self = this.c; // Error
     }
     f2() {
         var a;
-        var a = [this, this.c];
+        var a = [this, this.c]; // C[] since this is subtype of C
         var b;
         var b = [this, this.self, null, undefined];
     }
     f3(b) {
-        return b ? this.c : this.self;
+        return b ? this.c : this.self; // Should be C
     }
 }
 class D extends C {
@@ -76,8 +76,8 @@ class D extends C {
         this.self2 = this.self;
         this.self3 = this.self;
         this.d = this.self;
-        this.d = this.c;
-        this.self = this.d;
+        this.d = this.c; // Error
+        this.self = this.d; // Error
         this.c = this.d;
     }
 }

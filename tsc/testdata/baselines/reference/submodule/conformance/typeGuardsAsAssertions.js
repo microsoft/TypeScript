@@ -134,6 +134,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.none = void 0;
 exports.isSome = isSome;
 exports.fn = fn;
+// Repro from #8513
 let cond;
 exports.none = { none: '' };
 function isSome(value) {
@@ -144,78 +145,79 @@ function someFrom(some) {
 }
 function fn(makeSome) {
     let result = exports.none;
-    result;
+    result; // None
     while (cond) {
-        result;
+        result; // Some<r> | None
         result = someFrom(isSome(result) ? result.some : makeSome());
-        result;
+        result; // Some<r>
     }
 }
 function foo1() {
     let x = 0;
-    x;
+    x; // number
     while (cond) {
-        x;
+        x; // number, then string | number
         x = typeof x === "string" ? x.slice() : "abc";
-        x;
+        x; // string
     }
     x;
 }
 function foo2() {
     let x = 0;
-    x;
+    x; // number
     while (cond) {
-        x;
+        x; // number, then string | number
         if (typeof x === "string") {
             x = x.slice();
         }
         else {
             x = "abc";
         }
-        x;
+        x; // string
     }
     x;
 }
+// Type guards as assertions
 function f1() {
     let x = undefined;
-    x;
+    x; // undefined
     if (x) {
-        x;
+        x; // string | number (guard as assertion)
     }
-    x;
+    x; // string | number | undefined
 }
 function f2() {
     let x = undefined;
-    x;
+    x; // undefined
     if (typeof x === "string") {
-        x;
+        x; // string (guard as assertion)
     }
-    x;
+    x; // string | undefined
 }
 function f3() {
     let x = undefined;
-    x;
+    x; // undefined
     if (!x) {
         return;
     }
-    x;
+    x; // string | number (guard as assertion)
 }
 function f4() {
     let x = undefined;
-    x;
+    x; // undefined
     if (typeof x === "boolean") {
-        x;
+        x; // nothing (boolean not in declared type)
     }
-    x;
+    x; // undefined
 }
 function f5(x) {
     if (typeof x === "string" && typeof x === "number") {
-        x;
+        x; // number (guard as assertion)
     }
     else {
-        x;
+        x; // string | number
     }
-    x;
+    x; // string | number
 }
 function f6() {
     let x;

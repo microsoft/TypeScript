@@ -33,16 +33,8 @@
 +}
  function f1(x) {
      if (typeof x === "boolean") {
--        x; // never
-+        x;
-     }
- }
- function f2(x) {
-     while (true) {
-         if (typeof x === "boolean") {
--            return x; // never
-+            return x;
-         }
+         x; // never
+@@= skipped -30, +27 lines =@@
      }
  }
  function test(cb) {

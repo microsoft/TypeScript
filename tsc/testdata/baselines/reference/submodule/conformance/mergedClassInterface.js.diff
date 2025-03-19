@@ -14,15 +14,14 @@
 -    }
 -    return C4;
 -}());
--// checks if properties actually were merged
 +class C3 {
 +}
 +class C4 {
 +}
+ // checks if properties actually were merged
  var c5;
  c5.x1;
- c5.x2;
-@@= skipped -18, +11 lines =@@
+@@= skipped -18, +12 lines =@@
  c5.x4;
  //// [file2.js]
  //// [file3.js]

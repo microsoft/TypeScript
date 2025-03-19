@@ -76,29 +76,38 @@ interface testInterface2 {
 //// [errorsInGenericTypeReference.js]
 class Foo {
 }
+// in call type arguments
 class testClass1 {
     method() { }
 }
 var tc1 = new testClass1();
-tc1.method();
+tc1.method(); // error: could not find symbol V
+// in constructor type arguments
 class testClass2 {
 }
-var tc2 = new testClass2();
+var tc2 = new testClass2(); // error: could not find symbol V
+// in method return type annotation
 class testClass3 {
-    testMethod1() { return null; }
-    static testMethod2() { return null; }
-    set a(value) { }
-    property;
+    testMethod1() { return null; } // error: could not find symbol V
+    static testMethod2() { return null; } // error: could not find symbol V
+    set a(value) { } // error: could not find symbol V
+    property; // error: could not find symbol V
 }
-function testFunction1() { return null; }
-function testFunction2(p) { }
-var f;
+// in function return type annotation
+function testFunction1() { return null; } // error: could not find symbol V
+// in paramter types
+function testFunction2(p) { } // error: could not find symbol V
+// in var type annotation
+var f; // error: could not find symbol V
+// in constraints
 class testClass4 {
-}
+} // error: could not find symbol V
 class testClass6 {
-    method() { }
+    method() { } // error: could not find symbol V
 }
+// in extends clause
 class testClass7 extends Foo {
-}
+} // error: could not find symbol V
+// in implements clause
 class testClass8 {
-}
+} // error: could not find symbol V

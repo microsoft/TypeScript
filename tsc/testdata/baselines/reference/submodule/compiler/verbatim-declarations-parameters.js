@@ -33,12 +33,20 @@ class Foo {
     reuseTypeNode;
     reuseTypeNode2;
     resolveType;
-    constructor(reuseTypeNode, reuseTypeNode2, resolveType) {
+    constructor(
+    // Type node is accurate, preserve
+    reuseTypeNode, reuseTypeNode2, 
+    // Resolve type node, requires adding | undefined
+    resolveType) {
         this.reuseTypeNode = reuseTypeNode;
         this.reuseTypeNode2 = reuseTypeNode2;
         this.resolveType = resolveType;
     }
 }
 exports.Foo = Foo;
-function foo1(reuseTypeNode = {}, reuseTypeNode2 = {}, resolveType = {}, requiredParam) {
+function foo1(
+// Type node is accurate, preserve
+reuseTypeNode = {}, reuseTypeNode2 = {}, 
+// Resolve type node, requires adding | undefined
+resolveType = {}, requiredParam) {
 }

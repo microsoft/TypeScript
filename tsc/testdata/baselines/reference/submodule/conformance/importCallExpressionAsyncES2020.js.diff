@@ -1,22 +1,6 @@
 --- old.importCallExpressionAsyncES2020.js
 +++ new.importCallExpressionAsyncES2020.js
-@@= skipped -31, +31 lines =@@
- 
- //// [test.js]
- export async function fn() {
--    const req = await import('./test'); // ONE
-+    const req = await import('./test');
- }
- export class cl1 {
-     async m() {
--        const req = await import('./test'); // TWO
-+        const req = await import('./test');
-     }
- }
- export const obj = {
-     m: async () => {
--        const req = await import('./test'); // THREE
-+        const req = await import('./test');
+@@= skipped -44, +44 lines =@@
      }
  };
  export class cl2 {
@@ -29,11 +13,9 @@
 -    }
 +    p = {
 +        m: async () => {
-+            const req = await import('./test');
++            const req = await import('./test'); // FOUR
 +        }
 +    };
  }
  export const l = async () => {
--    const req = await import('./test'); // FIVE
-+    const req = await import('./test');
- };
+     const req = await import('./test'); // FIVE

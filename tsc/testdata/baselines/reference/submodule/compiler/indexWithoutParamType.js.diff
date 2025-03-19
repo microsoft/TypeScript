@@ -1,8 +1,0 @@
---- old.indexWithoutParamType.js
-+++ new.indexWithoutParamType.js
-@@= skipped -3, +3 lines =@@
- var y: { []; } // Error
- 
- //// [indexWithoutParamType.js]
--var y; // Error
-+var y;

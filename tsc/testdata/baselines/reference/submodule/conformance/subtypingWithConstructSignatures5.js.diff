@@ -1,11 +1,9 @@
 --- old.subtypingWithConstructSignatures5.js
 +++ new.subtypingWithConstructSignatures5.js
-@@= skipped -50, +50 lines =@@
- }
- 
+@@= skipped -52, +52 lines =@@
  //// [subtypingWithConstructSignatures5.js]
--// checking subtype relations for function types as it relates to contextual signature instantiation
--// same as subtypingWithConstructSignatures2 just with an extra level of indirection in the inheritance chain
+ // checking subtype relations for function types as it relates to contextual signature instantiation
+ // same as subtypingWithConstructSignatures2 just with an extra level of indirection in the inheritance chain
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||

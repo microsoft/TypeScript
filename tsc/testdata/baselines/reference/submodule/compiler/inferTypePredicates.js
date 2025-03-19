@@ -282,12 +282,13 @@ if (foobarPred(foobar)) {
 
 
 //// [inferTypePredicates.js]
+// https://github.com/microsoft/TypeScript/issues/16069
 const numsOrNull = [1, 2, 3, 4, null];
-const filteredNumsTruthy = numsOrNull.filter(x => !!x);
-const filteredNumsNonNullish = numsOrNull.filter(x => x !== null);
+const filteredNumsTruthy = numsOrNull.filter(x => !!x); // should error
+const filteredNumsNonNullish = numsOrNull.filter(x => x !== null); // should ok
 const evenSquaresInline = [1, 2, 3, 4]
     .map(x => x % 2 === 0 ? x * x : null)
-    .filter(x => !!x);
+    .filter(x => !!x); // tests truthiness, not non-nullishness
 const isTruthy = (x) => !!x;
 const evenSquares = [1, 2, 3, 4]
     .map(x => x % 2 === 0 ? x * x : null)
@@ -298,6 +299,7 @@ const evenSquaresNonNull = [1, 2, 3, 4]
 function isNonNull(x) {
     return x !== null;
 }
+// factoring out a boolean works thanks to aliased discriminants
 function isNonNullVar(x) {
     const ok = x !== null;
     return ok;
@@ -305,54 +307,61 @@ function isNonNullVar(x) {
 function isNonNullGeneric(x) {
     return x !== null;
 }
+// Type guards can flow between functions
 const myGuard = (o) => !!o;
 const mySecondGuard = (o) => myGuard(o);
 const myArray = [];
 const result = myArray
     .map((arr) => arr.list)
     .filter((arr) => arr && arr.length)
-    .map((arr) => arr
+    .map((arr) => arr // should error
     .filter((obj) => obj && obj.data)
-    .map(obj => JSON.parse(obj.data)));
+    .map(obj => JSON.parse(obj.data)) // should error
+);
 const result2 = myArray
     .map((arr) => arr.list)
     .filter((arr) => !!arr)
     .filter(arr => arr.length)
-    .map((arr) => arr
+    .map((arr) => arr // should ok
     .filter((obj) => obj)
+    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384
     .filter(obj => !!obj.data)
     .map(obj => JSON.parse(obj.data)));
 const list = [];
-const resultBars = list.filter((value) => 'bar' in value);
+const resultBars = list.filter((value) => 'bar' in value); // should ok
 function isBarNonNull(x) {
     return ('bar' in x);
 }
 const fooOrBar = list[0];
 if (isBarNonNull(fooOrBar)) {
-    const t = fooOrBar;
+    const t = fooOrBar; // should ok
 }
+// https://github.com/microsoft/TypeScript/issues/38390#issuecomment-626019466
+// Ryan's example (currently legal):
 const a = [1, "foo", 2, "bar"].filter(x => typeof x === "string");
 a.push(10);
+// Defer to explicit type guards, even when they're incorrect.
 function backwardsGuard(x) {
     return typeof x === 'string';
 }
+// Partition tests. The "false" case matters.
 function isString(x) {
     return typeof x === 'string';
 }
 if (isString(strOrNum)) {
-    let t = strOrNum;
+    let t = strOrNum; // should ok
 }
 else {
-    let t = strOrNum;
+    let t = strOrNum; // should ok
 }
 function flakyIsString(x) {
     return typeof x === 'string' && Math.random() > 0.5;
 }
 if (flakyIsString(strOrNum)) {
-    let t = strOrNum;
+    let t = strOrNum; // should error
 }
 else {
-    let t = strOrNum;
+    let t = strOrNum; // should error
 }
 function isDate(x) {
     return x instanceof Date;
@@ -361,17 +370,19 @@ function flakyIsDate(x) {
     return x instanceof Date && Math.random() > 0.5;
 }
 if (isDate(maybeDate)) {
-    let t = maybeDate;
+    let t = maybeDate; // should ok
 }
 else {
-    let t = maybeDate;
+    let t = maybeDate; // should ok
 }
 if (flakyIsDate(maybeDate)) {
-    let t = maybeDate;
+    let t = maybeDate; // should error
 }
 else {
-    let t = maybeDate;
+    let t = maybeDate; // should ok
 }
+// This should not infer a type guard since the value on which we do the refinement
+// is not related to the original parameter.
 function irrelevantIsNumber(x) {
     x = Math.random() < 0.5 ? "string" : 123;
     return typeof x === 'string';
@@ -380,9 +391,11 @@ function irrelevantIsNumberDestructuring(x) {
     [x] = [Math.random() < 0.5 ? "string" : 123];
     return typeof x === 'string';
 }
+// Cannot infer a type guard for either param because of the false case.
 function areBothNums(x, y) {
     return typeof x === 'number' && typeof y === 'number';
 }
+// Could potentially infer a type guard here but it would require more bookkeeping.
 function doubleReturn(x) {
     if (typeof x === 'string') {
         return true;
@@ -392,10 +405,13 @@ function doubleReturn(x) {
 function guardsOneButNotOthers(a, b, c) {
     return typeof b === 'string';
 }
+// Checks that there are no string escaping issues
 function dunderguard(__x) {
     return typeof __x === 'string';
 }
+// could infer a type guard here but it doesn't seem that helpful.
 const booleanIdentity = (x) => x;
+// we infer "x is number | true" which is accurate but of debatable utility.
 const numOrBoolean = (x) => typeof x === 'number' || x;
 class Inferrer {
     isNumber(x) {
@@ -404,11 +420,12 @@ class Inferrer {
 }
 const inf = new Inferrer();
 if (inf.isNumber(numOrStr)) {
-    let t = numOrStr;
+    let t = numOrStr; // should ok
 }
 else {
-    let t = numOrStr;
+    let t = numOrStr; // should ok
 }
+// Type predicates are not inferred on "this"
 class C1 {
     isC2() {
         return this instanceof C2;
@@ -418,35 +435,38 @@ class C2 extends C1 {
     z = 0;
 }
 if (c.isC2()) {
-    let c2 = c;
+    let c2 = c; // should error
 }
 function doNotRefineDestructuredParam({ x, y }) {
     return typeof x === 'number';
 }
+// The type predicate must remain valid when the function is called with subtypes.
 function isShortString(x) {
     return typeof x === "string" && x.length < 10;
 }
 if (isShortString(str)) {
-    str.charAt(0);
+    str.charAt(0); // should ok
 }
 else {
-    str.charAt(0);
+    str.charAt(0); // should ok
 }
 function isStringFromUnknown(x) {
     return typeof x === "string";
 }
 if (isStringFromUnknown(str)) {
-    str.charAt(0);
+    str.charAt(0); // should OK
 }
 else {
-    let t = str;
+    let t = str; // should OK
 }
+// infer a union type
 function isNumOrStr(x) {
     return (typeof x === "number" || typeof x === "string");
 }
 if (isNumOrStr(unk)) {
-    let t = unk;
+    let t = unk; // should ok
 }
+// A function can be a type predicate even if it throws.
 function assertAndPredicate(x) {
     if (x instanceof Date) {
         throw new Error();
@@ -454,7 +474,7 @@ function assertAndPredicate(x) {
     return typeof x === 'string';
 }
 if (assertAndPredicate(snd)) {
-    let t = snd;
+    let t = snd; // should error
 }
 function isNumberWithThis(x) {
     return typeof x === 'number';

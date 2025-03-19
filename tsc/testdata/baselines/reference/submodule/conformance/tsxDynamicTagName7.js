@@ -26,7 +26,8 @@ const React = require("react");
 class Text extends React.Component {
     _tagName = 'div';
     render() {
-        return (<this />);
+        return (<this /> // this should be an error
+        );
     }
 }
 exports.Text = Text;

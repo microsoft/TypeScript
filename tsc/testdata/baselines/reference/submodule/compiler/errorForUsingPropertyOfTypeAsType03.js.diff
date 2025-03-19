@@ -14,8 +14,11 @@
 -    var a1;
 -    var a2;
 -    var a3;
--    //let b1: (typeof Color).Red.toString;
--    //let b2: (typeof Color).Red["toString"];
++    let a1;
++    let a2;
++    let a3;
+     //let b1: (typeof Color).Red.toString;
+     //let b2: (typeof Color).Red["toString"];
 -    var b3;
 -    var c1;
 -    var c2;
@@ -23,9 +26,6 @@
 -    var d1;
 -    var d2;
 -    var d3;
-+    let a1;
-+    let a2;
-+    let a3;
 +    let b3;
 +    let c1;
 +    let c2;

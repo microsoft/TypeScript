@@ -32,6 +32,8 @@ x ??= class { @dec y: any; };
 
 //// [esDecorators-classExpression-namedEvaluation.1.js]
 let x;
+// 13.15.2 RS: Evaluation
+//  AssignmentExpression : LeftHandSideExpression `=` AssignmentExpression
 x = 
 @dec
 class {
@@ -40,6 +42,8 @@ x = class {
     @dec
     y;
 };
+// 13.15.2 RS: Evaluation
+//  AssignmentExpression : LeftHandSideExpression `&&=` AssignmentExpression
 x &&= 
 @dec
 class {
@@ -48,6 +52,8 @@ x &&= class {
     @dec
     y;
 };
+// 13.15.2 RS: Evaluation
+//  AssignmentExpression : LeftHandSideExpression `||=` AssignmentExpression
 x ||= 
 @dec
 class {
@@ -56,6 +62,8 @@ x ||= class {
     @dec
     y;
 };
+// 13.15.2 RS: Evaluation
+//  AssignmentExpression : LeftHandSideExpression `??=` AssignmentExpression
 x ??= 
 @dec
 class {

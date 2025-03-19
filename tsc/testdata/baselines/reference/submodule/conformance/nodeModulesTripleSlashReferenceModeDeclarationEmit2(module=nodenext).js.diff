@@ -1,10 +1,8 @@
 --- old.nodeModulesTripleSlashReferenceModeDeclarationEmit2(module=nodenext).js
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit2(module=nodenext).js
-@@= skipped -28, +28 lines =@@
- export interface LocalInterface extends ImportInterface {}
- 
+@@= skipped -30, +30 lines =@@
  //// [index.js]
--/// <reference types="pkg" preserve="true" />
+ /// <reference types="pkg" preserve="true" />
  export {};
 -
 -

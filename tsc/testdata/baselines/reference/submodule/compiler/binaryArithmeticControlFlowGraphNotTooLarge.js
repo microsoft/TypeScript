@@ -1299,6 +1299,7 @@ const foo = function (this: any) {
 };
 
 //// [binaryArithmeticControlFlowGraphNotTooLarge.js]
+// Repro from #29926 (expanded 10x for good measure)
 const foo = function () {
     var a, b, c, d, ab, bc, cd, da, blocks = this.blocks;
     if (this.first) {

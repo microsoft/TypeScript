@@ -16,6 +16,6 @@ if (value.foo !== null) {
 //// [controlFlowStringIndex.js]
 if (value.foo !== null) {
     value.foo.toExponential();
-    value.other;
-    value.bar;
+    value.other; // should still be number | null
+    value.bar; // should still be number | null
 }

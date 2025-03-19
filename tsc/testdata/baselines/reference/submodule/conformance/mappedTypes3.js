@@ -50,12 +50,12 @@ function f1(b) {
     let weight = bb.weight.value;
 }
 function f2(bb) {
-    let b = unboxify(bb);
+    let b = unboxify(bb); // Infer Bacon for T
     let bool = b.isPerfect;
     let weight = b.weight;
 }
 function f3(bb) {
-    let b = unboxify(bb);
+    let b = unboxify(bb); // Explicit type parameter required
     let bool = b.isPerfect;
     let weight = bb.weight;
 }

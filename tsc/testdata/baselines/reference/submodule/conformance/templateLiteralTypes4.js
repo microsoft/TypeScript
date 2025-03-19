@@ -307,6 +307,7 @@ f4("**false**"); // false | "false"
 
 
 //// [templateLiteralTypes4.js]
+// infer from literal enums
 var StringLiteralEnum;
 (function (StringLiteralEnum) {
     StringLiteralEnum["Zero"] = "0";
@@ -320,6 +321,7 @@ var NumberLiteralEnum;
     NumberLiteralEnum[NumberLiteralEnum["Zero"] = 0] = "Zero";
     NumberLiteralEnum[NumberLiteralEnum["One"] = 1] = "One";
 })(NumberLiteralEnum || (NumberLiteralEnum = {}));
+// infer from non-literal enums
 var NonLiteralEnum;
 (function (NonLiteralEnum) {
     NonLiteralEnum["Zero"] = NumberLiteralEnum.Zero;
@@ -327,14 +329,14 @@ var NonLiteralEnum;
     NonLiteralEnum["One"] = NumberLiteralEnum.One;
     if (typeof NonLiteralEnum.One !== "string") NonLiteralEnum[NonLiteralEnum.One] = "One";
 })(NonLiteralEnum || (NonLiteralEnum = {}));
-p.getIndex(0);
-p.getIndex(1);
-p.getIndex(2);
-p.setIndex(0, 0);
-p.setIndex(1, 0);
-p.setIndex(2, 3);
-f1("**123**");
-f2("**123**");
-f3("**123**");
-f4("**true**");
-f4("**false**");
+p.getIndex(0); // ok, 0 is a valid index
+p.getIndex(1); // ok, 1 is a valid index
+p.getIndex(2); // error, 2 is not a valid index
+p.setIndex(0, 0); // ok, 0 is a valid index
+p.setIndex(1, 0); // ok, 1 is a valid index
+p.setIndex(2, 3); // error, 2 is not a valid index
+f1("**123**"); // "123"
+f2("**123**"); // 123
+f3("**123**"); // 123n
+f4("**true**"); // true | "true"
+f4("**false**"); // false | "false"

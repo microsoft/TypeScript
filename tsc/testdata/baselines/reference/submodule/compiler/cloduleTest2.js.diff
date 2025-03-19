@@ -9,8 +9,7 @@
      (function (m3d) {
          m3d.y = 2;
      })(m3d || (m3d = {}));
--    var r = new m3d(); // error
-+    var r = new m3d();
+@@= skipped -8, +8 lines =@@
  })(T1 || (T1 = {}));
  var T2;
  (function (T2) {
@@ -19,8 +18,7 @@
      (function (m3d) {
          m3d.y = 2;
      })(m3d || (m3d = {}));
--    var r = new m3d(); // error
-+    var r = new m3d();
+@@= skipped -8, +8 lines =@@
  })(T2 || (T2 = {}));
  var T3;
  (function (T3) {
@@ -29,12 +27,7 @@
      (function (m3d) {
          m3d.y = 2;
      })(m3d || (m3d = {}));
-     var r = new m3d();
-     r.foo();
--    r.bar(); // error
--    r.y; // error
-+    r.bar();
-+    r.y;
+@@= skipped -11, +11 lines =@@
  })(T3 || (T3 = {}));
  var T4;
  (function (T4) {
@@ -43,18 +36,3 @@
      (function (m3d) {
          m3d.y = 2;
      })(m3d || (m3d = {}));
-     var r = new m3d();
-     r.foo();
--    r.bar(); // error
--    r.y; // error
-+    r.bar();
-+    r.y;
- })(T4 || (T4 = {}));
- var m3d;
- (function (m3d) {
-     m3d.y = 2;
- })(m3d || (m3d = {}));
--var r = new m3d(); // error
--var r2 = new m4d(); // error
-+var r = new m3d();
-+var r2 = new m4d();

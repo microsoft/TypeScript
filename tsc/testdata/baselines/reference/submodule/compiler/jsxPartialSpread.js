@@ -15,6 +15,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Repro = Repro;
+/// <reference path="react16.d.ts" />
 const Select = (p) => <p></p>;
 function Repro({ SelectProps = {} }) {
     return (<Select value={'test'} {...SelectProps}/>);

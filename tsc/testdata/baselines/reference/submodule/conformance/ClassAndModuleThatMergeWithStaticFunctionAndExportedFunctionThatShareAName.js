@@ -32,10 +32,10 @@ class Point {
         this.x = x;
         this.y = y;
     }
-    static Origin() { return { x: 0, y: 0 }; }
+    static Origin() { return { x: 0, y: 0 }; } // unexpected error here bug 840246
 }
 (function (Point) {
-    function Origin() { return null; }
+    function Origin() { return null; } //expected duplicate identifier error
     Point.Origin = Origin;
 })(Point || (Point = {}));
 var A;
@@ -47,11 +47,11 @@ var A;
             this.x = x;
             this.y = y;
         }
-        static Origin() { return { x: 0, y: 0 }; }
+        static Origin() { return { x: 0, y: 0 }; } // unexpected error here bug 840246
     }
     A.Point = Point;
     (function (Point) {
-        function Origin() { return ""; }
+        function Origin() { return ""; } //expected duplicate identifier error
         Point.Origin = Origin;
     })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));

@@ -54,26 +54,25 @@
 -    _a = C;
 -    C._ = [
 -        (function () {
--            var Reflect; // collision (es2015-es2021 only)
--            _super.w.call(_a);
 +class C extends B {
 +    static _ = [
 +        (() => {
-+            var Reflect;
+             var Reflect; // collision (es2015-es2021 only)
+-            _super.w.call(_a);
 +            super.w();
          })(),
 -        (function () {
 -            var Reflect = { Reflect: null }.Reflect; // collision (es2015-es2021 only)
 -            _super.w.call(_a);
 +        (() => {
-+            var { Reflect } = { Reflect: null };
++            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 +            super.w();
          })(),
 -        (function () {
 -            var Reflect = [null][0]; // collision (es2015-es2021 only)
 -            _super.w.call(_a);
 +        (() => {
-+            var [Reflect] = [null];
++            var [Reflect] = [null]; // collision (es2015-es2021 only)
 +            super.w();
          })(),
 -        (function () {
@@ -85,14 +84,13 @@
 -            _super.w.call(_a);
 +        (() => {
 +            class Reflect {
-+            }
++            } // collision (es2015-es2021 only)
 +            super.w();
          })(),
 -        (function () {
--            function Reflect() { } // collision (es2015-es2021 only)
--            _super.w.call(_a);
 +        (() => {
-+            function Reflect() { }
+             function Reflect() { } // collision (es2015-es2021 only)
+-            _super.w.call(_a);
 +            super.w();
          })(),
 -        (function () {
@@ -100,9 +98,8 @@
 +        (() => {
 +            let Reflect;
              (function (Reflect) {
--            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+             })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -            _super.w.call(_a);
-+            })(Reflect || (Reflect = {}));
 +            super.w();
          })(),
 -        (function () {
@@ -110,7 +107,7 @@
 +        (() => {
 +            let Reflect;
 +            (function (Reflect) {
-+            })(Reflect || (Reflect = {}));
++            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +            super.w();
          })(),
 -        (function () {
@@ -119,10 +116,9 @@
 +            super.w();
          })(),
 -        (function () {
--            ; // no collision
--            _super.w.call(_a);
 +        (() => {
-+            ;
+             ; // no collision
+-            _super.w.call(_a);
 +            super.w();
          })(),
 -        (function () {
@@ -134,14 +130,13 @@
 -            _super.w.call(_a);
 +        (() => {
 +            (class Reflect {
-+            });
++            }); // no collision
 +            super.w();
          })(),
 -        (function () {
--            (function Reflect() { }); // no collision
--            _super.w.call(_a);
 +        (() => {
-+            (function Reflect() { });
+             (function Reflect() { }); // no collision
+-            _super.w.call(_a);
 +            super.w();
          })(),
      ];
@@ -154,7 +149,16 @@
 -        _super.w.call(_a);
 -    })();
 -    (function () {
--        var Reflect; // collision (es2015-es2021 only)
++    static {
++        var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
++        super.w();
++    }
++    static {
++        var [Reflect] = [null]; // collision (es2015-es2021 only)
++        super.w();
++    }
++    static {
+         var Reflect; // collision (es2015-es2021 only)
 -        _super.w.call(_a);
 -    })();
 -    (function () {
@@ -166,35 +170,25 @@
 -        _super.w.call(_a);
 -    })();
 -    (function () {
--        function Reflect() { } // collision (es2015-es2021 only)
--        _super.w.call(_a);
--    })();
--    (function () {
-+    static {
-+        var { Reflect } = { Reflect: null };
-+        super.w();
-+    }
-+    static {
-+        var [Reflect] = [null];
-+        super.w();
-+    }
-+    static {
-         var Reflect;
 +        super.w();
 +    }
 +    static {
 +        class Reflect {
-+        }
++        } // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {
-+        function Reflect() { }
+         function Reflect() { } // collision (es2015-es2021 only)
+-        _super.w.call(_a);
+-    })();
+-    (function () {
+-        var Reflect;
 +        super.w();
 +    }
 +    static {
 +        let Reflect;
          (function (Reflect) {
--        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -        _super.w.call(_a);
 -    })();
 -    (function () {
@@ -215,18 +209,12 @@
 -        _super.w.call(_a);
 -    })();
 -    (function () {
--        (function Reflect() { }); // no collision
--        _super.w.call(_a);
--    })();
--    return C;
--}(B));
-+        })(Reflect || (Reflect = {}));
 +        super.w();
 +    }
 +    static {
 +        let Reflect;
 +        (function (Reflect) {
-+        })(Reflect || (Reflect = {}));
++        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {
@@ -237,11 +225,15 @@
 +    }
 +    static {
 +        (class Reflect {
-+        });
++        }); // no collision
 +        super.w();
 +    }
 +    static {
-+        (function Reflect() { });
+         (function Reflect() { }); // no collision
+-        _super.w.call(_a);
+-    })();
+-    return C;
+-}(B));
 +        super.w();
 +    }
 +}
@@ -263,7 +255,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--var Reflect = null; // collision (es2015-es2021 only)
+ var Reflect = null; // collision (es2015-es2021 only)
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -274,7 +266,6 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+var Reflect = null;
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -307,7 +298,7 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+var { Reflect } = { Reflect: null };
++var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -340,7 +331,7 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+var [Reflect] = [null];
++var [Reflect] = [null]; // collision (es2015-es2021 only)
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -364,7 +355,7 @@
 -var _a;
 -var _this = this;
  Object.defineProperty(exports, "__esModule", { value: true });
--var Reflect = null; // collision (es2015-es2021 only)
+ var Reflect = null; // collision (es2015-es2021 only)
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -376,7 +367,6 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+var Reflect = null;
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -412,7 +402,7 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+var { Reflect } = { Reflect: null };
++var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -448,7 +438,7 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+var [Reflect] = [null];
++var [Reflect] = [null]; // collision (es2015-es2021 only)
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -486,7 +476,7 @@
 -    return C;
 -}(B));
 +class Reflect {
-+}
++} // collision (es2015-es2021 only)
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -527,7 +517,7 @@
 -    _super.w.call(_a);
 -})();
 +class Reflect {
-+}
++} // collision (es2015-es2021 only)
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -549,7 +539,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--function Reflect() { } // collision (es2015-es2021 only)
+ function Reflect() { } // collision (es2015-es2021 only)
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -560,7 +550,6 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+function Reflect() { }
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -584,7 +573,7 @@
 -var _a;
 -var _this = this;
  Object.defineProperty(exports, "__esModule", { value: true });
--function Reflect() { } // collision (es2015-es2021 only)
+ function Reflect() { } // collision (es2015-es2021 only)
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -596,7 +585,6 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+function Reflect() { }
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -685,7 +673,7 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  var Reflect;
  (function (Reflect) {
--})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+ })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -696,7 +684,6 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+})(Reflect || (Reflect = {}));
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -722,7 +709,7 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  var Reflect;
  (function (Reflect) {
--})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+ })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -734,7 +721,6 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+})(Reflect || (Reflect = {}));
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -768,7 +754,7 @@
 -}(B));
 +var Reflect;
 +(function (Reflect) {
-+})(Reflect || (Reflect = {}));
++})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -805,7 +791,7 @@
 -})();
 +var Reflect;
 +(function (Reflect) {
-+})(Reflect || (Reflect = {}));
++})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -1412,7 +1398,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--; // no collision
+ ; // no collision
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -1423,7 +1409,6 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+;
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -1447,7 +1432,7 @@
 -var _a;
 -var _this = this;
  Object.defineProperty(exports, "__esModule", { value: true });
--; // no collision
+ ; // no collision
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -1459,7 +1444,6 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+;
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -1481,7 +1465,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--; // no collision
+ ; // no collision
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -1492,7 +1476,6 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+;
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -1516,7 +1499,7 @@
 -var _a;
 -var _this = this;
  Object.defineProperty(exports, "__esModule", { value: true });
--; // no collision
+ ; // no collision
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -1528,7 +1511,6 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+;
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -1566,7 +1548,7 @@
 -    return C;
 -}(B));
 +(class Reflect {
-+});
++}); // no collision
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -1607,7 +1589,7 @@
 -    _super.w.call(_a);
 -})();
 +(class Reflect {
-+});
++}); // no collision
 +class C extends B {
 +    static { super.w(); }
 +}
@@ -1719,7 +1701,7 @@
 -    };
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
--(function Reflect() { }); // no collision
+ (function Reflect() { }); // no collision
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -1730,7 +1712,6 @@
 -    C._ = _super.w.call(_a);
 -    return C;
 -}(B));
-+(function Reflect() { });
 +class C extends B {
 +    static _ = super.w();
 +}
@@ -1754,7 +1735,7 @@
 -var _a;
 -var _this = this;
  Object.defineProperty(exports, "__esModule", { value: true });
--(function Reflect() { }); // no collision
+ (function Reflect() { }); // no collision
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -1766,7 +1747,6 @@
 -(function () {
 -    _super.w.call(_a);
 -})();
-+(function Reflect() { });
 +class C extends B {
 +    static { super.w(); }
 +}

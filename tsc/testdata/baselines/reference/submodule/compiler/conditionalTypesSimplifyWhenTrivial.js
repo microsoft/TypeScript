@@ -98,4 +98,4 @@ function fn12(x) {
     var y = x;
     x = y;
 }
-const zee = z;
+const zee = z; // since x is `any`, `x extends null | undefined` should be both true and false - and thus yield `any` 

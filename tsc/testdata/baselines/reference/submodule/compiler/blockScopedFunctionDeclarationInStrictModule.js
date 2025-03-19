@@ -12,6 +12,6 @@ export = foo; // not ok
 "use strict";
 if (true) {
     function foo() { }
-    foo();
+    foo(); // ok
 }
 module.exports = foo;

@@ -47,6 +47,7 @@ class E {
 
 
 //// [accessibilityModifiers.js]
+// No errors
 class C {
     static privateProperty;
     static privateMethod() { }
@@ -61,6 +62,7 @@ class C {
     static get publicGetter() { return 0; }
     static set publicSetter(a) { }
 }
+// Errors, accessibility modifiers must precede static
 class D {
     static privateProperty;
     static privateMethod() { }
@@ -75,6 +77,7 @@ class D {
     static get publicGetter() { return 0; }
     static set publicSetter(a) { }
 }
+// Errors, multiple accessibility modifier
 class E {
     property;
     method() { }

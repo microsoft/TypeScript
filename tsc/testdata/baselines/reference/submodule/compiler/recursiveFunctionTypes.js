@@ -48,26 +48,26 @@ f7(); // ok
 
 //// [recursiveFunctionTypes.js]
 function fn() { return 1; }
-var x = fn;
-var y = fn;
+var x = fn; // error
+var y = fn; // ok
 var f;
 var g;
 function f1(d) { }
 function f2() { }
 function g2() { }
 function f3() { return f3; }
-var a = f3;
+var a = f3; // error
 class C {
     static g(t) { }
 }
-C.g(3);
+C.g(3); // error
 var f4;
-f4 = 3;
+f4 = 3; // error
 function f5() { return f5; }
 function f6(a) { return f6; }
-f6("", 3);
-f6("");
-f6();
-f7("", 3);
-f7("");
-f7();
+f6("", 3); // error (arity mismatch)
+f6(""); // ok (function takes an any param)
+f6(); // ok
+f7("", 3); // error (arity mismatch)
+f7(""); // ok (function takes an any param)
+f7(); // ok

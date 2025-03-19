@@ -1,8 +1,0 @@
---- old.tsxErrorRecovery1.js
-+++ new.tsxErrorRecovery1.js
-@@= skipped -13, +13 lines =@@
- function foo() {
-     var x = <div>  {} </div>;
- }
--// Shouldn't see any errors down here
- var y = { a: 1 };

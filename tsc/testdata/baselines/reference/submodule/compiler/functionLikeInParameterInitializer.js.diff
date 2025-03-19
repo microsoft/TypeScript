@@ -1,31 +1,30 @@
 --- old.functionLikeInParameterInitializer.js
 +++ new.functionLikeInParameterInitializer.js
-@@= skipped -27, +27 lines =@@
- exports.baz1 = baz1;
+@@= skipped -28, +28 lines =@@
  exports.baz2 = baz2;
  exports.baz3 = baz3;
--// error
+ // error
 -function bar(func) {
 -    if (func === void 0) { func = function () { return foo; }; }
 -    var foo = "in";
 +function bar(func = () => foo) {
 +    let foo = "in";
  }
--// error
+ // error
 -function baz1(func) {
 -    if (func === void 0) { func = { f: function () { return foo; } }; }
 -    var foo = "in";
 +function baz1(func = { f() { return foo; } }) {
 +    let foo = "in";
  }
--// error
+ // error
 -function baz2(func) {
 -    if (func === void 0) { func = function () { return foo; }; }
 -    var foo = "in";
 +function baz2(func = function () { return foo; }) {
 +    let foo = "in";
  }
--// error
+ // error
 -function baz3(func) {
 -    if (func === void 0) { func = /** @class */ (function () {
 -        function class_1() {

@@ -10,4 +10,4 @@
 -    return foo;
 -}()); // Legal, because module is ambient
 +class foo {
-+}
++} // Legal, because module is ambient

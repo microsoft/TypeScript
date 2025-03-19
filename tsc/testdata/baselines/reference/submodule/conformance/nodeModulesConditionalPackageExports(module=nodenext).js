@@ -123,6 +123,7 @@ export const cjsSource = true;
 }
 
 //// [index.mjs]
+// esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
@@ -163,6 +164,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// cjs format file
 const cjs = __importStar(require("package/cjs"));
 const mjs = __importStar(require("package/mjs"));
 const type = __importStar(require("package"));
@@ -178,6 +180,7 @@ mjsi.cjsSource;
 typei.implicitCjsSource;
 ts.cjsSource;
 //// [index.js]
+// esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";

@@ -33,6 +33,7 @@ async function fn(
 
 //// [operationsAvailableOnPromisedType.js]
 async function fn(a, b, c, d, e, f, g) {
+    // All errors
     a | b;
     b | a;
     a + b;

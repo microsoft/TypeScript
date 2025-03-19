@@ -34,6 +34,7 @@ class C {
         this.#x = x;
     }
     static {
+        // getX has privileged access to #x
         getX = (obj) => obj.#x;
         getY = (obj) => obj.#y;
     }
@@ -42,6 +43,7 @@ let getY;
 class D {
     #y = 1;
     static {
+        // getY has privileged access to y
         getX = (obj) => obj.#x;
         getY = (obj) => obj.#y;
     }

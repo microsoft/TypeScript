@@ -48,17 +48,22 @@ function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: 
 
 //// [objectSpreadStrictNull.js]
 function f(definiteBoolean, definiteString, optionalString, optionalNumber, undefinedString, undefinedNumber) {
+    // optional
     let optionalUnionStops = { ...definiteBoolean, ...definiteString, ...optionalNumber };
     let optionalUnionDuplicates = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
     let allOptional = { ...optionalString, ...optionalNumber };
+    // undefined
     let undefinedUnionStops = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
     let undefinedUnionDuplicates = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
     let allUndefined = { ...undefinedString, ...undefinedNumber };
     let undefinedWithOptionalContinues = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
 }
 const m = { title: "The Matrix", yearReleased: 1999 };
+// should error here because title: undefined is not assignable to string
 const x = { ...m, title: undefined };
 function g(fields, partialFields, nearlyPartialFields) {
+    // ok, undefined is stripped from optional properties when spread
     fields = { ...fields, ...partialFields };
+    // error: not optional, undefined remains
     fields = { ...fields, ...nearlyPartialFields };
 }

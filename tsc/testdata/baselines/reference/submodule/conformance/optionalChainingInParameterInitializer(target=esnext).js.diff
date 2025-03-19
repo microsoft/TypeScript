@@ -1,9 +1,0 @@
---- old.optionalChainingInParameterInitializer(target=esnext).js
-+++ new.optionalChainingInParameterInitializer(target=esnext).js
-@@= skipped -5, +5 lines =@@
- ((b = a()?.d) => {})();
- 
- //// [optionalChainingInParameterInitializer.js]
--// https://github.com/microsoft/TypeScript/issues/36295
- const a = () => undefined;
- ((b = a()?.d) => { })();

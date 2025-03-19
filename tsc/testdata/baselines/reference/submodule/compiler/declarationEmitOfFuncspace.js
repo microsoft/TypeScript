@@ -11,6 +11,7 @@ namespace ExpandoMerge {
 
 
 //// [expando.js]
+// #27032
 function ExpandoMerge(n) {
     return n;
 }

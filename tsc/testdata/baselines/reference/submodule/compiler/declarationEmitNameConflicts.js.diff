@@ -59,19 +59,7 @@
          (function (N) {
              function g() { }
              N.g = g;
-             ;
-         })(N = P.N || (P.N = {}));
-         P.im = M.P.f;
--        P.a = M.a; // emitted incorrectly as typeof f
--        P.b = M.b; // ok
--        P.c = M.c; // ok
--        P.g = M.c.g; // ok
--        P.d = M.d; // emitted incorrectly as typeof im
-+        P.a = M.a;
-+        P.b = M.b;
-+        P.c = M.c;
-+        P.g = M.c.g;
-+        P.d = M.d;
+@@= skipped -25, +22 lines =@@
      })(P = M.P || (M.P = {}));
  })(M || (exports.M = M = {}));
  (function (M) {
@@ -93,7 +81,7 @@
          (function (N) {
              function g() { }
              N.g = g;
-@@= skipped -43, +37 lines =@@
+@@= skipped -18, +15 lines =@@
          })(N = Q.N || (Q.N = {}));
      })(Q = M.Q || (M.Q = {}));
  })(M || (exports.M = M = {}));

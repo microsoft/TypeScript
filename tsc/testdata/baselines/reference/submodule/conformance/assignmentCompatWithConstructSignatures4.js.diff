@@ -1,10 +1,9 @@
 --- old.assignmentCompatWithConstructSignatures4.js
 +++ new.assignmentCompatWithConstructSignatures4.js
-@@= skipped -100, +100 lines =@@
- }
+@@= skipped -101, +101 lines =@@
  
  //// [assignmentCompatWithConstructSignatures4.js]
--// checking assignment compatibility relations for function types.
+ // checking assignment compatibility relations for function types.
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
 -        extendStatics = Object.setPrototypeOf ||
@@ -63,80 +62,14 @@
 +    }
 +    let WithNonGenericSignaturesInBaseType;
      (function (WithNonGenericSignaturesInBaseType) {
--        // target type with non-generic call signatures
+         // target type with non-generic call signatures
          var a2;
-         var a7;
-         var a8;
-@@= skipped -58, +27 lines =@@
-         var a16;
-         var a17;
-         var b2;
--        a2 = b2; // ok
--        b2 = a2; // ok
-+        a2 = b2;
-+        b2 = a2;
-         var b7;
--        a7 = b7; // ok
--        b7 = a7; // ok
-+        a7 = b7;
-+        b7 = a7;
-         var b8;
--        a8 = b8; // error, type mismatch
--        b8 = a8; // error
-+        a8 = b8;
-+        b8 = a8;
-         var b10;
--        a10 = b10; // ok
--        b10 = a10; // ok
-+        a10 = b10;
-+        b10 = a10;
-         var b11;
--        a11 = b11; // ok
--        b11 = a11; // ok
-+        a11 = b11;
-+        b11 = a11;
-         var b12;
--        a12 = b12; // ok
--        b12 = a12; // ok
-+        a12 = b12;
-+        b12 = a12;
-         var b15;
--        a15 = b15; // ok
--        b15 = a15; // ok
-+        a15 = b15;
-+        b15 = a15;
-         var b15a;
--        a15 = b15a; // ok
--        b15a = a15; // ok
-+        a15 = b15a;
-+        b15a = a15;
-         var b16;
--        a16 = b16; // error
--        b16 = a16; // error
-+        a16 = b16;
-+        b16 = a16;
-         var b17;
--        a17 = b17; // error
--        b17 = a17; // error
-+        a17 = b17;
-+        b17 = a17;
+@@= skipped -87, +58 lines =@@
+         a17 = b17; // error
+         b17 = a17; // error
      })(WithNonGenericSignaturesInBaseType || (WithNonGenericSignaturesInBaseType = {}));
 -    var WithGenericSignaturesInBaseType;
 +    let WithGenericSignaturesInBaseType;
      (function (WithGenericSignaturesInBaseType) {
--        // target type has generic call signature
+         // target type has generic call signature
          var a2;
-         var b2;
--        a2 = b2; // ok
--        b2 = a2; // ok
--        // target type has generic call signature
-+        a2 = b2;
-+        b2 = a2;
-         var a3;
-         var b3;
--        a3 = b3; // ok
--        b3 = a3; // ok
-+        a3 = b3;
-+        b3 = a3;
-     })(WithGenericSignaturesInBaseType || (WithGenericSignaturesInBaseType = {}));
- })(Errors || (Errors = {}));

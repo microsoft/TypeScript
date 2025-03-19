@@ -7,15 +7,5 @@
 -"use strict";
 -// Repro from #20196
  function call0(p) {
--    p.a("s"); // Error
-+    p.a("s");
- }
- function callN(p) {
--    p.a("s"); // Error
-+    p.a("s");
-     var a = p.a;
--    a(""); // Error
--    a("", "", "", ""); // Error
-+    a("");
-+    a("", "", "", "");
+     p.a("s"); // Error
  }

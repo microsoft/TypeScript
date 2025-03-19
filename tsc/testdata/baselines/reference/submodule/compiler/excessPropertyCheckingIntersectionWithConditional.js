@@ -8,5 +8,5 @@ const createDefaultExample = <K,>(x: K): Foo<K> & { x: K; } => {
 
 //// [excessPropertyCheckingIntersectionWithConditional.js]
 const createDefaultExample = (x) => {
-    return { a: 1, x: x };
+    return { a: 1, x: x }; // okay in TS 4.7.4, error in TS 4.8.2
 };

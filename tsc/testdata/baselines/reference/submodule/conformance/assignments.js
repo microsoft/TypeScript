@@ -34,21 +34,21 @@ interface I { }
 I = null; // Error
 
 //// [assignments.js]
-M = null;
+M = null; // Error
 class C {
 }
-C = null;
+C = null; // Error
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-E = null;
-E.A = null;
+E = null; // Error
+E.A = null; // OK per spec, Error per implementation (509581)
 function fn() { }
-fn = null;
+fn = null; // Should be error
 var v;
-v = null;
+v = null; // OK
 function fn2(p) {
-    p = null;
+    p = null; // OK
 }
-I = null;
+I = null; // Error

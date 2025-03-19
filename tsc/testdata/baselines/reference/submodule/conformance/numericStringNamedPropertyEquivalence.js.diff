@@ -1,11 +1,9 @@
 --- old.numericStringNamedPropertyEquivalence.js
 +++ new.numericStringNamedPropertyEquivalence.js
-@@= skipped -25, +25 lines =@@
- }
- 
+@@= skipped -27, +27 lines =@@
  //// [numericStringNamedPropertyEquivalence.js]
--// Each of these types has an error in it. 
--// String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
+ // Each of these types has an error in it. 
+ // String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -13,7 +11,7 @@
 -}());
 +class C {
 +    "1";
-+    "1.0";
++    "1.0"; // not a duplicate
 +    1.0;
 +}
  var a;

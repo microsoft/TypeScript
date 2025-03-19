@@ -1,9 +1,0 @@
---- old.parserKeywordsAsIdentifierName2.js
-+++ new.parserKeywordsAsIdentifierName2.js
-@@= skipped -4, +4 lines =@@
- a.public /*
- 
- //// [parserKeywordsAsIdentifierName2.js]
--// 'public' should be marked unusable, should complain on trailing /*
--a.public; /*
-+a.public;

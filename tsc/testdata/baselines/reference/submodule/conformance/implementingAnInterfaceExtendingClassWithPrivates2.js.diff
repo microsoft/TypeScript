@@ -35,6 +35,7 @@
 +    x;
 +    y;
 +}
++// another level of indirection
 +var M;
 +(function (M) {
 +    class Foo {
@@ -112,7 +113,7 @@
 +        y;
 +    }
  })(M || (M = {}));
--// two levels of privates
+ // two levels of privates
  var M2;
  (function (M2) {
 -    var Foo = /** @class */ (function () {
@@ -145,8 +146,8 @@
 +    }
      var b;
      var r1 = b.z;
--    var r2 = b.x; // error
--    var r3 = b.y; // error
+     var r2 = b.x; // error
+     var r3 = b.y; // error
 -    var Bar2 = /** @class */ (function (_super) {
 -        __extends(Bar2, _super);
 -        function Bar2() {
@@ -161,8 +162,6 @@
 -        }
 -        return Bar3;
 -    }(Foo));
-+    var r2 = b.x;
-+    var r3 = b.y;
 +    class Bar2 extends Foo {
 +        x;
 +        z;

@@ -65,6 +65,7 @@ class Bar {
     workaround(k1, k2, value) { }
 }
 const bar = new Bar();
-bar.broken("a", "1", true);
-bar.working("a", "1", true);
-bar.workaround("a", "1", true);
+// all 3 of the below should error on passing `true` for `"1"`
+bar.broken("a", "1", true); // was broken in the past - with 2nd argument incorrectly of type "1" | "2" | "3".
+bar.working("a", "1", true); // ok - true is not allowed
+bar.workaround("a", "1", true); // ok - true is not allowed

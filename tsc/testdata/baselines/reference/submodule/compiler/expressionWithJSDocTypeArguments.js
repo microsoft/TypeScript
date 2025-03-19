@@ -31,6 +31,7 @@ type TComeOnBar = typeof Bar<?string?>;
 
 
 //// [expressionWithJSDocTypeArguments.js]
+// Repro from #51802
 function foo(x) { return x; }
 class Bar {
     x;
@@ -38,6 +39,7 @@ class Bar {
         this.x = x;
     }
 }
+// Errors expected on all of the following
 const WhatFoo = foo;
 const HuhFoo = foo < string ?  >  : ;
 const NopeFoo = foo;

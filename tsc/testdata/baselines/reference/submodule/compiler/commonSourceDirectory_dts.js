@@ -12,4 +12,5 @@ export const x = y;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+/// <reference path="../lib/bar.d.ts" preserve="true" />
 exports.x = y;

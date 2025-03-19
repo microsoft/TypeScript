@@ -11,6 +11,9 @@ class WebControls {
 
 //// [commentOnClassMethod1.js]
 class WebControls {
+    /**
+     * Render a control
+     */
     createControl() {
     }
 }

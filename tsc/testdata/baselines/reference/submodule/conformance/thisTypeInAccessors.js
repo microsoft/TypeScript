@@ -66,5 +66,5 @@ class Explicit {
 }
 class Contextual {
     n = 21;
-    get x() { return this.n; }
+    get x() { return this.n; } // inside a class, so already correct
 }

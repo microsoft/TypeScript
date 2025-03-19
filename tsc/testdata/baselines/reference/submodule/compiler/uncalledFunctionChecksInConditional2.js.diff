@@ -7,22 +7,14 @@
 -var _a;
  {
 -    var perf = window.performance;
--    // Simplified
 +    const perf = window.performance;
+     // Simplified
      if (perf &&
          perf.measure &&
-         perf.clearMarks &&
-@@= skipped -12, +10 lines =@@
-         perf.clearMarks("");
-         perf.clearMeasures("");
-     }
--    // With ||
-     if (perf &&
-         perf.mark &&
-         perf.measure || !!true) {
+@@= skipped -19, +18 lines =@@
          perf.mark("");
      }
--    // With ??
+     // With ??
 -    if ((_a = (perf &&
 +    if ((perf &&
          perf.mark &&
@@ -36,7 +28,10 @@
 -    var mark = void 0;
 -    var measure = void 0;
 -    var perf_1 = inBrowser && window.performance;
--    /* istanbul ignore if */
++    let mark;
++    let measure;
++    const perf = inBrowser && window.performance;
+     /* istanbul ignore if */
 -    if (perf_1 &&
 -        perf_1.mark &&
 -        perf_1.measure &&
@@ -47,10 +42,6 @@
 -            perf_1.measure(name, startTag, endTag);
 -            perf_1.clearMarks(startTag);
 -            perf_1.clearMarks(endTag);
--            // perf.clearMeasures(name)
-+    let mark;
-+    let measure;
-+    const perf = inBrowser && window.performance;
 +    if (perf &&
 +        perf.mark &&
 +        perf.measure &&
@@ -61,6 +52,7 @@
 +            perf.measure(name, startTag, endTag);
 +            perf.clearMarks(startTag);
 +            perf.clearMarks(endTag);
+             // perf.clearMeasures(name)
          };
      }
  }
@@ -70,9 +62,7 @@
  function isMobile() {
      if (_isMobile === undefined) {
 -        var isMobileMatch = typeof window !== 'undefined' &&
--            window.matchMedia && // no error
 +        const isMobileMatch = typeof window !== 'undefined' &&
-+            window.matchMedia &&
+             window.matchMedia && // no error
              window.matchMedia('(max-device-width: 680px)');
          _isMobile = isMobileMatch && isMobileMatch.matches;
-     }

@@ -5,4 +5,4 @@
  
  //// [commentOnArrayElement10.js]
 -var array = [, , /* comment */];
-+const array = [, ,];
++const array = [, , /* comment */];

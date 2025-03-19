@@ -1,10 +1,9 @@
 --- old.ES5For-of37.js
 +++ new.ES5For-of37.js
-@@= skipped -17, +17 lines =@@
- }
+@@= skipped -18, +18 lines =@@
  
  //// [ES5For-of37.js]
--// https://github.com/microsoft/TypeScript/issues/30083
+ // https://github.com/microsoft/TypeScript/issues/30083
 -var __values = (this && this.__values) || function(o) {
 -    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
 -    if (m) return m.call(o);
@@ -31,6 +30,7 @@
 -                }
 +for (const i of [0, 1, 2, 3, 4]) {
 +    try {
++        // Ensure catch binding for the following loop is reset per iteration:
 +        for (const j of [1, 2, 3]) {
 +            if (i === 2) {
 +                throw new Error('ERR');

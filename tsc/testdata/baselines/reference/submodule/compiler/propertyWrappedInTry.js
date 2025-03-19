@@ -30,5 +30,5 @@ try {
 catch (e) { }
 baz();
 {
-    return this.bar;
+    return this.bar; // doesn't get rewritten to Foo.bar.
 }

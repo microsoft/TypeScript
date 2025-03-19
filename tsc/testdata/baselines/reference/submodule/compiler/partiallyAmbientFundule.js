@@ -7,4 +7,4 @@ declare module foo {
 function foo () { } // Legal, because module is ambient
 
 //// [partiallyAmbientFundule.js]
-function foo() { }
+function foo() { } // Legal, because module is ambient

@@ -65,46 +65,46 @@ var u: Proxy<Blah>; // ok
 //// [nonPrimitiveStrictNull.js]
 var a;
 var e;
-a.toString;
-a = undefined;
-a = null;
-a = b;
-a = c;
-a = d;
-e = a;
-a = e;
+a.toString; // error
+a = undefined; // error
+a = null; // error
+a = b; // error
+a = c; // error
+a = d; // error
+e = a; // ok
+a = e; // ok
 if (typeof b !== 'object') {
-    b.toString();
+    b.toString(); // error, never
 }
 if (typeof b === 'object') {
-    a = b;
+    a = b; // error, b is not narrowed
 }
 if (typeof d === 'object') {
-    b = d;
-    d.toString();
+    b = d; // ok
+    d.toString(); // error, object | null
 }
 else {
-    d.toString();
+    d.toString(); // error, undefined
 }
 if (d == null) {
-    d.toString();
+    d.toString(); // error, undefined | null
 }
 else {
-    d.toString();
+    d.toString(); // object
 }
 if (d === null) {
-    d.toString();
+    d.toString(); // error, null
 }
 else {
-    d.toString();
+    d.toString(); // error, object | undefined
 }
 if (typeof d === 'undefined') {
-    d.toString();
+    d.toString(); // error, undefined
 }
 else {
-    d.toString();
+    d.toString(); // error, object | null
 }
-var x;
-var y;
-var z;
-var u;
+var x; // error
+var y; // error
+var z; // error
+var u; // ok

@@ -125,35 +125,50 @@ class StrClass {
 const isNumClass = (item) => {
     return (item instanceof NumClass);
 };
+/**
+ * An example with one dimensional dictionary. Everything worked ok here, even in prior
+ * versions.
+ */
 class SimpleStore {
     entries = {};
     get(entryId) {
         let entry = this.entries[entryId];
-        entry.numExclusive();
+        entry.numExclusive(); // error - expected.
         if (isNumClass(entry)) {
-            entry.numExclusive();
+            entry.numExclusive(); // works
             return entry;
         }
-        return entry;
+        return entry; // type is Entries[EntryId] - all fine
     }
 }
+/**
+ * A an example with 2-dimensional dictionary.
+ *
+ * In v4.1 the `isNumClass` type guard doesn't work at all.
+ * In v4.2 or later, `isNumClass` type guard leaks outside its
+ * scope.
+ */
 class ComplexStore {
     slices = {};
     get(sliceId, sliceKey) {
         let item = this.slices[sliceId][sliceKey];
         if (isNumClass(item)) {
-            item.numExclusive();
+            item.numExclusive(); // works only since version 4.2
         }
         item.get();
-        return item;
+        // unfortunately, doesn't work completely.
+        // it seems like item's predicated type leaks outside the bracket...
+        return item; // type is Extract ...
     }
     get2(sliceId, sliceKey) {
         let item = this.slices[sliceId][sliceKey];
         if (isNumClass(item)) {
             return item;
         }
+        // it seems like the compiler asumes the above condition is always
+        // truthy
         item.get();
-        return item;
+        return item; // type is never
     }
 }
 function listFiles(program) {

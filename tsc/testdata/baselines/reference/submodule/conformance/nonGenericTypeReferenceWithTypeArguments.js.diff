@@ -1,10 +1,9 @@
 --- old.nonGenericTypeReferenceWithTypeArguments.js
 +++ new.nonGenericTypeReferenceWithTypeArguments.js
-@@= skipped -25, +25 lines =@@
- 
+@@= skipped -26, +26 lines =@@
  
  //// [nonGenericTypeReferenceWithTypeArguments.js]
--// Check that errors are reported for non-generic types with type arguments
+ // Check that errors are reported for non-generic types with type arguments
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
@@ -15,7 +14,7 @@
  var E;
  (function (E) {
  })(E || (E = {}));
-@@= skipped -14, +10 lines =@@
+@@= skipped -13, +10 lines =@@
  var v3;
  var v4;
  function f() {

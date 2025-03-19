@@ -25,14 +25,14 @@ class C<T> {
 function f() {
     var x;
     var y;
-    x = y;
+    x = y; // should be an error
     return x;
 }
 class C {
     f() {
         var x;
         var y;
-        x = y;
+        x = y; // should be an error
         return x;
     }
 }

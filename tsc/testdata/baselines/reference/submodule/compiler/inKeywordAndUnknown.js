@@ -54,20 +54,22 @@ function f7<T extends object>(x: T & {}) {
 
 
 //// [inKeywordAndUnknown.js]
+// Repro from #50531
 function f(x, y) {
     if (!("a" in x)) {
         return;
     }
-    x;
+    x; // {}
     if (!y) {
         return;
     }
-    y;
+    y; // {}
     if (!("a" in y)) {
         return;
     }
-    y;
+    y; // {}
 }
+// Repro from #51007
 function isHTMLTable(table) {
     return !!table && table instanceof Object && 'html' in table;
 }

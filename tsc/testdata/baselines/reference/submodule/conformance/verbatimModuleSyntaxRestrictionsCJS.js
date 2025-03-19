@@ -86,11 +86,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Values = exports.x = void 0;
-const decl_1 = __importDefault(require("./decl"));
-const esmy2 = __importStar(require("./decl"));
-const decl_2 = require("./decl");
-Promise.resolve().then(() => __importStar(require("./decl")));
-exports.x = 1;
+const decl_1 = __importDefault(require("./decl")); // error
+const esmy2 = __importStar(require("./decl")); // error
+const decl_2 = require("./decl"); // error
+Promise.resolve().then(() => __importStar(require("./decl"))); // error
+exports.x = 1; // error
 var Values;
 (function (Values) {
     Values.x = 1;
@@ -108,18 +108,18 @@ module.exports = ns;
 //// [main4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = 1;
+exports.default = 1; // error
 //// [main5.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class C {
-}
+} // error
 exports.default = C;
 //// [main6.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = I;
+exports.default = I; // error
 //// [main7.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = esmy;
+exports.default = esmy; // error

@@ -14,9 +14,3 @@
  try {
      bar = someInitThatMightFail();
  }
- catch (e) { }
- baz();
- {
--    return this.bar; // doesn't get rewritten to Foo.bar.
-+    return this.bar;
- }

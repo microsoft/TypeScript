@@ -8,7 +8,7 @@
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
 -    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 -};
--// https://github.com/microsoft/TypeScript/issues/36295
+ // https://github.com/microsoft/TypeScript/issues/36295
 -(function (b) {
 -    var _a;
 -    if (b === void 0) { b = (_a = /** @class */ (function () {

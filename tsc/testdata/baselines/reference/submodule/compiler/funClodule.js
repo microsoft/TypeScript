@@ -28,4 +28,4 @@ function foo3() { }
     foo3.x = x;
 })(foo3 || (foo3 = {}));
 class foo3 {
-}
+} // Should error

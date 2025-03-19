@@ -49,15 +49,15 @@ exports.C = C;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const b_1 = require("./b");
-let _ = new A();
-let __ = new B();
-let ___ = new b_1.C();
+let _ = new A(); // Error
+let __ = new B(); // Error
+let ___ = new b_1.C(); // Ok
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let _ = new A();
-let __ = new B();
-let ___ = new C();
+let _ = new A(); // Error
+let __ = new B(); // Error
+let ___ = new C(); // Error

@@ -19,15 +19,16 @@
      ;
 -    return Dog;
 -}());
--ca = cd; // Ok
--cd = ca; // Error
++}
+ ca = cd; // Ok
+ cd = ca; // Error
 -
 -
 -//// [varianceAnnotationValidation.d.ts]
 -interface Controller<out T> {
 -    createAnimal: () => T;
 -    run: (animal: T) => void;
- }
+-}
 -interface Animal {
 -    run(): void;
 -}
@@ -40,5 +41,3 @@
 -}
 -declare let ca: AnimalContainer<Animal>;
 -declare let cd: AnimalContainer<Dog>;
-+ca = cd;
-+cd = ca;

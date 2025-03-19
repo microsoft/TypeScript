@@ -20,8 +20,7 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var t = {
--    A: undefined, // ok
 +let t = {
-+    A: undefined,
+     A: undefined, // ok
      B: undefined,
  };

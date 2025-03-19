@@ -18,6 +18,7 @@ var r = c.foo({ length: 3, charAt: (x: number) => { '' } });
 var r2 = r('');
 
 //// [wrappedAndRecursiveConstraints3.js]
+// no errors expected
 class C {
     constructor(x) { }
     foo(x) {

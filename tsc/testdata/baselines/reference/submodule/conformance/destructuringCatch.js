@@ -49,7 +49,8 @@ try {
 catch ([{ x: [y], z }]) {
     y + z;
 }
+// Test of comment ranges. A fix to GH#11755 should update this.
 try {
 }
-catch ([a]) {
+catch ( /*Test comment ranges*/[/*a*/ a]) {
 }

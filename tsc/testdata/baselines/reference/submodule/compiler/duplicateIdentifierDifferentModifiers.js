@@ -25,9 +25,11 @@ interface C {
 
 
 //// [duplicateIdentifierDifferentModifiers.js]
+// OK
 class A {
     y;
 }
+// Not OK
 class C {
     y;
 }

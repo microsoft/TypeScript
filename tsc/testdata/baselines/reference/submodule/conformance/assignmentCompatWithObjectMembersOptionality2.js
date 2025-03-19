@@ -93,6 +93,8 @@ module SourceHasOptional {
 
 
 //// [assignmentCompatWithObjectMembersOptionality2.js]
+// M is optional and S contains no property with the same name as M
+// N is optional and T contains no property with the same name as N
 class Base {
     foo;
 }
@@ -110,6 +112,7 @@ var TargetHasOptional;
     var d;
     var e;
     var f;
+    // disallowed by weak type checking
     c = d;
     c = e;
     c = f;
@@ -119,6 +122,7 @@ var TargetHasOptional;
     b = d;
     b = e;
     b = f;
+    // ok
     c = a;
     a = c;
     b = a;
@@ -132,17 +136,17 @@ var SourceHasOptional;
     var d;
     var e;
     var f;
-    c = d;
-    c = e;
-    c = f;
-    c = a;
-    a = d;
-    a = e;
-    a = f;
-    a = c;
-    b = d;
-    b = e;
-    b = f;
-    b = a;
-    b = c;
+    c = d; // error
+    c = e; // error
+    c = f; // error
+    c = a; // ok
+    a = d; // error
+    a = e; // error
+    a = f; // error
+    a = c; // ok
+    b = d; // error
+    b = e; // error
+    b = f; // error
+    b = a; // ok
+    b = c; // ok
 })(SourceHasOptional || (SourceHasOptional = {}));

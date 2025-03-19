@@ -38,23 +38,31 @@ export const obj4 = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj4 = exports.obj3 = exports.obj2 = exports.obj1 = void 0;
+// same type accessors
 exports.obj1 = {
+    /** my awesome getter (first in source order) */
     get x() {
         return "";
     },
+    /** my awesome setter (second in source order) */
     set x(a) { },
 };
+// divergent accessors
 exports.obj2 = {
+    /** my awesome getter */
     get x() {
         return "";
     },
+    /** my awesome setter */
     set x(a) { },
 };
 exports.obj3 = {
+    /** my awesome getter */
     get x() {
         return "";
     },
 };
 exports.obj4 = {
+    /** my awesome setter */
     set x(a) { },
 };

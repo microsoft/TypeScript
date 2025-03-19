@@ -5,7 +5,8 @@
  
  //// [convertClassExpressionToFunctionFromObjectProperty1.js]
 -var foo = {};
--// properties
++const foo = {};
+ // properties
 -foo.x = /** @class */ (function () {
 -    function x() {
 -    }
@@ -16,7 +17,13 @@
 -    }
 -    return y;
 -}());
--// keywords
++foo.x = class {
++    constructor() { }
++};
++foo.y = class {
++    constructor() { }
++};
+ // keywords
 -foo.break = /** @class */ (function () {
 -    function break_1() {
 -    }
@@ -397,13 +404,6 @@
 -    }
 -    return of;
 -}());
-+const foo = {};
-+foo.x = class {
-+    constructor() { }
-+};
-+foo.y = class {
-+    constructor() { }
-+};
 +foo.break = class {
 +    constructor() { }
 +};

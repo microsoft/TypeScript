@@ -16,13 +16,13 @@ class D<T> {
 //// [superCallInConstructorWithNoBaseType.js]
 class C {
     constructor() {
-        super();
+        super(); // error
     }
 }
 class D {
     x;
     constructor(x) {
         this.x = x;
-        super();
+        super(); // error
     }
 }

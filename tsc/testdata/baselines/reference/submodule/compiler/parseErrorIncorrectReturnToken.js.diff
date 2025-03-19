@@ -1,19 +1,15 @@
 --- old.parseErrorIncorrectReturnToken.js
 +++ new.parseErrorIncorrectReturnToken.js
-@@= skipped -15, +15 lines =@@
- 
- 
+@@= skipped -17, +17 lines =@@
  //// [parseErrorIncorrectReturnToken.js]
--string; // should be => not :
--// doesn't work in non-type contexts, where the return type is optional
+ string; // should be => not :
+ // doesn't work in non-type contexts, where the return type is optional
 -var f = function (n) { return function (string) { return n.toString(); }; };
 -var o = {};
- string;
 +let f = (n) => string => n.toString();
 +let o = {
 +    m(n) { }
 +};
-+string;
+ string;
  {
      return n.toString();
- }

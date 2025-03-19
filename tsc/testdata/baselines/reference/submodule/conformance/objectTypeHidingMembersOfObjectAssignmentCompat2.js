@@ -26,16 +26,16 @@ a = o; // ok
 //// [objectTypeHidingMembersOfObjectAssignmentCompat2.js]
 var i;
 var o;
-o = i;
-i = o;
+o = i; // error
+i = o; // error
 class C {
     toString() { return 1; }
 }
 var c;
-o = c;
-c = o;
+o = c; // error
+c = o; // error
 var a = {
     toString: () => { }
 };
-o = a;
-a = o;
+o = a; // error
+a = o; // ok

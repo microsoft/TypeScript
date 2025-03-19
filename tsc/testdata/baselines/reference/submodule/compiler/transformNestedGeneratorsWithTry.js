@@ -25,16 +25,17 @@ declare module "bluebird" {
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// https://github.com/Microsoft/TypeScript/issues/11177
 const Bluebird = require("bluebird");
 async function a() {
     try {
         const b = async function b() {
             try {
-                await Bluebird.resolve();
+                await Bluebird.resolve(); // -- remove this and it compiles
             }
             catch (error) { }
         };
-        await b();
+        await b(); // -- or remove this and it compiles
     }
     catch (error) { }
 }

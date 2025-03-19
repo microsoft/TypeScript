@@ -60,14 +60,17 @@ class Qux {
         this.x = x;
     }
 }
+// b is public
 let a = Foo;
 a = Bar;
-a = Baz;
-a = Qux;
+a = Baz; // error Baz is protected
+a = Qux; // error Qux is private
+// b is protected
 let b = Baz;
 b = Foo;
 b = Bar;
-b = Qux;
+b = Qux; // error Qux is private
+// c is private
 let c = Qux;
 c = Foo;
 c = Bar;

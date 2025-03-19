@@ -12,7 +12,8 @@ let obj: { f(s: string): void } & Record<string, unknown> = {
 
 //// [typeSatisfaction_contextualTyping2.js]
 let obj = {
-    f(s) { },
+    f(s) { }, // "incorrect" implicit any on 's'
     g(s) { }
 };
+// This needs to not crash (outer node is not expression)
 ({ f(x) { } });

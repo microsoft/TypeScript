@@ -58,6 +58,7 @@ b.b(1);
 
 
 //// [callSignatureWithOptionalParameterAndInitializer.js]
+// Optional parameters cannot also have initializer expressions, these are all errors
 function foo(x = 1) { }
 var f = function foo(x = 1) { };
 var f2 = (x, y = 1) => { };

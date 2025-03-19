@@ -10,7 +10,7 @@
      switch (foo.kind) {
          case Kind.A:
 -            var myA = foo; // Should not be an error
-+            const myA = foo;
++            const myA = foo; // Should not be an error
              break;
          case Kind.B:
 -            var myB = foo;

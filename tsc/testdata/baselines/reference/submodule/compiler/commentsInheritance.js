@@ -155,6 +155,7 @@ i2_i = i3_i;
 //// [commentsInheritance.js]
 class c1 {
     i1_p1;
+    // i1_f1
     i1_f1() {
     }
     i1_l1;
@@ -162,22 +163,32 @@ class c1 {
     i1_nc_f1() {
     }
     i1_nc_l1;
+    /** c1_p1*/
     p1;
+    /** c1_f1*/
     f1() {
     }
+    /** c1_l1*/
     l1;
+    /** c1_nc_p1*/
     nc_p1;
+    /** c1_nc_f1*/
     nc_f1() {
     }
+    /** c1_nc_l1*/
     nc_l1;
 }
 var i1_i;
 var c1_i = new c1();
+// assign to interface
 i1_i = c1_i;
 class c2 {
+    /** c2 c2_p1*/
     c2_p1;
+    /** c2 c2_f1*/
     c2_f1() {
     }
+    /** c2 c2_prop*/
     get c2_prop() {
         return 10;
     }
@@ -187,9 +198,12 @@ class c2 {
     get c2_nc_prop() {
         return 10;
     }
+    /** c2 p1*/
     p1;
+    /** c2 f1*/
     f1() {
     }
+    /** c2 prop*/
     get prop() {
         return 10;
     }
@@ -199,6 +213,7 @@ class c2 {
     get nc_prop() {
         return 10;
     }
+    /** c2 constructor*/
     constructor(a) {
         this.c2_p1 = a;
     }
@@ -207,9 +222,12 @@ class c3 extends c2 {
     constructor() {
         super(10);
     }
+    /** c3 p1*/
     p1;
+    /** c3 f1*/
     f1() {
     }
+    /** c3 prop*/
     get prop() {
         return 10;
     }
@@ -222,10 +240,12 @@ class c3 extends c2 {
 }
 var c2_i = new c2(10);
 var c3_i = new c3();
+// assign
 c2_i = c3_i;
 class c4 extends c2 {
 }
 var c4_i = new c4(10);
 var i2_i;
 var i3_i;
+// assign to interface
 i2_i = i3_i;

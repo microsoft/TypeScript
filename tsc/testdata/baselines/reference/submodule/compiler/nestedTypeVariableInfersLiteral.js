@@ -27,8 +27,8 @@ const directUnionArray = direct(["z", "y"]);
 const nestedSingle = nested({ fields: "z" });
 const nestedUnionSingle = nestedUnion({ fields: "z" });
 const nestedUnionArray = nestedUnion({ fields: ["z", "y"] });
-hasZField(directUnionSingle);
-hasZField(directUnionArray);
-hasZField(nestedSingle);
-hasZField(nestedUnionSingle);
-hasZField(nestedUnionArray);
+hasZField(directUnionSingle); // ok
+hasZField(directUnionArray); // ok
+hasZField(nestedSingle); // ok
+hasZField(nestedUnionSingle); // ok
+hasZField(nestedUnionArray); // ok

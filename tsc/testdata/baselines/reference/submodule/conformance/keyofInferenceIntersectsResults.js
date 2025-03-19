@@ -14,6 +14,6 @@ const b = foo('a', 'b');    // also clean
 const c = bar('a', 'b');    // still clean
 
 //// [keyofInferenceIntersectsResults.js]
-const a = foo('a', 'b');
-const b = foo('a', 'b');
-const c = bar('a', 'b');
+const a = foo('a', 'b'); // compiles cleanly
+const b = foo('a', 'b'); // also clean
+const c = bar('a', 'b'); // still clean

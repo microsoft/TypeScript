@@ -1,10 +1,9 @@
 --- old.exponentiationOperatorWithOnlyNullValueOrUndefinedValue.js
 +++ new.exponentiationOperatorWithOnlyNullValueOrUndefinedValue.js
-@@= skipped -8, +8 lines =@@
- 
+@@= skipped -9, +9 lines =@@
  
  //// [exponentiationOperatorWithOnlyNullValueOrUndefinedValue.js]
--// operator **
+ // operator **
 -var r1 = Math.pow(null, null);
 -var r2 = Math.pow(null, undefined);
 -var r3 = Math.pow(undefined, null);

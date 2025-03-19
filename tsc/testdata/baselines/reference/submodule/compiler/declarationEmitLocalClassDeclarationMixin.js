@@ -49,6 +49,7 @@ exports.Unmixed = Unmixed;
 exports.Mixed = mixin(Unmixed);
 function Filter(ctor) {
     class FilterMixin extends ctor {
+        // other concrete methods, fields, constructor
         thing = 12;
     }
     return FilterMixin;

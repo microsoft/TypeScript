@@ -1,11 +1,6 @@
 --- old.objectLiteralShorthandPropertiesWithModule.js
 +++ new.objectLiteralShorthandPropertiesWithModule.js
-@@= skipped -16, +16 lines =@@
- 
- 
- //// [objectLiteralShorthandPropertiesWithModule.js]
--// module export
- var m;
+@@= skipped -21, +21 lines =@@
  (function (m) {
  })(m || (m = {}));
  (function (m) {

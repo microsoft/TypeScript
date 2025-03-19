@@ -1,9 +1,8 @@
 --- old.asOperatorContextualType.js
 +++ new.asOperatorContextualType.js
-@@= skipped -4, +4 lines =@@
- var x = (v => v) as (x: number) => string;
+@@= skipped -5, +5 lines =@@
  
  //// [asOperatorContextualType.js]
--// should error
+ // should error
 -var x = (function (v) { return v; });
 +var x = (v => v);

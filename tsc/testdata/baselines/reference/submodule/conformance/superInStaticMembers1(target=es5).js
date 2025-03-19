@@ -511,86 +511,86 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class C extends B {
     static _ = [
         (() => {
-            var Reflect;
+            var Reflect; // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
-            var { Reflect } = { Reflect: null };
+            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
-            var [Reflect] = [null];
+            var [Reflect] = [null]; // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
             class Reflect {
-            }
+            } // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
-            function Reflect() { }
-            super.w();
-        })(),
-        (() => {
-            let Reflect;
-            (function (Reflect) {
-            })(Reflect || (Reflect = {}));
+            function Reflect() { } // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
             let Reflect;
             (function (Reflect) {
-            })(Reflect || (Reflect = {}));
+            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+            super.w();
+        })(),
+        (() => {
+            let Reflect;
+            (function (Reflect) {
+            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
             super.w();
         })(),
         (() => {
             super.w();
         })(),
         (() => {
-            ;
+            ; // no collision
             super.w();
         })(),
         (() => {
             (class Reflect {
-            });
+            }); // no collision
             super.w();
         })(),
         (() => {
-            (function Reflect() { });
+            (function Reflect() { }); // no collision
             super.w();
         })(),
     ];
     static {
-        var { Reflect } = { Reflect: null };
+        var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
         super.w();
     }
     static {
-        var [Reflect] = [null];
+        var [Reflect] = [null]; // collision (es2015-es2021 only)
         super.w();
     }
     static {
-        var Reflect;
+        var Reflect; // collision (es2015-es2021 only)
         super.w();
     }
     static {
         class Reflect {
-        }
+        } // collision (es2015-es2021 only)
         super.w();
     }
     static {
-        function Reflect() { }
-        super.w();
-    }
-    static {
-        let Reflect;
-        (function (Reflect) {
-        })(Reflect || (Reflect = {}));
+        function Reflect() { } // collision (es2015-es2021 only)
         super.w();
     }
     static {
         let Reflect;
         (function (Reflect) {
-        })(Reflect || (Reflect = {}));
+        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+        super.w();
+    }
+    static {
+        let Reflect;
+        (function (Reflect) {
+        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
         super.w();
     }
     static {
@@ -601,53 +601,53 @@ class C extends B {
     }
     static {
         (class Reflect {
-        });
+        }); // no collision
         super.w();
     }
     static {
-        (function Reflect() { });
+        (function Reflect() { }); // no collision
         super.w();
     }
 }
 //// [varInContainingScopeStaticField1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Reflect = null;
+var Reflect = null; // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
 //// [varInContainingScopeStaticField2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var { Reflect } = { Reflect: null };
+var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
 //// [varInContainingScopeStaticField3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var [Reflect] = [null];
+var [Reflect] = [null]; // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
 //// [varInContainingScopeStaticBlock1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Reflect = null;
+var Reflect = null; // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
 //// [varInContainingScopeStaticBlock2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var { Reflect } = { Reflect: null };
+var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
 //// [varInContainingScopeStaticBlock3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var [Reflect] = [null];
+var [Reflect] = [null]; // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
@@ -655,7 +655,7 @@ class C extends B {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Reflect {
-}
+} // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
@@ -663,21 +663,21 @@ class C extends B {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Reflect {
-}
+} // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
 //// [funcDeclInContainingScopeStaticField.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function Reflect() { }
+function Reflect() { } // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
 //// [funcDeclInContainingScopeStaticBlock.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function Reflect() { }
+function Reflect() { } // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
@@ -698,7 +698,7 @@ class C extends B {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect;
 (function (Reflect) {
-})(Reflect || (Reflect = {}));
+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
@@ -707,7 +707,7 @@ class C extends B {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect;
 (function (Reflect) {
-})(Reflect || (Reflect = {}));
+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
@@ -716,7 +716,7 @@ class C extends B {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect;
 (function (Reflect) {
-})(Reflect || (Reflect = {}));
+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static _ = super.w();
 }
@@ -725,7 +725,7 @@ class C extends B {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect;
 (function (Reflect) {
-})(Reflect || (Reflect = {}));
+})(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 class C extends B {
     static { super.w(); }
 }
@@ -840,28 +840,28 @@ class C extends B {
 //// [interfaceInContainingScopeStaticField.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-;
+; // no collision
 class C extends B {
     static _ = super.w();
 }
 //// [interfaceInContainingScopeStaticBlock.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-;
+; // no collision
 class C extends B {
     static { super.w(); }
 }
 //// [uninstantiatedNamespaceInContainingScopeStaticField.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-;
+; // no collision
 class C extends B {
     static _ = super.w();
 }
 //// [uninstantiatedNamespaceInContainingScopeStaticBlock.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-;
+; // no collision
 class C extends B {
     static { super.w(); }
 }
@@ -869,7 +869,7 @@ class C extends B {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 (class Reflect {
-});
+}); // no collision
 class C extends B {
     static _ = super.w();
 }
@@ -877,7 +877,7 @@ class C extends B {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 (class Reflect {
-});
+}); // no collision
 class C extends B {
     static { super.w(); }
 }
@@ -904,14 +904,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [funcExprInContainingScopeStaticField.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-(function Reflect() { });
+(function Reflect() { }); // no collision
 class C extends B {
     static _ = super.w();
 }
 //// [funcExprInContainingScopeStaticBlock.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-(function Reflect() { });
+(function Reflect() { }); // no collision
 class C extends B {
     static { super.w(); }
 }

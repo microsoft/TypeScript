@@ -80,6 +80,7 @@ class Test1 {
     const t = new Test1();
     t.foo = 32;
     let m = t.foo;
+    // See how CFA interacts with out-of-type writes
     t.bar = 42;
     let n = t.bar;
     t.bar = false;
@@ -89,6 +90,7 @@ class Test1 {
     const t = {};
     t.foo = 32;
     let m = t.foo;
+    // See how CFA interacts with out-of-type writes
     t.bar = 42;
     let n = t.bar;
     t.bar = false;
@@ -98,6 +100,7 @@ class Test1 {
     const t = {};
     t.foo = 32;
     let m = t.foo;
+    // See how CFA interacts with out-of-type writes
     t.bar = 42;
     let n = t.bar;
     t.bar = false;

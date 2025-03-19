@@ -1,17 +1,13 @@
 --- old.commentsOnRequireStatement.js
 +++ new.commentsOnRequireStatement.js
-@@= skipped -29, +29 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.subject1 = exports.subject = void 0;
--/* blah0 */
--// blah 
--// blah 
--// blah 
+@@= skipped -33, +33 lines =@@
+ // blah 
+ // blah 
+ // blah 
 -var _0_1 = require("./0");
 +const _0_1 = require("./0");
  Object.defineProperty(exports, "subject", { enumerable: true, get: function () { return _0_1.subject; } });
--/* blah1 */
+ /* blah1 */
 -var _1_1 = require("./1");
 +const _1_1 = require("./1");
  Object.defineProperty(exports, "subject1", { enumerable: true, get: function () { return _1_1.subject1; } });

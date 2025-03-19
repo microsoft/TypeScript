@@ -40,9 +40,9 @@ class A2 {
         }
     }
 }
-new A2().#prop;
+new A2().#prop; // Error
 function foo() {
-    new A2().#prop;
+    new A2().#prop; // Error
 }
 class B2 {
     m() {

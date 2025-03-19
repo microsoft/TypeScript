@@ -15,11 +15,10 @@
      A.B = B;
      (function (B) {
          B.b = 0;
-@@= skipped -18, +16 lines =@@
- //// [index.js]
+@@= skipped -19, +17 lines =@@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
--/// <reference path="declarations.d.ts" />
+ /// <reference path="declarations.d.ts" />
 -var foobar_1 = require("foobar");
 -var X = foobar_1.default.X;
 -var foobarx_1 = require("foobarx");

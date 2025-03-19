@@ -20,7 +20,7 @@ class A {
     foo() { return 1; }
 }
 class C {
-}
+} // error
 class C2 extends A {
     foo() {
         return 1;

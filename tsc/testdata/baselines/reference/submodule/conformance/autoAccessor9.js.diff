@@ -1,16 +1,8 @@
 --- old.autoAccessor9.js
 +++ new.autoAccessor9.js
-@@= skipped -48, +48 lines =@@
- 
- 
- //// [autoAccessor9.js]
--// Auto-accessors do not use Set semantics themselves, so do not need to be transformed if there are no other
--// initializers that need to be transformed:
- class C1 {
-     accessor x = 1;
- }
--// If there are other field initializers to transform, we must transform auto-accessors so that we can preserve
--// initialization order:
+@@= skipped -56, +56 lines =@@
+ // If there are other field initializers to transform, we must transform auto-accessors so that we can preserve
+ // initialization order:
  class C2 {
 -    constructor() {
 -        this.x = 1;
@@ -24,13 +16,11 @@
 +    accessor y = 2;
 +    z = 3;
  }
--// Private field initializers also do not use Set semantics, so they do not force an auto-accessor transformation:
+ // Private field initializers also do not use Set semantics, so they do not force an auto-accessor transformation:
  class C3 {
-     #x = 1;
-     accessor y = 2;
- }
--// However, we still need to hoist private field initializers to the constructor if we need to preserve initialization
--// order:
+@@= skipped -17, +12 lines =@@
+ // However, we still need to hoist private field initializers to the constructor if we need to preserve initialization
+ // order:
  class C4 {
 -    constructor() {
 -        this.x = 1;
@@ -56,11 +46,11 @@
 +    accessor y = 2;
 +    z = 3;
  }
--// Static accessors aren't affected:
+ // Static accessors aren't affected:
  class C6 {
-     static accessor x = 1;
+@@= skipped -24, +15 lines =@@
  }
--// Static accessors aren't affected:
+ // Static accessors aren't affected:
  class C7 {
 -    static { this.x = 1; }
 +    static x = 1;

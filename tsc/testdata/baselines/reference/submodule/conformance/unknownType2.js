@@ -263,7 +263,7 @@ function notNotEquals(u: unknown)  {
 
 
 //// [unknownType2.js]
-let validate = x => (x === 'yes' || x === 'no') ? x : 'idk';
+let validate = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
 const u = undefined;
 if (u === 5) {
     const y = u.toString(10);
@@ -421,11 +421,12 @@ function switchResponseWrong(x) {
         case 'yes':
         case 'no':
         case 'maybe':
-            return x;
+            return x; // error
         default:
             throw new Error('Can you repeat the question?');
     }
 }
+// Repro from #33483
 function f2(x) {
     if (x !== undefined && typeof x !== 'string') {
         throw new Error();
@@ -445,6 +446,7 @@ function notNotEquals(u) {
     else {
         const aOrB = u;
     }
+    // equivalent to
     if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
     else {
         const aOrB = u;

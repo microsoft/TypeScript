@@ -21,8 +21,8 @@
 -    return C2;
 -}());
 +class C {
-+    static foo = this;
++    static foo = this; // ok
 +}
 +class C2 {
-+    static foo = this;
++    static foo = this; // ok
 +}

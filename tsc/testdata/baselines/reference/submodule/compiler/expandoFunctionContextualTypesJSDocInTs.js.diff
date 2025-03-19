@@ -1,10 +1,8 @@
 --- old.expandoFunctionContextualTypesJSDocInTs.js
 +++ new.expandoFunctionContextualTypesJSDocInTs.js
-@@= skipped -12, +12 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Foo = Foo;
+@@= skipped -14, +14 lines =@@
  function Foo() { }
--// This comment should have no effect; this is a TS file.
--/** @type {never} */
+ // This comment should have no effect; this is a TS file.
+ /** @type {never} */
 -Foo.bar = function () { };
 +Foo.bar = () => { };

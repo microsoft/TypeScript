@@ -1,10 +1,9 @@
 --- old.functionParameterObjectRestAndInitializers.js
 +++ new.functionParameterObjectRestAndInitializers.js
-@@= skipped -12, +12 lines =@@
- 
+@@= skipped -13, +13 lines =@@
  
  //// [functionParameterObjectRestAndInitializers.js]
--// https://github.com/microsoft/TypeScript/issues/47079
+ // https://github.com/microsoft/TypeScript/issues/47079
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};
 -    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)

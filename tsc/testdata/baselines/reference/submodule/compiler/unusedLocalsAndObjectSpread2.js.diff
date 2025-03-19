@@ -20,7 +20,9 @@
 -var children = props.children, // here!
 -_a = props.active, // here!
 -rest = __rest(props, ["children", "active"]);
-+const { children, active: _a, ...rest } = props;
++const { children, // here!
++active: _a, // here!
++...rest } = props;
  function foo() {
 -    var children = props.children, _a = props.active, rest = __rest(props, ["children", "active"]);
 +    const { children, active: _a, ...rest } = props;

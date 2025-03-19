@@ -58,5 +58,5 @@ var endOfIdent1 = <a:attr {..."value"}/>;
 var endOfIdent2 = <a attr:={"value"}/>;
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
 var beginOfIdent2 = <a:attr {..."value"}/>;
-var upcaseComponent1 = <ns:Upcase />;
-var upcaseComponent2 = <Upcase:element />;
+var upcaseComponent1 = <ns:Upcase />; // Parsed as intrinsic
+var upcaseComponent2 = <Upcase:element />; // Parsed as instrinsic

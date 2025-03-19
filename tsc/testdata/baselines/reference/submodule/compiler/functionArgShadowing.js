@@ -25,7 +25,7 @@ class B {
 }
 function foo(x) {
     var x = new B();
-    x.bar();
+    x.bar(); // the property bar does not exist on a value of type A
 }
 class C {
     p;

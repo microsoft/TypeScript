@@ -6,12 +6,12 @@
  
 +//// [typescript.js]
  //// [parserRealSource3.js]
--// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
--// See LICENSE.txt in the project root for complete license information.
--///<reference path='typescript.ts' />
+ // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+ // See LICENSE.txt in the project root for complete license information.
+@@= skipped -7, +8 lines =@@
  var TypeScript;
  (function (TypeScript) {
--    // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
+     // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
 -    var NodeType;
 +    let NodeType;
      (function (NodeType) {

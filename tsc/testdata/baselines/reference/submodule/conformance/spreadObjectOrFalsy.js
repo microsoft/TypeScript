@@ -55,13 +55,13 @@ class Foo<T extends string> {
 
 //// [spreadObjectOrFalsy.js]
 function f1(a) {
-    return { ...a };
+    return { ...a }; // Error
 }
 function f2(a) {
     return { ...a };
 }
 function f3(a) {
-    return { ...a };
+    return { ...a }; // Error
 }
 function f4(a) {
     return { ...a };
@@ -72,6 +72,7 @@ function f5(a) {
 function f6(a) {
     return { ...a };
 }
+// Repro from #46976
 function g1(a) {
     const { z } = a;
     return {

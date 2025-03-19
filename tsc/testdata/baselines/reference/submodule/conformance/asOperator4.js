@@ -20,5 +20,6 @@ function foo() { }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const foo_1 = require("./foo");
+// These should emit identically
 foo_1.foo;
 foo_1.foo;

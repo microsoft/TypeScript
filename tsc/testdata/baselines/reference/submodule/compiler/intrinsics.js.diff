@@ -1,11 +1,7 @@
 --- old.intrinsics.js
 +++ new.intrinsics.js
-@@= skipped -16, +16 lines =@@
- var foo: (__proto__: number) => void;
- 
- //// [intrinsics.js]
--var hasOwnProperty; // Error
-+var hasOwnProperty;
+@@= skipped -19, +19 lines =@@
+ var hasOwnProperty; // Error
  var m1;
  (function (m1) {
 -    var C = /** @class */ (function () {
@@ -16,8 +12,7 @@
 +    class C {
 +    }
  })(m1 || (m1 = {}));
--__proto__ = 0; // Error, __proto__ not defined
-+__proto__ = 0;
+ __proto__ = 0; // Error, __proto__ not defined
  m1.__proto__ = 0;
 -var Foo = /** @class */ (function () {
 -    function Foo() {

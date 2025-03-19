@@ -1,10 +1,9 @@
 --- old.objectTypesWithPredefinedTypesAsName.js
 +++ new.objectTypesWithPredefinedTypesAsName.js
-@@= skipped -15, +15 lines =@@
- 
+@@= skipped -16, +16 lines =@@
  
  //// [objectTypesWithPredefinedTypesAsName.js]
--// it is an error to use a predefined type as a type name
+ // it is an error to use a predefined type as a type name
 -var any = /** @class */ (function () {
 -    function any() {
 -    }
@@ -37,6 +36,6 @@
 +class boolean {
 +}
 +class bool {
-+}
++} // not a predefined type anymore
 +class string {
 +}

@@ -9,11 +9,3 @@
      x.a;
      x.b;
      x.a = 1;
-@@= skipped -12, +12 lines =@@
-     x.a;
-     x.b;
-     x;
--    delete x; // No effect
-+    delete x;
-     x;
- }

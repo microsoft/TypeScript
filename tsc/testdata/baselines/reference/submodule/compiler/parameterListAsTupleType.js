@@ -31,8 +31,8 @@ function foo(a, b) {
     return true;
 }
 const x = (a) => 5;
-const a = ['should-not-work'];
-function t(...args) { }
+const a = ['should-not-work']; // works, but shouldn't
+function t(...args) { } // should work
 class C {
     constructor(a, b) {
     }

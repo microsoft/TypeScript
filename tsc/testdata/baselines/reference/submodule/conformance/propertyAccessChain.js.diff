@@ -12,17 +12,17 @@
 -(_c = (_b = o4.b) === null || _b === void 0 ? void 0 : _b.c.d) === null || _c === void 0 ? void 0 : _c.e;
 -(_e = (_d = o5.b) === null || _d === void 0 ? void 0 : _d.call(o5).c.d) === null || _e === void 0 ? void 0 : _e.e;
 -(_f = o6()) === null || _f === void 0 ? void 0 : _f.x;
--// GH#34109
--(o1 === null || o1 === void 0 ? void 0 : o1.b) ? 1 : 0;
--// GH#36031
--o2 === null || o2 === void 0 ? void 0 : o2.b.c;
--o2 === null || o2 === void 0 ? void 0 : o2.b.c;
 +o1?.b;
 +o2?.b.c;
 +o3.b?.c;
 +o4.b?.c.d?.e;
 +o5.b?.().c.d?.e;
 +o6()?.x;
+ // GH#34109
+-(o1 === null || o1 === void 0 ? void 0 : o1.b) ? 1 : 0;
 +o1?.b ? 1 : 0;
+ // GH#36031
+-o2 === null || o2 === void 0 ? void 0 : o2.b.c;
+-o2 === null || o2 === void 0 ? void 0 : o2.b.c;
 +o2?.b.c;
 +o2?.b.c;

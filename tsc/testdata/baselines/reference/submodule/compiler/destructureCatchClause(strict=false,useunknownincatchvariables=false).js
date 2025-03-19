@@ -39,6 +39,7 @@ try {} catch ({ a: { b: { c: { x }} }}: unknown) { x }
 
 
 //// [destructureCatchClause.js]
+// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
 try { }
 catch ({ x }) {
     x;

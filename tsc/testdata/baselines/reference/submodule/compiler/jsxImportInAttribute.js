@@ -16,6 +16,7 @@ let x = Test; // emit test_1.default
 //// [consumer.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="component.d.ts" />
 const Test_1 = require("Test");
-let x = Test_1.default;
-<anything attr={Test_1.default}/>;
+let x = Test_1.default; // emit test_1.default
+<anything attr={Test_1.default}/>; // ?

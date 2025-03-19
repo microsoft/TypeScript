@@ -32,11 +32,23 @@ class Hola {
 
 
 //// [test1.js]
+/*! Copyright 2015 MyCompany Inc. */
+/**
+ * Hello class
+ */
 class Hello {
 }
 //// [test2.js]
+/* A comment at the top of the file. */
+/**
+ * Hi class
+ */
 class Hi {
 }
 //// [test3.js]
+// A one-line comment at the top of the file.
+/**
+ * Hola class
+ */
 class Hola {
 }

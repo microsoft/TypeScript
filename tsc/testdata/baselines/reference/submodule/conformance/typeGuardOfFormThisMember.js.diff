@@ -19,7 +19,7 @@
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 -    };
 -})();
--// There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+ // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
  var Test;
  (function (Test) {
 -    var FileSystemObject = /** @class */ (function () {
@@ -31,6 +31,7 @@
 +            return this instanceof File;
 +        }
 +        set isFile(param) {
++            // noop
 +        }
 +        get isDirectory() {
 +            return this instanceof Directory;
@@ -97,7 +98,7 @@
      if (file.isFile) {
          file.content;
          if (file.isNetworked) {
-@@= skipped -78, +49 lines =@@
+@@= skipped -78, +51 lines =@@
      else if (file.isNetworked) {
          file.host;
      }

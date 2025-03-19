@@ -27,6 +27,7 @@
 
 
 //// [divergentAccessors1.js]
+// Accessors in interfaces/types
 {
     const ihgs = null;
     ihgs.foo = "32";

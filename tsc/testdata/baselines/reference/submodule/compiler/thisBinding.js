@@ -29,8 +29,8 @@ var M;
     class C {
         x = 0;
         f(x) {
-            x.e;
-            x.z;
+            x.e; // e not found
+            x.z; // ok 
         }
         constructor() {
             ({ z: 10, f: this.f }).f(({}));

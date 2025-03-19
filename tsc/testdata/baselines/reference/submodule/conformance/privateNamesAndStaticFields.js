@@ -30,8 +30,8 @@ class A {
     static #bar;
     constructor() {
         A.#foo = 3;
-        B.#foo;
-        B.#bar;
+        B.#foo; // Error
+        B.#bar; // Error
     }
 }
 class B extends A {
@@ -41,5 +41,7 @@ class B extends A {
         B.#foo = "some string";
     }
 }
+// We currently filter out static private identifier fields in `getUnmatchedProperties`.
+// We will need a more robust solution when we support static fields
 const willErrorSomeDay = class {
-};
+}; // OK for now

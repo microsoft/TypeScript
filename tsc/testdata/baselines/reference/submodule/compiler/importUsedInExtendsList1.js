@@ -22,6 +22,7 @@ exports.Super = Super;
 //// [importUsedInExtendsList1_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='importUsedInExtendsList1_require.ts'/>
 const foo = require("./importUsedInExtendsList1_require");
 class Sub extends foo.Super {
 }

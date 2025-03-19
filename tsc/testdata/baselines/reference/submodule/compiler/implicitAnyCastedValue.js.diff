@@ -1,25 +1,18 @@
 --- old.implicitAnyCastedValue.js
 +++ new.implicitAnyCastedValue.js
-@@= skipped -81, +81 lines =@@
- 
- //// [implicitAnyCastedValue.js]
- var x = function () {
--    return 0; // this should not be an error
-+    return 0;
- };
+@@= skipped -86, +86 lines =@@
  function foo() {
--    return "hello world"; // this should not be an error
-+    return "hello world";
+     return "hello world"; // this should not be an error
  }
 -var C = /** @class */ (function () {
 -    function C() {
 -        this.bar = null; // this should be an error
 -        this.foo = undefined; // this should be an error
 +class C {
-+    bar = null;
-+    foo = undefined;
++    bar = null; // this should be an error
++    foo = undefined; // this should be an error
 +    get tempVar() {
-+        return 0;
++        return 0; // this should not be an error
      }
 -    Object.defineProperty(C.prototype, "tempVar", {
 -        get: function () {
@@ -33,7 +26,9 @@
          return this.bar;
 -    };
 -    C.prototype.returnFooWithCase = function () {
--        return this.foo; // this should not be an error
++    }
++    returnFooWithCase() {
+         return this.foo; // this should not be an error
 -    };
 -    return C;
 -}());
@@ -57,42 +52,16 @@
 -    });
 -    return C1;
 -}());
-+    returnFooWithCase() {
-+        return this.foo;
-+    }
 +}
 +class C1 {
-+    getValue = null;
++    getValue = null; // this should be an error
 +    get castedGet() {
-+        return this.getValue;
++        return this.getValue; // this should not be an error
 +    }
 +    get notCastedGet() {
-+        return this.getValue;
++        return this.getValue; // this should not be an error
 +    }
 +}
  function castedNull() {
--    return null; // this should not be an error
-+    return null;
+     return null; // this should not be an error
  }
- function notCastedNull() {
--    return null; // this should be an error
-+    return null;
- }
- function returnTypeBar() {
--    return null; // this should not be an error
-+    return null;
- }
- function undefinedBar() {
--    return undefined; // this should not be an error
-+    return undefined;
- }
- function multipleRets1(x) {
-     if (x) {
-@@= skipped -76, +58 lines =@@
-         return undefined;
-     }
- }
--// this should not be an error
- var bar1 = null;
- var bar2 = undefined;
- var bar3 = 0;

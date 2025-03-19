@@ -28,6 +28,7 @@ function f() {
 }
 
 //// [asyncFunctionDeclarationParameterEvaluation.js]
+// https://github.com/microsoft/TypeScript/issues/40410
 async function f1(x, y = z) { }
 async function f2({ [z]: x }) { }
 async function f3(x = z) { return async () => arguments; }

@@ -23,4 +23,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let _ = new ns.A();
+let _ = new ns.A(); // Error

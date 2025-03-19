@@ -35,6 +35,8 @@ declare let dec: any, f: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.10.js]
+// 10.2.1.3 RS: EvaluateBody
+//   Initializer : `=` AssignmentExpression
 {
     class C {
         static x = 
@@ -75,6 +77,7 @@ declare let dec: any, f: any;
         };
     }
 }
+// @ts-ignore
 {
     class C {
         static [f()] = 
@@ -83,6 +86,7 @@ declare let dec: any, f: any;
         };
     }
 }
+// __proto__ is not special in a class field
 {
     class C {
         static __proto__ = 
@@ -139,6 +143,7 @@ declare let dec: any, f: any;
         };
     }
 }
+// @ts-ignore
 {
     class C {
         static [f()] = 
@@ -147,6 +152,7 @@ declare let dec: any, f: any;
         };
     }
 }
+// __proto__ is not special in a class field
 {
     class C {
         static __proto__ = class {
@@ -163,6 +169,7 @@ declare let dec: any, f: any;
         };
     }
 }
+// ensure nested named evaluation happens when field is also transformed
 {
     class C {
         @dec

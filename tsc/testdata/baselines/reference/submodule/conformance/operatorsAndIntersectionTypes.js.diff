@@ -6,10 +6,14 @@
  }
 -var map1 = {};
 -var guid = createGuid();
--map1[guid] = 123; // Can with tagged string
++let map1 = {};
++let guid = createGuid();
+ map1[guid] = 123; // Can with tagged string
 -var map2 = {};
 -var serialNo = createSerialNo();
--map2[serialNo] = "hello"; // Can index with tagged number
++let map2 = {};
++let serialNo = createSerialNo();
+ map2[serialNo] = "hello"; // Can index with tagged number
 -var s1 = "{" + guid + "}";
 -var s2 = guid.toLowerCase();
 -var s3 = guid + guid;
@@ -21,12 +25,6 @@
 -var b2 = guid === guid;
 -var b3 = serialNo === 0;
 -var b4 = serialNo === serialNo;
-+let map1 = {};
-+let guid = createGuid();
-+map1[guid] = 123;
-+let map2 = {};
-+let serialNo = createSerialNo();
-+map2[serialNo] = "hello";
 +const s1 = "{" + guid + "}";
 +const s2 = guid.toLowerCase();
 +const s3 = guid + guid;

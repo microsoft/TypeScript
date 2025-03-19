@@ -30,26 +30,18 @@
 -    B.prototype.foo = function () { return this.bar(); };
 -    return B;
 -}());
--new B; // error
 +class A {
 +}
 +class B {
 +    foo() { return this.bar(); }
 +}
-+new B;
+ new B; // error
  var BB = B;
--var AA = BB; // error, AA is not of abstract type.
-+var AA = BB;
- new AA;
- function constructB(Factory) {
--    new Factory; // error -- Factory is of type typeof B.
-+    new Factory;
- }
- var BB = B;
--new BB; // error -- BB is of type typeof B.
-+new BB;
+ var AA = BB; // error, AA is not of abstract type.
+@@= skipped -37, +16 lines =@@
+ new BB; // error -- BB is of type typeof B.
  var x = C;
--new x; // okay -- undefined behavior at runtime
+ new x; // okay -- undefined behavior at runtime
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
@@ -90,11 +82,10 @@
 -    }
 -    return H;
 -}());
-+new x;
 +class C extends B {
-+}
++} // error -- not declared abstract
 +class D extends B {
-+}
++} // okay
 +class E extends B {
 +    bar() { return 1; }
 +}

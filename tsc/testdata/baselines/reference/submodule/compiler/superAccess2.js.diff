@@ -21,6 +21,13 @@
 -})();
 -var P = /** @class */ (function () {
 -    function P() {
+-    }
+-    P.prototype.x = function () { };
+-    P.y = function () { };
+-    return P;
+-}());
+-var Q = /** @class */ (function (_super) {
+-    __extends(Q, _super);
 +class P {
 +    x() { }
 +    static y() { }
@@ -28,18 +35,8 @@
 +class Q extends P {
 +    z;
 +    xx = super.;
-+    static yy = super.;
-+    constructor(z = super., zz = super., zzz = () => super.) {
-+        this.z = z;
-+        super();
-     }
--    P.prototype.x = function () { };
--    P.y = function () { };
--    return P;
--}());
--var Q = /** @class */ (function (_super) {
--    __extends(Q, _super);
--    // Super is not allowed in constructor args
++    static yy = super.; // error for static initializer accessing super
+     // Super is not allowed in constructor args
 -    function Q(z, zz, zzz) {
 -        if (z === void 0) { z = _super.prototype.; }
 -        if (zz === void 0) { zz = _super.prototype.; }
@@ -48,9 +45,9 @@
 -        _this.z = z;
 -        _this.xx = _super.prototype.;
 -        return _this;
-+    foo(zz = super.) {
-+        super.x();
-+        super.y();
++    constructor(z = super., zz = super., zzz = () => super.) {
++        this.z = z;
++        super();
      }
 -    Q.prototype.foo = function (zz) {
 -        if (zz === void 0) { zz = _super.prototype.; }
@@ -65,8 +62,12 @@
 -    Q.yy = _super.; // error for static initializer accessing super
 -    return Q;
 -}(P));
-+    static bar(zz = super.) {
++    foo(zz = super.) {
 +        super.x();
++        super.y(); // error
++    }
++    static bar(zz = super.) {
++        super.x(); // error
 +        super.y();
 +    }
 +}

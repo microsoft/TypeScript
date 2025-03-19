@@ -20,7 +20,7 @@
 -    };
 -})();
 -var _this = this;
--// body checking
+ // body checking
 -var B = /** @class */ (function () {
 -    function B() {
 +class B {
@@ -68,7 +68,7 @@
  function explicitStructural(x) {
      return x + this.y;
  }
-@@= skipped -55, +29 lines =@@
+@@= skipped -55, +30 lines =@@
  function implicitThis(n) {
      return this.m + n + 12;
  }
@@ -78,7 +78,7 @@
 -    explicitVoid2: function () { return _this.a; }, // ok, this: any because it refers to some outer object (window?)
 -    explicitVoid1: function () { return 12; },
 -    explicitStructural: function () {
-+    explicitVoid2: () => this.a,
++    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)
 +    explicitVoid1() { return 12; },
 +    explicitStructural() {
          return this.a;
@@ -102,7 +102,7 @@
 +impl.explicitStructural = () => 12;
 +impl.explicitInterface = () => 12;
  impl.explicitThis = function () { return this.a; };
--// parameter checking
+ // parameter checking
 -var ok = { y: 12, f: explicitStructural };
 -var implicitAnyOk = { notSpecified: 12, f: implicitThis };
 +let ok = { y: 12, f: explicitStructural };
@@ -127,14 +127,14 @@
      n: 12,
      explicitThis: c.explicitThis,
      explicitC: c.explicitC,
-@@= skipped -45, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  };
  reconstructed.explicitThis(10);
  reconstructed.explicitProperty(11);
 -var explicitVoid = reconstructed.explicitVoid;
 +let explicitVoid = reconstructed.explicitVoid;
  explicitVoid(12);
--// assignment checking
+ // assignment checking
 -var unboundToSpecified = function (x) { return x + _this.y; }; // ok, this:any
 -var specifiedToSpecified = explicitStructural;
 -var anyToSpecified = function (x) { return x + 12; };
@@ -144,7 +144,7 @@
 -var specifiedLambdaToSpecified = specifiedLambda;
 -var explicitCFunction;
 -var explicitPropertyFunction;
-+let unboundToSpecified = x => x + this.y;
++let unboundToSpecified = x => x + this.y; // ok, this:any
 +let specifiedToSpecified = explicitStructural;
 +let anyToSpecified = function (x) { return x + 12; };
 +let unspecifiedLambda = x => x + 12;
@@ -158,35 +158,31 @@
  c.explicitProperty = explicitPropertyFunction;
  c.explicitProperty = function (m) { return this.n + m; };
  c.explicitProperty = reconstructed.explicitProperty;
--// lambdas are assignable to anything
+ // lambdas are assignable to anything
 -c.explicitC = function (m) { return m; };
 -c.explicitThis = function (m) { return m; };
 -c.explicitProperty = function (m) { return m; };
--// this inside lambdas refer to outer scope
--// the outer-scoped lambda at top-level is still just `any`
--c.explicitC = function (m) { return m + _this.n; };
--c.explicitThis = function (m) { return m + _this.n; };
--c.explicitProperty = function (m) { return m + _this.n; };
--//NOTE: this=C here, I guess?
 +c.explicitC = m => m;
 +c.explicitThis = m => m;
 +c.explicitProperty = m => m;
+ // this inside lambdas refer to outer scope
+ // the outer-scoped lambda at top-level is still just `any`
+-c.explicitC = function (m) { return m + _this.n; };
+-c.explicitThis = function (m) { return m + _this.n; };
+-c.explicitProperty = function (m) { return m + _this.n; };
 +c.explicitC = m => m + this.n;
 +c.explicitThis = m => m + this.n;
 +c.explicitProperty = m => m + this.n;
+ //NOTE: this=C here, I guess?
  c.explicitThis = explicitCFunction;
  c.explicitThis = function (m) { return this.n + m; };
--// this:any compatibility
+@@= skipped -38, +38 lines =@@
+ // this: superclass compatibility
  c.explicitC = function (m) { return this.n + m; };
- c.explicitProperty = function (m) { return this.n + m; };
- c.explicitThis = function (m) { return this.n + m; };
--// this: contextual typing
- c.explicitThis = function (m) { return this.n + m; };
--// this: superclass compatibility
- c.explicitC = function (m) { return this.n + m; };
--// this:void compatibility
+ // this:void compatibility
 -c.explicitVoid = function (n) { return n; };
--// class-based assignability
++c.explicitVoid = n => n;
+ // class-based assignability
 -var Base1 = /** @class */ (function () {
 -    function Base1() {
 -    }
@@ -220,15 +216,6 @@
 -var b2 = new Base2();
 -var d1 = new Derived1();
 -var d2 = new Derived2();
--d2.polymorphic = d1.polymorphic; // ok, 'x' and 'y' in { x, y }
--d1.polymorphic = d2.polymorphic; // ok, 'x' and 'y' in { x, y }
--// bivariance-allowed cases
--d1.polymorphic = b2.polymorphic; // ok, 'y' in D: { x, y }
--d2.polymorphic = d1.explicit; // ok, 'y' in { x, y }
--b1.polymorphic = d2.polymorphic; // ok, 'x' and 'y' not in Base1: { x }
--b1.explicit = d2.polymorphic; // ok, 'x' and 'y' not in Base1: { x }
--////// use this-type for construction with new ////
-+c.explicitVoid = n => n;
 +class Base1 {
 +    x;
 +    polymorphic() { return this.x; }
@@ -251,16 +238,10 @@
 +let b2 = new Base2();
 +let d1 = new Derived1();
 +let d2 = new Derived2();
-+d2.polymorphic = d1.polymorphic;
-+d1.polymorphic = d2.polymorphic;
-+d1.polymorphic = b2.polymorphic;
-+d2.polymorphic = d1.explicit;
-+b1.polymorphic = d2.polymorphic;
-+b1.explicit = d2.polymorphic;
- function InterfaceThis() {
-     this.a = 12;
- }
-@@= skipped -90, +67 lines =@@
+ d2.polymorphic = d1.polymorphic; // ok, 'x' and 'y' in { x, y }
+ d1.polymorphic = d2.polymorphic; // ok, 'x' and 'y' in { x, y }
+ // bivariance-allowed cases
+@@= skipped -52, +41 lines =@@
  function AnyThis() {
      this.x = "ok";
  }

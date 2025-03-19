@@ -1,20 +1,18 @@
 --- old.collisionArgumentsClassConstructor.js
 +++ new.collisionArgumentsClassConstructor.js
-@@= skipped -88, +88 lines =@@
- }
+@@= skipped -89, +89 lines =@@
  
  //// [collisionArgumentsClassConstructor.js]
--// Constructors
+ // Constructors
 -var c1 = /** @class */ (function () {
 -    function c1(i) {
 -        var arguments = [];
 -        for (var _i = 1; _i < arguments.length; _i++) {
 -            arguments[_i - 1] = arguments[_i];
 -        }
--        var arguments; // no error
 +class c1 {
 +    constructor(i, ...arguments) {
-+        var arguments;
+         var arguments; // no error
      }
 -    return c1;
 -}());
@@ -24,21 +22,19 @@
 -        for (var _i = 1; _i < arguments.length; _i++) {
 -            rest[_i - 1] = arguments[_i];
 -        }
--        var arguments = 10; // no error
 +}
 +class c12 {
 +    constructor(arguments, ...rest) {
-+        var arguments = 10;
+         var arguments = 10; // no error
      }
 -    return c12;
 -}());
 -var c1NoError = /** @class */ (function () {
 -    function c1NoError(arguments) {
--        var arguments = 10; // no error
 +}
 +class c1NoError {
 +    constructor(arguments) {
-+        var arguments = 10;
+         var arguments = 10; // no error
      }
 -    return c1NoError;
 -}());
@@ -48,21 +44,19 @@
 -        for (var _i = 0; _i < arguments.length; _i++) {
 -            restParameters[_i] = arguments[_i];
 -        }
--        var arguments = 10; // no error
 +}
 +class c2 {
 +    constructor(...restParameters) {
-+        var arguments = 10;
+         var arguments = 10; // no error
      }
 -    return c2;
 -}());
 -var c2NoError = /** @class */ (function () {
 -    function c2NoError() {
--        var arguments = 10; // no error
 +}
 +class c2NoError {
 +    constructor() {
-+        var arguments = 10;
+         var arguments = 10; // no error
      }
 -    return c2NoError;
 -}());
@@ -77,8 +71,7 @@
 +    arguments;
 +    constructor(arguments, ...restParameters) {
          this.arguments = arguments;
--        var arguments = 10; // no error
-+        var arguments = 10;
+         var arguments = 10; // no error
      }
 -    return c3;
 -}());
@@ -89,8 +82,7 @@
 +    arguments;
 +    constructor(arguments) {
          this.arguments = arguments;
--        var arguments = 10; // no error
-+        var arguments = 10;
+         var arguments = 10; // no error
      }
 -    return c3NoError;
 -}());
@@ -100,11 +92,10 @@
 -        for (var _i = 1; _i < arguments.length; _i++) {
 -            arguments[_i - 1] = arguments[_i];
 -        }
--        var arguments; // no error
 +}
 +class c5 {
 +    constructor(i, ...arguments) {
-+        var arguments;
+         var arguments; // no error
      }
 -    return c5;
 -}());
@@ -114,21 +105,19 @@
 -        for (var _i = 1; _i < arguments.length; _i++) {
 -            rest[_i - 1] = arguments[_i];
 -        }
--        var arguments; // no error
 +}
 +class c52 {
 +    constructor(arguments, ...rest) {
-+        var arguments;
+         var arguments; // no error
      }
 -    return c52;
 -}());
 -var c5NoError = /** @class */ (function () {
 -    function c5NoError(arguments) {
--        var arguments; // no error
 +}
 +class c5NoError {
 +    constructor(arguments) {
-+        var arguments;
+         var arguments; // no error
      }
 -    return c5NoError;
 -}());

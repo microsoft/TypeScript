@@ -38,5 +38,5 @@ class Dog {
     bark() { }
     ;
 }
-ca = cd;
-cd = ca;
+ca = cd; // Ok
+cd = ca; // Error

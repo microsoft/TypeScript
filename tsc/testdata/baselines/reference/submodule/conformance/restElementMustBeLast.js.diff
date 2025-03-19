@@ -7,5 +7,5 @@
 -var _a;
 -var _b = [1, 2, 3], x = _b[1]; // Error, rest must be last element
 -_a = [1, 2, 3], x = _a[1]; // Error, rest must be last element
-+var [...a, x] = [1, 2, 3];
-+[...a, x] = [1, 2, 3];
++var [...a, x] = [1, 2, 3]; // Error, rest must be last element
++[...a, x] = [1, 2, 3]; // Error, rest must be last element

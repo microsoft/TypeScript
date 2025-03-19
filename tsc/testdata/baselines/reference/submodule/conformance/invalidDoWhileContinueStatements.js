@@ -41,10 +41,14 @@ do {
 }while (true)
 
 //// [invalidDoWhileContinueStatements.js]
+// All errors
+// naked continue not allowed
 continue;
+// non-existent label
 ONE: do
     continue TWO;
 while (true);
+// continue from inside function
 TWO: do {
     var x = () => {
         continue TWO;
@@ -55,10 +59,12 @@ THREE: do {
         continue THREE;
     };
 } while (true);
+// continue forward
 do {
     continue FIVE;
     FIVE: do { } while (true);
 } while (true);
+// label on non-loop statement
 NINE: var y = 12;
 do {
     continue NINE;

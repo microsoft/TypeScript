@@ -8,13 +8,11 @@
 -// Repro from #43411
  function init(properties) {
      if (properties.foo) {
--        properties.foo; // type is { aaa: string; bbb: string; }
+         properties.foo; // type is { aaa: string; bbb: string; }
 -        for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
 -            var x = _a[_i];
--            properties.foo; // type is { aaa: string; bbb: string; }
-+        properties.foo;
 +        for (const x of [1, 2, 3]) {
-+            properties.foo;
+             properties.foo; // type is { aaa: string; bbb: string; }
          }
      }
  }

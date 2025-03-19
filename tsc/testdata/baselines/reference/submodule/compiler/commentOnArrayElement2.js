@@ -10,6 +10,8 @@ const array = [
 
 //// [commentOnArrayElement2.js]
 const array = [
-    1,
+    /* element 1*/
+    1 /* end of element 1 */,
     2
+    /* end of element 2 */
 ];

@@ -16,4 +16,4 @@ class X {
     f(a) { }
 }
 var x = new X();
-var i = x;
+var i = x; // Should not be allowed -- type of 'f' is incompatible with 'I'

@@ -23,12 +23,16 @@ export {};
 //// [preact.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
 const props = { answer: 42 };
 const a = <div key="foo" {...props}>text</div>;
 const b = <div {...props} key="bar">text</div>;
 //// [react.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
 require("./preact");
 const props2 = { answer: 42 };
 const a2 = <div key="foo" {...props2}>text</div>;

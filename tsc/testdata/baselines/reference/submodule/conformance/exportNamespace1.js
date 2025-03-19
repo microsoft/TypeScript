@@ -45,4 +45,4 @@ __exportStar(require("./b"), exports);
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new A();
+new A(); // Error

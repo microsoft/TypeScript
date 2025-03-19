@@ -1,21 +1,8 @@
 --- old.mixinAbstractClasses.2.js
 +++ new.mixinAbstractClasses.2.js
-@@= skipped -28, +28 lines =@@
- 
- //// [mixinAbstractClasses.2.js]
- function Mixin(baseClass) {
--    // error expected: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
-     class MixinClass extends baseClass {
-         mixinMethod() {
-         }
-@@= skipped -10, +9 lines =@@
- class AbstractBase {
+@@= skipped -43, +43 lines =@@
  }
- const MixedBase = Mixin(AbstractBase);
--// error expected: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
- class DerivedFromAbstract extends MixedBase {
- }
--// error expected: Cannot create an instance of an abstract class.
+ // error expected: Cannot create an instance of an abstract class.
  new MixedBase();
 -
 -

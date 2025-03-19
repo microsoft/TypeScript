@@ -38,6 +38,7 @@ type;
 }
 
 //// [index.mjs]
+// esm format file
 import * as cjs from "#cjs";
 import * as mjs from "#mjs";
 import * as type from "#type";
@@ -70,6 +71,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// esm format file
 const cjs = __importStar(require("#cjs"));
 const mjs = __importStar(require("#mjs"));
 const type = __importStar(require("#type"));
@@ -77,6 +79,7 @@ cjs;
 mjs;
 type;
 //// [index.js]
+// esm format file
 import * as cjs from "#cjs";
 import * as mjs from "#mjs";
 import * as type from "#type";

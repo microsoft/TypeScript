@@ -24,20 +24,21 @@ class D<T> {
 }
 
 //// [initializerReferencingConstructorLocals.js]
+// Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
 class C {
-    a = z;
-    b;
-    c = this.z;
-    d;
+    a = z; // error
+    b; // error
+    c = this.z; // error
+    d; // error
     constructor(x) {
         z = 1;
     }
 }
 class D {
-    a = z;
-    b;
-    c = this.z;
-    d;
+    a = z; // error
+    b; // error
+    c = this.z; // error
+    d; // error
     constructor(x) {
         z = 1;
     }

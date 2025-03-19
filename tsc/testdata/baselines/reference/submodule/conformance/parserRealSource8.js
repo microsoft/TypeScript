@@ -470,6 +470,9 @@ module TypeScript {
 
 //// [typescript.js]
 //// [parserRealSource8.js]
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     class AssignScopeContext {
@@ -539,6 +542,7 @@ var TypeScript;
             moduleDecl.name.sym = moduleDecl.mod.symbol;
         }
         var mod = moduleDecl.mod;
+        // We're likely here because of error recovery
         if (!mod) {
             return;
         }
@@ -628,7 +632,12 @@ var TypeScript;
         }
         var isStatic = hasFlag(funcDecl.fncFlags, FncFlags.Static);
         var isInnerStatic = isStatic && context.scopeChain.fnc != null;
+        // for inner static functions, use the parent's member scope, so local vars cannot be captured
         var parentScope = isInnerStatic ? context.scopeChain.fnc.type.memberScope : context.scopeChain.scope;
+        // if this is not a method, but enclosed by class, use constructor as
+        // the enclosing scope
+        // REVIEW: Some twisted logic here - this needs to be cleaned up once old classes are removed
+        //  - if it's a new class, always use the contained scope, since we initialize the constructor scope below
         if (context.scopeChain.thisType &&
             (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod))) {
             var instType = context.scopeChain.thisType;
@@ -637,6 +646,7 @@ var TypeScript;
                     parentScope = instType.constructorScope;
                 }
                 else {
+                    // use constructor scope if a method as well
                     parentScope = instType.containedScope;
                 }
             }
@@ -645,18 +655,21 @@ var TypeScript;
                     context.scopeChain.previous.scope.container.declAST &&
                     context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl &&
                     context.scopeChain.previous.scope.container.declAST.isConstructor) {
+                    // if the parent is the class constructor, use the constructor scope
                     parentScope = instType.constructorScope;
                 }
                 else if (isStatic && context.scopeChain.classType) {
                     parentScope = context.scopeChain.classType.containedScope;
                 }
                 else {
+                    // else, use the contained scope
                     parentScope = instType.containedScope;
                 }
             }
             container = instType.symbol;
         }
         else if (funcDecl.isConstructor && context.scopeChain.thisType) {
+            // sets the container to the class type's symbol (which is shared by the instance type)
             container = context.scopeChain.thisType.symbol;
         }
         if (funcDecl.type == null || hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment)) {
@@ -668,6 +681,9 @@ var TypeScript;
             var nameText = funcDecl.name ? funcDecl.name.actualText : null;
             var fgSym = null;
             if (isStatic) {
+                // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
+                // compatibility tests
                 if (outerFnc.type.members == null && container.getType().memberScope) {
                     outerFnc.type.members = container.type.memberScope.valueMembers;
                 }
@@ -681,21 +697,26 @@ var TypeScript;
                     container.declAST.nodeType == NodeType.FuncDecl &&
                     container.declAST.isConstructor &&
                     !funcDecl.isMethod()) {
-                    funcScope = context.scopeChain.thisType.constructorScope;
+                    funcScope = context.scopeChain.thisType.constructorScope; //locals;
                 }
                 else {
                     funcScope = context.scopeChain.scope;
                 }
             }
+            // REVIEW: We don't search for another sym for accessors to prevent us from
+            // accidentally coalescing function signatures with the same name (E.g., a function
+            // 'f' the outer scope and a setter 'f' in an object literal within that scope)
             if (nameText && nameText != "__missing" && !funcDecl.isAccessor()) {
                 if (isStatic) {
                     fgSym = funcScope.findLocal(nameText, false, false);
                 }
                 else {
+                    // REVIEW: This logic should be symmetric with preCollectClassTypes
                     fgSym = funcScope.findLocal(nameText, false, false);
                 }
             }
             context.typeFlow.checker.createFunctionSignature(funcDecl, container, funcScope, fgSym, fgSym == null);
+            // it's a getter or setter for a class property                     
             if (!funcDecl.accessorSymbol &&
                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&
                 container &&
@@ -705,10 +726,14 @@ var TypeScript;
             }
             funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
         }
+        // Set the symbol for functions and their overloads
         if (funcDecl.name && funcDecl.type) {
             funcDecl.name.sym = funcDecl.type.symbol;
         }
+        // Keep track of the original scope type, because target typing might override
+        // the "type" member. We need the original "Scope type" for completion list, etc.
         funcDecl.scopeType = funcDecl.type;
+        // Overloads have no scope, so bail here
         if (funcDecl.isOverload) {
             return;
         }
@@ -720,12 +745,21 @@ var TypeScript;
         var funcStaticMembers = new ScopedMembers(new DualStringHashTable(funcStaticTable, new StringHashTable()));
         var ambientFuncStaticTable = new StringHashTable();
         var ambientFuncStaticMembers = new ScopedMembers(new DualStringHashTable(ambientFuncStaticTable, new StringHashTable()));
+        // REVIEW: Is it a problem that this is being set twice for properties and constructors?
         funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
         var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
         var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
         if (funcDecl.isConstructor && context.scopeChain.thisType) {
             context.scopeChain.thisType.constructorScope = locals;
         }
+        // basically, there are two problems
+        // - Above, for new classes, we were overwriting the constructor scope with the containing scope.  This caused constructor params to be
+        // in scope everywhere
+        // - Below, we're setting the contained scope table to the same table we were overwriting the constructor scope with, which we need to
+        // fish lambda params, etc, out (see funcTable below)
+        //
+        // A good first approach to solving this would be to change addLocalsFromScope to take a scope instead of a table, and add to the
+        // constructor scope as appropriate
         funcDecl.symbols = funcTable;
         if (!funcDecl.isSpecialFn()) {
             var group = funcDecl.type;
@@ -738,6 +772,7 @@ var TypeScript;
             }
             funcDecl.enclosingFnc = context.scopeChain.fnc;
             group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType;
+            // for mapping when type checking
             var fgSym = ast.type.symbol;
             if (((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars) {
                 context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars, funcTable, false);
@@ -761,7 +796,7 @@ var TypeScript;
     function preAssignCatchScopes(ast, context) {
         var catchBlock = ast;
         if (catchBlock.param) {
-            var catchTable = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
+            var catchTable = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())); // REVIEW: Should we be allocating a public table instead of a private one?
             var catchLocals = new SymbolScopeBuilder(catchTable, null, null, null, context.scopeChain.scope, context.scopeChain.scope.container);
             catchBlock.containedScope = catchLocals;
             pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc);

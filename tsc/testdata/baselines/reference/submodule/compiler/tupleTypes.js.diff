@@ -1,68 +1,13 @@
 --- old.tupleTypes.js
 +++ new.tupleTypes.js
-@@= skipped -68, +68 lines =@@
- 
- 
- //// [tupleTypes.js]
--var v1; // Error
-+var v1;
- var v2;
- var v3;
- var v4;
- var t;
--var t0 = t[0]; // number
-+var t0 = t[0];
- var t0;
--var t1 = t[1]; // string
-+var t1 = t[1];
- var t1;
--var t2 = t[2]; // number|string
-+var t2 = t[2];
- var t2;
--t = []; // Error
--t = [1]; // Error
--t = [1, "hello"]; // Ok
--t = ["hello", 1]; // Error
--t = [1, "hello", 2]; // Error
+@@= skipped -84, +84 lines =@@
+ t = [1, "hello"]; // Ok
+ t = ["hello", 1]; // Error
+ t = [1, "hello", 2]; // Error
 -var tf = ["hello", function (x) { return x.length; }];
 -var ff1 = ff("hello", ["foo", function (x) { return x.length; }]);
-+t = [];
-+t = [1];
-+t = [1, "hello"];
-+t = ["hello", 1];
-+t = [1, "hello", 2];
 +var tf = ["hello", x => x.length];
 +var ff1 = ff("hello", ["foo", x => x.length]);
  var ff1;
  function tuple2(item0, item1) {
      return [item0, item1];
-@@= skipped -32, +32 lines =@@
- tt = tuple2(1, undefined);
- tt = [1, undefined];
- tt = [undefined, undefined];
--tt = []; // Error
-+tt = [];
- var a;
- var a1;
- var a2;
- var a3;
--a = a1; // Error
-+a = a1;
- a = a2;
--a = a3; // Error
--a1 = a2; // Error
--a1 = a3; // Error
-+a = a3;
-+a1 = a2;
-+a1 = a3;
- a3 = a1;
- a3 = a2;
--b.length = 0; // Error
--b1.length = 0; // Error
--b2.length = 0; // Error
--b3.length = 0; // Error
-+b.length = 0;
-+b1.length = 0;
-+b2.length = 0;
-+b3.length = 0;
- b4.length = 0;

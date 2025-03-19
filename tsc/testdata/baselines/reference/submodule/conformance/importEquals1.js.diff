@@ -23,21 +23,3 @@
  module.exports = types;
  //// [d.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--new types.A(); // Error
-+new types.A();
- //// [e.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--new types.A(); // Error
-+new types.A();
- //// [f.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--new types.A(); // Error
-+new types.A();
- //// [g.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--new types.A(); // Error
-+new types.A();

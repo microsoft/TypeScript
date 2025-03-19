@@ -203,6 +203,7 @@ baz(makeFoo(Enum.A), makeFoo(Enum.A));
 
 
 //// [inferFromGenericFunctionReturnTypes3.js]
+// Repros from #5487
 function truePromise() {
     return Promise.resolve(true);
 }
@@ -220,7 +221,7 @@ function wrappedBar() {
     const inferred = wrapBar(value);
     const literal = wrapBar('bar');
     const value2 = 'bar';
-    const literal2 = wrapBar(value2);
+    const literal2 = wrapBar(value2); // Error
     return wrap(value);
 }
 function wrappedBaz() {
@@ -229,11 +230,13 @@ function wrappedBaz() {
 }
 let a = [];
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
+// Repro from #11312
 let arr = [[1, 2]];
 let mappedArr = arr.map(([x, y]) => {
     return [x, y];
 });
 export { DiagnosticSeverity };
+// Repro from #13594
 var DiagnosticSeverity;
 (function (DiagnosticSeverity) {
     DiagnosticSeverity.Error = 1;
@@ -250,6 +253,7 @@ function bug() {
         };
     });
 }
+// Repro from #22870
 function objectToMap(obj) {
     return new Map(Object.keys(obj).map(key => [key, obj[key]]));
 }
@@ -289,13 +293,14 @@ const f1 = () => {
         }
     ]);
 };
-let res = foldLeft(true, (acc, t) => acc && t);
+let res = foldLeft(true, (acc, t) => acc && t); // Error
 var State;
 (function (State) {
     State[State["A"] = 0] = "A";
     State[State["B"] = 1] = "B";
 })(State || (State = {}));
-let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);
+let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); // Error
+// Repros from #31443
 var Enum;
 (function (Enum) {
     Enum[Enum["A"] = 0] = "A";

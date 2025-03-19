@@ -46,11 +46,11 @@
  }
 -var fileNames = process.argv.slice(2);
 -fileNames.forEach(function (fileName) {
--    // Parse a file
--    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
--    // delint it
 +const fileNames = process.argv.slice(2);
 +fileNames.forEach(fileName => {
-+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, true);
+     // Parse a file
+-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
++    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
+     // delint it
      delint(sourceFile);
  });

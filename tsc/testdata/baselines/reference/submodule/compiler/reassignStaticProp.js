@@ -16,5 +16,5 @@ class foo {
 //// [reassignStaticProp.js]
 class foo {
     static bar = 1;
-    static bar;
+    static bar; // errror - duplicate id
 }

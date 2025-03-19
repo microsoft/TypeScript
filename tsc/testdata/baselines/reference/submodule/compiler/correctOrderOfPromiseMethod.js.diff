@@ -81,6 +81,6 @@
 -    });
 +    return 0;
  }
--// #31179
+ // #31179
 -var expected = Promise.all(undefined);
 +const expected = Promise.all(undefined);

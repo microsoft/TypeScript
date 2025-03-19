@@ -22,14 +22,9 @@
  var x = 5;
  var r = /yo/;
  r.source;
-@@= skipped -22, +7 lines =@@
- x.toString();
- var n = 0;
- var N;
--n = N; // should not work, as 'number' has a different brand
--N = n; // should work
-+n = N;
-+N = n;
+@@= skipped -25, +10 lines =@@
+ n = N; // should not work, as 'number' has a different brand
+ N = n; // should work
  var o = {};
 -var f = function (x) { return x.length; };
 +var f = (x) => x.length;

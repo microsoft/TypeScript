@@ -33,11 +33,15 @@ class c44 {
 
 
 //// [augmentedTypesClass2.js]
+// Checking class with other things in type space not value space
+// class then interface
 class c11 {
     foo() {
         return 1;
     }
 }
+// class then class - covered
+// class then enum 
 class c33 {
     foo() {
         return 1;
@@ -47,6 +51,7 @@ class c33 {
     c33[c33["One"] = 0] = "One";
 })(c33 || (c33 = {}));
 ;
+// class then import
 class c44 {
     foo() {
         return 1;

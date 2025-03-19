@@ -146,67 +146,68 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 tt1 = [5];
 tt1 = ['abc', 5];
 tt1 = ['abc', 'def', 5];
-tt1 = ['abc', 'def', 5, 6];
+tt1 = ['abc', 'def', 5, 6]; // Error
 ft1(5);
 ft1('abc', 5);
 ft1('abc', 'def', 5);
-ft1('abc', 'def', 5, 6);
-tt2 = [0];
+ft1('abc', 'def', 5, 6); // Error
+tt2 = [0]; // Error
 tt2 = [0, 1];
-tt2 = [0, 1, 2];
+tt2 = [0, 1, 2]; // Error
 tt2 = [0, 'abc', 1];
 tt2 = [0, 'abc', 'def', 1];
-tt2 = [0, 'abc', 1, 'def'];
-tt2 = [true, 'abc', 'def', 1];
-tt2 = [0, 'abc', 'def', true];
-ft2(0);
+tt2 = [0, 'abc', 1, 'def']; // Error
+tt2 = [true, 'abc', 'def', 1]; // Error
+tt2 = [0, 'abc', 'def', true]; // Error
+ft2(0); // Error
 ft2(0, 1);
-ft2(0, 1, 2);
+ft2(0, 1, 2); // Error
 ft2(0, 'abc', 1);
 ft2(0, 'abc', 'def', 1);
-ft2(0, 'abc', 1, 'def');
-ft2(true, 'abc', 'def', 1);
-ft2(0, 'abc', 'def', true);
+ft2(0, 'abc', 1, 'def'); // Error
+ft2(true, 'abc', 'def', 1); // Error
+ft2(0, 'abc', 'def', true); // Error
 function ft3(x, y, z) {
-    x = y;
-    x = z;
-    y = x;
-    z = x;
+    x = y; // Error
+    x = z; // Error
+    y = x; // Error
+    z = x; // Error
 }
-let tt4 = tt3;
+let tt4 = tt3; // Error
+// Inference
 function pipe(...args) {
     const callback = args[args.length - 1];
     const values = args.slice(0, -1);
     callback(...values);
 }
 pipe("foo", 123, true, (a, b, c) => {
-    a;
-    b;
-    c;
+    a; // string
+    b; // number
+    c; // boolean
 });
 pipe("foo", 123, true, (...x) => {
-    x;
+    x; // [string, number, boolean]
 });
 pipe(...sa, (...x) => {
-    x;
+    x; // string[]
 });
 pipe(1, ...sa, 2, (...x) => {
-    x;
+    x; // [number, ...string[], number]
     let qq = x[x.length - 1];
     let ww = x[0];
 });
-pipe(1, 2, 3, 4);
-pipe(...sa);
-fn1([]);
-fn1([1]);
-fn1([1, 'abc']);
-fn1([1, 'abc', true]);
-fn2([]);
-fn2([1]);
-fn2([1, 'abc']);
-fn2([1, 'abc', true]);
+pipe(1, 2, 3, 4); // Error
+pipe(...sa); // Error
+fn1([]); // Error
+fn1([1]); // Error
+fn1([1, 'abc']); // [number, string]
+fn1([1, 'abc', true]); // [string, boolean]
+fn2([]); // Error
+fn2([1]); // Error
+fn2([1, 'abc']); // [number, string]
+fn2([1, 'abc', true]); // [number, boolean]
 const a1 = foo('blah1', 1);
 const b1 = foo('blah1', 'blah2', 1);
-const c1 = foo(1);
-const d1 = foo(1, 2);
-const e1 = foo('blah1', 'blah2', 1, 2, 3);
+const c1 = foo(1); // Error
+const d1 = foo(1, 2); // Error
+const e1 = foo('blah1', 'blah2', 1, 2, 3); // Error

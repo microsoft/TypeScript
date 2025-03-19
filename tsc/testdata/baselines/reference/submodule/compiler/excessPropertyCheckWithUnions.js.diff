@@ -21,20 +21,17 @@
  wrong = { tag: "A", d20: 12 };
  wrong = { tag: "D" };
 -var amb;
--// no error for ambiguous tag, even when it could satisfy both constituents at once
 +let amb;
+ // no error for ambiguous tag, even when it could satisfy both constituents at once
  amb = { tag: "A", x: "hi" };
  amb = { tag: "A", y: 12 };
- amb = { tag: "A", x: "hi", y: 12 };
--// correctly error on excess property 'extra', even when ambiguous
- amb = { tag: "A", x: "hi", extra: 12 };
- amb = { tag: "A", y: 12, extra: 12 };
--// assignability errors still work
+@@= skipped -26, +14 lines =@@
+ // assignability errors still work
  amb = { tag: "A" };
  amb = { tag: "A", z: true };
 -var over;
--// these two are still errors despite their doubled up discriminants
 +let over;
+ // these two are still errors despite their doubled up discriminants
  over = { a: 1, b: 1, first: "ok", second: "error" };
  over = { a: 1, b: 1, first: "ok", third: "error" };
 -var t2 = __assign({}, t1);
@@ -45,8 +42,7 @@
      kind: "A",
      n: {
          a: "a",
--        b: "b", // excess -- kind: "A"
-+        b: "b",
+         b: "b", // excess -- kind: "A"
      }
  };
 -var abac = {
@@ -54,15 +50,14 @@
      kind: "A",
      n: {
          a: "a",
--        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
-+        c: "c",
+         c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
      }
  };
 -var obj = {
 +const obj = {
      tag: 'button',
      type: 'submit',
--    // should have error here
+     // should have error here
      href: 'foo',
  };
  ;
@@ -70,11 +65,11 @@
 +const dataSpecification = {
      foo: "asdfsadffsd"
  };
--// Repro from #34611
+ // Repro from #34611
 -var obj1 = { a: 'abc' }; // Error
 -var obj2 = { a: 5, c: 'abc' }; // Error
-+const obj1 = { a: 'abc' };
-+const obj2 = { a: 5, c: 'abc' };
++const obj1 = { a: 'abc' }; // Error
++const obj2 = { a: 5, c: 'abc' }; // Error
  function F1(_arg) { }
  F1({
      props: {

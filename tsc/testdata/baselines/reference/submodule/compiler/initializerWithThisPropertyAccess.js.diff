@@ -28,7 +28,7 @@
 -        this.d = (new A()).a;
 +class A {
 +    a;
-+    b = this.a;
++    b = this.a; // Error
 +    c = () => this.a;
 +    d = (new A()).a;
 +    constructor() {
@@ -51,12 +51,24 @@
 -    }
 -    return C;
 -}());
--// Repro from #37979
++}
++class B extends A {
++    x = this.a;
++}
++class C {
++    a;
++    b = this.a;
++}
+ // Repro from #37979
 -var Foo = /** @class */ (function () {
 -    function Foo() {
 -        this.barProp = this.bar.prop;
--        this.bar = new Bar();
--    }
++class Foo {
++    bar;
++    barProp = this.bar.prop;
++    constructor() {
+         this.bar = new Bar();
+     }
 -    return Foo;
 -}());
 -var Bar = /** @class */ (function () {
@@ -77,29 +89,18 @@
  }
 -declare class B extends A {
 -    x: number;
-+class B extends A {
-+    x = this.a;
++class Bar {
++    prop = false;
  }
 -declare class C {
 -    a: number;
 -    b: number;
-+class C {
-+    a;
-+    b = this.a;
- }
+-}
 -declare class Foo {
 -    private bar;
 -    readonly barProp = false;
 -    constructor();
-+class Foo {
-+    bar;
-+    barProp = this.bar.prop;
-+    constructor() {
-+        this.bar = new Bar();
-+    }
- }
+-}
 -declare class Bar {
 -    readonly prop = false;
-+class Bar {
-+    prop = false;
- }
+-}

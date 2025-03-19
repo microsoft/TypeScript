@@ -502,10 +502,10 @@ function positiveIntersectionTest(x) {
     }
 }
 if ('extra' in error) {
-    error;
+    error; // Still Error
 }
 else {
-    error;
+    error; // Error
 }
 function narrowsToNever(x) {
     let v;
@@ -527,6 +527,7 @@ if (isAOrB(x)) {
     else if ("bProp" in x) {
         x.bProp;
     }
+    // x is never because of the type predicate from unknown
     else if ("cProp" in x) {
         const _never = x;
     }
@@ -593,38 +594,39 @@ function f4(x) {
 }
 function f5(x) {
     if ("a" in x) {
-        x;
+        x; // { a: string }
     }
     else if ("b" in x) {
-        x;
+        x; // { b: string }
     }
     else {
-        x;
+        x; // never
     }
 }
 function f6(x) {
     if ("a" in x) {
-        x;
+        x; // { a: string }
     }
     else if ("a" in x) {
-        x;
+        x; // { b: string } & Record<"a", unknown>
     }
     else {
-        x;
+        x; // { b: string }
     }
 }
+// Object and corresponding intersection should narrow the same
 function f7(x, y) {
     if ("a" in x) {
         x;
     }
     else {
-        x;
+        x; // never
     }
     if ("a" in y) {
         y;
     }
     else {
-        y;
+        y; // never
     }
 }
 const sym = Symbol();
@@ -697,39 +699,44 @@ function f15(x) {
 function f16(x, y) {
     x = y;
 }
+// Repro from #50639
 function foo(value) {
     if (typeof value === "object" && value !== null && "prop" in value) {
-        value;
+        value; // A & object & Record<"prop", unknown>
     }
 }
+// Repro from #50954
 const checkIsTouchDevice = () => "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
+// Repro from #51501
 function isHTMLTable(table) {
     return !!table && 'html' in table;
 }
+// Repro from #51549
 const f = (a) => {
     "foo" in a;
 };
+// Repro from #53773
 function test1(obj) {
     if (Array.isArray(obj) || 'length' in obj) {
-        obj;
+        obj; // T
     }
     else {
-        obj;
+        obj; // T
     }
 }
 function test2(obj) {
     if (Array.isArray(obj)) {
-        obj;
+        obj; // T & any[]
     }
     else {
-        obj;
+        obj; // T
     }
 }
 function test3(obj) {
     if ('length' in obj) {
-        obj;
+        obj; // T
     }
     else {
-        obj;
+        obj; // T
     }
 }

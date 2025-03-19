@@ -21,30 +21,14 @@
 -})();
 -var CBaseBase = /** @class */ (function () {
 -    function CBaseBase(x) {
-+class CBaseBase {
-+    constructor(x) { }
-+}
-+class CBase extends CBaseBase {
-+}
-+class Parameter {
-+    method(t) { }
-+}
-+class Wrapper {
-+    property;
-+}
-+class C extends CBase {
-+    works() {
-+        new CBaseBase(this);
-     }
+-    }
 -    return CBaseBase;
 -}());
 -var CBase = /** @class */ (function (_super) {
 -    __extends(CBase, _super);
 -    function CBase() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    alsoWorks() {
-+        new CBase(this);
-     }
+-    }
 -    return CBase;
 -}(CBaseBase));
 -var Parameter = /** @class */ (function () {
@@ -64,13 +48,29 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    C.prototype.works = function () {
--        new CBaseBase(this);
++class CBaseBase {
++    constructor(x) { }
++}
++class CBase extends CBaseBase {
++}
++class Parameter {
++    method(t) { }
++}
++class Wrapper {
++    property;
++}
++class C extends CBase {
++    works() {
+         new CBaseBase(this);
 -    };
 -    C.prototype.alsoWorks = function () {
--        new CBase(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
++    }
++    alsoWorks() {
+         new CBase(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
 -    };
 -    C.prototype.method = function (t) { };
 -    return C;
 -}(CBase));
++    }
 +    method(t) { }
 +}

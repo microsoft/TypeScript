@@ -9,5 +9,6 @@ async function foo(): Promise<void> {
 
 //// [asyncFunctionDeclaration13_es6.js]
 async function foo() {
+    // Legal to use 'await' in a type context.
     var v;
 }

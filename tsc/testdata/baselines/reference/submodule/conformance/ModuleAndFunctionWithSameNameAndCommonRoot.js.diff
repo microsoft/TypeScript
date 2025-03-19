@@ -9,15 +9,7 @@
      (function (Point) {
          Point.Origin = { x: 0, y: 0 };
      })(Point = A.Point || (A.Point = {}));
-@@= skipped -8, +8 lines =@@
- //// [function.js]
- var A;
- (function (A) {
--    // duplicate identifier error
-     function Point() {
-         return { x: 0, y: 0 };
-     }
-@@= skipped -9, +8 lines =@@
+@@= skipped -17, +17 lines =@@
  //// [simple.js]
  var B;
  (function (B) {
@@ -26,7 +18,3 @@
      (function (Point) {
          Point.Origin = { x: 0, y: 0 };
      })(Point = B.Point || (B.Point = {}));
--    // duplicate identifier error
-     function Point() {
-         return { x: 0, y: 0 };
-     }

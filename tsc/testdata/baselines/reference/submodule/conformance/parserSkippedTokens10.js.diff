@@ -1,8 +1,0 @@
---- old.parserSkippedTokens10.js
-+++ new.parserSkippedTokens10.js
-@@= skipped -6, +6 lines =@@
- 
- 
- //// [parserSkippedTokens10.js]
--/*existing trivia*/ ;
-+;

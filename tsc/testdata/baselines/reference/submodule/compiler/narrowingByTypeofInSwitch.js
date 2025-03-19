@@ -430,7 +430,7 @@ function testAny(x) {
             assertUndefined(x);
             return;
     }
-    assertAll(x);
+    assertAll(x); // is any
 }
 function a1(x) {
     return x;
@@ -519,8 +519,8 @@ function exhaustiveChecksGenerics(x) {
     switch (typeof x) {
         case 'number': return x.toString(2);
         case 'string': return x;
-        case 'function': return x(42);
-        case 'object': return x.x;
+        case 'function': return x(42); // Can't narrow generic
+        case 'object': return x.x; // Can't narrow generic
     }
 }
 function multipleGeneric(xy) {
@@ -682,6 +682,7 @@ function narrowingNarrows2(x) {
             return;
     }
 }
+/* Template literals */
 function testUnionWithTempalte(x) {
     switch (typeof x) {
         case `number`:
@@ -740,6 +741,7 @@ function keyofNarrowingWithTemplate(k) {
             return;
     }
 }
+/* Both string literals and template literals */
 function multipleGenericFuseWithBoth(xy) {
     switch (typeof xy) {
         case `function`: return [xy, 1];

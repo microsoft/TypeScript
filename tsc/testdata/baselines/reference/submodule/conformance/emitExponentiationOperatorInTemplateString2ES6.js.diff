@@ -1,10 +1,9 @@
 --- old.emitExponentiationOperatorInTemplateString2ES6.js
 +++ new.emitExponentiationOperatorInTemplateString2ES6.js
-@@= skipped -31, +31 lines =@@
- var t1 = 10;
+@@= skipped -32, +32 lines =@@
  var t2 = 10;
  var s;
--// With templateHead
+ // With templateHead
 -`hello ${Math.pow(t1, t2)}`;
 -`hello ${Math.pow(t1, Math.pow(t2, t1))}`;
 -`hello ${t1 + Math.pow(t2, t1)}`;

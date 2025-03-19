@@ -1,11 +1,9 @@
 --- old.typeReferenceDirectives6.js
 +++ new.typeReferenceDirectives6.js
-@@= skipped -16, +16 lines =@@
- 
- 
+@@= skipped -18, +18 lines =@@
  //// [app.js]
--/// <reference path="./ref.d.ts"/>
--/// <reference types="lib"/>
+ /// <reference path="./ref.d.ts"/>
+ /// <reference types="lib"/>
 -var x;
 -var y = function () { return x; };
 -

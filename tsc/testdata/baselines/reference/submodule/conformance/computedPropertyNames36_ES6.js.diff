@@ -11,7 +11,4 @@
 +    y;
  }
  class C {
--    // Computed properties
-     get ["get1"]() { return new Foo; }
-     set ["set1"](p) { }
- }
+     // Computed properties

@@ -35,18 +35,18 @@ class C {
     #method() { return this.#foo; }
     get #prop() { return this.#foo; }
     set #prop(value) { this.#foo = value; }
-    bar(x) { return x.#foo; }
-    bar2(x) { return x.#method(); }
-    bar3(x) { return x.#prop; }
-    baz(x) { return x.#foo; }
-    baz2(x) { return x.#method; }
-    baz3(x) { return x.#prop; }
-    quux(x) { return x.#foo; }
-    quux2(x) { return x.#method; }
-    quux3(x) { return x.#prop; }
+    bar(x) { return x.#foo; } // OK
+    bar2(x) { return x.#method(); } // OK
+    bar3(x) { return x.#prop; } // OK
+    baz(x) { return x.#foo; } // OK
+    baz2(x) { return x.#method; } // OK
+    baz3(x) { return x.#prop; } // OK
+    quux(x) { return x.#foo; } // OK
+    quux2(x) { return x.#method; } // OK
+    quux3(x) { return x.#prop; } // OK
 }
-a.#foo;
-a.#method;
-a.#prop;
-a = b;
-b = a;
+a.#foo; // Error
+a.#method; // Error
+a.#prop; // Error
+a = b; // Error
+b = a; // Error

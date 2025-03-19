@@ -31,8 +31,3 @@
          M.D = D;
      })(M = B.M || (B.M = {}));
  })(B || (B = {}));
- var a;
- var b;
- a = b;
--b = a; // error
-+b = a;

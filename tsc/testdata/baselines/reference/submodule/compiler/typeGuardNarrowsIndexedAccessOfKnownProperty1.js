@@ -101,22 +101,22 @@ function subarea(s) {
     }
 }
 function check(z, c) {
-    z[0];
+    z[0]; // fine, typescript sees "xx" | "yy"
     switch (z[0]) {
         case "xx":
-            var xx = z[1];
+            var xx = z[1]; // should be number
             break;
         case "yy":
-            var yy = z[1];
+            var yy = z[1]; // should be string
             break;
     }
-    c[0];
+    c[0]; // fine, typescript sees "xx" | "yy"
     switch (c[0]) {
         case "aa":
-            var aa = c[1];
+            var aa = c[1]; // should be number
             break;
         case "bb":
-            var bb = c[1];
+            var bb = c[1]; // should be string
             break;
     }
 }

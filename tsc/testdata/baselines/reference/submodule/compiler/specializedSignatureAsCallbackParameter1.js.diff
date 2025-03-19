@@ -1,10 +1,9 @@
 --- old.specializedSignatureAsCallbackParameter1.js
 +++ new.specializedSignatureAsCallbackParameter1.js
-@@= skipped -13, +13 lines =@@
- function x3(a, cb) {
+@@= skipped -14, +14 lines =@@
      cb(a);
  }
--// both are errors
+ // both are errors
 -x3(1, function (x) { return 1; });
 -x3(1, function (x) { return 1; });
 +x3(1, (x) => 1);

@@ -10,11 +10,10 @@
 +const foo = {
      type: "number",
      value: 10,
--    multipleOf: 5, // excess property
-+    multipleOf: 5,
+     multipleOf: 5, // excess property
      format: "what?"
  };
--// This has excess error because variant three is the only applicable case.
+ // This has excess error because variant three is the only applicable case.
 -var a = {
 +const a = {
      p1: 'left',
@@ -22,7 +21,7 @@
      p3: 42,
      p4: "hello"
  };
--// This has excess error because variant two is not applicable.
+ // This has excess error because variant two is not applicable.
 -var b = {
 +const b = {
      p1: 'left',
@@ -30,7 +29,7 @@
      p3: 42,
      p4: "hello"
  };
--// This has excess error because variant two is the only applicable case
+ // This has excess error because variant two is the only applicable case
 -var c = {
 +const c = {
      p1: 'right',
@@ -38,25 +37,23 @@
      p3: 42,
      p4: "hello"
  };
--// Should reject { b } because reduced to Common | (Common & A)
+ // Should reject { b } because reduced to Common | (Common & A)
 -var c1 = {
 +const c1 = {
      type: "A",
      n: 1,
      a: 1,
--    b: 1 // excess property
-+    b: 1
+     b: 1 // excess property
  };
--// Should still reject { b } because reduced to Common | A, even though these are now disjoint
+ // Should still reject { b } because reduced to Common | A, even though these are now disjoint
 -var c2 = {
 +const c2 = {
      type: "A",
      n: 1,
      a: 1,
--    b: 1 // excess property
-+    b: 1
+     b: 1 // excess property
  };
--// both should error due to excess properties
+ // both should error due to excess properties
 -var attributes = {
 +const attributes = {
      type: 'string',

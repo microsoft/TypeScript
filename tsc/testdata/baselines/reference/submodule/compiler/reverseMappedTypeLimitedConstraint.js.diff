@@ -1,10 +1,9 @@
 --- old.reverseMappedTypeLimitedConstraint.js
 +++ new.reverseMappedTypeLimitedConstraint.js
-@@= skipped -18, +18 lines =@@
- 
+@@= skipped -19, +19 lines =@@
  //// [reverseMappedTypeLimitedConstraint.js]
  foo_({ x: 1, y: 'foo' });
--// -----------------------------------------------------------------------------------------
+ // -----------------------------------------------------------------------------------------
 -var checkType_ = function () { return function (value) { return value; }; };
 -var checked_ = checkType_()({
 +const checkType_ = () => (value) => value;

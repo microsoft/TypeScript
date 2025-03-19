@@ -23,6 +23,7 @@ class C {
         this.#x = x;
     }
     static {
+        // getX has privileged access to #x
         getX = (obj) => obj.#x;
     }
 }

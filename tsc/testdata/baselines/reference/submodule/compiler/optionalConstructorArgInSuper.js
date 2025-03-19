@@ -19,6 +19,6 @@ class Base {
 }
 class Derived extends Base {
 }
-var d = new Derived();
+var d = new Derived(); // bug caused an error here, couldn't select overload
 var d2;
 d2.foo();

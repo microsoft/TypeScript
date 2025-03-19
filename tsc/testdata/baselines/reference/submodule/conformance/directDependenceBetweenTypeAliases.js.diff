@@ -10,9 +10,9 @@
 -    }
 -    return C;
 -}());
--// A type query directly depends on the type of the referenced entity.
 +class C {
 +}
+ // A type query directly depends on the type of the referenced entity.
  var x = [];
 -var C1 = /** @class */ (function () {
 -    function C1() {

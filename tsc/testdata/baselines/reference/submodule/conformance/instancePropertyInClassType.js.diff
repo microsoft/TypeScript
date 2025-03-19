@@ -34,10 +34,7 @@
      var c = new C(1, 2);
      var r = c.fn();
      var r2 = r.x;
-     var r3 = r.y;
-     r.y = 4;
--    var r6 = c.y(); // error
-+    var r6 = c.y();
+@@= skipped -25, +23 lines =@@
  })(NonGeneric || (NonGeneric = {}));
  var Generic;
  (function (Generic) {
@@ -71,8 +68,3 @@
      var c = new C(1, '');
      var r = c.fn();
      var r2 = r.x;
-     var r3 = r.y;
-     r.y = '';
--    var r6 = c.y(); // error
-+    var r6 = c.y();
- })(Generic || (Generic = {}));

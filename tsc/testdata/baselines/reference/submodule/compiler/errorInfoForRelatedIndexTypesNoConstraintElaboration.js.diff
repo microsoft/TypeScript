@@ -1,10 +1,9 @@
 --- old.errorInfoForRelatedIndexTypesNoConstraintElaboration.js
 +++ new.errorInfoForRelatedIndexTypesNoConstraintElaboration.js
-@@= skipped -10, +10 lines =@@
- }
+@@= skipped -11, +11 lines =@@
  
  //// [errorInfoForRelatedIndexTypesNoConstraintElaboration.js]
--/// <reference path="react16.d.ts" />
+ /// <reference path="react16.d.ts" />
 -var I = /** @class */ (function () {
 -    function I() {
 +class I {

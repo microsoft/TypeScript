@@ -27,13 +27,13 @@ export class C {
 }
 class D {
     static A = class extends D.B {
-        [D.D]() { }
+        [D.D]() { } // should be an error
     };
     static B = class {
     };
     static C = {
         [D.D]: 1,
-        ...{ get [D.D]() { return 0; } }
+        ...{ get [D.D]() { return 0; } } // should be an error
     };
     static D = '';
 }

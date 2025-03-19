@@ -10,16 +10,16 @@
 -var x = foo;
 -var y = foo;
 -var z = x;
--// Repro from #30118
++const foo = { prop: true };
++const x = foo;
++const y = foo;
++const z = x;
+ // Repro from #30118
 -var Bar = /** @class */ (function () {
 -    function Bar() {
 -    }
 -    Bar.prototype.cast = function (_name) { };
 -    Bar.prototype.pushThis = function () {
-+const foo = { prop: true };
-+const x = foo;
-+const y = foo;
-+const z = x;
 +class Bar {
 +    static instance = [];
 +    cast(_name) { }

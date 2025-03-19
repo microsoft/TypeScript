@@ -21,6 +21,8 @@ declare let dec: any, obj: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.4.js]
+// 8.6.3 RS: IteratorBindingInitialization
+//  SingleNameBinding : BindingIdentifier Initializer?
 {
     const [x = 
     @dec
@@ -33,6 +35,8 @@ declare let dec: any, obj: any;
         y;
     }] = obj;
 }
+// 14.3.3.3 RS: KeyedBindingInitialization
+//  SingleNameBinding : BindingIdentifier Initializer?
 {
     const { x = 
     @dec

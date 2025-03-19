@@ -15,5 +15,5 @@ declare var React: any;
 
 //// [file.js]
 <>hi</>;
-div >
+div > // Error
     <>eof   // Error</>;

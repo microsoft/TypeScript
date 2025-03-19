@@ -31,4 +31,4 @@ class MyView extends View {
 var m = { model: new Model() };
 var aView = new View({ model: new Model() });
 var aView2 = new View(m);
-var myView = new MyView(m);
+var myView = new MyView(m); // was error

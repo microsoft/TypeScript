@@ -20,8 +20,8 @@
 -        __classPrivateFieldGet(_a, _a, "m", _A1_method).call(_a, 1); // Error
 -        __classPrivateFieldGet(_a, _a, "m", _A1_method).call(_a); // Error 
 +        A1.#method("");
-+        A1.#method(1);
-+        A1.#method();
++        A1.#method(1); // Error
++        A1.#method(); // Error 
      }
  }
 -_a = A1, _A1_method = function _A1_method(param) {

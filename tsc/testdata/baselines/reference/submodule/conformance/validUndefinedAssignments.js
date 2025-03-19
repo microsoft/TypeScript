@@ -32,7 +32,7 @@ var b = x;
 var c = x;
 var d = x;
 var e = x;
-e = x;
+e = x; // should work
 class C {
     foo;
 }

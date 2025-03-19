@@ -34,7 +34,7 @@ const withAsConst: MapOrSingleton = {
 Object.defineProperty(exports, "__esModule", { value: true });
 const withoutAsConst = {
     1: {
-        type: 'text',
+        type: 'text' /*as const*/,
     },
 };
 const withAsConst = {

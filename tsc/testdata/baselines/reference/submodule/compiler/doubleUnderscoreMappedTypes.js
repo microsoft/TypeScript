@@ -27,11 +27,13 @@ const partial: Partial<Properties> = {
 
 
 //// [doubleUnderscoreMappedTypes.js]
+// As expected, I can make an object satisfying this interface
 const ok = {
     property1: "",
     __property2: ""
 };
-const k = "__property2";
+const k = "__property2"; // ok
+// And should work with partial
 const partial = {
     property1: "",
     __property2: ""

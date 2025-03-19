@@ -35,12 +35,12 @@ class C2 extends C1 {
     y;
 }
 var c1;
-c1;
+c1; // Should succeed (private x originates in the same declaration)
 class C3 {
-    x;
+    x; // This T is the difference between C3 and C1
 }
 class C4 extends C3 {
     y;
 }
 var c3;
-c3;
+c3; // Should fail (private x originates in the same declaration, but different types)

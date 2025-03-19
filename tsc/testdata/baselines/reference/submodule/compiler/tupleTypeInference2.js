@@ -27,9 +27,9 @@ h2([[]] as [void[]]); // T: void
 
 
 //// [tupleTypeInference2.js]
-f([undefined, '']);
-f([undefined, '']);
-g([[]]);
-h([[]]);
-h2([[]]);
-h2([[]]);
+f([undefined, '']); // T: never
+f([undefined, '']); // T: void
+g([[]]); // U: {}
+h([[]]); // U: {}
+h2([[]]); // T: never
+h2([[]]); // T: void

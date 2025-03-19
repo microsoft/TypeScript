@@ -12,6 +12,7 @@ function foo(): Error2 {
 }
 
 //// [app.js]
+/// <reference types="node"/>
 function foo() {
     return undefined;
 }

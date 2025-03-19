@@ -9,6 +9,8 @@ try {
 
 //// [sourceMap-SkippedNode.js]
 try {
+    // ...
 }
 finally {
+    // N.B. No 'catch' block
 }

@@ -31,6 +31,7 @@ class A {
 }
 exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
+// empty
 //// [exportStarFromEmptyModule_module3.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -61,4 +62,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;
-X.A.r;
+X.A.r; // Error

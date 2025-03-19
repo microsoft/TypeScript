@@ -12,13 +12,11 @@
 +    method() {
          if (true) {
              function foo() { }
--            foo(); // ok
-+            foo();
+             foo(); // ok
          }
--        foo(); // not ok
+         foo(); // not ok
 -    };
 -    return c;
 -}());
-+        foo();
 +    }
 +}

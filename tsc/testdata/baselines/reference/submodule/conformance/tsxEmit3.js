@@ -54,20 +54,27 @@ var M;
         class Bar {
         }
         S.Bar = Bar;
+        // Emit Foo
+        // Foo, <Foo />;
     })(S = M.S || (M.S = {}));
 })(M || (M = {}));
 (function (M) {
+    // Emit M.Foo
     Foo, <Foo />;
     let S;
     (function (S) {
+        // Emit M.Foo
         Foo, <Foo />;
+        // Emit S.Bar
         Bar, <Bar />;
     })(S = M.S || (M.S = {}));
 })(M || (M = {}));
 (function (M) {
+    // Emit M.S.Bar
     S.Bar, <S.Bar />;
 })(M || (M = {}));
 (function (M_1) {
     var M = 100;
+    // Emit M_1.Foo
     Foo, <Foo />;
 })(M || (M = {}));

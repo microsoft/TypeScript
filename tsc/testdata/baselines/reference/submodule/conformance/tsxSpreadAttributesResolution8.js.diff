@@ -45,10 +45,10 @@
 -    };
 -    return OverWriteAttr;
 -}(React.Component));
--// OK
--var x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1}/>;
--var x1 = <OverWriteAttr {...obj1} {...obj3}/>;
 +    }
 +}
+ // OK
+-var x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1}/>;
+-var x1 = <OverWriteAttr {...obj1} {...obj3}/>;
 +let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1}/>;
 +let x1 = <OverWriteAttr {...obj1} {...obj3}/>;

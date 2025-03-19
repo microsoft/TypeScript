@@ -56,6 +56,7 @@ class C {
     z;
 }
 var c;
+// all ok
 var r = c.x;
 var ra = c.x.x.x;
 var r2 = c.y;

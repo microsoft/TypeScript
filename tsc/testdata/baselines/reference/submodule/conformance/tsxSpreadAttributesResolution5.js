@@ -48,6 +48,7 @@ let obj = {
     x: "hello world",
     y: 2
 };
+// Error as "obj" has type { x: string; y: number }
 let p = <Poisoned {...obj}/>;
 class EmptyProp extends React.Component {
     render() {
@@ -58,4 +59,5 @@ class EmptyProp extends React.Component {
 let o = {
     prop1: false
 };
+// Ok
 let e = <EmptyProp {...o}/>;

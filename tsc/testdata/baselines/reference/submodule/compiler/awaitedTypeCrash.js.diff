@@ -1,8 +1,0 @@
---- old.awaitedTypeCrash.js
-+++ new.awaitedTypeCrash.js
-@@= skipped -4, +4 lines =@@
- async function* f<T extends Promise<never>>(): AsyncGenerator<T, void, void> { }
- 
- //// [awaitedTypeCrash.js]
--// https://github.com/microsoft/TypeScript/issues/51984
- async function* f() { }

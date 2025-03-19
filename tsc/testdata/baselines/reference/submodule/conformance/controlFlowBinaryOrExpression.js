@@ -44,10 +44,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let x;
 let cond;
 (x = "") || (x = 0);
-x;
+x; // string | number
 x = "";
 cond || (x = 0);
-x;
+x; // string | number
 var sourceObj = undefined;
 if (isNodeList(sourceObj)) {
     sourceObj.length;

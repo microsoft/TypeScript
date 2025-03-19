@@ -59,11 +59,14 @@ function AnotherButton(p) {
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+// OK
 let k1 = <Comp a={10} b="hi"><></><Button /><AnotherButton /></Comp>;
 let k2 = <Comp a={10} b="hi"><><Button /></><AnotherButton /></Comp>;
 let k3 = <Comp a={10} b="hi"><><Button /><AnotherButton /></></Comp>;
 function SingleChildComp(p) {
     return <div>{p.b}</div>;
 }
+// OK
 let k4 = <SingleChildComp a={10} b="hi"><><Button /><AnotherButton /></></SingleChildComp>;
+// Error
 let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;

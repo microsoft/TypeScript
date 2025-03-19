@@ -14,5 +14,5 @@ a(
 
 
 //// [emptyArgumentsListComment.js]
-a();
+a( /*1*/ /*1*/);
 a();

@@ -30,10 +30,14 @@ const x2 = {
 const x = {
     m: true
 };
+// Should be OK
 checkTruths(x);
+// Should be OK
 checkM(x);
 console.log(x.z);
+// Should be OK under --noUncheckedIndexedAccess
 const m = x.m;
+// Should be able to detect a failure here
 const x2 = {
     m: true,
     s: "false"

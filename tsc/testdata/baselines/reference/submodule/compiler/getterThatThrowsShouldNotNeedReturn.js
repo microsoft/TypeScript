@@ -14,9 +14,9 @@ class Greeter {
 //// [getterThatThrowsShouldNotNeedReturn.js]
 class Greeter {
     get greet() {
-        throw '';
+        throw ''; // should not raise an error
     }
     greeting() {
-        throw '';
+        throw ''; // should not raise an error
     }
 }

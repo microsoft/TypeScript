@@ -1,10 +1,9 @@
 --- old.objectTypesIdentity2.js
 +++ new.objectTypesIdentity2.js
-@@= skipped -67, +67 lines =@@
- function foo14(x: any) { }
+@@= skipped -68, +68 lines =@@
  
  //// [objectTypesIdentity2.js]
--// object types are identical structurally
+ // object types are identical structurally
 -var A = /** @class */ (function () {
 -    function A() {
 -    }

@@ -1,12 +1,11 @@
 --- old.libTypeScriptOverrideSimpleConfig.js
 +++ new.libTypeScriptOverrideSimpleConfig.js
-@@= skipped -10, +10 lines =@@
- window.localStorage
+@@= skipped -11, +11 lines =@@
  
  //// [index.js]
--/// <reference lib="dom" />
+ /// <reference lib="dom" />
 -var a = { abc: "Hello" };
--// This should fail because libdom has been replaced
--// by the module above ^
 +const a = { abc: "Hello" };
+ // This should fail because libdom has been replaced
+ // by the module above ^
  window.localStorage;

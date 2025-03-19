@@ -42,6 +42,7 @@ var r2: Derived2 = new i('bye');
 var r3: Base = new a('hm');
 
 //// [typesWithSpecializedConstructSignatures.js]
+// basic uses of specialized signatures without errors
 class Base {
     foo;
 }

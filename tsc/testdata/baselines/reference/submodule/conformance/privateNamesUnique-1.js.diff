@@ -20,5 +20,4 @@
 +    #foo;
  }
 -_B_foo = new WeakMap();
--const b = new B(); // Error: Property #foo is missing
-+const b = new B();
+ const b = new B(); // Error: Property #foo is missing

@@ -20,9 +20,9 @@
 -    };
 -})();
 -var _a;
--// expected error for all the LHS of compound assignments (arithmetic and addition)
+ // expected error for all the LHS of compound assignments (arithmetic and addition)
  var value;
--// this
+ // this
 -var C = /** @class */ (function () {
 -    function C() {
 -        this = Math.pow(this, value);
@@ -50,8 +50,8 @@
 +    this **= value;
  }
 -this = Math.pow(this, value);
--// identifiers: module, class, enum, function
 +this **= value;
+ // identifiers: module, class, enum, function
  var M;
  (function (M) {
  })(M || (M = {}));
@@ -64,29 +64,30 @@
  })(E || (E = {}));
 -E = Math.pow(E, value);
 -foo = Math.pow(foo, value);
--// literals
++E **= value;
++foo **= value;
+ // literals
 -null = Math.pow(null, value);
 -true = Math.pow(true, value);
 -false = Math.pow(false, value);
 -0 = Math.pow(0, value);
 -'' = Math.pow('', value);
 -/d+/ = Math.pow(/d+/, value);
--// object literals
-+E **= value;
-+foo **= value;
 +null **= value;
 +true **= value;
 +false **= value;
 +0 **= value;
 +'' **= value;
 +/d+/ **= value;
+ // object literals
  {
      a: 0;
  }
  value;
--// array literals
+ // array literals
 -_a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
--// super
++['', ''] **= value;
+ // super
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
@@ -94,7 +95,6 @@
 -        var _this = _super.call(this) || this;
 -        (_a = _super.prototype). = Math.pow(_a., value);
 -        return _this;
-+['', ''] **= value;
 +class Derived extends C {
 +    constructor() {
 +        super();
@@ -110,7 +110,6 @@
 -    };
 -    return Derived;
 -}(C));
--// function expression
 +    foo() {
 +        super. **= value;
 +    }
@@ -118,14 +117,16 @@
 +        super. **= value;
 +    }
 +}
+ // function expression
  function bar1() { }
  value;
 -(function () { });
 +() => { };
  value;
--// function calls
+ // function calls
 -foo() = Math.pow(foo(), value);
--// parentheses, the containted expression is value
++foo() **= value;
+ // parentheses, the containted expression is value
 -(this) = Math.pow((this), value);
 -(M) = Math.pow((M), value);
 -(C) = Math.pow((C), value);
@@ -140,7 +141,6 @@
 -([]) = Math.pow(([]), value);
 -(function baz1() { }) = Math.pow((function baz1() { }), value);
 -(foo()) = Math.pow((foo()), value);
-+foo() **= value;
 +(this) **= value;
 +(M) **= value;
 +(C) **= value;

@@ -27,8 +27,8 @@ class A {
     doSomething() { }
 }
 class B extends CreateMixin(Context, A) {
-    foo() { }
+    foo() { } // Remove override
 }
 class C extends CreateMixin(Context, A) {
-    doSomethang() { }
+    doSomethang() { } // Suggestion 'doSomething'
 }

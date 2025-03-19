@@ -20,6 +20,7 @@ for (var v of new MyStringIterator) { }
 class MyStringIterator {
     next() {
         return {
+            // no done property
             value: ""
         };
     }

@@ -20,5 +20,6 @@ class Foo2 {
     y;
 }
 class C {
+    // Computed properties
     static [""]() { return new Foo; }
 }

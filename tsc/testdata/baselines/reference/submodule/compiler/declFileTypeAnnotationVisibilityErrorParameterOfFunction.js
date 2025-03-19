@@ -54,6 +54,7 @@ var m;
     class public1 {
     }
     m.public1 = public1;
+    // Directly using names from this module
     function foo1(param) {
     }
     function foo2(param = new private1()) {

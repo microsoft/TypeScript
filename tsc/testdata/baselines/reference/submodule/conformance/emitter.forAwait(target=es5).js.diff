@@ -402,11 +402,7 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+async function f5() {
-+    let y;
-+    outer: for await (const x of y) {
-+        continue outer;
-     }
+-    }
 -};
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -415,7 +411,7 @@
 -    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
 -    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 -};
--// https://github.com/Microsoft/TypeScript/issues/21363
+ // https://github.com/Microsoft/TypeScript/issues/21363
 -function f5() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var y, _a, y_1, y_1_1, x, e_1_1;
@@ -457,6 +453,11 @@
 -            }
 -        });
 -    });
++async function f5() {
++    let y;
++    outer: for await (const x of y) {
++        continue outer;
++    }
  }
  //// [file6.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
@@ -484,11 +485,7 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+async function* f6() {
-+    let y;
-+    outer: for await (const x of y) {
-+        continue outer;
-     }
+-    }
 -};
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -510,7 +507,7 @@
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 -};
--// https://github.com/Microsoft/TypeScript/issues/21363
+ // https://github.com/Microsoft/TypeScript/issues/21363
 -function f6() {
 -    return __asyncGenerator(this, arguments, function f6_1() {
 -        var y, _a, y_1, y_1_1, x, e_1_1;
@@ -552,6 +549,11 @@
 -            }
 -        });
 -    });
++async function* f6() {
++    let y;
++    outer: for await (const x of y) {
++        continue outer;
++    }
  }
  //// [file7.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
@@ -579,12 +581,7 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+async function* f7() {
-+    let y;
-+    for (;;) {
-+        for await (const x of y) {
-+        }
-     }
+-    }
 -};
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -606,7 +603,7 @@
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 -};
--// https://github.com/microsoft/TypeScript/issues/36166
+ // https://github.com/microsoft/TypeScript/issues/36166
 -function f7() {
 -    return __asyncGenerator(this, arguments, function f7_1() {
 -        var y, _a, y_1, y_1_1, x, e_1_1;
@@ -649,4 +646,10 @@
 -            }
 -        });
 -    });
++async function* f7() {
++    let y;
++    for (;;) {
++        for await (const x of y) {
++        }
++    }
  }

@@ -33,6 +33,9 @@ const AMixin = <K extends Constructor<Initable> & Initable>(SuperClass: K) => {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Serializable = void 0;
+/**
+ * Plain mixin where the superclass must be Initable
+ */
 const Serializable = (SuperClass) => {
     const LocalMixin = (InnerSuperClass) => {
         return class SerializableLocal extends InnerSuperClass {

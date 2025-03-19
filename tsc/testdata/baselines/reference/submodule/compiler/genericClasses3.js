@@ -28,6 +28,6 @@ class C extends B {
     x;
 }
 var v2;
-var y = v2.x;
-var u = v2.a;
+var y = v2.x; // should be 'string'
+var u = v2.a; // should be 'string'
 var z = v2.b;

@@ -29,5 +29,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const data_json_1 = __importDefault(require("./data.json"));
 fn(data_json_1.default.foo);
-fn(data_json_1.default.foo);
+fn(data_json_1.default.foo); // <-- shouldn't error!
 function fn(arg) { }

@@ -23,8 +23,7 @@
      (function (C) {
          C.a = 1, C.c = 2;
      })(C || (C = {}));
--    // Shouldn't be filtered
-     Inner.a1 = 1;
+@@= skipped -19, +16 lines =@@
      Inner.b1 = 1;
      Inner.c1 = 'a';
      Inner.d1 = 1;

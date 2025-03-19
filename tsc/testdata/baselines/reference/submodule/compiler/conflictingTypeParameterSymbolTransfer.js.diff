@@ -22,35 +22,36 @@
 -})();
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.C2 = void 0;
--// Via #56620
++// @strict
+ // Via #56620
 -var Base = /** @class */ (function () {
 -    function Base() {
-+class Base {
-+}
-+class C2 extends Base {
-+    T;
-+    constructor(T) {
-+        super();
-+        this.T = T;
-+        let a = null;
-     }
+-    }
 -    return Base;
 -}());
 -var C2 = /** @class */ (function (_super) {
 -    __extends(C2, _super);
 -    function C2(T) {
 -        var _this = _super.call(this) || this;
--        // Should not error
++class Base {
++}
++class C2 extends Base {
++    T;
++    constructor(T) {
++        super();
+         // Should not error
 -        _this.T = T;
--        // Should error
++        this.T = T;
+         // Should error
 -        var a = null;
 -        return _this;
--    }
++        let a = null;
+     }
 -    return C2;
 -}(Base));
 +}
  exports.C2 = C2;
--// via #56689
+ // via #56689
 -var Leg = /** @class */ (function () {
 -    function Leg() {
 -    }
@@ -67,7 +68,14 @@
 -    }
 -    return Foo;
 -}(Leg));
--// via #56661
++class Leg {
++}
++class Foo extends Leg {
++    t = {};
++    // should allow this access since t was declared as a property on Foo
++    foo = this.t;
++}
+ // via #56661
 -var BaseClass = /** @class */ (function () {
 -    function BaseClass() {
 -    }
@@ -79,18 +87,12 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    Item.prototype.getData = function () {
--        // should OK
-+class Leg {
-+}
-+class Foo extends Leg {
-+    t = {};
-+    foo = this.t;
-+}
 +class BaseClass {
 +}
 +class Item extends BaseClass {
 +    data;
 +    getData() {
+         // should OK
          return this.data;
 -    };
 -    return Item;

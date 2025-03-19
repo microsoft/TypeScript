@@ -23,7 +23,7 @@ class C {
         this.data2 = data2;
     }
     create() {
-        var x = new this.data();
-        var x2 = new this.data2();
+        var x = new this.data(); // should not error
+        var x2 = new this.data2(); // should not error
     }
 }

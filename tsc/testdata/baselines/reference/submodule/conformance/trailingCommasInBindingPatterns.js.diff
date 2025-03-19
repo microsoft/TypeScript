@@ -20,17 +20,17 @@
 -var c, d;
 -(c = [].slice(0));
 -(d = __rest({}, []));
--// Allowed for non-rest elements
--var e = [][0];
--var f = {}.f;
--var g, h;
--(g = [][0]);
--(h = {}.h);
 +const [...a,] = [];
 +const { ...b, } = {};
 +let c, d;
 +([...c,] = []);
 +({ ...d, } = {});
+ // Allowed for non-rest elements
+-var e = [][0];
+-var f = {}.f;
+-var g, h;
+-(g = [][0]);
+-(h = {}.h);
 +const [e,] = [];
 +const { f, } = {};
 +let g, h;

@@ -8,4 +8,6 @@ b /* parameter b */,
 ) { }
 
 //// [commentOnParameter3.js]
-function commentedParameters(a, b) { }
+function commentedParameters(a /* parameter a */, b /* parameter b */
+/* extra comment */
+) { }

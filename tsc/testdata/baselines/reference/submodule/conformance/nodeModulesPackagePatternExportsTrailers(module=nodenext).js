@@ -66,6 +66,7 @@ export { type };
 }
 
 //// [index.js]
+// esm format file
 import * as cjsi from "inner/cjs/index.cjs";
 import * as mjsi from "inner/mjs/index.mjs";
 import * as typei from "inner/js/index.js";
@@ -73,6 +74,7 @@ cjsi;
 mjsi;
 typei;
 //// [index.mjs]
+// esm format file
 import * as cjsi from "inner/cjs/index.cjs";
 import * as mjsi from "inner/mjs/index.mjs";
 import * as typei from "inner/js/index.js";
@@ -105,6 +107,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// cjs format file
 const cjsi = __importStar(require("inner/cjs/index.cjs"));
 const mjsi = __importStar(require("inner/mjs/index.mjs"));
 const typei = __importStar(require("inner/js/index.js"));

@@ -690,26 +690,26 @@ function setProperty(obj, key, value) {
     obj[key] = value;
 }
 function f10(shape) {
-    let name = getProperty(shape, "name");
-    let widthOrHeight = getProperty(shape, cond ? "width" : "height");
-    let nameOrVisible = getProperty(shape, cond ? "name" : "visible");
+    let name = getProperty(shape, "name"); // string
+    let widthOrHeight = getProperty(shape, cond ? "width" : "height"); // number
+    let nameOrVisible = getProperty(shape, cond ? "name" : "visible"); // string | boolean
     setProperty(shape, "name", "rectangle");
     setProperty(shape, cond ? "width" : "height", 10);
-    setProperty(shape, cond ? "name" : "visible", true);
+    setProperty(shape, cond ? "name" : "visible", true); // Technically not safe
 }
 function f11(a) {
-    let len = getProperty(a, "length");
+    let len = getProperty(a, "length"); // number
     setProperty(a, "length", len);
 }
 function f12(t) {
     let len = getProperty(t, "length");
-    let s2 = getProperty(t, "0");
-    let b2 = getProperty(t, "1");
+    let s2 = getProperty(t, "0"); // Shape
+    let b2 = getProperty(t, "1"); // boolean
 }
 function f13(foo, bar) {
-    let x = getProperty(foo, "x");
-    let y = getProperty(foo, "100");
-    let z = getProperty(foo, bar);
+    let x = getProperty(foo, "x"); // any
+    let y = getProperty(foo, "100"); // any
+    let z = getProperty(foo, bar); // any
 }
 class Component {
     props;
@@ -721,28 +721,28 @@ class Component {
     }
 }
 function f20(component) {
-    let name = component.getProperty("name");
-    let widthOrHeight = component.getProperty(cond ? "width" : "height");
-    let nameOrVisible = component.getProperty(cond ? "name" : "visible");
+    let name = component.getProperty("name"); // string
+    let widthOrHeight = component.getProperty(cond ? "width" : "height"); // number
+    let nameOrVisible = component.getProperty(cond ? "name" : "visible"); // string | boolean
     component.setProperty("name", "rectangle");
     component.setProperty(cond ? "width" : "height", 10);
-    component.setProperty(cond ? "name" : "visible", true);
+    component.setProperty(cond ? "name" : "visible", true); // Technically not safe
 }
 function pluck(array, key) {
     return array.map(x => x[key]);
 }
 function f30(shapes) {
-    let names = pluck(shapes, "name");
-    let widths = pluck(shapes, "width");
-    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible");
+    let names = pluck(shapes, "name"); // string[]
+    let widths = pluck(shapes, "width"); // number[]
+    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible"); // (string | boolean)[]
 }
 function f31(key) {
     const shape = { name: "foo", width: 5, height: 10, visible: true };
-    return shape[key];
+    return shape[key]; // Shape[K]
 }
 function f32(key) {
     const shape = { name: "foo", width: 5, height: 10, visible: true };
-    return shape[key];
+    return shape[key]; // Shape[K]
 }
 function f33(shape, key) {
     let name = getProperty(shape, "name");
@@ -758,6 +758,8 @@ class C {
     y;
     z;
 }
+// Indexed access expressions have always permitted access to private and protected members.
+// For consistency we also permit such access in indexed access types.
 function f40(c) {
     let x = c["x"];
     let y = c["y"];
@@ -803,45 +805,45 @@ function f70(func) {
 }
 function f71(func) {
     let x = func({ a: 1, b: "hello" }, { c: true });
-    x.a;
-    x.b;
-    x.c;
+    x.a; // number | undefined
+    x.b; // string | undefined
+    x.c; // boolean | undefined
 }
 function f72(func) {
-    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');
-    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');
-    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
 }
 function f73(func) {
-    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');
-    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');
-    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
 }
 function f74(func) {
-    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');
-    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');
+    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
+    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
 }
 function f80(obj) {
-    let a1 = obj.a;
-    let a2 = obj['a'];
-    let a3 = obj['a'];
-    let x1 = obj.a.x;
-    let x2 = obj['a']['x'];
-    let x3 = obj['a']['x'];
+    let a1 = obj.a; // { x: any }
+    let a2 = obj['a']; // { x: any }
+    let a3 = obj['a']; // T["a"]
+    let x1 = obj.a.x; // any
+    let x2 = obj['a']['x']; // any
+    let x3 = obj['a']['x']; // T["a"]["x"]
 }
 function f81(obj) {
     return obj['a']['x'];
 }
 function f82() {
-    let x1 = f81({ a: { x: "hello" } });
-    let x2 = f81({ a: { x: 42 } });
+    let x1 = f81({ a: { x: "hello" } }); // string
+    let x2 = f81({ a: { x: 42 } }); // number
 }
 function f83(obj, key) {
     return obj[key]['x'];
 }
 function f84() {
-    let x1 = f83({ foo: { x: "hello" } }, "foo");
-    let x2 = f83({ bar: { x: 42 } }, "bar");
+    let x1 = f83({ foo: { x: "hello" } }, "foo"); // string
+    let x2 = f83({ bar: { x: 42 } }, "bar"); // number
 }
 class C1 {
     x;
@@ -852,10 +854,10 @@ class C1 {
         this[key] = value;
     }
     foo() {
-        let x1 = this.x;
-        let x2 = this["x"];
-        let x3 = this.get("x");
-        let x4 = getProperty(this, "x");
+        let x1 = this.x; // number
+        let x2 = this["x"]; // number
+        let x3 = this.get("x"); // this["x"]
+        let x4 = getProperty(this, "x"); // this["x"]
         this.x = 42;
         this["x"] = 42;
         this.set("x", 42);
@@ -885,6 +887,7 @@ function f92(x, y, z) {
     a = y;
     a = z;
 }
+// Repros from #12011
 class Base {
     get(prop) {
         return this[prop];
@@ -920,15 +923,16 @@ function path(obj, ...keys) {
     return result;
 }
 function f1(thing) {
-    let x1 = path(thing, 'a');
-    let x2 = path(thing, 'a', 'y');
-    let x3 = path(thing, 'b');
-    let x4 = path(thing, ...['a', 'x']);
+    let x1 = path(thing, 'a'); // { x: number, y: string }
+    let x2 = path(thing, 'a', 'y'); // string
+    let x3 = path(thing, 'b'); // boolean
+    let x4 = path(thing, ...['a', 'x']); // any
 }
+// Repro from comment in #12114
 const assignTo2 = (object, key1, key2) => (value) => object[key1][key2] = value;
-var empty = one(() => { });
-var hashOfEmpty1 = on({ test: () => { } });
-var hashOfEmpty2 = on({ test: (x) => { } });
+var empty = one(() => { }); // inferred as {}, expected
+var hashOfEmpty1 = on({ test: () => { } }); // {}
+var hashOfEmpty2 = on({ test: (x) => { } }); // { test: boolean }
 let c1 = new Component1({
     data: {
         hello: ""
@@ -937,7 +941,7 @@ let c1 = new Component1({
 c1.get("hello");
 function f(p) {
     let a;
-    a[p].add;
+    a[p].add; // any
 }
 let result = dispatchMethod("someMethod", ["hello", 35]);
 let MyThingy;
@@ -947,6 +951,7 @@ function addToMyThingy(key) {
 function onChangeGenericFunction(handler) {
     handler.onChange('preset');
 }
+// Repro from #13285
 function updateIds(obj, idFields, idMapping) {
     for (const idField of idFields) {
         const newId = idMapping[obj[idField]];
@@ -956,10 +961,12 @@ function updateIds(obj, idFields, idMapping) {
     }
     return obj;
 }
+// Repro from #13285
 function updateIds2(obj, key, stringMap) {
     var x = obj[key];
-    stringMap[x];
+    stringMap[x]; // Should be OK.
 }
+// Repro from #13604
 class A {
     props;
 }
@@ -968,12 +975,14 @@ class B extends A {
         p.x;
     }
 }
+// Repro from #13749
 class Form {
     childFormFactories;
     set(prop, value) {
         this.childFormFactories[prop](value);
     }
 }
+// Repro from #13787
 class SampleClass {
     props;
     constructor(props) {
@@ -990,10 +999,11 @@ class AnotherSampleClass extends SampleClass {
     }
 }
 new AnotherSampleClass({});
+// Positive repro from #17166
 function f3(t, k, tk) {
     for (let key in t) {
-        key = k;
-        t[key] = tk;
+        key = k; // ok, K ==> keyof T
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
     }
 }
 var Flag;
@@ -1011,6 +1021,7 @@ function fn(o, k) {
     take(o[k]);
     take(o[k]);
 }
+// Repro from #23133
 class Unbounded {
     foo(x) {
         let y = x;
@@ -1023,6 +1034,7 @@ function ff2(dd, k1, k2) {
     const d = dd[k1];
     return d[k2];
 }
+// Repro from #26409
 const cf1 = (t, k) => {
     const s = t[k];
     t.cool;

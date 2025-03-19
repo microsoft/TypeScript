@@ -12,5 +12,5 @@ class Lion extends Animal {
 
 //// [propertyOverridesAccessors4.js]
 class Lion extends Animal {
-    sound = 'RAWR!';
+    sound = 'RAWR!'; // error here
 }

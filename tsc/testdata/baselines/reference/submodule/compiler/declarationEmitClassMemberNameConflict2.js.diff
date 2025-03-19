@@ -31,8 +31,11 @@
 -declare enum Hello {
 -    World = 0
 +class Foo {
++    // Same names + string => OK
 +    Bar = Bar;
++    // Same names + enum => OK
 +    Hello = Hello;
++    // Different names + enum => OK
 +    Hello2 = Hello1;
  }
 -declare enum Hello1 {

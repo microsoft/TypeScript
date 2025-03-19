@@ -1,8 +1,0 @@
---- old.generatorTypeCheck45.js
-+++ new.generatorTypeCheck45.js
-@@= skipped -5, +5 lines =@@
- foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, should be string
- 
- //// [generatorTypeCheck45.js]
--foo("", function* () { yield x => x.length; }, p => undefined); // T is fixed, should be string
-+foo("", function* () { yield x => x.length; }, p => undefined);

@@ -15,6 +15,7 @@ if (isDefined(foo)) {
 
 
 //// [voidUndefinedReduction.js]
+// Repro from #42786
 function isDefined(value) {
     return value !== undefined && value !== null;
 }

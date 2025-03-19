@@ -11,5 +11,5 @@ $.foo(); // should OK
 $2.foo(); // should error
 
 //// [consumer.js]
-$.foo();
-$2.foo();
+$.foo(); // should OK
+$2.foo(); // should error

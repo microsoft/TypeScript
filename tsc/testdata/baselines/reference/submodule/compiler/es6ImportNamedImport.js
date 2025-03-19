@@ -75,4 +75,4 @@ var xxxx = es6ImportNamedImport_0_7.x1;
 const es6ImportNamedImport_0_8 = require("./es6ImportNamedImport_0");
 var z111 = es6ImportNamedImport_0_8.z1;
 const es6ImportNamedImport_0_9 = require("./es6ImportNamedImport_0");
-var z2 = es6ImportNamedImport_0_9.z2;
+var z2 = es6ImportNamedImport_0_9.z2; // z2 shouldn't give redeclare error

@@ -36,4 +36,4 @@ var b;
 var c;
 var d;
 a = b;
-c = d;
+c = d; // Should not be allowed

@@ -25,11 +25,11 @@ var M;
         y;
     }
     M.Point = Point;
-    M.Point = 1;
+    M.Point = 1; // Error
 })(M || (M = {}));
 var M2;
 (function (M2) {
     M2.Point = 1;
 })(M2 || (M2 = {}));
 var m = M2;
-var p;
+var p; // Error

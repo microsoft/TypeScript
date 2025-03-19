@@ -45,6 +45,7 @@ x.a16 = b16;
 b16 = x.a16;
 
 //// [assignmentCompatWithConstructSignatures6.js]
+// checking assignment compatibility relations for function types. All valid.
 class Base {
     foo;
 }

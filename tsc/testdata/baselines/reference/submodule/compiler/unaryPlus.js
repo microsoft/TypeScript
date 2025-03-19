@@ -14,6 +14,7 @@ var z = ~"3"; // should be valid
 
 
 //// [unaryPlus.js]
+// allowed per spec
 var a = +1;
 var b = +"";
 var E;
@@ -23,6 +24,7 @@ var E;
 })(E || (E = {}));
 ;
 var c = +E.some;
-var x = +"3";
-var y = -"3";
-var z = ~"3";
+// also allowed, used to be errors
+var x = +"3"; //should be valid
+var y = -"3"; // should be valid
+var z = ~"3"; // should be valid

@@ -36,14 +36,14 @@ class C {
             #bar() { }
             constructor() {
                 new C().#foo;
-                new C().#bar;
+                new C().#bar; // Error
                 new C().#baz;
                 new D().#bar;
             }
             n(x) {
                 x.#foo;
                 x.#bar;
-                x.#unknown;
+                x.#unknown; // Error
             }
         };
     }

@@ -152,11 +152,13 @@ r.explicit;
 r.notResolved;
 r.explicit.required;
 r.notResolved.required;
+// All properties have inferable types
 const obj1 = id({
     foo: {
         contents: ""
     }
 });
+// Some properties have inferable types
 const obj2 = id({
     foo: {
         contents: "",
@@ -165,6 +167,7 @@ const obj2 = id({
         }
     }
 });
+// No properties have inferable types
 const obj3 = id({
     foo: {
         contains(k) {

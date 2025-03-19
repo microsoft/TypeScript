@@ -1,14 +1,6 @@
 --- old.convertKeywordsYes.js
 +++ new.convertKeywordsYes.js
-@@= skipped -307, +307 lines =@@
- }
- 
- //// [convertKeywordsYes.js]
--// reserved ES5 future in strict mode
- var constructor = 0;
- var any = 0;
- var boolean = 0;
-@@= skipped -76, +75 lines =@@
+@@= skipped -383, +383 lines =@@
      while: 0,
      with: 0,
  };

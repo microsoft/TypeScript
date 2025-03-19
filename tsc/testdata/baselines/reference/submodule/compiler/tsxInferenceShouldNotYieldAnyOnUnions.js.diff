@@ -1,10 +1,8 @@
 --- old.tsxInferenceShouldNotYieldAnyOnUnions.js
 +++ new.tsxInferenceShouldNotYieldAnyOnUnions.js
-@@= skipped -32, +32 lines =@@
- function ShouldInferFromData(props) {
-     return <div />;
+@@= skipped -34, +34 lines =@@
  }
--// Sanity check: function call equivalent versions work fine
+ // Sanity check: function call equivalent versions work fine
  ShouldInferFromData({ data: "1" });
 -ShouldInferFromData({ data: "1", convert: function (n) { return "" + n; } });
 -ShouldInferFromData({ data: 2, convert: function (n) { return "" + n; } });

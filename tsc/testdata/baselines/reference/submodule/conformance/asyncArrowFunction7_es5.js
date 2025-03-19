@@ -9,6 +9,7 @@ var bar = async (): Promise<void> => {
 
 //// [asyncArrowFunction7_es5.js]
 var bar = async () => {
+    // 'await' here is an identifier, and not an await expression.
     var foo = async (a = await ) => {
     };
 };
