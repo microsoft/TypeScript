@@ -1134,6 +1134,7 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
+    visitEachChild,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -1934,6 +1935,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getSymbolFlags,
         getTypeArgumentsForResolvedSignature,
         isLibType,
+        classSymbolToNode: nodeBuilder.classSymbolToNode,
     };
 
     function getTypeArgumentsForResolvedSignature(signature: Signature) {
@@ -6308,6 +6310,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeParameterToDeclaration(parameter, context), out),
             symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolTableToDeclarationStatements(symbolTable, context)),
             symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToNode(symbol, context, meaning)),
+            classSymbolToNode,
         };
 
         function getTypeFromTypeNode(context: NodeBuilderContext, node: TypeNode, noMappedTypes?: false): Type;
@@ -6365,6 +6368,111 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             return symbolToExpression(symbol, context, meaning);
+        }
+
+        function classSymbolToNode(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut): Node {
+            const classDeclarations = filter(symbol.declarations, isClassLike);
+            if (!classDeclarations || classDeclarations.length === 0) {
+                Debug.fail("Expected class symbol to have a declaration");
+            }
+            // A valid program should only have one class declaration per class symbol.
+            const classDeclaration = classDeclarations[0] as ClassDeclaration;
+            const node = withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => classToNodeHelper(classDeclaration, context), out);
+            if (node === undefined) {
+                Debug.fail("Should always get a node");
+            }
+            return node;
+        }
+
+        /** Transforms a class-like declaration into a simplified class-like declaration for quickinfo purposes.
+         *  Type nodes are possibly expanded, inferred types are added, and initializers and function bodies are removed.
+         */
+        function classToNodeHelper(declaration: Declaration, context: NodeBuilderContext): Node {
+            function visit(node: Node): Node | undefined {
+                const originalNode = node;
+                if (isTypeNode(node)) {
+                    if (node.parent.kind === SyntaxKind.HeritageClause) {
+                        return node;
+                    }
+                    const type = getTypeFromTypeNode(context, node);
+                    return typeToTypeNodeHelper(type, context);
+                }
+                switch (node.kind) {
+                    case SyntaxKind.Constructor:
+                        node = factory.updateConstructorDeclaration(
+                            node as ConstructorDeclaration,
+                            (node as ConstructorDeclaration).modifiers,
+                            (node as ConstructorDeclaration).parameters,
+                            /*body*/ undefined,
+                        );
+                        break;
+                    case SyntaxKind.MethodDeclaration:
+                        node = factory.updateMethodDeclaration(
+                            node as MethodDeclaration,
+                            (node as MethodDeclaration).modifiers,
+                            (node as MethodDeclaration).asteriskToken,
+                            (node as MethodDeclaration).name,
+                            (node as MethodDeclaration).questionToken,
+                            (node as MethodDeclaration).typeParameters,
+                            (node as MethodDeclaration).parameters,
+                            (node as MethodDeclaration).type,
+                            /*body*/ undefined,
+                        );
+                        break;
+                    case SyntaxKind.GetAccessor:
+                        node = factory.updateGetAccessorDeclaration(
+                            node as GetAccessorDeclaration,
+                            (node as GetAccessorDeclaration).modifiers,
+                            (node as GetAccessorDeclaration).name,
+                            (node as GetAccessorDeclaration).parameters,
+                            (node as GetAccessorDeclaration).type,
+                            /*body*/ undefined,
+                        );
+                        break;
+                    case SyntaxKind.SetAccessor:
+                        node = factory.updateSetAccessorDeclaration(
+                            node as SetAccessorDeclaration,
+                            (node as SetAccessorDeclaration).modifiers,
+                            (node as SetAccessorDeclaration).name,
+                            (node as SetAccessorDeclaration).parameters,
+                            /*body*/ undefined,
+                        );
+                        break;
+                    case SyntaxKind.PropertyDeclaration:
+                        node = factory.updatePropertyDeclaration(
+                            node as PropertyDeclaration,
+                            (node as PropertyDeclaration).modifiers,
+                            (node as PropertyDeclaration).name,
+                            (node as PropertyDeclaration).questionToken,
+                            (node as PropertyDeclaration).type,
+                            /*initializer*/ undefined,
+                        )
+                        break;
+                    case SyntaxKind.ClassStaticBlockDeclaration:
+                    case SyntaxKind.SemicolonClassElement:
+                        // Remove altogether.
+                        return undefined;
+                    case SyntaxKind.IndexSignature:
+                        // Preserve.
+                }
+                const newNode = visitEachChild(node, visit, /*context*/ undefined);
+                if (newNode.kind === SyntaxKind.PropertyDeclaration && !(newNode as PropertyDeclaration).type) {
+                    const symbol = getSymbolOfDeclaration(originalNode as PropertyDeclaration);
+                    const type = getTypeOfSymbol(symbol);
+                    const typeNode = typeToTypeNodeHelper(type, context);
+                    return factory.updatePropertyDeclaration(
+                        newNode as PropertyDeclaration,
+                        (newNode as PropertyDeclaration).modifiers,
+                        (newNode as PropertyDeclaration).name,
+                        (newNode as PropertyDeclaration).questionToken,
+                        typeNode,
+                        /*initializer*/ undefined,
+                    );
+                }
+                return newNode;
+            }
+            const newDecl = visit(declaration)!;
+            return newDecl;
         }
 
         function withContext<T>(

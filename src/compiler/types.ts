@@ -5445,6 +5445,8 @@ export interface TypeChecker {
 
     getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
     /** @internal */ isLibType(type: Type): boolean;
+    /** @internal */ classSymbolToNode(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut): Node | undefined;
+    
 }
 
 /** @internal */

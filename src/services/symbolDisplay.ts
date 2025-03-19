@@ -20,6 +20,7 @@ import {
     getCombinedLocalAndExportSymbolFlags,
     getDeclarationOfKind,
     getExternalModuleImportEqualsDeclarationExpression,
+    getIndentString,
     getMeaningFromLocation,
     getNameOfDeclaration,
     getNodeModifiers,
@@ -37,6 +38,7 @@ import {
     isCallExpression,
     isCallExpressionTarget,
     isCallOrNewExpression,
+    isClassDeclaration,
     isClassExpression,
     isConstTypeReference,
     isDeprecatedDeclaration,
@@ -69,6 +71,7 @@ import {
     length,
     lineBreakPart,
     ListFormat,
+    map,
     mapToDisplayParts,
     ModifierFlags,
     ModuleDeclaration,
@@ -445,20 +448,23 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo && !isThisExpression) {
         addAliasPrefixIfNecessary();
-        if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
+        const classExpression = getDeclarationOfKind(symbol, SyntaxKind.ClassExpression);
+        if (classExpression) {
             // Special case for class expressions because we would like to indicate that
             // the class name is local to the class body (similar to function expression)
             //      (local class) class <className>
             pushSymbolKind(ScriptElementKind.localClassElement);
+            displayParts.push(spacePart());
         }
-        else {
-            // Class declaration has name which is not local.
-            displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+        if (!tryUnfoldSymbol(symbol)) {
+            if (!classExpression) {
+                // Class declaration has name which is not local.
+                displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
+                displayParts.push(spacePart());
+            }
+            addFullSymbolName(symbol);
+            writeTypeParametersOfSymbol(symbol, sourceFile);
         }
-        displayParts.push(spacePart());
-        addFullSymbolName(symbol);
-        writeTypeParametersOfSymbol(symbol, sourceFile);
-        tryUnfoldSymbol(symbol);
     }
     if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
@@ -848,20 +854,46 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         return typeChecker.getTypeOfSymbolAtLocation(symbol, location);
     }
 
-    function tryUnfoldSymbol(symbol: Symbol) {
+    function tryUnfoldSymbol(symbol: Symbol): boolean {
         let unfoldType;
         if (unfoldType = canUnfoldSymbol(symbol, typeWriterOut)) {
-            const expandedDisplayParts = typeToDisplayParts(
-                typeChecker,
-                unfoldType,
-                enclosingDeclaration || sourceFile,
-                /*flags*/ undefined,
-                verbosityLevel,
-                typeWriterOut,
-            );
-            displayParts.push(spacePart());
-            addRange(displayParts, expandedDisplayParts);
+            if (symbol.flags & SymbolFlags.Enum) {
+                // >> TODO: probably add enum printing as enum declaration at the top level; add it to return of `createNodeBuilder`.
+            }
+            else if (symbol.flags & SymbolFlags.Class) {
+                let expandedDisplayParts = mapToDisplayParts(writer => {
+                    const node = typeChecker.classSymbolToNode(
+                        symbol,
+                        undefined,
+                        TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+                        undefined,
+                        undefined,
+                        verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
+                        typeWriterOut)!;  
+                    getPrinter().writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+                });
+                let start = 0;
+                while (start < expandedDisplayParts.length &&
+                    expandedDisplayParts[start].kind === SymbolDisplayPartKind[SymbolDisplayPartKind.lineBreak]) {
+                    start++;
+                }
+                addRange(displayParts, expandedDisplayParts, start);
+            }
+            else {
+                const expandedDisplayParts = typeToDisplayParts(
+                    typeChecker,
+                    unfoldType,
+                    enclosingDeclaration || sourceFile,
+                    /*flags*/ undefined,
+                    verbosityLevel,
+                    typeWriterOut,
+                );
+                displayParts.push(spacePart());
+                addRange(displayParts, expandedDisplayParts);
+            }
+            return true;
         }
+        return false;
     }
 
     function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
