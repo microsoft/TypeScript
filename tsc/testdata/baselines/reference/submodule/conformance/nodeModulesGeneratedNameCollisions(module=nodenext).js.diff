@@ -1,23 +1,16 @@
 --- old.nodeModulesGeneratedNameCollisions(module=nodenext).js
 +++ new.nodeModulesGeneratedNameCollisions(module=nodenext).js
-@@= skipped -25, +25 lines =@@
- }
- 
- //// [index.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--exports.Object = exports.exports = exports.__esModule = void 0;
--exports.require = require;
+@@= skipped -29, +29 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Object = exports.exports = exports.__esModule = void 0;
+ exports.require = require;
 -// cjs format file
  function require() { }
  const exports = {};
--exports.exports = exports;
- class Object {
- }
--exports.Object = Object;
--exports.__esModule = false;
-+export const __esModule = false;
-+export { require, exports, Object };
+ exports.exports = exports;
+@@= skipped -9, +8 lines =@@
+ exports.Object = Object;
+ exports.__esModule = false;
  //// [index.js]
 -// esm format file
  function require() { }

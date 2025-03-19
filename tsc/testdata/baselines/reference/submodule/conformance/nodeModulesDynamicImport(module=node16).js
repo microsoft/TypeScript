@@ -24,7 +24,10 @@ export async function main() {
 declare module "fs";
 
 //// [index.js]
-export async function main() {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.main = main;
+async function main() {
     const { readFile } = await import("fs");
 }
 //// [index.js]

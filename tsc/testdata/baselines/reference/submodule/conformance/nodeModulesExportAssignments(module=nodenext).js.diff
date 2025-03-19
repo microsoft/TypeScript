@@ -1,14 +1,12 @@
 --- old.nodeModulesExportAssignments(module=nodenext).js
 +++ new.nodeModulesExportAssignments(module=nodenext).js
-@@= skipped -19, +19 lines =@@
- }
+@@= skipped -20, +20 lines =@@
  
  //// [index.js]
--"use strict";
+ "use strict";
 -// cjs format file
  const a = {};
--module.exports = a;
-+export {};
+ module.exports = a;
  //// [index.js]
 -// esm format file
  const a = {};

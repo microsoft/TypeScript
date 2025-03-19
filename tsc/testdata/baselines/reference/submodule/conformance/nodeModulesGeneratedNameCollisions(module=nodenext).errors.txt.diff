@@ -1,43 +1,23 @@
 --- old.nodeModulesGeneratedNameCollisions(module=nodenext).errors.txt
 +++ new.nodeModulesGeneratedNameCollisions(module=nodenext).errors.txt
-@@= skipped -0, +-1 lines =@@
--subfolder/index.ts(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
--subfolder/index.ts(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+@@= skipped -0, +0 lines =@@
+ subfolder/index.ts(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+ subfolder/index.ts(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 -subfolder/index.ts(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 with module NodeNext.
--subfolder/index.ts(5,14): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
--
--
+ subfolder/index.ts(5,14): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
+ 
+ 
 -==== subfolder/index.ts (4 errors) ====
--    // cjs format file
--    function require() {}
--             ~~~~~~~
--!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
--    const exports = {};
--          ~~~~~~~
--!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
--    class Object {}
++==== subfolder/index.ts (3 errors) ====
+     // cjs format file
+     function require() {}
+              ~~~~~~~
+@@= skipped -12, +11 lines =@@
+           ~~~~~~~
+ !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+     class Object {}
 -          ~~~~~~
 -!!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module NodeNext.
--    export const __esModule = false;
--                 ~~~~~~~~~~
--!!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
--    export {require, exports, Object};
--==== index.ts (0 errors) ====
--    // esm format file
--    function require() {}
--    const exports = {};
--    class Object {}
--    export const __esModule = false;
--    export {require, exports, Object};
--==== package.json (0 errors) ====
--    {
--        "name": "package",
--        "private": true,
--        "type": "module"
--    }
--==== subfolder/package.json (0 errors) ====
--    {
--        "type": "commonjs"
--    }
-@@= skipped --1, +1 lines =@@
-+<no content>
+     export const __esModule = false;
+                  ~~~~~~~~~~
+ !!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.

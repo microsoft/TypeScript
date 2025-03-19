@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type fakeProgram struct {
@@ -51,6 +52,10 @@ func (p *fakeProgram) GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) co
 
 func (p *fakeProgram) GetResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
 	return p.getResolvedModule(currentSourceFile, moduleReference)
+}
+
+func (p *fakeProgram) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
+	return nil
 }
 
 func TestImportElision(t *testing.T) {

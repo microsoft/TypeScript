@@ -40,4 +40,5 @@ import dedent4 from "dedent4"; // Error
 //// [index.mjs]
 export {};
 //// [index.cjs]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

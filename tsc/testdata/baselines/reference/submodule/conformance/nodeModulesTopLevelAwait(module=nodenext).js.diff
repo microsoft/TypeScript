@@ -1,16 +1,12 @@
 --- old.nodeModulesTopLevelAwait(module=nodenext).js
 +++ new.nodeModulesTopLevelAwait(module=nodenext).js
-@@= skipped -21, +21 lines =@@
- }
- 
- //// [index.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--exports.x = void 0;
+@@= skipped -24, +24 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
 -// cjs format file
  const x = await 1;
--exports.x = x;
-+export { x };
+ exports.x = x;
  for await (const y of []) { }
  //// [index.js]
 -// esm format file

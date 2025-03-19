@@ -1217,7 +1217,8 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 					}
 					switch c.moduleKind {
 					case core.ModuleKindNode16, core.ModuleKindNodeNext:
-						if sourceFile.ImpliedNodeFormat == core.ModuleKindCommonJS {
+						sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.Path())
+						if sourceFileMetaData != nil && sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS {
 							c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
 							break
 						}
@@ -1719,7 +1720,8 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 				switch c.moduleKind {
 				case core.ModuleKindNode16,
 					core.ModuleKindNodeNext:
-					if sourceFile.ImpliedNodeFormat == core.ModuleKindCommonJS {
+					sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.Path())
+					if sourceFileMetaData != nil && sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS {
 						if !spanCalculated {
 							span = scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos())
 						}

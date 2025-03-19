@@ -12,8 +12,11 @@ d.a;
 ns.default.a;
 
 //// [a.cjs]
-export const a = 1;
-export default 'string';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = 1;
+exports.default = 'string';
 //// [foo.mjs]
 import d, { a } from './a.cjs';
 import * as ns from './a.cjs';

@@ -7,11 +7,10 @@
 -/// <reference types="pkg" preserve="true" />
  export default getInterI();
  //// [uses.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
 -/// <reference types="pkg" preserve="true" />
--exports.default = getInterR();
-+export default getInterR();
+ exports.default = getInterR();
  //// [index.js]
 -// only an esm file can `import` both kinds of files
  import obj1 from "./sub1/uses.js";

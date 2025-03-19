@@ -20,8 +20,9 @@ export = a;
 }
 
 //// [index.js]
+"use strict";
 const a = {};
-export {};
+module.exports = a;
 //// [index.js]
 const a = {};
 export {};

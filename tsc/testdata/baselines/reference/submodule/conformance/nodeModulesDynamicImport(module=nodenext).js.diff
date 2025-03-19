@@ -1,15 +1,11 @@
 --- old.nodeModulesDynamicImport(module=nodenext).js
 +++ new.nodeModulesDynamicImport(module=nodenext).js
-@@= skipped -23, +23 lines =@@
- declare module "fs";
- 
- //// [index.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--exports.main = main;
+@@= skipped -26, +26 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.main = main;
 -// cjs format file
--async function main() {
-+export async function main() {
+ async function main() {
      const { readFile } = await import("fs");
  }
  //// [index.js]

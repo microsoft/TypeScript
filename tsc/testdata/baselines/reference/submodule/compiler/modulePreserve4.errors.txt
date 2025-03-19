@@ -1,4 +1,5 @@
 /a.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/f.cts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /g.js(1,1): error TS2304: Cannot find name 'exports'.
 /main1.ts(1,13): error TS2305: Module '"/a"' has no exported member 'y'.
 /main1.ts(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -10,12 +11,18 @@
 /main2.mts(5,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /main2.mts(19,16): error TS2306: File '/g.js' is not a module.
 /main2.mts(20,21): error TS2306: File '/g.js' is not a module.
+/main3.cjs(1,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(1,13): error TS2305: Module '"/a"' has no exported member 'y'.
 /main3.cjs(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(5,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(6,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(8,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(9,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(10,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(11,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(12,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(13,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main3.cjs(14,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(15,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /main3.cjs(17,16): error TS2306: File '/g.js' is not a module.
 /main3.cjs(18,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -43,8 +50,10 @@
 ==== /e.mts (0 errors) ====
     export = 0;
     
-==== /f.cts (0 errors) ====
+==== /f.cts (1 errors) ====
     export default 0;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     
 ==== /g.js (1 errors) ====
     exports.default = 0;
@@ -127,8 +136,10 @@
                         ~~~~~
 !!! error TS2306: File '/g.js' is not a module.
     
-==== /main3.cjs (9 errors) ====
+==== /main3.cjs (15 errors) ====
     import { x, y } from "./a"; // No y
+             ~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
                 ~
 !!! error TS2305: Module '"/a"' has no exported member 'y'.
     import a1 = require("./a"); // Error in JS
@@ -137,23 +148,33 @@
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
     import b1 from "./b"; // 0
+           ~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     const b2 = require("./b"); // { default: 0 }
                ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
     import c1 from "./c"; // { default: [Function: default] }
+           ~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     const c2 = require("./c"); // { default: [Function: default] }
                ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     import d1 from "./d"; // [Function: default]
+           ~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     const d2 = require("./d"); // [Function: default]
                ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     import e1 from "./e.mjs"; // 0
+           ~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     const e2 = require("./e.mjs"); // 0
                ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     import f1 from "./f.cjs"; // 0
+           ~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     const f2 = require("./f.cjs"); // { default: 0 }
                ~~~~~~~
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

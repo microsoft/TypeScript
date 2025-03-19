@@ -6,17 +6,16 @@
 -index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
 -subfolder/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
 +subfolder/file.js(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+subfolder/index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
  
  
- ==== subfolder/index.js (1 errors) ====
-@@= skipped -8, +8 lines =@@
+-==== subfolder/index.js (1 errors) ====
++==== subfolder/index.js (0 errors) ====
+     // cjs format file
      const a = {};
      export = a;
-     ~~~~~~~~~~~
+-    ~~~~~~~~~~~
 -!!! error TS8003: 'export =' can only be used in TypeScript files.
 -==== subfolder/file.js (0 errors) ====
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +==== subfolder/file.js (1 errors) ====
      // cjs format file
      const a = {};

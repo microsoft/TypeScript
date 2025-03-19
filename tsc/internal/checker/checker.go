@@ -515,6 +515,7 @@ type Program interface {
 	GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind
 	GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) core.ModuleKind
 	GetResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile
+	GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData
 }
 
 type Host interface{}

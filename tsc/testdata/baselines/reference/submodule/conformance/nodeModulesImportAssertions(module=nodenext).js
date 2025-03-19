@@ -15,5 +15,6 @@ const json2 = import("./package.json", { assert: { type: "json" } }); // should 
 //// [index.js]
 export {};
 //// [otherc.cjs]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const json2 = import("./package.json", { assert: { type: "json" } });
-export {};

@@ -26,12 +26,17 @@ export {require, exports, Object};
 }
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Object = exports.exports = exports.__esModule = void 0;
+exports.require = require;
 function require() { }
 const exports = {};
+exports.exports = exports;
 class Object {
 }
-export const __esModule = false;
-export { require, exports, Object };
+exports.Object = Object;
+exports.__esModule = false;
 //// [index.js]
 function require() { }
 const exports = {};

@@ -64,6 +64,7 @@ import {} from "just-types-versions/foo";
 
 
 //// [main.cjs]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [main.mjs]
 export {};

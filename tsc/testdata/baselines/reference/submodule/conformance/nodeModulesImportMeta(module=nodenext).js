@@ -20,8 +20,11 @@ export {x};
 }
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 const x = import.meta.url;
-export { x };
+exports.x = x;
 //// [index.js]
 const x = import.meta.url;
 export { x };

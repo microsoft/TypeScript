@@ -9,17 +9,18 @@ import (
 
 type ImpliedModuleTransformer struct {
 	Transformer
-	compilerOptions *core.CompilerOptions
-	resolver        binder.ReferenceResolver
-	cjsTransformer  *Transformer
-	esmTransformer  *Transformer
+	compilerOptions            *core.CompilerOptions
+	resolver                   binder.ReferenceResolver
+	sourceFileMetaDataProvider printer.SourceFileMetaDataProvider
+	cjsTransformer             *Transformer
+	esmTransformer             *Transformer
 }
 
-func NewImpliedModuleTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver binder.ReferenceResolver) *Transformer {
+func NewImpliedModuleTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver binder.ReferenceResolver, sourceFileMetaDataProvider printer.SourceFileMetaDataProvider) *Transformer {
 	if resolver == nil {
 		resolver = binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 	}
-	tx := &ImpliedModuleTransformer{compilerOptions: compilerOptions, resolver: resolver}
+	tx := &ImpliedModuleTransformer{compilerOptions: compilerOptions, resolver: resolver, sourceFileMetaDataProvider: sourceFileMetaDataProvider}
 	return tx.newTransformer(tx.visit, emitContext)
 }
 
@@ -41,12 +42,12 @@ func (tx *ImpliedModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.N
 	var transformer *Transformer
 	if format >= core.ModuleKindES2015 {
 		if tx.esmTransformer == nil {
-			tx.esmTransformer = NewESModuleTransformer(tx.emitContext, tx.compilerOptions, tx.resolver)
+			tx.esmTransformer = NewESModuleTransformer(tx.emitContext, tx.compilerOptions, tx.resolver, tx.sourceFileMetaDataProvider)
 		}
 		transformer = tx.esmTransformer
 	} else {
 		if tx.cjsTransformer == nil {
-			tx.cjsTransformer = NewCommonJSModuleTransformer(tx.emitContext, tx.compilerOptions, tx.resolver)
+			tx.cjsTransformer = NewCommonJSModuleTransformer(tx.emitContext, tx.compilerOptions, tx.resolver, tx.sourceFileMetaDataProvider)
 		}
 		transformer = tx.cjsTransformer
 	}
@@ -56,5 +57,5 @@ func (tx *ImpliedModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.N
 
 func (tx *ImpliedModuleTransformer) getEmitModuleFormatOfFile(node *ast.SourceFile) core.ModuleKind {
 	// !!! host.getEmitModuleFormatOfFile?
-	return ast.GetEmitModuleFormatOfFileWorker(node, tx.compilerOptions)
+	return ast.GetEmitModuleFormatOfFileWorker(node, tx.compilerOptions, tx.sourceFileMetaDataProvider.GetSourceFileMetaData(node.Path()))
 }

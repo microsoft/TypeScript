@@ -75,7 +75,8 @@ export {};
 //// [index.mjs]
 export {};
 //// [index.cjs]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [other.js]
 export const a = await import("package/cjs");
 export const b = await import("package/mjs");
@@ -93,10 +94,16 @@ export const f = await import("inner");
 export const d = await import("inner/cjs");
 export const e = await import("inner/mjs");
 //// [other.cjs]
-export const a = import("package/cjs");
-export const b = import("package/mjs");
-export const c = import("package");
-export const f = import("inner");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = exports.c = exports.b = exports.a = void 0;
+exports.a = import("package/cjs");
+exports.b = import("package/mjs");
+exports.c = import("package");
+exports.f = import("inner");
 //// [other2.cjs]
-export const d = import("inner/cjs");
-export const e = import("inner/mjs");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.e = exports.d = void 0;
+exports.d = import("inner/cjs");
+exports.e = import("inner/mjs");

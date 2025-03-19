@@ -38,13 +38,13 @@ func (e *emitter) emit() {
 	e.emitBuildInfo(e.paths.buildInfoPath)
 }
 
-func (e *emitter) getModuleTransformer(emitContext *printer.EmitContext, resolver binder.ReferenceResolver) *transformers.Transformer {
+func (e *emitter) getModuleTransformer(emitContext *printer.EmitContext, resolver binder.ReferenceResolver, sourceFileMetaDataProvider printer.SourceFileMetaDataProvider) *transformers.Transformer {
 	options := e.host.Options()
 
 	switch options.GetEmitModuleKind() {
 	case core.ModuleKindPreserve:
 		// `ESModuleTransformer` contains logic for preserving CJS input syntax in `--module preserve`
-		return transformers.NewESModuleTransformer(emitContext, options, resolver)
+		return transformers.NewESModuleTransformer(emitContext, options, resolver, sourceFileMetaDataProvider)
 
 	case core.ModuleKindESNext,
 		core.ModuleKindES2022,
@@ -53,10 +53,10 @@ func (e *emitter) getModuleTransformer(emitContext *printer.EmitContext, resolve
 		core.ModuleKindNode16,
 		core.ModuleKindNodeNext,
 		core.ModuleKindCommonJS:
-		return transformers.NewImpliedModuleTransformer(emitContext, options, resolver)
+		return transformers.NewImpliedModuleTransformer(emitContext, options, resolver, sourceFileMetaDataProvider)
 
 	default:
-		return transformers.NewCommonJSModuleTransformer(emitContext, options, resolver)
+		return transformers.NewCommonJSModuleTransformer(emitContext, options, resolver, sourceFileMetaDataProvider)
 	}
 }
 
@@ -89,7 +89,7 @@ func (e *emitter) getScriptTransformers(emitContext *printer.EmitContext, source
 	tx = append(tx, transformers.NewRuntimeSyntaxTransformer(emitContext, options, referenceResolver))
 
 	// transform module syntax
-	tx = append(tx, e.getModuleTransformer(emitContext, referenceResolver))
+	tx = append(tx, e.getModuleTransformer(emitContext, referenceResolver, e.host))
 	return tx
 }
 

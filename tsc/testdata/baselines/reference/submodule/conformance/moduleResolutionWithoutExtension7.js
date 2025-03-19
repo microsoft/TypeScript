@@ -5,4 +5,5 @@
 import foo = require("./foo"); // should error, should not ask for extension
 
 //// [bar.cjs]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

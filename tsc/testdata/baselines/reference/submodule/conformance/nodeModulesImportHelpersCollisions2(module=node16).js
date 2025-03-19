@@ -26,8 +26,12 @@ declare module "tslib" {
 }
 
 //// [index.js]
-export * from "fs";
-export * as fs from "fs";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fs = void 0;
+const tslib_1 = require("tslib");
+tslib_1.__exportStar(require("fs"), exports);
+exports.fs = tslib_1.__importStar(require("fs"));
 //// [index.js]
 export * from "fs";
 export * as fs from "fs";

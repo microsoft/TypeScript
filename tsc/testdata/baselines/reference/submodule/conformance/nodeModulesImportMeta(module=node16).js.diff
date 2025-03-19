@@ -1,16 +1,12 @@
 --- old.nodeModulesImportMeta(module=node16).js
 +++ new.nodeModulesImportMeta(module=node16).js
-@@= skipped -19, +19 lines =@@
- }
- 
- //// [index.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--exports.x = void 0;
+@@= skipped -22, +22 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
 -// cjs format file
  const x = import.meta.url;
--exports.x = x;
-+export { x };
+ exports.x = x;
  //// [index.js]
 -// esm format file
  const x = import.meta.url;

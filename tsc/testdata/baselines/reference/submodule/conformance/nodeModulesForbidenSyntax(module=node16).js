@@ -67,11 +67,17 @@ export {x};
 }
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 const x = () => (void 0);
-export { x };
+exports.x = x;
 //// [index.cjs]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 const x = () => (void 0);
-export { x };
+exports.x = x;
 //// [index.mjs]
 const x = () => (void 0);
 export { x };
@@ -79,8 +85,11 @@ export { x };
 const x = () => (void 0);
 export { x };
 //// [index.cjs]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 const x = () => (void 0);
-export { x };
+exports.x = x;
 //// [index.mjs]
 const x = () => (void 0);
 export { x };
@@ -91,14 +100,20 @@ export { x };
 const x = () => (void 0);
 export { x };
 //// [index.cjs]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 const x = () => (void 0);
-export { x };
+exports.x = x;
 //// [index.mjs]
 const x = () => (void 0);
 export { x };
 //// [index.cjs]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 const x = () => (void 0);
-export { x };
+exports.x = x;
 //// [index.js]
 const x = () => (void 0);
 export { x };

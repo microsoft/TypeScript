@@ -1,9 +1,0 @@
---- old.moduleResolutionWithoutExtension6.js
-+++ new.moduleResolutionWithoutExtension6.js
-@@= skipped -6, +6 lines =@@
- import { foo } from "./foo"; // should error, should not ask for extension
- 
- //// [bar.cjs]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
-+export {};

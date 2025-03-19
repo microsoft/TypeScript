@@ -49,6 +49,8 @@ type Program struct {
 	files       []*ast.SourceFile
 	filesByPath map[tspath.Path]*ast.SourceFile
 
+	sourceFileMetaDatas map[tspath.Path]*ast.SourceFileMetaData
+
 	// The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
 	// This works as imported modules are discovered recursively in a depth first manner, specifically:
 	// - For each root file, findSourceFile is called.
@@ -68,13 +70,12 @@ type Program struct {
 	unsupportedExtensions []string
 }
 
-var extensions = []string{".ts", ".tsx"}
-
 func NewProgram(options ProgramOptions) *Program {
 	p := &Program{}
 	p.programOptions = options
 	p.compilerOptions = options.Options
 	p.configFileParsingDiagnostics = slices.Clip(options.ConfigFileParsingDiagnostics)
+	p.sourceFileMetaDatas = make(map[tspath.Path]*ast.SourceFileMetaData)
 	if p.compilerOptions == nil {
 		p.compilerOptions = &core.CompilerOptions{}
 	}
@@ -152,7 +153,7 @@ func NewProgram(options ProgramOptions) *Program {
 		}
 	}
 
-	p.files, p.resolvedModules = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
+	p.files, p.resolvedModules, p.sourceFileMetaDatas = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
 	p.filesByPath = make(map[tspath.Path]*ast.SourceFile, len(p.files))
 	for _, file := range p.files {
 		p.filesByPath[file.Path()] = file
@@ -456,16 +457,20 @@ func (p *Program) PrintSourceFileWithTypes() {
 	}
 }
 
+func (p *Program) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
+	return p.sourceFileMetaDatas[path]
+}
+
 func (p *Program) GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind {
 	return p.GetEmitModuleFormatOfFileWorker(sourceFile, p.compilerOptions)
 }
 
 func (p *Program) GetEmitModuleFormatOfFileWorker(sourceFile *ast.SourceFile, options *core.CompilerOptions) core.ModuleKind {
-	return ast.GetEmitModuleFormatOfFileWorker(sourceFile, options)
+	return ast.GetEmitModuleFormatOfFileWorker(sourceFile, options, p.GetSourceFileMetaData(sourceFile.Path()))
 }
 
 func (p *Program) GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) core.ResolutionMode {
-	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile, p.compilerOptions)
+	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.compilerOptions, p.GetSourceFileMetaData(sourceFile.Path()))
 }
 
 func (p *Program) CommonSourceDirectory() string {

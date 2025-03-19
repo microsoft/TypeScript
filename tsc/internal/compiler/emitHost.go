@@ -4,6 +4,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type WriteFileData struct {
@@ -23,6 +24,7 @@ type EmitHost interface {
 	CommonSourceDirectory() string
 	IsEmitBlocked(file string) bool
 	WriteFile(fileName string, text string, writeByteOrderMark bool, relatedSourceFiles []*ast.SourceFile, data *WriteFileData) error
+	GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData
 	GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) printer.EmitResolver
 }
 
@@ -53,4 +55,8 @@ func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark
 func (host *emitHost) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) printer.EmitResolver {
 	checker := host.program.GetTypeCheckerForFile(file)
 	return checker.GetEmitResolver(file, skipDiagnostics)
+}
+
+func (host *emitHost) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
+	return host.program.GetSourceFileMetaData(path)
 }

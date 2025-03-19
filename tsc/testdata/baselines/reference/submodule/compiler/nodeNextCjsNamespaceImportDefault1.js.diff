@@ -1,17 +1,6 @@
 --- old.nodeNextCjsNamespaceImportDefault1.js
 +++ new.nodeNextCjsNamespaceImportDefault1.js
-@@= skipped -10, +10 lines =@@
- ns.default.a;
- 
- //// [a.cjs]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--exports.a = void 0;
--exports.a = 1;
-+export const a = 1;
- //// [foo.mjs]
- import d, { a } from './a.cjs';
- import * as ns from './a.cjs';
+@@= skipped -20, +20 lines =@@
  export { d, a, ns };
  d.a;
  ns.default.a;

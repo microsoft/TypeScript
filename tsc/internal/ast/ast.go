@@ -8666,6 +8666,11 @@ type CommentDirective struct {
 
 // SourceFile
 
+type SourceFileMetaData struct {
+	PackageJsonType   string
+	ImpliedNodeFormat core.ResolutionMode
+}
+
 type SourceFile struct {
 	NodeBase
 	DeclarationBase
@@ -8727,7 +8732,6 @@ type SourceFile struct {
 
 	// !!!
 
-	ImpliedNodeFormat       core.ModuleKind
 	CommonJsModuleIndicator *Node
 	ExternalModuleIndicator *Node
 	JsGlobalAugmentations   SymbolTable
@@ -8812,7 +8816,6 @@ func (node *SourceFile) copyFrom(other *SourceFile) {
 	node.ReferencedFiles = other.ReferencedFiles
 	node.TypeReferenceDirectives = other.TypeReferenceDirectives
 	node.LibReferenceDirectives = other.LibReferenceDirectives
-	node.ImpliedNodeFormat = other.ImpliedNodeFormat
 	node.CommonJsModuleIndicator = other.CommonJsModuleIndicator
 	node.ExternalModuleIndicator = other.ExternalModuleIndicator
 	node.JsGlobalAugmentations = other.JsGlobalAugmentations

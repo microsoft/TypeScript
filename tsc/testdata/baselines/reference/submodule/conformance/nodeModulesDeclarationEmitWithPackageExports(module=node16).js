@@ -105,18 +105,44 @@ export const d = cjsi;
 export const e = mjsi;
 export const f = typei;
 //// [index.cjs]
-import * as cjs from "package/cjs";
-import * as mjs from "package/mjs";
-import * as type from "package";
-export const a = cjs;
-export const b = mjs;
-export const c = type;
-import * as cjsi from "inner/cjs";
-import * as mjsi from "inner/mjs";
-import * as typei from "inner";
-export const d = cjsi;
-export const e = mjsi;
-export const f = typei;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
+const cjs = __importStar(require("package/cjs"));
+const mjs = __importStar(require("package/mjs"));
+const type = __importStar(require("package"));
+exports.a = cjs;
+exports.b = mjs;
+exports.c = type;
+const cjsi = __importStar(require("inner/cjs"));
+const mjsi = __importStar(require("inner/mjs"));
+const typei = __importStar(require("inner"));
+exports.d = cjsi;
+exports.e = mjsi;
+exports.f = typei;
 //// [index.js]
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
