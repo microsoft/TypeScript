@@ -76,11 +76,12 @@ func (vfs *osFS) UseCaseSensitiveFileNames() bool {
 	return isFileSystemCaseSensitive
 }
 
-var osReadSema = make(chan struct{}, 128)
+var readSema = make(chan struct{}, 128)
 
 func (vfs *osFS) ReadFile(path string) (contents string, ok bool) {
-	osReadSema <- struct{}{}
-	defer func() { <-osReadSema }()
+	// Limit ourselves to fewer open files, which greatly reduces IO contention.
+	readSema <- struct{}{}
+	defer func() { <-readSema }()
 
 	return vfs.common.ReadFile(path)
 }
@@ -125,7 +126,12 @@ func osFSRealpath(path string) string {
 	return tspath.NormalizeSlashes(path)
 }
 
+var writeSema = make(chan struct{}, 32)
+
 func (vfs *osFS) writeFile(path string, content string, writeByteOrderMark bool) error {
+	writeSema <- struct{}{}
+	defer func() { <-writeSema }()
+
 	file, err := os.Create(path)
 	if err != nil {
 		return err
