@@ -5,23 +5,10 @@
  
  function f(x: ?number, y: Array.<number>) {
 ->f : (x: number | null, y: Array<number>) => number
-->x : number | null
-+>f : (x: any, y: number[]) => any
-+>x : any
++>f : (x: number | null, y: number[]) => number
+ >x : number | null
  >y : number[]
  
-     return x ? x + y[1] : y[0];
-->x ? x + y[1] : y[0] : number
-->x : number | null
-->x + y[1] : number
-->x : number
-+>x ? x + y[1] : y[0] : any
-+>x : any
-+>x + y[1] : any
-+>x : any
- >y[1] : number
- >y : number[]
- >1 : 1
 @@= skipped -17, +17 lines =@@
  >0 : 0
  }
@@ -58,8 +45,8 @@
      return f(12, 'hullo');
 ->f(12, 'hullo') : string
 ->f : (this: number, arg1: string) => string
-+>f(12, 'hullo') : any
-+>f : (x: any, y: number[]) => any
++>f(12, 'hullo') : number
++>f : (x: number | null, y: number[]) => number
  >12 : 12
  >'hullo' : "hullo"
  }
@@ -89,9 +76,8 @@
 +>m : any
  
  var most: !string = 'definite';
-->most : string
-+>most : any
- >'definite' : "definite"
+ >most : string
+@@= skipped -14, +20 lines =@@
  
  var postfixdef: number! = 101;
  >postfixdef : number
@@ -106,12 +92,4 @@
 +>undefined : any
  
  var nns: Array<?number>;
-->nns : (number | null)[]
-+>nns : any[]
- 
- var dns: Array<!number>;
-->dns : number[]
-+>dns : any[]
- 
- var anys: Array<*>;
- >anys : any[]
+ >nns : (number | null)[]

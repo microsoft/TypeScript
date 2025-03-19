@@ -2,7 +2,7 @@
 
 === parseInvalidNullableTypes.ts ===
 function f1(a: string): a is ?string {
->f1 : (a: string) => a is any
+>f1 : (a: string) => a is string | null
 >a : string
 
     return true;
@@ -20,15 +20,15 @@ function f3(a: number?) {}
 > : any
 
 function f4(a: ?string) {}
->f4 : (a: any) => void
->a : any
+>f4 : (a: string | null) => void
+>a : string | null
 
 function f5(a: ?number) {}
->f5 : (a: any) => void
->a : any
+>f5 : (a: number | null) => void
+>a : number | null
 
 function f6(a: string): ?string {
->f6 : (a: string) => any
+>f6 : (a: string) => string | null
 >a : string
 
     return true;
@@ -53,7 +53,7 @@ const c = 1 as ?any;
 >1 : 1
 
 const d: ?number = 1;
->d : any
+>d : number | null
 >1 : 1
 
 let e: unknown?;

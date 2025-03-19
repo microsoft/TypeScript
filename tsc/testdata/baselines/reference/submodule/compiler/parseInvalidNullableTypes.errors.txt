@@ -1,7 +1,11 @@
+parseInvalidNullableTypes.ts(1,30): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'string | null' is not assignable to type 'string'.
+    Type 'null' is not assignable to type 'string'.
 parseInvalidNullableTypes.ts(5,22): error TS1005: ',' expected.
 parseInvalidNullableTypes.ts(5,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
 parseInvalidNullableTypes.ts(6,22): error TS1005: ',' expected.
 parseInvalidNullableTypes.ts(6,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+parseInvalidNullableTypes.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
 parseInvalidNullableTypes.ts(15,20): error TS1109: Expression expected.
 parseInvalidNullableTypes.ts(16,16): error TS1005: ',' expected.
 parseInvalidNullableTypes.ts(16,18): error TS1134: Variable declaration expected.
@@ -12,8 +16,12 @@ parseInvalidNullableTypes.ts(23,12): error TS1005: ',' expected.
 parseInvalidNullableTypes.ts(24,17): error TS1005: ',' expected.
 
 
-==== parseInvalidNullableTypes.ts (12 errors) ====
+==== parseInvalidNullableTypes.ts (14 errors) ====
     function f1(a: string): a is ?string {
+                                 ~~~~~~~
+!!! error TS2677: A type predicate's type must be assignable to its parameter's type.
+!!! error TS2677:   Type 'string | null' is not assignable to type 'string'.
+!!! error TS2677:     Type 'null' is not assignable to type 'string'.
         return true;
     }
     
@@ -33,6 +41,8 @@ parseInvalidNullableTypes.ts(24,17): error TS1005: ',' expected.
     
     function f6(a: string): ?string {
         return true;
+        ~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
     }
     
     const a = 1 as any?;

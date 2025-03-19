@@ -1,16 +1,20 @@
 --- old.parseInvalidNullableTypes.errors.txt
 +++ new.parseInvalidNullableTypes.errors.txt
 @@= skipped -0, +0 lines =@@
--parseInvalidNullableTypes.ts(1,30): error TS2677: A type predicate's type must be assignable to its parameter's type.
--  Type 'string | null' is not assignable to type 'string'.
--    Type 'null' is not assignable to type 'string'.
+ parseInvalidNullableTypes.ts(1,30): error TS2677: A type predicate's type must be assignable to its parameter's type.
+   Type 'string | null' is not assignable to type 'string'.
+     Type 'null' is not assignable to type 'string'.
 -parseInvalidNullableTypes.ts(1,30): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
 -parseInvalidNullableTypes.ts(5,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
 -parseInvalidNullableTypes.ts(6,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
 -parseInvalidNullableTypes.ts(8,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
 -parseInvalidNullableTypes.ts(9,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 -parseInvalidNullableTypes.ts(11,25): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
--parseInvalidNullableTypes.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
++parseInvalidNullableTypes.ts(5,22): error TS1005: ',' expected.
++parseInvalidNullableTypes.ts(5,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
++parseInvalidNullableTypes.ts(6,22): error TS1005: ',' expected.
++parseInvalidNullableTypes.ts(6,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+ parseInvalidNullableTypes.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
 -parseInvalidNullableTypes.ts(15,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
 -parseInvalidNullableTypes.ts(16,10): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
 -parseInvalidNullableTypes.ts(18,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
@@ -19,10 +23,6 @@
 -parseInvalidNullableTypes.ts(22,8): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'never'?
 -parseInvalidNullableTypes.ts(23,8): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'void'?
 -parseInvalidNullableTypes.ts(24,8): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'undefined'?
-+parseInvalidNullableTypes.ts(5,22): error TS1005: ',' expected.
-+parseInvalidNullableTypes.ts(5,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
-+parseInvalidNullableTypes.ts(6,22): error TS1005: ',' expected.
-+parseInvalidNullableTypes.ts(6,22): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
 +parseInvalidNullableTypes.ts(15,20): error TS1109: Expression expected.
 +parseInvalidNullableTypes.ts(16,16): error TS1005: ',' expected.
 +parseInvalidNullableTypes.ts(16,18): error TS1134: Variable declaration expected.
@@ -34,12 +34,12 @@
  
  
 -==== parseInvalidNullableTypes.ts (16 errors) ====
-+==== parseInvalidNullableTypes.ts (12 errors) ====
++==== parseInvalidNullableTypes.ts (14 errors) ====
      function f1(a: string): a is ?string {
--                                 ~~~~~~~
--!!! error TS2677: A type predicate's type must be assignable to its parameter's type.
--!!! error TS2677:   Type 'string | null' is not assignable to type 'string'.
--!!! error TS2677:     Type 'null' is not assignable to type 'string'.
+                                  ~~~~~~~
+ !!! error TS2677: A type predicate's type must be assignable to its parameter's type.
+ !!! error TS2677:   Type 'string | null' is not assignable to type 'string'.
+ !!! error TS2677:     Type 'null' is not assignable to type 'string'.
 -                                 ~~~~~~~
 -!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
          return true;
@@ -71,8 +71,8 @@
 -                            ~~~~~~~
 -!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
          return true;
--        ~~~~~~
--!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+         ~~~~~~
+ !!! error TS2322: Type 'boolean' is not assignable to type 'string'.
      }
      
      const a = 1 as any?;

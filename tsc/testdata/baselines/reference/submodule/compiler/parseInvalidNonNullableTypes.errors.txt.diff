@@ -9,12 +9,6 @@
 -parseInvalidNonNullableTypes.ts(13,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 -parseInvalidNonNullableTypes.ts(15,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 -parseInvalidNonNullableTypes.ts(15,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
--parseInvalidNonNullableTypes.ts(16,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
--parseInvalidNonNullableTypes.ts(16,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
--parseInvalidNonNullableTypes.ts(18,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
--parseInvalidNonNullableTypes.ts(19,10): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
--parseInvalidNonNullableTypes.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
--parseInvalidNonNullableTypes.ts(22,10): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 +parseInvalidNonNullableTypes.ts(1,36): error TS1144: '{' or ';' expected.
 +parseInvalidNonNullableTypes.ts(1,38): error TS2872: This kind of expression is always truthy.
 +parseInvalidNonNullableTypes.ts(2,12): error TS1005: ':' expected.
@@ -25,13 +19,20 @@
 +parseInvalidNonNullableTypes.ts(10,22): error TS1005: ',' expected.
 +parseInvalidNonNullableTypes.ts(15,22): error TS1144: '{' or ';' expected.
 +parseInvalidNonNullableTypes.ts(15,24): error TS2872: This kind of expression is always truthy.
+ parseInvalidNonNullableTypes.ts(16,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+-parseInvalidNonNullableTypes.ts(16,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+-parseInvalidNonNullableTypes.ts(18,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+-parseInvalidNonNullableTypes.ts(19,10): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+-parseInvalidNonNullableTypes.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+-parseInvalidNonNullableTypes.ts(22,10): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 +parseInvalidNonNullableTypes.ts(18,19): error TS1005: ',' expected.
 +parseInvalidNonNullableTypes.ts(18,20): error TS1109: Expression expected.
 +parseInvalidNonNullableTypes.ts(19,16): error TS1005: ',' expected.
 +parseInvalidNonNullableTypes.ts(19,18): error TS1109: Expression expected.
  
  
- ==== parseInvalidNonNullableTypes.ts (14 errors) ====
+-==== parseInvalidNonNullableTypes.ts (14 errors) ====
++==== parseInvalidNonNullableTypes.ts (15 errors) ====
      function f1(a: string): a is string! {
 -                                 ~~~~~~~
 -!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
@@ -86,8 +87,8 @@
 +                           ~~
 +!!! error TS2872: This kind of expression is always truthy.
      function f8(): !string {}
--                   ~~~~~~~
--!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                    ~~~~~~~
+ !!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 -                   ~~~~~~~
 -!!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
      

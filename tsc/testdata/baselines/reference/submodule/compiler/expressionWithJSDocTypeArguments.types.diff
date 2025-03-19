@@ -17,10 +17,8 @@
 +> : any
  
  const NopeFoo = foo<?string>;
-->NopeFoo : (x: string | null) => string | null
-->foo<?string> : (x: string | null) => string | null
-+>NopeFoo : (x: any) => any
-+>foo<?string> : (x: any) => any
+ >NopeFoo : (x: string | null) => string | null
+@@= skipped -10, +16 lines =@@
  >foo : <T>(x: T) => T
  
  const ComeOnFoo = foo<?string?>;
@@ -54,12 +52,12 @@
  
  type TNopeFoo = typeof foo<?string>;
 ->TNopeFoo : typeof foo<string | null>
-+>TNopeFoo : (x: any) => any
++>TNopeFoo : (x: string | null) => string | null
  >foo : <T>(x: T) => T
  
  type TComeOnFoo = typeof foo<?string?>;
 ->TComeOnFoo : typeof foo<(string | null) | null>
-+>TComeOnFoo : (x: any) => any
++>TComeOnFoo : (x: string | null) => string | null
  >foo : <T>(x: T) => T
 +>> : boolean
 +> : any
@@ -67,7 +65,7 @@
  
  const WhatBar = Bar<?>;
  >WhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
-@@= skipped -36, +57 lines =@@
+@@= skipped -26, +41 lines =@@
  >Bar : typeof Bar
  
  const HuhBar = Bar<string?>;
@@ -84,10 +82,8 @@
 +> : any
  
  const NopeBar = Bar<?string>;
-->NopeBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
-->Bar<?string> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
-+>NopeBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
-+>Bar<?string> : { new (x: any): Bar<any>; prototype: Bar<any>; }
+ >NopeBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
+@@= skipped -10, +16 lines =@@
  >Bar : typeof Bar
  
  const ComeOnBar = Bar<?string?>;
@@ -121,12 +117,12 @@
  
  type TNopeBar = typeof Bar<?string>;
 ->TNopeBar : typeof Bar<string | null>
-+>TNopeBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
++>TNopeBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
  >Bar : typeof Bar
  
  type TComeOnBar = typeof Bar<?string?>;
 ->TComeOnBar : typeof Bar<(string | null) | null>
-+>TComeOnBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
++>TComeOnBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
  >Bar : typeof Bar
 +>> : boolean
 +> : any

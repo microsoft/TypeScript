@@ -10,15 +10,15 @@ var ara: Array.<number> = [1,2,3];
 >3 : 3
 
 function f(x: ?number, y: Array.<number>) {
->f : (x: any, y: number[]) => any
->x : any
+>f : (x: number | null, y: number[]) => number
+>x : number | null
 >y : number[]
 
     return x ? x + y[1] : y[0];
->x ? x + y[1] : y[0] : any
->x : any
->x + y[1] : any
->x : any
+>x ? x + y[1] : y[0] : number
+>x : number | null
+>x + y[1] : number
+>x : number
 >y[1] : number
 >y : number[]
 >1 : 1
@@ -50,8 +50,8 @@ function hof2(f: function(this: number, string): string) {
 > : any
 
     return f(12, 'hullo');
->f(12, 'hullo') : any
->f : (x: any, y: number[]) => any
+>f(12, 'hullo') : number
+>f : (x: number | null, y: number[]) => number
 >12 : 12
 >'hullo' : "hullo"
 }
@@ -79,7 +79,7 @@ var g: function(number, number): number = (n,m) => n + m;
 >m : any
 
 var most: !string = 'definite';
->most : any
+>most : string
 >'definite' : "definite"
 
 var postfixdef: number! = 101;
@@ -93,10 +93,10 @@ var postfixopt: number? = undefined;
 >undefined : any
 
 var nns: Array<?number>;
->nns : any[]
+>nns : (number | null)[]
 
 var dns: Array<!number>;
->dns : any[]
+>dns : number[]
 
 var anys: Array<*>;
 >anys : any[]

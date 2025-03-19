@@ -12,12 +12,6 @@
  >true : true
  }
  
- function f2(a: string): a is !string {
-->f2 : (a: string) => a is string
-+>f2 : (a: string) => a is any
- >a : string
- 
-     return true;
 @@= skipped -14, +17 lines =@@
  }
  
@@ -34,16 +28,8 @@
 +> : any
  
  function f5(a: !string) {}
-->f5 : (a: string) => void
-->a : string
-+>f5 : (a: any) => void
-+>a : any
- 
- function f6(a: !number) {}
-->f6 : (a: number) => void
-->a : number
-+>f6 : (a: any) => void
-+>a : any
+ >f5 : (a: string) => void
+@@= skipped -17, +19 lines =@@
  
  function f7(): string! {}
  >f7 : () => string
@@ -51,8 +37,7 @@
 +>{} : {}
  
  function f8(): !string {}
-->f8 : () => string
-+>f8 : () => any
+ >f8 : () => string
  
  const a = 1 as any!;
  >a : any
@@ -69,11 +54,3 @@
  >1 : 1
  
  const c = 1 as !any;
-@@= skipped -36, +44 lines =@@
- >1 : 1
- 
- const d: !number = 1;
-->d : number
-+>d : any
- >1 : 1
- 
