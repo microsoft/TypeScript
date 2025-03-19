@@ -497,14 +497,15 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
-        if (some(symbol.declarations, d => isEnumDeclaration(d) && isEnumConst(d))) {
-            displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
+        if (!tryUnfoldSymbol(symbol)) {
+            if (some(symbol.declarations, d => isEnumDeclaration(d) && isEnumConst(d))) {
+                displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
+                displayParts.push(spacePart());
+            }
+            displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
             displayParts.push(spacePart());
+            addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined);
         }
-        displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
-        displayParts.push(spacePart());
-        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined);
-        tryUnfoldSymbol(symbol);
     }
     if (symbolFlags & SymbolFlags.Module && !isThisExpression) {
         prefixNextMeaning();
@@ -858,26 +859,26 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         let unfoldType;
         if (unfoldType = canUnfoldSymbol(symbol, typeWriterOut)) {
             if (symbol.flags & SymbolFlags.Enum) {
-                // >> TODO: probably add enum printing as enum declaration at the top level; add it to return of `createNodeBuilder`.
-            }
-            else if (symbol.flags & SymbolFlags.Class) {
-                let expandedDisplayParts = mapToDisplayParts(writer => {
-                    const node = typeChecker.classSymbolToNode(
+                const expandedDisplayParts = mapToDisplayParts(writer => {
+                    const node = typeChecker.enumSymbolToDeclaration(
                         symbol,
-                        undefined,
                         TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
-                        undefined,
-                        undefined,
                         verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
                         typeWriterOut)!;  
                     getPrinter().writeNode(EmitHint.Unspecified, node, sourceFile, writer);
                 });
-                let start = 0;
-                while (start < expandedDisplayParts.length &&
-                    expandedDisplayParts[start].kind === SymbolDisplayPartKind[SymbolDisplayPartKind.lineBreak]) {
-                    start++;
-                }
-                addRange(displayParts, expandedDisplayParts, start);
+                addRange(displayParts, expandedDisplayParts);
+            }
+            else if (symbol.flags & SymbolFlags.Class) {
+                const expandedDisplayParts = mapToDisplayParts(writer => {
+                    const node = typeChecker.classSymbolToDeclaration(
+                        symbol,
+                        TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+                        verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
+                        typeWriterOut)!;  
+                    getPrinter().writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+                });
+                addRange(displayParts, expandedDisplayParts);
             }
             else {
                 const expandedDisplayParts = typeToDisplayParts(

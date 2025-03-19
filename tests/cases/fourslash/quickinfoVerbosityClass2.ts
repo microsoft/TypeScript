@@ -40,6 +40,12 @@
 ////     abstract makeSound(): void;
 //// }
 
+//// class Dog/*8*/ {
+////     what(this: this, that: Dog) { }
+////     #bones: string[];
+//// }
+//// const d/*9*/ = new Dog();
+
 
 verify.baselineQuickInfo({
     1: [0, 1, 2],
@@ -49,4 +55,6 @@ verify.baselineQuickInfo({
     5: [0, 1, 2],
     6: [0],
     7: [0, 1],
+    8: [0, 1],
+    9: [0, 1],
 });

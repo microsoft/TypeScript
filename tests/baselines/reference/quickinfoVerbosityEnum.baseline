@@ -4,9 +4,9 @@
 //      ^^^^^
 // | ----------------------------------------------------------------------
 // | enum Color {
-// |     Red;
-// |     Green;
-// |     Blue;
+// |     Red = 0,
+// |     Green = 1,
+// |     Blue = 2
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -28,6 +28,34 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | const x: Color
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const enum Direction {
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | const enum Direction {
+// |     Up = 0,
+// |     Down = 1
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | const enum Direction
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     Up,
+//     Down,
+// }
+// const y: Direction = Direction.Up;
+//       ^
+// | ----------------------------------------------------------------------
+// | const y: Direction.Up | Direction.Down
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | const y: Direction
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 
@@ -88,7 +116,7 @@
         },
         {
           "text": "Color",
-          "kind": "enumName"
+          "kind": "text"
         },
         {
           "text": " ",
@@ -108,10 +136,26 @@
         },
         {
           "text": "Red",
-          "kind": "propertyName"
+          "kind": "text"
         },
         {
-          "text": ";",
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
           "kind": "punctuation"
         },
         {
@@ -124,10 +168,26 @@
         },
         {
           "text": "Green",
-          "kind": "propertyName"
+          "kind": "text"
         },
         {
-          "text": ";",
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
           "kind": "punctuation"
         },
         {
@@ -140,11 +200,23 @@
         },
         {
           "text": "Blue",
-          "kind": "propertyName"
+          "kind": "text"
         },
         {
-          "text": ";",
-          "kind": "punctuation"
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "2",
+          "kind": "stringLiteral"
         },
         {
           "text": "\n",
@@ -296,6 +368,282 @@
         },
         {
           "text": "Blue",
+          "kind": "text"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
+      "position": 93,
+      "name": "d"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 84,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Direction",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
+      "position": 93,
+      "name": "d"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 84,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Direction",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "Up",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "Down",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
+      "position": 123,
+      "name": "y"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 122,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Direction",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityEnum.ts",
+      "position": 123,
+      "name": "y"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 122,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Direction",
+          "kind": "enumName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Up",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Direction",
+          "kind": "enumName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Down",
           "kind": "text"
         }
       ],

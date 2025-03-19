@@ -5052,6 +5052,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
 
 /** @internal */
 export interface WriterContextOut {
+    /** Whether we found a type alias that we could unfold but didn't. */
     couldUnfoldMore: boolean;
     truncated: boolean;
 }
@@ -5445,8 +5446,8 @@ export interface TypeChecker {
 
     getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
     /** @internal */ isLibType(type: Type): boolean;
-    /** @internal */ classSymbolToNode(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut): Node | undefined;
-    
+    /** @internal */ classSymbolToDeclaration(symbol: Symbol, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration | undefined;
+    /** @internal */ enumSymbolToDeclaration(symbol: Symbol, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration | undefined;
 }
 
 /** @internal */
