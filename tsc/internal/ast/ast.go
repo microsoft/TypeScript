@@ -8689,6 +8689,7 @@ type SourceFile struct {
 	HasNoDefaultLib             bool
 	UsesUriStyleNodeCoreModules core.Tristate
 	Identifiers                 map[string]string
+	IdentifierCount             int
 	Imports                     []*LiteralLikeNode // []LiteralLikeNode
 	ModuleAugmentations         []*ModuleName      // []ModuleName
 	AmbientModuleNames          []string

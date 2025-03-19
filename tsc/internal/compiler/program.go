@@ -400,10 +400,45 @@ func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound b
 	return SortAndDeduplicateDiagnostics(result)
 }
 
+func (p *Program) LineCount() int {
+	var count int
+	for _, file := range p.files {
+		count += len(file.LineMap())
+	}
+	return count
+}
+
+func (p *Program) IdentifierCount() int {
+	var count int
+	for _, file := range p.files {
+		count += file.IdentifierCount
+	}
+	return count
+}
+
+func (p *Program) SymbolCount() int {
+	var count int
+	for _, file := range p.files {
+		count += file.SymbolCount
+	}
+	for _, checker := range p.checkers {
+		count += int(checker.SymbolCount)
+	}
+	return count
+}
+
 func (p *Program) TypeCount() int {
 	var count int
 	for _, checker := range p.checkers {
 		count += int(checker.TypeCount)
+	}
+	return count
+}
+
+func (p *Program) InstantiationCount() int {
+	var count int
+	for _, checker := range p.checkers {
+		count += int(checker.TotalInstantiationCount)
 	}
 	return count
 }

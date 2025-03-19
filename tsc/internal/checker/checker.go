@@ -531,8 +531,8 @@ type Checker struct {
 	fileIndexMap                               map[*ast.SourceFile]int
 	compareSymbols                             func(*ast.Symbol, *ast.Symbol) int
 	TypeCount                                  uint32
-	symbolCount                                uint32
-	totalInstantiationCount                    uint32
+	SymbolCount                                uint32
+	TotalInstantiationCount                    uint32
 	instantiationCount                         uint32
 	instantiationDepth                         uint32
 	inlineLevel                                int
@@ -13041,7 +13041,7 @@ func (c *Checker) hasParseDiagnostics(sourceFile *ast.SourceFile) bool {
 }
 
 func (c *Checker) newSymbol(flags ast.SymbolFlags, name string) *ast.Symbol {
-	c.symbolCount++
+	c.SymbolCount++
 	result := c.symbolPool.New()
 	result.Flags = flags | ast.SymbolFlagsTransient
 	result.Name = name
@@ -20255,7 +20255,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		c.error(c.currentNode, diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
 		return c.errorType
 	}
-	c.totalInstantiationCount++
+	c.TotalInstantiationCount++
 	c.instantiationCount++
 	c.instantiationDepth++
 	result := c.instantiateTypeWorker(t, m, alias)

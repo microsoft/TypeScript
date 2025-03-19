@@ -68,6 +68,7 @@ type Parser struct {
 	hasDeprecatedTag            bool
 
 	identifiers             map[string]string
+	identifierCount         int
 	notParenthesizedArrow   core.Set[int]
 	nodeSlicePool           core.Pool[*ast.Node]
 	jsdocCache              map[*ast.Node][]*ast.Node
@@ -326,6 +327,7 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	result.ScriptKind = p.scriptKind
 	result.Flags |= p.sourceFlags
 	result.Identifiers = p.identifiers
+	result.IdentifierCount = p.identifierCount
 	result.SetJSDocCache(p.jsdocCache)
 	p.jsdocCache = nil
 	p.identifiers = nil
@@ -2812,6 +2814,7 @@ func (p *Parser) parseRightSideOfDot(allowIdentifierNames bool, allowPrivateIden
 }
 
 func (p *Parser) newIdentifier(text string) *ast.Node {
+	p.identifierCount++
 	id := p.factory.NewIdentifier(text)
 	if text == "await" {
 		p.statementHasAwaitIdentifier = true
