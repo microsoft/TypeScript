@@ -1,7 +1,8 @@
 constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+constDeclarations-scopes.ts(102,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== constDeclarations-scopes.ts (1 errors) ====
+==== constDeclarations-scopes.ts (2 errors) ====
     // global
     const c = "string";
     
@@ -106,6 +107,8 @@ constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not sup
     
     // modules
     module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         const c = 0;
         n = c;
     

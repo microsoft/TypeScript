@@ -1,0 +1,25 @@
+es6ModuleConst.ts(5,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleConst.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== es6ModuleConst.ts (2 errors) ====
+    export const a = "hello";
+    export const x: string = a, y = x;
+    const b = y;
+    const c: string = b, d = c;
+    export module m1 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export const k = a;
+        export const l: string = b, m = k;
+        const n = m1.k;
+        const o: string = n, p = k;
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export const k = a;
+        export const l: string = b, m = k;
+        const n = m1.k;
+        const o: string = n, p = k;
+    }

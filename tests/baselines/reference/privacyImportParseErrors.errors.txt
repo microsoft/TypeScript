@@ -1,3 +1,6 @@
+privacyImportParseErrors.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyImportParseErrors.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyImportParseErrors.ts(12,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 privacyImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
@@ -7,6 +10,9 @@ privacyImportParseErrors.ts(69,37): error TS1147: Import declarations in a names
 privacyImportParseErrors.ts(69,37): error TS2307: Cannot find module 'm1_M4_private' or its corresponding type declarations.
 privacyImportParseErrors.ts(81,43): error TS1147: Import declarations in a namespace cannot reference a module.
 privacyImportParseErrors.ts(82,43): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyImportParseErrors.ts(85,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyImportParseErrors.ts(86,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyImportParseErrors.ts(96,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(106,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 privacyImportParseErrors.ts(106,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyImportParseErrors.ts(114,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
@@ -16,8 +22,10 @@ privacyImportParseErrors.ts(153,37): error TS1147: Import declarations in a name
 privacyImportParseErrors.ts(153,37): error TS2307: Cannot find module 'm2_M4_private' or its corresponding type declarations.
 privacyImportParseErrors.ts(166,43): error TS1147: Import declarations in a namespace cannot reference a module.
 privacyImportParseErrors.ts(167,43): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyImportParseErrors.ts(170,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(180,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 privacyImportParseErrors.ts(180,23): error TS2664: Invalid module name in augmentation, module 'glo_M2_public' cannot be found.
+privacyImportParseErrors.ts(188,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(198,1): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 privacyImportParseErrors.ts(198,23): error TS2664: Invalid module name in augmentation, module 'glo_M4_private' cannot be found.
 privacyImportParseErrors.ts(218,34): error TS2307: Cannot find module 'glo_M2_public' or its corresponding type declarations.
@@ -49,15 +57,23 @@ privacyImportParseErrors.ts(328,9): error TS1038: A 'declare' modifier cannot be
 privacyImportParseErrors.ts(328,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyImportParseErrors.ts(333,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyImportParseErrors.ts(336,12): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+privacyImportParseErrors.ts(340,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(341,25): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyImportParseErrors.ts(342,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(344,29): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyImportParseErrors.ts(349,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(350,25): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyImportParseErrors.ts(351,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a namespace cannot reference a module.
 
 
-==== privacyImportParseErrors.ts (55 errors) ====
+==== privacyImportParseErrors.ts (67 errors) ====
     export module m1 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module m1_M1_public {
+                      ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class c1 {
             }
             export function f1() {
@@ -68,6 +84,8 @@ privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a name
         }
     
         module m1_M2_private {
+               ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class c1 {
             }
             export function f1() {
@@ -159,7 +177,11 @@ privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a name
     }
     
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module m2_M1_public {
+                      ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class c1 {
             }
             export function f1() {
@@ -170,6 +192,8 @@ privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a name
         }
     
         module m2_M2_private {
+               ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class c1 {
             }
             export function f1() {
@@ -262,6 +286,8 @@ privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a name
     }
     
     export module glo_M1_public {
+                  ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class c1 {
         }
         export function f1() {
@@ -284,6 +310,8 @@ privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a name
     }
     
     export module glo_M3_private {
+                  ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class c1 {
         }
         export function f1() {
@@ -498,10 +526,14 @@ privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a name
     }
     
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import m3 = require("use_glo_M1_public");
                             ~~~~~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
         module m4 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var a = 10;
             import m2 = require("use_glo_M1_public");
                                 ~~~~~~~~~~~~~~~~~~~
@@ -511,10 +543,14 @@ privacyImportParseErrors.ts(353,29): error TS1147: Import declarations in a name
     }
     
     export module m3 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import m3 = require("use_glo_M1_public");
                             ~~~~~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
         module m4 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var a = 10;
             import m2 = require("use_glo_M1_public");
                                 ~~~~~~~~~~~~~~~~~~~

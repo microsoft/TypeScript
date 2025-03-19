@@ -1,8 +1,11 @@
+switchStatements.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 switchStatements.ts(35,20): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'C'.
 
 
-==== switchStatements.ts (1 errors) ====
+==== switchStatements.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function fn(x: number) {
             return '';
         }

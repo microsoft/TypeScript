@@ -1,0 +1,11 @@
+aliasInaccessibleModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== aliasInaccessibleModule.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module N {
+        }
+        export import X = N;
+    }

@@ -1,9 +1,18 @@
+moduleExports1.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleExports1.ts(1,26): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleExports1.ts(1,34): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleExports1.ts(13,6): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 moduleExports1.ts(13,22): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
-==== moduleExports1.ts (2 errors) ====
+==== moduleExports1.ts (5 errors) ====
     export module TypeScript.Strasse.Street {
+                  ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                             ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                     ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export class Rue {
     		public address:string;
     	}	

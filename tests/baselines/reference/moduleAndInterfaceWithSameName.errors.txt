@@ -1,9 +1,19 @@
+moduleAndInterfaceWithSameName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleAndInterfaceWithSameName.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleAndInterfaceWithSameName.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleAndInterfaceWithSameName.ts(12,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
+moduleAndInterfaceWithSameName.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleAndInterfaceWithSameName.ts(24,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== moduleAndInterfaceWithSameName.ts (1 errors) ====
+==== moduleAndInterfaceWithSameName.ts (7 errors) ====
     module Foo1 {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module Bar {
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var x = 42;
         }
     
@@ -13,7 +23,11 @@ moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not 
     }
     
     module Foo2 {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module Bar {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var x = 42;
         }
     
@@ -27,7 +41,11 @@ moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not 
 !!! error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
     
     module Foo3 {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module Bar {
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var x = 42;
         }
     

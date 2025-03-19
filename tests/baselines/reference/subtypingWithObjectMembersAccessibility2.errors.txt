@@ -1,9 +1,11 @@
+subtypingWithObjectMembersAccessibility2.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithObjectMembersAccessibility2.ts(16,11): error TS2415: Class 'B' incorrectly extends base class 'A'.
   Property 'foo' is private in type 'A' but not in type 'B'.
 subtypingWithObjectMembersAccessibility2.ts(24,11): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
   Property '1' is private in type 'A2' but not in type 'B2'.
 subtypingWithObjectMembersAccessibility2.ts(32,11): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property ''1'' is private in type 'A3' but not in type 'B3'.
+subtypingWithObjectMembersAccessibility2.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithObjectMembersAccessibility2.ts(42,11): error TS2415: Class 'B' incorrectly extends base class 'A'.
   Property 'foo' is private in type 'A' but not in type 'B'.
 subtypingWithObjectMembersAccessibility2.ts(50,11): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
@@ -12,7 +14,7 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
   Property ''1'' is private in type 'A3' but not in type 'B3'.
 
 
-==== subtypingWithObjectMembersAccessibility2.ts (6 errors) ====
+==== subtypingWithObjectMembersAccessibility2.ts (8 errors) ====
     // Derived member is private, base member is not causes errors
     
     class Base {
@@ -24,6 +26,8 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
     }
     
     module ExplicitPublic {
+           ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class A {
             private foo: Base;
         }
@@ -59,6 +63,8 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
     }
     
     module ImplicitPublic {
+           ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class A {
             private foo: Base;
         }

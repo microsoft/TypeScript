@@ -1,0 +1,18 @@
+innerFunc.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== innerFunc.ts (1 errors) ====
+    function salt() {
+      function pepper() { return 5;}
+      return pepper();  
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function tungsten() {
+            function oxygen() { return 6; };
+            return oxygen();
+        }
+    }
+    

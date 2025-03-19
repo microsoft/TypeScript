@@ -1,0 +1,21 @@
+ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export class Point {
+            x: number;
+            y: number;
+        }
+    
+        class Line {
+            constructor(public start: Point, public end: Point) { }
+        }
+    
+        export function fromOrigin(p: Point): Line {
+            return new Line({ x: 0, y: 0 }, p);
+        }
+    }

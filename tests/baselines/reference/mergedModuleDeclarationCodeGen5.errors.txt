@@ -1,0 +1,39 @@
+mergedModuleDeclarationCodeGen5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen5.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen5.ts(1,14): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen5.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen5.ts(5,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen5.ts(5,14): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mergedModuleDeclarationCodeGen5.ts (6 errors) ====
+    module M.buz.plop {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                 ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function doom() { }
+        export function M() { }
+    }
+    module M.buz.plop {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                 ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        function gunk() { }
+        function buz() { }
+        export class fudge { }
+        export enum plop { }
+    
+        // Emit these references as follows
+        var v1 = gunk; // gunk
+        var v2 = buz; // buz
+        export var v3 = doom; // _plop.doom
+        export var v4 = M; // _plop.M
+        export var v5 = fudge; // fudge
+        export var v6 = plop; // plop
+    }

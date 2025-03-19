@@ -1,8 +1,11 @@
+unusedClassesinModule1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 unusedClassesinModule1.ts(2,11): error TS6196: 'Calculator' is declared but never used.
 
 
-==== unusedClassesinModule1.ts (1 errors) ====
+==== unusedClassesinModule1.ts (2 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Calculator {
               ~~~~~~~~~~
 !!! error TS6196: 'Calculator' is declared but never used.

@@ -1,0 +1,34 @@
+ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts(19,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts (3 errors) ====
+    class Point {
+        constructor(public x: number, public y: number) { }
+    
+        static Origin: Point = { x: 0, y: 0 };
+    }
+    
+    module Point {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var Origin = ""; // not an error, since not exported
+    }
+    
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Point {
+            constructor(public x: number, public y: number) { }
+    
+            static Origin: Point = { x: 0, y: 0 };
+        }
+    
+        export module Point {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            var Origin = ""; // not an error since not exported
+        }
+    }

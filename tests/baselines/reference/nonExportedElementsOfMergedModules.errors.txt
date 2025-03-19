@@ -1,17 +1,29 @@
+nonExportedElementsOfMergedModules.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonExportedElementsOfMergedModules.ts(3,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonExportedElementsOfMergedModules.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonExportedElementsOfMergedModules.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nonExportedElementsOfMergedModules.ts(13,7): error TS2339: Property 'x' does not exist on type 'typeof B'.
 
 
-==== nonExportedElementsOfMergedModules.ts (1 errors) ====
+==== nonExportedElementsOfMergedModules.ts (5 errors) ====
     module One {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         enum A { X }
         module B {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var x;
         }
     }
     
     module One {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         enum A { Y }
         module B {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var y;
         }
         B.x;

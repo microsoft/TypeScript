@@ -1,9 +1,10 @@
 libMembers.ts(4,3): error TS2339: Property 'subby' does not exist on type 'string'.
+libMembers.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 libMembers.ts(9,17): error TS1011: An element access expression should take an argument.
 libMembers.ts(12,15): error TS2339: Property 'prototype' does not exist on type 'C'.
 
 
-==== libMembers.ts (3 errors) ====
+==== libMembers.ts (4 errors) ====
     var s="hello";
     s.substring(0);
     s.substring(3,4);
@@ -12,6 +13,8 @@ libMembers.ts(12,15): error TS2339: Property 'prototype' does not exist on type 
 !!! error TS2339: Property 'subby' does not exist on type 'string'.
     String.fromCharCode(12);
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C {
         }
         var a=new C[];

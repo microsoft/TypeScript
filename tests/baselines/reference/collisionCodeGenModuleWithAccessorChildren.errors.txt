@@ -1,0 +1,63 @@
+collisionCodeGenModuleWithAccessorChildren.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithAccessorChildren.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithAccessorChildren.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithAccessorChildren.ts(30,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionCodeGenModuleWithAccessorChildren.ts(39,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionCodeGenModuleWithAccessorChildren.ts (5 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 3;
+        class c {
+            private y;
+            set Z(M) {
+                this.y = x;
+            }
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class d {
+            private y;
+            set Z(p) {
+                var M = 10;
+                this.y = x;
+            }
+        }
+    }
+    
+    module M { // Shouldnt be _M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class e {
+            private y;
+            set M(p) {
+                this.y = x;
+            }
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class f {
+            get Z() {
+                var M = 10;
+                return x;
+            }
+        }
+    }
+    
+    module M { // Shouldnt be _M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class e {
+            get M() {
+                return x;
+            }
+        }
+    }

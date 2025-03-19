@@ -14,7 +14,8 @@ module B {
     export import A1 = A
 >A1 : any
 >   : ^^^
->A : error
+>A : any
+>  : ^^^
     
 }
 

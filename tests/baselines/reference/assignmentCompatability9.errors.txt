@@ -1,0 +1,18 @@
+assignmentCompatability9.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+assignmentCompatability9.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== assignmentCompatability9.ts (2 errors) ====
+    module __test1__ {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
+        export var __val__obj4 = obj4;
+    }
+    module __test2__ {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export          class classWithOptional<T> { constructor(public one?: T) {} }                       var x3 = new classWithOptional<number>();;
+        export var __val__x3 = x3;
+    }
+    __test2__.__val__x3 = __test1__.__val__obj4

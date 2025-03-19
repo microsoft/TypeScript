@@ -1,0 +1,21 @@
+objectLiteralShorthandPropertiesWithModuleES6.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+objectLiteralShorthandPropertiesWithModuleES6.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== objectLiteralShorthandPropertiesWithModuleES6.ts (2 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x;
+    }
+    
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var z = x;
+        var y = {
+            a: x,
+            x
+        };
+    }
+    

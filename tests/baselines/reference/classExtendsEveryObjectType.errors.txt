@@ -3,12 +3,13 @@ classExtendsEveryObjectType.ts(6,18): error TS2507: Type '{ foo: any; }' is not 
 classExtendsEveryObjectType.ts(6,25): error TS2693: 'string' only refers to a type, but is being used as a value here.
 classExtendsEveryObjectType.ts(6,31): error TS1005: ',' expected.
 classExtendsEveryObjectType.ts(8,18): error TS2507: Type '{ foo: string; }' is not a constructor function type.
+classExtendsEveryObjectType.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsEveryObjectType.ts(11,18): error TS2507: Type 'typeof M' is not a constructor function type.
 classExtendsEveryObjectType.ts(14,18): error TS2507: Type '() => void' is not a constructor function type.
 classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a constructor function type.
 
 
-==== classExtendsEveryObjectType.ts (8 errors) ====
+==== classExtendsEveryObjectType.ts (9 errors) ====
     interface I {
         foo: string;
     }
@@ -29,6 +30,8 @@ classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a
 !!! error TS2507: Type '{ foo: string; }' is not a constructor function type.
     
     module M { export var x = 1; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     class C4 extends M { } // error
                      ~
 !!! error TS2507: Type 'typeof M' is not a constructor function type.

@@ -1,0 +1,13 @@
+classExtendingQualifiedName2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== classExtendingQualifiedName2.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C {
+        }
+    
+        class D extends M.C {
+        }
+    }

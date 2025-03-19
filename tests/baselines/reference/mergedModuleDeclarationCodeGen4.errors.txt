@@ -1,0 +1,43 @@
+mergedModuleDeclarationCodeGen4.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen4.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen4.ts(3,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen4.ts(3,26): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen4.ts(4,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen4.ts(8,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen4.ts(8,26): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen4.ts(9,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mergedModuleDeclarationCodeGen4.ts (8 errors) ====
+    module superContain {
+           ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module contain {
+                      ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export module my.buz {
+                          ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                             ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                export module data {
+                              ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    export function foo() { }
+                }
+            }
+            export module my.buz {
+                          ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                             ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                export module data {
+                              ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    export function bar(contain, my, buz, data) {
+                        foo();
+                    }
+                }
+            }
+        }
+    }

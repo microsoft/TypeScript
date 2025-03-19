@@ -15,6 +15,7 @@ genericTypeReferenceWithoutTypeArgument.ts(18,27): error TS2314: Generic type 'C
 genericTypeReferenceWithoutTypeArgument.ts(18,38): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(20,17): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(23,21): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericTypeReferenceWithoutTypeArgument.ts(29,18): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(30,20): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(31,22): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
@@ -24,7 +25,7 @@ genericTypeReferenceWithoutTypeArgument.ts(36,10): error TS2314: Generic type 'C
 genericTypeReferenceWithoutTypeArgument.ts(37,10): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 
 
-==== genericTypeReferenceWithoutTypeArgument.ts (24 errors) ====
+==== genericTypeReferenceWithoutTypeArgument.ts (25 errors) ====
     // it is an error to use a generic type without type arguments
     // all of these are errors 
     
@@ -84,6 +85,8 @@ genericTypeReferenceWithoutTypeArgument.ts(37,10): error TS2314: Generic type 'E
 !!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class E<T> { foo: T }
     }
     

@@ -41,7 +41,9 @@ module Bugs {
 
       var index= rest[0];
 >index : any
+>      : ^^^
 >rest[0] : any
+>        : ^^^
 >rest : any[]
 >     : ^^^^^
 >0 : 0
@@ -49,22 +51,27 @@ module Bugs {
 
       return typeof args[index] !== 'undefined'
 >typeof args[index] !== 'undefined'        ? args[index]        : match : any
+>                                                                       : ^^^
 >typeof args[index] !== 'undefined' : boolean
 >                                   : ^^^^^^^
 >typeof args[index] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args[index] : any
+>            : ^^^
 >args : any[]
 >     : ^^^^^
 >index : any
+>      : ^^^
 >'undefined' : "undefined"
 >            : ^^^^^^^^^^^
 
         ? args[index]
 >args[index] : any
+>            : ^^^
 >args : any[]
 >     : ^^^^^
 >index : any
+>      : ^^^
 
         : match;
 >match : string

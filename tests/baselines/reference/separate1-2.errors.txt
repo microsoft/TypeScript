@@ -1,0 +1,9 @@
+separate1-2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== separate1-2.ts (1 errors) ====
+    module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f() { }
+    }

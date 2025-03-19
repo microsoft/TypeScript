@@ -1,39 +1,69 @@
+mergedDeclarations3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(7,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(19,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(24,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(25,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(30,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations3.ts(31,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 mergedDeclarations3.ts(37,7): error TS2339: Property 'x' does not exist on type 'typeof foo'.
 mergedDeclarations3.ts(39,7): error TS2339: Property 'z' does not exist on type 'typeof foo'.
 
 
-==== mergedDeclarations3.ts (2 errors) ====
+==== mergedDeclarations3.ts (12 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      export enum Color {
        Red, Green
      }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      export module Color {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
        export var Blue = 4;
       }
     }
     var p = M.Color.Blue; // ok
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function foo() {
         }
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var x = 1;
         }
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module foo {
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var y = 2
         }
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var z = 1;
         }
     }

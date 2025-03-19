@@ -1,8 +1,11 @@
+bind1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 bind1.ts(2,31): error TS2304: Cannot find name 'I'.
 
 
-==== bind1.ts (1 errors) ====
+==== bind1.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C implements I {} // this should be an unresolved symbol I error
                                   ~
 !!! error TS2304: Cannot find name 'I'.

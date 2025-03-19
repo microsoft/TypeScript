@@ -1,10 +1,14 @@
+circularImportAlias.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaration.
+circularImportAlias.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== circularImportAlias.ts (1 errors) ====
+==== circularImportAlias.ts (3 errors) ====
     // expected no error
     
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export import a = A;
         export class D extends a.C {
                                  ~
@@ -15,6 +19,8 @@ circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaratio
     }
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C { name: string }
         export import b = B;
     }

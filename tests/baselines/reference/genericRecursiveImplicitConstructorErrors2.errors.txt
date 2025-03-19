@@ -1,0 +1,32 @@
+genericRecursiveImplicitConstructorErrors2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== genericRecursiveImplicitConstructorErrors2.ts (1 errors) ====
+    module TypeScript2 {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      export interface DeclKind { };
+      export interface PullTypesymbol { };
+      export interface SymbolLinkKind { };
+      export enum PullSymbolVisibility {
+        Private,
+        Public
+      }
+    　
+      export class PullSymbol {
+        constructor (name: string, declKind: DeclKind) {
+    
+        }
+        // link methods
+        public addOutgoingLink<A,B,C>(linkTo: PullSymbol, kind: SymbolLinkKind) {
+    
+        }
+    
+        public getType<A,B,C>(): PullTypeSymbol<A,B,C> {
+          return undefined;
+        }
+      }
+      export class PullTypeSymbol <A,B,C>extends PullSymbol {
+      }
+    }
+    

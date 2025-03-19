@@ -1,0 +1,15 @@
+commentsDottedModuleName.ts(2,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+commentsDottedModuleName.ts(2,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== commentsDottedModuleName.ts (2 errors) ====
+    /** this is multi declare module*/
+    export module outerModule.InnerModule {
+                  ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                              ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        /// class b comment
+        export class b {
+        }
+    }

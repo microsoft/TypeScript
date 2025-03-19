@@ -1,3 +1,4 @@
+interfaceDeclaration4.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 interfaceDeclaration4.ts(18,11): error TS2430: Interface 'I3' incorrectly extends interface 'I1'.
   Types of property 'item' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -10,10 +11,12 @@ interfaceDeclaration4.ts(39,15): error TS1434: Unexpected keyword or identifier.
 interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
 
 
-==== interfaceDeclaration4.ts (6 errors) ====
+==== interfaceDeclaration4.ts (7 errors) ====
     // Import this module when test harness supports external modules. Also remove the internal module below.
     // import Foo = require("interfaceDeclaration5")
     module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I1 { item: string; }
         export class C1 { }
     }

@@ -1,0 +1,17 @@
+visSyntax.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== visSyntax.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C {
+        }
+    
+        export interface I {
+    	
+        }
+    
+        export var x=10;
+    }
+    

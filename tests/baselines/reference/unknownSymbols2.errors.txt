@@ -1,3 +1,4 @@
+unknownSymbols2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 unknownSymbols2.ts(2,12): error TS2304: Cannot find name 'asdf'.
 unknownSymbols2.ts(3,17): error TS2304: Cannot find name 'asdf'.
 unknownSymbols2.ts(4,14): error TS2304: Cannot find name 'asdf'.
@@ -7,11 +8,14 @@ unknownSymbols2.ts(15,13): error TS2304: Cannot find name 'asdf'.
 unknownSymbols2.ts(16,14): error TS2304: Cannot find name 'qwerty'.
 unknownSymbols2.ts(22,19): error TS2304: Cannot find name 'asdf'.
 unknownSymbols2.ts(23,32): error TS2304: Cannot find name 'qwerty'.
+unknownSymbols2.ts(25,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 unknownSymbols2.ts(29,16): error TS2503: Cannot find namespace 'asdf'.
 
 
-==== unknownSymbols2.ts (10 errors) ====
+==== unknownSymbols2.ts (12 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var x: asdf;
                ~~~~
 !!! error TS2304: Cannot find name 'asdf'.
@@ -54,6 +58,8 @@ unknownSymbols2.ts(29,16): error TS2503: Cannot find namespace 'asdf'.
 !!! error TS2304: Cannot find name 'qwerty'.
     
         module N {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var x = 1;
         }
         import c = N;

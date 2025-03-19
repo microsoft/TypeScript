@@ -1,9 +1,12 @@
+arrayAssignmentTest5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[]' is not assignable to type 'IStateToken[]'.
   Property 'state' is missing in type 'IToken' but required in type 'IStateToken'.
 
 
-==== arrayAssignmentTest5.ts (1 errors) ====
+==== arrayAssignmentTest5.ts (2 errors) ====
     module Test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface IState {
         }
         interface IToken {

@@ -23,6 +23,7 @@ module X.Y.base {
 
         export var v;
 >v : any
+>  : ^^^
     }
     export enum E { }
 >E : E

@@ -1,0 +1,67 @@
+collisionExportsRequireAndAmbientEnum_externalmodule.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientEnum_globalFile.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionExportsRequireAndAmbientEnum_externalmodule.ts (1 errors) ====
+    export declare enum require {
+        _thisVal1,
+        _thisVal2,
+    }
+    export declare enum exports {
+        _thisVal1,
+        _thisVal2,
+    }
+    declare module m1 {
+        enum require {
+            _thisVal1,
+            _thisVal2,
+        }
+        enum exports {
+            _thisVal1,
+            _thisVal2,
+        }
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare enum require { 
+            _thisVal1,
+            _thisVal2,
+        }
+        export declare enum exports {
+            _thisVal1,
+            _thisVal2,
+        }
+    }
+    
+==== collisionExportsRequireAndAmbientEnum_globalFile.ts (1 errors) ====
+    declare enum require {
+        _thisVal1,
+        _thisVal2,
+    }
+    declare enum exports {
+        _thisVal1,
+        _thisVal2,
+    }
+    declare module m3 {
+        enum require {
+            _thisVal1,
+            _thisVal2,
+        }
+        enum exports {
+            _thisVal1,
+            _thisVal2,
+        }
+    }
+    module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare enum require {
+            _thisVal1,
+            _thisVal2,
+        }
+        export declare enum exports {
+            _thisVal1,
+            _thisVal2,
+        }
+    }

@@ -1,0 +1,44 @@
+privateInstanceVisibility.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== privateInstanceVisibility.ts (1 errors) ====
+    module Test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+     
+        export class Example {
+     
+            private someNumber: number;
+     
+            
+    
+            public doSomething() {
+     
+                var that = this;                      
+    
+                function innerFunction() {
+                    
+                    var num = that.someNumber;
+     
+                }
+     
+            }        
+    
+        }
+     
+    }
+    
+    
+    
+    class C {
+    
+        private x: number;
+    
+        getX() { return this.x; }
+    
+        clone(other: C) {
+            this.x = other.x;
+    
+        }
+    }
+    

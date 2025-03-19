@@ -3,10 +3,11 @@ for-inStatements.ts(22,15): error TS2873: This kind of expression is always fals
 for-inStatements.ts(23,15): error TS2872: This kind of expression is always truthy.
 for-inStatements.ts(33,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
 for-inStatements.ts(50,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+for-inStatements.ts(67,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'Color.Blue'.
 
 
-==== for-inStatements.ts (6 errors) ====
+==== for-inStatements.ts (7 errors) ====
     var aString: string;
     for (aString in {}) { }
     
@@ -86,6 +87,8 @@ for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' st
     
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class X<T> {
             name:string
         }

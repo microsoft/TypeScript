@@ -1,12 +1,18 @@
+moduleAssignmentCompat2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleAssignmentCompat2.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleAssignmentCompat2.ts(9,8): error TS2709: Cannot use namespace 'A' as a type.
 moduleAssignmentCompat2.ts(10,8): error TS2709: Cannot use namespace 'B' as a type.
 
 
-==== moduleAssignmentCompat2.ts (2 errors) ====
+==== moduleAssignmentCompat2.ts (4 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C { }
     }
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C { }
         export class D { }
     }

@@ -1,0 +1,47 @@
+declarationEmitNameConflicts3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts3.ts(3,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts3.ts(6,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts3.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts3.ts(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflicts3.ts(14,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declarationEmitNameConflicts3.ts (6 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface D { }
+        export module D {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function f() { }
+        }
+        export module C {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function f() { }
+        }
+        export module E {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function f() { }
+        }
+    }
+    
+    module M.P {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C {
+            static f() { }
+        }
+        export class E extends C { }
+        export enum D {
+            f
+        }
+        export var v: M.D; // ok
+        export var w = M.D.f; // error, should be typeof M.D.f
+        export var x = M.C.f; // error, should be typeof M.C.f
+        export var x = M.E.f; // error, should be typeof M.E.f
+    }

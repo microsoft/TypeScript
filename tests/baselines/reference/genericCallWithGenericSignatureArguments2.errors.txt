@@ -1,3 +1,4 @@
+genericCallWithGenericSignatureArguments2.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericCallWithGenericSignatureArguments2.ts(10,51): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -10,6 +11,7 @@ genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of t
     Type 'Date' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
 genericCallWithGenericSignatureArguments2.ts(37,43): error TS2322: Type 'F' is not assignable to type 'E'.
+genericCallWithGenericSignatureArguments2.ts(40,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
@@ -22,11 +24,13 @@ genericCallWithGenericSignatureArguments2.ts(67,51): error TS2304: Cannot find n
 genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find name 'U'.
 
 
-==== genericCallWithGenericSignatureArguments2.ts (10 errors) ====
+==== genericCallWithGenericSignatureArguments2.ts (12 errors) ====
     // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
     // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
     
     module onlyT {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function foo<T>(a: (x: T) => T, b: (x: T) => T) {
             var r: (x: T) => T;
             return r;
@@ -81,6 +85,8 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
     }
     
     module TU {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
             var r: (x: T) => T;
             return r;

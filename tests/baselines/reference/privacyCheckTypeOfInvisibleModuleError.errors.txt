@@ -1,0 +1,17 @@
+privacyCheckTypeOfInvisibleModuleError.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyCheckTypeOfInvisibleModuleError.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== privacyCheckTypeOfInvisibleModuleError.ts (2 errors) ====
+    module Outer {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module Inner {
+               ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var m: typeof Inner;
+        }
+    
+        export var f: typeof Inner;
+    }
+    

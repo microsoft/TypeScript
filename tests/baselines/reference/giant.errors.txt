@@ -19,6 +19,7 @@ giant.ts(36,20): error TS1005: '{' expected.
 giant.ts(62,5): error TS1021: An index signature must have a type annotation.
 giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
 giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
+giant.ts(78,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 giant.ts(87,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(88,20): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(88,24): error TS1005: '{' expected.
@@ -40,6 +41,7 @@ giant.ts(100,24): error TS1005: '{' expected.
 giant.ts(126,9): error TS1021: An index signature must have a type annotation.
 giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(142,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 giant.ts(154,39): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(166,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(167,20): error TS2300: Duplicate identifier 'pgF'.
@@ -62,6 +64,7 @@ giant.ts(179,24): error TS1005: '{' expected.
 giant.ts(205,9): error TS1021: An index signature must have a type annotation.
 giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(221,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 giant.ts(233,39): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(238,35): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(240,24): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -110,6 +113,7 @@ giant.ts(294,20): error TS1005: '{' expected.
 giant.ts(320,5): error TS1021: An index signature must have a type annotation.
 giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
 giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
+giant.ts(336,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 giant.ts(345,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(346,20): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(346,24): error TS1005: '{' expected.
@@ -131,6 +135,7 @@ giant.ts(358,24): error TS1005: '{' expected.
 giant.ts(384,9): error TS1021: An index signature must have a type annotation.
 giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(400,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 giant.ts(412,39): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(424,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(425,20): error TS2300: Duplicate identifier 'pgF'.
@@ -153,6 +158,7 @@ giant.ts(437,24): error TS1005: '{' expected.
 giant.ts(463,9): error TS1021: An index signature must have a type annotation.
 giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(479,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 giant.ts(491,39): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(496,35): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(498,24): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -231,7 +237,7 @@ giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
 giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== giant.ts (231 errors) ====
+==== giant.ts (237 errors) ====
     /*
         Prefixes
         p -> public
@@ -352,6 +358,8 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2386: Overload signatures must all be optional or required.
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var V;
         function F() { };
         class C {
@@ -458,6 +466,8 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2386: Overload signatures must all be optional or required.
         }
         module M {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var V;
             function F() { };
             class C { };
@@ -581,6 +591,8 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2386: Overload signatures must all be optional or required.
         }
         export module eM {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var V;
             function F() { };
             class C { };
@@ -792,6 +804,8 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2386: Overload signatures must all be optional or required.
     }
     export module eM {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var V;
         function F() { };
         class C {
@@ -898,6 +912,8 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2386: Overload signatures must all be optional or required.
         }
         module M {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var V;
             function F() { };
             class C { };
@@ -1021,6 +1037,8 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2386: Overload signatures must all be optional or required.
         }
         export module eM {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var V;
             function F() { };
             class C { };

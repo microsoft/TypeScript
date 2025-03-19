@@ -17,15 +17,19 @@ module M {
 
         private y;
 >y : any
+>  : ^^^
 
         set Z(M) {
 >Z : any
+>  : ^^^
 >M : any
+>  : ^^^
 
             this.y = x;
 >this.y = x : number
 >           : ^^^^^^
 >this.y : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >y : any
@@ -46,10 +50,13 @@ module M {
 
         private y;
 >y : any
+>  : ^^^
 
         set Z(p) {
 >Z : any
+>  : ^^^
 >p : any
+>  : ^^^
 
             var M = 10;
 >M : number
@@ -61,6 +68,7 @@ module M {
 >this.y = x : number
 >           : ^^^^^^
 >this.y : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >y : any
@@ -81,15 +89,19 @@ module M { // Shouldnt be _M
 
         private y;
 >y : any
+>  : ^^^
 
         set M(p) {
 >M : any
+>  : ^^^
 >p : any
+>  : ^^^
 
             this.y = x;
 >this.y = x : number
 >           : ^^^^^^
 >this.y : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >y : any

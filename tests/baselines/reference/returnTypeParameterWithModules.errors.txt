@@ -1,0 +1,23 @@
+returnTypeParameterWithModules.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+returnTypeParameterWithModules.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== returnTypeParameterWithModules.ts (2 errors) ====
+    module M1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function reduce<A>(ar, f, e?): Array<A> {
+            return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
+        };
+    };
+    module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      import A = M1
+      export function compose() {
+            A.reduce(arguments, compose2);
+        };
+        export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
+        return function (x) { return g(f(x)); }
+      };
+    };

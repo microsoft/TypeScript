@@ -1,19 +1,29 @@
 reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reachabilityChecks1.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(18,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reachabilityChecks1.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reachabilityChecks1.ts(28,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(30,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(51,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 reachabilityChecks1.ts(60,5): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
 
 
-==== reachabilityChecks1.ts (7 errors) ====
+==== reachabilityChecks1.ts (15 errors) ====
     while (true);
     var x = 1;
     ~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         while (true);
         let x;
         ~~~~~~
@@ -21,6 +31,8 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     }
     
     module A1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         do {} while(true);
         module A {
             interface F {}
@@ -28,9 +40,13 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     }
     
     module A2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         while (true);
         module A {
         ~~~~~~~~~~
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var x = 1;
     ~~~~~~~~~~~~~~~~~~
         }
@@ -39,14 +55,20 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     }
     
     module A3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         while (true);
         type T = string;
     }
     
     module A4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         while (true);
         module A {
         ~~~~~~~~~~
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             const enum E { X }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
@@ -74,6 +96,8 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     }
     
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         for (; ;);
         module C {
         }

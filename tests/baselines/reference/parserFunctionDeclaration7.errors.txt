@@ -1,8 +1,11 @@
+parserFunctionDeclaration7.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserFunctionDeclaration7.ts(2,13): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== parserFunctionDeclaration7.ts (1 errors) ====
+==== parserFunctionDeclaration7.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
        function foo();
                 ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.

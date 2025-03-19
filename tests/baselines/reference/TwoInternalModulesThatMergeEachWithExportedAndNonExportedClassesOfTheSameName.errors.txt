@@ -1,0 +1,67 @@
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(20,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(20,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(26,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(27,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(28,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts (8 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Point {
+            x: number;
+            y: number;
+        }
+    }
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class Point {
+            fromCarthesian(p: A.Point) {
+                return { x: p.x, y: p.y };
+            }
+        }
+    }
+    
+    // ensure merges as expected
+    var p: { x: number; y: number; };
+    var p: A.Point;
+    
+    module X.Y.Z {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Line {
+            length: number;
+        }
+    }
+    
+    module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export module Z {
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                class Line {
+                    name: string;
+                }
+            }
+        }
+    }
+    
+    // ensure merges as expected
+    var l: { length: number; }
+    var l: X.Y.Z.Line;
+    
+    

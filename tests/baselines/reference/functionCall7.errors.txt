@@ -1,10 +1,13 @@
+functionCall7.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 functionCall7.ts(5,10): error TS2554: Expected 1 arguments, but got 2.
 functionCall7.ts(6,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'c1'.
 functionCall7.ts(7,1): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== functionCall7.ts (3 errors) ====
+==== functionCall7.ts (4 errors) ====
     module m1 { export class c1 { public a; }}
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     function foo(a:m1.c1){ a.a = 1; }; 
     var myC = new m1.c1(); 
     foo(myC); 

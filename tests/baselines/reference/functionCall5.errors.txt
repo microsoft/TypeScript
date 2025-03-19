@@ -1,0 +1,9 @@
+functionCall5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== functionCall5.ts (1 errors) ====
+    module m1 { export class c1 { public a; }} 
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    function foo():m1.c1{return new m1.c1();}; 
+    var x = foo();

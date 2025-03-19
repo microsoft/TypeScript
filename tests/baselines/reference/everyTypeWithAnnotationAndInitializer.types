@@ -101,9 +101,11 @@ var anObject: Object = new Object();
 
 var anAny: any = null;
 >anAny : any
+>      : ^^^
 
 var aSecondAny: any = undefined;
 >aSecondAny : any
+>           : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

@@ -1,7 +1,8 @@
+plusOperatorWithBooleanType.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 plusOperatorWithBooleanType.ts(33,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== plusOperatorWithBooleanType.ts (1 errors) ====
+==== plusOperatorWithBooleanType.ts (2 errors) ====
     // + operator on boolean type
     var BOOLEAN: boolean;
     
@@ -12,6 +13,8 @@ plusOperatorWithBooleanType.ts(33,1): error TS2695: Left side of comma operator 
         static foo() { return false; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: boolean;
     }
     

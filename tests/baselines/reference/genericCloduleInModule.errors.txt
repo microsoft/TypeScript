@@ -1,0 +1,21 @@
+genericCloduleInModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericCloduleInModule.ts(6,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== genericCloduleInModule.ts (2 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class B<T> {
+            foo() { }
+            static bar() { }
+        }
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x = 1;
+        }
+    }
+    
+    var b: A.B<number>;
+    b.foo();

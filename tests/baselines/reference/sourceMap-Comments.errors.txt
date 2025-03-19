@@ -1,0 +1,29 @@
+sourceMap-Comments.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+sourceMap-Comments.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== sourceMap-Comments.ts (2 errors) ====
+    module sas.tools {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Test {
+            public doX(): void {
+                let f: number = 2;
+                switch (f) {
+                    case 1:
+                        break;
+                    case 2:
+                        //line comment 1
+                        //line comment 2
+                        break;
+                    case 3:
+                        //a comment
+                        break;
+                }
+            }
+        }
+    
+    }
+    

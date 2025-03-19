@@ -1,10 +1,14 @@
+invalidInstantiatedModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
 invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
+invalidInstantiatedModule.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
 
 
-==== invalidInstantiatedModule.ts (3 errors) ====
+==== invalidInstantiatedModule.ts (5 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Point { x: number; y: number }
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -14,6 +18,8 @@ invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface Point { x: number; y: number }
         export var Point = 1;
     }

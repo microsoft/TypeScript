@@ -47,6 +47,7 @@ export module M {
 
     export var x;
 >x : any
+>  : ^^^
 }
 export module N {
     export interface I {

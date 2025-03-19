@@ -1,0 +1,25 @@
+sourceMapValidationModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+sourceMapValidationModule.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+sourceMapValidationModule.ts(6,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== sourceMapValidationModule.ts (3 errors) ====
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var a = 10;
+        a++;
+    }
+    module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module m4 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x = 30;
+        }
+    
+        export function foo() {
+            return m4.x;
+        }
+    }

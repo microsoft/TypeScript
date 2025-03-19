@@ -1,8 +1,11 @@
+unspecializedConstraints.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParameter'. Did you mean 'Parameter'?
 
 
-==== unspecializedConstraints.ts (1 errors) ====
+==== unspecializedConstraints.ts (2 errors) ====
     module ts {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Map<T> {
             [index: string]: T;
         }

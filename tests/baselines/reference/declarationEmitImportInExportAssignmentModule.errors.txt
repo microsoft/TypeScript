@@ -1,0 +1,18 @@
+declarationEmitImportInExportAssignmentModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitImportInExportAssignmentModule.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declarationEmitImportInExportAssignmentModule.ts (2 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module c {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class c {
+            }
+        }
+        import x = c;
+        export var a: typeof x;
+    }
+    export = m;

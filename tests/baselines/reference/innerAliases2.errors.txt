@@ -1,0 +1,28 @@
+innerAliases2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+innerAliases2.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== innerAliases2.ts (2 errors) ====
+    module _provider {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    export class UsefulClass {
+                                    public foo() {
+                                    }
+                    }
+    }
+    
+    module consumer {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    import provider = _provider;
+                    
+                    var g:provider.UsefulClass= null;
+                    
+                    function use():provider.UsefulClass { 
+                                    var p2:provider.UsefulClass= new provider.UsefulClass();
+                                    return p2; 
+                    }
+    }
+    
+    

@@ -1,0 +1,13 @@
+testContainerList.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== testContainerList.ts (1 errors) ====
+    // Regression test for #325
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class C {
+            constructor(public d: {}) { }
+        }
+    }
+    

@@ -1,3 +1,4 @@
+vararg.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 vararg.ts(12,31): error TS2370: A rest parameter must be of an array type.
 vararg.ts(17,13): error TS2304: Cannot find name 'builder'.
 vararg.ts(19,17): error TS2304: Cannot find name 'builder'.
@@ -8,8 +9,10 @@ vararg.ts(32,17): error TS2345: Argument of type 'number' is not assignable to p
 vararg.ts(33,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
 
 
-==== vararg.ts (8 errors) ====
+==== vararg.ts (9 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C {
             public f(x:string,...rest:number[]) {
                 var sum=0;

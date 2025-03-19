@@ -1,0 +1,17 @@
+importAndVariableDeclarationConflict2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== importAndVariableDeclarationConflict2.ts (1 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      export var m = '';
+    }
+    
+    import x = m.m;
+    
+    class C {
+      public foo() {
+        var x = '';
+      }
+    }

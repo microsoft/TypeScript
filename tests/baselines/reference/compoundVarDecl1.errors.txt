@@ -1,0 +1,9 @@
+compoundVarDecl1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== compoundVarDecl1.ts (1 errors) ====
+    module Foo { var a = 1, b = 1; a = b + 2; }
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    var foo = 4, bar = 5;

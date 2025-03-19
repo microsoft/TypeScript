@@ -1,0 +1,12 @@
+thisInModuleFunction1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== thisInModuleFunction1.ts (1 errors) ====
+    module bar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+     export function bar() {
+      return this;
+     } 
+    } 
+    var z = bar.bar();

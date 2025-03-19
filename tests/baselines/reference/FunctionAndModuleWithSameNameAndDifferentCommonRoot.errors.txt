@@ -1,0 +1,32 @@
+function.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+module.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+module.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== function.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    }
+    
+==== module.ts (2 errors) ====
+    module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Point {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+==== test.ts (0 errors) ====
+    var fn: () => { x: number; y: number };
+    var fn = A.Point;
+    
+    var cl: { x: number; y: number; }
+    var cl = B.Point.Origin;
+    

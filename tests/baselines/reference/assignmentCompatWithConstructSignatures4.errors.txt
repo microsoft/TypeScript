@@ -1,3 +1,5 @@
+assignmentCompatWithConstructSignatures4.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+assignmentCompatWithConstructSignatures4.ts(9,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithConstructSignatures4.ts(45,9): error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T, U>(x: T) => U[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.
@@ -63,6 +65,7 @@ assignmentCompatWithConstructSignatures4.ts(82,9): error TS2322: Type '{ new (x:
   Types of parameters 'x' and 'x' are incompatible.
     Type '(a: any) => any' is not assignable to type '{ new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }'.
       Type '(a: any) => any' provides no match for the signature 'new <T extends Derived>(a: T): T'.
+assignmentCompatWithConstructSignatures4.ts(85,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithConstructSignatures4.ts(89,9): error TS2322: Type 'new <T>(x: T) => string[]' is not assignable to type 'new <T>(x: T) => T[]'.
   Type 'string[]' is not assignable to type 'T[]'.
     Type 'string' is not assignable to type 'T'.
@@ -79,16 +82,20 @@ assignmentCompatWithConstructSignatures4.ts(96,9): error TS2322: Type 'new <T>(x
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== assignmentCompatWithConstructSignatures4.ts (19 errors) ====
+==== assignmentCompatWithConstructSignatures4.ts (22 errors) ====
     // checking assignment compatibility relations for function types.
     
     module Errors {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Derived { baz: string; }
         class OtherDerived extends Base { bing: string; }
     
         module WithNonGenericSignaturesInBaseType {
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             // target type with non-generic call signatures
             var a2: new (x: number) => string[];
             var a7: new (x: (arg: Base) => Derived) => (r: Base) => Derived2;
@@ -247,6 +254,8 @@ assignmentCompatWithConstructSignatures4.ts(96,9): error TS2322: Type 'new <T>(x
         }
     
         module WithGenericSignaturesInBaseType {
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             // target type has generic call signature
             var a2: new <T>(x: T) => T[];
             var b2: new <T>(x: T) => string[];

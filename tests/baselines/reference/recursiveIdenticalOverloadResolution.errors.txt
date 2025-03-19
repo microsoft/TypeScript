@@ -1,0 +1,22 @@
+recursiveIdenticalOverloadResolution.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== recursiveIdenticalOverloadResolution.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+       interface I { (i: I): I; }
+    
+       function f(p: I) { return f };
+    
+       var i: I;
+    
+       f(i);
+    
+       f(f(i));
+    
+       f((f(f(i))));
+    
+    }
+    

@@ -1,8 +1,11 @@
+decoratorOnClassMethod12.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 decoratorOnClassMethod12.ts(6,11): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
 
-==== decoratorOnClassMethod12.ts (1 errors) ====
+==== decoratorOnClassMethod12.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class S {
             decorator(target: Object, key: string): void { }
         }

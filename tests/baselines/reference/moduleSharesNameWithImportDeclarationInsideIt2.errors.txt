@@ -1,0 +1,26 @@
+moduleSharesNameWithImportDeclarationInsideIt2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleSharesNameWithImportDeclarationInsideIt2.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleSharesNameWithImportDeclarationInsideIt2.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleSharesNameWithImportDeclarationInsideIt2.ts(6,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleSharesNameWithImportDeclarationInsideIt2.ts (4 errors) ====
+    module Z.M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function bar() {
+            return "";
+        }
+    }
+    module A.M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import M = Z.M;
+        export function bar() {
+        }
+        M.bar(); // Should call Z.M.bar
+    }

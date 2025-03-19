@@ -1,0 +1,17 @@
+moduleReopenedTypeOtherBlock.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleReopenedTypeOtherBlock.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleReopenedTypeOtherBlock.ts (2 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C1 { }
+        export interface I { n: number; }
+    }
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C2 { f(): I { return null; } }
+    }
+    

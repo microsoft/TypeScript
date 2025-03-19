@@ -1,0 +1,37 @@
+es6ModuleFunctionDeclaration.ts(8,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleFunctionDeclaration.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== es6ModuleFunctionDeclaration.ts (2 errors) ====
+    export function foo() {
+    }
+    function foo2() {
+    }
+    foo();
+    foo2();
+    
+    export module m1 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function foo3() {
+        }
+        function foo4() {
+        }
+        foo();
+        foo2();
+        foo3();
+        foo4();
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function foo3() {
+        }
+        function foo4() {
+        }
+        foo();
+        foo2();
+        foo3();
+        foo4();
+        m1.foo3();
+    }

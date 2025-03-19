@@ -1,0 +1,29 @@
+lib/classA.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+lib/classB.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== lib/classA.ts (1 errors) ====
+    module test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class ClassA
+        {
+            public method() { }
+        }
+    }
+==== lib/classB.ts (1 errors) ====
+    /// <reference path="classA.ts" />
+    
+    module test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class ClassB extends ClassA 
+        {
+        }
+    }
+==== main.ts (0 errors) ====
+    /// <reference path="lib/classA.ts" />
+    /// <reference path="lib/classB.ts" />
+    
+    class ClassC extends test.ClassA {
+    }

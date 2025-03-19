@@ -1,0 +1,20 @@
+systemModuleDeclarationMerging.ts(2,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+systemModuleDeclarationMerging.ts(5,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+systemModuleDeclarationMerging.ts(8,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== systemModuleDeclarationMerging.ts (3 errors) ====
+    export function F() {}
+    export module F { var x; }
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    export class C {}
+    export module C { var x; }
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    export enum E {}
+    export module E { var x; }
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.

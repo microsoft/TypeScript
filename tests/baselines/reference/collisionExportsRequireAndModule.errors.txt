@@ -1,9 +1,27 @@
+collisionExportsRequireAndModule_externalmodule.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 collisionExportsRequireAndModule_externalmodule.ts(1,15): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_externalmodule.ts(20,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_externalmodule.ts(26,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_externalmodule.ts(33,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_externalmodule.ts(34,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_externalmodule.ts(40,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(14,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(20,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(27,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(28,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndModule_globalFile.ts(34,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== collisionExportsRequireAndModule_externalmodule.ts (2 errors) ====
+==== collisionExportsRequireAndModule_externalmodule.ts (10 errors) ====
     export module require {
+                  ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                   ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
         export interface I {
@@ -16,6 +34,8 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
     }
     export module exports {
                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                  ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
         export interface I {
         }
@@ -26,13 +46,19 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
         return null;
     }
     module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module require {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {
             }
         }
         module exports {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {
@@ -40,13 +66,19 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
         }
     }
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module require {
+                      ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {
             }
         }
         export module exports {
+                      ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {
@@ -54,27 +86,37 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
         }
     }
     
-==== collisionExportsRequireAndModule_globalFile.ts (0 errors) ====
+==== collisionExportsRequireAndModule_globalFile.ts (8 errors) ====
     module require {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
         }
         export class C {
         }
     }
     module exports {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
         }
         export class C {
         }
     }
     module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module require {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {
             }
         }
         module exports {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {
@@ -82,13 +124,19 @@ collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplica
         }
     }
     module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module require {
+                      ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {
             }
         }
         export module exports {
+                      ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I {
             }
             export class C {

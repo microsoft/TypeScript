@@ -1,0 +1,37 @@
+duplicateVariablesByScope.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== duplicateVariablesByScope.ts (1 errors) ====
+    // duplicate local variables are only reported at global scope
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        for (var j = 0; j < 10; j++) {
+        }
+    
+        for (var j = 0; j < 10; j++) {
+        }
+    }
+    
+    function foo() {
+        var x = 2;
+        var x = 1;
+        if (true) {
+            var result = 1;
+        }
+        else {
+            var result = 2;
+        }
+    }
+    
+    class C {
+        foo() {
+            try {
+                var x = 1;
+            }
+            catch (e) {
+                var x = 2;
+            }
+        }
+    }

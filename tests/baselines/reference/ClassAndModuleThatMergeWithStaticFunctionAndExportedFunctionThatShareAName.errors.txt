@@ -1,10 +1,13 @@
 ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,21): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(19,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,25): error TS2300: Duplicate identifier 'Origin'.
 
 
-==== ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (4 errors) ====
+==== ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (7 errors) ====
     class Point {
         constructor(public x: number, public y: number) { }
     
@@ -14,6 +17,8 @@ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20
     }
     
     module Point {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function Origin() { return null; } //expected duplicate identifier error
                         ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.
@@ -21,6 +26,8 @@ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20
     
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Point {
             constructor(public x: number, public y: number) { }
     
@@ -30,6 +37,8 @@ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20
         }
     
         export module Point {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export function Origin() { return ""; }//expected duplicate identifier error
                             ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.

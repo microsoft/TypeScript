@@ -1,10 +1,11 @@
 mergedInterfacesWithInheritedPrivates3.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
+mergedInterfacesWithInheritedPrivates3.ts(22,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 mergedInterfacesWithInheritedPrivates3.ts(31,15): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
 
 
-==== mergedInterfacesWithInheritedPrivates3.ts (2 errors) ====
+==== mergedInterfacesWithInheritedPrivates3.ts (3 errors) ====
     class C {
         private x: number;
     }
@@ -30,6 +31,8 @@ mergedInterfacesWithInheritedPrivates3.ts(31,15): error TS2320: Interface 'A' ca
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C {
             private x: string;
         }

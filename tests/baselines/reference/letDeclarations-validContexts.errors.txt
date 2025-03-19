@@ -1,7 +1,9 @@
 letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+letDeclarations-validContexts.ts(85,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+letDeclarations-validContexts.ts(136,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== letDeclarations-validContexts.ts (1 errors) ====
+==== letDeclarations-validContexts.ts (3 errors) ====
     // Control flow statements with blocks
     if (true) { 
         let l1 = 0;
@@ -89,6 +91,8 @@ letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is no
     
     // modules
     module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         let l22 = 0;
     
         {
@@ -140,6 +144,8 @@ letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is no
     }
     
     module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         label: let l34 = 0;
         {
             label2: let l35 = 0;

@@ -1,3 +1,4 @@
+fuzzy.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 fuzzy.ts(13,18): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'alsoWorks' is missing in type 'C' but required in type 'I'.
 fuzzy.ts(21,34): error TS2322: Type 'this' is not assignable to type 'I'.
@@ -6,8 +7,10 @@ fuzzy.ts(25,20): error TS2352: Conversion of type '{ oneI: this; }' to type 'R' 
   Property 'anything' is missing in type '{ oneI: this; }' but required in type 'R'.
 
 
-==== fuzzy.ts (3 errors) ====
+==== fuzzy.ts (4 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
             works:()=>R;
             alsoWorks:()=>R;

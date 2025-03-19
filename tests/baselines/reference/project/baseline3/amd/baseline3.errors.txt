@@ -1,0 +1,15 @@
+nestedModule.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModule.ts(2,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== nestedModule.ts (2 errors) ====
+    export module outer {
+                  ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export module inner {
+    	              ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    		var local = 1;
+    		export var a = local;
+    	}
+    }

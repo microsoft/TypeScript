@@ -1,9 +1,12 @@
+symbolDeclarationEmit12.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 
 
-==== symbolDeclarationEmit12.ts (2 errors) ====
+==== symbolDeclarationEmit12.ts (3 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface I { }
         export class C {
             [Symbol.iterator]: I;

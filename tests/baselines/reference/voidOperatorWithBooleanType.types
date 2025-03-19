@@ -46,6 +46,7 @@ var objA = new A();
 // boolean type var
 var ResultIsAny1 = void BOOLEAN;
 >ResultIsAny1 : any
+>             : ^^^
 >void BOOLEAN : undefined
 >             : ^^^^^^^^^
 >BOOLEAN : boolean
@@ -54,6 +55,7 @@ var ResultIsAny1 = void BOOLEAN;
 // boolean type literal
 var ResultIsAny2 = void true;
 >ResultIsAny2 : any
+>             : ^^^
 >void true : undefined
 >          : ^^^^^^^^^
 >true : true
@@ -61,6 +63,7 @@ var ResultIsAny2 = void true;
 
 var ResultIsAny3 = void { x: true, y: false };
 >ResultIsAny3 : any
+>             : ^^^
 >void { x: true, y: false } : undefined
 >                           : ^^^^^^^^^
 >{ x: true, y: false } : { x: boolean; y: boolean; }
@@ -77,6 +80,7 @@ var ResultIsAny3 = void { x: true, y: false };
 // boolean type expressions
 var ResultIsAny4 = void objA.a;
 >ResultIsAny4 : any
+>             : ^^^
 >void objA.a : undefined
 >            : ^^^^^^^^^
 >objA.a : boolean
@@ -88,6 +92,7 @@ var ResultIsAny4 = void objA.a;
 
 var ResultIsAny5 = void M.n;
 >ResultIsAny5 : any
+>             : ^^^
 >void M.n : undefined
 >         : ^^^^^^^^^
 >M.n : boolean
@@ -99,6 +104,7 @@ var ResultIsAny5 = void M.n;
 
 var ResultIsAny6 = void foo();
 >ResultIsAny6 : any
+>             : ^^^
 >void foo() : undefined
 >           : ^^^^^^^^^
 >foo() : boolean
@@ -108,6 +114,7 @@ var ResultIsAny6 = void foo();
 
 var ResultIsAny7 = void A.foo();
 >ResultIsAny7 : any
+>             : ^^^
 >void A.foo() : undefined
 >             : ^^^^^^^^^
 >A.foo() : boolean
@@ -122,6 +129,7 @@ var ResultIsAny7 = void A.foo();
 // multiple void  operator
 var ResultIsAny8 = void void BOOLEAN;
 >ResultIsAny8 : any
+>             : ^^^
 >void void BOOLEAN : undefined
 >                  : ^^^^^^^^^
 >void BOOLEAN : undefined

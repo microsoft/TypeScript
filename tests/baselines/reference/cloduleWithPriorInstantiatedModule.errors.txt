@@ -1,9 +1,13 @@
+cloduleWithPriorInstantiatedModule.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleWithPriorInstantiatedModule.ts(2,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+cloduleWithPriorInstantiatedModule.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== cloduleWithPriorInstantiatedModule.ts (1 errors) ====
+==== cloduleWithPriorInstantiatedModule.ts (3 errors) ====
     // Non-ambient & instantiated module.
     module Moclodule {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
            ~~~~~~~~~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
         export interface Someinterface {
@@ -17,6 +21,8 @@ cloduleWithPriorInstantiatedModule.ts(2,8): error TS2434: A namespace declaratio
     
     // Instantiated module.
     module Moclodule {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Manager {
         }
     }

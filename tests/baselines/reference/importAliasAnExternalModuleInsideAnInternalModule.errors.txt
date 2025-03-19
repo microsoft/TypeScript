@@ -1,0 +1,21 @@
+importAliasAnExternalModuleInsideAnInternalModule_file0.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importAliasAnExternalModuleInsideAnInternalModule_file1.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== importAliasAnExternalModuleInsideAnInternalModule_file1.ts (1 errors) ====
+    import r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
+    module m_private {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        //import r2 = require('m'); // would be error
+        export import C = r; // no error
+        C.m.foo();
+    }
+    
+==== importAliasAnExternalModuleInsideAnInternalModule_file0.ts (1 errors) ====
+    export module m {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function foo() { }
+    }
+    

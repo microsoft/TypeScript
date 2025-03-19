@@ -1,7 +1,8 @@
+plusOperatorWithNumberType.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 plusOperatorWithNumberType.ts(41,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== plusOperatorWithNumberType.ts (1 errors) ====
+==== plusOperatorWithNumberType.ts (2 errors) ====
     // + operator on number type
     var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
@@ -13,6 +14,8 @@ plusOperatorWithNumberType.ts(41,1): error TS2695: Left side of comma operator i
         static foo() { return 1; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: number;
     }
     

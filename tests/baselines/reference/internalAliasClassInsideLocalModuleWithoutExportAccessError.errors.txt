@@ -1,8 +1,13 @@
+internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(9,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(10,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(17,26): error TS2339: Property 'c' does not exist on type 'typeof m3'.
 
 
-==== internalAliasClassInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+==== internalAliasClassInsideLocalModuleWithoutExportAccessError.ts (4 errors) ====
     export module x {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class c {
             foo(a: number) {
                 return a;
@@ -11,7 +16,11 @@ internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(17,26): error TS2
     }
     
     export module m2 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module m3 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             import c = x.c;
             export var cProp = new c();
             var cReturnVal = cProp.foo(10);

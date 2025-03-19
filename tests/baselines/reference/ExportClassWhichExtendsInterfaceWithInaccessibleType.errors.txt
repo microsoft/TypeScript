@@ -1,0 +1,25 @@
+ExportClassWhichExtendsInterfaceWithInaccessibleType.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportClassWhichExtendsInterfaceWithInaccessibleType.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        interface Point {
+            x: number;
+            y: number;
+    
+            fromOrigin(p: Point): number;
+        }
+    
+        export class Point2d implements Point {
+            constructor(public x: number, public y: number) { }
+    
+            fromOrigin(p: Point) {
+                return 1;
+            }
+        }
+    }
+    
+    

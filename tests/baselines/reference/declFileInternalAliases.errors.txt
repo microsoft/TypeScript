@@ -1,0 +1,24 @@
+declFileInternalAliases.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileInternalAliases.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileInternalAliases.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileInternalAliases.ts (3 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class c {
+        }
+    }
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import x = m.c;
+        export var d = new x(); // emit the type as m.c
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import x = m.c;
+        export var d = new x(); // emit the type as x
+    }

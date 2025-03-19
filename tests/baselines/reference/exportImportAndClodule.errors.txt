@@ -1,0 +1,31 @@
+exportImportAndClodule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAndClodule.ts(5,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAndClodule.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportImportAndClodule.ts (3 errors) ====
+    module K {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class L {
+            constructor(public name: string) { }
+        }
+        export module L {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var y = 12;
+            export interface Point {
+                x: number;
+                y: number;
+            }
+        }
+    }
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import D = K.L;
+    }
+    var o: { name: string };
+    var o = new M.D('Hello');
+    var p: { x: number; y: number; }
+    var p: M.D.Point;

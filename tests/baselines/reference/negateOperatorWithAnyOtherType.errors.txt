@@ -1,9 +1,10 @@
+negateOperatorWithAnyOtherType.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 negateOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
 negateOperatorWithAnyOtherType.ts(35,23): error TS18050: The value 'null' cannot be used here.
 negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== negateOperatorWithAnyOtherType.ts (3 errors) ====
+==== negateOperatorWithAnyOtherType.ts (4 errors) ====
     // - operator on any type
     
     var ANY: any;
@@ -24,6 +25,8 @@ negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operat
         }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: any;
     }
     var objA = new A();

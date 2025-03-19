@@ -1,8 +1,14 @@
+sourceMapSample.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+sourceMapSample.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 sourceMapSample.ts(14,45): error TS2694: Namespace 'Foo.Bar' has no exported member 'Greeter'.
 
 
-==== sourceMapSample.ts (1 errors) ====
+==== sourceMapSample.ts (3 errors) ====
     module Foo.Bar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         "use strict";
     
         class Greeter {

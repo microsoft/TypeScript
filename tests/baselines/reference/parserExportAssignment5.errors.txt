@@ -1,8 +1,11 @@
+parserExportAssignment5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserExportAssignment5.ts(2,5): error TS1063: An export assignment cannot be used in a namespace.
 
 
-==== parserExportAssignment5.ts (1 errors) ====
+==== parserExportAssignment5.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export = A;
         ~~~~~~~~~~~
 !!! error TS1063: An export assignment cannot be used in a namespace.

@@ -1,13 +1,16 @@
+namespacesDeclaration2.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 namespacesDeclaration2.ts(12,13): error TS2694: Namespace 'N' has no exported member 'S'.
 namespacesDeclaration2.ts(13,12): error TS2694: Namespace 'M' has no exported member 'F'.
 namespacesDeclaration2.ts(14,11): error TS2694: Namespace 'ns' has no exported member 'A'.
 
 
-==== namespacesDeclaration2.ts (3 errors) ====
+==== namespacesDeclaration2.ts (4 errors) ====
     namespace N {
         function S() {}
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function F() {}
     }
     

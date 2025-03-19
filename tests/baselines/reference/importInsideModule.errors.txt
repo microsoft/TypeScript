@@ -1,9 +1,12 @@
+importInsideModule_file2.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importInsideModule_file2.ts(2,26): error TS1147: Import declarations in a namespace cannot reference a module.
 importInsideModule_file2.ts(2,26): error TS2307: Cannot find module 'importInsideModule_file1' or its corresponding type declarations.
 
 
-==== importInsideModule_file2.ts (2 errors) ====
+==== importInsideModule_file2.ts (3 errors) ====
     export module myModule {
+                  ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import foo = require("importInsideModule_file1");
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.

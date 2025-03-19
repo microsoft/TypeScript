@@ -1,8 +1,12 @@
 collisionExportsRequireAndEnum_externalmodule.ts(1,13): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+collisionExportsRequireAndEnum_externalmodule.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndEnum_externalmodule.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndEnum_globalFile.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndEnum_globalFile.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== collisionExportsRequireAndEnum_externalmodule.ts (2 errors) ====
+==== collisionExportsRequireAndEnum_externalmodule.ts (4 errors) ====
     export enum require { // Error
                 ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
@@ -16,6 +20,8 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
         _thisVal2,
     }
     module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         enum require {
             _thisVal1,
             _thisVal2,
@@ -26,6 +32,8 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
         }
     }
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export enum require { 
             _thisVal1,
             _thisVal2,
@@ -36,7 +44,7 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
         }
     }
     
-==== collisionExportsRequireAndEnum_globalFile.ts (0 errors) ====
+==== collisionExportsRequireAndEnum_globalFile.ts (2 errors) ====
     enum require {
         _thisVal1,
         _thisVal2,
@@ -46,6 +54,8 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
         _thisVal2,
     }
     module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         enum require {
             _thisVal1,
             _thisVal2,
@@ -56,6 +66,8 @@ collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate 
         }
     }
     module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export enum require {
             _thisVal1,
             _thisVal2,

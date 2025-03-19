@@ -1,0 +1,14 @@
+ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class B {
+            id: number;
+        }
+    
+        export var beez: Array<B>;
+        export var beez2 = new Array<B>();
+    }

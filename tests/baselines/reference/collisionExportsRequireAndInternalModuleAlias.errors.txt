@@ -1,9 +1,14 @@
+collisionExportsRequireAndInternalModuleAlias.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 collisionExportsRequireAndInternalModuleAlias.ts(5,8): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 collisionExportsRequireAndInternalModuleAlias.ts(6,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndInternalModuleAlias.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndInternalModuleAlias.ts(17,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== collisionExportsRequireAndInternalModuleAlias.ts (2 errors) ====
+==== collisionExportsRequireAndInternalModuleAlias.ts (5 errors) ====
     export module m {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class c {
         }
     }
@@ -17,6 +22,8 @@ collisionExportsRequireAndInternalModuleAlias.ts(6,8): error TS2441: Duplicate i
     new require();
     
     module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import exports = m.c;
         import require = m.c;
         new exports();
@@ -24,6 +31,8 @@ collisionExportsRequireAndInternalModuleAlias.ts(6,8): error TS2441: Duplicate i
     }
     
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export import exports = m.c;
         export import require = m.c;
         new exports();

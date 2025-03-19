@@ -1,0 +1,13 @@
+genericClassImplementingGenericInterfaceFromAnotherModule.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== genericClassImplementingGenericInterfaceFromAnotherModule.ts (1 errors) ====
+    module foo {
+        export interface IFoo<T> { }
+    }
+    module bar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Foo<T> implements foo.IFoo<T> { }
+    }
+    

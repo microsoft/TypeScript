@@ -1,14 +1,20 @@
+internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(7,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(12,11): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
-==== internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+==== internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts (3 errors) ====
     export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function foo(x: number) {
             return x;
         }
     }
     
     export module c {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import b = a.foo;
         var bVal = b(10);
         export var bVal2 = b;

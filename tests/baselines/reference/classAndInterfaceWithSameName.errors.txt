@@ -1,0 +1,18 @@
+classAndInterfaceWithSameName.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== classAndInterfaceWithSameName.ts (1 errors) ====
+    class C { foo: string; }
+    interface C { foo: string; }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class D {
+            bar: string;
+        }
+    
+        interface D {
+            bar: string;
+        }
+    }

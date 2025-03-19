@@ -1,0 +1,80 @@
+duplicateAnonymousModuleClasses.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateAnonymousModuleClasses.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateAnonymousModuleClasses.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateAnonymousModuleClasses.ts(28,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateAnonymousModuleClasses.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateAnonymousModuleClasses.ts(38,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateAnonymousModuleClasses.ts(47,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== duplicateAnonymousModuleClasses.ts (7 errors) ====
+    module F {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        class Helper {
+    
+        }
+    
+    }
+    
+    
+    module F {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        
+        // Should not be an error
+        class Helper {
+    
+        }
+    
+    }
+    
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        class Helper {
+    
+        }
+    
+    }
+    
+    
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        
+        // Should not be an error
+        class Helper {
+    
+        }
+    
+    }
+    
+    module Gar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module Foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+            class Helper {
+    
+            }
+    
+        }
+    
+    
+        module Foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        
+            // Should not be an error
+            class Helper {
+    
+            }
+    
+        }
+    }
+    

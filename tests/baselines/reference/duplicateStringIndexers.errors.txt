@@ -1,3 +1,4 @@
+duplicateStringIndexers.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateStringIndexers.ts(5,9): error TS2374: Duplicate index signature for type 'string'.
 duplicateStringIndexers.ts(6,9): error TS2374: Duplicate index signature for type 'string'.
 duplicateStringIndexers.ts(10,9): error TS2374: Duplicate index signature for type 'string'.
@@ -12,10 +13,12 @@ duplicateStringIndexers.ts(30,9): error TS2374: Duplicate index signature for ty
 duplicateStringIndexers.ts(31,9): error TS2374: Duplicate index signature for type 'string'.
 
 
-==== duplicateStringIndexers.ts (12 errors) ====
+==== duplicateStringIndexers.ts (13 errors) ====
     // it is an error to have duplicate index signatures of the same kind in a type
     
     module test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Number {
             [x: string]: string;
             ~~~~~~~~~~~~~~~~~~~~

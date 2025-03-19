@@ -1,0 +1,10 @@
+letDeclarations2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== letDeclarations2.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        let l1 = "s";
+        export let l2 = 0;
+    }

@@ -1,8 +1,11 @@
+memberScope.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 memberScope.ts(4,11): error TS2708: Cannot use namespace 'Basil' as a value.
 
 
-==== memberScope.ts (1 errors) ====
+==== memberScope.ts (2 errors) ====
     module Salt {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class Pepper {}
       export module Basil { }
       var z = Basil.Pepper;

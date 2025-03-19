@@ -1,0 +1,12 @@
+declFileModuleWithPropertyOfTypeModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileModuleWithPropertyOfTypeModule.ts (1 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class c {
+        }
+    
+        export var a = m;
+    }

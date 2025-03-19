@@ -1,0 +1,21 @@
+multiModuleFundule1.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+multiModuleFundule1.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== multiModuleFundule1.ts (2 errors) ====
+    function C(x: number) { }
+    
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 1;
+    }
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function foo() { }
+    }
+    
+    var r = C(2);
+    var r2 = new C(2); // using void returning function as constructor
+    var r3 = C.foo();

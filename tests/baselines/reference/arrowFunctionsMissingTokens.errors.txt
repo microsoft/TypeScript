@@ -1,14 +1,18 @@
+arrowFunctionsMissingTokens.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 arrowFunctionsMissingTokens.ts(2,16): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(4,22): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(6,17): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(8,36): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(10,42): error TS1005: '=>' expected.
+arrowFunctionsMissingTokens.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+arrowFunctionsMissingTokens.ts(14,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 arrowFunctionsMissingTokens.ts(15,23): error TS1005: '{' expected.
 arrowFunctionsMissingTokens.ts(17,29): error TS1005: '{' expected.
 arrowFunctionsMissingTokens.ts(19,24): error TS1005: '{' expected.
 arrowFunctionsMissingTokens.ts(21,43): error TS1005: '{' expected.
 arrowFunctionsMissingTokens.ts(23,49): error TS1005: '{' expected.
 arrowFunctionsMissingTokens.ts(25,23): error TS1005: '{' expected.
+arrowFunctionsMissingTokens.ts(28,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 arrowFunctionsMissingTokens.ts(29,23): error TS1109: Expression expected.
 arrowFunctionsMissingTokens.ts(31,29): error TS1109: Expression expected.
 arrowFunctionsMissingTokens.ts(33,24): error TS1109: Expression expected.
@@ -17,15 +21,19 @@ arrowFunctionsMissingTokens.ts(37,49): error TS1109: Expression expected.
 arrowFunctionsMissingTokens.ts(39,23): error TS1109: Expression expected.
 arrowFunctionsMissingTokens.ts(40,5): error TS1128: Declaration or statement expected.
 arrowFunctionsMissingTokens.ts(41,1): error TS1128: Declaration or statement expected.
+arrowFunctionsMissingTokens.ts(43,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 arrowFunctionsMissingTokens.ts(44,14): error TS1109: Expression expected.
 arrowFunctionsMissingTokens.ts(46,21): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(48,14): error TS2304: Cannot find name 'x'.
 arrowFunctionsMissingTokens.ts(50,35): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
+arrowFunctionsMissingTokens.ts(55,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== arrowFunctionsMissingTokens.ts (24 errors) ====
+==== arrowFunctionsMissingTokens.ts (30 errors) ====
     module missingArrowsWithCurly {
+           ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var a = () { };
                    ~
 !!! error TS1005: '=>' expected.
@@ -48,7 +56,11 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
     }
     
     module missingCurliesWithArrow {
+           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module withStatement {
+               ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var a = () => var k = 10;};
                           ~~~
 !!! error TS1005: '{' expected.
@@ -75,6 +87,8 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
         }
     
         module withoutStatement {
+               ~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var a = () => };
                           ~
 !!! error TS1109: Expression expected.
@@ -106,6 +120,8 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
 !!! error TS1128: Declaration or statement expected.
     
     module ce_nEst_pas_une_arrow_function {
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var a = ();
                  ~
 !!! error TS1109: Expression expected.
@@ -128,6 +144,8 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
     }
     
     module okay {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var a = () => { };
     
         var b = (): void => { }

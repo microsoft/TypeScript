@@ -1,0 +1,30 @@
+mergedDeclarations4.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations4.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedDeclarations4.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mergedDeclarations4.ts (3 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f() { }
+        f();
+        M.f();    
+        var r = f.hello;
+    }
+     
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module f {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var hello = 1;
+        }
+        f();
+        M.f();
+        var r = f.hello;
+    }
+     
+    M.f();
+    M.f.hello;

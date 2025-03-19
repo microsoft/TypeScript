@@ -1,0 +1,22 @@
+ModuleAndEnumWithSameNameAndCommonRoot.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ModuleAndEnumWithSameNameAndCommonRoot.ts (1 errors) ====
+    module enumdule {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    }
+    
+    enum enumdule {
+        Red, Blue
+    }
+    
+    var x: enumdule;
+    var x = enumdule.Red;
+    
+    var y: { x: number; y: number };
+    var y = new enumdule.Point(0, 0);

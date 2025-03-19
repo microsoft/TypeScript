@@ -1,0 +1,31 @@
+collisionExportsRequireAndFunctionInGlobalFile.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndFunctionInGlobalFile.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionExportsRequireAndFunctionInGlobalFile.ts (2 errors) ====
+    function exports() {
+        return 1;
+    }
+    function require() {
+        return "require";
+    }
+    module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        function exports() {
+            return 1;
+        }
+        function require() {
+            return "require";
+        }
+    }
+    module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function exports() {
+            return 1;
+        }
+        export function require() {
+            return "require";
+        }
+    }

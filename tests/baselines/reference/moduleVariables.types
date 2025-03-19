@@ -3,6 +3,7 @@
 === moduleVariables.ts ===
 declare var console: any;
 >console : any
+>        : ^^^
  
 var x = 1;
 >x : number
@@ -22,7 +23,9 @@ module M {
 
     console.log(x); // 2
 >console.log(x) : any
+>               : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -37,7 +40,9 @@ module M {
 
     console.log(x); // 2
 >console.log(x) : any
+>               : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any
@@ -58,7 +63,9 @@ module M {
 
     console.log(x); // 3
 >console.log(x) : any
+>               : ^^^
 >console.log : any
+>            : ^^^
 >console : any
 >        : ^^^
 >log : any

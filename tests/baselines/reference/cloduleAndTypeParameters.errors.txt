@@ -1,0 +1,19 @@
+cloduleAndTypeParameters.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== cloduleAndTypeParameters.ts (1 errors) ====
+    class Foo<T extends Foo.Bar> {
+      constructor() {
+      }
+    }
+    
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      export interface Bar {
+        bar(): void;
+      }
+    
+      export class Baz {
+      }
+    }

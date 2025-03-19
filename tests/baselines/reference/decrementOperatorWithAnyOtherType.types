@@ -5,9 +5,11 @@
 
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var ANY1: any;
 >ANY1 : any
+>     : ^^^
 
 var ANY2: any[] = ["", ""];
 >ANY2 : any[]
@@ -37,6 +39,7 @@ class A {
 
     public a: any;
 >a : any
+>  : ^^^
 }
 module M {
 >M : typeof M
@@ -44,6 +47,7 @@ module M {
 
     export var n: any;
 >n : any
+>  : ^^^
 }
 var objA = new A();
 >objA : A
@@ -60,6 +64,7 @@ var ResultIsNumber1 = --ANY;
 >--ANY : number
 >      : ^^^^^^
 >ANY : any
+>    : ^^^
 
 var ResultIsNumber2 = --ANY1;
 >ResultIsNumber2 : number
@@ -67,6 +72,7 @@ var ResultIsNumber2 = --ANY1;
 >--ANY1 : number
 >       : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 var ResultIsNumber3 = ANY1--;
 >ResultIsNumber3 : number
@@ -74,6 +80,7 @@ var ResultIsNumber3 = ANY1--;
 >ANY1-- : number
 >       : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 var ResultIsNumber4 = ANY1--;
 >ResultIsNumber4 : number
@@ -81,6 +88,7 @@ var ResultIsNumber4 = ANY1--;
 >ANY1-- : number
 >       : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 // expressions
 var ResultIsNumber5 = --ANY2[0];
@@ -89,6 +97,7 @@ var ResultIsNumber5 = --ANY2[0];
 >--ANY2[0] : number
 >          : ^^^^^^
 >ANY2[0] : any
+>        : ^^^
 >ANY2 : any[]
 >     : ^^^^^
 >0 : 0
@@ -112,6 +121,7 @@ var ResultIsNumber7 = --obj.y;
 >--obj.y : number
 >        : ^^^^^^
 >obj.y : any
+>      : ^^^
 >obj : { x: number; y: any; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >y : any
@@ -123,6 +133,7 @@ var ResultIsNumber8 = --objA.a;
 >--objA.a : number
 >         : ^^^^^^
 >objA.a : any
+>       : ^^^
 >objA : A
 >     : ^
 >a : any
@@ -134,6 +145,7 @@ var ResultIsNumber = --M.n;
 >--M.n : number
 >      : ^^^^^^
 >M.n : any
+>    : ^^^
 >M : typeof M
 >  : ^^^^^^^^
 >n : any
@@ -145,6 +157,7 @@ var ResultIsNumber9 = ANY2[0]--;
 >ANY2[0]-- : number
 >          : ^^^^^^
 >ANY2[0] : any
+>        : ^^^
 >ANY2 : any[]
 >     : ^^^^^
 >0 : 0
@@ -168,6 +181,7 @@ var ResultIsNumber11 = obj.y--;
 >obj.y-- : number
 >        : ^^^^^^
 >obj.y : any
+>      : ^^^
 >obj : { x: number; y: any; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >y : any
@@ -179,6 +193,7 @@ var ResultIsNumber12 = objA.a--;
 >objA.a-- : number
 >         : ^^^^^^
 >objA.a : any
+>       : ^^^
 >objA : A
 >     : ^
 >a : any
@@ -190,6 +205,7 @@ var ResultIsNumber13 = M.n--;
 >M.n-- : number
 >      : ^^^^^^
 >M.n : any
+>    : ^^^
 >M : typeof M
 >  : ^^^^^^^^
 >n : any
@@ -200,16 +216,19 @@ var ResultIsNumber13 = M.n--;
 >--ANY : number
 >      : ^^^^^^
 >ANY : any
+>    : ^^^
 
 --ANY1;
 >--ANY1 : number
 >       : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 --ANY2[0];
 >--ANY2[0] : number
 >          : ^^^^^^
 >ANY2[0] : any
+>        : ^^^
 >ANY2 : any[]
 >     : ^^^^^
 >0 : 0
@@ -221,14 +240,17 @@ var ResultIsNumber13 = M.n--;
 >--ANY : number
 >      : ^^^^^^
 >ANY : any
+>    : ^^^
 >--ANY1 : number
 >       : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 --objA.a;
 >--objA.a : number
 >         : ^^^^^^
 >objA.a : any
+>       : ^^^
 >objA : A
 >     : ^
 >a : any
@@ -238,6 +260,7 @@ var ResultIsNumber13 = M.n--;
 >--M.n : number
 >      : ^^^^^^
 >M.n : any
+>    : ^^^
 >M : typeof M
 >  : ^^^^^^^^
 >n : any
@@ -247,16 +270,19 @@ ANY--;
 >ANY-- : number
 >      : ^^^^^^
 >ANY : any
+>    : ^^^
 
 ANY1--;
 >ANY1-- : number
 >       : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 ANY2[0]--;
 >ANY2[0]-- : number
 >          : ^^^^^^
 >ANY2[0] : any
+>        : ^^^
 >ANY2 : any[]
 >     : ^^^^^
 >0 : 0
@@ -268,14 +294,17 @@ ANY--, ANY1--;
 >ANY-- : number
 >      : ^^^^^^
 >ANY : any
+>    : ^^^
 >ANY1-- : number
 >       : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 objA.a--;
 >objA.a-- : number
 >         : ^^^^^^
 >objA.a : any
+>       : ^^^
 >objA : A
 >     : ^
 >a : any
@@ -285,6 +314,7 @@ M.n--;
 >M.n-- : number
 >      : ^^^^^^
 >M.n : any
+>    : ^^^
 >M : typeof M
 >  : ^^^^^^^^
 >n : any

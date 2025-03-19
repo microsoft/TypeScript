@@ -1,0 +1,23 @@
+classDeclarationMergedInModuleWithContinuation.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+classDeclarationMergedInModuleWithContinuation.ts(3,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+classDeclarationMergedInModuleWithContinuation.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== classDeclarationMergedInModuleWithContinuation.ts (3 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class N { }
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var v = 0;
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class O extends M.N {
+        }
+    }

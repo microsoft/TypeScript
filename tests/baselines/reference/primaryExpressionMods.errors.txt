@@ -1,9 +1,12 @@
+primaryExpressionMods.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 primaryExpressionMods.ts(7,8): error TS2709: Cannot use namespace 'M' as a type.
 primaryExpressionMods.ts(11,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
 
 
-==== primaryExpressionMods.ts (2 errors) ====
+==== primaryExpressionMods.ts (3 errors) ====
     module M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     {
         export interface P { x: number; y: number; }
         export var a = 1;

@@ -1,10 +1,13 @@
+moduleClassArrayCodeGenTest.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleClassArrayCodeGenTest.ts(10,11): error TS2694: Namespace 'M' has no exported member 'B'.
 
 
-==== moduleClassArrayCodeGenTest.ts (1 errors) ====
+==== moduleClassArrayCodeGenTest.ts (2 errors) ====
     // Invalid code gen for Array of Module class
     
     module M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     {
         export class A { }
         class B{ }

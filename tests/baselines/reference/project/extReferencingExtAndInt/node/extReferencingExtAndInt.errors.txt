@@ -1,0 +1,19 @@
+internal.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internal.ts (1 errors) ====
+    module outer {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export var b = "foo";
+    }
+==== external2.ts (0 errors) ====
+    export function square(x: number) {
+    	return (x * x);
+    }
+==== external.ts (0 errors) ====
+    ///<reference path="internal.ts" />
+    import a = require("external2");
+    
+    outer.b = "bar";
+    var c = a.square(5);

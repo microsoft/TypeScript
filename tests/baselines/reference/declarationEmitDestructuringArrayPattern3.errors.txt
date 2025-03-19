@@ -1,0 +1,9 @@
+declarationEmitDestructuringArrayPattern3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declarationEmitDestructuringArrayPattern3.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var [a, b] = [1, 2];
+    }

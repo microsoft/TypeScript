@@ -1,3 +1,5 @@
+assignmentCompatWithObjectMembersOptionality.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+assignmentCompatWithObjectMembersOptionality.ts(49,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembersOptionality.ts(73,5): error TS2322: Type 'D' is not assignable to type 'C'.
   Property 'opt' is optional in type 'D' but required in type 'C'.
 assignmentCompatWithObjectMembersOptionality.ts(74,5): error TS2322: Type 'E' is not assignable to type 'C'.
@@ -12,7 +14,7 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
   Property 'opt' is optional in type 'E' but required in type '{ opt: Base; }'.
 
 
-==== assignmentCompatWithObjectMembersOptionality.ts (6 errors) ====
+==== assignmentCompatWithObjectMembersOptionality.ts (8 errors) ====
     // Derived member is not optional but base member is, should be ok
     
     class Base { foo: string; }
@@ -20,6 +22,8 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
     class Derived2 extends Derived { baz: string; }
     
     module TargetHasOptional {
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // targets
         interface C {
             opt?: Base
@@ -62,6 +66,8 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
     }
     
     module SourceHasOptional {
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // targets
         interface C {
             opt: Base

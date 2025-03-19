@@ -1,0 +1,49 @@
+part1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part1.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part1.ts(8,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part2.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part2.ts(6,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== part1.ts (3 errors) ====
+    module Root {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module A {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface Point {
+                x: number;
+                y: number;
+            }
+    
+            export module Utils {
+                          ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                export function mirror<T extends Point>(p: T) {
+                    return { x: p.y, y: p.x };
+                }
+            }
+        }
+    }
+    
+==== part2.ts (3 errors) ====
+    module otherRoot {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module A {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            // have to be fully qualified since in different root
+            export var Origin: Root.A.Point = { x: 0, y: 0 };
+    
+            export module Utils {
+                          ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                export class Plane {
+                    constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
+                }
+            }
+        }
+    }

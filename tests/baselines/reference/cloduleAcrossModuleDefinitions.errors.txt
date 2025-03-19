@@ -1,0 +1,27 @@
+cloduleAcrossModuleDefinitions.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+cloduleAcrossModuleDefinitions.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+cloduleAcrossModuleDefinitions.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== cloduleAcrossModuleDefinitions.ts (3 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class B {
+            foo() { }
+            static bar() { }
+        }
+    }
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x = 1;
+        }
+    }
+    
+    var b: A.B; // ok
+    

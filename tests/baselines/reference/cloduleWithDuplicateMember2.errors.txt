@@ -1,19 +1,25 @@
+cloduleWithDuplicateMember2.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleWithDuplicateMember2.ts(7,16): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember2.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 cloduleWithDuplicateMember2.ts(10,21): error TS2300: Duplicate identifier 'x'.
 
 
-==== cloduleWithDuplicateMember2.ts (2 errors) ====
+==== cloduleWithDuplicateMember2.ts (4 errors) ====
     class C {
         set x(y) { }
         static set y(z) { }
     }
     
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x = 1;
                    ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function x() { }
                         ~
 !!! error TS2300: Duplicate identifier 'x'.

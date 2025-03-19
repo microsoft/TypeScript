@@ -1,0 +1,11 @@
+m1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== m1.ts (1 errors) ====
+    module foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        const enum E { X }
+    }
+    
+    export = foo

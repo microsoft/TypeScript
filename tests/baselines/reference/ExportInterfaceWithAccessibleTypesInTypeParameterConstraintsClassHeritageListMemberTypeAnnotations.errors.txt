@@ -1,0 +1,28 @@
+ExportInterfaceWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportInterfaceWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    
+        export var Origin: Point = { x: 0, y: 0 };
+    
+        export interface Point3d extends Point {
+            z: number;
+        }
+    
+        export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+    
+        export interface Line<TPoint extends Point>{
+            new (start: TPoint, end: TPoint);
+            start: TPoint;
+            end: TPoint;
+        }
+    }
+    

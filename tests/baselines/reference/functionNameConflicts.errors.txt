@@ -1,3 +1,4 @@
+functionNameConflicts.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 functionNameConflicts.ts(5,14): error TS2300: Duplicate identifier 'fn1'.
 functionNameConflicts.ts(6,9): error TS2300: Duplicate identifier 'fn1'.
 functionNameConflicts.ts(8,9): error TS2300: Duplicate identifier 'fn2'.
@@ -11,11 +12,13 @@ functionNameConflicts.ts(20,9): error TS2300: Duplicate identifier 'fn5'.
 functionNameConflicts.ts(24,10): error TS2389: Function implementation name must be 'over'.
 
 
-==== functionNameConflicts.ts (11 errors) ====
+==== functionNameConflicts.ts (12 errors) ====
     //Function and variable of the same name in same declaration space
     //Function overload with different name from implementation signature 
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function fn1() { }
                  ~~~
 !!! error TS2300: Duplicate identifier 'fn1'.

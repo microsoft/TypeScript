@@ -1,9 +1,10 @@
+logicalNotOperatorWithNumberType.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 logicalNotOperatorWithNumberType.ts(23,25): error TS2872: This kind of expression is always truthy.
 logicalNotOperatorWithNumberType.ts(24,25): error TS2872: This kind of expression is always truthy.
 logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== logicalNotOperatorWithNumberType.ts (3 errors) ====
+==== logicalNotOperatorWithNumberType.ts (4 errors) ====
     // ! operator on number type
     var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
@@ -15,6 +16,8 @@ logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma oper
         static foo() { return 1; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: number;
     }
     

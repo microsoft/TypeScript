@@ -7,9 +7,11 @@ letAndVarRedeclaration.ts(8,14): error TS2300: Duplicate identifier 'x1'.
 letAndVarRedeclaration.ts(12,9): error TS2451: Cannot redeclare block-scoped variable 'x'.
 letAndVarRedeclaration.ts(14,13): error TS2451: Cannot redeclare block-scoped variable 'x'.
 letAndVarRedeclaration.ts(17,18): error TS2451: Cannot redeclare block-scoped variable 'x'.
+letAndVarRedeclaration.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 letAndVarRedeclaration.ts(22,9): error TS2300: Duplicate identifier 'x2'.
 letAndVarRedeclaration.ts(23,9): error TS2300: Duplicate identifier 'x2'.
 letAndVarRedeclaration.ts(24,14): error TS2300: Duplicate identifier 'x2'.
+letAndVarRedeclaration.ts(27,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 letAndVarRedeclaration.ts(28,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
 letAndVarRedeclaration.ts(30,13): error TS2451: Cannot redeclare block-scoped variable 'x2'.
 letAndVarRedeclaration.ts(33,18): error TS2451: Cannot redeclare block-scoped variable 'x2'.
@@ -17,11 +19,12 @@ letAndVarRedeclaration.ts(37,5): error TS2451: Cannot redeclare block-scoped var
 letAndVarRedeclaration.ts(38,10): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 letAndVarRedeclaration.ts(42,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 letAndVarRedeclaration.ts(43,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+letAndVarRedeclaration.ts(47,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 letAndVarRedeclaration.ts(48,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 letAndVarRedeclaration.ts(49,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 
 
-==== letAndVarRedeclaration.ts (21 errors) ====
+==== letAndVarRedeclaration.ts (24 errors) ====
     let e0
         ~~
 !!! error TS2300: Duplicate identifier 'e0'.
@@ -61,6 +64,8 @@ letAndVarRedeclaration.ts(49,14): error TS2451: Cannot redeclare block-scoped va
     }
     
     module M0 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         let x2;
             ~~
 !!! error TS2300: Duplicate identifier 'x2'.
@@ -73,6 +78,8 @@ letAndVarRedeclaration.ts(49,14): error TS2451: Cannot redeclare block-scoped va
     }
     
     module M1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         let x2;
             ~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x2'.
@@ -107,6 +114,8 @@ letAndVarRedeclaration.ts(49,14): error TS2451: Cannot redeclare block-scoped va
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         let x11;
             ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x11'.

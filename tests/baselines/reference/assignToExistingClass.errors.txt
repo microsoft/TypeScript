@@ -1,8 +1,11 @@
+assignToExistingClass.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignToExistingClass.ts(8,13): error TS2629: Cannot assign to 'Mocked' because it is a class.
 
 
-==== assignToExistingClass.ts (1 errors) ====
+==== assignToExistingClass.ts (2 errors) ====
     module Test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Mocked {
             myProp: string;
         }

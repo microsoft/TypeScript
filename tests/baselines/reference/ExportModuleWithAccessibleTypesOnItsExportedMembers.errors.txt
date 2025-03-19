@@ -1,0 +1,29 @@
+ExportModuleWithAccessibleTypesOnItsExportedMembers.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ExportModuleWithAccessibleTypesOnItsExportedMembers.ts(7,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportModuleWithAccessibleTypesOnItsExportedMembers.ts (2 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var Origin: Point = new Point(0, 0);
+    
+            export class Line {
+                constructor(start: Point, end: Point) {
+    
+                }
+    
+                static fromOrigin(p: Point) {
+                    return new Line({ x: 0, y: 0 }, p);
+                }
+            }
+        }
+    }

@@ -1,14 +1,20 @@
+staticPropertyNotInClassType.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+staticPropertyNotInClassType.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNotInClassType.ts(16,16): error TS2576: Property 'foo' does not exist on type 'C'. Did you mean to access the static member 'C.foo' instead?
 staticPropertyNotInClassType.ts(17,16): error TS2339: Property 'bar' does not exist on type 'C'.
 staticPropertyNotInClassType.ts(18,16): error TS2576: Property 'x' does not exist on type 'C'. Did you mean to access the static member 'C.x' instead?
+staticPropertyNotInClassType.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNotInClassType.ts(27,21): error TS2302: Static members cannot reference class type parameters.
+staticPropertyNotInClassType.ts(30,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 staticPropertyNotInClassType.ts(36,16): error TS2576: Property 'foo' does not exist on type 'C<number, string>'. Did you mean to access the static member 'C<number, string>.foo' instead?
 staticPropertyNotInClassType.ts(37,16): error TS2339: Property 'bar' does not exist on type 'C<number, string>'.
 staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exist on type 'C<number, string>'. Did you mean to access the static member 'C<number, string>.x' instead?
 
 
-==== staticPropertyNotInClassType.ts (7 errors) ====
+==== staticPropertyNotInClassType.ts (11 errors) ====
     module NonGeneric {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C {
             fn() { return this; }
             static get x() { return 1; }
@@ -18,6 +24,8 @@ staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exis
         }
     
         module C {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var bar = ''; // not reflected in class type
         }
     
@@ -35,6 +43,8 @@ staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exis
     }
     
     module Generic {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C<T, U> {
             fn() { return this; }
             static get x() { return 1; }
@@ -46,6 +56,8 @@ staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exis
         }
     
         module C {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var bar = ''; // not reflected in class type
         }
     

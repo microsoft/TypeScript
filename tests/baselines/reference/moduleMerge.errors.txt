@@ -1,0 +1,32 @@
+moduleMerge.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleMerge.ts(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleMerge.ts (2 errors) ====
+    // This should not compile both B classes are in the same module this should be a collission
+    
+    module A
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    {
+        class B
+        {
+            public Hello(): string
+            {
+                return "from private B";
+            }
+        }
+    }
+    
+    module A
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    {
+        export class B
+        {
+            public Hello(): string
+            {
+                return "from export B";
+            }
+        }
+    }

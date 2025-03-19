@@ -1,0 +1,14 @@
+nestedSelf.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== nestedSelf.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+     export class C {
+       public n = 42;
+       public foo() { [1,2,3].map((x) => { return this.n * x; })}
+     }
+    }
+    
+    

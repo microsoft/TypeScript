@@ -1,8 +1,11 @@
+undeclaredBase.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 undeclaredBase.ts(1,37): error TS2339: Property 'I' does not exist on type 'typeof M'.
 
 
-==== undeclaredBase.ts (1 errors) ====
+==== undeclaredBase.ts (2 errors) ====
     module M { export class C extends M.I { } }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                                         ~
 !!! error TS2339: Property 'I' does not exist on type 'typeof M'.
     

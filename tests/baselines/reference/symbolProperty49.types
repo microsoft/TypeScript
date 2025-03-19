@@ -7,6 +7,7 @@ module M {
 
     export var Symbol;
 >Symbol : any
+>       : ^^^
 
     class C {
 >C : C
@@ -16,6 +17,7 @@ module M {
 >[Symbol.iterator] : () => void
 >                  : ^^^^^^^^^^
 >Symbol.iterator : any
+>                : ^^^
 >Symbol : any
 >       : ^^^
 >iterator : any

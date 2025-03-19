@@ -1,0 +1,61 @@
+declFileTypeAnnotationVisibilityErrorTypeAlias.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationVisibilityErrorTypeAlias.ts(7,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationVisibilityErrorTypeAlias.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationVisibilityErrorTypeAlias.ts(15,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationVisibilityErrorTypeAlias.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationVisibilityErrorTypeAlias.ts(26,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileTypeAnnotationVisibilityErrorTypeAlias.ts (6 errors) ====
+    interface Window {
+        someMethod();
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        type W = Window | string;
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class Window { }
+            export var p: W; // Should report error that W is private
+        }
+    }
+    
+    module M1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export type W = Window | string;
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class Window { }
+            export var p: W; // No error
+        }
+    }
+    
+    module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class private1 {
+        }
+        class public1 {
+        }
+        module m3 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class public1 {
+            }
+        }
+    
+        type t1 = private1;
+        export type t2 = private1; // error
+    
+        type t11 = public1;
+        export type t12 = public1;
+    
+        type t111 = m3.public1;
+        export type t112 = m3.public1; // error
+    }
+    

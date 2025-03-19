@@ -1,3 +1,4 @@
+deleteOperatorWithBooleanType.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 deleteOperatorWithBooleanType.ts(17,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(20,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(21,31): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -11,7 +12,7 @@ deleteOperatorWithBooleanType.ts(35,8): error TS2703: The operand of a 'delete' 
 deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
-==== deleteOperatorWithBooleanType.ts (11 errors) ====
+==== deleteOperatorWithBooleanType.ts (12 errors) ====
     // delete  operator on boolean type
     var BOOLEAN: boolean;
     
@@ -22,6 +23,8 @@ deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' 
         static foo() { return false; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: boolean;
     }
     

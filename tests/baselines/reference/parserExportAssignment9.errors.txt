@@ -1,8 +1,9 @@
 parserExportAssignment9.ts(2,3): error TS1319: A default export can only be used in an ECMAScript-style module.
+parserExportAssignment9.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserExportAssignment9.ts(6,3): error TS1319: A default export can only be used in an ECMAScript-style module.
 
 
-==== parserExportAssignment9.ts (2 errors) ====
+==== parserExportAssignment9.ts (3 errors) ====
     namespace Foo {
       export default foo;
       ~~~~~~~~~~~~~~~~~~~
@@ -10,6 +11,8 @@ parserExportAssignment9.ts(6,3): error TS1319: A default export can only be used
     }
     
     module Bar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export default bar;
       ~~~~~~~~~~~~~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.

@@ -1,3 +1,4 @@
+constructSignatureAssignabilityInInheritance3.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constructSignatureAssignabilityInInheritance3.ts(41,19): error TS2430: Interface 'I2<T, U>' incorrectly extends interface 'A'.
   Types of property 'a2' are incompatible.
     Type 'new (x: T) => U[]' is not assignable to type 'new (x: number) => string[]'.
@@ -37,11 +38,13 @@ constructSignatureAssignabilityInInheritance3.ts(95,19): error TS2430: Interface
       Type 'T' is not assignable to type 'string'.
 
 
-==== constructSignatureAssignabilityInInheritance3.ts (6 errors) ====
+==== constructSignatureAssignabilityInInheritance3.ts (7 errors) ====
     // checking subtype relations for function types as it relates to contextual signature instantiation
     // error cases
     
     module Errors {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Derived { baz: string; }

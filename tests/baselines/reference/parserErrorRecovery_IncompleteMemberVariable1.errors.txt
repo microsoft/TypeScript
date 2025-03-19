@@ -1,0 +1,34 @@
+parserErrorRecovery_IncompleteMemberVariable1.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== parserErrorRecovery_IncompleteMemberVariable1.ts (1 errors) ====
+    // Interface
+    interface IPoint {
+        getDist(): number;
+    }
+    
+    // Module
+    module Shapes {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        // Class
+        export class Point implements IPoint {
+    
+            public con: "hello";
+            // Constructor
+            constructor (public x: number, public y: number) { }
+    
+            // Instance member
+            getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    
+            // Static member
+            static origin = new Point(0, 0);
+        }
+    
+    }
+    
+    // Local variables
+    var p: IPoint = new Shapes.Point(3, 4);
+    var dist = p.getDist();
+    

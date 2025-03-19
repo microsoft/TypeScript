@@ -1,0 +1,11 @@
+collisionThisExpressionAndModuleInGlobal.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionThisExpressionAndModuleInGlobal.ts (1 errors) ====
+    module _this { //Error
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class c {
+        }
+    }
+    var f = () => this;

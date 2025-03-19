@@ -1,0 +1,27 @@
+declFileTypeAnnotationUnionType.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileTypeAnnotationUnionType.ts (1 errors) ====
+    class c {
+        private p: string;
+    }
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class c {
+            private q: string;
+        }
+        export class g<T> {
+            private r: string;
+        }
+    }
+    class g<T> {
+        private s: string;
+    }
+    
+    // Just the name
+    var k: c | m.c = new c() || new m.c();
+    var l = new c() || new m.c();
+    
+    var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
+    var y = new g<string>() || new m.g<number>() || (() => new c());

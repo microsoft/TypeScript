@@ -1,13 +1,16 @@
 module_augmentExistingAmbientVariable.ts(1,13): error TS2300: Duplicate identifier 'console'.
+module_augmentExistingAmbientVariable.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 module_augmentExistingAmbientVariable.ts(3,8): error TS2300: Duplicate identifier 'console'.
 
 
-==== module_augmentExistingAmbientVariable.ts (2 errors) ====
+==== module_augmentExistingAmbientVariable.ts (3 errors) ====
     declare var console: any;
                 ~~~~~~~
 !!! error TS2300: Duplicate identifier 'console'.
     
     module console {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
            ~~~~~~~
 !!! error TS2300: Duplicate identifier 'console'.
         export var x = 2;

@@ -1,9 +1,11 @@
+varBlock.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 varBlock.ts(8,18): error TS1039: Initializers are not allowed in ambient contexts.
 varBlock.ts(11,22): error TS2369: A parameter property is only allowed in a constructor implementation.
 varBlock.ts(11,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 varBlock.ts(15,17): error TS1039: Initializers are not allowed in ambient contexts.
 varBlock.ts(21,18): error TS1039: Initializers are not allowed in ambient contexts.
 varBlock.ts(22,22): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(24,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 varBlock.ts(25,21): error TS1039: Initializers are not allowed in ambient contexts.
 varBlock.ts(26,26): error TS1039: Initializers are not allowed in ambient contexts.
 varBlock.ts(26,35): error TS1039: Initializers are not allowed in ambient contexts.
@@ -20,8 +22,10 @@ varBlock.ts(39,13): error TS2403: Subsequent variable declarations must have the
 varBlock.ts(39,17): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== varBlock.ts (20 errors) ====
+==== varBlock.ts (22 errors) ====
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         export var a, b2: number = 10, b;
     }
@@ -57,6 +61,8 @@ varBlock.ts(39,17): error TS1039: Initializers are not allowed in ambient contex
 !!! error TS1039: Initializers are not allowed in ambient contexts.
     
     module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         declare var d = 10;
                         ~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.

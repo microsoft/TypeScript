@@ -1,7 +1,8 @@
+lambdaPropSelf.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 lambdaPropSelf.ts(21,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 
-==== lambdaPropSelf.ts (1 errors) ====
+==== lambdaPropSelf.ts (2 errors) ====
     declare var ko: any;
     
     class Person {
@@ -22,6 +23,8 @@ lambdaPropSelf.ts(21,13): error TS2331: 'this' cannot be referenced in a module 
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var x = this;
                 ~~~~
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.

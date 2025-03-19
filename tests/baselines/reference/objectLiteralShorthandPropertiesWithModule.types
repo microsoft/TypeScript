@@ -9,6 +9,7 @@ module m {
 
     export var x;
 >x : any
+>  : ^^^
 }
 
 module m {
@@ -17,7 +18,9 @@ module m {
 
     var z = x;
 >z : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     var y = {
 >y : { a: any; x: any; }
@@ -27,10 +30,13 @@ module m {
 
         a: x,
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 
         x
 >x : any
+>  : ^^^
 
     };
 }

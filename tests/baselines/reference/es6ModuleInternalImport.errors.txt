@@ -1,0 +1,31 @@
+es6ModuleInternalImport.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleInternalImport.ts(7,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleInternalImport.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== es6ModuleInternalImport.ts (3 errors) ====
+    export module m {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var a = 10;
+    }
+    export import a1 = m.a;
+    import a2 = m.a;
+    var x = a1 + a2;
+    export module m1 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import a3 = m.a;
+        import a4 = m.a;
+        var x = a1 + a2;
+        var x2 = a3 + a4;
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import a3 = m.a;
+        import a4 = m.a;
+        var x = a1 + a2;
+        var x2 = a3 + a4;
+        var x4 = m1.a3 + m2.a3;
+    }

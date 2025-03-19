@@ -1,4 +1,5 @@
 parserRealSource7.ts(4,21): error TS6053: File 'typescript.ts' not found.
+parserRealSource7.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserRealSource7.ts(12,38): error TS2304: Cannot find name 'ASTList'.
 parserRealSource7.ts(12,62): error TS2304: Cannot find name 'TypeLink'.
 parserRealSource7.ts(16,37): error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
@@ -304,7 +305,7 @@ parserRealSource7.ts(827,34): error TS2304: Cannot find name 'NodeType'.
 parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
 
 
-==== parserRealSource7.ts (304 errors) ====
+==== parserRealSource7.ts (305 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -313,6 +314,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
 !!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Continuation {
             public exceptionBlock = -1;
             constructor (public normalBlock: number) { }

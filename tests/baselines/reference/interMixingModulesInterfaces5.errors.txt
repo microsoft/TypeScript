@@ -1,0 +1,24 @@
+interMixingModulesInterfaces5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+interMixingModulesInterfaces5.ts(8,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== interMixingModulesInterfaces5.ts (2 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        interface B {
+            name: string;
+            value: number;
+        }
+    
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function createB(): number {
+                return null;
+            }
+        }
+    }
+    
+    var x: number = A.B.createB();

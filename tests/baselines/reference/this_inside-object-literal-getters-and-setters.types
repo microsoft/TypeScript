@@ -23,6 +23,7 @@ module ObjectLiteral {
 
             return this._foo;
 >this._foo : any
+>          : ^^^
 >this : any
 >     : ^^^
 >_foo : any
@@ -39,6 +40,7 @@ module ObjectLiteral {
 >this._foo = value : string
 >                  : ^^^^^^
 >this._foo : any
+>          : ^^^
 >this : any
 >     : ^^^
 >_foo : any
@@ -55,6 +57,7 @@ module ObjectLiteral {
 
             return this._foo;
 >this._foo : any
+>          : ^^^
 >this : any
 >     : ^^^
 >_foo : any

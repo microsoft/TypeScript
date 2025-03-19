@@ -1,10 +1,18 @@
+moduleSharesNameWithImportDeclarationInsideIt5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleSharesNameWithImportDeclarationInsideIt5.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleSharesNameWithImportDeclarationInsideIt5.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleSharesNameWithImportDeclarationInsideIt5.ts(9,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleSharesNameWithImportDeclarationInsideIt5.ts(10,12): error TS2300: Duplicate identifier 'M'.
 moduleSharesNameWithImportDeclarationInsideIt5.ts(11,12): error TS2300: Duplicate identifier 'M'.
 
 
-==== moduleSharesNameWithImportDeclarationInsideIt5.ts (2 errors) ====
+==== moduleSharesNameWithImportDeclarationInsideIt5.ts (6 errors) ====
     module Z {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module M {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export function bar() {
                 return "";
             }
@@ -12,6 +20,10 @@ moduleSharesNameWithImportDeclarationInsideIt5.ts(11,12): error TS2300: Duplicat
         export interface I { }
     }
     module A.M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import M = Z.I;
                ~
 !!! error TS2300: Duplicate identifier 'M'.

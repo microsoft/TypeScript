@@ -1,3 +1,6 @@
+aliasErrors.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+aliasErrors.ts(4,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+aliasErrors.ts(4,39): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 aliasErrors.ts(11,12): error TS2503: Cannot find namespace 'no'.
 aliasErrors.ts(12,13): error TS2503: Cannot find namespace 'no'.
 aliasErrors.ts(13,12): error TS1003: Identifier expected.
@@ -7,11 +10,17 @@ aliasErrors.ts(16,12): error TS2503: Cannot find namespace 'undefined'.
 aliasErrors.ts(26,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 
-==== aliasErrors.ts (7 errors) ====
+==== aliasErrors.ts (10 errors) ====
     module foo {    
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Provide {
         }
         export module bar { export module baz {export class boo {}}}
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                          ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     
     import provide = foo;

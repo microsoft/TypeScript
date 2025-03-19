@@ -1,10 +1,13 @@
+anyDeclare.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 anyDeclare.ts(3,9): error TS2300: Duplicate identifier 'myFn'.
 anyDeclare.ts(4,14): error TS2300: Duplicate identifier 'myFn'.
 
 
-==== anyDeclare.ts (2 errors) ====
+==== anyDeclare.ts (3 errors) ====
     declare var x: any;
     module myMod {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var myFn;
             ~~~~
 !!! error TS2300: Duplicate identifier 'myFn'.

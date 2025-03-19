@@ -1,8 +1,10 @@
+enumAssignabilityInInheritance.ts(84,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+enumAssignabilityInInheritance.ts(93,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 enumAssignabilityInInheritance.ts(104,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
 enumAssignabilityInInheritance.ts(109,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
 
 
-==== enumAssignabilityInInheritance.ts (2 errors) ====
+==== enumAssignabilityInInheritance.ts (4 errors) ====
     // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
     
     
@@ -87,6 +89,8 @@ enumAssignabilityInInheritance.ts(109,5): error TS2403: Subsequent variable decl
     
     function f() { }
     module f {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var bar = 1;
     }
     declare function foo14(x: typeof f): typeof f;
@@ -96,6 +100,8 @@ enumAssignabilityInInheritance.ts(109,5): error TS2403: Subsequent variable decl
     
     class CC { baz: string }
     module CC {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var bar = 1;
     }
     declare function foo15(x: CC): CC;

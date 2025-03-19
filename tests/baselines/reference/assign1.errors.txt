@@ -1,0 +1,15 @@
+assign1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== assign1.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface I {
+            salt:number;
+            pepper:number;
+        }
+    
+        var x:I={salt:2,pepper:0};
+    }
+    

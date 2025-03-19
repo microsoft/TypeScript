@@ -1,8 +1,11 @@
+ModuleWithExportedAndNonExportedVariables.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ModuleWithExportedAndNonExportedVariables.ts(11,11): error TS2339: Property 'y' does not exist on type 'typeof A'.
 
 
-==== ModuleWithExportedAndNonExportedVariables.ts (1 errors) ====
+==== ModuleWithExportedAndNonExportedVariables.ts (2 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x = 'hello world'
         var y = 12;
     }

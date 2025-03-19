@@ -1,0 +1,105 @@
+classdecl.ts(39,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+classdecl.ts(50,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+classdecl.ts(52,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== classdecl.ts (3 errors) ====
+    class a {
+        //constructor ();
+        constructor (n: number);
+        constructor (s: string);
+        constructor (ns: any) {
+    
+        }
+    
+        public pgF() { }
+    
+        public pv;
+        public get d() {
+            return 30;
+        }
+        public set d(a: number) {
+        }
+    
+        public static get p2() {
+            return { x: 30, y: 40 };
+        }
+    
+        private static d2() {
+        }
+        private static get p3() {
+            return "string";
+        }
+        private pv3;
+    
+        private foo(n: number): string;
+        private foo(s: string): string;
+        private foo(ns: any) {
+            return ns.toString();
+        }
+    }
+    
+    class b extends a {
+    }
+    
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class b {
+        }
+        class d {
+        }
+    
+    
+        export interface ib {
+        }
+    }
+    
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        export module m3 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class c extends b {
+            }
+            export class ib2 implements m1.ib {
+            }
+        }
+    }
+    
+    class c extends m1.b {
+    }
+    
+    class ib2 implements m1.ib {
+    }
+    
+    declare class aAmbient {
+        constructor (n: number);
+        constructor (s: string);
+        public pgF(): void;
+        public pv;
+        public d : number;
+        static p2 : { x: number; y: number; };
+        static d2();
+        static p3;
+        private pv3;
+        private foo(s);
+    }
+    
+    class d {
+        private foo(n: number): string;
+        private foo(s: string): string;
+        private foo(ns: any) {
+            return ns.toString();
+        }    
+    }
+    
+    class e {    
+        private foo(s: string): string;
+        private foo(n: number): string;
+        private foo(ns: any) {
+            return ns.toString();
+        }
+    }

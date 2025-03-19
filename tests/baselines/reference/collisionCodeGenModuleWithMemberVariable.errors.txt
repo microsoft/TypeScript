@@ -1,0 +1,11 @@
+collisionCodeGenModuleWithMemberVariable.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionCodeGenModuleWithMemberVariable.ts (1 errors) ====
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var m1 = 10;
+        var b = m1;
+    }
+    var foo = m1.m1;

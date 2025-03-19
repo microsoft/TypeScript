@@ -1,8 +1,12 @@
 collisionExportsRequireAndClass_externalmodule.ts(1,14): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 collisionExportsRequireAndClass_externalmodule.ts(3,14): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+collisionExportsRequireAndClass_externalmodule.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndClass_externalmodule.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndClass_globalFile.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndClass_globalFile.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== collisionExportsRequireAndClass_externalmodule.ts (2 errors) ====
+==== collisionExportsRequireAndClass_externalmodule.ts (4 errors) ====
     export class require {
                  ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
@@ -12,30 +16,38 @@ collisionExportsRequireAndClass_externalmodule.ts(3,14): error TS2441: Duplicate
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     }
     module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class require {
         }
         class exports {
         }
     }
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class require {
         }
         export class exports {
         }
     }
     
-==== collisionExportsRequireAndClass_globalFile.ts (0 errors) ====
+==== collisionExportsRequireAndClass_globalFile.ts (2 errors) ====
     class require {
     }
     class exports {
     }
     module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class require {
         }
         class exports {
         }
     }
     module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class require {
         }
         export class exports {

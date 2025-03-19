@@ -5,6 +5,7 @@
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 declare var OData: any;
 >OData : any
+>      : ^^^
 
 module Microsoft.PeopleAtWork.Model {
 >Microsoft : typeof Microsoft
@@ -47,6 +48,7 @@ module Microsoft.PeopleAtWork.Model {
 >populate : (raw: any) => void
 >         : ^   ^^   ^^^^^^^^^
 >raw : any
+>    : ^^^
 
             var res = Model.KnockoutExtentions;
 >res : typeof KnockoutExtentions

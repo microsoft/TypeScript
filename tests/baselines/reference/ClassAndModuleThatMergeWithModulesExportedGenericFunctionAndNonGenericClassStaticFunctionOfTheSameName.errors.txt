@@ -1,8 +1,9 @@
 ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts(5,12): error TS2300: Duplicate identifier 'fn'.
+ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts(10,21): error TS2300: Duplicate identifier 'fn'.
 
 
-==== ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts (2 errors) ====
+==== ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts (3 errors) ====
     class clodule<T> {
         id: string;
         value: T;
@@ -13,6 +14,8 @@ ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStati
     }
     
     module clodule {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): T {
                         ~~

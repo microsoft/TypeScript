@@ -42,6 +42,7 @@ interface Foo {
 
     d: any;
 >d : any
+>  : ^^^
 
     e: void;
 >e : void

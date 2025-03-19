@@ -1,6 +1,8 @@
+exportAlreadySeen.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportAlreadySeen.ts(2,12): error TS1030: 'export' modifier already seen.
 exportAlreadySeen.ts(3,12): error TS1030: 'export' modifier already seen.
 exportAlreadySeen.ts(5,12): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(5,26): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportAlreadySeen.ts(6,16): error TS1030: 'export' modifier already seen.
 exportAlreadySeen.ts(7,16): error TS1030: 'export' modifier already seen.
 exportAlreadySeen.ts(12,12): error TS1030: 'export' modifier already seen.
@@ -10,8 +12,10 @@ exportAlreadySeen.ts(16,16): error TS1030: 'export' modifier already seen.
 exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
 
 
-==== exportAlreadySeen.ts (10 errors) ====
+==== exportAlreadySeen.ts (12 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export export var x = 1;
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
@@ -22,6 +26,8 @@ exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
         export export module N {
                ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
+                             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export export class C { }
                    ~~~~~~
 !!! error TS1030: 'export' modifier already seen.

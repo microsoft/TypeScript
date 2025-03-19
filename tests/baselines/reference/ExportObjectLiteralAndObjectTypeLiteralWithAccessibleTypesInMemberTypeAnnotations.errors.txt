@@ -1,0 +1,17 @@
+ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    
+        export var Origin: Point = { x: 0, y: 0 };
+    
+        export var Unity = { start: new Point(0, 0), end: new Point(1, 0) };
+    }
+    

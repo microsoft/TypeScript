@@ -1,0 +1,11 @@
+declarationEmitDestructuringPrivacyError.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declarationEmitDestructuringPrivacyError.ts (1 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class c {
+        }
+        export var [x, y, z] = [10, new c(), 30];
+    }

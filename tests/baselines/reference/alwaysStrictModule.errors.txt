@@ -1,8 +1,11 @@
+alwaysStrictModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 alwaysStrictModule.ts(3,13): error TS1100: Invalid use of 'arguments' in strict mode.
 
 
-==== alwaysStrictModule.ts (1 errors) ====
+==== alwaysStrictModule.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function f() {
             var arguments = [];
                 ~~~~~~~~~

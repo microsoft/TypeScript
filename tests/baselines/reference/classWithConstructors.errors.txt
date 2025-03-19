@@ -1,13 +1,17 @@
+classWithConstructors.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classWithConstructors.ts(6,13): error TS2554: Expected 1 arguments, but got 0.
 classWithConstructors.ts(15,14): error TS2554: Expected 1 arguments, but got 0.
 classWithConstructors.ts(21,13): error TS2554: Expected 1 arguments, but got 0.
+classWithConstructors.ts(26,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classWithConstructors.ts(31,13): error TS2554: Expected 1 arguments, but got 0.
 classWithConstructors.ts(40,14): error TS2554: Expected 1-2 arguments, but got 0.
 classWithConstructors.ts(46,13): error TS2554: Expected 1-2 arguments, but got 0.
 
 
-==== classWithConstructors.ts (6 errors) ====
+==== classWithConstructors.ts (8 errors) ====
     module NonGeneric {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C {
             constructor(x: string) { }
         }
@@ -42,6 +46,8 @@ classWithConstructors.ts(46,13): error TS2554: Expected 1-2 arguments, but got 0
     }
     
     module Generics {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C<T> {
             constructor(x: T) { }
         }

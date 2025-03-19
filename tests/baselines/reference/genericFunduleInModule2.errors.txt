@@ -1,13 +1,22 @@
+genericFunduleInModule2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericFunduleInModule2.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericFunduleInModule2.ts(6,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericFunduleInModule2.ts(11,8): error TS2749: 'A.B' refers to a value, but is being used as a type here. Did you mean 'typeof A.B'?
 
 
-==== genericFunduleInModule2.ts (1 errors) ====
+==== genericFunduleInModule2.ts (4 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function B<T>(x: T) { return x; }
     }
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var x = 1;
         }
     }

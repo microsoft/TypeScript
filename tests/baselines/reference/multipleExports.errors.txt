@@ -1,15 +1,21 @@
+multipleExports.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+multipleExports.ts(7,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 multipleExports.ts(9,5): error TS1194: Export declarations are not permitted in a namespace.
 multipleExports.ts(9,13): error TS2484: Export declaration conflicts with exported declaration of 'x'.
 
 
-==== multipleExports.ts (2 errors) ====
+==== multipleExports.ts (4 errors) ====
     export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var v = 0;
         export let x;
     }
     
     const x = 0;
     export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         v;
         export {x};
         ~~~~~~~~~~~

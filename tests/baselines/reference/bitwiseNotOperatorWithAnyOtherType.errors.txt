@@ -1,3 +1,4 @@
+bitwiseNotOperatorWithAnyOtherType.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 bitwiseNotOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
 bitwiseNotOperatorWithAnyOtherType.ts(35,24): error TS18050: The value 'null' cannot be used here.
 bitwiseNotOperatorWithAnyOtherType.ts(46,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
@@ -5,7 +6,7 @@ bitwiseNotOperatorWithAnyOtherType.ts(47,26): error TS2365: Operator '+' cannot 
 bitwiseNotOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 
 
-==== bitwiseNotOperatorWithAnyOtherType.ts (5 errors) ====
+==== bitwiseNotOperatorWithAnyOtherType.ts (6 errors) ====
     // ~ operator on any type
     
     var ANY: any;
@@ -26,6 +27,8 @@ bitwiseNotOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot 
         }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: any;
     }
     var objA = new A();

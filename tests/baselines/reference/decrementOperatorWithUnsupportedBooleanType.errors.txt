@@ -1,3 +1,4 @@
+decrementOperatorWithUnsupportedBooleanType.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 decrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
@@ -29,7 +30,7 @@ decrementOperatorWithUnsupportedBooleanType.ts(54,1): error TS2356: An arithmeti
 decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== decrementOperatorWithUnsupportedBooleanType.ts (29 errors) ====
+==== decrementOperatorWithUnsupportedBooleanType.ts (30 errors) ====
     // -- operator on boolean type
     var BOOLEAN: boolean;
     
@@ -40,6 +41,8 @@ decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmet
         static foo() { return true; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: boolean;
     }
     

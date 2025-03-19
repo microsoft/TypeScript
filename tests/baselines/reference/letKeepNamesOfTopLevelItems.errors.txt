@@ -1,0 +1,14 @@
+letKeepNamesOfTopLevelItems.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== letKeepNamesOfTopLevelItems.ts (1 errors) ====
+    let x;
+    function foo() {
+        let x;
+    }
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        let x;
+    }

@@ -1,0 +1,27 @@
+multiModuleClodule1.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+multiModuleClodule1.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== multiModuleClodule1.ts (2 errors) ====
+    class C {
+        constructor(x: number) { }
+        foo() { }
+        bar() { }
+        static boo() { }
+    }
+    
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 1;
+        var y = 2;
+    }
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function foo() { }
+        function baz() { return ''; }
+    }
+    
+    var c = new C(C.x);
+    c.foo = C.foo;

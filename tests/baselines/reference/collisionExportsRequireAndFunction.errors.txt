@@ -1,8 +1,10 @@
 collisionExportsRequireAndFunction.ts(1,17): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 collisionExportsRequireAndFunction.ts(4,17): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndFunction.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndFunction.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== collisionExportsRequireAndFunction.ts (2 errors) ====
+==== collisionExportsRequireAndFunction.ts (4 errors) ====
     export function exports() {
                     ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
@@ -14,6 +16,8 @@ collisionExportsRequireAndFunction.ts(4,17): error TS2441: Duplicate identifier 
         return "require";
     }
     module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function exports() {
             return 1;
         }
@@ -22,6 +26,8 @@ collisionExportsRequireAndFunction.ts(4,17): error TS2441: Duplicate identifier 
         }
     }
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function exports() {
             return 1;
         }

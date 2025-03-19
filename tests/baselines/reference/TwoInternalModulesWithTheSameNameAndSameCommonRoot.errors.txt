@@ -1,0 +1,52 @@
+part1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part1.ts(7,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+part2.ts(4,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== part1.ts (2 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    
+        export module Utils {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function mirror<T extends Point>(p: T) {
+                return { x: p.y, y: p.x };
+            }
+        }
+    }
+    
+==== part2.ts (2 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var Origin: Point = { x: 0, y: 0 };
+    
+        export module Utils {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class Plane {
+                constructor(public tl: Point, public br: Point) { }
+            }
+        }
+    }
+    
+==== part3.ts (0 errors) ====
+    // test the merging actually worked
+    
+    var o: { x: number; y: number };
+    var o: A.Point;
+    var o = A.Origin;
+    var o = A.Utils.mirror(o);
+    
+    var p: { tl: A.Point; br: A.Point };
+    var p: A.Utils.Plane;
+    var p = new A.Utils.Plane(o, { x: 1, y: 1 });
+    
+    

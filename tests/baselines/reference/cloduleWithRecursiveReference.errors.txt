@@ -1,0 +1,16 @@
+cloduleWithRecursiveReference.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+cloduleWithRecursiveReference.ts(4,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== cloduleWithRecursiveReference.ts (2 errors) ====
+    module M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    {
+      export class C {  }
+      export module C {
+                    ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var C = M.C
+      }
+    }

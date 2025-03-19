@@ -1,3 +1,4 @@
+assignmentCompatWithObjectMembersAccessibility.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembersAccessibility.ts(31,5): error TS2322: Type 'E' is not assignable to type '{ foo: string; }'.
   Property 'foo' is private in type 'E' but not in type '{ foo: string; }'.
 assignmentCompatWithObjectMembersAccessibility.ts(36,5): error TS2322: Type 'E' is not assignable to type 'Base'.
@@ -14,6 +15,7 @@ assignmentCompatWithObjectMembersAccessibility.ts(50,5): error TS2322: Type 'I' 
   Property 'foo' is private in type 'E' but not in type 'I'.
 assignmentCompatWithObjectMembersAccessibility.ts(51,5): error TS2322: Type 'D' is not assignable to type 'E'.
   Property 'foo' is private in type 'E' but not in type 'D'.
+assignmentCompatWithObjectMembersAccessibility.ts(56,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembersAccessibility.ts(81,5): error TS2322: Type 'Base' is not assignable to type '{ foo: string; }'.
   Property 'foo' is private in type 'Base' but not in type '{ foo: string; }'.
 assignmentCompatWithObjectMembersAccessibility.ts(82,5): error TS2322: Type 'I' is not assignable to type '{ foo: string; }'.
@@ -48,10 +50,12 @@ assignmentCompatWithObjectMembersAccessibility.ts(106,5): error TS2322: Type 'D'
   Property 'foo' is private in type 'E' but not in type 'D'.
 
 
-==== assignmentCompatWithObjectMembersAccessibility.ts (24 errors) ====
+==== assignmentCompatWithObjectMembersAccessibility.ts (26 errors) ====
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
     
     module TargetIsPublic {
+           ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // targets
         class Base {
             public foo: string;
@@ -129,6 +133,8 @@ assignmentCompatWithObjectMembersAccessibility.ts(106,5): error TS2322: Type 'D'
     }
     
     module TargetIsPublic {
+           ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // targets
         class Base {
             private foo: string;

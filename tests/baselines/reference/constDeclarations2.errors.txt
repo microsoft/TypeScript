@@ -1,0 +1,13 @@
+constDeclarations2.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== constDeclarations2.ts (1 errors) ====
+    // No error
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export const c1 = false;
+        export const c2: number = 23;
+        export const c3 = 0, c4 :string = "", c5 = null;
+    }
+    

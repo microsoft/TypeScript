@@ -1,0 +1,23 @@
+internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts(8,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts (3 errors) ====
+    export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module b {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class c {
+            }
+        }
+    }
+    
+    export module c {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import b = a.b;
+        export var x: b.c = new b.c();
+    }

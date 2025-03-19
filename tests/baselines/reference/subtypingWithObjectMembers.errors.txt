@@ -4,6 +4,7 @@ subtypingWithObjectMembers.ts(24,5): error TS2416: Property '2' in type 'B2' is 
   Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers.ts(34,5): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
+subtypingWithObjectMembers.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithObjectMembers.ts(45,9): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers.ts(55,9): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
@@ -12,7 +13,7 @@ subtypingWithObjectMembers.ts(65,9): error TS2416: Property ''2.0'' in type 'B3'
   Type 'string' is not assignable to type 'Base'.
 
 
-==== subtypingWithObjectMembers.ts (6 errors) ====
+==== subtypingWithObjectMembers.ts (7 errors) ====
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
@@ -59,6 +60,8 @@ subtypingWithObjectMembers.ts(65,9): error TS2416: Property ''2.0'' in type 'B3'
     }
     
     module TwoLevels {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class A {
             foo: Base;
             bar: Base;

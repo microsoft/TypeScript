@@ -10,6 +10,7 @@ interface I {
 
     foo: any; // ok, any identical to itself
 >foo : any
+>    : ^^^
 }
 
 
@@ -20,6 +21,7 @@ interface I2 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -30,6 +32,7 @@ interface I3 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -40,6 +43,7 @@ interface I4 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -50,6 +54,7 @@ interface I5 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -60,6 +65,7 @@ interface I6 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -72,6 +78,7 @@ interface I7 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -82,6 +89,7 @@ interface I8 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -92,6 +100,7 @@ interface I9 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 class A { foo: number; }
@@ -107,6 +116,7 @@ interface I10 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 class A2<T> { foo: T; }
@@ -122,6 +132,7 @@ interface I11 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -130,9 +141,11 @@ interface I12 {
 >x : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -145,6 +158,7 @@ interface I13 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -161,6 +175,7 @@ interface I14 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -187,6 +202,7 @@ interface I15 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -215,6 +231,7 @@ interface I16 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -225,6 +242,7 @@ interface I17<T> {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -235,6 +253,7 @@ interface I18<T, U extends T> {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -245,6 +264,7 @@ interface I19 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 
@@ -255,5 +275,6 @@ interface I20 {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 

@@ -1,0 +1,34 @@
+collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts(17,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts (3 errors) ====
+    module mOfGloalFile {
+           ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class c {
+        }
+    }
+    import exports = mOfGloalFile.c;
+    import require = mOfGloalFile.c;
+    new exports();
+    new require();
+    
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import exports = mOfGloalFile.c;
+        import require = mOfGloalFile.c;
+        new exports();
+        new require();
+    }
+    
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import exports = mOfGloalFile.c;
+        export import require = mOfGloalFile.c;
+        new exports();
+        new require();
+    }

@@ -1,8 +1,11 @@
+unusedImports10.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 unusedImports10.ts(9,12): error TS6133: 'a' is declared but its value is never read.
 
 
-==== unusedImports10.ts (1 errors) ====
+==== unusedImports10.ts (2 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Calculator {
             public handelChar() {
             }

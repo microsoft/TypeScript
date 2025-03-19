@@ -1,8 +1,11 @@
+moduleNewExportBug.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleNewExportBug.ts(10,14): error TS2694: Namespace 'mod1' has no exported member 'C'.
 
 
-==== moduleNewExportBug.ts (1 errors) ====
+==== moduleNewExportBug.ts (2 errors) ====
     module mod1 {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface mInt {
     		new (bar:any):any;
             foo (bar:any):any;

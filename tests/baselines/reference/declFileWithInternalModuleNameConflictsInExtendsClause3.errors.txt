@@ -1,0 +1,28 @@
+declFileWithInternalModuleNameConflictsInExtendsClause3.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause3.ts(5,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause3.ts(5,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithInternalModuleNameConflictsInExtendsClause3.ts(5,14): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileWithInternalModuleNameConflictsInExtendsClause3.ts (4 errors) ====
+    module X.A.C {
+        export interface Z {
+        }
+    }
+    module X.A.B.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                 ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
+        }
+    }
+    
+    module X.A.B.C {
+        export module A {
+        }
+    }

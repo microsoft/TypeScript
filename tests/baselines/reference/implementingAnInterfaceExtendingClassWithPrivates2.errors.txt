@@ -6,6 +6,7 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(18,7): error TS2415: Class
   Types have separate declarations of a private property 'x'.
 implementingAnInterfaceExtendingClassWithPrivates2.ts(18,7): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
   Types have separate declarations of a private property 'x'.
+implementingAnInterfaceExtendingClassWithPrivates2.ts(24,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 implementingAnInterfaceExtendingClassWithPrivates2.ts(42,11): error TS2415: Class 'Bar2' incorrectly extends base class 'Foo'.
   Property 'x' is private in type 'Foo' but not in type 'Bar2'.
 implementingAnInterfaceExtendingClassWithPrivates2.ts(42,11): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
@@ -14,6 +15,7 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(47,11): error TS2415: Clas
   Types have separate declarations of a private property 'x'.
 implementingAnInterfaceExtendingClassWithPrivates2.ts(47,11): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
   Property 'z' is missing in type 'Bar3' but required in type 'I'.
+implementingAnInterfaceExtendingClassWithPrivates2.ts(54,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 implementingAnInterfaceExtendingClassWithPrivates2.ts(67,11): error TS2420: Class 'Bar' incorrectly implements interface 'I'.
   Property 'y' is missing in type 'Bar' but required in type 'I'.
 implementingAnInterfaceExtendingClassWithPrivates2.ts(73,16): error TS2341: Property 'x' is private and only accessible within class 'Foo'.
@@ -28,7 +30,7 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
   Property 'y' is missing in type 'Bar3' but required in type 'I'.
 
 
-==== implementingAnInterfaceExtendingClassWithPrivates2.ts (15 errors) ====
+==== implementingAnInterfaceExtendingClassWithPrivates2.ts (17 errors) ====
     class Foo {
         private x: string;
     }
@@ -65,6 +67,8 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
     
     // another level of indirection
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Foo {
             private x: string;
         }
@@ -109,6 +113,8 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
     
     // two levels of privates
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Foo {
             private x: string;
         }

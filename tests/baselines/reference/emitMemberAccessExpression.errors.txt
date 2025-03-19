@@ -1,0 +1,43 @@
+emitMemberAccessExpression_file2.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+emitMemberAccessExpression_file2.ts(3,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+emitMemberAccessExpression_file2.ts(3,31): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+emitMemberAccessExpression_file3.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+emitMemberAccessExpression_file3.ts(4,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+emitMemberAccessExpression_file3.ts(4,31): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== emitMemberAccessExpression_file3.ts (3 errors) ====
+    /// <reference path="emitMemberAccessExpression_file2.ts" />
+    /// <reference path="emitMemberAccessExpression_file1.ts" />
+    declare var OData: any;
+    module Microsoft.PeopleAtWork.Model {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                  ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class KnockoutExtentions {
+        }
+    }
+==== emitMemberAccessExpression_file1.ts (0 errors) ====
+    /// <reference path="emitMemberAccessExpression_file3.ts" />
+    "use strict";
+    
+==== emitMemberAccessExpression_file2.ts (3 errors) ====
+    /// <reference path="emitMemberAccessExpression_file3.ts" />
+    "use strict";
+    module Microsoft.PeopleAtWork.Model {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                  ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class _Person {
+            public populate(raw: any) {
+                var res = Model.KnockoutExtentions;
+            }
+        }
+    }
+    

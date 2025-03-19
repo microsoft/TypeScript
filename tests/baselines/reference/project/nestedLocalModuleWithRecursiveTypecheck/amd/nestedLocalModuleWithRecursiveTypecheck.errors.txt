@@ -1,9 +1,12 @@
+test1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 test1.ts(3,23): error TS1147: Import declarations in a namespace cannot reference a module.
 test1.ts(3,23): error TS2792: Cannot find module 'test2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== test1.ts (2 errors) ====
+==== test1.ts (3 errors) ====
     module myModule {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      
      import foo = require("test2");
                           ~~~~~~~

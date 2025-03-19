@@ -1,8 +1,11 @@
+classAbstractInAModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classAbstractInAModule.ts(6,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== classAbstractInAModule.ts (1 errors) ====
+==== classAbstractInAModule.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export abstract class A {}
         export class B extends A {}
     }

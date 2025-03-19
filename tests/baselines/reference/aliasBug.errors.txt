@@ -1,12 +1,21 @@
+aliasBug.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+aliasBug.ts(5,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+aliasBug.ts(5,39): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 aliasBug.ts(16,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 
-==== aliasBug.ts (1 errors) ====
+==== aliasBug.ts (4 errors) ====
     module foo {    
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Provide {
         }
     
         export module bar { export module baz {export class boo {}}}
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                          ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     
     import provide = foo;

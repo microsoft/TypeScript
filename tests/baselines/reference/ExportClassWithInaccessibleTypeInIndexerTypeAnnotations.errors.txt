@@ -1,0 +1,21 @@
+ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        class Point {
+            x: number;
+            y: number;
+        }
+    
+        export class points {
+    
+            [idx: number]: Point;
+            [idx: string]: Point;
+        }
+    }
+    
+    

@@ -1,10 +1,14 @@
+NonInitializedExportInInternalModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 NonInitializedExportInInternalModule.ts(2,8): error TS1123: Variable declaration list cannot be empty.
 NonInitializedExportInInternalModule.ts(3,5): error TS2304: Cannot find name 'let'.
 NonInitializedExportInInternalModule.ts(4,10): error TS1123: Variable declaration list cannot be empty.
+NonInitializedExportInInternalModule.ts(19,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== NonInitializedExportInInternalModule.ts (3 errors) ====
+==== NonInitializedExportInInternalModule.ts (5 errors) ====
     module Inner {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var;
            
 !!! error TS1123: Variable declaration list cannot be empty.
@@ -29,6 +33,8 @@ NonInitializedExportInInternalModule.ts(4,10): error TS1123: Variable declaratio
         }
         
         module C {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var a = 1, b, c = 2;
             export var x, y, z;
         }

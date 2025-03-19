@@ -1,11 +1,15 @@
+instancePropertyInClassType.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 instancePropertyInClassType.ts(17,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'Number' has no call signatures.
+instancePropertyInClassType.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 instancePropertyInClassType.ts(37,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'String' has no call signatures.
 
 
-==== instancePropertyInClassType.ts (2 errors) ====
+==== instancePropertyInClassType.ts (4 errors) ====
     module NonGeneric {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C {
             x: string;
             get y() {
@@ -29,6 +33,8 @@ instancePropertyInClassType.ts(37,16): error TS6234: This expression is not call
     }
     
     module Generic {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C<T,U> {
             x: T;
             get y() {

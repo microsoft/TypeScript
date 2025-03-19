@@ -1,0 +1,27 @@
+test/foo_2.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== test/foo_3.ts (0 errors) ====
+    import foo0 = require('../foo_0');
+    import foo1 = require('./test/foo_1');
+    import foo2 = require('./.././test/foo_2');
+    
+    if(foo2.M2.x){
+    	var x = foo0.foo + foo1.f();
+    }
+    
+==== foo_0.ts (0 errors) ====
+    export var foo = 42;
+    
+==== test/test/foo_1.ts (0 errors) ====
+    export function f(){
+    	return 42;
+    }
+    
+==== test/foo_2.ts (1 errors) ====
+    export module M2 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export var x = true;
+    }
+    

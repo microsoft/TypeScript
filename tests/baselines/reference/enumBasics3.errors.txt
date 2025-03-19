@@ -1,9 +1,13 @@
+enumBasics3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 enumBasics3.ts(5,13): error TS2339: Property 'a' does not exist on type 'E1.a'.
+enumBasics3.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 enumBasics3.ts(14,20): error TS2339: Property 'a' does not exist on type 'E1.a'.
 
 
-==== enumBasics3.ts (2 errors) ====
+==== enumBasics3.ts (4 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export namespace N {
         export enum E1 {
           a = 1,
@@ -15,6 +19,8 @@ enumBasics3.ts(14,20): error TS2339: Property 'a' does not exist on type 'E1.a'.
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export namespace N {
         export enum E2 {
           b = M.N.E1.a,

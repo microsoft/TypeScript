@@ -1,4 +1,5 @@
 parserRealSource6.ts(4,21): error TS6053: File 'typescript.ts' not found.
+parserRealSource6.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserRealSource6.ts(8,24): error TS2304: Cannot find name 'Script'.
 parserRealSource6.ts(10,41): error TS2304: Cannot find name 'ScopeChain'.
 parserRealSource6.ts(10,69): error TS2304: Cannot find name 'TypeChecker'.
@@ -60,7 +61,7 @@ parserRealSource6.ts(212,81): error TS2304: Cannot find name 'ISourceText'.
 parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
 
 
-==== parserRealSource6.ts (60 errors) ====
+==== parserRealSource6.ts (61 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -69,6 +70,8 @@ parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does 
 !!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class TypeCollectionContext {
             public script: Script = null;
                            ~~~~~~

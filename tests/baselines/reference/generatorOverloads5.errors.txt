@@ -1,0 +1,11 @@
+generatorOverloads5.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== generatorOverloads5.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        function f(s: string): Iterable<any>;
+        function f(s: number): Iterable<any>;
+        function* f(s: any): Iterable<any> { }
+    }

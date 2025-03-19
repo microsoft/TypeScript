@@ -1,0 +1,16 @@
+internalAliasFunctionInsideTopLevelModuleWithExport.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internalAliasFunctionInsideTopLevelModuleWithExport.ts (1 errors) ====
+    export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function foo(x: number) {
+            return x;
+        }
+    }
+    
+    export import b = a.foo;
+    export var bVal = b(10);
+    export var bVal2 = b;
+    

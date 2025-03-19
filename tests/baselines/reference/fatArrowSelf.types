@@ -8,6 +8,7 @@ module Events {
     export interface ListenerCallback {
         (value:any):void;
 >value : any
+>      : ^^^
     }
     export class EventEmitter {
 >EventEmitter : EventEmitter
@@ -60,6 +61,7 @@ module Consumer {
 >(e) => {                this.changed();            } : (e: any) => void
 >                                                     : ^ ^^^^^^^^^^^^^^
 >e : any
+>  : ^^^
 
                 this.changed();
 >this.changed() : void

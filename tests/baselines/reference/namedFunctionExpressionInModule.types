@@ -13,8 +13,11 @@ module Variables{
 >bar : (a: any, b: any, c: any) => void
 >    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
     }
     x(1, 2, 3);
 >x(1, 2, 3) : void

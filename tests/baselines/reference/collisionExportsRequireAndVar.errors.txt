@@ -1,8 +1,12 @@
 collisionExportsRequireAndVar_externalmodule.ts(3,5): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 collisionExportsRequireAndVar_externalmodule.ts(4,5): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndVar_externalmodule.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndVar_externalmodule.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndVar_globalFile.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndVar_globalFile.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== collisionExportsRequireAndVar_externalmodule.ts (2 errors) ====
+==== collisionExportsRequireAndVar_externalmodule.ts (4 errors) ====
     export function foo() {
     }
     var exports = 1;
@@ -12,22 +16,30 @@ collisionExportsRequireAndVar_externalmodule.ts(4,5): error TS2441: Duplicate id
         ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
     module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var exports = 0;
         var require = "require";
     }
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var exports = 0;
         export var require = "require";
     }
     
-==== collisionExportsRequireAndVar_globalFile.ts (0 errors) ====
+==== collisionExportsRequireAndVar_globalFile.ts (2 errors) ====
     var exports = 0;
     var require = "require";
     module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var exports = 0;
         var require = "require";
     }
     module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var exports = 0;
         export var require = "require";
     }

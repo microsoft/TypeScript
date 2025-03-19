@@ -17,6 +17,7 @@ module M {
 
         constructor(M, p = x) {
 >M : any
+>  : ^^^
 >p : number
 >  : ^^^^^^
 >x : number
@@ -35,6 +36,7 @@ module M {
 
         constructor(private M, p = x) {
 >M : any
+>  : ^^^
 >p : number
 >  : ^^^^^^
 >x : number

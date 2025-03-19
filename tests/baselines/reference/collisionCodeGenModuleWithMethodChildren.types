@@ -19,6 +19,7 @@ module M {
 >fn : (M: any, p?: number) => void
 >   : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >M : any
+>  : ^^^
 >p : number
 >  : ^^^^^^
 >x : number
@@ -40,6 +41,7 @@ module M {
 
             var M;
 >M : any
+>  : ^^^
 
             var p = x;
 >p : number

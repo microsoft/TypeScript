@@ -1,0 +1,33 @@
+fatArrowSelf.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+fatArrowSelf.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== fatArrowSelf.ts (2 errors) ====
+    module Events {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface ListenerCallback {
+            (value:any):void;
+        }
+        export class EventEmitter {
+             public addListener(type:string, listener:ListenerCallback) {
+             }
+        }
+    }
+    
+    module Consumer {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class EventEmitterConsummer {
+            constructor (private emitter: Events.EventEmitter) { }
+    
+            private register() {
+                this.emitter.addListener('change', (e) => {
+                    this.changed();
+                });
+            }      
+    
+            private changed() {
+            }
+        }
+    }

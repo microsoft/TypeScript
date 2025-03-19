@@ -1,0 +1,18 @@
+structural1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== structural1.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+            salt:number;
+            pepper:number;
+        }
+    
+        export function f(i:I) {
+        }
+    
+        f({salt:2,pepper:0});
+    }
+    

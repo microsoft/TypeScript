@@ -1,14 +1,18 @@
+file.tsx(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(12,5): error TS2339: Property 'other' does not exist on type 'typeof my'.
+file.tsx(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(19,11): error TS2339: Property 'non' does not exist on type 'typeof my'.
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (4 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements { }
     }
     
     module my {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var div: any;
     }
     // OK
@@ -19,6 +23,8 @@ file.tsx(19,11): error TS2339: Property 'non' does not exist on type 'typeof my'
 !!! error TS2339: Property 'other' does not exist on type 'typeof my'.
     
     module q {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import mine = my;
         // OK
         <mine.div n='x' />;

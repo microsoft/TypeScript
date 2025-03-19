@@ -16,21 +16,25 @@ interface Navigator {
 >getGamepads : { (): (Gamepad | null)[]; (func?: any): any; }
 >            : ^^^^^^                  ^^^    ^^^   ^^^   ^^^
 >func : any
+>     : ^^^
 
     webkitGetGamepads(func?: any): any
 >webkitGetGamepads : (func?: any) => any
 >                  : ^    ^^^   ^^^^^   
 >func : any
+>     : ^^^
 
     msGetGamepads(func?: any): any;
 >msGetGamepads : (func?: any) => any
 >              : ^    ^^^   ^^^^^   
 >func : any
+>     : ^^^
 
     webkitGamepads(func?: any): any;
 >webkitGamepads : (func?: any) => any
 >               : ^    ^^^   ^^^^^   
 >func : any
+>     : ^^^
 }
 
 === b.ts ===

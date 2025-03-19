@@ -1,10 +1,25 @@
+invalidNestedModules.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalidNestedModules.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalidNestedModules.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 invalidNestedModules.ts(1,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+invalidNestedModules.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalidNestedModules.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalidNestedModules.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalidNestedModules.ts(16,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 invalidNestedModules.ts(17,18): error TS2300: Duplicate identifier 'Point'.
+invalidNestedModules.ts(22,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+invalidNestedModules.ts(23,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
 
 
-==== invalidNestedModules.ts (3 errors) ====
+==== invalidNestedModules.ts (12 errors) ====
     module A.B.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                ~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
         export class Point {
@@ -14,7 +29,11 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
     }
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class C { // Error
                 name: string;
             }
@@ -22,6 +41,10 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
     }
     
     module M2.X {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Point {
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -30,7 +53,11 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module X {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var Point: number; // Error
                        ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.

@@ -1,8 +1,10 @@
+constructSignaturesWithOverloads2.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constructSignaturesWithOverloads2.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constructSignaturesWithOverloads2.ts(27,11): error TS2428: All declarations of 'I' must have identical type parameters.
 constructSignaturesWithOverloads2.ts(32,11): error TS2428: All declarations of 'I' must have identical type parameters.
 
 
-==== constructSignaturesWithOverloads2.ts (2 errors) ====
+==== constructSignaturesWithOverloads2.ts (4 errors) ====
     // No errors expected for basic overloads of construct signatures with merged declarations
     
     // clodules
@@ -12,6 +14,8 @@ constructSignaturesWithOverloads2.ts(32,11): error TS2428: All declarations of '
         constructor(x: number) { }
     }
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x = 1;
     }
     
@@ -23,6 +27,8 @@ constructSignaturesWithOverloads2.ts(32,11): error TS2428: All declarations of '
         constructor(x: T) { }
     }
     module C2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x = 1;
     }
     

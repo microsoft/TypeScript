@@ -1,0 +1,25 @@
+es6ModuleVariableStatement.ts(5,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleVariableStatement.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== es6ModuleVariableStatement.ts (2 errors) ====
+    export var a = "hello";
+    export var x: string = a, y = x;
+    var b = y;
+    var c: string = b, d = c;
+    export module m1 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var k = a;
+        export var l: string = b, m = k;
+        var n = m1.k;
+        var o: string = n, p = k;
+    }
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var k = a;
+        export var l: string = b, m = k;
+        var n = m1.k;
+        var o: string = n, p = k;
+    }
