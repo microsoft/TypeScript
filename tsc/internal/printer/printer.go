@@ -3496,8 +3496,8 @@ func (p *Printer) emitEnumDeclaration(node *ast.EnumDeclaration) {
 func (p *Printer) emitModuleDeclaration(node *ast.ModuleDeclaration) {
 	state := p.enterNode(node.AsNode())
 	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
-	if node.Flags&ast.NodeFlagsGlobalAugmentation == 0 {
-		p.writeKeyword(core.IfElse(node.Flags&ast.NodeFlagsNamespace != 0, "namespace", "module"))
+	if node.Keyword != ast.KindGlobalKeyword {
+		p.writeKeyword(core.IfElse(node.Keyword == ast.KindNamespaceKeyword, "namespace", "module"))
 		p.writeSpace()
 	}
 	p.emitModuleName(node.Name())

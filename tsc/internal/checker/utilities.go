@@ -501,7 +501,7 @@ func getSourceFileOfModule(module *ast.Symbol) *ast.SourceFile {
 
 func getNonAugmentationDeclaration(symbol *ast.Symbol) *ast.Node {
 	return core.Find(symbol.Declarations, func(d *ast.Node) bool {
-		return !isExternalModuleAugmentation(d) && !(ast.IsModuleDeclaration(d) && ast.IsGlobalScopeAugmentation(d))
+		return !isExternalModuleAugmentation(d) && !ast.IsGlobalScopeAugmentation(d)
 	})
 }
 
@@ -1859,7 +1859,9 @@ func isModuleExportsAccessExpression(node *ast.Node) bool {
 func getNonModifierTokenRangeOfNode(node *ast.Node) core.TextRange {
 	pos := node.Pos()
 	if node.Modifiers() != nil {
-		pos = core.LastOrNil(node.Modifiers().Nodes).End()
+		if last := ast.FindLastVisibleNode(node.Modifiers().Nodes); last != nil {
+			pos = last.Pos()
+		}
 	}
 	return scanner.GetRangeOfTokenAtPosition(ast.GetSourceFileOfNode(node), pos)
 }

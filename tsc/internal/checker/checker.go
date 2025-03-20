@@ -3381,7 +3381,7 @@ func (c *Checker) getEffectiveDeclarationFlags(n *ast.Node, flagsToCheck ast.Mod
 	// because those flags have no useful semantics there.
 	if !ast.IsInterfaceDeclaration(n.Parent) && !ast.IsClassDeclaration(n.Parent) && !ast.IsClassExpression(n.Parent) && n.Flags&ast.NodeFlagsAmbient != 0 {
 		container := getEnclosingContainer(n)
-		if container != nil && container.Flags&ast.NodeFlagsExportContext != 0 && flags&ast.ModifierFlagsAmbient == 0 && !(ast.IsModuleBlock(n.Parent) && ast.IsModuleDeclaration(n.Parent.Parent) && ast.IsGlobalScopeAugmentation(n.Parent.Parent)) {
+		if container != nil && container.Flags&ast.NodeFlagsExportContext != 0 && flags&ast.ModifierFlagsAmbient == 0 && !(ast.IsModuleBlock(n.Parent) && ast.IsGlobalScopeAugmentation(n.Parent.Parent)) {
 			// It is nested in an ambient export context, which means it is automatically exported
 			flags |= ast.ModifierFlagsExport
 		}
@@ -4752,7 +4752,7 @@ func (c *Checker) checkModuleDeclaration(node *ast.Node) {
 	}
 	if ast.IsIdentifier(node.Name()) {
 		c.checkCollisionsForDeclarationName(node, node.Name())
-		if node.Flags&(ast.NodeFlagsNamespace|ast.NodeFlagsGlobalAugmentation) == 0 {
+		if node.AsModuleDeclaration().Keyword == ast.KindModuleKeyword {
 			tokenRange := getNonModifierTokenRangeOfNode(node)
 			c.suggestionDiagnostics.Add(ast.NewDiagnostic(ast.GetSourceFileOfNode(node), tokenRange, diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead))
 		}

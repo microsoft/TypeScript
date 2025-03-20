@@ -977,18 +977,11 @@ func (p *Parser) parseJSDocTypeNameWithNamespace(nested bool) *ast.Node {
 	typeNameOrNamespaceName := p.parseJSDocIdentifierName(nil)
 	if p.parseOptional(ast.KindDotToken) {
 		body := p.parseJSDocTypeNameWithNamespace(true)
-		var flags ast.NodeFlags
-		if nested {
-			flags = ast.NodeFlagsNestedNamespace
-		}
-		jsDocNamespaceNode := p.factory.NewModuleDeclaration(nil, typeNameOrNamespaceName, body, flags)
+		jsDocNamespaceNode := p.factory.NewModuleDeclaration(nil /*modifiers*/, ast.KindModuleKeyword, typeNameOrNamespaceName, body)
 		p.finishNode(jsDocNamespaceNode, start)
 		return jsDocNamespaceNode
 	}
 
-	if nested {
-		typeNameOrNamespaceName.Flags |= ast.NodeFlagsIdentifierIsInJSDocNamespace
-	}
 	return typeNameOrNamespaceName
 }
 

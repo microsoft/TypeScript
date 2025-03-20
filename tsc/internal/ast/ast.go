@@ -442,9 +442,6 @@ func (n *Node) ModifierFlags() ModifierFlags {
 	if modifiers != nil {
 		return modifiers.ModifierFlags
 	}
-	if n.Flags&NodeFlagsNestedNamespace != 0 {
-		return ModifierFlagsExport
-	}
 	return ModifierFlagsNone
 }
 
@@ -3408,22 +3405,23 @@ type ModuleDeclaration struct {
 	ModifiersBase
 	LocalsContainerBase
 	BodyBase
-	name *ModuleName // ModuleName
+	name    *ModuleName // ModuleName
+	Keyword Kind        // KindModuleKeyword, KindNamespaceKeyword, KindGlobalKeyword (global augmentation)
 }
 
-func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, name *ModuleName, body *ModuleBody, flags NodeFlags) *Node {
+func (f *NodeFactory) NewModuleDeclaration(modifiers *ModifierList, keyword Kind, name *ModuleName, body *ModuleBody) *Node {
 	data := &ModuleDeclaration{}
 	data.modifiers = modifiers
+	data.Keyword = keyword
 	data.name = name
 	data.Body = body
 	node := newNode(KindModuleDeclaration, data, f.hooks)
-	node.Flags |= flags & (NodeFlagsNamespace | NodeFlagsNestedNamespace | NodeFlagsGlobalAugmentation)
 	return node
 }
 
-func (f *NodeFactory) UpdateModuleDeclaration(node *ModuleDeclaration, modifiers *ModifierList, name *ModuleName, body *ModuleBody) *Node {
-	if modifiers != node.modifiers || name != node.name || body != node.Body {
-		return updateNode(f.NewModuleDeclaration(modifiers, name, body, node.Flags), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateModuleDeclaration(node *ModuleDeclaration, modifiers *ModifierList, keyword Kind, name *ModuleName, body *ModuleBody) *Node {
+	if modifiers != node.modifiers || keyword != node.Keyword || name != node.name || body != node.Body {
+		return updateNode(f.NewModuleDeclaration(modifiers, keyword, name, body), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
@@ -3433,11 +3431,11 @@ func (node *ModuleDeclaration) ForEachChild(v Visitor) bool {
 }
 
 func (node *ModuleDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateModuleDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Body))
+	return v.Factory.UpdateModuleDeclaration(node, v.visitModifiers(node.modifiers), node.Keyword, v.visitNode(node.name), v.visitNode(node.Body))
 }
 
 func (node *ModuleDeclaration) Clone(f *NodeFactory) *Node {
-	return cloneNode(f.NewModuleDeclaration(node.Modifiers(), node.Name(), node.Body, node.Flags), node.AsNode(), f.hooks)
+	return cloneNode(f.NewModuleDeclaration(node.Modifiers(), node.Keyword, node.Name(), node.Body), node.AsNode(), f.hooks)
 }
 
 func (node *ModuleDeclaration) Name() *DeclarationName {
