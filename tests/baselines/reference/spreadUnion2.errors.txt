@@ -1,6 +1,6 @@
 spreadUnion2.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o1' must be of type '{} | { a: number; }', but here has type '{ a?: number | undefined; }'.
 spreadUnion2.ts(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o2' must be of type '{} | { b: number; }', but here has type '{ b?: number | undefined; }'.
-spreadUnion2.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o3' must be of type '{} | { a: number; } | { b: number; } | { a: number; b: number; }', but here has type '{ b?: number | undefined; a?: number | undefined; }'.
+spreadUnion2.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o3' must be of type '{} | { a: number; } | { b: number; } | { a: number; b: number; }', but here has type '{ a?: number | undefined; b?: number | undefined; }'.
 spreadUnion2.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o3' must be of type '{} | { a: number; } | { b: number; } | { a: number; b: number; }', but here has type '{ a?: number | undefined; b?: number | undefined; }'.
 spreadUnion2.ts(15,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o4' must be of type '{} | { a: number; }', but here has type '{ a?: number | undefined; }'.
 spreadUnion2.ts(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o5' must be of type '{} | { b: number; }', but here has type '{ b?: number | undefined; }'.
@@ -25,7 +25,7 @@ spreadUnion2.ts(18,5): error TS2403: Subsequent variable declarations must have 
     var o3: {} | { a: number } | { b: number } | { a: number, b: number };
     var o3 = { ...undefinedUnion, ...nullUnion };
         ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'o3' must be of type '{} | { a: number; } | { b: number; } | { a: number; b: number; }', but here has type '{ b?: number | undefined; a?: number | undefined; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'o3' must be of type '{} | { a: number; } | { b: number; } | { a: number; b: number; }', but here has type '{ a?: number | undefined; b?: number | undefined; }'.
 !!! related TS6203 spreadUnion2.ts:10:5: 'o3' was also declared here.
     var o3 = { ...nullUnion, ...undefinedUnion };
         ~~
