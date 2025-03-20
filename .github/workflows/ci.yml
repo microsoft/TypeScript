@@ -29,21 +29,15 @@ jobs:
           - windows-latest
           - macos-latest
         node-version:
+          - '23'
           - '22'
           - '20'
-          - '18'
-          - '16'
-          - '14'
         bundle:
           - 'true'
         include:
           - node-version: 'lts/*'
             bundle: false
             os: ubuntu-latest
-        exclude:
-          # No Node 14 on ARM macOS
-          - node-version: '14'
-            os: macos-latest
 
     runs-on: ${{ matrix.os }}
     name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
@@ -55,6 +49,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           check-latest: true
+
       - run: npm ci
 
       - name: Tests
@@ -84,6 +79,8 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
+
       - run: npm ci
 
       - name: Run tests with coverage
@@ -109,6 +106,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
       - run: npm ci
 
       - name: Linter
@@ -135,6 +133,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
       - run: npm ci
 
       - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
@@ -155,6 +154,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
       - run: npm ci
 
       - name: Installing browsers
@@ -171,6 +171,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
       - run: npm ci
 
       - name: Build src
@@ -185,6 +186,8 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
+
       - run: |
           npm --version
           # corepack enable npm
@@ -233,6 +236,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
       - run: |
           npm --version
           # corepack enable npm
@@ -266,6 +270,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
       - run: npm ci
 
       - name: Build scripts
@@ -282,6 +287,8 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
+
       - run: npm ci
 
       - name: Build tsc
@@ -301,6 +308,8 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 'lts/*'
+          check-latest: true
+
       - run: npm ci
 
       - name: Remove all baselines
