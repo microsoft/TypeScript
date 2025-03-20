@@ -244,7 +244,7 @@ var result6 = true ? 1 : {};
 >   : ^^
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; b: string; } | { a: number; b?: undefined; }
+>result7 : { a: number; b: string; } | { b?: undefined; a: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

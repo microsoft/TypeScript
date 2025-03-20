@@ -38,8 +38,8 @@ var o4: { a: boolean } | { b: string , a: boolean};
 var o4 =  { ...union, a: false };
 >o4 : { a: boolean; } | { b: string; a: boolean; }
 >   : ^^^^^       ^^^^^^^^^^^      ^^^^^       ^^^
->{ ...union, a: false } : { a: boolean; } | { a: boolean; b: string; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>{ ...union, a: false } : { a: boolean; } | { b: string; a: boolean; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >union : { a: number; } | { b: string; }
 >      : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : boolean
@@ -62,7 +62,7 @@ var o5: { a: number } | { b: string } | { a: number, b: string };
 var o5 =  { ...union, ...union };
 >o5 : { a: number; } | { b: string; } | { a: number; b: string; }
 >   : ^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
->{ ...union, ...union } : { a: number; } | { b: string; a: number; } | { a: number; b: string; } | { b: string; }
+>{ ...union, ...union } : { a: number; } | { a: number; b: string; } | { a: number; b: string; } | { b: string; }
 >                       : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^
 >union : { a: number; } | { b: string; }
 >      : ^^^^^      ^^^^^^^^^^^      ^^^

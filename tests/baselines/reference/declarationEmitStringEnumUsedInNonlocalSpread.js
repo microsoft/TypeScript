@@ -108,8 +108,8 @@ export declare class A {
 import { A } from './class';
 export declare class B extends A {
     getA(): {
-        a: string;
         "123123": string;
         "12312312312": string;
+        a: string;
     };
 }

@@ -1,4 +1,4 @@
-destructuringSpread.ts(16,21): error TS2339: Property 'g' does not exist on type '{ f: number; e: number; d: number; c: number; }'.
+destructuringSpread.ts(16,21): error TS2339: Property 'g' does not exist on type '{ c: number; d: number; e: number; f: number; }'.
 
 
 ==== destructuringSpread.ts (1 errors) ====
@@ -19,7 +19,7 @@ destructuringSpread.ts(16,21): error TS2339: Property 'g' does not exist on type
     
     const { c, d, e, f, g } = {
                         ~
-!!! error TS2339: Property 'g' does not exist on type '{ f: number; e: number; d: number; c: number; }'.
+!!! error TS2339: Property 'g' does not exist on type '{ c: number; d: number; e: number; f: number; }'.
       ...{
         ...{
           ...{

@@ -264,7 +264,7 @@ export const Input = Type.Object({
 })
 
 export type Output = Static<typeof Output>
->Output : { level1: { level2: { bar: string; foo: string; }; }; }
+>Output : { level1: { level2: { foo: string; bar: string; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Output : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -175,9 +175,9 @@ var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >  : ^
 
 var p10 = ([{ value, done }]) => { };
->p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>p10 : ([{ value, done }]: [{ done: any; value: any; }]) => void
 >    : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>([{ value, done }]) => { } : ([{ value, done }]: [{ done: any; value: any; }]) => void
 >                           : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
