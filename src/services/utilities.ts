@@ -449,7 +449,7 @@ export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
             if (isAmbientModule(node as ModuleDeclaration)) {
                 return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
-            else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
+            else if (getModuleInstanceState(node as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated) {
                 return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
             else {
