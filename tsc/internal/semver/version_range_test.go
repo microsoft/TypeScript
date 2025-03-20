@@ -40,9 +40,18 @@ func TestWildcardsHaveSameString(t *testing.T) {
 		"1.2.X",
 	}
 
+	mixedCaseWildcardStrings := []string{
+		"x",
+		"X",
+		"*",
+		"x.X.x",
+		"X.x.*",
+	}
+
 	assertAllVersionRangesHaveIdenticalStrings(t, "majorWildcardStrings", majorWildcardStrings)
 	assertAllVersionRangesHaveIdenticalStrings(t, "minorWildcardStrings", minorWildcardStrings)
 	assertAllVersionRangesHaveIdenticalStrings(t, "patchWildcardStrings", patchWildcardStrings)
+	assertAllVersionRangesHaveIdenticalStrings(t, "mixedCaseWildcardStrings", mixedCaseWildcardStrings)
 }
 
 func assertAllVersionRangesHaveIdenticalStrings(t *testing.T, name string, strs []string) {

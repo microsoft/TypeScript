@@ -119,6 +119,11 @@ func TestVersionCompare(t *testing.T) {
 		{"1.0.0+build.stuff", "1.0.0", comparisonEqualTo},
 		{"1.0.0", "1.0.0+build", comparisonEqualTo},
 		{"1.0.0+build", "1.0.0+stuff", comparisonEqualTo},
+
+		// https://semver.org/#spec-item-11
+		// Edge cases for numeric and lexical comparison of prerelease identifiers.
+		{"1.0.0-alpha.99999", "1.0.0-alpha.100000", comparisonLessThan},
+		{"1.0.0-alpha.beta", "1.0.0-alpha.alpha", comparisonGreaterThan},
 	}
 
 	for _, test := range tests {
