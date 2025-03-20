@@ -98,8 +98,8 @@ function f2<T extends object>(x: T) {
 }
 
 declare let union: "xyz" | { a: string } | undefined;
->union : { a: string; } | "xyz"
->      : ^^^^^      ^^^^^^^^^^^
+>union : "xyz" | { a: string; }
+>      : ^^^^^^^^^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 
@@ -108,8 +108,8 @@ if (nonNull === union) {
 >                  : ^^^^^^^
 >nonNull : {}
 >        : ^^
->union : { a: string; } | "xyz"
->      : ^^^^^      ^^^^^^^^^^^
+>union : "xyz" | { a: string; }
+>      : ^^^^^^^^^^^^^      ^^^
 
   nonNull;
 >nonNull : {}

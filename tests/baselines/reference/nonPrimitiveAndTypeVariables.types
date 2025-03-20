@@ -48,7 +48,7 @@ function foo<T, U>(x: T) {
 >  : ^
 
     let b: U | object = x;  // Error
->b : object | U
+>b : U | object
 >  : ^^^^^^^^^^
 >x : T
 >  : ^

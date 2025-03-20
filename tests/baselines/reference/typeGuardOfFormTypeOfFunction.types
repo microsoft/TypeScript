@@ -9,7 +9,7 @@ function f1(x: any) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >"function" : "function"
@@ -29,7 +29,7 @@ function f2(x: unknown) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
@@ -51,7 +51,7 @@ function f3(x: {}) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
 >  : ^^
@@ -73,7 +73,7 @@ function f4<T>(x: T) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -97,7 +97,7 @@ function f5(x: { s: string }) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; }
 >  : ^^^^^      ^^^
@@ -119,7 +119,7 @@ function f6(x: () => string) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : () => string
 >  : ^^^^^^      
@@ -141,7 +141,7 @@ function f10(x: string | (() => string)) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | (() => string)
 >  : ^^^^^^^^^^^^^^^^      ^
@@ -170,7 +170,7 @@ function f11(x: { s: string } | (() => string)) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; } | (() => string)
 >  : ^^^^^      ^^^^^^^^^^^^^      ^
@@ -201,7 +201,7 @@ function f12(x: { s: string } | { n: number }) {
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >                        : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; } | { n: number; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
@@ -248,7 +248,7 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
         if (typeof item == 'function')
 >typeof item == 'function' : boolean
 >                          : ^^^^^^^
->typeof item : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof item : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : T[K]
 >     : ^^^^
@@ -283,7 +283,7 @@ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S
     if (typeof reducer === 'function') {
 >typeof reducer === 'function' : boolean
 >                              : ^^^^^^^
->typeof reducer : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof reducer : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >reducer : Record<keyof S, () => void> | (() => void)
 >        : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
@@ -310,7 +310,7 @@ function f101(x: string | Record<string, any>) {
 >typeof x === "object" && x.anything : any
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | Record<string, any>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

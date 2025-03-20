@@ -6,4 +6,4 @@
 //// }
 
 // https://github.com/Microsoft/TypeScript/issues/29330
-verify.rangeAfterCodeFix("arr: { other: (arg0: (a: number, b: number) => 1 | -1) => void; }");
+verify.rangeAfterCodeFix("arr: { other: (arg0: (a: number, b: number) => -1 | 1) => void; }");

@@ -15,5 +15,5 @@
 
 verify.completions({
     marker: ["1", "2"],
-    exact: ["foo", "bar", "baz"]
+    exact: ["bar", "baz", "foo"]
 });

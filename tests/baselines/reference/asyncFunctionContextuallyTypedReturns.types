@@ -14,11 +14,11 @@ f(v => v ? [0] : Promise.reject());
 >                                   : ^^^^
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
 >  : ^  ^^                                      ^^^^^    
->v => v ? [0] : Promise.reject() : (v: boolean) => [0] | Promise<[0]>
+>v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]> | [0]
 >                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
 >  : ^^^^^^^
->v ? [0] : Promise.reject() : [0] | Promise<[0]>
+>v ? [0] : Promise.reject() : Promise<[0]> | [0]
 >                           : ^^^^^^^^^^^^^^^^^^
 >v : boolean
 >  : ^^^^^^^
@@ -44,7 +44,7 @@ f(async v => v ? [0] : Promise.reject());
 >                                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
 >  : ^^^^^^^
->v ? [0] : Promise.reject() : [0] | Promise<[0]>
+>v ? [0] : Promise.reject() : Promise<[0]> | [0]
 >                           : ^^^^^^^^^^^^^^^^^^
 >v : boolean
 >  : ^^^^^^^
@@ -136,12 +136,12 @@ h(v => v ? (abc) => { } : Promise.reject());
 >                                            : ^^^^
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
 >  : ^  ^^                                                    ^^^^^    
->v => v ? (abc) => { } : Promise.reject() : (v: boolean) => ((abc: string) => void) | Promise<MyCallback>
->                                         : ^ ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback> | ((abc: string) => void)
+>                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >v : boolean
 >  : ^^^^^^^
->v ? (abc) => { } : Promise.reject() : ((abc: string) => void) | Promise<MyCallback>
->                                    : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v ? (abc) => { } : Promise.reject() : Promise<MyCallback> | ((abc: string) => void)
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >v : boolean
 >  : ^^^^^^^
 >(abc) => { } : (abc: string) => void

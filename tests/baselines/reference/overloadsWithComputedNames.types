@@ -101,7 +101,7 @@ declare const sym: symbol;
 >    : ^^^^^^
 
 declare const strUnion: 'foo' | 'bar';
->strUnion : "foo" | "bar"
+>strUnion : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 
 class C1 {
@@ -166,13 +166,13 @@ class C2 {
     [strUnion](): void; // should error
 >[strUnion] : () => void
 >           : ^^^^^^    
->strUnion : "foo" | "bar"
+>strUnion : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 
     [strUnion]() { }
 >[strUnion] : () => void
 >           : ^^^^^^^^^^
->strUnion : "foo" | "bar"
+>strUnion : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 }
 
@@ -183,13 +183,13 @@ class I2 {
     [strUnion](): void; // should error
 >[strUnion] : () => void
 >           : ^^^^^^    
->strUnion : "foo" | "bar"
+>strUnion : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 
     [strUnion]() { }
 >[strUnion] : () => void
 >           : ^^^^^^^^^^
->strUnion : "foo" | "bar"
+>strUnion : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 }
 

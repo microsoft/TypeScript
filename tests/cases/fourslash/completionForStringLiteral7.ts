@@ -6,7 +6,7 @@
 ////f("[|/*1*/|]", "[|/*2*/|]", "[|/*3*/|]");
 
 verify.completions(
-    { marker: "1", exact: ["foo", "bar"].map(name => ({
+    { marker: "1", exact: ["bar", "foo"].map(name => ({
         name, replacementSpan: test.ranges()[0]
     })) },
     { marker: "2", exact: ["oof", "rab"].map(name => ({

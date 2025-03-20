@@ -81,7 +81,7 @@ const working: WorkingType = null as unknown as WorkingType;
 if (working.thing!.name !== "Correct") {
 >working.thing!.name !== "Correct" : boolean
 >                                  : ^^^^^^^
->working.thing!.name : "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Error9" | "Correct"
+>working.thing!.name : "Correct" | "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Error9"
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >working.thing! : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Error9"; message: string; } | { name: "Correct"; id: string; }
 >               : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^
@@ -91,7 +91,7 @@ if (working.thing!.name !== "Correct") {
 >        : ^^^^^^^^^^^
 >thing : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Error9"; message: string; } | { name: "Correct"; id: string; } | undefined
 >      : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^^^^^^^^^^^^^
->name : "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Error9" | "Correct"
+>name : "Correct" | "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Error9"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Correct" : "Correct"
 >          : ^^^^^^^^^
@@ -216,7 +216,7 @@ const borked: BorkedType = null as unknown as BorkedType;
 if (borked.thing!.name !== "Correct") {
 >borked.thing!.name !== "Correct" : boolean
 >                                 : ^^^^^^^
->borked.thing!.name : "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Correct"
+>borked.thing!.name : "Correct" | "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8"
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >borked.thing! : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Correct"; id: string; }
 >              : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^
@@ -226,7 +226,7 @@ if (borked.thing!.name !== "Correct") {
 >       : ^^^^^^^^^^
 >thing : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Correct"; id: string; } | undefined
 >      : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^^^^^^^^^^^^^
->name : "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Correct"
+>name : "Correct" | "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Correct" : "Correct"
 >          : ^^^^^^^^^
@@ -351,7 +351,7 @@ const fixed: FixedType = null as unknown as FixedType;
 if (fixed.thing?.name !== "Correct") {
 >fixed.thing?.name !== "Correct" : boolean
 >                                : ^^^^^^^
->fixed.thing?.name : "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Correct" | undefined
+>fixed.thing?.name : "Correct" | "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | undefined
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fixed.thing : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Correct"; id: string; } | undefined
 >            : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^^^^^^^^^^^^^
@@ -359,7 +359,7 @@ if (fixed.thing?.name !== "Correct") {
 >      : ^^^^^^^^^
 >thing : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Correct"; id: string; } | undefined
 >      : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^^^^^^^^^^^^^
->name : "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Correct" | undefined
+>name : "Correct" | "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | undefined
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Correct" : "Correct"
 >          : ^^^^^^^^^

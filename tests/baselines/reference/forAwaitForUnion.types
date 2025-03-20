@@ -4,13 +4,13 @@
 async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >f : <T>(source: Iterable<T> | AsyncIterable<T>) => Promise<void>
 >  : ^ ^^      ^^                              ^^^^^^^^^^^^^^^^^^
->source : Iterable<T> | AsyncIterable<T>
+>source : AsyncIterable<T> | Iterable<T>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     for await (const x of source) {
 >x : Awaited<T>
 >  : ^^^^^^^^^^
->source : Iterable<T> | AsyncIterable<T>
+>source : AsyncIterable<T> | Iterable<T>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
