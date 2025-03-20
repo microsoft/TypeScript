@@ -853,8 +853,7 @@ function getOrganizeImportsUnicodeStringComparer(ignoreCase: boolean, preference
         numeric,
     });
 
-    // `compare` is a bound method, so we do not need to close over `collator`.
-    return collator.compare;
+    return (a, b) => Math.sign(collator.compare(a, b)) as -1 | 0 | 1;
 }
 
 function getOrganizeImportsLocale(preferences: UserPreferences): string {
