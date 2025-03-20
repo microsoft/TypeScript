@@ -14,11 +14,8 @@ limit
 
 //// [a.js]
 var a = !;
-!;
 var b = !;
-!;
-!;
-!OK;
+OK;
 HERE;
 's A shouty thing;
 GOTTA;
