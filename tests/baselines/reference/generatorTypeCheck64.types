@@ -1,0 +1,67 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck64.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== generatorTypeCheck64.ts ===
+function* g3(): Generator<Generator<(x: string) => number>> {
+>g3 : () => Generator<Generator<(x: string) => number>>
+>   : ^^^^^^                                           
+>x : string
+>  : ^^^^^^
+
+    yield function* () {
+>yield function* () {        yield x => x.length;    } () : any
+>function* () {        yield x => x.length;    } () : Generator<(x: string) => number, void, any>
+>                                                   : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {        yield x => x.length;    } : () => Generator<(x: string) => number, void, any>
+>                                                : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        yield x => x.length;
+>yield x => x.length : any
+>x => x.length : (x: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+    } ()
+}
+
+function* g4(): Iterator<Iterable<(x: string) => number>> {
+>g4 : () => Iterator<Iterable<(x: string) => number>>
+>   : ^^^^^^                                         
+>x : string
+>  : ^^^^^^
+
+  yield (function* () {
+>yield (function* () {    yield (x) => x.length;  })() : any
+>(function* () {    yield (x) => x.length;  })() : Generator<(x: string) => number, void, any>
+>                                                : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function* () {    yield (x) => x.length;  }) : () => Generator<(x: string) => number, void, any>
+>                                              : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {    yield (x) => x.length;  } : () => Generator<(x: string) => number, void, any>
+>                                            : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    yield (x) => x.length;
+>yield (x) => x.length : any
+>(x) => x.length : (x: string) => number
+>                : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+  })();
+}
+
