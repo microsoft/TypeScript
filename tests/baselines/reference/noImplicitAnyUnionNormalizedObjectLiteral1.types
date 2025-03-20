@@ -12,7 +12,7 @@ function doSthWithParams(params: unknown) {
   if (typeof params !== "object") {
 >typeof params !== "object" : boolean
 >                           : ^^^^^^^
->typeof params : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof params : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >params : unknown
 >       : ^^^^^^^

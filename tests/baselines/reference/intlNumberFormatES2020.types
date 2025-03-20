@@ -3,7 +3,7 @@
 === intlNumberFormatES2020.ts ===
 // New/updated resolved options in ES2020
 const { notation, style, signDisplay } = new Intl.NumberFormat('en-NZ').resolvedOptions();
->notation : "standard" | "scientific" | "engineering" | "compact"
+>notation : "compact" | "engineering" | "scientific" | "standard"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >style : keyof Intl.NumberFormatOptionsStyleRegistry
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -64,7 +64,7 @@ new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' });
 const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
 >currency : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
->currencySign : "standard" | "accounting" | undefined
+>currencySign : "accounting" | "standard" | undefined
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -101,7 +101,7 @@ const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'curr
 const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
 >unit : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->unitDisplay : "short" | "long" | "narrow" | undefined
+>unitDisplay : "long" | "narrow" | "short" | undefined
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -136,7 +136,7 @@ const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', un
 
 // Compact
 const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
->compactDisplay : "short" | "long" | undefined
+>compactDisplay : "long" | "short" | undefined
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

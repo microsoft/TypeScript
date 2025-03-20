@@ -6,7 +6,7 @@ type TU1 = Uppercase<'hello'>;  // "HELLO"
 >    : ^^^^^^^
 
 type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
->TU2 : "FOO" | "BAR"
+>TU2 : "BAR" | "FOO"
 >    : ^^^^^^^^^^^^^
 
 type TU3 = Uppercase<string>;  // Uppercase<string>
@@ -30,7 +30,7 @@ type TL1 = Lowercase<'HELLO'>;  // "hello"
 >    : ^^^^^^^
 
 type TL2 = Lowercase<'FOO' | 'BAR'>;  // "foo" | "bar"
->TL2 : "foo" | "bar"
+>TL2 : "bar" | "foo"
 >    : ^^^^^^^^^^^^^
 
 type TL3 = Lowercase<string>;  // Lowercase<string>
@@ -54,7 +54,7 @@ type TC1 = Capitalize<'hello'>;  // "Hello"
 >    : ^^^^^^^
 
 type TC2 = Capitalize<'foo' | 'bar'>;  // "Foo" | "Bar"
->TC2 : "Foo" | "Bar"
+>TC2 : "Bar" | "Foo"
 >    : ^^^^^^^^^^^^^
 
 type TC3 = Capitalize<string>;  // Capitalize<string>
@@ -78,7 +78,7 @@ type TN1 = Uncapitalize<'Hello'>;  // "hello"
 >    : ^^^^^^^
 
 type TN2 = Uncapitalize<'Foo' | 'Bar'>;  // "foo" | "bar"
->TN2 : "foo" | "bar"
+>TN2 : "bar" | "foo"
 >    : ^^^^^^^^^^^^^
 
 type TN3 = Uncapitalize<string>;  // Uncapitalize<string>
@@ -187,9 +187,9 @@ function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
 >  : ^^^^^^^^^^^^
 
     let s: 'FOO' | 'BAR' = x;
->s : "FOO" | "BAR"
+>s : "BAR" | "FOO"
 >  : ^^^^^^^^^^^^^
->x : "FOO" | "BAR"
+>x : "BAR" | "FOO"
 >  : ^^^^^^^^^^^^^
 }
 

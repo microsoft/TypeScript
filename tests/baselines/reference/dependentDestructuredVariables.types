@@ -1176,13 +1176,13 @@ type FooMethod = {
 let fooM: FooMethod = {
 >fooM : FooMethod
 >     : ^^^^^^^^^
->{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): void; }
+>{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): void; }
 >                                                                                               : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^
 
   method(type, cb) {
->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => void
+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => void
 >       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
 >   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
@@ -1190,7 +1190,7 @@ let fooM: FooMethod = {
     if (type == 'num') {
 >type == 'num' : boolean
 >              : ^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >'num' : "num"
 >      : ^^^^^
@@ -1239,13 +1239,13 @@ type FooAsyncMethod = {
 let fooAsyncM: FooAsyncMethod = {
 >fooAsyncM : FooAsyncMethod
 >          : ^^^^^^^^^^^^^^
->{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
+>{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
 >                                                                                                     : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^
 
   async method(type, cb) {
->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
 >       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
 >   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
@@ -1253,7 +1253,7 @@ let fooAsyncM: FooAsyncMethod = {
     if (type == 'num') {
 >type == 'num' : boolean
 >              : ^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >'num' : "num"
 >      : ^^^^^
@@ -1302,13 +1302,13 @@ type FooGenMethod = {
 let fooGenM: FooGenMethod = {
 >fooGenM : FooGenMethod
 >        : ^^^^^^^^^^^^
->{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
+>{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
 >                                                                                                : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   *method(type, cb) {
->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
 >       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
 >   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
@@ -1316,7 +1316,7 @@ let fooGenM: FooGenMethod = {
     if (type == 'num') {
 >type == 'num' : boolean
 >              : ^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >'num' : "num"
 >      : ^^^^^
@@ -1365,13 +1365,13 @@ type FooAsyncGenMethod = {
 let fooAsyncGenM: FooAsyncGenMethod = {
 >fooAsyncGenM : FooAsyncGenMethod
 >             : ^^^^^^^^^^^^^^^^^
->{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
+>{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
 >                                                                                                      : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   async *method(type, cb) {
->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
 >       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
 >   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
@@ -1379,7 +1379,7 @@ let fooAsyncGenM: FooAsyncGenMethod = {
     if (type == 'num') {
 >type == 'num' : boolean
 >              : ^^^^^^^
->type : "str" | "num"
+>type : "num" | "str"
 >     : ^^^^^^^^^^^^^
 >'num' : "num"
 >      : ^^^^^
@@ -1567,7 +1567,7 @@ function foo({
 function fa1(x: [true, number] | [false, string]) {
 >fa1 : (x: [true, number] | [false, string]) => void
 >    : ^ ^^                                ^^^^^^^^^
->x : [true, number] | [false, string]
+>x : [false, string] | [true, number]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -1579,7 +1579,7 @@ function fa1(x: [true, number] | [false, string]) {
 >      : ^^^^^^^
 >value : string | number
 >      : ^^^^^^^^^^^^^^^
->x : [true, number] | [false, string]
+>x : [false, string] | [true, number]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (guard) {
@@ -1663,7 +1663,7 @@ function fa2(x: { guard: true, value: number } | { guard: false, value: string }
 const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
 >fa3 : (...args: [true, number] | [false, string]) => void
 >    : ^^^^    ^^                                ^^^^^    
->args : [true, number] | [false, string]
+>args : [false, string] | [true, number]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -1920,13 +1920,13 @@ function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
 >          : ^      ^^                     ^^^^^^^^^
 >x : 1
 >  : ^
->y : 2 | 1 | undefined
+>y : 1 | 2 | undefined
 >  : ^^^^^^^^^^^^^^^^^
 
     if (y === undefined) {
 >y === undefined : boolean
 >                : ^^^^^^^
->y : 2 | 1 | undefined
+>y : 1 | 2 | undefined
 >  : ^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^

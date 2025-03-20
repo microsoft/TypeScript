@@ -16,7 +16,7 @@ declare function getPropFromRaw<T>(
 >               : ^ ^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
 
   prop: "files" | "include" | "exclude" | "references",
->prop : "files" | "include" | "exclude" | "references"
+>prop : "exclude" | "files" | "include" | "references"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   validateElement: (value: unknown) => boolean,
@@ -36,7 +36,7 @@ function getSpecsFromRaw(
 >                : ^    ^^                               ^^^^^                 
 
   prop: "files" | "include" | "exclude"
->prop : "files" | "include" | "exclude"
+>prop : "exclude" | "files" | "include"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ): PropOfRaw<string> {
@@ -45,7 +45,7 @@ function getSpecsFromRaw(
 >                                         : ^^^^^^^^^^^^^^^^^
 >getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
 >               : ^ ^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
->prop : "files" | "include" | "exclude"
+>prop : "exclude" | "files" | "include"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isString : (text: unknown) => text is string
 >         : ^    ^^       ^^^^^              

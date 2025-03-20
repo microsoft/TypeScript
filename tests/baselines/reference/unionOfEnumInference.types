@@ -28,7 +28,7 @@ function foo<T extends Enum>(x: Interface<T>) { }
 function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 >bar : (x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) => void
 >    : ^ ^^                                              ^^^^^^^^^
->x : Interface<Enum.A | Enum.B> | Interface<Enum.C>
+>x : Interface<Enum.C> | Interface<Enum.A | Enum.B>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Enum : any
 >     : ^^^
@@ -42,7 +42,7 @@ function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 >       : ^^^^
 >foo : <T extends Enum>(x: Interface<T>) => void
 >    : ^ ^^^^^^^^^    ^^ ^^            ^^^^^^^^^
->x : Interface<Enum.A | Enum.B> | Interface<Enum.C>
+>x : Interface<Enum.C> | Interface<Enum.A | Enum.B>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

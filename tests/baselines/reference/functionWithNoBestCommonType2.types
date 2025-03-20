@@ -2,9 +2,9 @@
 
 === functionWithNoBestCommonType2.ts ===
 var v = function () {
->v : () => true | void
+>v : () => void | true
 >  : ^^^^^^^^^^^^^^^^^
->function () {   return true;   return bar();} : () => true | void
+>function () {   return true;   return bar();} : () => void | true
 >                                              : ^^^^^^^^^^^^^^^^^
 
    return true;

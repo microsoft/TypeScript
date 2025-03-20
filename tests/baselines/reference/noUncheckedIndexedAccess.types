@@ -128,7 +128,7 @@ const e7: boolean = strMap["foo" as "foo" | "baz"];
 >                               : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^
->"foo" as "foo" | "baz" : "foo" | "baz"
+>"foo" as "foo" | "baz" : "baz" | "foo"
 >                       : ^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^

@@ -1,4 +1,4 @@
-unionPropertyOfProtectedAndIntersectionProperty.ts(19,23): error TS2339: Property 'foo' does not exist on type 'Foo | Bar'.
+unionPropertyOfProtectedAndIntersectionProperty.ts(19,23): error TS2339: Property 'foo' does not exist on type 'Bar | Foo'.
 
 
 ==== unionPropertyOfProtectedAndIntersectionProperty.ts (1 errors) ====
@@ -22,7 +22,7 @@ unionPropertyOfProtectedAndIntersectionProperty.ts(19,23): error TS2339: Propert
     type _3 = (Foo & Bar)['foo'];         // Ok
     type _4 = (Foo | Bar)['foo'];         // Error
                           ~~~~~
-!!! error TS2339: Property 'foo' does not exist on type 'Foo | Bar'.
+!!! error TS2339: Property 'foo' does not exist on type 'Bar | Foo'.
     type _5 = (Foo | (Foo & Bar))['foo']; // Prev error, now ok
     
     // V[P] in `Nothing<V[P]>` is the substitution type `V[P] & Foo`. When

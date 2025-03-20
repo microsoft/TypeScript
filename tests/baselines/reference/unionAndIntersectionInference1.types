@@ -20,7 +20,7 @@ function destructure<a, r>(
 >            : ^ ^^ ^^         ^^     ^^         ^^               ^^     ^^               ^^^^^ 
 
     something: a | Y,
->something : Y | a
+>something : a | Y
 >          : ^^^^^
 
     haveValue: (value: a) => r,
@@ -41,7 +41,7 @@ function destructure<a, r>(
 >                                                     : ^
 >something === y : boolean
 >                : ^^^^^^^
->something : Y | a
+>something : a | Y
 >          : ^^^^^
 >y : Y
 >  : ^
@@ -57,14 +57,14 @@ function destructure<a, r>(
 >          : ^     ^^ ^^^^^ 
 ><a>something : a
 >             : ^
->something : Y | a
+>something : a | Y
 >          : ^^^^^
 }
 
 var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >value : string | Y
 >      : ^^^^^^^^^^
->Math.random() > 0.5 ? 'hey!' : <Y>undefined : Y | "hey!"
+>Math.random() > 0.5 ? 'hey!' : <Y>undefined : "hey!" | Y
 >                                            : ^^^^^^^^^^
 >Math.random() > 0.5 : boolean
 >                    : ^^^^^^^

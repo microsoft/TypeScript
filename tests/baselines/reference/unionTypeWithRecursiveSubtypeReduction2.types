@@ -33,7 +33,7 @@ class Property {
 >         : ^^^^^^^^
 
     public parent: Module | Class;
->parent : Module | Class
+>parent : Class | Module
 >       : ^^^^^^^^^^^^^^
 }
 

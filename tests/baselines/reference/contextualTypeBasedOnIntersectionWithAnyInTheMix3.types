@@ -74,7 +74,7 @@ declare function test2(a: { type: "foo" | "bar" } & { type: any }): void;
 >      : ^ ^^                                         ^^^^^    
 >a : { type: "foo" | "bar"; } & { type: any; }
 >  : ^^^^^^^^             ^^^^^^^^^^^^^^   ^^^
->type : "foo" | "bar"
+>type : "bar" | "foo"
 >     : ^^^^^^^^^^^^^
 >type : any
 

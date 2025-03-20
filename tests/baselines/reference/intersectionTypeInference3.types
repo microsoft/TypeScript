@@ -36,7 +36,7 @@ const c1 = Array.from(a).concat(Array.from(b));
 >   : ^^^
 >Array.from(a).concat(Array.from(b)) : A[]
 >                                    : ^^^
->Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
+>Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
 >                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Array.from(a) : A[]
 >              : ^^^
@@ -48,7 +48,7 @@ const c1 = Array.from(a).concat(Array.from(b));
 >     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >a : Set<A>
 >  : ^^^^^^
->concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
+>concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
 >       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Array.from(b) : A[]
 >              : ^^^

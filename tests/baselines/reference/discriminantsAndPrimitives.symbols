@@ -33,9 +33,9 @@ function f1(x: Foo | Bar | string) {
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 12, 12))
 
         switch(x.kind) {
->x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 12, 12))
->kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 
             case 'foo':
                 x.name;
@@ -56,9 +56,9 @@ function f2(x: Foo | Bar | string | undefined) {
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 21, 12))
 
         switch(x.kind) {
->x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 21, 12))
->kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 
             case 'foo':
                 x.name;
@@ -80,9 +80,9 @@ function f3(x: Foo | Bar | string | null) {
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 30, 12))
 
         switch(x.kind) {
->x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 30, 12))
->kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 
             case 'foo':
                 x.name;
@@ -104,9 +104,9 @@ function f4(x: Foo | Bar | string | number | null) {
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 39, 12))
 
         switch(x.kind) {
->x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 >x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 39, 12))
->kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 2, 15), Decl(discriminantsAndPrimitives.ts, 7, 15))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 7, 15), Decl(discriminantsAndPrimitives.ts, 2, 15))
 
             case 'foo':
                 x.name;

@@ -51,7 +51,7 @@ module Bugs {
 >typeof args[index] !== 'undefined'        ? args[index]        : match : any
 >typeof args[index] !== 'undefined' : boolean
 >                                   : ^^^^^^^
->typeof args[index] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof args[index] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args[index] : any
 >args : any[]

@@ -54,12 +54,12 @@ const RandomComponent: React.SFC = () => {
 >                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^
 
   const Component =
->Component : ((props: {}) => React.ReactElement<{}>) | React.SFC<{}>
->          : ^^     ^^  ^^^^^                      ^^^^^^^^^^^^^^^^^
+>Component : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
+>          : ^^^^^^^^^^^^^^^^^^     ^^  ^^^^^                      ^
 
     condition1
->condition1      ? Radio      : Checkbox : ((props: {}) => React.ReactElement<{}>) | React.SFC<{}>
->                                        : ^^     ^^  ^^^^^                      ^^^^^^^^^^^^^^^^^
+>condition1      ? Radio      : Checkbox : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
+>                                        : ^^^^^^^^^^^^^^^^^^     ^^  ^^^^^                      ^
 >condition1 : boolean
 >           : ^^^^^^^
 
@@ -72,12 +72,12 @@ const RandomComponent: React.SFC = () => {
 >         : ^^^^^^^^^^^^^
 
   const OtherComponent =
->OtherComponent : (() => React.ReactElement<{}>) | React.SFC<{}>
->               : ^^^^^^^                      ^^^^^^^^^^^^^^^^^
+>OtherComponent : React.SFC<{}> | (() => React.ReactElement<{}>)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^                      ^
 
     condition2
->condition2      ? OtherRadio      : Checkbox : (() => React.ReactElement<{}>) | React.SFC<{}>
->                                             : ^^^^^^^                      ^^^^^^^^^^^^^^^^^
+>condition2      ? OtherRadio      : Checkbox : React.SFC<{}> | (() => React.ReactElement<{}>)
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^                      ^
 >condition2 : boolean
 >           : ^^^^^^^
 
@@ -96,12 +96,12 @@ const RandomComponent: React.SFC = () => {
 >           : ^^^^^^^
 ><Component /> : JSX.Element
 >              : ^^^^^^^^^^^
->Component : ((props: {}) => React.ReactElement<{}>) | React.SFC<{}>
->          : ^^     ^^  ^^^^^                      ^^^^^^^^^^^^^^^^^
+>Component : React.SFC<{}> | ((props: {}) => React.ReactElement<{}>)
+>          : ^^^^^^^^^^^^^^^^^^     ^^  ^^^^^                      ^
 ><OtherComponent /> : JSX.Element
 >                   : ^^^^^^^^^^^
->OtherComponent : (() => React.ReactElement<{}>) | React.SFC<{}>
->               : ^^^^^^^                      ^^^^^^^^^^^^^^^^^
+>OtherComponent : React.SFC<{}> | (() => React.ReactElement<{}>)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^                      ^
 
 };
 

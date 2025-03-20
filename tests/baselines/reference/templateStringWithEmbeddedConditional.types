@@ -6,7 +6,7 @@ var x = `abc${ true ? false : " " }def`;
 >  : ^^^^^^
 >`abc${ true ? false : " " }def` : string
 >                                : ^^^^^^
->true ? false : " " : false | " "
+>true ? false : " " : " " | false
 >                   : ^^^^^^^^^^^
 >true : true
 >     : ^^^^

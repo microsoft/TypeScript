@@ -22,6 +22,6 @@ const b: { xyz: "baz" } = { xyz: "foo" } satisfies { xyz: "foo" | "bar" };
 >    : ^^^^^
 >"foo" : "foo"
 >      : ^^^^^
->xyz : "foo" | "bar"
+>xyz : "bar" | "foo"
 >    : ^^^^^^^^^^^^^
 

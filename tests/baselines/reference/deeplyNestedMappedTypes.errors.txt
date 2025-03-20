@@ -4,16 +4,16 @@ deeplyNestedMappedTypes.ts(9,7): error TS2322: Type 'Id<{ x: { y: { z: { a: { b:
 deeplyNestedMappedTypes.ts(17,7): error TS2322: Type 'Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>' is not assignable to type 'Id2<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>'.
   The types of 'x.y.z.a.b.c' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
-deeplyNestedMappedTypes.ts(69,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }[]'.
-  Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
+deeplyNestedMappedTypes.ts(69,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }[]'.
+  Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }'.
     The types of 'level1.level2' are incompatible between these types.
-      Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+      Property 'bar' is missing in type '{ foo: string; }' but required in type '{ bar: string; foo: string; }'.
 deeplyNestedMappedTypes.ts(73,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to '{ level1: { level2: { foo: string; }; }; }[]'.
-deeplyNestedMappedTypes.ts(77,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }[]'.
-  Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
+deeplyNestedMappedTypes.ts(77,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }[]'.
+  Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }'.
     The types of 'level1.level2' are incompatible between these types.
-      Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+      Property 'bar' is missing in type '{ foo: string; }' but required in type '{ bar: string; foo: string; }'.
 
 
 ==== deeplyNestedMappedTypes.ts (5 errors) ====
@@ -95,10 +95,10 @@ deeplyNestedMappedTypes.ts(77,5): error TS2322: Type '{ level1: { level2: { foo:
     function problematicFunction1(ors: Input[]): Output[] {
         return ors;  // Error
         ~~~~~~
-!!! error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }[]'.
-!!! error TS2322:   Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
+!!! error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }[]'.
+!!! error TS2322:   Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }'.
 !!! error TS2322:     The types of 'level1.level2' are incompatible between these types.
-!!! error TS2322:       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+!!! error TS2322:       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ bar: string; foo: string; }'.
 !!! related TS2728 deeplyNestedMappedTypes.ts:63:13: 'bar' is declared here.
     }
     
@@ -112,10 +112,10 @@ deeplyNestedMappedTypes.ts(77,5): error TS2322: Type '{ level1: { level2: { foo:
     function problematicFunction3(ors: (typeof Input.static)[]): Output[] {
         return ors;  // Error
         ~~~~~~
-!!! error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }[]'.
-!!! error TS2322:   Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
+!!! error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }[]'.
+!!! error TS2322:   Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { bar: string; foo: string; }; }; }'.
 !!! error TS2322:     The types of 'level1.level2' are incompatible between these types.
-!!! error TS2322:       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+!!! error TS2322:       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ bar: string; foo: string; }'.
 !!! related TS2728 deeplyNestedMappedTypes.ts:63:13: 'bar' is declared here.
     }
     

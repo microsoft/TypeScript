@@ -20,7 +20,7 @@ import * as Z from "./0"
 let v = "str" || true;
 >v : string | boolean
 >  : ^^^^^^^^^^^^^^^^
->"str" || true : true | "str"
+>"str" || true : "str" | true
 >              : ^^^^^^^^^^^^
 >"str" : "str"
 >      : ^^^^^

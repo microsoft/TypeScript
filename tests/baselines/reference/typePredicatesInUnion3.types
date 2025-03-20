@@ -63,13 +63,13 @@ function f2(x: unknown, p: P1 | P2 | F1) {
 >   : ^ ^^       ^^ ^^            ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
->p : P1 | P2 | F1
+>p : F1 | P1 | P2
 >  : ^^^^^^^^^^^^
 
     if (p(x)) {
 >p(x) : boolean
 >     : ^^^^^^^
->p : P1 | P2 | F1
+>p : F1 | P1 | P2
 >  : ^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
@@ -85,13 +85,13 @@ function f3(x: unknown, p: P1 | P2 | F2) {
 >   : ^ ^^       ^^ ^^            ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
->p : P1 | P2 | F2
+>p : F2 | P1 | P2
 >  : ^^^^^^^^^^^^
 
     if (p(x)) {
 >p(x) : boolean
 >     : ^^^^^^^
->p : P1 | P2 | F2
+>p : F2 | P1 | P2
 >  : ^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
@@ -107,13 +107,13 @@ function f4(x: unknown, p: P1 | P2 | F3) {
 >   : ^ ^^       ^^ ^^            ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
->p : P1 | P2 | F3
+>p : F3 | P1 | P2
 >  : ^^^^^^^^^^^^
 
     if (p(x)) {
 >p(x) : string | boolean
 >     : ^^^^^^^^^^^^^^^^
->p : P1 | P2 | F3
+>p : F3 | P1 | P2
 >  : ^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^

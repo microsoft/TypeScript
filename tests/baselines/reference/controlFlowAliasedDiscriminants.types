@@ -291,7 +291,7 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >     : ^^^^^^^
 >bar1 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult() : [false, undefined] | [true, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArrayResult : () => [true, number] | [false, undefined]
 >               : ^^^^^^                                   
@@ -301,7 +301,7 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >     : ^^^^^^^
 >bar2 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult() : [false, undefined] | [true, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArrayResult : () => [true, number] | [false, undefined]
 >               : ^^^^^^                                   
@@ -311,7 +311,7 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >     : ^^^^^^^
 >bar3 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult() : [false, undefined] | [true, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArrayResult : () => [true, number] | [false, undefined]
 >               : ^^^^^^                                   
@@ -372,7 +372,7 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >     : ^^^^^^^
 >bar1 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult() : [false, undefined] | [true, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArrayResult : () => [true, number] | [false, undefined]
 >               : ^^^^^^                                   
@@ -382,7 +382,7 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >     : ^^^^^^^
 >bar2 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult() : [false, undefined] | [true, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArrayResult : () => [true, number] | [false, undefined]
 >               : ^^^^^^                                   
@@ -392,7 +392,7 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >     : ^^^^^^^
 >bar3 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult() : [false, undefined] | [true, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArrayResult : () => [true, number] | [false, undefined]
 >               : ^^^^^^                                   
@@ -488,7 +488,7 @@ type Nested = {
 >     : ^^^
 >data : string | number
 >     : ^^^^^^^^^^^^^^^
->type : "string" | "number"
+>type : "number" | "string"
 >     : ^^^^^^^^^^^^^^^^^^^
 >resp : Nested
 >     : ^^^^^^
@@ -496,7 +496,7 @@ type Nested = {
     if (type === 'string') {
 >type === 'string' : boolean
 >                  : ^^^^^^^
->type : "string" | "number"
+>type : "number" | "string"
 >     : ^^^^^^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
@@ -510,11 +510,11 @@ type Nested = {
     if (resp.type === 'string') {
 >resp.type === 'string' : boolean
 >                       : ^^^^^^^
->resp.type : "string" | "number"
+>resp.type : "number" | "string"
 >          : ^^^^^^^^^^^^^^^^^^^
 >resp : Nested
 >     : ^^^^^^
->type : "string" | "number"
+>type : "number" | "string"
 >     : ^^^^^^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
@@ -548,7 +548,7 @@ type Nested = {
 >     : ^^^
 >dataAlias : string | number
 >          : ^^^^^^^^^^^^^^^
->type : "string" | "number"
+>type : "number" | "string"
 >     : ^^^^^^^^^^^^^^^^^^^
 >resp : Nested
 >     : ^^^^^^
@@ -556,7 +556,7 @@ type Nested = {
     if (type === 'string') {
 >type === 'string' : boolean
 >                  : ^^^^^^^
->type : "string" | "number"
+>type : "number" | "string"
 >     : ^^^^^^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
@@ -570,11 +570,11 @@ type Nested = {
     if (resp.type === 'string') {
 >resp.type === 'string' : boolean
 >                       : ^^^^^^^
->resp.type : "string" | "number"
+>resp.type : "number" | "string"
 >          : ^^^^^^^^^^^^^^^^^^^
 >resp : Nested
 >     : ^^^^^^
->type : "string" | "number"
+>type : "number" | "string"
 >     : ^^^^^^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
