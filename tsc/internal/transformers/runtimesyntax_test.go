@@ -432,6 +432,13 @@ func TestParameterPropertyTransformer(t *testing.T) {
         this.x = x;
     }
 }`},
+		{title: "parameter properties #2", input: "class C extends B { constructor(public x) { super(); } }", output: `class C extends B {
+    x;
+    constructor(x) {
+        super();
+        this.x = x;
+    }
+}`},
 	}
 
 	for _, rec := range data {

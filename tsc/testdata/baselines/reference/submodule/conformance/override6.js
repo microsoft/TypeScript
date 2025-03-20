@@ -31,8 +31,8 @@ class D extends B {
     baz;
     bar = 1;
     constructor(foo, baz) {
+        super(foo, 42);
         this.foo = foo;
         this.baz = baz;
-        super(foo, 42);
     }
 }

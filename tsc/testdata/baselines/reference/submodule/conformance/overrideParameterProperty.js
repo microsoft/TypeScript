@@ -41,24 +41,24 @@ class Base {
 class C1 extends Base {
     p1;
     constructor(p1) {
-        this.p1 = p1;
         super();
+        this.p1 = p1;
         this.p1;
     }
 }
 class C2 extends Base {
     p1;
     constructor(p1) {
-        this.p1 = p1;
         super();
+        this.p1 = p1;
         this.p1;
     }
 }
 class C3 extends Base {
     p1;
     constructor(p1) {
-        this.p1 = p1;
         super();
+        this.p1 = p1;
         this.p1;
     }
     m(p1) { }
@@ -66,7 +66,7 @@ class C3 extends Base {
 class C4 extends Base {
     p2;
     constructor(p2) {
-        this.p2 = p2;
         super();
+        this.p2 = p2;
     }
 }

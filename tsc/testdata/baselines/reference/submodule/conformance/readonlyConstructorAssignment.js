@@ -62,8 +62,8 @@ class C extends A {
     // This is the usual behavior of readonly properties:
     // if one is redeclared in a base class, then it can be assigned to.
     constructor(x) {
-        this.x = x;
         super(x);
+        this.x = x;
         this.x = 1;
     }
 }
@@ -78,8 +78,8 @@ class D {
 class E extends D {
     x;
     constructor(x) {
-        this.x = x;
         super(x);
+        this.x = x;
         this.x = 1;
     }
 }

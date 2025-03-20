@@ -130,8 +130,8 @@
 -        var _this = _super.call(this) || this;
 -        _this.member = member;
 +        "ngInject1";
-+        this.member = member;
 +        super();
++        this.member = member;
          console.log("hi");
 -        return _this;
      }
@@ -149,8 +149,8 @@
 -        _this.member = member;
 -        _this.m();
 +        "ngInject1";
-+        this.member = member;
 +        super();
++        this.member = member;
 +        this.m();
          console.log("hi");
 -        return _this;

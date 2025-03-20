@@ -25,8 +25,8 @@ class Base {
 class Derived extends Base {
     p;
     constructor(p) {
-        this.p = p;
         super(p);
+        this.p = p;
         this.p; // OK
     }
 }

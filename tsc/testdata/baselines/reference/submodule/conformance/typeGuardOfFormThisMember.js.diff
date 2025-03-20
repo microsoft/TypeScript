@@ -70,8 +70,8 @@
 +    class File extends FileSystemObject {
 +        content;
 +        constructor(path, content) {
-+            this.content = content;
 +            super(path);
++            this.content = content;
          }
 -        return File;
 -    }(FileSystemObject));

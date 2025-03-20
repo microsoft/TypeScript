@@ -43,8 +43,8 @@ class Derived extends Base {
     q;
     //super call in class constructor of derived type
     constructor(q) {
-        this.q = q;
         super('');
+        this.q = q;
         //type of super call expression is void
         var p = super('');
         var p = v();

@@ -7,10 +7,9 @@
 +    p;
      // @ts-ignore
      constructor(p) {
-+        this.p = p;
          console.log('hi'); // should emit before super
          super();
--        this.p = p;
+         this.p = p;
 -        this.field = 0;
      }
 +    field = 0;
@@ -20,10 +19,4 @@
 +    prop;
      // @ts-ignore
      constructor(p) {
-+        this.p = p;
          1; // should emit before super
-         super();
--        this.p = p;
-         this.prop = 1;
-     }
- }

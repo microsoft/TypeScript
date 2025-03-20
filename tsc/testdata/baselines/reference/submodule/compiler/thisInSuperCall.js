@@ -42,7 +42,7 @@ class Foo2 extends Base {
 class Foo3 extends Base {
     p;
     constructor(p) {
-        this.p = p;
         super(this); // error
+        this.p = p;
     }
 }

@@ -224,10 +224,10 @@ var ts;
         type;
         flags;
         constructor(name, type, flags) {
+            super();
             this.name = name;
             this.type = type;
             this.flags = flags;
-            super();
         }
         equals(other) {
             return this.name === other.name &&
@@ -245,10 +245,10 @@ var ts;
         parameters;
         returnType;
         constructor(typeParameters, parameters, returnType) {
+            super();
             this.typeParameters = typeParameters;
             this.parameters = parameters;
             this.returnType = returnType;
-            super();
         }
         equalsNoReturn(other) {
             return this.parameters.length === other.parameters.length &&
@@ -266,10 +266,10 @@ var ts;
         type;
         flags;
         constructor(name, type, flags) {
+            super();
             this.name = name;
             this.type = type;
             this.flags = flags;
-            super();
         }
         equals(other) {
             return this.name === other.name &&

@@ -2388,8 +2388,8 @@ var TypeScript;
         postComments = null;
         isParenthesized = false;
         constructor(nodeType) {
-            this.nodeType = nodeType;
             super();
+            this.nodeType = nodeType;
         }
         isExpression() { return false; }
         isStatementOrExpression() { return false; }
@@ -2613,9 +2613,9 @@ var TypeScript;
         //    To change text, and to avoid running into a situation where 'actualText' does not 
         //    match 'text', always use setText.
         constructor(actualText, hasEscapeSequence) {
+            super(NodeType.Name);
             this.actualText = actualText;
             this.hasEscapeSequence = hasEscapeSequence;
-            super(NodeType.Name);
             this.setText(actualText, hasEscapeSequence);
         }
         setText(actualText, hasEscapeSequence) {
@@ -2666,8 +2666,8 @@ var TypeScript;
     class Label extends AST {
         id;
         constructor(id) {
-            this.id = id;
             super(NodeType.Label);
+            this.id = id;
         }
         printLabel() { return this.id.actualText + ":"; }
         typeCheck(typeFlow) {
@@ -2699,8 +2699,8 @@ var TypeScript;
         targetType = null; // Target type for an object literal (null if no target type)
         castTerm = null;
         constructor(nodeType, operand) {
-            this.operand = operand;
             super(nodeType);
+            this.operand = operand;
         }
         addToControlFlow(context) {
             super.addToControlFlow(context);
@@ -2841,9 +2841,9 @@ var TypeScript;
         target;
         arguments;
         constructor(nodeType, target, arguments) {
+            super(nodeType);
             this.target = target;
             this.arguments = arguments;
-            super(nodeType);
             this.minChar = this.target.minChar;
         }
         signature = null;
@@ -2873,9 +2873,9 @@ var TypeScript;
         operand1;
         operand2;
         constructor(nodeType, operand1, operand2) {
+            super(nodeType);
             this.operand1 = operand1;
             this.operand2 = operand2;
-            super(nodeType);
         }
         typeCheck(typeFlow) {
             switch (this.nodeType) {
@@ -3026,10 +3026,10 @@ var TypeScript;
         operand2;
         operand3;
         constructor(operand1, operand2, operand3) {
+            super(NodeType.ConditionalExpression);
             this.operand1 = operand1;
             this.operand2 = operand2;
             this.operand3 = operand3;
-            super(NodeType.ConditionalExpression);
         }
         typeCheck(typeFlow) {
             return typeFlow.typeCheckQMark(this);
@@ -3051,9 +3051,9 @@ var TypeScript;
         value;
         hasEmptyFraction;
         constructor(value, hasEmptyFraction) {
+            super(NodeType.NumberLit);
             this.value = value;
             this.hasEmptyFraction = hasEmptyFraction;
-            super(NodeType.NumberLit);
         }
         isNegativeZero = false;
         typeCheck(typeFlow) {
@@ -3091,8 +3091,8 @@ var TypeScript;
     class RegexLiteral extends Expression {
         regex;
         constructor(regex) {
-            this.regex = regex;
             super(NodeType.Regex);
+            this.regex = regex;
         }
         typeCheck(typeFlow) {
             this.type = typeFlow.regexType;
@@ -3110,8 +3110,8 @@ var TypeScript;
     class StringLiteral extends Expression {
         text;
         constructor(text) {
-            this.text = text;
             super(NodeType.QString);
+            this.text = text;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3145,9 +3145,9 @@ var TypeScript;
         varFlags = VarFlags.None;
         isDynamicImport = false;
         constructor(id, alias) {
+            super(NodeType.ImportDeclaration);
             this.id = id;
             this.alias = alias;
-            super(NodeType.ImportDeclaration);
         }
         emit(emitter, tokenId, startLine) {
             var mod = this.alias.type;
@@ -3204,9 +3204,9 @@ var TypeScript;
         varFlags = VarFlags.None;
         sym = null;
         constructor(id, nodeType, nestingLevel) {
+            super(nodeType);
             this.id = id;
             this.nestingLevel = nestingLevel;
-            super(nodeType);
         }
         isStatementOrExpression() { return true; }
         isPrivate() { return hasFlag(this.varFlags, VarFlags.Private); }
@@ -3289,6 +3289,7 @@ var TypeScript;
         scopeType = null; // Type of the FuncDecl, before target typing
         endingToken = null;
         constructor(name, bod, isConstructor, arguments, vars, scopes, statics, nodeType) {
+            super(nodeType);
             this.name = name;
             this.bod = bod;
             this.isConstructor = isConstructor;
@@ -3296,7 +3297,6 @@ var TypeScript;
             this.vars = vars;
             this.scopes = scopes;
             this.statics = statics;
-            super(nodeType);
         }
         internalName() {
             if (this.internalNameCache == null) {
@@ -3480,9 +3480,9 @@ var TypeScript;
         leftCurlyCount = 0;
         rightCurlyCount = 0;
         constructor(nodeType, name, members) {
+            super(nodeType);
             this.name = name;
             this.members = members;
-            super(nodeType);
         }
     }
     TypeScript.NamedDeclaration = NamedDeclaration;
@@ -3498,8 +3498,8 @@ var TypeScript;
         containsUnicodeChar = false;
         containsUnicodeCharInComment = false;
         constructor(name, members, vars, scopes, endingToken) {
-            this.endingToken = endingToken;
             super(NodeType.ModuleDeclaration, name, members);
+            this.endingToken = endingToken;
             this.vars = vars;
             this.scopes = scopes;
             this.prettyName = this.name.actualText;
@@ -3529,9 +3529,9 @@ var TypeScript;
         implementsList;
         varFlags = VarFlags.None;
         constructor(nodeType, name, extendsList, implementsList, members) {
+            super(nodeType, name, members);
             this.extendsList = extendsList;
             this.implementsList = implementsList;
-            super(nodeType, name, members);
         }
         isExported() {
             return hasFlag(this.varFlags, VarFlags.Exported);
@@ -3586,9 +3586,9 @@ var TypeScript;
         labels;
         stmt;
         constructor(labels, stmt) {
+            super(NodeType.LabeledStatement);
             this.labels = labels;
             this.stmt = stmt;
-            super(NodeType.LabeledStatement);
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3620,9 +3620,9 @@ var TypeScript;
         statements;
         isStatementBlock;
         constructor(statements, isStatementBlock) {
+            super(NodeType.Block);
             this.statements = statements;
             this.isStatementBlock = isStatementBlock;
-            super(NodeType.Block);
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3724,8 +3724,8 @@ var TypeScript;
         cond;
         body = null;
         constructor(cond) {
-            this.cond = cond;
             super(NodeType.While);
+            this.cond = cond;
         }
         isLoop() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -3831,8 +3831,8 @@ var TypeScript;
         elseBod = null;
         statement = new ASTSpan();
         constructor(cond) {
-            this.cond = cond;
             super(NodeType.If);
+            this.cond = cond;
         }
         isCompoundStatement() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -3942,9 +3942,9 @@ var TypeScript;
         lval;
         obj;
         constructor(lval, obj) {
+            super(NodeType.ForIn);
             this.lval = lval;
             this.obj = obj;
-            super(NodeType.ForIn);
             if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
                 this.lval.varFlags |= VarFlags.AutoInit;
             }
@@ -4060,8 +4060,8 @@ var TypeScript;
         body;
         incr;
         constructor(init) {
-            this.init = init;
             super(NodeType.For);
+            this.init = init;
         }
         isLoop() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -4153,8 +4153,8 @@ var TypeScript;
         isCompoundStatement() { return true; }
         withSym = null;
         constructor(expr) {
-            this.expr = expr;
             super(NodeType.With);
+            this.expr = expr;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4179,8 +4179,8 @@ var TypeScript;
         defaultCase = null;
         statement = new ASTSpan();
         constructor(val) {
-            this.val = val;
             super(NodeType.Switch);
+            this.val = val;
         }
         isCompoundStatement() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -4301,9 +4301,9 @@ var TypeScript;
         term;
         arrayCount;
         constructor(term, arrayCount) {
+            super(NodeType.TypeRef);
             this.term = term;
             this.arrayCount = arrayCount;
-            super(NodeType.TypeRef);
         }
         emit(emitter, tokenId, startLine) {
             throw new Error("should not emit a type ref");
@@ -4331,9 +4331,9 @@ var TypeScript;
         tryNode;
         finallyNode;
         constructor(tryNode, finallyNode) {
+            super(NodeType.TryFinally);
             this.tryNode = tryNode;
             this.finallyNode = finallyNode;
-            super(NodeType.TryFinally);
         }
         isCompoundStatement() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -4376,9 +4376,9 @@ var TypeScript;
         tryNode;
         catchNode;
         constructor(tryNode, catchNode) {
+            super(NodeType.TryCatch);
             this.tryNode = tryNode;
             this.catchNode = catchNode;
-            super(NodeType.TryCatch);
         }
         isCompoundStatement() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -4425,8 +4425,8 @@ var TypeScript;
     class Try extends Statement {
         body;
         constructor(body) {
-            this.body = body;
             super(NodeType.Try);
+            this.body = body;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4453,9 +4453,9 @@ var TypeScript;
         param;
         body;
         constructor(param, body) {
+            super(NodeType.Catch);
             this.param = param;
             this.body = body;
-            super(NodeType.Catch);
             if (this.param) {
                 this.param.varFlags |= VarFlags.AutoInit;
             }
@@ -4525,8 +4525,8 @@ var TypeScript;
     class Finally extends Statement {
         body;
         constructor(body) {
-            this.body = body;
             super(NodeType.Finally);
+            this.body = body;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4555,10 +4555,10 @@ var TypeScript;
         endsLine;
         text = null;
         constructor(content, isBlockComment, endsLine) {
+            super(NodeType.Comment);
             this.content = content;
             this.isBlockComment = isBlockComment;
             this.endsLine = endsLine;
-            super(NodeType.Comment);
         }
         getText() {
             if (this.text == null) {

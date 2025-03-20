@@ -61,8 +61,8 @@
 +        postComments = null;
 +        isParenthesized = false;
 +        constructor(nodeType) {
-+            this.nodeType = nodeType;
 +            super();
++            this.nodeType = nodeType;
          }
 -        AST.prototype.isExpression = function () { return false; };
 -        AST.prototype.isStatementOrExpression = function () { return false; };
@@ -250,9 +250,9 @@
 -            _this.setText(actualText, hasEscapeSequence);
 -            return _this;
 +        constructor(actualText, hasEscapeSequence) {
++            super(NodeType.Name);
 +            this.actualText = actualText;
 +            this.hasEscapeSequence = hasEscapeSequence;
-+            super(NodeType.Name);
 +            this.setText(actualText, hasEscapeSequence);
          }
 -        Identifier.prototype.setText = function (actualText, hasEscapeSequence) {
@@ -335,8 +335,8 @@
 +    class Label extends AST {
 +        id;
 +        constructor(id) {
-+            this.id = id;
 +            super(NodeType.Label);
++            this.id = id;
          }
 -        Label.prototype.printLabel = function () { return this.id.actualText + ":"; };
 -        Label.prototype.typeCheck = function (typeFlow) {
@@ -390,8 +390,8 @@
 +        targetType = null; // Target type for an object literal (null if no target type)
 +        castTerm = null;
 +        constructor(nodeType, operand) {
-+            this.operand = operand;
 +            super(nodeType);
++            this.operand = operand;
          }
 -        UnaryExpression.prototype.addToControlFlow = function (context) {
 -            _super.prototype.addToControlFlow.call(this, context);
@@ -442,9 +442,9 @@
 +        target;
 +        arguments;
 +        constructor(nodeType, target, arguments) {
++            super(nodeType);
 +            this.target = target;
 +            this.arguments = arguments;
-+            super(nodeType);
 +            this.minChar = this.target.minChar;
          }
 -        CallExpression.prototype.typeCheck = function (typeFlow) {
@@ -484,9 +484,9 @@
 +        operand1;
 +        operand2;
 +        constructor(nodeType, operand1, operand2) {
++            super(nodeType);
 +            this.operand1 = operand1;
 +            this.operand2 = operand2;
-+            super(nodeType);
          }
 -        BinaryExpression.prototype.typeCheck = function (typeFlow) {
 +        typeCheck(typeFlow) {
@@ -527,10 +527,10 @@
 +        operand2;
 +        operand3;
 +        constructor(operand1, operand2, operand3) {
++            super(NodeType.ConditionalExpression);
 +            this.operand1 = operand1;
 +            this.operand2 = operand2;
 +            this.operand3 = operand3;
-+            super(NodeType.ConditionalExpression);
          }
 -        ConditionalExpression.prototype.typeCheck = function (typeFlow) {
 +        typeCheck(typeFlow) {
@@ -564,9 +564,9 @@
 +        value;
 +        hasEmptyFraction;
 +        constructor(value, hasEmptyFraction) {
++            super(NodeType.NumberLit);
 +            this.value = value;
 +            this.hasEmptyFraction = hasEmptyFraction;
-+            super(NodeType.NumberLit);
          }
 -        NumberLiteral.prototype.typeCheck = function (typeFlow) {
 +        isNegativeZero = false;
@@ -615,8 +615,8 @@
 +    class RegexLiteral extends Expression {
 +        regex;
 +        constructor(regex) {
-+            this.regex = regex;
 +            super(NodeType.Regex);
++            this.regex = regex;
          }
 -        RegexLiteral.prototype.typeCheck = function (typeFlow) {
 +        typeCheck(typeFlow) {
@@ -646,8 +646,8 @@
 +    class StringLiteral extends Expression {
 +        text;
 +        constructor(text) {
-+            this.text = text;
 +            super(NodeType.QString);
++            this.text = text;
          }
 -        StringLiteral.prototype.emit = function (emitter, tokenId, startLine) {
 +        emit(emitter, tokenId, startLine) {
@@ -706,9 +706,9 @@
 +        varFlags = VarFlags.None;
 +        isDynamicImport = false;
 +        constructor(id, alias) {
++            super(NodeType.ImportDeclaration);
 +            this.id = id;
 +            this.alias = alias;
-+            super(NodeType.ImportDeclaration);
          }
 -        ImportDeclaration.prototype.isStatementOrExpression = function () { return true; };
 -        ImportDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
@@ -773,9 +773,9 @@
 +        varFlags = VarFlags.None;
 +        sym = null;
 +        constructor(id, nodeType, nestingLevel) {
++            super(nodeType);
 +            this.id = id;
 +            this.nestingLevel = nestingLevel;
-+            super(nodeType);
          }
 -        BoundDecl.prototype.isStatementOrExpression = function () { return true; };
 -        BoundDecl.prototype.isPrivate = function () { return hasFlag(this.varFlags, VarFlags.Private); };
@@ -929,6 +929,7 @@
 +        scopeType = null; // Type of the FuncDecl, before target typing
 +        endingToken = null;
 +        constructor(name, bod, isConstructor, arguments, vars, scopes, statics, nodeType) {
++            super(nodeType);
 +            this.name = name;
 +            this.bod = bod;
 +            this.isConstructor = isConstructor;
@@ -936,7 +937,6 @@
 +            this.vars = vars;
 +            this.scopes = scopes;
 +            this.statics = statics;
-+            super(nodeType);
          }
 -        FuncDecl.prototype.internalName = function () {
 +        internalName() {
@@ -1173,9 +1173,9 @@
 +        leftCurlyCount = 0;
 +        rightCurlyCount = 0;
 +        constructor(nodeType, name, members) {
++            super(nodeType);
 +            this.name = name;
 +            this.members = members;
-+            super(nodeType);
          }
 -        return NamedDeclaration;
 -    }(ModuleElement));
@@ -1207,8 +1207,8 @@
 +        containsUnicodeChar = false;
 +        containsUnicodeCharInComment = false;
 +        constructor(name, members, vars, scopes, endingToken) {
-+            this.endingToken = endingToken;
 +            super(NodeType.ModuleDeclaration, name, members);
++            this.endingToken = endingToken;
 +            this.vars = vars;
 +            this.scopes = scopes;
 +            this.prettyName = this.name.actualText;
@@ -1257,9 +1257,9 @@
 +        implementsList;
 +        varFlags = VarFlags.None;
 +        constructor(nodeType, name, extendsList, implementsList, members) {
++            super(nodeType, name, members);
 +            this.extendsList = extendsList;
 +            this.implementsList = implementsList;
-+            super(nodeType, name, members);
          }
 -        TypeDeclaration.prototype.isExported = function () {
 +        isExported() {
@@ -1365,9 +1365,9 @@
 +        labels;
 +        stmt;
 +        constructor(labels, stmt) {
++            super(NodeType.LabeledStatement);
 +            this.labels = labels;
 +            this.stmt = stmt;
-+            super(NodeType.LabeledStatement);
          }
 -        LabeledStatement.prototype.emit = function (emitter, tokenId, startLine) {
 +        emit(emitter, tokenId, startLine) {
@@ -1410,9 +1410,9 @@
 +        statements;
 +        isStatementBlock;
 +        constructor(statements, isStatementBlock) {
++            super(NodeType.Block);
 +            this.statements = statements;
 +            this.isStatementBlock = isStatementBlock;
-+            super(NodeType.Block);
          }
 -        Block.prototype.emit = function (emitter, tokenId, startLine) {
 +        emit(emitter, tokenId, startLine) {
@@ -1510,8 +1510,8 @@
 +        cond;
 +        body = null;
 +        constructor(cond) {
-+            this.cond = cond;
 +            super(NodeType.While);
++            this.cond = cond;
          }
 -        WhileStatement.prototype.isLoop = function () { return true; };
 -        WhileStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -1608,8 +1608,8 @@
 +        elseBod = null;
 +        statement = new ASTSpan();
 +        constructor(cond) {
-+            this.cond = cond;
 +            super(NodeType.If);
++            this.cond = cond;
          }
 -        IfStatement.prototype.isCompoundStatement = function () { return true; };
 -        IfStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -1707,9 +1707,9 @@
 +        lval;
 +        obj;
 +        constructor(lval, obj) {
++            super(NodeType.ForIn);
 +            this.lval = lval;
 +            this.obj = obj;
-+            super(NodeType.ForIn);
 +            if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
 +                this.lval.varFlags |= VarFlags.AutoInit;
              }
@@ -1778,8 +1778,8 @@
 +        body;
 +        incr;
 +        constructor(init) {
-+            this.init = init;
 +            super(NodeType.For);
++            this.init = init;
          }
 -        ForStatement.prototype.isLoop = function () { return true; };
 -        ForStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -1827,8 +1827,8 @@
 +        isCompoundStatement() { return true; }
 +        withSym = null;
 +        constructor(expr) {
-+            this.expr = expr;
 +            super(NodeType.With);
++            this.expr = expr;
          }
 -        WithStatement.prototype.isCompoundStatement = function () { return true; };
 -        WithStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -1865,8 +1865,8 @@
 +        defaultCase = null;
 +        statement = new ASTSpan();
 +        constructor(val) {
-+            this.val = val;
 +            super(NodeType.Switch);
++            this.val = val;
          }
 -        SwitchStatement.prototype.isCompoundStatement = function () { return true; };
 -        SwitchStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -1967,9 +1967,9 @@
 +        term;
 +        arrayCount;
 +        constructor(term, arrayCount) {
++            super(NodeType.TypeRef);
 +            this.term = term;
 +            this.arrayCount = arrayCount;
-+            super(NodeType.TypeRef);
          }
 -        TypeReference.prototype.emit = function (emitter, tokenId, startLine) {
 +        emit(emitter, tokenId, startLine) {
@@ -2002,9 +2002,9 @@
 +        tryNode;
 +        finallyNode;
 +        constructor(tryNode, finallyNode) {
++            super(NodeType.TryFinally);
 +            this.tryNode = tryNode;
 +            this.finallyNode = finallyNode;
-+            super(NodeType.TryFinally);
          }
 -        TryFinally.prototype.isCompoundStatement = function () { return true; };
 -        TryFinally.prototype.emit = function (emitter, tokenId, startLine) {
@@ -2050,9 +2050,9 @@
 +        tryNode;
 +        catchNode;
 +        constructor(tryNode, catchNode) {
++            super(NodeType.TryCatch);
 +            this.tryNode = tryNode;
 +            this.catchNode = catchNode;
-+            super(NodeType.TryCatch);
          }
 -        TryCatch.prototype.isCompoundStatement = function () { return true; };
 -        TryCatch.prototype.emit = function (emitter, tokenId, startLine) {
@@ -2098,8 +2098,8 @@
 +    class Try extends Statement {
 +        body;
 +        constructor(body) {
-+            this.body = body;
 +            super(NodeType.Try);
++            this.body = body;
          }
 -        Try.prototype.emit = function (emitter, tokenId, startLine) {
 +        emit(emitter, tokenId, startLine) {
@@ -2144,9 +2144,9 @@
 +        param;
 +        body;
 +        constructor(param, body) {
++            super(NodeType.Catch);
 +            this.param = param;
 +            this.body = body;
-+            super(NodeType.Catch);
 +            if (this.param) {
 +                this.param.varFlags |= VarFlags.AutoInit;
              }
@@ -2200,8 +2200,8 @@
 +    class Finally extends Statement {
 +        body;
 +        constructor(body) {
-+            this.body = body;
 +            super(NodeType.Finally);
++            this.body = body;
          }
 -        Finally.prototype.emit = function (emitter, tokenId, startLine) {
 +        emit(emitter, tokenId, startLine) {
@@ -2247,10 +2247,10 @@
 +        endsLine;
 +        text = null;
 +        constructor(content, isBlockComment, endsLine) {
++            super(NodeType.Comment);
 +            this.content = content;
 +            this.isBlockComment = isBlockComment;
 +            this.endsLine = endsLine;
-+            super(NodeType.Comment);
          }
 -        Comment.prototype.getText = function () {
 +        getText() {

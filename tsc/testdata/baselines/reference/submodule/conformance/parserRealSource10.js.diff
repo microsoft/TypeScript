@@ -154,9 +154,9 @@
 +        value;
 +        hasEmptyFraction;
 +        constructor(value, hasEmptyFraction) {
++            super(TokenID.NumberLiteral);
 +            this.value = value;
 +            this.hasEmptyFraction = hasEmptyFraction;
-+            super(TokenID.NumberLiteral);
          }
 -        NumberLiteralToken.prototype.getText = function () {
 +        getText() {
@@ -181,8 +181,8 @@
 +    class StringLiteralToken extends Token {
 +        value;
 +        constructor(value) {
-+            this.value = value;
 +            super(TokenID.StringLiteral);
++            this.value = value;
          }
 -        StringLiteralToken.prototype.getText = function () {
 +        getText() {
@@ -209,9 +209,9 @@
 +        value;
 +        hasEscapeSequence;
 +        constructor(value, hasEscapeSequence) {
++            super(TokenID.Identifier);
 +            this.value = value;
 +            this.hasEscapeSequence = hasEscapeSequence;
-+            super(TokenID.Identifier);
          }
 -        IdentifierToken.prototype.getText = function () {
 +        getText() {
@@ -236,8 +236,8 @@
 +    class WhitespaceToken extends Token {
 +        value;
 +        constructor(tokenId, value) {
-+            this.value = value;
 +            super(tokenId);
++            this.value = value;
          }
 -        WhitespaceToken.prototype.getText = function () {
 +        getText() {
@@ -270,12 +270,12 @@
 +        line;
 +        endsLine;
 +        constructor(tokenID, value, isBlock, startPos, line, endsLine) {
++            super(tokenID);
 +            this.value = value;
 +            this.isBlock = isBlock;
 +            this.startPos = startPos;
 +            this.line = line;
 +            this.endsLine = endsLine;
-+            super(tokenID);
          }
 -        CommentToken.prototype.getText = function () {
 +        getText() {
@@ -300,8 +300,8 @@
 +    class RegularExpressionLiteralToken extends Token {
 +        regex;
 +        constructor(regex) {
-+            this.regex = regex;
 +            super(TokenID.RegularExpressionLiteral);
++            this.regex = regex;
          }
 -        RegularExpressionLiteralToken.prototype.getText = function () {
 +        getText() {

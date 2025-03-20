@@ -46,8 +46,8 @@
 -        _this.xx = _super.prototype.;
 -        return _this;
 +    constructor(z = super., zz = super., zzz = () => super.) {
-+        this.z = z;
 +        super();
++        this.z = z;
      }
 -    Q.prototype.foo = function (zz) {
 -        if (zz === void 0) { zz = _super.prototype.; }

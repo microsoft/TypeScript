@@ -46,12 +46,12 @@
 +class Derived2 extends Base {
 +    y;
 +    constructor(y) {
-+        this.y = y;
          var a = 1;
 -        _this = _super.call(this) || this;
 -        _this.y = y;
 -        return _this;
 +        super();
++        this.y = y;
      }
 -    return Derived2;
 -}(Base));
@@ -64,8 +64,8 @@
 +class Derived3 extends Base {
 +    y;
 +    constructor(y) {
-+        this.y = y;
 +        super();
++        this.y = y;
          var a = 1;
 -        return _this;
      }

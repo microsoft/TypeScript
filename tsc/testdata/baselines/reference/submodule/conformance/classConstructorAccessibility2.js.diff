@@ -66,8 +66,8 @@
 +class DerivedA extends BaseA {
 +    x;
 +    constructor(x) {
-+        this.x = x;
 +        super(x);
++        this.x = x;
      }
 -    DerivedA.prototype.createInstance = function () { new DerivedA(5); };
 -    DerivedA.prototype.createBaseInstance = function () { new BaseA(6); };
@@ -87,8 +87,8 @@
 +class DerivedB extends BaseB {
 +    x;
 +    constructor(x) {
-+        this.x = x;
 +        super(x);
++        this.x = x;
      }
 -    DerivedB.prototype.createInstance = function () { new DerivedB(7); };
 -    DerivedB.prototype.createBaseInstance = function () { new BaseB(8); }; // ok
@@ -108,8 +108,8 @@
 +class DerivedC extends BaseC {
 +    x;
 +    constructor(x) {
-+        this.x = x;
 +        super(x);
++        this.x = x;
      }
 -    DerivedC.prototype.createInstance = function () { new DerivedC(9); };
 -    DerivedC.prototype.createBaseInstance = function () { new BaseC(10); }; // error

@@ -162,31 +162,31 @@ class I extends Object {
 class J extends G {
     p1;
     constructor(p1) {
-        this.p1 = p1;
         super(); // NO ERROR
+        this.p1 = p1;
     }
 }
 class K extends G {
     p1;
     constructor(p1) {
-        this.p1 = p1;
         var i = 0;
         super();
+        this.p1 = p1;
     }
 }
 class L extends G {
     p1;
     constructor(p1) {
-        this.p1 = p1;
         super(); // NO ERROR
+        this.p1 = p1;
     }
 }
 class M extends G {
     p1;
     constructor(p1) {
-        this.p1 = p1;
         var i = 0;
         super();
+        this.p1 = p1;
     }
 }
 //

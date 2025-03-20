@@ -19,7 +19,7 @@ class C {
 class D extends C {
     p;
     constructor(p) {
-        this.p = p;
         super();
+        this.p = p;
     }
 }

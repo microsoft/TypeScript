@@ -57,8 +57,8 @@
 -        _this.x = 1;
 -        return _this;
 +    constructor(x) {
-+        this.x = x;
 +        super(x);
++        this.x = x;
 +        this.x = 1;
      }
 -    return C;
@@ -86,8 +86,8 @@
 +class E extends D {
 +    x;
 +    constructor(x) {
-+        this.x = x;
 +        super(x);
++        this.x = x;
 +        this.x = 1;
      }
 -    return E;

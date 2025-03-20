@@ -159,8 +159,8 @@ class Foo7 extends C {
     constructor(member) {
         "ngInject1";
         "ngInject1";
-        this.member = member;
         super();
+        this.member = member;
         console.log("hi");
     }
 }
@@ -169,8 +169,8 @@ class Foo8 extends C {
     constructor(member) {
         "ngInject1";
         "ngInject1";
-        this.member = member;
         super();
+        this.member = member;
         this.m();
         console.log("hi");
     }

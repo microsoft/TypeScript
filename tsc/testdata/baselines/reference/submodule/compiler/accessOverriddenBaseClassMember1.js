@@ -32,8 +32,8 @@ class Point {
 class ColoredPoint extends Point {
     color;
     constructor(x, y, color) {
-        this.color = color;
         super(x, y);
+        this.color = color;
     }
     toString() {
         return super.toString() + " color=" + this.color;

@@ -39,8 +39,8 @@
 -        var _this = _super.call(this, '') || this;
 -        _this.q = q;
 +    constructor(q) {
-+        this.q = q;
 +        super('');
++        this.q = q;
          //type of super call expression is void
 -        var p = _this = _super.call(this, '') || this;
 +        var p = super('');

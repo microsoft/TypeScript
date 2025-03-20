@@ -22,7 +22,7 @@ class Derived extends Base {
     a;
     b = this.a /*undefined*/;
     constructor(a) {
-        this.a = a;
         super();
+        this.a = a;
     }
 }

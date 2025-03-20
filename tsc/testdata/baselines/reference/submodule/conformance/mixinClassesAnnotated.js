@@ -80,8 +80,8 @@ class Base {
 class Derived extends Base {
     z;
     constructor(x, y, z) {
-        this.z = z;
         super(x, y);
+        this.z = z;
     }
 }
 const Printable = (superClass) => class extends superClass {

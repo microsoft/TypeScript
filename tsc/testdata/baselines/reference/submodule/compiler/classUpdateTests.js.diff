@@ -88,8 +88,8 @@
 +class J extends G {
 +    p1;
 +    constructor(p1) {
-+        this.p1 = p1;
 +        super(); // NO ERROR
++        this.p1 = p1;
      }
 -    return D;
 -}());
@@ -149,12 +149,12 @@
 +class K extends G {
 +    p1;
 +    constructor(p1) {
-+        this.p1 = p1;
          var i = 0;
 -        _this = _super.call(this) || this;
 -        _this.p1 = p1;
 -        return _this;
 +        super();
++        this.p1 = p1;
      }
 -    return K;
 -}(G));
@@ -168,8 +168,8 @@
 +class L extends G {
 +    p1;
 +    constructor(p1) {
-+        this.p1 = p1;
 +        super(); // NO ERROR
++        this.p1 = p1;
      }
 -    return L;
 -}(G));
@@ -181,12 +181,12 @@
 +class M extends G {
 +    p1;
 +    constructor(p1) {
-+        this.p1 = p1;
          var i = 0;
 -        _this = _super.call(this) || this;
 -        _this.p1 = p1;
 -        return _this;
 +        super();
++        this.p1 = p1;
      }
 -    return M;
 -}(G));

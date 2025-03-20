@@ -28,9 +28,9 @@
 +    a;
 +    b;
 +    constructor(a, b) {
++        super();
 +        this.a = a;
 +        this.b = b;
-+        super();
      }
 -    return B;
 -}());
@@ -55,8 +55,8 @@
 +class DD extends BB {
 +    a;
 +    constructor(a) {
-         this.a = a;
 +        super(a);
+         this.a = a;
      }
 -    return BB;
 -}());

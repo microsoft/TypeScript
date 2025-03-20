@@ -43,21 +43,21 @@ class Derived extends Base {
 class Derived2 extends Base {
     a;
     constructor(a) {
-        this.a = a;
         super(this); // error
+        this.a = a;
     }
 }
 class Derived3 extends Base {
     a;
     constructor(a) {
-        this.a = a;
         super(() => this); // error
+        this.a = a;
     }
 }
 class Derived4 extends Base {
     a;
     constructor(a) {
-        this.a = a;
         super(function () { return this; }); // ok
+        this.a = a;
     }
 }

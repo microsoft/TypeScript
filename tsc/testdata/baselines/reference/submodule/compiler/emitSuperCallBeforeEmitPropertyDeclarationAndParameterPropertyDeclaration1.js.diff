@@ -43,8 +43,8 @@
 -        return _this;
 +        "use strict";
 +        'someStringForEgngInject';
-+        this.x = x;
 +        super();
++        this.x = x;
      }
 -    return B;
 -}(A));

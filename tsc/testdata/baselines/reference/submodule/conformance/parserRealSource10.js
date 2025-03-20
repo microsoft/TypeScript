@@ -834,9 +834,9 @@ var TypeScript;
         value;
         hasEmptyFraction;
         constructor(value, hasEmptyFraction) {
+            super(TokenID.NumberLiteral);
             this.value = value;
             this.hasEmptyFraction = hasEmptyFraction;
-            super(TokenID.NumberLiteral);
         }
         getText() {
             return this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString();
@@ -849,8 +849,8 @@ var TypeScript;
     class StringLiteralToken extends Token {
         value;
         constructor(value) {
-            this.value = value;
             super(TokenID.StringLiteral);
+            this.value = value;
         }
         getText() {
             return this.value;
@@ -864,9 +864,9 @@ var TypeScript;
         value;
         hasEscapeSequence;
         constructor(value, hasEscapeSequence) {
+            super(TokenID.Identifier);
             this.value = value;
             this.hasEscapeSequence = hasEscapeSequence;
-            super(TokenID.Identifier);
         }
         getText() {
             return this.value;
@@ -879,8 +879,8 @@ var TypeScript;
     class WhitespaceToken extends Token {
         value;
         constructor(tokenId, value) {
-            this.value = value;
             super(tokenId);
+            this.value = value;
         }
         getText() {
             return this.value;
@@ -897,12 +897,12 @@ var TypeScript;
         line;
         endsLine;
         constructor(tokenID, value, isBlock, startPos, line, endsLine) {
+            super(tokenID);
             this.value = value;
             this.isBlock = isBlock;
             this.startPos = startPos;
             this.line = line;
             this.endsLine = endsLine;
-            super(tokenID);
         }
         getText() {
             return this.value;
@@ -915,8 +915,8 @@ var TypeScript;
     class RegularExpressionLiteralToken extends Token {
         regex;
         constructor(regex) {
-            this.regex = regex;
             super(TokenID.RegularExpressionLiteral);
+            this.regex = regex;
         }
         getText() {
             return this.regex.toString();

@@ -27,8 +27,8 @@
 +class C1 extends Base {
 +    p1;
 +    constructor(p1) {
-+        this.p1 = p1;
 +        super();
++        this.p1 = p1;
 +        this.p1;
      }
 -    return Base;
@@ -44,8 +44,8 @@
 +class C2 extends Base {
 +    p1;
 +    constructor(p1) {
-+        this.p1 = p1;
 +        super();
++        this.p1 = p1;
 +        this.p1;
      }
 -    return C1;
@@ -61,8 +61,8 @@
 +class C3 extends Base {
 +    p1;
 +    constructor(p1) {
-+        this.p1 = p1;
 +        super();
++        this.p1 = p1;
 +        this.p1;
      }
 -    return C2;
@@ -79,8 +79,8 @@
 +class C4 extends Base {
 +    p2;
 +    constructor(p2) {
-+        this.p2 = p2;
 +        super();
++        this.p2 = p2;
      }
 -    C3.prototype.m = function (p1) { };
 -    return C3;

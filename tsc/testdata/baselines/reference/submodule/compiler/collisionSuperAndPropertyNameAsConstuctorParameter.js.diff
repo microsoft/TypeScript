@@ -37,8 +37,8 @@
 +class b2 extends a {
 +    _super;
 +    constructor(_super) {
-+        this._super = _super;
 +        super();
++        this._super = _super;
      }
 -    return b1;
 -}(a));
@@ -63,8 +63,8 @@
 +class b4 extends a {
 +    _super;
 +    constructor(_super) {
-+        this._super = _super;
 +        super();
++        this._super = _super;
      }
 -    return b3;
 -}(a));

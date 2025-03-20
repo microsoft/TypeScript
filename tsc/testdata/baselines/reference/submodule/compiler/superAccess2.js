@@ -37,8 +37,8 @@ class Q extends P {
     static yy = super.; // error for static initializer accessing super
     // Super is not allowed in constructor args
     constructor(z = super., zz = super., zzz = () => super.) {
-        this.z = z;
         super();
+        this.z = z;
     }
     foo(zz = super.) {
         super.x();

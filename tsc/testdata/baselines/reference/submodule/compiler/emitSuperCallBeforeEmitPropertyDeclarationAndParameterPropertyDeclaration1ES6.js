@@ -27,7 +27,7 @@ class B extends A {
         'someStringForEgngInject';
         "use strict";
         'someStringForEgngInject';
-        this.x = x;
         super();
+        this.x = x;
     }
 }

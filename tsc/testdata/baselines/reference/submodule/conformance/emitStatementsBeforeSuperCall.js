@@ -30,9 +30,9 @@ class Sub extends Base {
     p;
     // @ts-ignore
     constructor(p) {
-        this.p = p;
         console.log('hi'); // should emit before super
         super();
+        this.p = p;
     }
     field = 0;
 }
@@ -41,9 +41,9 @@ class Test extends Base {
     prop;
     // @ts-ignore
     constructor(p) {
-        this.p = p;
         1; // should emit before super
         super();
+        this.p = p;
         this.prop = 1;
     }
 }

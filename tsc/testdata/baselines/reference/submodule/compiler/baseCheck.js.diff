@@ -71,8 +71,8 @@
 +class D extends C {
 +    z;
 +    constructor(z) {
-+        this.z = z;
 +        super(this.z);
++        this.z = z;
      }
 -    return E;
 -}(C));
@@ -86,8 +86,8 @@
 +class E extends C {
 +    z;
 +    constructor(z) {
-+        this.z = z;
 +        super(0, this.z);
++        this.z = z;
      }
 -    return F;
 -}(C)); // first param type
@@ -95,8 +95,8 @@
 +class F extends C {
 +    z;
 +    constructor(z) {
-+        this.z = z;
 +        super("hello", this.z);
++        this.z = z;
 +    }
 +} // first param type
  function f() {

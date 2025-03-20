@@ -110,16 +110,16 @@ class Derived extends Base {
 class Derived2 extends Base {
     y;
     constructor(y) {
-        this.y = y;
         var a = 1;
         super();
+        this.y = y;
     }
 }
 class Derived3 extends Base {
     y;
     constructor(y) {
-        this.y = y;
         super();
+        this.y = y;
         var a = 1;
     }
 }

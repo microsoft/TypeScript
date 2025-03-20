@@ -41,8 +41,8 @@ class Point {
 class Point3D extends Point {
     z;
     constructor(x, y, z, m) {
-        this.z = z;
         super(x, y);
+        this.z = z;
     }
     getDist() {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.m);

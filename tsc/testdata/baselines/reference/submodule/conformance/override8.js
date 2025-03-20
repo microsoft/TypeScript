@@ -40,9 +40,9 @@ class D extends B {
     a;
     b;
     constructor(a, b) {
+        super();
         this.a = a;
         this.b = b;
-        super();
     }
 }
 class BB {
@@ -54,8 +54,8 @@ class BB {
 class DD extends BB {
     a;
     constructor(a) {
-        this.a = a;
         super(a);
+        this.a = a;
     }
 }
 class DDD extends BB {

@@ -79,48 +79,48 @@ class Food {
 class MonsterFood extends Food {
     flavor;
     constructor(name, flavor) {
-        this.flavor = flavor;
         super(name);
+        this.flavor = flavor;
     }
 }
 class IceCream extends MonsterFood {
     flavor;
     isDairyFree;
     constructor(flavor) {
-        this.flavor = flavor;
         super("Ice Cream", flavor);
+        this.flavor = flavor;
     }
 }
 class Cookie extends MonsterFood {
     flavor;
     isGlutenFree;
     constructor(flavor, isGlutenFree) {
+        super("Cookie", flavor);
         this.flavor = flavor;
         this.isGlutenFree = isGlutenFree;
-        super("Cookie", flavor);
     }
 }
 class PetFood extends Food {
     whereToBuy;
     constructor(name, whereToBuy) {
-        this.whereToBuy = whereToBuy;
         super(name);
+        this.whereToBuy = whereToBuy;
     }
 }
 class ExpensiveOrganicDogFood extends PetFood {
     whereToBuy;
     constructor(whereToBuy) {
-        this.whereToBuy = whereToBuy;
         super("Origen", whereToBuy);
+        this.whereToBuy = whereToBuy;
     }
 }
 class ExpensiveOrganicCatFood extends PetFood {
     whereToBuy;
     containsFish;
     constructor(whereToBuy, containsFish) {
+        super("Nature's Logic", whereToBuy);
         this.whereToBuy = whereToBuy;
         this.containsFish = containsFish;
-        super("Nature's Logic", whereToBuy);
     }
 }
 class Slug {

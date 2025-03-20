@@ -61,17 +61,17 @@ class C3 extends A {
 class C4 extends A {
     y;
     constructor(y) {
-        this.y = y;
         using x = null;
         super();
+        this.y = y;
     }
 }
 class C5 extends A {
     y;
     z = 1;
     constructor(y) {
-        this.y = y;
         using x = null;
         super();
+        this.y = y;
     }
 }

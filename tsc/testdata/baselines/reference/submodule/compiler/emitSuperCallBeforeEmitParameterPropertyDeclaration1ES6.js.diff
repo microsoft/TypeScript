@@ -14,10 +14,8 @@
      constructor(x) {
          "use strict";
          'someStringForEgngInject';
--        super();
 +        "use strict";
 +        'someStringForEgngInject';
+         super();
          this.x = x;
-+        super();
      }
- }

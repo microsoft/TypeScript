@@ -80,6 +80,8 @@ func (tx *RuntimeSyntaxTransformer) popScope(savedCurrentScope *ast.Node, savedC
 func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 	savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName := tx.pushScope(node)
 	grandparentNode := tx.pushNode(node)
+	defer tx.popNode(grandparentNode)
+	defer tx.popScope(savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName)
 
 	switch node.Kind {
 	// TypeScript parameter property modifiers are elided
@@ -88,7 +90,7 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindProtectedKeyword,
 		ast.KindReadonlyKeyword,
 		ast.KindOverrideKeyword:
-		return nil
+		node = nil
 	case ast.KindEnumDeclaration:
 		node = tx.visitEnumDeclaration(node.AsEnumDeclaration())
 	case ast.KindModuleDeclaration:
@@ -112,9 +114,6 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 	default:
 		node = tx.visitor.VisitEachChild(node)
 	}
-
-	tx.popNode(grandparentNode)
-	tx.popScope(savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName)
 	return node
 }
 
@@ -830,7 +829,6 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constr
 		return tx.emitContext.VisitFunctionBody(body.AsNode(), tx.visitor)
 	}
 
-	grandparentOfConstructor := tx.pushNode(constructor)
 	grandparentOfBody := tx.pushNode(body.AsNode())
 	savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName := tx.pushScope(body.AsNode())
 
@@ -896,7 +894,6 @@ func (tx *RuntimeSyntaxTransformer) visitConstructorBody(body *ast.Block, constr
 
 	tx.popScope(savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName)
 	tx.popNode(grandparentOfBody)
-	tx.popNode(grandparentOfConstructor)
 	updated := tx.factory.NewBlock(statementList /*multiline*/, true)
 	tx.emitContext.SetOriginal(updated, body.AsNode())
 	updated.Loc = body.Loc

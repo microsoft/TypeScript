@@ -59,8 +59,8 @@ var Test;
     class File extends FileSystemObject {
         content;
         constructor(path, content) {
-            this.content = content;
             super(path);
+            this.content = content;
         }
     }
     Test.File = File;

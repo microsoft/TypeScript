@@ -106,9 +106,9 @@ class Foo extends Bar {
     boo(x) { return x; }
     static statVal = 0;
     constructor(x, y, z = 0) {
+        super(x);
         this.y = y;
         this.z = z;
-        super(x);
         this.x = x;
         this.gar = 5;
     }

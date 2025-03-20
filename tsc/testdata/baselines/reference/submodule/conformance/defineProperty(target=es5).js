@@ -48,8 +48,8 @@ class C extends B {
     ka;
     z = this.ka;
     constructor(ka) {
-        this.ka = ka;
         super();
+        this.ka = ka;
     }
     ki = this.ka;
 }

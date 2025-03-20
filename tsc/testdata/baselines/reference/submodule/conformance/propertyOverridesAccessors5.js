@@ -18,7 +18,7 @@ class A {
 class B extends A {
     p;
     constructor(p) {
-        this.p = p;
         super();
+        this.p = p;
     }
 }

@@ -73,8 +73,8 @@ class BaseC {
 class DerivedA extends BaseA {
     x;
     constructor(x) {
-        this.x = x;
         super(x);
+        this.x = x;
     }
     createInstance() { new DerivedA(5); }
     createBaseInstance() { new BaseA(6); }
@@ -83,8 +83,8 @@ class DerivedA extends BaseA {
 class DerivedB extends BaseB {
     x;
     constructor(x) {
-        this.x = x;
         super(x);
+        this.x = x;
     }
     createInstance() { new DerivedB(7); }
     createBaseInstance() { new BaseB(8); } // ok
@@ -93,8 +93,8 @@ class DerivedB extends BaseB {
 class DerivedC extends BaseC {
     x;
     constructor(x) {
-        this.x = x;
         super(x);
+        this.x = x;
     }
     createInstance() { new DerivedC(9); }
     createBaseInstance() { new BaseC(10); } // error
