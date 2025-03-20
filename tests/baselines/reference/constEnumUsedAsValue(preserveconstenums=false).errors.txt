@@ -1,0 +1,19 @@
+constEnumUsedAsValue.ts(9,1): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+constEnumUsedAsValue.ts(10,3): error TS2476: A const enum member can only be accessed using a string literal.
+
+
+==== constEnumUsedAsValue.ts (2 errors) ====
+    const enum E {
+        A,
+        B,
+        C,
+    }
+    
+    declare const x: E;
+    
+    E;
+    ~
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+    E[x];
+      ~
+!!! error TS2476: A const enum member can only be accessed using a string literal.
