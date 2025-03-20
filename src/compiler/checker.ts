@@ -5908,7 +5908,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return addVisibleAlias(declaration, declaration.parent.parent.parent.parent);
                     }
                     else if (symbol.flags & SymbolFlags.BlockScopedVariable) {
-                        const variableStatement = findAncestor(declaration, isVariableStatement)!;
+                        const rootDeclaration = walkUpBindingElementsAndPatterns(declaration);
+                        if (rootDeclaration.kind === SyntaxKind.Parameter) {
+                            return false;
+                        }
+                        const variableStatement = rootDeclaration.parent.parent;
+                        if (variableStatement.kind !== SyntaxKind.VariableStatement) {
+                            return false;
+                        }
                         if (hasSyntacticModifier(variableStatement, ModifierFlags.Export)) {
                             return true;
                         }
