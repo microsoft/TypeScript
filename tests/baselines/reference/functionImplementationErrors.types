@@ -219,7 +219,7 @@ var f10 = () => {
 
 };
 function f11() {
->f11 : () => Base | AnotherClass
+>f11 : () => AnotherClass | Base
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();
@@ -235,9 +235,9 @@ function f11() {
 >             : ^^^^^^^^^^^^^^^^^^^
 }
 var f12 = function () {
->f12 : () => Base | AnotherClass
+>f12 : () => AnotherClass | Base
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
->function () {    return new Base();    return new AnotherClass();} : () => Base | AnotherClass
+>function () {    return new Base();    return new AnotherClass();} : () => AnotherClass | Base
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();
@@ -254,9 +254,9 @@ var f12 = function () {
 
 };
 var f13 = () => {
->f13 : () => Base | AnotherClass
+>f13 : () => AnotherClass | Base
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
->() => {    return new Base();    return new AnotherClass();} : () => Base | AnotherClass
+>() => {    return new Base();    return new AnotherClass();} : () => AnotherClass | Base
 >                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();

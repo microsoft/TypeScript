@@ -53,7 +53,7 @@ switch (tmp.get('t')) {
 // from https://github.com/microsoft/TypeScript/issues/36390
 
 const arr: number[] | string[] = [];  // Works with Array<number | string>
->arr : number[] | string[]
+>arr : string[] | number[]
 >    : ^^^^^^^^^^^^^^^^^^^
 >[] : never[]
 >   : ^^^^^^^
@@ -73,11 +73,11 @@ const arr2:  string[] = [];
 arr.map((a: number | string, index: number) => { 
 >arr.map((a: number | string, index: number) => {     return index}) : number[]
 >                                                                    : ^^^^^^^^
->arr.map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>arr.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[])
 >        : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->arr : number[] | string[]
+>arr : string[] | number[]
 >    : ^^^^^^^^^^^^^^^^^^^
->map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[])
 >    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >(a: number | string, index: number) => {     return index} : (a: number | string, index: number) => number
 >                                                           : ^ ^^               ^^     ^^      ^^^^^^^^^^^
@@ -96,11 +96,11 @@ arr.map((a: number | string, index: number) => {
 arr.reduce((acc: Array<string>, a: number | string, index: number) => { 
 >arr.reduce((acc: Array<string>, a: number | string, index: number) => {     return []}, []) : never[]
 >                                                                                            : ^^^^^^^
->arr.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>arr.reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >           : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
->arr : number[] | string[]
+>arr : string[] | number[]
 >    : ^^^^^^^^^^^^^^^^^^^
->reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >       : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(acc: Array<string>, a: number | string, index: number) => {     return []} : (acc: Array<string>, a: number | string, index: number) => never[]
 >                                                                            : ^   ^^             ^^ ^^               ^^     ^^      ^^^^^^^^^^^^
@@ -122,11 +122,11 @@ arr.reduce((acc: Array<string>, a: number | string, index: number) => {
 arr.forEach((a: number | string, index: number) => { 
 >arr.forEach((a: number | string, index: number) => {     return index}) : void
 >                                                                        : ^^^^
->arr.forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>arr.forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
 >            : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
->arr : number[] | string[]
+>arr : string[] | number[]
 >    : ^^^^^^^^^^^^^^^^^^^
->forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
 >        : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
 >(a: number | string, index: number) => {     return index} : (a: number | string, index: number) => number
 >                                                           : ^ ^^               ^^     ^^      ^^^^^^^^^^^
@@ -322,7 +322,7 @@ declare var a: Bar | Baz;
 a.doThing().then((result: Bar | Baz) => {
 >a.doThing().then((result: Bar | Baz) => {	// whatever}) : Promise<void>
 >                                                        : ^^^^^^^^^^^^^
->a.doThing().then : (<TResult1 = Baz, TResult2 = never>(onfulfilled?: ((value: Baz) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>) | (<TResult1 = Bar, TResult2 = never>(onfulfilled?: ((value: Bar) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>)
+>a.doThing().then : (<TResult1 = Bar, TResult2 = never>(onfulfilled?: ((value: Bar) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>) | (<TResult1 = Baz, TResult2 = never>(onfulfilled?: ((value: Baz) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>)
 >                 : ^^        ^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.doThing() : Promise<Bar> | Promise<Baz>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -332,7 +332,7 @@ a.doThing().then((result: Bar | Baz) => {
 >  : ^^^^^^^^^
 >doThing : (() => Promise<Bar>) | (() => Promise<Baz>)
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->then : (<TResult1 = Baz, TResult2 = never>(onfulfilled?: ((value: Baz) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>) | (<TResult1 = Bar, TResult2 = never>(onfulfilled?: ((value: Bar) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>)
+>then : (<TResult1 = Bar, TResult2 = never>(onfulfilled?: ((value: Bar) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>) | (<TResult1 = Baz, TResult2 = never>(onfulfilled?: ((value: Baz) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>)
 >     : ^^        ^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(result: Bar | Baz) => {	// whatever} : (result: Bar | Baz) => void
 >                                      : ^      ^^         ^^^^^^^^^

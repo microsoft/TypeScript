@@ -100,7 +100,7 @@ function f4<T extends { x: string } | undefined>(obj: T) {
     if (typeof obj?.x === "string") {
 >typeof obj?.x === "string" : boolean
 >                           : ^^^^^^^
->typeof obj?.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj?.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj?.x : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^

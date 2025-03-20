@@ -30,7 +30,7 @@ interface Fake {
 function test(r: Real | Fake) {
 >test : (r: Real | Fake) => void
 >     : ^ ^^           ^^^^^^^^^
->r : Real | Fake
+>r : Fake | Real
 >  : ^^^^^^^^^^^
 
     r.method(12); // error
@@ -38,7 +38,7 @@ function test(r: Real | Fake) {
 >             : ^^^^
 >r.method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
 >         : ^^    ^^^^^^^^ ^^      ^^^^^    ^^^^^^    ^^^^^^^^ ^^      ^^^^^    ^
->r : Real | Fake
+>r : Fake | Real
 >  : ^^^^^^^^^^^
 >method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
 >       : ^^    ^^^^^^^^ ^^      ^^^^^    ^^^^^^    ^^^^^^^^ ^^      ^^^^^    ^

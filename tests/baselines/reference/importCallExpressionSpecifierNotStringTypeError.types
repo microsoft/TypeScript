@@ -33,7 +33,7 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >   : ^^^^^^^^^^^^
 >import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
 >                                                   : ^^^^^^^^^^^^
->whatToLoad ? getSpecifier() : "defaulPath" : boolean | "defaulPath"
+>whatToLoad ? getSpecifier() : "defaulPath" : "defaulPath" | boolean
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^
 >whatToLoad : boolean
 >           : ^^^^^^^

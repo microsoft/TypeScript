@@ -97,7 +97,7 @@ export function evaluate(expression: Expression): boolean {
     return expression === 'true';
 >expression === 'true' : boolean
 >                      : ^^^^^^^
->expression : "true" | "false"
+>expression : "false" | "true"
 >           : ^^^^^^^^^^^^^^^^
 >'true' : "true"
 >       : ^^^^^^

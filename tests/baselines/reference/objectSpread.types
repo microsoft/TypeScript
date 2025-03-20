@@ -1141,10 +1141,10 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 >  : ^^^^^^^^^      ^^^
 
     let x14 = { ...w, ...obj };
->x14 : (T & { x: number; }) | { x: number; s: string; }
->    : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
->{ ...w, ...obj } : (T & { x: number; }) | { x: number; s: string; }
->                 : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
+>x14 : { x: number; s: string; } | (T & { x: number; })
+>    : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^      ^^^^
+>{ ...w, ...obj } : { x: number; s: string; } | (T & { x: number; })
+>                 : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^      ^^^^
 >w : T | { s: string; }
 >  : ^^^^^^^^^      ^^^
 >obj : { x: number; }

@@ -62,7 +62,7 @@ interface Collection<K, V> {
 >       : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
->reduction : V | R
+>reduction : R | V
 >          : ^^^^^
 >value : V
 >      : ^
@@ -152,7 +152,7 @@ declare module Immutable {
 >        : ^   ^^               ^^        ^^                                                       ^^    ^^^                      ^^^^^   
 >key : string | number
 >    : ^^^^^^^^^^^^^^^
->sequence : Collection.Keyed<string, any> | Collection.Indexed<any>
+>sequence : Collection.Indexed<any> | Collection.Keyed<string, any>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -356,7 +356,7 @@ declare module Immutable {
     merge(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 >merge : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
 >      : ^^^^           ^^                                       ^^^^^    
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -372,7 +372,7 @@ declare module Immutable {
 >       : ^
 >key : number
 >    : ^^^^^^
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -380,7 +380,7 @@ declare module Immutable {
     mergeDeep(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 >mergeDeep : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
 >          : ^^^^           ^^                                       ^^^^^    
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -396,7 +396,7 @@ declare module Immutable {
 >       : ^
 >key : number
 >    : ^^^^^^
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -1108,25 +1108,25 @@ declare module Immutable {
     union(...collections: Array<Collection<any, T> | Array<T>>): this;
 >union : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >      : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     merge(...collections: Array<Collection<any, T> | Array<T>>): this;
 >merge : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >      : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     intersect(...collections: Array<Collection<any, T> | Array<T>>): this;
 >intersect : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >          : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     subtract(...collections: Array<Collection<any, T> | Array<T>>): this;
 >subtract : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >         : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Transient changes
@@ -1559,11 +1559,11 @@ declare module Immutable {
 
     export interface Class<T extends Object> {
       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Partial<T> | Iterable<[string, any]>
+>values : Iterable<[string, any]> | Partial<T>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Partial<T> | Iterable<[string, any]>
+>values : Iterable<[string, any]> | Partial<T>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export interface Instance<T extends Object> {
@@ -3359,7 +3359,7 @@ declare module Immutable {
 >       : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
->reduction : V | R
+>reduction : R | V
 >          : ^^^^^
 >value : V
 >      : ^
@@ -3391,7 +3391,7 @@ declare module Immutable {
 >            : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
->reduction : V | R
+>reduction : R | V
 >          : ^^^^^
 >value : V
 >      : ^

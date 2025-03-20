@@ -240,11 +240,11 @@ export async function adaptSession(input: GatewayPayload) {
     if (input.t === 'MESSAGE_CREATE') {
 >input.t === 'MESSAGE_CREATE' : boolean
 >                             : ^^^^^^^
->input.t : "MESSAGE_CREATE" | "MESSAGE_UPDATE" | "MESSAGE_DELETE"
+>input.t : "MESSAGE_CREATE" | "MESSAGE_DELETE" | "MESSAGE_UPDATE"
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : GatewayPayload
 >      : ^^^^^^^^^^^^^^
->t : "MESSAGE_CREATE" | "MESSAGE_UPDATE" | "MESSAGE_DELETE"
+>t : "MESSAGE_CREATE" | "MESSAGE_DELETE" | "MESSAGE_UPDATE"
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'MESSAGE_CREATE' : "MESSAGE_CREATE"
 >                 : ^^^^^^^^^^^^^^^^

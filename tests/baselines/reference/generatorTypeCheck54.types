@@ -14,7 +14,7 @@ class Baz { z: number }
 >  : ^^^^^^
 
 function* g() {
->g : () => Generator<Foo | Baz, void, unknown>
+>g : () => Generator<Baz | Foo, void, unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [new Foo];

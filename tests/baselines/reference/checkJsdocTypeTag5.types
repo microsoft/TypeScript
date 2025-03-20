@@ -70,7 +70,7 @@ var k = function (x) { return x }
 function blargle(s) {
 >blargle : (x: "hi" | "bye") => 0 | 1 | 2
 >        : ^ ^^            ^^^^^         
->s : "hi" | "bye"
+>s : "bye" | "hi"
 >  : ^^^^^^^^^^^^
 
     return 0;
@@ -103,7 +103,7 @@ function monaLisa(sb) {
 >                               : ^^^^^
 >typeof sb === 'string' : boolean
 >                       : ^^^^^^^
->typeof sb : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof sb : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sb : any
 >   : ^^^

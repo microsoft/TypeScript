@@ -2,7 +2,7 @@
 
 === inferredFunctionReturnTypeIsEmptyType.ts ===
 function foo() {
->foo : () => 42 | "42"
+>foo : () => "42" | 42
 >    : ^^^^^^^^^^^^^^^
 
     if (true) {

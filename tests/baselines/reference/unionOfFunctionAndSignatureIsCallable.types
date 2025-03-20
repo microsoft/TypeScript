@@ -39,18 +39,18 @@ function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
 function f2(fetcherParams: object | (() => object)) {
 >f2 : (fetcherParams: object | (() => object)) => void
 >   : ^             ^^                       ^^^^^^^^^
->fetcherParams : object | (() => object)
->              : ^^^^^^^^^^^^^^^^      ^
+>fetcherParams : (() => object) | object
+>              : ^^^^^^^      ^^^^^^^^^^
 
     const data = typeof fetcherParams === 'function'
 >data : error
 >typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : error
 >typeof fetcherParams === 'function' : boolean
 >                                    : ^^^^^^^
->typeof fetcherParams : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fetcherParams : object | (() => object)
->              : ^^^^^^^^^^^^^^^^      ^
+>fetcherParams : (() => object) | object
+>              : ^^^^^^^      ^^^^^^^^^^
 >'function' : "function"
 >           : ^^^^^^^^^^
 

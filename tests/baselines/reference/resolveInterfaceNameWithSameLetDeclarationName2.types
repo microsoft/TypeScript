@@ -4,10 +4,10 @@
 interface foo { }
 interface bar { }
 let bar: bar | foo;
->bar : foo | bar
+>bar : bar | foo
 >    : ^^^^^^^^^
 
 let foo: bar | foo;
->foo : foo | bar
+>foo : bar | foo
 >    : ^^^^^^^^^
 

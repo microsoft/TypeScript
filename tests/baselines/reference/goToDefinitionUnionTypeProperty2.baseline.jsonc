@@ -1,12 +1,12 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionUnionTypeProperty2.ts ===
 // interface HasAOrB {
-//     <|[|{| defId: 1 |}a|]: string;|>
+//     <|[|{| defId: 0 |}a|]: string;|>
 //     b: string;
 // }
 // 
 // interface One {
-//     common: { <|[|{| defId: 0 |}a|] : number;|> };
+//     common: { <|[|{| defId: 1 |}a|] : number;|> };
 // }
 // 
 // interface Two {

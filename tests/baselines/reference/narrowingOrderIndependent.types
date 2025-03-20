@@ -61,7 +61,7 @@ if (a instanceof A && a.stringOrUndefined) {
 }
 
 if (a.stringOrUndefined && a instanceof A) {
->a.stringOrUndefined && a instanceof A : boolean | "" | undefined
+>a.stringOrUndefined && a instanceof A : "" | boolean | undefined
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a.stringOrUndefined : string | undefined
 >                    : ^^^^^^^^^^^^^^^^^^

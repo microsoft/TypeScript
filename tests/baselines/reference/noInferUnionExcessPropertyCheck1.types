@@ -12,8 +12,8 @@ declare function test1<T extends { x: string }>(
 >  : ^
 
   b: NoInfer<T> | (() => NoInfer<T>),
->b : NoInfer<T> | (() => NoInfer<T>)
->  : ^^^^^^^^^^^^^^^^^^^^          ^
+>b : (() => NoInfer<T>) | NoInfer<T>
+>  : ^^^^^^^          ^^^^^^^^^^^^^^
 
 ): void;
 

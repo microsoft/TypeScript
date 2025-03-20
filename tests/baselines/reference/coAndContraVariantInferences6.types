@@ -54,7 +54,7 @@ declare function createElementIsolated<P extends {}>(
 >                      : ^ ^^^^^^^^^  ^^    ^^                                                 ^^     ^^^        ^^^^^    
 
   type: FunctionComponent<P> | ComponentClass<P> | string,
->type : string | FunctionComponent<P> | ComponentClass<P>
+>type : string | ComponentClass<P> | FunctionComponent<P>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   props?: P | null,

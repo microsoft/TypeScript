@@ -243,7 +243,7 @@ fn3(10, ...(tuple2 satisfies number[]));
 >    : ^^^^    ^^         ^^^^^    
 >10 : 10
 >   : ^^
->...(tuple2 satisfies number[]) : 10 | "20"
+>...(tuple2 satisfies number[]) : "20" | 10
 >                               : ^^^^^^^^^
 >(tuple2 satisfies number[]) : readonly [10, "20"]
 >                            : ^^^^^^^^^^^^^^^^^^^
@@ -297,7 +297,7 @@ fn4(10, ...(tuple3 satisfies readonly string[]));
 >    : ^^^^    ^^        ^^^^^    
 >10 : 10
 >   : ^^
->...(tuple3 satisfies readonly string[]) : "20" | "10"
+>...(tuple3 satisfies readonly string[]) : "10" | "20"
 >                                        : ^^^^^^^^^^^
 >(tuple3 satisfies readonly string[]) : readonly ["10", "20"]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^

@@ -144,9 +144,9 @@ function area(s: Shape): number {
 >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
 
     switch (s.kind) {
->s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+>s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
 >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
 
         case "square": area = s.size * s.size; break;
 >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
@@ -206,9 +206,9 @@ function areaWrapped(s: Shape): number {
 >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 76, 7))
 
         switch (s.kind) {
->s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+>s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
 >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
 
             case "square": return s.size * s.size;
 >s.size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
@@ -431,17 +431,17 @@ function withDefault(s1: Shape2, s2: Shape2): string {
 >Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
 
     switch (s1.kind) {
->s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 >s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 155, 21))
->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 
         case "square":
             return "1";
         case "circle":
             switch (s2.kind) {
->s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 >s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 155, 32))
->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 
                 case "square":
                     return "2";
@@ -461,17 +461,17 @@ function withoutDefault(s1: Shape2, s2: Shape2): string {
 >Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
 
     switch (s1.kind) {
->s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 >s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 171, 24))
->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 
         case "square":
             return "1";
         case "circle":
             switch (s2.kind) {
->s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 >s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 171, 35))
->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
 
                 case "square":
                     return "2";

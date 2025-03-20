@@ -2,7 +2,7 @@
 
 === one.ts ===
 declare const y: never[] | string[];
->y : never[] | string[]
+>y : string[] | never[]
 >  : ^^^^^^^^^^^^^^^^^^
 
 export const yThen = y.map(item => item.length);
@@ -10,12 +10,12 @@ export const yThen = y.map(item => item.length);
 >      : ^^^^^^^^
 >y.map(item => item.length) : number[]
 >                           : ^^^^^^^^
->y.map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
->      : ^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->y : never[] | string[]
+>y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>y : string[] | never[]
 >  : ^^^^^^^^^^^^^^^^^^
->map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
->    : ^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >item => item.length : (item: string) => number
 >                    : ^    ^^^^^^^^^^^^^^^^^^^
 >item : string

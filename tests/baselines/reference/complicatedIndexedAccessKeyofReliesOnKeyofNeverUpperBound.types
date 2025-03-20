@@ -34,7 +34,7 @@ type Channel = TextChannel | EmailChannel;
 >        : ^^^^^^^
 
 export type ChannelType = Channel extends { type: infer R } ? R : never;
->ChannelType : "text" | "email"
+>ChannelType : "email" | "text"
 >            : ^^^^^^^^^^^^^^^^
 >type : R
 >     : ^

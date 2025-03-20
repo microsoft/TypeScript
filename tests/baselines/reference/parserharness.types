@@ -181,7 +181,7 @@ var typescriptServiceFile = IO.readFile(typescriptServiceFileName);
 if (typeof ActiveXObject === "function") {
 >typeof ActiveXObject === "function" : boolean
 >                                    : ^^^^^^^
->typeof ActiveXObject : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ActiveXObject : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ActiveXObject : any
 >              : ^^^
@@ -199,7 +199,7 @@ if (typeof ActiveXObject === "function") {
 } else if (typeof require === "function") {
 >typeof require === "function" : boolean
 >                              : ^^^^^^^
->typeof require : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof require : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >        : ^^^
@@ -1624,7 +1624,7 @@ module Harness {
             if (typeof loggers[i][field] === 'function') {
 >typeof loggers[i][field] === 'function' : boolean
 >                                        : ^^^^^^^
->typeof loggers[i][field] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof loggers[i][field] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >loggers[i][field] : any
 >                  : ^^^
@@ -2992,7 +2992,7 @@ module Harness {
 >                                                                                                : ^^^^^^^
 >typeof WScript !== "undefined" : boolean
 >                               : ^^^^^^^
->typeof WScript : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof WScript : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >WScript : typeof WScript
 >        : ^^^^^^^^^^^^^^
@@ -3000,7 +3000,7 @@ module Harness {
 >            : ^^^^^^^^^^^
 >typeof global['WScript'].InitializeProjection !== "undefined" : boolean
 >                                                              : ^^^^^^^
->typeof global['WScript'].InitializeProjection : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof global['WScript'].InitializeProjection : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >global['WScript'].InitializeProjection : any
 >                                       : ^^^
@@ -4405,7 +4405,7 @@ module Harness {
 >  : ^^^^^^
 >typeof this.fileCollection[s] !== 'undefined' : boolean
 >                                              : ^^^^^^^
->typeof this.fileCollection[s] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.fileCollection[s] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.fileCollection[s] : any
 >                       : ^^^
@@ -6044,7 +6044,7 @@ module Harness {
                 if (typeof target === "string") {
 >typeof target === "string" : boolean
 >                           : ^^^^^^^
->typeof target : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof target : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >target : any
 >       : ^^^
@@ -6062,7 +6062,7 @@ module Harness {
                 else if (typeof target === "number") {
 >typeof target === "number" : boolean
 >                           : ^^^^^^^
->typeof target : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof target : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >target : any
 >       : ^^^
@@ -6087,9 +6087,9 @@ module Harness {
 >                                                   : ^^^^^^
 >"Expected string or number not " : "Expected string or number not "
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(typeof target) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof target) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->typeof target : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof target : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >target : any
 >       : ^^^
@@ -9284,9 +9284,9 @@ module Harness {
 >        : ^^^^^^^^^^^^^^^^^^
 >unitName : string
 >         : ^^^^^^
->((isDeclareFile) ? '0.d.ts' : '0.ts') : "0.ts" | "0.d.ts"
+>((isDeclareFile) ? '0.d.ts' : '0.ts') : "0.d.ts" | "0.ts"
 >                                      : ^^^^^^^^^^^^^^^^^
->(isDeclareFile) ? '0.d.ts' : '0.ts' : "0.ts" | "0.d.ts"
+>(isDeclareFile) ? '0.d.ts' : '0.ts' : "0.d.ts" | "0.ts"
 >                                    : ^^^^^^^^^^^^^^^^^
 >(isDeclareFile) : boolean
 >                : ^^^^^^^
@@ -12710,7 +12710,7 @@ module Harness {
         if (typeof process !== "undefined") {
 >typeof process !== "undefined" : boolean
 >                               : ^^^^^^^
->typeof process : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof process : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >process : typeof process
 >        : ^^^^^^^^^^^^^^

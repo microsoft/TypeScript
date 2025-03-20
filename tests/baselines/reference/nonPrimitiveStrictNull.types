@@ -86,7 +86,7 @@ a = e; // ok
 if (typeof b !== 'object') {
 >typeof b !== 'object' : boolean
 >                      : ^^^^^^^
->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : object | null
 >  : ^^^^^^^^^^^^^
@@ -107,7 +107,7 @@ if (typeof b !== 'object') {
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
 >                      : ^^^^^^^
->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : object | null
 >  : ^^^^^^^^^^^^^
@@ -126,7 +126,7 @@ if (typeof b === 'object') {
 if (typeof d === 'object') {
 >typeof d === 'object' : boolean
 >                      : ^^^^^^^
->typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof d : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : object | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -222,7 +222,7 @@ if (d === null) {
 if (typeof d === 'undefined') {
 >typeof d === 'undefined' : boolean
 >                         : ^^^^^^^
->typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof d : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : object | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^

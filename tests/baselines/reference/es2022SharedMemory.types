@@ -58,9 +58,9 @@ const int64 = new BigInt64Array(sab64);
 >      : ^^^^^^^^^^^^^^^^^
 
 const waitValue = Atomics.wait(int32, 0, 0);
->waitValue : "ok" | "not-equal" | "timed-out"
+>waitValue : "not-equal" | "ok" | "timed-out"
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Atomics.wait(int32, 0, 0) : "ok" | "not-equal" | "timed-out"
+>Atomics.wait(int32, 0, 0) : "not-equal" | "ok" | "timed-out"
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Atomics.wait : { (typedArray: Int32Array<ArrayBufferLike>, index: number, value: number, timeout?: number): "ok" | "not-equal" | "timed-out"; (typedArray: BigInt64Array<ArrayBufferLike>, index: number, value: bigint, timeout?: number): "ok" | "not-equal" | "timed-out"; }
 >             : ^^^          ^^                           ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^          ^^                              ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^

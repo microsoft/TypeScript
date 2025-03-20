@@ -6,7 +6,7 @@ var x = `abc${ typeof "hi" }def`;
 >  : ^^^^^^
 >`abc${ typeof "hi" }def` : string
 >                         : ^^^^^^
->typeof "hi" : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof "hi" : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hi" : "hi"
 >     : ^^^^

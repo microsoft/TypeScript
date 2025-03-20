@@ -98,7 +98,7 @@ namespace Directive {
 >                                                      : ^^^^^^^
 >typeof value === "number" : boolean
 >                          : ^^^^^^^
->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T | Directive
 >      : ^^^^^^^^^^^^^
@@ -341,7 +341,7 @@ function* showStep<
 
   });
   const selection: StepSelection<typeof step> = yield step;
->selection : Directive | QuickPickItem[]
+>selection : QuickPickItem[] | Directive
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >step : QuickPickStep<QuickPickItem>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -350,7 +350,7 @@ function* showStep<
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   return canPickStepContinue(step, state, selection)
->canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : QuickPickItem | unique symbol
+>canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : unique symbol | QuickPickItem
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >canPickStepContinue(step, state, selection) : boolean
 >                                            : ^^^^^^^
@@ -360,7 +360,7 @@ function* showStep<
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
 >      : ^^^^^
->selection : Directive | QuickPickItem[]
+>selection : QuickPickItem[] | Directive
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ? selection[0]

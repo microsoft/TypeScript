@@ -12,7 +12,7 @@ function f1(obj: Record<string, unknown>, key: string) {
     if (typeof obj[key] === "string") {
 >typeof obj[key] === "string" : boolean
 >                             : ^^^^^^^
->typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj[key] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[key] : unknown
 >         : ^^^^^^^
@@ -180,7 +180,7 @@ function f3(obj: Thing, key: keyof Thing) {
         if (typeof obj[key] === "string") {
 >typeof obj[key] === "string" : boolean
 >                             : ^^^^^^^
->typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj[key] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[key] : string | number
 >         : ^^^^^^^^^^^^^^^
@@ -208,7 +208,7 @@ function f3(obj: Thing, key: keyof Thing) {
         if (typeof obj[key] === "number") {
 >typeof obj[key] === "number" : boolean
 >                             : ^^^^^^^
->typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj[key] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[key] : string | number
 >         : ^^^^^^^^^^^^^^^

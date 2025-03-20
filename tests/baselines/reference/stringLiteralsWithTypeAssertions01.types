@@ -2,7 +2,7 @@
 
 === stringLiteralsWithTypeAssertions01.ts ===
 let fooOrBar: "foo" | "bar";
->fooOrBar : "foo" | "bar"
+>fooOrBar : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 
 let a = "foo" as "bar";
@@ -26,7 +26,7 @@ let c = fooOrBar as "foo";
 >  : ^^^^^
 >fooOrBar as "foo" : "foo"
 >                  : ^^^^^
->fooOrBar : "foo" | "bar"
+>fooOrBar : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 
 let d = fooOrBar as "bar";
@@ -34,7 +34,7 @@ let d = fooOrBar as "bar";
 >  : ^^^^^
 >fooOrBar as "bar" : "bar"
 >                  : ^^^^^
->fooOrBar : "foo" | "bar"
+>fooOrBar : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 
 let e = fooOrBar as "baz";
@@ -42,16 +42,16 @@ let e = fooOrBar as "baz";
 >  : ^^^^^
 >fooOrBar as "baz" : "baz"
 >                  : ^^^^^
->fooOrBar : "foo" | "bar"
+>fooOrBar : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 
 let f = "baz" as typeof fooOrBar;
->f : "foo" | "bar"
+>f : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
->"baz" as typeof fooOrBar : "foo" | "bar"
+>"baz" as typeof fooOrBar : "bar" | "foo"
 >                         : ^^^^^^^^^^^^^
 >"baz" : "baz"
 >      : ^^^^^
->fooOrBar : "foo" | "bar"
+>fooOrBar : "bar" | "foo"
 >         : ^^^^^^^^^^^^^
 

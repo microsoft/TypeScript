@@ -11,7 +11,7 @@ catch (e) {
 >         : ^^^^^^^
 >typeof e === 'string' : boolean
 >                      : ^^^^^^^
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : unknown
 >  : ^^^^^^^
@@ -36,7 +36,7 @@ catch (e) {
     if (typeof e === 'string') {
 >typeof e === 'string' : boolean
 >                      : ^^^^^^^
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : unknown
 >  : ^^^^^^^
@@ -65,7 +65,7 @@ catch (e) {
 >         : ^^^^^^^
 >typeof e === 'string' : boolean
 >                      : ^^^^^^^
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : unknown
 >  : ^^^^^^^
@@ -98,7 +98,7 @@ catch (e) {
     if (typeof e === 'string') {
 >typeof e === 'string' : boolean
 >                      : ^^^^^^^
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : unknown
 >  : ^^^^^^^

@@ -96,7 +96,7 @@ function Test3({ foo }: { foo: Foo | undefined }) {
 >    : ^^^
 
       {foo?.bar === false && "foo"}
->foo?.bar === false && "foo" : false | "foo"
+>foo?.bar === false && "foo" : "foo" | false
 >                            : ^^^^^^^^^^^^^
 >foo?.bar === false : boolean
 >                   : ^^^^^^^

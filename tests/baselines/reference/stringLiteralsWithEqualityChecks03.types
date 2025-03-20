@@ -18,7 +18,7 @@ let x: string;
 >  : ^^^^^^
 
 let y: "foo" | Refrigerator;
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 let b: boolean;
@@ -34,7 +34,7 @@ b = x === y;
 >        : ^^^^^^^
 >x : string
 >  : ^^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 b = "foo" === y
@@ -46,7 +46,7 @@ b = "foo" === y
 >            : ^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 b = y === "foo";
@@ -56,7 +56,7 @@ b = y === "foo";
 >  : ^^^^^^^
 >y === "foo" : boolean
 >            : ^^^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
@@ -104,7 +104,7 @@ b = y === "bar";
 >  : ^^^^^^^
 >y === "bar" : boolean
 >            : ^^^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 >"bar" : "bar"
 >      : ^^^^^
@@ -118,7 +118,7 @@ b = "bar" === y;
 >            : ^^^^^^^
 >"bar" : "bar"
 >      : ^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 b = x !== y;
@@ -130,7 +130,7 @@ b = x !== y;
 >        : ^^^^^^^
 >x : string
 >  : ^^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 b = "foo" !== y
@@ -142,7 +142,7 @@ b = "foo" !== y
 >            : ^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 b = y !== "foo";
@@ -152,7 +152,7 @@ b = y !== "foo";
 >  : ^^^^^^^
 >y !== "foo" : boolean
 >            : ^^^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
@@ -200,7 +200,7 @@ b = y !== "bar";
 >  : ^^^^^^^
 >y !== "bar" : boolean
 >            : ^^^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 >"bar" : "bar"
 >      : ^^^^^
@@ -214,6 +214,6 @@ b = "bar" !== y;
 >            : ^^^^^^^
 >"bar" : "bar"
 >      : ^^^^^
->y : Refrigerator | "foo"
+>y : "foo" | Refrigerator
 >  : ^^^^^^^^^^^^^^^^^^^^
 

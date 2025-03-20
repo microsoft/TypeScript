@@ -48,7 +48,7 @@ function fx2<T>(x: T | undefined) {
 >  : ^^^^^^^^^^^^^
 
         x;  // T & Falsy | undefined
->x : (T & null) | (T & false) | (T & "") | (T & 0) | (T & 0n) | undefined
+>x : (T & null) | (T & "") | (T & 0) | (T & false) | (T & 0n) | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
@@ -600,7 +600,7 @@ function check1(x: unknown): x is (string | 0) {
 >                                 : ^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
@@ -648,7 +648,7 @@ function test3(x: unknown) {
 >                                 : ^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
@@ -682,7 +682,7 @@ function test3(x: unknown) {
 >  : ^
 
 			x;  // 0 | "hello"
->x : 0 | "hello"
+>x : "hello" | 0
 >  : ^^^^^^^^^^^
 		}
 	}
@@ -707,7 +707,7 @@ function test3(x: unknown) {
 >  : ^^^^^^^^^^
 
 			x;  // 0 | "hello"
->x : 0 | "hello"
+>x : "hello" | 0
 >  : ^^^^^^^^^^^
 		}
 	}

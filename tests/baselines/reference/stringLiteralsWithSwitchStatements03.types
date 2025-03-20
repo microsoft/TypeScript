@@ -6,7 +6,7 @@ let x: "foo";
 >  : ^^^^^
 
 let y: "foo" | "bar"; 
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
 let z: "bar";
@@ -22,7 +22,7 @@ switch (x) {
 >  : ^^^^^
 
     case randBool() ? "foo" : "baz":
->randBool() ? "foo" : "baz" : "foo" | "baz"
+>randBool() ? "foo" : "baz" : "baz" | "foo"
 >                           : ^^^^^^^^^^^^^
 >randBool() : boolean
 >           : ^^^^^^^
@@ -71,11 +71,11 @@ switch (x) {
 >                : ^^^^^
 >x, y, ("baz") : "baz"
 >              : ^^^^^
->x, y : "foo" | "bar"
+>x, y : "bar" | "foo"
 >     : ^^^^^^^^^^^^^
 >x : "foo"
 >  : ^^^^^
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >("baz") : "baz"
 >        : ^^^^^
@@ -87,16 +87,16 @@ switch (x) {
 >  : ^^^^^
 
         y;
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
         break;
     case (("foo" || ("bar"))):
->(("foo" || ("bar"))) : "foo" | "bar"
+>(("foo" || ("bar"))) : "bar" | "foo"
 >                     : ^^^^^^^^^^^^^
->("foo" || ("bar")) : "foo" | "bar"
+>("foo" || ("bar")) : "bar" | "foo"
 >                   : ^^^^^^^^^^^^^
->"foo" || ("bar") : "foo" | "bar"
+>"foo" || ("bar") : "bar" | "foo"
 >                 : ^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^

@@ -304,11 +304,11 @@ let o1 = { x: 10, y: 20 } as const;
 >   : ^^
 
 let o2 = { a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const;
->o2 : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : 1
 >  : ^
@@ -346,7 +346,7 @@ let o3 = { ...o1, ...o2 } as const;
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { readonly x: 10; readonly y: 20; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->o2 : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let o4 = { a: 1, b: 2 };
@@ -650,19 +650,19 @@ let t4 = `${`(${t1})`}-${`(${t2})`}` as const;
 >   : ^^^^^
 
 function ff1(x: 'foo' | 'bar', y: 1 | 2) {
->ff1 : (x: "foo" | "bar", y: 1 | 2) => "foo-1" | "foo-2" | "bar-1" | "bar-2"
+>ff1 : (x: "foo" | "bar", y: 1 | 2) => "bar-1" | "bar-2" | "foo-1" | "foo-2"
 >    : ^ ^^             ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : "foo" | "bar"
+>x : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >y : 1 | 2
 >  : ^^^^^
 
     return `${x}-${y}` as const;
->`${x}-${y}` as const : "foo-1" | "foo-2" | "bar-1" | "bar-2"
+>`${x}-${y}` as const : "bar-1" | "bar-2" | "foo-1" | "foo-2"
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->`${x}-${y}` : "foo-1" | "foo-2" | "bar-1" | "bar-2"
+>`${x}-${y}` : "bar-1" | "bar-2" | "foo-1" | "foo-2"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : "foo" | "bar"
+>x : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >y : 1 | 2
 >  : ^^^^^
@@ -700,9 +700,9 @@ const ts1 = ff2('foo', 'bar');
 >      : ^^^^^
 
 const ts2 = ff2('foo', !!true ? '0' : '1');
->ts2 : "foo-1" | "foo-0"
+>ts2 : "foo-0" | "foo-1"
 >    : ^^^^^^^^^^^^^^^^^
->ff2('foo', !!true ? '0' : '1') : "foo-1" | "foo-0"
+>ff2('foo', !!true ? '0' : '1') : "foo-0" | "foo-1"
 >                               : ^^^^^^^^^^^^^^^^^
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
 >    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
@@ -722,13 +722,13 @@ const ts2 = ff2('foo', !!true ? '0' : '1');
 >    : ^^^
 
 const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
->ts3 : "top-left" | "top-right" | "bottom-left" | "bottom-right"
+>ts3 : "bottom-left" | "bottom-right" | "top-left" | "top-right"
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right') : "top-left" | "top-right" | "bottom-left" | "bottom-right"
+>ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right') : "bottom-left" | "bottom-right" | "top-left" | "top-right"
 >                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
 >    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
->!!true ? 'top' : 'bottom' : "top" | "bottom"
+>!!true ? 'top' : 'bottom' : "bottom" | "top"
 >                          : ^^^^^^^^^^^^^^^^
 >!!true : true
 >       : ^^^^
@@ -754,19 +754,19 @@ const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
 >        : ^^^^^^^
 
 function ff3(x: 'foo' | 'bar', y: object) {
->ff3 : (x: "foo" | "bar", y: object) => `foo${string}` | `bar${string}`
+>ff3 : (x: "foo" | "bar", y: object) => `bar${string}` | `foo${string}`
 >    : ^ ^^             ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : "foo" | "bar"
+>x : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >y : object
 >  : ^^^^^^
 
     return `${x}${y}` as const;
->`${x}${y}` as const : `foo${string}` | `bar${string}`
+>`${x}${y}` as const : `bar${string}` | `foo${string}`
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->`${x}${y}` : `foo${string}` | `bar${string}`
+>`${x}${y}` : `bar${string}` | `foo${string}`
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : "foo" | "bar"
+>x : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >y : object
 >  : ^^^^^^
