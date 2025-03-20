@@ -56,11 +56,11 @@ var abc: ABC;
 >    : ^^^
 
 declare const x: "foo" | "bar";
->x : "foo" | "bar"
+>x : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
 declare const bFoo: B | "foo";
->bFoo : B | "foo"
+>bFoo : "foo" | B
 >     : ^^^^^^^^^
 
 x.nope();
@@ -68,7 +68,7 @@ x.nope();
 >         : ^^^
 >x.nope : any
 >       : ^^^
->x : "foo" | "bar"
+>x : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >nope : any
 >     : ^^^
@@ -76,7 +76,7 @@ x.nope();
 bFoo.onlyInB;
 >bFoo.onlyInB : any
 >             : ^^^
->bFoo : B | "foo"
+>bFoo : "foo" | B
 >     : ^^^^^^^^^
 >onlyInB : any
 >        : ^^^
@@ -84,7 +84,7 @@ bFoo.onlyInB;
 x.length; // Ok
 >x.length : number
 >         : ^^^^^^
->x : "foo" | "bar"
+>x : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
@@ -92,7 +92,7 @@ x.length; // Ok
 bFoo.length;
 >bFoo.length : any
 >            : ^^^
->bFoo : B | "foo"
+>bFoo : "foo" | B
 >     : ^^^^^^^^^
 >length : any
 >       : ^^^

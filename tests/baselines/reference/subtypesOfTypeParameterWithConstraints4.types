@@ -154,9 +154,9 @@ function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
 
     // ok
     var r6 = true ? v : new Foo();
->r6 : Foo | V
+>r6 : V | Foo
 >   : ^^^^^^^
->true ? v : new Foo() : Foo | V
+>true ? v : new Foo() : V | Foo
 >                     : ^^^^^^^
 >true : true
 >     : ^^^^
@@ -168,9 +168,9 @@ function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
 >    : ^^^^^^^^^^
 
     var r6 = true ? new Foo() : v;
->r6 : Foo | V
+>r6 : V | Foo
 >   : ^^^^^^^
->true ? new Foo() : v : Foo | V
+>true ? new Foo() : v : V | Foo
 >                     : ^^^^^^^
 >true : true
 >     : ^^^^

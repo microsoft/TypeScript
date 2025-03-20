@@ -542,8 +542,8 @@ function f31(f: (<T>(a: T) => T) | ((a: string, b: number) => string[])) {
 function f32(f: (<T>(a: T) => T) | { x: string }) {
 >f32 : (f: (<T>(a: T) => T) | { x: string; }) => void
 >    : ^ ^^                                 ^^^^^^^^^
->f : { x: string; } | (<T>(a: T) => T)
->  : ^^^^^      ^^^^^^^^ ^^ ^^ ^^^^^ ^
+>f : (<T>(a: T) => T) | { x: string; }
+>  : ^^ ^^ ^^ ^^^^^ ^^^^^^^^^      ^^^
 >a : T
 >  : ^
 >x : string
@@ -554,8 +554,8 @@ function f32(f: (<T>(a: T) => T) | { x: string }) {
 >   : ^^^^^      ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >f<string> : { x: string; } | ((a: string) => string)
 >          : ^^^^^      ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
->f : { x: string; } | (<T>(a: T) => T)
->  : ^^^^^      ^^^^^^^^ ^^ ^^ ^^^^^ ^
+>f : (<T>(a: T) => T) | { x: string; }
+>  : ^^ ^^ ^^ ^^^^^ ^^^^^^^^^      ^^^
 }
 
 function f33(f: { x: string } | { y: string }) {

@@ -33,7 +33,7 @@ class D {
 >                                                 : ^^^^^^
 >typeof data === "string" : boolean
 >                         : ^^^^^^^
->typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : string | string[]
 >     : ^^^^^^^^^^^^^^^^^
@@ -62,7 +62,7 @@ class D {
 >                                                                : ^^^^^^
 >typeof this.data === "string" : boolean
 >                              : ^^^^^^^
->typeof this.data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.data : string | string[]
 >          : ^^^^^^^^^^^^^^^^^
@@ -129,7 +129,7 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >                                                     : ^^^^^^
 >typeof o.prop1 === "string" : boolean
 >                            : ^^^^^^^
->typeof o.prop1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o.prop1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o.prop1 : string | number
 >        : ^^^^^^^^^^^^^^^
@@ -167,7 +167,7 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >                                                       : ^^^^^^
 >typeof prop1 === "string" : boolean
 >                          : ^^^^^^^
->typeof prop1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof prop1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop1 : string | number
 >      : ^^^^^^^^^^^^^^^

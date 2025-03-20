@@ -43,13 +43,13 @@ function f3<T extends undefined>(a: T) {
 function f4<T extends undefined>(a: object | T) {
 >f4 : <T extends undefined>(a: object | T) => {}
 >   : ^ ^^^^^^^^^         ^^ ^^          ^^^^^^^
->a : object | T
+>a : T | object
 >  : ^^^^^^^^^^
 
     return { ...a };
 >{ ...a } : {}
 >         : ^^
->a : object | T
+>a : T | object
 >  : ^^^^^^^^^^
 }
 
