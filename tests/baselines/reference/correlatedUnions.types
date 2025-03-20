@@ -983,7 +983,7 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 >f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
 >   : ^ ^^^^^^^^^            ^^ ^^                   ^^ ^^        ^^^^^^^^^
->x : Func<"b"> | Func<"a">
+>x : Func<"a"> | Func<"b">
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >y : Funcs[K]
 >  : ^^^^^^^^
@@ -991,7 +991,7 @@ function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
     x = y;
 >x = y : Funcs[K]
 >      : ^^^^^^^^
->x : Func<"b"> | Func<"a">
+>x : Func<"a"> | Func<"b">
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >y : Funcs[K]
 >  : ^^^^^^^^
@@ -1332,10 +1332,10 @@ function getConfigOrDefault<T extends keyof Config>(
 >    : ^
 
   const assertedCheck = userValue ? userValue! : defaultValue;
->assertedCheck : Config[T]
->              : ^^^^^^^^^
->userValue ? userValue! : defaultValue : Config[T]
->                                      : ^^^^^^^^^
+>assertedCheck : NonNullable<Partial<Config>[T]>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>userValue ? userValue! : defaultValue : NonNullable<Partial<Config>[T]>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >userValue : Partial<Config>[T]
 >          : ^^^^^^^^^^^^^^^^^^
 >userValue! : NonNullable<Partial<Config>[T]>
@@ -1346,8 +1346,8 @@ function getConfigOrDefault<T extends keyof Config>(
 >             : ^^^^^^^^^
 
   return assertedCheck;
->assertedCheck : Config[T]
->              : ^^^^^^^^^
+>assertedCheck : NonNullable<Partial<Config>[T]>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // repro from #47523

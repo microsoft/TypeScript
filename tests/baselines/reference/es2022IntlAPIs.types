@@ -23,7 +23,7 @@ const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGener
 >              : ^^^^^^^^^^^^^
 
 for (const zoneName of timezoneNames) {
->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -41,7 +41,7 @@ for (const zoneName of timezoneNames) {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
->{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
+>{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"; }
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     timeZone: 'America/Los_Angeles',
@@ -51,9 +51,9 @@ for (const zoneName of timezoneNames) {
 >                      : ^^^^^^^^^^^^^^^^^^^^^
 
     timeZoneName: zoneName,
->timeZoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>timeZoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   });

@@ -42,7 +42,7 @@ x = "";
 >   : ^^
 
 cond || (x = 0);
->cond || (x = 0) : true | 0
+>cond || (x = 0) : 0 | true
 >                : ^^^^^^^^
 >cond : boolean
 >     : ^^^^^^^
@@ -105,7 +105,7 @@ if (isNodeList(sourceObj)) {
     sourceObj.length;
 >sourceObj.length : number
 >                 : ^^^^^^
->sourceObj : NodeList | HTMLCollection
+>sourceObj : HTMLCollection | NodeList
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
@@ -122,7 +122,7 @@ if (isHTMLCollection(sourceObj)) {
     sourceObj.length;
 >sourceObj.length : number
 >                 : ^^^^^^
->sourceObj : NodeList | HTMLCollection
+>sourceObj : HTMLCollection | NodeList
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
@@ -147,8 +147,8 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
     sourceObj.length;
 >sourceObj.length : number
 >                 : ^^^^^^
->sourceObj : NodeList
->          : ^^^^^^^^
+>sourceObj : HTMLCollection
+>          : ^^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
 }

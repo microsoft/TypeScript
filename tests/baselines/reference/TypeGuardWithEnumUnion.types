@@ -20,7 +20,7 @@ function f1(x: Color | string) {
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | Color
 >  : ^^^^^^^^^^^^^^
@@ -53,15 +53,15 @@ function f1(x: Color | string) {
 function f2(x: Color | string | string[]) {
 >f2 : (x: Color | string | string[]) => void
 >   : ^ ^^                         ^^^^^^^^^
->x : string | Color | string[]
+>x : string | string[] | Color
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | Color | string[]
+>x : string | string[] | Color
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"object" : "object"
 >         : ^^^^^^^^
@@ -79,9 +79,9 @@ function f2(x: Color | string | string[]) {
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | Color | string[]
+>x : string | string[] | Color
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
 >         : ^^^^^^^^
@@ -110,9 +110,9 @@ function f2(x: Color | string | string[]) {
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | Color | string[]
+>x : string | string[] | Color
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
@@ -129,13 +129,13 @@ function f2(x: Color | string | string[]) {
     }
     else {
         var b = x;
->b : Color | string[]
+>b : string[] | Color
 >  : ^^^^^^^^^^^^^^^^
->x : Color | string[]
+>x : string[] | Color
 >  : ^^^^^^^^^^^^^^^^
 
         var b: Color | string[];
->b : Color | string[]
+>b : string[] | Color
 >  : ^^^^^^^^^^^^^^^^
     }
 }

@@ -6,7 +6,7 @@ let x: "foo";
 >  : ^^^^^
 
 let y: "foo" | "bar"; 
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
 declare function randBool(): boolean;
@@ -14,7 +14,7 @@ declare function randBool(): boolean;
 >         : ^^^^^^       
 
 switch (y) {
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 
     case "foo", x:
@@ -63,13 +63,13 @@ switch (y) {
 
         break;
     case "baz" && ("foo" || "bar"):
->"baz" && ("foo" || "bar") : "" | "foo" | "bar"
+>"baz" && ("foo" || "bar") : "" | "bar" | "foo"
 >                          : ^^^^^^^^^^^^^^^^^^
 >"baz" : "baz"
 >      : ^^^^^
->("foo" || "bar") : "foo" | "bar"
+>("foo" || "bar") : "bar" | "foo"
 >                 : ^^^^^^^^^^^^^
->"foo" || "bar" : "foo" | "bar"
+>"foo" || "bar" : "bar" | "foo"
 >               : ^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^

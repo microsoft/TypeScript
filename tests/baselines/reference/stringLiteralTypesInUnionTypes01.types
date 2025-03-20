@@ -6,7 +6,7 @@ type T = "foo" | "bar" | "baz";
 >  : ^
 
 var x: "foo" | "bar" | "baz" = undefined;
->x : "foo" | "bar" | "baz"
+>x : "bar" | "baz" | "foo"
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
@@ -20,7 +20,7 @@ var y: T = undefined;
 if (x === "foo") {
 >x === "foo" : boolean
 >            : ^^^^^^^
->x : "foo" | "bar" | "baz"
+>x : "bar" | "baz" | "foo"
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
@@ -80,16 +80,16 @@ else {
 x = y;
 >x = y : T
 >      : ^
->x : "foo" | "bar" | "baz"
+>x : "bar" | "baz" | "foo"
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >y : T
 >  : ^
 
 y = x;
->y = x : "foo" | "bar" | "baz"
+>y = x : "bar" | "baz" | "foo"
 >      : ^^^^^^^^^^^^^^^^^^^^^
 >y : T
 >  : ^
->x : "foo" | "bar" | "baz"
+>x : "bar" | "baz" | "foo"
 >  : ^^^^^^^^^^^^^^^^^^^^^
 

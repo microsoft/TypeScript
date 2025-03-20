@@ -58,13 +58,13 @@ class Giraffe extends Mammal { neck; }
 function fn1(x: Array<number>|Array<string>|boolean) {
 >fn1 : (x: Array<number> | Array<string> | boolean) => void
 >    : ^ ^^                                       ^^^^^^^^^
->x : boolean | number[] | string[]
+>x : boolean | string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	if(x instanceof Array) {
 >x instanceof Array : boolean
 >                   : ^^^^^^^
->x : boolean | number[] | string[]
+>x : boolean | string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
@@ -72,9 +72,9 @@ function fn1(x: Array<number>|Array<string>|boolean) {
 		// 1.5: y: Array<number>|Array<string>
 		// Want: y: Array<number>|Array<string>
 		let y = x;
->y : number[] | string[]
+>y : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
->x : number[] | string[]
+>x : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 	}
 }
@@ -202,13 +202,13 @@ function fn6(x: Animal|Mammal) {
 function fn7(x: Array<number>|Array<string>) {
 >fn7 : (x: Array<number> | Array<string>) => void
 >    : ^ ^^                             ^^^^^^^^^
->x : number[] | string[]
+>x : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
 	if(x instanceof Array) {
 >x instanceof Array : boolean
 >                   : ^^^^^^^
->x : number[] | string[]
+>x : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
@@ -216,9 +216,9 @@ function fn7(x: Array<number>|Array<string>) {
 		// 1.5: y: Array<number>|Array<string>
 		// Want: y: Array<number>|Array<string>
 		let y = x;
->y : number[] | string[]
+>y : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
->x : number[] | string[]
+>x : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 	}
 }

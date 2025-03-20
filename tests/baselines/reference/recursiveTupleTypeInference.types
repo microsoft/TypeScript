@@ -29,11 +29,11 @@ interface K {
 const gK: { [key in keyof K]: A } = { b: ["number", "null"] };
 >gK : { b: A; }
 >   : ^^^^^^^^^
->{ b: ["number", "null"] } : { b: ("number" | "null")[]; }
+>{ b: ["number", "null"] } : { b: ("null" | "number")[]; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->b : ("number" | "null")[]
+>b : ("null" | "number")[]
 >  : ^^^^^^^^^^^^^^^^^^^^^
->["number", "null"] : ("number" | "null")[]
+>["number", "null"] : ("null" | "number")[]
 >                   : ^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
 >         : ^^^^^^^^

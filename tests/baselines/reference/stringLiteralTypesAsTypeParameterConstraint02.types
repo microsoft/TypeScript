@@ -23,13 +23,13 @@ let f = foo((y: "foo" | "bar") => y === "foo" ? y : "foo");
 >    : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(y: "foo" | "bar") => y === "foo" ? y : "foo" : (y: "foo" | "bar") => "foo"
 >                                              : ^ ^^             ^^^^^^^^^^
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >y === "foo" ? y : "foo" : "foo"
 >                        : ^^^^^
 >y === "foo" : boolean
 >            : ^^^^^^^
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >  : ^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^

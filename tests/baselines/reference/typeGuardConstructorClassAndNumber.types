@@ -486,15 +486,15 @@ else {
 function foo(instance: Function | object) {
 >foo : (instance: Function | object) => number
 >    : ^        ^^                 ^^^^^^^^^^^
->instance : object | Function
+>instance : Function | object
 >         : ^^^^^^^^^^^^^^^^^
 
     if (typeof instance === 'function') {
 >typeof instance === 'function' : boolean
 >                               : ^^^^^^^
->typeof instance : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof instance : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->instance : object | Function
+>instance : Function | object
 >         : ^^^^^^^^^^^^^^^^^
 >'function' : "function"
 >           : ^^^^^^^^^^
