@@ -477,6 +477,7 @@ import {
     PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
+    PrivateNameType,
     ProjectReference,
     PrologueDirective,
     PropertyAccessEntityNameExpression,
@@ -11057,17 +11058,20 @@ export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName): 
  * Indicates whether a type can be used as a property name.
  * @internal
  */
-export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
-    return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
+export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType | PrivateNameType {
+    return !!(type.flags & (TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.PrivateNameType));
 }
 
 /**
  * Gets the symbolic name for a member from its type.
  * @internal
  */
-export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
+export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType | PrivateNameType): __String {
     if (type.flags & TypeFlags.UniqueESSymbol) {
         return (type as UniqueESSymbolType).escapedName;
+    }
+    if (type.flags & TypeFlags.PrivateNameType) {
+        return (type as PrivateNameType).symbol.escapedName;
     }
     if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
