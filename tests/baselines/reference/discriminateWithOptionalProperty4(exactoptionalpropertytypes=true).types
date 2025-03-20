@@ -10,7 +10,7 @@ export function main(a: string[] | undefined) {
 >  : ^^^^^^^^^^^^^^^^^^^^
 
   const z = a ? { a } : { b: ["there"] };
->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
+>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a ? { a } : { b: ["there"] } : { a: string[]; } | { b: string[]; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -34,7 +34,7 @@ export function main(a: string[] | undefined) {
 >                                               : ^^^^^^
 >z.a : string[] | undefined
 >    : ^^^^^^^^^^^^^^^^^^^^
->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
+>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string[] | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^
@@ -60,7 +60,7 @@ export function main(a: string[] | undefined) {
 >             : ^^^^^^      
 >z.b : string[]
 >    : ^^^^^^^^
->z : { b: string[]; a?: never; }
+>z : { a?: never; b: string[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string[]
 >  : ^^^^^^^^
@@ -82,7 +82,7 @@ export function main(a: string[] | undefined) {
 >  : ^^^^^^^^
 >a : undefined
 >  : ^^^^^^^^^
->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
+>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   zWorkAround.a ? zWorkAround.a.toString() : zWorkAround.b.toString();
@@ -126,7 +126,7 @@ export function main(a: string[] | undefined) {
 >         : ^^^^^^^
 >"a" : "a"
 >    : ^^^
->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
+>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z.a.toString() : string
 >               : ^^^^^^
@@ -134,7 +134,7 @@ export function main(a: string[] | undefined) {
 >             : ^^^^^^      
 >z.a : string[]
 >    : ^^^^^^^^
->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
+>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string[]
 >  : ^^^^^^^^
@@ -146,7 +146,7 @@ export function main(a: string[] | undefined) {
 >             : ^^^^^^      
 >z.b : string[]
 >    : ^^^^^^^^
->z : { b: string[]; a?: never; }
+>z : { a?: never; b: string[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string[]
 >  : ^^^^^^^^

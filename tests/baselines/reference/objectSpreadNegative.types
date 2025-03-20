@@ -96,9 +96,9 @@ interface Str { s: string };
 >  : ^^^^^^
 
 let spread = { ...{ b: true }, ...{s: "foo" } };
->spread : { s: string; b: boolean; }
+>spread : { b: boolean; s: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ ...{ b: true }, ...{s: "foo" } } : { s: string; b: boolean; }
+>{ ...{ b: true }, ...{s: "foo" } } : { b: boolean; s: string; }
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: true } : { b: boolean; }
 >            : ^^^^^^^^^^^^^^^
@@ -116,7 +116,7 @@ let spread = { ...{ b: true }, ...{s: "foo" } };
 spread = { s: "foo" };  // error, missing 'b'
 >spread = { s: "foo" } : { s: string; }
 >                      : ^^^^^^^^^^^^^^
->spread : { s: string; b: boolean; }
+>spread : { b: boolean; s: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ s: "foo" } : { s: string; }
 >             : ^^^^^^^^^^^^^^
@@ -138,16 +138,16 @@ let b = { b: false };
 spread = b; // error, missing 's'
 >spread = b : { b: boolean; }
 >           : ^^^^^^^^^^^^^^^
->spread : { s: string; b: boolean; }
+>spread : { b: boolean; s: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { b: boolean; }
 >  : ^^^^^^^^^^^^^^^
 
 // literal repeats are not allowed, but spread repeats are fine
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
->duplicated : { b: string; a: number; }
+>duplicated : { a: number; b: string; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^
->{ b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' } : { b: string; a: number; }
+>{ b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' } : { a: number; b: string; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
@@ -234,7 +234,7 @@ let combinedBefore: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { b: 'ok', ...o3, ...o4 }
->{ b: 'ok', ...o3, ...o4 } : { b: string; c: boolean; a: number; }
+>{ b: 'ok', ...o3, ...o4 } : { a: number; b: string; c: boolean; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
@@ -256,7 +256,7 @@ let combinedMid: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { ...o3, b: 'ok', ...o4 }
->{ ...o3, b: 'ok', ...o4 } : { b: string; c: boolean; a: number; }
+>{ ...o3, b: 'ok', ...o4 } : { a: number; b: string; c: boolean; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { a: number; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -280,9 +280,9 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >  : ^^^^^^
 
     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
+>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { b: false; c: string; a: number; d: string; }
 >                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
@@ -344,7 +344,7 @@ let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number 
 >                : ^^^^^^
 
     { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
->{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { b: string; c: boolean; "in the middle": number; a: number; }
+>{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { a: number; b: string; c: boolean; "in the middle": number; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { a: number; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^

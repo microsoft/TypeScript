@@ -258,12 +258,12 @@ declare let o2: {
     readonly d: () => void;
 };
 declare let o3: {
+    readonly x: 10;
+    readonly y: 20;
     readonly a: 1;
     readonly b: 2;
     readonly c: 3;
     readonly d: () => void;
-    readonly x: 10;
-    readonly y: 20;
 };
 declare let o4: {
     a: number;

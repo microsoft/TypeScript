@@ -78,7 +78,7 @@ var g = [[1], ['']]; // {}[]
 >   : ^^
 
 var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
->h : ({ foo: number; bar: string; } | { foo: number; bar?: undefined; })[]
+>h : ({ foo: number; bar: string; } | { bar?: undefined; foo: number; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: 1, bar: '' }, { foo: 2 }] : ({ foo: number; bar: string; } | { foo: number; })[]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -100,7 +100,7 @@ var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
 >  : ^
 
 var i = [{ foo: 1, bar: '' }, { foo: '' }]; // {}[]
->i : ({ foo: number; bar: string; } | { foo: string; bar?: undefined; })[]
+>i : ({ foo: number; bar: string; } | { bar?: undefined; foo: string; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: 1, bar: '' }, { foo: '' }] : ({ foo: number; bar: string; } | { foo: string; })[]
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -234,7 +234,7 @@ module Derived {
 >        : ^^^^^^^^^^^^^^
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
->h : ({ foo: Base; basear: Derived; } | { foo: Base; basear?: undefined; })[]
+>h : ({ foo: Base; basear: Derived; } | { basear?: undefined; foo: Base; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: base, basear: derived }, { foo: base }] : ({ foo: Base; basear: Derived; } | { foo: Base; })[]
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -256,7 +256,7 @@ module Derived {
 >     : ^^^^
 
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
->i : ({ foo: Base; basear: Derived; } | { foo: Derived; basear?: undefined; })[]
+>i : ({ foo: Base; basear: Derived; } | { basear?: undefined; foo: Derived; })[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: base, basear: derived }, { foo: derived }] : ({ foo: Base; basear: Derived; } | { foo: Derived; })[]
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === typeParameterConstModifiers.ts ===
 declare function f1<const T>(x: T): T;
 >f1 : <const T>(x: T) => T
