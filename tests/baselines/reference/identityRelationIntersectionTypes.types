@@ -1,0 +1,371 @@
+//// [tests/cases/compiler/identityRelationIntersectionTypes.ts] ////
+
+=== identityRelationIntersectionTypes.ts ===
+namespace identityRelationIntersectionTypes {
+>identityRelationIntersectionTypes : typeof identityRelationIntersectionTypes
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Equals<A, B>
+>       : ^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    type GoodIntersection = Equals<{a: 1} & {b: 2}, {a: 1; b: 2}>;  // true
+>GoodIntersection : true
+>                 : ^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    // Interfaces aren't mergeable
+    interface I {i: 3};
+>i : 3
+>  : ^
+
+    type BadIntersection1 = Equals<{a: 1} & I, {a: 1; i: 3}>;  // false
+>BadIntersection1 : false
+>                 : ^^^^^
+>a : 1
+>  : ^
+>a : 1
+>  : ^
+>i : 3
+>  : ^
+
+    // Objects with call or constructor signatures aren't mergeable
+    type BadIntersection2 = Equals<{a: 1} & {b: 2; (): void}, {a: 1; b: 2; (): void}>;  // false
+>BadIntersection2 : false
+>                 : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    type BadIntersection3 = Equals<{a: 1} & {b: 2; new (): void}, {a: 1; b: 2; new (): void}>;  // false
+>BadIntersection3 : false
+>                 : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    // Objects with index signatures aren't mergeable
+    type BadIntersection4 = Equals<{a: 1} & {b: 2; [key: string]: number}, {a: 1; b: 2; [key: string]: number}>;  // false
+>BadIntersection4 : false
+>                 : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>key : string
+>    : ^^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>key : string
+>    : ^^^^^^
+
+    // Shouldn't merge intersection if any constituents aren't mergeable
+    type StillBadIntersection1 = Equals<{a: 1} & {b: 2} & I, {a: 1; b: 2; i: 3}>;  // false
+>StillBadIntersection1 : false
+>                      : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>i : 3
+>  : ^
+
+    type StillBadIntersection2 = Equals<{a: 1} & {b: 2} & I, {a: 1; b: 2} & I>;  // false
+>StillBadIntersection2 : false
+>                      : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    // Parentheses don't matter because intersections are flattened
+    type StillBadIntersection3 = Equals<({a: 1} & {b: 2}) & I, {a: 1; b: 2; i: 3}>;  // false
+>StillBadIntersection3 : false
+>                      : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>i : 3
+>  : ^
+
+    type StillBadIntersection4 = Equals<({a: 1} & {b: 2}) & I, {a: 1; b: 2} & I>;  // false
+>StillBadIntersection4 : false
+>                      : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    // Type aliases also don't prevent flattening
+    type AB = {a: 1} & {b: 2};
+>AB : AB
+>   : ^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    type StillBadIntersection5 = Equals<AB & I, {a: 1; b: 2; i: 3}>;  // false
+>StillBadIntersection5 : false
+>                      : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>i : 3
+>  : ^
+
+    type StillBadIntersection6 = Equals<AB & I, {a: 1; b: 2} & I>;  // false
+>StillBadIntersection6 : false
+>                      : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    type GoodDeepIntersection1 = Equals<{a: 0 | 1} & {a: 1 | 2}, {a: 1}>;  // true
+>GoodDeepIntersection1 : true
+>                      : ^^^^
+>a : 0 | 1
+>  : ^^^^^
+>a : 1 | 2
+>  : ^^^^^
+>a : 1
+>  : ^
+
+    type GoodDeepIntersection2 = Equals<{a: {x: 1}} & {a: {y: 2}}, {a: {x: 1; y: 2}}>;  // true
+>GoodDeepIntersection2 : true
+>                      : ^^^^
+>a : { x: 1; }
+>  : ^^^^^ ^^^
+>x : 1
+>  : ^
+>a : { y: 2; }
+>  : ^^^^^ ^^^
+>y : 2
+>  : ^
+>a : { x: 1; y: 2; }
+>  : ^^^^^ ^^^^^ ^^^
+>x : 1
+>  : ^
+>y : 2
+>  : ^
+
+    type GoodShallowBadDeepIntersection1 = Equals<{a: {x: 1}} & {a: {y: 2} & I}, {a: {x: 1; y: 2} & I}>;  // false
+>GoodShallowBadDeepIntersection1 : false
+>                                : ^^^^^
+>a : { x: 1; }
+>  : ^^^^^ ^^^
+>x : 1
+>  : ^
+>a : { y: 2; } & I
+>  : ^^^^^ ^^^^^^^
+>y : 2
+>  : ^
+>a : { x: 1; y: 2; } & I
+>  : ^^^^^ ^^^^^ ^^^^^^^
+>x : 1
+>  : ^
+>y : 2
+>  : ^
+
+    type GoodShallowBadDeepIntersection2 = Equals<{a: {x: 1}} & {a: {y: 2} & I}, {a: {x: 1} & {y: 2} & I}>;  // true
+>GoodShallowBadDeepIntersection2 : true
+>                                : ^^^^
+>a : { x: 1; }
+>  : ^^^^^ ^^^
+>x : 1
+>  : ^
+>a : { y: 2; } & I
+>  : ^^^^^ ^^^^^^^
+>y : 2
+>  : ^
+>a : { x: 1; } & { y: 2; } & I
+>  : ^^^^^ ^^^^^^^^^^^ ^^^^^^^
+>x : 1
+>  : ^
+>y : 2
+>  : ^
+
+    // Reduction applies to nested intersections
+    type DeepReduction = Equals<{a: {x: 1}} & {a: {x: 2}}, {a: never}>;  // true
+>DeepReduction : true
+>              : ^^^^
+>a : { x: 1; }
+>  : ^^^^^ ^^^
+>x : 1
+>  : ^
+>a : { x: 2; }
+>  : ^^^^^ ^^^
+>x : 2
+>  : ^
+>a : never
+>  : ^^^^^
+
+    // Intersections are distributed and merged if possible with union constituents
+    type Distributed = Equals<
+>Distributed : true
+>            : ^^^^
+
+        {a: 1} & {b: 2} & ({c: 3} | {d: 4} | I),
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>c : 3
+>  : ^
+>d : 4
+>  : ^
+
+        {a: 1; b: 2; c: 3} | {a: 1; b: 2; d: 4} | {a: 1} & {b: 2} & I
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>c : 3
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+>d : 4
+>  : ^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+    >;  // true
+
+    // Should work with recursive types
+    type R1 = {a: R1; x: 1};
+>R1 : R1
+>   : ^^
+>a : R1
+>  : ^^
+>x : 1
+>  : ^
+
+    type R2 = {a: R2; y: 1};
+>R2 : R2
+>   : ^^
+>a : R2
+>  : ^^
+>y : 1
+>  : ^
+
+    type R = R1 & R2;
+>R : R
+>  : ^
+
+    type Recursive1 = Equals<R, {a: R1 & R2; x: 1; y: 1}>;  // true
+>Recursive1 : true
+>           : ^^^^
+>a : R1 & R2
+>  : ^^^^^^^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+
+    type Recursive2 = Equals<R, {a: {a: R1 & R2; x: 1; y: 1}; x: 1; y: 1}>;  // true
+>Recursive2 : true
+>           : ^^^^
+>a : { a: R1 & R2; x: 1; y: 1; }
+>  : ^^^^^       ^^^^^ ^^^^^ ^^^
+>a : R1 & R2
+>  : ^^^^^^^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+
+    type Recursive3 = Equals<R, {a: {a: {a: R1 & R2; x: 1; y: 1}; x: 1; y: 1}; x: 1; y: 1}>;  // true
+>Recursive3 : true
+>           : ^^^^
+>a : { a: { a: R1 & R2; x: 1; y: 1; }; x: 1; y: 1; }
+>  : ^^^^^                           ^^^^^ ^^^^^ ^^^
+>a : { a: R1 & R2; x: 1; y: 1; }
+>  : ^^^^^       ^^^^^ ^^^^^ ^^^
+>a : R1 & R2
+>  : ^^^^^^^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+
+    type Recursive4 = Equals<R, {a: {a: {a: R1 & R2; x: 1; y: 0}; x: 1; y: 1}; x: 1; y: 1}>;  // false
+>Recursive4 : false
+>           : ^^^^^
+>a : { a: { a: R1 & R2; x: 1; y: 0; }; x: 1; y: 1; }
+>  : ^^^^^                           ^^^^^ ^^^^^ ^^^
+>a : { a: R1 & R2; x: 1; y: 0; }
+>  : ^^^^^       ^^^^^ ^^^^^ ^^^
+>a : R1 & R2
+>  : ^^^^^^^
+>x : 1
+>  : ^
+>y : 0
+>  : ^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+>x : 1
+>  : ^
+>y : 1
+>  : ^
+}
+
