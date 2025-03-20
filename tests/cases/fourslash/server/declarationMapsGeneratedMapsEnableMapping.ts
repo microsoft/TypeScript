@@ -63,8 +63,8 @@
 ////        x: number;
 ////        y?: undefined;
 ////    } | {
-////        y: string;
 ////        x?: undefined;
+////        y: string;
 ////    };
 ////}
 ////export interface SomeType {
