@@ -633,6 +633,7 @@ interface FocusEventInit extends UIEventInit {
 
 interface FocusOptions {
     preventScroll?: boolean;
+    focusVisible?: boolean;
 }
 
 interface FontFaceDescriptors {
