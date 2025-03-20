@@ -15,16 +15,7 @@
  
  
  ==== noInfer.ts (10 errors) ====
-@@= skipped -59, +57 lines =@@
-     foo5('foo', { x: 'bar' }) // error
-                   ~
- !!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
--!!! related TS6500 noInfer.ts:32:60: The expected type comes from property 'x' which is declared here on type 'NoInfer<{ x: "foo"; }>'
-+!!! related TS6500 noInfer.ts:32:60: The expected type comes from property 'x' which is declared here on type '{ x: "foo"; }'
-     
-     declare class Animal { move(): void }
-     declare class Dog extends Animal { woof(): void }
-@@= skipped -20, +20 lines =@@
+@@= skipped -79, +77 lines =@@
      const g = { x: 3, y: 2 };
      assertEqual(g, { x: 3 }); // error
                     ~~~~~~~~

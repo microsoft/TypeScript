@@ -1,5 +1,5 @@
-noInferUnionExcessPropertyCheck1.ts(7,33): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '() => { x: string; } | { x: string; }'.
-noInferUnionExcessPropertyCheck1.ts(15,33): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '() => { x: string; } | { x: string; }'.
+noInferUnionExcessPropertyCheck1.ts(7,33): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '() => NoInfer<{ x: string; }> | NoInfer<{ x: string; }>'.
+noInferUnionExcessPropertyCheck1.ts(15,33): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'NoInfer<() => { x: string; }> | NoInfer<{ x: string; }>'.
 noInferUnionExcessPropertyCheck1.ts(23,33): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '() => { x: string; } | { x: string; }'.
 
 
@@ -12,7 +12,7 @@ noInferUnionExcessPropertyCheck1.ts(23,33): error TS2353: Object literal may onl
     test1({ x: "foo" }, { x: "bar" }); // no error
     test1({ x: "foo" }, { x: "bar", y: 42 }); // epc error
                                     ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '() => { x: string; } | { x: string; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '() => NoInfer<{ x: string; }> | NoInfer<{ x: string; }>'.
     
     declare function test2<T extends { x: string }>(
       a: T,
@@ -22,7 +22,7 @@ noInferUnionExcessPropertyCheck1.ts(23,33): error TS2353: Object literal may onl
     test2({ x: "foo" }, { x: "bar" }); // no error
     test2({ x: "foo" }, { x: "bar", y: 42 }); // epc error
                                     ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '() => { x: string; } | { x: string; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'NoInfer<() => { x: string; }> | NoInfer<{ x: string; }>'.
     
     declare function test3<T extends { x: string }>(
       a: T,

@@ -61,7 +61,7 @@ noInfer.ts(66,14): error TS2741: Property 'foo' is missing in type '{}' but requ
     foo5('foo', { x: 'bar' }) // error
                   ~
 !!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-!!! related TS6500 noInfer.ts:32:60: The expected type comes from property 'x' which is declared here on type '{ x: "foo"; }'
+!!! related TS6500 noInfer.ts:32:60: The expected type comes from property 'x' which is declared here on type 'NoInfer<{ x: "foo"; }>'
     
     declare class Animal { move(): void }
     declare class Dog extends Animal { woof(): void }

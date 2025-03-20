@@ -1,22 +1,11 @@
 --- old.noInferRedeclaration.types
 +++ new.noInferRedeclaration.types
-@@= skipped -1, +1 lines =@@
- 
- === a.ts ===
- export const f = <T>(x: T, y: NoInfer<T>) => x;
-->f : <T>(x: T, y: NoInfer<T>) => T
--><T>(x: T, y: NoInfer<T>) => x : <T>(x: T, y: NoInfer<T>) => T
-+>f : <T>(x: T, y: T) => T
-+><T>(x: T, y: NoInfer<T>) => x : <T>(x: T, y: T) => T
- >x : T
-->y : NoInfer<T>
-+>y : T
- >x : T
+@@= skipped -9, +9 lines =@@
  
  === b.ts ===
  import { f } from "./a";
 ->f : <T>(x: T, y: globalThis.NoInfer<T>) => T
-+>f : <T>(x: T, y: T) => T
++>f : <T>(x: T, y: NoInfer<T>) => T
  
  type NoInfer<T> = T & number;
  >NoInfer : NoInfer<T>
@@ -24,6 +13,6 @@
  export const g = f;
 ->g : <T>(x: T, y: globalThis.NoInfer<T>) => T
 ->f : <T>(x: T, y: globalThis.NoInfer<T>) => T
-+>g : <T>(x: T, y: T) => T
-+>f : <T>(x: T, y: T) => T
++>g : <T>(x: T, y: NoInfer<T>) => T
++>f : <T>(x: T, y: NoInfer<T>) => T
  
