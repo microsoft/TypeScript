@@ -471,7 +471,7 @@ class Class1<T> {
 >T : Symbol(T, Decl(dependentReturnType11.ts, 146, 13))
 }
 
-function g15<T extends boolean>(param: Class1<T>): Ret<T> { // Unsupported.
+function g15<T extends boolean>(param: Class1<T>): Ret<T> {
 >g15 : Symbol(g15, Decl(dependentReturnType11.ts, 148, 1))
 >T : Symbol(T, Decl(dependentReturnType11.ts, 150, 13))
 >param : Symbol(param, Decl(dependentReturnType11.ts, 150, 32))

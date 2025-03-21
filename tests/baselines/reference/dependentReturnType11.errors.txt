@@ -217,7 +217,7 @@ dependentReturnType11.ts(276,5): error TS2322: Type '2' is not assignable to typ
         prop!: T;
     }
     
-    function g15<T extends boolean>(param: Class1<T>): Ret<T> { // Unsupported.
+    function g15<T extends boolean>(param: Class1<T>): Ret<T> {
         return param.prop ? 1 : 2;
     }
     
