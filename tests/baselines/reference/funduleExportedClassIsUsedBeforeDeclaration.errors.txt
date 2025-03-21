@@ -1,0 +1,15 @@
+funduleExportedClassIsUsedBeforeDeclaration.ts(5,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== funduleExportedClassIsUsedBeforeDeclaration.ts (1 errors) ====
+    interface A {   // interface before module declaration
+        (): B.C;    // uses defined below class in module
+    }
+    declare function B(): B.C;  // function merged with module
+    declare module B {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C {    // class defined in module 
+        }
+    }
+    new B.C(); 

@@ -1,3 +1,4 @@
+react.d.ts(6,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 test.tsx(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 test.tsx(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
@@ -23,13 +24,15 @@ test.tsx(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnl
     	var y = <X></X>;
     }
     
-==== react.d.ts (0 errors) ====
+==== react.d.ts (1 errors) ====
     declare module 'react' {
     	var x: any;
     	export = x;
     }
     
     declare module ReactRouter {
+                   ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	var Route: any;
     	interface Thing { }
     }

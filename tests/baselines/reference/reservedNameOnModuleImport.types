@@ -11,6 +11,7 @@ declare module test {
     export import string = mstring;
 >string : any
 >       : ^^^
->mstring : error
+>mstring : any
+>        : ^^^
 }
 

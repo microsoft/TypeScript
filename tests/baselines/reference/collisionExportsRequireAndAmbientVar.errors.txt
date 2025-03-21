@@ -1,11 +1,15 @@
+collisionExportsRequireAndAmbientVar_externalmodule.ts(3,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 collisionExportsRequireAndAmbientVar_externalmodule.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndAmbientVar_globalFile.ts(3,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 collisionExportsRequireAndAmbientVar_globalFile.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== collisionExportsRequireAndAmbientVar_externalmodule.ts (1 errors) ====
+==== collisionExportsRequireAndAmbientVar_externalmodule.ts (2 errors) ====
     export declare var exports: number;
     export declare var require: string;
     declare module m1 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var exports: string;
         var require: number;
     }
@@ -17,10 +21,12 @@ collisionExportsRequireAndAmbientVar_globalFile.ts(7,8): error TS1294: This synt
         var a = 10;
     }
     
-==== collisionExportsRequireAndAmbientVar_globalFile.ts (1 errors) ====
+==== collisionExportsRequireAndAmbientVar_globalFile.ts (2 errors) ====
     declare var exports: number;
     declare var require: string;
     declare module m3 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var exports: string;
         var require: number;
     }

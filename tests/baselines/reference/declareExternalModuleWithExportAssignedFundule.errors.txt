@@ -1,0 +1,30 @@
+declareExternalModuleWithExportAssignedFundule.ts(7,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declareExternalModuleWithExportAssignedFundule.ts (1 errors) ====
+    declare module "express" {
+    
+        export = express;
+    
+        function express(): express.ExpressServer;
+    
+        module express {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+            export interface ExpressServer {
+    
+                enable(name: string): ExpressServer;
+    
+                post(path: RegExp, handler: (req: Function) => void ): void;
+    
+            }
+    
+            export class ExpressServerRequest {
+    
+            }
+    
+        }
+    
+    }
+    

@@ -1,8 +1,9 @@
 importInTypePosition.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importInTypePosition.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importInTypePosition.ts(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== importInTypePosition.ts (2 errors) ====
+==== importInTypePosition.ts (3 errors) ====
     module A {
            ~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -14,6 +15,8 @@ importInTypePosition.ts(14,8): error TS1294: This syntax is not allowed when 'er
     
     // no code gen expected
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         import a = A; //Error generates 'var <Alias> = <EntityName>;'
     }

@@ -1,3 +1,6 @@
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(1,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(1,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(6,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -5,8 +8,14 @@ declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(13,10): error TS1294
 declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(13,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== declFileWithExtendsClauseThatHasItsContainerNameConflict.ts (5 errors) ====
+==== declFileWithExtendsClauseThatHasItsContainerNameConflict.ts (8 errors) ====
     declare module A.B.C {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                       ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class B {
         }
     }

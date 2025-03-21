@@ -1,3 +1,8 @@
+duplicateSymbolsExportMatching.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateSymbolsExportMatching.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateSymbolsExportMatching.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateSymbolsExportMatching.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateSymbolsExportMatching.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateSymbolsExportMatching.ts(24,15): error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
 duplicateSymbolsExportMatching.ts(25,22): error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
 duplicateSymbolsExportMatching.ts(26,22): error TS2395: Individual declarations in merged declaration 'E' must be all exported or all local.
@@ -19,6 +24,7 @@ duplicateSymbolsExportMatching.ts(49,12): error TS2434: A namespace declaration 
 duplicateSymbolsExportMatching.ts(52,21): error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
 duplicateSymbolsExportMatching.ts(55,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateSymbolsExportMatching.ts(56,11): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
+duplicateSymbolsExportMatching.ts(57,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateSymbolsExportMatching.ts(57,12): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
 duplicateSymbolsExportMatching.ts(58,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateSymbolsExportMatching.ts(58,19): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
@@ -26,23 +32,31 @@ duplicateSymbolsExportMatching.ts(64,11): error TS2395: Individual declarations 
 duplicateSymbolsExportMatching.ts(65,18): error TS2395: Individual declarations in merged declaration 'D' must be all exported or all local.
 
 
-==== duplicateSymbolsExportMatching.ts (26 errors) ====
+==== duplicateSymbolsExportMatching.ts (32 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface E { }
         interface I { }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface E { } // ok
         interface I { } // ok
     }
     
     // Doesn't match export visibility, but it's in a different parent, so it's ok
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface E { } // ok
         export interface I { } // ok
     }
     
     module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface I { }
         interface I { } // ok
         export interface E { }
@@ -50,6 +64,8 @@ duplicateSymbolsExportMatching.ts(65,18): error TS2395: Individual declarations 
     }
     
     module N2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface I { }
                   ~
 !!! error TS2395: Individual declarations in merged declaration 'I' must be all exported or all local.
@@ -126,6 +142,8 @@ duplicateSymbolsExportMatching.ts(65,18): error TS2395: Individual declarations 
               ~
 !!! error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
         module C { }
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                ~
 !!! error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
         export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)

@@ -1,0 +1,21 @@
+internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.ts (2 errors) ====
+    export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module b {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I {
+                foo();
+            }
+        }
+    }
+    
+    import b = a.b;
+    export var x: b.I;
+    x.foo();
+    

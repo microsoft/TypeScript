@@ -1,3 +1,6 @@
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(1,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(6,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -7,8 +10,14 @@ declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,12): erro
 declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(13,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts (7 errors) ====
+==== declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts (10 errors) ====
     declare module A.B.Base {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                       ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class W {
             id: number;
         }

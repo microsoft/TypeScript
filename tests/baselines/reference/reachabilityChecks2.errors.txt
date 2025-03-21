@@ -1,8 +1,9 @@
 reachabilityChecks2.ts(4,1): error TS7027: Unreachable code detected.
 reachabilityChecks2.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reachabilityChecks2.ts(6,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== reachabilityChecks2.ts (2 errors) ====
+==== reachabilityChecks2.ts (3 errors) ====
     while (true) { }
     const enum E { X }
     
@@ -14,6 +15,8 @@ reachabilityChecks2.ts(4,8): error TS1294: This syntax is not allowed when 'eras
     ~~~~~~~~~~~~~~~~~
         module A {
     ~~~~~~~~~~~~~~
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             const enum E { X }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
         }

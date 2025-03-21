@@ -1,12 +1,15 @@
+importedModuleAddToGlobal.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importedModuleAddToGlobal.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importedModuleAddToGlobal.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importedModuleAddToGlobal.ts(15,23): error TS2833: Cannot find namespace 'b'. Did you mean 'B'?
 
 
-==== importedModuleAddToGlobal.ts (3 errors) ====
+==== importedModuleAddToGlobal.ts (4 errors) ====
     // Binding for an import statement in a typeref position is being added to the global scope
     // Shouldn't compile b.B is not defined in C
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import b = B;
         import c = C;
     }

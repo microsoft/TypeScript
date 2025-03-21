@@ -1,3 +1,4 @@
+duplicateIdentifiersAcrossContainerBoundaries.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(9,21): error TS2814: Function with bodies can only merge with classes that are ambient.
@@ -14,10 +15,13 @@ duplicateIdentifiersAcrossContainerBoundaries.ts(40,8): error TS1294: This synta
 duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
 duplicateIdentifiersAcrossContainerBoundaries.ts(44,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(45,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(49,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== duplicateIdentifiersAcrossContainerBoundaries.ts (16 errors) ====
+==== duplicateIdentifiersAcrossContainerBoundaries.ts (18 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I { }
     }
     module M {
@@ -100,6 +104,8 @@ duplicateIdentifiersAcrossContainerBoundaries.ts(45,19): error TS1294: This synt
         }
     }
     declare module N {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function F(); // no error because function is ambient
     }
     

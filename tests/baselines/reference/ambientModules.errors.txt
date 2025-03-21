@@ -1,0 +1,11 @@
+ambientModules.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ambientModules.ts(1,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ambientModules.ts (2 errors) ====
+    declare module Foo.Bar { export var foo; };
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                       ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    Foo.Bar.foo = 5; 

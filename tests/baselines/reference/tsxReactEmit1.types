@@ -11,9 +11,11 @@ declare module JSX {
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 var p;
 >p : any
+>  : ^^^
 
 var selfClosed1 = <div />;
 >selfClosed1 : JSX.Element
@@ -91,7 +93,9 @@ var selfClosed7 = <div x={p} y='p' b />;
 >div : any
 >    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 >y : string
 >  : ^^^^^^
 >b : true
@@ -129,6 +133,7 @@ var openClosed3 = <div n='m'>{p}</div>;
 >n : string
 >  : ^^^^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -144,7 +149,9 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >p < p : boolean
 >      : ^^^^^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -162,7 +169,9 @@ var openClosed5 = <div n='m' b>{p > p}</div>;
 >p > p : boolean
 >      : ^^^^^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -198,9 +207,13 @@ class SomeClass {
 >[p, ...p, p] : any[]
 >             : ^^^^^
 >p : any
+>  : ^^^
 >...p : any
+>     : ^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -214,6 +227,7 @@ class SomeClass {
 >{p} : { p: any; }
 >    : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -245,9 +259,13 @@ class SomeClass {
 >[p, ...p, p] : any[]
 >             : ^^^^^
 >p : any
+>  : ^^^
 >...p : any
+>     : ^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -263,6 +281,7 @@ class SomeClass {
 >{p} : { p: any; }
 >    : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 	}
@@ -286,6 +305,7 @@ var whitespace2 = <div>  {p}    </div>;
 >div : any
 >    : ^^^
 >p : any
+>  : ^^^
 >div : any
 >    : ^^^
 
@@ -299,6 +319,7 @@ var whitespace3 = <div>
 
       {p}    
 >p : any
+>  : ^^^
 
       </div>;
 >div : any

@@ -5,10 +5,12 @@
 
 var a;
 >a : any
+>  : ^^^
 
 module M { }
 import a = M;
 >a : any
 >  : ^^^
->M : error
+>M : any
+>  : ^^^
 

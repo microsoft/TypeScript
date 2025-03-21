@@ -1,0 +1,21 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== file.tsx (1 errors) ====
+    declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    declare var React: any;
+    
+    <></>; // no whitespace
+    <    ></   >; // lots of whitespace
+    < /*starting wrap*/ ></ /*ending wrap*/>; // comments in the tags
+    <>hi</>; // text inside
+    <><span>hi</span><div>bye</div></>; // children
+    <><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
+    <>#</>; // # would cause scanning error if not in jsxtext

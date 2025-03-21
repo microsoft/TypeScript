@@ -1,9 +1,12 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(8,2): error TS2604: JSX element type 'Div' does not have any construct or call signatures.
 file.tsx(34,2): error TS2604: JSX element type 'Obj3' does not have any construct or call signatures.
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (3 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements { }
     }

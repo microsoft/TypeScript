@@ -1,0 +1,29 @@
+component.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+component.d.ts(4,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== consumer.tsx (0 errors) ====
+    /// <reference path="component.d.ts" />
+    import BaseComponent from 'BaseComponent';
+    class TestComponent extends React.Component<any, {}> {
+        render() {
+            return <BaseComponent />;
+        }
+    }
+    
+==== component.d.ts (2 errors) ====
+    declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      interface ElementAttributesProperty { props; }
+    }
+    declare module React {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      class Component<T, U> { }
+    }
+    declare module "BaseComponent" {
+        export default class extends React.Component<any, {}> {
+        }
+    }
+    

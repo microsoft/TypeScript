@@ -1,8 +1,11 @@
+knockout.ts(1,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 knockout.ts(21,20): error TS2339: Property 'd' does not exist on type 'Observable<string>'.
 
 
-==== knockout.ts (1 errors) ====
+==== knockout.ts (2 errors) ====
       declare module ko {
+                     ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
        export interface Observable<T> {
          (): T;
          (value: T): any;

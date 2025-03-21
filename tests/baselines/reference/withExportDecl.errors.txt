@@ -1,8 +1,9 @@
 withExportDecl.ts(38,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+withExportDecl.ts(43,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 withExportDecl.ts(49,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== withExportDecl.ts (2 errors) ====
+==== withExportDecl.ts (3 errors) ====
     var simpleVar;
     export var exportedSimpleVar;
     
@@ -48,6 +49,8 @@ withExportDecl.ts(49,15): error TS1294: This syntax is not allowed when 'erasabl
         }
     }
     export declare module m2 {
+                          ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         export var a: number;
     }

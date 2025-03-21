@@ -9,12 +9,13 @@ labeledStatementWithLabel_strict.ts(9,1): error TS1344: 'A label is not allowed 
 labeledStatementWithLabel_strict.ts(10,1): error TS1344: 'A label is not allowed here.
 labeledStatementWithLabel_strict.ts(12,1): error TS1344: 'A label is not allowed here.
 labeledStatementWithLabel_strict.ts(12,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+labeledStatementWithLabel_strict.ts(12,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 labeledStatementWithLabel_strict.ts(13,1): error TS1344: 'A label is not allowed here.
 labeledStatementWithLabel_strict.ts(13,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed here.
 
 
-==== labeledStatementWithLabel_strict.ts (14 errors) ====
+==== labeledStatementWithLabel_strict.ts (15 errors) ====
     "use strict"
     label: function fn() { }
     ~~~~~
@@ -49,6 +50,8 @@ labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed
 !!! error TS1344: 'A label is not allowed here.
            ~~~~~~
 !!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     label: namespace N {}
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.

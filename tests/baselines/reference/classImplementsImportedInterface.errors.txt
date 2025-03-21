@@ -1,8 +1,11 @@
+classImplementsImportedInterface.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classImplementsImportedInterface.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== classImplementsImportedInterface.ts (1 errors) ====
+==== classImplementsImportedInterface.ts (2 errors) ====
     module M1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
             foo();
         }

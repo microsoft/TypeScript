@@ -1,7 +1,8 @@
 server.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+server.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== server.ts (1 errors) ====
+==== server.ts (2 errors) ====
     class c {
     }
     interface i {
@@ -13,6 +14,8 @@ server.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnl
     }
     var x = 10;
     module uninstantiated {
+           ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     export { c };
     export { c as c2 };

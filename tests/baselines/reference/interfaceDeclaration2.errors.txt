@@ -1,0 +1,19 @@
+interfaceDeclaration2.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== interfaceDeclaration2.ts (1 errors) ====
+    interface I1 { }
+    module I1 { }
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    interface I2 { }
+    class I2 { }
+    
+    interface I3 { }
+    function I3() { }
+    
+    interface I4 { }
+    var I4:number;
+    
+    

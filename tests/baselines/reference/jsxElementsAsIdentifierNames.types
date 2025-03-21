@@ -3,11 +3,13 @@
 === a.tsx ===
 declare const React: any;
 >React : any
+>      : ^^^
 
 declare module JSX {
     interface IntrinsicElements {
         ["package"]: any;
 >["package"] : any
+>            : ^^^
 >"package" : "package"
 >          : ^^^^^^^^^
     }
@@ -18,7 +20,8 @@ function A() {
 >  : ^^^^^^^^^
 
     return <package />
-><package /> : error
+><package /> : any
+>            : ^^^
 >package : any
 >        : ^^^
 }
@@ -28,7 +31,8 @@ function B() {
 >  : ^^^^^^^^^
 
     return <package></package>
-><package></package> : error
+><package></package> : any
+>                    : ^^^
 >package : any
 >        : ^^^
 >package : any

@@ -1,0 +1,15 @@
+importDeclWithExportModifierInAmbientContext.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== importDeclWithExportModifierInAmbientContext.ts (1 errors) ====
+    declare module "m" {
+        module x {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            interface c {
+            }
+        }
+        export import a = x.c;
+        var b: a;
+    }
+    

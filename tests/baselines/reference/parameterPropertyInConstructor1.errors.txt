@@ -1,8 +1,11 @@
+parameterPropertyInConstructor1.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parameterPropertyInConstructor1.ts(3,17): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== parameterPropertyInConstructor1.ts (1 errors) ====
+==== parameterPropertyInConstructor1.ts (2 errors) ====
     declare module mod {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       class Customers {
         constructor(public names: string);
                     ~~~~~~~~~~~~~~~~~~~~

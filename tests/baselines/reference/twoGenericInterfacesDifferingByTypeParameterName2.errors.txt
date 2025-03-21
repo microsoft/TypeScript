@@ -1,13 +1,18 @@
 twoGenericInterfacesDifferingByTypeParameterName2.ts(3,11): error TS2428: All declarations of 'B' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName2.ts(7,11): error TS2428: All declarations of 'B' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName2.ts(8,8): error TS2304: Cannot find name 'V'.
+twoGenericInterfacesDifferingByTypeParameterName2.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 twoGenericInterfacesDifferingByTypeParameterName2.ts(12,15): error TS2428: All declarations of 'B' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName2.ts(16,15): error TS2428: All declarations of 'B' must have identical type parameters.
+twoGenericInterfacesDifferingByTypeParameterName2.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+twoGenericInterfacesDifferingByTypeParameterName2.ts(27,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+twoGenericInterfacesDifferingByTypeParameterName2.ts(33,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 twoGenericInterfacesDifferingByTypeParameterName2.ts(34,22): error TS2428: All declarations of 'B' must have identical type parameters.
+twoGenericInterfacesDifferingByTypeParameterName2.ts(39,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All declarations of 'B' must have identical type parameters.
 
 
-==== twoGenericInterfacesDifferingByTypeParameterName2.ts (7 errors) ====
+==== twoGenericInterfacesDifferingByTypeParameterName2.ts (12 errors) ====
     // type parameter names are relevant when choosing whether to merge interface declarations
     
     interface B<T, U> {
@@ -25,6 +30,8 @@ twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All d
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface B<T, U> {
                   ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.
@@ -39,18 +46,24 @@ twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All d
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface B<T, U> {
             x: U;
         }
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface B<U, T> { // ok, different declaration space than other M2
             y: T;
         }
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface B<T, U> {
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.
@@ -59,6 +72,8 @@ twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All d
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface B<U, T> { // error
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.

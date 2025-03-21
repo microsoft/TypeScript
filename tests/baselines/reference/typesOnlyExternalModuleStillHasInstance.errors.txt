@@ -1,3 +1,4 @@
+foo_0.ts(6,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 foo_1.ts(5,5): error TS2741: Property 'M2' is missing in type 'typeof import("foo_0")' but required in type '{ M2: Object; }'.
 
 
@@ -11,13 +12,15 @@ foo_1.ts(5,5): error TS2741: Property 'M2' is missing in type 'typeof import("fo
 !!! error TS2741: Property 'M2' is missing in type 'typeof import("foo_0")' but required in type '{ M2: Object; }'.
 !!! related TS2728 foo_1.ts:5:9: 'M2' is declared here.
     
-==== foo_0.ts (0 errors) ====
+==== foo_0.ts (1 errors) ====
     export interface Person {
     	name: string;
     	age: number;
     }
     
     export module M2 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export interface I2 {
     		x: Person;
     	}

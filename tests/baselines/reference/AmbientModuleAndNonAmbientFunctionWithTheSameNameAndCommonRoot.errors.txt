@@ -1,0 +1,19 @@
+module.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== module.d.ts (1 errors) ====
+    declare module Point {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var Origin: { x: number; y: number; }
+    }
+    
+==== function.ts (0 errors) ====
+    function Point() {
+        return { x: 0, y: 0 };
+    }
+    
+==== test.ts (0 errors) ====
+    var cl: { x: number; y: number; }
+    var cl = Point();
+    var cl = Point.Origin;

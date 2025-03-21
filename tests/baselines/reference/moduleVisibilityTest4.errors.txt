@@ -1,11 +1,14 @@
+moduleVisibilityTest4.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleVisibilityTest4.ts(9,11): error TS2724: 'M' has no exported member named 'num'. Did you mean 'nums'?
 moduleVisibilityTest4.ts(11,11): error TS2694: Namespace 'M' has no exported member 'bar'.
 moduleVisibilityTest4.ts(13,11): error TS2724: 'N' has no exported member named 'num'. Did you mean 'nums'?
 moduleVisibilityTest4.ts(15,11): error TS2694: Namespace 'N' has no exported member 'bar'.
 
 
-==== moduleVisibilityTest4.ts (4 errors) ====
+==== moduleVisibilityTest4.ts (5 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export type nums = number;
     }
     

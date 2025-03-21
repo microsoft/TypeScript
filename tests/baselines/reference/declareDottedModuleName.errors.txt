@@ -1,0 +1,37 @@
+declareDottedModuleName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedModuleName.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedModuleName.ts(2,14): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedModuleName.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedModuleName.ts(6,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedModuleName.ts(6,21): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedModuleName.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declareDottedModuleName.ts(9,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declareDottedModuleName.ts (8 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module P.Q { } // This shouldnt be emitted
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                 ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module R.S { }  //This should be emitted
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                        ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    
+    module T.U { // This needs to be emitted
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }

@@ -1,3 +1,4 @@
+implicitAnyAmbients.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 implicitAnyAmbients.ts(2,9): error TS7005: Variable 'x' implicitly has an 'any' type.
 implicitAnyAmbients.ts(5,14): error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
 implicitAnyAmbients.ts(5,16): error TS7006: Parameter 'x' implicitly has an 'any' type.
@@ -6,11 +7,14 @@ implicitAnyAmbients.ts(10,9): error TS7010: 'foo', which lacks return-type annot
 implicitAnyAmbients.ts(11,9): error TS7010: 'foo2', which lacks return-type annotation, implicitly has an 'any' return type.
 implicitAnyAmbients.ts(16,9): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 implicitAnyAmbients.ts(17,9): error TS7010: 'foo2', which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyAmbients.ts(21,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 implicitAnyAmbients.ts(22,13): error TS7005: Variable 'y' implicitly has an 'any' type.
 
 
-==== implicitAnyAmbients.ts (9 errors) ====
+==== implicitAnyAmbients.ts (11 errors) ====
     declare module m {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var x; // error
             ~
 !!! error TS7005: Variable 'x' implicitly has an 'any' type.
@@ -47,6 +51,8 @@ implicitAnyAmbients.ts(22,13): error TS7005: Variable 'y' implicitly has an 'any
         }
     
         module n {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var y; // error
                 ~
 !!! error TS7005: Variable 'y' implicitly has an 'any' type.

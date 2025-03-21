@@ -1,8 +1,11 @@
+semicolonsInModuleDeclarations.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 semicolonsInModuleDeclarations.ts(2,27): error TS1036: Statements are not allowed in ambient contexts.
 
 
-==== semicolonsInModuleDeclarations.ts (1 errors) ====
+==== semicolonsInModuleDeclarations.ts (2 errors) ====
     declare module ambiModule {
+                   ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
        export interface i1 { };
                               ~
 !!! error TS1036: Statements are not allowed in ambient contexts.

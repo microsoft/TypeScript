@@ -1,8 +1,9 @@
 constEnumOnlyModuleMerging.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnumOnlyModuleMerging.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constEnumOnlyModuleMerging.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== constEnumOnlyModuleMerging.ts (2 errors) ====
+==== constEnumOnlyModuleMerging.ts (3 errors) ====
     module Outer {
            ~~~~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -10,6 +11,8 @@ constEnumOnlyModuleMerging.ts(9,8): error TS1294: This syntax is not allowed whe
     }
     
     module Outer {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export const enum A { X }
     }
     

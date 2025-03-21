@@ -1,0 +1,31 @@
+file6.ts(1,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== file1.ts (0 errors) ====
+    declare class Promise { }
+    declare function Foo(): void;
+    declare class C {}
+    declare enum E {X = 1};
+    
+    export var promise = Promise;
+    export var foo = Foo;
+    export var c = C;
+    export var e = E;
+    
+==== file2.ts (0 errors) ====
+    export declare function foo();
+    
+==== file3.ts (0 errors) ====
+    export declare class C {}
+    
+==== file4.ts (0 errors) ====
+    export declare var v: number;
+    
+==== file5.ts (0 errors) ====
+    export declare enum E {X = 1}
+    
+==== file6.ts (1 errors) ====
+    export declare module M { var v: number; }
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    

@@ -1,10 +1,12 @@
 privacyTopLevelInternalReferenceImportWithExport.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyTopLevelInternalReferenceImportWithExport.ts(15,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyTopLevelInternalReferenceImportWithExport.ts(19,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyTopLevelInternalReferenceImportWithExport.ts(26,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyTopLevelInternalReferenceImportWithExport.ts(39,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyTopLevelInternalReferenceImportWithExport.ts(43,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== privacyTopLevelInternalReferenceImportWithExport.ts (4 errors) ====
+==== privacyTopLevelInternalReferenceImportWithExport.ts (6 errors) ====
     // private elements
     module m_private {
            ~~~~~~~~~
@@ -28,6 +30,8 @@ privacyTopLevelInternalReferenceImportWithExport.ts(39,19): error TS1294: This s
             }
         }
         export module mu_private {
+                      ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface i {
             }
         }
@@ -56,6 +60,8 @@ privacyTopLevelInternalReferenceImportWithExport.ts(39,19): error TS1294: This s
             }
         }
         export module mu_public {
+                      ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface i {
             }
         }

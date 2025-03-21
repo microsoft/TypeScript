@@ -1,3 +1,4 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(8,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 file.tsx(9,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 file.tsx(10,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
@@ -9,8 +10,10 @@ file.tsx(17,10): error TS2874: This JSX tag requires 'React' to be in scope, but
 file.tsx(18,10): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
-==== file.tsx (9 errors) ====
+==== file.tsx (10 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

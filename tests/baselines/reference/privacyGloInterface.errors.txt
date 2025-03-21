@@ -1,7 +1,8 @@
 privacyGloInterface.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyGloInterface.ts(89,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== privacyGloInterface.ts (1 errors) ====
+==== privacyGloInterface.ts (2 errors) ====
     module m1 {
            ~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -93,6 +94,8 @@ privacyGloInterface.ts(1,8): error TS1294: This syntax is not allowed when 'eras
     }
     
     module m3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface m3_i_public {
             f1(): number;
         }

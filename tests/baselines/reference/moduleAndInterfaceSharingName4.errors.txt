@@ -1,0 +1,18 @@
+moduleAndInterfaceSharingName4.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleAndInterfaceSharingName4.ts(4,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleAndInterfaceSharingName4.ts (2 errors) ====
+    declare module D3 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x: D3.Color.Color;
+    
+        module Color {
+               ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface Color {
+                darker: Color;
+            }
+        }
+    }

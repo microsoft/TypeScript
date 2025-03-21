@@ -6,10 +6,11 @@ declarationEmit_nameConflicts_0.ts(19,19): error TS1294: This syntax is not allo
 declarationEmit_nameConflicts_0.ts(31,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declarationEmit_nameConflicts_0.ts(31,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declarationEmit_nameConflicts_0.ts(34,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(40,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declarationEmit_nameConflicts_1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== declarationEmit_nameConflicts_0.ts (8 errors) ====
+==== declarationEmit_nameConflicts_0.ts (9 errors) ====
     import im = require('./declarationEmit_nameConflicts_1');
     export module M {
                   ~
@@ -66,6 +67,8 @@ declarationEmit_nameConflicts_1.ts(1,8): error TS1294: This syntax is not allowe
         export interface b extends M.b { } // ok
         export interface I extends M.c.I { } // ok
         export module c {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface I extends M.c.I { } // ok
         }
     }

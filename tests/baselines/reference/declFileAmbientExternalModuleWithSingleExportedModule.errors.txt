@@ -1,0 +1,24 @@
+declFileAmbientExternalModuleWithSingleExportedModule_0.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileAmbientExternalModuleWithSingleExportedModule_0.ts(3,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileAmbientExternalModuleWithSingleExportedModule_1.ts (0 errors) ====
+    ///<reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.ts' preserve="true" />
+    import SubModule = require('SubModule');
+    export var x: SubModule.m.m3.c;
+    
+    
+==== declFileAmbientExternalModuleWithSingleExportedModule_0.ts (2 errors) ====
+    declare module "SubModule" {
+        export module m {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export module m3 {
+                          ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                interface c {
+                }
+            }
+        }
+    }
+    

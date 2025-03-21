@@ -1,12 +1,13 @@
 interfaceThatIndirectlyInheritsFromItself.ts(1,11): error TS2310: Type 'Base' recursively references itself as a base type.
 interfaceThatIndirectlyInheritsFromItself.ts(5,11): error TS2310: Type 'Derived' recursively references itself as a base type.
 interfaceThatIndirectlyInheritsFromItself.ts(9,11): error TS2310: Type 'Derived2' recursively references itself as a base type.
+interfaceThatIndirectlyInheritsFromItself.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 interfaceThatIndirectlyInheritsFromItself.ts(14,15): error TS2310: Type 'Base<T>' recursively references itself as a base type.
 interfaceThatIndirectlyInheritsFromItself.ts(18,15): error TS2310: Type 'Derived<T>' recursively references itself as a base type.
 interfaceThatIndirectlyInheritsFromItself.ts(22,15): error TS2310: Type 'Derived2<T>' recursively references itself as a base type.
 
 
-==== interfaceThatIndirectlyInheritsFromItself.ts (6 errors) ====
+==== interfaceThatIndirectlyInheritsFromItself.ts (7 errors) ====
     interface Base extends Derived2 { // error
               ~~~~
 !!! error TS2310: Type 'Base' recursively references itself as a base type.
@@ -26,6 +27,8 @@ interfaceThatIndirectlyInheritsFromItself.ts(22,15): error TS2310: Type 'Derived
     }
     
     module Generic {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base<T> extends Derived2<T> { // error
                   ~~~~
 !!! error TS2310: Type 'Base<T>' recursively references itself as a base type.

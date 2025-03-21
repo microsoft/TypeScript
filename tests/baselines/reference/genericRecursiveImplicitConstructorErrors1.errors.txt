@@ -1,8 +1,11 @@
+genericRecursiveImplicitConstructorErrors1.ts(1,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericRecursiveImplicitConstructorErrors1.ts(9,49): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
 
 
-==== genericRecursiveImplicitConstructorErrors1.ts (1 errors) ====
+==== genericRecursiveImplicitConstructorErrors1.ts (2 errors) ====
     export declare module TypeScript {
+                          ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       class PullSymbol { }
       class PullSignatureSymbol <A,B,C> extends PullSymbol {
       public addSpecialization<A,B,C>(signature: PullSignatureSymbol<A,B,C>, typeArguments: PullTypeSymbol<any,any,any>[]): void;

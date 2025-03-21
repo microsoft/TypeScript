@@ -8,10 +8,13 @@ Error4.tsx(2,1): error TS1005: '</' expected.
 Error5.tsx(1,11): error TS17008: JSX element 'div' has no corresponding closing tag.
 Error5.tsx(1,16): error TS17008: JSX element 'span' has no corresponding closing tag.
 Error5.tsx(3,1): error TS1005: '</' expected.
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== file.tsx (0 errors) ====
+==== file.tsx (1 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

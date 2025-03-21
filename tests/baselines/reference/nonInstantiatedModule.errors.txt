@@ -2,9 +2,10 @@ nonInstantiatedModule.ts(1,8): error TS1294: This syntax is not allowed when 'er
 nonInstantiatedModule.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nonInstantiatedModule.ts(17,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nonInstantiatedModule.ts(35,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonInstantiatedModule.ts(36,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== nonInstantiatedModule.ts (4 errors) ====
+==== nonInstantiatedModule.ts (5 errors) ====
     module M {
            ~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -49,6 +50,8 @@ nonInstantiatedModule.ts(35,8): error TS1294: This syntax is not allowed when 'e
            ~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module Utils {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface Point {
                 x: number; y: number;
             }

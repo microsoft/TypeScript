@@ -1,0 +1,20 @@
+decl.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== decl.d.ts (1 errors) ====
+    declare module "decl"
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    {
+        export function call();
+    }
+==== main/consume.ts (0 errors) ====
+    ///<reference path="../decl.d.ts" />
+    import decl = require("decl");
+    var str = decl.call();
+    
+    declare function fail();
+    
+    if(str !== "success") {
+        fail();
+    }

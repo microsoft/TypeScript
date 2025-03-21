@@ -1,7 +1,8 @@
 es6ClassTest.ts(25,44): error TS1015: Parameter cannot have question mark and initializer.
+es6ClassTest.ts(34,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== es6ClassTest.ts (1 errors) ====
+==== es6ClassTest.ts (2 errors) ====
     class Bar {
         public goo: number;
         public prop1(x) {
@@ -38,6 +39,8 @@ es6ClassTest.ts(25,44): error TS1015: Parameter cannot have question mark and in
     var f = new Foo();
     
     declare module AmbientMod {
+                   ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export class Provide {
     		foo:number;
     		zoo:string;

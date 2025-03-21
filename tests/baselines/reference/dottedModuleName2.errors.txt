@@ -5,9 +5,10 @@ dottedModuleName2.ts(9,27): error TS1294: This syntax is not allowed when 'erasa
 dottedModuleName2.ts(22,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 dottedModuleName2.ts(22,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 dottedModuleName2.ts(22,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName2.ts(32,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== dottedModuleName2.ts (7 errors) ====
+==== dottedModuleName2.ts (8 errors) ====
     module A.B {
            ~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -54,6 +55,8 @@ dottedModuleName2.ts(22,12): error TS1294: This syntax is not allowed when 'eras
      
      
     module M
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
      
     {
      

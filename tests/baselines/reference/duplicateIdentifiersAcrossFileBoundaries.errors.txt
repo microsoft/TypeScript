@@ -8,6 +8,7 @@ file2.ts(4,7): error TS2813: Class declaration cannot implement overload list fo
 file2.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file2.ts(7,8): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
+file2.ts(11,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
 ==== file1.ts (5 errors) ====
@@ -40,7 +41,7 @@ file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
         }
     }
     
-==== file2.ts (5 errors) ====
+==== file2.ts (6 errors) ====
     class I { } // error -- cannot merge interface with non-ambient class
     interface C1 { } // error -- cannot merge interface with non-ambient class
     function C2() { } // error -- cannot merge function with non-ambient class
@@ -65,6 +66,8 @@ file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
     }
     
     declare module N {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function F(); // no error because function is ambient
     }
     

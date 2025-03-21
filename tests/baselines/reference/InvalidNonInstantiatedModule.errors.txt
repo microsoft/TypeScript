@@ -1,9 +1,12 @@
+InvalidNonInstantiatedModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 InvalidNonInstantiatedModule.ts(5,9): error TS2708: Cannot use namespace 'M' as a value.
 InvalidNonInstantiatedModule.ts(7,15): error TS2708: Cannot use namespace 'M' as a value.
 
 
-==== InvalidNonInstantiatedModule.ts (2 errors) ====
+==== InvalidNonInstantiatedModule.ts (3 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface Point { x: number; y: number }
     }
     

@@ -1,8 +1,11 @@
+parserFunctionDeclaration1.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserFunctionDeclaration1.ts(2,3): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 
 
-==== parserFunctionDeclaration1.ts (1 errors) ====
+==== parserFunctionDeclaration1.ts (2 errors) ====
     declare module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       declare function F();
       ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.

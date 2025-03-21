@@ -1,11 +1,22 @@
+nestedModules.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(1,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(1,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nestedModules.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nestedModules.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModules.ts(14,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nestedModules.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nestedModules.ts(21,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== nestedModules.ts (4 errors) ====
+==== nestedModules.ts (9 errors) ====
     module A.B.C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface Point {
             x: number;
             y: number;
@@ -23,6 +34,10 @@ nestedModules.ts(21,19): error TS1294: This syntax is not allowed when 'erasable
     }
     
     module M2.X {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface Point {
             x: number; y: number;
         }

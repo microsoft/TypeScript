@@ -1,9 +1,12 @@
+tsxDynamicTagName2.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 tsxDynamicTagName2.tsx(9,1): error TS2339: Property 'customTag' does not exist on type 'JSX.IntrinsicElements'.
 tsxDynamicTagName2.tsx(9,25): error TS2339: Property 'customTag' does not exist on type 'JSX.IntrinsicElements'.
 
 
-==== tsxDynamicTagName2.tsx (2 errors) ====
+==== tsxDynamicTagName2.tsx (3 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
             div: any

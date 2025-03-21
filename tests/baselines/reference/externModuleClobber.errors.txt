@@ -1,0 +1,19 @@
+externModuleClobber.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== externModuleClobber.ts (1 errors) ====
+    declare module EM {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export class Position { }
+    
+    	export class EC {
+    		public getPosition() : EM.Position;
+    	}
+    }
+    
+    var x:EM.Position;
+    var ec:EM.EC = new EM.EC();
+    
+    x = ec.getPosition();
+    

@@ -1,11 +1,14 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(26,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (5 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface ElementAttributesProperty { pr: any; }
     	interface IntrinsicElements { }

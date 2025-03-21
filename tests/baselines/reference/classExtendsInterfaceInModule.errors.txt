@@ -1,10 +1,14 @@
+classExtendsInterfaceInModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsInterfaceInModule.ts(5,18): error TS2689: Cannot extend an interface 'M.I1'. Did you mean 'implements'?
 classExtendsInterfaceInModule.ts(6,21): error TS2689: Cannot extend an interface 'M.I2'. Did you mean 'implements'?
+classExtendsInterfaceInModule.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classExtendsInterfaceInModule.ts(14,17): error TS2689: Cannot extend an interface 'Mod.Nested.I'. Did you mean 'implements'?
 
 
-==== classExtendsInterfaceInModule.ts (3 errors) ====
+==== classExtendsInterfaceInModule.ts (5 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export interface I1 {}
       export interface I2<T> {}
     }
@@ -16,6 +20,8 @@ classExtendsInterfaceInModule.ts(14,17): error TS2689: Cannot extend an interfac
 !!! error TS2689: Cannot extend an interface 'M.I2'. Did you mean 'implements'?
     
     module Mod {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export namespace Nested {
     		export interface I {}
     	}

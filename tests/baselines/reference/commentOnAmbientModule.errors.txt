@@ -1,0 +1,34 @@
+a.ts(7,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+a.ts(12,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+b.ts(2,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== b.ts (1 errors) ====
+    ///<reference path="a.ts"/>
+    declare module E {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class foobar extends D.bar {
+            foo();
+        }
+    }
+==== a.ts (2 errors) ====
+    /*!=========
+        Keep this pinned comment
+       =========
+    */
+    
+    /*! Don't keep this pinned comment */
+    declare module C {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        function foo();
+    }
+    
+    // Don't keep this comment.
+    declare module D {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class bar { }
+    }
+    

@@ -1,0 +1,18 @@
+exportSpecifierAndExportedMemberDeclaration.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportSpecifierAndExportedMemberDeclaration.ts (1 errors) ====
+    declare module "m2" {
+        export module X {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            interface I { }
+        }
+        function Y();
+        export { Y as X };
+        function Z(): X.I;
+    }
+    
+    declare module "m2" {
+        function Z2(): X.I;
+    }

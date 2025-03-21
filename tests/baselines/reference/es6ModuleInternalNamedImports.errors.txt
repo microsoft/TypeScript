@@ -1,5 +1,6 @@
 es6ModuleInternalNamedImports.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 es6ModuleInternalNamedImports.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es6ModuleInternalNamedImports.ts(11,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 es6ModuleInternalNamedImports.ts(22,5): error TS1194: Export declarations are not permitted in a namespace.
 es6ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
 es6ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
@@ -10,7 +11,7 @@ es6ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are no
 es6ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
 
 
-==== es6ModuleInternalNamedImports.ts (10 errors) ====
+==== es6ModuleInternalNamedImports.ts (11 errors) ====
     export module M {
                   ~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -26,6 +27,8 @@ es6ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are no
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // uninstantiated module
         export module M_MU { }
+                      ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // function
         export function M_F() { }
         // enum

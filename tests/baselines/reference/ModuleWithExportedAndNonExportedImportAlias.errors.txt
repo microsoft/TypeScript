@@ -1,10 +1,13 @@
+ModuleWithExportedAndNonExportedImportAlias.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ModuleWithExportedAndNonExportedImportAlias.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ModuleWithExportedAndNonExportedImportAlias.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ModuleWithExportedAndNonExportedImportAlias.ts(37,21): error TS2339: Property 'Lines' does not exist on type 'typeof Geometry'.
 
 
-==== ModuleWithExportedAndNonExportedImportAlias.ts (3 errors) ====
+==== ModuleWithExportedAndNonExportedImportAlias.ts (4 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface Point {
             x: number;
             y: number;

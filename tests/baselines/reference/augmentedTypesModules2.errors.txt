@@ -1,3 +1,4 @@
+augmentedTypesModules2.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 augmentedTypesModules2.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 augmentedTypesModules2.ts(5,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 augmentedTypesModules2.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -5,12 +6,17 @@ augmentedTypesModules2.ts(8,8): error TS2434: A namespace declaration cannot be 
 augmentedTypesModules2.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 augmentedTypesModules2.ts(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 augmentedTypesModules2.ts(14,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+augmentedTypesModules2.ts(17,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+augmentedTypesModules2.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+augmentedTypesModules2.ts(24,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 augmentedTypesModules2.ts(27,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== augmentedTypesModules2.ts (8 errors) ====
+==== augmentedTypesModules2.ts (12 errors) ====
     // module then function
     module m2 { }
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     function m2() { }; // ok since the module is not instantiated
     
     module m2a { var y = 2; }
@@ -40,13 +46,19 @@ augmentedTypesModules2.ts(27,8): error TS1294: This syntax is not allowed when '
     function m2cc() { }; // error to have module first
     
     module m2d { }
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     declare function m2d(): void; 
     
     declare function m2e(): void; 
     module m2e { }
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     function m2f() { };
     module m2f { export interface I { foo(): void } } 
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     function m2g() { };
     module m2g { export class C { foo() { } } } 

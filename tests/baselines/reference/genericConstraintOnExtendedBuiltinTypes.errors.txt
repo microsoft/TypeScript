@@ -1,11 +1,14 @@
+genericConstraintOnExtendedBuiltinTypes.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericConstraintOnExtendedBuiltinTypes.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericConstraintOnExtendedBuiltinTypes.ts(9,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericConstraintOnExtendedBuiltinTypes.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericConstraintOnExtendedBuiltinTypes.ts(20,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== genericConstraintOnExtendedBuiltinTypes.ts (4 errors) ====
+==== genericConstraintOnExtendedBuiltinTypes.ts (5 errors) ====
     declare module EndGate {
+                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface ICloneable {
             Clone(): any;
         }

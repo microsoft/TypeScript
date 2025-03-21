@@ -1,0 +1,18 @@
+parserModuleDeclaration4.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserModuleDeclaration4.ts(2,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserModuleDeclaration4.ts(3,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== parserModuleDeclaration4.ts (3 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      declare module M1 {
+                     ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module M2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        }
+      }
+    }

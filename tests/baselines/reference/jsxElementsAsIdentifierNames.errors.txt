@@ -1,0 +1,21 @@
+a.tsx(2,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== a.tsx (1 errors) ====
+    declare const React: any;
+    declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface IntrinsicElements {
+            ["package"]: any;
+        }
+    }
+    
+    function A() {
+        return <package />
+    }
+    
+    function B() {
+        return <package></package>
+    }
+    

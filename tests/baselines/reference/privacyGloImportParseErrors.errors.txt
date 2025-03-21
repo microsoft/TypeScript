@@ -11,10 +11,14 @@ privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find module 'm1_M4_p
 privacyGloImportParseErrors.ts(81,43): error TS1147: Import declarations in a namespace cannot reference a module.
 privacyGloImportParseErrors.ts(82,43): error TS1147: Import declarations in a namespace cannot reference a module.
 privacyGloImportParseErrors.ts(85,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyGloImportParseErrors.ts(120,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(124,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImportParseErrors.ts(125,45): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(132,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+privacyGloImportParseErrors.ts(137,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyGloImportParseErrors.ts(145,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in a namespace cannot reference a module.
@@ -22,7 +26,7 @@ privacyGloImportParseErrors.ts(147,12): error TS1294: This syntax is not allowed
 privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a namespace cannot reference a module.
 
 
-==== privacyGloImportParseErrors.ts (22 errors) ====
+==== privacyGloImportParseErrors.ts (26 errors) ====
     module m1 {
            ~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -169,12 +173,16 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
         var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
     
         module m2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             import errorImport = require("glo_M2_public");
                                          ~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
             import nonerrorImport = glo_M1_public;
     
             module m5 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 import m5_errorImport = require("glo_M2_public");
                                                 ~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
@@ -185,6 +193,8 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
     
     declare module "anotherParseError" {
         module m2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             declare module "abc" {
             ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -194,6 +204,8 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
         }
     
         module m2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             module "abc2" {
                    ~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.

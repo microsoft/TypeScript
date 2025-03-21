@@ -4,10 +4,13 @@ Error3.tsx(1,22): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbra
 Error4.tsx(1,22): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 Error5.tsx(1,15): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 Error6.tsx(1,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== file.tsx (0 errors) ====
+==== file.tsx (1 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       interface Element {}
       interface IntrinsicElements {
         [s: string]: any;

@@ -1,3 +1,4 @@
+genericClassPropertyInheritanceSpecialization.ts(36,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericClassPropertyInheritanceSpecialization.ts(40,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericClassPropertyInheritanceSpecialization.ts(40,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericClassPropertyInheritanceSpecialization.ts(40,24): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -7,7 +8,7 @@ genericClassPropertyInheritanceSpecialization.ts(53,28): error TS1294: This synt
 genericClassPropertyInheritanceSpecialization.ts(53,37): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== genericClassPropertyInheritanceSpecialization.ts (7 errors) ====
+==== genericClassPropertyInheritanceSpecialization.ts (8 errors) ====
     interface KnockoutObservableBase<T> {
         peek(): T;
         (): T;
@@ -44,6 +45,8 @@ genericClassPropertyInheritanceSpecialization.ts(53,37): error TS1294: This synt
     }
     
     declare module ko {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var observableArray: KnockoutObservableArrayStatic;
     }
     

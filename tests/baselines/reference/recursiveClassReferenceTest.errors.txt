@@ -1,3 +1,5 @@
+recursiveClassReferenceTest.ts(6,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveClassReferenceTest.ts(6,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
 recursiveClassReferenceTest.ts(32,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveClassReferenceTest.ts(32,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -16,13 +18,17 @@ recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' i
   Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
 
 
-==== recursiveClassReferenceTest.ts (15 errors) ====
+==== recursiveClassReferenceTest.ts (17 errors) ====
     // Scenario 1: Test reqursive function call with "this" parameter
     // Scenario 2: Test recursive function call with cast and "this" parameter
     
     
     
     declare module Sample.Thing {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                          ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     	export interface IWidget {
     		getDomNode(): any;

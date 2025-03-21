@@ -1,0 +1,9 @@
+augmentedTypesExternalModule1.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== augmentedTypesExternalModule1.ts (1 errors) ====
+    export var a = 1;
+    class c5 { public foo() { } }
+    module c5 { } // should be ok everywhere
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.

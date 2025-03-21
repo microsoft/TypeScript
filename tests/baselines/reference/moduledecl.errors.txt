@@ -1,3 +1,10 @@
+moduledecl.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(4,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(7,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(7,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduledecl.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduledecl.ts(47,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduledecl.ts(84,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -10,21 +17,41 @@ moduledecl.ts(104,8): error TS1294: This syntax is not allowed when 'erasableSyn
 moduledecl.ts(105,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduledecl.ts(106,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduledecl.ts(107,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(118,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(122,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(126,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(130,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduledecl.ts(138,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(178,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduledecl.ts(195,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== moduledecl.ts (13 errors) ====
+==== moduledecl.ts (26 errors) ====
     module a {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     
     module b.a {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     
     module c.a.b {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import ma = a;
     }
     
     module mImport {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import d = a;
         import e = b.a;
         import d1 = a;
@@ -156,18 +183,26 @@ moduledecl.ts(138,8): error TS1294: This syntax is not allowed when 'erasableSyn
     }
     
     declare module m4 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var b;
     }
     
     declare module m5 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var c;
     }
     
     declare module m43 {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var b;
     }
     
     declare module m55 {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var c;
     }
     
@@ -218,6 +253,8 @@ moduledecl.ts(138,8): error TS1294: This syntax is not allowed when 'erasableSyn
     }
     
     declare module mAmbient {
+                   ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class C {
             public myProp: number;
         }
@@ -235,6 +272,8 @@ moduledecl.ts(138,8): error TS1294: This syntax is not allowed when 'erasableSyn
         }
     
         module m3 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             class C {
                 public myProp: number;
             }

@@ -1,0 +1,19 @@
+exportEqualNamespaces.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportEqualNamespaces.ts (1 errors) ====
+    declare module server {
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface Server extends Object { }
+    }
+    
+    interface server {
+        (): server.Server;
+        startTime: Date;
+    }
+     
+    var x = 5;
+    var server = new Date();
+    export = server;
+    

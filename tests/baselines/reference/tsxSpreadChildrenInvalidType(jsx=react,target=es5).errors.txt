@@ -1,8 +1,11 @@
+tsxSpreadChildrenInvalidType.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
 
 
-==== tsxSpreadChildrenInvalidType.tsx (1 errors) ====
+==== tsxSpreadChildrenInvalidType.tsx (2 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

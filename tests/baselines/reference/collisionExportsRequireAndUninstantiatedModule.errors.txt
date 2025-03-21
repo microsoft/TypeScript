@@ -1,0 +1,23 @@
+collisionExportsRequireAndUninstantiatedModule.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+collisionExportsRequireAndUninstantiatedModule.ts(8,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionExportsRequireAndUninstantiatedModule.ts (2 errors) ====
+    export module require { // no error 
+                  ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+    }
+    export function foo(): require.I {
+        return null;
+    }
+    export module exports { // no error
+                  ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+    }
+    export function foo2(): exports.I {
+        return null;
+    }

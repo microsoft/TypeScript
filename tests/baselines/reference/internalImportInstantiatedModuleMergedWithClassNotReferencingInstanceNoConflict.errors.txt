@@ -1,7 +1,8 @@
 internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts (1 errors) ====
+==== internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts (2 errors) ====
     class A {
         aProp: string;
     }
@@ -13,6 +14,8 @@ internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.
     }
     
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import Y = A;
     }
     

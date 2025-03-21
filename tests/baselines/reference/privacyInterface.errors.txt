@@ -1,8 +1,10 @@
 privacyInterface.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyInterface.ts(67,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyInterface.ts(195,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyInterface.ts(220,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== privacyInterface.ts (2 errors) ====
+==== privacyInterface.ts (4 errors) ====
     export module m1 {
                   ~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -202,6 +204,8 @@ privacyInterface.ts(67,8): error TS1294: This syntax is not allowed when 'erasab
     }
     
     export module m3 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface m3_i_public {
             f1(): number;
         }
@@ -227,6 +231,8 @@ privacyInterface.ts(67,8): error TS1294: This syntax is not allowed when 'erasab
     
     
     module m4 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface m4_i_public {
             f1(): number;
         }

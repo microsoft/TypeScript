@@ -94,7 +94,9 @@
 
     var name_v = o.name("Robert");  // should be 'any'
 >name_v : any
+>       : ^^^
 >o.name("Robert") : any
+>                 : ^^^
 >o.name : ko.Observable<string>
 >       : ^^^^^^^^^^^^^^^^^^^^^
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }

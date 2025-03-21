@@ -1,10 +1,13 @@
+recursiveTypeComparison2.ts(3,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveTypeComparison2.ts(13,80): error TS2304: Cannot find name 'StateValue'.
 
 
-==== recursiveTypeComparison2.ts (1 errors) ====
+==== recursiveTypeComparison2.ts (2 errors) ====
     // Before fix this would cause compiler to hang (#1170)
     
     declare module Bacon {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Event<T> {
         }
         interface Error<T> extends Event<T> {

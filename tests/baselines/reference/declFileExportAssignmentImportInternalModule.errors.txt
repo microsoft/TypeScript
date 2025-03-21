@@ -1,11 +1,14 @@
 declFileExportAssignmentImportInternalModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileExportAssignmentImportInternalModule.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== declFileExportAssignmentImportInternalModule.ts (1 errors) ====
+==== declFileExportAssignmentImportInternalModule.ts (2 errors) ====
     module m3 {
            ~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module m2 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface connectModule {
                 (res, req, next): void;
             }

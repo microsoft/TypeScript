@@ -1,7 +1,8 @@
 commentsemitComments.ts(72,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+commentsemitComments.ts(81,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== commentsemitComments.ts (1 errors) ====
+==== commentsemitComments.ts (2 errors) ====
     /** Variable comments*/
     var myVariable = 10;
     
@@ -85,6 +86,8 @@ commentsemitComments.ts(72,8): error TS1294: This syntax is not allowed when 'er
     
         /// module m2
         export module m2 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         }
     }
     

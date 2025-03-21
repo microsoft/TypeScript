@@ -1,3 +1,4 @@
+privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts(7,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts(8,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
@@ -105,7 +106,7 @@ privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts(8,15): error TS1294: T
     }
     function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createExportedWidget4()) {
     }
-==== privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts (0 errors) ====
+==== privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts (1 errors) ====
     declare module "GlobalWidgets" {
         export class Widget3 {
             name: string;
@@ -113,6 +114,8 @@ privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts(8,15): error TS1294: T
         export function createWidget3(): Widget3;
     
         export module SpecializedGlobalWidget {
+                      ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class Widget4 {
                 name: string;
             }

@@ -7,6 +7,7 @@ parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
 parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parserharness.ts(50,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(55,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(81,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
@@ -16,6 +17,8 @@ parserharness.ts(354,17): error TS2662: Cannot find name 'errorHandlerStack'. Di
 parserharness.ts(354,35): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 parserharness.ts(499,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(500,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(504,28): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserharness.ts(508,28): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(687,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserharness.ts(691,50): error TS2304: Cannot find name 'ITextWriter'.
 parserharness.ts(716,47): error TS2503: Cannot find namespace 'TypeScript'.
@@ -118,7 +121,7 @@ parserharness.ts(1910,19): error TS1294: This syntax is not allowed when 'erasab
 parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 
 
-==== parserharness.ts (118 errors) ====
+==== parserharness.ts (121 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -187,6 +190,8 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
     }
     
     declare module process {
+                   ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function nextTick(callback: () => any): void;
         export function on(event: string, listener: Function);
     }
@@ -659,10 +664,14 @@ parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
                 export var resolution: number;
     
                 declare module WScript {
+                               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                     export function InitializeProjection();
                 }
     
                 declare module TestUtilities {
+                               ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                     export function QueryPerformanceCounter(): number;
                     export function QueryPerformanceFrequency(): number;
                 }

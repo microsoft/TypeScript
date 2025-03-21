@@ -2,11 +2,15 @@ privacyGloImport.ts(1,8): error TS1294: This syntax is not allowed when 'erasabl
 privacyGloImport.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImport.ts(12,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImport.ts(85,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyGloImport.ts(120,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyGloImport.ts(124,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyGloImport.ts(132,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+privacyGloImport.ts(137,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImport.ts(145,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 privacyGloImport.ts(147,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== privacyGloImport.ts (6 errors) ====
+==== privacyGloImport.ts (10 errors) ====
     module m1 {
            ~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -135,10 +139,14 @@ privacyGloImport.ts(147,12): error TS1294: This syntax is not allowed when 'eras
         var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
     
         module m2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             //import errorImport = require("glo_M2_public");
             import nonerrorImport = glo_M1_public;
     
             module m5 {
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 //import m5_errorImport = require("glo_M2_public");
                 import m5_nonerrorImport = glo_M1_public;
             }
@@ -147,11 +155,15 @@ privacyGloImport.ts(147,12): error TS1294: This syntax is not allowed when 'eras
     
     declare module "anotherParseError" {
         module m2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             //declare module "abc" {
             //}
         }
     
         module m2 {
+               ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             //module "abc2" {
             //}
         }

@@ -1,4 +1,5 @@
 exportImportAlias.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportImportAlias.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportImportAlias.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportImportAlias.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportImportAlias.ts(30,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -8,7 +9,7 @@ exportImportAlias.ts(51,19): error TS1294: This syntax is not allowed when 'eras
 exportImportAlias.ts(60,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== exportImportAlias.ts (8 errors) ====
+==== exportImportAlias.ts (9 errors) ====
     // expect no errors here
     
     module A {
@@ -20,6 +21,8 @@ exportImportAlias.ts(60,8): error TS1294: This syntax is not allowed when 'erasa
             constructor(public x: number, public y: number) { }
         }
         export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface Id {
                 name: string;
             }

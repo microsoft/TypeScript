@@ -1,0 +1,12 @@
+exportDefaultForNonInstantiatedModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportDefaultForNonInstantiatedModule.ts (1 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface foo {
+        }
+    }
+    // Should not be emitted
+    export default m;

@@ -1,11 +1,27 @@
+immutable.ts(4,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(19,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(64,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(110,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(129,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(161,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(182,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(213,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(262,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(265,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(283,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(299,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(333,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+immutable.ts(338,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Keyed<K, V>' is not assignable to type 'this'.
       'Keyed<K, V>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Keyed<K, V>'.
+immutable.ts(357,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 immutable.ts(359,22): error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Indexed<T>' is not assignable to type 'this'.
       'Indexed<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Indexed<T>'.
+immutable.ts(389,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Set<T>' is not assignable to type 'this'.
@@ -33,11 +49,13 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
         toSeq(): N2<T>;
     }
-==== immutable.ts (3 errors) ====
+==== immutable.ts (19 errors) ====
     // Test that complex recursive collections can pass the `extends` assignability check without
     // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
     // started being checked.
     declare module Immutable {
+                   ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export function fromJS(jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any): any;
       export function is(first: any, second: any): boolean;
       export function hash(value: any): number;
@@ -53,6 +71,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         hashCode(): number;
       }
       export module List {
+                    ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isList(maybeList: any): maybeList is List<any>;
         function of<T>(...values: Array<T>): List<T>;
       }
@@ -98,6 +118,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
       }
       export module Map {
+                    ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isMap(maybeMap: any): maybeMap is Map<any, any>;
         function of(...keyValues: Array<any>): Map<any, any>;
       }
@@ -144,6 +166,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
       export module OrderedMap {
+                    ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isOrderedMap(maybeOrderedMap: any): maybeOrderedMap is OrderedMap<any, any>;
       }
       export function OrderedMap<K, V>(collection: Iterable<[K, V]>): OrderedMap<K, V>;
@@ -163,6 +187,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
       export module Set {
+                    ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isSet(maybeSet: any): maybeSet is Set<any>;
         function of<T>(...values: Array<T>): Set<T>;
         function fromKeys<T>(iter: Collection<T, any>): Set<T>;
@@ -195,6 +221,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
       }
       export module OrderedSet {
+                    ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isOrderedSet(maybeOrderedSet: any): boolean;
         function of<T>(...values: Array<T>): OrderedSet<T>;
         function fromKeys<T>(iter: Collection<T, any>): OrderedSet<T>;
@@ -216,6 +244,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>;
       }
       export module Stack {
+                    ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isStack(maybeStack: any): maybeStack is Stack<any>;
         function of<T>(...values: Array<T>): Stack<T>;
       }
@@ -247,6 +277,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
       export function Range(start?: number, end?: number, step?: number): Seq.Indexed<number>;
       export function Repeat<T>(value: T, times?: number): Seq.Indexed<T>;
       export module Record {
+                    ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
         export function getDescriptiveName(record: Instance<any>): string;
         export interface Class<T extends Object> {
@@ -296,9 +328,13 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
       }
       export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
       export module Seq {
+                    ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
         function of<T>(...values: Array<T>): Seq.Indexed<T>;
         export module Keyed {}
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
         export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
         export function Keyed<K, V>(): Seq.Keyed<K, V>;
@@ -317,6 +353,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
         }
         module Indexed {
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
           function of<T>(...values: Array<T>): Seq.Indexed<T>;
         }
         export function Indexed(): Seq.Indexed<any>;
@@ -333,6 +371,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
         }
         export module Set {
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
           function of<T>(...values: Array<T>): Seq.Set<T>;
         }
         export function Set(): Seq.Set<any>;
@@ -367,11 +407,15 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
       export module Collection {
+                    ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
         function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
         function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
         function isOrdered(maybeOrdered: any): boolean;
         export module Keyed {}
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
         export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
         export interface Keyed<K, V> extends Collection<K, V> {
@@ -396,6 +440,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           [Symbol.iterator](): IterableIterator<[K, V]>;
         }
         export module Indexed {}
+                      ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
         export interface Indexed<T> extends Collection<number, T> {
                          ~~~~~~~
@@ -433,6 +479,8 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           [Symbol.iterator](): IterableIterator<T>;
         }
         export module Set {}
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
         export interface Set<T> extends Collection<never, T> {
                          ~~~

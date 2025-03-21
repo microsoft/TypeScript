@@ -1,8 +1,11 @@
+internalAliasInterface.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 internalAliasInterface.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== internalAliasInterface.ts (1 errors) ====
+==== internalAliasInterface.ts (2 errors) ====
     module a {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
         }
     }

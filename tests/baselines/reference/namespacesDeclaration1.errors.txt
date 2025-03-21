@@ -1,0 +1,16 @@
+namespacesDeclaration1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+namespacesDeclaration1.ts(3,21): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== namespacesDeclaration1.ts (2 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+       export namespace N {
+          export module M2 {
+                        ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             export interface I {}
+          }
+       }
+    }

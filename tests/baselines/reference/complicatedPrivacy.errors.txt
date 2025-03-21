@@ -9,9 +9,10 @@ complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported me
 complicatedPrivacy.ts(79,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 complicatedPrivacy.ts(82,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 complicatedPrivacy.ts(84,31): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+complicatedPrivacy.ts(95,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== complicatedPrivacy.ts (11 errors) ====
+==== complicatedPrivacy.ts (12 errors) ====
     module m1 {
            ~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -129,6 +130,8 @@ complicatedPrivacy.ts(84,31): error TS1294: This syntax is not allowed when 'era
     }
     
     module mglo5 {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface i5 {
             f1(): string;
         }

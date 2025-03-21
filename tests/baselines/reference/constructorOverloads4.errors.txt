@@ -1,9 +1,12 @@
+constructorOverloads4.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constructorOverloads4.ts(10,1): error TS2349: This expression is not callable.
   Type 'Function' has no call signatures.
 
 
-==== constructorOverloads4.ts (1 errors) ====
+==== constructorOverloads4.ts (2 errors) ====
     declare module M {    
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Function {
             constructor(...args: string[]);
         }

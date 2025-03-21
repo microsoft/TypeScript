@@ -7,11 +7,13 @@ declare module Foo.Bar { export var foo; };
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 >foo : any
+>    : ^^^
 
 Foo.Bar.foo = 5; 
 >Foo.Bar.foo = 5 : 5
 >                : ^
 >Foo.Bar.foo : any
+>            : ^^^
 >Foo.Bar : typeof Foo.Bar
 >        : ^^^^^^^^^^^^^^
 >Foo : typeof Foo

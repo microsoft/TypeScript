@@ -14,6 +14,7 @@ declare module string {
 }
 string.foo("abc");
 >string.foo("abc") : any
+>                  : ^^^
 >string.foo : (s: string) => any
 >           : ^ ^^      ^^^^^^^^
 >string : typeof string

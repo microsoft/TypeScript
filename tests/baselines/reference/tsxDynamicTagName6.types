@@ -6,6 +6,7 @@ declare module JSX {
 	interface IntrinsicElements {
 		div: any
 >div : any
+>    : ^^^
 	}
 }
 

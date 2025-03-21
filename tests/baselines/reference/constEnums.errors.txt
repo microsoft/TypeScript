@@ -1,9 +1,19 @@
+constEnums.ts(50,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(51,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(52,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(61,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(62,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(63,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(72,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(73,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(74,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constEnums.ts(83,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constEnums.ts(84,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+constEnums.ts(85,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 constEnums.ts(92,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== constEnums.ts (3 errors) ====
+==== constEnums.ts (13 errors) ====
     const enum Enum1 {
        A0 = 100,
     }
@@ -54,8 +64,14 @@ constEnums.ts(92,23): error TS1294: This syntax is not allowed when 'erasableSyn
     }
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export module C {
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 export const enum E {
                     V1 = 1,
                     V2 = A.B.C.E.V1 | 100
@@ -65,8 +81,14 @@ constEnums.ts(92,23): error TS1294: This syntax is not allowed when 'erasableSyn
     }
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export module C {
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 export const enum E {
                     V3 = A.B.C.E["V2"] & 200,
                     V4 = A.B.C.E[`V1`] << 1,
@@ -76,8 +98,14 @@ constEnums.ts(92,23): error TS1294: This syntax is not allowed when 'erasableSyn
     }
     
     module A1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export module C {
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 export const enum E {
                     V1 = 10,
                     V2 = 110,
@@ -93,6 +121,8 @@ constEnums.ts(92,23): error TS1294: This syntax is not allowed when 'erasableSyn
                       ~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export module C {
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                 export const enum E {
                     V1 = 10,
                     V2 = 110,

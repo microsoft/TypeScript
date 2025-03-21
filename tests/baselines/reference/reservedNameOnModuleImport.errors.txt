@@ -1,0 +1,16 @@
+reservedNameOnModuleImport.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reservedNameOnModuleImport.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== reservedNameOnModuleImport.ts (2 errors) ====
+    declare module test {
+                   ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        module mstring { }
+               ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        // Should be fine; this does not clobber any declared values.
+        export import string = mstring;
+    }
+    

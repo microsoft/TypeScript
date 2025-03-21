@@ -1,8 +1,11 @@
+internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts (1 errors) ====
+==== internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts (2 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface X { s: string }
     }
     

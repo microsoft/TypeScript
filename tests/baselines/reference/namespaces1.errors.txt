@@ -1,0 +1,18 @@
+namespaces1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+namespaces1.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== namespaces1.ts (2 errors) ====
+    module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface Z { }
+        }
+        export interface Y { }
+    }
+    
+    var x: X.Y.Z;
+    var x2: X.Y;

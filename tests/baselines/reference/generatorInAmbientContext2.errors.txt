@@ -1,8 +1,11 @@
+generatorInAmbientContext2.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 generatorInAmbientContext2.ts(2,14): error TS1221: Generators are not allowed in an ambient context.
 
 
-==== generatorInAmbientContext2.ts (1 errors) ====
+==== generatorInAmbientContext2.ts (2 errors) ====
     declare module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function *generator(): any;
                  ~
 !!! error TS1221: Generators are not allowed in an ambient context.

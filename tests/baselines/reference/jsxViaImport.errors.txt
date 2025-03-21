@@ -1,3 +1,5 @@
+component.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+component.d.ts(4,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 consumer.tsx(5,17): error TS2604: JSX element type 'BaseComponent' does not have any construct or call signatures.
 
 
@@ -12,11 +14,15 @@ consumer.tsx(5,17): error TS2604: JSX element type 'BaseComponent' does not have
         }
     }
     
-==== component.d.ts (0 errors) ====
+==== component.d.ts (2 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       interface ElementAttributesProperty { props; }
     }
     declare module React {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       class Component<T, U> { }
     }
     declare module "BaseComponent" {

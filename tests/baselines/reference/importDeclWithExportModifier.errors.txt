@@ -1,9 +1,12 @@
+importDeclWithExportModifier.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importDeclWithExportModifier.ts(5,19): error TS2708: Cannot use namespace 'x' as a value.
 importDeclWithExportModifier.ts(5,21): error TS2694: Namespace 'x' has no exported member 'c'.
 
 
-==== importDeclWithExportModifier.ts (2 errors) ====
+==== importDeclWithExportModifier.ts (3 errors) ====
     module x {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface c {
         }
     }

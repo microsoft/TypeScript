@@ -1,8 +1,11 @@
+unusedNamespaceInModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 unusedNamespaceInModule.ts(2,15): error TS6133: 'B' is declared but its value is never read.
 
 
-==== unusedNamespaceInModule.ts (1 errors) ====
+==== unusedNamespaceInModule.ts (2 errors) ====
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         namespace B { }
                   ~
 !!! error TS6133: 'B' is declared but its value is never read.

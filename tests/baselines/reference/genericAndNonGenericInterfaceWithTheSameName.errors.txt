@@ -1,12 +1,17 @@
 genericAndNonGenericInterfaceWithTheSameName.ts(3,11): error TS2428: All declarations of 'A' must have identical type parameters.
 genericAndNonGenericInterfaceWithTheSameName.ts(7,11): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericAndNonGenericInterfaceWithTheSameName.ts(12,15): error TS2428: All declarations of 'A' must have identical type parameters.
 genericAndNonGenericInterfaceWithTheSameName.ts(16,15): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericAndNonGenericInterfaceWithTheSameName.ts(27,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericAndNonGenericInterfaceWithTheSameName.ts(33,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericAndNonGenericInterfaceWithTheSameName.ts(34,22): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(39,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declarations of 'A' must have identical type parameters.
 
 
-==== genericAndNonGenericInterfaceWithTheSameName.ts (6 errors) ====
+==== genericAndNonGenericInterfaceWithTheSameName.ts (11 errors) ====
     // generic and non-generic interfaces with the same name do not merge
     
     interface A {
@@ -22,6 +27,8 @@ genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declar
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T> { 
                   ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -36,18 +43,24 @@ genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declar
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A {
             foo: string;
         }
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T> { // ok, different declaration space than other M2
             bar: T;
         }
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface A {
                          ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -56,6 +69,8 @@ genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declar
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface A<T> { // error
                          ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.

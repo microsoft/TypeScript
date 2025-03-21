@@ -1,7 +1,8 @@
 t1.ts(13,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+t1.ts(16,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== t1.ts (1 errors) ====
+==== t1.ts (2 errors) ====
     export var v = 1;
     export function f() { }
     export class C {
@@ -20,6 +21,8 @@ t1.ts(13,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly'
         export var x;
     }
     export module N {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I {
         }
     }

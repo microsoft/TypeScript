@@ -2,9 +2,13 @@ shadowedInternalModule.ts(3,8): error TS1294: This syntax is not allowed when 'e
 shadowedInternalModule.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 shadowedInternalModule.ts(13,20): error TS2437: Module 'A' is hidden by a local declaration with the same name.
 shadowedInternalModule.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+shadowedInternalModule.ts(17,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 shadowedInternalModule.ts(29,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 shadowedInternalModule.ts(30,5): error TS2440: Import declaration conflicts with local declaration of 'Y'.
+shadowedInternalModule.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 shadowedInternalModule.ts(41,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+shadowedInternalModule.ts(43,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+shadowedInternalModule.ts(46,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 shadowedInternalModule.ts(47,10): error TS2438: Import name cannot be 'any'.
 shadowedInternalModule.ts(52,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 shadowedInternalModule.ts(56,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -12,7 +16,7 @@ shadowedInternalModule.ts(61,8): error TS1294: This syntax is not allowed when '
 shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with local declaration of 'Q'.
 
 
-==== shadowedInternalModule.ts (12 errors) ====
+==== shadowedInternalModule.ts (16 errors) ====
     // all errors imported modules conflict with local variables
     
     module A {
@@ -38,6 +42,8 @@ shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with
            ~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface Point{
                 x: number;
                 y: number
@@ -62,6 +68,8 @@ shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with
     //
     
     module a {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export type A = number;
     }
     
@@ -70,9 +78,13 @@ shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export import A = a.A;
       export module A {}
+                    ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     
     module c {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       import any = b.A;
              ~~~
 !!! error TS2438: Import name cannot be 'any'.

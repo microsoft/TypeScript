@@ -1,8 +1,9 @@
 decoratorOnImportEquals1.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+decoratorOnImportEquals1.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 decoratorOnImportEquals1.ts(8,5): error TS1206: Decorators are not valid here.
 
 
-==== decoratorOnImportEquals1.ts (2 errors) ====
+==== decoratorOnImportEquals1.ts (3 errors) ====
     declare function dec<T>(target: T): T;
     
     module M1 {
@@ -12,6 +13,8 @@ decoratorOnImportEquals1.ts(8,5): error TS1206: Decorators are not valid here.
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         @dec
         ~
 !!! error TS1206: Decorators are not valid here.

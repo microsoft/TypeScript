@@ -1,0 +1,16 @@
+useModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== decl.d.ts (0 errors) ====
+    export interface A {
+        b: number;
+    }
+    export as namespace moduleA;
+==== useModule.ts (1 errors) ====
+    module moduleB {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface IUseModuleA {
+            a: moduleA.A;
+        }
+    }

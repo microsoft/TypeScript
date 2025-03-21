@@ -70,6 +70,7 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(768,8): error TS1294: This 
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Class 'lasiurus' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(787,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(815,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(823,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(825,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(838,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(850,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -89,7 +90,7 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(1000,8): error TS1294: This
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(1009,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== resolvingClassDeclarationWhenInBaseTypeResolution.ts (89 errors) ====
+==== resolvingClassDeclarationWhenInBaseTypeResolution.ts (90 errors) ====
     module rionegrensis {
            ~~~~~~~~~~~~
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
@@ -1081,6 +1082,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(1009,8): error TS1294: This
         }
     }
     module butleri {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     module petrophilus {
            ~~~~~~~~~~~

@@ -1,3 +1,4 @@
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(20,15): error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base<T>'.
   Types of property 'a' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new () => T'.
@@ -6,6 +7,7 @@ subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(50,15): error T
   Types of property 'a3' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new (x: T) => T'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(89,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(100,15): error TS2430: Interface 'I1<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a()' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
@@ -98,6 +100,7 @@ subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(172,15): error 
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(177,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(196,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   Types of property 'a' are incompatible.
     Type 'new <T>(x: T) => T' is not assignable to type 'new <T>() => T'.
@@ -108,10 +111,12 @@ subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(226,15): error 
       Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== subtypingWithGenericConstructSignaturesWithOptionalParameters.ts (22 errors) ====
+==== subtypingWithGenericConstructSignaturesWithOptionalParameters.ts (25 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
     module ClassTypeParam {
+           ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base<T> {
             a: new () => T;
             a2: new (x?: T) => T;
@@ -208,6 +213,8 @@ subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(226,15): error 
     }
     
     module GenericSignaturesInvalid {
+           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         // all of these are errors
         interface Base2 {
@@ -422,6 +429,8 @@ subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(226,15): error 
     }
     
     module GenericSignaturesValid {
+           ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         interface Base2 {
             a: new <T>() => T;

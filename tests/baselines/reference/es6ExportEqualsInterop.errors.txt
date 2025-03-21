@@ -39,6 +39,11 @@ main.ts(103,15): error TS2498: Module '"function"' uses 'export =' and cannot be
 main.ts(104,15): error TS2498: Module '"function-module"' uses 'export =' and cannot be used with 'export *'.
 main.ts(105,15): error TS2498: Module '"class"' uses 'export =' and cannot be used with 'export *'.
 main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
+modules.d.ts(30,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+modules.d.ts(42,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+modules.d.ts(50,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+modules.d.ts(70,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+modules.d.ts(90,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
 ==== main.ts (41 errors) ====
@@ -241,7 +246,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
                   ~~~~~~~~~~~~~~
 !!! error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
     
-==== modules.d.ts (0 errors) ====
+==== modules.d.ts (5 errors) ====
     declare module "interface" {
         interface Foo {
             x: number;
@@ -272,6 +277,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     
     declare module "module" {
         module Foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var a: number;
             export var b: number;
         }
@@ -284,6 +291,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
             y: number;
         }
         module Foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var a: number;
             export var b: number;
         }
@@ -292,6 +301,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     
     declare module "variable-module" {
         module Foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             interface Bar {
                 x: number;
                 y: number;
@@ -312,6 +323,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     declare module "function-module" {
         function foo();
         module foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var a: number;
             export var b: number;
         }
@@ -332,6 +345,8 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
             y: number;
         }
         module Foo {
+               ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var a: number;
             export var b: number;
         }

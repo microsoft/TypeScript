@@ -1,0 +1,11 @@
+duplicateVarAndImport.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== duplicateVarAndImport.ts (1 errors) ====
+    // no error since module is not instantiated
+    
+    var a;
+    module M { }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    import a = M;

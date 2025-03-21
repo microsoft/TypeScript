@@ -2,15 +2,20 @@ twoGenericInterfacesDifferingByTypeParameterName.ts(3,11): error TS2428: All dec
 twoGenericInterfacesDifferingByTypeParameterName.ts(7,11): error TS2428: All declarations of 'A' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName.ts(11,11): error TS2428: All declarations of 'B' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName.ts(15,11): error TS2428: All declarations of 'B' must have identical type parameters.
+twoGenericInterfacesDifferingByTypeParameterName.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 twoGenericInterfacesDifferingByTypeParameterName.ts(20,15): error TS2428: All declarations of 'A' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName.ts(24,15): error TS2428: All declarations of 'A' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName.ts(28,15): error TS2428: All declarations of 'B' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName.ts(32,15): error TS2428: All declarations of 'B' must have identical type parameters.
+twoGenericInterfacesDifferingByTypeParameterName.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+twoGenericInterfacesDifferingByTypeParameterName.ts(43,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+twoGenericInterfacesDifferingByTypeParameterName.ts(49,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 twoGenericInterfacesDifferingByTypeParameterName.ts(50,22): error TS2428: All declarations of 'B' must have identical type parameters.
+twoGenericInterfacesDifferingByTypeParameterName.ts(55,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 twoGenericInterfacesDifferingByTypeParameterName.ts(56,22): error TS2428: All declarations of 'B' must have identical type parameters.
 
 
-==== twoGenericInterfacesDifferingByTypeParameterName.ts (10 errors) ====
+==== twoGenericInterfacesDifferingByTypeParameterName.ts (15 errors) ====
     // type parameter names are relevant when choosing whether to merge interface declarations
     
     interface A<T> {
@@ -38,6 +43,8 @@ twoGenericInterfacesDifferingByTypeParameterName.ts(56,22): error TS2428: All de
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T> {
                   ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -64,18 +71,24 @@ twoGenericInterfacesDifferingByTypeParameterName.ts(56,22): error TS2428: All de
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface B<T, U> {
             x: U;
         }
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface B<T, V> { // ok, different declaration space than other M2
             y: V;
         }
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface B<T, U> {
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.
@@ -84,6 +97,8 @@ twoGenericInterfacesDifferingByTypeParameterName.ts(56,22): error TS2428: All de
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface B<T, V> { // error
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.

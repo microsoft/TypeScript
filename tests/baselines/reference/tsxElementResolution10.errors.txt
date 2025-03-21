@@ -1,3 +1,4 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(13,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
 file.tsx(13,2): error TS2786: 'Obj1' cannot be used as a JSX component.
   Its instance type '{ x: number; }' is not a valid JSX element.
@@ -5,8 +6,10 @@ file.tsx(13,2): error TS2786: 'Obj1' cannot be used as a JSX component.
 file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
 
 
-==== file.tsx (3 errors) ====
+==== file.tsx (4 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface ElementClass {
     		render: any;

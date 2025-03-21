@@ -1,0 +1,32 @@
+useModule.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+useModule.ts(8,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== m4.ts (0 errors) ====
+    export class d {
+    };
+    export var x: d;
+    export function foo() {
+        return new d();
+    }
+    
+==== useModule.ts (2 errors) ====
+    declare module "quotedm1" {
+                   ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import m4 = require("m4");
+        export class v {
+            public c: m4.d;
+        }
+    }
+    
+    declare module "quotedm2" {
+                   ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import m1 = require("quotedm1");
+        export var c: m1.v;
+    }
+    
+    
+    
+    
