@@ -2757,7 +2757,7 @@ export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, 
     readonly modifiers?: NodeArray<Modifier>;
     readonly equalsGreaterThanToken: EqualsGreaterThanToken;
     readonly body: ConciseBody;
-    readonly name: never;
+    readonly name?: never;
 }
 
 // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -6019,7 +6019,7 @@ export interface SymbolLinks {
     leftSpread?: Symbol;                        // Left source for synthetic spread property
     rightSpread?: Symbol;                       // Right source for synthetic spread property
     syntheticOrigin?: Symbol;                   // For a property on a mapped or spread type, points back to the original property
-    isDiscriminantProperty?: boolean;           // True if discriminant synthetic property
+    isDiscriminantProperty?: Map<boolean, boolean | undefined> // Key is a flag, value is true if discriminant synthetic property
     resolvedExports?: SymbolTable;              // Resolved exports of module or combined early- and late-bound static members of a class.
     resolvedMembers?: SymbolTable;              // Combined early- and late-bound members of a symbol
     exportsChecked?: boolean;                   // True if exports of external module have been checked
@@ -6070,6 +6070,7 @@ export const enum CheckFlags {
     Mapped            = 1 << 18,        // Property of mapped type
     StripOptional     = 1 << 19,        // Strip optionality in mapped property
     Unresolved        = 1 << 20,        // Unresolved type alias symbol
+    HasPrimitiveType  = 1 << 21,        // Synthetic property with at least one primitive type in constituents
     Synthetic = SyntheticProperty | SyntheticMethod,
     Discriminant = HasNonUniformType | HasLiteralType,
     Partial = ReadPartial | WritePartial,
