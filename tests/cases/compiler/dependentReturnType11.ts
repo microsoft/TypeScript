@@ -151,7 +151,7 @@ class Class1<T> {
     prop!: T;
 }
 
-function g15<T extends boolean>(param: Class1<T>): Ret<T> { // Unsupported.
+function g15<T extends boolean>(param: Class1<T>): Ret<T> {
     return param.prop ? 1 : 2;
 }
 

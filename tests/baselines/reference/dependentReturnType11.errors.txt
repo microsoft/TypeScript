@@ -15,8 +15,6 @@ dependentReturnType11.ts(136,25): error TS2322: Type '1' is not assignable to ty
 dependentReturnType11.ts(136,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(144,25): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(144,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
-dependentReturnType11.ts(152,25): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
-dependentReturnType11.ts(152,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(205,13): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(207,9): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(221,9): error TS2322: Type '3' is not assignable to type 'RetU<T>'.
@@ -34,7 +32,7 @@ dependentReturnType11.ts(274,9): error TS2322: Type '1' is not assignable to typ
 dependentReturnType11.ts(276,5): error TS2322: Type '2' is not assignable to type 'RetU<T>'.
 
 
-==== dependentReturnType11.ts (34 errors) ====
+==== dependentReturnType11.ts (32 errors) ====
     type Ret<T extends boolean> =
         T extends true ? 1 :
         T extends false ? 2 :
@@ -221,10 +219,6 @@ dependentReturnType11.ts(276,5): error TS2322: Type '2' is not assignable to typ
     
     function g15<T extends boolean>(param: Class1<T>): Ret<T> { // Unsupported.
         return param.prop ? 1 : 2;
-                            ~
-!!! error TS2322: Type '1' is not assignable to type 'Ret<T>'.
-                                ~
-!!! error TS2322: Type '2' is not assignable to type 'Ret<T>'.
     }
     
     type Type8<T> = {

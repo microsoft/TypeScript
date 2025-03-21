@@ -46045,11 +46045,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         aliasDeclaration = walkUpParenthesizedTypes(typeDeclaration.parent); // `type Foo = { ... }`
                         if (!isTypeAliasDeclaration(aliasDeclaration)) return false;
                     }
-                    else if (isInterfaceDeclaration(typeDeclaration)) { // `interface Foo { ... }`
+                    else if (isInterfaceDeclaration(typeDeclaration) || isClassLike(typeDeclaration)) { // `interface Foo { ... }`
                         aliasDeclaration = typeDeclaration;
                     }
                     else {
-                        return false; // Unsuported case, e.g. `class Foo<...> ...`, `type Foo<...> = { [P in Foo]: ... }`, etc.
+                        return false; // Unsuported case, e.g. `type Foo<...> = { [P in Foo]: ... }`, etc.
                     }
                     const typeArgIndex = typeArgs!.findIndex(arg => arg === typeArg);
                     const matchingTypeParamDecl = aliasDeclaration.typeParameters?.[typeArgIndex];
@@ -46057,13 +46057,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const matchingTypeParam = getDeclaredTypeOfTypeParameter(matchingTypeParamDecl.symbol);
                     return getValidTypeParameterReference(typeDeclaration, matchingTypeParam, path);
                 case SyntaxKind.InterfaceDeclaration:
-                    const extendsTypes = flatMap((typeNode as InterfaceDeclaration).heritageClauses, clause => clause.types);
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    const extendsTypes = flatMap((typeNode as InterfaceDeclaration | ClassLikeDeclaration).heritageClauses, clause => clause.types);
                     const relevantExtendsTypes = extendsTypes.filter(node => isTypeParameterReferenced(typeParam, node));
                     if (relevantExtendsTypes && relevantExtendsTypes.length > 1) {
                         return false; // Unsupported: `interface Foo<T> extends Bar<T>, Baz<T> { ... }`
                     }
-                    const result = getValidTypeParameterReferenceFromTypeElements((typeNode as InterfaceDeclaration).members, typeParam, path);
-                    if (relevantExtendsTypes && relevantExtendsTypes.length === 1) { // `interface Foo<T> extends Bar<T>, Baz<T> { ... }`
+                    const result = getValidTypeParameterReferenceFromTypeElements((typeNode as InterfaceDeclaration | ClassLikeDeclaration).members, typeParam, path);
+                    if (relevantExtendsTypes && relevantExtendsTypes.length === 1) { // `interface Foo<T> extends Bar<T> { ... }`
                         if (result !== true) {
                             return false; // e.g. `interface Foo<T> extends Bar<T> { ... otherRef: T; ...}`
                         }
@@ -46093,13 +46095,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function getValidTypeParameterReferenceFromTypeElements(members: NodeArray<TypeElement>, typeParam: TypeParameter, path: Member[]): Member[] | boolean {
+        function getValidTypeParameterReferenceFromTypeElements(members: NodeArray<TypeElement | ClassElement>, typeParam: TypeParameter, path: Member[]): Member[] | boolean {
             let validPath: Member[] | undefined;
             for (const member of members) {
                 if (!isTypeParameterReferenced(typeParam, member)) {
                     continue;
                 }
-                if (!isPropertySignature(member)) {
+                if (!isPropertySignature(member) && !isPropertyDeclaration(member)) {
                     return false; // Unsupported reference to `T`, e.g. `[s: string]: T`.
                 }
                 if (!isIdentifier(member.name) && !isStringLiteral(member.name)) {
