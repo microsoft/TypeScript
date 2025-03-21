@@ -1367,6 +1367,10 @@ export function getInternalEmitFlags(node: Node): InternalEmitFlags {
 /** @internal */
 export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, string[]>>;
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+//       lib/esnext.*.d.ts file.
 /** @internal */
 export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetFeatures =>
     new Map(Object.entries({
@@ -1405,11 +1409,45 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         AsyncIterator: new Map(Object.entries({
             es2015: emptyArray,
         })),
+        ArrayBuffer: new Map(Object.entries({
+            es2024: [
+                "maxByteLength",
+                "resizable",
+                "resize",
+                "detached",
+                "transfer",
+                "transferToFixedLength",
+            ],
+        })),
         Atomics: new Map(Object.entries({
-            es2017: emptyArray,
+            es2017: [
+                "add",
+                "and",
+                "compareExchange",
+                "exchange",
+                "isLockFree",
+                "load",
+                "or",
+                "store",
+                "sub",
+                "wait",
+                "notify",
+                "xor",
+            ],
+            es2024: [
+                "waitAsync",
+            ],
         })),
         SharedArrayBuffer: new Map(Object.entries({
-            es2017: emptyArray,
+            es2017: [
+                "byteLength",
+                "slice",
+            ],
+            es2024: [
+                "growable",
+                "maxByteLength",
+                "grow",
+            ],
         })),
         AsyncIterable: new Map(Object.entries({
             es2018: emptyArray,
@@ -1431,6 +1469,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             es2018: [
                 "dotAll",
+            ],
+            es2024: [
+                "unicodeSets",
             ],
         })),
         Reflect: new Map(Object.entries({
@@ -1478,6 +1519,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2022: [
                 "hasOwn",
             ],
+            es2024: [
+                "groupBy",
+            ],
         })),
         NumberConstructor: new Map(Object.entries({
             es2015: [
@@ -1517,11 +1561,25 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "values",
             ],
         })),
+        MapConstructor: new Map(Object.entries({
+            es2024: [
+                "groupBy",
+            ],
+        })),
         Set: new Map(Object.entries({
             es2015: [
                 "entries",
                 "keys",
                 "values",
+            ],
+            esnext: [
+                "union",
+                "intersection",
+                "difference",
+                "symmetricDifference",
+                "isSubsetOf",
+                "isSupersetOf",
+                "isDisjointFrom",
             ],
         })),
         PromiseConstructor: new Map(Object.entries({
@@ -1536,6 +1594,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             es2021: [
                 "any",
+            ],
+            es2024: [
+                "withResolvers",
             ],
         })),
         Symbol: new Map(Object.entries({
@@ -1602,7 +1663,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2022: [
                 "at",
             ],
-            esnext: [
+            es2024: [
                 "isWellFormed",
                 "toWellFormed",
             ],
@@ -1647,6 +1708,11 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         SymbolConstructor: new Map(Object.entries({
             es2020: [
                 "matchAll",
+            ],
+            esnext: [
+                "metadata",
+                "dispose",
+                "asyncDispose",
             ],
         })),
         DataView: new Map(Object.entries({

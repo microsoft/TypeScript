@@ -3,6 +3,10 @@
 // @noemit: true
 // @strict: true
 
+// ES2024 Atomics.waitAsync was included in the ES2022 type file due to a mistake.
+// This test file checks if it fails successfully.
+// https://github.com/microsoft/TypeScript/pull/58573#issuecomment-2119347142
+
 const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
 const int32 = new Int32Array(sab);
 const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);

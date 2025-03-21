@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/es2024/transferableArrayBuffer.ts] ////
+
+=== transferableArrayBuffer.ts ===
+const buffer = new ArrayBuffer(8);
+>buffer : Symbol(buffer, Decl(transferableArrayBuffer.ts, 0, 5))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2024.arraybuffer.d.ts, --, --))
+
+const buffer2 = buffer.transfer();
+>buffer2 : Symbol(buffer2, Decl(transferableArrayBuffer.ts, 1, 5))
+>buffer.transfer : Symbol(ArrayBuffer.transfer, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+>buffer : Symbol(buffer, Decl(transferableArrayBuffer.ts, 0, 5))
+>transfer : Symbol(ArrayBuffer.transfer, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+
+buffer.detached;
+>buffer.detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+>buffer : Symbol(buffer, Decl(transferableArrayBuffer.ts, 0, 5))
+>detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+
+buffer2.detached;
+>buffer2.detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+>buffer2 : Symbol(buffer2, Decl(transferableArrayBuffer.ts, 1, 5))
+>detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+
