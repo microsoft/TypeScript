@@ -21,8 +21,20 @@
 //// import { a/*a*/ } from "./0";
 //// import { Color/*c*/ } from "./0";
 
+// @filename: /3.ts
+//// export default class {
+////     a: boolean;
+//// }
+
+// @filename: /4.ts
+//// import Foo/*d*/ from "./3";
+//// const f/*e*/ = new Foo/*f*/();
+
 verify.baselineQuickInfo({
     b: [0, 1, 2],
     a: [0, 1],
     c: [0, 1],
+    d: [0],
+    e: [0, 1],
+    f: [0, 1],
 });
