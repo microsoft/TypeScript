@@ -5341,6 +5341,11 @@
         "category": "Error",
         "code": 6189
     },
+    "Redundant named import '{0}'.": {
+        "category": "Suggestion",
+        "code": 6190,
+        "reportsUnnecessary": true
+    },
     "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
         "category": "Message",
         "code": 6191
@@ -8270,6 +8275,14 @@
     "Add 'resolution-mode' import attribute to all type-only imports that need it": {
         "category": "Message",
         "code": 95197
+    },
+    "Simplify redundant import '{0}'": {
+        "category": "Message",
+        "code": 95198
+    },
+    "Simplify all redundant imports": {
+        "category": "Message",
+        "code": 95199
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
