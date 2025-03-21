@@ -1,3 +1,4 @@
+assignmentCompatWithObjectMembersOptionality2.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembersOptionality2.ts(33,5): error TS2559: Type 'D' has no properties in common with type 'C'.
 assignmentCompatWithObjectMembersOptionality2.ts(34,5): error TS2559: Type 'E' has no properties in common with type 'C'.
 assignmentCompatWithObjectMembersOptionality2.ts(35,5): error TS2559: Type 'F' has no properties in common with type 'C'.
@@ -7,6 +8,7 @@ assignmentCompatWithObjectMembersOptionality2.ts(38,5): error TS2559: Type 'F' h
 assignmentCompatWithObjectMembersOptionality2.ts(39,5): error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
 assignmentCompatWithObjectMembersOptionality2.ts(40,5): error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
 assignmentCompatWithObjectMembersOptionality2.ts(41,5): error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
+assignmentCompatWithObjectMembersOptionality2.ts(50,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembersOptionality2.ts(74,5): error TS2741: Property 'opt' is missing in type 'D' but required in type 'C'.
 assignmentCompatWithObjectMembersOptionality2.ts(75,5): error TS2741: Property 'opt' is missing in type 'E' but required in type 'C'.
 assignmentCompatWithObjectMembersOptionality2.ts(76,5): error TS2741: Property 'opt' is missing in type 'F' but required in type 'C'.
@@ -18,7 +20,7 @@ assignmentCompatWithObjectMembersOptionality2.ts(85,5): error TS2741: Property '
 assignmentCompatWithObjectMembersOptionality2.ts(86,5): error TS2741: Property 'opt' is missing in type 'F' but required in type '{ opt: Base; }'.
 
 
-==== assignmentCompatWithObjectMembersOptionality2.ts (18 errors) ====
+==== assignmentCompatWithObjectMembersOptionality2.ts (20 errors) ====
     // M is optional and S contains no property with the same name as M
     // N is optional and T contains no property with the same name as N
     
@@ -27,6 +29,8 @@ assignmentCompatWithObjectMembersOptionality2.ts(86,5): error TS2741: Property '
     class Derived2 extends Derived { baz: string; }
     
     module TargetHasOptional {
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // targets
         interface C {
             opt?: Base
@@ -87,6 +91,8 @@ assignmentCompatWithObjectMembersOptionality2.ts(86,5): error TS2741: Property '
     }
     
     module SourceHasOptional {
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // targets
         interface C {
             opt: Base

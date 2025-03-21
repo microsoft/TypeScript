@@ -1,24 +1,46 @@
+duplicateIdentifiersAcrossContainerBoundaries.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(9,21): error TS2814: Function with bodies can only merge with classes that are ambient.
+duplicateIdentifiersAcrossContainerBoundaries.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(12,18): error TS2813: Class declaration cannot implement overload list for 'f'.
+duplicateIdentifiersAcrossContainerBoundaries.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(22,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(29,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(32,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(37,12): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifiersAcrossContainerBoundaries.ts(40,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifiersAcrossContainerBoundaries.ts(44,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(45,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateIdentifiersAcrossContainerBoundaries.ts(49,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== duplicateIdentifiersAcrossContainerBoundaries.ts (4 errors) ====
+==== duplicateIdentifiersAcrossContainerBoundaries.ts (18 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface I { }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class I { }
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function f() { }
                         ~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
 !!! related TS6506 duplicateIdentifiersAcrossContainerBoundaries.ts:12:18: Consider adding a 'declare' modifier to this class.
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class f { } // error
                      ~
 !!! error TS2813: Class declaration cannot implement overload list for 'f'.
@@ -26,23 +48,35 @@ duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function g() { }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class g { } // no error
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C { }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         function C() { } // no error
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var v = 3;
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var v = 3; // error for redeclaring var in a different parent
     }
     
@@ -53,17 +87,25 @@ duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate
     }
     
     module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var x: number; // error for redeclaring var in a different parent
                    ~
 !!! error TS2300: Duplicate identifier 'x'.
     }
     
     module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module F {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             var t;
         }
     }
     declare module N {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export function F(); // no error because function is ambient
     }
     

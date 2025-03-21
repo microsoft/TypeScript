@@ -6,12 +6,13 @@ invalidVoidValues.ts(8,1): error TS2322: Type 'E' is not assignable to type 'voi
 invalidVoidValues.ts(12,1): error TS2322: Type 'C' is not assignable to type 'void'.
 invalidVoidValues.ts(16,1): error TS2322: Type 'I' is not assignable to type 'void'.
 invalidVoidValues.ts(18,1): error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.
+invalidVoidValues.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 invalidVoidValues.ts(21,1): error TS2322: Type 'typeof M' is not assignable to type 'void'.
 invalidVoidValues.ts(24,5): error TS2322: Type 'T' is not assignable to type 'void'.
 invalidVoidValues.ts(26,5): error TS2322: Type '<T>(a: T) => void' is not assignable to type 'void'.
 
 
-==== invalidVoidValues.ts (11 errors) ====
+==== invalidVoidValues.ts (12 errors) ====
     var x: void;
     x = 1;
     ~
@@ -48,6 +49,8 @@ invalidVoidValues.ts(26,5): error TS2322: Type '<T>(a: T) => void' is not assign
 !!! error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.
     
     module M { export var x = 1; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     x = M;
     ~
 !!! error TS2322: Type 'typeof M' is not assignable to type 'void'.

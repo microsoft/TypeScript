@@ -1,9 +1,10 @@
 spellingSuggestionModule.ts(2,1): error TS2304: Cannot find name 'foobar'.
 spellingSuggestionModule.ts(5,1): error TS2304: Cannot find name 'barfoo'.
+spellingSuggestionModule.ts(7,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 spellingSuggestionModule.ts(8,1): error TS2552: Cannot find name 'faroo'. Did you mean 'farboo'?
 
 
-==== spellingSuggestionModule.ts (3 errors) ====
+==== spellingSuggestionModule.ts (4 errors) ====
     declare module "foobar" { export const x: number; }
     foobar;
     ~~~~~~
@@ -15,6 +16,8 @@ spellingSuggestionModule.ts(8,1): error TS2552: Cannot find name 'faroo'. Did yo
 !!! error TS2304: Cannot find name 'barfoo'.
     
     declare module farboo { export const x: number; }
+                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     faroo;
     ~~~~~
 !!! error TS2552: Cannot find name 'faroo'. Did you mean 'farboo'?

@@ -1,0 +1,34 @@
+file1.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file1.ts(1,25): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file1.ts(1,32): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file1.ts(1,36): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file2.ts(4,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== file2.ts (1 errors) ====
+    import RT_ALIAS = require("file1");
+    import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
+    
+    export module ImportingModule {
+                  ~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class UsesReferredType {
+            constructor(private referred: ReferredTo) { }
+        }
+    }
+==== file1.ts (4 errors) ====
+    export module elaborate.nested.mod.name {
+                  ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                            ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                       ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class ReferredTo {
+            doSomething(): void {
+            }
+        }
+    }
+    

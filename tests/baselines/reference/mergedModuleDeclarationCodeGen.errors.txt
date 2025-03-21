@@ -1,0 +1,30 @@
+mergedModuleDeclarationCodeGen.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen.ts(10,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen.ts(11,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mergedModuleDeclarationCodeGen.ts (4 errors) ====
+    export module X {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            class A {
+                constructor(Y: any) {
+                    new B();
+                }
+            }
+        }
+    }
+    export module X {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class B {
+            }
+        }
+    }

@@ -1,4 +1,5 @@
 assignmentCompatWithStringIndexer3.ts(7,8): error TS2304: Cannot find name 'A'.
+assignmentCompatWithStringIndexer3.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithStringIndexer3.ts(20,9): error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
   'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
@@ -9,7 +10,7 @@ assignmentCompatWithStringIndexer3.ts(21,9): error TS2322: Type 'A<T>' is not as
       Type 'Derived' is not assignable to type 'string'.
 
 
-==== assignmentCompatWithStringIndexer3.ts (3 errors) ====
+==== assignmentCompatWithStringIndexer3.ts (4 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }
@@ -24,6 +25,8 @@ assignmentCompatWithStringIndexer3.ts(21,9): error TS2322: Type 'A<T>' is not as
     b1 = a; // error
     
     module Generics {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class A<T extends Derived> {
             [x: string]: T;
         }

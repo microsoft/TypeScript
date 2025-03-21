@@ -1,3 +1,4 @@
+additionOperatorWithInvalidOperands.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 additionOperatorWithInvalidOperands.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
 additionOperatorWithInvalidOperands.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
 additionOperatorWithInvalidOperands.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'Object'.
@@ -19,7 +20,7 @@ additionOperatorWithInvalidOperands.ts(39,11): error TS2365: Operator '+' cannot
 additionOperatorWithInvalidOperands.ts(40,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'typeof M'.
 
 
-==== additionOperatorWithInvalidOperands.ts (19 errors) ====
+==== additionOperatorWithInvalidOperands.ts (20 errors) ====
     function foo() { }
     class C {
         public a: string;
@@ -27,6 +28,8 @@ additionOperatorWithInvalidOperands.ts(40,11): error TS2365: Operator '+' cannot
     }
     enum E { a, b, c }
     module M { export var a }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     var a: boolean;
     var b: number;

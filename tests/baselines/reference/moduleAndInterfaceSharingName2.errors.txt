@@ -1,9 +1,15 @@
+moduleAndInterfaceSharingName2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleAndInterfaceSharingName2.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleAndInterfaceSharingName2.ts(8,9): error TS2315: Type 'Y' is not generic.
 
 
-==== moduleAndInterfaceSharingName2.ts (1 errors) ====
+==== moduleAndInterfaceSharingName2.ts (3 errors) ====
     module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface Z { }
         }
         export interface Y { }

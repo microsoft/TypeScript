@@ -1,0 +1,58 @@
+importAliasIdentifiers.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importAliasIdentifiers.ts(17,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importAliasIdentifiers.ts(35,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== importAliasIdentifiers.ts (3 errors) ====
+    module moduleA {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    }
+    
+    import alias = moduleA;
+    
+    var p: alias.Point;
+    var p: moduleA.Point;
+    var p: { x: number; y: number; };
+    
+    class clodule {
+        name: string;
+    }
+    
+    module clodule {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Point {
+            x: number; y: number;
+        }
+        var Point: Point = { x: 0, y: 0 };
+    }
+    
+    import clolias = clodule;
+    
+    var p: clolias.Point;
+    var p: clodule.Point;
+    var p: { x: number; y: number; };
+    
+    
+    function fundule() {
+        return { x: 0, y: 0 };
+    }
+    
+    module fundule {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Point {
+            x: number; y: number;
+        }
+        var Point: Point = { x: 0, y: 0 };
+    }
+    
+    import funlias = fundule;
+    
+    var p: funlias.Point;
+    var p: fundule.Point;
+    var p: { x: number; y: number; };

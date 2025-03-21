@@ -1,0 +1,22 @@
+localImportNameVsGlobalName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+localImportNameVsGlobalName.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== localImportNameVsGlobalName.ts (2 errors) ====
+    module Keyboard {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      export enum Key { UP, DOWN, LEFT, RIGHT }
+    }
+    
+    module App {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      import Key = Keyboard.Key;
+    
+      export function foo(key: Key): void {}
+    
+      foo(Key.UP);
+      foo(Key.DOWN);
+      foo(Key.LEFT);
+    }

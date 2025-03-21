@@ -1,9 +1,14 @@
 mergedInterfacesWithConflictingPropertyNames.ts(6,5): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'string', but here has type 'number'.
+mergedInterfacesWithConflictingPropertyNames.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 mergedInterfacesWithConflictingPropertyNames.ts(15,9): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
+mergedInterfacesWithConflictingPropertyNames.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedInterfacesWithConflictingPropertyNames.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedInterfacesWithConflictingPropertyNames.ts(31,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedInterfacesWithConflictingPropertyNames.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
 
 
-==== mergedInterfacesWithConflictingPropertyNames.ts (3 errors) ====
+==== mergedInterfacesWithConflictingPropertyNames.ts (8 errors) ====
     interface A {
         x: string; // error
     }
@@ -16,6 +21,8 @@ mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2717: Subsequent 
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T> {
             x: T;
         }
@@ -29,24 +36,32 @@ mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2717: Subsequent 
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T> {
             x: T;
         }   
     }
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T> {
             x: number;  // ok, different declaration space than other M2
         }
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface A<T> {
             x: T;
         }
     }
     
     module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface A<T> {
             x: number;  // error
             ~

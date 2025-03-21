@@ -1,16 +1,36 @@
+dottedModuleName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 dottedModuleName.ts(3,29): error TS1144: '{' or ';' expected.
 dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
+dottedModuleName.ts(4,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(4,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(4,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(12,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(13,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(14,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+dottedModuleName.ts(14,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== dottedModuleName.ts (2 errors) ====
+==== dottedModuleName.ts (12 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export function f(x:number)=>2*x;
     	                           ~~
 !!! error TS1144: '{' or ';' expected.
     	                               ~
 !!! error TS2552: Cannot find name 'x'. Did you mean 'X'?
     	export module X.Y.Z {
+    	              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	                ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	    export var v2=f(v);
     	}
         }
@@ -19,8 +39,18 @@ dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
     
     
     module M.N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module X {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export module Y.Z {
+    	              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	                ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	    export var v=f(10);
     	}
         }

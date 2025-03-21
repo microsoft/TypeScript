@@ -1,0 +1,34 @@
+duplicateAnonymousInners1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+duplicateAnonymousInners1.ts(14,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== duplicateAnonymousInners1.ts (2 errors) ====
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        class Helper {
+    
+        }
+        
+        class Inner {}
+        // Inner should show up in intellisense
+        
+        export var Outer=0;
+    }
+    
+    
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        
+        // Should not be an error
+        class Helper {
+    
+        }
+        
+        // Inner should not show up in intellisense
+        // Outer should show up in intellisense
+    
+    }
+    

@@ -1,0 +1,30 @@
+ambientInsideNonAmbient.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ambientInsideNonAmbient.ts(6,27): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ambientInsideNonAmbient.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ambientInsideNonAmbient.ts(14,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ambientInsideNonAmbient.ts (4 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export declare var x;
+        export declare function f();
+        export declare class C { }
+        export declare enum E { }
+        export declare module M { }
+                              ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    
+    module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        declare var x;
+        declare function f();
+        declare class C { }
+        declare enum E { }
+        declare module M { }
+                       ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }

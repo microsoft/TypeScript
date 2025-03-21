@@ -1,5 +1,6 @@
 thisInInvalidContexts.ts(9,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 thisInInvalidContexts.ts(17,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+thisInInvalidContexts.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 thisInInvalidContexts.ts(23,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
 thisInInvalidContexts.ts(31,13): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisInInvalidContexts.ts(33,25): error TS2507: Type 'typeof globalThis' is not a constructor function type.
@@ -7,7 +8,7 @@ thisInInvalidContexts.ts(39,9): error TS2332: 'this' cannot be referenced in cur
 thisInInvalidContexts.ts(40,9): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== thisInInvalidContexts.ts (7 errors) ====
+==== thisInInvalidContexts.ts (8 errors) ====
     class BaseErrClass {
         constructor(t: any) { }
     }
@@ -33,6 +34,8 @@ thisInInvalidContexts.ts(40,9): error TS2332: 'this' cannot be referenced in cur
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         //'this' in module variable
         var x = this; // Error
                 ~~~~

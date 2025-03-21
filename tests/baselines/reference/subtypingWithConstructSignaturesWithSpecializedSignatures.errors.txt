@@ -1,3 +1,5 @@
+subtypingWithConstructSignaturesWithSpecializedSignatures.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+subtypingWithConstructSignaturesWithSpecializedSignatures.ts(38,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypingWithConstructSignaturesWithSpecializedSignatures.ts(70,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
   The types returned by 'new a(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
@@ -7,10 +9,12 @@ subtypingWithConstructSignaturesWithSpecializedSignatures.ts(76,15): error TS243
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== subtypingWithConstructSignaturesWithSpecializedSignatures.ts (2 errors) ====
+==== subtypingWithConstructSignaturesWithSpecializedSignatures.ts (4 errors) ====
     // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
     
     module CallSignature {
+           ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base { // T
             // M's
             new (x: 'a'): void;
@@ -46,6 +50,8 @@ subtypingWithConstructSignaturesWithSpecializedSignatures.ts(76,15): error TS243
     }
     
     module MemberWithCallSignature {
+           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface Base { // T
             // M's
             a: {

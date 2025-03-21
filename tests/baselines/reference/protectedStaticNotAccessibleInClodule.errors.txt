@@ -1,7 +1,8 @@
+protectedStaticNotAccessibleInClodule.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 protectedStaticNotAccessibleInClodule.ts(10,22): error TS2445: Property 'bar' is protected and only accessible within class 'C' and its subclasses.
 
 
-==== protectedStaticNotAccessibleInClodule.ts (1 errors) ====
+==== protectedStaticNotAccessibleInClodule.ts (2 errors) ====
     // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
     
     class C {
@@ -10,6 +11,8 @@ protectedStaticNotAccessibleInClodule.ts(10,22): error TS2445: Property 'bar' is
     }
     
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var f = C.foo; // OK
         export var b = C.bar; // error
                          ~~~

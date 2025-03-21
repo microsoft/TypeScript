@@ -21,4 +21,5 @@ module M {
 >f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
 >  : ^^^ ^^      ^^^             ^^^ ^^      ^^^             ^^^
 >s : any
+>  : ^^^
 }

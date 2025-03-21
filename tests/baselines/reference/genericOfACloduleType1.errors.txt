@@ -1,0 +1,21 @@
+genericOfACloduleType1.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+genericOfACloduleType1.ts(4,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== genericOfACloduleType1.ts (2 errors) ====
+    class G<T>{ bar(x: T) { return x; } }
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C { foo() { } }
+        export module C {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class X {
+            }
+        }
+     
+        var g1 = new G<C>();
+        g1.bar(null).foo();
+    }
+    var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.C'.

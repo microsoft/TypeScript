@@ -1,0 +1,30 @@
+mergeClassInterfaceAndModule.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergeClassInterfaceAndModule.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergeClassInterfaceAndModule.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergeClassInterfaceAndModule.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mergeClassInterfaceAndModule.ts (4 errors) ====
+    interface C1 {}
+    declare class C1 {}
+    module C1 {}
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    declare class C2 {}
+    interface C2 {}
+    module C2 {}
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    declare class C3 {}
+    module C3 {}
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    interface C3 {}
+    
+    module C4 {}
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    declare class C4 {} // error -- class declaration must precede module declaration
+    interface C4 {}

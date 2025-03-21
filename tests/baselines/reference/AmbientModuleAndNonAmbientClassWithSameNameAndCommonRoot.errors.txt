@@ -1,0 +1,32 @@
+classPoint.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+module.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+module.d.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== module.d.ts (2 errors) ====
+    declare module A {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Point {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var Origin: {
+                x: number;
+                y: number;
+            }
+        }
+    }
+    
+==== classPoint.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    }
+    
+==== test.ts (0 errors) ====
+    var p: { x: number; y: number; }
+    var p = A.Point.Origin;
+    var p = new A.Point(0, 0); // unexpected error here, bug 840000

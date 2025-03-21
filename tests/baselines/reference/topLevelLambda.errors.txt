@@ -1,8 +1,11 @@
+topLevelLambda.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 topLevelLambda.ts(2,17): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 
-==== topLevelLambda.ts (1 errors) ====
+==== topLevelLambda.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	var f = () => {this.window;}
     	               ~~~~
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.

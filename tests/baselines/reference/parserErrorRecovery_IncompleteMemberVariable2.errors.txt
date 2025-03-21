@@ -1,8 +1,9 @@
+parserErrorRecovery_IncompleteMemberVariable2.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserErrorRecovery_IncompleteMemberVariable2.ts(12,20): error TS2304: Cannot find name 'C'.
 parserErrorRecovery_IncompleteMemberVariable2.ts(12,22): error TS1442: Expected '=' for property initializer.
 
 
-==== parserErrorRecovery_IncompleteMemberVariable2.ts (2 errors) ====
+==== parserErrorRecovery_IncompleteMemberVariable2.ts (3 errors) ====
     // Interface
     interface IPoint {
         getDist(): number;
@@ -10,6 +11,8 @@ parserErrorRecovery_IncompleteMemberVariable2.ts(12,22): error TS1442: Expected 
     
     // Module
     module Shapes {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         // Class
         export class Point implements IPoint {

@@ -1,3 +1,4 @@
+assignmentCompatWithObjectMembersStringNumericNames.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembersStringNumericNames.ts(21,5): error TS2741: Property ''1'' is missing in type 'T' but required in type 'S'.
 assignmentCompatWithObjectMembersStringNumericNames.ts(22,5): error TS2741: Property ''1.'' is missing in type 'S' but required in type 'T'.
 assignmentCompatWithObjectMembersStringNumericNames.ts(24,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
@@ -14,6 +15,7 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(36,5): error TS2741: Prop
 assignmentCompatWithObjectMembersStringNumericNames.ts(38,5): error TS2741: Property ''1.0'' is missing in type '{ '1': string; }' but required in type '{ '1.0': string; }'.
 assignmentCompatWithObjectMembersStringNumericNames.ts(39,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type '{ '1': string; }'.
 assignmentCompatWithObjectMembersStringNumericNames.ts(42,5): error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(45,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembersStringNumericNames.ts(65,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
 assignmentCompatWithObjectMembersStringNumericNames.ts(71,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S2'.
 assignmentCompatWithObjectMembersStringNumericNames.ts(73,5): error TS2741: Property ''1.'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
@@ -29,11 +31,13 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(83,5): error TS2741: Prop
 assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
 
 
-==== assignmentCompatWithObjectMembersStringNumericNames.ts (29 errors) ====
+==== assignmentCompatWithObjectMembersStringNumericNames.ts (31 errors) ====
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
     // string named numeric properties work correctly, errors below unless otherwise noted
     
     module JustStrings {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class S { '1': string; }
         class T { '1.': string; }
         var s: S;
@@ -123,6 +127,8 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Prop
     }
     
     module NumbersAndStrings {
+           ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class S { '1': string; }
         class T { 1: string; }
         var s: S;

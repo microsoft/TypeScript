@@ -1,0 +1,20 @@
+interfaceInReopenedModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+interfaceInReopenedModule.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== interfaceInReopenedModule.ts (2 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    
+    // In second instance of same module, exported interface is not visible
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface f {}
+        export class n { 
+            private n: f;
+        }
+    }
+    

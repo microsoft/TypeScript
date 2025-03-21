@@ -1,15 +1,23 @@
+moduleWithNoValuesAsType.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleWithNoValuesAsType.ts(2,8): error TS2709: Cannot use namespace 'A' as a type.
+moduleWithNoValuesAsType.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleWithNoValuesAsType.ts(7,8): error TS2709: Cannot use namespace 'B' as a type.
+moduleWithNoValuesAsType.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleWithNoValuesAsType.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleWithNoValuesAsType.ts(15,8): error TS2709: Cannot use namespace 'C' as a type.
 
 
-==== moduleWithNoValuesAsType.ts (3 errors) ====
+==== moduleWithNoValuesAsType.ts (7 errors) ====
     module A { }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     var a: A; // error
            ~
 !!! error TS2709: Cannot use namespace 'A' as a type.
     
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface I {}
     }
     var b: B; // error
@@ -17,7 +25,11 @@ moduleWithNoValuesAsType.ts(15,8): error TS2709: Cannot use namespace 'C' as a t
 !!! error TS2709: Cannot use namespace 'B' as a type.
     
     module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         module M {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             interface I {}
         }
     }

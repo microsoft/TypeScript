@@ -16,11 +16,12 @@ declarationsAndAssignments.ts(73,14): error TS2339: Property 'b' does not exist 
 declarationsAndAssignments.ts(74,11): error TS2339: Property 'a' does not exist on type 'undefined[]'.
 declarationsAndAssignments.ts(74,14): error TS2339: Property 'b' does not exist on type 'undefined[]'.
 declarationsAndAssignments.ts(106,17): error TS2741: Property 'x' is missing in type '{ y: false; }' but required in type '{ x: any; y?: boolean; }'.
+declarationsAndAssignments.ts(108,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
 declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== declarationsAndAssignments.ts (20 errors) ====
+==== declarationsAndAssignments.ts (21 errors) ====
     function f0() {
         var [] = [1, "hello"];
         var [x] = [1, "hello"];
@@ -166,6 +167,8 @@ declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assigna
 !!! error TS2741: Property 'x' is missing in type '{ y: false; }' but required in type '{ x: any; y?: boolean; }'.
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var [a, b] = [1, 2];
     }
     

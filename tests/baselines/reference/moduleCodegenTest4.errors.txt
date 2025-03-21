@@ -1,0 +1,10 @@
+moduleCodegenTest4.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleCodegenTest4.ts (1 errors) ====
+    export module Baz { export var x = "hello"; }
+                  ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    Baz.x = "goodbye";
+    void 0;

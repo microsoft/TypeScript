@@ -1,3 +1,4 @@
+exportEqualMemberMissing_0.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportEqualMemberMissing_1.ts(3,23): error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
 
 
@@ -8,8 +9,10 @@ exportEqualMemberMissing_1.ts(3,23): error TS2339: Property 'static' does not ex
                           ~~~~~~
 !!! error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
     
-==== exportEqualMemberMissing_0.ts (0 errors) ====
+==== exportEqualMemberMissing_0.ts (1 errors) ====
     module server {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface connectModule {
             (res, req, next): void;
         }

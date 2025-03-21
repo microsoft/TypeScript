@@ -1,0 +1,25 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file.tsx(5,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file.tsx(5,18): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+file.tsx(5,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== file.tsx (4 errors) ====
+    declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	interface Element { }
+    }
+    
+    declare module A.B.C {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                     ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                       ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+      var D: any;
+    }
+    
+    <A.B.C.D>foo</A . B . C.D>
+    

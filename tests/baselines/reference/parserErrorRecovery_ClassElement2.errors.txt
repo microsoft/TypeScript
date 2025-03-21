@@ -1,8 +1,11 @@
+parserErrorRecovery_ClassElement2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserErrorRecovery_ClassElement2.ts(4,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 
 
-==== parserErrorRecovery_ClassElement2.ts (1 errors) ====
+==== parserErrorRecovery_ClassElement2.ts (2 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       class C {
     
       enum E {

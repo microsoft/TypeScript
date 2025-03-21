@@ -1,0 +1,13 @@
+collisionCodeGenModuleWithMemberInterfaceConflict.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== collisionCodeGenModuleWithMemberInterfaceConflict.ts (1 errors) ====
+    module m1 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface m1 {
+        }
+        export class m2 implements m1 {
+        }
+    }
+    var foo = new m1.m2();
