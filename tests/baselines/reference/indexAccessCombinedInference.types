@@ -1,0 +1,670 @@
+//// [tests/cases/compiler/indexAccessCombinedInference.ts] ////
+
+=== indexAccessCombinedInference.ts ===
+// Simple case
+interface Args {
+    TA: object,
+>TA : object
+>   : ^^^^^^
+
+    TY: object
+>TY : object
+>   : ^^^^^^
+}
+
+declare function foo<T extends Args>(
+>foo : <T extends Args>(a: T["TA"], b: T["TY"]) => T["TA"] & T["TY"]
+>    : ^ ^^^^^^^^^    ^^ ^^       ^^ ^^       ^^^^^                 
+
+    a: T["TA"],
+>a : T["TA"]
+>  : ^^^^^^^
+
+    b: T["TY"]): T["TA"] & T["TY"];
+>b : T["TY"]
+>  : ^^^^^^^
+
+const x = foo({
+>x : { x: { j: number; i: number; }; } & { y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo({    x: {        j: 12,        i: 11    }}, { y: 42 }) : { x: { j: number; i: number; }; } & { y: number; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends Args>(a: T["TA"], b: T["TY"]) => T["TA"] & T["TY"]
+>    : ^ ^^^^^^^^^    ^^ ^^       ^^ ^^       ^^^^^                 
+>{    x: {        j: 12,        i: 11    }} : { x: { j: number; i: number; }; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    x: {
+>x : { j: number; i: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        j: 12,        i: 11    } : { j: number; i: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        j: 12,
+>j : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+
+        i: 11
+>i : number
+>  : ^^^^^^
+>11 : 11
+>   : ^^
+    }
+}, { y: 42 });
+>{ y: 42 } : { y: number; }
+>          : ^^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+// Union result type
+interface A {
+    foo: number;
+>foo : number
+>    : ^^^^^^
+}
+interface B {
+    bar: string;
+>bar : string
+>    : ^^^^^^
+}
+declare const something: A | B;
+>something : A | B
+>          : ^^^^^
+
+const y = foo(something, { bat: 42 });
+>y : (A & { bat: number; }) | (B & { bat: number; })
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo(something, { bat: 42 }) : (A | B) & { bat: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends Args>(a: T["TA"], b: T["TY"]) => T["TA"] & T["TY"]
+>    : ^ ^^^^^^^^^    ^^ ^^       ^^ ^^       ^^^^^                 
+>something : A | B
+>          : ^^^^^
+>{ bat: 42 } : { bat: number; }
+>            : ^^^^^^^^^^^^^^^^
+>bat : number
+>    : ^^^^^^
+>42 : 42
+>   : ^^
+
+// Union key type
+interface Args2 {
+    TA?: object, // Optional since only one of TA or TB needs to be infered in the below argument list
+>TA : object
+>   : ^^^^^^
+
+    TB?: object,
+>TB : object
+>   : ^^^^^^
+
+    TY: object
+>TY : object
+>   : ^^^^^^
+}
+declare function foo2<T extends Args2>(
+>foo2 : <T extends Args2>(a: T["TA"] | T["TB"], b: T["TY"]) => { a: T["TA"]; b: T["TB"]; } & T["TY"]
+>     : ^ ^^^^^^^^^     ^^ ^^                 ^^ ^^       ^^^^^                                     
+
+    a: T["TA"] | T["TB"],
+>a : T["TA"] | T["TB"]
+>  : ^^^^^^^^^^^^^^^^^
+
+    b: T["TY"]): {a: T["TA"], b: T["TB"]} & T["TY"];
+>b : T["TY"]
+>  : ^^^^^^^
+>a : T["TA"]
+>  : ^^^^^^^
+>b : T["TB"]
+>  : ^^^^^^^
+
+declare function foo3<T extends Args2>( // Morally equivalent to foo2
+>foo3 : <T extends Args2>(a: T["TA" | "TB"], b: T["TY"]) => { a: T["TA"]; b: T["TB"]; } & T["TY"]
+>     : ^ ^^^^^^^^^     ^^ ^^              ^^ ^^       ^^^^^                                     
+
+    a: T["TA" | "TB"],
+>a : T["TA" | "TB"]
+>  : ^^^^^^^^^^^^^^
+
+    b: T["TY"]): {a: T["TA"], b: T["TB"]} & T["TY"];
+>b : T["TY"]
+>  : ^^^^^^^
+>a : T["TA"]
+>  : ^^^^^^^
+>b : T["TB"]
+>  : ^^^^^^^
+
+let z = foo2({
+>z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo2({    x: {        j: 12,        i: 11    }}, { y: 42 }) : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo2 : <T extends Args2>(a: T["TA"] | T["TB"], b: T["TY"]) => { a: T["TA"]; b: T["TB"]; } & T["TY"]
+>     : ^ ^^^^^^^^^     ^^ ^^                 ^^ ^^       ^^^^^                                     
+>{    x: {        j: 12,        i: 11    }} : { x: { j: number; i: number; }; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    x: {
+>x : { j: number; i: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        j: 12,        i: 11    } : { j: number; i: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        j: 12,
+>j : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+
+        i: 11
+>i : number
+>  : ^^^^^^
+>11 : 11
+>   : ^^
+    }
+}, { y: 42 });
+>{ y: 42 } : { y: number; }
+>          : ^^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+let zz = foo3({
+>zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo3({    x: {        j: 12,        i: 11    }}, { y: 42 }) : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo3 : <T extends Args2>(a: T["TA" | "TB"], b: T["TY"]) => { a: T["TA"]; b: T["TB"]; } & T["TY"]
+>     : ^ ^^^^^^^^^     ^^ ^^              ^^ ^^       ^^^^^                                     
+>{    x: {        j: 12,        i: 11    }} : { x: { j: number; i: number; }; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    x: {
+>x : { j: number; i: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        j: 12,        i: 11    } : { j: number; i: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        j: 12,
+>j : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+
+        i: 11
+>i : number
+>  : ^^^^^^
+>11 : 11
+>   : ^^
+    }
+}, { y: 42 });
+>{ y: 42 } : { y: number; }
+>          : ^^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+z = zz;
+>z = zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+zz = z;
+>zz = z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Higher-order
+interface Args3 {
+    Key: "A" | "B",
+>Key : "A" | "B"
+>    : ^^^^^^^^^
+
+    A: object,
+>A : object
+>  : ^^^^^^
+
+    B: object,
+>B : object
+>  : ^^^^^^
+
+    Merge: object,
+>Merge : object
+>      : ^^^^^^
+}
+declare const either: "A" | "B";
+>either : "A" | "B"
+>       : ^^^^^^^^^
+
+declare function pickOne<T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"];
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T_1 extends Args3>(key: T_1["Key"], left: T_1["A"], right: T_1["B"], into: T_1["Merge"], extra: T_1["Extra"]): T_1[T_1["Key"]] & { into: T_1["Merge"]; extra: T_1["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^^^^^^^^^^^^^     ^^   ^^          ^^    ^^        ^^     ^^        ^^    ^^            ^^     ^^            ^^^                                                              ^^^
+>key : T["Key"]
+>    : ^^^^^^^^
+>left : T["A"]
+>     : ^^^^^^
+>right : T["B"]
+>      : ^^^^^^
+>into : T["Merge"]
+>     : ^^^^^^^^^^
+
+const opt1 = pickOne("A", {x: 12}, {y: ""}, {z: /./});
+>opt1 : { x: number; } & { z: RegExp; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne("A", {x: 12}, {y: ""}, {z: /./}) : { x: number; } & { z: RegExp; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>"A" : "A"
+>    : ^^^
+>{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+>{y: ""} : { y: string; }
+>        : ^^^^^^^^^^^^^^
+>y : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+
+const opt2 = pickOne("B", {x: 12}, {y: ""}, {z: /./});
+>opt2 : { y: string; } & { z: RegExp; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne("B", {x: 12}, {y: ""}, {z: /./}) : { y: string; } & { z: RegExp; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>"B" : "B"
+>    : ^^^
+>{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+>{y: ""} : { y: string; }
+>        : ^^^^^^^^^^^^^^
+>y : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+
+const opt3 = pickOne(either, {x: 12}, {y: ""}, {z: /./});
+>opt3 : ({ x: number; } & { z: RegExp; }) | ({ y: string; } & { z: RegExp; })
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne(either, {x: 12}, {y: ""}, {z: /./}) : ({ x: number; } | { y: string; }) & { z: RegExp; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>either : "A" | "B"
+>       : ^^^^^^^^^
+>{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+>{y: ""} : { y: string; }
+>        : ^^^^^^^^^^^^^^
+>y : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+
+const pickDelayed = <TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x});
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x}) : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
+>                                                                                : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : TKey
+>  : ^^^^
+>pickOne(x, {j: x}, {i: x}, {chosen: x}) : ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>x : TKey
+>  : ^^^^
+>{j: x} : { j: TKey; }
+>       : ^^^^^^^^^^^^
+>j : TKey
+>  : ^^^^
+>x : TKey
+>  : ^^^^
+>{i: x} : { i: TKey; }
+>       : ^^^^^^^^^^^^
+>i : TKey
+>  : ^^^^
+>x : TKey
+>  : ^^^^
+>{chosen: x} : { chosen: TKey; }
+>            : ^^^^^^^^^^^^^^^^^
+>chosen : TKey
+>       : ^^^^
+>x : TKey
+>  : ^^^^
+
+const opt4 = pickDelayed("A");
+>opt4 : { j: "A"; } & { chosen: "A"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed("A") : { j: "A"; } & { chosen: "A"; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+const opt5 = pickDelayed("B");
+>opt5 : { i: "B"; } & { chosen: "B"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed("B") : { i: "B"; } & { chosen: "B"; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+const opt6 = pickDelayed(either);
+>opt6 : ({ j: "A" | "B"; } & { chosen: "A" | "B"; }) | ({ i: "A" | "B"; } & { chosen: "A" | "B"; })
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed(either) : ({ j: "A" | "B"; } | { i: "A" | "B"; }) & { chosen: "A" | "B"; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickDelayed : <TKey extends Args3["Key"]>(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
+>            : ^    ^^^^^^^^^            ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>either : "A" | "B"
+>       : ^^^^^^^^^
+
+// Reopenable
+interface Args3 {
+    /**
+     * One must make patched parameters optional, otherwise signatures expecting the unpatched
+     * interface (ie, pickOne above) will not be able to produce a type satisfying the interface
+     * (as there are no inference sites for the new members) and will fall back to the constraints on each member
+     */
+    Extra?: object,
+>Extra : object
+>      : ^^^^^^
+}
+declare function pickOne<T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & {into: T["Merge"], extra: T["Extra"]};
+>pickOne : { <T_1 extends Args3>(key: T_1["Key"], left: T_1["A"], right: T_1["B"], into: T_1["Merge"]): T_1[T_1["Key"]] & T_1["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^^^^^^^^^^^^^     ^^   ^^          ^^    ^^        ^^     ^^        ^^    ^^            ^^^                              ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>key : T["Key"]
+>    : ^^^^^^^^
+>left : T["A"]
+>     : ^^^^^^
+>right : T["B"]
+>      : ^^^^^^
+>into : T["Merge"]
+>     : ^^^^^^^^^^
+>extra : T["Extra"]
+>      : ^^^^^^^^^^
+>into : T["Merge"]
+>     : ^^^^^^^^^^
+>extra : T["Extra"]
+>      : ^^^^^^^^^^
+
+const opt7 = pickOne("A", {x: 12}, {y: ""}, {z: /./}, {z: /./});
+>opt7 : { x: number; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne("A", {x: 12}, {y: ""}, {z: /./}, {z: /./}) : { x: number; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>"A" : "A"
+>    : ^^^
+>{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+>{y: ""} : { y: string; }
+>        : ^^^^^^^^^^^^^^
+>y : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+
+const opt8 = pickOne("B", {x: 12}, {y: ""}, {z: /./}, {z: /./});
+>opt8 : { y: string; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne("B", {x: 12}, {y: ""}, {z: /./}, {z: /./}) : { y: string; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>"B" : "B"
+>    : ^^^
+>{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+>{y: ""} : { y: string; }
+>        : ^^^^^^^^^^^^^^
+>y : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+
+const opt9 = pickOne(either, {x: 12}, {y: ""}, {z: /./}, {z: /./});
+>opt9 : ({ x: number; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }) | ({ y: string; } & { into: { z: RegExp; }; extra: { z: RegExp; }; })
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne(either, {x: 12}, {y: ""}, {z: /./}, {z: /./}) : ({ x: number; } | { y: string; }) & { into: { z: RegExp; }; extra: { z: RegExp; }; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
+>        : ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^^                        ^^^ ^^^^^^^^^     ^^   ^^        ^^    ^^      ^^     ^^      ^^    ^^          ^^     ^^          ^^^                                                      ^^^
+>either : "A" | "B"
+>       : ^^^^^^^^^
+>{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+>{y: ""} : { y: string; }
+>        : ^^^^^^^^^^^^^^
+>y : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+>{z: /./} : { z: RegExp; }
+>         : ^^^^^^^^^^^^^^
+>z : RegExp
+>  : ^^^^^^
+>/./ : RegExp
+>    : ^^^^^^
+
+// Interactions with `this` types
+interface TPicker {
+    Key: keyof this,
+>Key : keyof this
+>    : ^^^^^^^^^^
+
+    X: number,
+>X : number
+>  : ^^^^^^
+
+    Y: string
+>Y : string
+>  : ^^^^^^
+}
+declare function chooseLiteral<T extends TPicker>(choice: T["Key"], x: T["X"], y:T["Y"]): T[T["Key"]];
+>chooseLiteral : <T extends TPicker>(choice: T["Key"], x: T["X"], y: T["Y"]) => T[T["Key"]]
+>              : ^ ^^^^^^^^^       ^^      ^^        ^^ ^^      ^^ ^^      ^^^^^           
+>choice : T["Key"]
+>       : ^^^^^^^^
+>x : T["X"]
+>  : ^^^^^^
+>y : T["Y"]
+>  : ^^^^^^
+
+const cx = chooseLiteral("X", 1, "no");
+>cx : 1
+>   : ^
+>chooseLiteral("X", 1, "no") : 1
+>                            : ^
+>chooseLiteral : <T extends TPicker>(choice: T["Key"], x: T["X"], y: T["Y"]) => T[T["Key"]]
+>              : ^ ^^^^^^^^^       ^^      ^^        ^^ ^^      ^^ ^^      ^^^^^           
+>"X" : "X"
+>    : ^^^
+>1 : 1
+>  : ^
+>"no" : "no"
+>     : ^^^^
+
+const cy = chooseLiteral("Y", 0, "yes");
+>cy : "yes"
+>   : ^^^^^
+>chooseLiteral("Y", 0, "yes") : "yes"
+>                             : ^^^^^
+>chooseLiteral : <T extends TPicker>(choice: T["Key"], x: T["X"], y: T["Y"]) => T[T["Key"]]
+>              : ^ ^^^^^^^^^       ^^      ^^        ^^ ^^      ^^ ^^      ^^^^^           
+>"Y" : "Y"
+>    : ^^^
+>0 : 0
+>  : ^
+>"yes" : "yes"
+>      : ^^^^^
+
+const ceither = chooseLiteral("X" as "X" | "Y", 1, "yes");
+>ceither : 1 | "yes"
+>        : ^^^^^^^^^
+>chooseLiteral("X" as "X" | "Y", 1, "yes") : 1 | "yes"
+>                                          : ^^^^^^^^^
+>chooseLiteral : <T extends TPicker>(choice: T["Key"], x: T["X"], y: T["Y"]) => T[T["Key"]]
+>              : ^ ^^^^^^^^^       ^^      ^^        ^^ ^^      ^^ ^^      ^^^^^           
+>"X" as "X" | "Y" : "X" | "Y"
+>                 : ^^^^^^^^^
+>"X" : "X"
+>    : ^^^
+>1 : 1
+>  : ^
+>"yes" : "yes"
+>      : ^^^^^
+
+const cneither = chooseLiteral("Key", 0, "no");
+>cneither : "Key"
+>         : ^^^^^
+>chooseLiteral("Key", 0, "no") : "Key"
+>                              : ^^^^^
+>chooseLiteral : <T extends TPicker>(choice: T["Key"], x: T["X"], y: T["Y"]) => T[T["Key"]]
+>              : ^ ^^^^^^^^^       ^^      ^^        ^^ ^^      ^^ ^^      ^^^^^           
+>"Key" : "Key"
+>      : ^^^^^
+>0 : 0
+>  : ^
+>"no" : "no"
+>     : ^^^^
+
+// Multiple inference sites
+interface Args4 {
+    0: object,
+>0 : object
+>  : ^^^^^^
+
+    1: Record<keyof this[0], Function>,
+>1 : Record<keyof this[0], Function>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+declare function dualInputs<T extends Args4>(x: T[0], y: T[0], toDelay: T[1]): T[0] & {transformers: T[1]};
+>dualInputs : <T extends Args4>(x: T[0], y: T[0], toDelay: T[1]) => T[0] & { transformers: T[1]; }
+>           : ^ ^^^^^^^^^     ^^ ^^    ^^ ^^    ^^       ^^    ^^^^^                              
+>x : T[0]
+>  : ^^^^
+>y : T[0]
+>  : ^^^^
+>toDelay : T[1]
+>        : ^^^^
+>transformers : T[1]
+>             : ^^^^
+
+const result = dualInputs({x: 0}, {x: 1}, {x: () => ""});
+>result : { x: number; } & { x: number; } & { transformers: { x: () => ""; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dualInputs({x: 0}, {x: 1}, {x: () => ""}) : { x: number; } & { x: number; } & { transformers: { x: () => ""; }; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dualInputs : <T extends Args4>(x: T[0], y: T[0], toDelay: T[1]) => T[0] & { transformers: T[1]; }
+>           : ^ ^^^^^^^^^     ^^ ^^    ^^ ^^    ^^       ^^    ^^^^^                              
+>{x: 0} : { x: number; }
+>       : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>{x: 1} : { x: number; }
+>       : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>{x: () => ""} : { x: () => ""; }
+>              : ^^^^^^^^^^^^^^^^
+>x : () => ""
+>  : ^^^^^^^^
+>() => "" : () => ""
+>         : ^^^^^^^^
+>"" : ""
+>   : ^^
+
