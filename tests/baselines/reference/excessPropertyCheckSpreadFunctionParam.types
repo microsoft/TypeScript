@@ -1,0 +1,283 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadFunctionParam.ts] ////
+
+=== excessPropertyCheckSpreadFunctionParam.ts ===
+type Params = {
+>Params : Params
+>       : ^^^^^^
+
+    a?: any;
+>a : any
+>  : ^^^
+
+    b?: any;
+>b : any
+>  : ^^^
+}
+  
+function f(params: Params) {
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>params : Params
+>       : ^^^^^^
+
+    return;
+}
+
+const objWithAllowedKeys = { a: 2 }
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+>{ a: 2 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const objWithForbiddenKeys = { c: 2 }
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const objWithNoKeys = {}
+>objWithNoKeys : {}
+>              : ^^
+>{} : {}
+>   : ^^
+
+const a = 2;
+>a : 2
+>  : ^
+>2 : 2
+>  : ^
+
+const c = 2;
+>c : 2
+>  : ^
+>2 : 2
+>  : ^
+
+f({ ...objWithAllowedKeys })
+>f({ ...objWithAllowedKeys }) : void
+>                             : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...objWithAllowedKeys } : { a: number; }
+>                          : ^^^^^^^^^^^^^^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+
+f({ ...objWithForbiddenKeys })
+>f({ ...objWithForbiddenKeys }) : void
+>                               : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...objWithForbiddenKeys } : { c: number; }
+>                            : ^^^^^^^^^^^^^^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+
+f({ ...objWithAllowedKeys, ...objWithForbiddenKeys })
+>f({ ...objWithAllowedKeys, ...objWithForbiddenKeys }) : void
+>                                                      : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...objWithAllowedKeys, ...objWithForbiddenKeys } : { c: number; a: number; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+
+f({ ...{ a: 2 }, ...{ c: 2 } })
+>f({ ...{ a: 2 }, ...{ c: 2 } }) : void
+>                                : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ a: 2 }, ...{ c: 2 } } : { c: number; a: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 2 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+f({ ...{ a: 2, c: 2 } })
+>f({ ...{ a: 2, c: 2 } }) : void
+>                         : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ a: 2, c: 2 } } : { a: number; c: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 2, c: 2 } : { a: number; c: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+f({ ...{ c: 2 }, ...{ b: 2 } })
+>f({ ...{ c: 2 }, ...{ b: 2 } }) : void
+>                                : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ c: 2 }, ...{ b: 2 } } : { b: number; c: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>{ b: 2 } : { b: number; }
+>         : ^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+f({ ...{ a: 2 }, ...objWithForbiddenKeys })
+>f({ ...{ a: 2 }, ...objWithForbiddenKeys }) : void
+>                                            : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ a: 2 }, ...objWithForbiddenKeys } : { c: number; a: number; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 2 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+
+f({ ...{ c: 2 }, ...objWithAllowedKeys })
+>f({ ...{ c: 2 }, ...objWithAllowedKeys }) : void
+>                                          : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ c: 2 }, ...objWithAllowedKeys } : { a: number; c: number; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+
+f({ ...{ c: 2 }, ...objWithForbiddenKeys })
+>f({ ...{ c: 2 }, ...objWithForbiddenKeys }) : void
+>                                            : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ c: 2 }, ...objWithForbiddenKeys } : { c: number; }
+>                                         : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+
+f({ ...{ c: 2 }, ...objWithNoKeys })
+>f({ ...{ c: 2 }, ...objWithNoKeys }) : void
+>                                     : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ c: 2 }, ...objWithNoKeys } : { c: number; }
+>                                  : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithNoKeys : {}
+>              : ^^
+
+f({ ...{...{ c: 2 }, ...objWithNoKeys } })
+>f({ ...{...{ c: 2 }, ...objWithNoKeys } }) : void
+>                                           : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{...{ c: 2 }, ...objWithNoKeys } } : { c: number; }
+>                                        : ^^^^^^^^^^^^^^
+>{...{ c: 2 }, ...objWithNoKeys } : { c: number; }
+>                                 : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithNoKeys : {}
+>              : ^^
+
+f({ a, ...{ c: 2 } })
+>f({ a, ...{ c: 2 } }) : void
+>                      : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ a, ...{ c: 2 } } : { c: number; a: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+f({ a, ...{ c } })
+>f({ a, ...{ c } }) : void
+>                   : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ a, ...{ c } } : { c: number; a: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>{ c } : { c: number; }
+>      : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+
+f({ ...{ c }, ...objWithAllowedKeys })
+>f({ ...{ c }, ...objWithAllowedKeys }) : void
+>                                       : ^^^^
+>f : (params: Params) => void
+>  : ^      ^^      ^^^^^^^^^
+>{ ...{ c }, ...objWithAllowedKeys } : { a: number; c: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c } : { c: number; }
+>      : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+
+
+
+
+
