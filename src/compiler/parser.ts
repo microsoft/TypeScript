@@ -176,6 +176,7 @@ import {
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocIgnoreTag,
     JSDocImplementsTag,
     JSDocImportTag,
     JSDocLink,
@@ -1129,6 +1130,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocProtectedTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
+    [SyntaxKind.JSDocIgnoreTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocImportTag]: forEachChildInJSDocImportTag,
     [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
@@ -1215,7 +1217,7 @@ function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode |
     return visitNode(cbNode, node.name);
 }
 
-function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocIgnoreTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName)
         || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
@@ -9095,6 +9097,9 @@ namespace Parser {
                     case "deprecated":
                         hasDeprecatedTag = true;
                         tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
+                        break;
+                    case "ignore":
+                        tag = parseSimpleTag(start, factory.createJSDocIgnoreTag, tagName, margin, indentText);
                         break;
                     case "this":
                         tag = parseThisTag(start, tagName, margin, indentText);
