@@ -41,7 +41,7 @@ class B {
 >v : number
 
   foo(this: A, a: A, b: B) {
->foo : (a: A, b: B) => void
+>foo : (this: A, a: A, b: B) => void
 >this : A
 >a : A
 >b : B
@@ -92,7 +92,7 @@ class B {
 }
 
 function bar(this: A, a: A, b: B) {
->bar : (a: A, b: B) => void
+>bar : (this: A, a: A, b: B) => void
 >this : A
 >a : A
 >b : B

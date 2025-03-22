@@ -64,7 +64,7 @@ declare const ThemeSymbol: InjectionKey<ThemeInstance>;
 >ThemeSymbol : InjectionKey<ThemeInstance>
 
 declare function inject(
->inject : (key: string | InjectionKey<any>) => any
+>inject : (this: ExtractComputedReturns<{}>, key: string | InjectionKey<any>) => any
 
   this: ComponentPublicInstance,
 >this : ExtractComputedReturns<{}>
@@ -100,9 +100,9 @@ app.mixin({
         theme: inject.call(this, ThemeSymbol),
 >theme : any
 >inject.call(this, ThemeSymbol) : any
->inject.call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
->inject : (key: string | InjectionKey<any>) => any
->call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
+>inject.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>inject : (this: ExtractComputedReturns<{}>, key: string | InjectionKey<any>) => any
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
 >this : any
 >ThemeSymbol : InjectionKey<ThemeInstance>
 

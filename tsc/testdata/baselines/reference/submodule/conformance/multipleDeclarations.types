@@ -35,11 +35,11 @@ class X {
 >this : this
 >m : () => void
 >this.m.bind(this) : any
->this.m.bind : (thisArg: any, ...argArray: any[]) => any
+>this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this.m : () => void
 >this : this
 >m : () => void
->bind : (thisArg: any, ...argArray: any[]) => any
+>bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this : this
 
         this.mistake = 'frankly, complete nonsense';
@@ -97,11 +97,11 @@ class Y {
 >this : this
 >m : () => void
 >this.m.bind(this) : any
->this.m.bind : (thisArg: any, ...argArray: any[]) => any
+>this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this.m : () => void
 >this : this
 >m : () => void
->bind : (thisArg: any, ...argArray: any[]) => any
+>bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this : this
 
         this.mistake = 'even more nonsense';

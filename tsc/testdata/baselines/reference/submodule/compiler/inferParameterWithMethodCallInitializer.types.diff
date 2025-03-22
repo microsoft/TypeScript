@@ -9,21 +9,3 @@
  >a : number
  >this.getNumber() : number
  >this.getNumber : () => number
-@@= skipped -13, +13 lines =@@
-     }
- }
- function weird(this: Example, a = this.getNumber()) {
-->weird : (this: Example, a?: number) => number
-+>weird : (a?: number) => number
- >this : Example
- >a : number
- >this.getNumber() : number
-@@= skipped -15, +15 lines =@@
- >Weird : Weird
- 
-     doSomething(this: Example, a = this.getNumber()) {
-->doSomething : (this: Example, a?: number) => number
-+>doSomething : (a?: number) => number
- >this : Example
- >a : number
- >this.getNumber() : number

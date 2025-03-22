@@ -25,7 +25,7 @@ declare function invalidReturnType(): unique symbol;
 >invalidReturnType : () => symbol
 
 declare function invalidThisType(this: unique symbol): void;
->invalidThisType : () => void
+>invalidThisType : (this: symbol) => void
 >this : symbol
 
 declare function invalidTypePredicate(n: any): n is unique symbol;
@@ -63,7 +63,7 @@ class InvalidClass {
 >invalidReturnType : () => symbol
 
     invalidThisType(this: unique symbol): void { return; }
->invalidThisType : () => void
+>invalidThisType : (this: symbol) => void
 >this : symbol
 
     invalidTypePredicate(n: any): n is unique symbol { return; }
@@ -98,7 +98,7 @@ class InvalidClass {
 >invalidStaticReturnType : () => symbol
 
     static invalidStaticThisType(this: unique symbol): void { return; }
->invalidStaticThisType : () => void
+>invalidStaticThisType : (this: symbol) => void
 >this : symbol
 
     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
@@ -136,7 +136,7 @@ interface InvalidInterface {
 >invalidReturnType : () => symbol
 
     invalidThisType(this: unique symbol);
->invalidThisType : () => any
+>invalidThisType : (this: symbol) => any
 >this : symbol
 
     invalidTypePredicate(n: any): n is unique symbol
@@ -169,7 +169,7 @@ type InvalidTypeLiteral = {
 >invalidReturnType : () => symbol
 
     invalidThisType(this: unique symbol);
->invalidThisType : () => any
+>invalidThisType : (this: symbol) => any
 >this : symbol
 
     invalidTypePredicate(n: any): n is unique symbol

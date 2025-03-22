@@ -23,7 +23,7 @@ function isFoo1(object: {}): object is Foo {
 }
 
 function isFoo2(this: void, object: {}): object is Foo {
->isFoo2 : (object: {}) => object is Foo
+>isFoo2 : (this: void, object: {}) => object is Foo
 >this : void
 >object : {}
 
@@ -51,7 +51,7 @@ if (isFoo1(test)) {
 
 if (isFoo2(test)) {
 >isFoo2(test) : boolean
->isFoo2 : (object: {}) => object is Foo
+>isFoo2 : (this: void, object: {}) => object is Foo
 >test : Bar | Foo
 
     test.foo = 'hi';

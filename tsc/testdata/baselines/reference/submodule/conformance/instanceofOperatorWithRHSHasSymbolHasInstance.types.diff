@@ -580,7 +580,7 @@
      // all construct signatures, but we have no way of extracting individual construct signatures from a type.
      static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
 ->[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is (T extends globalThis.Function ? T extends { readonly prototype: infer U; } ? boolean extends (U extends never ? true : false) ? T extends (abstract new (...args: any) => infer V) ? V : {} : U : never : never)
-+>[Symbol.hasInstance] : <T>(value: unknown) => value is T extends Function ? T extends { readonly prototype: infer U; } ? boolean extends infer U extends never ? true : false ? T extends new (...args: any) => infer V ? V : {} : U : never : never
++>[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is T extends Function ? T extends { readonly prototype: infer U; } ? boolean extends infer U extends never ? true : false ? T extends new (...args: any) => infer V ? V : {} : U : never : never
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol

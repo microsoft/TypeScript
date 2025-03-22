@@ -8,7 +8,7 @@ class A {
 >a : number
 
     public method(this: this): number {
->method : () => number
+>method : (this: this) => number
 >this : this
 
         return this.a;
@@ -18,7 +18,7 @@ class A {
     }
 
     public method2(this: A): number {
->method2 : () => number
+>method2 : (this: A) => number
 >this : A
 
         return this.a;
@@ -28,7 +28,7 @@ class A {
     }
 
     public method3(this: this): number {
->method3 : () => number
+>method3 : (this: this) => number
 >this : this
 
         var fn = () => this.a;
@@ -44,7 +44,7 @@ class A {
     }
 
     public method4(this: A): number {
->method4 : () => number
+>method4 : (this: A) => number
 >this : A
 
         var fn = () => this.a;
@@ -60,7 +60,7 @@ class A {
     }
 
     static staticMethod(this: A): number {
->staticMethod : () => number
+>staticMethod : (this: A) => number
 >this : A
 
         return this.a;
@@ -71,7 +71,7 @@ class A {
 }
 
 function f(this: A): number {
->f : () => number
+>f : (this: A) => number
 >this : A
 
     return this.a
@@ -81,9 +81,9 @@ function f(this: A): number {
 }
 
 var f2 = function f2(this: A): number {
->f2 : () => number
->function f2(this: A): number {    return this.a;} : () => number
->f2 : () => number
+>f2 : (this: A) => number
+>function f2(this: A): number {    return this.a;} : (this: A) => number
+>f2 : (this: A) => number
 >this : A
 
     return this.a;

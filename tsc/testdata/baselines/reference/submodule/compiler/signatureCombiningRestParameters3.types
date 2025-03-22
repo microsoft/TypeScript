@@ -3,7 +3,7 @@
 === signatureCombiningRestParameters3.ts ===
 interface ExtensionConfig<Options = any> {
   extendMarkSchema?:
->extendMarkSchema : (extension: Mark<any>) => Record<string, any> | null | undefined
+>extendMarkSchema : (this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any> | null | undefined
 
     | ((
         this: {
@@ -66,7 +66,7 @@ declare class Node<Options = any> {
 
 interface NodeConfig<Options = any> {
   extendMarkSchema?:
->extendMarkSchema : (extension: Node<any>) => Record<string, any> | null | undefined
+>extendMarkSchema : (this: { name: string; options: Options; }, extension: Node<any>) => Record<string, any> | null | undefined
 
     | ((
         this: {
@@ -98,7 +98,7 @@ declare class Mark<Options = any> {
 
 interface MarkConfig<Options = any> {
   extendMarkSchema?:
->extendMarkSchema : (extension: Mark<any>) => Record<string, any> | null | undefined
+>extendMarkSchema : (this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any> | null | undefined
 
     | ((
         this: {

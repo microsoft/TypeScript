@@ -5,25 +5,7 @@
  
      static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
 ->[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is (T extends (abstract new (...args: any) => infer U) ? U : never)
-+>[Symbol.hasInstance] : <T>(value: unknown) => value is T extends new (...args: any) => infer U ? U : never
++>[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is T extends new (...args: any) => infer U ? U : never
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-@@= skipped -14, +14 lines =@@
-     ) {
-         return Function.prototype[Symbol.hasInstance].call(this, value);
- >Function.prototype[Symbol.hasInstance].call(this, value) : any
-->Function.prototype[Symbol.hasInstance].call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>Function.prototype[Symbol.hasInstance].call : (thisArg: any, ...argArray: any[]) => any
- >Function.prototype[Symbol.hasInstance] : (value: any) => boolean
- >Function.prototype : Function
- >Function : FunctionConstructor
-@@= skipped -8, +8 lines =@@
- >Symbol.hasInstance : unique symbol
- >Symbol : SymbolConstructor
- >hasInstance : unique symbol
-->call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>call : (thisArg: any, ...argArray: any[]) => any
- >this : T
- >value : unknown
-     }

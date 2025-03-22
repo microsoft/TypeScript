@@ -1,15 +1,6 @@
 --- old.typePredicateWithThisParameter.types
 +++ new.typePredicateWithThisParameter.types
-@@= skipped -22, +22 lines =@@
- }
- 
- function isFoo2(this: void, object: {}): object is Foo {
-->isFoo2 : (this: void, object: {}) => object is Foo
-+>isFoo2 : (object: {}) => object is Foo
- >this : void
- >object : {}
- 
-@@= skipped -11, +11 lines =@@
+@@= skipped -33, +33 lines =@@
  }
  
  declare let test: Foo | Bar;
@@ -24,13 +15,11 @@
  
      test.foo = 'hi';
  >test.foo = 'hi' : "hi"
-@@= skipped -17, +17 lines =@@
- 
+@@= skipped -18, +18 lines =@@
  if (isFoo2(test)) {
  >isFoo2(test) : boolean
-->isFoo2 : (this: void, object: {}) => object is Foo
+ >isFoo2 : (this: void, object: {}) => object is Foo
 ->test : Foo | Bar
-+>isFoo2 : (object: {}) => object is Foo
 +>test : Bar | Foo
  
      test.foo = 'hi';

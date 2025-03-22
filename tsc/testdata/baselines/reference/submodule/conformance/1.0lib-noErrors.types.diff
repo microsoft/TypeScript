@@ -153,7 +153,7 @@
        */
      apply(thisArg: any, argArray?: any): any;
 ->apply : (thisArg: any, argArray?: any) => any
-+>apply : { (thisArg: any, argArray?: any): any; (thisArg: any, argArray?: any): any; }
++>apply : { (this: Function, thisArg: any, argArray?: any): any; (thisArg: any, argArray?: any): any; }
  >thisArg : any
  >argArray : any
  
@@ -162,7 +162,7 @@
        */
      call(thisArg: any, ...argArray: any[]): any;
 ->call : (thisArg: any, ...argArray: any[]) => any
-+>call : { (thisArg: any, ...argArray: any[]): any; (thisArg: any, ...argArray: any[]): any; }
++>call : { (this: Function, thisArg: any, ...argArray: any[]): any; (thisArg: any, ...argArray: any[]): any; }
  >thisArg : any
  >argArray : any[]
  
@@ -171,7 +171,7 @@
        */
      bind(thisArg: any, ...argArray: any[]): any;
 ->bind : (thisArg: any, ...argArray: any[]) => any
-+>bind : { (thisArg: any, ...argArray: any[]): any; (thisArg: any, ...argArray: any[]): any; }
++>bind : { (this: Function, thisArg: any, ...argArray: any[]): any; (thisArg: any, ...argArray: any[]): any; }
  >thisArg : any
  >argArray : any[]
  
@@ -996,7 +996,7 @@
        */
      parse(text: string, reviver?: (key: any, value: any) => any): any;
 ->parse : (text: string, reviver?: (key: any, value: any) => any) => any
-+>parse : { (text: string, reviver?: (key: string, value: any) => any): any; (text: string, reviver?: (key: any, value: any) => any): any; }
++>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver?: (key: any, value: any) => any): any; }
  >text : string
  >reviver : (key: any, value: any) => any
  >key : any
@@ -1005,7 +1005,7 @@
        */
      stringify(value: any): string;
 ->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
-+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
++>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
  >value : any
  
      /**
@@ -1014,7 +1014,7 @@
        */
      stringify(value: any, replacer: (key: string, value: any) => any): string;
 ->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
-+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
++>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
  >value : any
  >replacer : (key: string, value: any) => any
  >key : string
@@ -1023,7 +1023,7 @@
        */
      stringify(value: any, replacer: any[]): string;
 ->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
-+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
++>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
  >value : any
  >replacer : any[]
  
@@ -1032,7 +1032,7 @@
        */
      stringify(value: any, replacer: (key: string, value: any) => any, space: any): string;
 ->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
-+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
++>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
  >value : any
  >replacer : (key: string, value: any) => any
  >key : string
@@ -1041,7 +1041,7 @@
        */
      stringify(value: any, replacer: any[], space: any): string;
 ->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
-+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
++>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
  >value : any
  >replacer : any[]
  >space : any

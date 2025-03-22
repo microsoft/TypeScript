@@ -5,7 +5,7 @@ class Foo {
 >Foo : Foo
 
     static m<T>(this: new () => T, strings: TemplateStringsArray | string) {
->m : <T>(strings: string | TemplateStringsArray) => T
+>m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
 >this : new () => T
 >strings : string | TemplateStringsArray
 
@@ -17,16 +17,16 @@ class Foo {
 
 Foo.m`test`;
 >Foo.m`test` : Foo
->Foo.m : <T>(strings: string | TemplateStringsArray) => T
+>Foo.m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
 >Foo : typeof Foo
->m : <T>(strings: string | TemplateStringsArray) => T
+>m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
 >`test` : "test"
 
 (Foo.m)`test`;
 >(Foo.m)`test` : Foo
->(Foo.m) : <T>(strings: string | TemplateStringsArray) => T
->Foo.m : <T>(strings: string | TemplateStringsArray) => T
+>(Foo.m) : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
+>Foo.m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
 >Foo : typeof Foo
->m : <T>(strings: string | TemplateStringsArray) => T
+>m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
 >`test` : "test"
 

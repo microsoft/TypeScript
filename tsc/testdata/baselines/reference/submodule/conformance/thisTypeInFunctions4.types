@@ -19,7 +19,7 @@ declare function callsCallback(cb: (name: string)=>void)
 >name : string
 
 function problemFunction(this: CorrectObject | WrongObject): void {
->problemFunction : () => void
+>problemFunction : (this: CorrectObject | WrongObject) => void
 >this : CorrectObject | WrongObject
 
     //check type

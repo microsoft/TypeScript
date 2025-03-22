@@ -20,10 +20,9 @@
 -  Overload 1 of 2, '(this: (this: 1, ...args: T) => void, thisArg: 1): (...args: T) => void', gave the following error.
 -    Argument of type '2' is not assignable to parameter of type '1'.
 -  Overload 2 of 2, '(this: (this: 1, ...args: unknown[]) => void, thisArg: 1): (...args: unknown[]) => void', gave the following error.
--    The 'this' context of type '(this: 1, ...args: T) => void' is not assignable to method's 'this' of type '(this: 1, ...args: unknown[]) => void'.
 +strictBindCallApply1.ts(76,5): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
-+    The 'this' context of type '(...args: T) => void' is not assignable to method's 'this' of type '(...args: unknown[]) => void'.
+     The 'this' context of type '(this: 1, ...args: T) => void' is not assignable to method's 'this' of type '(this: 1, ...args: unknown[]) => void'.
        Types of parameters 'args' and 'args' are incompatible.
          Type 'unknown[]' is not assignable to type 'T'.
            'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown[]'.
@@ -35,7 +34,7 @@
 -      Types of parameters 'args' and 'args_0' are incompatible.
 +strictBindCallApply1.ts(81,5): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
-+    The 'this' context of type '(...args: T extends 1 ? [unknown] : [unknown, unknown]) => void' is not assignable to method's 'this' of type '(...args: [unknown]) => void'.
++    The 'this' context of type '(this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void' is not assignable to method's 'this' of type '(this: 1, ...args: [unknown]) => void'.
 +      Types of parameters 'args' and 'args' are incompatible.
          Type '[unknown]' is not assignable to type 'T extends 1 ? [unknown] : [unknown, unknown]'.
  
@@ -63,9 +62,8 @@
 -!!! error TS2769:   Overload 1 of 2, '(this: (this: 1, ...args: T) => void, thisArg: 1): (...args: T) => void', gave the following error.
 -!!! error TS2769:     Argument of type '2' is not assignable to parameter of type '1'.
 -!!! error TS2769:   Overload 2 of 2, '(this: (this: 1, ...args: unknown[]) => void, thisArg: 1): (...args: unknown[]) => void', gave the following error.
--!!! error TS2769:     The 'this' context of type '(this: 1, ...args: T) => void' is not assignable to method's 'this' of type '(this: 1, ...args: unknown[]) => void'.
 +!!! error TS2769:   The last overload gave the following error.
-+!!! error TS2769:     The 'this' context of type '(...args: T) => void' is not assignable to method's 'this' of type '(...args: unknown[]) => void'.
+ !!! error TS2769:     The 'this' context of type '(this: 1, ...args: T) => void' is not assignable to method's 'this' of type '(this: 1, ...args: unknown[]) => void'.
  !!! error TS2769:       Types of parameters 'args' and 'args' are incompatible.
  !!! error TS2769:         Type 'unknown[]' is not assignable to type 'T'.
  !!! error TS2769:           'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown[]'.
@@ -84,7 +82,7 @@
 -!!! error TS2769:     The 'this' context of type '(this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void' is not assignable to method's 'this' of type '(this: 1, args_0: unknown) => void'.
 -!!! error TS2769:       Types of parameters 'args' and 'args_0' are incompatible.
 +!!! error TS2769:   The last overload gave the following error.
-+!!! error TS2769:     The 'this' context of type '(...args: T extends 1 ? [unknown] : [unknown, unknown]) => void' is not assignable to method's 'this' of type '(...args: [unknown]) => void'.
++!!! error TS2769:     The 'this' context of type '(this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void' is not assignable to method's 'this' of type '(this: 1, ...args: [unknown]) => void'.
 +!!! error TS2769:       Types of parameters 'args' and 'args' are incompatible.
  !!! error TS2769:         Type '[unknown]' is not assignable to type 'T extends 1 ? [unknown] : [unknown, unknown]'.
 +!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.

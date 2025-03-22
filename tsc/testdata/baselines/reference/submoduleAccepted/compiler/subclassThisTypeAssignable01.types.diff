@@ -1,15 +1,6 @@
 --- old.subclassThisTypeAssignable01.types
 +++ new.subclassThisTypeAssignable01.types
-@@= skipped -16, +16 lines =@@
- 
- interface Component<Attrs, State> {
- 	view(this: State, vnode: Vnode<Attrs, State>): number;
-->view : (this: State, vnode: Vnode<Attrs, State>) => number
-+>view : (vnode: Vnode<Attrs, State>) => number
- >this : State
- >vnode : Vnode<Attrs, State>
- }
-@@= skipped -22, +22 lines =@@
+@@= skipped -38, +38 lines =@@
  >C : C
  
  	view(v: Vnode<MyAttrs>) { return 0; }

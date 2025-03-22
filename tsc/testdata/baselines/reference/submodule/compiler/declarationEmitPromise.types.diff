@@ -9,19 +9,7 @@
  
      a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
  >a : bluebird<A>
-@@= skipped -45, +45 lines =@@
- 
-         f.apply(this, result);
- >f.apply(this, result) : any
-->f.apply : (this: Function, thisArg: any, argArray?: any) => any
-+>f.apply : (thisArg: any, argArray?: any) => any
- >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
-->apply : (this: Function, thisArg: any, argArray?: any) => any
-+>apply : (thisArg: any, argArray?: any) => any
- >this : any
- >result : any
- 
-@@= skipped -17, +17 lines =@@
+@@= skipped -62, +62 lines =@@
  }
  
  export async function runSampleBreaks<A, B, C, D, E>(
@@ -30,15 +18,3 @@
  
      a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
  >a : bluebird<A>
-@@= skipped -45, +45 lines =@@
- 
-         f.apply(this, result);
- >f.apply(this, result) : any
-->f.apply : (this: Function, thisArg: any, argArray?: any) => any
-+>f.apply : (thisArg: any, argArray?: any) => any
- >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
-->apply : (this: Function, thisArg: any, argArray?: any) => any
-+>apply : (thisArg: any, argArray?: any) => any
- >this : any
- >result : any
- 

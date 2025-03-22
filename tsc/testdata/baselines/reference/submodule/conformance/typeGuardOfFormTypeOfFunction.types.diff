@@ -109,16 +109,6 @@
  >item : T[K]
  >'function' : "function"
  
-             item.call(obj);
- >item.call(obj) : any
-->item.call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>item.call : (thisArg: any, ...argArray: any[]) => any
- >item : T[K] & Function
-->call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>call : (thisArg: any, ...argArray: any[]) => any
- >obj : T
-     }
- }
 @@= skipped -16, +16 lines =@@
  // Repro from #49316
  

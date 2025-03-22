@@ -20,9 +20,9 @@ var r2b: (x: any, y?: any) => any = i.apply;
 >r2b : (x: any, y?: any) => any
 >x : any
 >y : any
->i.apply : (thisArg: any, argArray?: any) => any
+>i.apply : (this: Function, thisArg: any, argArray?: any) => any
 >i : I
->apply : (thisArg: any, argArray?: any) => any
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 
 var b: {
 >b : () => void
@@ -39,7 +39,7 @@ var rb4: (x: any, y?: any) => any = b.apply;
 >rb4 : (x: any, y?: any) => any
 >x : any
 >y : any
->b.apply : (thisArg: any, argArray?: any) => any
+>b.apply : (this: Function, thisArg: any, argArray?: any) => any
 >b : () => void
->apply : (thisArg: any, argArray?: any) => any
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 

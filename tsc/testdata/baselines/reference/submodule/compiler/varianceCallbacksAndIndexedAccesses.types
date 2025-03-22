@@ -6,7 +6,7 @@ type Source = {
 
     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 >type : K
->listener : (ev: WindowEventMap[K]) => any
+>listener : (this: Window, ev: WindowEventMap[K]) => any
 >this : Window
 >ev : WindowEventMap[K]
 >options : boolean | AddEventListenerOptions

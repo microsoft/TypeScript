@@ -71,18 +71,13 @@
          document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
  >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
 ->document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
-+>document.addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
++>document.addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
  >document : Document
 ->addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
-+>addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
++>addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
  >event.name : K
  >event : Ev<K>
  >name : K
-->(ev) => event.callback(ev) : (this: Document, ev: DocumentEventMap[K]) => void
-+>(ev) => event.callback(ev) : (ev: DocumentEventMap[K]) => void
- >ev : DocumentEventMap[K]
- >event.callback(ev) : void
- >event.callback : (ev: DocumentEventMap[K]) => void
 @@= skipped -22, +22 lines =@@
  }
  

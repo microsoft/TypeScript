@@ -2,16 +2,16 @@
 
 === thisTypeInTypePredicate.ts ===
 declare function filter<S>(f: (this: void, x: any) => x is S): S[];
->filter : <S>(f: (x: any) => x is S) => S[]
->f : (x: any) => x is S
+>filter : <S>(f: (this: void, x: any) => x is S) => S[]
+>f : (this: void, x: any) => x is S
 >this : void
 >x : any
 
 const numbers = filter<number>((x): x is number => 'number' == typeof x)
 >numbers : number[]
 >filter<number>((x): x is number => 'number' == typeof x) : number[]
->filter : <S>(f: (x: any) => x is S) => S[]
->(x): x is number => 'number' == typeof x : (x: any) => x is number
+>filter : <S>(f: (this: void, x: any) => x is S) => S[]
+>(x): x is number => 'number' == typeof x : (this: void, x: any) => x is number
 >x : any
 >'number' == typeof x : boolean
 >'number' : "number"

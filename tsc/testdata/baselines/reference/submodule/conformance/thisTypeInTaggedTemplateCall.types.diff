@@ -5,7 +5,7 @@
  
      static m<T>(this: new () => T, strings: TemplateStringsArray | string) {
 ->m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
-+>m : <T>(strings: string | TemplateStringsArray) => T
++>m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
  >this : new () => T
  >strings : string | TemplateStringsArray
  
@@ -14,20 +14,20 @@
  Foo.m`test`;
  >Foo.m`test` : Foo
 ->Foo.m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
-+>Foo.m : <T>(strings: string | TemplateStringsArray) => T
++>Foo.m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
  >Foo : typeof Foo
 ->m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
-+>m : <T>(strings: string | TemplateStringsArray) => T
++>m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
  >`test` : "test"
  
  (Foo.m)`test`;
  >(Foo.m)`test` : Foo
 ->(Foo.m) : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
 ->Foo.m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
-+>(Foo.m) : <T>(strings: string | TemplateStringsArray) => T
-+>Foo.m : <T>(strings: string | TemplateStringsArray) => T
++>(Foo.m) : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
++>Foo.m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
  >Foo : typeof Foo
 ->m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
-+>m : <T>(strings: string | TemplateStringsArray) => T
++>m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
  >`test` : "test"
  

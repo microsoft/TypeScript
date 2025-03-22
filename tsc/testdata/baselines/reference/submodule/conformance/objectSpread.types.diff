@@ -67,15 +67,7 @@
  >op : { readonly a: number; }
  >c : number
  >7 : 7
-@@= skipped -26, +26 lines =@@
- >authToken : string
- 
- function from16326(this: { header: Header }, header: Header, authToken: string): Header {
-->from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
-+>from16326 : (header: Header, authToken: string) => Header
- >this : { header: Header; }
- >header : Header
- >header : Header
+@@= skipped -33, +33 lines =@@
  >authToken : string
  
      return {
@@ -84,7 +76,7 @@
  
          ...this.header,
  >this.header : Header
-@@= skipped -178, +178 lines =@@
+@@= skipped -171, +171 lines =@@
  
  // own methods are enumerable
  let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };

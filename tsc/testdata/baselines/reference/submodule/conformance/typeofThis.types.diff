@@ -1,24 +1,6 @@
 --- old.typeofThis.types
 +++ new.typeofThis.types
-@@= skipped -82, +82 lines =@@
- }
- 
- function Test3(this: { no: number }) {
-->Test3 : (this: { no: number; }) => void
-+>Test3 : () => void
- >this : { no: number; }
- >no : number
- 
-@@= skipped -13, +13 lines =@@
- }
- 
- function Test4(this: { no: number } | undefined) {
-->Test4 : (this: { no: number; } | undefined) => void
-+>Test4 : () => void
- >this : { no: number; } | undefined
- >no : number
- 
-@@= skipped -183, +183 lines =@@
+@@= skipped -278, +278 lines =@@
  >Test10 : Test10
  
      a?: { b?: string }

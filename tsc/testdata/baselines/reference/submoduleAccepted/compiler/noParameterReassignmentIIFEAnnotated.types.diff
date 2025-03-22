@@ -26,11 +26,3 @@
  
          return importScripts.apply(this, arguments);
  >importScripts.apply(this, arguments) : any
-->importScripts.apply : (this: Function, thisArg: any, argArray?: any) => any
-+>importScripts.apply : (thisArg: any, argArray?: any) => any
- >importScripts : (...urls: string[]) => void
-->apply : (this: Function, thisArg: any, argArray?: any) => any
-+>apply : (thisArg: any, argArray?: any) => any
- >this : any
- >arguments : IArguments
- 

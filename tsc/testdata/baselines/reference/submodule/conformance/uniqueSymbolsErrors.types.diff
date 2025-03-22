@@ -19,7 +19,7 @@
  
  declare function invalidThisType(this: unique symbol): void;
 ->invalidThisType : (this: unique symbol) => void
-+>invalidThisType : () => void
++>invalidThisType : (this: symbol) => void
  >this : symbol
  
  declare function invalidTypePredicate(n: any): n is unique symbol;
@@ -56,7 +56,7 @@
  
      invalidThisType(this: unique symbol): void { return; }
 ->invalidThisType : (this: unique symbol) => void
-+>invalidThisType : () => void
++>invalidThisType : (this: symbol) => void
  >this : symbol
  
      invalidTypePredicate(n: any): n is unique symbol { return; }
@@ -93,7 +93,7 @@
  
      static invalidStaticThisType(this: unique symbol): void { return; }
 ->invalidStaticThisType : (this: unique symbol) => void
-+>invalidStaticThisType : () => void
++>invalidStaticThisType : (this: symbol) => void
  >this : symbol
  
      static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
@@ -130,7 +130,7 @@
  
      invalidThisType(this: unique symbol);
 ->invalidThisType : (this: unique symbol) => any
-+>invalidThisType : () => any
++>invalidThisType : (this: symbol) => any
  >this : symbol
  
      invalidTypePredicate(n: any): n is unique symbol
@@ -167,7 +167,7 @@
  
      invalidThisType(this: unique symbol);
 ->invalidThisType : (this: unique symbol) => any
-+>invalidThisType : () => any
++>invalidThisType : (this: symbol) => any
  >this : symbol
  
      invalidTypePredicate(n: any): n is unique symbol

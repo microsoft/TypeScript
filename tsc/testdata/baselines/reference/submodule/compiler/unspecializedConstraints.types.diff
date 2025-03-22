@@ -1,30 +1,6 @@
 --- old.unspecializedConstraints.types
 +++ new.unspecializedConstraints.types
-@@= skipped -454, +454 lines =@@
-         if (!hasOwnProperty.call(map, key)) return undefined;
- >!hasOwnProperty.call(map, key) : boolean
- >hasOwnProperty.call(map, key) : any
-->hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>hasOwnProperty.call : (thisArg: any, ...argArray: any[]) => any
- >hasOwnProperty : (v: PropertyKey) => boolean
-->call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>call : (thisArg: any, ...argArray: any[]) => any
- >map : Map<T>
- >key : string
- >undefined : undefined
-@@= skipped -20, +20 lines =@@
- 
-         return hasOwnProperty.call(map, key);
- >hasOwnProperty.call(map, key) : any
-->hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>hasOwnProperty.call : (thisArg: any, ...argArray: any[]) => any
- >hasOwnProperty : (v: PropertyKey) => boolean
-->call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>call : (thisArg: any, ...argArray: any[]) => any
- >map : Map<T>
- >key : string
-     }
-@@= skipped -117, +117 lines =@@
+@@= skipped -591, +591 lines =@@
              if (!arrayContains(b, a[i])) return false;
  >!arrayContains(b, a[i]) : boolean
  >arrayContains(b, a[i]) : boolean

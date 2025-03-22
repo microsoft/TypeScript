@@ -27,21 +27,7 @@
  >require : any
  >"function" : "function"
  
-@@= skipped -50, +50 lines =@@
- >global : any
- ><any>Function("return this").call(null) : any
- >Function("return this").call(null) : any
-->Function("return this").call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>Function("return this").call : (thisArg: any, ...argArray: any[]) => any
- >Function("return this") : Function
- >Function : FunctionConstructor
- >"return this" : "return this"
-->call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>call : (thisArg: any, ...argArray: any[]) => any
- 
-     export var usePull = false;
- >usePull : boolean
-@@= skipped -103, +103 lines =@@
+@@= skipped -153, +153 lines =@@
              var bugs = content.match(/\bbug (\d+)/i);
  >bugs : RegExpMatchArray
  >content.match(/\bbug (\d+)/i) : RegExpMatchArray
@@ -351,20 +337,16 @@
  >benchmark : Benchmark
  >description : string
  >name : any
-@@= skipped -9, +9 lines =@@
- 
+@@= skipped -10, +10 lines =@@
              f.call(benchmark, subBenchmark);
  >f.call(benchmark, subBenchmark) : any
-->f.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+ >f.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 ->f : (bench?: { (): void; }) => void
-->call : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>f.call : (thisArg: any, ...argArray: any[]) => any
 +>f : (bench?: () => void) => void
-+>call : (thisArg: any, ...argArray: any[]) => any
+ >call : (this: Function, thisArg: any, ...argArray: any[]) => any
  >benchmark : Benchmark
  >subBenchmark : (name: any, f: any) => void
- 
-@@= skipped -32, +32 lines =@@
+@@= skipped -31, +31 lines =@@
  >i < benchmarks.length : boolean
  >i : number
  >benchmarks.length : number
@@ -2687,10 +2669,10 @@
              return JSON.stringify({ usePullLanguageService: usePull });
  >JSON.stringify({ usePullLanguageService: usePull }) : string
 ->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
++>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
  >JSON : JSON
 ->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
++>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
  >{ usePullLanguageService: usePull } : { usePullLanguageService: boolean; }
  >usePullLanguageService : boolean
  >usePull : boolean

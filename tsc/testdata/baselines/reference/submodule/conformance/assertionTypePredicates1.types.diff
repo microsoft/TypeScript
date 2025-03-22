@@ -150,21 +150,3 @@
  >x : unknown
  >"string" : "string"
  }
-@@= skipped -144, +144 lines =@@
- >x : TestPropertySignature
- }
- function testFunctionThisParameter1(
-->testFunctionThisParameter1 : (this: TestPropertySignature, x: unknown) => void
-+>testFunctionThisParameter1 : (x: unknown) => void
- 
-   this: TestPropertySignature,
- >this : TestPropertySignature
-@@= skipped -46, +46 lines =@@
- >x : TestMethodSignature
- }
- function testFunctionThisParameter2(
-->testFunctionThisParameter2 : (this: TestMethodSignature, x: unknown) => void
-+>testFunctionThisParameter2 : (x: unknown) => void
- 
-   this: TestMethodSignature,
- >this : TestMethodSignature

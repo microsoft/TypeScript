@@ -1,21 +1,6 @@
 --- old.controlFlowAnalysisOnBareThisKeyword.types
 +++ new.controlFlowAnalysisOnBareThisKeyword.types
-@@= skipped -7, +7 lines =@@
- >true : true
- 
- function bigger(this: {}) {
-->bigger : (this: {}) => void
-+>bigger : () => void
- >this : {}
- 
-     if (isBig(this)) {
-@@= skipped -16, +16 lines =@@
- }
- 
- function bar(this: string | number) {
-->bar : (this: string | number) => void
-+>bar : () => void
- >this : string | number
+@@= skipped -28, +28 lines =@@
  
      if (typeof this === "string") {
  >typeof this === "string" : boolean

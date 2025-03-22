@@ -17,11 +17,11 @@ export class MyClass {
 >this : this
 >_symbol : unique symbol
 >this[_symbol].bind(this) : () => Promise<void>
->this[_symbol].bind : { <T>(thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(thisArg: T, ...args: A): (...args: B) => R; }
+>this[_symbol].bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >this[_symbol] : () => Promise<void>
 >this : this
 >_symbol : unique symbol
->bind : { <T>(thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(thisArg: T, ...args: A): (...args: B) => R; }
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >this : this
     }
 

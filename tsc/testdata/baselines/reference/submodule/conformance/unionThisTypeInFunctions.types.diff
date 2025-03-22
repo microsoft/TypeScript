@@ -1,24 +1,6 @@
 --- old.unionThisTypeInFunctions.types
 +++ new.unionThisTypeInFunctions.types
-@@= skipped -2, +2 lines =@@
- === unionThisTypeInFunctions.ts ===
- interface Real {
-     method(this: this, n: number): void;
-->method : (this: this, n: number) => void
-+>method : (n: number) => void
- >this : this
- >n : number
- 
-@@= skipped -9, +9 lines =@@
- }
- interface Fake {
-     method(this: this, n: number): void;
-->method : (this: this, n: number) => void
-+>method : (n: number) => void
- >this : this
- >n : number
- 
-@@= skipped -8, +8 lines =@@
+@@= skipped -19, +19 lines =@@
  >data : number
  }
  function test(r: Real | Fake) {
@@ -32,9 +14,9 @@
 ->r.method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
 ->r : Real | Fake
 ->method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
-+>r.method : (n: number) => void | (n: number) => void
++>r.method : (this: Real, n: number) => void | (this: Fake, n: number) => void
 +>r : Fake | Real
-+>method : (n: number) => void | (n: number) => void
++>method : (this: Real, n: number) => void | (this: Fake, n: number) => void
  >12 : 12
  }
  

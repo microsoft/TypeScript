@@ -44,7 +44,7 @@ function hof(ctor: function(new: number, string)) {
 function hof2(f: function(this: number, string): string) {
 >hof2 : (f: function) => any
 >f : function
->(this: number, string): string : (string: any) => string
+>(this: number, string): string : (this: number, string: any) => string
 >this : number
 >string : any
 > : any

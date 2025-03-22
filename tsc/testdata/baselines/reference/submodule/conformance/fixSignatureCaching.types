@@ -1118,13 +1118,13 @@ define(function () {
 >value : any
 >Object.prototype.toString.call(value) === '[object Array]' : boolean
 >Object.prototype.toString.call(value) : any
->Object.prototype.toString.call : (thisArg: any, ...argArray: any[]) => any
+>Object.prototype.toString.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >Object.prototype.toString : () => string
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
 >toString : () => string
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >value : any
 >'[object Array]' : "[object Array]"
 
@@ -1141,13 +1141,13 @@ define(function () {
 >value : any
 >Object.prototype.toString.call(value) === '[object Array]' : boolean
 >Object.prototype.toString.call(value) : any
->Object.prototype.toString.call : (thisArg: any, ...argArray: any[]) => any
+>Object.prototype.toString.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >Object.prototype.toString : () => string
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
 >toString : () => string
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >value : any
 >'[object Array]' : "[object Array]"
 
@@ -1248,9 +1248,9 @@ define(function () {
 
             if (hasOwnProp.call(object, key)) {
 >hasOwnProp.call(object, key) : any
->hasOwnProp.call : (thisArg: any, ...argArray: any[]) => any
+>hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >hasOwnProp : (v: PropertyKey) => boolean
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >object : any
 >key : string
 
@@ -1295,9 +1295,9 @@ define(function () {
 
             if (hasOwnProp.call(mobileDetectRules.props, key)) {
 >hasOwnProp.call(mobileDetectRules.props, key) : any
->hasOwnProp.call : (thisArg: any, ...argArray: any[]) => any
+>hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >hasOwnProp : (v: PropertyKey) => boolean
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >mobileDetectRules.props : any
 >mobileDetectRules : any
 >props : any
@@ -1486,9 +1486,9 @@ define(function () {
 
             if (hasOwnProp.call(rules, key)) {
 >hasOwnProp.call(rules, key) : any
->hasOwnProp.call : (thisArg: any, ...argArray: any[]) => any
+>hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >hasOwnProp : (v: PropertyKey) => boolean
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >rules : any
 >key : string
 
@@ -1535,9 +1535,9 @@ define(function () {
 
             if (hasOwnProp.call(rules, key)) {
 >hasOwnProp.call(rules, key) : any
->hasOwnProp.call : (thisArg: any, ...argArray: any[]) => any
+>hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >hasOwnProp : (v: PropertyKey) => boolean
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >rules : any
 >key : string
 
@@ -1595,9 +1595,9 @@ define(function () {
 
         if (hasOwnProp.call(props, propertyName)) {
 >hasOwnProp.call(props, propertyName) : any
->hasOwnProp.call : (thisArg: any, ...argArray: any[]) => any
+>hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >hasOwnProp : (v: PropertyKey) => boolean
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >props : any
 >propertyName : any
 

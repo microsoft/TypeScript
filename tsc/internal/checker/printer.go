@@ -471,6 +471,11 @@ func (p *Printer) printSignature(sig *Signature, returnSeparator string) {
 	}
 	p.print("(")
 	var tail bool
+	if sig.thisParameter != nil {
+		p.print("this: ")
+		p.printType(p.c.getTypeOfSymbol(sig.thisParameter))
+		tail = true
+	}
 	for i, param := range sig.parameters {
 		if tail {
 			p.print(", ")

@@ -44,17 +44,7 @@
  >required1() : boolean
  >required1 : () => boolean
  >console.log('required call') : void
-@@= skipped -32, +32 lines =@@
- >f && f.apply(parent, []) : any
- >f : () => void
- >f.apply(parent, []) : any
-->f.apply : (this: Function, thisArg: any, argArray?: any) => any
-+>f.apply : (thisArg: any, argArray?: any) => any
- >f : () => void
-->apply : (this: Function, thisArg: any, argArray?: any) => any
-+>apply : (thisArg: any, argArray?: any) => any
- >parent : Window
- >[] : never[]
+@@= skipped -40, +40 lines =@@
  
      // error
      required1 && required2 && required1() && console.log('foo');
@@ -63,7 +53,7 @@
  >required1 && required2 && required1() : boolean
  >required1 && required2 : () => boolean
  >required1 : () => boolean
-@@= skipped -130, +130 lines =@@
+@@= skipped -122, +122 lines =@@
  
      // error
      if (b && (required1 || required2)) {

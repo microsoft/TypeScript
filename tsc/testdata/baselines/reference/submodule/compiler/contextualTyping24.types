@@ -5,9 +5,9 @@ var foo:(a:{():number; (i:number):number; })=>number; foo = function(this: void,
 >foo : (a: { (): number; (i: number): number; }) => number
 >a : { (): number; (i: number): number; }
 >i : number
->foo = function(this: void, a:string){return 5} : (a: string) => number
+>foo = function(this: void, a:string){return 5} : (this: void, a: string) => number
 >foo : (a: { (): number; (i: number): number; }) => number
->function(this: void, a:string){return 5} : (a: string) => number
+>function(this: void, a:string){return 5} : (this: void, a: string) => number
 >this : void
 >a : string
 >5 : 5

@@ -5,18 +5,18 @@
  
          window.ontouchstart
 ->window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>window.ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any | null | undefined
++>window.ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any | null | undefined
  >window : Window & typeof globalThis
 ->ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any | null | undefined
++>ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any | null | undefined
  
      } else {
          window.ontouchstart
 ->window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>window.ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any | null | undefined
++>window.ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any | null | undefined
  >window : Window & typeof globalThis
 ->ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
-+>ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any | null | undefined
++>ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any | null | undefined
      }
  }
  

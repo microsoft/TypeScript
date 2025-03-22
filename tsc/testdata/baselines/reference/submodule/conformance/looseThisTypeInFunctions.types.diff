@@ -1,48 +1,7 @@
 --- old.looseThisTypeInFunctions.types
 +++ new.looseThisTypeInFunctions.types
-@@= skipped -5, +5 lines =@@
- >n : number
- 
-     explicitThis(this: this, m: number): number;
-->explicitThis : (this: this, m: number) => number
-+>explicitThis : (m: number) => number
- >this : this
- >m : number
- }
-@@= skipped -16, +16 lines =@@
- >n : number
- 
-     explicitThis(this: this, m: number): number {
-->explicitThis : (this: this, m: number) => number
-+>explicitThis : (m: number) => number
- >this : this
- >m : number
- 
-@@= skipped -23, +23 lines =@@
- >m : number
-     }
-     explicitVoid(this: void, m: number): number {
-->explicitVoid : (this: void, m: number) => number
-+>explicitVoid : (m: number) => number
- >this : void
- >m : number
- 
-@@= skipped -16, +16 lines =@@
- >C : typeof C
- 
- c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
-->c.explicitVoid = c.explicitThis : (this: C, m: number) => number
-->c.explicitVoid : (this: void, m: number) => number
-+>c.explicitVoid = c.explicitThis : (m: number) => number
-+>c.explicitVoid : (m: number) => number
- >c : C
-->explicitVoid : (this: void, m: number) => number
-->c.explicitThis : (this: C, m: number) => number
-+>explicitVoid : (m: number) => number
-+>c.explicitThis : (m: number) => number
- >c : C
-->explicitThis : (this: C, m: number) => number
-+>explicitThis : (m: number) => number
+@@= skipped -69, +69 lines =@@
+ >explicitThis : (this: C, m: number) => number
  
  let o = {
 ->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
@@ -52,7 +11,7 @@
  
      n: 101,
  >n : number
-@@= skipped -26, +26 lines =@@
+@@= skipped -17, +17 lines =@@
  >m : number
  >this.n.length : any
  >this.n : number
@@ -70,54 +29,7 @@
  
  let o2: I = {
  >o2 : I
-->{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: number; explicitThis: (this: I, m: number) => any; }
-+>{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: number; explicitThis: (m: number) => any; }
- 
-     n: 1001,
- >n : number
- >1001 : 1001
- 
-     explicitThis: function (m) {
-->explicitThis : (this: I, m: number) => any
-->function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    } : (this: I, m: number) => any
-+>explicitThis : (m: number) => any
-+>function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    } : (m: number) => any
- >m : number
- 
-          return m + this.n.length;  // error, this.n: number, no member 'length'
-@@= skipped -27, +27 lines =@@
-     },
- }
- let x = i.explicitThis;
-->x : (this: I, m: number) => number
-->i.explicitThis : (this: I, m: number) => number
-+>x : (m: number) => number
-+>i.explicitThis : (m: number) => number
- >i : I
-->explicitThis : (this: I, m: number) => number
-+>explicitThis : (m: number) => number
- 
- let n = x(12); // callee:void doesn't match this:I
- >n : number
- >x(12) : number
-->x : (this: I, m: number) => number
-+>x : (m: number) => number
- >12 : 12
- 
- let u: Unused;
-@@= skipped -29, +29 lines =@@
- 
- c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
- >c.explicitVoid = c.implicitThis : (m: number) => number
-->c.explicitVoid : (this: void, m: number) => number
-+>c.explicitVoid : (m: number) => number
- >c : C
-->explicitVoid : (this: void, m: number) => number
-+>explicitVoid : (m: number) => number
- >c.implicitThis : (m: number) => number
- >c : C
- >implicitThis : (m: number) => number
-@@= skipped -10, +10 lines =@@
+@@= skipped -66, +66 lines =@@
  o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
  >o.implicitThis = c.implicitThis : (m: number) => number
  >o.implicitThis : (m: number) => number
@@ -126,44 +38,21 @@
  >implicitThis : (m: number) => number
  >c.implicitThis : (m: number) => number
  >c : C
- >implicitThis : (m: number) => number
- 
+@@= skipped -9, +9 lines =@@
  o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
-->o.implicitThis = c.explicitThis : (this: C, m: number) => number
-+>o.implicitThis = c.explicitThis : (m: number) => number
+ >o.implicitThis = c.explicitThis : (this: C, m: number) => number
  >o.implicitThis : (m: number) => number
 ->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 +>o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
  >implicitThis : (m: number) => number
-->c.explicitThis : (this: C, m: number) => number
-+>c.explicitThis : (m: number) => number
+ >c.explicitThis : (this: C, m: number) => number
  >c : C
-->explicitThis : (this: C, m: number) => number
-+>explicitThis : (m: number) => number
- 
+@@= skipped -9, +9 lines =@@
  o.implicitThis = i.explicitThis;
-->o.implicitThis = i.explicitThis : (this: I, m: number) => number
-+>o.implicitThis = i.explicitThis : (m: number) => number
+ >o.implicitThis = i.explicitThis : (this: I, m: number) => number
  >o.implicitThis : (m: number) => number
 ->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 +>o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
  >implicitThis : (m: number) => number
-->i.explicitThis : (this: I, m: number) => number
-+>i.explicitThis : (m: number) => number
+ >i.explicitThis : (this: I, m: number) => number
  >i : I
-->explicitThis : (this: I, m: number) => number
-+>explicitThis : (m: number) => number
- 
- i.explicitThis = function(m) {
-->i.explicitThis = function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any
-->i.explicitThis : (this: I, m: number) => number
-+>i.explicitThis = function(m) {     return this.n.length;  // error, this.n: number} : (m: number) => any
-+>i.explicitThis : (m: number) => number
- >i : I
-->explicitThis : (this: I, m: number) => number
-->function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any
-+>explicitThis : (m: number) => number
-+>function(m) {     return this.n.length;  // error, this.n: number} : (m: number) => any
- >m : number
- 
-      return this.n.length;  // error, this.n: number

@@ -5,15 +5,13 @@
  >bar : string[]
  >foo.flatMap(bar => bar as Foo) : string[]
 ->foo.flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
-+>foo.flatMap : <U, This>(callback: (value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
++>foo.flatMap : <U, This>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
  >foo : unknown[]
 ->flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
-->bar => bar as Foo : (this: undefined, bar: unknown) => Foo
-+>flatMap : <U, This>(callback: (value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
-+>bar => bar as Foo : (bar: unknown) => Foo
++>flatMap : <U, This>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+ >bar => bar as Foo : (this: undefined, bar: unknown) => Foo
  >bar : unknown
  >bar as Foo : Foo
- >bar : unknown
 @@= skipped -19, +19 lines =@@
  
      if (typeof value !== "string") {

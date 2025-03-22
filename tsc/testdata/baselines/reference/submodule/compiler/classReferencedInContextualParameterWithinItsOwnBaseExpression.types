@@ -68,9 +68,9 @@ export class A extends Class<A>("A")(
 >(a) => JSON.stringify(a) : (a: A) => string
 >a : A
 >JSON.stringify(a) : string
->JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: (key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >a : A
 
   },

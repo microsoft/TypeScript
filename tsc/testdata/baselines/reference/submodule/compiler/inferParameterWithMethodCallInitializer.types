@@ -30,7 +30,7 @@ class Example {
     }
 }
 function weird(this: Example, a = this.getNumber()) {
->weird : (a?: number) => number
+>weird : (this: Example, a?: number) => number
 >this : Example
 >a : number
 >this.getNumber() : number
@@ -45,7 +45,7 @@ class Weird {
 >Weird : Weird
 
     doSomething(this: Example, a = this.getNumber()) {
->doSomething : (a?: number) => number
+>doSomething : (this: Example, a?: number) => number
 >this : Example
 >a : number
 >this.getNumber() : number

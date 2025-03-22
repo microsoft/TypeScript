@@ -177,11 +177,11 @@ module Harness {
 >global : any
 ><any>Function("return this").call(null) : any
 >Function("return this").call(null) : any
->Function("return this").call : (thisArg: any, ...argArray: any[]) => any
+>Function("return this").call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >Function("return this") : Function
 >Function : FunctionConstructor
 >"return this" : "return this"
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 
     export var usePull = false;
 >usePull : boolean
@@ -2336,9 +2336,9 @@ Actual errors follow: "
 
             f.call(benchmark, subBenchmark);
 >f.call(benchmark, subBenchmark) : any
->f.call : (thisArg: any, ...argArray: any[]) => any
+>f.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >f : (bench?: () => void) => void
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >benchmark : Benchmark
 >subBenchmark : (name: any, f: any) => void
 
@@ -7567,9 +7567,9 @@ Actual errors follow: "
 
             return JSON.stringify({ usePullLanguageService: usePull });
 >JSON.stringify({ usePullLanguageService: usePull }) : string
->JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >{ usePullLanguageService: usePull } : { usePullLanguageService: boolean; }
 >usePullLanguageService : boolean
 >usePull : boolean

@@ -176,7 +176,7 @@ type Header = { head: string, body: string, authToken: string }
 >authToken : string
 
 function from16326(this: { header: Header }, header: Header, authToken: string): Header {
->from16326 : (header: Header, authToken: string) => Header
+>from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
 >this : { header: Header; }
 >header : Header
 >header : Header

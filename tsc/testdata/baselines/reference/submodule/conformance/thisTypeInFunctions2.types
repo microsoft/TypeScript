@@ -4,11 +4,11 @@
 interface IndexedWithThis {
     // this is a workaround for React
     init?: (this: this) => void;
->init : () => void
+>init : (this: this) => void
 >this : this
 
     willDestroy?: (this: any) => void;
->willDestroy : () => void
+>willDestroy : (this: any) => void
 >this : any
 
     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
@@ -50,19 +50,19 @@ declare function simple(arg: SimpleInterface): void;
 extend1({
 >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
 >extend1 : (args: IndexedWithThis) => void
->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init: () => void; mine: number; foo: () => void; }
+>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init: (this: IndexedWithThis) => void; mine: number; foo: (this: any) => void; }
 
     init() {
->init : () => void
+>init : (this: IndexedWithThis) => void
 
         this // this: IndexedWithThis because of contextual typing.
 >this : IndexedWithThis
 
         // this.mine
         this.willDestroy
->this.willDestroy : () => void
+>this.willDestroy : (this: any) => void
 >this : IndexedWithThis
->willDestroy : () => void
+>willDestroy : (this: any) => void
 
     },
     mine: 12,
@@ -70,7 +70,7 @@ extend1({
 >12 : 12
 
     foo() {
->foo : () => void
+>foo : (this: any) => void
 
         this.url; // this: any because 'foo' matches the string indexer
 >this.url : any

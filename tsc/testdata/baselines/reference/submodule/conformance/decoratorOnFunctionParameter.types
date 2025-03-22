@@ -10,7 +10,7 @@ class C { n = true; }
 >true : true
 
 function direct(@dec this: C) { return this.n; }
->direct : () => boolean
+>direct : (this: C) => boolean
 >dec : any
 >this : C
 >this.n : boolean
@@ -18,7 +18,7 @@ function direct(@dec this: C) { return this.n; }
 >n : boolean
 
 function called(@dec() this: C) { return this.n; }
->called : () => boolean
+>called : (this: C) => boolean
 >dec() : any
 >dec : any
 >this : C

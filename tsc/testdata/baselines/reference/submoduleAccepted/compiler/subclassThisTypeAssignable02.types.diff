@@ -9,15 +9,7 @@
  >vnode : Vnode<Attrs, State>
  
  	[_: number]: any;
-@@= skipped -14, +14 lines =@@
- 
- interface Component<Attrs, State extends Lifecycle<Attrs, State>> {
- 	view(this: State, vnode: Vnode<Attrs, State>): number;
-->view : (this: State, vnode: Vnode<Attrs, State>) => number
-+>view : (vnode: Vnode<Attrs, State>) => number
- >this : State
- >vnode : Vnode<Attrs, State>
- }
+@@= skipped -21, +21 lines =@@
  
  interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
  	oninit?(vnode: Vnode<A, this>): number;
@@ -26,7 +18,7 @@
  >vnode : Vnode<A, this>
  
  	view(vnode: Vnode<A, this>): number;
-@@= skipped -40, +40 lines =@@
+@@= skipped -33, +33 lines =@@
  === file1.js ===
  /** @type {ClassComponent<any>} */
  const test9 = new C();

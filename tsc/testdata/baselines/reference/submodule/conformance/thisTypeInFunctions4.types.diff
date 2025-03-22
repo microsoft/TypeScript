@@ -1,12 +1,10 @@
 --- old.thisTypeInFunctions4.types
 +++ new.thisTypeInFunctions4.types
-@@= skipped -18, +18 lines =@@
- >name : string
+@@= skipped -19, +19 lines =@@
  
  function problemFunction(this: CorrectObject | WrongObject): void {
-->problemFunction : (this: CorrectObject | WrongObject) => void
+ >problemFunction : (this: CorrectObject | WrongObject) => void
 ->this : WrongObject | CorrectObject
-+>problemFunction : () => void
 +>this : CorrectObject | WrongObject
  
      //check type

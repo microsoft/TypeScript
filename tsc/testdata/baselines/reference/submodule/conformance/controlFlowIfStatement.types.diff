@@ -9,19 +9,16 @@
  >data : string | T
  >'string' : "string"
  
-         return JSON.parse(data);
- >JSON.parse(data) : any
-->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
-+>JSON.parse : (text: string, reviver?: (key: string, value: any) => any) => any
+@@= skipped -9, +9 lines =@@
+ >JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
  >JSON : JSON
-->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+ >parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 ->data : string | (T & string)
-+>parse : (text: string, reviver?: (key: string, value: any) => any) => any
 +>data : string | T & string
      }
      else {
          return data;
-@@= skipped -22, +22 lines =@@
+@@= skipped -13, +13 lines =@@
  
      if (typeof data === 'string') {
  >typeof data === 'string' : boolean

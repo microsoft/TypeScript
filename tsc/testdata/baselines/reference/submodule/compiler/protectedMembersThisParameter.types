@@ -25,8 +25,8 @@ class MessageWrapper {
 >message : Message
 
     let f = function(this: T) {
->f : () => void
->function(this: T) {      m.secret(); // should error    } : () => void
+>f : (this: T) => void
+>function(this: T) {      m.secret(); // should error    } : (this: T) => void
 >this : T
 
       m.secret(); // should error
@@ -66,7 +66,7 @@ class Z {
 }
 
 function bA<T extends A>(this: T, arg: B) {
->bA : <T extends A>(arg: B) => void
+>bA : <T extends A>(this: T, arg: B) => void
 >this : T
 >arg : B
 
@@ -89,7 +89,7 @@ function bA<T extends A>(this: T, arg: B) {
 >b : () => void
 }
 function bB<T extends B>(this: T, arg: B) {
->bB : <T extends B>(arg: B) => void
+>bB : <T extends B>(this: T, arg: B) => void
 >this : T
 >arg : B
 
@@ -118,7 +118,7 @@ function bB<T extends B>(this: T, arg: B) {
 >b : () => void
 }
 function bC<T extends C>(this: T, arg: B) {
->bC : <T extends C>(arg: B) => void
+>bC : <T extends C>(this: T, arg: B) => void
 >this : T
 >arg : B
 
@@ -147,7 +147,7 @@ function bC<T extends C>(this: T, arg: B) {
 >b : () => void
 }
 function bZ<T extends Z>(this: T, arg: B) {
->bZ : <T extends Z>(arg: B) => void
+>bZ : <T extends Z>(this: T, arg: B) => void
 >this : T
 >arg : B
 
@@ -170,7 +170,7 @@ function bZ<T extends Z>(this: T, arg: B) {
 >b : () => void
 }
 function bString<T extends string>(this: T, arg: B) {
->bString : <T extends string>(arg: B) => void
+>bString : <T extends string>(this: T, arg: B) => void
 >this : T
 >arg : B
 
@@ -193,7 +193,7 @@ function bString<T extends string>(this: T, arg: B) {
 >b : () => void
 }
 function bAny<T>(this: T, arg: B) {
->bAny : <T>(arg: B) => void
+>bAny : <T>(this: T, arg: B) => void
 >this : T
 >arg : B
 
@@ -233,7 +233,7 @@ class D {
 >d1 : () => void
   }
   derived1ThisD(this: D, arg: D1) {
->derived1ThisD : (arg: D1) => void
+>derived1ThisD : (this: D, arg: D1) => void
 >this : D
 >arg : D1
 
@@ -250,7 +250,7 @@ class D {
 >d1 : () => void
   }
   derived1ThisD1(this: D1, arg: D1) {
->derived1ThisD1 : (arg: D1) => void
+>derived1ThisD1 : (this: D1, arg: D1) => void
 >this : D1
 >arg : D1
 
@@ -284,7 +284,7 @@ class D {
 >d2 : () => void
   }
   derived2ThisD(this: D, arg: D2) {
->derived2ThisD : (arg: D2) => void
+>derived2ThisD : (this: D, arg: D2) => void
 >this : D
 >arg : D2
 
@@ -301,7 +301,7 @@ class D {
 >d2 : () => void
   }
   derived2ThisD2(this: D2, arg: D2) {
->derived2ThisD2 : (arg: D2) => void
+>derived2ThisD2 : (this: D2, arg: D2) => void
 >this : D2
 >arg : D2
 

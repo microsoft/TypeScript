@@ -1366,7 +1366,7 @@ interface Desc<A extends unknown[], T> {
 >args : A
 
     bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
->bind : <T extends unknown[], U extends unknown[], R>(...args: T) => Desc<[...U], R>
+>bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
 >this : Desc<[...T, ...U], R>
 >args : T
 }
@@ -1377,9 +1377,9 @@ declare const a: Desc<[string, number, boolean], object>;
 const b = a.bind("", 1);  // Desc<[boolean], object>
 >b : Desc<[boolean], object>
 >a.bind("", 1) : Desc<[boolean], object>
->a.bind : <T extends unknown[], U extends unknown[], R>(...args: T) => Desc<[...U], R>
+>a.bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
 >a : Desc<[string, number, boolean], object>
->bind : <T extends unknown[], U extends unknown[], R>(...args: T) => Desc<[...U], R>
+>bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
 >"" : ""
 >1 : 1
 

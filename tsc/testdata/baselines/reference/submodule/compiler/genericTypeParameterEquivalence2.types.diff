@@ -1,18 +1,6 @@
 --- old.genericTypeParameterEquivalence2.types
 +++ new.genericTypeParameterEquivalence2.types
-@@= skipped -17, +17 lines =@@
- >f(g.apply(null, a)) : C
- >f : (b: B) => C
- >g.apply(null, a) : any
-->g.apply : (this: Function, thisArg: any, argArray?: any) => any
-+>g.apply : (thisArg: any, argArray?: any) => any
- >g : (a: A) => B
-->apply : (this: Function, thisArg: any, argArray?: any) => any
-+>apply : (thisArg: any, argArray?: any) => any
- >a : A
- 
-     };
-@@= skipped -50, +50 lines =@@
+@@= skipped -67, +67 lines =@@
  
      forEach(ar, (el) => {
  >forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void

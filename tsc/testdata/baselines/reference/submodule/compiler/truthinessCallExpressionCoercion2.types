@@ -128,9 +128,9 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >f && f.apply(parent, []) : any
 >f : () => void
 >f.apply(parent, []) : any
->f.apply : (thisArg: any, argArray?: any) => any
+>f.apply : (this: Function, thisArg: any, argArray?: any) => any
 >f : () => void
->apply : (thisArg: any, argArray?: any) => any
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 >parent : Window
 >[] : never[]
 

@@ -559,7 +559,7 @@ declare class A {
     // approximation of `getInstanceType` behavior, with one caveat: the checker versions unions the return types of
     // all construct signatures, but we have no way of extracting individual construct signatures from a type.
     static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
->[Symbol.hasInstance] : <T>(value: unknown) => value is T extends Function ? T extends { readonly prototype: infer U; } ? boolean extends infer U extends never ? true : false ? T extends new (...args: any) => infer V ? V : {} : U : never : never
+>[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is T extends Function ? T extends { readonly prototype: infer U; } ? boolean extends infer U extends never ? true : false ? T extends new (...args: any) => infer V ? V : {} : U : never : never
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
 >hasInstance : unique symbol

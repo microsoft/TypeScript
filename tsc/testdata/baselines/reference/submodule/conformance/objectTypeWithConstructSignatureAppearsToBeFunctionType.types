@@ -24,9 +24,9 @@ var r2c: (x: any, y?: any) => any = i.apply;
 >r2c : (x: any, y?: any) => any
 >x : any
 >y : any
->i.apply : (thisArg: any, argArray?: any) => any
+>i.apply : (this: Function, thisArg: any, argArray?: any) => any
 >i : I
->apply : (thisArg: any, argArray?: any) => any
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 
 var b: {
 >b : new () => number
@@ -48,7 +48,7 @@ var r4c: (x: any, y?: any) => any = b.apply;
 >r4c : (x: any, y?: any) => any
 >x : any
 >y : any
->b.apply : (thisArg: any, argArray?: any) => any
+>b.apply : (this: Function, thisArg: any, argArray?: any) => any
 >b : new () => number
->apply : (thisArg: any, argArray?: any) => any
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 

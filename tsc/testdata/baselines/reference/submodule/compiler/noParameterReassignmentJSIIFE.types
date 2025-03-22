@@ -16,9 +16,9 @@ self.importScripts = (function (importScripts) {
 
         return importScripts.apply(this, arguments);
 >importScripts.apply(this, arguments) : any
->importScripts.apply : (thisArg: any, argArray?: any) => any
+>importScripts.apply : (this: Function, thisArg: any, argArray?: any) => any
 >importScripts : (...urls: string[]) => void
->apply : (thisArg: any, argArray?: any) => any
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 >this : any
 >arguments : IArguments
 

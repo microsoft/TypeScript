@@ -455,9 +455,9 @@ module ts {
         if (!hasOwnProperty.call(map, key)) return undefined;
 >!hasOwnProperty.call(map, key) : boolean
 >hasOwnProperty.call(map, key) : any
->hasOwnProperty.call : (thisArg: any, ...argArray: any[]) => any
+>hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >hasOwnProperty : (v: PropertyKey) => boolean
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >map : Map<T>
 >key : string
 >undefined : undefined
@@ -475,9 +475,9 @@ module ts {
 
         return hasOwnProperty.call(map, key);
 >hasOwnProperty.call(map, key) : any
->hasOwnProperty.call : (thisArg: any, ...argArray: any[]) => any
+>hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >hasOwnProperty : (v: PropertyKey) => boolean
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >map : Map<T>
 >key : string
     }

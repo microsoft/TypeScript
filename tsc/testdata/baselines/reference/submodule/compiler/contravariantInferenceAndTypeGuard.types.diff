@@ -26,12 +26,3 @@
  >fn : IteratorFn<TData, boolean, List<TData>>
  }
  interface Test {
-@@= skipped -32, +32 lines =@@
- >list2.filter : { <TContext, TResult extends Test | null>(fn: FilterFn<Test | null, TResult, TContext>, context: TContext): List<TResult>; <TResult extends Test | null>(fn: FilterFn<Test | null, TResult, List<Test | null>>): List<TResult>; <TContext>(fn: IteratorFn<Test | null, boolean, TContext>, context: TContext): List<Test | null>; (fn: IteratorFn<Test | null, boolean, List<Test | null>>): List<Test | null>; }
- >list2 : List<Test | null>
- >filter : { <TContext, TResult extends Test | null>(fn: FilterFn<Test | null, TResult, TContext>, context: TContext): List<TResult>; <TResult extends Test | null>(fn: FilterFn<Test | null, TResult, List<Test | null>>): List<TResult>; <TContext>(fn: IteratorFn<Test | null, boolean, TContext>, context: TContext): List<Test | null>; (fn: IteratorFn<Test | null, boolean, List<Test | null>>): List<Test | null>; }
-->function(item, node, list): item is Test {    this.b; // $ExpectType string    item; // $ExpectType Test | null    node; // $ExpectType ListItem<Test | null>    list; // $ExpectType List<Test | null>    return !!item;} : (this: { b: string; }, item: Test | null, node: ListItem<Test | null>, list: List<Test | null>) => item is Test
-+>function(item, node, list): item is Test {    this.b; // $ExpectType string    item; // $ExpectType Test | null    node; // $ExpectType ListItem<Test | null>    list; // $ExpectType List<Test | null>    return !!item;} : (item: Test | null, node: ListItem<Test | null>, list: List<Test | null>) => item is Test
- >item : Test | null
- >node : ListItem<Test | null>
- >list : List<Test | null>

@@ -5,7 +5,7 @@
  interface ExtensionConfig<Options = any> {
    extendMarkSchema?:
 ->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark) => Record<string, any>) | null | undefined
-+>extendMarkSchema : (extension: Mark<any>) => Record<string, any> | null | undefined
++>extendMarkSchema : (this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any> | null | undefined
  
      | ((
          this: {
@@ -14,7 +14,7 @@
  interface NodeConfig<Options = any> {
    extendMarkSchema?:
 ->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Node) => Record<string, any>) | null | undefined
-+>extendMarkSchema : (extension: Node<any>) => Record<string, any> | null | undefined
++>extendMarkSchema : (this: { name: string; options: Options; }, extension: Node<any>) => Record<string, any> | null | undefined
  
      | ((
          this: {
@@ -23,7 +23,7 @@
  interface MarkConfig<Options = any> {
    extendMarkSchema?:
 ->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark) => Record<string, any>) | null | undefined
-+>extendMarkSchema : (extension: Mark<any>) => Record<string, any> | null | undefined
++>extendMarkSchema : (this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any> | null | undefined
  
      | ((
          this: {

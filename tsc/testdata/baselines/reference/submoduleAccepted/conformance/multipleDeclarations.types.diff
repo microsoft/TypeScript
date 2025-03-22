@@ -34,31 +34,3 @@
  >nothing : any
  }
  class X {
-@@= skipped -33, +33 lines =@@
- >this : this
- >m : () => void
- >this.m.bind(this) : any
-->this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>this.m.bind : (thisArg: any, ...argArray: any[]) => any
- >this.m : () => void
- >this : this
- >m : () => void
-->bind : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>bind : (thisArg: any, ...argArray: any[]) => any
- >this : this
- 
-         this.mistake = 'frankly, complete nonsense';
-@@= skipped -62, +62 lines =@@
- >this : this
- >m : () => void
- >this.m.bind(this) : any
-->this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>this.m.bind : (thisArg: any, ...argArray: any[]) => any
- >this.m : () => void
- >this : this
- >m : () => void
-->bind : (this: Function, thisArg: any, ...argArray: any[]) => any
-+>bind : (thisArg: any, ...argArray: any[]) => any
- >this : this
- 
-         this.mistake = 'even more nonsense';

@@ -18,8 +18,8 @@ function fn(x = () => this, y = x()) {
 
 fn.call(4); // Should be 4
 >fn.call(4) : any
->fn.call : (thisArg: any, ...argArray: any[]) => any
+>fn.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >fn : (x?: () => any, y?: any) => any
->call : (thisArg: any, ...argArray: any[]) => any
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >4 : 4
 

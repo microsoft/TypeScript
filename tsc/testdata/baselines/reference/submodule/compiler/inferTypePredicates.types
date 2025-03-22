@@ -262,9 +262,9 @@ const result = myArray
 >obj => JSON.parse(obj.data) : (obj: MyObj) => any
 >obj : MyObj
 >JSON.parse(obj.data) : any
->JSON.parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
 >JSON : JSON
->parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
 >obj.data : string | undefined
 >obj : MyObj
 >data : string | undefined
@@ -341,9 +341,9 @@ const result2 = myArray
 >obj => JSON.parse(obj.data) : (obj: MyObj) => any
 >obj : MyObj
 >JSON.parse(obj.data) : any
->JSON.parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
 >JSON : JSON
->parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
 >obj.data : string | undefined
 >obj : MyObj
 >data : string | undefined
@@ -926,7 +926,7 @@ if (assertAndPredicate(snd)) {
 }
 
 function isNumberWithThis(this: Date, x: number | string) {
->isNumberWithThis : (x: string | number) => x is number
+>isNumberWithThis : (this: Date, x: string | number) => x is number
 >this : Date
 >x : string | number
 

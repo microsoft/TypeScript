@@ -177,13 +177,11 @@
      }
      Vec.call(this, 2);
  >Vec.call(this, 2) : any
-->Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+ >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 ->Vec : typeof Vec
-->call : (this: Function, thisArg: any, ...argArray: any[]) => any
-->this : this
-+>Vec.call : (thisArg: any, ...argArray: any[]) => any
 +>Vec : { (len: any): void; prototype: { dot: (other: any) => number; magnitude: () => number; }; }
-+>call : (thisArg: any, ...argArray: any[]) => any
+ >call : (this: Function, thisArg: any, ...argArray: any[]) => any
+->this : this
 +>this : any
  >2 : 2
  

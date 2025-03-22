@@ -8,7 +8,7 @@ declare function isBig(x: any): x is { big: true };
 >true : true
 
 function bigger(this: {}) {
->bigger : () => void
+>bigger : (this: {}) => void
 >this : {}
 
     if (isBig(this)) {
@@ -24,7 +24,7 @@ function bigger(this: {}) {
 }
 
 function bar(this: string | number) {
->bar : () => void
+>bar : (this: string | number) => void
 >this : string | number
 
     if (typeof this === "string") {

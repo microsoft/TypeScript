@@ -7,7 +7,7 @@ declare class DecoratorProvider {
 >DecoratorProvider : DecoratorProvider
 
     decorate<T>(this: DecoratorProvider, v: T, ctx: DecoratorContext): T;
->decorate : <T>(v: T, ctx: DecoratorContext) => T
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >this : DecoratorProvider
 >v : T
 >ctx : DecoratorContext
@@ -21,16 +21,16 @@ class C {
 >C : C
 
     @instance.decorate
->instance.decorate : <T>(v: T, ctx: DecoratorContext) => T
+>instance.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >instance : DecoratorProvider
->decorate : <T>(v: T, ctx: DecoratorContext) => T
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 
     method1() { }
 >method1 : () => void
 
     @(instance["decorate"])
->(instance["decorate"]) : <T>(v: T, ctx: DecoratorContext) => T
->instance["decorate"] : <T>(v: T, ctx: DecoratorContext) => T
+>(instance["decorate"]) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>instance["decorate"] : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >instance : DecoratorProvider
 >"decorate" : "decorate"
 
@@ -39,11 +39,11 @@ class C {
 
     // even in parens
     @((instance.decorate))
->((instance.decorate)) : <T>(v: T, ctx: DecoratorContext) => T
->(instance.decorate) : <T>(v: T, ctx: DecoratorContext) => T
->instance.decorate : <T>(v: T, ctx: DecoratorContext) => T
+>((instance.decorate)) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>(instance.decorate) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>instance.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >instance : DecoratorProvider
->decorate : <T>(v: T, ctx: DecoratorContext) => T
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 
     method3() { }
 >method3 : () => void
@@ -61,17 +61,17 @@ class D extends DecoratorProvider {
 >C : C
 
             @(super.decorate)
->(super.decorate) : <T>(v: T, ctx: DecoratorContext) => T
->super.decorate : <T>(v: T, ctx: DecoratorContext) => T
+>(super.decorate) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>super.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >super : DecoratorProvider
->decorate : <T>(v: T, ctx: DecoratorContext) => T
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 
             method1() { }
 >method1 : () => void
 
             @(super["decorate"])
->(super["decorate"]) : <T>(v: T, ctx: DecoratorContext) => T
->super["decorate"] : <T>(v: T, ctx: DecoratorContext) => T
+>(super["decorate"]) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>super["decorate"] : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >super : DecoratorProvider
 >"decorate" : "decorate"
 
@@ -79,11 +79,11 @@ class D extends DecoratorProvider {
 >method2 : () => void
 
             @((super.decorate))
->((super.decorate)) : <T>(v: T, ctx: DecoratorContext) => T
->(super.decorate) : <T>(v: T, ctx: DecoratorContext) => T
->super.decorate : <T>(v: T, ctx: DecoratorContext) => T
+>((super.decorate)) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>(super.decorate) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>super.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >super : DecoratorProvider
->decorate : <T>(v: T, ctx: DecoratorContext) => T
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 
             method3() { }
 >method3 : () => void

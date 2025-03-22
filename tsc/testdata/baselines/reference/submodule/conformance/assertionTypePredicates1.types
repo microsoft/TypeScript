@@ -783,7 +783,7 @@ function testPropertySignature(
 >x : TestPropertySignature
 }
 function testFunctionThisParameter1(
->testFunctionThisParameter1 : (x: unknown) => void
+>testFunctionThisParameter1 : (this: TestPropertySignature, x: unknown) => void
 
   this: TestPropertySignature,
 >this : TestPropertySignature
@@ -829,7 +829,7 @@ function testMethodSignature(
 >x : TestMethodSignature
 }
 function testFunctionThisParameter2(
->testFunctionThisParameter2 : (x: unknown) => void
+>testFunctionThisParameter2 : (this: TestMethodSignature, x: unknown) => void
 
   this: TestMethodSignature,
 >this : TestMethodSignature

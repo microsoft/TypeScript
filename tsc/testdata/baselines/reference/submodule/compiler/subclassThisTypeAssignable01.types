@@ -17,7 +17,7 @@ interface Vnode<Attrs, State extends Lifecycle<Attrs, State> = Lifecycle<Attrs, 
 
 interface Component<Attrs, State> {
 	view(this: State, vnode: Vnode<Attrs, State>): number;
->view : (vnode: Vnode<Attrs, State>) => number
+>view : (this: State, vnode: Vnode<Attrs, State>) => number
 >this : State
 >vnode : Vnode<Attrs, State>
 }

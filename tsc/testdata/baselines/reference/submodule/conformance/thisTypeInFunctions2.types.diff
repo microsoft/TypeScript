@@ -1,53 +1,15 @@
 --- old.thisTypeInFunctions2.types
 +++ new.thisTypeInFunctions2.types
-@@= skipped -3, +3 lines =@@
- interface IndexedWithThis {
-     // this is a workaround for React
-     init?: (this: this) => void;
-->init : (this: this) => void
-+>init : () => void
- >this : this
- 
-     willDestroy?: (this: any) => void;
-->willDestroy : (this: any) => void
-+>willDestroy : () => void
- >this : any
- 
-     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
-@@= skipped -46, +46 lines =@@
+@@= skipped -49, +49 lines =@@
  extend1({
  >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
  >extend1 : (args: IndexedWithThis) => void
 ->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
-+>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init: () => void; mine: number; foo: () => void; }
++>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init: (this: IndexedWithThis) => void; mine: number; foo: (this: any) => void; }
  
      init() {
-->init : (this: IndexedWithThis) => void
-+>init : () => void
- 
-         this // this: IndexedWithThis because of contextual typing.
- >this : IndexedWithThis
- 
-         // this.mine
-         this.willDestroy
-->this.willDestroy : (this: any) => void
-+>this.willDestroy : () => void
- >this : IndexedWithThis
-->willDestroy : (this: any) => void
-+>willDestroy : () => void
- 
-     },
-     mine: 12,
-@@= skipped -20, +20 lines =@@
- >12 : 12
- 
-     foo() {
-->foo : (this: any) => void
-+>foo : () => void
- 
-         this.url; // this: any because 'foo' matches the string indexer
- >this.url : any
-@@= skipped -16, +16 lines =@@
+ >init : (this: IndexedWithThis) => void
+@@= skipped -36, +36 lines =@@
  extend2({
  >extend2({    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }}) : void
  >extend2 : (args: IndexedWithoutThis) => void

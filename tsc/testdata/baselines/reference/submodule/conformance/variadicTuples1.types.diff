@@ -213,27 +213,7 @@
  >["foo", 42] : [string, number]
  >"foo" : "foo"
  >42 : 42
-@@= skipped -14, +14 lines =@@
- >args : A
- 
-     bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
-->bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
-+>bind : <T extends unknown[], U extends unknown[], R>(...args: T) => Desc<[...U], R>
- >this : Desc<[...T, ...U], R>
- >args : T
- }
-@@= skipped -11, +11 lines =@@
- const b = a.bind("", 1);  // Desc<[boolean], object>
- >b : Desc<[boolean], object>
- >a.bind("", 1) : Desc<[boolean], object>
-->a.bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
-+>a.bind : <T extends unknown[], U extends unknown[], R>(...args: T) => Desc<[...U], R>
- >a : Desc<[string, number, boolean], object>
-->bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
-+>bind : <T extends unknown[], U extends unknown[], R>(...args: T) => Desc<[...U], R>
- >"" : ""
- >1 : 1
- 
+@@= skipped -34, +34 lines =@@
  // Repro from #39607
  
  declare function getUser(id: string, options?: { x?: string }): string;
@@ -266,7 +246,7 @@
  >args : [...T]
  >method(...args, {}) : U
  >method : (...args: [...T, object]) => U
-@@= skipped -38, +38 lines =@@
+@@= skipped -29, +29 lines =@@
  }
  
  callApi(getUser);

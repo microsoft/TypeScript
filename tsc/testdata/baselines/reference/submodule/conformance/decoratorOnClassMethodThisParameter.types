@@ -11,7 +11,7 @@ class C {
 >C : C
 
     method(@dec this: C) {}
->method : () => void
+>method : (this: C) => void
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 >this : C
 }

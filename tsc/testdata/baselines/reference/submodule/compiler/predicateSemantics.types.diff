@@ -31,7 +31,7 @@
  
  function foo(this: Object | undefined) {
 ->foo : (this: Object | undefined) => Object | 0
-+>foo : () => 0 | Object
++>foo : (this: Object) => 0 | Object
  >this : Object
  
      // Should be OK

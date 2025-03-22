@@ -15,9 +15,9 @@ class C {
 >async () => await other.apply(this, arguments) : () => Promise<any>
 >await other.apply(this, arguments) : any
 >other.apply(this, arguments) : any
->other.apply : (thisArg: any, argArray?: any) => any
+>other.apply : (this: Function, thisArg: any, argArray?: any) => any
 >other : () => void
->apply : (thisArg: any, argArray?: any) => any
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 >this : this
 >arguments : IArguments
    }
