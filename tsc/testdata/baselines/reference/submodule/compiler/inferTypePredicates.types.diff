@@ -26,10 +26,10 @@
  >obj : MyObj
  >JSON.parse(obj.data) : any
 ->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
-+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
++>JSON.parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
  >JSON : JSON
 ->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
-+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
++>parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
  >obj.data : string | undefined
  >obj : MyObj
  >data : string | undefined
@@ -59,10 +59,10 @@
  >obj : MyObj
  >JSON.parse(obj.data) : any
 ->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
-+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
++>JSON.parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
  >JSON : JSON
 ->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
-+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any | undefined) => any
++>parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
  >obj.data : string | undefined
  >obj : MyObj
  >data : string | undefined

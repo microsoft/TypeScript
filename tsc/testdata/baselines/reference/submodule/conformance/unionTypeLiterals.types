@@ -16,20 +16,20 @@ var arrayOfUnions: Array<string | number>;
 >arrayOfUnions : (string | number)[]
 
 var unionOfFunctionType: (() => string) | (() => number);
->unionOfFunctionType : () => string | () => number
+>unionOfFunctionType : (() => string) | (() => number)
 
 var unionOfFunctionType: { (): string } | { (): number };
->unionOfFunctionType : () => string | () => number
+>unionOfFunctionType : (() => string) | (() => number)
 
 var unionOfFunctionType: () => string | number;
->unionOfFunctionType : () => string | () => number
+>unionOfFunctionType : (() => string) | (() => number)
 
 var unionOfConstructorType: (new () => string) | (new () => number);
->unionOfConstructorType : new () => string | new () => number
+>unionOfConstructorType : (new () => string) | (new () => number)
 
 var unionOfConstructorType: { new (): string } | { new (): number };
->unionOfConstructorType : new () => string | new () => number
+>unionOfConstructorType : (new () => string) | (new () => number)
 
 var unionOfConstructorType: new () => string | number;
->unionOfConstructorType : new () => string | new () => number
+>unionOfConstructorType : (new () => string) | (new () => number)
 

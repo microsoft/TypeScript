@@ -9,29 +9,15 @@
  
    iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
  >iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>
-@@= skipped -13, +13 lines =@@
-   const iterator = iterable[Symbol.asyncIterator]();
- >iterator : AsyncIterator<T, R, undefined>
- >iterable[Symbol.asyncIterator]() : AsyncIterator<T, R, undefined>
-->iterable[Symbol.asyncIterator] : (() => AsyncGenerator<T, R, undefined>) | (() => AsyncIterator<T, R, undefined>)
-+>iterable[Symbol.asyncIterator] : () => AsyncGenerator<T, R, undefined> | () => AsyncIterator<T, R, undefined>
- >iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>
- >Symbol.asyncIterator : unique symbol
- >Symbol : SymbolConstructor
-@@= skipped -40, +40 lines =@@
+@@= skipped -53, +53 lines =@@
  
        if (typeof iterator.return === "function") {
  >typeof iterator.return === "function" : boolean
 ->typeof iterator.return : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
 +>typeof iterator.return : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>iterator.return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>> | undefined
+ >iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
  >iterator : AsyncIterator<T, R, undefined>
-->return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
-+>return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>> | undefined
- >"function" : "function"
- 
-         try {
+ >return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
 @@= skipped -23, +23 lines =@@
    }
  
@@ -58,29 +44,19 @@
  >typeof iterator.return === "function"        ? mapResult(await iterator.return(value))        : { value: undefined as any, done: true } : Promise<IteratorResult<U, R>> | { value: any; done: true; }
  >typeof iterator.return === "function" : boolean
 ->typeof iterator.return : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
 +>typeof iterator.return : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>iterator.return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>> | undefined
+ >iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
  >iterator : AsyncIterator<T, R, undefined>
-->return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
-+>return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>> | undefined
- >"function" : "function"
- 
-         ? mapResult(await iterator.return(value))
+ >return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
 @@= skipped -31, +31 lines =@@
  
        if (typeof iterator.throw === "function") {
  >typeof iterator.throw === "function" : boolean
 ->typeof iterator.throw : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->iterator.throw : ((e?: any) => Promise<IteratorResult<T, R>>) | undefined
 +>typeof iterator.throw : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>iterator.throw : (e?: any) => Promise<IteratorResult<T, R>> | undefined
+ >iterator.throw : ((e?: any) => Promise<IteratorResult<T, R>>) | undefined
  >iterator : AsyncIterator<T, R, undefined>
-->throw : ((e?: any) => Promise<IteratorResult<T, R>>) | undefined
-+>throw : (e?: any) => Promise<IteratorResult<T, R>> | undefined
- >"function" : "function"
- 
-         return mapResult(await iterator.throw(error));
+ >throw : ((e?: any) => Promise<IteratorResult<T, R>>) | undefined
 @@= skipped -56, +56 lines =@@
  >3 : 3
  

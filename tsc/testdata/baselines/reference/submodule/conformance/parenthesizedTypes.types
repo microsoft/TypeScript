@@ -31,27 +31,27 @@ var c: ((string)[]) | ((number)[]);
 >c : string[] | number[]
 
 var d: (((x: string) => string) | ((x: number) => number))[];
->d : ((x: string) => string | (x: number) => number)[]
+>d : (((x: string) => string) | ((x: number) => number))[]
 >x : string
 >x : number
 
 var d: ({ (x: string): string } | { (x: number): number })[];
->d : ((x: string) => string | (x: number) => number)[]
+>d : (((x: string) => string) | ((x: number) => number))[]
 >x : string
 >x : number
 
 var d: Array<((x: string) => string) | ((x: number) => number)>;
->d : ((x: string) => string | (x: number) => number)[]
+>d : (((x: string) => string) | ((x: number) => number))[]
 >x : string
 >x : number
 
 var d: Array<{ (x: string): string } | { (x: number): number }>;
->d : ((x: string) => string | (x: number) => number)[]
+>d : (((x: string) => string) | ((x: number) => number))[]
 >x : string
 >x : number
 
 var d: (Array<{ (x: string): string } | { (x: number): number }>);
->d : ((x: string) => string | (x: number) => number)[]
+>d : (((x: string) => string) | ((x: number) => number))[]
 >x : string
 >x : number
 

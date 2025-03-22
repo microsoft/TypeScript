@@ -1,15 +1,6 @@
 --- old.thisIndexOnExistingReadonlyFieldIsNotNever.types
 +++ new.thisIndexOnExistingReadonlyFieldIsNotNever.types
-@@= skipped -12, +12 lines =@@
- }
- interface CoachMarkAnchorProps<C> {
-     anchorRef?: (anchor: C) => void;
-->anchorRef : ((anchor: C) => void) | undefined
-+>anchorRef : (anchor: C) => void | undefined
- >anchor : C
- }
- type AnchorType<P> = Component<P>;
-@@= skipped -24, +24 lines =@@
+@@= skipped -36, +36 lines =@@
  >anchor : AnchorType<P>
  
                  const anchorRef = this.props.anchorRef;

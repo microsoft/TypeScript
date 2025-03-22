@@ -1,12 +1,6 @@
 --- old.nonNullableReductionNonStrict.types
 +++ new.nonNullableReductionNonStrict.types
-@@= skipped -23, +23 lines =@@
- 
-     f2?.("hello");
- >f2?.("hello") : T
-->f2 : ((value: string) => T) | ((value: string) => T)
-+>f2 : (value: string) => T | (value: string) => T
- >"hello" : "hello"
+@@= skipped -28, +28 lines =@@
  }
  
  function f1<T>(x: T | (string extends T ? null | undefined : never)) {
@@ -15,7 +9,7 @@
  >x : T | (string extends T ? null : never)
  
      let z = x!;  // NonNullable<T>
-@@= skipped -15, +15 lines =@@
+@@= skipped -10, +10 lines =@@
  }
  
  function f2<T, U extends null | undefined>(x: T | U) {

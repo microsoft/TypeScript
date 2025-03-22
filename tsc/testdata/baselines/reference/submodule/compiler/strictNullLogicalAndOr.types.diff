@@ -1,15 +1,6 @@
 --- old.strictNullLogicalAndOr.types
 +++ new.strictNullLogicalAndOr.types
-@@= skipped -14, +14 lines =@@
- let choice = sinOrCos && Math.sin || Math.cos;
- >choice : (x: number) => number
- >sinOrCos && Math.sin || Math.cos : (x: number) => number
-->sinOrCos && Math.sin : false | ((x: number) => number)
-+>sinOrCos && Math.sin : false | (x: number) => number
- >sinOrCos : boolean
- >Math.sin : (x: number) => number
- >Math : Math
-@@= skipped -17, +17 lines =@@
+@@= skipped -31, +31 lines =@@
  >PI : number
  
  function sq(n?: number): number {

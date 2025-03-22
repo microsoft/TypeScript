@@ -1,6 +1,15 @@
 --- old.classReferencedInContextualParameterWithinItsOwnBaseExpression.types
 +++ new.classReferencedInContextualParameterWithinItsOwnBaseExpression.types
-@@= skipped -15, +15 lines =@@
+@@= skipped -7, +7 lines =@@
+ 
+ interface Schema<A> {
+   readonly pretty?: Pretty<A>;
+->pretty : Pretty<A> | undefined
++>pretty : (Pretty<A>) | undefined
+ }
+ 
+ interface Class<A> {
+@@= skipped -8, +8 lines =@@
  }
  
  declare const Class: <Self>(
@@ -23,10 +32,10 @@
  >a : A
  >JSON.stringify(a) : string
 ->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
++>JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
  >JSON : JSON
 ->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
++>stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
  >a : A
  
    },

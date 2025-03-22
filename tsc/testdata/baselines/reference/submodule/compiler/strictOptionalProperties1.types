@@ -786,12 +786,12 @@ a = e;  // Error
 
 interface PropsFromReact {
     onClick?: () => void;
->onClick : () => void | undefined
+>onClick : (() => void) | undefined
 }
 
 interface PropsFromMaterialUI {
     onClick?: (() => void) | undefined;
->onClick : () => void | undefined
+>onClick : (() => void) | undefined
 }
 
 type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;

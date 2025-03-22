@@ -1,27 +1,20 @@
 --- old.typeParameterLeak.types
 +++ new.typeParameterLeak.types
-@@= skipped -24, +24 lines =@@
- }
- 
- declare const f: BoxFactoryFactory<BoxTypes>;
-->f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
-+>f : (arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined | (arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined
- 
+@@= skipped -29, +29 lines =@@
  const b = f({ x: "", y: "" })?.getBox();
  >b : Box<{ x: string; }> | Box<{ y: string; }> | undefined
  >f({ x: "", y: "" })?.getBox() : Box<{ x: string; }> | Box<{ y: string; }> | undefined
 ->f({ x: "", y: "" })?.getBox : (() => Box<{ y: string; }>) | (() => Box<{ x: string; }>) | undefined
-+>f({ x: "", y: "" })?.getBox : () => Box<{ x: string; }> | () => Box<{ y: string; }> | undefined
++>f({ x: "", y: "" })?.getBox : (() => Box<{ x: string; }>) | (() => Box<{ y: string; }>) | undefined
  >f({ x: "", y: "" }) : BoxFactory<Box<{ x: string; }>> | BoxFactory<Box<{ y: string; }>> | undefined
-->f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
-+>f : (arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined | (arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined
+ >f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
  >{ x: "", y: "" } : { x: string; y: string; }
- >x : string
+@@= skipped -8, +8 lines =@@
  >"" : ""
  >y : string
  >"" : ""
 ->getBox : (() => Box<{ y: string; }>) | (() => Box<{ x: string; }>) | undefined
-+>getBox : () => Box<{ x: string; }> | () => Box<{ y: string; }> | undefined
++>getBox : (() => Box<{ x: string; }>) | (() => Box<{ y: string; }>) | undefined
  
  if (b) {
  >b : Box<{ x: string; }> | Box<{ y: string; }> | undefined

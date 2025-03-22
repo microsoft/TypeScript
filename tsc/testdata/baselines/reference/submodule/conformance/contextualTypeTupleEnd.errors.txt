@@ -1,4 +1,4 @@
-contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...(arg: number) => void[], (arg: string) => void]'.
+contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
   Source has 0 element(s) but target requires 1.
 contextualTypeTupleEnd.ts(9,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
 contextualTypeTupleEnd.ts(10,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
@@ -26,7 +26,7 @@ contextualTypeTupleEnd.ts(52,22): error TS7006: Parameter 'c' implicitly has an 
     
     f1();  // Error
     ~~~~
-!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...(arg: number) => void[], (arg: string) => void]'.
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
 !!! error TS2345:   Source has 0 element(s) but target requires 1.
     f1(x => str(x));
        ~

@@ -288,14 +288,14 @@ var r1 = foo1(r1arg1); // any, return types are not subtype of first overload
 >r1arg1 : <T>(x: T) => T[]
 
 var r1a = [r1arg2, r1arg1]; // generic signature, subtype in both directions
->r1a : (x: number) => number[][]
->[r1arg2, r1arg1] : (x: number) => number[][]
+>r1a : ((x: number) => number[])[]
+>[r1arg2, r1arg1] : ((x: number) => number[])[]
 >r1arg2 : (x: number) => number[]
 >r1arg1 : <T>(x: T) => T[]
 
 var r1b = [r1arg1, r1arg2]; // generic signature, subtype in both directions
->r1b : (x: number) => number[][]
->[r1arg1, r1arg2] : (x: number) => number[][]
+>r1b : ((x: number) => number[])[]
+>[r1arg1, r1arg2] : ((x: number) => number[])[]
 >r1arg1 : <T>(x: T) => T[]
 >r1arg2 : (x: number) => number[]
 
@@ -320,14 +320,14 @@ var r2 = foo2(r2arg1);
 >r2arg1 : <T>(x: T) => string[]
 
 var r2a = [r2arg1, r2arg2];
->r2a : (x: number) => string[][]
->[r2arg1, r2arg2] : (x: number) => string[][]
+>r2a : ((x: number) => string[])[]
+>[r2arg1, r2arg2] : ((x: number) => string[])[]
 >r2arg1 : <T>(x: T) => string[]
 >r2arg2 : (x: number) => string[]
 
 var r2b = [r2arg2, r2arg1];
->r2b : (x: number) => string[][]
->[r2arg2, r2arg1] : (x: number) => string[][]
+>r2b : ((x: number) => string[])[]
+>[r2arg2, r2arg1] : ((x: number) => string[])[]
 >r2arg2 : (x: number) => string[]
 >r2arg1 : <T>(x: T) => string[]
 
@@ -349,14 +349,14 @@ var r3 = foo3(r3arg1);
 >r3arg1 : <T>(x: T) => T
 
 var r3a = [r3arg1, r3arg2];
->r3a : (x: number) => void[]
->[r3arg1, r3arg2] : (x: number) => void[]
+>r3a : ((x: number) => void)[]
+>[r3arg1, r3arg2] : ((x: number) => void)[]
 >r3arg1 : <T>(x: T) => T
 >r3arg2 : (x: number) => void
 
 var r3b = [r3arg2, r3arg1];
->r3b : (x: number) => void[]
->[r3arg2, r3arg1] : (x: number) => void[]
+>r3b : ((x: number) => void)[]
+>[r3arg2, r3arg1] : ((x: number) => void)[]
 >r3arg2 : (x: number) => void
 >r3arg1 : <T>(x: T) => T
 
@@ -381,14 +381,14 @@ var r4 = foo4(r4arg1); // any
 >r4arg1 : <T, U>(x: T, y: U) => T
 
 var r4a = [r4arg1, r4arg2];
->r4a : (x: string, y: number) => string[]
->[r4arg1, r4arg2] : (x: string, y: number) => string[]
+>r4a : ((x: string, y: number) => string)[]
+>[r4arg1, r4arg2] : ((x: string, y: number) => string)[]
 >r4arg1 : <T, U>(x: T, y: U) => T
 >r4arg2 : (x: string, y: number) => string
 
 var r4b = [r4arg2, r4arg1];
->r4b : (x: string, y: number) => string[]
->[r4arg2, r4arg1] : (x: string, y: number) => string[]
+>r4b : ((x: string, y: number) => string)[]
+>[r4arg2, r4arg1] : ((x: string, y: number) => string)[]
 >r4arg2 : (x: string, y: number) => string
 >r4arg1 : <T, U>(x: T, y: U) => T
 
@@ -413,14 +413,14 @@ var r5 = foo5(r5arg1); // any
 >r5arg1 : <T, U>(x: (arg: T) => U) => T
 
 var r5a = [r5arg1, r5arg2];
->r5a : (x: (arg: string) => number) => string[]
->[r5arg1, r5arg2] : (x: (arg: string) => number) => string[]
+>r5a : ((x: (arg: string) => number) => string)[]
+>[r5arg1, r5arg2] : ((x: (arg: string) => number) => string)[]
 >r5arg1 : <T, U>(x: (arg: T) => U) => T
 >r5arg2 : (x: (arg: string) => number) => string
 
 var r5b = [r5arg2, r5arg1];
->r5b : (x: (arg: string) => number) => string[]
->[r5arg2, r5arg1] : (x: (arg: string) => number) => string[]
+>r5b : ((x: (arg: string) => number) => string)[]
+>[r5arg2, r5arg1] : ((x: (arg: string) => number) => string)[]
 >r5arg2 : (x: (arg: string) => number) => string
 >r5arg1 : <T, U>(x: (arg: T) => U) => T
 
@@ -445,14 +445,14 @@ var r6 = foo6(r6arg1); // any
 >r6arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
 
 var r6a = [r6arg1, r6arg2];
->r6a : (x: (arg: Base) => Derived) => Base[]
->[r6arg1, r6arg2] : (x: (arg: Base) => Derived) => Base[]
+>r6a : ((x: (arg: Base) => Derived) => Base)[]
+>[r6arg1, r6arg2] : ((x: (arg: Base) => Derived) => Base)[]
 >r6arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
 >r6arg2 : (x: (arg: Base) => Derived) => Base
 
 var r6b = [r6arg2, r6arg1];
->r6b : (x: (arg: Base) => Derived) => Base[]
->[r6arg2, r6arg1] : (x: (arg: Base) => Derived) => Base[]
+>r6b : ((x: (arg: Base) => Derived) => Base)[]
+>[r6arg2, r6arg1] : ((x: (arg: Base) => Derived) => Base)[]
 >r6arg2 : (x: (arg: Base) => Derived) => Base
 >r6arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
 
@@ -481,14 +481,14 @@ var r7 = foo7(r7arg1); // any
 >r7arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U
 
 var r7a = [r7arg1, r7arg2];
->r7a : (x: (arg: Base) => Derived) => (r: Base) => Derived[]
->[r7arg1, r7arg2] : (x: (arg: Base) => Derived) => (r: Base) => Derived[]
+>r7a : ((x: (arg: Base) => Derived) => (r: Base) => Derived)[]
+>[r7arg1, r7arg2] : ((x: (arg: Base) => Derived) => (r: Base) => Derived)[]
 >r7arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U
 >r7arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived
 
 var r7b = [r7arg2, r7arg1];
->r7b : (x: (arg: Base) => Derived) => (r: Base) => Derived[]
->[r7arg2, r7arg1] : (x: (arg: Base) => Derived) => (r: Base) => Derived[]
+>r7b : ((x: (arg: Base) => Derived) => (r: Base) => Derived)[]
+>[r7arg2, r7arg1] : ((x: (arg: Base) => Derived) => (r: Base) => Derived)[]
 >r7arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived
 >r7arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U
 
@@ -521,14 +521,14 @@ var r8 = foo8(r8arg1); // any
 >r8arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U
 
 var r8a = [r8arg1, r8arg2];
->r8a : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
->[r8arg1, r8arg2] : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
+>r8a : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
+>[r8arg1, r8arg2] : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
 >r8arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U
 >r8arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 
 var r8b = [r8arg2, r8arg1];
->r8b : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
->[r8arg2, r8arg1] : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
+>r8b : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
+>[r8arg2, r8arg1] : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
 >r8arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >r8arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U
 
@@ -563,14 +563,14 @@ var r9 = foo9(r9arg1); // any
 >r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 
 var r9a = [r9arg1, r9arg2];
->r9a : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
->[r9arg1, r9arg2] : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
+>r9a : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
+>[r9arg1, r9arg2] : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
 >r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 >r9arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 
 var r9b = [r9arg2, r9arg1];
->r9b : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
->[r9arg2, r9arg1] : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived[]
+>r9b : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
+>[r9arg2, r9arg1] : ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived)[]
 >r9arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 
@@ -595,14 +595,14 @@ var r10 = foo10(r10arg1); // any
 >r10arg1 : <T extends Derived>(...x: T[]) => T
 
 var r10a = [r10arg1, r10arg2];
->r10a : (...x: Derived[]) => Derived[]
->[r10arg1, r10arg2] : (...x: Derived[]) => Derived[]
+>r10a : ((...x: Derived[]) => Derived)[]
+>[r10arg1, r10arg2] : ((...x: Derived[]) => Derived)[]
 >r10arg1 : <T extends Derived>(...x: T[]) => T
 >r10arg2 : (...x: Derived[]) => Derived
 
 var r10b = [r10arg2, r10arg1];
->r10b : (...x: Derived[]) => Derived[]
->[r10arg2, r10arg1] : (...x: Derived[]) => Derived[]
+>r10b : ((...x: Derived[]) => Derived)[]
+>[r10arg2, r10arg1] : ((...x: Derived[]) => Derived)[]
 >r10arg2 : (...x: Derived[]) => Derived
 >r10arg1 : <T extends Derived>(...x: T[]) => T
 
@@ -630,14 +630,14 @@ var r11 = foo11(r11arg1); // any
 >r11arg1 : <T extends Base>(x: T, y: T) => T
 
 var r11a = [r11arg1, r11arg2];
->r11a : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base[]
->[r11arg1, r11arg2] : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base[]
+>r11a : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>[r11arg1, r11arg2] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
 >r11arg1 : <T extends Base>(x: T, y: T) => T
 >r11arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
 var r11b = [r11arg2, r11arg1];
->r11b : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base[]
->[r11arg2, r11arg1] : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base[]
+>r11b : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>[r11arg2, r11arg1] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
 >r11arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >r11arg1 : <T extends Base>(x: T, y: T) => T
 
@@ -662,14 +662,14 @@ var r12 = foo12(r12arg1); // any
 >r12arg1 : <T extends Base[]>(x: Base[], y: T) => Derived[]
 
 var r12a = [r12arg1, r12arg2];
->r12a : (x: Base[], y: Derived2[]) => Derived[][]
->[r12arg1, r12arg2] : (x: Base[], y: Derived2[]) => Derived[][]
+>r12a : ((x: Base[], y: Derived2[]) => Derived[])[]
+>[r12arg1, r12arg2] : ((x: Base[], y: Derived2[]) => Derived[])[]
 >r12arg1 : <T extends Base[]>(x: Base[], y: T) => Derived[]
 >r12arg2 : (x: Base[], y: Derived2[]) => Derived[]
 
 var r12b = [r12arg2, r12arg1];
->r12b : (x: Base[], y: Derived2[]) => Derived[][]
->[r12arg2, r12arg1] : (x: Base[], y: Derived2[]) => Derived[][]
+>r12b : ((x: Base[], y: Derived2[]) => Derived[])[]
+>[r12arg2, r12arg1] : ((x: Base[], y: Derived2[]) => Derived[])[]
 >r12arg2 : (x: Base[], y: Derived2[]) => Derived[]
 >r12arg1 : <T extends Base[]>(x: Base[], y: T) => Derived[]
 
@@ -694,14 +694,14 @@ var r13 = foo13(r13arg1); // any
 >r13arg1 : <T extends Derived[]>(x: Base[], y: T) => T
 
 var r13a = [r13arg1, r13arg2];
->r13a : (x: Base[], y: Derived[]) => Derived[][]
->[r13arg1, r13arg2] : (x: Base[], y: Derived[]) => Derived[][]
+>r13a : ((x: Base[], y: Derived[]) => Derived[])[]
+>[r13arg1, r13arg2] : ((x: Base[], y: Derived[]) => Derived[])[]
 >r13arg1 : <T extends Derived[]>(x: Base[], y: T) => T
 >r13arg2 : (x: Base[], y: Derived[]) => Derived[]
 
 var r13b = [r13arg2, r13arg1];
->r13b : (x: Base[], y: Derived[]) => Derived[][]
->[r13arg2, r13arg1] : (x: Base[], y: Derived[]) => Derived[][]
+>r13b : ((x: Base[], y: Derived[]) => Derived[])[]
+>[r13arg2, r13arg1] : ((x: Base[], y: Derived[]) => Derived[])[]
 >r13arg2 : (x: Base[], y: Derived[]) => Derived[]
 >r13arg1 : <T extends Derived[]>(x: Base[], y: T) => T
 
@@ -730,14 +730,14 @@ var r14 = foo14(r14arg1); // any
 >r14arg1 : <T>(x: { a: T; b: T; }) => T
 
 var r14a = [r14arg1, r14arg2];
->r14a : (<T>(x: { a: T; b: T; }) => T | (x: { a: string; b: number; }) => Object)[]
->[r14arg1, r14arg2] : (<T>(x: { a: T; b: T; }) => T | (x: { a: string; b: number; }) => Object)[]
+>r14a : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => Object))[]
+>[r14arg1, r14arg2] : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => Object))[]
 >r14arg1 : <T>(x: { a: T; b: T; }) => T
 >r14arg2 : (x: { a: string; b: number; }) => Object
 
 var r14b = [r14arg2, r14arg1];
->r14b : (<T>(x: { a: T; b: T; }) => T | (x: { a: string; b: number; }) => Object)[]
->[r14arg2, r14arg1] : (<T>(x: { a: T; b: T; }) => T | (x: { a: string; b: number; }) => Object)[]
+>r14b : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => Object))[]
+>[r14arg2, r14arg1] : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => Object))[]
 >r14arg2 : (x: { a: string; b: number; }) => Object
 >r14arg1 : <T>(x: { a: T; b: T; }) => T
 

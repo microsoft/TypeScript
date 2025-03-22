@@ -1942,7 +1942,7 @@ func (p *Printer) emitUnionTypeConstituent(node *ast.TypeNode) {
 
 func (p *Printer) emitUnionType(node *ast.UnionTypeNode) {
 	state := p.enterNode(node.AsNode())
-	p.emitList((*Printer).emitUnionTypeConstituent, node.AsNode(), node.Types, LFUnionTypeConstituents /*, parenthesizer.parenthesizeConstituentTypeOfUnionType*/) // !!!
+	p.emitList((*Printer).emitUnionTypeConstituent, node.AsNode(), node.Types, LFUnionTypeConstituents)
 	p.exitNode(node.AsNode(), state)
 }
 

@@ -17,17 +17,17 @@ declare const val: ReturnVal;
 >val : ReturnVal
 
 function run(options: { something?(b?: string): void }) {
->run : (options: { something?: (b?: string | undefined) => void | undefined; }) => void
->options : { something?: (b?: string | undefined) => void | undefined; }
->something : (b?: string | undefined) => void | undefined
+>run : (options: { something?: ((b?: string | undefined) => void) | undefined; }) => void
+>options : { something?: ((b?: string | undefined) => void) | undefined; }
+>something : ((b?: string | undefined) => void) | undefined
 >b : string | undefined
 
     const something = options.something ?? val.something;
 >something : (b?: string | undefined) => void
 >options.something ?? val.something : (b?: string | undefined) => void
->options.something : (b?: string | undefined) => void | undefined
->options : { something?: (b?: string | undefined) => void | undefined; }
->something : (b?: string | undefined) => void | undefined
+>options.something : ((b?: string | undefined) => void) | undefined
+>options : { something?: ((b?: string | undefined) => void) | undefined; }
+>something : ((b?: string | undefined) => void) | undefined
 >val.something : () => void
 >val : ReturnVal
 >something : () => void

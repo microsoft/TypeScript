@@ -54,44 +54,25 @@
  >x : () => string
  >"function" : "function"
  
-@@= skipped -10, +10 lines =@@
- }
- 
- function f10(x: string | (() => string)) {
-->f10 : (x: string | (() => string)) => void
-->x : string | (() => string)
-+>f10 : (x: string | () => string) => void
-+>x : string | () => string
+@@= skipped -15, +15 lines =@@
  
      if (typeof x === "function") {
  >typeof x === "function" : boolean
 ->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->x : string | (() => string)
 +>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>x : string | () => string
+ >x : string | (() => string)
  >"function" : "function"
  
-         x;  // () => string
-@@= skipped -19, +19 lines =@@
- }
- 
- function f11(x: { s: string } | (() => string)) {
-->f11 : (x: { s: string; } | (() => string)) => void
-->x : { s: string; } | (() => string)
-+>f11 : (x: { s: string; } | () => string) => void
-+>x : { s: string; } | () => string
- >s : string
+@@= skipped -20, +20 lines =@@
  
      if (typeof x === "function") {
  >typeof x === "function" : boolean
 ->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->x : { s: string; } | (() => string)
 +>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>x : { s: string; } | () => string
+ >x : { s: string; } | (() => string)
  >"function" : "function"
  
-         x;  // () => string
-@@= skipped -27, +27 lines =@@
+@@= skipped -21, +21 lines =@@
  
      if (typeof x === "function") {
  >typeof x === "function" : boolean
@@ -114,23 +95,20 @@
  
  function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
 ->configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
-->reducer : Record<keyof S, () => void> | (() => void)
-+>configureStore : <S extends object>(reducer: Record<keyof S, () => void> | () => void) => void
-+>reducer : Record<keyof S, () => void> | () => void
++>configureStore : <S extends object>(reducer: Record<keyof S, () => void> | (() => void)) => void
+ >reducer : Record<keyof S, () => void> | (() => void)
  
      let rootReducer: () => void;
- >rootReducer : () => void
+@@= skipped -8, +8 lines =@@
  
      if (typeof reducer === 'function') {
  >typeof reducer === 'function' : boolean
 ->typeof reducer : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->reducer : Record<keyof S, () => void> | (() => void)
 +>typeof reducer : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>reducer : Record<keyof S, () => void> | () => void
+ >reducer : Record<keyof S, () => void> | (() => void)
  >'function' : "function"
  
-         rootReducer = reducer;
-@@= skipped -26, +26 lines =@@
+@@= skipped -18, +18 lines =@@
      return typeof x === "object" && x.anything;
  >typeof x === "object" && x.anything : any
  >typeof x === "object" : boolean

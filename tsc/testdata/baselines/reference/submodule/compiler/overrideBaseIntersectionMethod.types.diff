@@ -25,16 +25,12 @@
  >Point : typeof Point
  
    calculate() {
-@@= skipped -21, +21 lines =@@
- 
+@@= skipped -22, +22 lines =@@
      return super.getLocation()
  >super.getLocation() : [number, number]
-->super.getLocation : (() => [number, number]) & (() => [number, number])
+ >super.getLocation : (() => [number, number]) & (() => [number, number])
 ->super : WithLocation<typeof Point>.(Anonymous class) & Point
-->getLocation : (() => [number, number]) & (() => [number, number])
-+>super.getLocation : () => [number, number] & () => [number, number]
 +>super : (Anonymous class)<typeof Point> & Point
-+>getLocation : () => [number, number] & () => [number, number]
+ >getLocation : (() => [number, number]) & (() => [number, number])
    }
    whereAmI() {
- >whereAmI : () => [number, number]

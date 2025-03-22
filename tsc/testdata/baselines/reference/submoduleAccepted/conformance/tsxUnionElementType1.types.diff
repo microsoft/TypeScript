@@ -39,8 +39,8 @@
 ->SFC1 || SFC2 : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
 ->SFC1 : (prop: { x: number; }) => JSX.Element
 ->SFC2 : (prop: { x: boolean; }) => JSX.Element
-+>SFCComp : (prop: { x: number; }) => any | (prop: { x: boolean; }) => any
-+>SFC1 || SFC2 : (prop: { x: number; }) => any | (prop: { x: boolean; }) => any
++>SFCComp : ((prop: { x: number; }) => any) | ((prop: { x: boolean; }) => any)
++>SFC1 || SFC2 : ((prop: { x: number; }) => any) | ((prop: { x: boolean; }) => any)
 +>SFC1 : (prop: { x: number; }) => any
 +>SFC2 : (prop: { x: boolean; }) => any
  
@@ -49,6 +49,6 @@
 ->SFCComp : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
 ->x : true
 +><SFCComp x /> : any
-+>SFCComp : (prop: { x: number; }) => any | (prop: { x: boolean; }) => any
++>SFCComp : ((prop: { x: number; }) => any) | ((prop: { x: boolean; }) => any)
 +>x : any
  

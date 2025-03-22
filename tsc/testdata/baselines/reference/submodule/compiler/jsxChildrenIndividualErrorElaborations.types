@@ -68,7 +68,7 @@ var a = <Blah>
 
 interface PropsArr {
   children: ((x: number) => string)[];
->children : (x: number) => string[]
+>children : ((x: number) => string)[]
 >x : number
 }
 

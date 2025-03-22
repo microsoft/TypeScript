@@ -7,26 +7,9 @@
 ->Foo : (opts: { a?(): void; b?: () => void; }) => { c?(): void; d?: () => void; }
 ->(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: { a?(): void; b?: () => void; }) => { c?(): void; d?: () => void; }
 ->opts : { a?(): void; b?: () => void; }
-+>Foo : (opts: { a?: () => void | undefined; b?: () => void | undefined; }) => { c?: () => void | undefined; d?: () => void | undefined; }
-+>(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: { a?: () => void | undefined; b?: () => void | undefined; }) => { c?: () => void | undefined; d?: () => void | undefined; }
-+>opts : { a?: () => void | undefined; b?: () => void | undefined; }
++>Foo : (opts: { a?: (() => void) | undefined; b?: (() => void) | undefined; }) => { c?: (() => void) | undefined; d?: (() => void) | undefined; }
++>(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: { a?: (() => void) | undefined; b?: (() => void) | undefined; }) => { c?: (() => void) | undefined; d?: (() => void) | undefined; }
++>opts : { a?: (() => void) | undefined; b?: (() => void) | undefined; }
  
      a?(): void,
-->a : (() => void) | undefined
-+>a : () => void | undefined
- 
-     b?: () => void,
-->b : (() => void) | undefined
-+>b : () => void | undefined
- 
- }): {
-     c?(): void,
-->c : (() => void) | undefined
-+>c : () => void | undefined
- 
-     d?: () => void,
-->d : (() => void) | undefined
-+>d : () => void | undefined
- 
- } => ({  });
- >({  }) : {}
+ >a : (() => void) | undefined

@@ -18,16 +18,7 @@
  >{    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }} : { props: { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }; }
  
      props: {
-@@= skipped -83, +83 lines =@@
- >contents : T | undefined
- 
-     contains?(content: T): boolean;
-->contains : ((content: T) => boolean) | undefined
-+>contains : (content: T) => boolean | undefined
- >content : T
- 
- };
-@@= skipped -39, +39 lines =@@
+@@= skipped -122, +122 lines =@@
  >obj2 : Mapped<{ foo: string; }>
  >id({    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }}) : Mapped<{ foo: string; }>
  >id : <T>(arg: Mapped<T>) => Mapped<T>

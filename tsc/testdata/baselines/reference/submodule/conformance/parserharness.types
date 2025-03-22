@@ -1211,7 +1211,7 @@ Actual errors follow: "
         }
 
         static errorHandlerStack: { (e: Error): void; }[] = [];
->errorHandlerStack : (e: Error) => void[]
+>errorHandlerStack : ((e: Error) => void)[]
 >e : Error
 >[] : undefined[]
 
@@ -2261,7 +2261,7 @@ Actual errors follow: "
         }
 
         export var benchmarks: { new (): Benchmark; }[] = [];
->benchmarks : new () => Benchmark[]
+>benchmarks : (new () => Benchmark)[]
 >[] : undefined[]
 
         var timeFunction: (
@@ -2368,7 +2368,7 @@ Actual errors follow: "
 >i < benchmarks.length : boolean
 >i : number
 >benchmarks.length : number
->benchmarks : new () => Benchmark[]
+>benchmarks : (new () => Benchmark)[]
 >length : number
 >i++ : number
 >i : number
@@ -2377,7 +2377,7 @@ Actual errors follow: "
 >b : Benchmark
 >new benchmarks[i]() : Benchmark
 >benchmarks[i] : new () => Benchmark
->benchmarks : new () => Benchmark[]
+>benchmarks : (new () => Benchmark)[]
 >i : number
 
 
@@ -2537,9 +2537,9 @@ Actual errors follow: "
 
             benchmarks.push(BenchmarkClass);
 >benchmarks.push(BenchmarkClass) : number
->benchmarks.push : (...items: new () => Benchmark[]) => number
->benchmarks : new () => Benchmark[]
->push : (...items: new () => Benchmark[]) => number
+>benchmarks.push : (...items: (new () => Benchmark)[]) => number
+>benchmarks : (new () => Benchmark)[]
+>push : (...items: (new () => Benchmark)[]) => number
 >BenchmarkClass : any
         }
 

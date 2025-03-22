@@ -170,14 +170,14 @@ createSelector(
 // Repro from #43122
 
 declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void
->example : (...args: [...(n: number) => void[], (x: any) => void]) => void
->args : [...(n: number) => void[], (x: any) => void]
+>example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
+>args : [...((n: number) => void)[], (x: any) => void]
 >n : number
 >x : any
 
 example(
 >example(    x => x.foo,  // Error    x => x.bar,  // Error    x => x.baz,) : void
->example : (...args: [...(n: number) => void[], (x: any) => void]) => void
+>example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
 
     x => x.foo,  // Error
 >x => x.foo : (x: any) => any
@@ -205,14 +205,14 @@ example(
 // Repro from #52846
 
 declare function test(...args: [...((arg: number) => void)[], (arg: string) => void]): void;
->test : (...args: [...(arg: number) => void[], (arg: string) => void]) => void
->args : [...(arg: number) => void[], (arg: string) => void]
+>test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
+>args : [...((arg: number) => void)[], (arg: string) => void]
 >arg : number
 >arg : string
   
 test(a => a, b => b, c => c);
 >test(a => a, b => b, c => c) : void
->test : (...args: [...(arg: number) => void[], (arg: string) => void]) => void
+>test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
 >a => a : (a: any) => any
 >a : any
 >a : any

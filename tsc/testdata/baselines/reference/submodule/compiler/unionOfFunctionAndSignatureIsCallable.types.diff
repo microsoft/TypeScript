@@ -5,31 +5,26 @@
  === unionOfFunctionAndSignatureIsCallable.ts ===
  function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
 ->f1 : (c1: Function, c2: () => object, callable: typeof c1 | typeof c2) => void
-+>f1 : (c1: Function, c2: () => object, callable: Function | () => object) => void
++>f1 : (c1: Function, c2: () => object, callable: Function | (() => object)) => void
  >c1 : Function
  >c2 : () => object
-->callable : Function | (() => object)
-+>callable : Function | () => object
- >c1 : Function
- >c2 : () => object
- 
+ >callable : Function | (() => object)
 @@= skipped -18, +18 lines =@@
  >c2 : () => object
  
      const c = callable();
 ->c : error
 ->callable() : error
-->callable : Function | (() => object)
 +>c : any
 +>callable() : any
-+>callable : Function | () => object
+ >callable : Function | (() => object)
  }
  
  function f2(fetcherParams: object | (() => object)) {
 ->f2 : (fetcherParams: object | (() => object)) => void
 ->fetcherParams : object | (() => object)
-+>f2 : (fetcherParams: () => object | object) => void
-+>fetcherParams : () => object | object
++>f2 : (fetcherParams: (() => object) | object) => void
++>fetcherParams : (() => object) | object
  
      const data = typeof fetcherParams === 'function'
 ->data : error
@@ -40,14 +35,12 @@
 ->typeof fetcherParams : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 ->fetcherParams : object | (() => object)
 +>typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>fetcherParams : () => object | object
++>fetcherParams : (() => object) | object
  >'function' : "function"
  
          ? fetcherParams()
 ->fetcherParams() : error
-->fetcherParams : Function | (() => object)
 +>fetcherParams() : any
-+>fetcherParams : Function | () => object
+ >fetcherParams : Function | (() => object)
  
          : fetcherParams
- >fetcherParams : object

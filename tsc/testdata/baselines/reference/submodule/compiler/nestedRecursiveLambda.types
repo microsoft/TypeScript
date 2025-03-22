@@ -37,7 +37,7 @@ void(r =>(r => r));
 >r : any
 
 [(r =>(r => r))]
->[(r =>(r => r))] : (r: any) => (r: any) => any[]
+>[(r =>(r => r))] : ((r: any) => (r: any) => any)[]
 >(r =>(r => r)) : (r: any) => (r: any) => any
 >r =>(r => r) : (r: any) => (r: any) => any
 >r : any

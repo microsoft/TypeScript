@@ -5,7 +5,7 @@ class Base {
 >Base : Base
 
     method?() { }
->method : () => void | undefined
+>method : (() => void) | undefined
 }
 
 class Derived extends Base {
@@ -17,9 +17,9 @@ class Derived extends Base {
 
         return super.method?.();
 >super.method?.() : void | undefined
->super.method : () => void | undefined
+>super.method : (() => void) | undefined
 >super : Base
->method : () => void | undefined
+>method : (() => void) | undefined
     }
 
     async asyncMethod() {
@@ -27,8 +27,8 @@ class Derived extends Base {
 
         return super.method?.();
 >super.method?.() : void | undefined
->super.method : () => void | undefined
+>super.method : (() => void) | undefined
 >super : Base
->method : () => void | undefined
+>method : (() => void) | undefined
     }
 }

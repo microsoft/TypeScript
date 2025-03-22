@@ -349,7 +349,7 @@ type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
 >outputs : O
 
     map?: (inputs: Unwrap<I>) => Unwrap<O>;
->map : (inputs: Unwrap<I>) => Unwrap<O> | undefined
+>map : ((inputs: Unwrap<I>) => Unwrap<O>) | undefined
 >inputs : Unwrap<I>
 
 };
@@ -872,7 +872,7 @@ const resWithConditionalExpression = withConditionalExpression({
 >resWithConditionalExpression : [string[], "first" | "two", boolean]
 >withConditionalExpression({  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),}) : [string[], "first" | "two", boolean]
 >withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
->{  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),} : { a: (arg: string) => string[]; b: (arg: string[]) => "first" | (arg: string[]) => "two"; c: (arg: "first" | "two") => boolean; }
+>{  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),} : { a: (arg: string) => string[]; b: ((arg: string[]) => "first") | ((arg: string[]) => "two"); c: (arg: "first" | "two") => boolean; }
 
   a: (arg) => [arg],
 >a : (arg: string) => string[]
@@ -882,8 +882,8 @@ const resWithConditionalExpression = withConditionalExpression({
 >arg : string
 
   b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,
->b : (arg: string[]) => "first" | (arg: string[]) => "two"
->Math.random() ? (arg) => "first" as const : (arg) => "two" as const : (arg: string[]) => "first" | (arg: string[]) => "two"
+>b : ((arg: string[]) => "first") | ((arg: string[]) => "two")
+>Math.random() ? (arg) => "first" as const : (arg) => "two" as const : ((arg: string[]) => "first") | ((arg: string[]) => "two")
 >Math.random() : number
 >Math.random : () => number
 >Math : Math

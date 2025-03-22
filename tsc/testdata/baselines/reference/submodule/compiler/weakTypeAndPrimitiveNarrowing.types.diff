@@ -1,51 +1,25 @@
 --- old.weakTypeAndPrimitiveNarrowing.types
 +++ new.weakTypeAndPrimitiveNarrowing.types
-@@= skipped -10, +10 lines =@@
- >true : true
- 
-   | { toLowerCase?(): string }
-->toLowerCase : (() => string) | undefined
-+>toLowerCase : () => string | undefined
- 
-   | { toUpperCase?(): string, otherOptionalProp?: number };
-->toUpperCase : (() => string) | undefined
-+>toUpperCase : () => string | undefined
- >otherOptionalProp : number | undefined
- 
- const g = (arg: LiteralsAndWeakTypes) => {
-@@= skipped -17, +17 lines =@@
+@@= skipped -27, +27 lines =@@
  >'A' : "A"
  
        arg;
 ->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "A"
-+>arg : "A" | { toLowerCase?: () => string | undefined; } | { toUpperCase?: () => string | undefined; otherOptionalProp?: number | undefined; }
++>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
  
      } else {
        arg;
 ->arg : { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "B"
-+>arg : "B" | { optional?: true | undefined; } | { toLowerCase?: () => string | undefined; } | { toUpperCase?: () => string | undefined; otherOptionalProp?: number | undefined; }
++>arg : "B" | { optional?: true | undefined; } | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
      }
  }
  
-@@= skipped -18, +18 lines =@@
- >true : true
- 
-   | { toLowerCase?(): string }
-->toLowerCase : (() => string) | undefined
-+>toLowerCase : () => string | undefined
- 
-   | { toUpperCase?(): string, otherOptionalProp?: number };
-->toUpperCase : (() => string) | undefined
-+>toUpperCase : () => string | undefined
- >otherOptionalProp : number | undefined
- 
- const h = (arg: PrimitivesAndWeakTypes) => {
-@@= skipped -17, +17 lines =@@
+@@= skipped -35, +35 lines =@@
  >'A' : "A"
  
        arg;
 ->arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
-+>arg : "A" | { toLowerCase?: () => string | undefined; } | { toUpperCase?: () => string | undefined; otherOptionalProp?: number | undefined; }
++>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
  
      } else {
        arg;

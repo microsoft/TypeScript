@@ -80,9 +80,9 @@ class Foo extends WithLocation(Point) {
 
     return super.getLocation()
 >super.getLocation() : [number, number]
->super.getLocation : () => [number, number] & () => [number, number]
+>super.getLocation : (() => [number, number]) & (() => [number, number])
 >super : (Anonymous class)<typeof Point> & Point
->getLocation : () => [number, number] & () => [number, number]
+>getLocation : (() => [number, number]) & (() => [number, number])
   }
   whereAmI() {
 >whereAmI : () => [number, number]

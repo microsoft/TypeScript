@@ -85,9 +85,9 @@ function f01(x: unknown) {
 >"number" : "number"
 
         x.toLocaleString;
->x.toLocaleString : () => string | (locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string
+>x.toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
 >x : number | boolean
->toLocaleString : () => string | (locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string
+>toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
     }
     if (!!true) {
 >!!true : true
@@ -599,14 +599,14 @@ function f20(x: unknown) {
 >"string" : "string"
 
     const a = [assert];
->a : (value: unknown) => asserts value[]
->[assert] : (value: unknown) => asserts value[]
+>a : ((value: unknown) => asserts value)[]
+>[assert] : ((value: unknown) => asserts value)[]
 >assert : (value: unknown) => asserts value
 
     a[0](typeof x === "string");  // Error
 >a[0](typeof x === "string") : void
 >a[0] : (value: unknown) => asserts value
->a : (value: unknown) => asserts value[]
+>a : ((value: unknown) => asserts value)[]
 >0 : 0
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"

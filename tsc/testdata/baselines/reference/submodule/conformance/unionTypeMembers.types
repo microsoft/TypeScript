@@ -97,9 +97,9 @@ str = x.commonMethodType(str); // (a: string) => string so result should be stri
 >str = x.commonMethodType(str) : string
 >str : string
 >x.commonMethodType(str) : string
->x.commonMethodType : (a: string) => string | (a: string) => string
+>x.commonMethodType : ((a: string) => string) | ((a: string) => string)
 >x : I1<number> | I2<number>
->commonMethodType : (a: string) => string | (a: string) => string
+>commonMethodType : ((a: string) => string) | ((a: string) => string)
 >str : string
 
 strOrNum = x.commonPropertyDifferenType;
@@ -113,21 +113,21 @@ strOrNum = x.commonMethodDifferentReturnType(str); // string | union
 >strOrNum = x.commonMethodDifferentReturnType(str) : string | number
 >strOrNum : string | number
 >x.commonMethodDifferentReturnType(str) : string | number
->x.commonMethodDifferentReturnType : (a: string) => string | (a: string) => number
+>x.commonMethodDifferentReturnType : ((a: string) => string) | ((a: string) => number)
 >x : I1<number> | I2<number>
->commonMethodDifferentReturnType : (a: string) => string | (a: string) => number
+>commonMethodDifferentReturnType : ((a: string) => string) | ((a: string) => number)
 >str : string
 
 x.commonMethodDifferentParameterType; // No error - property exists
->x.commonMethodDifferentParameterType : (a: string) => string | (a: number) => number
+>x.commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
 >x : I1<number> | I2<number>
->commonMethodDifferentParameterType : (a: string) => string | (a: number) => number
+>commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
 
 x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures because the type of this property is ((a: string) => string) | (a: number) => number
 >x.commonMethodDifferentParameterType(strOrNum) : string | number
->x.commonMethodDifferentParameterType : (a: string) => string | (a: number) => number
+>x.commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
 >x : I1<number> | I2<number>
->commonMethodDifferentParameterType : (a: string) => string | (a: number) => number
+>commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
 >strOrNum : string | number
 
                                                 // and the call signatures arent identical
@@ -135,36 +135,36 @@ num = x.commonMethodWithTypeParameter(num);
 >num = x.commonMethodWithTypeParameter(num) : number
 >num : number
 >x.commonMethodWithTypeParameter(num) : number
->x.commonMethodWithTypeParameter : (a: number) => number | (a: number) => number
+>x.commonMethodWithTypeParameter : ((a: number) => number) | ((a: number) => number)
 >x : I1<number> | I2<number>
->commonMethodWithTypeParameter : (a: number) => number | (a: number) => number
+>commonMethodWithTypeParameter : ((a: number) => number) | ((a: number) => number)
 >num : number
 
 num = x.commonMethodWithOwnTypeParameter(num);
 >num = x.commonMethodWithOwnTypeParameter(num) : number
 >num : number
 >x.commonMethodWithOwnTypeParameter(num) : number
->x.commonMethodWithOwnTypeParameter : <U>(a: U) => U | <U>(a: U) => U
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
 >x : I1<number> | I2<number>
->commonMethodWithOwnTypeParameter : <U>(a: U) => U | <U>(a: U) => U
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
 >num : number
 
 str = x.commonMethodWithOwnTypeParameter(str);
 >str = x.commonMethodWithOwnTypeParameter(str) : string
 >str : string
 >x.commonMethodWithOwnTypeParameter(str) : string
->x.commonMethodWithOwnTypeParameter : <U>(a: U) => U | <U>(a: U) => U
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
 >x : I1<number> | I2<number>
->commonMethodWithOwnTypeParameter : <U>(a: U) => U | <U>(a: U) => U
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
 >str : string
 
 strOrNum = x.commonMethodWithOwnTypeParameter(strOrNum);
 >strOrNum = x.commonMethodWithOwnTypeParameter(strOrNum) : string | number
 >strOrNum : string | number
 >x.commonMethodWithOwnTypeParameter(strOrNum) : string | number
->x.commonMethodWithOwnTypeParameter : <U>(a: U) => U | <U>(a: U) => U
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
 >x : I1<number> | I2<number>
->commonMethodWithOwnTypeParameter : <U>(a: U) => U | <U>(a: U) => U
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
 >strOrNum : string | number
 
 x.propertyOnlyInI1; // error

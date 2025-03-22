@@ -154,7 +154,7 @@
  	window[action] = (x, y) => {
  >window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
 ->window[action] : ((width: number, height: number) => void) & ((width: number, height: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void)
-+>window[action] : (x: number, y: number) => void & (x: number, y: number) => void & (width: number, height: number) => void & (width: number, height: number) => void
++>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((width: number, height: number) => void) & ((width: number, height: number) => void)
  >window : Window & typeof globalThis
 ->action : "resizeTo" | "resizeBy"
 +>action : "resizeBy" | "resizeTo"
@@ -165,7 +165,7 @@
  		window[action](x, y);
  >window[action](x, y) : void
 ->window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((width: number, height: number) => void) & ((width: number, height: number) => void))
-+>window[action] : (x: number, y: number) => void & (x: number, y: number) => void | (width: number, height: number) => void & (width: number, height: number) => void
++>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) | ((width: number, height: number) => void) & ((width: number, height: number) => void)
  >window : Window & typeof globalThis
 ->action : "resizeTo" | "resizeBy"
 +>action : "resizeBy" | "resizeTo"

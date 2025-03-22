@@ -16,8 +16,8 @@
 ->fn : (() => unknown) | (() => unknown) | ((args_0: string) => unknown) | ((args_0: number) => unknown)
 ->Object.entries(map) : [string, (() => unknown) | (() => unknown) | ((args_0: string) => unknown) | ((args_0: number) => unknown)][]
 ->Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
-+>fn : (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown
-+>Object.entries(map) : [string, (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown][]
++>fn : ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)
++>Object.entries(map) : [string, ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)][]
 +>Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >Object : ObjectConstructor
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
@@ -28,14 +28,14 @@
    fn(...args);
  >fn(...args) : unknown
 ->fn : (() => unknown) | (() => unknown) | ((args_0: string) => unknown) | ((args_0: number) => unknown)
-+>fn : (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown
++>fn : ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)
  >...args : any
  >args : any
  }
  
  const test2: ((a: number, ...args: []) => void) &
 ->test2 : ((a: number) => void) & ((b: string) => void) & ((c: boolean) => void)
-+>test2 : (a: number, ...args: []) => void & (b: string) => void & (c: boolean) => void
++>test2 : ((a: number, ...args: []) => void) & ((b: string) => void) & ((c: boolean) => void)
  >a : number
  >args : []
  

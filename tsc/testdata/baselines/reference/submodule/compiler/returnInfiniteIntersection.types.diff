@@ -5,26 +5,26 @@
  === returnInfiniteIntersection.ts ===
  function recursive() {
 ->recursive : () => (<T>(subkey: T) => any & { p: any; }) & { p: any; }
-+>recursive : () => <T>(subkey: T) => ??? & { p: any; } & { p: any; }
++>recursive : () => (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
  
      let x = <T>(subkey: T) => recursive();
 ->x : <T>(subkey: T) => any & { p: any; }
 -><T>(subkey: T) => recursive() : <T>(subkey: T) => any & { p: any; }
-+>x : <T>(subkey: T) => ??? & { p: any; }
-+><T>(subkey: T) => recursive() : <T>(subkey: T) => ??? & { p: any; }
++>x : <T>(subkey: T) => (???) & { p: any; }
++><T>(subkey: T) => recursive() : <T>(subkey: T) => (???) & { p: any; }
  >subkey : T
 ->recursive() : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 ->recursive : () => (<T>(subkey: T) => any & { p: any; }) & { p: any; }
-+>recursive() : <T>(subkey: T) => ??? & { p: any; } & { p: any; }
-+>recursive : () => <T>(subkey: T) => ??? & { p: any; } & { p: any; }
++>recursive() : (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
++>recursive : () => (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
  
      return x as typeof x & { p };
 ->x as typeof x & { p } : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 ->x : <T>(subkey: T) => any & { p: any; }
 ->x : <T>(subkey: T) => any & { p: any; }
-+>x as typeof x & { p } : <T>(subkey: T) => ??? & { p: any; } & { p: any; }
-+>x : <T>(subkey: T) => ??? & { p: any; }
-+>x : <T>(subkey: T) => ??? & { p: any; }
++>x as typeof x & { p } : (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
++>x : <T>(subkey: T) => (???) & { p: any; }
++>x : <T>(subkey: T) => (???) & { p: any; }
  >p : any
  }
  
@@ -33,9 +33,9 @@
 ->recursive()(1) : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 ->recursive() : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 ->recursive : () => (<T>(subkey: T) => any & { p: any; }) & { p: any; }
-+>result : <T>(subkey: T) => ??? & { p: any; } & { p: any; }
-+>recursive()(1) : <T>(subkey: T) => ??? & { p: any; } & { p: any; }
-+>recursive() : <T>(subkey: T) => ??? & { p: any; } & { p: any; }
-+>recursive : () => <T>(subkey: T) => ??? & { p: any; } & { p: any; }
++>result : (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
++>recursive()(1) : (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
++>recursive() : (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
++>recursive : () => (<T>(subkey: T) => (???) & { p: any; }) & { p: any; }
  >1 : 1
  

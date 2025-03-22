@@ -2,12 +2,12 @@
 
 === parserArrowFunctionExpression6.ts ===
 function foo(q: string, b: number) {
->foo : (q: string, b: number) => boolean | () => void
+>foo : (q: string, b: number) => boolean | (() => void)
 >q : string
 >b : number
 
     return true ? (q ? true : false) : (b = q.length, function() { });
->true ? (q ? true : false) : (b = q.length, function() { }) : boolean | () => void
+>true ? (q ? true : false) : (b = q.length, function() { }) : boolean | (() => void)
 >true : true
 >(q ? true : false) : boolean
 >q ? true : false : boolean

@@ -20,32 +20,14 @@
  >true : true
  >x : T
  >/1/ : RegExp
-@@= skipped -32, +32 lines =@@
- >1 : 1
- 
-     var r7 = true ? () => { } : x;
-->r7 : T | (() => void)
-->true ? () => { } : x : T | (() => void)
-+>r7 : T | () => void
-+>true ? () => { } : x : T | () => void
- >true : true
- >() => { } : () => void
- >x : T
- 
-     var r7 = true ? x : () => { };
-->r7 : T | (() => void)
-->true ? x : () => { } : T | (() => void)
-+>r7 : T | () => void
-+>true ? x : () => { } : T | () => void
- >true : true
- >x : T
+@@= skipped -46, +46 lines =@@
  >() => { } : () => void
  
      var r8 = true ? <T>(x: T) => { return x } : x;
 ->r8 : T | (<T_1>(x: T_1) => T_1)
 ->true ? <T>(x: T) => { return x } : x : T | (<T_1>(x: T_1) => T_1)
-+>r8 : T | <T>(x: T) => T
-+>true ? <T>(x: T) => { return x } : x : T | <T>(x: T) => T
++>r8 : T | (<T>(x: T) => T)
++>true ? <T>(x: T) => { return x } : x : T | (<T>(x: T) => T)
  >true : true
 -><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 +><T>(x: T) => { return x } : <T>(x: T) => T
@@ -56,8 +38,8 @@
      var r8b = true ? x : <T>(x: T) => { return x }; // type parameters not identical across declarations
 ->r8b : T | (<T_1>(x: T_1) => T_1)
 ->true ? x : <T>(x: T) => { return x } : T | (<T_1>(x: T_1) => T_1)
-+>r8b : T | <T>(x: T) => T
-+>true ? x : <T>(x: T) => { return x } : T | <T>(x: T) => T
++>r8b : T | (<T>(x: T) => T)
++>true ? x : <T>(x: T) => { return x } : T | (<T>(x: T) => T)
  >true : true
  >x : T
 -><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
@@ -65,7 +47,7 @@
  >x : T
  >x : T
  
-@@= skipped -35, +35 lines =@@
+@@= skipped -21, +21 lines =@@
  >i1 : I1
  
      var r9 = true ? i1 : x;

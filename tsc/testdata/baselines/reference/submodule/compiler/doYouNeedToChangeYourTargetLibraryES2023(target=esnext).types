@@ -58,9 +58,9 @@ export let last2 = array.findLast(somePredicate);
 export let sorted = array.toSorted();
 >sorted : number[]
 >array.toSorted() : number[]
->array.toSorted : (compareFn?: (a: number, b: number) => number | undefined) => number[]
+>array.toSorted : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
 >array : number[]
->toSorted : (compareFn?: (a: number, b: number) => number | undefined) => number[]
+>toSorted : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
 
 export let spliced1 = array.toSpliced(2);
 >spliced1 : number[]

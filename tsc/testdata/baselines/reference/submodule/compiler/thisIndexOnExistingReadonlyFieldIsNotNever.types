@@ -13,7 +13,7 @@ declare class Component<P, S = {}> {
 }
 interface CoachMarkAnchorProps<C> {
     anchorRef?: (anchor: C) => void;
->anchorRef : (anchor: C) => void | undefined
+>anchorRef : ((anchor: C) => void) | undefined
 >anchor : C
 }
 type AnchorType<P> = Component<P>;

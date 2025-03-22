@@ -5,19 +5,16 @@
  === taggedTemplatesWithTypeArguments1.ts ===
  declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 ->f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
-+>f : <T>(strs: TemplateStringsArray, ...callbacks: (x: T) => any[]) => void
++>f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
  >strs : TemplateStringsArray
-->callbacks : ((x: T) => any)[]
-+>callbacks : (x: T) => any[]
+ >callbacks : ((x: T) => any)[]
  >x : T
- 
- interface Stuff {
 @@= skipped -19, +19 lines =@@
  export const a = f<Stuff> `
  >a : void
  >f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : void
 ->f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
-+>f : <T>(strs: TemplateStringsArray, ...callbacks: (x: T) => any[]) => void
++>f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
  >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
  
      hello

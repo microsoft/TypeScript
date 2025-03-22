@@ -72,22 +72,3 @@
  >protectedMethod : any
  }
  
-@@= skipped -19, +19 lines =@@
- 
- 	x.privateMethod(); // Error, private constituent makes method inaccessible
- >x.privateMethod() : void
-->x.privateMethod : (() => void) & (() => void)
-+>x.privateMethod : () => void & () => void
- >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
-->privateMethod : (() => void) & (() => void)
-+>privateMethod : () => void & () => void
- 
- 	x.protectedMethod(); // Error, protected when all constituents are protected
- >x.protectedMethod() : void
-->x.protectedMethod : (() => void) & (() => void)
-+>x.protectedMethod : () => void & () => void
- >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
-->protectedMethod : (() => void) & (() => void)
-+>protectedMethod : () => void & () => void
- }
- 

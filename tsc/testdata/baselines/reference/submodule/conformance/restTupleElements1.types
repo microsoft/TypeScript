@@ -197,20 +197,20 @@ f0([1, "hello", true]);
 >true : true
 
 declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
->f1 : (a: [(x: number) => number, ...(x: string) => number[]]) => void
->a : [(x: number) => number, ...(x: string) => number[]]
+>f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
+>a : [(x: number) => number, ...((x: string) => number)[]]
 >x : number
 >x : string
 
 declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;
->f2 : (...a: [(x: number) => number, ...(x: string) => number[]]) => void
->a : [(x: number) => number, ...(x: string) => number[]]
+>f2 : (...a: [(x: number) => number, ...((x: string) => number)[]]) => void
+>a : [(x: number) => number, ...((x: string) => number)[]]
 >x : number
 >x : string
 
 f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]) : void
->f1 : (a: [(x: number) => number, ...(x: string) => number[]]) => void
+>f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
 >[x => x * 2, x => x.length, x => x.charCodeAt(0)] : [(x: number) => number, (x: string) => number, (x: string) => number]
 >x => x * 2 : (x: number) => number
 >x : number
@@ -232,7 +232,7 @@ f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 
 f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >f2(x => x * 2, x => x.length, x => x.charCodeAt(0)) : void
->f2 : (...a: [(x: number) => number, ...(x: string) => number[]]) => void
+>f2 : (...a: [(x: number) => number, ...((x: string) => number)[]]) => void
 >x => x * 2 : (x: number) => number
 >x : number
 >x * 2 : number

@@ -93,13 +93,13 @@ function f6(x: () => string) {
 }
 
 function f10(x: string | (() => string)) {
->f10 : (x: string | () => string) => void
->x : string | () => string
+>f10 : (x: string | (() => string)) => void
+>x : string | (() => string)
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : string | () => string
+>x : string | (() => string)
 >"function" : "function"
 
         x;  // () => string
@@ -112,14 +112,14 @@ function f10(x: string | (() => string)) {
 }
 
 function f11(x: { s: string } | (() => string)) {
->f11 : (x: { s: string; } | () => string) => void
->x : { s: string; } | () => string
+>f11 : (x: { s: string; } | (() => string)) => void
+>x : { s: string; } | (() => string)
 >s : string
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : { s: string; } | () => string
+>x : { s: string; } | (() => string)
 >"function" : "function"
 
         x;  // () => string
@@ -187,8 +187,8 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 // Repro from #49316
 
 function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
->configureStore : <S extends object>(reducer: Record<keyof S, () => void> | () => void) => void
->reducer : Record<keyof S, () => void> | () => void
+>configureStore : <S extends object>(reducer: Record<keyof S, () => void> | (() => void)) => void
+>reducer : Record<keyof S, () => void> | (() => void)
 
     let rootReducer: () => void;
 >rootReducer : () => void
@@ -196,7 +196,7 @@ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S
     if (typeof reducer === 'function') {
 >typeof reducer === 'function' : boolean
 >typeof reducer : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->reducer : Record<keyof S, () => void> | () => void
+>reducer : Record<keyof S, () => void> | (() => void)
 >'function' : "function"
 
         rootReducer = reducer;

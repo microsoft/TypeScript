@@ -7,8 +7,8 @@ declare var x: [number, string] | [number, string, string];
 x.slice(1) as readonly string[];
 >x.slice(1) as readonly string[] : readonly string[]
 >x.slice(1) : (string | number)[]
->x.slice : (start?: number, end?: number) => (string | number)[] | (start?: number, end?: number) => (string | number)[]
+>x.slice : ((start?: number, end?: number) => (string | number)[]) | ((start?: number, end?: number) => (string | number)[])
 >x : [number, string] | [number, string, string]
->slice : (start?: number, end?: number) => (string | number)[] | (start?: number, end?: number) => (string | number)[]
+>slice : ((start?: number, end?: number) => (string | number)[]) | ((start?: number, end?: number) => (string | number)[])
 >1 : 1
 

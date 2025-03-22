@@ -11,9 +11,9 @@ const foo = { a! }
 >a : string
 
 const bar = {
->bar : { a?: () => void | undefined; }
->{    a ? () { }} : { a?: () => void | undefined; }
+>bar : { a?: (() => void) | undefined; }
+>{    a ? () { }} : { a?: (() => void) | undefined; }
 
     a ? () { }
->a : () => void | undefined
+>a : (() => void) | undefined
 }

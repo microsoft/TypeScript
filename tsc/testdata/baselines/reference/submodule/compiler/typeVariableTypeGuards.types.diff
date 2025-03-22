@@ -1,12 +1,6 @@
 --- old.typeVariableTypeGuards.types
 +++ new.typeVariableTypeGuards.types
-@@= skipped -202, +202 lines =@@
- // https://github.com/microsoft/TypeScript/issues/57381
- 
- function f6<T extends string | (new () => {})>(a: T) {
-->f6 : <T extends string | (new () => {})>(a: T) => void
-+>f6 : <T extends string | new () => {}>(a: T) => void
- >a : T
+@@= skipped -207, +207 lines =@@
  
    if (typeof a !== "string") {
  >typeof a !== "string" : boolean

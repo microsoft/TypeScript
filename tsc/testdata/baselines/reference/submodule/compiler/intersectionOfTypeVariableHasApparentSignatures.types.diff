@@ -9,13 +9,6 @@
  >children : {} | undefined
  }
  
- interface Props {
-     children?: (items: {x: number}) => void
-->children : ((items: { x: number; }) => void) | undefined
-+>children : (items: { x: number; }) => void | undefined
- >items : { x: number; }
- >x : number
- }
 @@= skipped -18, +18 lines =@@
  f({
  >f({    props: {        children: (({ x }) => { })    }}) : void

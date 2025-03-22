@@ -34,16 +34,12 @@
  >work : () => void
      }
      else {
-@@= skipped -13, +13 lines =@@
- 
+@@= skipped -14, +14 lines =@@
          o.sayHi();
  >o.sayHi() : void
-->o.sayHi : (() => void) | (() => void)
+ >o.sayHi : (() => void) | (() => void)
 ->o : Person | Car
-->sayHi : (() => void) | (() => void)
-+>o.sayHi : () => void | () => void
 +>o : Car | Person
-+>sayHi : () => void | () => void
+ >sayHi : (() => void) | (() => void)
      }
  }
- 

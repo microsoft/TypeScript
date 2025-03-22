@@ -1,5 +1,5 @@
-aliasInstantiationExpressionGenericIntersectionNoCrash1.ts(10,1): error TS2352: Conversion of type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & () => number' to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; } & () => string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & () => number' is not comparable to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; }'.
+aliasInstantiationExpressionGenericIntersectionNoCrash1.ts(10,1): error TS2352: Conversion of type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)' to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; } & (() => string)' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)' is not comparable to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; }'.
     Type 'ErrImpl<number>' is not comparable to type 'ErrImpl<string>'.
       Type 'number' is not comparable to type 'string'.
 
@@ -16,8 +16,8 @@ aliasInstantiationExpressionGenericIntersectionNoCrash1.ts(10,1): error TS2352: 
     declare const e: ErrAlias<number>;
     e as ErrAlias<string>;
     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Conversion of type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & () => number' to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; } & () => string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & () => number' is not comparable to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; }'.
+!!! error TS2352: Conversion of type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)' to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; } & (() => string)' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)' is not comparable to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; }'.
 !!! error TS2352:     Type 'ErrImpl<number>' is not comparable to type 'ErrImpl<string>'.
 !!! error TS2352:       Type 'number' is not comparable to type 'string'.
     

@@ -240,21 +240,8 @@
 +>g23 : (...rest: []) => string[]
  
  declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
-->f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
-+>f30 : <T, U extends (x: T) => any[]>(x: T, ...args: U) => U
- >x : T
- >x : T
- >args : U
-@@= skipped -95, +95 lines =@@
- const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: number) => number]
- >c30 : [(x: number) => string, (x: number) => number]
- >f30(42, x => "" + x, x => x + 1) : [(x: number) => string, (x: number) => number]
-->f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
-+>f30 : <T, U extends (x: T) => any[]>(x: T, ...args: U) => U
- >42 : 42
- >x => "" + x : (x: number) => string
- >x : number
-@@= skipped -59, +59 lines =@@
+ >f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
+@@= skipped -154, +154 lines =@@
  >move : [number, "left" | "right"]
  
    jump: [number, 'up' | 'down'];

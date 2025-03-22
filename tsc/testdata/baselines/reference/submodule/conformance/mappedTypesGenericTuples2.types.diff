@@ -5,7 +5,7 @@
  Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
  >Promise.all([getT<string>(), ...getT<any>()]).then((result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok}) : Promise<void>
 ->Promise.all([getT<string>(), ...getT<any>()]).then : <TResult1 = [string, ...any[]], TResult2 = never>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>Promise.all([getT<string>(), ...getT<any>()]).then : <TResult1, TResult2>(onfulfilled?: (value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>Promise.all([getT<string>(), ...getT<any>()]).then : <TResult1, TResult2>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >Promise.all([getT<string>(), ...getT<any>()]) : Promise<[string, ...any[]]>
 ->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 +>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
@@ -19,7 +19,7 @@
  >getT<any>() : any
  >getT : <T>() => T
 ->then : <TResult1 = [string, ...any[]], TResult2 = never>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: (value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >(result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok} : (result: [string, ...any[]]) => void
  >result : [string, ...any[]]
  

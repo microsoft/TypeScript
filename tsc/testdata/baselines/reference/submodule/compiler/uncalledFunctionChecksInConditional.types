@@ -8,7 +8,7 @@ declare function isBar(): boolean;
 >isBar : () => boolean
 
 declare const isUndefinedFoo: (() => boolean) | undefined;
->isUndefinedFoo : () => boolean | undefined
+>isUndefinedFoo : (() => boolean) | undefined
 
 if (isFoo) {
 >isFoo : () => boolean
@@ -34,8 +34,8 @@ if (isFoo || isFoo()) {
 }
 
 if (isUndefinedFoo || isFoo()) {
->isUndefinedFoo || isFoo() : boolean | () => boolean
->isUndefinedFoo : () => boolean | undefined
+>isUndefinedFoo || isFoo() : boolean | (() => boolean)
+>isUndefinedFoo : (() => boolean) | undefined
 >isFoo() : boolean
 >isFoo : () => boolean
 
@@ -67,10 +67,10 @@ declare function z(): boolean;
 >z : () => boolean
 
 declare const uz: (() => boolean) | undefined;
->uz : () => boolean | undefined
+>uz : (() => boolean) | undefined
 
 if (x || isFoo) {
->x || isFoo : true | () => boolean
+>x || isFoo : true | (() => boolean)
 >x : boolean
 >isFoo : () => boolean
 
@@ -86,7 +86,7 @@ if (isFoo || x) {
 }
 
 if (x || y || z() || isFoo) {
->x || y || z() || isFoo : true | () => boolean
+>x || y || z() || isFoo : true | (() => boolean)
 >x || y || z() : boolean
 >x || y : boolean
 >x : boolean
@@ -99,31 +99,31 @@ if (x || y || z() || isFoo) {
 }
 
 if (x || uy || z || isUndefinedFoo) {
->x || uy || z || isUndefinedFoo : true | () => boolean
->x || uy || z : true | () => boolean
+>x || uy || z || isUndefinedFoo : true | (() => boolean)
+>x || uy || z : true | (() => boolean)
 >x || uy : boolean | undefined
 >x : boolean
 >uy : boolean | undefined
 >z : () => boolean
->isUndefinedFoo : () => boolean | undefined
+>isUndefinedFoo : (() => boolean) | undefined
 
     // error on z
 }
 
 if (ux || y || uz || isFoo) {
->ux || y || uz || isFoo : true | () => boolean
->ux || y || uz : true | () => boolean | undefined
+>ux || y || uz || isFoo : true | (() => boolean)
+>ux || y || uz : true | (() => boolean) | undefined
 >ux || y : boolean
 >ux : boolean | undefined
 >y : boolean
->uz : () => boolean | undefined
+>uz : (() => boolean) | undefined
 >isFoo : () => boolean
 
     // error on isFoo
 }
 
 if (x && z) {
->x && z : false | () => boolean
+>x && z : false | (() => boolean)
 >x : boolean
 >z : () => boolean
 

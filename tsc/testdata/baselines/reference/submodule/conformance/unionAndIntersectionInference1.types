@@ -254,9 +254,9 @@ const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 >b : U
 
 const res: (() => void) & { func: any } = assign(() => {}, { func });
->res : () => void & { func: any; }
+>res : (() => void) & { func: any; }
 >func : any
->assign(() => {}, { func }) : () => void & { func: <T>() => void; }
+>assign(() => {}, { func }) : (() => void) & { func: <T>() => void; }
 >assign : <T, U>(a: T, b: U) => T & U
 >() => {} : () => void
 >{ func } : { func: <T>() => void; }

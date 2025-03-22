@@ -12,7 +12,7 @@ interface Options<State, Actions> {
 >state : State | undefined
 
     view?: (state: State, actions: Actions) => any;
->view : (state: State, actions: Actions) => any | undefined
+>view : ((state: State, actions: Actions) => any) | undefined
 >state : State
 >actions : Actions
 
@@ -82,7 +82,7 @@ interface Options2<State, Actions> {
 >state : State | undefined
 
     view?: (state: State, actions: Actions) => any;
->view : (state: State, actions: Actions) => any | undefined
+>view : ((state: State, actions: Actions) => any) | undefined
 >state : State
 >actions : Actions
 
@@ -136,15 +136,15 @@ declare function app3<State, Actions extends ActionsArray<State>>(obj: Options<S
 app3({
 >app3({    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,}) : void
 >app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
->{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: (s: number) => number[]; view: (s: number, a: (s: number) => number[]) => any; }
+>{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: ((s: number) => number)[]; view: (s: number, a: ((s: number) => number)[]) => any; }
 
     state: 100,
 >state : number
 >100 : 100
 
     actions: [
->actions : (s: number) => number[]
->[        s => s // Should be typed number => number    ] : (s: number) => number[]
+>actions : ((s: number) => number)[]
+>[        s => s // Should be typed number => number    ] : ((s: number) => number)[]
 
         s => s // Should be typed number => number
 >s => s : (s: number) => number
@@ -153,10 +153,10 @@ app3({
 
     ],
     view: (s, a) => undefined as any,
->view : (s: number, a: (s: number) => number[]) => any
->(s, a) => undefined as any : (s: number, a: (s: number) => number[]) => any
+>view : (s: number, a: ((s: number) => number)[]) => any
+>(s, a) => undefined as any : (s: number, a: ((s: number) => number)[]) => any
 >s : number
->a : (s: number) => number[]
+>a : ((s: number) => number)[]
 >undefined as any : any
 >undefined : undefined
 

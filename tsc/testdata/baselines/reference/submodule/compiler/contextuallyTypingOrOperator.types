@@ -20,10 +20,10 @@ var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 >1 : 1
 
 var v2 = (s: string) => s.length || function (s) { s.length };
->v2 : (s: string) => number | (s: any) => void
->(s: string) => s.length || function (s) { s.length } : (s: string) => number | (s: any) => void
+>v2 : (s: string) => number | ((s: any) => void)
+>(s: string) => s.length || function (s) { s.length } : (s: string) => number | ((s: any) => void)
 >s : string
->s.length || function (s) { s.length } : number | (s: any) => void
+>s.length || function (s) { s.length } : number | ((s: any) => void)
 >s.length : number
 >s : string
 >length : number
@@ -34,10 +34,10 @@ var v2 = (s: string) => s.length || function (s) { s.length };
 >length : any
 
 var v3 = (s: string) => s.length || function (s: number) { return 1 };
->v3 : (s: string) => number | (s: number) => number
->(s: string) => s.length || function (s: number) { return 1 } : (s: string) => number | (s: number) => number
+>v3 : (s: string) => number | ((s: number) => number)
+>(s: string) => s.length || function (s: number) { return 1 } : (s: string) => number | ((s: number) => number)
 >s : string
->s.length || function (s: number) { return 1 } : number | (s: number) => number
+>s.length || function (s: number) { return 1 } : number | ((s: number) => number)
 >s.length : number
 >s : string
 >length : number
@@ -46,10 +46,10 @@ var v3 = (s: string) => s.length || function (s: number) { return 1 };
 >1 : 1
 
 var v4 = (s: number) => 1 || function (s: string) { return s.length };
->v4 : (s: number) => 1 | (s: string) => number
->(s: number) => 1 || function (s: string) { return s.length } : (s: number) => 1 | (s: string) => number
+>v4 : (s: number) => 1 | ((s: string) => number)
+>(s: number) => 1 || function (s: string) { return s.length } : (s: number) => 1 | ((s: string) => number)
 >s : number
->1 || function (s: string) { return s.length } : 1 | (s: string) => number
+>1 || function (s: string) { return s.length } : 1 | ((s: string) => number)
 >1 : 1
 >function (s: string) { return s.length } : (s: string) => number
 >s : string

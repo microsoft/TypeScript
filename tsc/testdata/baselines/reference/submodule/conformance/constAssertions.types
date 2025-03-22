@@ -184,9 +184,9 @@ let o1 = { x: 10, y: 20 } as const;
 >20 : 20
 
 let o2 = { a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const;
->o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 >a : 1
 >1 : 1
 >'b' : 2
@@ -206,7 +206,7 @@ let o3 = { ...o1, ...o2 } as const;
 >{ ...o1, ...o2 } as const : { readonly x: 10; readonly y: 20; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 >{ ...o1, ...o2 } : { readonly x: 10; readonly y: 20; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 >o1 : { readonly x: 10; readonly y: 20; }
->o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 
 let o4 = { a: 1, b: 2 };
 >o4 : { a: number; b: number; }

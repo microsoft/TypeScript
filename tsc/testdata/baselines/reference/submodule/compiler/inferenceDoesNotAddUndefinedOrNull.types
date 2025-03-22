@@ -5,10 +5,10 @@ interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
 
 interface Node {
     forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
 >cbNode : (node: Node) => T | undefined
 >node : Node
->cbNodeArray : (nodes: NodeArray<Node>) => T | undefined | undefined
+>cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
 >nodes : NodeArray<Node>
 }
 
@@ -32,9 +32,9 @@ function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | 
 
     node.forEachChild(child => {
 >node.forEachChild(child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    }) : void | undefined
->node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
+>node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
 >node : Node
->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
 >child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    } : (child: Node) => void
 >child : Node
 
@@ -76,9 +76,9 @@ function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T |
 
     node.forEachChild(child => {
 >node.forEachChild(child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    }) : void | undefined
->node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
+>node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
 >node : Node
->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
 >child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    } : (child: Node) => void
 >child : Node
 

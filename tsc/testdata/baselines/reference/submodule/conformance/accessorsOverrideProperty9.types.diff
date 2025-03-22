@@ -1,15 +1,6 @@
 --- old.accessorsOverrideProperty9.types
 +++ new.accessorsOverrideProperty9.types
-@@= skipped -38, +38 lines =@@
- }
- 
- function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
-->ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
-+>ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & new (...args: any[]) => ApiItemContainerMixin
- 
-   baseClass: TBaseClass
- >baseClass : TBaseClass
-@@= skipped -9, +9 lines =@@
+@@= skipped -47, +47 lines =@@
  >args : any[]
  
    abstract class MixedClass extends baseClass implements ApiItemContainerMixin {
@@ -27,11 +18,3 @@
  }
  
  // Subclass inheriting from mixin
- export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
- >ApiEnum : ApiEnum
- >ApiItemContainerMixin(ApiItem) : ApiItem & ApiItemContainerMixin
-->ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
-+>ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & new (...args: any[]) => ApiItemContainerMixin
- >ApiItem : typeof ApiItem
- 
-   // This worked prior to TypeScript 4.0:

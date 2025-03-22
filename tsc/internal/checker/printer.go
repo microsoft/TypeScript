@@ -22,6 +22,8 @@ func (c *Checker) getTypePrecedence(t *Type) ast.TypePrecedence {
 			return ast.TypePrecedenceTypeOperator
 		case c.isArrayType(t):
 			return ast.TypePrecedencePostfix
+		case t.objectFlags&ObjectFlagsClassOrInterface == 0 && c.getSingleCallOrConstructSignature(t) != nil:
+			return ast.TypePrecedenceFunction
 		}
 	}
 	return ast.TypePrecedenceNonArray

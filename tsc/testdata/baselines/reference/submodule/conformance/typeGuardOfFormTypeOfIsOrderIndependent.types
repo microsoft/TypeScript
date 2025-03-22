@@ -8,7 +8,7 @@ var strOrBool: string | boolean;
 >strOrBool : string | boolean
 
 var strOrFunc: string | (() => void);
->strOrFunc : string | () => void
+>strOrFunc : string | (() => void)
 
 var numOrBool: number | boolean
 >numOrBool : number | boolean
@@ -46,7 +46,7 @@ if ("function" === typeof strOrFunc) {
 >"function" === typeof strOrFunc : boolean
 >"function" : "function"
 >typeof strOrFunc : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->strOrFunc : string | () => void
+>strOrFunc : string | (() => void)
 
     func = strOrFunc;
 >func = strOrFunc : () => void

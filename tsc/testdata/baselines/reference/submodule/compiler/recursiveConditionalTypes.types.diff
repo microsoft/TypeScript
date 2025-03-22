@@ -1,17 +1,6 @@
 --- old.recursiveConditionalTypes.types
 +++ new.recursiveConditionalTypes.types
-@@= skipped -13, +13 lines =@@
- >MyPromise : MyPromise<T>
- 
-     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
-->then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
-->f : ((value: T) => U | PromiseLike<U>) | null | undefined
-+>then : <U>(f: (value: T) => U | PromiseLike<U> | null | undefined) => MyPromise<U>
-+>f : (value: T) => U | PromiseLike<U> | null | undefined
- >value : T
- }
- 
-@@= skipped -111, +111 lines =@@
+@@= skipped -124, +124 lines =@@
  }
  
  declare function f23<T>(t: TupleOf<T, 3>): T;

@@ -7,8 +7,5 @@
 ->iter : Iterable<(x: string) => number>
 +>iter : Iterable<(x: string) => number, any, any>
  >x : string
-->[s => s.length] : ((s: string) => number)[]
-+>[s => s.length] : (s: string) => number[]
+ >[s => s.length] : ((s: string) => number)[]
  >s => s.length : (s: string) => number
- >s : string
- >s.length : number

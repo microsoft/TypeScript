@@ -5,8 +5,8 @@ var s: symbol;
 >s : symbol
 
 var x = {
->x : { [x: symbol]: number | () => void; }
->{    [s]: 0,    [s]() { },    get [s]() {        return 0;    }} : { [x: symbol]: number | () => void; }
+>x : { [x: symbol]: number | (() => void); }
+>{    [s]: 0,    [s]() { },    get [s]() {        return 0;    }} : { [x: symbol]: number | (() => void); }
 
     [s]: 0,
 >[s] : number

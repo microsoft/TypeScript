@@ -6,7 +6,7 @@ interface FormikConfig<Values> {
 >initialValues : Values
 
     validate?: (props: Values) => void;
->validate : (props: Values) => void | undefined
+>validate : ((props: Values) => void) | undefined
 >props : Values
 
     validateOnChange?: boolean;

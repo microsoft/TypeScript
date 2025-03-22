@@ -16,12 +16,12 @@ type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 
 interface Subscribable<T> {
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
->subscribe : (next?: (value: T) => void | undefined, error?: (error: any) => void | undefined, complete?: () => void | undefined) => void
->next : (value: T) => void | undefined
+>subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined) => void
+>next : ((value: T) => void) | undefined
 >value : T
->error : (error: any) => void | undefined
+>error : ((error: any) => void) | undefined
 >error : any
->complete : () => void | undefined
+>complete : (() => void) | undefined
 }
 type ObservableInput<T> = Subscribable<T> | Subscribable<never>;
 >ObservableInput : ObservableInput<T>
@@ -31,12 +31,12 @@ declare class Observable<T> implements Subscribable<T> {
 >Observable : Observable<T>
 
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
->subscribe : (next?: (value: T) => void | undefined, error?: (error: any) => void | undefined, complete?: () => void | undefined) => void
->next : (value: T) => void | undefined
+>subscribe : (next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined) => void
+>next : ((value: T) => void) | undefined
 >value : T
->error : (error: any) => void | undefined
+>error : ((error: any) => void) | undefined
 >error : any
->complete : () => void | undefined
+>complete : (() => void) | undefined
 }
 
 function asObservable(input: string | ObservableInput<string>): Observable<string> {

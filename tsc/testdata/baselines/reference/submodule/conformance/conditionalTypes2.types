@@ -113,13 +113,13 @@ function f10<T>(x: T) {
 }
 
 function f11(x: string | (() => string) | undefined) {
->f11 : (x: string | () => string | undefined) => void
->x : string | () => string | undefined
+>f11 : (x: string | (() => string) | undefined) => void
+>x : string | (() => string) | undefined
 
     if (isFunction(x)) {
 >isFunction(x) : boolean
 >isFunction : <T>(value: T) => value is Extract<T, Function>
->x : string | () => string | undefined
+>x : string | (() => string) | undefined
 
         x();
 >x() : string
@@ -128,14 +128,14 @@ function f11(x: string | (() => string) | undefined) {
 }
 
 function f12(x: string | (() => string) | undefined) {
->f12 : (x: string | () => string | undefined) => void
->x : string | () => string | undefined
+>f12 : (x: string | (() => string) | undefined) => void
+>x : string | (() => string) | undefined
 
     const f = getFunction(x);  // () => string
 >f : () => string
 >getFunction(x) : () => string
 >getFunction : <T>(item: T) => Extract<T, Function>
->x : string | () => string | undefined
+>x : string | (() => string) | undefined
 
     f();
 >f() : string

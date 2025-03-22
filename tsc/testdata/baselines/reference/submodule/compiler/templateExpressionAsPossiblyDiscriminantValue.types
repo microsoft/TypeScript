@@ -10,7 +10,7 @@ type BiomePlainLinkProps = {
 >href : string
 
   onClick?: (event: string) => void;
->onClick : (event: string) => void | undefined
+>onClick : ((event: string) => void) | undefined
 >event : string
 }
 
@@ -21,7 +21,7 @@ type BiomeButtonProps = {
 >href : undefined
 
   onClick?: (event: number) => void;
->onClick : (event: number) => void | undefined
+>onClick : ((event: number) => void) | undefined
 >event : number
 }
 

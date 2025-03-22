@@ -11,12 +11,3 @@
  >event : any
  >params : {}
  >{} : {}
-@@= skipped -14, +14 lines =@@
- >(x: number) => 0 : (x: number) => number
- >x : number
- >0 : 0
-->fn2 : ((x: number) => number) | ((x: any) => any)
-+>fn2 : (x: number) => number | (x: any) => any
- >fn1 : (x: number) => number
- >{ fn1: x => x + 1, fn2: x => x + 2 } : { fn1?: (x: number) => number; fn2?: (x: any) => any; }
- >fn1 : (x: number) => number

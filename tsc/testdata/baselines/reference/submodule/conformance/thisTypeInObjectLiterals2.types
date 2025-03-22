@@ -519,10 +519,10 @@ type PropDesc<T> = {
 >value : T | undefined
 
     get?(): T;
->get : () => T | undefined
+>get : (() => T) | undefined
 
     set?(value: T): void;
->set : (value: T) => void | undefined
+>set : ((value: T) => void) | undefined
 >value : T
 }
 
@@ -681,10 +681,10 @@ type Computed<T> = {
 >Computed : Computed<T>
 
     get?(): T;
->get : () => T | undefined
+>get : (() => T) | undefined
 
     set?(value: T): void;
->set : (value: T) => void | undefined
+>set : ((value: T) => void) | undefined
 >value : T
 }
 
@@ -692,7 +692,7 @@ type VueOptions<D, M, P> = ThisType<D & M & P> & {
 >VueOptions : VueOptions<D, M, P>
 
     data?: D | (() => D);
->data : D | () => D | undefined
+>data : D | (() => D) | undefined
 
     methods?: M;
 >methods : M | undefined

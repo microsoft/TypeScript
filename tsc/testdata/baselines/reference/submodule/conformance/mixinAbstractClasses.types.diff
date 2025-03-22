@@ -5,7 +5,7 @@
  
  function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
 ->Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
-+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
++>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
  >args : any
  >baseClass : TBaseClass
  >args : any
@@ -30,7 +30,7 @@
  >DerivedFromConcrete : DerivedFromConcrete
  >Mixin(ConcreteBase) : ConcreteBase & Mixin
 ->Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
-+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
++>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
  >ConcreteBase : typeof ConcreteBase
  }
  
@@ -39,7 +39,7 @@
  >DerivedFromAbstract : DerivedFromAbstract
  >Mixin(AbstractBase) : AbstractBase & Mixin
 ->Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
-+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
++>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
  >AbstractBase : typeof AbstractBase
  
      abstractBaseMethod() {}

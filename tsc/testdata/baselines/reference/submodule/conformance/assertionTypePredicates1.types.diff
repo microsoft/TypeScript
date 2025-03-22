@@ -25,10 +25,10 @@
  
          x.toLocaleString;
 ->x.toLocaleString : ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string) | (() => string)
-+>x.toLocaleString : () => string | (locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string
++>x.toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
  >x : number | boolean
 ->toLocaleString : ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string) | (() => string)
-+>toLocaleString : () => string | (locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string
++>toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
      }
      if (!!true) {
  >!!true : true
@@ -113,18 +113,8 @@
  >x : unknown
  >"string" : "string"
  
-     const a = [assert];
-->a : ((value: unknown) => asserts value)[]
-->[assert] : ((value: unknown) => asserts value)[]
-+>a : (value: unknown) => asserts value[]
-+>[assert] : (value: unknown) => asserts value[]
- >assert : (value: unknown) => asserts value
- 
-     a[0](typeof x === "string");  // Error
- >a[0](typeof x === "string") : void
- >a[0] : (value: unknown) => asserts value
-->a : ((value: unknown) => asserts value)[]
-+>a : (value: unknown) => asserts value[]
+@@= skipped -15, +15 lines =@@
+ >a : ((value: unknown) => asserts value)[]
  >0 : 0
  >typeof x === "string" : boolean
 ->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -132,7 +122,7 @@
  >x : unknown
  >"string" : "string"
  
-@@= skipped -30, +30 lines =@@
+@@= skipped -15, +15 lines =@@
  >t1 : Test
  >assert : (value: unknown) => asserts value
  >typeof x === "string" : boolean

@@ -4,11 +4,11 @@
 // Repro for #17388
 
 declare let x: {foo: undefined} & {new(...args: any[]): any};
->x : { foo: undefined; } & new (...args: any[]) => any
+>x : { foo: undefined; } & (new (...args: any[]) => any)
 >foo : undefined
 >args : any[]
 
 new x();
 >new x() : any
->x : { foo: undefined; } & new (...args: any[]) => any
+>x : { foo: undefined; } & (new (...args: any[]) => any)
 

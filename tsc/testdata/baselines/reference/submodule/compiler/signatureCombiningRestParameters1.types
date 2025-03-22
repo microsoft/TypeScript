@@ -30,8 +30,8 @@ declare const args: any;
 
 for (const [key, fn] of Object.entries(map)) {
 >key : string
->fn : (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown
->Object.entries(map) : [string, (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown][]
+>fn : ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)
+>Object.entries(map) : [string, ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)][]
 >Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
@@ -39,13 +39,13 @@ for (const [key, fn] of Object.entries(map)) {
 
   fn(...args);
 >fn(...args) : unknown
->fn : (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown
+>fn : ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)
 >...args : any
 >args : any
 }
 
 const test2: ((a: number, ...args: []) => void) &
->test2 : (a: number, ...args: []) => void & (b: string) => void & (c: boolean) => void
+>test2 : ((a: number, ...args: []) => void) & ((b: string) => void) & ((c: boolean) => void)
 >a : number
 >args : []
 

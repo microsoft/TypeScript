@@ -10,10 +10,10 @@ function f<T extends any[]>(v: ReadonlyArray<T>) { }
 f([
 >f([    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],]) : void
 >f : <T extends any[]>(v: readonly T[]) => void
->[    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],] : ((() => void | undefined)[] | (number | () => void)[])[]
+>[    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],] : (((() => void) | undefined)[] | (number | (() => void))[])[]
 
     [
->[        undefined,        () => { },    ] : (() => void | undefined)[]
+>[        undefined,        () => { },    ] : ((() => void) | undefined)[]
 
         undefined,
 >undefined : undefined
@@ -23,7 +23,7 @@ f([
 
     ],
     [
->[        1,        () => {            console.log('Hello')        },    ] : (number | () => void)[]
+>[        1,        () => {            console.log('Hello')        },    ] : (number | (() => void))[]
 
         1,
 >1 : 1

@@ -25,20 +25,20 @@ interface BoxFactory<A> {
 }
 
 declare const f: BoxFactoryFactory<BoxTypes>;
->f : (arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined | (arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined
+>f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
 
 const b = f({ x: "", y: "" })?.getBox();
 >b : Box<{ x: string; }> | Box<{ y: string; }> | undefined
 >f({ x: "", y: "" })?.getBox() : Box<{ x: string; }> | Box<{ y: string; }> | undefined
->f({ x: "", y: "" })?.getBox : () => Box<{ x: string; }> | () => Box<{ y: string; }> | undefined
+>f({ x: "", y: "" })?.getBox : (() => Box<{ x: string; }>) | (() => Box<{ y: string; }>) | undefined
 >f({ x: "", y: "" }) : BoxFactory<Box<{ x: string; }>> | BoxFactory<Box<{ y: string; }>> | undefined
->f : (arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined | (arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined
+>f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
 >{ x: "", y: "" } : { x: string; y: string; }
 >x : string
 >"" : ""
 >y : string
 >"" : ""
->getBox : () => Box<{ x: string; }> | () => Box<{ y: string; }> | undefined
+>getBox : (() => Box<{ x: string; }>) | (() => Box<{ y: string; }>) | undefined
 
 if (b) {
 >b : Box<{ x: string; }> | Box<{ y: string; }> | undefined

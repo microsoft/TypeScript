@@ -76,7 +76,7 @@ interface QueryOptions<
 >initialData : TData | undefined
 
   initialDataUpdatedAt?: number | (() => number | undefined);
->initialDataUpdatedAt : number | () => number | undefined | undefined
+>initialDataUpdatedAt : number | (() => number | undefined) | undefined
 }
 
 interface QueryObserverOptions<
@@ -100,7 +100,7 @@ interface QueryObserverOptions<
 >refetchInterval : number | undefined
 
   select?: (data: TQueryData) => TData;
->select : (data: TQueryData) => TData | undefined
+>select : ((data: TQueryData) => TData) | undefined
 >data : TQueryData
 }
 
@@ -344,11 +344,11 @@ const testApi = {
 
     return fetch(baseUrl + 'entries')
 >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err)) : Promise<any>
->fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult> | null | undefined) => Promise<any>
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : <TResult>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
 >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries) : Promise<any>
->fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : <TResult1, TResult2>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >fetch(baseUrl + 'entries')      .then((res) => res.json()) : Promise<any>
->fetch(baseUrl + 'entries')      .then : <TResult1, TResult2>(onfulfilled?: (value: Response) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>fetch(baseUrl + 'entries')      .then : <TResult1, TResult2>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >fetch(baseUrl + 'entries') : Promise<Response>
 >fetch : (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>
 >baseUrl + 'entries' : string
@@ -356,7 +356,7 @@ const testApi = {
 >'entries' : "entries"
 
       .then((res) => res.json())
->then : <TResult1, TResult2>(onfulfilled?: (value: Response) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1, TResult2>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >(res) => res.json() : (res: Response) => Promise<any>
 >res : Response
 >res.json() : Promise<any>
@@ -365,7 +365,7 @@ const testApi = {
 >json : () => Promise<any>
 
       .then((data) => data.entries)
->then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1, TResult2>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >(data) => data.entries : (data: any) => any
 >data : any
 >data.entries : any
@@ -373,7 +373,7 @@ const testApi = {
 >entries : any
 
       .catch((err) => console.log(err))
->catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult> | null | undefined) => Promise<any>
+>catch : <TResult>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
 >(err) => console.log(err) : (err: any) => void
 >err : any
 >console.log(err) : void

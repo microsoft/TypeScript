@@ -35,9 +35,9 @@ class Derived extends Base {
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number & (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>window.setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >window : Window & typeof globalThis
->setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number & (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
 >100 : 100
 
@@ -54,14 +54,14 @@ var obj: { (n: number): string; }; // OK
 >n : number
 
 var arr = [(n: number) => ''];
->arr : (n: number) => string[]
->[(n: number) => ''] : (n: number) => string[]
+>arr : ((n: number) => string)[]
+>[(n: number) => ''] : ((n: number) => string)[]
 >(n: number) => '' : (n: number) => string
 >n : number
 >'' : ""
 
 var arr: { (n: number): string; }[]; // Incorrect error here (bug 829597)
->arr : (n: number) => string[]
+>arr : ((n: number) => string)[]
 >n : number
 
 // Arrow function as enum value
@@ -137,9 +137,9 @@ module M2 {
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number & (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>window.setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >window : Window & typeof globalThis
->setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number & (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
 >100 : 100
 
@@ -156,14 +156,14 @@ module M2 {
 >n : number
 
     var arr = [(n: number) => ''];
->arr : (n: number) => string[]
->[(n: number) => ''] : (n: number) => string[]
+>arr : ((n: number) => string)[]
+>[(n: number) => ''] : ((n: number) => string)[]
 >(n: number) => '' : (n: number) => string
 >n : number
 >'' : ""
 
     var arr: { (n: number): string; }[]; // Incorrect error here (bug 829597)
->arr : (n: number) => string[]
+>arr : ((n: number) => string)[]
 >n : number
 
     // Arrow function as enum value

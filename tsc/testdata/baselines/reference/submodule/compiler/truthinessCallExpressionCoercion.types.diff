@@ -5,50 +5,11 @@
  === truthinessCallExpressionCoercion.ts ===
  function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
 ->onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
-+>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean | undefined) => void
++>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: (() => boolean) | undefined) => void
  >required : () => boolean
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
+ >optional : (() => boolean) | undefined
  
-     if (required) { // error
- >required : () => boolean
-     }
- 
-     if (optional) { // ok
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
-     }
- 
-     if (!!required) { // ok
-@@= skipped -71, +71 lines =@@
- 
-         [() => null].forEach(() => {
- >[() => null].forEach(() => {            test();        }) : void
-->[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-->[() => null] : (() => null)[]
-+>[() => null].forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
-+>[() => null] : () => null[]
- >() => null : () => null
-->forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-+>forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
- >() => {            test();        } : () => void
- 
-             test();
-@@= skipped -18, +18 lines =@@
- 
-         [() => null].forEach(test => {
- >[() => null].forEach(test => {            test();        }) : void
-->[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-->[() => null] : (() => null)[]
-+>[() => null].forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
-+>[() => null] : () => null[]
- >() => null : () => null
-->forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-+>forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
- >test => {            test();        } : (test: () => null) => void
- >test : () => null
- 
-@@= skipped -19, +19 lines =@@
+@@= skipped -108, +108 lines =@@
  >checksPropertyAccess : () => void
  
      const x = {
@@ -97,26 +58,5 @@
 +>x : { foo: { bar: () => boolean; }; }
 +>foo : { bar: () => boolean; }
  >bar : () => boolean
-     }
- }
-@@= skipped -26, +26 lines =@@
- >Foo : Foo
- 
-     maybeIsUser?: () => boolean;
-->maybeIsUser : (() => boolean) | undefined
-+>maybeIsUser : () => boolean | undefined
- 
-     isUser() {
- >isUser : () => boolean
-@@= skipped -19, +19 lines =@@
-         }
- 
-         if (this.maybeIsUser) { // ok
-->this.maybeIsUser : (() => boolean) | undefined
-+>this.maybeIsUser : () => boolean | undefined
- >this : this
-->maybeIsUser : (() => boolean) | undefined
-+>maybeIsUser : () => boolean | undefined
-         }
      }
  }

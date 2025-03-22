@@ -15,14 +15,14 @@ var a0: (n: number, s: string) => number
 >s : string
 
 var a1: typeof a0 | ((n: number, s: string) => string);
->a1 : (n: number, s: string) => number | (n: number, s: string) => string
+>a1 : ((n: number, s: string) => number) | ((n: number, s: string) => string)
 >a0 : (n: number, s: string) => number
 >n : number
 >s : string
 
 a1 = (foo, bar) => { return true; }  // Error
 >a1 = (foo, bar) => { return true; } : (foo: number, bar: string) => boolean
->a1 : (n: number, s: string) => number | (n: number, s: string) => string
+>a1 : ((n: number, s: string) => number) | ((n: number, s: string) => string)
 >(foo, bar) => { return true; } : (foo: number, bar: string) => boolean
 >foo : number
 >bar : string

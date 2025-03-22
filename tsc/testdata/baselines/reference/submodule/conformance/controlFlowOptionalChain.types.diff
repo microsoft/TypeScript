@@ -90,44 +90,7 @@
  
  // type predicates
  declare const f: undefined | ((x: any) => x is number);
-->f : ((x: any) => x is number) | undefined
-+>f : (x: any) => x is number | undefined
- >x : any
- 
- declare const x: string | number;
-@@= skipped -14, +14 lines =@@
- 
- if (f?.(x)) {
- >f?.(x) : boolean | undefined
-->f : ((x: any) => x is number) | undefined
-+>f : (x: any) => x is number | undefined
- >x : string | number
- 
-     x; // number
-@@= skipped -19, +19 lines =@@
- >x : string | number
- 
-     f;
-->f : ((x: any) => x is number) | undefined
-+>f : (x: any) => x is number | undefined
- 
-     f(x);
- >f(x) : boolean
-->f : ((x: any) => x is number) | undefined
-+>f : (x: any) => x is number | undefined
- >x : string | number
- }
- x;
- >x : string | number
- 
- f;
-->f : ((x: any) => x is number) | undefined
-+>f : (x: any) => x is number | undefined
- 
- f(x);
- >f(x) : boolean
-->f : ((x: any) => x is number) | undefined
-+>f : (x: any) => x is number | undefined
+@@= skipped -52, +52 lines =@@
  >x : string | number
  
  declare const o2: { f(x: any): x is number; } | undefined;
@@ -138,16 +101,13 @@
  
  if (o2?.f(x)) {
  >o2?.f(x) : boolean | undefined
-->o2?.f : ((x: any) => x is number) | undefined
+ >o2?.f : ((x: any) => x is number) | undefined
 ->o2 : { f(x: any): x is number; } | undefined
-->f : ((x: any) => x is number) | undefined
-+>o2?.f : (x: any) => x is number | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
-+>f : (x: any) => x is number | undefined
+ >f : ((x: any) => x is number) | undefined
  >x : string | number
  
-     x; // number
-@@= skipped -35, +35 lines =@@
+@@= skipped -16, +16 lines =@@
  
      o2.f; // (x: any) => x is number
  >o2.f : (x: any) => x is number
@@ -177,12 +137,10 @@
 +>o2 : { f: (x: any) => x is number; } | undefined
  
      o2?.f;
-->o2?.f : ((x: any) => x is number) | undefined
+ >o2?.f : ((x: any) => x is number) | undefined
 ->o2 : { f(x: any): x is number; } | undefined
-->f : ((x: any) => x is number) | undefined
-+>o2?.f : (x: any) => x is number | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
-+>f : (x: any) => x is number | undefined
+ >f : ((x: any) => x is number) | undefined
  
      o2.f;
  >o2.f : (x: any) => x is number
@@ -198,12 +156,10 @@
 +>o2 : { f: (x: any) => x is number; } | undefined
  
  o2?.f;
-->o2?.f : ((x: any) => x is number) | undefined
+ >o2?.f : ((x: any) => x is number) | undefined
 ->o2 : { f(x: any): x is number; } | undefined
-->f : ((x: any) => x is number) | undefined
-+>o2?.f : (x: any) => x is number | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
-+>f : (x: any) => x is number | undefined
+ >f : ((x: any) => x is number) | undefined
  
  o2.f;
  >o2.f : (x: any) => x is number
@@ -577,240 +533,7 @@
  >z : { w: boolean; } | undefined
  >w : boolean
  
-@@= skipped -268, +268 lines =@@
- 
- if (o6?.f()) {
- >o6?.f() : boolean | undefined
-->o6?.f : (() => this is Derived) | undefined
-+>o6?.f : () => this is Derived | undefined
- >o6 : Base | undefined
-->f : (() => this is Derived) | undefined
-+>f : () => this is Derived | undefined
- 
-     o6; // Derived
- >o6 : Derived
-@@= skipped -17, +17 lines =@@
- >o6 : Base | undefined
- 
-     o6?.f;
-->o6?.f : (() => this is Derived) | undefined
-+>o6?.f : () => this is Derived | undefined
- >o6 : Base | undefined
-->f : (() => this is Derived) | undefined
-+>f : () => this is Derived | undefined
- 
-     o6.f;
- >o6.f : () => this is Derived
-@@= skipped -13, +13 lines =@@
- >o6 : Base | undefined
- 
- o6?.f;
-->o6?.f : (() => this is Derived) | undefined
-+>o6?.f : () => this is Derived | undefined
- >o6 : Base | undefined
-->f : (() => this is Derived) | undefined
-+>f : () => this is Derived | undefined
- 
- o6.f;
- >o6.f : () => this is Derived
-@@= skipped -19, +19 lines =@@
- >value : unknown
- 
- declare const maybeIsString: undefined | ((value: unknown) => asserts value is string);
-->maybeIsString : ((value: unknown) => asserts value is string) | undefined
-+>maybeIsString : (value: unknown) => asserts value is string | undefined
- >value : unknown
- 
- declare const maybeNever: undefined | (() => never);
-->maybeNever : (() => never) | undefined
-+>maybeNever : () => never | undefined
- 
- function f01(x: unknown) {
- >f01 : (x: unknown) => void
-@@= skipped -30, +30 lines =@@
- 
-         maybeIsString?.(x);
- >maybeIsString?.(x) : void | undefined
-->maybeIsString : ((value: unknown) => asserts value is string) | undefined
-+>maybeIsString : (value: unknown) => asserts value is string | undefined
- >x : unknown
- 
-         x;
-@@= skipped -14, +14 lines =@@
-         isDefined(maybeIsString);
- >isDefined(maybeIsString) : void
- >isDefined : <T>(value: T) => asserts value is NonNullable<T>
-->maybeIsString : ((value: unknown) => asserts value is string) | undefined
-+>maybeIsString : (value: unknown) => asserts value is string | undefined
- 
-         maybeIsString?.(x);
- >maybeIsString?.(x) : void
-@@= skipped -17, +17 lines =@@
- 
-         maybeNever?.();
- >maybeNever?.() : undefined
-->maybeNever : (() => never) | undefined
-+>maybeNever : () => never | undefined
- 
-         x;
- >x : unknown
-@@= skipped -45, +45 lines =@@
-     if (o?.bar() === value) {
- >o?.bar() === value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number
- 
-         o.bar;
-@@= skipped -37, +37 lines =@@
-     if (o?.bar() == value) {
- >o?.bar() == value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number
- 
-         o.bar;
-@@= skipped -44, +44 lines =@@
-     if (o?.bar() === value) {
- >o?.bar() === value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | null
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number
- 
-         o.bar;
-@@= skipped -37, +37 lines =@@
-     if (o?.bar() == value) {
- >o?.bar() == value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | null
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number
- 
-         o.bar;
-@@= skipped -44, +44 lines =@@
-     if (o?.bar() === value) {
- >o?.bar() === value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number | undefined
- 
-         o.bar;  // Error
-@@= skipped -37, +37 lines =@@
-     if (o?.bar() == value) {
- >o?.bar() == value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number | undefined
- 
-         o.bar;  // Error
-@@= skipped -44, +44 lines =@@
-     if (o?.bar() === value) {
- >o?.bar() === value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number | null
- 
-         o.bar;
-@@= skipped -37, +37 lines =@@
-     if (o?.bar() == value) {
- >o?.bar() == value : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >value : number | null
- 
-         o.bar;  // Error
-@@= skipped -43, +43 lines =@@
-     if (o?.bar() !== undefined) {
- >o?.bar() !== undefined : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >undefined : undefined
- 
-         o.bar;
-@@= skipped -37, +37 lines =@@
-     if (o?.bar() != undefined) {
- >o?.bar() != undefined : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >undefined : undefined
- 
-         o.bar;
-@@= skipped -41, +41 lines =@@
-     if (o?.bar() !== null) {
- >o?.bar() !== null : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- 
-         o.bar;  // Error
- >o.bar : () => number
-@@= skipped -34, +34 lines =@@
-     if (o?.bar() != null) {
- >o?.bar() != null : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- 
-         o.bar;
- >o.bar : () => number
-@@= skipped -42, +42 lines =@@
-     if (o?.bar() !== undefined) {
- >o?.bar() !== undefined : boolean
- >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
- >o : Thing | null
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >undefined : undefined
- 
-         o.bar;
-@@= skipped -254, +254 lines =@@
+@@= skipped -1154, +1154 lines =@@
  
      if (typeof o?.foo === "number") {
  >typeof o?.foo === "number" : boolean
@@ -835,14 +558,8 @@
 ->typeof o?.bar() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 +>typeof o?.bar() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
+ >o?.bar : (() => number) | undefined
  >o : Thing | undefined
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >"number" : "number"
- 
-         o.bar;
 @@= skipped -32, +32 lines =@@
  
      if (typeof o?.foo === "number") {
@@ -868,14 +585,8 @@
 ->typeof o?.bar() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 +>typeof o?.bar() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >o?.bar() : number | undefined
-->o?.bar : (() => number) | undefined
-+>o?.bar : () => number | undefined
+ >o?.bar : (() => number) | undefined
  >o : Thing | null
-->bar : (() => number) | undefined
-+>bar : () => number | undefined
- >"number" : "number"
- 
-         o.bar;
 @@= skipped -32, +32 lines =@@
  
      if (typeof o?.foo === "number") {

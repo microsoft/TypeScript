@@ -203,7 +203,7 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 // https://github.com/microsoft/TypeScript/issues/57381
 
 function f6<T extends string | (new () => {})>(a: T) {
->f6 : <T extends string | new () => {}>(a: T) => void
+>f6 : <T extends string | (new () => {})>(a: T) => void
 >a : T
 
   if (typeof a !== "string") {

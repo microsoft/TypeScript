@@ -68,24 +68,3 @@
  }
  
  // Array of function types
- function foo9(): (()=>c)[] {
-->foo9 : () => (() => c)[]
-+>foo9 : () => () => c[]
- 
-     return [() => new c()];
-->[() => new c()] : (() => c)[]
-+>[() => new c()] : () => c[]
- >() => new c() : () => c
- >new c() : c
- >c : typeof c
- }
- function foo10() {
-->foo10 : () => (() => c)[]
-+>foo10 : () => () => c[]
- 
-     return [() => new c()];
-->[() => new c()] : (() => c)[]
-+>[() => new c()] : () => c[]
- >() => new c() : () => c
- >new c() : c
- >c : typeof c

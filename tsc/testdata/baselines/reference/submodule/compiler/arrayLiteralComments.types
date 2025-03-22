@@ -2,8 +2,8 @@
 
 === arrayLiteralComments.ts ===
 var testArrayWithFunc = [
->testArrayWithFunc : (string | number | number[] | () => void | { a: number; })[]
->[    // Function comment    function() {        let x = 1;    },    // String comment    '1',    // Numeric comment    2,    // Object comment    { a: 1 },    // Array comment    [1, 2, 3]] : (string | number | number[] | () => void | { a: number; })[]
+>testArrayWithFunc : (string | number | number[] | (() => void) | { a: number; })[]
+>[    // Function comment    function() {        let x = 1;    },    // String comment    '1',    // Numeric comment    2,    // Object comment    { a: 1 },    // Array comment    [1, 2, 3]] : (string | number | number[] | (() => void) | { a: number; })[]
 
     // Function comment
     function() {

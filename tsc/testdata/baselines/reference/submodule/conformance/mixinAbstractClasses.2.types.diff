@@ -5,7 +5,7 @@
  
  function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
 ->Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
-+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
++>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
  >args : any
  >baseClass : TBaseClass
  >args : any
@@ -33,9 +33,9 @@
 ->MixedBase : typeof AbstractBase & (abstract new (...args: any) => Mixin)
 ->Mixin(AbstractBase) : typeof AbstractBase & (abstract new (...args: any) => Mixin)
 ->Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
-+>MixedBase : typeof AbstractBase & new (...args: any) => Mixin
-+>Mixin(AbstractBase) : typeof AbstractBase & new (...args: any) => Mixin
-+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
++>MixedBase : typeof AbstractBase & (new (...args: any) => Mixin)
++>Mixin(AbstractBase) : typeof AbstractBase & (new (...args: any) => Mixin)
++>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
  >AbstractBase : typeof AbstractBase
  
  // error expected: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
@@ -44,5 +44,5 @@
  new MixedBase();
  >new MixedBase() : any
 ->MixedBase : typeof AbstractBase & (abstract new (...args: any) => Mixin)
-+>MixedBase : typeof AbstractBase & new (...args: any) => Mixin
++>MixedBase : typeof AbstractBase & (new (...args: any) => Mixin)
  

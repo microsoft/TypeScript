@@ -1,25 +1,6 @@
 --- old.intraExpressionInferencesJsx.types
 +++ new.intraExpressionInferencesJsx.types
-@@= skipped -37, +37 lines =@@
- 
-     | ({ kind: "a"; func?(): Partial<A> } & A)
- >kind : "a"
-->func : (() => Partial<A>) | undefined
-+>func : () => Partial<A> | undefined
- 
-     | ({ kind: "b"; func?(): Partial<B> } & B)
- >kind : "b"
-->func : (() => Partial<B>) | undefined
-+>func : () => Partial<B> | undefined
- 
-     | ({ kind: "c"; func?(): Partial<C> } & C)
- >kind : "c"
-->func : (() => Partial<C>) | undefined
-+>func : () => Partial<C> | undefined
- 
-   );
- };
-@@= skipped -29, +29 lines =@@
+@@= skipped -66, +66 lines =@@
  };
  
  const Component = <T extends Animations>({

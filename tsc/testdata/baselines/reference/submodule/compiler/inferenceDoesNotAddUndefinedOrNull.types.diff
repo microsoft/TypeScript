@@ -5,12 +5,11 @@
  interface Node {
      forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
 ->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined
-+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
++>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
  >cbNode : (node: Node) => T | undefined
  >node : Node
-->cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
-+>cbNodeArray : (nodes: NodeArray<Node>) => T | undefined | undefined
- >nodes : NodeArray<Node>
+ >cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
+@@= skipped -8, +8 lines =@@
  }
  
  declare function toArray<T>(value: T | T[]): T[];
@@ -32,15 +31,15 @@
  >child : Node
  
      const result: T[] = [];
-@@= skipped -27, +27 lines =@@
+@@= skipped -19, +19 lines =@@
  
      node.forEachChild(child => {
  >node.forEachChild(child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    }) : void | undefined
 ->node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
++>node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
  >node : Node
 ->forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
++>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
  >child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    } : (child: Node) => void
  >child : Node
  
@@ -80,10 +79,10 @@
      node.forEachChild(child => {
  >node.forEachChild(child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    }) : void | undefined
 ->node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
++>node.forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
  >node : Node
 ->forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
++>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
  >child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    } : (child: Node) => void
  >child : Node
  

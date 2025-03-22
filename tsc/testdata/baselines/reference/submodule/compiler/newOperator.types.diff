@@ -1,35 +1,6 @@
 --- old.newOperator.types
 +++ new.newOperator.types
-@@= skipped -97, +97 lines =@@
- 
- // Error on union with one constructor
- declare const ctorUnion: { a: string } | (new (a: string) => void)
-->ctorUnion : { a: string; } | (new (a: string) => void)
-+>ctorUnion : { a: string; } | new (a: string) => void
- >a : string
- >a : string
- 
- new ctorUnion("");
- >new ctorUnion("") : any
-->ctorUnion : { a: string; } | (new (a: string) => void)
-+>ctorUnion : { a: string; } | new (a: string) => void
- >"" : ""
- 
- // Error on union with incompatible constructors
- declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
-->ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
-+>ctorUnion2 : new <T extends number>(a: T) => void | new <T>(a: string) => void
- >a : T
- >a : string
- 
- new ctorUnion2("");
- >new ctorUnion2("") : any
-->ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
-+>ctorUnion2 : new <T extends number>(a: T) => void | new <T>(a: string) => void
- >"" : ""
- 
- module M {
-@@= skipped -35, +35 lines =@@
+@@= skipped -132, +132 lines =@@
  >S : S
  
      public get xs(): M.T[] {

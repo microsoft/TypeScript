@@ -53,9 +53,9 @@ var l = new c() || new m.c();
 >c : typeof c
 
 var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
->x : g<number> | g<string> | () => c
+>x : g<number> | g<string> | (() => c)
 >m : any
->new g<string>() ||  new m.g<number>() || (() => new c()) : g<number> | g<string> | () => c
+>new g<string>() ||  new m.g<number>() || (() => new c()) : g<number> | g<string> | (() => c)
 >new g<string>() ||  new m.g<number>() : g<number> | g<string>
 >new g<string>() : g<string>
 >g : typeof g
@@ -69,8 +69,8 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 >c : typeof c
 
 var y = new g<string>() || new m.g<number>() || (() => new c());
->y : g<number> | g<string> | () => c
->new g<string>() || new m.g<number>() || (() => new c()) : g<number> | g<string> | () => c
+>y : g<number> | g<string> | (() => c)
+>new g<string>() || new m.g<number>() || (() => new c()) : g<number> | g<string> | (() => c)
 >new g<string>() || new m.g<number>() : g<number> | g<string>
 >new g<string>() : g<string>
 >g : typeof g

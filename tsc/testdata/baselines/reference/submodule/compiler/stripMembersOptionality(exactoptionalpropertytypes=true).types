@@ -7,7 +7,7 @@ declare const someVal: Required<{
 >someVal : Required<{ fn?: (key: string) => string | null; }>
 
     fn?(key: string): string | null;
->fn : (key: string) => string | null | undefined
+>fn : ((key: string) => string | null) | undefined
 >key : string
 
 }>;
@@ -22,7 +22,7 @@ declare const someVal2: Required<{
 >someVal2 : Required<{ fn?: (key: string) => string | null; }>
 
     fn?: (key: string) => string | null;
->fn : (key: string) => string | null | undefined
+>fn : ((key: string) => string | null) | undefined
 >key : string
 
 }>;

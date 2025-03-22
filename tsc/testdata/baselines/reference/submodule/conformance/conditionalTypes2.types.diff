@@ -27,42 +27,7 @@
  >x : T
  
          const f: Function = x;
-@@= skipped -14, +14 lines =@@
- }
- 
- function f11(x: string | (() => string) | undefined) {
-->f11 : (x: string | (() => string) | undefined) => void
-->x : string | (() => string) | undefined
-+>f11 : (x: string | () => string | undefined) => void
-+>x : string | () => string | undefined
- 
-     if (isFunction(x)) {
- >isFunction(x) : boolean
- >isFunction : <T>(value: T) => value is Extract<T, Function>
-->x : string | (() => string) | undefined
-+>x : string | () => string | undefined
- 
-         x();
- >x() : string
-@@= skipped -15, +15 lines =@@
- }
- 
- function f12(x: string | (() => string) | undefined) {
-->f12 : (x: string | (() => string) | undefined) => void
-->x : string | (() => string) | undefined
-+>f12 : (x: string | () => string | undefined) => void
-+>x : string | () => string | undefined
- 
-     const f = getFunction(x);  // () => string
- >f : () => string
- >getFunction(x) : () => string
- >getFunction : <T>(item: T) => Extract<T, Function>
-->x : string | (() => string) | undefined
-+>x : string | () => string | undefined
- 
-     f();
- >f() : string
-@@= skipped -121, +121 lines =@@
+@@= skipped -150, +150 lines =@@
  >x : T
  
      partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {

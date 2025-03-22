@@ -142,7 +142,7 @@ type Box<T> = {
 >contents : T | undefined
 
     contains?(content: T): boolean;
->contains : (content: T) => boolean | undefined
+>contains : ((content: T) => boolean) | undefined
 >content : T
 
 };

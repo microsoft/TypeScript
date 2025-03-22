@@ -26,12 +26,12 @@ const send = handlers => new Promise((resolve, reject) => {
 >reject : (reason?: any) => void
 
   handlers[++id] = [resolve, reject]
->handlers[++id] = [resolve, reject] : (value: unknown) => void[]
+>handlers[++id] = [resolve, reject] : ((value: unknown) => void)[]
 >handlers[++id] : any
 >handlers : any
 >++id : number
 >id : number
->[resolve, reject] : (value: unknown) => void[]
+>[resolve, reject] : ((value: unknown) => void)[]
 >resolve : (value: unknown) => void
 >reject : (reason?: any) => void
 

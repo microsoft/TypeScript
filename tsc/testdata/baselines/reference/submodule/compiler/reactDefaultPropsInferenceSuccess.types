@@ -8,7 +8,7 @@ import React from 'react';
 
 interface BaseProps {
   when?: ((value: string) => boolean) | "a" | "b";
->when : "a" | "b" | (value: string) => boolean | undefined
+>when : "a" | "b" | ((value: string) => boolean) | undefined
 >value : string
 
   error?: boolean;

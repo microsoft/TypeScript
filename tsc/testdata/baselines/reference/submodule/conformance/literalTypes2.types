@@ -596,7 +596,7 @@ function f20() {
 >"bar" : "bar"
 
     const f7: (() => "foo") | (() => "bar") = () => "bar";
->f7 : () => "foo" | () => "bar"
+>f7 : (() => "foo") | (() => "bar")
 >() => "bar" : () => "bar"
 >"bar" : "bar"
 }

@@ -7,8 +7,8 @@ var lol = "hello Lol"
 >"hello Lol" : "hello Lol"
 
 const obj = {
->obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
->{  /** @type {string|undefined} */  foo: undefined,  /** @type {string|undefined} */  bar: "42",  /** @type {function(number): number} */  method1(n1) {      return n1 + 42;  },  /** @type {string} */  lol,  /** @type {number} */  ['b' + 'ar1']: 42,  /** @type {function(number): number} */  arrowFunc: (num) => num + 42} : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>obj : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>{  /** @type {string|undefined} */  foo: undefined,  /** @type {string|undefined} */  bar: "42",  /** @type {function(number): number} */  method1(n1) {      return n1 + 42;  },  /** @type {string} */  lol,  /** @type {number} */  ['b' + 'ar1']: 42,  /** @type {function(number): number} */  arrowFunc: (num) => num + 42} : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
 
   /** @type {string|undefined} */
   foo: undefined,
@@ -55,19 +55,19 @@ const obj = {
 obj.foo = 'string'
 >obj.foo = 'string' : "string"
 >obj.foo : undefined
->obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>obj : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
 >foo : undefined
 >'string' : "string"
 
 obj.lol
 >obj.lol : string
->obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>obj : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
 >lol : string
 
 obj.bar = undefined;
 >obj.bar = undefined : undefined
 >obj.bar : string
->obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>obj : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
 >bar : string
 >undefined : undefined
 
@@ -75,21 +75,21 @@ var k = obj.method1(0);
 >k : any
 >obj.method1(0) : any
 >obj.method1 : (n1: any) => any
->obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>obj : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
 >method1 : (n1: any) => any
 >0 : 0
 
 obj.bar1 = "42";
 >obj.bar1 = "42" : "42"
->obj.bar1 : string | number | (n1: any) => any | undefined
->obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
->bar1 : string | number | (n1: any) => any | undefined
+>obj.bar1 : string | number | ((n1: any) => any) | undefined
+>obj : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>bar1 : string | number | ((n1: any) => any) | undefined
 >"42" : "42"
 
 obj.arrowFunc(0);
 >obj.arrowFunc(0) : any
 >obj.arrowFunc : (num: any) => any
->obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+>obj : { [x: string]: string | number | ((n1: any) => any) | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
 >arrowFunc : (num: any) => any
 >0 : 0
 

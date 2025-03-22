@@ -5,10 +5,10 @@
  
  foo({
 ->foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : string | number | boolean | (() => void) | number[]
-+>foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : string | number | boolean | number[] | () => void
++>foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : string | number | boolean | number[] | (() => void)
  >foo : <T>(obj: I<T>) => T
 ->{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | number | true | (() => void) | number[]; [x: number]: number | (() => void) | number[]; p: string; 0: () => void; }
-+>{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | number | true | number[] | () => void; [x: number]: number | number[] | () => void; p: string; 0: () => void; }
++>{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | number | true | number[] | (() => void); [x: number]: number | number[] | (() => void); p: string; 0: () => void; }
  
      p: "",
  >p : string

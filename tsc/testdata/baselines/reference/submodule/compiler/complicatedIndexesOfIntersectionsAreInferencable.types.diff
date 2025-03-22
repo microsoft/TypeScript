@@ -1,15 +1,6 @@
 --- old.complicatedIndexesOfIntersectionsAreInferencable.types
 +++ new.complicatedIndexesOfIntersectionsAreInferencable.types
-@@= skipped -5, +5 lines =@@
- >initialValues : Values
- 
-     validate?: (props: Values) => void;
-->validate : ((props: Values) => void) | undefined
-+>validate : (props: Values) => void | undefined
- >props : Values
- 
-     validateOnChange?: boolean;
-@@= skipped -8, +8 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  
  declare function Func<Values = object, ExtraProps = {}>(

@@ -41,10 +41,10 @@ type JSXElementConstructor<P> =
 >props : P
 
 declare function createElementIsolated<P extends {}>(
->createElementIsolated : <P extends {}>(type: string | ComponentClass<P> | FunctionComponent<P>, props?: P | null | undefined) => void
+>createElementIsolated : <P extends {}>(type: string | (ComponentClass<P>) | (FunctionComponent<P>), props?: P | null | undefined) => void
 
   type: FunctionComponent<P> | ComponentClass<P> | string,
->type : string | ComponentClass<P> | FunctionComponent<P>
+>type : string | (ComponentClass<P>) | (FunctionComponent<P>)
 
   props?: P | null,
 >props : P | null | undefined
@@ -56,7 +56,7 @@ declare let WrapperIsolated: JSXElementConstructor<ExactProps>;
 
 createElementIsolated(WrapperIsolated, { value: "C" });
 >createElementIsolated(WrapperIsolated, { value: "C" }) : void
->createElementIsolated : <P extends {}>(type: string | ComponentClass<P> | FunctionComponent<P>, props?: P | null | undefined) => void
+>createElementIsolated : <P extends {}>(type: string | (ComponentClass<P>) | (FunctionComponent<P>), props?: P | null | undefined) => void
 >WrapperIsolated : JSXElementConstructor<ExactProps>
 >{ value: "C" } : { value: "C"; }
 >value : "C"

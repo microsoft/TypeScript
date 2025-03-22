@@ -5,7 +5,7 @@ class B {
 >B : B
 
     protected m?(): void;
->m : () => void | undefined
+>m : (() => void) | undefined
 }
 class C extends B {
 >C : C
@@ -16,9 +16,9 @@ class C extends B {
 
         super.m && super.m();
 >super.m && super.m() : void | undefined
->super.m : () => void | undefined
+>super.m : (() => void) | undefined
 >super : B
->m : () => void | undefined
+>m : (() => void) | undefined
 >super.m() : void
 >super.m : () => void
 >super : B

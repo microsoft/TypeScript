@@ -14,10 +14,10 @@ newOperator.ts(31,14): error TS2351: This expression is not constructable.
 newOperator.ts(38,5): error TS2351: This expression is not constructable.
   No constituent of type '{ a: string; } | { b: string; }' is constructable.
 newOperator.ts(42,5): error TS2351: This expression is not constructable.
-  Not all constituents of type '{ a: string; } | new (a: string) => void' are constructable.
+  Not all constituents of type '{ a: string; } | (new (a: string) => void)' are constructable.
     Type '{ a: string; }' has no construct signatures.
 newOperator.ts(46,5): error TS2351: This expression is not constructable.
-  Each member of the union type 'new <T extends number>(a: T) => void | new <T>(a: string) => void' has construct signatures, but none of those signatures are compatible with each other.
+  Each member of the union type '(new <T extends number>(a: T) => void) | (new <T>(a: string) => void)' has construct signatures, but none of those signatures are compatible with each other.
 newOperator.ts(56,24): error TS1011: An element access expression should take an argument.
 
 
@@ -92,7 +92,7 @@ newOperator.ts(56,24): error TS1011: An element access expression should take an
     new ctorUnion("");
         ~~~~~~~~~
 !!! error TS2351: This expression is not constructable.
-!!! error TS2351:   Not all constituents of type '{ a: string; } | new (a: string) => void' are constructable.
+!!! error TS2351:   Not all constituents of type '{ a: string; } | (new (a: string) => void)' are constructable.
 !!! error TS2351:     Type '{ a: string; }' has no construct signatures.
     
     // Error on union with incompatible constructors
@@ -100,7 +100,7 @@ newOperator.ts(56,24): error TS1011: An element access expression should take an
     new ctorUnion2("");
         ~~~~~~~~~~
 !!! error TS2351: This expression is not constructable.
-!!! error TS2351:   Each member of the union type 'new <T extends number>(a: T) => void | new <T>(a: string) => void' has construct signatures, but none of those signatures are compatible with each other.
+!!! error TS2351:   Each member of the union type '(new <T extends number>(a: T) => void) | (new <T>(a: string) => void)' has construct signatures, but none of those signatures are compatible with each other.
     
     module M {
         export class T {

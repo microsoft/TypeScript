@@ -16,14 +16,14 @@ class FooComponent {
 
 // Glimmer-style tracked API:
 declare const tracked: PropertyDecorator & { (...watchedProperties: string[]): any; }
->tracked : PropertyDecorator & (...watchedProperties: string[]) => any
+>tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
 >watchedProperties : string[]
 
 class Person {
 >Person : Person
 
     @tracked person; any;
->tracked : PropertyDecorator & (...watchedProperties: string[]) => any
+>tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
 >person : any
 >any : any
 }
@@ -36,7 +36,7 @@ class MultiplyByTwo {
 
     @tracked('args')
 >tracked('args') : any
->tracked : PropertyDecorator & (...watchedProperties: string[]) => any
+>tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
 >'args' : "args"
 
     get multiplied() {

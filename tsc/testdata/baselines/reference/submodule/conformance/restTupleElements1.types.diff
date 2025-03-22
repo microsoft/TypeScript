@@ -9,38 +9,21 @@
  
  type T10 = [string, ...[...string[]]];
  >T10 : T10
-@@= skipped -168, +168 lines =@@
- >true : true
- 
- declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
-->f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
-->a : [(x: number) => number, ...((x: string) => number)[]]
-+>f1 : (a: [(x: number) => number, ...(x: string) => number[]]) => void
-+>a : [(x: number) => number, ...(x: string) => number[]]
- >x : number
+@@= skipped -174, +174 lines =@@
  >x : string
  
  declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;
 ->f2 : (a_0: (x: number) => number, ...a: ((x: string) => number)[]) => void
-->a : [(x: number) => number, ...((x: string) => number)[]]
-+>f2 : (...a: [(x: number) => number, ...(x: string) => number[]]) => void
-+>a : [(x: number) => number, ...(x: string) => number[]]
++>f2 : (...a: [(x: number) => number, ...((x: string) => number)[]]) => void
+ >a : [(x: number) => number, ...((x: string) => number)[]]
  >x : number
  >x : string
- 
- f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
- >f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]) : void
-->f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
-+>f1 : (a: [(x: number) => number, ...(x: string) => number[]]) => void
- >[x => x * 2, x => x.length, x => x.charCodeAt(0)] : [(x: number) => number, (x: string) => number, (x: string) => number]
- >x => x * 2 : (x: number) => number
- >x : number
-@@= skipped -35, +35 lines =@@
+@@= skipped -29, +29 lines =@@
  
  f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
  >f2(x => x * 2, x => x.length, x => x.charCodeAt(0)) : void
 ->f2 : (a_0: (x: number) => number, ...a: ((x: string) => number)[]) => void
-+>f2 : (...a: [(x: number) => number, ...(x: string) => number[]]) => void
++>f2 : (...a: [(x: number) => number, ...((x: string) => number)[]]) => void
  >x => x * 2 : (x: number) => number
  >x : number
  >x * 2 : number

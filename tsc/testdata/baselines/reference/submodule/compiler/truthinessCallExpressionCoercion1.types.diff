@@ -5,51 +5,11 @@
  === truthinessCallExpressionCoercion1.ts ===
  function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
 ->onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
-+>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean | undefined) => void
++>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: (() => boolean) | undefined) => void
  >required : () => boolean
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
+ >optional : (() => boolean) | undefined
  
-     // error
-     required ? console.log('required') : undefined;
-@@= skipped -18, +18 lines =@@
-     // ok
-     optional ? console.log('optional') : undefined;
- >optional ? console.log('optional') : undefined : void
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
- >console.log('optional') : void
- >console.log : (...data: any[]) => void
- >console : Console
-@@= skipped -83, +83 lines =@@
- 
-         ? [() => null].forEach(() => { test(); })
- >[() => null].forEach(() => { test(); }) : void
-->[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-->[() => null] : (() => null)[]
-+>[() => null].forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
-+>[() => null] : () => null[]
- >() => null : () => null
-->forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-+>forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
- >() => { test(); } : () => void
- >test() : boolean
- >test : () => boolean
-@@= skipped -18, +18 lines =@@
- 
-         ? [() => null].forEach(test => { test() })
- >[() => null].forEach(test => { test() }) : void
-->[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-->[() => null] : (() => null)[]
-+>[() => null].forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
-+>[() => null] : () => null[]
- >() => null : () => null
-->forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
-+>forEach : (callbackfn: (value: () => null, index: number, array: () => null[]) => void, thisArg?: any) => void
- >test => { test() } : (test: () => null) => void
- >test : () => null
- >test() : null
-@@= skipped -17, +17 lines =@@
+@@= skipped -136, +136 lines =@@
  >checksPropertyAccess : () => void
  
      const x = {
@@ -79,12 +39,9 @@
  >bar : () => boolean
  >console.log('x.foo.bar') : void
  >console.log : (...data: any[]) => void
-@@= skipped -13, +13 lines =@@
- 
-     // ok
+@@= skipped -15, +15 lines =@@
      x.foo.bar ? x.foo.bar : undefined;
-->x.foo.bar ? x.foo.bar : undefined : (() => boolean) | undefined
-+>x.foo.bar ? x.foo.bar : undefined : () => boolean | undefined
+ >x.foo.bar ? x.foo.bar : undefined : (() => boolean) | undefined
  >x.foo.bar : () => boolean
 ->x.foo : { bar(): boolean; }
 ->x : { foo: { bar(): boolean; }; }
@@ -125,7 +82,7 @@
  
                      sign() {},
  >sign : () => void
-@@= skipped -40, +40 lines =@@
+@@= skipped -38, +38 lines =@@
      // ok
      if (chrome.platformKeys.subtleCrypto().exportKey) {
  >chrome.platformKeys.subtleCrypto().exportKey : () => boolean
@@ -160,24 +117,3 @@
  >exportKey : () => boolean
      }
  }
-@@= skipped -24, +24 lines =@@
- >Foo : Foo
- 
-     maybeIsUser?: () => boolean;
-->maybeIsUser : (() => boolean) | undefined
-+>maybeIsUser : () => boolean | undefined
- 
-     isUser() {
- >isUser : () => boolean
-@@= skipped -28, +28 lines =@@
-         // ok
-         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
- >this.maybeIsUser ? console.log('this.maybeIsUser') : undefined : void
-->this.maybeIsUser : (() => boolean) | undefined
-+>this.maybeIsUser : () => boolean | undefined
- >this : this
-->maybeIsUser : (() => boolean) | undefined
-+>maybeIsUser : () => boolean | undefined
- >console.log('this.maybeIsUser') : void
- >console.log : (...data: any[]) => void
- >console : Console

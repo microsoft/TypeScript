@@ -14,8 +14,8 @@ type MyPromise<T> = {
 >MyPromise : MyPromise<T>
 
     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
->then : <U>(f: (value: T) => U | PromiseLike<U> | null | undefined) => MyPromise<U>
->f : (value: T) => U | PromiseLike<U> | null | undefined
+>then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
+>f : ((value: T) => U | PromiseLike<U>) | null | undefined
 >value : T
 }
 

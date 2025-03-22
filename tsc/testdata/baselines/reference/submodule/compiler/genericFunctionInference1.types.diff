@@ -401,10 +401,10 @@
  promise.then(
  >promise.then(    pipe(        x => x + 1,        x => x * 2,    ),) : Promise<number>
 ->promise.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>promise.then : <TResult1, TResult2>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>promise.then : <TResult1, TResult2>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >promise : Promise<number>
 ->then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  
      pipe(
 ->pipe(        x => x + 1,        x => x * 2,    ) : (x: number) => number

@@ -46,9 +46,9 @@ export class Bar extends Foo {
 
         super.m1();
 >super.m1() : void
->super.m1 : () => void & () => void
+>super.m1 : (() => void) & (() => void)
 >super : I1 & I2
->m1 : () => void & () => void
+>m1 : (() => void) & (() => void)
     }
     m2() {
 >m2 : () => void

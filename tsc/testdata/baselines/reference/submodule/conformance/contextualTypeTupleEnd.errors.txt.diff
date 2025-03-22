@@ -1,8 +1,7 @@
 --- old.contextualTypeTupleEnd.errors.txt
 +++ new.contextualTypeTupleEnd.errors.txt
 @@= skipped -0, +0 lines =@@
--contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
-+contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...(arg: number) => void[], (arg: string) => void]'.
+ contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
    Source has 0 element(s) but target requires 1.
 +contextualTypeTupleEnd.ts(9,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
 +contextualTypeTupleEnd.ts(10,4): error TS7006: Parameter 'x' implicitly has an 'any' type.
@@ -27,12 +26,8 @@
      type Funcs = [...((arg: number) => void)[], (arg: string) => void];
      
      declare function num(x: number): void;
-@@= skipped -15, +25 lines =@@
-     
-     f1();  // Error
-     ~~~~
--!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
-+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...(arg: number) => void[], (arg: string) => void]'.
+@@= skipped -18, +28 lines =@@
+ !!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
  !!! error TS2345:   Source has 0 element(s) but target requires 1.
      f1(x => str(x));
 +       ~
@@ -52,7 +47,7 @@
      
      const a0: Funcs = [];  // Error
            ~~
-@@= skipped -40, +52 lines =@@
+@@= skipped -37, +49 lines =@@
      
      example(
          x => x.foo,  // Error

@@ -23,14 +23,14 @@
 ->handlers[++id] = [resolve, reject] : [(value: any) => void, (reason?: any) => void]
 ->handlers[++id] : [Function, Function]
 ->handlers : ResolveRejectMap
-+>handlers[++id] = [resolve, reject] : (value: unknown) => void[]
++>handlers[++id] = [resolve, reject] : ((value: unknown) => void)[]
 +>handlers[++id] : any
 +>handlers : any
  >++id : number
  >id : number
 ->[resolve, reject] : [(value: any) => void, (reason?: any) => void]
 ->resolve : (value: any) => void
-+>[resolve, reject] : (value: unknown) => void[]
++>[resolve, reject] : ((value: unknown) => void)[]
 +>resolve : (value: unknown) => void
  >reject : (reason?: any) => void
  

@@ -9,7 +9,7 @@ interface Component<P> {
 
 interface Props {
     children?: (items: {x: number}) => void
->children : (items: { x: number; }) => void | undefined
+>children : ((items: { x: number; }) => void) | undefined
 >items : { x: number; }
 >x : number
 }

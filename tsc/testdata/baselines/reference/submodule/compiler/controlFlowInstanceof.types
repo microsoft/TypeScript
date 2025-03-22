@@ -247,14 +247,14 @@ function goo(x: X) {
 // Repro from #27282
 
 declare const x: (() => void)|null;
->x : () => void | null
+>x : (() => void) | null
 
 declare const ctor: Function;
 >ctor : Function
 
 if (x instanceof ctor) {
 >x instanceof ctor : boolean
->x : () => void | null
+>x : (() => void) | null
 >ctor : Function
 
     x();

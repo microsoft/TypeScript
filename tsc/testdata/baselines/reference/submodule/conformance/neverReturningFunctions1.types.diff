@@ -291,32 +291,7 @@
  
          x;  // Unreachable
  >x : number
-@@= skipped -23, +23 lines =@@
- >Error : ErrorConstructor
- 
-     const f = [fail];
-->f : (() => never)[]
-->[fail] : (() => never)[]
-+>f : () => never[]
-+>[fail] : () => never[]
- >fail : () => never
- 
-     fail();  // No effect (missing type annotation)
-@@= skipped -11, +11 lines =@@
-     f[0]();  // No effect (not a dotted name)
- >f[0]() : never
- >f[0] : () => never
-->f : (() => never)[]
-+>f : () => never[]
- >0 : 0
- 
-     f;
-->f : (() => never)[]
-+>f : () => never[]
- }
- 
- // Repro from #33582
-@@= skipped -38, +38 lines =@@
+@@= skipped -72, +72 lines =@@
  >system : any
  
  	init(data?: T): void;
@@ -325,25 +300,7 @@
  >data : T | undefined
  
  	pause(): void;
-@@= skipped -13, +13 lines =@@
- >remove : () => void
- 
- 	tick?(time: number, timeDelta: number): void;
-->tick : ((time: number, timeDelta: number) => void) | undefined
-+>tick : (time: number, timeDelta: number) => void | undefined
- >time : number
- >timeDelta : number
- 
-@@= skipped -9, +9 lines =@@
- >oldData : T
- 
- 	updateSchema?(): void;
-->updateSchema : (() => void) | undefined
-+>updateSchema : () => void | undefined
- 
- 	extendSchema(update: unknown): void;
- >extendSchema : (update: unknown) => void
-@@= skipped -17, +17 lines =@@
+@@= skipped -39, +39 lines =@@
  >id : string
  
  	prototype: T & {

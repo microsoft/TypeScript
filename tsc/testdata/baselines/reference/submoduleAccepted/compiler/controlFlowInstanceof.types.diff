@@ -1,23 +1,6 @@
 --- old.controlFlowInstanceof.types
 +++ new.controlFlowInstanceof.types
-@@= skipped -246, +246 lines =@@
- // Repro from #27282
- 
- declare const x: (() => void)|null;
-->x : (() => void) | null
-+>x : () => void | null
- 
- declare const ctor: Function;
- >ctor : Function
- 
- if (x instanceof ctor) {
- >x instanceof ctor : boolean
-->x : (() => void) | null
-+>x : () => void | null
- >ctor : Function
- 
-     x();
-@@= skipped -19, +19 lines =@@
+@@= skipped -265, +265 lines =@@
  === uglify.js ===
  /** @constructor */
  function AtTop(val) { this.val = val }

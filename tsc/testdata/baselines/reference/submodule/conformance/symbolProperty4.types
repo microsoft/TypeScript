@@ -2,8 +2,8 @@
 
 === symbolProperty4.ts ===
 var x = {
->x : { [x: symbol]: number | () => void; }
->{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : { [x: symbol]: number | () => void; }
+>x : { [x: symbol]: number | (() => void); }
+>{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : { [x: symbol]: number | (() => void); }
 
     [Symbol()]: 0,
 >[Symbol()] : number

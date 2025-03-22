@@ -164,15 +164,15 @@ declare function canHaveLocals(node: Node): node is HasLocals;
 >node : Node
 
 declare function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U;
->assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: (node: Node) => boolean | undefined): void; }
+>assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: ((node: Node) => boolean) | undefined): void; }
 >node : T | undefined
 >test : (node: T) => node is U
 >node : T
 
 declare function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined): void;
->assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: (node: Node) => boolean | undefined): void; }
+>assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: ((node: Node) => boolean) | undefined): void; }
 >node : Node | undefined
->test : (node: Node) => boolean | undefined
+>test : ((node: Node) => boolean) | undefined
 >node : Node
 
 function foo(node: FunctionDeclaration | CaseClause) {
@@ -181,7 +181,7 @@ function foo(node: FunctionDeclaration | CaseClause) {
 
     assertNode(node, canHaveLocals);  // assertNode<Node, HasLocals>
 >assertNode(node, canHaveLocals) : void
->assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: (node: Node) => boolean | undefined): void; }
+>assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: ((node: Node) => boolean) | undefined): void; }
 >node : CaseClause | FunctionDeclaration
 >canHaveLocals : (node: Node) => node is HasLocals
 

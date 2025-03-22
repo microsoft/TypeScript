@@ -5,21 +5,16 @@
  === assignmentToInstantiationExpression.ts ===
  let obj: { fn?: <T>() => T } = {};
 ->obj : { fn?: <T>() => T; }
-->fn : (<T>() => T) | undefined
-+>obj : { fn?: <T>() => T | undefined; }
-+>fn : <T>() => T | undefined
++>obj : { fn?: (<T>() => T) | undefined; }
+ >fn : (<T>() => T) | undefined
  >{} : {}
  
- obj.fn<number> = () => 1234;
+@@= skipped -8, +8 lines =@@
  >obj.fn<number> = () => 1234 : () => number
-->obj.fn<number> : (() => number) | undefined
-->obj.fn : (<T>() => T) | undefined
+ >obj.fn<number> : (() => number) | undefined
+ >obj.fn : (<T>() => T) | undefined
 ->obj : { fn?: <T>() => T; }
-->fn : (<T>() => T) | undefined
-+>obj.fn<number> : () => number | undefined
-+>obj.fn : <T>() => T | undefined
-+>obj : { fn?: <T>() => T | undefined; }
-+>fn : <T>() => T | undefined
++>obj : { fn?: (<T>() => T) | undefined; }
+ >fn : (<T>() => T) | undefined
  >() => 1234 : () => number
  >1234 : 1234
- 

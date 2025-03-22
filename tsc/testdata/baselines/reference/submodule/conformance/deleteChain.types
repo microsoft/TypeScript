@@ -108,8 +108,8 @@ delete (o4.b?.c.d?.e);
 >e : string | undefined
 
 declare const o5: { b?(): { c: { d?: { e: string } } } };
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 >c : { d?: { e: string; } | undefined; }
 >d : { e: string; } | undefined
 >e : string
@@ -120,9 +120,9 @@ delete o5.b?.().c.d?.e;
 >o5.b?.().c.d : { e: string; } | undefined
 >o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
 >o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5.b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 >c : { d?: { e: string; } | undefined; } | undefined
 >d : { e: string; } | undefined
 >e : string | undefined
@@ -134,9 +134,9 @@ delete (o5.b?.().c.d?.e);
 >o5.b?.().c.d : { e: string; } | undefined
 >o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
 >o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5.b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 >c : { d?: { e: string; } | undefined; } | undefined
 >d : { e: string; } | undefined
 >e : string | undefined

@@ -186,17 +186,13 @@
 +>C6 : () => void
  
    this.functions = [x => x, x => x + 1, x => x - 1]
-->this.functions = [x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
-+>this.functions = [x => x, x => x + 1, x => x - 1] : (x: any) => any[]
+ >this.functions = [x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
  >this.functions : any
 ->this : this
 +>this : any
  >functions : any
-->[x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
-+>[x => x, x => x + 1, x => x - 1] : (x: any) => any[]
+ >[x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
  >x => x : (x: any) => any
- >x : any
- >x : any
 @@= skipped -30, +30 lines =@@
  };
  

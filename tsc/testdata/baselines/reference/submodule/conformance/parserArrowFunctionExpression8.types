@@ -2,7 +2,7 @@
 
 === fileJs.js ===
 x ? y => ({ y }) : z => ({ z }) // Legal JS
->x ? y => ({ y }) : z => ({ z }) : (y: any) => { y: any; } | (z: any) => { z: any; }
+>x ? y => ({ y }) : z => ({ z }) : ((y: any) => { y: any; }) | ((z: any) => { z: any; })
 >x : any
 >y => ({ y }) : (y: any) => { y: any; }
 >y : any
@@ -17,7 +17,7 @@ x ? y => ({ y }) : z => ({ z }) // Legal JS
 
 === fileTs.ts ===
 x ? y => ({ y }) : z => ({ z })
->x ? y => ({ y }) : z => ({ z }) : (y: any) => { y: any; } | (z: any) => { z: any; }
+>x ? y => ({ y }) : z => ({ z }) : ((y: any) => { y: any; }) | ((z: any) => { z: any; })
 >x : any
 >y => ({ y }) : (y: any) => { y: any; }
 >y : any

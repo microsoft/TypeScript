@@ -1,15 +1,6 @@
 --- old.doYouNeedToChangeYourTargetLibraryES2023(target=esnext).types
 +++ new.doYouNeedToChangeYourTargetLibraryES2023(target=esnext).types
-@@= skipped -57, +57 lines =@@
- export let sorted = array.toSorted();
- >sorted : number[]
- >array.toSorted() : number[]
-->array.toSorted : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
-+>array.toSorted : (compareFn?: (a: number, b: number) => number | undefined) => number[]
- >array : number[]
-->toSorted : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
-+>toSorted : (compareFn?: (a: number, b: number) => number | undefined) => number[]
- 
+@@= skipped -64, +64 lines =@@
  export let spliced1 = array.toSpliced(2);
  >spliced1 : number[]
  >array.toSpliced(2) : number[]
@@ -42,7 +33,7 @@
  >2 : 2
  >1 : 1
  >4 : 4
-@@= skipped -37, +37 lines =@@
+@@= skipped -30, +30 lines =@@
  export let spliced4 = array.toSpliced(2, undefined);
  >spliced4 : number[]
  >array.toSpliced(2, undefined) : number[]

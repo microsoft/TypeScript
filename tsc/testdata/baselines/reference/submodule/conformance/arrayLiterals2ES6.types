@@ -44,8 +44,8 @@ var a3 = [, , ...a0]
 >a0 : number[]
 
 var a4 = [() => 1, ];
->a4 : () => number[]
->[() => 1, ] : () => number[]
+>a4 : (() => number)[]
+>[() => 1, ] : (() => number)[]
 >() => 1 : () => number
 >1 : 1
 
@@ -178,10 +178,10 @@ var d6 = [...a3];
 >a3 : number[]
 
 var d7 = [...a4];
->d7 : () => number[]
->[...a4] : () => number[]
+>d7 : (() => number)[]
+>[...a4] : (() => number)[]
 >...a4 : () => number
->a4 : () => number[]
+>a4 : (() => number)[]
 
 var d8: number[][] = [[...temp1]]
 >d8 : number[][]

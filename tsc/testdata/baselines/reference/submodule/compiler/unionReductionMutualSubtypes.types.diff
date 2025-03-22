@@ -15,9 +15,9 @@
 ->run : (options: { something?(b?: string): void; }) => void
 ->options : { something?(b?: string): void; }
 ->something : ((b?: string) => void) | undefined
-+>run : (options: { something?: (b?: string | undefined) => void | undefined; }) => void
-+>options : { something?: (b?: string | undefined) => void | undefined; }
-+>something : (b?: string | undefined) => void | undefined
++>run : (options: { something?: ((b?: string | undefined) => void) | undefined; }) => void
++>options : { something?: ((b?: string | undefined) => void) | undefined; }
++>something : ((b?: string | undefined) => void) | undefined
  >b : string | undefined
  
      const something = options.something ?? val.something;
@@ -28,9 +28,9 @@
 ->something : ((b?: string) => void) | undefined
 +>something : (b?: string | undefined) => void
 +>options.something ?? val.something : (b?: string | undefined) => void
-+>options.something : (b?: string | undefined) => void | undefined
-+>options : { something?: (b?: string | undefined) => void | undefined; }
-+>something : (b?: string | undefined) => void | undefined
++>options.something : ((b?: string | undefined) => void) | undefined
++>options : { something?: ((b?: string | undefined) => void) | undefined; }
++>something : ((b?: string | undefined) => void) | undefined
  >val.something : () => void
  >val : ReturnVal
  >something : () => void

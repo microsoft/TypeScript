@@ -130,47 +130,7 @@
  
  // Instantiation expression and binary operators
  
- declare let g: (<T>(x: T) => T) | undefined;
-->g : (<T>(x: T) => T) | undefined
-+>g : <T>(x: T) => T | undefined
- >x : T
- 
- const c1 = g<string> || ((x: string) => x);
- >c1 : (x: string) => string
- >g<string> || ((x: string) => x) : (x: string) => string
-->g<string> : ((x: string) => string) | undefined
-->g : (<T>(x: T) => T) | undefined
-+>g<string> : (x: string) => string | undefined
-+>g : <T>(x: T) => T | undefined
- >((x: string) => x) : (x: string) => string
- >(x: string) => x : (x: string) => string
- >x : string
-@@= skipped -55, +55 lines =@@
- const c2 = g<string> ?? ((x: string) => x);
- >c2 : (x: string) => string
- >g<string> ?? ((x: string) => x) : (x: string) => string
-->g<string> : ((x: string) => string) | undefined
-->g : (<T>(x: T) => T) | undefined
-+>g<string> : (x: string) => string | undefined
-+>g : <T>(x: T) => T | undefined
- >((x: string) => x) : (x: string) => string
- >(x: string) => x : (x: string) => string
- >x : string
- >x : string
- 
- const c3 = g<string> && ((x: string) => x);
-->c3 : ((x: string) => string) | undefined
-->g<string> && ((x: string) => x) : ((x: string) => string) | undefined
-->g<string> : ((x: string) => string) | undefined
-->g : (<T>(x: T) => T) | undefined
-+>c3 : (x: string) => string | undefined
-+>g<string> && ((x: string) => x) : (x: string) => string | undefined
-+>g<string> : (x: string) => string | undefined
-+>g : <T>(x: T) => T | undefined
- >((x: string) => x) : (x: string) => string
- >(x: string) => x : (x: string) => string
- >x : string
-@@= skipped -22, +22 lines =@@
+@@= skipped -77, +77 lines =@@
  const x1 = f<true>
  >x1 : true
  >f<true>(true) : true

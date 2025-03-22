@@ -5,37 +5,11 @@
  
  function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
 ->test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) => void
-+>test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean | undefined) => void
++>test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: (() => boolean) | undefined) => void
  >required1 : () => boolean
  >required2 : () => boolean
  >b : boolean
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
- 
-     // error
-     required1 && console.log('required');
-@@= skipped -47, +47 lines =@@
-     // ok
-     optional && console.log('optional');
- >optional && console.log('optional') : void | undefined
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
- >console.log('optional') : void
- >console.log : (...data: any[]) => void
- >console : Console
-@@= skipped -10, +10 lines =@@
-     // ok
-     1 && optional && console.log('optional');
- >1 && optional && console.log('optional') : void | undefined
-->1 && optional : (() => boolean) | undefined
-+>1 && optional : () => boolean | undefined
- >1 : 1
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
- >console.log('optional') : void
- >console.log : (...data: any[]) => void
- >console : Console
-@@= skipped -23, +23 lines =@@
+@@= skipped -80, +80 lines =@@
  
      // ok
      required1() && console.log('required call');
@@ -53,25 +27,7 @@
  >required1 && required2 && required1() : boolean
  >required1 && required2 : () => boolean
  >required1 : () => boolean
-@@= skipped -122, +122 lines =@@
- 
-     // error
-     if (b && (required1 || required2)) {
-->b && (required1 || required2) : false | (() => boolean)
-+>b && (required1 || required2) : false | () => boolean
- >b : boolean
- >(required1 || required2) : () => boolean
- >required1 || required2 : () => boolean
-@@= skipped -20, +20 lines =@@
- 
-     // error
-     if (b && (required1 ?? required2)) {
-->b && (required1 ?? required2) : false | (() => boolean)
-+>b && (required1 ?? required2) : false | () => boolean
- >b : boolean
- >(required1 ?? required2) : () => boolean
- >required1 ?? required2 : () => boolean
-@@= skipped -27, +27 lines =@@
+@@= skipped -169, +169 lines =@@
  >typeof window !== 'undefined' && window.console &&        ((window.console as any).firebug || (window.console.error && window.console.table)) : any
  >typeof window !== 'undefined' && window.console : false | Console
  >typeof window !== 'undefined' : boolean
@@ -190,27 +146,3 @@
  >bar : () => boolean
  
      // ok
-@@= skipped -184, +184 lines =@@
- >Foo : Foo
- 
-     optional?: () => boolean;
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
- 
-     required() {
- >required : () => boolean
-@@= skipped -64, +64 lines =@@
-         // ok
-         1 && this.optional && console.log('optional');
- >1 && this.optional && console.log('optional') : void | undefined
-->1 && this.optional : (() => boolean) | undefined
-+>1 && this.optional : () => boolean | undefined
- >1 : 1
-->this.optional : (() => boolean) | undefined
-+>this.optional : () => boolean | undefined
- >this : this
-->optional : (() => boolean) | undefined
-+>optional : () => boolean | undefined
- >console.log('optional') : void
- >console.log : (...data: any[]) => void
- >console : Console

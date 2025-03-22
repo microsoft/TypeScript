@@ -183,9 +183,9 @@ function test(o: Person | Car) {
 
         o.sayHi();
 >o.sayHi() : void
->o.sayHi : () => void | () => void
+>o.sayHi : (() => void) | (() => void)
 >o : Car | Person
->sayHi : () => void | () => void
+>sayHi : (() => void) | (() => void)
     }
 }
 

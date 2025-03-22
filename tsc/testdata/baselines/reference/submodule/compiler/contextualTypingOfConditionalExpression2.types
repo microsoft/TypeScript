@@ -25,7 +25,7 @@ class C extends A {
 var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
 >x2 : (a: A) => void
 >a : A
->true ? (a: C) => a.foo : (b: number) => { } : (a: C) => number | (b: number) => void
+>true ? (a: C) => a.foo : (b: number) => { } : ((a: C) => number) | ((b: number) => void)
 >true : true
 >(a: C) => a.foo : (a: C) => number
 >a : C

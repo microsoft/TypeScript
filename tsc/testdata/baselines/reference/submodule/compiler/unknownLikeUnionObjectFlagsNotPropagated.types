@@ -11,9 +11,9 @@ const myVar: MyType = null as MyType;
 >null as MyType : MyType
 
 myVar?.toLocaleString;
->myVar?.toLocaleString : () => string | undefined
+>myVar?.toLocaleString : (() => string) | undefined
 >myVar : MyType
->toLocaleString : () => string | undefined
+>toLocaleString : (() => string) | undefined
 
 myVar;
 >myVar : MyType

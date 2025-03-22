@@ -80,10 +80,10 @@ const cb1: LoadCallback = async () => load().then(m => m);
 >cb1 : LoadCallback
 >async () => load().then(m => m) : () => Promise<boolean>
 >load().then(m => m) : Promise<boolean>
->load().then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>load().then : <TResult1, TResult2>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >load() : Promise<boolean>
 >load : () => Promise<boolean>
->then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1, TResult2>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >m => m : (m: boolean) => boolean
 >m : boolean
 >m : boolean
@@ -98,10 +98,10 @@ const cb3: LoadCallback = () => load().then(m => m);
 >cb3 : LoadCallback
 >() => load().then(m => m) : () => Promise<boolean>
 >load().then(m => m) : Promise<boolean>
->load().then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>load().then : <TResult1, TResult2>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >load() : Promise<boolean>
 >load : () => Promise<boolean>
->then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
+>then : <TResult1, TResult2>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >m => m : (m: boolean) => boolean
 >m : boolean
 >m : boolean

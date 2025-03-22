@@ -223,20 +223,7 @@
  >y : number
  >dy : number
          }
-@@= skipped -23, +23 lines =@@
- >value : T | undefined
- 
-     get?(): T;
-->get : (() => T) | undefined
-+>get : () => T | undefined
- 
-     set?(value: T): void;
-->set : ((value: T) => void) | undefined
-+>set : (value: T) => void | undefined
- >value : T
- }
- 
-@@= skipped -51, +51 lines =@@
+@@= skipped -74, +74 lines =@@
  >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
  >p1 : Point
  >"bar" : "bar"
@@ -265,29 +252,7 @@
  
          get(): number {
  >get : () => number
-@@= skipped -60, +60 lines =@@
- >Computed : Computed<T>
- 
-     get?(): T;
-->get : (() => T) | undefined
-+>get : () => T | undefined
- 
-     set?(value: T): void;
-->set : ((value: T) => void) | undefined
-+>set : (value: T) => void | undefined
- >value : T
- }
- 
-@@= skipped -11, +11 lines =@@
- >VueOptions : VueOptions<D, M, P>
- 
-     data?: D | (() => D);
-->data : D | (() => D) | undefined
-+>data : D | () => D | undefined
- 
-     methods?: M;
- >methods : M | undefined
-@@= skipped -14, +14 lines =@@
+@@= skipped -85, +85 lines =@@
  >options : VueOptions<D, M, P>
  
  let vue = new Vue({

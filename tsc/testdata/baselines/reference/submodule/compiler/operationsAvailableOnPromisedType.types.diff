@@ -5,41 +5,16 @@
  === operationsAvailableOnPromisedType.ts ===
  async function fn(
 ->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
-+>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | () => void, g: Promise<new () => any>) => Promise<void>
++>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<new () => any>) => Promise<void>
  
      a: number,
  >a : number
-@@= skipped -19, +19 lines =@@
- >e : Promise<() => void>
- 
-     f: Promise<() => void> | (() => void),
-->f : Promise<() => void> | (() => void)
-+>f : Promise<() => void> | () => void
- 
-     g: Promise<{ new(): any }>
- >g : Promise<new () => any>
-@@= skipped -51, +51 lines =@@
+@@= skipped -70, +70 lines =@@
  
          fn(b, b, c, d, e, f, g);
  >fn(b, b, c, d, e, f, g) : Promise<void>
 ->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
-+>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | () => void, g: Promise<new () => any>) => Promise<void>
++>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<new () => any>) => Promise<void>
  >b : Promise<number>
  >b : Promise<number>
  >c : Promise<string[]>
- >d : Promise<{ prop: string; }>
- >e : Promise<() => void>
-->f : Promise<() => void> | (() => void)
-+>f : Promise<() => void> | () => void
- >g : Promise<new () => any>
- 
-         d.prop;
-@@= skipped -24, +24 lines =@@
- 
-     f();
- >f() : any
-->f : Promise<() => void> | (() => void)
-+>f : Promise<() => void> | () => void
- 
-     new g();
- >new g() : any

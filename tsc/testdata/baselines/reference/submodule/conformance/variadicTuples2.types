@@ -342,10 +342,10 @@ function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => vo
 >values : T
 >args.slice(0, -1) as unknown as T : T
 >args.slice(0, -1) as unknown : unknown
->args.slice(0, -1) : ((...values: T) => void | T[number])[]
->args.slice : (start?: number | undefined, end?: number | undefined) => ((...values: T) => void | T[number])[]
+>args.slice(0, -1) : (((...values: T) => void) | T[number])[]
+>args.slice : (start?: number | undefined, end?: number | undefined) => (((...values: T) => void) | T[number])[]
 >args : [...T, (...values: T) => void]
->slice : (start?: number | undefined, end?: number | undefined) => ((...values: T) => void | T[number])[]
+>slice : (start?: number | undefined, end?: number | undefined) => (((...values: T) => void) | T[number])[]
 >0 : 0
 >-1 : -1
 >1 : 1

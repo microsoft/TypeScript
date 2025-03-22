@@ -39,7 +39,7 @@ interface ApiItemContainerMixin extends ApiItem {
 }
 
 function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
->ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & new (...args: any[]) => ApiItemContainerMixin
+>ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
 
   baseClass: TBaseClass
 >baseClass : TBaseClass
@@ -77,7 +77,7 @@ function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
 >ApiEnum : ApiEnum
 >ApiItemContainerMixin(ApiItem) : ApiItem & ApiItemContainerMixin
->ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & new (...args: any[]) => ApiItemContainerMixin
+>ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
 >ApiItem : typeof ApiItem
 
   // This worked prior to TypeScript 4.0:

@@ -117,7 +117,7 @@ var n2: {
     (): void;
 }
 var n4: {
->n4 : () => void[]
+>n4 : (() => void)[]
 
     (): void;
 }[];

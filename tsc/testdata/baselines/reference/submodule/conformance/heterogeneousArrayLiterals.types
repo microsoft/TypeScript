@@ -72,31 +72,31 @@ var i = [{ foo: 1, bar: '' }, { foo: '' }]; // {}[]
 >'' : ""
 
 var j = [() => 1, () => '']; // {}[]
->j : (() => number | () => string)[]
->[() => 1, () => ''] : (() => number | () => string)[]
+>j : ((() => number) | (() => string))[]
+>[() => 1, () => ''] : ((() => number) | (() => string))[]
 >() => 1 : () => number
 >1 : 1
 >() => '' : () => string
 >'' : ""
 
 var k = [() => 1, () => 1]; // { (): number }[]
->k : () => number[]
->[() => 1, () => 1] : () => number[]
+>k : (() => number)[]
+>[() => 1, () => 1] : (() => number)[]
 >() => 1 : () => number
 >1 : 1
 >() => 1 : () => number
 >1 : 1
 
 var l = [() => 1, () => null]; // { (): any }[]
->l : () => any[]
->[() => 1, () => null] : () => any[]
+>l : (() => any)[]
+>[() => 1, () => null] : (() => any)[]
 >() => 1 : () => number
 >1 : 1
 >() => null : () => any
 
 var m = [() => 1, () => '', () => null]; // { (): any }[]
->m : () => any[]
->[() => 1, () => '', () => null] : () => any[]
+>m : (() => any)[]
+>[() => 1, () => '', () => null] : (() => any)[]
 >() => 1 : () => number
 >1 : 1
 >() => '' : () => string
@@ -104,12 +104,12 @@ var m = [() => 1, () => '', () => null]; // { (): any }[]
 >() => null : () => any
 
 var n = [[() => 1], [() => '']]; // {}[]
->n : (() => number[] | () => string[])[]
->[[() => 1], [() => '']] : (() => number[] | () => string[])[]
->[() => 1] : () => number[]
+>n : ((() => number)[] | (() => string)[])[]
+>[[() => 1], [() => '']] : ((() => number)[] | (() => string)[])[]
+>[() => 1] : (() => number)[]
 >() => 1 : () => number
 >1 : 1
->[() => ''] : () => string[]
+>[() => ''] : (() => string)[]
 >() => '' : () => string
 >'' : ""
 
@@ -164,31 +164,31 @@ module Derived {
 >derived : Derived
 
     var j = [() => base, () => derived]; // { {}: Base }
->j : () => Base[]
->[() => base, () => derived] : () => Base[]
+>j : (() => Base)[]
+>[() => base, () => derived] : (() => Base)[]
 >() => base : () => Base
 >base : Base
 >() => derived : () => Derived
 >derived : Derived
 
     var k = [() => base, () => 1]; // {}[]~
->k : (() => Base | () => number)[]
->[() => base, () => 1] : (() => Base | () => number)[]
+>k : ((() => Base) | (() => number))[]
+>[() => base, () => 1] : ((() => Base) | (() => number))[]
 >() => base : () => Base
 >base : Base
 >() => 1 : () => number
 >1 : 1
 
     var l = [() => base, () => null]; // { (): any }[]
->l : () => any[]
->[() => base, () => null] : () => any[]
+>l : (() => any)[]
+>[() => base, () => null] : (() => any)[]
 >() => base : () => Base
 >base : Base
 >() => null : () => any
 
     var m = [() => base, () => derived, () => null]; // { (): any }[]
->m : () => any[]
->[() => base, () => derived, () => null] : () => any[]
+>m : (() => any)[]
+>[() => base, () => derived, () => null] : (() => any)[]
 >() => base : () => Base
 >base : Base
 >() => derived : () => Derived
@@ -196,12 +196,12 @@ module Derived {
 >() => null : () => any
 
     var n = [[() => base], [() => derived]]; // { (): Base }[]
->n : () => Base[][]
->[[() => base], [() => derived]] : () => Base[][]
->[() => base] : () => Base[]
+>n : (() => Base)[][]
+>[[() => base], [() => derived]] : (() => Base)[][]
+>[() => base] : (() => Base)[]
 >() => base : () => Base
 >base : Base
->[() => derived] : () => Derived[]
+>[() => derived] : (() => Derived)[]
 >() => derived : () => Derived
 >derived : Derived
 
@@ -219,12 +219,12 @@ module Derived {
 >base : Base
 
     var q = [[() => derived2], [() => derived]]; // {}[]
->q : (() => Derived2[] | () => Derived[])[]
->[[() => derived2], [() => derived]] : (() => Derived2[] | () => Derived[])[]
->[() => derived2] : () => Derived2[]
+>q : ((() => Derived2)[] | (() => Derived)[])[]
+>[[() => derived2], [() => derived]] : ((() => Derived2)[] | (() => Derived)[])[]
+>[() => derived2] : (() => Derived2)[]
 >() => derived2 : () => Derived2
 >derived2 : Derived2
->[() => derived] : () => Derived[]
+>[() => derived] : (() => Derived)[]
 >() => derived : () => Derived
 >derived : Derived
 }
@@ -248,8 +248,8 @@ module WithContextualType {
 >[] : undefined[]
 
     var d: { (): Base }[] = [() => derived, () => derived2];
->d : () => Base[]
->[() => derived, () => derived2] : (() => Derived | () => Derived2)[]
+>d : (() => Base)[]
+>[() => derived, () => derived2] : ((() => Derived) | (() => Derived2))[]
 >() => derived : () => Derived
 >derived : Derived
 >() => derived2 : () => Derived2
@@ -285,16 +285,16 @@ function foo<T, U>(t: T, u: U) {
 >1 : 1
 
     var e = [() => t, () => u]; // {}[]
->e : (() => T | () => U)[]
->[() => t, () => u] : (() => T | () => U)[]
+>e : ((() => T) | (() => U))[]
+>[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
 >t : T
 >() => u : () => U
 >u : U
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : () => any[]
->[() => t, () => u, () => null] : () => any[]
+>f : (() => any)[]
+>[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
 >t : T
 >() => u : () => U
@@ -331,16 +331,16 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >1 : 1
 
     var e = [() => t, () => u]; // {}[]
->e : (() => T | () => U)[]
->[() => t, () => u] : (() => T | () => U)[]
+>e : ((() => T) | (() => U))[]
+>[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
 >t : T
 >() => u : () => U
 >u : U
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : () => any[]
->[() => t, () => u, () => null] : () => any[]
+>f : (() => any)[]
+>[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
 >t : T
 >() => u : () => U
@@ -401,16 +401,16 @@ function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 >1 : 1
 
     var e = [() => t, () => u]; // {}[]
->e : (() => T | () => U)[]
->[() => t, () => u] : (() => T | () => U)[]
+>e : ((() => T) | (() => U))[]
+>[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
 >t : T
 >() => u : () => U
 >u : U
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : () => any[]
->[() => t, () => u, () => null] : () => any[]
+>f : (() => any)[]
+>[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
 >t : T
 >() => u : () => U
@@ -471,16 +471,16 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >1 : 1
 
     var e = [() => t, () => u]; // {}[]
->e : (() => T | () => U)[]
->[() => t, () => u] : (() => T | () => U)[]
+>e : ((() => T) | (() => U))[]
+>[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
 >t : T
 >() => u : () => U
 >u : U
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : () => any[]
->[() => t, () => u, () => null] : () => any[]
+>f : (() => any)[]
+>[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
 >t : T
 >() => u : () => U

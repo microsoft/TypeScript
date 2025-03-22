@@ -92,9 +92,7 @@
  
  interface PropsArr {
    children: ((x: number) => string)[];
-->children : ((x: number) => string)[]
-+>children : (x: number) => string[]
- >x : number
+@@= skipped -61, +61 lines =@@
  }
  
  export function Blah2(props: PropsArr) {
@@ -118,7 +116,7 @@
  
    {x => x}
  >x => x : (x: any) => any
-@@= skipped -80, +80 lines =@@
+@@= skipped -19, +19 lines =@@
  >x : any
  
  </Blah2>

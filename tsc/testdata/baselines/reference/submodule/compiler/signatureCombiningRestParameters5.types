@@ -2,7 +2,7 @@
 
 === signatureCombiningRestParameters5.ts ===
 declare const test1:
->test1 : (...args: [a: string | number, b: number | boolean]) => void | (...args: [c: number | boolean, d: string | boolean]) => void
+>test1 : ((...args: [a: string | number, b: number | boolean]) => void) | ((...args: [c: number | boolean, d: string | boolean]) => void)
 
   | ((...args: [a: string | number, b: number | boolean]) => void)
 >args : [a: string | number, b: number | boolean]
@@ -12,19 +12,19 @@ declare const test1:
 
 test1(42, true);
 >test1(42, true) : void
->test1 : (...args: [a: string | number, b: number | boolean]) => void | (...args: [c: number | boolean, d: string | boolean]) => void
+>test1 : ((...args: [a: string | number, b: number | boolean]) => void) | ((...args: [c: number | boolean, d: string | boolean]) => void)
 >42 : 42
 >true : true
 
 test1(42, [true]); // error
 >test1(42, [true]) : void
->test1 : (...args: [a: string | number, b: number | boolean]) => void | (...args: [c: number | boolean, d: string | boolean]) => void
+>test1 : ((...args: [a: string | number, b: number | boolean]) => void) | ((...args: [c: number | boolean, d: string | boolean]) => void)
 >42 : 42
 >[true] : boolean[]
 >true : true
 
 declare function test2<
->test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: (...args: A) => void | (...args: B) => void) => void) => void
+>test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: ((...args: A) => void) | ((...args: B) => void)) => void) => void
 
   A extends readonly unknown[],
   B extends readonly unknown[],
@@ -38,8 +38,8 @@ declare function test2<
 >args : B
 
   e: (arg: typeof c | typeof d) => void,
->e : (arg: (...args: A) => void | (...args: B) => void) => void
->arg : (...args: A) => void | (...args: B) => void
+>e : (arg: ((...args: A) => void) | ((...args: B) => void)) => void
+>arg : ((...args: A) => void) | ((...args: B) => void)
 >c : (...args: A) => void
 >d : (...args: B) => void
 
@@ -47,7 +47,7 @@ declare function test2<
 
 test2(
 >test2(  (a: number | boolean, b: string | number) => {},  (c: string | boolean, d: number | boolean) => {},  (cb) => {    cb(true, 42);    cb(true, [42]); // error  },) : void
->test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: (...args: A) => void | (...args: B) => void) => void) => void
+>test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: ((...args: A) => void) | ((...args: B) => void)) => void) => void
 
   (a: number | boolean, b: string | number) => {},
 >(a: number | boolean, b: string | number) => {} : (a: number | boolean, b: string | number) => void
@@ -60,18 +60,18 @@ test2(
 >d : number | boolean
 
   (cb) => {
->(cb) => {    cb(true, 42);    cb(true, [42]); // error  } : (cb: (...args: [a: number | boolean, b: string | number]) => void | (...args: [c: string | boolean, d: number | boolean]) => void) => void
->cb : (...args: [a: number | boolean, b: string | number]) => void | (...args: [c: string | boolean, d: number | boolean]) => void
+>(cb) => {    cb(true, 42);    cb(true, [42]); // error  } : (cb: ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)) => void
+>cb : ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)
 
     cb(true, 42);
 >cb(true, 42) : void
->cb : (...args: [a: number | boolean, b: string | number]) => void | (...args: [c: string | boolean, d: number | boolean]) => void
+>cb : ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)
 >true : true
 >42 : 42
 
     cb(true, [42]); // error
 >cb(true, [42]) : void
->cb : (...args: [a: number | boolean, b: string | number]) => void | (...args: [c: string | boolean, d: number | boolean]) => void
+>cb : ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)
 >true : true
 >[42] : number[]
 >42 : 42

@@ -140,7 +140,7 @@ const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 
     typeHandlers[p.t]?.(p);
 >typeHandlers[p.t]?.(p) : void | undefined
->typeHandlers[p.t] : (p: P<T>) => void | undefined
+>typeHandlers[p.t] : ((p: P<T>) => void) | undefined
 >typeHandlers : TypeHandlers
 >p.t : T
 >p : { t: T; } & ({ foo: "bar"; } | { a: "b"; })

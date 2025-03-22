@@ -4,10 +4,10 @@
 // See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
 
 declare function test(
->test : (arg: (arg: number) => void[] | Record<string, (arg: string) => void>) => void
+>test : (arg: ((arg: number) => void)[] | Record<string, (arg: string) => void>) => void
 
   arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
->arg : (arg: number) => void[] | Record<string, (arg: string) => void>
+>arg : ((arg: number) => void)[] | Record<string, (arg: string) => void>
 >arg : string
 >arg : number
 
@@ -15,8 +15,8 @@ declare function test(
 
 test([
 >test([  (arg) => {    arg; // number  },]) : void
->test : (arg: (arg: number) => void[] | Record<string, (arg: string) => void>) => void
->[  (arg) => {    arg; // number  },] : (arg: any) => void[]
+>test : (arg: ((arg: number) => void)[] | Record<string, (arg: string) => void>) => void
+>[  (arg) => {    arg; // number  },] : ((arg: any) => void)[]
 
   (arg) => {
 >(arg) => {    arg; // number  } : (arg: any) => void

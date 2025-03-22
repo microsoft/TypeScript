@@ -155,9 +155,9 @@ function f6() {
 
     x.push(99);  // Error
 >x.push(99) : number
->x.push : (...items: (string | number)[]) => number | (...items: boolean[]) => number
+>x.push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
 >x : (string | number)[] | boolean[]
->push : (...items: (string | number)[]) => number | (...items: boolean[]) => number
+>push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
 >99 : 99
 }
 

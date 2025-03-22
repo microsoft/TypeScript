@@ -7,9 +7,9 @@
 ->o2 : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 ->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 ->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
-+>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
-+>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
-+>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
  >a : 1
  >1 : 1
  >'b' : 2
@@ -25,7 +25,7 @@
 +>{ ...o1, ...o2 } : { readonly x: 10; readonly y: 20; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
  >o1 : { readonly x: 10; readonly y: 20; }
 ->o2 : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
-+>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | (() => void); readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
  
  let o4 = { a: 1, b: 2 };
  >o4 : { a: number; b: number; }

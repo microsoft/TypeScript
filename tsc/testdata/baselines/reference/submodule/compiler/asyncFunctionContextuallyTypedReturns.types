@@ -77,9 +77,9 @@ declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): vo
 h(v => v ? (abc) => { } : Promise.reject());
 >h(v => v ? (abc) => { } : Promise.reject()) : void
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
->v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback> | (abc: string) => void
+>v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback> | ((abc: string) => void)
 >v : boolean
->v ? (abc) => { } : Promise.reject() : Promise<MyCallback> | (abc: string) => void
+>v ? (abc) => { } : Promise.reject() : Promise<MyCallback> | ((abc: string) => void)
 >v : boolean
 >(abc) => { } : (abc: string) => void
 >abc : string
@@ -91,9 +91,9 @@ h(v => v ? (abc) => { } : Promise.reject());
 h(async v => v ? (def) => { } : Promise.reject());
 >h(async v => v ? (def) => { } : Promise.reject()) : void
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
->async v => v ? (def) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback | (def: string) => void>
+>async v => v ? (def) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback | ((def: string) => void)>
 >v : boolean
->v ? (def) => { } : Promise.reject() : Promise<MyCallback> | (def: string) => void
+>v ? (def) => { } : Promise.reject() : Promise<MyCallback> | ((def: string) => void)
 >v : boolean
 >(def) => { } : (def: string) => void
 >def : string
@@ -104,7 +104,7 @@ h(async v => v ? (def) => { } : Promise.reject());
 
 // repro from #29196
 const increment: (
->increment : (num: number, str: string) => string | Promise<string | (s: string) => any>
+>increment : (num: number, str: string) => string | Promise<string | ((s: string) => any)>
 
   num: number,
 >num : number
@@ -130,7 +130,7 @@ const increment: (
 }
 
 const increment2: (
->increment2 : (num: number, str: string) => Promise<string | (s: string) => any>
+>increment2 : (num: number, str: string) => Promise<string | ((s: string) => any)>
 
   num: number,
 >num : number

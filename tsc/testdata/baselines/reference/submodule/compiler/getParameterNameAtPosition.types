@@ -18,15 +18,15 @@ declare function cases(tester: Tester): void;
 >tester : Tester
 
 declare function fn<Y extends any[]>(implementation?: (...args: Y) => any): Mock<Y>;
->fn : <Y extends any[]>(implementation?: (...args: Y) => any | undefined) => Mock<Y>
->implementation : (...args: Y) => any | undefined
+>fn : <Y extends any[]>(implementation?: ((...args: Y) => any) | undefined) => Mock<Y>
+>implementation : ((...args: Y) => any) | undefined
 >args : Y
 
 cases(fn(opts => { }));
 >cases(fn(opts => { })) : void
 >cases : (tester: Tester) => void
 >fn(opts => { }) : Mock<[opts: any]>
->fn : <Y extends any[]>(implementation?: (...args: Y) => any | undefined) => Mock<Y>
+>fn : <Y extends any[]>(implementation?: ((...args: Y) => any) | undefined) => Mock<Y>
 >opts => { } : (opts: any) => void
 >opts : any
 

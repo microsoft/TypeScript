@@ -21,9 +21,9 @@ function run(a: Cat | Dog) {
 
     a.run();
 >a.run() : void
->a.run : () => void | () => void
+>a.run : (() => void) | (() => void)
 >a : Cat | Dog
->run : () => void | () => void
+>run : (() => void) | (() => void)
 }
 
 function f<T extends Cat | Dog>(a: T) {
@@ -32,9 +32,9 @@ function f<T extends Cat | Dog>(a: T) {
 
     a.run();
 >a.run() : void
->a.run : () => void | () => void
+>a.run : (() => void) | (() => void)
 >a : Cat | Dog
->run : () => void | () => void
+>run : (() => void) | (() => void)
 
     run(a);
 >run(a) : void

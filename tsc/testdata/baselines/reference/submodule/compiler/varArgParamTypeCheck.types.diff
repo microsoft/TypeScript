@@ -5,18 +5,16 @@
  === varArgParamTypeCheck.ts ===
  function sequence(...sequences:{():void;}[]) {
 ->sequence : (...sequences: { (): void; }[]) => void
-->sequences : (() => void)[]
-+>sequence : (...sequences: () => void[]) => void
-+>sequences : () => void[]
++>sequence : (...sequences: (() => void)[]) => void
+ >sequences : (() => void)[]
  }
  
- function callback(clb:()=>void) {
 @@= skipped -11, +11 lines =@@
  
  sequence(
  >sequence(    function bar() {    },    function foo() {        callback(()=>{            this();        });    },    function baz() {        callback(()=>{            this();        });    }) : void
 ->sequence : (...sequences: { (): void; }[]) => void
-+>sequence : (...sequences: () => void[]) => void
++>sequence : (...sequences: (() => void)[]) => void
  
      function bar() {
  >function bar() {    } : () => void

@@ -18,13 +18,6 @@
  
  // Repro from #35291
  
- interface SelectProps<T, K> {
-   selector?: (obj: T) => K;
-->selector : ((obj: T) => K) | undefined
-+>selector : (obj: T) => K | undefined
- >obj : T
- }
- 
 @@= skipped -22, +22 lines =@@
  }
  

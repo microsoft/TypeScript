@@ -1,4 +1,4 @@
-contextualTypingOfConditionalExpression2.ts(11,5): error TS2322: Type '(a: C) => number | (b: number) => void' is not assignable to type '(a: A) => void'.
+contextualTypingOfConditionalExpression2.ts(11,5): error TS2322: Type '((a: C) => number) | ((b: number) => void)' is not assignable to type '(a: A) => void'.
   Type '(b: number) => void' is not assignable to type '(a: A) => void'.
     Types of parameters 'b' and 'a' are incompatible.
       Type 'A' is not assignable to type 'number'.
@@ -17,7 +17,7 @@ contextualTypingOfConditionalExpression2.ts(11,5): error TS2322: Type '(a: C) =>
     
     var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
         ~~
-!!! error TS2322: Type '(a: C) => number | (b: number) => void' is not assignable to type '(a: A) => void'.
+!!! error TS2322: Type '((a: C) => number) | ((b: number) => void)' is not assignable to type '(a: A) => void'.
 !!! error TS2322:   Type '(b: number) => void' is not assignable to type '(a: A) => void'.
 !!! error TS2322:     Types of parameters 'b' and 'a' are incompatible.
 !!! error TS2322:       Type 'A' is not assignable to type 'number'.

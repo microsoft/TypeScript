@@ -87,7 +87,7 @@ function fn5() {
     return [fn5][0]();
 >[fn5][0]() : any
 >[fn5][0] : () => any
->[fn5] : () => any[]
+>[fn5] : (() => any)[]
 >fn5 : () => any
 >0 : 0
 }

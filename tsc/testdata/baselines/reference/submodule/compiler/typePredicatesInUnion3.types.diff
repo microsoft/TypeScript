@@ -51,15 +51,3 @@
  >x : unknown
  
          x;  // unknown
-@@= skipped -58, +58 lines =@@
- 
- if (val.predicate()) {
- >val.predicate() : boolean
-->val.predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
-+>val.predicate : () => this is HasAttribute<Type1> | () => boolean
- >val : Type1 | Type2
-->predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
-+>predicate : () => this is HasAttribute<Type1> | () => boolean
- 
-     assertType<number>(val.attribute);  // Error
- >assertType<number>(val.attribute) : void

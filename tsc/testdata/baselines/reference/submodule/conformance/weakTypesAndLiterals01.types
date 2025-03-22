@@ -9,10 +9,10 @@ type WeakTypes =
 >true : true
 
     | { toLowerCase?(): string }
->toLowerCase : () => string | undefined
+>toLowerCase : (() => string) | undefined
 
     | { toUpperCase?(): string, otherOptionalProp?: number };
->toUpperCase : () => string | undefined
+>toUpperCase : (() => string) | undefined
 >otherOptionalProp : number | undefined
 
 type LiteralsOrWeakTypes =
@@ -36,7 +36,7 @@ const f = (arg: LiteralsOrWeakTypes) => {
 >"A" : "A"
 
         return arg;
->arg : "A" | { toLowerCase?: () => string | undefined; } | { toUpperCase?: () => string | undefined; otherOptionalProp?: number | undefined; }
+>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
     }
     else {
         return arg;
@@ -55,7 +55,7 @@ const g = (arg: WeakTypes) => {
 >"A" : "A"
 
         return arg;
->arg : { toLowerCase?: () => string | undefined; } | { toUpperCase?: () => string | undefined; otherOptionalProp?: number | undefined; }
+>arg : { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
     }
     else {
         return arg;
@@ -74,7 +74,7 @@ const h = (arg: LiteralsOrWeakTypes) => {
 >aOrB : "A" | "B"
 
         return arg;
->arg : "A" | "B" | { toLowerCase?: () => string | undefined; } | { toUpperCase?: () => string | undefined; otherOptionalProp?: number | undefined; }
+>arg : "A" | "B" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
     }
     else {
         return arg;
@@ -93,7 +93,7 @@ const i = (arg: WeakTypes) => {
 >aOrB : "A" | "B"
 
         return arg;
->arg : { toLowerCase?: () => string | undefined; } | { toUpperCase?: () => string | undefined; otherOptionalProp?: number | undefined; }
+>arg : { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
     }
     else {
         return arg;

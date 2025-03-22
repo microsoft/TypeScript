@@ -9,11 +9,6 @@
  
  interface BaseProps {
    when?: ((value: string) => boolean) | "a" | "b";
-->when : "a" | "b" | ((value: string) => boolean) | undefined
-+>when : "a" | "b" | (value: string) => boolean | undefined
- >value : string
- 
-   error?: boolean;
 @@= skipped -16, +16 lines =@@
  
  class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {

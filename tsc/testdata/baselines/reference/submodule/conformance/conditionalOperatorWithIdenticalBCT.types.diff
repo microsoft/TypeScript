@@ -9,12 +9,3 @@
  >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
  >true : true
  >{ a: 2, b: 'string' } : { a: number; b: string; }
-@@= skipped -48, +48 lines =@@
- var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
- >result10 : (t: X) => any
- >t : X
-->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
-+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (m: X) => number | (n: X) => string
- >true : true
- >(m) => m.propertyX1 : (m: X) => number
- >m : X

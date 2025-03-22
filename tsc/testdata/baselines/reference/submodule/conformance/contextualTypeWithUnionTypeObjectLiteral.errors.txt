@@ -23,7 +23,7 @@ contextualTypeWithUnionTypeObjectLiteral.ts(29,5): error TS2322: Type '{ prop: s
     Types of property 'prop' are incompatible.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-contextualTypeWithUnionTypeObjectLiteral.ts(58,5): error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string | (a: string, b: number) => number'.
+contextualTypeWithUnionTypeObjectLiteral.ts(58,5): error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
   Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
     Type 'string | number' is not assignable to type 'string'.
       Type 'number' is not assignable to type 'string'.
@@ -119,7 +119,7 @@ contextualTypeWithUnionTypeObjectLiteral.ts(58,5): error TS2322: Type '(a: strin
     var i11Ori21: I11 | I21 = { // Like i1 and i2 both
         commonMethodDifferentReturnType: (a, b) => strOrNumber,
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string | (a: string, b: number) => number'.
+!!! error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
 !!! error TS2322:   Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
 !!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.

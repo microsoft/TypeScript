@@ -13,25 +13,13 @@
 ->y.map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
 ->y : never[] | string[]
 ->map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
-+>y.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
++>y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 +>y : string[] | never[]
-+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
++>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
  >item => item.length : (item: string) => number
  >item : string
  >item.length : number
-@@= skipped -21, +21 lines =@@
- export const yThen = y.map(item => item.length);
- >yThen : number[]
- >y.map(item => item.length) : number[]
-->y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[])
-+>y.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[]
- >y : string[] | number[][]
-->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[])
-+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[]
- >item => item.length : (item: string | number[]) => number
- >item : string | number[]
- >item.length : number
-@@= skipped -25, +25 lines =@@
+@@= skipped -46, +46 lines =@@
  const resizeObserver = new ResizeObserver(([entry]) => {
  >resizeObserver : ResizeObserver
  >new ResizeObserver(([entry]) => {    entry}) : ResizeObserver
@@ -42,12 +30,33 @@
  >entry : ResizeObserverEntry
  
      entry
-@@= skipped -97, +97 lines =@@
+@@= skipped -25, +25 lines =@@
+ }
+ 
+ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
+->series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
+->tasks : Task<T>[]
++>series : <T>(tasks: (Task<T>)[], callback: Callback<T[]>) => void
++>tasks : (Task<T>)[]
+ >callback : Callback<T[]>
+ 
+     let index = 0
+@@= skipped -18, +18 lines =@@
+         let task = tasks[index]
+ >task : Task<T>
+ >tasks[index] : Task<T>
+->tasks : Task<T>[]
++>tasks : (Task<T>)[]
+ >index : number
+ 
+         if (!task) {
+@@= skipped -53, +53 lines =@@
+ 
  series([
  >series([    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),], (error, results) => {    if (error) {        console.error(error)    } else {        console.log(results)    }}) : void
- >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
-->[    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),] : ((cb: Callback<unknown>) => number)[]
-+>[    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),] : (cb: Callback<unknown>) => number[]
+->series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
++>series : <T>(tasks: (Task<T>)[], callback: Callback<T[]>) => void
+ >[    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),] : ((cb: Callback<unknown>) => number)[]
  
      cb => setTimeout(() => cb(null, 1), 300),
  >cb => setTimeout(() => cb(null, 1), 300) : (cb: Callback<unknown>) => number
@@ -58,7 +67,7 @@
  >() => cb(null, 1) : () => unknown
  >cb(null, 1) : unknown
  >cb : Callback<unknown>
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
  >cb => setTimeout(() => cb(null, 2), 200) : (cb: Callback<unknown>) => number
  >cb : Callback<unknown>
  >setTimeout(() => cb(null, 2), 200) : number

@@ -1,15 +1,6 @@
 --- old.typeGuardOfFormTypeOfIsOrderIndependent.types
 +++ new.typeGuardOfFormTypeOfIsOrderIndependent.types
-@@= skipped -7, +7 lines =@@
- >strOrBool : string | boolean
- 
- var strOrFunc: string | (() => void);
-->strOrFunc : string | (() => void)
-+>strOrFunc : string | () => void
- 
- var numOrBool: number | boolean
- >numOrBool : number | boolean
-@@= skipped -20, +20 lines =@@
+@@= skipped -27, +27 lines =@@
  if ("string" === typeof strOrNum) {
  >"string" === typeof strOrNum : boolean
  >"string" : "string"
@@ -23,12 +14,10 @@
  >"function" === typeof strOrFunc : boolean
  >"function" : "function"
 ->typeof strOrFunc : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->strOrFunc : string | (() => void)
 +>typeof strOrFunc : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>strOrFunc : string | () => void
+ >strOrFunc : string | (() => void)
  
      func = strOrFunc;
- >func = strOrFunc : () => void
 @@= skipped -17, +17 lines =@@
  if ("number" === typeof numOrBool) {
  >"number" === typeof numOrBool : boolean

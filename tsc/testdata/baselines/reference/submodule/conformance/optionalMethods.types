@@ -12,7 +12,7 @@ interface Foo {
 >f : () => number
 
     g?(): number;
->g : () => number | undefined
+>g : (() => number) | undefined
 }
 
 function test1(x: Foo) {
@@ -35,9 +35,9 @@ function test1(x: Foo) {
 >f : () => number
 
     x.g;
->x.g : () => number | undefined
+>x.g : (() => number) | undefined
 >x : Foo
->g : () => number | undefined
+>g : (() => number) | undefined
 
     let f1 = x.f();
 >f1 : number
@@ -49,9 +49,9 @@ function test1(x: Foo) {
     let g1 = x.g && x.g();
 >g1 : number | undefined
 >x.g && x.g() : number | undefined
->x.g : () => number | undefined
+>x.g : (() => number) | undefined
 >x : Foo
->g : () => number | undefined
+>g : (() => number) | undefined
 >x.g() : number
 >x.g : () => number
 >x : Foo
@@ -60,9 +60,9 @@ function test1(x: Foo) {
     let g2 = x.g ? x.g() : 0;
 >g2 : number
 >x.g ? x.g() : 0 : number
->x.g : () => number | undefined
+>x.g : (() => number) | undefined
 >x : Foo
->g : () => number | undefined
+>g : (() => number) | undefined
 >x.g() : number
 >x.g : () => number
 >x : Foo
@@ -95,10 +95,10 @@ class Bar {
 >1 : 1
     }
     g?(): number;  // Body of optional method can be omitted
->g : () => number | undefined
+>g : (() => number) | undefined
 
     h?() {
->h : () => number | undefined
+>h : (() => number) | undefined
 
         return 2;
 >2 : 2
@@ -140,9 +140,9 @@ function test2(x: Bar) {
 >f : () => number
 
     x.g;
->x.g : () => number | undefined
+>x.g : (() => number) | undefined
 >x : Bar
->g : () => number | undefined
+>g : (() => number) | undefined
 
     let f1 = x.f();
 >f1 : number
@@ -154,9 +154,9 @@ function test2(x: Bar) {
     let g1 = x.g && x.g();
 >g1 : number | undefined
 >x.g && x.g() : number | undefined
->x.g : () => number | undefined
+>x.g : (() => number) | undefined
 >x : Bar
->g : () => number | undefined
+>g : (() => number) | undefined
 >x.g() : number
 >x.g : () => number
 >x : Bar
@@ -165,9 +165,9 @@ function test2(x: Bar) {
     let g2 = x.g ? x.g() : 0;
 >g2 : number
 >x.g ? x.g() : 0 : number
->x.g : () => number | undefined
+>x.g : (() => number) | undefined
 >x : Bar
->g : () => number | undefined
+>g : (() => number) | undefined
 >x.g() : number
 >x.g : () => number
 >x : Bar
@@ -177,9 +177,9 @@ function test2(x: Bar) {
     let h1 = x.h && x.h();
 >h1 : number | undefined
 >x.h && x.h() : number | undefined
->x.h : () => number | undefined
+>x.h : (() => number) | undefined
 >x : Bar
->h : () => number | undefined
+>h : (() => number) | undefined
 >x.h() : number
 >x.h : () => number
 >x : Bar
@@ -188,9 +188,9 @@ function test2(x: Bar) {
     let h2 = x.h ? x.h() : 0;
 >h2 : number
 >x.h ? x.h() : 0 : number
->x.h : () => number | undefined
+>x.h : (() => number) | undefined
 >x : Bar
->h : () => number | undefined
+>h : (() => number) | undefined
 >x.h() : number
 >x.h : () => number
 >x : Bar
@@ -205,7 +205,7 @@ class Base {
 >a : number | undefined
 
     f?(): number;
->f : () => number | undefined
+>f : (() => number) | undefined
 }
 
 class Derived extends Base {

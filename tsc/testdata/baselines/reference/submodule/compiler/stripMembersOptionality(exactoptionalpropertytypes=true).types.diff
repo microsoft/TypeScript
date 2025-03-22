@@ -8,11 +8,8 @@
 +>someVal : Required<{ fn?: (key: string) => string | null; }>
  
      fn?(key: string): string | null;
-->fn : ((key: string) => string | null) | undefined
-+>fn : (key: string) => string | null | undefined
- >key : string
- 
- }>;
+ >fn : ((key: string) => string | null) | undefined
+@@= skipped -10, +10 lines =@@
  someVal.fn("");
  >someVal.fn("") : string | null
  >someVal.fn : (key: string) => string | null
@@ -21,12 +18,3 @@
  >fn : (key: string) => string | null
  >"" : ""
  
-@@= skipped -18, +18 lines =@@
- >someVal2 : Required<{ fn?: (key: string) => string | null; }>
- 
-     fn?: (key: string) => string | null;
-->fn : ((key: string) => string | null) | undefined
-+>fn : (key: string) => string | null | undefined
- >key : string
- 
- }>;

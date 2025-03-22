@@ -1,24 +1,6 @@
 --- old.declarationEmitUsingAlternativeContainingModules2.types
 +++ new.declarationEmitUsingAlternativeContainingModules2.types
-@@= skipped -75, +75 lines =@@
- >initialData : TData | undefined
- 
-   initialDataUpdatedAt?: number | (() => number | undefined);
-->initialDataUpdatedAt : number | (() => number | undefined) | undefined
-+>initialDataUpdatedAt : number | () => number | undefined | undefined
- }
- 
- interface QueryObserverOptions<
-@@= skipped -24, +24 lines =@@
- >refetchInterval : number | undefined
- 
-   select?: (data: TQueryData) => TData;
-->select : ((data: TQueryData) => TData) | undefined
-+>select : (data: TQueryData) => TData | undefined
- >data : TQueryData
- }
- 
-@@= skipped -182, +182 lines =@@
+@@= skipped -281, +281 lines =@@
  >UseQueryReturnType : UseQueryReturnType<TData, TError>
  
  declare function useQuery<
@@ -57,13 +39,13 @@
      return fetch(baseUrl + 'entries')
  >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err)) : Promise<any>
 ->fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
-+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult> | null | undefined) => Promise<any>
++>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : <TResult>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
  >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries) : Promise<any>
 ->fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : <TResult1, TResult2>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >fetch(baseUrl + 'entries')      .then((res) => res.json()) : Promise<any>
 ->fetch(baseUrl + 'entries')      .then : <TResult1 = Response, TResult2 = never>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>fetch(baseUrl + 'entries')      .then : <TResult1, TResult2>(onfulfilled?: (value: Response) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>fetch(baseUrl + 'entries')      .then : <TResult1, TResult2>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >fetch(baseUrl + 'entries') : Promise<Response>
 ->fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 +>fetch : (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>
@@ -73,7 +55,7 @@
  
        .then((res) => res.json())
 ->then : <TResult1 = Response, TResult2 = never>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: (value: Response) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >(res) => res.json() : (res: Response) => Promise<any>
  >res : Response
  >res.json() : Promise<any>
@@ -82,7 +64,7 @@
  
        .then((data) => data.entries)
 ->then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1> | null | undefined, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2> | null | undefined) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
  >(data) => data.entries : (data: any) => any
  >data : any
  >data.entries : any
@@ -91,7 +73,7 @@
  
        .catch((err) => console.log(err))
 ->catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
-+>catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult> | null | undefined) => Promise<any>
++>catch : <TResult>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
  >(err) => console.log(err) : (err: any) => void
  >err : any
  >console.log(err) : void

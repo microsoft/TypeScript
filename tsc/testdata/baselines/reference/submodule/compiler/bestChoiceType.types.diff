@@ -1,36 +1,6 @@
 --- old.bestChoiceType.types
 +++ new.bestChoiceType.types
-@@= skipped -4, +4 lines =@@
- 
- (''.match(/ /) || []).map(s => s.toLowerCase());
- >(''.match(/ /) || []).map(s => s.toLowerCase()) : any[]
-->(''.match(/ /) || []).map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
-+>(''.match(/ /) || []).map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
- >(''.match(/ /) || []) : RegExpMatchArray | []
- >''.match(/ /) || [] : RegExpMatchArray | []
- >''.match(/ /) : RegExpMatchArray | null
-@@= skipped -9, +9 lines =@@
- >match : (regexp: string | RegExp) => RegExpMatchArray | null
- >/ / : RegExp
- >[] : []
-->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
-+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
- >s => s.toLowerCase() : (s: any) => any
- >s : any
- >s.toLowerCase() : any
-@@= skipped -30, +30 lines =@@
-     let z = y.map(s => s.toLowerCase());
- >z : any[]
- >y.map(s => s.toLowerCase()) : any[]
-->y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
-+>y.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
- >y : RegExpMatchArray | []
-->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
-+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
- >s => s.toLowerCase() : (s: any) => any
- >s : any
- >s.toLowerCase() : any
-@@= skipped -23, +23 lines =@@
+@@= skipped -66, +66 lines =@@
  >/ / : RegExp
  
      let y = x ? x : [];
@@ -41,16 +11,12 @@
  >x : RegExpMatchArray | null
  >x : RegExpMatchArray
  >[] : never[]
-@@= skipped -9, +9 lines =@@
-     let z = y.map(s => s.toLowerCase());
+@@= skipped -10, +10 lines =@@
  >z : any[]
  >y.map(s => s.toLowerCase()) : any[]
-->y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+ >y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 ->y : RegExpMatchArray | never[]
-->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
-+>y.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
 +>y : never[] | RegExpMatchArray
-+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[] | <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+ >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
  >s => s.toLowerCase() : (s: any) => any
  >s : any
- >s.toLowerCase() : any

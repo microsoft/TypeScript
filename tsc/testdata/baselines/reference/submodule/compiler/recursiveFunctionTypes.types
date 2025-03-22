@@ -90,13 +90,13 @@ function f6(a?: any) { return f6; }
 >f6 : { (): ???; (a: ???): () => number; }
 
 f6("", 3); // error (arity mismatch)
->f6("", 3) : { (): ???; (a: ???): () => number; } & () => number
+>f6("", 3) : { (): ???; (a: ???): () => number; } & (() => number)
 >f6 : { (): ???; (a: ???): () => number; }
 >"" : ""
 >3 : 3
 
 f6(""); // ok (function takes an any param)
->f6("") : { (): ???; (a: ???): () => number; } & () => number
+>f6("") : { (): ???; (a: ???): () => number; } & (() => number)
 >f6 : { (): ???; (a: ???): () => number; }
 >"" : ""
 
@@ -124,13 +124,13 @@ declare function f7(a?: typeof f7): typeof f7;
 >f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 
 f7("", 3); // error (arity mismatch)
->f7("", 3) : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; } & () => number & number
+>f7("", 3) : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; } & (() => number) & number
 >f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 >"" : ""
 >3 : 3
 
 f7(""); // ok (function takes an any param)
->f7("") : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; } & () => number & number
+>f7("") : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; } & (() => number) & number
 >f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 >"" : ""
 

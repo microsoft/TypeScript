@@ -179,12 +179,6 @@
  >() => "bar" : () => "bar"
  >"bar" : "bar"
  
-     const f7: (() => "foo") | (() => "bar") = () => "bar";
-->f7 : (() => "foo") | (() => "bar")
-+>f7 : () => "foo" | () => "bar"
- >() => "bar" : () => "bar"
- >"bar" : "bar"
- }
 @@= skipped -74, +74 lines =@@
  >2 : 2
  

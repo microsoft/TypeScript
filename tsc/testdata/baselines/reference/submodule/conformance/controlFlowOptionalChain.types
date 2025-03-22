@@ -86,7 +86,7 @@ d.toString();
 
 // type predicates
 declare const f: undefined | ((x: any) => x is number);
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 >x : any
 
 declare const x: string | number;
@@ -94,7 +94,7 @@ declare const x: string | number;
 
 if (f?.(x)) {
 >f?.(x) : boolean | undefined
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 >x : string | number
 
     x; // number
@@ -113,22 +113,22 @@ else {
 >x : string | number
 
     f;
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 
     f(x);
 >f(x) : boolean
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 >x : string | number
 }
 x;
 >x : string | number
 
 f;
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 
 f(x);
 >f(x) : boolean
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 >x : string | number
 
 declare const o2: { f(x: any): x is number; } | undefined;
@@ -138,9 +138,9 @@ declare const o2: { f(x: any): x is number; } | undefined;
 
 if (o2?.f(x)) {
 >o2?.f(x) : boolean | undefined
->o2?.f : (x: any) => x is number | undefined
+>o2?.f : ((x: any) => x is number) | undefined
 >o2 : { f: (x: any) => x is number; } | undefined
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 >x : string | number
 
     x; // number
@@ -171,9 +171,9 @@ else {
 >o2 : { f: (x: any) => x is number; } | undefined
 
     o2?.f;
->o2?.f : (x: any) => x is number | undefined
+>o2?.f : ((x: any) => x is number) | undefined
 >o2 : { f: (x: any) => x is number; } | undefined
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 
     o2.f;
 >o2.f : (x: any) => x is number
@@ -187,9 +187,9 @@ o2;
 >o2 : { f: (x: any) => x is number; } | undefined
 
 o2?.f;
->o2?.f : (x: any) => x is number | undefined
+>o2?.f : ((x: any) => x is number) | undefined
 >o2 : { f: (x: any) => x is number; } | undefined
->f : (x: any) => x is number | undefined
+>f : ((x: any) => x is number) | undefined
 
 o2.f;
 >o2.f : (x: any) => x is number
@@ -519,9 +519,9 @@ declare const o6: Base | undefined;
 
 if (o6?.f()) {
 >o6?.f() : boolean | undefined
->o6?.f : () => this is Derived | undefined
+>o6?.f : (() => this is Derived) | undefined
 >o6 : Base | undefined
->f : () => this is Derived | undefined
+>f : (() => this is Derived) | undefined
 
     o6; // Derived
 >o6 : Derived
@@ -536,9 +536,9 @@ else {
 >o6 : Base | undefined
 
     o6?.f;
->o6?.f : () => this is Derived | undefined
+>o6?.f : (() => this is Derived) | undefined
 >o6 : Base | undefined
->f : () => this is Derived | undefined
+>f : (() => this is Derived) | undefined
 
     o6.f;
 >o6.f : () => this is Derived
@@ -549,9 +549,9 @@ o6;
 >o6 : Base | undefined
 
 o6?.f;
->o6?.f : () => this is Derived | undefined
+>o6?.f : (() => this is Derived) | undefined
 >o6 : Base | undefined
->f : () => this is Derived | undefined
+>f : (() => this is Derived) | undefined
 
 o6.f;
 >o6.f : () => this is Derived
@@ -568,11 +568,11 @@ declare const isString: (value: unknown) => asserts value is string;
 >value : unknown
 
 declare const maybeIsString: undefined | ((value: unknown) => asserts value is string);
->maybeIsString : (value: unknown) => asserts value is string | undefined
+>maybeIsString : ((value: unknown) => asserts value is string) | undefined
 >value : unknown
 
 declare const maybeNever: undefined | (() => never);
->maybeNever : () => never | undefined
+>maybeNever : (() => never) | undefined
 
 function f01(x: unknown) {
 >f01 : (x: unknown) => void
@@ -598,7 +598,7 @@ function f01(x: unknown) {
 
         maybeIsString?.(x);
 >maybeIsString?.(x) : void | undefined
->maybeIsString : (value: unknown) => asserts value is string | undefined
+>maybeIsString : ((value: unknown) => asserts value is string) | undefined
 >x : unknown
 
         x;
@@ -612,7 +612,7 @@ function f01(x: unknown) {
         isDefined(maybeIsString);
 >isDefined(maybeIsString) : void
 >isDefined : <T>(value: T) => asserts value is NonNullable<T>
->maybeIsString : (value: unknown) => asserts value is string | undefined
+>maybeIsString : ((value: unknown) => asserts value is string) | undefined
 
         maybeIsString?.(x);
 >maybeIsString?.(x) : void
@@ -629,7 +629,7 @@ function f01(x: unknown) {
 
         maybeNever?.();
 >maybeNever?.() : undefined
->maybeNever : () => never | undefined
+>maybeNever : (() => never) | undefined
 
         x;
 >x : unknown
@@ -674,9 +674,9 @@ function f10(o: Thing | undefined, value: number) {
     if (o?.bar() === value) {
 >o?.bar() === value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number
 
         o.bar;
@@ -711,9 +711,9 @@ function f10(o: Thing | undefined, value: number) {
     if (o?.bar() == value) {
 >o?.bar() == value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number
 
         o.bar;
@@ -755,9 +755,9 @@ function f11(o: Thing | null, value: number) {
     if (o?.bar() === value) {
 >o?.bar() === value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | null
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number
 
         o.bar;
@@ -792,9 +792,9 @@ function f11(o: Thing | null, value: number) {
     if (o?.bar() == value) {
 >o?.bar() == value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | null
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number
 
         o.bar;
@@ -836,9 +836,9 @@ function f12(o: Thing | undefined, value: number | undefined) {
     if (o?.bar() === value) {
 >o?.bar() === value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number | undefined
 
         o.bar;  // Error
@@ -873,9 +873,9 @@ function f12(o: Thing | undefined, value: number | undefined) {
     if (o?.bar() == value) {
 >o?.bar() == value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number | undefined
 
         o.bar;  // Error
@@ -917,9 +917,9 @@ function f12a(o: Thing | undefined, value: number | null) {
     if (o?.bar() === value) {
 >o?.bar() === value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number | null
 
         o.bar;
@@ -954,9 +954,9 @@ function f12a(o: Thing | undefined, value: number | null) {
     if (o?.bar() == value) {
 >o?.bar() == value : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >value : number | null
 
         o.bar;  // Error
@@ -997,9 +997,9 @@ function f13(o: Thing | undefined) {
     if (o?.bar() !== undefined) {
 >o?.bar() !== undefined : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >undefined : undefined
 
         o.bar;
@@ -1034,9 +1034,9 @@ function f13(o: Thing | undefined) {
     if (o?.bar() != undefined) {
 >o?.bar() != undefined : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >undefined : undefined
 
         o.bar;
@@ -1075,9 +1075,9 @@ function f13a(o: Thing | undefined) {
     if (o?.bar() !== null) {
 >o?.bar() !== null : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 
         o.bar;  // Error
 >o.bar : () => number
@@ -1109,9 +1109,9 @@ function f13a(o: Thing | undefined) {
     if (o?.bar() != null) {
 >o?.bar() != null : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 
         o.bar;
 >o.bar : () => number
@@ -1151,9 +1151,9 @@ function f14(o: Thing | null) {
     if (o?.bar() !== undefined) {
 >o?.bar() !== undefined : boolean
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | null
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >undefined : undefined
 
         o.bar;
@@ -1433,9 +1433,9 @@ function f20(o: Thing | undefined) {
 >typeof o?.bar() === "number" : boolean
 >typeof o?.bar() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | undefined
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >"number" : "number"
 
         o.bar;
@@ -1491,9 +1491,9 @@ function f21(o: Thing | null) {
 >typeof o?.bar() === "number" : boolean
 >typeof o?.bar() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.bar() : number | undefined
->o?.bar : () => number | undefined
+>o?.bar : (() => number) | undefined
 >o : Thing | null
->bar : () => number | undefined
+>bar : (() => number) | undefined
 >"number" : "number"
 
         o.bar;

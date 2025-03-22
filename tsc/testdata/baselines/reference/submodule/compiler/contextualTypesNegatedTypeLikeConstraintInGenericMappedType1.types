@@ -48,7 +48,7 @@ type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
 >defaultIndex : number | undefined
 
     onChange?: (index: number) => void;
->onChange : (index: number) => void | undefined
+>onChange : ((index: number) => void) | undefined
 >index : number
 
     selectedIndex?: number;

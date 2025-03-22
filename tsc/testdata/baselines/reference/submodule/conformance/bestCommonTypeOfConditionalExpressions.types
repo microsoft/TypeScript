@@ -66,8 +66,8 @@ var r5 = true ? b : a; // typeof b
 >a : { x: number; y?: number; }
 
 var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => void
->r6 : (x: number) => void | (x: Object) => void
->true ? (x: number) => { } : (x: Object) => { } : (x: number) => void | (x: Object) => void
+>r6 : ((x: number) => void) | ((x: Object) => void)
+>true ? (x: number) => { } : (x: Object) => { } : ((x: number) => void) | ((x: Object) => void)
 >true : true
 >(x: number) => { } : (x: number) => void
 >x : number
@@ -77,7 +77,7 @@ var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => vo
 var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { }; 
 >r7 : (x: Object) => void
 >x : Object
->true ? (x: number) => { } : (x: Object) => { } : (x: number) => void | (x: Object) => void
+>true ? (x: number) => { } : (x: Object) => { } : ((x: number) => void) | ((x: Object) => void)
 >true : true
 >(x: number) => { } : (x: number) => void
 >x : number
@@ -85,8 +85,8 @@ var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { };
 >x : Object
 
 var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
->r8 : (x: Object) => void | (x: number) => void
->true ? (x: Object) => { } : (x: number) => { } : (x: Object) => void | (x: number) => void
+>r8 : ((x: Object) => void) | ((x: number) => void)
+>true ? (x: Object) => { } : (x: number) => { } : ((x: Object) => void) | ((x: number) => void)
 >true : true
 >(x: Object) => { } : (x: Object) => void
 >x : Object

@@ -217,16 +217,7 @@
  >loggers[i][field] : any
  >loggers[i] : ILogger
  >loggers : ILogger[]
-@@= skipped -203, +203 lines =@@
-         }
- 
-         static errorHandlerStack: { (e: Error): void; }[] = [];
-->errorHandlerStack : ((e: Error) => void)[]
-+>errorHandlerStack : (e: Error) => void[]
- >e : Error
- >[] : undefined[]
- 
-@@= skipped -336, +336 lines =@@
+@@= skipped -539, +539 lines =@@
  >false : false
  >bugs : any
  >assert.bugIds : any
@@ -285,12 +276,7 @@
  >global['WScript'].InitializeProjection : any
  >global['WScript'] : any
  >global : any
-@@= skipped -405, +405 lines =@@
-         }
- 
-         export var benchmarks: { new (): Benchmark; }[] = [];
-->benchmarks : (new () => Benchmark)[]
-+>benchmarks : new () => Benchmark[]
+@@= skipped -409, +409 lines =@@
  >[] : undefined[]
  
          var timeFunction: (
@@ -299,7 +285,7 @@
  
              benchmark: Benchmark,
  >benchmark : Benchmark
-@@= skipped -16, +16 lines =@@
+@@= skipped -12, +12 lines =@@
  >name : string
  
              f?: (bench?: { (): void; }) => void
@@ -346,25 +332,7 @@
  >call : (this: Function, thisArg: any, ...argArray: any[]) => any
  >benchmark : Benchmark
  >subBenchmark : (name: any, f: any) => void
-@@= skipped -31, +31 lines =@@
- >i < benchmarks.length : boolean
- >i : number
- >benchmarks.length : number
-->benchmarks : (new () => Benchmark)[]
-+>benchmarks : new () => Benchmark[]
- >length : number
- >i++ : number
- >i : number
-@@= skipped -9, +9 lines =@@
- >b : Benchmark
- >new benchmarks[i]() : Benchmark
- >benchmarks[i] : new () => Benchmark
-->benchmarks : (new () => Benchmark)[]
-+>benchmarks : new () => Benchmark[]
- >i : number
- 
- 
-@@= skipped -34, +34 lines =@@
+@@= skipped -74, +74 lines =@@
  
                      timeFunction(b);
  >timeFunction(b) : void
@@ -373,20 +341,7 @@
  >b : Benchmark
  
                      b.afterEach();
-@@= skipped -126, +126 lines =@@
- 
-             benchmarks.push(BenchmarkClass);
- >benchmarks.push(BenchmarkClass) : number
-->benchmarks.push : (...items: (new () => Benchmark)[]) => number
-->benchmarks : (new () => Benchmark)[]
-->push : (...items: (new () => Benchmark)[]) => number
-+>benchmarks.push : (...items: new () => Benchmark[]) => number
-+>benchmarks : new () => Benchmark[]
-+>push : (...items: new () => Benchmark[]) => number
- >BenchmarkClass : any
-         }
- 
-@@= skipped -173, +173 lines =@@
+@@= skipped -299, +299 lines =@@
  >fileExists : (s: string) => boolean
  >s : string
  >typeof this.fileCollection[s] !== 'undefined' : boolean

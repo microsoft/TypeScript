@@ -15,7 +15,7 @@ operationsAvailableOnPromisedType.ts(23,27): error TS2495: Type 'Promise<string[
 operationsAvailableOnPromisedType.ts(24,5): error TS2349: This expression is not callable.
   Type 'Promise<() => void>' has no call signatures.
 operationsAvailableOnPromisedType.ts(25,5): error TS2349: This expression is not callable.
-  Not all constituents of type 'Promise<() => void> | () => void' are callable.
+  Not all constituents of type 'Promise<() => void> | (() => void)' are callable.
     Type 'Promise<() => void>' has no call signatures.
 operationsAvailableOnPromisedType.ts(26,9): error TS2351: This expression is not constructable.
   Type 'Promise<new () => any>' has no construct signatures.
@@ -92,7 +92,7 @@ operationsAvailableOnPromisedType.ts(27,5): error TS2349: This expression is not
         f();
         ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Not all constituents of type 'Promise<() => void> | () => void' are callable.
+!!! error TS2349:   Not all constituents of type 'Promise<() => void> | (() => void)' are callable.
 !!! error TS2349:     Type 'Promise<() => void>' has no call signatures.
 !!! related TS2773 operationsAvailableOnPromisedType.ts:25:5: Did you forget to use 'await'?
         new g();

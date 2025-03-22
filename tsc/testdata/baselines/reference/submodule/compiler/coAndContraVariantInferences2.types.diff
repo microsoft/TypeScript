@@ -1,21 +1,6 @@
 --- old.coAndContraVariantInferences2.types
 +++ new.coAndContraVariantInferences2.types
-@@= skipped -163, +163 lines =@@
- >node : Node
- 
- declare function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U;
-->assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: ((node: Node) => boolean) | undefined): void; }
-+>assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: (node: Node) => boolean | undefined): void; }
- >node : T | undefined
- >test : (node: T) => node is U
- >node : T
- 
- declare function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined): void;
-->assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: ((node: Node) => boolean) | undefined): void; }
-+>assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: (node: Node) => boolean | undefined): void; }
- >node : Node | undefined
-->test : ((node: Node) => boolean) | undefined
-+>test : (node: Node) => boolean | undefined
+@@= skipped -175, +175 lines =@@
  >node : Node
  
  function foo(node: FunctionDeclaration | CaseClause) {
@@ -24,13 +9,7 @@
  >node : CaseClause | FunctionDeclaration
  
      assertNode(node, canHaveLocals);  // assertNode<Node, HasLocals>
- >assertNode(node, canHaveLocals) : void
-->assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: ((node: Node) => boolean) | undefined): void; }
-+>assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: (node: Node) => boolean | undefined): void; }
- >node : CaseClause | FunctionDeclaration
- >canHaveLocals : (node: Node) => node is HasLocals
- 
-@@= skipped -30, +30 lines =@@
+@@= skipped -18, +18 lines =@@
  >node : Node
  
  declare function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut;

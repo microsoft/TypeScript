@@ -9,21 +9,3 @@
  
      return 1;
  >1 : 1
-@@= skipped -77, +77 lines =@@
- 
- // returns number => void
- function f11() {
-->f11 : () => ((x: number) => void) | ((x: Object) => void)
-+>f11 : () => (x: number) => void | (x: Object) => void
- 
-     if (true) {
- >true : true
-@@= skipped -18, +18 lines =@@
- 
- // returns Object => void
- function f12() {
-->f12 : () => ((x: Object) => void) | ((x: number) => void)
-+>f12 : () => (x: Object) => void | (x: number) => void
- 
-     if (true) {
- >true : true

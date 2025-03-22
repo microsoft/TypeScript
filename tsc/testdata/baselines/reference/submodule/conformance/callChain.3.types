@@ -5,17 +5,17 @@ declare function absorb<T>(): T;
 >absorb : <T>() => T
 
 declare const a: { m?<T>(obj: {x: T}): T } | undefined;
->a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
->m : <T>(obj: { x: T; }) => T | undefined
+>a : { m?: (<T>(obj: { x: T; }) => T) | undefined; } | undefined
+>m : (<T>(obj: { x: T; }) => T) | undefined
 >obj : { x: T; }
 >x : T
 
 const n1: number = a?.m?.({x: 12 }); // should be an error (`undefined` is not assignable to `number`)
 >n1 : number
 >a?.m?.({x: 12 }) : number | undefined
->a?.m : <T>(obj: { x: T; }) => T | undefined
->a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
->m : <T>(obj: { x: T; }) => T | undefined
+>a?.m : (<T>(obj: { x: T; }) => T) | undefined
+>a : { m?: (<T>(obj: { x: T; }) => T) | undefined; } | undefined
+>m : (<T>(obj: { x: T; }) => T) | undefined
 >{x: 12 } : { x: number; }
 >x : number
 >12 : 12
@@ -23,9 +23,9 @@ const n1: number = a?.m?.({x: 12 }); // should be an error (`undefined` is not a
 const n2: number = a?.m?.({x: absorb()}); // likewise
 >n2 : number
 >a?.m?.({x: absorb()}) : number | undefined
->a?.m : <T>(obj: { x: T; }) => T | undefined
->a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
->m : <T>(obj: { x: T; }) => T | undefined
+>a?.m : (<T>(obj: { x: T; }) => T) | undefined
+>a : { m?: (<T>(obj: { x: T; }) => T) | undefined; } | undefined
+>m : (<T>(obj: { x: T; }) => T) | undefined
 >{x: absorb()} : { x: number; }
 >x : number
 >absorb() : number
@@ -34,9 +34,9 @@ const n2: number = a?.m?.({x: absorb()}); // likewise
 const n3: number | undefined = a?.m?.({x: 12}); // should be ok
 >n3 : number | undefined
 >a?.m?.({x: 12}) : number | undefined
->a?.m : <T>(obj: { x: T; }) => T | undefined
->a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
->m : <T>(obj: { x: T; }) => T | undefined
+>a?.m : (<T>(obj: { x: T; }) => T) | undefined
+>a : { m?: (<T>(obj: { x: T; }) => T) | undefined; } | undefined
+>m : (<T>(obj: { x: T; }) => T) | undefined
 >{x: 12} : { x: number; }
 >x : number
 >12 : 12
@@ -44,9 +44,9 @@ const n3: number | undefined = a?.m?.({x: 12}); // should be ok
 const n4: number | undefined = a?.m?.({x: absorb()}); // likewise
 >n4 : number | undefined
 >a?.m?.({x: absorb()}) : number | undefined
->a?.m : <T>(obj: { x: T; }) => T | undefined
->a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
->m : <T>(obj: { x: T; }) => T | undefined
+>a?.m : (<T>(obj: { x: T; }) => T) | undefined
+>a : { m?: (<T>(obj: { x: T; }) => T) | undefined; } | undefined
+>m : (<T>(obj: { x: T; }) => T) | undefined
 >{x: absorb()} : { x: number; }
 >x : number
 >absorb() : number
@@ -56,9 +56,9 @@ const n4: number | undefined = a?.m?.({x: absorb()}); // likewise
 let t1 = a?.m?.({x: 12});
 >t1 : number | undefined
 >a?.m?.({x: 12}) : number | undefined
->a?.m : <T>(obj: { x: T; }) => T | undefined
->a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
->m : <T>(obj: { x: T; }) => T | undefined
+>a?.m : (<T>(obj: { x: T; }) => T) | undefined
+>a : { m?: (<T>(obj: { x: T; }) => T) | undefined; } | undefined
+>m : (<T>(obj: { x: T; }) => T) | undefined
 >{x: 12} : { x: number; }
 >x : number
 >12 : 12
@@ -68,10 +68,10 @@ t1 = a!.m!({x: 12});
 >t1 : number | undefined
 >a!.m!({x: 12}) : number
 >a!.m! : <T>(obj: { x: T; }) => T
->a!.m : <T>(obj: { x: T; }) => T | undefined
->a! : { m?: <T>(obj: { x: T; }) => T | undefined; }
->a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
->m : <T>(obj: { x: T; }) => T | undefined
+>a!.m : (<T>(obj: { x: T; }) => T) | undefined
+>a! : { m?: (<T>(obj: { x: T; }) => T) | undefined; }
+>a : { m?: (<T>(obj: { x: T; }) => T) | undefined; } | undefined
+>m : (<T>(obj: { x: T; }) => T) | undefined
 >{x: 12} : { x: number; }
 >x : number
 >12 : 12

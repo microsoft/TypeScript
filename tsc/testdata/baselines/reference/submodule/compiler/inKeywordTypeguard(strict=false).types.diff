@@ -1,26 +1,6 @@
 --- old.inKeywordTypeguard(strict=false).types
 +++ new.inKeywordTypeguard(strict=false).types
-@@= skipped -441, +441 lines =@@
- >window : Window & typeof globalThis
- 
-         window.ontouchstart
-->window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
-+>window.ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any
- >window : Window & typeof globalThis
-->ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
-+>ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any
- 
-     } else {
-         window.ontouchstart
-->window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
-+>window.ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any
- >window : Window & typeof globalThis
-->ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
-+>ontouchstart : (this: GlobalEventHandlers, ev: TouchEvent) => any & (this: Window, ev: TouchEvent) => any
-     }
- }
- 
-@@= skipped -43, +43 lines =@@
+@@= skipped -484, +484 lines =@@
  >x && typeof x === "object" : boolean
  >x : unknown
  >typeof x === "object" : boolean

@@ -78,10 +78,10 @@
  >h(v => v ? (abc) => { } : Promise.reject()) : void
  >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
 ->v => v ? (abc) => { } : Promise.reject() : (v: boolean) => ((abc: string) => void) | Promise<MyCallback>
-+>v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback> | (abc: string) => void
++>v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback> | ((abc: string) => void)
  >v : boolean
 ->v ? (abc) => { } : Promise.reject() : ((abc: string) => void) | Promise<MyCallback>
-+>v ? (abc) => { } : Promise.reject() : Promise<MyCallback> | (abc: string) => void
++>v ? (abc) => { } : Promise.reject() : Promise<MyCallback> | ((abc: string) => void)
  >v : boolean
  >(abc) => { } : (abc: string) => void
  >abc : string
@@ -94,13 +94,7 @@
  
  h(async v => v ? (def) => { } : Promise.reject());
  >h(async v => v ? (def) => { } : Promise.reject()) : void
- >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
-->async v => v ? (def) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback | ((def: string) => void)>
-+>async v => v ? (def) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback | (def: string) => void>
- >v : boolean
-->v ? (def) => { } : Promise.reject() : Promise<MyCallback> | ((def: string) => void)
-+>v ? (def) => { } : Promise.reject() : Promise<MyCallback> | (def: string) => void
- >v : boolean
+@@= skipped -21, +21 lines =@@
  >(def) => { } : (def: string) => void
  >def : string
  >Promise.reject() : Promise<MyCallback>
@@ -113,16 +107,16 @@
  // repro from #29196
  const increment: (
 ->increment : (num: number, str: string) => Promise<((s: string) => any) | string> | string
-+>increment : (num: number, str: string) => string | Promise<string | (s: string) => any>
++>increment : (num: number, str: string) => string | Promise<string | ((s: string) => any)>
  
    num: number,
  >num : number
-@@= skipped -53, +53 lines =@@
+@@= skipped -32, +32 lines =@@
  }
  
  const increment2: (
 ->increment2 : (num: number, str: string) => Promise<((s: string) => any) | string>
-+>increment2 : (num: number, str: string) => Promise<string | (s: string) => any>
++>increment2 : (num: number, str: string) => Promise<string | ((s: string) => any)>
  
    num: number,
  >num : number

@@ -22,7 +22,7 @@ declare class Node<Options = any> {
 
 interface NodeConfig<Options = any> {
   extendMarkSchema?:
->extendMarkSchema : (this: { name: string; options: Options; }, extension: Node<any>) => Record<string, any> | null | undefined
+>extendMarkSchema : ((this: { name: string; options: Options; }, extension: Node<any>) => Record<string, any>) | null | undefined
 
     | ((
         this: {
@@ -54,7 +54,7 @@ declare class Mark<Options = any> {
 
 interface MarkConfig<Options = any> {
   extendMarkSchema?:
->extendMarkSchema : (this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any> | null | undefined
+>extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any>) | null | undefined
 
     | ((
         this: {
@@ -104,8 +104,8 @@ declare function getExtensionField<T = any>(
 ): RemoveThis<T>;
 
 const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
->extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
->getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
+>extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
+>getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
 >getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
 
   e,
@@ -120,11 +120,11 @@ declare const extension: Mark<any>;
 >extension : Mark<any>
 
 if (extendMarkSchema) {
->extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
+>extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
 
   extendMarkSchema(extension); // error
 >extendMarkSchema(extension) : Record<string, any>
->extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any>
+>extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>)
 >extension : Mark<any>
 }
 

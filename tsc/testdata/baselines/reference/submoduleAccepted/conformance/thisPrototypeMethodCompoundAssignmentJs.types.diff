@@ -1,20 +1,6 @@
 --- old.thisPrototypeMethodCompoundAssignmentJs.types
 +++ new.thisPrototypeMethodCompoundAssignmentJs.types
-@@= skipped -11, +11 lines =@@
- 
-   this.parentNode?.removeChild(this);
- >this.parentNode?.removeChild(this) : Element | undefined
-->this.parentNode?.removeChild : (<T extends Node>(child: T) => T) | undefined
-+>this.parentNode?.removeChild : <T extends Node>(child: T) => T | undefined
- >this.parentNode : ParentNode | null
- >this : Element
- >parentNode : ParentNode | null
-->removeChild : (<T extends Node>(child: T) => T) | undefined
-+>removeChild : <T extends Node>(child: T) => T | undefined
- >this : Element
- 
- };
-@@= skipped -19, +19 lines =@@
+@@= skipped -30, +30 lines =@@
  >Element : { new (): Element; prototype: Element; }
  >prototype : Element
  >remove : () => void
@@ -23,16 +9,14 @@
  
    this.parentNode?.removeChild(this);
 ->this.parentNode?.removeChild(this) : Node | undefined
-->this.parentNode?.removeChild : (<T extends Node>(child: T) => T) | undefined
 +>this.parentNode?.removeChild(this) : Element | undefined
-+>this.parentNode?.removeChild : <T extends Node>(child: T) => T | undefined
+ >this.parentNode?.removeChild : (<T extends Node>(child: T) => T) | undefined
  >this.parentNode : ParentNode | null
 ->this : Node
 +>this : Element
  >parentNode : ParentNode | null
-->removeChild : (<T extends Node>(child: T) => T) | undefined
+ >removeChild : (<T extends Node>(child: T) => T) | undefined
 ->this : Node
-+>removeChild : <T extends Node>(child: T) => T | undefined
 +>this : Element
  
  };

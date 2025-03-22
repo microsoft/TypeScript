@@ -6,21 +6,21 @@
  declare function useState1<S>(initialState: (S extends (() => any) ? never : S) | (() => S)): S; // No args
 ->useState1 : <S>(initialState: (S extends (() => any) ? never : S) | (() => S)) => S
 ->initialState : (S extends () => any ? never : S) | (() => S)
-+>useState1 : <S>(initialState: () => S | (S extends () => any ? never : S)) => S
-+>initialState : () => S | (S extends () => any ? never : S)
++>useState1 : <S>(initialState: (() => S) | (S extends () => any ? never : S)) => S
++>initialState : (() => S) | (S extends () => any ? never : S)
  
  declare function useState2<S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)): S; // Any args
 ->useState2 : <S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)) => S
 ->initialState : (S extends (...args: any[]) => any ? never : S) | (() => S)
-+>useState2 : <S>(initialState: () => S | (S extends (...args: any[]) => any ? never : S)) => S
-+>initialState : () => S | (S extends (...args: any[]) => any ? never : S)
++>useState2 : <S>(initialState: (() => S) | (S extends (...args: any[]) => any ? never : S)) => S
++>initialState : (() => S) | (S extends (...args: any[]) => any ? never : S)
  >args : any[]
  
  const func1 = useState1(() => () => 0);
  >func1 : () => 0
  >useState1(() => () => 0) : () => 0
 ->useState1 : <S>(initialState: (S extends (() => any) ? never : S) | (() => S)) => S
-+>useState1 : <S>(initialState: () => S | (S extends () => any ? never : S)) => S
++>useState1 : <S>(initialState: (() => S) | (S extends () => any ? never : S)) => S
  >() => () => 0 : () => () => 0
  >() => 0 : () => 0
  >0 : 0
@@ -29,7 +29,7 @@
  >func2 : () => 0
  >useState2(() => () => 0) : () => 0
 ->useState2 : <S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)) => S
-+>useState2 : <S>(initialState: () => S | (S extends (...args: any[]) => any ? never : S)) => S
++>useState2 : <S>(initialState: (() => S) | (S extends (...args: any[]) => any ? never : S)) => S
  >() => () => 0 : () => () => 0
  >() => 0 : () => 0
  >0 : 0
@@ -37,21 +37,21 @@
  declare function useState3<S, T extends S>(initialState: (T extends (() => any) ? never : T) | (() => S)): S; // No args
 ->useState3 : <S, T extends S>(initialState: (T extends (() => any) ? never : T) | (() => S)) => S
 ->initialState : (T extends () => any ? never : T) | (() => S)
-+>useState3 : <S, T extends S>(initialState: () => S | (T extends () => any ? never : T)) => S
-+>initialState : () => S | (T extends () => any ? never : T)
++>useState3 : <S, T extends S>(initialState: (() => S) | (T extends () => any ? never : T)) => S
++>initialState : (() => S) | (T extends () => any ? never : T)
  
  declare function useState4<S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)): S; // Any args
 ->useState4 : <S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)) => S
 ->initialState : (T extends (...args: any[]) => any ? never : T) | (() => S)
-+>useState4 : <S, T extends S>(initialState: () => S | (T extends (...args: any[]) => any ? never : T)) => S
-+>initialState : () => S | (T extends (...args: any[]) => any ? never : T)
++>useState4 : <S, T extends S>(initialState: (() => S) | (T extends (...args: any[]) => any ? never : T)) => S
++>initialState : (() => S) | (T extends (...args: any[]) => any ? never : T)
  >args : any[]
  
  const func3 = useState1(() => () => 0);
  >func3 : () => 0
  >useState1(() => () => 0) : () => 0
 ->useState1 : <S>(initialState: (S extends (() => any) ? never : S) | (() => S)) => S
-+>useState1 : <S>(initialState: () => S | (S extends () => any ? never : S)) => S
++>useState1 : <S>(initialState: (() => S) | (S extends () => any ? never : S)) => S
  >() => () => 0 : () => () => 0
  >() => 0 : () => 0
  >0 : 0
@@ -60,7 +60,7 @@
  >func4 : () => 0
  >useState2(() => () => 0) : () => 0
 ->useState2 : <S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)) => S
-+>useState2 : <S>(initialState: () => S | (S extends (...args: any[]) => any ? never : S)) => S
++>useState2 : <S>(initialState: (() => S) | (S extends (...args: any[]) => any ? never : S)) => S
  >() => () => 0 : () => () => 0
  >() => 0 : () => 0
  >0 : 0

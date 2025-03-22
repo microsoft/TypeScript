@@ -83,7 +83,7 @@ function compose<A, B, C, D, E>(
 /* ... etc ... */
 function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
 >compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
->fns : (x: T) => T[]
+>fns : ((x: T) => T)[]
 >x : T
 >x : T
 
@@ -91,9 +91,9 @@ function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
 >(x: T) => fns.reduce((prev, fn) => fn(prev), x) : (x: T) => T
 >x : T
 >fns.reduce((prev, fn) => fn(prev), x) : T
->fns.reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: (x: T) => T[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: (x: T) => T[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: (x: T) => T[]) => U, initialValue: U): U; }
->fns : (x: T) => T[]
->reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: (x: T) => T[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: (x: T) => T[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: (x: T) => T[]) => U, initialValue: U): U; }
+>fns.reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; }
+>fns : ((x: T) => T)[]
+>reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; }
 >(prev, fn) => fn(prev) : (prev: T, fn: (x: T) => T) => T
 >prev : T
 >fn : (x: T) => T

@@ -12,7 +12,7 @@ interface Props<T extends OptionValues> {
 >value : T | Option<T> | undefined
 
     onChange?(value: Option<T> | undefined): void;
->onChange : (value: Option<T> | undefined) => void | undefined
+>onChange : ((value: Option<T> | undefined) => void) | undefined
 >value : Option<T> | undefined
 }
 
@@ -407,7 +407,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      * Callback to be invoked when this option is focused.
      */
     onFocus?: (option: Option<TValue>, event: any) => void;
->onFocus : (option: Option<TValue>, event: any) => void | undefined
+>onFocus : ((option: Option<TValue>, event: any) => void) | undefined
 >option : Option<TValue>
 >event : any
 
@@ -415,7 +415,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      * Callback to be invoked when this option is selected.
      */
     onSelect?: (option: Option<TValue>, event: any) => void;
->onSelect : (option: Option<TValue>, event: any) => void | undefined
+>onSelect : ((option: Option<TValue>, event: any) => void) | undefined
 >option : Option<TValue>
 >event : any
 
@@ -436,14 +436,14 @@ export interface OptionComponentProps<TValue = OptionValues> {
      * being rendered)
      */
     removeValue?: (value: TValue | TValue[]) => void;
->removeValue : (value: TValue | TValue[]) => void | undefined
+>removeValue : ((value: TValue | TValue[]) => void) | undefined
 >value : TValue | TValue[]
 
     /**
      * Callback to invoke to select an option. (Not necessarily the one being rendered)
      */
     selectValue?: (value: TValue | TValue[]) => void;
->selectValue : (value: TValue | TValue[]) => void | undefined
+>selectValue : ((value: TValue | TValue[]) => void) | undefined
 >value : TValue | TValue[]
 }
 

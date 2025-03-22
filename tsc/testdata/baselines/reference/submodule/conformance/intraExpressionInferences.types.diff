@@ -138,16 +138,7 @@
  
      a() { return 42 },
  >a : () => 42
-@@= skipped -115, +115 lines =@@
- >outputs : O
- 
-     map?: (inputs: Unwrap<I>) => Unwrap<O>;
-->map : ((inputs: Unwrap<I>) => Unwrap<O>) | undefined
-+>map : (inputs: Unwrap<I>) => Unwrap<O> | undefined
- >inputs : Unwrap<I>
- 
- };
-@@= skipped -12, +12 lines =@@
+@@= skipped -127, +127 lines =@@
  createMappingComponent({
  >createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
  >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
@@ -236,27 +227,7 @@
  >"," : ","
  
    },
-@@= skipped -128, +128 lines =@@
- >resWithConditionalExpression : [string[], "first" | "two", boolean]
- >withConditionalExpression({  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),}) : [string[], "first" | "two", boolean]
- >withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
-->{  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),} : { a: (arg: string) => string[]; b: ((arg: string[]) => "first") | ((arg: string[]) => "two"); c: (arg: "first" | "two") => boolean; }
-+>{  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),} : { a: (arg: string) => string[]; b: (arg: string[]) => "first" | (arg: string[]) => "two"; c: (arg: "first" | "two") => boolean; }
- 
-   a: (arg) => [arg],
- >a : (arg: string) => string[]
-@@= skipped -10, +10 lines =@@
- >arg : string
- 
-   b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,
-->b : ((arg: string[]) => "first") | ((arg: string[]) => "two")
-->Math.random() ? (arg) => "first" as const : (arg) => "two" as const : ((arg: string[]) => "first") | ((arg: string[]) => "two")
-+>b : (arg: string[]) => "first" | (arg: string[]) => "two"
-+>Math.random() ? (arg) => "first" as const : (arg) => "two" as const : (arg: string[]) => "first" | (arg: string[]) => "two"
- >Math.random() : number
- >Math.random : () => number
- >Math : Math
-@@= skipped -73, +73 lines =@@
+@@= skipped -211, +211 lines =@@
  >(arg) => arg.join(",") : (arg: string[]) => string
  >arg : string[]
  >arg.join(",") : string

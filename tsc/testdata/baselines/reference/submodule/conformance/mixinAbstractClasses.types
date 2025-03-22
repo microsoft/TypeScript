@@ -7,7 +7,7 @@ interface Mixin {
 }
 
 function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
->Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
 >args : any
 >baseClass : TBaseClass
 >args : any
@@ -41,7 +41,7 @@ abstract class AbstractBase {
 class DerivedFromConcrete extends Mixin(ConcreteBase) {
 >DerivedFromConcrete : DerivedFromConcrete
 >Mixin(ConcreteBase) : ConcreteBase & Mixin
->Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
 >ConcreteBase : typeof ConcreteBase
 }
 
@@ -65,7 +65,7 @@ wasConcrete.mixinMethod();
 class DerivedFromAbstract extends Mixin(AbstractBase) {
 >DerivedFromAbstract : DerivedFromAbstract
 >Mixin(AbstractBase) : AbstractBase & Mixin
->Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
 >AbstractBase : typeof AbstractBase
 
     abstractBaseMethod() {}

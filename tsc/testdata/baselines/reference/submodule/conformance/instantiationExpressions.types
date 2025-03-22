@@ -215,21 +215,21 @@ function f17(f: { <T>(a: T): T, new (a: string, b: number): string[] }) {
 }
 
 function f20(f: (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
->f20 : (f: <T>(a: T) => T & <U>(a: U, b: number) => U[]) => void
->f : <T>(a: T) => T & <U>(a: U, b: number) => U[]
+>f20 : (f: (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])) => void
+>f : (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])
 >a : T
 >a : U
 >b : number
 
     let fs = f<string>;  // ((a: string) => string) & ((a: string, b: number) => string[]])
->fs : (a: string) => string & (a: string, b: number) => string[]
->f<string> : (a: string) => string & (a: string, b: number) => string[]
->f : <T>(a: T) => T & <U>(a: U, b: number) => U[]
+>fs : ((a: string) => string) & ((a: string, b: number) => string[])
+>f<string> : ((a: string) => string) & ((a: string, b: number) => string[])
+>f : (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])
 }
 
 function f21(f: (<T>(a: T) => T) & ((a: string, b: number) => string[])) {
->f21 : (f: <T>(a: T) => T & (a: string, b: number) => string[]) => void
->f : <T>(a: T) => T & (a: string, b: number) => string[]
+>f21 : (f: (<T>(a: T) => T) & ((a: string, b: number) => string[])) => void
+>f : (<T>(a: T) => T) & ((a: string, b: number) => string[])
 >a : T
 >a : string
 >b : number
@@ -237,19 +237,19 @@ function f21(f: (<T>(a: T) => T) & ((a: string, b: number) => string[])) {
     let fs = f<string>;  // (a: string) => string
 >fs : (a: string) => string
 >f<string> : (a: string) => string
->f : <T>(a: T) => T & (a: string, b: number) => string[]
+>f : (<T>(a: T) => T) & ((a: string, b: number) => string[])
 }
 
 function f22(f: (<T>(a: T) => T) & { x: string }) {
->f22 : (f: <T>(a: T) => T & { x: string; }) => void
->f : <T>(a: T) => T & { x: string; }
+>f22 : (f: (<T>(a: T) => T) & { x: string; }) => void
+>f : (<T>(a: T) => T) & { x: string; }
 >a : T
 >x : string
 
     let fs = f<string>;  // ((a: string) => string) & { x: string }
->fs : (a: string) => string & { x: string; }
->f<string> : (a: string) => string & { x: string; }
->f : <T>(a: T) => T & { x: string; }
+>fs : ((a: string) => string) & { x: string; }
+>f<string> : ((a: string) => string) & { x: string; }
+>f : (<T>(a: T) => T) & { x: string; }
 }
 
 function f23(f: { x: string } & { y: string }) {
@@ -265,34 +265,34 @@ function f23(f: { x: string } & { y: string }) {
 }
 
 function f24(f: (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])) {
->f24 : (f: new <T>(a: T) => T & new <U>(a: U, b: number) => U[]) => void
->f : new <T>(a: T) => T & new <U>(a: U, b: number) => U[]
+>f24 : (f: (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])) => void
+>f : (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])
 >a : T
 >a : U
 >b : number
 
     let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
->fs : new (a: string) => string & new (a: string, b: number) => string[]
->f<string> : new (a: string) => string & new (a: string, b: number) => string[]
->f : new <T>(a: T) => T & new <U>(a: U, b: number) => U[]
+>fs : (new (a: string) => string) & (new (a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) & (new (a: string, b: number) => string[])
+>f : (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])
 }
 
 function f25(f: (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
->f25 : (f: new <T>(a: T) => T & <U>(a: U, b: number) => U[]) => void
->f : new <T>(a: T) => T & <U>(a: U, b: number) => U[]
+>f25 : (f: (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])) => void
+>f : (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])
 >a : T
 >a : U
 >b : number
 
     let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
->fs : new (a: string) => string & (a: string, b: number) => string[]
->f<string> : new (a: string) => string & (a: string, b: number) => string[]
->f : new <T>(a: T) => T & <U>(a: U, b: number) => U[]
+>fs : (new (a: string) => string) & ((a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) & ((a: string, b: number) => string[])
+>f : (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])
 }
 
 function f26(f: (new <T>(a: T) => T) & ((a: string, b: number) => string[])) {
->f26 : (f: new <T>(a: T) => T & (a: string, b: number) => string[]) => void
->f : new <T>(a: T) => T & (a: string, b: number) => string[]
+>f26 : (f: (new <T>(a: T) => T) & ((a: string, b: number) => string[])) => void
+>f : (new <T>(a: T) => T) & ((a: string, b: number) => string[])
 >a : T
 >a : string
 >b : number
@@ -300,12 +300,12 @@ function f26(f: (new <T>(a: T) => T) & ((a: string, b: number) => string[])) {
     let fs = f<string>;  // new (a: string) => string
 >fs : new (a: string) => string
 >f<string> : new (a: string) => string
->f : new <T>(a: T) => T & (a: string, b: number) => string[]
+>f : (new <T>(a: T) => T) & ((a: string, b: number) => string[])
 }
 
 function f27(f: (<T>(a: T) => T) & (new (a: string, b: number) => string[])) {
->f27 : (f: <T>(a: T) => T & new (a: string, b: number) => string[]) => void
->f : <T>(a: T) => T & new (a: string, b: number) => string[]
+>f27 : (f: (<T>(a: T) => T) & (new (a: string, b: number) => string[])) => void
+>f : (<T>(a: T) => T) & (new (a: string, b: number) => string[])
 >a : T
 >a : string
 >b : number
@@ -313,45 +313,45 @@ function f27(f: (<T>(a: T) => T) & (new (a: string, b: number) => string[])) {
     let fs = f<string>;  // (a: string) => string
 >fs : (a: string) => string
 >f<string> : (a: string) => string
->f : <T>(a: T) => T & new (a: string, b: number) => string[]
+>f : (<T>(a: T) => T) & (new (a: string, b: number) => string[])
 }
 
 function f30(f: (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
->f30 : (f: <T>(a: T) => T | <U>(a: U, b: number) => U[]) => void
->f : <T>(a: T) => T | <U>(a: U, b: number) => U[]
+>f30 : (f: (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])) => void
+>f : (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])
 >a : T
 >a : U
 >b : number
 
     let fs = f<string>;  // ((a: string) => string) | ((a: string, b: number) => string[]])
->fs : (a: string) => string | (a: string, b: number) => string[]
->f<string> : (a: string) => string | (a: string, b: number) => string[]
->f : <T>(a: T) => T | <U>(a: U, b: number) => U[]
+>fs : ((a: string) => string) | ((a: string, b: number) => string[])
+>f<string> : ((a: string) => string) | ((a: string, b: number) => string[])
+>f : (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])
 }
 
 function f31(f: (<T>(a: T) => T) | ((a: string, b: number) => string[])) {
->f31 : (f: <T>(a: T) => T | (a: string, b: number) => string[]) => void
->f : <T>(a: T) => T | (a: string, b: number) => string[]
+>f31 : (f: (<T>(a: T) => T) | ((a: string, b: number) => string[])) => void
+>f : (<T>(a: T) => T) | ((a: string, b: number) => string[])
 >a : T
 >a : string
 >b : number
 
     let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
->fs : (a: string) => string | {}
->f<string> : (a: string) => string | {}
->f : <T>(a: T) => T | (a: string, b: number) => string[]
+>fs : ((a: string) => string) | {}
+>f<string> : ((a: string) => string) | {}
+>f : (<T>(a: T) => T) | ((a: string, b: number) => string[])
 }
 
 function f32(f: (<T>(a: T) => T) | { x: string }) {
->f32 : (f: <T>(a: T) => T | { x: string; }) => void
->f : <T>(a: T) => T | { x: string; }
+>f32 : (f: (<T>(a: T) => T) | { x: string; }) => void
+>f : (<T>(a: T) => T) | { x: string; }
 >a : T
 >x : string
 
     let fs = f<string>;  // ((a: string) => string) | { x: string }
->fs : { x: string; } | (a: string) => string
->f<string> : { x: string; } | (a: string) => string
->f : <T>(a: T) => T | { x: string; }
+>fs : { x: string; } | ((a: string) => string)
+>f<string> : { x: string; } | ((a: string) => string)
+>f : (<T>(a: T) => T) | { x: string; }
 }
 
 function f33(f: { x: string } | { y: string }) {
@@ -367,68 +367,68 @@ function f33(f: { x: string } | { y: string }) {
 }
 
 function f34(f: (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])) {
->f34 : (f: new <T>(a: T) => T | new <U>(a: U, b: number) => U[]) => void
->f : new <T>(a: T) => T | new <U>(a: U, b: number) => U[]
+>f34 : (f: (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])) => void
+>f : (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])
 >a : T
 >a : U
 >b : number
 
     let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
->fs : new (a: string) => string | new (a: string, b: number) => string[]
->f<string> : new (a: string) => string | new (a: string, b: number) => string[]
->f : new <T>(a: T) => T | new <U>(a: U, b: number) => U[]
+>fs : (new (a: string) => string) | (new (a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) | (new (a: string, b: number) => string[])
+>f : (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])
 }
 
 function f35(f: (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
->f35 : (f: new <T>(a: T) => T | <U>(a: U, b: number) => U[]) => void
->f : new <T>(a: T) => T | <U>(a: U, b: number) => U[]
+>f35 : (f: (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])) => void
+>f : (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])
 >a : T
 >a : U
 >b : number
 
     let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
->fs : new (a: string) => string | (a: string, b: number) => string[]
->f<string> : new (a: string) => string | (a: string, b: number) => string[]
->f : new <T>(a: T) => T | <U>(a: U, b: number) => U[]
+>fs : (new (a: string) => string) | ((a: string, b: number) => string[])
+>f<string> : (new (a: string) => string) | ((a: string, b: number) => string[])
+>f : (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])
 }
 
 function f36(f: (new <T>(a: T) => T) | ((a: string, b: number) => string[])) {
->f36 : (f: new <T>(a: T) => T | (a: string, b: number) => string[]) => void
->f : new <T>(a: T) => T | (a: string, b: number) => string[]
+>f36 : (f: (new <T>(a: T) => T) | ((a: string, b: number) => string[])) => void
+>f : (new <T>(a: T) => T) | ((a: string, b: number) => string[])
 >a : T
 >a : string
 >b : number
 
     let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
->fs : new (a: string) => string | {}
->f<string> : new (a: string) => string | {}
->f : new <T>(a: T) => T | (a: string, b: number) => string[]
+>fs : (new (a: string) => string) | {}
+>f<string> : (new (a: string) => string) | {}
+>f : (new <T>(a: T) => T) | ((a: string, b: number) => string[])
 }
 
 function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
->f37 : (f: <T>(a: T) => T | new (a: string, b: number) => string[]) => void
->f : <T>(a: T) => T | new (a: string, b: number) => string[]
+>f37 : (f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) => void
+>f : (<T>(a: T) => T) | (new (a: string, b: number) => string[])
 >a : T
 >a : string
 >b : number
 
     let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
->fs : (a: string) => string | {}
->f<string> : (a: string) => string | {}
->f : <T>(a: T) => T | new (a: string, b: number) => string[]
+>fs : ((a: string) => string) | {}
+>f<string> : ((a: string) => string) | {}
+>f : (<T>(a: T) => T) | (new (a: string, b: number) => string[])
 }
 
 function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
->f38 : <T extends <A>(x: A) => A | <B>(x: B) => B[], U>(f: T | U | <C>(x: C) => C[][]) => void
+>f38 : <T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) => void
 >x : A
 >x : B
->f : T | U | <C>(x: C) => C[][]
+>f : T | U | (<C>(x: C) => C[][])
 >x : C
 
     let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
->fs : U | (x: string) => string | (x: string) => string[] | (x: string) => string[][]
->f<string> : U | (x: string) => string | (x: string) => string[] | (x: string) => string[][]
->f : T | U | <C>(x: C) => C[][]
+>fs : U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+>f<string> : U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+>f : T | U | (<C>(x: C) => C[][])
 }
 
 function makeBox<T>(value: T) {

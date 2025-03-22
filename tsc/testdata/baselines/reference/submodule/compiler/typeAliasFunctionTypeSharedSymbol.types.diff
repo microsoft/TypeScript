@@ -20,7 +20,7 @@
  type Mixin = ReturnTypeOf<typeof Mixin>
 ->Mixin : { new (...args: any[]): Mixin<new (...args: any[]) => {}>.(Anonymous class); prototype: Mixin<any>.(Anonymous class); } & (new (...args: any[]) => {})
 ->Mixin : <TBase extends { new (...args: any[]): {}; }>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
-+>Mixin : { new (...args: any[]): (Anonymous class)<new (...args: any[]) => {}>; prototype: (Anonymous class)<any>; } & new (...args: any[]) => {}
++>Mixin : { new (...args: any[]): (Anonymous class)<new (...args: any[]) => {}>; prototype: (Anonymous class)<any>; } & (new (...args: any[]) => {})
 +>Mixin : <TBase extends new (...args: any[]) => {}>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
  
  type ReturnTypeOf<V> = V extends (...args: any[])=>infer R ? R : never;

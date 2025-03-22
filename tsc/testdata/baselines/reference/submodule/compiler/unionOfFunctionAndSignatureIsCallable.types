@@ -2,10 +2,10 @@
 
 === unionOfFunctionAndSignatureIsCallable.ts ===
 function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
->f1 : (c1: Function, c2: () => object, callable: Function | () => object) => void
+>f1 : (c1: Function, c2: () => object, callable: Function | (() => object)) => void
 >c1 : Function
 >c2 : () => object
->callable : Function | () => object
+>callable : Function | (() => object)
 >c1 : Function
 >c2 : () => object
 
@@ -22,24 +22,24 @@ function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
     const c = callable();
 >c : any
 >callable() : any
->callable : Function | () => object
+>callable : Function | (() => object)
 }
 
 function f2(fetcherParams: object | (() => object)) {
->f2 : (fetcherParams: () => object | object) => void
->fetcherParams : () => object | object
+>f2 : (fetcherParams: (() => object) | object) => void
+>fetcherParams : (() => object) | object
 
     const data = typeof fetcherParams === 'function'
 >data : any
 >typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : any
 >typeof fetcherParams === 'function' : boolean
 >typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->fetcherParams : () => object | object
+>fetcherParams : (() => object) | object
 >'function' : "function"
 
         ? fetcherParams()
 >fetcherParams() : any
->fetcherParams : Function | () => object
+>fetcherParams : Function | (() => object)
 
         : fetcherParams
 >fetcherParams : object

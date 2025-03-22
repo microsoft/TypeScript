@@ -158,9 +158,9 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 
         item.get();
 >item.get() : string | number
->item.get : () => number | () => string
+>item.get : (() => number) | (() => string)
 >item : NumClass<number> | StrClass<string>
->get : () => number | () => string
+>get : (() => number) | (() => string)
 
         // unfortunately, doesn't work completely.
         // it seems like item's predicated type leaks outside the bracket...
@@ -200,9 +200,9 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 
         item.get();
 >item.get() : string | number
->item.get : () => number | () => string
+>item.get : (() => number) | (() => string)
 >item : NumClass<number> | StrClass<string>
->get : () => number | () => string
+>get : (() => number) | (() => string)
 
         return item; // type is never
 >item : Slices[SliceId][SliceKey]

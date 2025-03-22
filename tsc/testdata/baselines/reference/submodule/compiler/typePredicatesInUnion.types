@@ -22,9 +22,9 @@ function f(o: Or, x: {}) {
 
     if (o.pred(x)) {
 >o.pred(x) : boolean
->o.pred : (x: {}) => x is boolean | (x: {}) => x is string
+>o.pred : ((x: {}) => x is boolean) | ((x: {}) => x is string)
 >o : Or
->pred : (x: {}) => x is boolean | (x: {}) => x is string
+>pred : ((x: {}) => x is boolean) | ((x: {}) => x is string)
 >x : {}
 
         x;

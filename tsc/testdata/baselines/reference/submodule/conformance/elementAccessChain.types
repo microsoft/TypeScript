@@ -78,8 +78,8 @@ o4.b?.["c"].d?.["e"];
 >"e" : "e"
 
 declare const o5: { b?(): { c: { d?: { e: string } } } };
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 >c : { d?: { e: string; } | undefined; }
 >d : { e: string; } | undefined
 >e : string
@@ -89,9 +89,9 @@ o5.b?.()["c"].d?.e;
 >o5.b?.()["c"].d : { e: string; } | undefined
 >o5.b?.()["c"] : { d?: { e: string; } | undefined; } | undefined
 >o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5.b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 >"c" : "c"
 >d : { e: string; } | undefined
 >e : string | undefined
@@ -101,9 +101,9 @@ o5.b?.()["c"].d?.["e"];
 >o5.b?.()["c"].d : { e: string; } | undefined
 >o5.b?.()["c"] : { d?: { e: string; } | undefined; } | undefined
 >o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5.b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 >"c" : "c"
 >d : { e: string; } | undefined
 >"e" : "e"
@@ -113,8 +113,8 @@ o5["b"]?.()["c"].d?.e;
 >o5["b"]?.()["c"].d : { e: string; } | undefined
 >o5["b"]?.()["c"] : { d?: { e: string; } | undefined; } | undefined
 >o5["b"]?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5["b"] : () => { c: { d?: { e: string; } | undefined; }; } | undefined
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>o5["b"] : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
 >"b" : "b"
 >"c" : "c"
 >d : { e: string; } | undefined
@@ -125,8 +125,8 @@ o5["b"]?.()["c"].d?.["e"];
 >o5["b"]?.()["c"].d : { e: string; } | undefined
 >o5["b"]?.()["c"] : { d?: { e: string; } | undefined; } | undefined
 >o5["b"]?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5["b"] : () => { c: { d?: { e: string; } | undefined; }; } | undefined
->o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>o5["b"] : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
 >"b" : "b"
 >"c" : "c"
 >d : { e: string; } | undefined

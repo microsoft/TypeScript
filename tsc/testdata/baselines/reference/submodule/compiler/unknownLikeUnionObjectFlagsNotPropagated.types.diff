@@ -1,18 +1,6 @@
 --- old.unknownLikeUnionObjectFlagsNotPropagated.types
 +++ new.unknownLikeUnionObjectFlagsNotPropagated.types
-@@= skipped -10, +10 lines =@@
- >null as MyType : MyType
- 
- myVar?.toLocaleString;
-->myVar?.toLocaleString : (() => string) | undefined
-+>myVar?.toLocaleString : () => string | undefined
- >myVar : MyType
-->toLocaleString : (() => string) | undefined
-+>toLocaleString : () => string | undefined
- 
- myVar;
- >myVar : MyType
-@@= skipped -24, +24 lines =@@
+@@= skipped -34, +34 lines =@@
  >data1 : string[]
  >await Promise.all([fetch1]) : [string[]]
  >Promise.all([fetch1]) : Promise<[string[]]>

@@ -46,7 +46,7 @@ const [x] = foo();  // [number]
 
 interface SelectProps<T, K> {
   selector?: (obj: T) => K;
->selector : (obj: T) => K | undefined
+>selector : ((obj: T) => K) | undefined
 >obj : T
 }
 

@@ -40,9 +40,9 @@ var r0 = map([1, ""], (x) => x.toString());
 >(x) => x.toString() : (x: string | number) => string
 >x : string | number
 >x.toString() : string
->x.toString : () => string | (radix?: number) => string
+>x.toString : (() => string) | ((radix?: number) => string)
 >x : string | number
->toString : () => string | (radix?: number) => string
+>toString : (() => string) | ((radix?: number) => string)
 
 var r5 = map<any, any>([1, ""], (x) => x.toString());
 >r5 : any[]

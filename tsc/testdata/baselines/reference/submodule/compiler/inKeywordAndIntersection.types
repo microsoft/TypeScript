@@ -48,8 +48,8 @@ const instance = {} as InstanceOne | InstanceTwo
 >{} : {}
 
 const ClassOne = {} as { new(): InstanceOne } & { foo: true };
->ClassOne : new () => InstanceOne & { foo: true; }
->{} as { new(): InstanceOne } & { foo: true } : new () => InstanceOne & { foo: true; }
+>ClassOne : (new () => InstanceOne) & { foo: true; }
+>{} as { new(): InstanceOne } & { foo: true } : (new () => InstanceOne) & { foo: true; }
 >{} : {}
 >foo : true
 >true : true
@@ -57,7 +57,7 @@ const ClassOne = {} as { new(): InstanceOne } & { foo: true };
 if (instance instanceof ClassOne) {
 >instance instanceof ClassOne : boolean
 >instance : InstanceOne | InstanceTwo
->ClassOne : new () => InstanceOne & { foo: true; }
+>ClassOne : (new () => InstanceOne) & { foo: true; }
 
     instance.one();
 >instance.one() : void

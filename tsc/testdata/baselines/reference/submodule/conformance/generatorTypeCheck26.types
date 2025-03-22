@@ -16,7 +16,7 @@ function* g(): IterableIterator<(x: string) => number, (x: string) => number> {
 
     yield *[x => x.length];
 >yield *[x => x.length] : any
->[x => x.length] : (x: string) => number[]
+>[x => x.length] : ((x: string) => number)[]
 >x => x.length : (x: string) => number
 >x : string
 >x.length : number

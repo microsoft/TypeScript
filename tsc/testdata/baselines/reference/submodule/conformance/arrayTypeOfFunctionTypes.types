@@ -23,12 +23,12 @@ var r2b = new r();
 >r : any
 
 var x2: { (): string }[];
->x2 : () => string[]
+>x2 : (() => string)[]
 
 var r3 = x2[1];
 >r3 : () => string
 >x2[1] : () => string
->x2 : () => string[]
+>x2 : (() => string)[]
 >1 : 1
 
 var r4 = r3();
@@ -42,12 +42,12 @@ var r4b = new r3(); // error
 >r3 : () => string
 
 var x3: Array<() => string>;
->x3 : () => string[]
+>x3 : (() => string)[]
 
 var r5 = x2[1];
 >r5 : () => string
 >x2[1] : () => string
->x2 : () => string[]
+>x2 : (() => string)[]
 >1 : 1
 
 var r6 = r5();

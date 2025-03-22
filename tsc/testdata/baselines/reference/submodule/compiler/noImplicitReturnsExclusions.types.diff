@@ -14,34 +14,20 @@
  interface Thenable<T> {
    then<TResult>(
 ->then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => void): Thenable<TResult_1>; }
-+>then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => TResult | Thenable<TResult> | undefined): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => void | undefined): Thenable<TResult>; }
++>then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
  
      onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-->onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
-+>onfulfilled : (value: T) => TResult | Thenable<TResult> | undefined
- >value : T
- 
-     onrejected?: (reason: any) => TResult | Thenable<TResult>
-->onrejected : ((reason: any) => TResult | Thenable<TResult>) | undefined
-+>onrejected : (reason: any) => TResult | Thenable<TResult> | undefined
- >reason : any
+ >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
+@@= skipped -12, +12 lines =@@
  
    ): Thenable<TResult>;
    then<TResult>(
 ->then : { <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => TResult_1 | Thenable<TResult_1>): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
-+>then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => TResult | Thenable<TResult> | undefined): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => void | undefined): Thenable<TResult>; }
++>then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
  
      onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-->onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
-+>onfulfilled : (value: T) => TResult | Thenable<TResult> | undefined
- >value : T
- 
-     onrejected?: (reason: any) => void
-->onrejected : ((reason: any) => void) | undefined
-+>onrejected : (reason: any) => void | undefined
- >reason : any
- 
-   ): Thenable<TResult>;
+ >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
+@@= skipped -14, +14 lines =@@
  }
  
  export declare function executeCommand<T = unknown>(
@@ -50,7 +36,7 @@
  
    command: string,
  >command : string
-@@= skipped -65, +65 lines =@@
+@@= skipped -39, +39 lines =@@
  
      return executeCommand("vscode.open", item.input.location.uri);
  >executeCommand("vscode.open", item.input.location.uri) : Thenable<unknown>

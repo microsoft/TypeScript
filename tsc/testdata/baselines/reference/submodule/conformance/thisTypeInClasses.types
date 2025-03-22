@@ -58,7 +58,7 @@ class C3 {
 >h : Foo<this>
 
     i: Foo<this | (() => this)>;
->i : Foo<this | () => this>
+>i : Foo<this | (() => this)>
 
     j: (x: any) => x is this;
 >j : (x: any) => x is this

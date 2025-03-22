@@ -5,7 +5,7 @@
  
       export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
 ->createValidator3 : (schema: any) => number | { new <T>(data: T): T; }
-+>createValidator3 : (schema: any) => number | new <T>(data: T) => T
++>createValidator3 : (schema: any) => number | (new <T>(data: T) => T)
  >schema : any
  >data : T
  
@@ -14,7 +14,7 @@
  
       export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
 ->createValidator4 : (schema: any) => { new <T>(data: T): T; }[]
-+>createValidator4 : (schema: any) => new <T>(data: T) => T[]
++>createValidator4 : (schema: any) => (new <T>(data: T) => T)[]
  >schema : any
  >data : T
  
@@ -27,21 +27,12 @@
  >schema : any
  >data : T
  
-@@= skipped -28, +28 lines =@@
- >schema : typeof schema
- 
-     export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
-->createValidator7 : (schema: any) => (new <T>(data: T) => T)[]
-+>createValidator7 : (schema: any) => new <T>(data: T) => T[]
- >schema : any
- >data : T
- 
-@@= skipped -14, +14 lines =@@
+@@= skipped -42, +42 lines =@@
  >schema : typeof schema
  
      export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
 ->createValidator8 : (schema: any) => Array<{ <T>(data: T): T; }>
-+>createValidator8 : (schema: any) => <T>(data: T) => T[]
++>createValidator8 : (schema: any) => (<T>(data: T) => T)[]
  >schema : any
  >data : T
  

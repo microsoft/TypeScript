@@ -6,7 +6,7 @@ type Foo = abstract new(...args: any) => any;
 >args : any
 
 declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T): T & {
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & new (...args: any[]) => { context: InstanceType<C>; }
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
 >Context : C
 >Base : T
 
@@ -27,7 +27,7 @@ class A {
 class B extends CreateMixin(Context, A) {
 >B : B
 >CreateMixin(Context, A) : A & { context: Context; }
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & new (...args: any[]) => { context: InstanceType<C>; }
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
 >Context : typeof Context
 >A : typeof A
 
@@ -38,7 +38,7 @@ class B extends CreateMixin(Context, A) {
 class C extends CreateMixin(Context, A) {
 >C : C
 >CreateMixin(Context, A) : A & { context: Context; }
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & new (...args: any[]) => { context: InstanceType<C>; }
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
 >Context : typeof Context
 >A : typeof A
 

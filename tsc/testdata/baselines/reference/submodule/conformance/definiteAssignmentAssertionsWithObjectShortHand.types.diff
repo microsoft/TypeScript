@@ -6,10 +6,8 @@
  const bar = {
 ->bar : { a?(): void; }
 ->{    a ? () { }} : { a?(): void; }
-+>bar : { a?: () => void | undefined; }
-+>{    a ? () { }} : { a?: () => void | undefined; }
++>bar : { a?: (() => void) | undefined; }
++>{    a ? () { }} : { a?: (() => void) | undefined; }
  
      a ? () { }
-->a : (() => void) | undefined
-+>a : () => void | undefined
- }
+ >a : (() => void) | undefined

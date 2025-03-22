@@ -5,7 +5,7 @@
  interface NodeConfig<Options = any> {
    extendMarkSchema?:
 ->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Node) => Record<string, any>) | null | undefined
-+>extendMarkSchema : (this: { name: string; options: Options; }, extension: Node<any>) => Record<string, any> | null | undefined
++>extendMarkSchema : ((this: { name: string; options: Options; }, extension: Node<any>) => Record<string, any>) | null | undefined
  
      | ((
          this: {
@@ -14,7 +14,7 @@
  interface MarkConfig<Options = any> {
    extendMarkSchema?:
 ->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark) => Record<string, any>) | null | undefined
-+>extendMarkSchema : (this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any> | null | undefined
++>extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any>) | null | undefined
  
      | ((
          this: {
@@ -34,8 +34,8 @@
 ->extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 ->getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 ->getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
-+>extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
-+>getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
++>extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
++>getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
 +>getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
  
    e,
@@ -45,12 +45,12 @@
  
  if (extendMarkSchema) {
 ->extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
-+>extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
++>extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
  
    extendMarkSchema(extension); // error
  >extendMarkSchema(extension) : Record<string, any>
 ->extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>)
-+>extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any>
++>extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>)
  >extension : Mark<any>
  }
  

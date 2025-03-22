@@ -1,13 +1,7 @@
 --- old.typeGuardRedundancy.types
 +++ new.typeGuardRedundancy.types
-@@= skipped -4, +4 lines =@@
- >x : string | number
- 
- var r1 = typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed;
-->r1 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-->typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-+>r1 : (from: number, length?: number) => string | (fractionDigits?: number) => string
-+>typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed : (from: number, length?: number) => string | (fractionDigits?: number) => string
+@@= skipped -8, +8 lines =@@
+ >typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
  >typeof x === "string" && typeof x === "string" : boolean
  >typeof x === "string" : boolean
 ->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -20,15 +14,7 @@
  >x : string
  >"string" : "string"
  >x.substr : (from: number, length?: number) => string
-@@= skipped -19, +19 lines =@@
- >toFixed : (fractionDigits?: number) => string
- 
- var r2 = !(typeof x === "string" && typeof x === "string") ? x.toFixed : x.substr;
-->r2 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-->!(typeof x === "string" && typeof x === "string") ? x.toFixed : x.substr : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-+>r2 : (from: number, length?: number) => string | (fractionDigits?: number) => string
-+>!(typeof x === "string" && typeof x === "string") ? x.toFixed : x.substr : (from: number, length?: number) => string | (fractionDigits?: number) => string
- >!(typeof x === "string" && typeof x === "string") : boolean
+@@= skipped -21, +21 lines =@@
  >(typeof x === "string" && typeof x === "string") : boolean
  >typeof x === "string" && typeof x === "string" : boolean
  >typeof x === "string" : boolean
@@ -42,14 +28,8 @@
  >x : string
  >"string" : "string"
  >x.toFixed : (fractionDigits?: number) => string
-@@= skipped -21, +21 lines =@@
- >substr : (from: number, length?: number) => string
- 
- var r3 = typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed;
-->r3 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-->typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-+>r3 : (from: number, length?: number) => string | (fractionDigits?: number) => string
-+>typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed : (from: number, length?: number) => string | (fractionDigits?: number) => string
+@@= skipped -19, +19 lines =@@
+ >typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
  >typeof x === "string" || typeof x === "string" : boolean
  >typeof x === "string" : boolean
 ->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -62,15 +42,7 @@
  >x : number
  >"string" : "string"
  >x.substr : (from: number, length?: number) => string
-@@= skipped -19, +19 lines =@@
- >toFixed : (fractionDigits?: number) => string
- 
- var r4 = !(typeof x === "string" || typeof x === "string") ? x.toFixed : x.substr;
-->r4 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-->!(typeof x === "string" || typeof x === "string") ? x.toFixed : x.substr : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
-+>r4 : (from: number, length?: number) => string | (fractionDigits?: number) => string
-+>!(typeof x === "string" || typeof x === "string") ? x.toFixed : x.substr : (from: number, length?: number) => string | (fractionDigits?: number) => string
- >!(typeof x === "string" || typeof x === "string") : boolean
+@@= skipped -21, +21 lines =@@
  >(typeof x === "string" || typeof x === "string") : boolean
  >typeof x === "string" || typeof x === "string" : boolean
  >typeof x === "string" : boolean

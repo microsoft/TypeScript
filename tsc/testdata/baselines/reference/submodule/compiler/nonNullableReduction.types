@@ -19,12 +19,12 @@ function test<T>(f1: Transform1<T>, f2: Transform2<T>) {
 
     f1?.("hello");
 >f1?.("hello") : T | undefined
->f1 : (value: string) => T | undefined
+>f1 : ((value: string) => T) | undefined
 >"hello" : "hello"
 
     f2?.("hello");
 >f2?.("hello") : T | undefined
->f2 : (value: string) => T | (value: string) => T | undefined
+>f2 : ((value: string) => T) | ((value: string) => T) | undefined
 >"hello" : "hello"
 }
 

@@ -152,10 +152,10 @@
 ->perf &&    perf.mark &&    perf.measure &&    perf.clearMarks : false | ((markName?: string) => void)
 ->perf &&    perf.mark &&    perf.measure : false | ((measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure)
 ->perf &&    perf.mark : false | ((markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark)
-+>perf &&    perf.mark &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : false | (measureName?: string | undefined) => void
-+>perf &&    perf.mark &&    perf.measure &&    perf.clearMarks : false | (markName?: string | undefined) => void
-+>perf &&    perf.mark &&    perf.measure : false | (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
-+>perf &&    perf.mark : false | (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
++>perf &&    perf.mark &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : false | ((measureName?: string | undefined) => void)
++>perf &&    perf.mark &&    perf.measure &&    perf.clearMarks : false | ((markName?: string | undefined) => void)
++>perf &&    perf.mark &&    perf.measure : false | ((measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure)
++>perf &&    perf.mark : false | ((markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark)
  >perf : false | Performance
  
      perf.mark &&
@@ -237,27 +237,10 @@
        typeof window !== 'undefined' &&
  >typeof window !== 'undefined' &&      window.matchMedia && // no error      window.matchMedia('(max-device-width: 680px)') : false | MediaQueryList
 ->typeof window !== 'undefined' &&      window.matchMedia : false | (((query: string) => MediaQueryList) & ((query: string) => MediaQueryList))
-+>typeof window !== 'undefined' &&      window.matchMedia : false | (query: string) => MediaQueryList & (query: string) => MediaQueryList
++>typeof window !== 'undefined' &&      window.matchMedia : false | ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
  >typeof window !== 'undefined' : boolean
 ->typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 +>typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >window : Window & typeof globalThis
  >'undefined' : "undefined"
  
-       window.matchMedia && // no error
-->window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
-+>window.matchMedia : (query: string) => MediaQueryList & (query: string) => MediaQueryList
- >window : Window & typeof globalThis
-->matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
-+>matchMedia : (query: string) => MediaQueryList & (query: string) => MediaQueryList
- 
-       window.matchMedia('(max-device-width: 680px)');
- >window.matchMedia('(max-device-width: 680px)') : MediaQueryList
-->window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
-+>window.matchMedia : (query: string) => MediaQueryList & (query: string) => MediaQueryList
- >window : Window & typeof globalThis
-->matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
-+>matchMedia : (query: string) => MediaQueryList & (query: string) => MediaQueryList
- >'(max-device-width: 680px)' : "(max-device-width: 680px)"
- 
-     _isMobile = isMobileMatch && isMobileMatch.matches;

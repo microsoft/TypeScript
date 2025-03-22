@@ -117,13 +117,13 @@ type FnTypes = A | B | C | D;
 >FnTypes : FnTypes
 
 function fx1(f: (() => void) | undefined) {
->fx1 : (f: () => void | undefined) => void
->f : () => void | undefined
+>fx1 : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
 
     if (isFunction<A>(f)) {
 >isFunction<A>(f) : boolean
 >isFunction : <T>(x: unknown) => x is T
->f : () => void | undefined
+>f : (() => void) | undefined
 
         f;  // () => void
 >f : () => void
@@ -133,17 +133,17 @@ function fx1(f: (() => void) | undefined) {
 >f : undefined
     }
     f;  // (() => void) | undefined
->f : () => void | undefined
+>f : (() => void) | undefined
 }
 
 function fx2(f: (() => void) | undefined) {
->fx2 : (f: () => void | undefined) => void
->f : () => void | undefined
+>fx2 : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
 
     if (isFunction<B>(f)) {
 >isFunction<B>(f) : boolean
 >isFunction : <T>(x: unknown) => x is T
->f : () => void | undefined
+>f : (() => void) | undefined
 
         f;  // () => void
 >f : () => void
@@ -153,17 +153,17 @@ function fx2(f: (() => void) | undefined) {
 >f : undefined
     }
     f;  // (() => void) | undefined
->f : () => void | undefined
+>f : (() => void) | undefined
 }
 
 function fx3(f: (() => void) | undefined) {
->fx3 : (f: () => void | undefined) => void
->f : () => void | undefined
+>fx3 : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
 
     if (isFunction<C>(f)) {
 >isFunction<C>(f) : boolean
 >isFunction : <T>(x: unknown) => x is T
->f : () => void | undefined
+>f : (() => void) | undefined
 
         f;  // () => void
 >f : () => void
@@ -173,17 +173,17 @@ function fx3(f: (() => void) | undefined) {
 >f : undefined
     }
     f;  // (() => void) | undefined
->f : () => void | undefined
+>f : (() => void) | undefined
 }
 
 function fx4(f: (() => void) | undefined) {
->fx4 : (f: () => void | undefined) => void
->f : () => void | undefined
+>fx4 : (f: (() => void) | undefined) => void
+>f : (() => void) | undefined
 
     if (isFunction<D>(f)) {
 >isFunction<D>(f) : boolean
 >isFunction : <T>(x: unknown) => x is T
->f : () => void | undefined
+>f : (() => void) | undefined
 
         f;  // () => void
 >f : () => void
@@ -193,7 +193,7 @@ function fx4(f: (() => void) | undefined) {
 >f : undefined
     }
     f;  // (() => void) | undefined
->f : () => void | undefined
+>f : (() => void) | undefined
 }
 
 function checkA(f: FnTypes) {
