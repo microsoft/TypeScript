@@ -1,19 +1,16 @@
 --- old.symbolProperty44.errors.txt
 +++ new.symbolProperty44.errors.txt
-@@= skipped -0, +-1 lines =@@
--symbolProperty44.ts(5,9): error TS2300: Duplicate identifier '[Symbol.hasInstance]'.
--
--
+@@= skipped -0, +0 lines =@@
++symbolProperty44.ts(2,9): error TS2300: Duplicate identifier '[Symbol.hasInstance]'.
+ symbolProperty44.ts(5,9): error TS2300: Duplicate identifier '[Symbol.hasInstance]'.
+ 
+ 
 -==== symbolProperty44.ts (1 errors) ====
--    class C {
--        get [Symbol.hasInstance]() {
--            return "";
--        }
--        get [Symbol.hasInstance]() {
--            ~~~~~~~~~~~~~~~~~~~~
--!!! error TS2300: Duplicate identifier '[Symbol.hasInstance]'.
--            return "";
--        }
--    }
-@@= skipped --1, +1 lines =@@
-+<no content>
++==== symbolProperty44.ts (2 errors) ====
+     class C {
+         get [Symbol.hasInstance]() {
++            ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2300: Duplicate identifier '[Symbol.hasInstance]'.
+             return "";
+         }
+         get [Symbol.hasInstance]() {

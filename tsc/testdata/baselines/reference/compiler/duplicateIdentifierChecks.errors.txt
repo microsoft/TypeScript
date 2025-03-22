@@ -1,0 +1,546 @@
+duplicateIdentifierChecks.ts(4,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(5,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(9,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(10,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(14,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(15,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(16,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(20,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(21,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(22,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(26,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(27,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(28,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(32,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(33,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(34,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(38,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(39,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(40,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(44,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(45,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(46,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(50,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(51,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(52,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(56,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(57,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(58,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(62,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(63,14): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(64,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(68,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(69,14): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(70,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(74,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(75,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(76,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(80,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(81,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(82,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(86,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(87,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(88,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(92,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(93,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(94,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(98,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(99,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+duplicateIdentifierChecks.ts(99,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(103,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(104,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+duplicateIdentifierChecks.ts(104,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(108,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(109,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(110,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+duplicateIdentifierChecks.ts(110,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(114,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(115,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(116,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+duplicateIdentifierChecks.ts(116,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(120,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(121,5): error TS1119: An object literal cannot have property and accessor with the same name.
+duplicateIdentifierChecks.ts(121,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(122,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(126,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(127,5): error TS1119: An object literal cannot have property and accessor with the same name.
+duplicateIdentifierChecks.ts(127,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(128,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(132,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(133,5): error TS1119: An object literal cannot have property and accessor with the same name.
+duplicateIdentifierChecks.ts(133,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(134,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(138,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(139,5): error TS1119: An object literal cannot have property and accessor with the same name.
+duplicateIdentifierChecks.ts(139,5): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(140,9): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifierChecks.ts(146,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(147,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(148,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(152,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(153,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(154,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(158,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(159,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(160,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(164,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(165,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(169,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(170,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(171,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(175,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(176,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(177,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(181,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(182,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(183,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(187,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(188,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(189,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(193,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(194,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(195,5): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(201,9): error TS2300: Duplicate identifier '[sym]'.
+duplicateIdentifierChecks.ts(202,5): error TS2300: Duplicate identifier '[sym]'.
+duplicateIdentifierChecks.ts(203,9): error TS2300: Duplicate identifier '[sym]'.
+duplicateIdentifierChecks.ts(207,9): error TS2300: Duplicate identifier '[sym]'.
+duplicateIdentifierChecks.ts(208,5): error TS2300: Duplicate identifier '[sym]'.
+duplicateIdentifierChecks.ts(209,9): error TS2300: Duplicate identifier '[sym]'.
+
+
+==== duplicateIdentifierChecks.ts (108 errors) ====
+    // Every member declaration in the following should produce a duplicate identifier error.
+    
+    interface I1 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    interface I2 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    interface I3 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    interface I4 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    interface I5 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    interface I6 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    interface I7 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x(): number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    interface I8 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x(): number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C1 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C2 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C3 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        accessor x: number;
+                 ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C4 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        accessor x: number;
+                 ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C5 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C6 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x: number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C7 {
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x(): number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    declare class C8 {
+        set x(value: number);
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x(): number;
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x(): number;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o1 = {
+        get x() { return 0 },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() { return 0 }
+            ~
+!!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o2 = {
+        set x(value: number) { },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number) { }
+            ~
+!!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o3 = {
+        get x() { return 0 },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number) { },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() { return 0 }
+            ~
+!!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o4 = {
+        set x(value: number) { },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() { return 0 },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number) { }
+            ~
+!!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o5 = {
+        get x() { return 0 },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x: 0,
+        ~
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number) { }
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o6 = {
+        set x(value: number) { },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x: 0,
+        ~
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() { return 0 }
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o7 = {
+        get x() { return 0 },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x() { return 0 },
+        ~
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        set x(value: number) { }
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const o8 = {
+        set x(value: number) { },
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+        x() { return 0 },
+        ~
+!!! error TS1119: An object literal cannot have property and accessor with the same name.
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
+        get x() { return 0 }
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
+    }
+    
+    const foo = "foo"
+    
+    interface I10 {
+        get [foo](): number;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        set [foo](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    interface I11 {
+        get [foo](): number;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 duplicateIdentifierChecks.ts:153:5: 'foo' was also declared here.
+        foo: number;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 duplicateIdentifierChecks.ts:152:9: 'foo' was also declared here.
+!!! related TS6204 duplicateIdentifierChecks.ts:154:9: and here.
+        set [foo](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 duplicateIdentifierChecks.ts:153:5: 'foo' was also declared here.
+    }
+    
+    interface I12 {
+        get foo(): number;
+            ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 duplicateIdentifierChecks.ts:159:9: 'foo' was also declared here.
+        set [foo](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 duplicateIdentifierChecks.ts:158:9: 'foo' was also declared here.
+!!! related TS6204 duplicateIdentifierChecks.ts:160:9: and here.
+        set foo(value: number);
+            ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+!!! related TS6203 duplicateIdentifierChecks.ts:159:9: 'foo' was also declared here.
+    }
+    
+    interface I13 {
+        foo: number;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    interface I14 {
+        foo: number;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        foo: number;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    interface I15 {
+        foo: number;
+        ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    declare class C10 {
+        get [foo](): number;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        set [foo](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    declare class C11 {
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        get [foo](): number;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        set [foo](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    declare class C12 {
+        get [foo](): number;
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        set [foo](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+        [foo]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    }
+    
+    const sym = Symbol();
+    
+    interface I20 {
+        get [sym](): number;
+            ~~~~~
+!!! error TS2300: Duplicate identifier '[sym]'.
+        [sym]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier '[sym]'.
+        set [sym](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier '[sym]'.
+    }
+    
+    declare class C20 {
+        get [sym](): number;
+            ~~~~~
+!!! error TS2300: Duplicate identifier '[sym]'.
+        [sym]: number;
+        ~~~~~
+!!! error TS2300: Duplicate identifier '[sym]'.
+        set [sym](value: number);
+            ~~~~~
+!!! error TS2300: Duplicate identifier '[sym]'.
+    }
+    

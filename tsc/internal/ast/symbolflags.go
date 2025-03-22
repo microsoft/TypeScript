@@ -68,7 +68,7 @@ const (
 	SymbolFlagsMethodExcludes                      = SymbolFlagsValue & ^SymbolFlagsMethod
 	SymbolFlagsGetAccessorExcludes                 = SymbolFlagsValue & ^SymbolFlagsSetAccessor
 	SymbolFlagsSetAccessorExcludes                 = SymbolFlagsValue & ^SymbolFlagsGetAccessor
-	SymbolFlagsAccessorExcludes                    = SymbolFlagsValue & ^SymbolFlagsAccessor
+	SymbolFlagsAccessorExcludes                    = SymbolFlagsValue
 	SymbolFlagsTypeParameterExcludes               = SymbolFlagsType & ^SymbolFlagsTypeParameter
 	SymbolFlagsTypeAliasExcludes                   = SymbolFlagsType
 	SymbolFlagsAliasExcludes                       = SymbolFlagsAlias

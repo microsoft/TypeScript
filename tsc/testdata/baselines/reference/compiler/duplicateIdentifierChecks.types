@@ -1,0 +1,506 @@
+//// [tests/cases/compiler/duplicateIdentifierChecks.ts] ////
+
+=== duplicateIdentifierChecks.ts ===
+// Every member declaration in the following should produce a duplicate identifier error.
+
+interface I1 {
+    get x(): number;
+>x : number
+
+    get x(): number;
+>x : number
+}
+
+interface I2 {
+    set x(value: number);
+>x : number
+>value : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+interface I3 {
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+
+    get x(): number;
+>x : number
+}
+
+interface I4 {
+    set x(value: number);
+>x : number
+>value : number
+
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+interface I5 {
+    get x(): number;
+>x : number
+
+    x: number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+interface I6 {
+    set x(value: number);
+>x : number
+>value : number
+
+    x: number;
+>x : number
+
+    get x(): number;
+>x : number
+}
+
+interface I7 {
+    get x(): number;
+>x : number
+
+    x(): number;
+>x : () => number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+interface I8 {
+    set x(value: number);
+>x : number
+>value : number
+
+    x(): number;
+>x : () => number
+
+    get x(): number;
+>x : number
+}
+
+declare class C1 {
+>C1 : C1
+
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+
+    get x(): number;
+>x : number
+}
+
+declare class C2 {
+>C2 : C2
+
+    set x(value: number);
+>x : number
+>value : number
+
+    get x(): number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+declare class C3 {
+>C3 : C3
+
+    get x(): number;
+>x : number
+
+    accessor x: number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+declare class C4 {
+>C4 : C4
+
+    set x(value: number);
+>x : number
+>value : number
+
+    accessor x: number;
+>x : number
+
+    get x(): number;
+>x : number
+}
+
+declare class C5 {
+>C5 : C5
+
+    get x(): number;
+>x : number
+
+    x: number;
+>x : number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+declare class C6 {
+>C6 : C6
+
+    set x(value: number);
+>x : number
+>value : number
+
+    x: number;
+>x : number
+
+    get x(): number;
+>x : number
+}
+
+declare class C7 {
+>C7 : C7
+
+    get x(): number;
+>x : number
+
+    x(): number;
+>x : () => number
+
+    set x(value: number);
+>x : number
+>value : number
+}
+
+declare class C8 {
+>C8 : C8
+
+    set x(value: number);
+>x : number
+>value : number
+
+    x(): number;
+>x : () => number
+
+    get x(): number;
+>x : number
+}
+
+const o1 = {
+>o1 : { readonly x: number; }
+>{    get x() { return 0 },    get x() { return 0 }} : { readonly x: number; }
+
+    get x() { return 0 },
+>x : number
+>0 : 0
+
+    get x() { return 0 }
+>x : number
+>0 : 0
+}
+
+const o2 = {
+>o2 : { x: number; }
+>{    set x(value: number) { },    set x(value: number) { }} : { x: number; }
+
+    set x(value: number) { },
+>x : number
+>value : number
+
+    set x(value: number) { }
+>x : number
+>value : number
+}
+
+const o3 = {
+>o3 : { readonly x: number; }
+>{    get x() { return 0 },    set x(value: number) { },    get x() { return 0 }} : { readonly x: number; }
+
+    get x() { return 0 },
+>x : number
+>0 : 0
+
+    set x(value: number) { },
+>x : number
+>value : number
+
+    get x() { return 0 }
+>x : number
+>0 : 0
+}
+
+const o4 = {
+>o4 : { x: number; }
+>{    set x(value: number) { },    get x() { return 0 },    set x(value: number) { }} : { x: number; }
+
+    set x(value: number) { },
+>x : number
+>value : number
+
+    get x() { return 0 },
+>x : number
+>0 : 0
+
+    set x(value: number) { }
+>x : number
+>value : number
+}
+
+const o5 = {
+>o5 : { x: number; }
+>{    get x() { return 0 },    x: 0,    set x(value: number) { }} : { x: number; }
+
+    get x() { return 0 },
+>x : number
+>0 : 0
+
+    x: 0,
+>x : number
+>0 : 0
+
+    set x(value: number) { }
+>x : number
+>value : number
+}
+
+const o6 = {
+>o6 : { readonly x: number; }
+>{    set x(value: number) { },    x: 0,    get x() { return 0 }} : { readonly x: number; }
+
+    set x(value: number) { },
+>x : number
+>value : number
+
+    x: 0,
+>x : number
+>0 : 0
+
+    get x() { return 0 }
+>x : number
+>0 : 0
+}
+
+const o7 = {
+>o7 : { x: number; }
+>{    get x() { return 0 },    x() { return 0 },    set x(value: number) { }} : { x: number; }
+
+    get x() { return 0 },
+>x : number
+>0 : 0
+
+    x() { return 0 },
+>x : () => number
+>0 : 0
+
+    set x(value: number) { }
+>x : number
+>value : number
+}
+
+const o8 = {
+>o8 : { readonly x: number; }
+>{    set x(value: number) { },    x() { return 0 },    get x() { return 0 }} : { readonly x: number; }
+
+    set x(value: number) { },
+>x : number
+>value : number
+
+    x() { return 0 },
+>x : () => number
+>0 : 0
+
+    get x() { return 0 }
+>x : number
+>0 : 0
+}
+
+const foo = "foo"
+>foo : "foo"
+>"foo" : "foo"
+
+interface I10 {
+    get [foo](): number;
+>[foo] : number
+>foo : "foo"
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+
+    set [foo](value: number);
+>[foo] : number
+>foo : "foo"
+>value : number
+}
+
+interface I11 {
+    get [foo](): number;
+>[foo] : number
+>foo : "foo"
+
+    foo: number;
+>foo : number
+
+    set [foo](value: number);
+>[foo] : number
+>foo : "foo"
+>value : number
+}
+
+interface I12 {
+    get foo(): number;
+>foo : number
+
+    set [foo](value: number);
+>[foo] : number
+>foo : "foo"
+>value : number
+
+    set foo(value: number);
+>foo : number
+>value : number
+}
+
+interface I13 {
+    foo: number;
+>foo : number
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+}
+
+interface I14 {
+    foo: number;
+>foo : number
+
+    foo: number;
+>foo : number
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+}
+
+interface I15 {
+    foo: number;
+>foo : number
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+}
+
+declare class C10 {
+>C10 : C10
+
+    get [foo](): number;
+>[foo] : number
+>foo : "foo"
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+
+    set [foo](value: number);
+>[foo] : number
+>foo : "foo"
+>value : number
+}
+
+declare class C11 {
+>C11 : C11
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+
+    get [foo](): number;
+>[foo] : number
+>foo : "foo"
+
+    set [foo](value: number);
+>[foo] : number
+>foo : "foo"
+>value : number
+}
+
+declare class C12 {
+>C12 : C12
+
+    get [foo](): number;
+>[foo] : number
+>foo : "foo"
+
+    set [foo](value: number);
+>[foo] : number
+>foo : "foo"
+>value : number
+
+    [foo]: number;
+>[foo] : number
+>foo : "foo"
+}
+
+const sym = Symbol();
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+interface I20 {
+    get [sym](): number;
+>[sym] : number
+>sym : unique symbol
+
+    [sym]: number;
+>[sym] : number
+>sym : unique symbol
+
+    set [sym](value: number);
+>[sym] : number
+>sym : unique symbol
+>value : number
+}
+
+declare class C20 {
+>C20 : C20
+
+    get [sym](): number;
+>[sym] : number
+>sym : unique symbol
+
+    [sym]: number;
+>[sym] : number
+>sym : unique symbol
+
+    set [sym](value: number);
+>[sym] : number
+>sym : unique symbol
+>value : number
+}
+

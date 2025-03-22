@@ -15,7 +15,7 @@ module M {
 >iterator : unique symbol
 
         [Symbol.toPrimitive](x: I) { }
->[Symbol.toPrimitive] : I
+>[Symbol.toPrimitive] : (x: I) => void
 >Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
 >toPrimitive : unique symbol
@@ -31,7 +31,7 @@ module M {
 >undefined : undefined
         }
         get [Symbol.toPrimitive]() { return undefined; }
->[Symbol.toPrimitive] : I
+>[Symbol.toPrimitive] : any
 >Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
 >toPrimitive : unique symbol

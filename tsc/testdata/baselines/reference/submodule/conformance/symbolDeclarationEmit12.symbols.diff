@@ -16,7 +16,7 @@
          [Symbol.toPrimitive](x: I) { }
 ->[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29), Decl(symbolDeclarationEmit12.ts, 7, 9), Decl(symbolDeclarationEmit12.ts, 8, 56))
 ->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29), Decl(symbolDeclarationEmit12.ts, 7, 9), Decl(symbolDeclarationEmit12.ts, 8, 56))
++>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29))
 +>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -40,7 +40,7 @@
          get [Symbol.toPrimitive]() { return undefined; }
 ->[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29), Decl(symbolDeclarationEmit12.ts, 7, 9), Decl(symbolDeclarationEmit12.ts, 8, 56))
 ->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29), Decl(symbolDeclarationEmit12.ts, 7, 9), Decl(symbolDeclarationEmit12.ts, 8, 56))
++>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 7, 9))
 +>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -50,7 +50,7 @@
          set [Symbol.toPrimitive](x: I) { }
 ->[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29), Decl(symbolDeclarationEmit12.ts, 7, 9), Decl(symbolDeclarationEmit12.ts, 8, 56))
 ->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29), Decl(symbolDeclarationEmit12.ts, 7, 9), Decl(symbolDeclarationEmit12.ts, 8, 56))
++>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 8, 56))
 +>Symbol.toPrimitive : Symbol(toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

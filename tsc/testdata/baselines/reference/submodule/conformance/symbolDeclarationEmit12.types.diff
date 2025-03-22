@@ -1,0 +1,20 @@
+--- old.symbolDeclarationEmit12.types
++++ new.symbolDeclarationEmit12.types
+@@= skipped -14, +14 lines =@@
+ >iterator : unique symbol
+ 
+         [Symbol.toPrimitive](x: I) { }
+->[Symbol.toPrimitive] : I
++>[Symbol.toPrimitive] : (x: I) => void
+ >Symbol.toPrimitive : unique symbol
+ >Symbol : SymbolConstructor
+ >toPrimitive : unique symbol
+@@= skipped -16, +16 lines =@@
+ >undefined : undefined
+         }
+         get [Symbol.toPrimitive]() { return undefined; }
+->[Symbol.toPrimitive] : I
++>[Symbol.toPrimitive] : any
+ >Symbol.toPrimitive : unique symbol
+ >Symbol : SymbolConstructor
+ >toPrimitive : unique symbol

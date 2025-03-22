@@ -1,0 +1,513 @@
+//// [tests/cases/compiler/duplicateIdentifierChecks.ts] ////
+
+=== duplicateIdentifierChecks.ts ===
+// Every member declaration in the following should produce a duplicate identifier error.
+
+interface I1 {
+>I1 : Symbol(I1, Decl(duplicateIdentifierChecks.ts, 0, 0))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 2, 14))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 3, 20))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(duplicateIdentifierChecks.ts, 5, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 7, 14))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 8, 10))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 8, 25))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 9, 10))
+}
+
+interface I3 {
+>I3 : Symbol(I3, Decl(duplicateIdentifierChecks.ts, 10, 1))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 12, 14), Decl(duplicateIdentifierChecks.ts, 13, 20))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 12, 14), Decl(duplicateIdentifierChecks.ts, 13, 20))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 14, 10))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 14, 25))
+}
+
+interface I4 {
+>I4 : Symbol(I4, Decl(duplicateIdentifierChecks.ts, 16, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 18, 14), Decl(duplicateIdentifierChecks.ts, 19, 25))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 19, 10))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 18, 14), Decl(duplicateIdentifierChecks.ts, 19, 25))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 20, 20))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 21, 10))
+}
+
+interface I5 {
+>I5 : Symbol(I5, Decl(duplicateIdentifierChecks.ts, 22, 1))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 24, 14))
+
+    x: number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 25, 20))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 26, 14))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 27, 10))
+}
+
+interface I6 {
+>I6 : Symbol(I6, Decl(duplicateIdentifierChecks.ts, 28, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 30, 14))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 31, 10))
+
+    x: number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 31, 25))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 32, 14))
+}
+
+interface I7 {
+>I7 : Symbol(I7, Decl(duplicateIdentifierChecks.ts, 34, 1))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 36, 14))
+
+    x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 37, 20))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 38, 16))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 39, 10))
+}
+
+interface I8 {
+>I8 : Symbol(I8, Decl(duplicateIdentifierChecks.ts, 40, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 42, 14))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 43, 10))
+
+    x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 43, 25))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 44, 16))
+}
+
+declare class C1 {
+>C1 : Symbol(C1, Decl(duplicateIdentifierChecks.ts, 46, 1))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 48, 18), Decl(duplicateIdentifierChecks.ts, 49, 20))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 48, 18), Decl(duplicateIdentifierChecks.ts, 49, 20))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 50, 10))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 50, 25))
+}
+
+declare class C2 {
+>C2 : Symbol(C2, Decl(duplicateIdentifierChecks.ts, 52, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 54, 18), Decl(duplicateIdentifierChecks.ts, 55, 25))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 55, 10))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 54, 18), Decl(duplicateIdentifierChecks.ts, 55, 25))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 56, 20))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 57, 10))
+}
+
+declare class C3 {
+>C3 : Symbol(C3, Decl(duplicateIdentifierChecks.ts, 58, 1))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 60, 18))
+
+    accessor x: number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 61, 20))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 62, 23))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 63, 10))
+}
+
+declare class C4 {
+>C4 : Symbol(C4, Decl(duplicateIdentifierChecks.ts, 64, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 66, 18))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 67, 10))
+
+    accessor x: number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 67, 25))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 68, 23))
+}
+
+declare class C5 {
+>C5 : Symbol(C5, Decl(duplicateIdentifierChecks.ts, 70, 1))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 72, 18))
+
+    x: number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 73, 20))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 74, 14))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 75, 10))
+}
+
+declare class C6 {
+>C6 : Symbol(C6, Decl(duplicateIdentifierChecks.ts, 76, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 78, 18))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 79, 10))
+
+    x: number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 79, 25))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 80, 14))
+}
+
+declare class C7 {
+>C7 : Symbol(C7, Decl(duplicateIdentifierChecks.ts, 82, 1))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 84, 18))
+
+    x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 85, 20))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 86, 16))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 87, 10))
+}
+
+declare class C8 {
+>C8 : Symbol(C8, Decl(duplicateIdentifierChecks.ts, 88, 1))
+
+    set x(value: number);
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 90, 18))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 91, 10))
+
+    x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 91, 25))
+
+    get x(): number;
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 92, 16))
+}
+
+const o1 = {
+>o1 : Symbol(o1, Decl(duplicateIdentifierChecks.ts, 96, 5))
+
+    get x() { return 0 },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 96, 12))
+
+    get x() { return 0 }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 97, 25))
+}
+
+const o2 = {
+>o2 : Symbol(o2, Decl(duplicateIdentifierChecks.ts, 101, 5))
+
+    set x(value: number) { },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 101, 12))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 102, 10))
+
+    set x(value: number) { }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 102, 29))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 103, 10))
+}
+
+const o3 = {
+>o3 : Symbol(o3, Decl(duplicateIdentifierChecks.ts, 106, 5))
+
+    get x() { return 0 },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 106, 12), Decl(duplicateIdentifierChecks.ts, 107, 25))
+
+    set x(value: number) { },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 106, 12), Decl(duplicateIdentifierChecks.ts, 107, 25))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 108, 10))
+
+    get x() { return 0 }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 108, 29))
+}
+
+const o4 = {
+>o4 : Symbol(o4, Decl(duplicateIdentifierChecks.ts, 112, 5))
+
+    set x(value: number) { },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 112, 12), Decl(duplicateIdentifierChecks.ts, 113, 29))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 113, 10))
+
+    get x() { return 0 },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 112, 12), Decl(duplicateIdentifierChecks.ts, 113, 29))
+
+    set x(value: number) { }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 114, 25))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 115, 10))
+}
+
+const o5 = {
+>o5 : Symbol(o5, Decl(duplicateIdentifierChecks.ts, 118, 5))
+
+    get x() { return 0 },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 118, 12))
+
+    x: 0,
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 119, 25))
+
+    set x(value: number) { }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 120, 9))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 121, 10))
+}
+
+const o6 = {
+>o6 : Symbol(o6, Decl(duplicateIdentifierChecks.ts, 124, 5))
+
+    set x(value: number) { },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 124, 12))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 125, 10))
+
+    x: 0,
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 125, 29))
+
+    get x() { return 0 }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 126, 9))
+}
+
+const o7 = {
+>o7 : Symbol(o7, Decl(duplicateIdentifierChecks.ts, 130, 5))
+
+    get x() { return 0 },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 130, 12))
+
+    x() { return 0 },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 131, 25))
+
+    set x(value: number) { }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 132, 21))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 133, 10))
+}
+
+const o8 = {
+>o8 : Symbol(o8, Decl(duplicateIdentifierChecks.ts, 136, 5))
+
+    set x(value: number) { },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 136, 12))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 137, 10))
+
+    x() { return 0 },
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 137, 29))
+
+    get x() { return 0 }
+>x : Symbol(x, Decl(duplicateIdentifierChecks.ts, 138, 21))
+}
+
+const foo = "foo"
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+interface I10 {
+>I10 : Symbol(I10, Decl(duplicateIdentifierChecks.ts, 142, 17))
+
+    get [foo](): number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 144, 15))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 145, 24))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    set [foo](value: number);
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 146, 18))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 147, 14))
+}
+
+interface I11 {
+>I11 : Symbol(I11, Decl(duplicateIdentifierChecks.ts, 148, 1))
+
+    get [foo](): number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 150, 15), Decl(duplicateIdentifierChecks.ts, 152, 16))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    foo: number;
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 151, 24))
+
+    set [foo](value: number);
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 150, 15), Decl(duplicateIdentifierChecks.ts, 152, 16))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 153, 14))
+}
+
+interface I12 {
+>I12 : Symbol(I12, Decl(duplicateIdentifierChecks.ts, 154, 1))
+
+    get foo(): number;
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 156, 15), Decl(duplicateIdentifierChecks.ts, 158, 29))
+
+    set [foo](value: number);
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 157, 22))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 158, 14))
+
+    set foo(value: number);
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 156, 15), Decl(duplicateIdentifierChecks.ts, 158, 29))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 159, 12))
+}
+
+interface I13 {
+>I13 : Symbol(I13, Decl(duplicateIdentifierChecks.ts, 160, 1))
+
+    foo: number;
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 162, 15), Decl(duplicateIdentifierChecks.ts, 163, 16))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 162, 15), Decl(duplicateIdentifierChecks.ts, 163, 16))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+}
+
+interface I14 {
+>I14 : Symbol(I14, Decl(duplicateIdentifierChecks.ts, 165, 1))
+
+    foo: number;
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 167, 15), Decl(duplicateIdentifierChecks.ts, 168, 16), Decl(duplicateIdentifierChecks.ts, 169, 16))
+
+    foo: number;
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 167, 15), Decl(duplicateIdentifierChecks.ts, 168, 16), Decl(duplicateIdentifierChecks.ts, 169, 16))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 167, 15), Decl(duplicateIdentifierChecks.ts, 168, 16), Decl(duplicateIdentifierChecks.ts, 169, 16))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+}
+
+interface I15 {
+>I15 : Symbol(I15, Decl(duplicateIdentifierChecks.ts, 171, 1))
+
+    foo: number;
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 173, 15), Decl(duplicateIdentifierChecks.ts, 174, 16), Decl(duplicateIdentifierChecks.ts, 175, 18))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 173, 15), Decl(duplicateIdentifierChecks.ts, 174, 16), Decl(duplicateIdentifierChecks.ts, 175, 18))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 173, 15), Decl(duplicateIdentifierChecks.ts, 174, 16), Decl(duplicateIdentifierChecks.ts, 175, 18))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+}
+
+declare class C10 {
+>C10 : Symbol(C10, Decl(duplicateIdentifierChecks.ts, 177, 1))
+
+    get [foo](): number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 179, 19))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 180, 24))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    set [foo](value: number);
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 181, 18))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 182, 14))
+}
+
+declare class C11 {
+>C11 : Symbol(C11, Decl(duplicateIdentifierChecks.ts, 183, 1))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 185, 19))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    get [foo](): number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 186, 18))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    set [foo](value: number);
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 187, 24))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 188, 14))
+}
+
+declare class C12 {
+>C12 : Symbol(C12, Decl(duplicateIdentifierChecks.ts, 189, 1))
+
+    get [foo](): number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 191, 19), Decl(duplicateIdentifierChecks.ts, 192, 24))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+
+    set [foo](value: number);
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 191, 19), Decl(duplicateIdentifierChecks.ts, 192, 24))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 193, 14))
+
+    [foo]: number;
+>[foo] : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 193, 29))
+>foo : Symbol(foo, Decl(duplicateIdentifierChecks.ts, 142, 5))
+}
+
+const sym = Symbol();
+>sym : Symbol(sym, Decl(duplicateIdentifierChecks.ts, 197, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+interface I20 {
+>I20 : Symbol(I20, Decl(duplicateIdentifierChecks.ts, 197, 21))
+
+    get [sym](): number;
+>[sym] : Symbol([sym], Decl(duplicateIdentifierChecks.ts, 199, 15))
+>sym : Symbol(sym, Decl(duplicateIdentifierChecks.ts, 197, 5))
+
+    [sym]: number;
+>[sym] : Symbol([sym], Decl(duplicateIdentifierChecks.ts, 200, 24))
+>sym : Symbol(sym, Decl(duplicateIdentifierChecks.ts, 197, 5))
+
+    set [sym](value: number);
+>[sym] : Symbol([sym], Decl(duplicateIdentifierChecks.ts, 201, 18))
+>sym : Symbol(sym, Decl(duplicateIdentifierChecks.ts, 197, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 202, 14))
+}
+
+declare class C20 {
+>C20 : Symbol(C20, Decl(duplicateIdentifierChecks.ts, 203, 1))
+
+    get [sym](): number;
+>[sym] : Symbol([sym], Decl(duplicateIdentifierChecks.ts, 205, 19))
+>sym : Symbol(sym, Decl(duplicateIdentifierChecks.ts, 197, 5))
+
+    [sym]: number;
+>[sym] : Symbol([sym], Decl(duplicateIdentifierChecks.ts, 206, 24))
+>sym : Symbol(sym, Decl(duplicateIdentifierChecks.ts, 197, 5))
+
+    set [sym](value: number);
+>[sym] : Symbol([sym], Decl(duplicateIdentifierChecks.ts, 207, 18))
+>sym : Symbol(sym, Decl(duplicateIdentifierChecks.ts, 197, 5))
+>value : Symbol(value, Decl(duplicateIdentifierChecks.ts, 208, 14))
+}
+
