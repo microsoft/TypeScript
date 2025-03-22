@@ -112,6 +112,7 @@ parserRealSource11.ts(504,58): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(506,22): error TS2304: Cannot find name 'NodeType'.
 parserRealSource11.ts(507,58): error TS2304: Cannot find name 'TokenID'.
 parserRealSource11.ts(518,32): error TS2304: Cannot find name 'NodeType'.
+parserRealSource11.ts(520,29): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 parserRealSource11.ts(525,27): error TS2304: Cannot find name 'Signature'.
 parserRealSource11.ts(527,36): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource11.ts(528,34): error TS2304: Cannot find name 'NodeType'.
@@ -239,6 +240,7 @@ parserRealSource11.ts(959,27): error TS2304: Cannot find name 'FncFlags'.
 parserRealSource11.ts(961,25): error TS2304: Cannot find name 'IHashTable'.
 parserRealSource11.ts(963,27): error TS2304: Cannot find name 'Signature'.
 parserRealSource11.ts(981,27): error TS2304: Cannot find name 'Type'.
+parserRealSource11.ts(985,29): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 parserRealSource11.ts(1004,44): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource11.ts(1004,67): error TS2304: Cannot find name 'FncFlags'.
 parserRealSource11.ts(1005,57): error TS2304: Cannot find name 'FncFlags'.
@@ -508,7 +510,7 @@ parserRealSource11.ts(2356,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 
 
-==== parserRealSource11.ts (508 errors) ====
+==== parserRealSource11.ts (510 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -1257,6 +1259,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 !!! error TS2304: Cannot find name 'NodeType'.
                          public target: AST,
                          public arguments: ASTList) {
+                                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 super(nodeType);
                 this.minChar = this.target.minChar;
             }
@@ -1976,6 +1980,8 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
     
             constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
                          public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statics: ASTList,
+                                ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 nodeType: number) {
     
                 super(nodeType);

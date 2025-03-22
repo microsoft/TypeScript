@@ -1,19 +1,18 @@
 --- old.emitArrowFunctionWhenUsingArguments12.errors.txt
 +++ new.emitArrowFunctionWhenUsingArguments12.errors.txt
-@@= skipped -0, +-1 lines =@@
--emitArrowFunctionWhenUsingArguments12.ts(2,7): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+@@= skipped -0, +0 lines =@@
+ emitArrowFunctionWhenUsingArguments12.ts(2,7): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 -emitArrowFunctionWhenUsingArguments12.ts(3,23): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
--
--
+ 
+ 
 -==== emitArrowFunctionWhenUsingArguments12.ts (2 errors) ====
--    class C {
--        f(arguments) {
--          ~~~~~~~~~
--!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
--            var a = () => arguments;
++==== emitArrowFunctionWhenUsingArguments12.ts (1 errors) ====
+     class C {
+         f(arguments) {
+           ~~~~~~~~~
+ !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+             var a = () => arguments;
 -                          ~~~~~~~~~
 -!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
--        }
--    }
-@@= skipped --1, +1 lines =@@
-+<no content>
+         }
+     }

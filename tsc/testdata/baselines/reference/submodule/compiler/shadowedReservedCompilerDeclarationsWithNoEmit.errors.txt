@@ -1,8 +1,9 @@
+shadowedReservedCompilerDeclarationsWithNoEmit.ts(23,13): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
 shadowedReservedCompilerDeclarationsWithNoEmit.ts(44,5): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 shadowedReservedCompilerDeclarationsWithNoEmit.ts(47,5): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 
 
-==== shadowedReservedCompilerDeclarationsWithNoEmit.ts (2 errors) ====
+==== shadowedReservedCompilerDeclarationsWithNoEmit.ts (3 errors) ====
     // Shadowed captured this and super
     class Base { }
     class C extends Base {
@@ -26,6 +27,8 @@ shadowedReservedCompilerDeclarationsWithNoEmit.ts(47,5): error TS2441: Duplicate
     
     /// shadowed arguments
     function f1(arguments, ...a) {
+                ~~~~~~~~~
+!!! error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
     }
     
     class C2 extends Base {
