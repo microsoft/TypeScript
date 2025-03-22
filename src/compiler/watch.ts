@@ -436,7 +436,7 @@ export function getMatchedIncludeSpec(program: Program, fileName: string): strin
     const index = findIndex(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
         if (isJsonFile && !endsWith(includeSpec, Extension.Json)) return false;
         const pattern = getPatternFromSpec(includeSpec, basePath, "files");
-        return !!pattern && getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames).test(fileName);
+        return !!pattern && getRegexFromPattern(`(?:${pattern})$`, useCaseSensitiveFileNames).test(fileName);
     });
     return index !== -1 ? configFile.configFileSpecs.validatedIncludeSpecsBeforeSubstitution![index] : undefined;
 }
