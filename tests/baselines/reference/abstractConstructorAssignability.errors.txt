@@ -1,0 +1,31 @@
+abstractConstructorAssignability.ts(7,1): error TS2322: Type 'AbstractConstructor' is not assignable to type 'ConcreteConstructor'.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
+abstractConstructorAssignability.ts(16,1): error TS2322: Type 'typeof AbstractClass' is not assignable to type 'typeof ConcreteClass'.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
+
+
+==== abstractConstructorAssignability.ts (2 errors) ====
+    type ConcreteConstructor = new () => void;
+    type AbstractConstructor = abstract new () => void;
+    
+    declare let concreteConstructor: ConcreteConstructor;
+    declare let abstractConstructor: AbstractConstructor;
+    
+    concreteConstructor = abstractConstructor; // should error
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'AbstractConstructor' is not assignable to type 'ConcreteConstructor'.
+!!! error TS2322:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+    abstractConstructor = concreteConstructor; // should work
+    
+    class ConcreteClass {}
+    abstract class AbstractClass {}
+    
+    declare let concreteClass: typeof ConcreteClass
+    declare let abstractClass: typeof AbstractClass
+    
+    concreteClass = abstractClass; // should error
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type 'typeof AbstractClass' is not assignable to type 'typeof ConcreteClass'.
+!!! error TS2322:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+    abstractClass = concreteClass; // should work
+    
