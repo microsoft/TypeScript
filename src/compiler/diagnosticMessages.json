@@ -7281,6 +7281,10 @@
         "category": "Suggestion",
         "code": 80010
     },
+    "This may need `await` keyword. Otherwise the enclosing try statement won't handle this.": {
+        "category": "Suggestion",
+        "code": 80011
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -8270,6 +8274,14 @@
     "Add 'resolution-mode' import attribute to all type-only imports that need it": {
         "category": "Message",
         "code": 95197
+    },
+    "Add missing await.": {
+        "category": "Message",
+        "code": 95198
+    },
+    "Add all missing awaits.": {
+        "category": "Message",
+        "code": 95199
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
