@@ -1,7 +1,7 @@
-missingDomElements.ts(6,24): error TS2339: Property 'textContent' does not exist on type 'Element'.
-missingDomElements.ts(7,28): error TS2339: Property 'textContent' does not exist on type 'HTMLElement'.
-missingDomElements.ts(8,33): error TS2339: Property 'textContent' does not exist on type 'HTMLInputElement'.
-missingDomElements.ts(9,47): error TS2339: Property 'textContent' does not exist on type 'EventTarget & HTMLInputElement'.
+missingDomElements.ts(6,24): error TS2812: Property 'textContent' does not exist on type 'Element'. Try changing the 'lib' compiler option to include 'dom'.
+missingDomElements.ts(7,28): error TS2812: Property 'textContent' does not exist on type 'HTMLElement'. Try changing the 'lib' compiler option to include 'dom'.
+missingDomElements.ts(8,33): error TS2812: Property 'textContent' does not exist on type 'HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
+missingDomElements.ts(9,47): error TS2812: Property 'textContent' does not exist on type 'EventTarget & HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
 missingDomElements.ts(16,32): error TS2339: Property 'textContent' does not exist on type 'HTMLElementFake'.
 missingDomElements.ts(17,21): error TS2339: Property 'textContent' does not exist on type 'Node'.
 
@@ -14,16 +14,16 @@ missingDomElements.ts(17,21): error TS2339: Property 'textContent' does not exis
     
     ({} as any as Element).textContent;
                            ~~~~~~~~~~~
-!!! error TS2339: Property 'textContent' does not exist on type 'Element'.
+!!! error TS2812: Property 'textContent' does not exist on type 'Element'. Try changing the 'lib' compiler option to include 'dom'.
     ({} as any as HTMLElement).textContent;
                                ~~~~~~~~~~~
-!!! error TS2339: Property 'textContent' does not exist on type 'HTMLElement'.
+!!! error TS2812: Property 'textContent' does not exist on type 'HTMLElement'. Try changing the 'lib' compiler option to include 'dom'.
     ({} as any as HTMLInputElement).textContent;
                                     ~~~~~~~~~~~
-!!! error TS2339: Property 'textContent' does not exist on type 'HTMLInputElement'.
+!!! error TS2812: Property 'textContent' does not exist on type 'HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
     ({} as any as EventTarget & HTMLInputElement).textContent
                                                   ~~~~~~~~~~~
-!!! error TS2339: Property 'textContent' does not exist on type 'EventTarget & HTMLInputElement'.
+!!! error TS2812: Property 'textContent' does not exist on type 'EventTarget & HTMLInputElement'. Try changing the 'lib' compiler option to include 'dom'.
     
     interface HTMLElementFake {}
     interface Node {
