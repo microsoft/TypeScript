@@ -1834,6 +1834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getVoidType: () => voidType,
         getUndefinedType: () => undefinedType,
         getNullType: () => nullType,
+        getUnknownType: () => unknownType,
         getESSymbolType: () => esSymbolType,
         getNeverType: () => neverType,
         getOptionalType: () => optionalType,
