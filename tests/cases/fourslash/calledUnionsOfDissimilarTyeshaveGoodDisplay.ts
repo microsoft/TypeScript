@@ -41,7 +41,34 @@
 ////    ;
 ////
 ////callableThing5(/*5*/1)
-////
+//// 
+//// declare const callableThing6:
+////     | ((a: string) => void)
+////     | ((a: string, b: number) => void)
+////     ;
+//// 
+//// callableThing6(/*6*/);
+//// 
+//// declare const callableThing7:
+////     | ((a: string) => void)
+////     | ((a: any) => void)
+////     ;
+//// 
+//// callableThing7(/*7*/);
+//// 
+//// declare const callableThing8:
+////     | ((a: string, b: any) => void)
+////     | ((a: any, b: number) => void)
+////     ;
+//// 
+//// callableThing8(/*8*/);
+//// 
+//// declare const callableThing9:
+////     | ((a: string, b: any) => void)
+////     | ((a: any) => void)
+////     ;
+//// 
+//// callableThing9(/*9*/);
 
 verify.signatureHelp({
     marker: "1",
@@ -62,4 +89,20 @@ verify.signatureHelp({
 {
     marker: "5",
     text: "callableThing5(a1: number): void"
+},
+{
+    marker: "6",
+    text: "callableThing6(a: string, b: number): void"
+},
+{
+    marker: "7",
+    text: "callableThing7(a: string): void"
+},
+{
+    marker: "8",
+    text: "callableThing8(a: string, b: number): void"
+},
+{
+    marker: "9",
+    text: "callableThing9(a: string, b: any): void"
 });
