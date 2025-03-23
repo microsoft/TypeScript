@@ -4944,7 +4944,7 @@ namespace Parser {
         }
         const pos = getNodePos();
         const type = parseUnionTypeOrHigher();
-        if (!inDisallowConditionalTypesContext() && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
+        if (!inDisallowConditionalTypesContext() && tryParse(parseConditionalTypeExtends)) {
             // The type following 'extends' is not permitted to be another conditional type
             const extendsType = disallowConditionalTypesAnd(parseType);
             parseExpected(SyntaxKind.QuestionToken);
@@ -4954,6 +4954,19 @@ namespace Parser {
             return finishNode(factory.createConditionalTypeNode(type, extendsType, trueType, falseType), pos);
         }
         return type;
+    }
+
+    function parseConditionalTypeExtends() {
+        // In certain cases when extends is preceeded by a newline this can
+        // indicate that it is a key in an object type or instance variable
+        // in a class.  We infer those case by looking at the next token to
+        // see if it is likely part of such a definition. (see #21637)
+        return parseOptional(SyntaxKind.ExtendsKeyword) && !(
+            parseOptional(SyntaxKind.QuestionToken) ||
+            parseOptional(SyntaxKind.ColonToken) ||
+            parseOptional(SyntaxKind.EqualsToken) ||
+            parseOptional(SyntaxKind.SemicolonToken)
+        );
     }
 
     function parseTypeAnnotation(): TypeNode | undefined {
