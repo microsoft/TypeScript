@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/arrowFunctionReturnTypeErrorSpan.ts] ////
+
+=== arrowFunctionReturnTypeErrorSpan.ts ===
+// block body
+const a = (): number => {
+>a : Symbol(a, Decl(arrowFunctionReturnTypeErrorSpan.ts, 1, 5))
+
+  return "foo";
+};
+
+const a = (): number => {
+>a : Symbol(a, Decl(arrowFunctionReturnTypeErrorSpan.ts, 5, 5))
+
+  return missing;
+};
+
+// expression body
+const b = (): number => "foo";
+>b : Symbol(b, Decl(arrowFunctionReturnTypeErrorSpan.ts, 10, 5))
+
+type F<T> = T;
+>F : Symbol(F, Decl(arrowFunctionReturnTypeErrorSpan.ts, 10, 30))
+>T : Symbol(T, Decl(arrowFunctionReturnTypeErrorSpan.ts, 12, 7))
+>T : Symbol(T, Decl(arrowFunctionReturnTypeErrorSpan.ts, 12, 7))
+
+const c = (): F<number> => "foo";
+>c : Symbol(c, Decl(arrowFunctionReturnTypeErrorSpan.ts, 13, 5))
+>F : Symbol(F, Decl(arrowFunctionReturnTypeErrorSpan.ts, 10, 30))
+
+const d = (): number => missing;
+>d : Symbol(d, Decl(arrowFunctionReturnTypeErrorSpan.ts, 15, 5))
+
