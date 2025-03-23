@@ -1674,13 +1674,13 @@ export function isFunctionLike(node: Node | undefined): node is SignatureDeclara
 }
 
 /** @internal */
-export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is SignatureDeclaration | ClassStaticBlockDeclaration {
-    return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
+export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is FunctionLikeDeclaration | ClassStaticBlockDeclaration {
+    return !!node && (isFunctionLikeDeclaration(node) || isClassStaticBlockDeclaration(node));
 }
 
 /** @internal */
-export function isFunctionLikeDeclaration(node: Node): node is FunctionLikeDeclaration {
-    return node && isFunctionLikeDeclarationKind(node.kind);
+export function isFunctionLikeDeclaration(node: Node | undefined): node is FunctionLikeDeclaration {
+    return !!node && isFunctionLikeDeclarationKind(node.kind);
 }
 
 /** @internal */
