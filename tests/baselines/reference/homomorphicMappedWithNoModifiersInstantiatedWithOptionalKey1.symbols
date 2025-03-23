@@ -1,0 +1,139 @@
+//// [tests/cases/compiler/homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts] ////
+
+=== homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59987
+
+type requiredKeyOf<o> = {
+>requiredKeyOf : Symbol(requiredKeyOf, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 0, 0))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 2, 19))
+
+  [k in keyof o]-?: o extends { [_ in k]-?: o[k] } ? k : never;
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 3, 3))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 2, 19))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 2, 19))
+>_ : Symbol(_, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 3, 33))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 3, 3))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 2, 19))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 3, 3))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 3, 3))
+
+}[keyof o];
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 2, 19))
+
+type declared = {
+>declared : Symbol(declared, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 4, 11))
+
+  bar?: number;
+>bar : Symbol(bar, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 6, 17))
+
+} & {
+  foo?: "default";
+>foo : Symbol(foo, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 8, 5))
+
+};
+
+type requiredDeclaredKey = requiredKeyOf<declared>; // never
+>requiredDeclaredKey : Symbol(requiredDeclaredKey, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 10, 2))
+>requiredKeyOf : Symbol(requiredKeyOf, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 0, 0))
+>declared : Symbol(declared, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 4, 11))
+
+type distill<t> = t extends object ? distillMappable<t> : t;
+>distill : Symbol(distill, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 12, 51))
+>t : Symbol(t, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 14, 13))
+>t : Symbol(t, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 14, 13))
+>distillMappable : Symbol(distillMappable, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 14, 60))
+>t : Symbol(t, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 14, 13))
+>t : Symbol(t, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 14, 13))
+
+type distillMappable<o> = {
+>distillMappable : Symbol(distillMappable, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 14, 60))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 16, 21))
+
+  [k in keyof o as k extends inferredDefaultKeyOf<o> ? never : k]: distill<
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 17, 3))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 16, 21))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 17, 3))
+>inferredDefaultKeyOf : Symbol(inferredDefaultKeyOf, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 22, 2))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 16, 21))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 17, 3))
+>distill : Symbol(distill, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 12, 51))
+
+    o[k]
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 16, 21))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 17, 3))
+
+  >;
+} & {
+  [k in inferredDefaultKeyOf<o>]?: distill<o[k]>;
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 21, 3))
+>inferredDefaultKeyOf : Symbol(inferredDefaultKeyOf, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 22, 2))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 16, 21))
+>distill : Symbol(distill, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 12, 51))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 16, 21))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 21, 3))
+
+};
+
+type inferredDefaultKeyOf<o> = {
+>inferredDefaultKeyOf : Symbol(inferredDefaultKeyOf, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 22, 2))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 24, 26))
+
+  [k in keyof o]: o[k] extends "default" ? k : never;
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 25, 3))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 24, 26))
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 24, 26))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 25, 3))
+>k : Symbol(k, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 25, 3))
+
+}[keyof o];
+>o : Symbol(o, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 24, 26))
+
+type distilled = distill<{
+>distilled : Symbol(distilled, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 26, 11))
+>distill : Symbol(distill, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 12, 51))
+
+  foo: "default";
+>foo : Symbol(foo, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 28, 26))
+
+  bar?: number;
+>bar : Symbol(bar, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 29, 17))
+
+}>;
+
+type requiredDistilledKey = requiredKeyOf<distilled>; // never
+>requiredDistilledKey : Symbol(requiredDistilledKey, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 31, 3))
+>requiredKeyOf : Symbol(requiredKeyOf, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 0, 0))
+>distilled : Symbol(distilled, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 26, 11))
+
+// simplified repro of the above
+type IndirectKeys<T> = { [K in keyof T]: K }[keyof T];
+>IndirectKeys : Symbol(IndirectKeys, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 33, 53))
+>T : Symbol(T, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 36, 18))
+>K : Symbol(K, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 36, 26))
+>T : Symbol(T, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 36, 18))
+>K : Symbol(K, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 36, 26))
+>T : Symbol(T, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 36, 18))
+
+type MappedBasedOnIndirectKeys<T> = {
+>MappedBasedOnIndirectKeys : Symbol(MappedBasedOnIndirectKeys, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 36, 54))
+>T : Symbol(T, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 37, 31))
+
+  [K in IndirectKeys<T>]: unknown;
+>K : Symbol(K, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 38, 3))
+>IndirectKeys : Symbol(IndirectKeys, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 33, 53))
+>T : Symbol(T, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 37, 31))
+
+};
+type AcceptPropertyKey<K extends PropertyKey> = K;
+>AcceptPropertyKey : Symbol(AcceptPropertyKey, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 39, 2))
+>K : Symbol(K, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 40, 23))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 40, 23))
+
+type Result = AcceptPropertyKey<keyof MappedBasedOnIndirectKeys<{ a?: string; b: number }>>; // "a" | "b"
+>Result : Symbol(Result, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 40, 50))
+>AcceptPropertyKey : Symbol(AcceptPropertyKey, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 39, 2))
+>MappedBasedOnIndirectKeys : Symbol(MappedBasedOnIndirectKeys, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 36, 54))
+>a : Symbol(a, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 41, 65))
+>b : Symbol(b, Decl(homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts, 41, 77))
+
