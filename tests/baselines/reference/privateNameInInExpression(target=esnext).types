@@ -166,6 +166,10 @@ class Foo {
 >       : ^^^
 >v : any
 >  : ^^^
+
+        for (let d in #field) { /**/ } // Bad - private field not allowed in expression of forInStatement
+>d : string
+>  : ^^^^^^
     }
     whitespace(v: any) {
 >whitespace : (v: any) => void
