@@ -1,0 +1,117 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardWeakTypes1.ts] ////
+
+=== typeGuardWeakTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60979
+
+export interface FilesCleanupCliFlags {
+>FilesCleanupCliFlags : Symbol(FilesCleanupCliFlags, Decl(typeGuardWeakTypes1.ts, 0, 0))
+
+  readonly dryRun?: boolean;
+>dryRun : Symbol(FilesCleanupCliFlags.dryRun, Decl(typeGuardWeakTypes1.ts, 2, 39))
+
+  readonly outputPath?: string;
+>outputPath : Symbol(FilesCleanupCliFlags.outputPath, Decl(typeGuardWeakTypes1.ts, 3, 28))
+}
+
+function checkCliFlags(
+>checkCliFlags : Symbol(checkCliFlags, Decl(typeGuardWeakTypes1.ts, 5, 1))
+
+  flags: FilesCleanupCliFlags,
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 7, 23))
+>FilesCleanupCliFlags : Symbol(FilesCleanupCliFlags, Decl(typeGuardWeakTypes1.ts, 0, 0))
+
+): flags is
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 7, 23))
+
+  | { readonly dryRun: true; readonly outputPath: string }
+>dryRun : Symbol(dryRun, Decl(typeGuardWeakTypes1.ts, 10, 5))
+>outputPath : Symbol(outputPath, Decl(typeGuardWeakTypes1.ts, 10, 28))
+
+  | { readonly dryRun?: false } {
+>dryRun : Symbol(dryRun, Decl(typeGuardWeakTypes1.ts, 11, 5))
+
+  if (flags.dryRun && !flags.outputPath) {
+>flags.dryRun : Symbol(FilesCleanupCliFlags.dryRun, Decl(typeGuardWeakTypes1.ts, 2, 39))
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 7, 23))
+>dryRun : Symbol(FilesCleanupCliFlags.dryRun, Decl(typeGuardWeakTypes1.ts, 2, 39))
+>flags.outputPath : Symbol(FilesCleanupCliFlags.outputPath, Decl(typeGuardWeakTypes1.ts, 3, 28))
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 7, 23))
+>outputPath : Symbol(FilesCleanupCliFlags.outputPath, Decl(typeGuardWeakTypes1.ts, 3, 28))
+
+    throw new Error(
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+      "The --outputPath option is required in dry-run mode and must specify the full file path.",
+    );
+  }
+  return true;
+}
+
+function main() {
+>main : Symbol(main, Decl(typeGuardWeakTypes1.ts, 18, 1))
+
+  const options: FilesCleanupCliFlags = {};
+>options : Symbol(options, Decl(typeGuardWeakTypes1.ts, 21, 7))
+>FilesCleanupCliFlags : Symbol(FilesCleanupCliFlags, Decl(typeGuardWeakTypes1.ts, 0, 0))
+
+  if (checkCliFlags(options)) {
+>checkCliFlags : Symbol(checkCliFlags, Decl(typeGuardWeakTypes1.ts, 5, 1))
+>options : Symbol(options, Decl(typeGuardWeakTypes1.ts, 21, 7))
+
+    const { dryRun, outputPath } = options;
+>dryRun : Symbol(dryRun, Decl(typeGuardWeakTypes1.ts, 24, 11))
+>outputPath : Symbol(outputPath, Decl(typeGuardWeakTypes1.ts, 24, 19))
+>options : Symbol(options, Decl(typeGuardWeakTypes1.ts, 21, 7))
+  }
+}
+
+function checkCliFlagsWithAsserts(
+>checkCliFlagsWithAsserts : Symbol(checkCliFlagsWithAsserts, Decl(typeGuardWeakTypes1.ts, 26, 1))
+
+  flags: FilesCleanupCliFlags,
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 28, 34))
+>FilesCleanupCliFlags : Symbol(FilesCleanupCliFlags, Decl(typeGuardWeakTypes1.ts, 0, 0))
+
+): asserts flags is
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 28, 34))
+
+  | { readonly dryRun: true; readonly outputPath: string }
+>dryRun : Symbol(dryRun, Decl(typeGuardWeakTypes1.ts, 31, 5))
+>outputPath : Symbol(outputPath, Decl(typeGuardWeakTypes1.ts, 31, 28))
+
+  | { readonly dryRun?: false } {
+>dryRun : Symbol(dryRun, Decl(typeGuardWeakTypes1.ts, 32, 5))
+
+  if (flags.dryRun && !flags.outputPath) {
+>flags.dryRun : Symbol(FilesCleanupCliFlags.dryRun, Decl(typeGuardWeakTypes1.ts, 2, 39))
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 28, 34))
+>dryRun : Symbol(FilesCleanupCliFlags.dryRun, Decl(typeGuardWeakTypes1.ts, 2, 39))
+>flags.outputPath : Symbol(FilesCleanupCliFlags.outputPath, Decl(typeGuardWeakTypes1.ts, 3, 28))
+>flags : Symbol(flags, Decl(typeGuardWeakTypes1.ts, 28, 34))
+>outputPath : Symbol(FilesCleanupCliFlags.outputPath, Decl(typeGuardWeakTypes1.ts, 3, 28))
+
+    throw new Error(
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+      "The --outputPath option is required in dry-run mode and must specify the full file path.",
+    );
+  }
+}
+
+function mainWithAsserts() {
+>mainWithAsserts : Symbol(mainWithAsserts, Decl(typeGuardWeakTypes1.ts, 38, 1))
+
+  const options: FilesCleanupCliFlags = {};
+>options : Symbol(options, Decl(typeGuardWeakTypes1.ts, 41, 7))
+>FilesCleanupCliFlags : Symbol(FilesCleanupCliFlags, Decl(typeGuardWeakTypes1.ts, 0, 0))
+
+  checkCliFlagsWithAsserts(options);
+>checkCliFlagsWithAsserts : Symbol(checkCliFlagsWithAsserts, Decl(typeGuardWeakTypes1.ts, 26, 1))
+>options : Symbol(options, Decl(typeGuardWeakTypes1.ts, 41, 7))
+
+  const { dryRun, outputPath } = options;
+>dryRun : Symbol(dryRun, Decl(typeGuardWeakTypes1.ts, 45, 9))
+>outputPath : Symbol(outputPath, Decl(typeGuardWeakTypes1.ts, 45, 17))
+>options : Symbol(options, Decl(typeGuardWeakTypes1.ts, 41, 7))
+}
+
