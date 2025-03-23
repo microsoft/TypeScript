@@ -2387,7 +2387,10 @@ func GetEmitModuleFormatOfFileWorker(sourceFile *SourceFile, options *core.Compi
 
 func GetImpliedNodeFormatForEmitWorker(fileName string, options *core.CompilerOptions, sourceFileMetaData *SourceFileMetaData) core.ModuleKind {
 	moduleKind := options.GetEmitModuleKind()
-	if core.ModuleKindNode16 <= moduleKind && moduleKind <= core.ModuleKindNodeNext && sourceFileMetaData != nil {
+	if core.ModuleKindNode16 <= moduleKind && moduleKind <= core.ModuleKindNodeNext {
+		if sourceFileMetaData == nil {
+			return core.ModuleKindNone
+		}
 		return sourceFileMetaData.ImpliedNodeFormat
 	}
 	if sourceFileMetaData != nil && sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS &&
