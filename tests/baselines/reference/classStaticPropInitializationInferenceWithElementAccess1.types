@@ -1,0 +1,345 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticPropInitializationInferenceWithElementAccess1.ts] ////
+
+=== classStaticPropInitializationInferenceWithElementAccess1.ts ===
+let seed = 0;
+>seed : number
+>     : ^^^^^^
+>0 : 0
+>  : ^
+
+export class Cls1 {
+>Cls1 : Cls1
+>     : ^^^^
+
+  static x;
+>x : number[]
+>  : ^^^^^^^^
+
+  static y;
+>y : { seed: number; }
+>  : ^^^^^^^^^^^^^^^^^
+
+  static z;
+>z : string
+>  : ^^^^^^
+
+  static 0;
+>0 : number[]
+>  : ^^^^^^^^
+
+  static {
+    this["x"] = [seed];
+>this["x"] = [seed] : number[]
+>                   : ^^^^^^^^
+>this["x"] : number[]
+>          : ^^^^^^^^
+>this : typeof Cls1
+>     : ^^^^^^^^^^^
+>"x" : "x"
+>    : ^^^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    this["y"] = { seed };
+>this["y"] = { seed } : { seed: number; }
+>                     : ^^^^^^^^^^^^^^^^^
+>this["y"] : { seed: number; }
+>          : ^^^^^^^^^^^^^^^^^
+>this : typeof Cls1
+>     : ^^^^^^^^^^^
+>"y" : "y"
+>    : ^^^
+>{ seed } : { seed: number; }
+>         : ^^^^^^^^^^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    this["z"] = `${seed}`;
+>this["z"] = `${seed}` : string
+>                      : ^^^^^^
+>this["z"] : string
+>          : ^^^^^^
+>this : typeof Cls1
+>     : ^^^^^^^^^^^
+>"z" : "z"
+>    : ^^^
+>`${seed}` : string
+>          : ^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    this[0] = [seed];
+>this[0] = [seed] : number[]
+>                 : ^^^^^^^^
+>this[0] : number[]
+>        : ^^^^^^^^
+>this : typeof Cls1
+>     : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+  }
+}
+
+export class Cls2 {
+>Cls2 : Cls2
+>     : ^^^^
+
+  static accessor x;
+>x : number[]
+>  : ^^^^^^^^
+
+  static accessor y;
+>y : { seed: number; }
+>  : ^^^^^^^^^^^^^^^^^
+
+  static accessor z;
+>z : string
+>  : ^^^^^^
+
+  static accessor 0;
+>0 : number[]
+>  : ^^^^^^^^
+
+  static {
+    this["x"] = [seed];
+>this["x"] = [seed] : number[]
+>                   : ^^^^^^^^
+>this["x"] : number[]
+>          : ^^^^^^^^
+>this : typeof Cls2
+>     : ^^^^^^^^^^^
+>"x" : "x"
+>    : ^^^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    this["y"] = { seed };
+>this["y"] = { seed } : { seed: number; }
+>                     : ^^^^^^^^^^^^^^^^^
+>this["y"] : { seed: number; }
+>          : ^^^^^^^^^^^^^^^^^
+>this : typeof Cls2
+>     : ^^^^^^^^^^^
+>"y" : "y"
+>    : ^^^
+>{ seed } : { seed: number; }
+>         : ^^^^^^^^^^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    this["z"] = `${seed}`;
+>this["z"] = `${seed}` : string
+>                      : ^^^^^^
+>this["z"] : string
+>          : ^^^^^^
+>this : typeof Cls2
+>     : ^^^^^^^^^^^
+>"z" : "z"
+>    : ^^^
+>`${seed}` : string
+>          : ^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    this[0] = [seed];
+>this[0] = [seed] : number[]
+>                 : ^^^^^^^^
+>this[0] : number[]
+>        : ^^^^^^^^
+>this : typeof Cls2
+>     : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+  }
+}
+
+export class Cls3 {
+>Cls3 : Cls3
+>     : ^^^^
+
+  static x;
+>x : number[]
+>  : ^^^^^^^^
+
+  static y;
+>y : { seed: number; }
+>  : ^^^^^^^^^^^^^^^^^
+
+  static z;
+>z : string
+>  : ^^^^^^
+
+  static 0;
+>0 : number[]
+>  : ^^^^^^^^
+
+  static {
+    (() => {
+>(() => {      this["x"] = [seed];      this["y"] = { seed };      this["z"] = `${seed}`;      this[0] = [seed];    })() : void
+>                                                                                                                        : ^^^^
+>(() => {      this["x"] = [seed];      this["y"] = { seed };      this["z"] = `${seed}`;      this[0] = [seed];    }) : () => void
+>                                                                                                                      : ^^^^^^^^^^
+>() => {      this["x"] = [seed];      this["y"] = { seed };      this["z"] = `${seed}`;      this[0] = [seed];    } : () => void
+>                                                                                                                    : ^^^^^^^^^^
+
+      this["x"] = [seed];
+>this["x"] = [seed] : number[]
+>                   : ^^^^^^^^
+>this["x"] : number[]
+>          : ^^^^^^^^
+>this : typeof Cls3
+>     : ^^^^^^^^^^^
+>"x" : "x"
+>    : ^^^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+      this["y"] = { seed };
+>this["y"] = { seed } : { seed: number; }
+>                     : ^^^^^^^^^^^^^^^^^
+>this["y"] : { seed: number; }
+>          : ^^^^^^^^^^^^^^^^^
+>this : typeof Cls3
+>     : ^^^^^^^^^^^
+>"y" : "y"
+>    : ^^^
+>{ seed } : { seed: number; }
+>         : ^^^^^^^^^^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+      this["z"] = `${seed}`;
+>this["z"] = `${seed}` : string
+>                      : ^^^^^^
+>this["z"] : string
+>          : ^^^^^^
+>this : typeof Cls3
+>     : ^^^^^^^^^^^
+>"z" : "z"
+>    : ^^^
+>`${seed}` : string
+>          : ^^^^^^
+>seed : number
+>     : ^^^^^^
+
+      this[0] = [seed];
+>this[0] = [seed] : number[]
+>                 : ^^^^^^^^
+>this[0] : number[]
+>        : ^^^^^^^^
+>this : typeof Cls3
+>     : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    })();
+  }
+}
+
+export class Cls4 {
+>Cls4 : Cls4
+>     : ^^^^
+
+  static accessor x;
+>x : number[]
+>  : ^^^^^^^^
+
+  static accessor y;
+>y : { seed: number; }
+>  : ^^^^^^^^^^^^^^^^^
+
+  static accessor z;
+>z : string
+>  : ^^^^^^
+
+  static accessor 0;
+>0 : number[]
+>  : ^^^^^^^^
+
+  static {
+    (() => {
+>(() => {      this["x"] = [seed];      this["y"] = { seed };      this["z"] = `${seed}`;      this[0] = [seed];    })() : void
+>                                                                                                                        : ^^^^
+>(() => {      this["x"] = [seed];      this["y"] = { seed };      this["z"] = `${seed}`;      this[0] = [seed];    }) : () => void
+>                                                                                                                      : ^^^^^^^^^^
+>() => {      this["x"] = [seed];      this["y"] = { seed };      this["z"] = `${seed}`;      this[0] = [seed];    } : () => void
+>                                                                                                                    : ^^^^^^^^^^
+
+      this["x"] = [seed];
+>this["x"] = [seed] : number[]
+>                   : ^^^^^^^^
+>this["x"] : number[]
+>          : ^^^^^^^^
+>this : typeof Cls4
+>     : ^^^^^^^^^^^
+>"x" : "x"
+>    : ^^^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+      this["y"] = { seed };
+>this["y"] = { seed } : { seed: number; }
+>                     : ^^^^^^^^^^^^^^^^^
+>this["y"] : { seed: number; }
+>          : ^^^^^^^^^^^^^^^^^
+>this : typeof Cls4
+>     : ^^^^^^^^^^^
+>"y" : "y"
+>    : ^^^
+>{ seed } : { seed: number; }
+>         : ^^^^^^^^^^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+      this["z"] = `${seed}`;
+>this["z"] = `${seed}` : string
+>                      : ^^^^^^
+>this["z"] : string
+>          : ^^^^^^
+>this : typeof Cls4
+>     : ^^^^^^^^^^^
+>"z" : "z"
+>    : ^^^
+>`${seed}` : string
+>          : ^^^^^^
+>seed : number
+>     : ^^^^^^
+
+      this[0] = [seed];
+>this[0] = [seed] : number[]
+>                 : ^^^^^^^^
+>this[0] : number[]
+>        : ^^^^^^^^
+>this : typeof Cls4
+>     : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+>[seed] : number[]
+>       : ^^^^^^^^
+>seed : number
+>     : ^^^^^^
+
+    })();
+  }
+}
+
