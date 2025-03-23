@@ -11722,7 +11722,8 @@ export function createNameResolver({
                     if (
                         lastLocation && (
                             lastLocation === (location as BindingElement).initializer ||
-                            lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation)
+                            lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation) ||
+                            lastLocation === (location as BindingElement).propertyName
                         )
                     ) {
                         if (isPartOfParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
