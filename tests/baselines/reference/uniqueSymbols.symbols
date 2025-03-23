@@ -863,3 +863,16 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 >obj : Symbol(obj, Decl(uniqueSymbols.ts, 263, 32))
 }
 
+// https://github.com/microsoft/TypeScript/issues/61070
+const bar = Symbol('bar') satisfies symbol;
+>bar : Symbol(bar, Decl(uniqueSymbols.ts, 268, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+let bar2 = Symbol('bar2') satisfies symbol;
+>bar2 : Symbol(bar2, Decl(uniqueSymbols.ts, 269, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const testErrorMessage1 = Symbol() as string;
+>testErrorMessage1 : Symbol(testErrorMessage1, Decl(uniqueSymbols.ts, 271, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
