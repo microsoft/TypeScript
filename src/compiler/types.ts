@@ -6831,11 +6831,12 @@ export const enum AccessFlags {
     Writing = 1 << 2,
     CacheSymbol = 1 << 3,
     AllowMissing = 1 << 4,
-    ExpressionPosition = 1 << 5,
-    ReportDeprecated = 1 << 6,
-    SuppressNoImplicitAnyError = 1 << 7,
-    Contextual = 1 << 8,
-    Persistent = IncludeUndefined,
+    NonMissing = 1 << 5,
+    ExpressionPosition = 1 << 6,
+    ReportDeprecated = 1 << 7,
+    SuppressNoImplicitAnyError = 1 << 8,
+    Contextual = 1 << 9,
+    Persistent = IncludeUndefined | NonMissing,
 }
 
 // Indexed access types (TypeFlags.IndexedAccess)
