@@ -5446,8 +5446,7 @@ export interface TypeChecker {
 
     getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
     /** @internal */ isLibType(type: Type): boolean;
-    /** @internal */ classSymbolToDeclaration(symbol: Symbol, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration | undefined;
-    /** @internal */ enumSymbolToDeclaration(symbol: Symbol, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration | undefined;
+    /** @internal */ symbolToDeclarations(symbol: Symbol, meaning: SymbolFlags, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration[];
 }
 
 /** @internal */

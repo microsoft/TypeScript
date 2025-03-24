@@ -1,120 +1,126 @@
 // === QuickInfo ===
-=== /tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts ===
-// type Node<T> = {
-//      ^^^^
+=== /3.ts ===
+// import * as Foo_1 from "./b";
+// export declare namespace ns {
+//                          ^^
 // | ----------------------------------------------------------------------
-// | type Node<T> = {
-// |     value: T;
-// |     left: Node<T> | undefined;
-// |     right: Node<T> | undefined;
-// | }
-// | (verbosity level: 0)
-// | ----------------------------------------------------------------------
-//     value: T;
-//     left: Node<T> | undefined;
-//     right: Node<T> | undefined;
-// }
-// const n: Node<number> = {
-//       ^
-// | ----------------------------------------------------------------------
-// | const n: {
-// |     value: number;
-// |     left: Node<number>;
-// |     right: Node<number>;
-// | }
-// | (verbosity level: 1)
-// | ----------------------------------------------------------------------
-//       ^
-// | ----------------------------------------------------------------------
-// | const n: Node<number>
-// | (verbosity level: 0)
-// | ----------------------------------------------------------------------
-//     value: 1,
-//     left: undefined,
-//     right: undefined,
-// }
-// interface Orange {
-//     name: string;
-// }
-// type TreeNode<T> = {
-//      ^^^^^^^^
-// | ----------------------------------------------------------------------
-// | type TreeNode<T> = {
-// |     value: T;
-// |     left: TreeNode<T> | undefined;
-// |     right: TreeNode<T> | undefined;
-// |     orange?: {
-// |         name: string;
-// |     };
-// | }
-// | (verbosity level: 1)
-// | ----------------------------------------------------------------------
-//      ^^^^^^^^
-// | ----------------------------------------------------------------------
-// | type TreeNode<T> = {
-// |     value: T;
-// |     left: TreeNode<T> | undefined;
-// |     right: TreeNode<T> | undefined;
-// |     orange?: Orange;
-// | }
-// | (verbosity level: 0)
-// | ----------------------------------------------------------------------
-//     value: T;
-//     left: TreeNode<T> | undefined;
-//     right: TreeNode<T> | undefined;
-//     orange?: Orange;
-// }
-// const m: TreeNode<number> = {
-//       ^
-// | ----------------------------------------------------------------------
-// | const m: {
-// |     value: number;
-// |     left: TreeNode<number>;
-// |     right: TreeNode<number>;
-// |     orange?: {
-// |         name: string;
+// | declare namespace ns {
+// |     export { Foo };
+// |     export let c: number;
+// |     export let d: 1;
+// |     export let f: {
+// |         a: string;
 // |     };
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
-//       ^
+//                          ^^
 // | ----------------------------------------------------------------------
-// | const m: {
-// |     value: number;
-// |     left: TreeNode<number>;
-// |     right: TreeNode<number>;
-// |     orange?: Orange;
+// | declare namespace ns {
+// |     export { Foo };
+// |     export let c: number;
+// |     export let d: 1;
+// |     export let f: Apple;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
-//       ^
+//                          ^^
 // | ----------------------------------------------------------------------
-// | const m: TreeNode<number>
+// | namespace ns
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
-//     value: 1,
-//     left: undefined,
-//     right: undefined,
-//     orange: { name: "orange" },
+//     import Foo = Foo_1.Foo;
+//     export { Foo };
+//     export const c: number;
+//     export const d = 1;
+//     let e: Apple;
+//     export let f: Apple;
+// }
+// interface Apple {
+//     a: string;
+// }
+
+=== /1.ts ===
+// export {};
+// class Foo<T> {
+//     y: string;
+// }
+// namespace Foo {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | class Foo<T> {
+// |     y: string;
+// | }
+// | namespace Foo {
+// |     let y: number;
+// |     let x: string;
+// |     let w: string;
+// | }
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | class Foo<T>
+// | namespace Foo
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export var y: number = 1;
+//     export var x: string = "hello";
+//     export var w = "world";
+//     var z = 2;
+// }
+
+=== /4.ts ===
+// class Foo<T> {
+//     y!: T;
+// }
+// namespace Two {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | namespace Two {
+// |     let f: {
+// |         y: number;
+// |     };
+// |     let g: {
+// |         y: string;
+// |     };
+// | }
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | namespace Two {
+// |     let f: Foo<number>;
+// |     let g: Foo<string>;
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | namespace Two
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export const f = new Foo<number>();
 // }
 
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 9,
-      "name": "N"
+      "fileName": "/1.ts",
+      "position": 56,
+      "name": "1"
     },
     "item": {
-      "kind": "type",
+      "kind": "class",
       "kindModifiers": "",
       "textSpan": {
-        "start": 5,
-        "length": 4
+        "start": 53,
+        "length": 3
       },
       "displayParts": [
         {
-          "text": "type",
+          "text": "class",
           "kind": "keyword"
         },
         {
@@ -122,8 +128,8 @@
           "kind": "space"
         },
         {
-          "text": "Node",
-          "kind": "aliasName"
+          "text": "Foo",
+          "kind": "className"
         },
         {
           "text": "<",
@@ -138,191 +144,11 @@
           "kind": "punctuation"
         },
         {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
           "text": "\n",
           "kind": "lineBreak"
         },
         {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "value",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "left",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Node",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "right",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Node",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false,
-      "verbosityLevel": 0
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 103,
-      "name": "n"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 102,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
+          "text": "namespace",
           "kind": "keyword"
         },
         {
@@ -330,32 +156,8 @@
           "kind": "space"
         },
         {
-          "text": "n",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Node",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
+          "text": "Foo",
+          "kind": "className"
         }
       ],
       "documentation": [],
@@ -365,20 +167,20 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 103,
-      "name": "n"
+      "fileName": "/1.ts",
+      "position": 56,
+      "name": "1"
     },
     "item": {
-      "kind": "const",
+      "kind": "class",
       "kindModifiers": "",
       "textSpan": {
-        "start": 102,
-        "length": 1
+        "start": 53,
+        "length": 3
       },
       "displayParts": [
         {
-          "text": "const",
+          "text": "class",
           "kind": "keyword"
         },
         {
@@ -386,11 +188,19 @@
           "kind": "space"
         },
         {
-          "text": "n",
-          "kind": "localName"
+          "text": "Foo",
+          "kind": "text"
         },
         {
-          "text": ":",
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
           "kind": "punctuation"
         },
         {
@@ -410,8 +220,8 @@
           "kind": "space"
         },
         {
-          "text": "value",
-          "kind": "propertyName"
+          "text": "y",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -422,88 +232,8 @@
           "kind": "space"
         },
         {
-          "text": "number",
+          "text": "string",
           "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "left",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Node",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "right",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Node",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -516,29 +246,13 @@
         {
           "text": "}",
           "kind": "punctuation"
-        }
-      ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false,
-      "verbosityLevel": 1
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 233,
-      "name": "t"
-    },
-    "item": {
-      "kind": "type",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 225,
-        "length": 8
-      },
-      "displayParts": [
+        },
         {
-          "text": "type",
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "namespace",
           "kind": "keyword"
         },
         {
@@ -546,28 +260,8 @@
           "kind": "space"
         },
         {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
+          "text": "Foo",
+          "kind": "text"
         },
         {
           "text": " ",
@@ -586,8 +280,16 @@
           "kind": "space"
         },
         {
-          "text": "value",
-          "kind": "propertyName"
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -598,63 +300,7 @@
           "kind": "space"
         },
         {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "left",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
+          "text": "number",
           "kind": "keyword"
         },
         {
@@ -670,8 +316,16 @@
           "kind": "space"
         },
         {
-          "text": "right",
-          "kind": "propertyName"
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -682,35 +336,7 @@
           "kind": "space"
         },
         {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
+          "text": "string",
           "kind": "keyword"
         },
         {
@@ -726,12 +352,16 @@
           "kind": "space"
         },
         {
-          "text": "orange",
-          "kind": "propertyName"
+          "text": "let",
+          "kind": "keyword"
         },
         {
-          "text": "?",
-          "kind": "punctuation"
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "w",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -742,7 +372,271 @@
           "kind": "space"
         },
         {
-          "text": "Orange",
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/3.ts",
+      "position": 57,
+      "name": "2"
+    },
+    "item": {
+      "kind": "module",
+      "kindModifiers": "export,declare",
+      "textSpan": {
+        "start": 55,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ns",
+          "kind": "moduleName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/3.ts",
+      "position": 57,
+      "name": "2"
+    },
+    "item": {
+      "kind": "module",
+      "kindModifiers": "export,declare",
+      "textSpan": {
+        "start": 55,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "declare",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ns",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "text"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "text"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "text"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Apple",
           "kind": "interfaceName"
         },
         {
@@ -760,25 +654,25 @@
       ],
       "documentation": [],
       "canIncreaseVerbosityLevel": true,
-      "verbosityLevel": 0
+      "verbosityLevel": 1
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 233,
-      "name": "t"
+      "fileName": "/3.ts",
+      "position": 57,
+      "name": "2"
     },
     "item": {
-      "kind": "type",
-      "kindModifiers": "",
+      "kind": "module",
+      "kindModifiers": "export,declare",
       "textSpan": {
-        "start": 225,
-        "length": 8
+        "start": 55,
+        "length": 2
       },
       "displayParts": [
         {
-          "text": "type",
+          "text": "declare",
           "kind": "keyword"
         },
         {
@@ -786,28 +680,16 @@
           "kind": "space"
         },
         {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
+          "text": "namespace",
+          "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
         },
         {
-          "text": "=",
-          "kind": "operator"
+          "text": "ns",
+          "kind": "text"
         },
         {
           "text": " ",
@@ -826,11 +708,15 @@
           "kind": "space"
         },
         {
-          "text": "value",
-          "kind": "propertyName"
+          "text": "export",
+          "kind": "keyword"
         },
         {
-          "text": ":",
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
           "kind": "punctuation"
         },
         {
@@ -838,8 +724,16 @@
           "kind": "space"
         },
         {
-          "text": "T",
-          "kind": "typeParameterName"
+          "text": "Foo",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -854,8 +748,24 @@
           "kind": "space"
         },
         {
-          "text": "left",
-          "kind": "propertyName"
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -866,35 +776,7 @@
           "kind": "space"
         },
         {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
+          "text": "number",
           "kind": "keyword"
         },
         {
@@ -910,8 +792,24 @@
           "kind": "space"
         },
         {
-          "text": "right",
-          "kind": "propertyName"
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -922,36 +820,8 @@
           "kind": "space"
         },
         {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "keyword"
+          "text": "1",
+          "kind": "stringLiteral"
         },
         {
           "text": ";",
@@ -966,12 +836,24 @@
           "kind": "space"
         },
         {
-          "text": "orange",
-          "kind": "propertyName"
+          "text": "export",
+          "kind": "keyword"
         },
         {
-          "text": "?",
-          "kind": "punctuation"
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -994,7 +876,7 @@
           "kind": "space"
         },
         {
-          "text": "name",
+          "text": "a",
           "kind": "propertyName"
         },
         {
@@ -1040,25 +922,25 @@
       ],
       "documentation": [],
       "canIncreaseVerbosityLevel": false,
-      "verbosityLevel": 1
+      "verbosityLevel": 2
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 356,
-      "name": "m"
+      "fileName": "/4.ts",
+      "position": 41,
+      "name": "3"
     },
     "item": {
-      "kind": "const",
+      "kind": "module",
       "kindModifiers": "",
       "textSpan": {
-        "start": 355,
-        "length": 1
+        "start": 38,
+        "length": 3
       },
       "displayParts": [
         {
-          "text": "const",
+          "text": "namespace",
           "kind": "keyword"
         },
         {
@@ -1066,32 +948,8 @@
           "kind": "space"
         },
         {
-          "text": "m",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
+          "text": "Two",
+          "kind": "moduleName"
         }
       ],
       "documentation": [],
@@ -1101,20 +959,20 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 356,
-      "name": "m"
+      "fileName": "/4.ts",
+      "position": 41,
+      "name": "3"
     },
     "item": {
-      "kind": "const",
+      "kind": "module",
       "kindModifiers": "",
       "textSpan": {
-        "start": 355,
-        "length": 1
+        "start": 38,
+        "length": 3
       },
       "displayParts": [
         {
-          "text": "const",
+          "text": "namespace",
           "kind": "keyword"
         },
         {
@@ -1122,12 +980,8 @@
           "kind": "space"
         },
         {
-          "text": "m",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
+          "text": "Two",
+          "kind": "text"
         },
         {
           "text": " ",
@@ -1146,36 +1000,16 @@
           "kind": "space"
         },
         {
-          "text": "value",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
+          "text": "let",
           "kind": "keyword"
         },
         {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
+          "text": " ",
           "kind": "space"
         },
         {
-          "text": "left",
-          "kind": "propertyName"
+          "text": "f",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -1186,8 +1020,8 @@
           "kind": "space"
         },
         {
-          "text": "TreeNode",
-          "kind": "aliasName"
+          "text": "Foo",
+          "kind": "className"
         },
         {
           "text": "<",
@@ -1214,8 +1048,16 @@
           "kind": "space"
         },
         {
-          "text": "right",
-          "kind": "propertyName"
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "g",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -1226,52 +1068,20 @@
           "kind": "space"
         },
         {
-          "text": "TreeNode",
-          "kind": "aliasName"
+          "text": "Foo",
+          "kind": "className"
         },
         {
           "text": "<",
           "kind": "punctuation"
         },
         {
-          "text": "number",
+          "text": "string",
           "kind": "keyword"
         },
         {
           "text": ">",
           "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "orange",
-          "kind": "propertyName"
-        },
-        {
-          "text": "?",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Orange",
-          "kind": "interfaceName"
         },
         {
           "text": ";",
@@ -1293,20 +1103,20 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityRecursiveType.ts",
-      "position": 356,
-      "name": "m"
+      "fileName": "/4.ts",
+      "position": 41,
+      "name": "3"
     },
     "item": {
-      "kind": "const",
+      "kind": "module",
       "kindModifiers": "",
       "textSpan": {
-        "start": 355,
-        "length": 1
+        "start": 38,
+        "length": 3
       },
       "displayParts": [
         {
-          "text": "const",
+          "text": "namespace",
           "kind": "keyword"
         },
         {
@@ -1314,12 +1124,8 @@
           "kind": "space"
         },
         {
-          "text": "m",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
+          "text": "Two",
+          "kind": "text"
         },
         {
           "text": " ",
@@ -1338,120 +1144,16 @@
           "kind": "space"
         },
         {
-          "text": "value",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
+          "text": "let",
+          "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
         },
         {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "left",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "right",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "TreeNode",
-          "kind": "aliasName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "orange",
-          "kind": "propertyName"
-        },
-        {
-          "text": "?",
-          "kind": "punctuation"
+          "text": "f",
+          "kind": "text"
         },
         {
           "text": ":",
@@ -1474,7 +1176,83 @@
           "kind": "space"
         },
         {
-          "text": "name",
+          "text": "y",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "g",
+          "kind": "text"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "        ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
           "kind": "propertyName"
         },
         {

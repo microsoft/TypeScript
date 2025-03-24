@@ -51,14 +51,14 @@
 // class Bar<T extends Date> implements Foo<T> {
 //       ^^^
 // | ----------------------------------------------------------------------
-// | class Bar<T extends Date> {
+// | class Bar<T extends Date> implements Foo<T> {
 // |     prop: T;
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //       ^^^
 // | ----------------------------------------------------------------------
-// | class Bar<T extends Date> {
+// | class Bar<T extends Date> implements Foo<T> {
 // |     prop: T;
 // | }
 // | (verbosity level: 1)
@@ -77,21 +77,23 @@
 //           ^^^
 // | ----------------------------------------------------------------------
 // | class c5b {
-// |     foo(): void;
+// |     public foo(): void;
 // | }
 // | namespace c5b {
-// |     foo(): void;
+// |     let y: number;
 // | }
+// | 
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //           ^^^
 // | ----------------------------------------------------------------------
 // | class c5b {
-// |     foo(): void;
+// |     public foo(): void;
 // | }
 // | namespace c5b {
-// |     foo(): void;
+// |     let y: number;
 // | }
+// | 
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
 //           ^^^
@@ -396,7 +398,7 @@
         },
         {
           "text": "Opt",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": " ",
@@ -480,7 +482,7 @@
         },
         {
           "text": "Opt",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": " ",
@@ -624,7 +626,7 @@
         },
         {
           "text": "Foo",
-          "kind": "interfaceName"
+          "kind": "text"
         },
         {
           "text": "<",
@@ -788,7 +790,7 @@
         },
         {
           "text": "Bar",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": "<",
@@ -823,6 +825,34 @@
           "kind": "space"
         },
         {
+          "text": "implements",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
           "text": "{",
           "kind": "punctuation"
         },
@@ -836,7 +866,7 @@
         },
         {
           "text": "prop",
-          "kind": "propertyName"
+          "kind": "text"
         },
         {
           "text": ":",
@@ -892,7 +922,7 @@
         },
         {
           "text": "Bar",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": "<",
@@ -927,6 +957,34 @@
           "kind": "space"
         },
         {
+          "text": "implements",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
           "text": "{",
           "kind": "punctuation"
         },
@@ -940,7 +998,7 @@
         },
         {
           "text": "prop",
-          "kind": "propertyName"
+          "kind": "text"
         },
         {
           "text": ":",
@@ -1044,7 +1102,7 @@
         },
         {
           "text": "c5b",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": " ",
@@ -1060,6 +1118,14 @@
         },
         {
           "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "public",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
           "kind": "space"
         },
         {
@@ -1112,7 +1178,7 @@
         },
         {
           "text": "c5b",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": " ",
@@ -1131,16 +1197,16 @@
           "kind": "space"
         },
         {
-          "text": "foo",
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
           "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
         },
         {
           "text": ":",
@@ -1151,7 +1217,7 @@
           "kind": "space"
         },
         {
-          "text": "void",
+          "text": "number",
           "kind": "keyword"
         },
         {
@@ -1165,6 +1231,10 @@
         {
           "text": "}",
           "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
         }
       ],
       "documentation": [],
@@ -1196,7 +1266,7 @@
         },
         {
           "text": "c5b",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": " ",
@@ -1212,6 +1282,14 @@
         },
         {
           "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "public",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
           "kind": "space"
         },
         {
@@ -1264,7 +1342,7 @@
         },
         {
           "text": "c5b",
-          "kind": "className"
+          "kind": "text"
         },
         {
           "text": " ",
@@ -1283,16 +1361,16 @@
           "kind": "space"
         },
         {
-          "text": "foo",
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
           "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
         },
         {
           "text": ":",
@@ -1303,7 +1381,7 @@
           "kind": "space"
         },
         {
-          "text": "void",
+          "text": "number",
           "kind": "keyword"
         },
         {
@@ -1317,6 +1395,10 @@
         {
           "text": "}",
           "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
         }
       ],
       "documentation": [],

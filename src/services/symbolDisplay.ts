@@ -283,6 +283,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
     const typeWriterOut: WriterContextOut = { couldUnfoldMore: false, truncated: false };
+    let hasUnfoldedSymbol = false;
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
         return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -456,7 +457,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             pushSymbolKind(ScriptElementKind.localClassElement);
             displayParts.push(spacePart());
         }
-        if (!tryUnfoldSymbol(symbol)) {
+        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
             if (!classExpression) {
                 // Class declaration has name which is not local.
                 displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
@@ -468,11 +469,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
-        displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
-        displayParts.push(spacePart());
-        addFullSymbolName(symbol);
-        writeTypeParametersOfSymbol(symbol, sourceFile);
-        tryUnfoldSymbol(symbol);
+        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
+            displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
+            displayParts.push(spacePart());
+            addFullSymbolName(symbol);
+            writeTypeParametersOfSymbol(symbol, sourceFile);
+        }
     }
     if ((symbolFlags & SymbolFlags.TypeAlias) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
@@ -497,7 +499,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
-        if (!tryUnfoldSymbol(symbol)) {
+        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
             if (some(symbol.declarations, d => isEnumDeclaration(d) && isEnumConst(d))) {
                 displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                 displayParts.push(spacePart());
@@ -509,12 +511,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
     if (symbolFlags & SymbolFlags.Module && !isThisExpression) {
         prefixNextMeaning();
-        const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
-        const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
-        displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
-        displayParts.push(spacePart());
-        addFullSymbolName(symbol);
-        tryUnfoldSymbol(symbol);
+        if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
+            const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
+            const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
+            displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
+            displayParts.push(spacePart());
+            addFullSymbolName(symbol);
+        }
     }
     if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
@@ -831,21 +834,21 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(spacePart());
     }
 
-    function canUnfoldSymbol(symbol: Symbol, out: WriterContextOut | undefined): Type | undefined {
-        if (verbosityLevel === undefined || !(symbol.flags & SymbolFlags.Type)) {
-            return undefined;
+    function canUnfoldSymbol(symbol: Symbol, out: WriterContextOut | undefined): boolean {
+        if (verbosityLevel === undefined) {
+            return false;
         }
         const type = getTypeOfSymbol(symbol);
         if (!type || typeChecker.isLibType(type)) {
-            return undefined;
+            return false;
         }
         if (0 < verbosityLevel) {
-            return type;
+            return true;
         }
         if (out) {
             out.couldUnfoldMore = true;
         }
-        return undefined;
+        return false;
     }
 
     function getTypeOfSymbol(symbol: Symbol) {
@@ -855,43 +858,41 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         return typeChecker.getTypeOfSymbolAtLocation(symbol, location);
     }
 
-    function tryUnfoldSymbol(symbol: Symbol): boolean {
-        let unfoldType;
-        if (unfoldType = canUnfoldSymbol(symbol, typeWriterOut)) {
-            if (symbol.flags & SymbolFlags.Enum) {
-                const expandedDisplayParts = mapToDisplayParts(writer => {
-                    const node = typeChecker.enumSymbolToDeclaration(
-                        symbol,
-                        TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
-                        verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
-                        typeWriterOut)!;  
-                    getPrinter().writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+    function getSymbolMeaning(meaning: SemanticMeaning): SymbolFlags {
+        let symbolMeaning = SymbolFlags.None;
+        if (meaning & SemanticMeaning.Value) {
+            symbolMeaning |= SymbolFlags.Value;
+        }
+        if (meaning & SemanticMeaning.Type) {
+            symbolMeaning |= SymbolFlags.Type;
+        }
+        if (meaning & SemanticMeaning.Namespace) {
+            symbolMeaning |= SymbolFlags.Namespace;
+        }
+        return symbolMeaning;
+    }
+
+    function tryUnfoldSymbol(symbol: Symbol, meaning: SemanticMeaning): boolean {
+         if (hasUnfoldedSymbol) {
+            return true;
+        }
+        if (canUnfoldSymbol(symbol, typeWriterOut)) {
+            const symbolMeaning = getSymbolMeaning(meaning);
+            const expandedDisplayParts = mapToDisplayParts(writer => {
+                const nodes = typeChecker.symbolToDeclarations(
+                    symbol,
+                    symbolMeaning,
+                    TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+                    verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
+                    typeWriterOut);
+                const printer = getPrinter();
+                nodes.forEach((node, i) => {
+                    if (i > 0) writer.writeLine();
+                    printer.writeNode(EmitHint.Unspecified, node, sourceFile, writer);
                 });
-                addRange(displayParts, expandedDisplayParts);
-            }
-            else if (symbol.flags & SymbolFlags.Class) {
-                const expandedDisplayParts = mapToDisplayParts(writer => {
-                    const node = typeChecker.classSymbolToDeclaration(
-                        symbol,
-                        TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
-                        verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
-                        typeWriterOut)!;  
-                    getPrinter().writeNode(EmitHint.Unspecified, node, sourceFile, writer);
-                });
-                addRange(displayParts, expandedDisplayParts);
-            }
-            else {
-                const expandedDisplayParts = typeToDisplayParts(
-                    typeChecker,
-                    unfoldType,
-                    enclosingDeclaration || sourceFile,
-                    /*flags*/ undefined,
-                    verbosityLevel,
-                    typeWriterOut,
-                );
-                displayParts.push(spacePart());
-                addRange(displayParts, expandedDisplayParts);
-            }
+            });
+            addRange(displayParts, expandedDisplayParts);
+            hasUnfoldedSymbol = true;
             return true;
         }
         return false;

@@ -30,7 +30,6 @@
 // | ----------------------------------------------------------------------
 // | const c: {
 // |     new (length: number): Banana;
-// |     prototype: Banana;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -322,34 +321,6 @@
         {
           "text": ")",
           "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Banana",
-          "kind": "className"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
         },
         {
           "text": ":",

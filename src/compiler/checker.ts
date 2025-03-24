@@ -1935,8 +1935,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getSymbolFlags,
         getTypeArgumentsForResolvedSignature,
         isLibType,
-        classSymbolToDeclaration: nodeBuilder.classSymbolToDeclaration,
-        enumSymbolToDeclaration: nodeBuilder.enumSymbolToDeclaration,
+        symbolToDeclarations: nodeBuilder.symbolToDeclarations,
     };
 
     function getTypeArgumentsForResolvedSignature(signature: Signature) {
@@ -6311,8 +6310,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeParameterToDeclaration(parameter, context), out),
             symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolTableToDeclarationStatements(symbolTable, context)),
             symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToNode(symbol, context, meaning)),
-            classSymbolToDeclaration,
-            enumSymbolToDeclaration,
+            symbolToDeclarations,
         };
 
         function getTypeFromTypeNode(context: NodeBuilderContext, node: TypeNode, noMappedTypes?: false): Type;
@@ -6372,39 +6370,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbolToExpression(symbol, context, meaning);
         }
 
-        function classSymbolToDeclaration(symbol: Symbol, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration {
-            const classDeclarations = filter(symbol.declarations, isClassLike);
-            if (!classDeclarations || classDeclarations.length === 0) {
-                Debug.fail("Expected class symbol to have a declaration");
-            }
-            const modifiers = getModifiers(classDeclarations[0]);
-            const isAnonymous = isClassExpression(classDeclarations[0]);
-            const instanceType = getDeclaredTypeOfSymbol(symbol);
-            const node = withContext(
+        function symbolToDeclarations(symbol: Symbol, meaning: SymbolFlags, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration[] {
+            const nodes = withContext(
                 /*enclosingDeclaration*/ undefined,
                 flags,
                 /*internalFlags*/ undefined,
                 /*tracker*/ undefined,
                 verbosityLevel,
-                context => classSymbolToDeclarationWorker(symbol, instanceType.id, isAnonymous, modifiers, context),
+                context => symbolToDeclarationsWorker(symbol, context),
                 out);
-            Debug.assert(node !== undefined, "Should always get a node");
-            return node;
+            return mapDefined(nodes, node => {
+                switch (node.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                        return simplifyClassDeclaration(node as ClassDeclaration, symbol);
+                    case SyntaxKind.EnumDeclaration:
+                        return simplifyEnumDeclaration(node as EnumDeclaration, symbol);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return simplifyInterfaceDeclaration(node as InterfaceDeclaration, symbol, meaning);
+                    case SyntaxKind.ModuleDeclaration:
+                        return simplifyNamespaceDeclaration(node as ModuleDeclaration, symbol);
+                    // TODO: type declaration?
+                    default:
+                        return undefined;
+                }
+            });
         }
 
-        function classSymbolToDeclarationWorker(
-            symbol: Symbol,
-            instanceTypeId: number,
-            isAnonymous: boolean,
-            originalModifiers: readonly Modifier[] | undefined,
-            context: NodeBuilderContext): Declaration {
-            // We're already expanding the class type: set it in the stack to avoid expanding it again.
-            context.typeStack.push(instanceTypeId);
-            context.typeStack.push(-1);
-            const table = createSymbolTable([symbol]);
-            const stmts = symbolTableToDeclarationStatements(table, context);
-            Debug.assert(stmts.length === 1 && isClassDeclaration(stmts[0]), "Expected a single class declaration.");
-            let classDecl = stmts[0] as ClassDeclaration;
+        function simplifyClassDeclaration(classDecl: ClassDeclaration, symbol: Symbol): ClassDeclaration {
+            const classDeclarations = filter(symbol.declarations, isClassLike);
+            if (!classDeclarations || classDeclarations.length === 0) {
+                Debug.fail("Expected class symbol to have a declaration");
+            }
+            const modifiers = getEffectiveModifierFlags(classDeclarations[0]) & ~ModifierFlags.Export;
+            const isAnonymous = isClassExpression(classDeclarations[0]);
             if (isAnonymous) {
                 classDecl = factory.updateClassDeclaration(
                     classDecl,
@@ -6415,29 +6413,50 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     classDecl.members,
                 );
             }
-            return factory.replaceModifiers(classDecl, originalModifiers);
+            return factory.replaceModifiers(classDecl, modifiers);
         }
 
-        function enumSymbolToDeclaration(symbol: Symbol, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration {
-            const node = withContext(
-                /*enclosingDeclaration*/ undefined,
-                flags,
-                /*internalFlags*/ undefined,
-                /*tracker*/ undefined,
-                verbosityLevel,
-                context => enumSymbolToDeclarationWorker(symbol, context),
-                out);
-            Debug.assert(node !== undefined, "Should always get a node");
-            return node;
-        }
-
-        function enumSymbolToDeclarationWorker(symbol: Symbol, context: NodeBuilderContext): Declaration {
-            const table = createSymbolTable([symbol]);
-            const stmts = symbolTableToDeclarationStatements(table, context);
-            Debug.assert(stmts.length === 1 && isEnumDeclaration(stmts[0]), "Expected a single enum declaration.");
-            const enumDecl = stmts[0] as EnumDeclaration;
-            const modifiers = getModifiers(enumDecl)?.filter(modifier => modifier.kind !== SyntaxKind.DeclareKeyword);
+        // TODO: unify all those 3 functions if possible, after we re-add truncation
+        function simplifyEnumDeclaration(enumDecl: EnumDeclaration, symbol: Symbol): EnumDeclaration | undefined {
+            const enumDeclarations = filter(symbol.declarations, isEnumDeclaration);
+            if (!enumDeclarations || enumDeclarations.length === 0) {
+                Debug.fail("Expected enum symbol to have a declaration");
+            }
+            const modifiers = getEffectiveModifierFlags(enumDeclarations[0]) & ~ModifierFlags.Export;
             return factory.replaceModifiers(enumDecl, modifiers);
+        }
+
+        function simplifyNamespaceDeclaration(namespaceDecl: ModuleDeclaration, symbol: Symbol): ModuleDeclaration | undefined {
+            const namespaceDeclarations = filter(symbol.declarations, isModuleDeclaration);
+            if (!namespaceDeclarations || namespaceDeclarations.length === 0) {
+                Debug.fail("Expected namespace symbol to have a declaration");
+            }
+            const modifiers = getEffectiveModifierFlags(namespaceDeclarations[0]) & ~ModifierFlags.Export;
+            return factory.replaceModifiers(namespaceDecl, modifiers);
+        }
+
+        function simplifyInterfaceDeclaration(interfaceDecl: InterfaceDeclaration, symbol: Symbol, meaning: SymbolFlags): InterfaceDeclaration | undefined {
+            if (!(meaning & SymbolFlags.Interface)) {
+                return undefined;
+            }
+            const interfaceDeclarations = filter(symbol.declarations, isInterfaceDeclaration);
+            if (!interfaceDeclarations || interfaceDeclarations.length === 0) {
+                Debug.fail("Expected interface symbol to have a declaration");
+            }
+            const modifiers = getEffectiveModifierFlags(interfaceDeclarations[0]) & ~ModifierFlags.Export;
+            return factory.replaceModifiers(interfaceDecl, modifiers);
+        }
+
+        function symbolToDeclarationsWorker(symbol: Symbol, context: NodeBuilderContext): Statement[] {
+            // We're already expanding the type: set it in the stack to avoid expanding it again.
+            const type = getDeclaredTypeOfSymbol(symbol);
+            context.typeStack.push(type.id);
+            context.typeStack.push(-1);
+            const table = createSymbolTable([symbol]);
+            const statements = symbolTableToDeclarationStatements(table, context);
+            context.typeStack.pop();
+            context.typeStack.pop();
+            return statements;
         }
 
         function withContext<T>(
@@ -7459,6 +7478,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const properties = resolvedType.properties;
                 if (!properties) {
+                    context.typeStack.pop();
                     return typeElements;
                 }
 
@@ -7490,6 +7510,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     addPropertyToElementList(propertySymbol, context, typeElements);
                 }
+                context.typeStack.pop();
                 return typeElements.length ? typeElements : undefined;
             }
         }
@@ -9701,9 +9722,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
-                const members = getNamespaceMembersForSerialization(symbol);
+                const members =  getNamespaceMembersForSerialization(symbol);
+                const unfolding = isUnfolding(context);
                 // Split NS members up by declaration - members whose parent symbol is the ns symbol vs those whose is not (but were added in later via merging)
-                const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol ? "real" : "merged");
+                const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol || unfolding ? "real" : "merged");
                 const realMembers = locationMap.get("real") || emptyArray;
                 const mergedMembers = locationMap.get("merged") || emptyArray;
                 // TODO: `suppressNewPrivateContext` is questionable -we need to simply be emitting privates in whatever scope they were declared in, rather
@@ -9797,7 +9819,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
                 if (length(props)) {
-                    const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) ? "local" : "remote");
+                    const unfolding = isUnfolding(context);
+                    const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) || unfolding ? "local" : "remote");
                     const localProps = localVsRemoteMap.get("local") || emptyArray;
                     // handle remote props first - we need to make an `import` declaration that points at the module containing each remote
                     // prop in the outermost scope (TODO: a namespace within a namespace would need to be appropriately handled by this)
