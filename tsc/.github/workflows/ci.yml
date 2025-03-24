@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+      - uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
 
       - run: npm ci
 
@@ -104,7 +104,7 @@ jobs:
           npx hereby baseline-accept
           git add testdata/baselines/reference
           git diff --staged --exit-code
-      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
         with:
           name: ${{ matrix.os }}-${{ (matrix.race && 'race') || 'norace' }}-new-baselines-artifact
