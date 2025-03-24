@@ -56,6 +56,31 @@
 // | function isApple(x: unknown): x is Apple
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
+// type SomeType = {
+//     prop1: string;
+// }
+// function someFun(a: SomeType): SomeType {
+//     return a;
+// }
+// someFun.what = 'what';
+// ^^^^^^^
+// | ----------------------------------------------------------------------
+// | namespace someFun {
+// |     let what: string;
+// | }
+// | function someFun(a: {
+// |     prop1: string;
+// | }): {
+// |     prop1: string;
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^^^
+// | ----------------------------------------------------------------------
+// | module someFun
+// | function someFun(a: SomeType): SomeType
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
 
 [
   {
@@ -918,6 +943,298 @@
         },
         {
           "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityFunction.ts",
+      "position": 357,
+      "name": "s"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 350,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "someFun",
+          "kind": "functionName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "someFun",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "SomeType",
+          "kind": "aliasName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "SomeType",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityFunction.ts",
+      "position": 357,
+      "name": "s"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 350,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "someFun",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "let",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "what",
+          "kind": "text"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "someFun",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "prop1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "prop1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
           "kind": "keyword"
         },
         {

@@ -4,7 +4,7 @@
 // export declare namespace ns {
 //                          ^^
 // | ----------------------------------------------------------------------
-// | declare namespace ns {
+// | namespace ns {
 // |     export { Foo };
 // |     export let c: number;
 // |     export let d: 1;
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //                          ^^
 // | ----------------------------------------------------------------------
-// | declare namespace ns {
+// | namespace ns {
 // |     export { Foo };
 // |     export let c: number;
 // |     export let d: 1;
@@ -102,6 +102,21 @@
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 //     export const f = new Foo<number>();
+// }
+
+=== /6.ts ===
+// namespace OnlyLocal {
+//           ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | namespace OnlyLocal { }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | namespace OnlyLocal
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     const bar: number;
 // }
 
 [
@@ -444,14 +459,6 @@
       },
       "displayParts": [
         {
-          "text": "declare",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
           "text": "namespace",
           "kind": "keyword"
         },
@@ -671,14 +678,6 @@
         "length": 2
       },
       "displayParts": [
-        {
-          "text": "declare",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
         {
           "text": "namespace",
           "kind": "keyword"
@@ -1299,6 +1298,86 @@
       "documentation": [],
       "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/6.ts",
+      "position": 19,
+      "name": "4"
+    },
+    "item": {
+      "kind": "module",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 10,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "OnlyLocal",
+          "kind": "moduleName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/6.ts",
+      "position": 19,
+      "name": "4"
+    },
+    "item": {
+      "kind": "module",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 10,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "OnlyLocal",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
     }
   }
 ]

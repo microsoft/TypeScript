@@ -20,7 +20,6 @@ import {
     getCombinedLocalAndExportSymbolFlags,
     getDeclarationOfKind,
     getExternalModuleImportEqualsDeclarationExpression,
-    getIndentString,
     getMeaningFromLocation,
     getNameOfDeclaration,
     getNodeModifiers,
@@ -38,7 +37,6 @@ import {
     isCallExpression,
     isCallExpressionTarget,
     isCallOrNewExpression,
-    isClassDeclaration,
     isClassExpression,
     isConstTypeReference,
     isDeprecatedDeclaration,
@@ -71,7 +69,6 @@ import {
     length,
     lineBreakPart,
     ListFormat,
-    map,
     mapToDisplayParts,
     ModifierFlags,
     ModuleDeclaration,
@@ -514,6 +511,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
             const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
+            // const isNamespace = !(declaration && declaration.name && declaration.name.kind === SyntaxKind.StringLiteral); // TODO: breaking change
             displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);

@@ -1134,7 +1134,6 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
-    visitEachChild,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -6384,25 +6383,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ClassDeclaration:
                         return simplifyClassDeclaration(node as ClassDeclaration, symbol);
                     case SyntaxKind.EnumDeclaration:
-                        return simplifyEnumDeclaration(node as EnumDeclaration, symbol);
+                        return simplifyModifiers(node as EnumDeclaration, isEnumDeclaration, symbol);
                     case SyntaxKind.InterfaceDeclaration:
                         return simplifyInterfaceDeclaration(node as InterfaceDeclaration, symbol, meaning);
                     case SyntaxKind.ModuleDeclaration:
-                        return simplifyNamespaceDeclaration(node as ModuleDeclaration, symbol);
-                    // TODO: type declaration?
+                        return simplifyModifiers(node as ModuleDeclaration, isModuleDeclaration, symbol);
                     default:
                         return undefined;
                 }
             });
         }
 
-        function simplifyClassDeclaration(classDecl: ClassDeclaration, symbol: Symbol): ClassDeclaration {
+        function simplifyClassDeclaration(classDecl: ClassDeclaration, symbol: Symbol): Declaration {
             const classDeclarations = filter(symbol.declarations, isClassLike);
-            if (!classDeclarations || classDeclarations.length === 0) {
-                Debug.fail("Expected class symbol to have a declaration");
-            }
-            const modifiers = getEffectiveModifierFlags(classDeclarations[0]) & ~ModifierFlags.Export;
-            const isAnonymous = isClassExpression(classDeclarations[0]);
+            const originalClassDecl = classDeclarations && classDeclarations.length > 0 ? classDeclarations[0] : classDecl;
+            const modifiers = getEffectiveModifierFlags(originalClassDecl) & ~(ModifierFlags.Export | ModifierFlags.Ambient);
+            const isAnonymous = isClassExpression(originalClassDecl);
             if (isAnonymous) {
                 classDecl = factory.updateClassDeclaration(
                     classDecl,
@@ -6416,35 +6412,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return factory.replaceModifiers(classDecl, modifiers);
         }
 
-        // TODO: unify all those 3 functions if possible, after we re-add truncation
-        function simplifyEnumDeclaration(enumDecl: EnumDeclaration, symbol: Symbol): EnumDeclaration | undefined {
-            const enumDeclarations = filter(symbol.declarations, isEnumDeclaration);
-            if (!enumDeclarations || enumDeclarations.length === 0) {
-                Debug.fail("Expected enum symbol to have a declaration");
-            }
-            const modifiers = getEffectiveModifierFlags(enumDeclarations[0]) & ~ModifierFlags.Export;
-            return factory.replaceModifiers(enumDecl, modifiers);
+        function simplifyModifiers(newDecl: Declaration & HasModifiers, isDeclKind: (d: Declaration) => boolean, symbol: Symbol): Declaration & HasModifiers {
+            const decls = filter(symbol.declarations, isDeclKind);
+            const declWithModifiers = decls && decls.length > 0 ? decls[0] : newDecl;
+            const modifiers = getEffectiveModifierFlags(declWithModifiers) & ~(ModifierFlags.Export | ModifierFlags.Ambient);
+            return factory.replaceModifiers(newDecl, modifiers);
         }
 
-        function simplifyNamespaceDeclaration(namespaceDecl: ModuleDeclaration, symbol: Symbol): ModuleDeclaration | undefined {
-            const namespaceDeclarations = filter(symbol.declarations, isModuleDeclaration);
-            if (!namespaceDeclarations || namespaceDeclarations.length === 0) {
-                Debug.fail("Expected namespace symbol to have a declaration");
-            }
-            const modifiers = getEffectiveModifierFlags(namespaceDeclarations[0]) & ~ModifierFlags.Export;
-            return factory.replaceModifiers(namespaceDecl, modifiers);
-        }
-
-        function simplifyInterfaceDeclaration(interfaceDecl: InterfaceDeclaration, symbol: Symbol, meaning: SymbolFlags): InterfaceDeclaration | undefined {
+        function simplifyInterfaceDeclaration(interfaceDecl: InterfaceDeclaration, symbol: Symbol, meaning: SymbolFlags): Declaration | undefined {
             if (!(meaning & SymbolFlags.Interface)) {
                 return undefined;
             }
-            const interfaceDeclarations = filter(symbol.declarations, isInterfaceDeclaration);
-            if (!interfaceDeclarations || interfaceDeclarations.length === 0) {
-                Debug.fail("Expected interface symbol to have a declaration");
-            }
-            const modifiers = getEffectiveModifierFlags(interfaceDeclarations[0]) & ~ModifierFlags.Export;
-            return factory.replaceModifiers(interfaceDecl, modifiers);
+            return simplifyModifiers(interfaceDecl, isInterfaceDeclaration, symbol);
         }
 
         function symbolToDeclarationsWorker(symbol: Symbol, context: NodeBuilderContext): Statement[] {
@@ -9731,7 +9710,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // TODO: `suppressNewPrivateContext` is questionable -we need to simply be emitting privates in whatever scope they were declared in, rather
                 // than whatever scope we traverse to them in. That's a bit of a complex rewrite, since we're not _actually_ tracking privates at all in advance,
                 // so we don't even have placeholders to fill in.
-                if (length(realMembers)) {
+                if (length(realMembers) || unfolding) {
                     const localName = getInternalSymbolName(symbol, symbolName);
                     serializeAsNamespaceDeclaration(realMembers, localName, modifierFlags, !!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Assignment)));
                 }
@@ -9818,8 +9797,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
+                const unfolding = isUnfolding(context);
                 if (length(props)) {
-                    const unfolding = isUnfolding(context);
                     const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) || unfolding ? "local" : "remote");
                     const localProps = localVsRemoteMap.get("local") || emptyArray;
                     // handle remote props first - we need to make an `import` declaration that points at the module containing each remote
@@ -9872,6 +9851,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         factory.createModuleBlock(exportModifierStripped),
                     );
                     addResult(fakespace, modifierFlags); // namespaces can never be default exported
+                }
+                else if (unfolding) {
+                    addResult(
+                        factory.createModuleDeclaration(
+                            /*modifiers*/ undefined,
+                            factory.createIdentifier(localName),
+                            factory.createModuleBlock([]),
+                            NodeFlags.Namespace,
+                        ),
+                        modifierFlags,
+                    )
                 }
             }
 

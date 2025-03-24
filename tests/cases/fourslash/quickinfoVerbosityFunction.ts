@@ -17,6 +17,17 @@
 
 //// declare function isApple/*f*/(x: unknown): x is Apple;
 
+//// type SomeType = {
+////     prop1: string;
+//// }
+//// function someFun(a: SomeType): SomeType {
+////     return a;
+//// }
+//// someFun/*s*/.what = 'what';
 
 
-verify.baselineQuickInfo({ "o": [0, 1, 2], "f": [0, 1] });
+verify.baselineQuickInfo({
+    "o": [0, 1, 2],
+    "f": [0, 1],
+    "s": [0, 1]
+});

@@ -45,8 +45,14 @@
 ////     export const g = new Foo<string>();
 //// }
 
+// @filename: /6.ts
+//// namespace OnlyLocal/*4*/ {
+////     const bar: number;
+//// }
+
 verify.baselineQuickInfo({
     1: [0, 1],
     2: [0, 1, 2],
     3: [0, 1, 2],
+    4: [0, 1],
 })
