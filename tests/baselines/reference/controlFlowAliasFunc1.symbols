@@ -1,0 +1,23 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasFunc1.ts ===
+declare type Foo = { foo: ()=> number[] }; 
+>Foo : Symbol(Foo, Decl(controlFlowAliasFunc1.ts, 0, 0))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc1.ts, 0, 20))
+
+declare const obj: undefined | Foo;
+>obj : Symbol(obj, Decl(controlFlowAliasFunc1.ts, 1, 13))
+>Foo : Symbol(Foo, Decl(controlFlowAliasFunc1.ts, 0, 0))
+
+const isFoo = obj?.foo();
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasFunc1.ts, 2, 5))
+>obj?.foo : Symbol(foo, Decl(controlFlowAliasFunc1.ts, 0, 20))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc1.ts, 1, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc1.ts, 0, 20))
+
+if (isFoo){
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasFunc1.ts, 2, 5))
+
+    obj.foo();
+>obj.foo : Symbol(foo, Decl(controlFlowAliasFunc1.ts, 0, 20))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc1.ts, 1, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc1.ts, 0, 20))
+}
