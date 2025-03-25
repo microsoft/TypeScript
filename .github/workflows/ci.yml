@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - release-*
+      - tsgo-port
   pull_request:
     branches:
       - main
       - release-*
+      - tsgo-port
 
 permissions:
   contents: read
@@ -70,6 +72,8 @@ jobs:
           git diff --staged --exit-code
 
   coverage:
+    if: ${{ github.ref != 'refs/heads/tsgo-port' }}
+
     runs-on:
       - 'self-hosted'
       - '1ES.Pool=TypeScript-1ES-GitHub-Large'
