@@ -47,7 +47,7 @@ function isFoo2(this: void, object: {}): object is Foo {
 }
 
 declare let test: Foo | Bar;
->test : Foo | Bar
+>test : Bar | Foo
 >     : ^^^^^^^^^
 
 if (isFoo1(test)) {
@@ -55,7 +55,7 @@ if (isFoo1(test)) {
 >             : ^^^^^^^
 >isFoo1 : (object: {}) => object is Foo
 >       : ^      ^^  ^^^^^             
->test : Foo | Bar
+>test : Bar | Foo
 >     : ^^^^^^^^^
 
     test.foo = 'hi';
@@ -76,7 +76,7 @@ if (isFoo2(test)) {
 >             : ^^^^^^^
 >isFoo2 : (this: void, object: {}) => object is Foo
 >       : ^    ^^    ^^      ^^  ^^^^^             
->test : Foo | Bar
+>test : Bar | Foo
 >     : ^^^^^^^^^
 
     test.foo = 'hi';

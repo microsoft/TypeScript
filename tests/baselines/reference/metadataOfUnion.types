@@ -23,7 +23,7 @@ class B {
 >         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     x: "foo" | A;
->x : A | "foo"
+>x : "foo" | A
 >  : ^^^^^^^^^
 
     @PropDeco
@@ -41,7 +41,7 @@ class B {
 >         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     z: "foo" | boolean;
->z : boolean | "foo"
+>z : "foo" | boolean
 >  : ^^^^^^^^^^^^^^^
 }
 

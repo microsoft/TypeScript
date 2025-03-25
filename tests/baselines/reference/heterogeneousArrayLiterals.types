@@ -64,9 +64,9 @@ var f = [[], [1]]; // number[][]
 >  : ^
 
 var g = [[1], ['']]; // {}[]
->g : (number[] | string[])[]
+>g : (string[] | number[])[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
->[[1], ['']] : (number[] | string[])[]
+>[[1], ['']] : (string[] | number[])[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
@@ -598,9 +598,9 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >     : ^^^^
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[]
+>h : (T | Derived)[]
 >  : ^^^^^^^^^^^^^^^
->[t, derived] : (Derived | T)[]
+>[t, derived] : (T | Derived)[]
 >             : ^^^^^^^^^^^^^^^
 >t : T
 >  : ^
@@ -832,9 +832,9 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >     : ^^^^
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[]
+>h : (T | Derived)[]
 >  : ^^^^^^^^^^^^^^^
->[t, derived] : (Derived | T)[]
+>[t, derived] : (T | Derived)[]
 >             : ^^^^^^^^^^^^^^^
 >t : T
 >  : ^
@@ -852,9 +852,9 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >     : ^^^^
 
     var j = [u, derived]; // Derived[]
->j : (Derived | U)[]
+>j : (U | Derived)[]
 >  : ^^^^^^^^^^^^^^^
->[u, derived] : (Derived | U)[]
+>[u, derived] : (U | Derived)[]
 >             : ^^^^^^^^^^^^^^^
 >u : U
 >  : ^

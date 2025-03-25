@@ -150,13 +150,13 @@ var b = baz(b, b, g);      // Should be number | string
 >  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
 var d: number[] | string[];
->d : number[] | string[]
+>d : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
 var d = foo(h);            // Should be number[] | string[]
->d : number[] | string[]
+>d : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
->foo(h) : number[] | string[]
+>foo(h) : string[] | number[]
 >       : ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(cb: (x: number, y: string) => T) => T
 >    : ^ ^^  ^^                           ^^^^^ 
@@ -164,9 +164,9 @@ var d = foo(h);            // Should be number[] | string[]
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^         
 
 var d = bar(1, "one", h);  // Should be number[] | string[]
->d : number[] | string[]
+>d : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
->bar(1, "one", h) : number[] | string[]
+>bar(1, "one", h) : string[] | number[]
 >                 : ^^^^^^^^^^^^^^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
@@ -178,9 +178,9 @@ var d = bar(1, "one", h);  // Should be number[] | string[]
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^         
 
 var d = bar("one", 1, h);  // Should be number[] | string[]
->d : number[] | string[]
+>d : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
->bar("one", 1, h) : number[] | string[]
+>bar("one", 1, h) : string[] | number[]
 >                 : ^^^^^^^^^^^^^^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
@@ -192,15 +192,15 @@ var d = bar("one", 1, h);  // Should be number[] | string[]
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^         
 
 var d = baz(d, d, g);      // Should be number[] | string[]
->d : number[] | string[]
+>d : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
->baz(d, d, g) : number[] | string[]
+>baz(d, d, g) : string[] | number[]
 >             : ^^^^^^^^^^^^^^^^^^^
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
->d : number[] | string[]
+>d : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
->d : number[] | string[]
+>d : string[] | number[]
 >  : ^^^^^^^^^^^^^^^^^^^
 >g : <T>(x: T, y: T) => T
 >  : ^ ^^ ^^ ^^ ^^ ^^^^^ 

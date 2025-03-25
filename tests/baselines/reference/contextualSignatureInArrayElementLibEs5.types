@@ -8,8 +8,8 @@ declare function test(
 >     : ^   ^^                                                                    ^^^^^    
 
   arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
->arg : Record<string, (arg: string) => void> | ((arg: number) => void)[]
->    : ^^^^^^^^^^^^^^^^   ^^      ^^^^^    ^^^^^^   ^^      ^^^^^    ^^^
+>arg : ((arg: number) => void)[] | Record<string, (arg: string) => void>
+>    : ^^   ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^    ^
 >arg : string
 >    : ^^^^^^
 >arg : number
