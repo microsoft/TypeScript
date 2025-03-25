@@ -32,7 +32,7 @@ type ClassNameArg<S> = ClassName<S> | ClassNameObjectMap<S>;
 >ClassNameArg : ClassNameArg<S>
 
 export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]): string {
->css : <S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
+>css : <S extends { [K in keyof S]: string; }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
 >styles : S
 >classNames : ClassNameArg<S>[]
 

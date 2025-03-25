@@ -1,0 +1,15 @@
+index.tsx(2,1): error TS2308: Module "./b" has already exported a member named '__foo'. Consider explicitly re-exporting to resolve the ambiguity.
+
+
+==== index.tsx (1 errors) ====
+    export * from "./b";
+    export * from "./c";
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./b" has already exported a member named '__foo'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== b.ts (0 errors) ====
+    export function __foo(): number | void {}
+    
+==== c.ts (0 errors) ====
+    export function __foo(): string | void {}
+    

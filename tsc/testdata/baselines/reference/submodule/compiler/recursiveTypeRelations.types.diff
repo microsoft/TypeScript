@@ -1,15 +1,6 @@
 --- old.recursiveTypeRelations.types
 +++ new.recursiveTypeRelations.types
-@@= skipped -31, +31 lines =@@
- >ClassNameArg : ClassNameArg<S>
- 
- export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]): string {
-->css : <S extends { [K in keyof S]: string; }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
-+>css : <S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
- >styles : S
- >classNames : ClassNameArg<S>[]
- 
-@@= skipped -21, +21 lines =@@
+@@= skipped -52, +52 lines =@@
      }
      if (typeof arg == "string") {
  >typeof arg == "string" : boolean

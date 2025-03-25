@@ -8,7 +8,6 @@ privateNamesIncompatibleModifiers.ts(9,5): error TS18010: An accessibility modif
 privateNamesIncompatibleModifiers.ts(10,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
 privateNamesIncompatibleModifiers.ts(11,5): error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
 privateNamesIncompatibleModifiers.ts(12,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
-privateNamesIncompatibleModifiers.ts(12,13): error TS7010: '#whatMethod', which lacks return-type annotation, implicitly has an 'any' return type.
 privateNamesIncompatibleModifiers.ts(17,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
 privateNamesIncompatibleModifiers.ts(18,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
 privateNamesIncompatibleModifiers.ts(19,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
@@ -26,7 +25,7 @@ privateNamesIncompatibleModifiers.ts(32,14): error TS1267: Property '#quux' cann
 
 
 !!! error TS2318: Cannot find global type 'AsyncIterableIterator'.
-==== privateNamesIncompatibleModifiers.ts (24 errors) ====
+==== privateNamesIncompatibleModifiers.ts (23 errors) ====
     class A {
         public #foo = 3;         // Error
         ~~~~~~
@@ -57,8 +56,6 @@ privateNamesIncompatibleModifiers.ts(32,14): error TS1267: Property '#quux' cann
         declare #whatMethod()                      // Error
         ~~~~~~~
 !!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
-                ~~~~~~~~~~~
-!!! error TS7010: '#whatMethod', which lacks return-type annotation, implicitly has an 'any' return type.
         async #asyncMethod() { return 1; }         //OK
         *#genMethod() { return 1; }                //OK
         async *#asyncGenMethod() { return 1; }     //OK

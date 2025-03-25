@@ -29,17 +29,17 @@ type T2 = ObjectHasKey<{ a: string }, 'b'>;  // 'false'
 // Verify that mapped type isn't eagerly resolved in type-to-string operation
 
 declare function f1<A extends string, B extends string>(a: A, b: B): { [P in A | B]: any };
->f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any }
+>f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
 >a : A
 >b : B
 
 function f2<A extends string>(a: A) {
->f2 : <A extends string>(a: A) => { [P in "x" | A]: any }
+>f2 : <A extends string>(a: A) => { [P in "x" | A]: any; }
 >a : A
 
     return f1(a, 'x');
->f1(a, 'x') : { [P in "x" | A]: any }
->f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any }
+>f1(a, 'x') : { [P in "x" | A]: any; }
+>f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
 >a : A
 >'x' : "x"
 }
@@ -50,7 +50,7 @@ function f3(x: 'a' | 'b') {
 
     return f2(x);
 >f2(x) : { a: any; b: any; x: any; }
->f2 : <A extends string>(a: A) => { [P in "x" | A]: any }
+>f2 : <A extends string>(a: A) => { [P in "x" | A]: any; }
 >x : "a" | "b"
 }
 

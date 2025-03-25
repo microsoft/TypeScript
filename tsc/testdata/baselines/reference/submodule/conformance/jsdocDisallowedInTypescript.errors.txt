@@ -1,3 +1,4 @@
+jsdocDisallowedInTypescript.ts(7,10): error TS7010: 'hof', which lacks return-type annotation, implicitly has an 'any' return type.
 jsdocDisallowedInTypescript.ts(7,20): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 jsdocDisallowedInTypescript.ts(7,28): error TS1005: ',' expected.
 jsdocDisallowedInTypescript.ts(7,32): error TS1109: Expression expected.
@@ -6,6 +7,7 @@ jsdocDisallowedInTypescript.ts(7,34): error TS2695: Left side of comma operator 
 jsdocDisallowedInTypescript.ts(7,42): error TS2693: 'string' only refers to a type, but is being used as a value here.
 jsdocDisallowedInTypescript.ts(7,48): error TS1005: ';' expected.
 jsdocDisallowedInTypescript.ts(7,49): error TS1128: Declaration or statement expected.
+jsdocDisallowedInTypescript.ts(10,10): error TS7010: 'hof2', which lacks return-type annotation, implicitly has an 'any' return type.
 jsdocDisallowedInTypescript.ts(10,18): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 jsdocDisallowedInTypescript.ts(10,26): error TS1005: ',' expected.
 jsdocDisallowedInTypescript.ts(10,27): error TS2730: An arrow function cannot have a 'this' parameter.
@@ -28,7 +30,7 @@ jsdocDisallowedInTypescript.ts(18,25): error TS1134: Variable declaration expect
 jsdocDisallowedInTypescript.ts(18,27): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
 
 
-==== jsdocDisallowedInTypescript.ts (28 errors) ====
+==== jsdocDisallowedInTypescript.ts (30 errors) ====
     // grammar error from checker
     var ara: Array.<number> = [1,2,3];
     
@@ -36,6 +38,8 @@ jsdocDisallowedInTypescript.ts(18,27): error TS2397: Declaration name conflicts 
         return x ? x + y[1] : y[0];
     }
     function hof(ctor: function(new: number, string)) {
+             ~~~
+!!! error TS7010: 'hof', which lacks return-type annotation, implicitly has an 'any' return type.
                        ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
@@ -56,6 +60,8 @@ jsdocDisallowedInTypescript.ts(18,27): error TS2397: Declaration name conflicts 
         return new ctor('hi');
     }
     function hof2(f: function(this: number, string): string) {
+             ~~~~
+!!! error TS7010: 'hof2', which lacks return-type annotation, implicitly has an 'any' return type.
                      ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.

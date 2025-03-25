@@ -8,8 +8,8 @@ type Reducer<S> = (state: S) => S;
 >state : S
 
 declare function combineReducers<S>(reducers: { [K in keyof S]: Reducer<S[K]> }): Reducer<S>;
->combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
->reducers : { [K in keyof S]: Reducer<S[K]> }
+>combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
+>reducers : { [K in keyof S]: Reducer<S[K]>; }
 
 type MyState = { combined: { foo: number } };
 >MyState : MyState
@@ -22,13 +22,13 @@ declare const foo: Reducer<MyState['combined']['foo']>;
 const myReducer1: Reducer<MyState> = combineReducers({
 >myReducer1 : Reducer<MyState>
 >combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
->combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
+>combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
 
     combined: combineReducers({ foo }),
 >combined : Reducer<{ foo: number; }>
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
->combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
+>combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 >{ foo } : { foo: Reducer<number>; }
 >foo : Reducer<number>
 
@@ -37,13 +37,13 @@ const myReducer1: Reducer<MyState> = combineReducers({
 const myReducer2 = combineReducers({
 >myReducer2 : Reducer<{ combined: { foo: number; }; }>
 >combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
->combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
+>combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
 
     combined: combineReducers({ foo }),
 >combined : Reducer<{ foo: number; }>
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
->combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
+>combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 >{ foo } : { foo: Reducer<number>; }
 >foo : Reducer<number>
 

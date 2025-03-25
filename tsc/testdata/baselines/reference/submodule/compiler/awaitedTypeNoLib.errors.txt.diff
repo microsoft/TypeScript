@@ -1,18 +1,8 @@
 --- old.awaitedTypeNoLib.errors.txt
 +++ new.awaitedTypeNoLib.errors.txt
-@@= skipped -0, +0 lines =@@
- error TS2318: Cannot find global type 'Array'.
- error TS2318: Cannot find global type 'Awaited'.
--error TS2318: Cannot find global type 'Boolean'.
- error TS2318: Cannot find global type 'Function'.
- error TS2318: Cannot find global type 'IArguments'.
--error TS2318: Cannot find global type 'Number'.
--error TS2318: Cannot find global type 'Object'.
+@@= skipped -7, +7 lines =@@
  error TS2318: Cannot find global type 'RegExp'.
  error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
  awaitedTypeNoLib.ts(3,15): error TS2304: Cannot find name 'PromiseLike'.
 -awaitedTypeNoLib.ts(18,27): error TS2345: Argument of type 'NotPromise<TResult> | Thenable<NotPromise<TResult>>' is not assignable to parameter of type 'Thenable<TResult>'.
 +awaitedTypeNoLib.ts(18,27): error TS2345: Argument of type 'Thenable<NotPromise<TResult>> | NotPromise<TResult>' is not assignable to parameter of type 'Thenable<TResult>'.
@@ -22,24 +12,7 @@
        Type 'Thenable<unknown> & TResult' is not assignable to type 'Thenable<TResult>'.
          Type 'unknown' is not assignable to type 'TResult'.
            'TResult' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
-@@= skipped -17, +17 lines =@@
- 
- !!! error TS2318: Cannot find global type 'Array'.
- !!! error TS2318: Cannot find global type 'Awaited'.
--!!! error TS2318: Cannot find global type 'Boolean'.
- !!! error TS2318: Cannot find global type 'Function'.
- !!! error TS2318: Cannot find global type 'IArguments'.
--!!! error TS2318: Cannot find global type 'Number'.
--!!! error TS2318: Cannot find global type 'Object'.
- !!! error TS2318: Cannot find global type 'RegExp'.
- !!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
- ==== awaitedTypeNoLib.ts (2 errors) ====
-     type NotPromise<T> = T extends Thenable<unknown>
-       ? T
-@@= skipped -29, +29 lines =@@
+@@= skipped -39, +39 lines =@@
            //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
            this.resolvePromise(result, resolve);
                                ~~~~~~

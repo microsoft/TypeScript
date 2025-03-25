@@ -768,11 +768,6 @@
  
        // Conversion to JavaScript types
        toJS(): { [K in keyof T]: any };
-->toJS : () => { [K in keyof T]: any; }
-+>toJS : () => { [K in keyof T]: any }
- 
-       toJSON(): T;
- >toJSON : () => T
 @@= skipped -52, +52 lines =@@
  
        // Sequence algorithms

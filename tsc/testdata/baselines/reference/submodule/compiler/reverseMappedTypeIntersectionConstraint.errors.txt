@@ -1,12 +1,12 @@
 reverseMappedTypeIntersectionConstraint.ts(19,7): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
 reverseMappedTypeIntersectionConstraint.ts(32,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
 reverseMappedTypeIntersectionConstraint.ts(43,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
-reverseMappedTypeIntersectionConstraint.ts(59,7): error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K] }' is not assignable to type 'T'.
-  '{ [K in keyof T & (keyof Stuff)]: T[K] }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+reverseMappedTypeIntersectionConstraint.ts(59,7): error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is not assignable to type 'T'.
+  '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
 reverseMappedTypeIntersectionConstraint.ts(63,49): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
-reverseMappedTypeIntersectionConstraint.ts(69,7): error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K] }[]' is not assignable to type 'T[]'.
-  Type '{ [K in keyof T & (keyof Stuff)]: T[K] }' is not assignable to type 'T'.
-    '{ [K in keyof T & (keyof Stuff)]: T[K] }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+reverseMappedTypeIntersectionConstraint.ts(69,7): error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }[]' is not assignable to type 'T[]'.
+  Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is not assignable to type 'T'.
+    '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
 reverseMappedTypeIntersectionConstraint.ts(74,36): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
 reverseMappedTypeIntersectionConstraint.ts(87,12): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
 reverseMappedTypeIntersectionConstraint.ts(98,12): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; }'.
@@ -85,8 +85,8 @@ reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal 
         } else {
           return s
           ~~~~~~
-!!! error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K] }' is not assignable to type 'T'.
-!!! error TS2322:   '{ [K in keyof T & (keyof Stuff)]: T[K] }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+!!! error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is not assignable to type 'T'.
+!!! error TS2322:   '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
         }
     }
     
@@ -100,9 +100,9 @@ reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal 
         } else {
           return arr
           ~~~~~~
-!!! error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K] }[]' is not assignable to type 'T[]'.
-!!! error TS2322:   Type '{ [K in keyof T & (keyof Stuff)]: T[K] }' is not assignable to type 'T'.
-!!! error TS2322:     '{ [K in keyof T & (keyof Stuff)]: T[K] }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+!!! error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }[]' is not assignable to type 'T[]'.
+!!! error TS2322:   Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is not assignable to type 'T'.
+!!! error TS2322:     '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
         }
     }
     

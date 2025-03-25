@@ -1097,7 +1097,7 @@ declare module Immutable {
 
       // Conversion to JavaScript types
       toJS(): { [K in keyof T]: any };
->toJS : () => { [K in keyof T]: any }
+>toJS : () => { [K in keyof T]: any; }
 
       toJSON(): T;
 >toJSON : () => T

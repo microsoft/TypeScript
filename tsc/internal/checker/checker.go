@@ -311,6 +311,15 @@ const (
 	DeclarationMeaningPropertyAssignmentOrMethod = DeclarationMeaningPropertyAssignment | DeclarationMeaningMethod
 )
 
+type DeclarationSpaces int32
+
+const (
+	DeclarationSpacesNone            DeclarationSpaces = 0
+	DeclarationSpacesExportValue     DeclarationSpaces = 1 << 0
+	DeclarationSpacesExportType      DeclarationSpaces = 1 << 1
+	DeclarationSpacesExportNamespace DeclarationSpaces = 1 << 2
+)
+
 // IntrinsicTypeKind
 
 type IntrinsicTypeKind int32
@@ -1597,17 +1606,14 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 		return symbol
 	}
 	allSymbols := slices.Collect(maps.Values(symbols))
-	c.sortSymbols(allSymbols)
 	if meaning&ast.SymbolFlagsGlobalLookup != 0 {
-		allSymbols = slices.Concat([]*ast.Symbol{
-			c.newSymbol(ast.SymbolFlagsTypeAlias, "string"),
-			c.newSymbol(ast.SymbolFlagsTypeAlias, "number"),
-			c.newSymbol(ast.SymbolFlagsTypeAlias, "boolean"),
-			c.newSymbol(ast.SymbolFlagsTypeAlias, "object"),
-			c.newSymbol(ast.SymbolFlagsTypeAlias, "bigint"),
-			c.newSymbol(ast.SymbolFlagsTypeAlias, "symbol"),
-		}, allSymbols)
+		for _, s := range []string{"stringString", "numberNumber", "booleanBoolean", "objectObject", "bigintBigInt", "symbolSymbol"} {
+			if _, ok := symbols[s[len(s)/2:]]; ok {
+				allSymbols = append(allSymbols, c.newSymbol(ast.SymbolFlagsTypeAlias, s[:len(s)/2]))
+			}
+		}
 	}
+	c.sortSymbols(allSymbols)
 	return c.getSpellingSuggestionForName(name, allSymbols, meaning)
 }
 
@@ -2038,6 +2044,7 @@ func (c *Checker) checkSourceFile(sourceFile *ast.SourceFile) {
 		c.checkDeferredNodes(sourceFile)
 		c.checkJSDocNodes(sourceFile)
 		if ast.IsExternalOrCommonJsModule(sourceFile) {
+			c.checkExternalModuleExports(sourceFile.AsNode())
 			c.registerForUnusedIdentifiersCheck(sourceFile.AsNode())
 		}
 		// This relies on the results of other lazy diagnostics, so must be computed after them
@@ -2470,7 +2477,6 @@ func (c *Checker) checkSignatureDeclaration(node *ast.Node) {
 // that in turn supplies a `resolve` function as one of its arguments and results in an
 // object with a callable `then` signature.
 func (c *Checker) checkAsyncFunctionReturnType(node *ast.Node, returnTypeNode *ast.Node) {
-	// !!! Possibly error if c.languageVersion < core.ScriptTargetES2015
 	returnType := c.getTypeFromTypeNode(returnTypeNode)
 	if c.isErrorType(returnType) {
 		return
@@ -3133,7 +3139,7 @@ func (c *Checker) checkFunctionOrMethodDeclaration(node *ast.Node) {
 	if node.Type() == nil {
 		// Report an implicit any error if there is no body, no explicit return type, and node is not a private method
 		// in an ambient context
-		if ast.NodeIsMissing(body) && isPrivateWithinAmbient(node) {
+		if ast.NodeIsMissing(body) && !isPrivateWithinAmbient(node) {
 			c.reportImplicitAny(node, c.anyType, WideningKindNormal)
 		}
 		if functionFlags&FunctionFlagsGenerator != 0 && ast.NodeIsPresent(body) {
@@ -5255,12 +5261,12 @@ func (c *Checker) checkExternalModuleExports(node *ast.Node) {
 		// Checks for export * conflicts
 		for id, symbol := range c.getExportsOfModule(moduleSymbol) {
 			if id == ast.InternalSymbolNameExportStar {
-				return
+				continue
 			}
 			// ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries.
 			// (TS Exceptions: namespaces, function overloads, enums, and interfaces)
 			if symbol.Flags&(ast.SymbolFlagsNamespace|ast.SymbolFlagsEnum) != 0 {
-				return
+				continue
 			}
 			exportedDeclarationsCount := core.CountWhere(symbol.Declarations, func(d *ast.Node) bool {
 				return isNotOverload(d) && !ast.IsAccessor(d) && !ast.IsInterfaceDeclaration(d)
@@ -5268,7 +5274,7 @@ func (c *Checker) checkExternalModuleExports(node *ast.Node) {
 			if symbol.Flags&ast.SymbolFlagsTypeAlias != 0 && exportedDeclarationsCount <= 2 {
 				// it is legal to merge type alias with other values
 				// so count should be either 1 (just type alias) or 2 (type alias + merged value)
-				return
+				continue
 			}
 			if exportedDeclarationsCount > 1 {
 				for _, declaration := range symbol.Declarations {
@@ -6349,7 +6355,96 @@ func (c *Checker) checkTypeNameIsReserved(name *ast.Node, message *diagnostics.M
 }
 
 func (c *Checker) checkExportsOnMergedDeclarations(node *ast.Node) {
-	// !!!
+	// If localSymbol is defined on node then node itself is exported - check is required.
+	symbol := node.LocalSymbol()
+	if symbol == nil {
+		// Local symbol is undefined => this declaration is non-exported.
+		// However, symbol might contain other declarations that are exported.
+		symbol = c.getSymbolOfDeclaration(node)
+		if symbol.ExportSymbol == nil {
+			// This is a pure local symbol (all declarations are non-exported) - no need to check anything.
+			return
+		}
+	}
+	// Run the check only for the first declaration in the list.
+	if ast.GetDeclarationOfKind(symbol, node.Kind) != node {
+		return
+	}
+	exportedDeclarationSpaces := DeclarationSpacesNone
+	nonExportedDeclarationSpaces := DeclarationSpacesNone
+	defaultExportedDeclarationSpaces := DeclarationSpacesNone
+	for _, d := range symbol.Declarations {
+		declarationSpaces := c.getDeclarationSpaces(d)
+		effectiveDeclarationFlags := c.getEffectiveDeclarationFlags(d, ast.ModifierFlagsExport|ast.ModifierFlagsDefault)
+		if effectiveDeclarationFlags&ast.ModifierFlagsExport != 0 {
+			if effectiveDeclarationFlags&ast.ModifierFlagsDefault != 0 {
+				defaultExportedDeclarationSpaces |= declarationSpaces
+			} else {
+				exportedDeclarationSpaces |= declarationSpaces
+			}
+		} else {
+			nonExportedDeclarationSpaces |= declarationSpaces
+		}
+	}
+	// Spaces for anything not declared a 'default export'.
+	nonDefaultExportedDeclarationSpaces := exportedDeclarationSpaces | nonExportedDeclarationSpaces
+	commonDeclarationSpacesForExportsAndLocals := exportedDeclarationSpaces & nonExportedDeclarationSpaces
+	commonDeclarationSpacesForDefaultAndNonDefault := defaultExportedDeclarationSpaces & nonDefaultExportedDeclarationSpaces
+	if commonDeclarationSpacesForExportsAndLocals != 0 || commonDeclarationSpacesForDefaultAndNonDefault != 0 {
+		// declaration spaces for exported and non-exported declarations intersect
+		for _, d := range symbol.Declarations {
+			declarationSpaces := c.getDeclarationSpaces(d)
+			name := ast.GetNameOfDeclaration(d)
+			// Only error on the declarations that contributed to the intersecting spaces.
+			if declarationSpaces&commonDeclarationSpacesForDefaultAndNonDefault != 0 {
+				c.error(name, diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead, scanner.DeclarationNameToString(name))
+			} else if declarationSpaces&commonDeclarationSpacesForExportsAndLocals != 0 {
+				c.error(name, diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, scanner.DeclarationNameToString(name))
+			}
+		}
+	}
+}
+
+func (c *Checker) getDeclarationSpaces(node *ast.Declaration) DeclarationSpaces {
+	switch node.Kind {
+	case ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration, ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag:
+		return DeclarationSpacesExportType
+	case ast.KindModuleDeclaration:
+		if ast.IsAmbientModule(node) || ast.GetModuleInstanceState(node) != ast.ModuleInstanceStateNonInstantiated {
+			return DeclarationSpacesExportNamespace | DeclarationSpacesExportValue
+		}
+		return DeclarationSpacesExportNamespace
+	case ast.KindClassDeclaration, ast.KindEnumDeclaration, ast.KindEnumMember:
+		return DeclarationSpacesExportType | DeclarationSpacesExportValue
+	case ast.KindSourceFile:
+		return DeclarationSpacesExportType | DeclarationSpacesExportValue | DeclarationSpacesExportNamespace
+	case ast.KindExportAssignment, ast.KindBinaryExpression:
+		var expression *ast.Node
+		if ast.IsExportAssignment(node) {
+			expression = node.Expression()
+		} else {
+			expression = node.AsBinaryExpression().Right
+		}
+		// Export assigned entity name expressions act as aliases and should fall through, otherwise they export values.
+		if !ast.IsEntityNameExpression(expression) {
+			return DeclarationSpacesExportValue
+		}
+		node = expression
+		// The below options all declare an Alias, which is allowed to merge with other values within the importing module.
+		fallthrough
+	case ast.KindImportEqualsDeclaration, ast.KindNamespaceImport, ast.KindImportClause:
+		result := DeclarationSpacesNone
+		target := c.resolveAlias(c.getSymbolOfDeclaration(node))
+		for _, d := range target.Declarations {
+			result |= c.getDeclarationSpaces(d)
+		}
+		return result
+	case ast.KindVariableDeclaration, ast.KindBindingElement, ast.KindFunctionDeclaration, ast.KindImportSpecifier:
+		return DeclarationSpacesExportValue
+	case ast.KindMethodSignature, ast.KindPropertySignature:
+		return DeclarationSpacesExportType
+	}
+	panic("Unhandled case in getDeclarationSpaces")
 }
 
 func (c *Checker) checkTypeParameters(typeParameterDeclarations []*ast.Node) {
@@ -7658,7 +7753,7 @@ func (c *Checker) checkIndexedAccessIndexType(t *Type, accessNode *ast.Node) *Ty
 }
 
 func (c *Checker) getConstituentProperty(objectType *Type, propertyName string) *ast.Symbol {
-	for _, t := range objectType.Distributed() {
+	for _, t := range c.getApparentType(objectType).Distributed() {
 		prop := c.getPropertyOfType(t, propertyName)
 		if prop != nil {
 			return prop
@@ -8184,7 +8279,33 @@ func (c *Checker) resolveJsxOpeningLikeElement(node *ast.Node, candidatesOutArra
 }
 
 func (c *Checker) resolveInstanceofExpression(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
-	return c.unknownSignature // !!!
+	// if rightType is an object type with a custom `[Symbol.hasInstance]` method, then it is potentially
+	// valid on the right-hand side of the `instanceof` operator. This allows normal `object` types to
+	// participate in `instanceof`, as per Step 2 of https://tc39.es/ecma262/#sec-instanceofoperator.
+	right := node.AsBinaryExpression().Right
+	rightType := c.checkExpression(right)
+	if !IsTypeAny(rightType) {
+		hasInstanceMethodType := c.getSymbolHasInstanceMethodOfObjectType(rightType)
+		if hasInstanceMethodType != nil {
+			apparentType := c.getApparentType(hasInstanceMethodType)
+			if c.isErrorType(apparentType) {
+				return c.resolveErrorCall(node)
+			}
+			callSignatures := c.getSignaturesOfType(apparentType, SignatureKindCall)
+			constructSignatures := c.getSignaturesOfType(apparentType, SignatureKindConstruct)
+			if c.isUntypedFunctionCall(hasInstanceMethodType, apparentType, len(callSignatures), len(constructSignatures)) {
+				return c.resolveUntypedCall(node)
+			}
+			if len(callSignatures) != 0 {
+				return c.resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlagsNone, nil)
+			}
+		} else if !(c.typeHasCallOrConstructSignatures(rightType) || c.isTypeSubtypeOf(rightType, c.globalFunctionType)) {
+			c.error(right, diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_a_class_function_or_other_type_assignable_to_the_Function_interface_type_or_an_object_type_with_a_Symbol_hasInstance_method)
+			return c.resolveErrorCall(node)
+		}
+	}
+	// fall back to a default signature
+	return c.anySignature
 }
 
 type CallState struct {
@@ -9059,7 +9180,7 @@ func (c *Checker) reportCallResolutionErrors(s *CallState, signatures []*Signatu
 			if last.declaration != nil && len(s.candidatesForArgumentError) > 1 {
 				diagnostic.AddRelatedInfo(NewDiagnosticForNode(last.declaration, diagnostics.The_last_overload_is_declared_here))
 			}
-			// !!! addImplementationSuccessElaboration(last, d)
+			c.addImplementationSuccessElaboration(s, last, diagnostic)
 			c.diagnostics.Add(diagnostic)
 		}
 	case s.candidateForArgumentArityError != nil:
@@ -9074,6 +9195,26 @@ func (c *Checker) reportCallResolutionErrors(s *CallState, signatures []*Signatu
 			c.diagnostics.Add(c.getTypeArgumentArityError(s.node, signatures, s.typeArguments, headMessage))
 		} else {
 			c.diagnostics.Add(c.getArgumentArityError(s.node, signaturesWithCorrectTypeArgumentArity, s.args, headMessage))
+		}
+	}
+}
+
+func (c *Checker) addImplementationSuccessElaboration(s *CallState, failed *Signature, diagnostic *ast.Diagnostic) {
+	if failed.declaration != nil && failed.declaration.Symbol() != nil {
+		declarations := failed.declaration.Symbol().Declarations
+		if len(declarations) > 1 {
+			implementation := core.Find(declarations, func(d *ast.Declaration) bool {
+				return ast.IsFunctionLikeDeclaration(d) && ast.NodeIsPresent(d.Body())
+			})
+			if implementation != nil {
+				candidate := c.getSignatureFromDeclaration(implementation)
+				localState := *s
+				localState.candidates = []*Signature{candidate}
+				localState.isSingleNonGenericCandidate = candidate.typeParameters == nil
+				if c.chooseOverload(&localState, c.assignableRelation) != nil {
+					diagnostic.AddRelatedInfo(NewDiagnosticForNode(implementation, diagnostics.The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_are_not_externally_visible))
+				}
+			}
 		}
 	}
 }
@@ -10826,39 +10967,15 @@ func (c *Checker) isPropertyAccessible(node *ast.Node, isSuper bool, isWrite boo
 }
 
 func (c *Checker) containerSeemsToBeEmptyDomElement(containingType *Type) bool {
-	if c.compilerOptions.Lib == nil || slices.Contains(c.compilerOptions.Lib, "lib.dom.d.ts") {
+	return !slices.Contains(c.compilerOptions.Lib, "lib.dom.d.ts") && everyContainedType(containingType, hasCommonDomTypeName) && c.isEmptyObjectType(containingType)
+}
+
+func hasCommonDomTypeName(t *Type) bool {
+	if t.symbol == nil {
 		return false
 	}
-	return everyContainedType(containingType, func(t *Type) bool {
-		if t.symbol == nil {
-			return false
-		}
-
-		name := t.symbol.Name
-
-		switch name {
-		case "EventTarget", "Node", "Element":
-			return true
-		}
-
-		name, ok := strings.CutPrefix(name, "HTML")
-		if !ok {
-			return false
-		}
-
-		name, ok = strings.CutSuffix(name, "Element")
-		if !ok {
-			return false
-		}
-
-		for _, r := range name {
-			if !stringutil.IsASCIILetter(r) {
-				return false
-			}
-		}
-
-		return true
-	}) && c.isEmptyObjectType(containingType)
+	name := t.symbol.Name
+	return name == "EventTarget" || name == "Node" || name == "Element" || strings.HasPrefix(name, "HTML") && strings.HasSuffix(name, "Element")
 }
 
 func (c *Checker) checkAndReportErrorForExtendingInterface(errorLocation *ast.Node) bool {
@@ -15598,7 +15715,7 @@ func (c *Checker) getInferredTypeParameterConstraint(t *Type, omitTypeReferences
 				// present, we form an intersection of the inferred constraint types.
 				child := declaration.Parent
 				parent := child.Parent
-				for parent != nil && ast.IsParenthesizedExpression(parent) {
+				for parent != nil && ast.IsParenthesizedTypeNode(parent) {
 					child = parent
 					parent = child.Parent
 				}
@@ -26679,9 +26796,12 @@ func (c *Checker) getDefinitelyFalsyPartOfType(t *Type) *Type {
 
 func (c *Checker) getConstraintDeclaration(t *Type) *ast.Node {
 	if t.symbol != nil {
-		declaration := core.Find(t.symbol.Declarations, ast.IsTypeParameterDeclaration)
-		if declaration != nil {
-			return declaration.AsTypeParameter().Constraint
+		for _, d := range t.symbol.Declarations {
+			if ast.IsTypeParameterDeclaration(d) {
+				if constraint := d.AsTypeParameter().Constraint; constraint != nil {
+					return constraint
+				}
+			}
 		}
 	}
 	return nil
@@ -27558,6 +27678,9 @@ func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
 		return args
 	case ast.IsDecorator(node):
 		return c.getEffectiveDecoratorArguments(node)
+	case ast.IsBinaryExpression(node):
+		// Handles instanceof operator
+		return []*ast.Node{node.AsBinaryExpression().Left}
 	case isJsxOpeningLikeElement(node):
 		// !!!
 		// if node.Attributes.Properties.length > 0 || (isJsxOpeningElement(node) && node.Parent.Children.length > 0) {

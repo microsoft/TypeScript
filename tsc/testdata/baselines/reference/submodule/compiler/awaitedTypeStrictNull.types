@@ -120,9 +120,9 @@ async function main() {
     ] = await Promise.all([
 >await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
 >Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
 
         MaybePromise(1),
@@ -168,12 +168,12 @@ interface Obj { x: number }
 >x : number
 
 async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
->fn : <T>() => Promise<T extends object ? { [K in keyof T]: Obj } : Obj>
+>fn : <T>() => Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
 
 	// Per #45924, this was failing due to incorrect inference both above and here.
 	// Should not error.
 	return api.post();
->api.post() : Promise<T extends object ? { [K in keyof T]: Obj } : Obj>
+>api.post() : Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
 >api.post : <T>() => Promise<T>
 >api : Api<{}>
 >post : <T>() => Promise<T>

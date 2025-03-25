@@ -1,32 +1,13 @@
 --- old.contextualComputedNonBindablePropertyType.types
 +++ new.contextualComputedNonBindablePropertyType.types
-@@= skipped -6, +6 lines =@@
- >testD : () => "d"
- 
- declare function forceMatch<T>(matched: {
-->forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
-->matched : { [key in keyof T]: key; }
-+>forceMatch : <T>(matched: { [key in keyof T]: key }) => void
-+>matched : { [key in keyof T]: key }
- 
-   [key in keyof T]: key;
- }): void;
- 
- forceMatch({
- >forceMatch({  [testD()]: "d",}) : void
-->forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
-+>forceMatch : <T>(matched: { [key in keyof T]: key }) => void
- >{  [testD()]: "d",} : { d: "d"; }
- 
-   [testD()]: "d",
-@@= skipped -20, +20 lines =@@
+@@= skipped -26, +26 lines =@@
  });
  
  declare function forceMatch2<T>(matched: {
 ->forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
 ->matched : { [key in keyof T]: ({ key }: { key: key; }) => void; }
-+>forceMatch2 : <T>(matched: { [key in keyof T]: (__0: { key: key; }) => void }) => void
-+>matched : { [key in keyof T]: (__0: { key: key; }) => void }
++>forceMatch2 : <T>(matched: { [key in keyof T]: (__0: { key: key; }) => void; }) => void
++>matched : { [key in keyof T]: (__0: { key: key; }) => void; }
  
    [key in keyof T]: ({ key }: { key: key }) => void;
  >key : key
@@ -36,7 +17,7 @@
  >forceMatch2({  [testD()]: ({ key }) => {},}) : void
 ->forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
 ->{  [testD()]: ({ key }) => {},} : { d: ({ key }: { key: "d"; }) => void; }
-+>forceMatch2 : <T>(matched: { [key in keyof T]: (__0: { key: key; }) => void }) => void
++>forceMatch2 : <T>(matched: { [key in keyof T]: (__0: { key: key; }) => void; }) => void
 +>{  [testD()]: ({ key }) => {},} : { d: (__0: { key: "d"; }) => void; }
  
    [testD()]: ({ key }) => {},

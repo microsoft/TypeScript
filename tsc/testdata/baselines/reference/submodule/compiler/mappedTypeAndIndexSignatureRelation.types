@@ -41,7 +41,7 @@ type Identity<T> = T;
 >Identity : T
 
 type Merge3<T> = Identity<{ [k in keyof T] : T[k] }>
->Merge3 : { [k in keyof T]: T[k] }
+>Merge3 : { [k in keyof T]: T[k]; }
 
 type Bar3<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
 >Bar3 : Bar3<IdentifierT, T>

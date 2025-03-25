@@ -18,34 +18,17 @@
  >obj[k] : Boxified<T>[Extract<keyof T, string>]
  >obj : Boxified<T>
  >k : Extract<keyof T, string>
-@@= skipped -186, +186 lines =@@
- }
- 
- function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
-->makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
-->obj : { [P in K]: T; }
-+>makeRecord : <T, K extends string>(obj: { [P in K]: T }) => { [P in K]: T }
-+>obj : { [P in K]: T }
- 
-     return obj;
-->obj : { [P in K]: T; }
-+>obj : { [P in K]: T }
- }
- 
- function f5(s: string) {
-@@= skipped -12, +12 lines =@@
+@@= skipped -198, +198 lines =@@
  >s : string
  
      let b = makeRecord({
 ->b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
 ->makeRecord({        a: box(42),        b: box("hello"),        c: box(true)    }) : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
-->makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
 +>b : { a: Box<string> | Box<number> | Box<boolean>; b: Box<string> | Box<number> | Box<boolean>; c: Box<string> | Box<number> | Box<boolean>; }
 +>makeRecord({        a: box(42),        b: box("hello"),        c: box(true)    }) : { a: Box<string> | Box<number> | Box<boolean>; b: Box<string> | Box<number> | Box<boolean>; c: Box<string> | Box<number> | Box<boolean>; }
-+>makeRecord : <T, K extends string>(obj: { [P in K]: T }) => { [P in K]: T }
+ >makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
  >{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
  
-         a: box(42),
 @@= skipped -28, +28 lines =@@
  >v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
  >unboxify(b) : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
@@ -88,48 +71,38 @@
  
  declare function validate<T>(obj: { [P in keyof T]?: T[P] }): T;
 ->validate : <T>(obj: { [P in keyof T]?: T[P]; }) => T
-->obj : { [P in keyof T]?: T[P] | undefined; }
-+>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined }) => T
-+>obj : { [P in keyof T]?: T[P] | undefined }
++>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
+ >obj : { [P in keyof T]?: T[P] | undefined; }
  
  declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
-->clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
-->obj : { readonly [P in keyof T]: T[P]; }
-+>clone : <T>(obj: { readonly [P in keyof T]: T[P] }) => T
-+>obj : { readonly [P in keyof T]: T[P] }
+@@= skipped -21, +21 lines =@@
+ >obj : { readonly [P in keyof T]: T[P]; }
  
  declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;
 ->validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P]; }) => T
-->obj : { readonly [P in keyof T]?: T[P] | undefined; }
-+>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined }) => T
-+>obj : { readonly [P in keyof T]?: T[P] | undefined }
++>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
+ >obj : { readonly [P in keyof T]?: T[P] | undefined; }
  
  type Foo = {
- >Foo : Foo
-@@= skipped -41, +41 lines =@@
+@@= skipped -20, +20 lines =@@
      let x = validate(foo);  // { a: number, readonly b: string }
  >x : { a: number; readonly b: string; }
  >validate(foo) : { a: number; readonly b: string; }
 ->validate : <T>(obj: { [P in keyof T]?: T[P]; }) => T
-+>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined }) => T
++>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
  >foo : Foo
  
      let y = clone(foo);  // { a?: number, b: string }
- >y : { a?: number | undefined; b: string; }
- >clone(foo) : { a?: number | undefined; b: string; }
-->clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
-+>clone : <T>(obj: { readonly [P in keyof T]: T[P] }) => T
- >foo : Foo
- 
+@@= skipped -12, +12 lines =@@
      let z = validateAndClone(foo);  // { a: number, b: string }
  >z : { a: number; b: string; }
  >validateAndClone(foo) : { a: number; b: string; }
 ->validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P]; }) => T
-+>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined }) => T
++>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
  >foo : Foo
  }
  
-@@= skipped -147, +147 lines =@@
+@@= skipped -135, +135 lines =@@
  >"hello" : "hello"
  
  let x1 = f21({ foo: 42, bar: "hello" });

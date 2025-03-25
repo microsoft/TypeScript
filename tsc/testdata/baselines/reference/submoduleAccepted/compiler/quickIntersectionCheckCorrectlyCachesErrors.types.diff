@@ -1,15 +1,6 @@
 --- old.quickIntersectionCheckCorrectlyCachesErrors.types
 +++ new.quickIntersectionCheckCorrectlyCachesErrors.types
-@@= skipped -6, +6 lines =@@
- >children : boolean
- 
-     propTypes: { [K in keyof P]: null extends P ? K : K };
-->propTypes : { [K in keyof P]: null extends P ? K : K; }
-+>propTypes : { [K in keyof P]: null extends P ? K : K }
- }
- declare function g(C: F<unknown>): string;
- >g : (C: F<unknown>) => string
-@@= skipped -12, +12 lines =@@
+@@= skipped -18, +18 lines =@@
  >CC : F<CP>
  
      class WU {

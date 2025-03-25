@@ -32,10 +32,10 @@
      return Promise.all([
  >Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
 ->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
-+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
++>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
  >Promise : PromiseConstructor
 ->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
-+>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
++>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
  >[        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ] : ({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]
          {
  >{            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        } : { name: string; age: number; position: "GOALKEEPER"; }

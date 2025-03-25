@@ -626,7 +626,7 @@ func (p *Printer) printMappedType(t *Type) {
 	}
 	p.print(": ")
 	p.printType(p.c.getTemplateTypeFromMappedType(t))
-	p.print(" }")
+	p.print("; }")
 }
 
 func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {

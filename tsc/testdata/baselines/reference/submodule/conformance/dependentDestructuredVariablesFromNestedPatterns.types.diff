@@ -9,37 +9,24 @@
  >p1 : number | undefined
  >p1Error : Error | undefined
  
-@@= skipped -15, +15 lines =@@
- }
- 
- async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
-->myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }>
-+>myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined] }>
- >fn : () => T
- 
-   const promises = await Promise.allSettled(fn());
-->promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
-->await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
-->Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
+@@= skipped -22, +22 lines =@@
+ >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
+ >await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
+ >Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
 ->Promise.allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_1>(values: Iterable<T_1 | PromiseLike<T_1>>): Promise<PromiseSettledResult<Awaited<T_1>>[]>; }
-+>promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }
-+>await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }
-+>Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }>
-+>Promise.allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }>; <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<PromiseSettledResult<Awaited<T>>[]>; }
++>Promise.allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>; <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<PromiseSettledResult<Awaited<T>>[]>; }
  >Promise : PromiseConstructor
 ->allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_1>(values: Iterable<T_1 | PromiseLike<T_1>>): Promise<PromiseSettledResult<Awaited<T_1>>[]>; }
-+>allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }>; <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<PromiseSettledResult<Awaited<T>>[]>; }
++>allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>; <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<PromiseSettledResult<Awaited<T>>[]>; }
  >fn() : T
  >fn : () => T
  
    return promises.map((result) =>
-->promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] } : { [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }
+ >promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] } : { [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }
 ->promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) : ([undefined, Error] | [unknown, undefined])[]
-+>promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] } : { [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined] }
 +>promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) : ([unknown, undefined] | [undefined, Error])[]
  >promises.map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
-->promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
-+>promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }
+ >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
  >map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
 ->(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<unknown>) => [undefined, Error] | [unknown, undefined]
 +>(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<unknown>) => [unknown, undefined] | [undefined, Error]
@@ -56,16 +43,7 @@
  >"fulfilled" : "fulfilled"
  
        ? [result.value, undefined]
-@@= skipped -60, +60 lines =@@
- >_ : [undefined, Error] | [never, undefined]
- >await myAllSettled(    () => [Promise.resolve(0), Promise.reject(1)] as const,  ) : [[undefined, Error] | [number, undefined], [undefined, Error] | [never, undefined]]
- >myAllSettled(    () => [Promise.resolve(0), Promise.reject(1)] as const,  ) : Promise<[[undefined, Error] | [number, undefined], [undefined, Error] | [never, undefined]]>
-->myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }>
-+>myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined] }>
- 
-     () => [Promise.resolve(0), Promise.reject(1)] as const,
- >() => [Promise.resolve(0), Promise.reject(1)] as const : () => [Promise<number>, Promise<never>]
-@@= skipped -12, +12 lines =@@
+@@= skipped -65, +65 lines =@@
  >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
  >0 : 0
  >Promise.reject(1) : Promise<never>

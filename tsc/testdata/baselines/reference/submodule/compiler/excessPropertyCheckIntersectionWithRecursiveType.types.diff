@@ -1,20 +1,7 @@
 --- old.excessPropertyCheckIntersectionWithRecursiveType.types
 +++ new.excessPropertyCheckIntersectionWithRecursiveType.types
-@@= skipped -14, +14 lines =@@
- type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema1<T[P]> }; }) & Example<T>;
- >Schema1 : Schema1<T>
- >type : "boolean"
-->props : { [P in keyof T]: Schema1<T[P]>; }
-+>props : { [P in keyof T]: Schema1<T[P]> }
- 
- export const schemaObj1: Schema1<Request> = {
- >schemaObj1 : Schema1<Request>
-@@= skipped -36, +36 lines =@@
- type Schema2<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: { [P in keyof T]: Schema2<T[P]> }; } & Example<T>);
- >Schema2 : Schema2<T>
- >type : "boolean"
-->props : { [P in keyof T]: Schema2<T[P]>; }
-+>props : { [P in keyof T]: Schema2<T[P]> }
+@@= skipped -53, +53 lines =@@
+ >props : { [P in keyof T]: Schema2<T[P]>; }
  
  export const schemaObj2: Schema2<Request> = {
 ->schemaObj2 : { props: { l1: { props: { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; } & Example<{ l2: boolean; }>; }; } & Example<Request>
@@ -22,21 +9,8 @@
  >{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
  
    props: {
-@@= skipped -36, +36 lines =@@
- type Schema3<T> = Example<T> & (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema3<T[P]> }; });
- >Schema3 : Schema3<T>
- >type : "boolean"
-->props : { [P in keyof T]: Schema3<T[P]>; }
-+>props : { [P in keyof T]: Schema3<T[P]> }
- 
- export const schemaObj3: Schema3<Request> = {
- >schemaObj3 : Schema3<Request>
-@@= skipped -36, +36 lines =@@
- type Schema4<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: Example<T> & { [P in keyof T]: Schema4<T[P]> }; });
- >Schema4 : Schema4<T>
- >type : "boolean"
-->props : Example<T> & { [P in keyof T]: Schema4<T[P]>; }
-+>props : Example<T> & { [P in keyof T]: Schema4<T[P]> }
+@@= skipped -72, +72 lines =@@
+ >props : Example<T> & { [P in keyof T]: Schema4<T[P]>; }
  
  export const schemaObj4: Schema4<Request> = {
 ->schemaObj4 : { props: Example<Request> & { l1: { props: Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; }; }; }
@@ -44,7 +18,7 @@
  >{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
  
    props: {
-@@= skipped -59, +59 lines =@@
+@@= skipped -56, +56 lines =@@
  >1 : T
  
    0: T & { children: BuildTree<T, N, Prepend<any, I>>[] };

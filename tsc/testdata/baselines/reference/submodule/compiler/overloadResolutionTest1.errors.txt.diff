@@ -32,12 +32,11 @@
  !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
 -!!! related TS6500 overloadResolutionTest1.ts:1:19: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
  !!! related TS6500 overloadResolutionTest1.ts:2:19: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
--!!! related TS2793 overloadResolutionTest1.ts:3:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
 +!!! related TS2771 overloadResolutionTest1.ts:2:10: The last overload is declared here.
+ !!! related TS2793 overloadResolutionTest1.ts:3:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
      var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
      
-     
-@@= skipped -20, +17 lines =@@
+@@= skipped -20, +18 lines =@@
      var x4 = foo2({a:"s"}); // error
                     ~
  !!! error TS2769: No overload matches this call.
@@ -48,12 +47,11 @@
  !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
 -!!! related TS6500 overloadResolutionTest1.ts:12:20: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
  !!! related TS6500 overloadResolutionTest1.ts:13:20: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
--!!! related TS2793 overloadResolutionTest1.ts:14:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
 +!!! related TS2771 overloadResolutionTest1.ts:13:10: The last overload is declared here.
+ !!! related TS2793 overloadResolutionTest1.ts:14:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
      
      
-     function foo4(bar:{a:number;}):number;
-@@= skipped -15, +12 lines =@@
+@@= skipped -15, +13 lines =@@
      var x = foo4({a:true}); // error
                    ~
  !!! error TS2769: No overload matches this call.
@@ -64,5 +62,5 @@
  !!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 -!!! related TS6500 overloadResolutionTest1.ts:21:20: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
  !!! related TS6500 overloadResolutionTest1.ts:22:20: The expected type comes from property 'a' which is declared here on type '{ a: string; }'
--!!! related TS2793 overloadResolutionTest1.ts:23:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
 +!!! related TS2771 overloadResolutionTest1.ts:22:10: The last overload is declared here.
+ !!! related TS2793 overloadResolutionTest1.ts:23:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.

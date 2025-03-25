@@ -1,18 +1,24 @@
+exportDefaultDuplicateCrash.ts(3,1): error TS2323: Cannot redeclare exported variable 'default'.
 exportDefaultDuplicateCrash.ts(3,1): error TS2528: A module cannot have multiple default exports.
+exportDefaultDuplicateCrash.ts(4,10): error TS2323: Cannot redeclare exported variable 'default'.
 exportDefaultDuplicateCrash.ts(4,10): error TS2528: A module cannot have multiple default exports.
 exportDefaultDuplicateCrash.ts(4,25): error TS2307: Cannot find module './hi' or its corresponding type declarations.
 exportDefaultDuplicateCrash.ts(5,16): error TS2528: A module cannot have multiple default exports.
 exportDefaultDuplicateCrash.ts(5,31): error TS2307: Cannot find module './hi' or its corresponding type declarations.
 
 
-==== exportDefaultDuplicateCrash.ts (5 errors) ====
+==== exportDefaultDuplicateCrash.ts (7 errors) ====
     // #38214
     
     export default function () { }
     ~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'default'.
+    ~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 exportDefaultDuplicateCrash.ts:5:16: Another export default is here.
     export { default } from './hi'
+             ~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'default'.
              ~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS6204 exportDefaultDuplicateCrash.ts:5:16: and here.

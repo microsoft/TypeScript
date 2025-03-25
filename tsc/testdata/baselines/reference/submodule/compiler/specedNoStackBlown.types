@@ -45,7 +45,7 @@ export type SpecFunction<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArra
 >value : INPUT
 
 export type SpecObject<INPUT, ROOTINPUT = any> = Partial<{[key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>}>;
->SpecObject : Partial<{ [key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT> }>
+>SpecObject : Partial<{ [key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>; }>
 
 export type SpecValue<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<any>]
 >SpecValue : SpecValue<INPUT, ROOTINPUT>

@@ -6,29 +6,28 @@
  x.foo().x;
 ->x.foo().x : Symbol(Cls.x, Decl(O.d.ts, 5, 15))
 ->x.foo : Symbol(Observable.foo, Decl(O.d.ts, 11, 30))
++>x.foo().x : Symbol(x, Decl(O.d.ts, 5, 15))
++>x.foo : Symbol(foo, Decl(O.d.ts, 11, 30))
  >x : Symbol(x, Decl(main.ts, 4, 3))
 ->foo : Symbol(Observable.foo, Decl(O.d.ts, 11, 30))
 ->x : Symbol(Cls.x, Decl(O.d.ts, 5, 15))
++>foo : Symbol(foo, Decl(O.d.ts, 11, 30))
++>x : Symbol(x, Decl(O.d.ts, 5, 15))
  
  x.foo2().x2;
 ->x.foo2().x2 : Symbol(Cls2.x2, Decl(O.d.ts, 18, 16))
 ->x.foo2 : Symbol(Observable.foo2, Decl(O.d.ts, 20, 30))
++>x.foo2().x2 : Symbol(x2, Decl(O.d.ts, 18, 16))
++>x.foo2 : Symbol(foo2, Decl(O.d.ts, 20, 30))
  >x : Symbol(x, Decl(main.ts, 4, 3))
 ->foo2 : Symbol(Observable.foo2, Decl(O.d.ts, 20, 30))
 ->x2 : Symbol(Cls2.x2, Decl(O.d.ts, 18, 16))
++>foo2 : Symbol(foo2, Decl(O.d.ts, 20, 30))
++>x2 : Symbol(x2, Decl(O.d.ts, 18, 16))
  
  === O.d.ts ===
  declare module "Observable" {
-->"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
-+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0))
- 
-     class Observable {}
-->Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
-+>Observable : Symbol(Observable, Decl(O.d.ts, 0, 29))
- }
- 
- declare module "M" {
-@@= skipped -26, +18 lines =@@
+@@= skipped -26, +26 lines =@@
  
      class Cls { x: number }
  >Cls : Symbol(Cls, Decl(O.d.ts, 4, 20))
@@ -37,16 +36,8 @@
  }
  
  declare module "Map" {
-@@= skipped -10, +10 lines =@@
- >Cls : Symbol(Cls, Decl(O.d.ts, 9, 12))
- 
-     module "Observable" {
-->"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
-+>"Observable" : Symbol("Observable", Decl(O.d.ts, 9, 28), Decl(O.d.ts, 0, 0))
- 
-         interface Observable {
-->Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
-+>Observable : Symbol(Observable, Decl(O.d.ts, 10, 25), Decl(O.d.ts, 0, 29))
+@@= skipped -16, +16 lines =@@
+ >Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
  
              foo(): Cls;
 ->foo : Symbol(Observable.foo, Decl(O.d.ts, 11, 30))
@@ -54,7 +45,7 @@
  >Cls : Symbol(Cls, Decl(O.d.ts, 9, 12))
          }
      }
-@@= skipped -17, +17 lines =@@
+@@= skipped -11, +11 lines =@@
  
      class Cls2 { x2: number }
  >Cls2 : Symbol(Cls2, Decl(O.d.ts, 17, 22))
@@ -62,12 +53,9 @@
 +>x2 : Symbol(x2, Decl(O.d.ts, 18, 16))
  
      module "Observable" {
-->"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
-+>"Observable" : Symbol("Observable", Decl(O.d.ts, 18, 29), Decl(O.d.ts, 0, 0))
- 
-         interface Observable {
-->Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
-+>Observable : Symbol(Observable, Decl(O.d.ts, 19, 25), Decl(O.d.ts, 0, 29))
+ >"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
+@@= skipped -9, +9 lines =@@
+ >Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
  
              foo2(): Cls2;
 ->foo2 : Symbol(Observable.foo2, Decl(O.d.ts, 20, 30))

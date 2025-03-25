@@ -1,11 +1,11 @@
 error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Boolean'.
 error TS2318: Cannot find global type 'Function'.
 error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
 error TS2318: Cannot find global type 'RegExp'.
 error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 file1.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 file1.tsx(2,10): error TS6133: 'MyComponent' is declared but its value is never read.
 file1.tsx(4,7): error TS6133: 'MY_STRING' is declared but its value is never read.
@@ -13,13 +13,13 @@ file1.tsx(5,7): error TS6133: 'MY_CLASSNAME' is declared but its value is never 
 
 
 !!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Boolean'.
 !!! error TS2318: Cannot find global type 'Function'.
 !!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
 !!! error TS2318: Cannot find global type 'RegExp'.
 !!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== my-component.tsx (0 errors) ====
     declare var React: any;
     

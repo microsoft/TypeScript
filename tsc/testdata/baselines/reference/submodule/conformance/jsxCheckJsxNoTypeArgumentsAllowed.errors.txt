@@ -1,11 +1,11 @@
 error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Boolean'.
 error TS2318: Cannot find global type 'Function'.
 error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
 error TS2318: Cannot find global type 'RegExp'.
 error TS2318: Cannot find global type 'String'.
-error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 file.jsx(2,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 file.jsx(4,9): error TS2657: JSX expressions must have one parent element.
 file.jsx(4,16): error TS1003: Identifier expected.
@@ -15,13 +15,13 @@ file.jsx(5,1): error TS1005: '</' expected.
 
 
 !!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Boolean'.
 !!! error TS2318: Cannot find global type 'Function'.
 !!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
 !!! error TS2318: Cannot find global type 'RegExp'.
 !!! error TS2318: Cannot find global type 'String'.
-!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 ==== component.d.ts (0 errors) ====
     import * as React from "react";
     export declare class MyComp<P> extends React.Component<P, {}> {

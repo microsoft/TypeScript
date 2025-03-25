@@ -28,12 +28,12 @@ class I<SS extends string>{
 >f : () => void
 
         let w: [...args: { [S in SS]: [a: number]; }[SS]] = [1];
->w : [...args: { [S in SS]: [a: number] }[SS]]
+>w : [...args: { [S in SS]: [a: number]; }[SS]]
 >[1] : [1]
 >1 : 1
 
         let x: [t: "AAA", ...args: { [S in SS]: [a: number]; }[SS]] = ["AAA", 1];
->x : [t: "AAA", ...args: { [S in SS]: [a: number] }[SS]]
+>x : [t: "AAA", ...args: { [S in SS]: [a: number]; }[SS]]
 >["AAA", 1] : ["AAA", 1]
 >"AAA" : "AAA"
 >1 : 1

@@ -7,7 +7,7 @@
 -recursiveMappedTypes.ts(73,5): error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
 -recursiveMappedTypes.ts(73,13): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
 +recursiveMappedTypes.ts(73,5): error TS2502: 'each' is referenced directly or indirectly in its own type annotation.
-+recursiveMappedTypes.ts(73,13): error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P }'.
++recursiveMappedTypes.ts(73,13): error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
  
  
  ==== recursiveMappedTypes.ts (9 errors) ====
@@ -19,7 +19,7 @@
 +!!! error TS2502: 'each' is referenced directly or indirectly in its own type annotation.
                  ~~~~~~~~~~~~~~~~~
 -!!! error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
-+!!! error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P }'.
++!!! error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
      }
      
      type ListChild = Child<ListWidget>

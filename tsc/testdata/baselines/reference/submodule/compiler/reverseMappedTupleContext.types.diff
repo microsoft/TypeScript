@@ -1,49 +1,13 @@
 --- old.reverseMappedTupleContext.types
 +++ new.reverseMappedTupleContext.types
-@@= skipped -3, +3 lines =@@
- // https://github.com/microsoft/TypeScript/issues/55382
- 
- declare function test1<T>(arg: {
-->test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
-->arg : { [K in keyof T]: T[K]; }
-+>test1 : <T>(arg: { [K in keyof T]: T[K] }) => T
-+>arg : { [K in keyof T]: T[K] }
- 
-   [K in keyof T]: T[K];
- }): T;
- const result1 = test1(["foo", 42]);
- >result1 : [string, number]
- >test1(["foo", 42]) : [string, number]
-->test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
-+>test1 : <T>(arg: { [K in keyof T]: T[K] }) => T
- >["foo", 42] : [string, number]
- >"foo" : "foo"
- >42 : 42
- 
- declare function test2<T extends readonly unknown[]>(arg: {
-->test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
-->arg : { [K in keyof T]: T[K]; }
-+>test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K] }) => T
-+>arg : { [K in keyof T]: T[K] }
- 
-   [K in keyof T]: T[K];
- }): T;
- const result2 = test2(["foo", 42]);
- >result2 : [string, number]
- >test2(["foo", 42]) : [string, number]
-->test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
-+>test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K] }) => T
- >["foo", 42] : [string, number]
- >"foo" : "foo"
- >42 : 42
-@@= skipped -85, +85 lines =@@
+@@= skipped -88, +88 lines =@@
    [K in keyof T]: T[K];
  };
  declare function test4<T extends Record<string, string[]>>(obj: {
 ->test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
 ->obj : { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }
-+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; } }) => T
-+>obj : { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; } }
++>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
++>obj : { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; }; }
  
    [K in keyof T & keyof CompilerOptions]: {
      dependencies: KeepLiteralStrings<T[K]>;
@@ -52,7 +16,7 @@
  >result4 : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
  >test4({  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },}) : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
 ->test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
-+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; } }) => T
++>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
  >{  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },} : { alwaysStrict: { dependencies: ["foo", "bar"]; }; allowUnusedLabels: { dependencies: ["baz", "qwe"]; }; }
  
    alwaysStrict: {

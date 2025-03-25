@@ -29,6 +29,7 @@ overloadingOnConstants2.ts(19,10): error TS2394: This overload signature is not 
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '"um"' is not assignable to parameter of type '"bye"'.
 !!! related TS2771 overloadingOnConstants2.ts:9:10: The last overload is declared here.
+!!! related TS2793 overloadingOnConstants2.ts:10:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     
     //function bar(x: "hi", items: string[]): D;

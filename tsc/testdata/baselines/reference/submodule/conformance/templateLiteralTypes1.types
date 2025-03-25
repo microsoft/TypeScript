@@ -86,36 +86,36 @@ function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
->fa1 : <T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) => void
+>fa1 : <T>(x: T, y: { [P in keyof T]: T[P]; }, z: { [P in keyof T & string as `p_${P}`]: T[P]; }) => void
 >x : T
->y : { [P in keyof T]: T[P] }
->z : { [P in keyof T & string as `p_${P}`]: T[P] }
+>y : { [P in keyof T]: T[P]; }
+>z : { [P in keyof T & string as `p_${P}`]: T[P]; }
 
     y = x;
 >y = x : T
->y : { [P in keyof T]: T[P] }
+>y : { [P in keyof T]: T[P]; }
 >x : T
 
     z = x;  // Error
 >z = x : T
->z : { [P in keyof T & string as `p_${P}`]: T[P] }
+>z : { [P in keyof T & string as `p_${P}`]: T[P]; }
 >x : T
 }
 
 function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {
->fa2 : <T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) => void
->x : { [P in B as `p_${P}`]: T }
->y : { [Q in A as `p_${Q}`]: U }
+>fa2 : <T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T; }, y: { [Q in A as `p_${Q}`]: U; }) => void
+>x : { [P in B as `p_${P}`]: T; }
+>y : { [Q in A as `p_${Q}`]: U; }
 
     x = y;
->x = y : { [Q in A as `p_${Q}`]: U }
->x : { [P in B as `p_${P}`]: T }
->y : { [Q in A as `p_${Q}`]: U }
+>x = y : { [Q in A as `p_${Q}`]: U; }
+>x : { [P in B as `p_${P}`]: T; }
+>y : { [Q in A as `p_${Q}`]: U; }
 
     y = x;  // Error
->y = x : { [P in B as `p_${P}`]: T }
->y : { [Q in A as `p_${Q}`]: U }
->x : { [P in B as `p_${P}`]: T }
+>y = x : { [P in B as `p_${P}`]: T; }
+>y : { [Q in A as `p_${Q}`]: U; }
+>x : { [P in B as `p_${P}`]: T; }
 }
 
 // String transformations using recursive conditional types

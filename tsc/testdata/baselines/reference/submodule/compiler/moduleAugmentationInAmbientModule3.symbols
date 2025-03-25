@@ -12,17 +12,25 @@ let x: Observable;
 >Observable : Symbol(Observable, Decl(main.ts, 2, 8))
 
 x.foo().x;
+>x.foo().x : Symbol(x, Decl(O.d.ts, 5, 15))
+>x.foo : Symbol(foo, Decl(O.d.ts, 11, 30))
 >x : Symbol(x, Decl(main.ts, 4, 3))
+>foo : Symbol(foo, Decl(O.d.ts, 11, 30))
+>x : Symbol(x, Decl(O.d.ts, 5, 15))
 
 x.foo2().x2;
+>x.foo2().x2 : Symbol(x2, Decl(O.d.ts, 18, 16))
+>x.foo2 : Symbol(foo2, Decl(O.d.ts, 20, 30))
 >x : Symbol(x, Decl(main.ts, 4, 3))
+>foo2 : Symbol(foo2, Decl(O.d.ts, 20, 30))
+>x2 : Symbol(x2, Decl(O.d.ts, 18, 16))
 
 === O.d.ts ===
 declare module "Observable" {
->"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0))
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
 
     class Observable {}
->Observable : Symbol(Observable, Decl(O.d.ts, 0, 29))
+>Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
 }
 
 declare module "M" {
@@ -40,10 +48,10 @@ declare module "Map" {
 >Cls : Symbol(Cls, Decl(O.d.ts, 9, 12))
 
     module "Observable" {
->"Observable" : Symbol("Observable", Decl(O.d.ts, 9, 28), Decl(O.d.ts, 0, 0))
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
 
         interface Observable {
->Observable : Symbol(Observable, Decl(O.d.ts, 10, 25), Decl(O.d.ts, 0, 29))
+>Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
 
             foo(): Cls;
 >foo : Symbol(foo, Decl(O.d.ts, 11, 30))
@@ -60,10 +68,10 @@ declare module "Map" {
 >x2 : Symbol(x2, Decl(O.d.ts, 18, 16))
 
     module "Observable" {
->"Observable" : Symbol("Observable", Decl(O.d.ts, 18, 29), Decl(O.d.ts, 0, 0))
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
 
         interface Observable {
->Observable : Symbol(Observable, Decl(O.d.ts, 19, 25), Decl(O.d.ts, 0, 29))
+>Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
 
             foo2(): Cls2;
 >foo2 : Symbol(foo2, Decl(O.d.ts, 20, 30))

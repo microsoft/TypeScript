@@ -88,6 +88,7 @@ incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) => number' is not assig
 !!! error TS2769:       The types returned by 'p1(...)' are incompatible between these types.
 !!! error TS2769:         Type 'string' is not assignable to type 'number'.
 !!! related TS2771 incompatibleTypes.ts:38:10: The last overload is declared here.
+!!! related TS2793 incompatibleTypes.ts:39:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     
     function of1(n: { a: { a: string; }; b: string; }): number;
@@ -100,6 +101,7 @@ incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) => number' is not assig
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
 !!! related TS2771 incompatibleTypes.ts:46:10: The last overload is declared here.
+!!! related TS2793 incompatibleTypes.ts:47:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     interface IMap {
      [key:string]:string;

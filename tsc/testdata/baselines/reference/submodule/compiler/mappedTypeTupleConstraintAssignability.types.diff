@@ -14,16 +14,7 @@
  
  export function create<T extends AnyTuple>(schemas: {
 ->create : <T extends AnyTuple>(schemas: { [K in keyof T]: ISchema<T[K]>; }) => TupleSchema<T | undefined, AnyObject, undefined, "">
-->schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
-+>create : <T extends AnyTuple>(schemas: { [K in keyof T]: ISchema<T[K], any, any, any> }) => TupleSchema<T | undefined, AnyObject, undefined, "">
-+>schemas : { [K in keyof T]: ISchema<T[K], any, any, any> }
++>create : <T extends AnyTuple>(schemas: { [K in keyof T]: ISchema<T[K], any, any, any>; }) => TupleSchema<T | undefined, AnyObject, undefined, "">
+ >schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
  
    [K in keyof T]: ISchema<T[K]>;
- }) {
-   return new TupleSchema<T | undefined>(schemas);
- >new TupleSchema<T | undefined>(schemas) : TupleSchema<T | undefined, AnyObject, undefined, "">
- >TupleSchema : typeof TupleSchema
-->schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
-+>schemas : { [K in keyof T]: ISchema<T[K], any, any, any> }
- }
- 

@@ -12,11 +12,11 @@ type HandleOptions<O> = {
 };
 
 declare function func1<
->func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }) => T
+>func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }) => T
 
     T extends Record<PropertyKey, readonly any[]>,
 >(fields: {
->fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }
+>fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }
 
     [K in keyof T]: {
         label: string;
@@ -31,7 +31,7 @@ declare function func1<
 const result = func1({
 >result : { prop: [number, string]; other: [string, boolean]; }
 >func1({    prop: {        label: "first",        options: [            {                value: 123,            },            {                value: "foo",            },        ],    },    other: {        label: "second",        options: [            {                value: "bar",            },            {                value: true,            },        ],    },}) : { prop: [number, string]; other: [string, boolean]; }
->func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }) => T
+>func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }) => T
 >{    prop: {        label: "first",        options: [            {                value: 123,            },            {                value: "foo",            },        ],    },    other: {        label: "second",        options: [            {                value: "bar",            },            {                value: true,            },        ],    },} : { prop: { label: string; options: [{ value: number; }, { value: string; }]; }; other: { label: string; options: [{ value: string; }, { value: true; }]; }; }
 
     prop: {

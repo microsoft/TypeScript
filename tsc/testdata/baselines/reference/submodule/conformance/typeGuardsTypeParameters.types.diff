@@ -9,48 +9,12 @@
  >x : T
  >"string" : "string"
  
-@@= skipped -22, +22 lines =@@
- // Repro from #13872
- 
- function fun<T>(item: { [P in keyof T]: T[P] }) {
-->fun : <T>(item: { [P in keyof T]: T[P]; }) => void
-->item : { [P in keyof T]: T[P]; }
-+>fun : <T>(item: { [P in keyof T]: T[P] }) => void
-+>item : { [P in keyof T]: T[P] }
- 
-     const strings: string[] = [];
- >strings : string[]
-@@= skipped -9, +9 lines =@@
- 
-     for (const key in item) {
- >key : Extract<keyof T, string>
-->item : { [P in keyof T]: T[P]; }
-+>item : { [P in keyof T]: T[P] }
- 
-         const value = item[key];
-->value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
-->item[key] : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
-->item : { [P in keyof T]: T[P]; }
-+>value : { [P in keyof T]: T[P] }[Extract<keyof T, string>]
-+>item[key] : { [P in keyof T]: T[P] }[Extract<keyof T, string>]
-+>item : { [P in keyof T]: T[P] }
- >key : Extract<keyof T, string>
+@@= skipped -41, +41 lines =@@
  
          if (typeof value === "string") {
  >typeof value === "string" : boolean
 ->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
 +>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>value : { [P in keyof T]: T[P] }[Extract<keyof T, string>]
+ >value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
  >"string" : "string"
  
-             strings.push(value);
-@@= skipped -19, +19 lines =@@
- >strings.push : (...items: string[]) => number
- >strings : string[]
- >push : (...items: string[]) => number
-->value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>] & string
-+>value : { [P in keyof T]: T[P] }[Extract<keyof T, string>] & string
-         }
-     }
- }

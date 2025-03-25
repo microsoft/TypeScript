@@ -5,7 +5,7 @@ class A<T> {
 >A : A<T>
 
     unmeasurableUsage!: {[K in keyof T]-?: T[K]};
->unmeasurableUsage : { [K in keyof T]-?: T[K] }
+>unmeasurableUsage : { [K in keyof T]-?: T[K]; }
 }
 
 class B<T> extends A<T> {

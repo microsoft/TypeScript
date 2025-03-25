@@ -10,12 +10,12 @@ let x: Observable;
 >x : Observable
 
 x.foo().x;
->x.foo().x : any
->x.foo() : any
->x.foo : any
+>x.foo().x : number
+>x.foo() : Cls
+>x.foo : () => Cls
 >x : Observable
->foo : any
->x : any
+>foo : () => Cls
+>x : number
 
 === O.d.ts ===
 declare module "Observable" {

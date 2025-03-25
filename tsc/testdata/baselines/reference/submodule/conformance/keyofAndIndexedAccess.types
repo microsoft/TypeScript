@@ -1840,7 +1840,7 @@ class Form<T> {
 >Form : Form<T>
 
     private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
->childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]> }
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
 >v : T[K]
 
     public set<K extends keyof T>(prop: K, value: T[K]) {
@@ -1850,10 +1850,10 @@ class Form<T> {
 
         this.childFormFactories[prop](value)
 >this.childFormFactories[prop](value) : Form<T[K]>
->this.childFormFactories[prop] : { [K in keyof T]: (v: T[K]) => Form<T[K]> }[K]
->this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]> }
+>this.childFormFactories[prop] : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }[K]
+>this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
 >this : this
->childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]> }
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
 >prop : K
 >value : T[K]
     }
@@ -2147,8 +2147,8 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
 // Repro from #26409
 
 const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
->cf1 : <T extends { [P in K]: string } & { cool: string; }, K extends keyof T>(t: T, k: K) => void
-><T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in K]: string } & { cool: string; }, K extends keyof T>(t: T, k: K) => void
+>cf1 : <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) => void
+><T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) => void
 >cool : string
 >t : T
 >k : K
@@ -2167,8 +2167,8 @@ const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyo
 };
 
 const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
->cf2 : <T extends { [P in "cool" | K]: string }, K extends keyof T>(t: T, k: K) => void
-><T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in "cool" | K]: string }, K extends keyof T>(t: T, k: K) => void
+>cf2 : <T extends { [P in "cool" | K]: string; }, K extends keyof T>(t: T, k: K) => void
+><T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in "cool" | K]: string; }, K extends keyof T>(t: T, k: K) => void
 >t : T
 >k : K
 {

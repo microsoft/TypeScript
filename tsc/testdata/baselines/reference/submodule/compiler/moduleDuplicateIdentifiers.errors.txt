@@ -1,10 +1,16 @@
+moduleDuplicateIdentifiers.ts(1,12): error TS2323: Cannot redeclare exported variable 'Foo'.
+moduleDuplicateIdentifiers.ts(2,12): error TS2323: Cannot redeclare exported variable 'Foo'.
 moduleDuplicateIdentifiers.ts(20,14): error TS2300: Duplicate identifier 'Kettle'.
 moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplicate identifier 'Kettle'.
 
 
-==== moduleDuplicateIdentifiers.ts (2 errors) ====
+==== moduleDuplicateIdentifiers.ts (4 errors) ====
     export var Foo = 2;
+               ~~~
+!!! error TS2323: Cannot redeclare exported variable 'Foo'.
     export var Foo = 42; // Should error
+               ~~~
+!!! error TS2323: Cannot redeclare exported variable 'Foo'.
     
     export interface Bar {
     	_brand1: any;

@@ -24,12 +24,12 @@
  isolatedDeclarationErrorsClasses.ts(50,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 -isolatedDeclarationErrorsClasses.ts(50,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
  isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
--isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
+ isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
 -isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
  
  
 -==== isolatedDeclarationErrorsClasses.ts (25 errors) ====
-+==== isolatedDeclarationErrorsClasses.ts (10 errors) ====
++==== isolatedDeclarationErrorsClasses.ts (11 errors) ====
      export class Cls {
      
          field = 1 + 1;
@@ -61,7 +61,7 @@
          set setOnly(value) { }
              ~~~~~~~
  !!! error TS7032: Property 'setOnly' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-@@= skipped -84, +54 lines =@@
+@@= skipped -84, +55 lines =@@
          [missing] = 1;
          ~~~~~~~~~
  !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -108,12 +108,10 @@
      
      }
      
-@@= skipped -48, +32 lines =@@
-         ~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+@@= skipped -50, +34 lines =@@
          [noAnnotationLiteralName]();
--        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
 -        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
      }

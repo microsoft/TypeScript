@@ -1,20 +1,16 @@
 --- old.moduleAugmentationInAmbientModule1.types
 +++ new.moduleAugmentationInAmbientModule1.types
-@@= skipped -9, +9 lines =@@
- >x : Observable
+@@= skipped -10, +10 lines =@@
  
  x.foo().x;
-->x.foo().x : number
+ >x.foo().x : number
 ->x.foo() : import("M").Cls
 ->x.foo : () => import("M").Cls
-+>x.foo().x : any
-+>x.foo() : any
-+>x.foo : any
++>x.foo() : Cls
++>x.foo : () => Cls
  >x : Observable
 ->foo : () => import("M").Cls
-->x : number
-+>foo : any
-+>x : any
++>foo : () => Cls
+ >x : number
  
  === O.d.ts ===
- declare module "Observable" {

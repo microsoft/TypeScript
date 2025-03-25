@@ -2,7 +2,7 @@
 
 === typeGuardNarrowByMutableUntypedField.ts ===
 declare function hasOwnProperty<P extends PropertyKey>(target: {}, property: P): target is { [K in P]: unknown };
->hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { [K in P]: unknown }
+>hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { [K in P]: unknown; }
 >target : {}
 >property : P
 
@@ -11,7 +11,7 @@ declare const arrayLikeOrIterable: ArrayLike<any> | Iterable<any>;
 
 if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 >hasOwnProperty(arrayLikeOrIterable, 'length') : boolean
->hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { [K in P]: unknown }
+>hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { [K in P]: unknown; }
 >arrayLikeOrIterable : ArrayLike<any> | Iterable<any, any, any>
 >'length' : "length"
 

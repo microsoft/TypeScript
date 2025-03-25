@@ -11,15 +11,15 @@ let x: Observable<number>;
 >x : Observable<number>
 
 let y = x.map(x => x + 1);
->y : any
->x.map(x => x + 1) : any
->x.map : any
+>y : Observable<number>
+>x.map(x => x + 1) : Observable<number>
+>x.map : <U>(proj: (e: number) => U) => Observable<U>
 >x : Observable<number>
->map : any
->x => x + 1 : (x: any) => any
->x : any
->x + 1 : any
->x : any
+>map : <U>(proj: (e: number) => U) => Observable<U>
+>x => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
 >1 : 1
 
 let z1 = Observable.someValue.toFixed();
@@ -32,13 +32,13 @@ let z1 = Observable.someValue.toFixed();
 >toFixed : (fractionDigits?: number) => string
 
 let z2 = Observable.someAnotherValue.toLowerCase();
->z2 : any
->Observable.someAnotherValue.toLowerCase() : any
->Observable.someAnotherValue.toLowerCase : any
->Observable.someAnotherValue : any
+>z2 : string
+>Observable.someAnotherValue.toLowerCase() : string
+>Observable.someAnotherValue.toLowerCase : () => string
+>Observable.someAnotherValue : string
 >Observable : typeof Observable
->someAnotherValue : any
->toLowerCase : any
+>someAnotherValue : string
+>toLowerCase : () => string
 
 === map.ts ===
 import { Observable } from "observable"
@@ -60,7 +60,7 @@ declare module "observable" {
 
     interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
->map : <U>(proj: (e: T) => U) => any
+>map : <U>(proj: (e: T) => U) => Observable<U>
 >proj : (e: T) => U
 >e : T
     }

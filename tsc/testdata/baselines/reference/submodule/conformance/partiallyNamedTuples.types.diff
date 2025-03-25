@@ -34,24 +34,3 @@
  >a : NamedAnonymousMixed
  >args : NamedAndAnonymous
  
-@@= skipped -72, +72 lines =@@
- >AddMixedConditionalNumberPrimitive : [first: boolean, null, third: "a"]
- 
- declare function test<T extends readonly unknown[]>(
-->test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
-+>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; } }]) => T
- 
-   arg: [
-->arg : [...{ [K in keyof T]: { type: T[K]; }; }]
-+>arg : [...{ [K in keyof T]: { type: T[K]; } }]
- 
-     ...{
-       [K in keyof T]: {
-@@= skipped -23, +23 lines =@@
- const output = test(input);
- >output : [first: number, string]
- >test(input) : [first: number, string]
-->test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
-+>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; } }]) => T
- >input : [first: { type: number; }, { type: string; }]
- 

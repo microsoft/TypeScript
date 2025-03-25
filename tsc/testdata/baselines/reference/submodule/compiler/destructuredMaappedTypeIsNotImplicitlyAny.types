@@ -2,22 +2,22 @@
 
 === destructuredMaappedTypeIsNotImplicitlyAny.ts ===
 function foo<T extends string>(key: T, obj: { [_ in T]: number }) {
->foo : <T extends string>(key: T, obj: { [_ in T]: number }) => void
+>foo : <T extends string>(key: T, obj: { [_ in T]: number; }) => void
 >key : T
->obj : { [_ in T]: number }
+>obj : { [_ in T]: number; }
 
     const { [key]: bar } = obj; // Element implicitly has an 'any' type because type '{ [_ in T]: number; }' has no index signature.
 >key : T
->bar : { [_ in T]: number }[T]
->obj : { [_ in T]: number }
+>bar : { [_ in T]: number; }[T]
+>obj : { [_ in T]: number; }
 
     bar; // bar : any
->bar : { [_ in T]: number }[T]
+>bar : { [_ in T]: number; }[T]
 
     // Note: this does work:
     const lorem = obj[key];
->lorem : { [_ in T]: number }[T]
->obj[key] : { [_ in T]: number }[T]
->obj : { [_ in T]: number }
+>lorem : { [_ in T]: number; }[T]
+>obj[key] : { [_ in T]: number; }[T]
+>obj : { [_ in T]: number; }
 >key : T
 }

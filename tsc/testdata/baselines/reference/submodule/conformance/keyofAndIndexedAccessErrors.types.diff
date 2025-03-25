@@ -74,12 +74,3 @@
  >y : T & U
  >k4 : keyof T | keyof U
  
-@@= skipped -165, +165 lines =@@
- 
- // The constraint of 'keyof T' is 'keyof T'
- function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
-->f4 : <T extends { [K in keyof T]: string; }>(k: keyof T) => void
-+>f4 : <T extends { [K in keyof T]: string }>(k: keyof T) => void
- >k : keyof T
- 
-     k = 42; // error

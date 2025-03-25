@@ -5,16 +5,11 @@
  
  declare function setup<
 ->setup : <TActors extends Record<string, UnknownActorLogic> = {}>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
-+>setup : <TActors extends Record<string, UnknownActorLogic>>(implementations?: { actors?: { [K in keyof TActors]: TActors[K] }; } | undefined) => { createMachine: <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
++>setup : <TActors extends Record<string, UnknownActorLogic>>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; } | undefined) => { createMachine: <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
  
    TActors extends Record<string, UnknownActorLogic> = {},
  >(implementations?: {
-->implementations : { actors?: { [K in keyof TActors]: TActors[K]; }; } | undefined
-+>implementations : { actors?: { [K in keyof TActors]: TActors[K] }; } | undefined
- 
-   actors?: { [K in keyof TActors]: TActors[K] };
-->actors : { [K in keyof TActors]: TActors[K]; } | undefined
-+>actors : { [K in keyof TActors]: TActors[K] } | undefined
+@@= skipped -11, +11 lines =@@
  
  }): {
    createMachine: <
@@ -23,7 +18,7 @@
  
      const TConfig extends MachineConfig<ToProvidedActor<TActors>>,
    >(
-@@= skipped -28, +28 lines =@@
+@@= skipped -17, +17 lines =@@
  // example usage
  setup({
  >setup({  actors: { counter: counterLogic },}).createMachine({  entry: assign((spawn) => {    spawn("counter"); // ok    spawn("alarm"); // error    return {};  }),}) : void
@@ -32,7 +27,7 @@
 ->setup : <TActors extends Record<string, UnknownActorLogic> = {}>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
 +>setup({  actors: { counter: counterLogic },}).createMachine : <TConfig extends MachineConfig<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>>(config: TConfig) => void
 +>setup({  actors: { counter: counterLogic },}) : { createMachine: <TConfig extends MachineConfig<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>>(config: TConfig) => void; }
-+>setup : <TActors extends Record<string, UnknownActorLogic>>(implementations?: { actors?: { [K in keyof TActors]: TActors[K] }; } | undefined) => { createMachine: <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
++>setup : <TActors extends Record<string, UnknownActorLogic>>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; } | undefined) => { createMachine: <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
  >{  actors: { counter: counterLogic },} : { actors: { counter: ActorLogic<{ type: "INCREMENT"; }>; }; }
  
    actors: { counter: counterLogic },
@@ -55,7 +50,7 @@
 ->createMachine : <const TConfig extends MachineConfig<never>>(config: TConfig) => void
 +>setup().createMachine : <TConfig extends MachineConfig<never>>(config: TConfig) => void
 +>setup() : { createMachine: <TConfig extends MachineConfig<never>>(config: TConfig) => void; }
-+>setup : <TActors extends Record<string, UnknownActorLogic>>(implementations?: { actors?: { [K in keyof TActors]: TActors[K] }; } | undefined) => { createMachine: <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
++>setup : <TActors extends Record<string, UnknownActorLogic>>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; } | undefined) => { createMachine: <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
 +>createMachine : <TConfig extends MachineConfig<never>>(config: TConfig) => void
  >{  entry: assign(() => ({})),} : { entry: AssignAction<never>; }
  

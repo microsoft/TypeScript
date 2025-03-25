@@ -9,7 +9,7 @@ type ObjectIterator<TObject, TResult> = (value: TObject[keyof TObject], key: str
 
 interface LoDashStatic {
     mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
->mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
+>mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
 >obj : T | null | undefined
 >callback : ObjectIterator<T, TResult>
 }
@@ -53,9 +53,9 @@ export class Test {
 >vm : any
 >objects : any
 >_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : { [x: string]: any; }
->_.mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
+>_.mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
 >_ : LoDashStatic
->mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
+>mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
 
             obj,
 >obj : any

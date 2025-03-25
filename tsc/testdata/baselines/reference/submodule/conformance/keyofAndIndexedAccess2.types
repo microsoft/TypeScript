@@ -166,50 +166,50 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 }
 
 function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
->f3 : <K extends string>(a: { [P in K]: number }, b: { [key: string]: number; }, k: K) => void
->a : { [P in K]: number }
+>f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
+>a : { [P in K]: number; }
 >b : { [key: string]: number; }
 >key : string
 >k : K
 
     a = b;  // Error, index signature doesn't imply properties are present
 >a = b : { [key: string]: number; }
->a : { [P in K]: number }
+>a : { [P in K]: number; }
 >b : { [key: string]: number; }
 
     b = a;
->b = a : { [P in K]: number }
+>b = a : { [P in K]: number; }
 >b : { [key: string]: number; }
->a : { [P in K]: number }
+>a : { [P in K]: number; }
 
     a[k];
->a[k] : { [P in K]: number }[K]
->a : { [P in K]: number }
+>a[k] : { [P in K]: number; }[K]
+>a : { [P in K]: number; }
 >k : K
 
     a[k] = 1;
 >a[k] = 1 : 1
->a[k] : { [P in K]: number }[K]
->a : { [P in K]: number }
+>a[k] : { [P in K]: number; }[K]
+>a : { [P in K]: number; }
 >k : K
 >1 : 1
 }
 
 function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
->f3b : <K extends string>(a: { [P in K]: number }, b: { [x: string]: number; }, k: K) => void
->a : { [P in K]: number }
+>f3b : <K extends string>(a: { [P in K]: number; }, b: { [x: string]: number; }, k: K) => void
+>a : { [P in K]: number; }
 >b : { [x: string]: number; }
 >k : K
 
     a = b;  // Error, index signature doesn't imply properties are present
 >a = b : { [x: string]: number; }
->a : { [P in K]: number }
+>a : { [P in K]: number; }
 >b : { [x: string]: number; }
 
     b = a;
->b = a : { [P in K]: number }
+>b = a : { [P in K]: number; }
 >b : { [x: string]: number; }
->a : { [P in K]: number }
+>a : { [P in K]: number; }
 }
 
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {

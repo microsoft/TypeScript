@@ -1,20 +1,11 @@
 --- old.coAndContraVariantInferences3.types
 +++ new.coAndContraVariantInferences3.types
-@@= skipped -22, +22 lines =@@
- 
- type OverloadBinder<T extends OverloadDefinitions> = (args: OverloadParameters<T>) => OverloadKeys<T> | undefined;
- >OverloadBinder : OverloadBinder<T>
-->args : Parameters<{ [P in Extract<keyof T, number>]: T[P]; }[Extract<keyof T, number>]>
-+>args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
- 
- type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
- >OverloadKeys : OverloadKeys<T>
-@@= skipped -13, +13 lines =@@
+@@= skipped -35, +35 lines =@@
  
  type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
  >OverloadBinders : OverloadBinders<T>
 ->args : Parameters<{ [P_1 in Extract<keyof T, number>]: T[P_1]; }[Extract<keyof T, number>]>
-+>args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
++>args : Parameters<{ [P in Extract<keyof T, number>]: T[P]; }[Extract<keyof T, number>]>
  
  type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
  >OverloadDeprecations : OverloadDeprecations<T>

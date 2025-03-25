@@ -1,7 +1,9 @@
+typeofAnExportedType.ts(20,12): error TS2323: Cannot redeclare exported variable 'r5'.
+typeofAnExportedType.ts(21,12): error TS2323: Cannot redeclare exported variable 'r5'.
 typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
 
 
-==== typeofAnExportedType.ts (1 errors) ====
+==== typeofAnExportedType.ts (3 errors) ====
     export var x = 1;
     export var r1: typeof x;
     export var y = { foo: '' };
@@ -22,7 +24,11 @@ typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or in
     export var i: I;
     var i2: I;
     export var r5: typeof i;
+               ~~
+!!! error TS2323: Cannot redeclare exported variable 'r5'.
     export var r5: typeof i2;
+               ~~
+!!! error TS2323: Cannot redeclare exported variable 'r5'.
     
     export module M {
         export var foo = '';

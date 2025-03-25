@@ -1,15 +1,6 @@
 --- old.thisConditionalOnMethodReturnOfGenericInstance.types
 +++ new.thisConditionalOnMethodReturnOfGenericInstance.types
-@@= skipped -4, +4 lines =@@
- >A : A<T>
- 
-     unmeasurableUsage!: {[K in keyof T]-?: T[K]};
-->unmeasurableUsage : { [K in keyof T]-?: T[K]; }
-+>unmeasurableUsage : { [K in keyof T]-?: T[K] }
- }
- 
- class B<T> extends A<T> {
-@@= skipped -8, +8 lines =@@
+@@= skipped -12, +12 lines =@@
  >A : A<T>
  
      method(): string | (this extends C ? undefined : null) {

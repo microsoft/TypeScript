@@ -1,17 +1,6 @@
 --- old.genericFunctionsAndConditionalInference.types
 +++ new.genericFunctionsAndConditionalInference.types
-@@= skipped -69, +69 lines =@@
- >o : Result<F, O>
- 
-     dict: <P>(p: {[k in keyof P]: Result<F, P[k]>}) => Result<F, P>
-->dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
-->p : { [k in keyof P]: Result<F, P[k]>; }
-+>dict : <P>(p: { [k in keyof P]: Result<F, P[k]> }) => Result<F, P>
-+>p : { [k in keyof P]: Result<F, P[k]> }
- }
- const left: Ops<"left"> = {} as any
- >left : Ops<"left">
-@@= skipped -14, +14 lines =@@
+@@= skipped -83, +83 lines =@@
  >{} : {}
  
  const ok = <F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)})
@@ -32,11 +21,9 @@
 +><F extends Target>(at: Ops<F>) => at.dict(ok(at)) : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
  >at : Ops<F>
  >at.dict(ok(at)) : Result<F, { lr: LR<F, string, number>; }>
-->at.dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
-+>at.dict : <P>(p: { [k in keyof P]: Result<F, P[k]> }) => Result<F, P>
+ >at.dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
  >at : Ops<F>
-->dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
-+>dict : <P>(p: { [k in keyof P]: Result<F, P[k]> }) => Result<F, P>
+ >dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
  >ok(at) : { lr: Result<F, LR<F, string, number>>; }
 ->ok : <F_1 extends Target>(at: Ops<F_1>) => { lr: Result<F_1, LR<F_1, string, number>>; }
 +>ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }

@@ -4,109 +4,109 @@
 // Repro from #12513
 
 function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
->f1 : <K extends string, T>(obj: { [P in K]: T }, k: K) => void
->obj : { [P in K]: T }
+>f1 : <K extends string, T>(obj: { [P in K]: T; }, k: K) => void
+>obj : { [P in K]: T; }
 >k : K
 
     const b = k in obj;
 >b : boolean
 >k in obj : boolean
 >k : K
->obj : { [P in K]: T }
+>obj : { [P in K]: T; }
 
     let k1: K;
 >k1 : K
 
     for (k1 in obj) {
 >k1 : K
->obj : { [P in K]: T }
+>obj : { [P in K]: T; }
 
         let x1 = obj[k1];
->x1 : { [P in K]: T }[K]
->obj[k1] : { [P in K]: T }[K]
->obj : { [P in K]: T }
+>x1 : { [P in K]: T; }[K]
+>obj[k1] : { [P in K]: T; }[K]
+>obj : { [P in K]: T; }
 >k1 : K
     }
     for (let k2 in obj) {
 >k2 : Extract<K, string>
->obj : { [P in K]: T }
+>obj : { [P in K]: T; }
 
         let x2 = obj[k2];
->x2 : { [P in K]: T }[Extract<K, string>]
->obj[k2] : { [P in K]: T }[Extract<K, string>]
->obj : { [P in K]: T }
+>x2 : { [P in K]: T; }[Extract<K, string>]
+>obj[k2] : { [P in K]: T; }[Extract<K, string>]
+>obj : { [P in K]: T; }
 >k2 : Extract<K, string>
     }
 }
 
 function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
->f2 : <T>(obj: { [P in keyof T]: T[P] }, k: keyof T) => void
->obj : { [P in keyof T]: T[P] }
+>f2 : <T>(obj: { [P in keyof T]: T[P]; }, k: keyof T) => void
+>obj : { [P in keyof T]: T[P]; }
 >k : keyof T
 
     const b = k in obj;
 >b : boolean
 >k in obj : boolean
 >k : keyof T
->obj : { [P in keyof T]: T[P] }
+>obj : { [P in keyof T]: T[P]; }
 
     let k1: keyof T;
 >k1 : keyof T
 
     for (k1 in obj) {
 >k1 : keyof T
->obj : { [P in keyof T]: T[P] }
+>obj : { [P in keyof T]: T[P]; }
 
         let x1 = obj[k1];
->x1 : { [P in keyof T]: T[P] }[keyof T]
->obj[k1] : { [P in keyof T]: T[P] }[keyof T]
->obj : { [P in keyof T]: T[P] }
+>x1 : { [P in keyof T]: T[P]; }[keyof T]
+>obj[k1] : { [P in keyof T]: T[P]; }[keyof T]
+>obj : { [P in keyof T]: T[P]; }
 >k1 : keyof T
     }
     for (let k2 in obj) {
 >k2 : Extract<keyof T, string>
->obj : { [P in keyof T]: T[P] }
+>obj : { [P in keyof T]: T[P]; }
 
         let x2 = obj[k2];
->x2 : { [P in keyof T]: T[P] }[Extract<keyof T, string>]
->obj[k2] : { [P in keyof T]: T[P] }[Extract<keyof T, string>]
->obj : { [P in keyof T]: T[P] }
+>x2 : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
+>obj[k2] : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
+>obj : { [P in keyof T]: T[P]; }
 >k2 : Extract<keyof T, string>
     }
 }
 
 function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
->f3 : <T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) => void
->obj : { [P in K]: T[P] }
+>f3 : <T, K extends keyof T>(obj: { [P in K]: T[P]; }, k: K) => void
+>obj : { [P in K]: T[P]; }
 >k : K
 
     const b = k in obj;
 >b : boolean
 >k in obj : boolean
 >k : K
->obj : { [P in K]: T[P] }
+>obj : { [P in K]: T[P]; }
 
     let k1: K;
 >k1 : K
 
     for (k1 in obj) {
 >k1 : K
->obj : { [P in K]: T[P] }
+>obj : { [P in K]: T[P]; }
 
         let x1 = obj[k1];
->x1 : { [P in K]: T[P] }[K]
->obj[k1] : { [P in K]: T[P] }[K]
->obj : { [P in K]: T[P] }
+>x1 : { [P in K]: T[P]; }[K]
+>obj[k1] : { [P in K]: T[P]; }[K]
+>obj : { [P in K]: T[P]; }
 >k1 : K
     }
     for (let k2 in obj) {
 >k2 : Extract<K, string>
->obj : { [P in K]: T[P] }
+>obj : { [P in K]: T[P]; }
 
         let x2 = obj[k2];
->x2 : { [P in K]: T[P] }[Extract<K, string>]
->obj[k2] : { [P in K]: T[P] }[Extract<K, string>]
->obj : { [P in K]: T[P] }
+>x2 : { [P in K]: T[P]; }[Extract<K, string>]
+>obj[k2] : { [P in K]: T[P]; }[Extract<K, string>]
+>obj : { [P in K]: T[P]; }
 >k2 : Extract<K, string>
     }
 }

@@ -18,27 +18,3 @@
  
  // Repro from #18354
  
- declare function f2<T, Key extends keyof T>(obj: {[K in keyof T]: T[K]}, key: Key): T[Key];
-->f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
-->obj : { [K in keyof T]: T[K]; }
-+>f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K] }, key: Key) => T[Key]
-+>obj : { [K in keyof T]: T[K] }
- >key : Key
- 
- declare const obj: { a: string } & { b: string };
-@@= skipped -16, +16 lines =@@
- 
- f2(obj, 'a');
- >f2(obj, 'a') : string
-->f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
-+>f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K] }, key: Key) => T[Key]
- >obj : { a: string; } & { b: string; }
- >'a' : "a"
- 
- f2(obj, 'b');
- >f2(obj, 'b') : string
-->f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
-+>f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K] }, key: Key) => T[Key]
- >obj : { a: string; } & { b: string; }
- >'b' : "b"
- 

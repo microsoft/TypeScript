@@ -23,7 +23,7 @@ type OverloadDefinitions = { readonly [P in number]: (...args: any[]) => any; };
 
 type OverloadBinder<T extends OverloadDefinitions> = (args: OverloadParameters<T>) => OverloadKeys<T> | undefined;
 >OverloadBinder : OverloadBinder<T>
->args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
+>args : Parameters<{ [P in Extract<keyof T, number>]: T[P]; }[Extract<keyof T, number>]>
 
 type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
 >OverloadKeys : OverloadKeys<T>
@@ -36,7 +36,7 @@ type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersection<T[key
 
 type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
 >OverloadBinders : OverloadBinders<T>
->args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
+>args : Parameters<{ [P in Extract<keyof T, number>]: T[P]; }[Extract<keyof T, number>]>
 
 type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
 >OverloadDeprecations : OverloadDeprecations<T>

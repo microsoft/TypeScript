@@ -1,21 +1,6 @@
 --- old.contextualPropertyOfGenericMappedType.types
 +++ new.contextualPropertyOfGenericMappedType.types
-@@= skipped -3, +3 lines =@@
- // Repro for #24694
- 
- declare function f<T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }): void;
-->f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }) => void
-+>f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void }) => void
- >data : T
-->handlers : { [P in keyof T]: (value: T[P], prop: P) => void; }
-+>handlers : { [P in keyof T]: (value: T[P], prop: P) => void }
- >value : T[P]
- >prop : P
- 
- f({ data: 0 }, { data(value, key) {} });
- >f({ data: 0 }, { data(value, key) {} }) : void
-->f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }) => void
-+>f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void }) => void
+@@= skipped -15, +15 lines =@@
  >{ data: 0 } : { data: number; }
  >data : number
  >0 : 0

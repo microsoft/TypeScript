@@ -2,62 +2,50 @@
 +++ new.es6ImportDefaultBindingFollowedWithNamedImport1WithExport.errors.txt
 @@= skipped -0, +0 lines =@@
  client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
--client.ts(2,12): error TS2323: Cannot redeclare exported variable 'x1'.
+ client.ts(2,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
 -client.ts(3,34): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
--client.ts(4,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(3,34): error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
+ client.ts(4,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(5,1): error TS1191: An import declaration cannot have modifiers.
 -client.ts(5,34): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
--client.ts(6,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(5,34): error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
+ client.ts(6,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(7,1): error TS1191: An import declaration cannot have modifiers.
 -client.ts(7,34): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
 -client.ts(7,37): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
--client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(7,34): error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
 +client.ts(7,37): error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
+ client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
 -client.ts(9,34): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
--client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(9,34): error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
+ client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
 -client.ts(11,34): error TS2614: Module '"./server"' has no exported member 'm'. Did you mean to use 'import m from "./server"' instead?
--client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(11,34): error TS2614: Module '"server"' has no exported member 'm'. Did you mean to use 'import m from "server"' instead?
+ client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
  
  
- ==== server.ts (0 errors) ====
-     var a = 10;
-     export default a;
-     
--==== client.ts (18 errors) ====
-+==== client.ts (12 errors) ====
-     export import defaultBinding1, { } from "./server";
-     ~~~~~~
- !!! error TS1191: An import declaration cannot have modifiers.
-     export var x1: number = defaultBinding1;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     export import defaultBinding2, { a } from "./server";
+@@= skipped -32, +32 lines =@@
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
                                       ~
 -!!! error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
 +!!! error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
      export var x1: number = defaultBinding2;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     export import defaultBinding3, { a as b } from "./server";
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
+@@= skipped -8, +8 lines =@@
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
                                       ~
 -!!! error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
 +!!! error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
      export var x1: number = defaultBinding3;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     export import defaultBinding4, { x, a as y } from "./server";
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
+@@= skipped -8, +8 lines =@@
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
                                       ~
@@ -67,24 +55,23 @@
 -!!! error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
 +!!! error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
      export var x1: number = defaultBinding4;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     export import defaultBinding5, { x as z,  } from "./server";
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
+@@= skipped -10, +10 lines =@@
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
                                       ~
 -!!! error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
 +!!! error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
      export var x1: number = defaultBinding5;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     export import defaultBinding6, { m,  } from "./server";
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
+@@= skipped -8, +8 lines =@@
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
                                       ~
 -!!! error TS2614: Module '"./server"' has no exported member 'm'. Did you mean to use 'import m from "./server"' instead?
 +!!! error TS2614: Module '"server"' has no exported member 'm'. Did you mean to use 'import m from "server"' instead?
      export var x1: number = defaultBinding6;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.

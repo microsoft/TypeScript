@@ -78,9 +78,9 @@ export class BrokenClass {
 >Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      }) : Promise<void>
 >Promise.all(result.map(populateItems))      .then : <TResult1, TResult2>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >Promise.all(result.map(populateItems)) : Promise<unknown[]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >result.map(populateItems) : Promise<unknown>[]
 >result.map : <U>(callbackfn: (value: MyModel, index: number, array: MyModel[]) => U, thisArg?: any) => U[]
 >result : MyModel[]

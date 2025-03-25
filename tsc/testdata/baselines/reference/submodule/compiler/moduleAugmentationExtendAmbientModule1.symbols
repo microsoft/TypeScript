@@ -13,7 +13,9 @@ let x: Observable<number>;
 
 let y = x.map(x => x + 1);
 >y : Symbol(y, Decl(main.ts, 5, 3))
+>x.map : Symbol(map, Decl(map.ts, 5, 29))
 >x : Symbol(x, Decl(main.ts, 4, 3))
+>map : Symbol(map, Decl(map.ts, 5, 29))
 >x : Symbol(x, Decl(main.ts, 5, 14))
 >x : Symbol(x, Decl(main.ts, 5, 14))
 
@@ -27,24 +29,24 @@ import { Observable } from "observable"
 >prototype : Symbol(prototype)
 
 declare module "observable" {
->"observable" : Symbol("observable", Decl(map.ts, 2, 48), Decl(observable.d.ts, 0, 0))
+>"observable" : Symbol("observable", Decl(observable.d.ts, 0, 0), Decl(map.ts, 2, 48))
 
     interface Observable<T> {
->Observable : Symbol(Observable, Decl(map.ts, 4, 29), Decl(map.ts, 7, 5), Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5))
->T : Symbol(T, Decl(map.ts, 5, 25), Decl(observable.d.ts, 1, 21))
+>Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
+>T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 5, 25))
 
         map<U>(proj: (e:T) => U): Observable<U>
 >map : Symbol(map, Decl(map.ts, 5, 29))
 >U : Symbol(U, Decl(map.ts, 6, 12))
 >proj : Symbol(proj, Decl(map.ts, 6, 15))
 >e : Symbol(e, Decl(map.ts, 6, 22))
->T : Symbol(T, Decl(map.ts, 5, 25), Decl(observable.d.ts, 1, 21))
+>T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 5, 25))
 >U : Symbol(U, Decl(map.ts, 6, 12))
->Observable : Symbol(Observable, Decl(map.ts, 4, 29), Decl(map.ts, 7, 5), Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5))
+>Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
 >U : Symbol(U, Decl(map.ts, 6, 12))
     }
     namespace Observable {
->Observable : Symbol(Observable, Decl(map.ts, 4, 29), Decl(map.ts, 7, 5), Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5))
+>Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
 
         let someAnotherValue: number;
 >someAnotherValue : Symbol(someAnotherValue, Decl(map.ts, 9, 11))
@@ -53,22 +55,22 @@ declare module "observable" {
 
 === observable.d.ts ===
 declare module "observable" {
->"observable" : Symbol("observable", Decl(observable.d.ts, 0, 0))
+>"observable" : Symbol("observable", Decl(observable.d.ts, 0, 0), Decl(map.ts, 2, 48))
 
     class Observable<T> {
->Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5))
->T : Symbol(T, Decl(observable.d.ts, 1, 21))
+>Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
+>T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 5, 25))
 
         filter(pred: (e:T) => boolean): Observable<T>;
 >filter : Symbol(filter, Decl(observable.d.ts, 1, 25))
 >pred : Symbol(pred, Decl(observable.d.ts, 2, 15))
 >e : Symbol(e, Decl(observable.d.ts, 2, 22))
->T : Symbol(T, Decl(observable.d.ts, 1, 21))
->Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5))
->T : Symbol(T, Decl(observable.d.ts, 1, 21))
+>T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 5, 25))
+>Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
+>T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 5, 25))
     }
     namespace Observable {
->Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5))
+>Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
 
         let someValue: number;
 >someValue : Symbol(someValue, Decl(observable.d.ts, 5, 11))

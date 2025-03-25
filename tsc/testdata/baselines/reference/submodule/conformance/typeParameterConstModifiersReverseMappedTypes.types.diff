@@ -5,104 +5,86 @@
  === typeParameterConstModifiersReverseMappedTypes.ts ===
  declare function test1<const T>(obj: {
 ->test1 : <const T>(obj: { [K in keyof T]: T[K]; }) => [T, typeof obj]
-->obj : { [K in keyof T]: T[K]; }
-+>test1 : <T>(obj: { [K in keyof T]: T[K] }) => [T, { [K in keyof T]: T[K] }]
-+>obj : { [K in keyof T]: T[K] }
++>test1 : <T>(obj: { [K in keyof T]: T[K]; }) => [T, { [K in keyof T]: T[K]; }]
+ >obj : { [K in keyof T]: T[K]; }
  
    [K in keyof T]: T[K];
- }): [T, typeof obj];
-->obj : { [K in keyof T]: T[K]; }
-+>obj : { [K in keyof T]: T[K] }
- 
+@@= skipped -10, +10 lines =@@
  const result1 = test1({
  >result1 : [{ readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }, { readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }]
  >test1({  prop: "foo",  nested: {    nestedProp: "bar",  },}) : [{ readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }, { readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }]
 ->test1 : <const T>(obj: { [K in keyof T]: T[K]; }) => [T, typeof obj]
-+>test1 : <T>(obj: { [K in keyof T]: T[K] }) => [T, { [K in keyof T]: T[K] }]
++>test1 : <T>(obj: { [K in keyof T]: T[K]; }) => [T, { [K in keyof T]: T[K]; }]
  >{  prop: "foo",  nested: {    nestedProp: "bar",  },} : { prop: "foo"; nested: { nestedProp: "bar"; }; }
  
    prop: "foo",
-@@= skipped -29, +29 lines =@@
+@@= skipped -19, +19 lines =@@
  });
  
  declare function test2<const T>(obj: {
 ->test2 : <const T>(obj: { readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
-->obj : { readonly [K in keyof T]: T[K]; }
-+>test2 : <T>(obj: { readonly [K in keyof T]: T[K] }) => [T, { readonly [K in keyof T]: T[K] }]
-+>obj : { readonly [K in keyof T]: T[K] }
++>test2 : <T>(obj: { readonly [K in keyof T]: T[K]; }) => [T, { readonly [K in keyof T]: T[K]; }]
+ >obj : { readonly [K in keyof T]: T[K]; }
  
    readonly [K in keyof T]: T[K];
- }): [T, typeof obj];
-->obj : { readonly [K in keyof T]: T[K]; }
-+>obj : { readonly [K in keyof T]: T[K] }
- 
+@@= skipped -10, +10 lines =@@
  const result2 = test2({
  >result2 : [{ prop: "foo"; nested: { readonly nestedProp: "bar"; }; }, { readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }]
  >test2({  prop: "foo",  nested: {    nestedProp: "bar",  },}) : [{ prop: "foo"; nested: { readonly nestedProp: "bar"; }; }, { readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }]
 ->test2 : <const T>(obj: { readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
-+>test2 : <T>(obj: { readonly [K in keyof T]: T[K] }) => [T, { readonly [K in keyof T]: T[K] }]
++>test2 : <T>(obj: { readonly [K in keyof T]: T[K]; }) => [T, { readonly [K in keyof T]: T[K]; }]
  >{  prop: "foo",  nested: {    nestedProp: "bar",  },} : { prop: "foo"; nested: { nestedProp: "bar"; }; }
  
    prop: "foo",
-@@= skipped -29, +29 lines =@@
+@@= skipped -19, +19 lines =@@
  });
  
  declare function test3<const T>(obj: {
 ->test3 : <const T>(obj: { -readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
-->obj : { -readonly [K in keyof T]: T[K]; }
-+>test3 : <T>(obj: { -readonly [K in keyof T]: T[K] }) => [T, { -readonly [K in keyof T]: T[K] }]
-+>obj : { -readonly [K in keyof T]: T[K] }
++>test3 : <T>(obj: { -readonly [K in keyof T]: T[K]; }) => [T, { -readonly [K in keyof T]: T[K]; }]
+ >obj : { -readonly [K in keyof T]: T[K]; }
  
    -readonly [K in keyof T]: T[K];
- }): [T, typeof obj];
-->obj : { -readonly [K in keyof T]: T[K]; }
-+>obj : { -readonly [K in keyof T]: T[K] }
- 
+@@= skipped -10, +10 lines =@@
  const result3 = test3({
  >result3 : [{ readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }, { prop: "foo"; nested: { readonly nestedProp: "bar"; }; }]
  >test3({  prop: "foo",  nested: {    nestedProp: "bar",  },}) : [{ readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }, { prop: "foo"; nested: { readonly nestedProp: "bar"; }; }]
 ->test3 : <const T>(obj: { -readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
-+>test3 : <T>(obj: { -readonly [K in keyof T]: T[K] }) => [T, { -readonly [K in keyof T]: T[K] }]
++>test3 : <T>(obj: { -readonly [K in keyof T]: T[K]; }) => [T, { -readonly [K in keyof T]: T[K]; }]
  >{  prop: "foo",  nested: {    nestedProp: "bar",  },} : { prop: "foo"; nested: { nestedProp: "bar"; }; }
  
    prop: "foo",
-@@= skipped -29, +29 lines =@@
+@@= skipped -19, +19 lines =@@
  });
  
  declare function test4<const T extends readonly unknown[]>(arr: {
 ->test4 : <const T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
-->arr : { [K in keyof T]: T[K]; }
-+>test4 : <T extends readonly unknown[]>(arr: { [K in keyof T]: T[K] }) => T
-+>arr : { [K in keyof T]: T[K] }
++>test4 : <T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
+ >arr : { [K in keyof T]: T[K]; }
  
    [K in keyof T]: T[K];
- }): T;
 @@= skipped -9, +9 lines =@@
  const result4 = test4(["1", 2]);
  >result4 : readonly ["1", 2]
  >test4(["1", 2]) : readonly ["1", 2]
 ->test4 : <const T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
-+>test4 : <T extends readonly unknown[]>(arr: { [K in keyof T]: T[K] }) => T
++>test4 : <T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
  >["1", 2] : ["1", 2]
  >"1" : "1"
  >2 : 2
  
  declare function test5<const T extends readonly unknown[]>(
 ->test5 : <const T extends readonly unknown[]>(...args: { [K in keyof T]: T[K]; }) => T
-+>test5 : <T extends readonly unknown[]>(...args: { [K in keyof T]: T[K] }) => T
++>test5 : <T extends readonly unknown[]>(...args: { [K in keyof T]: T[K]; }) => T
  
    ...args: {
-->args : { [K in keyof T]: T[K]; }
-+>args : { [K in keyof T]: T[K] }
- 
-     [K in keyof T]: T[K];
-   }
+ >args : { [K in keyof T]: T[K]; }
 @@= skipped -18, +18 lines =@@
  const result5 = test5({ a: "foo" });
  >result5 : readonly [{ readonly a: "foo"; }]
  >test5({ a: "foo" }) : readonly [{ readonly a: "foo"; }]
 ->test5 : <const T extends readonly unknown[]>(...args: { [K in keyof T]: T[K]; }) => T
-+>test5 : <T extends readonly unknown[]>(...args: { [K in keyof T]: T[K] }) => T
++>test5 : <T extends readonly unknown[]>(...args: { [K in keyof T]: T[K]; }) => T
  >{ a: "foo" } : { a: "foo"; }
  >a : "foo"
  >"foo" : "foo"

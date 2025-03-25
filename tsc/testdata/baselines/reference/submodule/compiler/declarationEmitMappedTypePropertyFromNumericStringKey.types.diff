@@ -8,14 +8,10 @@
 ->(<T>(arg: {[K in keyof T]: T[K] | string}) => arg)({'0': 0}) : { '0': string | number; }
 ->(<T>(arg: {[K in keyof T]: T[K] | string}) => arg) : <T>(arg: { [K in keyof T]: T[K] | string; }) => { [K in keyof T]: string | T[K]; }
 -><T>(arg: {[K in keyof T]: T[K] | string}) => arg : <T>(arg: { [K in keyof T]: T[K] | string; }) => { [K in keyof T]: string | T[K]; }
-->arg : { [K in keyof T]: string | T[K]; }
-->arg : { [K in keyof T]: string | T[K]; }
 +>f : { 0: string | number; }
 +>(<T>(arg: {[K in keyof T]: T[K] | string}) => arg)({'0': 0}) : { 0: string | number; }
-+>(<T>(arg: {[K in keyof T]: T[K] | string}) => arg) : <T>(arg: { [K in keyof T]: string | T[K] }) => { [K in keyof T]: string | T[K] }
-+><T>(arg: {[K in keyof T]: T[K] | string}) => arg : <T>(arg: { [K in keyof T]: string | T[K] }) => { [K in keyof T]: string | T[K] }
-+>arg : { [K in keyof T]: string | T[K] }
-+>arg : { [K in keyof T]: string | T[K] }
++>(<T>(arg: {[K in keyof T]: T[K] | string}) => arg) : <T>(arg: { [K in keyof T]: string | T[K]; }) => { [K in keyof T]: string | T[K]; }
++><T>(arg: {[K in keyof T]: T[K] | string}) => arg : <T>(arg: { [K in keyof T]: string | T[K]; }) => { [K in keyof T]: string | T[K]; }
+ >arg : { [K in keyof T]: string | T[K]; }
+ >arg : { [K in keyof T]: string | T[K]; }
  >{'0': 0} : { '0': number; }
- >'0' : number
- >0 : 0

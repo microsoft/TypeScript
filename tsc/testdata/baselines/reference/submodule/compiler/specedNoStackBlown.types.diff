@@ -9,16 +9,7 @@
  >spec : SPEC
  >input : ROOTINPUT
  
-@@= skipped -37, +37 lines =@@
- >value : INPUT
- 
- export type SpecObject<INPUT, ROOTINPUT = any> = Partial<{[key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>}>;
-->SpecObject : Partial<{ [key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>; }>
-+>SpecObject : Partial<{ [key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT> }>
- 
- export type SpecValue<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<any>]
- >SpecValue : SpecValue<INPUT, ROOTINPUT>
-@@= skipped -15, +15 lines =@@
+@@= skipped -52, +52 lines =@@
  >true : true
  
  export default spected;

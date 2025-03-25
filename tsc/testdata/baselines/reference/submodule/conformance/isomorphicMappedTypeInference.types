@@ -267,11 +267,11 @@ function f4() {
 }
 
 function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
->makeRecord : <T, K extends string>(obj: { [P in K]: T }) => { [P in K]: T }
->obj : { [P in K]: T }
+>makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
+>obj : { [P in K]: T; }
 
     return obj;
->obj : { [P in K]: T }
+>obj : { [P in K]: T; }
 }
 
 function f5(s: string) {
@@ -281,7 +281,7 @@ function f5(s: string) {
     let b = makeRecord({
 >b : { a: Box<string> | Box<number> | Box<boolean>; b: Box<string> | Box<number> | Box<boolean>; c: Box<string> | Box<number> | Box<boolean>; }
 >makeRecord({        a: box(42),        b: box("hello"),        c: box(true)    }) : { a: Box<string> | Box<number> | Box<boolean>; b: Box<string> | Box<number> | Box<boolean>; c: Box<string> | Box<number> | Box<boolean>; }
->makeRecord : <T, K extends string>(obj: { [P in K]: T }) => { [P in K]: T }
+>makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
 >{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 
         a: box(42),
@@ -368,16 +368,16 @@ function f6(s: string) {
 }
 
 declare function validate<T>(obj: { [P in keyof T]?: T[P] }): T;
->validate : <T>(obj: { [P in keyof T]?: T[P] | undefined }) => T
->obj : { [P in keyof T]?: T[P] | undefined }
+>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
+>obj : { [P in keyof T]?: T[P] | undefined; }
 
 declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
->clone : <T>(obj: { readonly [P in keyof T]: T[P] }) => T
->obj : { readonly [P in keyof T]: T[P] }
+>clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
+>obj : { readonly [P in keyof T]: T[P]; }
 
 declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;
->validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined }) => T
->obj : { readonly [P in keyof T]?: T[P] | undefined }
+>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
+>obj : { readonly [P in keyof T]?: T[P] | undefined; }
 
 type Foo = {
 >Foo : Foo
@@ -396,19 +396,19 @@ function f10(foo: Foo) {
     let x = validate(foo);  // { a: number, readonly b: string }
 >x : { a: number; readonly b: string; }
 >validate(foo) : { a: number; readonly b: string; }
->validate : <T>(obj: { [P in keyof T]?: T[P] | undefined }) => T
+>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
 >foo : Foo
 
     let y = clone(foo);  // { a?: number, b: string }
 >y : { a?: number | undefined; b: string; }
 >clone(foo) : { a?: number | undefined; b: string; }
->clone : <T>(obj: { readonly [P in keyof T]: T[P] }) => T
+>clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
 >foo : Foo
 
     let z = validateAndClone(foo);  // { a: number, b: string }
 >z : { a: number; b: string; }
 >validateAndClone(foo) : { a: number; b: string; }
->validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined }) => T
+>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
 >foo : Foo
 }
 

@@ -1,23 +1,6 @@
 --- old.inferingFromAny.types
 +++ new.inferingFromAny.types
-@@= skipped -81, +81 lines =@@
- >x : Partial<T>
- 
- declare function f17<T, K>(x: {[P in keyof T]: K}): T;
-->f17 : <T, K>(x: { [P in keyof T]: K; }) => T
-->x : { [P in keyof T]: K; }
-+>f17 : <T, K>(x: { [P in keyof T]: K }) => T
-+>x : { [P in keyof T]: K }
- 
- declare function f18<T, K extends keyof T>(x: {[P in K]: T[P]}): T;
-->f18 : <T, K extends keyof T>(x: { [P in K]: T[P]; }) => T
-->x : { [P in K]: T[P]; }
-+>f18 : <T, K extends keyof T>(x: { [P in K]: T[P] }) => T
-+>x : { [P in K]: T[P] }
- 
- declare function f19<T, K extends keyof T>(k: K, x: T[K]): T;
- >f19 : <T, K extends keyof T>(k: K, x: T[K]) => T
-@@= skipped -21, +21 lines =@@
+@@= skipped -102, +102 lines =@@
  
  var a = f2(a);
  >a : any
@@ -122,17 +105,15 @@
  var a = f17(a);
  >a : any
 ->f17(a) : any
-->f17 : <T, K>(x: { [P in keyof T]: K; }) => T
 +>f17(a) : unknown
-+>f17 : <T, K>(x: { [P in keyof T]: K }) => T
+ >f17 : <T, K>(x: { [P in keyof T]: K; }) => T
  >a : any
  
  var a = f18(a);
  >a : any
 ->f18(a) : any
-->f18 : <T, K extends keyof T>(x: { [P in K]: T[P]; }) => T
 +>f18(a) : unknown
-+>f18 : <T, K extends keyof T>(x: { [P in K]: T[P] }) => T
+ >f18 : <T, K extends keyof T>(x: { [P in K]: T[P]; }) => T
  >a : any
  
  var a = f19(a, a);

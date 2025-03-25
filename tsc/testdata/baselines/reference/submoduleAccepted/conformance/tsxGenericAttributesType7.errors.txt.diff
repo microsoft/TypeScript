@@ -4,25 +4,25 @@
 -<no content>
 @@= skipped --1, +1 lines =@@
 +error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Boolean'.
 +error TS2318: Cannot find global type 'Function'.
 +error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Number'.
++error TS2318: Cannot find global type 'Object'.
 +error TS2318: Cannot find global type 'RegExp'.
 +error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 +file.tsx(3,43): error TS2503: Cannot find namespace 'JSX'.
 +
 +
 +!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Boolean'.
 +!!! error TS2318: Cannot find global type 'Function'.
 +!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Number'.
++!!! error TS2318: Cannot find global type 'Object'.
 +!!! error TS2318: Cannot find global type 'RegExp'.
 +!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== file.tsx (2 errors) ====
 +    import React = require('react');
 +                           ~~~~~~~

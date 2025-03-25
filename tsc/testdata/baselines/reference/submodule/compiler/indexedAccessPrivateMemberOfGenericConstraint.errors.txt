@@ -1,6 +1,6 @@
 indexedAccessPrivateMemberOfGenericConstraint.ts(9,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
 indexedAccessPrivateMemberOfGenericConstraint.ts(9,32): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
-indexedAccessPrivateMemberOfGenericConstraint.ts(10,27): error TS2536: Type '"a"' cannot be used to index type 'T'.
+indexedAccessPrivateMemberOfGenericConstraint.ts(10,27): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
 
 
 ==== indexedAccessPrivateMemberOfGenericConstraint.ts (3 errors) ====
@@ -19,6 +19,6 @@ indexedAccessPrivateMemberOfGenericConstraint.ts(10,27): error TS2536: Type '"a"
 !!! error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
     type Y<T extends A | B> = T["a"];
                               ~~~~~~
-!!! error TS2536: Type '"a"' cannot be used to index type 'T'.
+!!! error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
     type Z<T extends A & B> = T["a"];
     

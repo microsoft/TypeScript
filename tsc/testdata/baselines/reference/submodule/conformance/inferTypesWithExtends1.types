@@ -221,17 +221,17 @@ type X9_T1 = X9<{ a: "a", b: "b" }>; // ["string", "a" | "b"]
 >b : "b"
 
 type X9_T2 = X9<{ a: 1, b: 2 }>; // ["number", 1 | 2]
->X9_T2 : ["string", 1 | 2]
+>X9_T2 : ["number", 1 | 2]
 >a : 1
 >b : 2
 
 type X9_T3 = X9<{ a: object, b: object }>; // never
->X9_T3 : ["string", object]
+>X9_T3 : never
 >a : object
 >b : object
 
 type X9_T4 = X9<{ a: "a", b: 1 }>; // never
->X9_T4 : ["string", "a" | 1]
+>X9_T4 : never
 >a : "a"
 >b : 1
 

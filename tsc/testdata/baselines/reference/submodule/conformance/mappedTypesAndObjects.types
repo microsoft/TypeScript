@@ -89,7 +89,7 @@ class Form<T> {
 >Form : Form<T>
 
     private values: {[P in keyof T]?: T[P]} = {}
->values : { [P in keyof T]?: T[P] | undefined }
+>values : { [P in keyof T]?: T[P] | undefined; }
 >{} : {}
 }
 

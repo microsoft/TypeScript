@@ -105,12 +105,3 @@
  
  // Repro from #41613
  
-@@= skipped -9, +9 lines =@@
- >x : { y: 0; z: 1; }
- >y : 0
- >z : 1
-->x : { [P in K]: 0; }
-+>x : { [P in K]: 0 }
- >true : true
- >false : false
-  

@@ -9,9 +9,9 @@ async function foo(x: any) {
 >abc : any[]
 >await Promise.all(x) : any[]
 >Promise.all(x) : Promise<any[]>
->Promise.all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>
+>Promise.all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
 >Promise : PromiseConstructor
->all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>
+>all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
 >x : any
 
     let result: any[] = abc;

@@ -17,7 +17,7 @@ type AProp<T extends { a: string }> = T
 >a : string
 
 declare function myBug<
->myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never }>(arg: T) => T
+>myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
 
   T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
 >(arg: T): T
@@ -26,7 +26,7 @@ declare function myBug<
 const out = myBug({obj1: {a: "test"}})
 >out : { obj1: { a: string; }; }
 >myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
->myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never }>(arg: T) => T
+>myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
 >{obj1: {a: "test"}} : { obj1: { a: string; }; }
 >obj1 : { a: string; }
 >{a: "test"} : { a: string; }
@@ -41,7 +41,7 @@ declare function value<V extends string>(val: V): Value<V>;
 >val : V
 
 declare function ensureNoDuplicates<
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any }>(vals: T) => void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
 
   T extends {
     [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
@@ -54,7 +54,7 @@ declare function ensureNoDuplicates<
 const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2")});
 >noError : void
 >ensureNoDuplicates({main: value("test"), alternate: value("test2")}) : void
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any }>(vals: T) => void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("test"), alternate: value("test2")} : { main: Value<"test">; alternate: Value<"test2">; }
 >main : Value<"test">
 >value("test") : Value<"test">
@@ -68,7 +68,7 @@ const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2
 const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 >shouldBeNoError : void
 >ensureNoDuplicates({main: value("test")}) : void
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any }>(vals: T) => void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("test")} : { main: Value<"test">; }
 >main : Value<"test">
 >value("test") : Value<"test">
@@ -78,7 +78,7 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
 >shouldBeError : void
 >ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : void
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any }>(vals: T) => void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("dup"), alternate: value("dup")} : { main: Value<"dup">; alternate: Value<"dup">; }
 >main : Value<"dup">
 >value("dup") : Value<"dup">
@@ -95,7 +95,7 @@ type Cond<T> = T extends number ? number : never;
 >Cond : Cond<T>
 
 declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
->function1 : <T extends { [K in keyof T]: Cond<T[K]> }>() => T[keyof T]["foo"]
+>function1 : <T extends { [K in keyof T]: Cond<T[K]>; }>() => T[keyof T]["foo"]
 
 // Repro from #31823
 

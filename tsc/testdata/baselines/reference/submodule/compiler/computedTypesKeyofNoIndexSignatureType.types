@@ -2,7 +2,7 @@
 
 === computedTypesKeyofNoIndexSignatureType.ts ===
 type Compute<A> = { [K in keyof A]: Compute<A[K]>; } & {};
->Compute : { [K in keyof A]: { [K in keyof A[K]]: { [K in keyof A[K][K]]: { [K in keyof A[K][K][K]]: { [K in keyof ???[K][K][K]]: { [K in keyof ???[K][K]]: { [K in keyof ???[K]]: { [K in keyof ???]: { [K in ???]: ??? } } } } } } } } }
+>Compute : { [K in keyof A]: { [K in keyof A[K]]: { [K in keyof A[K][K]]: { [K in keyof A[K][K][K]]: { [K in keyof ???[K][K][K]]: { [K in keyof ???[K][K]]: { [K in keyof ???[K]]: { [K in keyof ???]: { [K in ???]: ???; }; }; }; }; }; }; }; }; }
 
 type EqualsTest<T> = <A>() => A extends T ? 1 : 0;
 >EqualsTest : EqualsTest<T>

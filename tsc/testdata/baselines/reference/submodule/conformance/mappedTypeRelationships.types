@@ -511,115 +511,115 @@ function f62<U>(x: Identity<U>, y: Readonly<U>) {
 }
 
 function f70<T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: T[P] }) {
->f70 : <T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: T[P] }) => void
->x : { [P in keyof T]: T[P] }
->y : { [P in keyof T]: T[P] }
+>f70 : <T>(x: { [P in keyof T]: T[P]; }, y: { [P in keyof T]: T[P]; }) => void
+>x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof T]: T[P]; }
 
     x = y;
->x = y : { [P in keyof T]: T[P] }
->x : { [P in keyof T]: T[P] }
->y : { [P in keyof T]: T[P] }
+>x = y : { [P in keyof T]: T[P]; }
+>x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof T]: T[P]; }
 
     y = x;
->y = x : { [P in keyof T]: T[P] }
->y : { [P in keyof T]: T[P] }
->x : { [P in keyof T]: T[P] }
+>y = x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof T]: T[P]; }
+>x : { [P in keyof T]: T[P]; }
 }
 
 function f71<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: U[P] }) {
->f71 : <T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: U[P] }) => void
->x : { [P in keyof T]: T[P] }
->y : { [P in keyof T]: U[P] }
+>f71 : <T, U extends T>(x: { [P in keyof T]: T[P]; }, y: { [P in keyof T]: U[P]; }) => void
+>x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof T]: U[P]; }
 
     x = y;
->x = y : { [P in keyof T]: U[P] }
->x : { [P in keyof T]: T[P] }
->y : { [P in keyof T]: U[P] }
+>x = y : { [P in keyof T]: U[P]; }
+>x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof T]: U[P]; }
 
     y = x;  // Error
->y = x : { [P in keyof T]: T[P] }
->y : { [P in keyof T]: U[P] }
->x : { [P in keyof T]: T[P] }
+>y = x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof T]: U[P]; }
+>x : { [P in keyof T]: T[P]; }
 }
 
 function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
->f72 : <T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) => void
->x : { [P in keyof T]: T[P] }
->y : { [P in keyof U]: U[P] }
+>f72 : <T, U extends T>(x: { [P in keyof T]: T[P]; }, y: { [P in keyof U]: U[P]; }) => void
+>x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof U]: U[P]; }
 
     x = y;
->x = y : { [P in keyof U]: U[P] }
->x : { [P in keyof T]: T[P] }
->y : { [P in keyof U]: U[P] }
+>x = y : { [P in keyof U]: U[P]; }
+>x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof U]: U[P]; }
 
     y = x;  // Error
->y = x : { [P in keyof T]: T[P] }
->y : { [P in keyof U]: U[P] }
->x : { [P in keyof T]: T[P] }
+>y = x : { [P in keyof T]: T[P]; }
+>y : { [P in keyof U]: U[P]; }
+>x : { [P in keyof T]: T[P]; }
 }
 
 function f73<T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T[P] }) {
->f73 : <T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T[P] }) => void
->x : { [P in K]: T[P] }
->y : { [P in keyof T]: T[P] }
+>f73 : <T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in keyof T]: T[P]; }) => void
+>x : { [P in K]: T[P]; }
+>y : { [P in keyof T]: T[P]; }
 
     x = y;
->x = y : { [P in keyof T]: T[P] }
->x : { [P in K]: T[P] }
->y : { [P in keyof T]: T[P] }
+>x = y : { [P in keyof T]: T[P]; }
+>x : { [P in K]: T[P]; }
+>y : { [P in keyof T]: T[P]; }
 
     y = x;  // Error
->y = x : { [P in K]: T[P] }
->y : { [P in keyof T]: T[P] }
->x : { [P in K]: T[P] }
+>y = x : { [P in K]: T[P]; }
+>y : { [P in keyof T]: T[P]; }
+>x : { [P in K]: T[P]; }
 }
 
 function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) {
->f74 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) => void
->x : { [P in K]: T[P] }
->y : { [P in keyof U]: U[P] }
+>f74 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in keyof U]: U[P]; }) => void
+>x : { [P in K]: T[P]; }
+>y : { [P in keyof U]: U[P]; }
 
     x = y;
->x = y : { [P in keyof U]: U[P] }
->x : { [P in K]: T[P] }
->y : { [P in keyof U]: U[P] }
+>x = y : { [P in keyof U]: U[P]; }
+>x : { [P in K]: T[P]; }
+>y : { [P in keyof U]: U[P]; }
 
     y = x;  // Error
->y = x : { [P in K]: T[P] }
->y : { [P in keyof U]: U[P] }
->x : { [P in K]: T[P] }
+>y = x : { [P in K]: T[P]; }
+>y : { [P in keyof U]: U[P]; }
+>x : { [P in K]: T[P]; }
 }
 
 function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) {
->f75 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) => void
->x : { [P in K]: T[P] }
->y : { [P in keyof T]: U[P] }
+>f75 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in keyof T]: U[P]; }) => void
+>x : { [P in K]: T[P]; }
+>y : { [P in keyof T]: U[P]; }
 
     x = y;
->x = y : { [P in keyof T]: U[P] }
->x : { [P in K]: T[P] }
->y : { [P in keyof T]: U[P] }
+>x = y : { [P in keyof T]: U[P]; }
+>x : { [P in K]: T[P]; }
+>y : { [P in keyof T]: U[P]; }
 
     y = x;  // Error
->y = x : { [P in K]: T[P] }
->y : { [P in keyof T]: U[P] }
->x : { [P in K]: T[P] }
+>y = x : { [P in K]: T[P]; }
+>y : { [P in keyof T]: U[P]; }
+>x : { [P in K]: T[P]; }
 }
 
 function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) {
->f76 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) => void
->x : { [P in K]: T[P] }
->y : { [P in K]: U[P] }
+>f76 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in K]: U[P]; }) => void
+>x : { [P in K]: T[P]; }
+>y : { [P in K]: U[P]; }
 
     x = y;
->x = y : { [P in K]: U[P] }
->x : { [P in K]: T[P] }
->y : { [P in K]: U[P] }
+>x = y : { [P in K]: U[P]; }
+>x : { [P in K]: T[P]; }
+>y : { [P in K]: U[P]; }
 
     y = x;  // Error
->y = x : { [P in K]: T[P] }
->y : { [P in K]: U[P] }
->x : { [P in K]: T[P] }
+>y = x : { [P in K]: T[P]; }
+>y : { [P in K]: U[P]; }
+>x : { [P in K]: T[P]; }
 }
 
 function f80<T>(t: T): Partial<T> {

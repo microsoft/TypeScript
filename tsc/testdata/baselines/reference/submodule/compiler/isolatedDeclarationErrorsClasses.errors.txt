@@ -8,9 +8,10 @@ isolatedDeclarationErrorsClasses.ts(48,9): error TS7032: Property '[noParamAnnot
 isolatedDeclarationErrorsClasses.ts(48,39): error TS7006: Parameter 'value' implicitly has an 'any' type.
 isolatedDeclarationErrorsClasses.ts(50,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== isolatedDeclarationErrorsClasses.ts (10 errors) ====
+==== isolatedDeclarationErrorsClasses.ts (11 errors) ====
     export class Cls {
     
         field = 1 + 1;
@@ -87,4 +88,6 @@ isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property nam
         ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
         [noAnnotationLiteralName]();
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
     }

@@ -22,7 +22,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >k : keyof T
 
     var mapped_generic: {[P in keyof T]: T[P]};
->mapped_generic : { [P in keyof T]: T[P] }
+>mapped_generic : { [P in keyof T]: T[P]; }
 
     var mapped: {[P in "b"]: T[P]};
 >mapped : { b: T["b"]; }
@@ -94,9 +94,9 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >k : keyof T
 
     var o6 = { ...mapped_generic }; // OK, generic mapped object type
->o6 : { [P in keyof T]: T[P] }
->{ ...mapped_generic } : { [P in keyof T]: T[P] }
->mapped_generic : { [P in keyof T]: T[P] }
+>o6 : { [P in keyof T]: T[P]; }
+>{ ...mapped_generic } : { [P in keyof T]: T[P]; }
+>mapped_generic : { [P in keyof T]: T[P]; }
 
     var o7 = { ...mapped };  // OK, non-generic mapped type
 >o7 : { b: T["b"]; }

@@ -7,7 +7,7 @@ interface F<P> {
 >children : boolean
 
     propTypes: { [K in keyof P]: null extends P ? K : K };
->propTypes : { [K in keyof P]: null extends P ? K : K }
+>propTypes : { [K in keyof P]: null extends P ? K : K; }
 }
 declare function g(C: F<unknown>): string;
 >g : (C: F<unknown>) => string

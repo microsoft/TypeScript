@@ -11,14 +11,18 @@ let x: Observable;
 >Observable : Symbol(Observable, Decl(main.ts, 2, 8))
 
 x.foo().x;
+>x.foo().x : Symbol(x, Decl(O.d.ts, 5, 15))
+>x.foo : Symbol(foo, Decl(O.d.ts, 11, 30))
 >x : Symbol(x, Decl(main.ts, 3, 3))
+>foo : Symbol(foo, Decl(O.d.ts, 11, 30))
+>x : Symbol(x, Decl(O.d.ts, 5, 15))
 
 === O.d.ts ===
 declare module "Observable" {
->"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0))
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28))
 
     class Observable {}
->Observable : Symbol(Observable, Decl(O.d.ts, 0, 29))
+>Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25))
 }
 
 declare module "M" {
@@ -36,10 +40,10 @@ declare module "Map" {
 >Cls : Symbol(Cls, Decl(O.d.ts, 9, 12))
 
     module "Observable" {
->"Observable" : Symbol("Observable", Decl(O.d.ts, 9, 28), Decl(O.d.ts, 0, 0))
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28))
 
         interface Observable {
->Observable : Symbol(Observable, Decl(O.d.ts, 10, 25), Decl(O.d.ts, 0, 29))
+>Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25))
 
             foo(): Cls;
 >foo : Symbol(foo, Decl(O.d.ts, 11, 30))

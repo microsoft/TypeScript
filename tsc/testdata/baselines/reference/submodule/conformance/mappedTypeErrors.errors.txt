@@ -11,10 +11,10 @@ mappedTypeErrors.ts(33,24): error TS2344: Type 'T' does not satisfy the constrai
 mappedTypeErrors.ts(37,24): error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
   Type 'string | number' is not assignable to type 'keyof Shape'.
     Type 'string' is not assignable to type 'keyof Shape'.
-mappedTypeErrors.ts(59,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]?: T[P] | undefined }'.
-mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]: T[P] }'.
-mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined }'.
-mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]: T[P][] }'.
+mappedTypeErrors.ts(59,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
+mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
+mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
+mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
 mappedTypeErrors.ts(75,45): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
 mappedTypeErrors.ts(77,59): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
 mappedTypeErrors.ts(83,58): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
@@ -115,15 +115,15 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
         var x: { [P in keyof T]: T[P] };
         var x: { [P in keyof T]?: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]?: T[P] | undefined }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
 !!! related TS6203 mappedTypeErrors.ts:58:9: 'x' was also declared here.
         var x: { readonly [P in keyof T]: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]: T[P] }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
 !!! related TS6203 mappedTypeErrors.ts:58:9: 'x' was also declared here.
         var x: { readonly [P in keyof T]?: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
 !!! related TS6203 mappedTypeErrors.ts:58:9: 'x' was also declared here.
     }
     
@@ -131,7 +131,7 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
         var x: { [P in keyof T]: T[P] };
         var x: { [P in keyof T]: T[P][] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P] }', but here has type '{ [P in keyof T]: T[P][] }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
 !!! related TS6203 mappedTypeErrors.ts:65:9: 'x' was also declared here.
     }
     

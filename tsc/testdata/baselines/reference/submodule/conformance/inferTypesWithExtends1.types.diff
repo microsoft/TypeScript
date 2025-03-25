@@ -1,27 +1,6 @@
 --- old.inferTypesWithExtends1.types
 +++ new.inferTypesWithExtends1.types
-@@= skipped -220, +220 lines =@@
- >b : "b"
- 
- type X9_T2 = X9<{ a: 1, b: 2 }>; // ["number", 1 | 2]
-->X9_T2 : ["number", 1 | 2]
-+>X9_T2 : ["string", 1 | 2]
- >a : 1
- >b : 2
- 
- type X9_T3 = X9<{ a: object, b: object }>; // never
-->X9_T3 : never
-+>X9_T3 : ["string", object]
- >a : object
- >b : object
- 
- type X9_T4 = X9<{ a: "a", b: 1 }>; // never
-->X9_T4 : never
-+>X9_T4 : ["string", "a" | 1]
- >a : "a"
- >b : 1
- 
-@@= skipped -89, +89 lines =@@
+@@= skipped -309, +309 lines =@@
  >IfEquals : IfEquals<X, Y, A, B>
  
  declare const x1: <T>() => (T extends infer U extends number ? 1 : 0);

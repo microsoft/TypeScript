@@ -16,4 +16,5 @@ signatureLengthMismatchInOverload.ts(5,3): error TS2769: No overload matches thi
 !!! error TS2769:     Argument of type '(arg: number, arg2: number) => void' is not assignable to parameter of type '(arg: number) => void'.
 !!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
 !!! related TS2771 signatureLengthMismatchInOverload.ts:2:10: The last overload is declared here.
+!!! related TS2793 signatureLengthMismatchInOverload.ts:3:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     

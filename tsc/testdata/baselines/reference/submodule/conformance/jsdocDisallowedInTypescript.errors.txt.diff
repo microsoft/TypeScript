@@ -17,6 +17,7 @@
 -jsdocDisallowedInTypescript.ts(20,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 -jsdocDisallowedInTypescript.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 -jsdocDisallowedInTypescript.ts(22,17): error TS8020: JSDoc types can only be used inside documentation comments.
++jsdocDisallowedInTypescript.ts(7,10): error TS7010: 'hof', which lacks return-type annotation, implicitly has an 'any' return type.
 +jsdocDisallowedInTypescript.ts(7,20): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +jsdocDisallowedInTypescript.ts(7,28): error TS1005: ',' expected.
 +jsdocDisallowedInTypescript.ts(7,32): error TS1109: Expression expected.
@@ -25,6 +26,7 @@
 +jsdocDisallowedInTypescript.ts(7,42): error TS2693: 'string' only refers to a type, but is being used as a value here.
 +jsdocDisallowedInTypescript.ts(7,48): error TS1005: ';' expected.
 +jsdocDisallowedInTypescript.ts(7,49): error TS1128: Declaration or statement expected.
++jsdocDisallowedInTypescript.ts(10,10): error TS7010: 'hof2', which lacks return-type annotation, implicitly has an 'any' return type.
 +jsdocDisallowedInTypescript.ts(10,18): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +jsdocDisallowedInTypescript.ts(10,26): error TS1005: ',' expected.
 +jsdocDisallowedInTypescript.ts(10,27): error TS2730: An arrow function cannot have a 'this' parameter.
@@ -48,7 +50,7 @@
  
  
 -==== jsdocDisallowedInTypescript.ts (16 errors) ====
-+==== jsdocDisallowedInTypescript.ts (28 errors) ====
++==== jsdocDisallowedInTypescript.ts (30 errors) ====
      // grammar error from checker
      var ara: Array.<number> = [1,2,3];
 -                  ~
@@ -64,6 +66,8 @@
      function hof(ctor: function(new: number, string)) {
 -                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS8020: JSDoc types can only be used inside documentation comments.
++             ~~~
++!!! error TS7010: 'hof', which lacks return-type annotation, implicitly has an 'any' return type.
 +                       ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
@@ -86,6 +90,8 @@
      function hof2(f: function(this: number, string): string) {
 -                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS8020: JSDoc types can only be used inside documentation comments.
++             ~~~~
++!!! error TS7010: 'hof2', which lacks return-type annotation, implicitly has an 'any' return type.
 +                     ~~~~~~~~
 +!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.

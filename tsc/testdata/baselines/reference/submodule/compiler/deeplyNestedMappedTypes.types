@@ -341,7 +341,7 @@ export interface TObject<T extends TProperties = TProperties> extends TSchema {
 >Kind : unique symbol
 
     static: PropertiesReduce<T, this['params']>
->static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]> }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]> }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]> }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]> }, Exclude<keyof T, OptionalPropertyKeys<T> | ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T>>>>>
+>static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, OptionalPropertyKeys<T> | ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T>>>>>
 
     type: 'object'
 >type : "object"

@@ -786,7 +786,9 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 				}
 			}
 			symbol := b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsValueModule, ast.SymbolFlagsValueModuleExcludes)
-			b.file.PatternAmbientModules = append(b.file.PatternAmbientModules, ast.PatternAmbientModule{Pattern: pattern, Symbol: symbol})
+			if pattern.StarIndex >= 0 {
+				b.file.PatternAmbientModules = append(b.file.PatternAmbientModules, ast.PatternAmbientModule{Pattern: pattern, Symbol: symbol})
+			}
 		}
 	} else {
 		state := b.declareModuleSymbol(node)

@@ -1,26 +1,6 @@
 --- old.mappedToToIndexSignatureInference.types
 +++ new.mappedToToIndexSignatureInference.types
-@@= skipped -1, +1 lines =@@
- 
- === mappedToToIndexSignatureInference.ts ===
- declare const fn: <K extends string, V>(object: { [Key in K]: V }) => object;
-->fn : <K extends string, V>(object: { [Key in K]: V; }) => object
-->object : { [Key in K]: V; }
-+>fn : <K extends string, V>(object: { [Key in K]: V }) => object
-+>object : { [Key in K]: V }
- 
- declare const a: { [index: string]: number };
- >a : { [index: string]: number; }
-@@= skipped -9, +9 lines =@@
- 
- fn(a);
- >fn(a) : object
-->fn : <K extends string, V>(object: { [Key in K]: V; }) => object
-+>fn : <K extends string, V>(object: { [Key in K]: V }) => object
- >a : { [index: string]: number; }
- 
- // Repro from #30218
-@@= skipped -18, +18 lines =@@
+@@= skipped -28, +28 lines =@@
  
  let x: E[] = enumValues(E);
  >x : E[]

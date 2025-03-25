@@ -9,33 +9,3 @@
  >arrayish : any[]
  >objectish : Objectish<any>
  >indirectArrayish : Objectish<any>
-@@= skipped -25, +25 lines =@@
- }
- 
- declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
-->stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
-+>stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string }
- >arr : T
- 
- let abc: any[] = stringifyArray(void 0 as any);
- >abc : any[]
- >stringifyArray(void 0 as any) : string[]
-->stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
-+>stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string }
- >void 0 as any : any
- >void 0 : undefined
- >0 : 0
- 
- declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
-->stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
-+>stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string }
- >arr : T
- 
- let def: [any, any] = stringifyPair(void 0 as any);
- >def : [any, any]
- >stringifyPair(void 0 as any) : string[]
-->stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
-+>stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string }
- >void 0 as any : any
- >void 0 : undefined
- >0 : 0

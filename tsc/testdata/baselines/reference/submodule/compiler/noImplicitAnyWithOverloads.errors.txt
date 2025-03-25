@@ -1,8 +1,10 @@
 noImplicitAnyWithOverloads.ts(2,5): error TS7008: Member 'foo' implicitly has an 'any' type.
+noImplicitAnyWithOverloads.ts(6,10): error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
+noImplicitAnyWithOverloads.ts(7,10): error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
 noImplicitAnyWithOverloads.ts(8,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
 
 
-==== noImplicitAnyWithOverloads.ts (2 errors) ====
+==== noImplicitAnyWithOverloads.ts (4 errors) ====
     interface A {
         foo;
         ~~~
@@ -11,7 +13,11 @@ noImplicitAnyWithOverloads.ts(8,16): error TS7006: Parameter 'a' implicitly has 
     interface B { }
     
     function callb(lam: (l: A) => void);
+             ~~~~~
+!!! error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
     function callb(lam: (n: B) => void);
+             ~~~~~
+!!! error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
     function callb(a) { }
                    ~
 !!! error TS7006: Parameter 'a' implicitly has an 'any' type.

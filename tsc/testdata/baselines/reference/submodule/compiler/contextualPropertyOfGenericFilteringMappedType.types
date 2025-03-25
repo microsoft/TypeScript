@@ -2,13 +2,13 @@
 
 === contextualPropertyOfGenericFilteringMappedType.ts ===
 declare function f1<T extends object>(
->f1 : <T extends object>(data: T, handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void }) => void
+>f1 : <T extends object>(data: T, handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void; }) => void
 
   data: T,
 >data : T
 
   handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void },
->handlers : { [P in keyof T as P]: (value: T[P], prop: P) => void }
+>handlers : { [P in keyof T as P]: (value: T[P], prop: P) => void; }
 >value : T[P]
 >prop : P
 
@@ -16,7 +16,7 @@ declare function f1<T extends object>(
 
 f1(
 >f1(  {    foo: 0,    bar: "",  },  {    foo: (value, key) => {},    bar: (value, key) => {},  },) : void
->f1 : <T extends object>(data: T, handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void }) => void
+>f1 : <T extends object>(data: T, handlers: { [P in keyof T as P]: (value: T[P], prop: P) => void; }) => void
   {
 >{    foo: 0,    bar: "",  } : { foo: number; bar: string; }
 
@@ -48,13 +48,13 @@ f1(
 );
 
 declare function f2<T extends object>(
->f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void }) => void
+>f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }) => void
 
   data: T,
 >data : T
 
   handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void },
->handlers : { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void }
+>handlers : { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }
 >value : T[P]
 >prop : P
 
@@ -62,7 +62,7 @@ declare function f2<T extends object>(
 
 f2(
 >f2(  {    foo: 0,    bar: "",  },  {    bar: (value, key) => {},  },) : void
->f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void }) => void
+>f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }) => void
   {
 >{    foo: 0,    bar: "",  } : { foo: number; bar: string; }
 
@@ -89,7 +89,7 @@ f2(
 
 f2(
 >f2(  {    foo: 0,    bar: "",  },  {    foo: (value, key) => {      // implicit `any`s    },  },) : void
->f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void }) => void
+>f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }) => void
   {
 >{    foo: 0,    bar: "",  } : { foo: number; bar: string; }
 

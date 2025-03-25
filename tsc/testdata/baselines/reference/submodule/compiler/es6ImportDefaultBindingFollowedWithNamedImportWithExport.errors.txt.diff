@@ -4,25 +4,29 @@
  client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
 +client.ts(1,41): error TS2307: Cannot find module 'server' or its corresponding type declarations.
  client.ts(2,1): error TS1191: An import declaration cannot have modifiers.
--client.ts(3,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(2,43): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ client.ts(3,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(4,1): error TS1191: An import declaration cannot have modifiers.
--client.ts(5,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(4,48): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ client.ts(5,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(6,1): error TS1191: An import declaration cannot have modifiers.
--client.ts(7,12): error TS2323: Cannot redeclare exported variable 'x1'.
--client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(6,51): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ client.ts(7,12): error TS2323: Cannot redeclare exported variable 'x1'.
+ client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
--client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(9,50): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
  client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
--client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
 +client.ts(11,45): error TS2307: Cannot find module 'server' or its corresponding type declarations.
+ client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
  
  
- ==== server.ts (0 errors) ====
-@@= skipped -21, +21 lines =@@
+@@= skipped -17, +23 lines =@@
+     export var m = a;
+     export default {};
+     
+-==== client.ts (12 errors) ====
++==== client.ts (18 errors) ====
      export import defaultBinding1, { } from "server";
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
@@ -34,41 +38,38 @@
 +                                              ~~~~~~~~
 +!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
      export var x1: number = a;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
      export import defaultBinding3, { a as b } from "server";
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
 +                                                   ~~~~~~~~
 +!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
      export var x1: number = b;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
      export import defaultBinding4, { x, a as y } from "server";
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
 +                                                      ~~~~~~~~
 +!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
      export var x1: number = x;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     export var x1: number = y;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
+@@= skipped -28, +36 lines =@@
      export import defaultBinding5, { x as z,  } from "server";
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
 +                                                     ~~~~~~~~
 +!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
      export var x1: number = z;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.
      export import defaultBinding6, { m,  } from "server";
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.
 +                                                ~~~~~~~~
 +!!! error TS2307: Cannot find module 'server' or its corresponding type declarations.
      export var x1: number = m;
--               ~~
--!!! error TS2323: Cannot redeclare exported variable 'x1'.
-     
+                ~~
+ !!! error TS2323: Cannot redeclare exported variable 'x1'.

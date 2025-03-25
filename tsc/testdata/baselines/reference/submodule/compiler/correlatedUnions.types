@@ -724,7 +724,7 @@ declare function bar(t: string): void;
 // Repro from #48246
 
 declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
->makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item }
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
 
     ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
 >ops : T
@@ -744,7 +744,7 @@ const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
 const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
 >BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
 >makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
->makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item }
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
 >ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
 >'name' : "name"
 

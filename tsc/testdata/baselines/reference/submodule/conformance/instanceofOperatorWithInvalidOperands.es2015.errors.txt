@@ -7,10 +7,24 @@ instanceofOperatorWithInvalidOperands.es2015.ts(19,11): error TS2358: The left-h
 instanceofOperatorWithInvalidOperands.es2015.ts(20,11): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofOperatorWithInvalidOperands.es2015.ts(21,11): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofOperatorWithInvalidOperands.es2015.ts(22,11): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+instanceofOperatorWithInvalidOperands.es2015.ts(34,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(35,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(36,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(37,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(38,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(39,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(40,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(41,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(42,24): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(43,25): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
 instanceofOperatorWithInvalidOperands.es2015.ts(46,11): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+instanceofOperatorWithInvalidOperands.es2015.ts(46,25): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithInvalidOperands.es2015.ts(51,12): error TS2860: The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method.
+  Property 'x' is missing in type '{ y: string; }' but required in type '{ x: number; }'.
+instanceofOperatorWithInvalidOperands.es2015.ts(55,25): error TS2861: An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression.
 
 
-==== instanceofOperatorWithInvalidOperands.es2015.ts (10 errors) ====
+==== instanceofOperatorWithInvalidOperands.es2015.ts (23 errors) ====
     class C {
         foo() { }
     }
@@ -63,26 +77,54 @@ instanceofOperatorWithInvalidOperands.es2015.ts(46,11): error TS2358: The left-h
     var o3: C;
     
     var rb1 = x instanceof b1;
+                           ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb2 = x instanceof b2;
+                           ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb3 = x instanceof b3;
+                           ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb4 = x instanceof b4;
+                           ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb5 = x instanceof 0;
+                           ~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb6 = x instanceof true;
+                           ~~~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb7 = x instanceof '';
+                           ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb8 = x instanceof o1;
+                           ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb9 = x instanceof o2;
+                           ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     var rb10 = x instanceof o3;
+                            ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     
     // both operands are invalid
     var rc1 = '' instanceof {};
               ~~
 !!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+                            ~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     
     // @@hasInstance restricts LHS
     var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
     var o5: { y: string };
     var ra10 = o5 instanceof o4;
+               ~~
+!!! error TS2860: The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method.
+!!! error TS2860:   Property 'x' is missing in type '{ y: string; }' but required in type '{ x: number; }'.
+!!! related TS2728 instanceofOperatorWithInvalidOperands.es2015.ts:49:40: 'x' is declared here.
     
     // invalid @@hasInstance method return type on RHS
     var o6: {[Symbol.hasInstance](value: unknown): number;};
     var rb11 = x instanceof o6;
+                            ~~
+!!! error TS2861: An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression.

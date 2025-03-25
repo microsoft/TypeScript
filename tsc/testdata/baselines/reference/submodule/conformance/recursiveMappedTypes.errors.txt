@@ -6,7 +6,7 @@ recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly re
 recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
 recursiveMappedTypes.ts(20,19): error TS2589: Type instantiation is excessively deep and possibly infinite.
 recursiveMappedTypes.ts(73,5): error TS2502: 'each' is referenced directly or indirectly in its own type annotation.
-recursiveMappedTypes.ts(73,13): error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P }'.
+recursiveMappedTypes.ts(73,13): error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
 
 
 ==== recursiveMappedTypes.ts (9 errors) ====
@@ -101,7 +101,7 @@ recursiveMappedTypes.ts(73,13): error TS2615: Type of property 'each' circularly
         ~~~~~~
 !!! error TS2502: 'each' is referenced directly or indirectly in its own type annotation.
                 ~~~~~~~~~~~~~~~~~
-!!! error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P }'.
+!!! error TS2615: Type of property 'each' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
     }
     
     type ListChild = Child<ListWidget>

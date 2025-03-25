@@ -1,15 +1,6 @@
 --- old.restInvalidArgumentType.types
 +++ new.restInvalidArgumentType.types
-@@= skipped -21, +21 lines =@@
- >k : keyof T
- 
-     var mapped_generic: {[P in keyof T]: T[P]};
-->mapped_generic : { [P in keyof T]: T[P]; }
-+>mapped_generic : { [P in keyof T]: T[P] }
- 
-     var mapped: {[P in "b"]: T[P]};
- >mapped : { b: T["b"]; }
-@@= skipped -50, +50 lines =@@
+@@= skipped -71, +71 lines =@@
  >p1 : T
  
      var {...r2} = p2;   // OK
@@ -18,14 +9,3 @@
  >p2 : T[]
  
      var {...r3} = t;   // Error, generic type paramter
-@@= skipped -16, +16 lines =@@
- >k : string | number | symbol
- 
-     var {...r6} = mapped_generic; // Error, generic mapped object type
-->r6 : { [P in keyof T]: T[P]; }
-->mapped_generic : { [P in keyof T]: T[P]; }
-+>r6 : { [P in keyof T]: T[P] }
-+>mapped_generic : { [P in keyof T]: T[P] }
- 
-     var {...r7} = mapped;  // OK, non-generic mapped type
- >r7 : { b: T["b"]; }

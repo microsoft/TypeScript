@@ -1,14 +1,17 @@
 --- old.privacyTopLevelAmbientExternalModuleImportWithoutExport.errors.txt
 +++ new.privacyTopLevelAmbientExternalModuleImportWithoutExport.errors.txt
 @@= skipped -0, +0 lines =@@
--privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(15,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
--privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(17,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
 +privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(6,39): error TS2307: Cannot find module 'privacyTopLevelAmbientExternalModuleImportWithoutExport_require' or its corresponding type declarations.
 +privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(7,39): error TS2307: Cannot find module 'privacyTopLevelAmbientExternalModuleImportWithoutExport_require1' or its corresponding type declarations.
+ privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(15,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
+ privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(17,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
  
  
- ==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (2 errors) ====
-@@= skipped -8, +8 lines =@@
+-==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (2 errors) ====
++==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (4 errors) ====
+     ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
+     ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
+     // Privacy errors - importing private elements
      import im_private_mi_private = require("m");
      import im_private_mu_private = require("m2");
      import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
@@ -20,16 +23,3 @@
      
      // Usage of privacy error imports
      var privateUse_im_private_mi_private = new im_private_mi_private.c_private();
-@@= skipped -9, +13 lines =@@
-     export var publicUse_im_private_mu_private = new im_private_mu_private.c_private();
-     var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
-     export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
--               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
-     var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
-     export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
--               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
-     
- ==== privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts (0 errors) ====
-     // Public elements

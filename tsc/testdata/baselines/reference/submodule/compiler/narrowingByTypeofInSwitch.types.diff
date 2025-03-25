@@ -192,16 +192,7 @@
  >x : unknown
  
          case 'number': assertNumber(x); return;
-@@= skipped -48, +48 lines =@@
- }
- 
- function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
-->keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
-+>keyofNarrowing : <S extends { [K in keyof S]: string }>(k: keyof S) => void
- >k : keyof S
- 
-     function assertKeyofS(k1: keyof S) { }
-@@= skipped -8, +8 lines =@@
+@@= skipped -56, +56 lines =@@
  >k1 : keyof S
  
      switch (typeof k) {
@@ -255,16 +246,7 @@
  >x : string | number | boolean | object
  
          case `number`:
-@@= skipped -42, +42 lines =@@
- }
- 
- function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
-->keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
-+>keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string }>(k: keyof S) => void
- >k : keyof S
- 
-     function assertKeyofS(k1: keyof S) { }
-@@= skipped -8, +8 lines =@@
+@@= skipped -50, +50 lines =@@
  >k1 : keyof S
  
      switch (typeof k) {

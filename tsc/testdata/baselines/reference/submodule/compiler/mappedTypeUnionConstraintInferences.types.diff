@@ -5,7 +5,7 @@
  
  export function doSomething_Actual<T extends {
 ->doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
-+>doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
++>doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
  
      prop: string;
  >prop : string
@@ -14,16 +14,16 @@
  
      const x: { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; } = null as any;
 ->x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
-+>x : { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
++>x : { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
  >null as any : any
  
      return x;
 ->x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
-+>x : { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
++>x : { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
  }
  export declare function doSomething_Expected<T extends {
 ->doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
-+>doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
++>doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
  
      prop: string;
  >prop : string
@@ -32,7 +32,7 @@
  >a : { prop?: string; }
  >doSomething_Actual({ prop: "test" }) : { prop?: string; }
 ->doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
-+>doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
++>doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
  >{ prop: "test" } : { prop: string; }
  >prop : string
  >"test" : "test"
@@ -41,7 +41,7 @@
  >b : { prop?: string; }
  >doSomething_Expected({ prop: "test" }) : { prop?: string; }
 ->doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
-+>doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
++>doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
  >{ prop: "test" } : { prop: string; }
  >prop : string
  >"test" : "test"

@@ -25,30 +25,7 @@
  >a : string
  >b : number
  
-@@= skipped -126, +126 lines =@@
- >true : true
- 
- type GetKey<S, V> = keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any };
-->GetKey : keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any; }
-+>GetKey : keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any }
- >true : true
- 
- type GetKeyWithIf<S, V> = keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
-->GetKeyWithIf : keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any; }
-+>GetKeyWithIf : keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any }
- 
- type GetObjWithIf<S, V> = { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
- >GetObjWithIf : GetObjWithIf<S, V>
-@@= skipped -46, +46 lines =@@
- // Repro from #44019
- 
- type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
-->KeysExtendedBy : keyof { [K in keyof T as U extends T[K] ? K : never]: T[K]; }
-+>KeysExtendedBy : keyof { [K in keyof T as U extends T[K] ? K : never]: T[K] }
- 
- interface M {
-     a: boolean;
-@@= skipped -11, +11 lines =@@
+@@= skipped -183, +183 lines =@@
  }
  
  function f(x: KeysExtendedBy<M, number>) {
@@ -66,71 +43,25 @@
  >"a" : "a"
  
  type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
-@@= skipped -12, +12 lines =@@
- // Distributive, will be simplified
- 
- type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
-->TS0 : keyof { [P in keyof T as P]: string; }
-+>TS0 : keyof { [P in keyof T as P]: string }
- 
- type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
-->TS1 : keyof { [P in keyof T as Extract<P, "a" | "b" | "c">]: string; }
-+>TS1 : keyof { [P in keyof T as Extract<P, "a" | "b" | "c">]: string }
- 
- type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
-->TS2 : keyof { [P in keyof T as P & ("a" | "b" | "c")]: string; }
-+>TS2 : keyof { [P in keyof T as P & ("a" | "b" | "c")]: string }
- 
- type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
-->TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string; }
-+>TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string }
+@@= skipped -24, +24 lines =@@
+ >TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string; }
  
  type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
 ->TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
-+>TS4 : keyof { [P in keyof T as NameMap[P & (keyof NameMap)]]: string }
++>TS4 : keyof { [P in keyof T as NameMap[P & (keyof NameMap)]]: string; }
  
  type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
 ->TS5 : keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string; }
-+>TS5 : keyof { [P in keyof T & (keyof NameMap) as NameMap[P]]: string }
++>TS5 : keyof { [P in keyof T & (keyof NameMap) as NameMap[P]]: string; }
  
  type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
-->TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
-+>TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string }
- 
- // Non-distributive, won't be simplified
- 
- type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
-->TN0 : keyof { [P in keyof T as T[P] extends number ? P : never]: string; }
-+>TN0 : keyof { [P in keyof T as T[P] extends number ? P : never]: string }
- 
- type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
-->TN1 : keyof { [P in keyof T as number extends T[P] ? P : never]: string; }
-+>TN1 : keyof { [P in keyof T as number extends T[P] ? P : never]: string }
- 
- type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
-->TN2 : keyof { [P in keyof T as "a" extends P ? "x" : "y"]: string; }
-+>TN2 : keyof { [P in keyof T as "a" extends P ? "x" : "y"]: string }
- 
- type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
-->TN3 : keyof { [P in keyof T as Exclude<Exclude<Exclude<P, "c">, "b">, "a">]: string; }
-+>TN3 : keyof { [P in keyof T as Exclude<Exclude<Exclude<P, "c">, "b">, "a">]: string }
+ >TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
+@@= skipped -23, +23 lines =@@
+ >TN3 : keyof { [P in keyof T as Exclude<Exclude<Exclude<P, "c">, "b">, "a">]: string; }
  
  type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
 ->TN4 : keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string; }
-+>TN4 : keyof { [K in keyof T as K extends U ? T[K] : never extends T[K] ? K : never]: string }
++>TN4 : keyof { [K in keyof T as K extends U ? T[K] : never extends T[K] ? K : never]: string; }
  
  type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
-->TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true; }]: string; }
-+>TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string }
- >true : true
- 
- // repro from https://github.com/microsoft/TypeScript/issues/55129
-@@= skipped -75, +75 lines =@@
-   [Key in T as `${Key['name']}:${Key['color']}`]: unknown
- }; 
- type Result2<T extends {name: string | number; color: string | number }> = keyof {
-->Result2 : keyof { [Key in T as `${Key["name"]}:${Key["color"]}`]: unknown; }
-+>Result2 : keyof { [Key in T as `${Key["name"]}:${Key["color"]}`]: unknown }
- >name : string | number
- >color : string | number
- 
+ >TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true; }]: string; }

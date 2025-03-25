@@ -38,36 +38,36 @@ mappedTypeRelationships.ts(72,5): error TS2322: Type 'Partial<T>' is not assigna
 mappedTypeRelationships.ts(78,5): error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
 mappedTypeRelationships.ts(88,5): error TS2322: Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'.
 mappedTypeRelationships.ts(127,5): error TS2322: Type 'Partial<U>' is not assignable to type 'Identity<U>'.
-mappedTypeRelationships.ts(143,5): error TS2322: Type '{ [P in keyof T]: T[P] }' is not assignable to type '{ [P in keyof T]: U[P] }'.
+mappedTypeRelationships.ts(143,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
     Type 'T' is not assignable to type 'U'.
       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-mappedTypeRelationships.ts(148,5): error TS2322: Type '{ [P in keyof T]: T[P] }' is not assignable to type '{ [P in keyof U]: U[P] }'.
+mappedTypeRelationships.ts(148,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'keyof T'.
     Type 'string | number | symbol' is not assignable to type 'keyof T'.
       Type 'string' is not assignable to type 'keyof T'.
-mappedTypeRelationships.ts(153,5): error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in keyof T]: T[P] }'.
+mappedTypeRelationships.ts(153,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: T[P]; }'.
   Type 'keyof T' is not assignable to type 'K'.
     'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
       Type 'string | number | symbol' is not assignable to type 'K'.
         'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
           Type 'string' is not assignable to type 'K'.
             'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
-mappedTypeRelationships.ts(158,5): error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in keyof U]: U[P] }'.
+mappedTypeRelationships.ts(158,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'K'.
     'keyof U' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
       Type 'string | number | symbol' is not assignable to type 'K'.
         'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
           Type 'string' is not assignable to type 'K'.
             'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
-mappedTypeRelationships.ts(163,5): error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in keyof T]: U[P] }'.
+mappedTypeRelationships.ts(163,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'keyof T' is not assignable to type 'K'.
     'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
       Type 'string | number | symbol' is not assignable to type 'K'.
         'string | number | symbol' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
           Type 'string' is not assignable to type 'K'.
             'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
-mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in K]: U[P] }'.
+mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
     Type 'T' is not assignable to type 'U'.
       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -284,7 +284,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P] }' is no
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [P in keyof T]: T[P] }' is not assignable to type '{ [P in keyof T]: U[P] }'.
+!!! error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
 !!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -295,7 +295,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P] }' is no
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [P in keyof T]: T[P] }' is not assignable to type '{ [P in keyof U]: U[P] }'.
+!!! error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
 !!! error TS2322:   Type 'keyof U' is not assignable to type 'keyof T'.
 !!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T'.
 !!! error TS2322:       Type 'string' is not assignable to type 'keyof T'.
@@ -305,7 +305,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P] }' is no
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in keyof T]: T[P] }'.
+!!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: T[P]; }'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'K'.
 !!! error TS2322:     'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
 !!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'K'.
@@ -318,7 +318,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P] }' is no
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in keyof U]: U[P] }'.
+!!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
 !!! error TS2322:   Type 'keyof U' is not assignable to type 'K'.
 !!! error TS2322:     'keyof U' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
 !!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'K'.
@@ -331,7 +331,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P] }' is no
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in keyof T]: U[P] }'.
+!!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'K'.
 !!! error TS2322:     'keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string | number | symbol'.
 !!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'K'.
@@ -344,7 +344,7 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P] }' is no
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [P in K]: T[P] }' is not assignable to type '{ [P in K]: U[P] }'.
+!!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
 !!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.

@@ -1,26 +1,6 @@
 --- old.circularReferenceInReturnType2.types
 +++ new.circularReferenceInReturnType2.types
-@@= skipped -26, +26 lines =@@
- };
- 
- declare const object: <Source>() => <
-->object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
-+>object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string> }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
- 
-   Fields extends {
-     [Key in keyof Fields]: Field<Source, Key & string>;
-@@= skipped -56, +56 lines =@@
- const A = object<Something>()({
- >A : any
- >object<Something>()({  name: "A",  fields: () => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }),}) : ObjectType<Something>
-->object<Something>() : <Fields extends { [Key in keyof Fields]: Field<Something, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Something>
-->object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
-+>object<Something>() : <Fields extends { [Key in keyof Fields]: Field<Something, Key & string> }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Something>
-+>object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string> }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
- >{  name: "A",  fields: () => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }),} : { name: string; fields: () => any; }
- 
-   name: "A",
-@@= skipped -18, +18 lines =@@
+@@= skipped -100, +100 lines =@@
  >a : Field<Something, "a">
  >field({      type: A,      resolve() {        return {          foo: 100,        };      },    }) : Field<Something, "a">
  >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>

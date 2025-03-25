@@ -769,7 +769,7 @@ function unknownNarrowing(x: unknown) {
 }
 
 function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
->keyofNarrowing : <S extends { [K in keyof S]: string }>(k: keyof S) => void
+>keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
 >k : keyof S
 
     function assertKeyofS(k1: keyof S) { }
@@ -1041,7 +1041,7 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 }
 
 function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
->keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string }>(k: keyof S) => void
+>keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
 >k : keyof S
 
     function assertKeyofS(k1: keyof S) { }

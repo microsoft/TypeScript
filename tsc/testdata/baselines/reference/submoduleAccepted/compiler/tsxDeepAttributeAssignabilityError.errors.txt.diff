@@ -3,26 +3,26 @@
 @@= skipped -0, +0 lines =@@
 -file1.tsx(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
 +error TS2318: Cannot find global type 'Array'.
++error TS2318: Cannot find global type 'Boolean'.
 +error TS2318: Cannot find global type 'Function'.
 +error TS2318: Cannot find global type 'IArguments'.
++error TS2318: Cannot find global type 'Number'.
++error TS2318: Cannot find global type 'Object'.
 +error TS2318: Cannot find global type 'RegExp'.
 +error TS2318: Cannot find global type 'String'.
-+error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +file1.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 +my-component.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
  
  
 -==== my-component.tsx (0 errors) ====
 +!!! error TS2318: Cannot find global type 'Array'.
++!!! error TS2318: Cannot find global type 'Boolean'.
 +!!! error TS2318: Cannot find global type 'Function'.
 +!!! error TS2318: Cannot find global type 'IArguments'.
++!!! error TS2318: Cannot find global type 'Number'.
++!!! error TS2318: Cannot find global type 'Object'.
 +!!! error TS2318: Cannot find global type 'RegExp'.
 +!!! error TS2318: Cannot find global type 'String'.
-+!!! error TS2552: Cannot find name 'Boolean'. Did you mean 'boolean'?
-+!!! error TS2552: Cannot find name 'Number'. Did you mean 'number'?
-+!!! error TS2552: Cannot find name 'Object'. Did you mean 'object'?
 +==== my-component.tsx (1 errors) ====
      import * as React from 'react'
 +                           ~~~~~~~
