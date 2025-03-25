@@ -1,6 +1,5 @@
 variadicTuples1.ts(52,5): error TS2555: Expected at least 3 arguments, but got 2.
 variadicTuples1.ts(53,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-variadicTuples1.ts(61,25): error TS2345: Argument of type '2' is not assignable to parameter of type 'never'.
 variadicTuples1.ts(62,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], number]'.
   Source has 0 element(s) but target requires 1.
 variadicTuples1.ts(131,9): error TS2344: Type 'V' does not satisfy the constraint 'unknown[]'.
@@ -49,7 +48,7 @@ variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignab
     Type 'boolean' is not assignable to type 'number'.
 
 
-==== variadicTuples1.ts (23 errors) ====
+==== variadicTuples1.ts (22 errors) ====
     // Variadics in tuple types
     
     type TV0<T extends unknown[]> = [string, ...T];
@@ -116,8 +115,6 @@ variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignab
         foo3(1, 2);
         foo3(1, 'hello', true, 2);
         foo3(1, ...u, 'hi', 2);
-                            ~
-!!! error TS2345: Argument of type '2' is not assignable to parameter of type 'never'.
         foo3(1);
         ~~~~~~~
 !!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], number]'.

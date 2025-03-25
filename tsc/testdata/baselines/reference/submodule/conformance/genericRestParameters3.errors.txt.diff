@@ -1,18 +1,6 @@
 --- old.genericRestParameters3.errors.txt
 +++ new.genericRestParameters3.errors.txt
-@@= skipped -0, +0 lines =@@
-+genericRestParameters3.ts(13,11): error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+  Type 'boolean' is not assignable to type 'string | number'.
-+genericRestParameters3.ts(14,11): error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+  Type 'boolean' is not assignable to type 'string | number'.
-+genericRestParameters3.ts(15,11): error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+  Type 'boolean' is not assignable to type 'string | number'.
-+genericRestParameters3.ts(16,11): error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+  Type 'boolean' is not assignable to type 'string | number'.
- genericRestParameters3.ts(17,11): error TS2345: Argument of type '[10]' is not assignable to parameter of type '[string] | [number, boolean]'.
-   Type '[10]' is not assignable to type '[string]'.
-     Type 'number' is not assignable to type 'string'.
-@@= skipped -18, +26 lines =@@
+@@= skipped -18, +18 lines =@@
  genericRestParameters3.ts(37,21): error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
    Types of parameters 'cb' and 'args' are incompatible.
      Property '0' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
@@ -26,45 +14,15 @@
 -  Property 'hello' is missing in type '[number, number]' but required in type 'CoolArray<unknown>'.
 -genericRestParameters3.ts(52,5): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'CoolArray<number>'.
 -  Property 'hello' is missing in type 'number[]' but required in type 'CoolArray<number>'.
--genericRestParameters3.ts(59,5): error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
--  Type '["what"]' is not assignable to type '[number, string]'.
--    Source has 1 element(s) but target requires 2.
 +genericRestParameters3.ts(44,32): error TS2741: Property 'hello' is missing in type '[10, 20]' but required in type 'CoolArray<number>'.
 +genericRestParameters3.ts(49,1): error TS2741: Property 'hello' is missing in type '[]' but required in type 'CoolArray<never>'.
 +genericRestParameters3.ts(50,5): error TS2741: Property 'hello' is missing in type '[number]' but required in type 'CoolArray<unknown>'.
 +genericRestParameters3.ts(51,5): error TS2741: Property 'hello' is missing in type '[number, number]' but required in type 'CoolArray<unknown>'.
 +genericRestParameters3.ts(52,5): error TS2741: Property 'hello' is missing in type 'number[]' but required in type 'CoolArray<number>'.
-+genericRestParameters3.ts(59,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
- 
- 
--==== genericRestParameters3.ts (13 errors) ====
-+==== genericRestParameters3.ts (17 errors) ====
-     declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
-     declare let f2: (x: string, y: string) => void;
-     declare let f3: (x: string, y: number, z: boolean) => void;
-@@= skipped -29, +22 lines =@@
-     f1("foo", "abc");
-     f1("foo", 10, true);
-     f1("foo", ...t1);
-+              ~~~~~
-+!!! error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+!!! error TS2345:   Type 'boolean' is not assignable to type 'string | number'.
-     f1("foo", ...t2);
-+              ~~~~~
-+!!! error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+!!! error TS2345:   Type 'boolean' is not assignable to type 'string | number'.
-     f1("foo", ...t3);
-+              ~~~~~
-+!!! error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+!!! error TS2345:   Type 'boolean' is not assignable to type 'string | number'.
-     f1("foo", ...t4);
-+              ~~~~~
-+!!! error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
-+!!! error TS2345:   Type 'boolean' is not assignable to type 'string | number'.
-     f1("foo", 10);  // Error
-               ~~
- !!! error TS2345: Argument of type '[10]' is not assignable to parameter of type '[string] | [number, boolean]'.
-@@= skipped -61, +73 lines =@@
+ genericRestParameters3.ts(59,5): error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
+   Type '["what"]' is not assignable to type '[number, string]'.
+     Source has 1 element(s) but target requires 2.
+@@= skipped -90, +85 lines =@@
      let a = bar(10, 20);
      let b = bar<CoolArray<number>>(10, 20);  // Error
                                     ~~~~~~
@@ -102,14 +60,3 @@
  !!! related TS2728 genericRestParameters3.ts:30:5: 'hello' is declared here.
      
      // Repro from #26491
-@@= skipped -26, +22 lines =@@
-     hmm(1, "s"); // okay, A = [1, "s"]
-     hmm("what"); // no error?  A = [] | [number, string] ?
-         ~~~~~~
--!!! error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
--!!! error TS2345:   Type '["what"]' is not assignable to type '[number, string]'.
--!!! error TS2345:     Source has 1 element(s) but target requires 2.
-+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-     
-     // Repro from #35066
-     

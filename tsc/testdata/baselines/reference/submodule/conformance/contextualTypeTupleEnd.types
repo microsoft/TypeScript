@@ -25,44 +25,44 @@ f1();  // Error
 f1(x => str(x));
 >f1(x => str(x)) : void
 >f1 : (...args: Funcs) => void
->x => str(x) : (x: any) => void
->x : any
+>x => str(x) : (x: string) => void
+>x : string
 >str(x) : void
 >str : (x: string) => void
->x : any
+>x : string
 
 f1(x => num(x), x => str(x));
 >f1(x => num(x), x => str(x)) : void
 >f1 : (...args: Funcs) => void
->x => num(x) : (x: any) => void
->x : any
+>x => num(x) : (x: number) => void
+>x : number
 >num(x) : void
 >num : (x: number) => void
->x : any
->x => str(x) : (x: any) => void
->x : any
+>x : number
+>x => str(x) : (x: string) => void
+>x : string
 >str(x) : void
 >str : (x: string) => void
->x : any
+>x : string
 
 f1(x => num(x), x => num(x), x => str(x));
 >f1(x => num(x), x => num(x), x => str(x)) : void
 >f1 : (...args: Funcs) => void
->x => num(x) : (x: any) => void
->x : any
+>x => num(x) : (x: number) => void
+>x : number
 >num(x) : void
 >num : (x: number) => void
->x : any
->x => num(x) : (x: any) => void
->x : any
+>x : number
+>x => num(x) : (x: number) => void
+>x : number
 >num(x) : void
 >num : (x: number) => void
->x : any
->x => str(x) : (x: any) => void
->x : any
+>x : number
+>x => str(x) : (x: string) => void
+>x : string
 >str(x) : void
 >str : (x: string) => void
->x : any
+>x : string
 
 const a0: Funcs = [];  // Error
 >a0 : Funcs
@@ -180,17 +180,17 @@ example(
 >example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
 
     x => x.foo,  // Error
->x => x.foo : (x: any) => any
->x : any
+>x => x.foo : (x: number) => any
+>x : number
 >x.foo : any
->x : any
+>x : number
 >foo : any
 
     x => x.bar,  // Error
->x => x.bar : (x: any) => any
->x : any
+>x => x.bar : (x: number) => any
+>x : number
 >x.bar : any
->x : any
+>x : number
 >bar : any
 
     x => x.baz,
@@ -213,13 +213,13 @@ declare function test(...args: [...((arg: number) => void)[], (arg: string) => v
 test(a => a, b => b, c => c);
 >test(a => a, b => b, c => c) : void
 >test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
->a => a : (a: any) => any
->a : any
->a : any
->b => b : (b: any) => any
->b : any
->b : any
->c => c : (c: any) => any
->c : any
->c : any
+>a => a : (a: number) => number
+>a : number
+>a : number
+>b => b : (b: number) => number
+>b : number
+>b : number
+>c => c : (c: string) => string
+>c : string
+>c : string
 

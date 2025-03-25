@@ -8797,7 +8797,8 @@ func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signat
 	} else {
 		argCount = len(args)
 	}
-	for i, arg := range args {
+	for i := range argCount {
+		arg := args[i]
 		if !ast.IsOmittedExpression(arg) {
 			paramType := c.getTypeAtPosition(signature, i)
 			argType := c.checkExpressionWithContextualType(arg, paramType, nil /*inferenceContext*/, checkMode)
