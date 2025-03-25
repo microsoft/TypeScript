@@ -304,8 +304,8 @@ func convertJsonOptionOfListType(
 ) ([]any, []*ast.Diagnostic) {
 	var expression *ast.Node
 	var errors []*ast.Diagnostic
-	if _, ok := values.([]any); ok {
-		mappedValues := core.MapIndex(values.([]any), func(v any, index int) any {
+	if values, ok := values.([]any); ok {
+		mappedValues := core.MapIndex(values, func(v any, index int) any {
 			if valueExpression != nil {
 				expression = valueExpression.AsArrayLiteralExpression().Elements.Nodes[index]
 			}
@@ -545,6 +545,8 @@ func convertArrayLiteralExpressionToJson(
 	}
 	// Filter out invalid values
 	if len(elements) == 0 {
+		// Always return an empty array, even if elements is nil.
+		// The parser will produce nil slices instead of allocating empty ones.
 		return []any{}, nil
 	}
 	var errors []*ast.Diagnostic
@@ -909,26 +911,28 @@ func parseConfig(
 				}
 				if propertyName == "include" || propertyName == "exclude" || propertyName == "files" {
 					if rawMap, ok := extendsRaw.(*collections.OrderedMap[string, any]); ok && rawMap.Has(propertyName) {
-						value := core.Map(rawMap.GetOrZero(propertyName).([]any), func(path any) any {
-							if startsWithConfigDirTemplate(path) || tspath.IsRootedDiskPath(path.(string)) {
-								return path.(string)
-							} else {
-								if relativeDifference == "" {
-									t := tspath.ComparePathsOptions{
-										UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
-										CurrentDirectory:          host.GetCurrentDirectory(),
+						if slice, _ := rawMap.GetOrZero(propertyName).([]any); slice != nil {
+							value := core.Map(slice, func(path any) any {
+								if startsWithConfigDirTemplate(path) || tspath.IsRootedDiskPath(path.(string)) {
+									return path.(string)
+								} else {
+									if relativeDifference == "" {
+										t := tspath.ComparePathsOptions{
+											UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
+											CurrentDirectory:          host.GetCurrentDirectory(),
+										}
+										relativeDifference = tspath.ConvertToRelativePath(basePath, t)
 									}
-									relativeDifference = tspath.ConvertToRelativePath(basePath, t)
+									return tspath.CombinePaths(relativeDifference, path.(string))
 								}
-								return tspath.CombinePaths(relativeDifference, path.(string))
+							})
+							if propertyName == "include" {
+								result.include = value
+							} else if propertyName == "exclude" {
+								result.exclude = value
+							} else if propertyName == "files" {
+								result.files = value
 							}
-						})
-						if propertyName == "include" {
-							result.include = value
-						} else if propertyName == "exclude" {
-							result.exclude = value
-						} else if propertyName == "files" {
-							result.files = value
 						}
 					}
 				}
@@ -1028,7 +1032,7 @@ func parseJsonConfigFileContentWorker(
 	}
 	getPropFromRaw := func(prop string, validateElement func(value any) bool, elementTypeName string) propOfRaw {
 		value, exists := rawConfig.Get(prop)
-		if exists {
+		if exists && value != nil {
 			if reflect.TypeOf(value).Kind() == reflect.Slice {
 				result := rawConfig.GetOrZero(prop)
 				if _, ok := result.([]any); ok {
@@ -1075,7 +1079,7 @@ func parseJsonConfigFileContentWorker(
 		outDir := parsedConfig.options.OutDir
 		declarationDir := parsedConfig.options.DeclarationDir
 		if outDir != "" || declarationDir != "" {
-			values := []any{}
+			var values []any
 			if outDir != "" {
 				values = append(values, outDir)
 			}

@@ -495,6 +495,20 @@ var parseJsonConfigFileTests = []struct {
 			allFileList:    map[string]string{"/app.ts": ""},
 		}},
 	},
+	{
+		title:               "handles empty types array",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+					"types": []
+				}
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
 }
 
 var tsconfigWithExtends = `{

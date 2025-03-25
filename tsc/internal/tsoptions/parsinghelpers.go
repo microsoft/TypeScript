@@ -25,7 +25,10 @@ func parseTristate(value any) core.Tristate {
 
 func parseStringArray(value any) []string {
 	if arr, ok := value.([]any); ok {
-		var result []string
+		if arr == nil {
+			return nil
+		}
+		result := make([]string, 0, len(arr))
 		for _, v := range arr {
 			if str, ok := v.(string); ok {
 				result = append(result, str)
@@ -83,41 +86,22 @@ func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {
 	result := collections.NewOrderedMapWithSizeHint[string, any](6)
 	if m, ok := json.(*collections.OrderedMap[string, any]); ok {
 		if v, ok := m.Get("include"); ok {
-			if arr, ok := v.([]string); ok && len(arr) == 0 {
-				result.Set("include", []any{})
-			} else {
-				result.Set("include", v)
-			}
+			result.Set("include", v)
 		}
 		if v, ok := m.Get("exclude"); ok {
-			if arr, ok := v.([]string); ok && len(arr) == 0 {
-				result.Set("exclude", []any{})
-			} else {
-				result.Set("exclude", v)
-			}
+			result.Set("exclude", v)
 		}
 		if v, ok := m.Get("files"); ok {
-			if arr, ok := v.([]string); ok && len(arr) == 0 {
-				result.Set("files", []any{})
-			} else {
-				result.Set("files", v)
-			}
+			result.Set("files", v)
 		}
 		if v, ok := m.Get("references"); ok {
-			if arr, ok := v.([]string); ok && len(arr) == 0 {
-				result.Set("references", []any{})
-			} else {
-				result.Set("references", v)
-			}
+			result.Set("references", v)
 		}
 		if v, ok := m.Get("extends"); ok {
-			if arr, ok := v.([]string); ok && len(arr) == 0 {
-				result.Set("extends", []any{})
-			} else if str, ok := v.(string); ok {
+			if str, ok := v.(string); ok {
 				result.Set("extends", []any{str})
-			} else {
-				result.Set("extends", v)
 			}
+			result.Set("extends", v)
 		}
 		if v, ok := m.Get("compilerOptions"); ok {
 			result.Set("compilerOptions", v)
