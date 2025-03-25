@@ -220,6 +220,34 @@ func TestWritableFS(t *testing.T) {
 	assert.ErrorContains(t, err, `mkdir "foo/bar/baz": path exists but is not a directory`)
 }
 
+func TestWritableFSDelete(t *testing.T) {
+	t.Parallel()
+	fs := FromMap[any](nil, false)
+
+	_ = fs.WriteFile("/foo/bar/file.ts", "remove", false)
+	assert.Assert(t, fs.FileExists("/foo/bar/file.ts"))
+	err := fs.Remove("/foo/bar/file.ts")
+	assert.NilError(t, err)
+	assert.Assert(t, !fs.FileExists("/foo/bar/file.ts"))
+
+	_ = fs.WriteFile("/foo/bar/test/remove2.ts", "remove2", false)
+	assert.Assert(t, fs.DirectoryExists("/foo/bar/test"))
+	err = fs.Remove("/foo/bar/test")
+	assert.NilError(t, err)
+	assert.Assert(t, !fs.FileExists("/foo/bar/test/remove2.ts"))
+	assert.Assert(t, !fs.DirectoryExists("/foo/bar/test"))
+
+	// no errors when removing file/dir that does not exist
+	err = fs.Remove("/foo/bar/test")
+	assert.NilError(t, err)
+	err = fs.Remove("/foo/bar/file.ts")
+	assert.NilError(t, err)
+
+	_ = fs.WriteFile("/foo/barbar", "remove2", false)
+	_ = fs.Remove("/foo/bar")
+	assert.Assert(t, fs.FileExists("/foo/barbar"))
+}
+
 func TestStress(t *testing.T) {
 	t.Parallel()
 
@@ -676,4 +704,50 @@ func TestWritableFSSymlinkChainNotDir(t *testing.T) {
 
 	err := fs.WriteFile("/a/foo/bar/new.ts", "this is new.ts", false)
 	assert.Error(t, err, `mkdir "d": path exists but is not a directory`)
+}
+
+func TestWritableFSSymlinkDelete(t *testing.T) {
+	t.Parallel()
+
+	fs := FromMap(map[string]any{
+		"/some/dir/other.ts": "NOTHING",
+		"/other.ts":          Symlink("/some/dir/other.ts"),
+		"/some/dirlink":      Symlink("/some/dir"),
+		"/brokenlink":        Symlink("/does/not/exist"),
+		"/a":                 Symlink("/b"),
+		"/b":                 Symlink("/c"),
+		"/c":                 Symlink("/d"),
+		"/d/existing.ts":     "hello, world",
+	}, false)
+
+	err := fs.Remove("/a")
+	assert.NilError(t, err)
+	assert.Assert(t, !fs.DirectoryExists("/a"))
+	assert.Assert(t, fs.DirectoryExists("/b"))
+	assert.Assert(t, fs.DirectoryExists("/c"))
+	assert.Assert(t, fs.FileExists("/d/existing.ts"))
+
+	// symlinks should still exist even if underlying file/dir is deleted
+	err = fs.Remove("/d")
+	assert.NilError(t, err)
+	assert.Assert(t, !fs.DirectoryExists("/b"))
+	assert.Assert(t, !fs.DirectoryExists("/c"))
+	assert.Assert(t, !fs.DirectoryExists("/d"))
+	assert.Assert(t, !fs.FileExists("/d/again.ts"))
+	err = fs.WriteFile("/d/again.ts", "d exists again", false)
+	assert.NilError(t, err)
+	assert.Assert(t, fs.DirectoryExists("/b"))
+	assert.Assert(t, fs.DirectoryExists("/c"))
+	content, _ := fs.ReadFile("/b/again.ts")
+	assert.Equal(t, content, "d exists again")
+
+	assert.Assert(t, !fs.FileExists("/brokenlink"))
+	assert.Assert(t, !fs.DirectoryExists("/brokenlink"))
+	err = fs.Remove("/does/not/exist") // should do nothing
+	assert.NilError(t, err)
+	assert.Assert(t, !fs.FileExists("/brokenlink"))
+	assert.Assert(t, !fs.DirectoryExists("/brokenlink"))
+	err = fs.WriteFile("/does/not/exist", "hello, world", false)
+	assert.NilError(t, err)
+	assert.Assert(t, fs.FileExists("/brokenlink"))
 }

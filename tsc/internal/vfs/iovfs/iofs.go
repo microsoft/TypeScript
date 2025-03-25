@@ -19,6 +19,8 @@ type WritableFS interface {
 	fs.FS
 	WriteFile(path string, data []byte, perm fs.FileMode) error
 	MkdirAll(path string, perm fs.FileMode) error
+	// Removes `path` and all its contents. Will return the first error it encounters.
+	Remove(path string) error
 }
 
 // From creates a new FS from an [fs.FS].
@@ -52,6 +54,7 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) vfs.FS {
 
 	var writeFile func(path string, content string, writeByteOrderMark bool) error
 	var mkdirAll func(path string) error
+	var remove func(path string) error
 	if fsys, ok := fsys.(WritableFS); ok {
 		writeFile = func(path string, content string, writeByteOrderMark bool) error {
 			rest, _ := strings.CutPrefix(path, "/")
@@ -64,12 +67,19 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) vfs.FS {
 			rest, _ := strings.CutPrefix(path, "/")
 			return fsys.MkdirAll(rest, 0o777)
 		}
+		remove = func(path string) error {
+			rest, _ := strings.CutPrefix(path, "/")
+			return fsys.Remove(rest)
+		}
 	} else {
 		writeFile = func(string, string, bool) error {
 			panic("writeFile not supported")
 		}
 		mkdirAll = func(string) error {
 			panic("mkdirAll not supported")
+		}
+		remove = func(string) error {
+			panic("remove not supported")
 		}
 	}
 
@@ -92,6 +102,7 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) vfs.FS {
 		realpath:                  realpath,
 		writeFile:                 writeFile,
 		mkdirAll:                  mkdirAll,
+		remove:                    remove,
 	}
 }
 
@@ -102,6 +113,7 @@ type ioFS struct {
 	realpath                  func(path string) (string, error)
 	writeFile                 func(path string, content string, writeByteOrderMark bool) error
 	mkdirAll                  func(path string) error
+	remove                    func(path string) error
 }
 
 var _ vfs.FS = (*ioFS)(nil)
@@ -133,6 +145,11 @@ func (vfs *ioFS) ReadFile(path string) (contents string, ok bool) {
 
 func (vfs *ioFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 	return vfs.common.WalkDir(root, walkFn)
+}
+
+func (vfs *ioFS) Remove(path string) error {
+	_ = internal.RootLength(path) // Assert path is rooted
+	return vfs.remove(path)
 }
 
 func (vfs *ioFS) Realpath(path string) string {

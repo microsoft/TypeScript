@@ -154,6 +154,13 @@ func (vfs *wrappedFS) WriteFile(path string, data string, writeByteOrderMark boo
 	return vfs.fs.WriteFile(path, data, writeByteOrderMark)
 }
 
+func (vfs *wrappedFS) Remove(path string) error {
+	if _, ok := splitPath(path); ok {
+		panic("cannot remove from embedded file system")
+	}
+	return vfs.fs.Remove(path)
+}
+
 type fileInfo struct {
 	mode fs.FileMode
 	name string

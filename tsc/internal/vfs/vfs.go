@@ -18,6 +18,9 @@ type FS interface {
 
 	WriteFile(path string, data string, writeByteOrderMark bool) error
 
+	// Removes `path` and all its contents. Will return the first error it encounters.
+	Remove(path string) error
+
 	// DirectoryExists returns true if the path is a directory.
 	DirectoryExists(path string) bool
 

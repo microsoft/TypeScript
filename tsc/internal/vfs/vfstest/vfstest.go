@@ -21,7 +21,9 @@ type mapFS struct {
 	// mu protects m.
 	// A single mutex is sufficient as we only use fstest.Map's Open method.
 	mu sync.RWMutex
-	m  fstest.MapFS
+
+	// keys in m are canonicalPaths
+	m fstest.MapFS
 
 	useCaseSensitiveFileNames bool
 
@@ -166,6 +168,29 @@ func (m *mapFS) getCanonicalPath(p string) canonicalPath {
 
 func (m *mapFS) open(p canonicalPath) (fs.File, error) {
 	return m.m.Open(string(p))
+}
+
+func (m *mapFS) remove(path string) error {
+	canonical := m.getCanonicalPath(path)
+	canonicalString := string(canonical)
+	fileInfo := m.m[canonicalString]
+	if fileInfo == nil {
+		// file does not exist
+		return nil
+	}
+	delete(m.m, canonicalString)
+	delete(m.symlinks, canonical)
+
+	if fileInfo.Mode.IsDir() {
+		canonicalString += "/"
+		for path := range m.m {
+			if strings.HasPrefix(path, canonicalString) {
+				delete(m.m, path)
+				delete(m.symlinks, canonicalPath(path))
+			}
+		}
+	}
+	return nil
 }
 
 func Symlink(target string) *fstest.MapFile {
@@ -462,6 +487,13 @@ func (m *mapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
 	})
 
 	return nil
+}
+
+func (m *mapFS) Remove(path string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	return m.remove(path)
 }
 
 func must[T any](v T, err error) T {
