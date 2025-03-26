@@ -830,7 +830,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     let messageNeedsName = true;
 
                     if (symbol.flags & SymbolFlags.Enum || includes & SymbolFlags.Enum) {
-                        message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
+                        message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_declarations;
                         messageNeedsName = false;
                     }
 

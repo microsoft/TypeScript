@@ -2,9 +2,11 @@ moduleDuplicateIdentifiers.ts(1,12): error TS2323: Cannot redeclare exported var
 moduleDuplicateIdentifiers.ts(2,12): error TS2323: Cannot redeclare exported variable 'Foo'.
 moduleDuplicateIdentifiers.ts(20,14): error TS2300: Duplicate identifier 'Kettle'.
 moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplicate identifier 'Kettle'.
+moduleDuplicateIdentifiers.ts(31,13): error TS2567: Enum declarations can only merge with namespace declarations.
+moduleDuplicateIdentifiers.ts(37,13): error TS2567: Enum declarations can only merge with namespace declarations.
 
 
-==== moduleDuplicateIdentifiers.ts (4 errors) ====
+==== moduleDuplicateIdentifiers.ts (6 errors) ====
     export var Foo = 2;
                ~~~
 !!! error TS2323: Cannot redeclare exported variable 'Foo'.
@@ -44,12 +46,16 @@ moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplicate identifier 'Kettle
     Pot = 42; // Shouldn't error
     
     export enum Utensils {
+                ~~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     	Spoon,
     	Fork,
     	Knife
     }
     
     export enum Utensils { // Shouldn't error
+                ~~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace declarations.
     	Spork = 3
     }
     

@@ -6489,7 +6489,7 @@ declare namespace ts {
         FunctionExcludes = 110991,
         ClassExcludes = 899503,
         InterfaceExcludes = 788872,
-        RegularEnumExcludes = 899327,
+        RegularEnumExcludes = 899583,
         ConstEnumExcludes = 899967,
         ValueModuleExcludes = 110735,
         NamespaceModuleExcludes = 0,
