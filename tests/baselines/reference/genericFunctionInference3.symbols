@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/genericFunctionInference3.ts] ////
+
+=== genericFunctionInference3.ts ===
+// https://github.com/microsoft/TypeScript/issues/56931
+
+declare function defineComponent<Props extends Record<string, any>>(
+>defineComponent : Symbol(defineComponent, Decl(genericFunctionInference3.ts, 0, 0))
+>Props : Symbol(Props, Decl(genericFunctionInference3.ts, 2, 33))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  setup: (props: Props) => void,
+>setup : Symbol(setup, Decl(genericFunctionInference3.ts, 2, 68))
+>props : Symbol(props, Decl(genericFunctionInference3.ts, 3, 10))
+>Props : Symbol(Props, Decl(genericFunctionInference3.ts, 2, 33))
+
+  options?: {
+>options : Symbol(options, Decl(genericFunctionInference3.ts, 3, 32))
+
+    props?: (keyof Props)[];
+>props : Symbol(props, Decl(genericFunctionInference3.ts, 4, 13))
+>Props : Symbol(Props, Decl(genericFunctionInference3.ts, 2, 33))
+
+  },
+): (props: Props) => unknown;
+>props : Symbol(props, Decl(genericFunctionInference3.ts, 7, 4))
+>Props : Symbol(Props, Decl(genericFunctionInference3.ts, 2, 33))
+
+const res1 = defineComponent(
+>res1 : Symbol(res1, Decl(genericFunctionInference3.ts, 9, 5))
+>defineComponent : Symbol(defineComponent, Decl(genericFunctionInference3.ts, 0, 0))
+
+  <T extends string>(_props: { msg: T }) => {
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 10, 3))
+>_props : Symbol(_props, Decl(genericFunctionInference3.ts, 10, 21))
+>msg : Symbol(msg, Decl(genericFunctionInference3.ts, 10, 30))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 10, 3))
+
+    return () => {};
+  }
+);
+
+const res2 = defineComponent(
+>res2 : Symbol(res2, Decl(genericFunctionInference3.ts, 15, 5))
+>defineComponent : Symbol(defineComponent, Decl(genericFunctionInference3.ts, 0, 0))
+
+  <T extends string>(_props: { msg: T }) => {
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 16, 3))
+>_props : Symbol(_props, Decl(genericFunctionInference3.ts, 16, 21))
+>msg : Symbol(msg, Decl(genericFunctionInference3.ts, 16, 30))
+>T : Symbol(T, Decl(genericFunctionInference3.ts, 16, 3))
+
+    return () => {};
+  },
+  {
+    props: ["msg"],
+>props : Symbol(props, Decl(genericFunctionInference3.ts, 19, 3))
+
+  },
+);
+
