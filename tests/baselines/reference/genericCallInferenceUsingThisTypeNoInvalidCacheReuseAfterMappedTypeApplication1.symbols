@@ -1,0 +1,168 @@
+//// [tests/cases/compiler/genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts] ////
+
+=== genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts ===
+declare const EffectTypeId: unique symbol;
+>EffectTypeId : Symbol(EffectTypeId, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 0, 13))
+
+interface Variance<out A, out E, out R> {
+>Variance : Symbol(Variance, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 0, 42))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 2, 19))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 2, 25))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 2, 32))
+
+  readonly [EffectTypeId]: VarianceStruct<A, E, R>;
+>[EffectTypeId] : Symbol(Variance[EffectTypeId], Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 2, 41))
+>EffectTypeId : Symbol(EffectTypeId, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 0, 13))
+>VarianceStruct : Symbol(VarianceStruct, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 6, 36))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 2, 19))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 2, 25))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 2, 32))
+}
+
+type Covariant<A> = (_: never) => A;
+>Covariant : Symbol(Covariant, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 4, 1))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 6, 15))
+>_ : Symbol(_, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 6, 21))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 6, 15))
+
+interface VarianceStruct<out A, out E, out R> {
+>VarianceStruct : Symbol(VarianceStruct, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 6, 36))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 8, 25))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 8, 31))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 8, 38))
+
+  readonly _V: string;
+>_V : Symbol(VarianceStruct._V, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 8, 47))
+
+  readonly _A: Covariant<A>;
+>_A : Symbol(VarianceStruct._A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 9, 22))
+>Covariant : Symbol(Covariant, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 4, 1))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 8, 25))
+
+  readonly _E: Covariant<E>;
+>_E : Symbol(VarianceStruct._E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 10, 28))
+>Covariant : Symbol(Covariant, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 4, 1))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 8, 31))
+
+  readonly _R: Covariant<R>;
+>_R : Symbol(VarianceStruct._R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 11, 28))
+>Covariant : Symbol(Covariant, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 4, 1))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 8, 38))
+}
+
+interface Effect<out A, out E = never, out R = never>
+>Effect : Symbol(Effect, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 13, 1))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 15, 17))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 15, 23))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 15, 38))
+
+  extends Variance<A, E, R> {}
+>Variance : Symbol(Variance, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 0, 42))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 15, 17))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 15, 23))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 15, 38))
+
+declare const succeed: <A>(value: A) => Effect<A>;
+>succeed : Symbol(succeed, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 13))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 24))
+>value : Symbol(value, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 27))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 24))
+>Effect : Symbol(Effect, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 13, 1))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 24))
+
+type F<X, Y> = Y extends { _type: infer Z }
+>F : Symbol(F, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 50))
+>X : Symbol(X, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 7))
+>Y : Symbol(Y, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 9))
+>Y : Symbol(Y, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 9))
+>_type : Symbol(_type, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 26))
+>Z : Symbol(Z, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 39))
+
+  ? X extends Effect<infer A, infer E, infer R>
+>X : Symbol(X, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 7))
+>Effect : Symbol(Effect, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 13, 1))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 21, 26))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 21, 35))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 21, 44))
+
+    ? Effect<A, E, R | Z>
+>Effect : Symbol(Effect, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 13, 1))
+>A : Symbol(A, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 21, 26))
+>E : Symbol(E, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 21, 35))
+>R : Symbol(R, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 21, 44))
+>Z : Symbol(Z, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 39))
+
+    : X
+>X : Symbol(X, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 7))
+
+  : X;
+>X : Symbol(X, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 20, 7))
+
+type ProxyMap<Service> = {
+>ProxyMap : Symbol(ProxyMap, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 24, 6))
+>Service : Symbol(Service, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 26, 14))
+
+  [K in keyof Service]: (Service & { _type: Service })[K];
+>K : Symbol(K, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 27, 3))
+>Service : Symbol(Service, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 26, 14))
+>Service : Symbol(Service, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 26, 14))
+>_type : Symbol(_type, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 27, 36))
+>Service : Symbol(Service, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 26, 14))
+>K : Symbol(K, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 27, 3))
+
+};
+
+declare const implement: <T>() => <I extends ReadonlyArray<any>, X>(
+>implement : Symbol(implement, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 13))
+>T : Symbol(T, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 26))
+>I : Symbol(I, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 35))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>X : Symbol(X, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 64))
+
+  x: (...i: I) => X,
+>x : Symbol(x, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 68))
+>i : Symbol(i, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 31, 6))
+>I : Symbol(I, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 35))
+>X : Symbol(X, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 64))
+
+) => (...i: I) => F<X, T>;
+>i : Symbol(i, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 32, 6))
+>I : Symbol(I, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 35))
+>F : Symbol(F, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 50))
+>X : Symbol(X, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 64))
+>T : Symbol(T, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 26))
+
+class XXX {
+>XXX : Symbol(XXX, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 32, 26))
+
+  log = implement<this>()(<N extends number>(n: N) => succeed(n));
+>log : Symbol(XXX.log, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 34, 11))
+>implement : Symbol(implement, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 30, 13))
+>N : Symbol(N, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 35, 27))
+>n : Symbol(n, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 35, 45))
+>N : Symbol(N, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 35, 27))
+>succeed : Symbol(succeed, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 18, 13))
+>n : Symbol(n, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 35, 45))
+}
+
+export declare const inner: XXX;
+>inner : Symbol(inner, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 38, 20))
+>XXX : Symbol(XXX, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 32, 26))
+
+export declare const outer: ProxyMap<XXX>;
+>outer : Symbol(outer, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 39, 20))
+>ProxyMap : Symbol(ProxyMap, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 24, 6))
+>XXX : Symbol(XXX, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 32, 26))
+
+export const a = inner.log(100); // Effect<100, never, never>
+>a : Symbol(a, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 41, 12))
+>inner.log : Symbol(XXX.log, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 34, 11))
+>inner : Symbol(inner, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 38, 20))
+>log : Symbol(XXX.log, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 34, 11))
+
+export const b = outer.log(100); // Effect<100, never, XXX>
+>b : Symbol(b, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 42, 12))
+>outer.log : Symbol(log, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 34, 11))
+>outer : Symbol(outer, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 39, 20))
+>log : Symbol(log, Decl(genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts, 34, 11))
+
