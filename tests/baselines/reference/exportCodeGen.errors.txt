@@ -1,0 +1,80 @@
+exportCodeGen.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportCodeGen.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportCodeGen.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportCodeGen.ts(26,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportCodeGen.ts(33,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportCodeGen.ts(38,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportCodeGen.ts(45,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+exportCodeGen.ts(50,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportCodeGen.ts (8 errors) ====
+    // should replace all refs to 'x' in the body,
+    // with fully qualified
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 12;
+        function lt12() {
+            return x < 12;
+        }
+    } 
+    
+    // should not fully qualify 'x'
+    module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x = 12;
+        function lt12() {
+            return x < 12;
+        }
+    }
+    
+    // not copied, since not exported
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        function no() {
+            return false;
+        }
+    }
+    
+    // copies, since exported
+    module D {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function yes() {
+            return true;
+        }
+    }
+    
+    // validate all exportable statements
+    module E {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export enum Color { Red }
+        export function fn() { }
+        export interface I { id: number }
+        export class C { name: string }
+        export module M {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var x = 42;
+        }
+    }
+    
+    // validate all exportable statements,
+    // which are not exported
+    module F {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        enum Color { Red }
+        function fn() { }
+        interface I { id: number }
+        class C { name: string }
+        module M {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            var x = 42;
+        }
+    }

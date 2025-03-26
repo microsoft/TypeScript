@@ -1,8 +1,11 @@
+checkForObjectTooStrict.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 checkForObjectTooStrict.ts(3,18): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
 
 
-==== checkForObjectTooStrict.ts (1 errors) ====
+==== checkForObjectTooStrict.ts (2 errors) ====
     module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         export class Object {
                      ~~~~~~

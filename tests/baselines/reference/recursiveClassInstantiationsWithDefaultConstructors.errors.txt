@@ -1,0 +1,15 @@
+recursiveClassInstantiationsWithDefaultConstructors.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== recursiveClassInstantiationsWithDefaultConstructors.ts (1 errors) ====
+    module TypeScript2 {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class MemberName {
+            public prefix: string = "";
+        }
+        export class MemberNameArray extends MemberName {
+        }
+    }
+    
+    var a = new TypeScript2.MemberNameArray()

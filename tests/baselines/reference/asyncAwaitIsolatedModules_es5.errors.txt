@@ -1,7 +1,8 @@
 asyncAwaitIsolatedModules_es5.ts(1,27): error TS2307: Cannot find module 'missing' or its corresponding type declarations.
+asyncAwaitIsolatedModules_es5.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== asyncAwaitIsolatedModules_es5.ts (1 errors) ====
+==== asyncAwaitIsolatedModules_es5.ts (2 errors) ====
     import { MyPromise } from "missing";
                               ~~~~~~~~~
 !!! error TS2307: Cannot find module 'missing' or its corresponding type declarations.
@@ -41,5 +42,7 @@ asyncAwaitIsolatedModules_es5.ts(1,27): error TS2307: Cannot find module 'missin
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export async function f1() { }
     }

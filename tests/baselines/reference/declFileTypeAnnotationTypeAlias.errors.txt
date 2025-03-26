@@ -1,0 +1,45 @@
+declFileTypeAnnotationTypeAlias.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationTypeAlias.ts(10,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationTypeAlias.ts(24,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileTypeAnnotationTypeAlias.ts(26,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileTypeAnnotationTypeAlias.ts (4 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export type Value = string | number | boolean;
+        export var x: Value;
+    
+        export class c {
+        }
+    
+        export type C = c;
+    
+        export module m {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class c {
+            }
+        }
+    
+        export type MC = m.c;
+    
+        export type fc = () => c;
+    }
+    
+    interface Window {
+        someMethod();
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export type W = Window | string;
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class Window { }
+            export var p: W;
+        }
+    }

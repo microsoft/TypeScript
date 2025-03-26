@@ -1,0 +1,15 @@
+chainedImportAlias_file0.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== chainedImportAlias_file1.ts (0 errors) ====
+    import x = require('./chainedImportAlias_file0');
+    import y = x;
+    y.m.foo();
+    
+==== chainedImportAlias_file0.ts (1 errors) ====
+    export module m {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function foo() { }
+    }
+    

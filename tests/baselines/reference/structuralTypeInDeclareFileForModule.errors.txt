@@ -1,0 +1,8 @@
+structuralTypeInDeclareFileForModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== structuralTypeInDeclareFileForModule.ts (1 errors) ====
+    module M { export var x; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    var m = M;

@@ -1,11 +1,14 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(9,7): error TS2304: Cannot find name 'div'.
 file.tsx(9,7): error TS17015: Expected corresponding closing tag for JSX fragment.
 file.tsx(9,11): error TS17014: JSX fragment has no corresponding closing tag.
 file.tsx(11,17): error TS1005: '</' expected.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (5 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

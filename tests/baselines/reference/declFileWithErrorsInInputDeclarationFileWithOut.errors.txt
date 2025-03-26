@@ -1,6 +1,8 @@
+declFile.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFile.d.ts(2,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 declFile.d.ts(3,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 declFile.d.ts(5,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+declFile.d.ts(5,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 declFile.d.ts(7,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 
 
@@ -8,8 +10,10 @@ declFile.d.ts(7,5): error TS1038: A 'declare' modifier cannot be used in an alre
     ///<reference path="declFile.d.ts" preserve="true"/>
     var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file
     
-==== declFile.d.ts (4 errors) ====
+==== declFile.d.ts (6 errors) ====
     declare module M {
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         declare var x;
         ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -20,6 +24,8 @@ declFile.d.ts(7,5): error TS1038: A 'declare' modifier cannot be used in an alre
         declare module N { }
         ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+                       ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         declare class C { }
         ~~~~~~~

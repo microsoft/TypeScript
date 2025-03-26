@@ -1,3 +1,6 @@
+typeofInternalModules.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+typeofInternalModules.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+typeofInternalModules.ts(5,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 typeofInternalModules.ts(15,16): error TS2708: Cannot use namespace 'importUninst' as a value.
 typeofInternalModules.ts(17,9): error TS2709: Cannot use namespace 'Outer' as a type.
 typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
@@ -5,12 +8,18 @@ typeofInternalModules.ts(21,16): error TS2708: Cannot use namespace 'importUnins
 typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
 
 
-==== typeofInternalModules.ts (5 errors) ====
+==== typeofInternalModules.ts (8 errors) ====
     module Outer {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module instantiated {
+                      ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export class C { }
         }
         export module uninstantiated {
+                      ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface P { }
         }
     }

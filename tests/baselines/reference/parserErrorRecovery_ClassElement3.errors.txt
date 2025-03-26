@@ -1,11 +1,14 @@
+parserErrorRecovery_ClassElement3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parserErrorRecovery_ClassElement3.ts(2,4): error TS1127: Invalid character.
 parserErrorRecovery_ClassElement3.ts(6,4): error TS1109: Expression expected.
 parserErrorRecovery_ClassElement3.ts(7,4): error TS1127: Invalid character.
 parserErrorRecovery_ClassElement3.ts(7,5): error TS1005: '}' expected.
 
 
-==== parserErrorRecovery_ClassElement3.ts (4 errors) ====
+==== parserErrorRecovery_ClassElement3.ts (5 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
        ¬
        ~
 !!! error TS1127: Invalid character.

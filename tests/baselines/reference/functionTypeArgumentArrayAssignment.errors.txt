@@ -1,0 +1,17 @@
+functionTypeArgumentArrayAssignment.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== functionTypeArgumentArrayAssignment.ts (1 errors) ====
+    module test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface Array<T> {
+            foo: T;
+            length: number;
+        }
+    
+        function map<U>() {
+            var ys: U[] = [];
+        }
+    }
+    

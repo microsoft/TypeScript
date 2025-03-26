@@ -1,9 +1,12 @@
+ambientStatement1.ts(1,20): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ambientStatement1.ts(2,6): error TS1036: Statements are not allowed in ambient contexts.
 ambientStatement1.ts(4,22): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== ambientStatement1.ts (2 errors) ====
+==== ambientStatement1.ts (3 errors) ====
         declare module M1 {
+                       ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         	while(true);
         	~~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

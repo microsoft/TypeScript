@@ -1,3 +1,4 @@
+noImplicitAnyParametersInAmbientModule.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 noImplicitAnyParametersInAmbientModule.ts(6,20): error TS7006: Parameter 'x' implicitly has an 'any' type.
 noImplicitAnyParametersInAmbientModule.ts(12,20): error TS7006: Parameter 'x' implicitly has an 'any' type.
 noImplicitAnyParametersInAmbientModule.ts(12,23): error TS7006: Parameter 'y' implicitly has an 'any' type.
@@ -22,8 +23,10 @@ noImplicitAnyParametersInAmbientModule.ts(44,18): error TS7006: Parameter 'x' im
 noImplicitAnyParametersInAmbientModule.ts(44,21): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
 
 
-==== noImplicitAnyParametersInAmbientModule.ts (22 errors) ====
+==== noImplicitAnyParametersInAmbientModule.ts (23 errors) ====
     declare module D_M {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // No implicit-'any' errors.
         function dm_f1(): void;
     

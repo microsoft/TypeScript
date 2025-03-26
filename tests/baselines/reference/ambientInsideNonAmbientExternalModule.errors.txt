@@ -1,0 +1,11 @@
+ambientInsideNonAmbientExternalModule.ts(5,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ambientInsideNonAmbientExternalModule.ts (1 errors) ====
+    export declare var x;
+    export declare function f();
+    export declare class C { }
+    export declare enum E { }
+    export declare module M { }
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.

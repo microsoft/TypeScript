@@ -1,0 +1,23 @@
+server.d.ts(8,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== server.d.ts (1 errors) ====
+    declare module "other" {
+        export class C { }
+    }
+    
+    declare module "server" {
+        import events = require("other"); // Ambient declaration, no error expected.
+    
+        module S {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var a: number;
+        }
+    
+        export = S; // Ambient declaration, no error expected.
+    }
+    
+==== client.ts (0 errors) ====
+    import {a} from "server";
+    

@@ -1,3 +1,8 @@
+moduleVisibilityTest2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest2.ts(4,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest2.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest2.ts(13,9): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+moduleVisibilityTest2.ts(54,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleVisibilityTest2.ts(55,17): error TS2304: Cannot find name 'x'.
 moduleVisibilityTest2.ts(56,21): error TS2339: Property 'E' does not exist on type 'typeof M'.
 moduleVisibilityTest2.ts(59,16): error TS2694: Namespace 'M' has no exported member 'I'.
@@ -6,11 +11,15 @@ moduleVisibilityTest2.ts(62,11): error TS2339: Property 'x' does not exist on ty
 moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on type 'typeof M'.
 
 
-==== moduleVisibilityTest2.ts (6 errors) ====
+==== moduleVisibilityTest2.ts (11 errors) ====
     module OuterMod {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export function someExportedOuterFunc() { return -1; }
     
     	export module OuterInnerMod {
+    	              ~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     		export function someExportedOuterInnerFunc() { return "foo"; }
     	}
     }
@@ -18,8 +27,12 @@ moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on ty
     import OuterInnerAlias = OuterMod.OuterInnerMod;
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     	module InnerMod {
+    	       ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     		export function someExportedInnerFunc() { return -2; }
     	}
     
@@ -61,6 +74,8 @@ moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on ty
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export var c = x;
     	               ~
 !!! error TS2304: Cannot find name 'x'.

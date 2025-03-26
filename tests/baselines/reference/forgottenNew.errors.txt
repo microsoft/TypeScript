@@ -1,8 +1,11 @@
+forgottenNew.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 forgottenNew.ts(5,14): error TS2348: Value of type 'typeof NullLogger' is not callable. Did you mean to include 'new'?
 
 
-==== forgottenNew.ts (1 errors) ====
+==== forgottenNew.ts (2 errors) ====
     module Tools {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class NullLogger { }
     }
     

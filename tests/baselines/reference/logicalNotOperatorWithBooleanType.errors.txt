@@ -1,8 +1,9 @@
+logicalNotOperatorWithBooleanType.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 logicalNotOperatorWithBooleanType.ts(21,25): error TS2872: This kind of expression is always truthy.
 logicalNotOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== logicalNotOperatorWithBooleanType.ts (2 errors) ====
+==== logicalNotOperatorWithBooleanType.ts (3 errors) ====
     // ! operator on boolean type
     var BOOLEAN: boolean;
     
@@ -13,6 +14,8 @@ logicalNotOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma ope
         static foo() { return false; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: boolean;
     }
     

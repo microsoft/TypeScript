@@ -1,0 +1,31 @@
+extBaseClass1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extBaseClass1.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+extBaseClass1.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== extBaseClass1.ts (3 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class B {
+    	    public x=10;
+        }
+    
+        export class C extends B {
+        }
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C2 extends B {
+        }
+    }
+    
+    module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class C3 extends M.B {
+        }
+    }
+    

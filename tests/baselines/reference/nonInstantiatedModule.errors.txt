@@ -1,0 +1,63 @@
+nonInstantiatedModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonInstantiatedModule.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonInstantiatedModule.ts(17,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonInstantiatedModule.ts(35,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nonInstantiatedModule.ts(36,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== nonInstantiatedModule.ts (5 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Point { x: number; y: number }
+        export var a = 1;
+    }
+    
+    // primary expression
+    var m : typeof M;
+    var m = M;
+    
+    var a1: number;
+    var a1 = M.a;
+    
+    var a2: number;
+    var a2 = m.a;
+    
+    module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Point {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function Origin(): Point {
+                return { x: 0, y: 0 };
+            }
+        }
+    
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    }
+    
+    var p: { x: number; y: number; };
+    var p: M2.Point;
+    
+    var p2: { Origin() : { x: number; y: number; } };
+    var p2: typeof M2.Point;
+    
+    module M3 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Utils {
+                      ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface Point {
+                x: number; y: number;
+            }
+        }
+    
+        export class Utils {
+            name: string;
+        }
+    }

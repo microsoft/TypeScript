@@ -1,0 +1,15 @@
+tsxDynamicTagName6.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== tsxDynamicTagName6.tsx (1 errors) ====
+    declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	interface Element { }
+    	interface IntrinsicElements {
+    		div: any
+    	}
+    }
+    
+    const t = {tag:'h1'}
+    const foo = <t.tag/>  // No error

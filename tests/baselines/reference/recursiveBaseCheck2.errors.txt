@@ -1,9 +1,20 @@
+recursiveBaseCheck2.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveBaseCheck2.ts(1,22): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveBaseCheck2.ts(1,32): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 recursiveBaseCheck2.ts(2,18): error TS2506: 'b2CircleShape' is referenced directly or indirectly in its own base expression.
 recursiveBaseCheck2.ts(4,18): error TS2506: 'b2Shape' is referenced directly or indirectly in its own base expression.
+recursiveBaseCheck2.ts(7,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+recursiveBaseCheck2.ts(7,22): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== recursiveBaseCheck2.ts (2 errors) ====
+==== recursiveBaseCheck2.ts (7 errors) ====
     declare module Box2D.Collision.Shapes {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                         ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                                   ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class b2CircleShape extends b2Shape {
                      ~~~~~~~~~~~~~
 !!! error TS2506: 'b2CircleShape' is referenced directly or indirectly in its own base expression.
@@ -14,6 +25,10 @@ recursiveBaseCheck2.ts(4,18): error TS2506: 'b2Shape' is referenced directly or 
         }
     }
     declare module Box2D.Dynamics {
+                   ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                         ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class b2ContactListener extends Box2D.Collision.Shapes.b2Shape {
         }
         export class b2FixtureDef extends Box2D.Dynamics.b2ContactListener {

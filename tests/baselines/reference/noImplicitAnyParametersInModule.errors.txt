@@ -1,3 +1,4 @@
+noImplicitAnyParametersInModule.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 noImplicitAnyParametersInModule.ts(6,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
 noImplicitAnyParametersInModule.ts(12,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
 noImplicitAnyParametersInModule.ts(12,22): error TS7006: Parameter 'y' implicitly has an 'any' type.
@@ -22,8 +23,10 @@ noImplicitAnyParametersInModule.ts(44,18): error TS7006: Parameter 'x' implicitl
 noImplicitAnyParametersInModule.ts(44,21): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
 
 
-==== noImplicitAnyParametersInModule.ts (22 errors) ====
+==== noImplicitAnyParametersInModule.ts (23 errors) ====
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // No implicit-'any' errors.
         function m_f1(): void { }
     

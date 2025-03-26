@@ -5,7 +5,8 @@ export module C { export interface I { } }
 export import v = C;
 >v : any
 >  : ^^^
->C : error
+>C : any
+>  : ^^^
 
 export module M {
 >M : typeof M

@@ -15,6 +15,7 @@ export module X {
 
             constructor(Y: any) {
 >Y : any
+>  : ^^^
 
                 new B();
 >new B() : B

@@ -1,9 +1,13 @@
+extBaseClass2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 extBaseClass2.ts(2,31): error TS2339: Property 'B' does not exist on type 'typeof M'.
+extBaseClass2.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 extBaseClass2.ts(7,29): error TS2304: Cannot find name 'B'.
 
 
-==== extBaseClass2.ts (2 errors) ====
+==== extBaseClass2.ts (4 errors) ====
     module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C4 extends M.B {
                                   ~
 !!! error TS2339: Property 'B' does not exist on type 'typeof M'.
@@ -11,6 +15,8 @@ extBaseClass2.ts(7,29): error TS2304: Cannot find name 'B'.
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class C5 extends B {
                                 ~
 !!! error TS2304: Cannot find name 'B'.

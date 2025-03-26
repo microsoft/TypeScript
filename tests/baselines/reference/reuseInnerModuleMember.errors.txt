@@ -1,0 +1,25 @@
+reuseInnerModuleMember_0.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reuseInnerModuleMember_1.ts(2,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+reuseInnerModuleMember_1.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== reuseInnerModuleMember_1.ts (2 errors) ====
+    ///<reference path='reuseInnerModuleMember_0.ts'/>
+    declare module bar {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface alpha { }
+    }
+    
+    import f = require('./reuseInnerModuleMember_0');
+    module bar {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x: alpha;
+    }
+    
+==== reuseInnerModuleMember_0.ts (1 errors) ====
+    export module M { }
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    

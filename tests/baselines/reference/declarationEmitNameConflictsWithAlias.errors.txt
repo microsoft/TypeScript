@@ -1,0 +1,18 @@
+declarationEmitNameConflictsWithAlias.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflictsWithAlias.ts(3,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmitNameConflictsWithAlias.ts(4,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declarationEmitNameConflictsWithAlias.ts (3 errors) ====
+    export module C { export interface I { } }
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    export import v = C;
+    export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module C { export interface I { } }
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var w: v.I; // Gets emitted as C.I, which is the wrong interface
+    }

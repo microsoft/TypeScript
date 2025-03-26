@@ -1,3 +1,6 @@
+es5ModuleInternalNamedImports.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es5ModuleInternalNamedImports.ts(9,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+es5ModuleInternalNamedImports.ts(11,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 es5ModuleInternalNamedImports.ts(22,5): error TS1194: Export declarations are not permitted in a namespace.
 es5ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
 es5ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
@@ -12,8 +15,10 @@ es5ModuleInternalNamedImports.ts(32,32): error TS1147: Import declarations in a 
 es5ModuleInternalNamedImports.ts(34,16): error TS2792: Cannot find module 'M3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== es5ModuleInternalNamedImports.ts (12 errors) ====
+==== es5ModuleInternalNamedImports.ts (15 errors) ====
     export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // variable
         export var M_V = 0;
         // interface
@@ -22,8 +27,12 @@ es5ModuleInternalNamedImports.ts(34,16): error TS2792: Cannot find module 'M3'. 
         export class M_C { }
         // instantiated module
         export module M_M { var x; }
+                      ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // uninstantiated module
         export module M_MU { }
+                      ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // function
         export function M_F() { }
         // enum

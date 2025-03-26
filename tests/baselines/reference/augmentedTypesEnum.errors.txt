@@ -10,9 +10,12 @@ augmentedTypesEnum.ts(18,11): error TS2432: In an enum with multiple declaration
 augmentedTypesEnum.ts(20,12): error TS2300: Duplicate identifier 'One'.
 augmentedTypesEnum.ts(21,12): error TS2300: Duplicate identifier 'One'.
 augmentedTypesEnum.ts(21,12): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+augmentedTypesEnum.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+augmentedTypesEnum.ts(28,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+augmentedTypesEnum.ts(31,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== augmentedTypesEnum.ts (12 errors) ====
+==== augmentedTypesEnum.ts (15 errors) ====
     // enum then var
     enum e1111 { One } // error
          ~~~~~
@@ -62,12 +65,18 @@ augmentedTypesEnum.ts(21,12): error TS2432: In an enum with multiple declaration
     // enum then internal module
     enum e6 { One } 
     module e6 { } // ok
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     enum e6a { One }
     module e6a { var y = 2; } // should be error
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     enum e6b { One }
     module e6b { export var y = 2; } // should be error
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     // enum then import, messes with error reporting
     //enum e7 { One }

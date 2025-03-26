@@ -1,8 +1,13 @@
+nameCollisions.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nameCollisions.ts(2,9): error TS2300: Duplicate identifier 'x'.
+nameCollisions.ts(4,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nameCollisions.ts(4,12): error TS2300: Duplicate identifier 'x'.
+nameCollisions.ts(10,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nameCollisions.ts(10,12): error TS2300: Duplicate identifier 'z'.
 nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
+nameCollisions.ts(15,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nameCollisions.ts(15,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+nameCollisions.ts(22,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 nameCollisions.ts(24,9): error TS2300: Duplicate identifier 'f'.
 nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
 nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
@@ -13,13 +18,17 @@ nameCollisions.ts(36,14): error TS2814: Function with bodies can only merge with
 nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overload list for 'C2'.
 
 
-==== nameCollisions.ts (13 errors) ====
+==== nameCollisions.ts (18 errors) ====
     module T {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var x = 2;
             ~
 !!! error TS2300: Duplicate identifier 'x'.
     
         module x { // error
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                ~
 !!! error TS2300: Duplicate identifier 'x'.
             export class Bar {
@@ -28,6 +37,8 @@ nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overl
         }
     
         module z {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
                ~
 !!! error TS2300: Duplicate identifier 'z'.
             var t;
@@ -38,6 +49,8 @@ nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overl
     
         module y {
                ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
             var b;
         }
@@ -46,6 +59,8 @@ nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overl
     
         var w;
         module w { } //ok
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
         var f;
             ~

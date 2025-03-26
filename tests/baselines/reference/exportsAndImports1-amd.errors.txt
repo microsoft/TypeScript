@@ -1,0 +1,40 @@
+t1.ts(13,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+t1.ts(16,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== t1.ts (2 errors) ====
+    var v = 1;
+    function f() { }
+    class C {
+    }
+    interface I {
+    }
+    enum E {
+        A, B, C
+    }
+    const enum D {
+        A, B, C
+    }
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x;
+    }
+    module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+    }
+    type T = number;
+    import a = M.x;
+    
+    export { v, f, C, I, E, D, M, N, T, a };
+    
+==== t2.ts (0 errors) ====
+    export { v, f, C, I, E, D, M, N, T, a } from "./t1";
+    
+==== t3.ts (0 errors) ====
+    import { v, f, C, I, E, D, M, N, T, a } from "./t1";
+    export { v, f, C, I, E, D, M, N, T, a };
+    

@@ -119,13 +119,17 @@ throw anObject;
 
 var anAny = null;
 >anAny : any
+>      : ^^^
 
 throw anAny;
 >anAny : any
+>      : ^^^
 
 var anOtherAny = <any> new C();
 >anOtherAny : any
+>           : ^^^
 ><any> new C() : any
+>              : ^^^
 >new C() : C
 >        : ^
 >C : typeof C
@@ -133,14 +137,17 @@ var anOtherAny = <any> new C();
 
 throw anOtherAny;
 >anOtherAny : any
+>           : ^^^
 
 var anUndefined = undefined;
 >anUndefined : any
+>            : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 throw anUndefined;
 >anUndefined : any
+>            : ^^^
 
 var aClass = new C();
 >aClass : C
@@ -204,6 +211,7 @@ var aLambda = (x) => 2;
 >(x) => 2 : (x: any) => number
 >         : ^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
 >  : ^
 
@@ -268,9 +276,11 @@ throw aFunctionInModule;
 // no initializer or annotation, so this is an 'any'
 var x;
 >x : any
+>  : ^^^
 
 throw x;
 >x : any
+>  : ^^^
 
 // literals
 throw 0.0;

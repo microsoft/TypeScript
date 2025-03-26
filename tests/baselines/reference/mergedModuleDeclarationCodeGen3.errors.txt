@@ -1,0 +1,26 @@
+mergedModuleDeclarationCodeGen3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen3.ts(1,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen3.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen3.ts(4,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationCodeGen3.ts(4,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mergedModuleDeclarationCodeGen3.ts (5 errors) ====
+    module my.data {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+              ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function buz() { }
+    }
+    module my.data.foo {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+              ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        function data(my, foo) {
+            buz();
+        }
+    }

@@ -1,8 +1,11 @@
+importAndVariableDeclarationConflict4.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 importAndVariableDeclarationConflict4.ts(6,1): error TS2440: Import declaration conflicts with local declaration of 'x'.
 
 
-==== importAndVariableDeclarationConflict4.ts (1 errors) ====
+==== importAndVariableDeclarationConflict4.ts (2 errors) ====
     module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export var m = '';
     }
     

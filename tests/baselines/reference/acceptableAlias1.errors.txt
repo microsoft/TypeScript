@@ -1,0 +1,16 @@
+acceptableAlias1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+acceptableAlias1.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== acceptableAlias1.ts (2 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        }
+        export import X = N;
+    }
+    
+    import r = M.X;
