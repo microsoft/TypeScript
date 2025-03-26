@@ -27110,7 +27110,7 @@ func (c *Checker) getContextuallyTypedParameterType(parameter *ast.Node) *Type {
 		return nil
 	}
 	iife := ast.GetImmediatelyInvokedFunctionExpression(fn)
-	if iife != nil && len(iife.Arguments()) != 0 {
+	if iife != nil {
 		args := c.getEffectiveCallArguments(iife)
 		indexOfParameter := slices.Index(fn.Parameters(), parameter)
 		if hasDotDotDotToken(parameter) {

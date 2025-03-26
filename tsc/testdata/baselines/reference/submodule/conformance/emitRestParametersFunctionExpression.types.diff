@@ -6,8 +6,7 @@
  >(function (...rest) { })() : void
 ->(function (...rest) { }) : () => void
 ->function (...rest) { } : () => void
-->rest : []
-+>(function (...rest) { }) : (...rest: any[]) => void
-+>function (...rest) { } : (...rest: any[]) => void
-+>rest : any[]
++>(function (...rest) { }) : (...rest: []) => void
++>function (...rest) { } : (...rest: []) => void
+ >rest : []
  

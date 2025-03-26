@@ -82,11 +82,11 @@
 
 ((k?) => k + 1)();
 >((k?) => k + 1)() : any
->((k?) => k + 1) : (k?: any) => any
->(k?) => k + 1 : (k?: any) => any
->k : any
+>((k?) => k + 1) : (k?: undefined) => any
+>(k?) => k + 1 : (k?: undefined) => any
+>k : undefined
 >k + 1 : any
->k : any
+>k : undefined
 >1 : 1
 
 ((l, o?) => l + o)(12);
@@ -139,17 +139,17 @@
 
 ((...noNumbers) => noNumbers.some(n => n > 0))();
 >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
->((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: any[]) => boolean
->(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: any[]) => boolean
->noNumbers : any[]
+>((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: []) => boolean
+>(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: []) => boolean
+>noNumbers : []
 >noNumbers.some(n => n > 0) : boolean
->noNumbers.some : (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
->noNumbers : any[]
->some : (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
->n => n > 0 : (n: any) => boolean
->n : any
+>noNumbers.some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
+>noNumbers : []
+>some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
+>n => n > 0 : (n: never) => boolean
+>n : never
 >n > 0 : boolean
->n : any
+>n : never
 >0 : 0
 
 ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
@@ -264,10 +264,10 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 
 ((x, y, z) => 42)();
 >((x, y, z) => 42)() : number
->((x, y, z) => 42) : (x?: any, y?: any, z?: any) => number
->(x, y, z) => 42 : (x?: any, y?: any, z?: any) => number
->x : any
->y : any
->z : any
+>((x, y, z) => 42) : (x?: undefined, y?: undefined, z?: undefined) => number
+>(x, y, z) => 42 : (x?: undefined, y?: undefined, z?: undefined) => number
+>x : undefined
+>y : undefined
+>z : undefined
 >42 : 42
 

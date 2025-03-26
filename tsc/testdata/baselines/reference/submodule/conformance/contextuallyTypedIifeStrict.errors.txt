@@ -1,8 +1,9 @@
 contextuallyTypedIifeStrict.ts(14,10): error TS18048: 'j' is possibly 'undefined'.
+contextuallyTypedIifeStrict.ts(15,10): error TS18048: 'k' is possibly 'undefined'.
 contextuallyTypedIifeStrict.ts(16,17): error TS18048: 'o' is possibly 'undefined'.
 
 
-==== contextuallyTypedIifeStrict.ts (2 errors) ====
+==== contextuallyTypedIifeStrict.ts (3 errors) ====
     // arrow
     (jake => { })("build");
     // function expression
@@ -20,6 +21,8 @@ contextuallyTypedIifeStrict.ts(16,17): error TS18048: 'o' is possibly 'undefined
              ~
 !!! error TS18048: 'j' is possibly 'undefined'.
     ((k?) => k + 1)();
+             ~
+!!! error TS18048: 'k' is possibly 'undefined'.
     ((l, o?) => l + o)(12);
                     ~
 !!! error TS18048: 'o' is possibly 'undefined'.

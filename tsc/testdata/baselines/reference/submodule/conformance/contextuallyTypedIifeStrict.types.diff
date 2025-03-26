@@ -1,22 +1,6 @@
 --- old.contextuallyTypedIifeStrict.types
 +++ new.contextuallyTypedIifeStrict.types
-@@= skipped -81, +81 lines =@@
- 
- ((k?) => k + 1)();
- >((k?) => k + 1)() : any
-->((k?) => k + 1) : (k?: undefined) => any
-->(k?) => k + 1 : (k?: undefined) => any
-->k : undefined
-+>((k?) => k + 1) : (k?: any) => any
-+>(k?) => k + 1 : (k?: any) => any
-+>k : any
- >k + 1 : any
-->k : undefined
-+>k : any
- >1 : 1
- 
- ((l, o?) => l + o)(12);
-@@= skipped -21, +21 lines =@@
+@@= skipped -102, +102 lines =@@
  // rest parameters
  ((...numbers) => numbers.every(n => n > 0))(5,6,7);
  >((...numbers) => numbers.every(n => n > 0))(5,6,7) : boolean
@@ -44,25 +28,12 @@
  >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
 ->((...noNumbers) => noNumbers.some(n => n > 0)) : () => boolean
 ->(...noNumbers) => noNumbers.some(n => n > 0) : () => boolean
-->noNumbers : []
-+>((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: any[]) => boolean
-+>(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: any[]) => boolean
-+>noNumbers : any[]
++>((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: []) => boolean
++>(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: []) => boolean
+ >noNumbers : []
  >noNumbers.some(n => n > 0) : boolean
-->noNumbers.some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
-->noNumbers : []
-->some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
-->n => n > 0 : (n: never) => boolean
-->n : never
-+>noNumbers.some : (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
-+>noNumbers : any[]
-+>some : (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
-+>n => n > 0 : (n: any) => boolean
-+>n : any
- >n > 0 : boolean
-->n : never
-+>n : any
- >0 : 0
+ >noNumbers.some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
+@@= skipped -15, +15 lines =@@
  
  ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
  >((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : boolean[]
@@ -73,7 +44,7 @@
  >first : number
  >rest : [number, number]
  >first ? [] : rest.map(n => n > 0) : boolean[]
-@@= skipped -38, +38 lines =@@
+@@= skipped -23, +23 lines =@@
  // destructuring parameters (with defaults too!)
  (({ q }) => q)({ q : 13 });
  >(({ q }) => q)({ q : 13 }) : number
@@ -117,19 +88,3 @@
  >u : number
  >22 : 22
  >{ u: 23 } : { u?: number; }
-@@= skipped -52, +52 lines =@@
- 
- ((x, y, z) => 42)();
- >((x, y, z) => 42)() : number
-->((x, y, z) => 42) : (x?: undefined, y?: undefined, z?: undefined) => number
-->(x, y, z) => 42 : (x?: undefined, y?: undefined, z?: undefined) => number
-->x : undefined
-->y : undefined
-->z : undefined
-+>((x, y, z) => 42) : (x?: any, y?: any, z?: any) => number
-+>(x, y, z) => 42 : (x?: any, y?: any, z?: any) => number
-+>x : any
-+>y : any
-+>z : any
- >42 : 42
- 
