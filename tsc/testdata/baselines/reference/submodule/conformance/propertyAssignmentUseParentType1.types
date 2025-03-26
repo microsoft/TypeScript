@@ -8,7 +8,7 @@ interface N {
 }
 export const interfaced: N = () => true;
 >interfaced : N
->() => true : { (): true; num: number; }
+>() => true : { (): true; num: 123; }
 >true : true
 
 interfaced.num = 123;
@@ -21,7 +21,7 @@ interfaced.num = 123;
 export const inlined: { (): boolean; nun: 456 } = () => true;
 >inlined : { (): boolean; nun: 456; }
 >nun : 456
->() => true : { (): true; nun: number; }
+>() => true : { (): true; nun: 456; }
 >true : true
 
 inlined.nun = 456;

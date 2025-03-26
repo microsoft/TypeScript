@@ -64,14 +64,14 @@
  plainJSGrammarErrors.js(104,6): error TS1171: A comma expression is not allowed in a computed property name.
  plainJSGrammarErrors.js(105,5): error TS18016: Private identifiers are not allowed outside class bodies.
  plainJSGrammarErrors.js(106,5): error TS1042: 'export' modifier cannot be used here.
--plainJSGrammarErrors.js(108,25): error TS1162: An object member cannot be declared optional.
--plainJSGrammarErrors.js(109,6): error TS1162: An object member cannot be declared optional.
+ plainJSGrammarErrors.js(108,25): error TS1162: An object member cannot be declared optional.
+ plainJSGrammarErrors.js(109,6): error TS1162: An object member cannot be declared optional.
 -plainJSGrammarErrors.js(109,6): error TS8009: The '?' modifier can only be used in TypeScript files.
 +plainJSGrammarErrors.js(110,5): error TS18004: No value exists in scope for the shorthand property 'definitely'. Either declare one or provide an initializer.
  plainJSGrammarErrors.js(110,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
  plainJSGrammarErrors.js(111,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
  plainJSGrammarErrors.js(114,16): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
-@@= skipped -40, +42 lines =@@
+@@= skipped -40, +44 lines =@@
  plainJSGrammarErrors.js(202,22): error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
  plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
  plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
@@ -81,7 +81,11 @@
 +plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be used within a function body.
  
  
- ==== plainJSGrammarErrors.js (102 errors) ====
+-==== plainJSGrammarErrors.js (102 errors) ====
++==== plainJSGrammarErrors.js (104 errors) ====
+     class C {
+         // #private mistakes
+         q = #unbound
 @@= skipped -14, +17 lines =@@
              ~~
  !!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
@@ -184,15 +188,10 @@
         ~~~~~~~~
  !!! error TS1358: Tagged template expressions are not permitted in an optional chain.
      const o = {
-@@= skipped -14, +17 lines =@@
- !!! error TS1042: 'export' modifier cannot be used here.
-         // TODO: See what the existing JS error is like for these
-         cantHaveQuestionMark?: 1,
--                            ~
--!!! error TS1162: An object member cannot be declared optional.
+@@= skipped -19, +22 lines =@@
          m?() { return 12 },
--         ~
--!!! error TS1162: An object member cannot be declared optional.
+          ~
+ !!! error TS1162: An object member cannot be declared optional.
 -         ~
 -!!! error TS8009: The '?' modifier can only be used in TypeScript files.
          definitely!,
@@ -201,7 +200,7 @@
                    ~
  !!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
          definiteMethod!() { return 13 },
-@@= skipped -164, +160 lines =@@
+@@= skipped -159, +159 lines =@@
      const trinaryDynamicImport = import('1', '2', '3')
                                   ~~~~~~~~~~~~~~~~~~~~~
  !!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments

@@ -960,7 +960,7 @@ func NewChecker(program Program) *Checker {
 	c.enumNumberIndexInfo = &IndexInfo{keyType: c.numberType, valueType: c.stringType, isReadonly: true}
 	c.emptyStringType = c.getStringLiteralType("")
 	c.zeroType = c.getNumberLiteralType(0)
-	c.zeroBigIntType = c.getBigIntLiteralType(jsnum.PseudoBigInt{Negative: false, Base10Value: "0"})
+	c.zeroBigIntType = c.getBigIntLiteralType(jsnum.PseudoBigInt{})
 	c.typeofType = c.getUnionType(core.Map(slices.Sorted(maps.Keys(typeofNEFacts)), c.getStringLiteralType))
 	c.flowLoopCache = make(map[FlowLoopKey]*Type)
 	c.flowNodeReachable = make(map[*ast.FlowNode]bool)
@@ -7168,10 +7168,7 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 		return c.getFreshTypeOfLiteralType(c.getNumberLiteralType(jsnum.FromString(node.Text())))
 	case ast.KindBigIntLiteral:
 		c.checkGrammarBigIntLiteral(node.AsBigIntLiteral())
-		return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(jsnum.PseudoBigInt{
-			Negative:    false,
-			Base10Value: jsnum.ParsePseudoBigInt(node.Text()),
-		}))
+		return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(jsnum.NewPseudoBigInt(jsnum.ParsePseudoBigInt(node.Text()), false /*negative*/)))
 	case ast.KindTrueKeyword:
 		return c.trueType
 	case ast.KindFalseKeyword:
@@ -10191,10 +10188,7 @@ func (c *Checker) checkPrefixUnaryExpression(node *ast.Node) *Type {
 		}
 	case ast.KindBigIntLiteral:
 		if expr.Operator == ast.KindMinusToken {
-			return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(jsnum.PseudoBigInt{
-				Negative:    true,
-				Base10Value: jsnum.ParsePseudoBigInt(expr.Operand.Text()),
-			}))
+			return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(jsnum.NewPseudoBigInt(jsnum.ParsePseudoBigInt(expr.Operand.Text()), true /*negative*/)))
 		}
 	}
 	switch expr.Operator {
@@ -23525,18 +23519,10 @@ func (c *Checker) getBigIntLiteralType(value jsnum.PseudoBigInt) *Type {
 	return t
 }
 
-func (c *Checker) parseBigIntLiteralType(text string) *Type {
-	return c.getBigIntLiteralType(parseValidBigInt(text))
-}
-
 // text is a valid bigint string excluding a trailing `n`, but including a possible prefix `-`.
 // Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
-func parseValidBigInt(text string) jsnum.PseudoBigInt {
-	text, negative := strings.CutPrefix(text, "-")
-	return jsnum.PseudoBigInt{
-		Negative:    negative,
-		Base10Value: jsnum.ParsePseudoBigInt(text),
-	}
+func (c *Checker) parseBigIntLiteralType(text string) *Type {
+	return c.getBigIntLiteralType(jsnum.ParseValidBigInt(text))
 }
 
 func getStringLiteralValue(t *Type) string {
@@ -27500,7 +27486,7 @@ func (c *Checker) canGetContextualTypeForAssignmentDeclaration(node *ast.Node) b
 	// binder) of the form 'F.id = expr' or 'F[xxx] = expr'. If 'F' is declared as a variable with a type annotation,
 	// we can obtain a contextual type from the annotated type without triggering a circularity. Otherwise, the
 	// assignment declaration has no contextual type.
-	symbol := c.getResolvedSymbol(node.Expression())
+	symbol := c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(node.Expression()))
 	return symbol.ValueDeclaration != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration) && symbol.ValueDeclaration.Type() != nil
 }
 
@@ -28739,7 +28725,7 @@ func (c *Checker) getIntersectionTypeFacts(t *Type, callerOnlyNeeds TypeFacts) T
 }
 
 func isZeroBigInt(t *Type) bool {
-	return getBigIntLiteralValue(t).Base10Value == "0"
+	return getBigIntLiteralValue(t) == jsnum.PseudoBigInt{}
 }
 
 func (c *Checker) isFunctionObjectType(t *Type) bool {

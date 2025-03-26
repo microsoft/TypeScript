@@ -1237,7 +1237,7 @@ func isValidBigIntString(s string, roundTripOnly bool) bool {
 	// * the full length of the input string (so the scanner is one character beyond the augmented input length)
 	// * it does not contain a numeric separator (the `BigInt` constructor does not accept a numeric separator in its input)
 	return success && result == ast.KindBigIntLiteral && scanner.TokenEnd() == len(s)+1 && flags&ast.TokenFlagsContainsSeparator == 0 &&
-		(!roundTripOnly || s == pseudoBigIntToString(jsnum.PseudoBigInt{Negative: negative, Base10Value: jsnum.ParsePseudoBigInt(scanner.TokenValue())}))
+		(!roundTripOnly || s == pseudoBigIntToString(jsnum.NewPseudoBigInt(jsnum.ParsePseudoBigInt(scanner.TokenValue()), negative)))
 }
 
 func isValidESSymbolDeclaration(node *ast.Node) bool {

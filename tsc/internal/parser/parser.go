@@ -5307,9 +5307,12 @@ func (p *Parser) parsePropertyAccessExpressionRest(pos int, expression *ast.Expr
 	if isOptionalChain && ast.IsPrivateIdentifier(name) {
 		p.parseErrorAtRange(p.skipRangeTrivia(name.Loc), diagnostics.An_optional_chain_cannot_contain_private_identifiers)
 	}
-	if ast.IsExpressionWithTypeArguments(expression) && expression.AsExpressionWithTypeArguments().TypeArguments != nil {
-		loc := p.skipRangeTrivia(expression.AsExpressionWithTypeArguments().TypeArguments.Loc)
-		p.parseErrorAtRange(loc, diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access)
+	if ast.IsExpressionWithTypeArguments(expression) {
+		typeArguments := expression.AsExpressionWithTypeArguments().TypeArguments
+		if typeArguments != nil {
+			loc := core.NewTextRange(typeArguments.Pos()-1, scanner.SkipTrivia(p.sourceText, typeArguments.End())+1)
+			p.parseErrorAtRange(loc, diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access)
+		}
 	}
 	p.finishNode(propertyAccess, pos)
 	return propertyAccess

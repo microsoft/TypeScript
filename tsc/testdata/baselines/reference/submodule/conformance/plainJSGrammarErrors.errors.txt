@@ -65,6 +65,8 @@ plainJSGrammarErrors.js(102,4): error TS1358: Tagged template expressions are no
 plainJSGrammarErrors.js(104,6): error TS1171: A comma expression is not allowed in a computed property name.
 plainJSGrammarErrors.js(105,5): error TS18016: Private identifiers are not allowed outside class bodies.
 plainJSGrammarErrors.js(106,5): error TS1042: 'export' modifier cannot be used here.
+plainJSGrammarErrors.js(108,25): error TS1162: An object member cannot be declared optional.
+plainJSGrammarErrors.js(109,6): error TS1162: An object member cannot be declared optional.
 plainJSGrammarErrors.js(110,5): error TS18004: No value exists in scope for the shorthand property 'definitely'. Either declare one or provide an initializer.
 plainJSGrammarErrors.js(110,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
 plainJSGrammarErrors.js(111,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
@@ -103,7 +105,7 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
 plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== plainJSGrammarErrors.js (102 errors) ====
+==== plainJSGrammarErrors.js (104 errors) ====
     class C {
         // #private mistakes
         q = #unbound
@@ -345,7 +347,11 @@ plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be u
 !!! error TS1042: 'export' modifier cannot be used here.
         // TODO: See what the existing JS error is like for these
         cantHaveQuestionMark?: 1,
+                            ~
+!!! error TS1162: An object member cannot be declared optional.
         m?() { return 12 },
+         ~
+!!! error TS1162: An object member cannot be declared optional.
         definitely!,
         ~~~~~~~~~~
 !!! error TS18004: No value exists in scope for the shorthand property 'definitely'. Either declare one or provide an initializer.

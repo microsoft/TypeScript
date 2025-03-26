@@ -10,6 +10,7 @@ autoAccessorDisallowedModifiers.ts(10,5): error TS1275: 'accessor' modifier can 
 autoAccessorDisallowedModifiers.ts(11,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(12,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(13,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
+autoAccessorDisallowedModifiers.ts(14,15): error TS1276: An 'accessor' property cannot be declared optional.
 autoAccessorDisallowedModifiers.ts(15,14): error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.
 autoAccessorDisallowedModifiers.ts(16,14): error TS1243: 'declare' modifier cannot be used with 'accessor' modifier.
 autoAccessorDisallowedModifiers.ts(20,14): error TS1029: 'override' modifier must precede 'accessor' modifier.
@@ -29,7 +30,7 @@ autoAccessorDisallowedModifiers.ts(37,1): error TS1275: 'accessor' modifier can 
 autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 
 
-==== autoAccessorDisallowedModifiers.ts (29 errors) ====
+==== autoAccessorDisallowedModifiers.ts (30 errors) ====
     abstract class C1 {
         accessor accessor a: any;
                  ~~~~~~~~
@@ -68,6 +69,8 @@ autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can 
         ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
         accessor l?: any;
+                  ~
+!!! error TS1276: An 'accessor' property cannot be declared optional.
         accessor readonly m: any;
                  ~~~~~~~~
 !!! error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.

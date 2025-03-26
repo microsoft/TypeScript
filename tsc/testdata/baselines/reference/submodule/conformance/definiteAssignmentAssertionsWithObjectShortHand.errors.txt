@@ -1,7 +1,8 @@
 definiteAssignmentAssertionsWithObjectShortHand.ts(2,16): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+definiteAssignmentAssertionsWithObjectShortHand.ts(5,7): error TS1162: An object member cannot be declared optional.
 
 
-==== definiteAssignmentAssertionsWithObjectShortHand.ts (1 errors) ====
+==== definiteAssignmentAssertionsWithObjectShortHand.ts (2 errors) ====
     const a: string | undefined = 'ff';
     const foo = { a! }
                    ~
@@ -9,4 +10,6 @@ definiteAssignmentAssertionsWithObjectShortHand.ts(2,16): error TS1255: A defini
     
     const bar = {
         a ? () { }
+          ~
+!!! error TS1162: An object member cannot be declared optional.
     }

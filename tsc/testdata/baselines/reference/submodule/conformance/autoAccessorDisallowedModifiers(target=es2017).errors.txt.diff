@@ -1,14 +1,6 @@
 --- old.autoAccessorDisallowedModifiers(target=es2017).errors.txt
 +++ new.autoAccessorDisallowedModifiers(target=es2017).errors.txt
-@@= skipped -9, +9 lines =@@
- autoAccessorDisallowedModifiers.ts(11,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
- autoAccessorDisallowedModifiers.ts(12,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
- autoAccessorDisallowedModifiers.ts(13,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
--autoAccessorDisallowedModifiers.ts(14,15): error TS1276: An 'accessor' property cannot be declared optional.
- autoAccessorDisallowedModifiers.ts(15,14): error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.
- autoAccessorDisallowedModifiers.ts(16,14): error TS1243: 'declare' modifier cannot be used with 'accessor' modifier.
- autoAccessorDisallowedModifiers.ts(20,14): error TS1029: 'override' modifier must precede 'accessor' modifier.
-@@= skipped -14, +13 lines =@@
+@@= skipped -23, +23 lines =@@
  autoAccessorDisallowedModifiers.ts(33,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
  autoAccessorDisallowedModifiers.ts(34,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
  autoAccessorDisallowedModifiers.ts(35,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
@@ -17,23 +9,7 @@
  autoAccessorDisallowedModifiers.ts(36,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
  autoAccessorDisallowedModifiers.ts(37,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
  autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
- 
- 
--==== autoAccessorDisallowedModifiers.ts (30 errors) ====
-+==== autoAccessorDisallowedModifiers.ts (29 errors) ====
-     abstract class C1 {
-         accessor accessor a: any;
-                  ~~~~~~~~
-@@= skipped -45, +45 lines =@@
-         ~~~~~~~~
- !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
-         accessor l?: any;
--                  ~
--!!! error TS1276: An 'accessor' property cannot be declared optional.
-         accessor readonly m: any;
-                  ~~~~~~~~
- !!! error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.
-@@= skipped -50, +48 lines =@@
+@@= skipped -95, +95 lines =@@
      ~~~~~~~~
  !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
                              ~~~

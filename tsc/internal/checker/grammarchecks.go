@@ -1002,7 +1002,7 @@ func (c *Checker) checkGrammarForGenerator(node *ast.Node) bool {
 }
 
 func (c *Checker) checkGrammarForInvalidQuestionMark(postfixToken *ast.TokenNode, message *diagnostics.Message) bool {
-	return postfixToken != nil && postfixToken.Kind == ast.KindQuestionQuestionToken && c.grammarErrorOnNode(postfixToken, message)
+	return postfixToken != nil && postfixToken.Kind == ast.KindQuestionToken && c.grammarErrorOnNode(postfixToken, message)
 }
 
 func (c *Checker) checkGrammarForInvalidExclamationToken(postfixToken *ast.TokenNode, message *diagnostics.Message) bool {
