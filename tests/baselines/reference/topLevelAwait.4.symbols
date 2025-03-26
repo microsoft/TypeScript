@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/externalModules/topLevelAwait.4.ts] ////
+
+=== topLevelAwait.4.ts ===
+(await
+ WebAssembly.instantiateStreaming(fetch("")));
+>WebAssembly.instantiateStreaming : Symbol(WebAssembly.instantiateStreaming, Decl(lib.dom.d.ts, --, --))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>instantiateStreaming : Symbol(WebAssembly.instantiateStreaming, Decl(lib.dom.d.ts, --, --))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
+
+export class BitSet {}
+>BitSet : Symbol(BitSet, Decl(topLevelAwait.4.ts, 1, 46))
+
