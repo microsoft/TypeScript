@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_importType.ts] ////
+
+=== /a.js ===
+/** @implements {import('./b').B} */
+class A {
+>A : A
+>  : ^
+
+    /** @return {number} */
+    method() { throw new Error(); }
+>method : () => number
+>       : ^^^^^^      
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+}
+=== /b.ts ===
+export interface B  {
+    method(): number
+>method : () => number
+>       : ^^^^^^      
+}
+
