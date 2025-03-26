@@ -1,0 +1,115 @@
+trigger: none
+
+variables:
+  - name: _REMINDER
+    value: Review & undraft the release at https://github.com/microsoft/TypeScript/releases once it appears!
+  - name: PUBLISH_TAG
+    value: dev
+  - name: RELEASE_TITLE_NAME
+    value: 0.0.0 Test
+  - name: TAG_NAME
+    value: v0.0.0-SetMe
+
+resources:
+  pipelines:
+    - pipeline: 'tgz'
+      project: 'TypeScript'
+      source: 'Release\TypeScript Release'
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: TypeScript-AzurePipelines-EO
+      image: 1ESPT-Mariner2.0
+      os: linux
+
+    sdl:
+      sourceAnalysisPool:
+        name: TypeScript-AzurePipelines-EO
+        image: 1ESPT-Windows2022
+        os: windows
+
+    stages:
+      - stage: Stage_1
+        displayName: Publish tarball
+        jobs:
+          - job: Job_1
+            displayName: Agent job
+            condition: succeeded()
+            timeoutInMinutes: 0
+            templateContext:
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: 'tgz'
+                  artifactName: 'tgz'
+                  targetPath: '$(Pipeline.Workspace)/tgz'
+                - input: pipelineArtifact
+                  displayName: 'Download Pipeline Artifact'
+                  project: cf7ac146-d525-443c-b23c-0d58337efebc
+                  definition: 20
+                  artifactName: tgz
+                  itemPattern: '**/typescript-*.tgz'
+            steps:
+              - task: CmdLine@2
+                displayName: Rename versioned drop to typescript.tgz
+                inputs:
+                  script: |-
+                    pushd $(System.ArtifactsDirectory)
+                    ls -lhR
+                    mv typescript-*.tgz typescript.tgz
+              - task: Npm@1
+                displayName: npm publish tarball
+                inputs:
+                  command: custom
+                  workingDir: $(System.ArtifactsDirectory)
+                  verbose: false
+                  customCommand: publish $(System.ArtifactsDirectory)/typescript.tgz --tag $(PUBLISH_TAG)
+                  customEndpoint: Typescript NPM
+                  publishEndpoint: Typescript NPM
+
+      - stage: Stage_2
+        displayName: Publish git tag
+        dependsOn: Stage_1
+        jobs:
+          - job: Job_1
+            displayName: Agent job
+            condition: succeeded()
+            timeoutInMinutes: 0
+            templateContext:
+              type: releaseJob
+              isProduction: true
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: 'tgz'
+                  artifactName: 'tgz'
+                  targetPath: '$(Pipeline.Workspace)/tgz'
+            steps:
+              - task: GitHubRelease@1
+                displayName: GitHub release (create)
+                inputs:
+                  gitHubConnection: typescript-bot connection
+                  repositoryName: microsoft/TypeScript
+                  tagSource: userSpecifiedTag
+                  tag: $(TAG_NAME)
+                  title: TypeScript $(RELEASE_TITLE_NAME)
+                  releaseNotesSource: inline
+                  releaseNotes: |-
+                    For release notes, check out the [release announcement]().
+                     For new features, check out the [What's new in TypeScript $(TAG_NAME)]().
+                    For the complete list of fixed issues, check out the
+                    * [fixed issues query for Typescript $(TAG_NAME)](https://github.com/microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue+milestone%3A%22TypeScript+3.3%22+is%3Aclosed+).
+                    Downloads are available on:
+                    * [npm](https://www.npmjs.com/package/typescript)
+                    * [Visual Studio 2017]() ([Select new version in project options](https://github.com/microsoft/TypeScript/wiki/Updating-TypeScript-in-Visual-Studio-2017))
+                    * [NuGet package](https://www.nuget.org/packages/Microsoft.TypeScript.MSBuild)
+                    Special thanks to all our contributors in this release:
+                    * [Empty list]
+                  assets: $(System.ArtifactsDirectory)/**/typescript-*.tgz
+                  isDraft: true
+                  addChangeLog: false
