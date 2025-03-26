@@ -169,6 +169,7 @@ import {
     EntityNameOrEntityNameExpression,
     entityNameToString,
     EnumDeclaration,
+    EnumLiteralExpression,
     EnumMember,
     EnumType,
     equateValues,
@@ -536,7 +537,10 @@ import {
     isEntityNameExpression,
     isEnumConst,
     isEnumDeclaration,
+    isEnumLiteralDeclaration,
+    isEnumLiteralExpression,
     isEnumMember,
+    isEnumTypeAnnotation,
     isExclusivelyTypeOnlyImportOrExport,
     isExpandoPropertyDeclaration,
     isExportAssignment,
@@ -11987,7 +11991,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // getTypeOfSymbol dispatches some JS merges incorrectly because their symbol flags are not mutually exclusive.
         // Re-dispatch based on valueDeclaration.kind instead.
-        else if (isEnumDeclaration(declaration)) {
+        else if (isEnumDeclaration(declaration) || isEnumLiteralExpression(declaration)) {
             type = getTypeOfFuncClassEnumModule(symbol);
         }
         else if (isEnumMember(declaration)) {
@@ -12879,7 +12883,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const memberTypeList: Type[] = [];
             if (symbol.declarations) {
                 for (const declaration of symbol.declarations) {
-                    if (declaration.kind === SyntaxKind.EnumDeclaration) {
+                    if (declaration.kind === SyntaxKind.EnumDeclaration || declaration.kind === SyntaxKind.EnumLiteralExpression) {
                         for (const member of (declaration as EnumDeclaration).members) {
                             if (hasBindableName(member)) {
                                 const memberSymbol = getSymbolOfDeclaration(member);
@@ -16709,6 +16713,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 links.resolvedSymbol = unknownSymbol;
                 return links.resolvedType = checkExpressionCached(node.parent.expression);
             }
+            // `var MyEnum: enum = { FirstValue: 1, SecondValue: 2 }` should resolve to a union of the enum values.
+            if (node.parent && isEnumLiteralDeclaration(node.parent)) {
+                return links.resolvedType = checkExpressionCached(node.parent.initializer);
+            }
             let symbol: Symbol | undefined;
             let type: Type | undefined;
             const meaning = SymbolFlags.Type;
@@ -16763,6 +16771,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.EnumDeclaration:
+                        case SyntaxKind.EnumLiteralExpression:
                             return declaration;
                     }
                 }
@@ -41112,6 +41121,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkArrayLiteral(node as ArrayLiteralExpression, checkMode, forceTuple);
             case SyntaxKind.ObjectLiteralExpression:
                 return checkObjectLiteral(node as ObjectLiteralExpression, checkMode);
+            case SyntaxKind.EnumLiteralExpression:
+                return checkEnumLiteralExpression(node as EnumLiteralExpression);
             case SyntaxKind.PropertyAccessExpression:
                 return checkPropertyAccessExpression(node as PropertyAccessExpression, checkMode);
             case SyntaxKind.QualifiedName:
@@ -44131,7 +44142,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkClassNameCollisionWithObject(name);
             }
         }
-        else if (isEnumDeclaration(node)) {
+        else if (isEnumDeclaration(node) || isEnumLiteralDeclaration(node)) {
             checkTypeNameIsReserved(name, Diagnostics.Enum_name_cannot_be_0);
         }
     }
@@ -47036,16 +47047,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function computeEnumMemberValues(node: EnumDeclaration) {
+    function computeEnumMemberValues(node: EnumDeclaration | EnumLiteralExpression) {
         const nodeLinks = getNodeLinks(node);
         if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
             nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
-            let autoValue: number | undefined = 0;
+            // EnumLiteralExpressions are essentially plain ObjectLiteralExpressions and can not have computed values.
+            const hasComputedValues = !isEnumLiteralExpression(node);
+            let autoValue: number | undefined = hasComputedValues ? 0 : undefined;
             let previous: EnumMember | undefined;
             for (const member of node.members) {
                 const result = computeEnumMemberValue(member, autoValue, previous);
                 getNodeLinks(member).enumMemberValue = result;
-                autoValue = typeof result.value === "number" ? result.value + 1 : undefined;
+                autoValue = (hasComputedValues && typeof result.value === "number") ? result.value + 1 : undefined;
                 previous = member;
             }
         }
@@ -47093,6 +47106,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isConstEnum = isEnumConst(member.parent);
         const initializer = member.initializer!;
         const result = evaluate(initializer, member);
+        const isDecl = isEnumDeclaration(member.parent);
         if (result.value !== undefined) {
             if (isConstEnum && typeof result.value === "number" && !isFinite(result.value)) {
                 error(
@@ -47106,7 +47120,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(
                     initializer,
                     Diagnostics._0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax_when_isolatedModules_is_enabled,
-                    `${idText(member.parent.name)}.${getTextOfPropertyName(member.name)}`,
+                    isDecl ? `${idText(member.parent.name)}.${getTextOfPropertyName(member.name)}` : `${member.parent.name}.${getTextOfPropertyName(member.name)}`,
                 );
             }
         }
@@ -47194,6 +47208,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         addLazyDiagnostic(() => checkEnumDeclarationWorker(node));
     }
 
+    function checkEnumLiteralExpression(node: EnumLiteralExpression) {
+        addLazyDiagnostic(() => checkEnumDeclarationWorker(node as any));
+        return getTypeOfSymbol(getSymbolOfDeclaration(node));
+    }
+
     function checkEnumDeclarationWorker(node: EnumDeclaration) {
         // Grammar checking
         checkGrammarModifiers(node);
@@ -47221,7 +47240,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const enumIsConst = isEnumConst(node);
                 // check that const is placed\omitted on all enum declarations
                 forEach(enumSymbol.declarations, decl => {
-                    if (isEnumDeclaration(decl) && isEnumConst(decl) !== enumIsConst) {
+                    if ((isEnumDeclaration(decl) || isEnumLiteralExpression(decl)) && isEnumConst(decl) !== enumIsConst) {
                         error(getNameOfDeclaration(decl), Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                     }
                 });
@@ -48857,6 +48876,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ModuleDeclaration:
                         copyLocallyVisibleExportSymbols(getSymbolOfDeclaration(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
                         break;
+                    case SyntaxKind.EnumLiteralExpression:
                     case SyntaxKind.EnumDeclaration:
                         copySymbols(getSymbolOfDeclaration(location as EnumDeclaration).exports!, meaning & SymbolFlags.EnumMember);
                         break;
@@ -49307,6 +49327,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // no other meta properties are valid syntax, thus no others should have symbols
                 return undefined;
             }
+            else if (isEnumTypeAnnotation(node)) {
+                // Avoid symbolizing "enum" keywords in type annotations.
+                return undefined;
+            }
         }
 
         switch (node.kind) {
@@ -49493,6 +49517,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isDeclarationNameOrImportPropertyName(node)) {
             const symbol = getSymbolAtLocation(node);
             if (symbol) {
+                if (symbol.valueDeclaration && isEnumLiteralDeclaration(symbol.valueDeclaration)) {
+                    return getDeclaredTypeOfEnum(symbol);
+                }
                 return getTypeOfSymbol(symbol);
             }
             return errorType;
@@ -50355,6 +50382,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             case SyntaxKind.PropertyAssignment:
                             case SyntaxKind.ShorthandPropertyAssignment:
                             case SyntaxKind.EnumMember:
+                            case SyntaxKind.EnumLiteralExpression:
                             case SyntaxKind.ObjectLiteralExpression:
                             case SyntaxKind.FunctionDeclaration:
                             case SyntaxKind.FunctionExpression:
@@ -51332,6 +51360,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             findFirstModifierExcept(node, SyntaxKind.AwaitKeyword) :
                             find(node.modifiers, isModifier);
                     case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.EnumLiteralExpression:
                         return findFirstModifierExcept(node, SyntaxKind.ConstKeyword);
                     default:
                         Debug.assertNever(node);

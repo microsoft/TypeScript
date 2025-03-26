@@ -56,6 +56,7 @@ import {
     EntityName,
     entityNameToString,
     EnumDeclaration,
+    EnumLiteralDeclaration,
     every,
     ExportAssignment,
     ExportDeclaration,
@@ -123,6 +124,7 @@ import {
     isClassStaticBlockDeclaration,
     isDecorator,
     isElementAccessExpression,
+    isEnumLiteralExpression,
     isExpandoPropertyDeclaration,
     isExportAssignment,
     isExportDeclaration,
@@ -1426,6 +1428,19 @@ export function isConstTypeReference(node: Node): boolean {
         node.typeName.escapedText === "const" && !node.typeArguments;
 }
 
+export function isEnumTypeReference(node: Node): boolean {
+    return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+        node.typeName.escapedText === "enum" && !node.typeArguments;
+}
+export function isEnumLiteralDeclaration(node: Node): node is EnumLiteralDeclaration {
+    return isVariableDeclaration(node) && hasType(node) && isEnumTypeReference(node.type!) && hasInitializer(node) && isEnumLiteralExpression(node.initializer!);
+}
+
+export function isEnumTypeAnnotation(node: Node): boolean {
+    if (isIdentifier(node)) node = node.parent;
+    return isEnumTypeReference(node) && node.parent && isEnumLiteralDeclaration(node.parent);
+}
+
 export function skipPartiallyEmittedExpressions(node: Expression): Expression;
 export function skipPartiallyEmittedExpressions(node: Node): Node;
 export function skipPartiallyEmittedExpressions(node: Node) {
@@ -2006,6 +2021,7 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.ArrayLiteralExpression:
         case SyntaxKind.ParenthesizedExpression:
         case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.EnumLiteralExpression:
         case SyntaxKind.ClassExpression:
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.Identifier:
@@ -2323,6 +2339,7 @@ function isDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.ClassStaticBlockDeclaration
         || kind === SyntaxKind.Constructor
         || kind === SyntaxKind.EnumDeclaration
+        || kind === SyntaxKind.EnumLiteralExpression
         || kind === SyntaxKind.EnumMember
         || kind === SyntaxKind.ExportSpecifier
         || kind === SyntaxKind.FunctionDeclaration
