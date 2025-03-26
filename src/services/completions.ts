@@ -38,6 +38,7 @@ import {
     ConstructorDeclaration,
     ContextFlags,
     countWhere,
+    createDeclarationName,
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
     createPrinter,
@@ -111,7 +112,6 @@ import {
     getSourceFileOfModule,
     getSwitchedType,
     getSymbolId,
-    getSynthesizedDeepClone,
     getTokenAtPosition,
     getTouchingPropertyName,
     hasDocComment,
@@ -326,7 +326,6 @@ import {
     programContainsModules,
     PropertyAccessExpression,
     PropertyDeclaration,
-    PropertyName,
     PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
@@ -2314,7 +2313,7 @@ function createObjectLiteralMethod(
     }
     const checker = program.getTypeChecker();
     const declaration = declarations[0];
-    const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
+    const name = createDeclarationName(symbol, declaration);
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const builderFlags = NodeBuilderFlags.OmitThisParameter | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
