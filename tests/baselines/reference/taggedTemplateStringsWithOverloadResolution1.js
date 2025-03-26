@@ -26,7 +26,12 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 
 //// [taggedTemplateStringsWithOverloadResolution1.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    if (Object.freeze) {
+        Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+    }
+    else {
+        cooked.raw = raw;
+    }
     return cooked;
 };
 function foo() {
