@@ -285,14 +285,18 @@ export const testAll = task({
 const customLinterPath = "./_tools/custom-gcl";
 const customLinterHashPath = customLinterPath + ".hash";
 
-const golangciLintVersion = memoize(() => {
+const golangciLintPackage = memoize(() => {
     const golangciLintYml = fs.readFileSync(".custom-gcl.yml", "utf8");
     const pattern = /^version:\s*(v\d+\.\d+\.\d+).*$/m;
     const match = pattern.exec(golangciLintYml);
     if (!match) {
         throw new Error("Expected version in .custom-gcl.yml");
     }
-    return match[1];
+    const version = match[1];
+    const major = version.split(".")[0];
+    const versionSuffix = ["v0", "v1"].includes(major) ? "" : "/" + major;
+
+    return `github.com/golangci/golangci-lint${versionSuffix}/cmd/golangci-lint@${version}`;
 });
 
 const customlintHash = memoize(() => {
@@ -327,7 +331,7 @@ const buildCustomLinter = memoize(async () => {
         return;
     }
 
-    await $`go run github.com/golangci/golangci-lint/cmd/golangci-lint@${golangciLintVersion()} custom`;
+    await $`go run ${golangciLintPackage()} custom`;
     await $`${customLinterPath} cache clean`;
 
     fs.writeFileSync(customLinterHashPath, hash);
@@ -338,10 +342,7 @@ export const lint = task({
     run: async () => {
         await buildCustomLinter();
 
-        const lintArgs = ["run", "--sort-results", "--show-stats"];
-        if (isCI) {
-            lintArgs.push("--timeout=5m");
-        }
+        const lintArgs = ["run"];
         if (defaultGoBuildTags.length) {
             lintArgs.push("--build-tags", defaultGoBuildTags.join(","));
         }
