@@ -491,19 +491,6 @@ func isFileLevelReservedGeneratedIdentifier(emitContext *printer.EmitContext, na
 		info.Flags.IsReservedInNestedScopes()
 }
 
-func containsDynamicImport(emitContext *printer.EmitContext, node *ast.SourceFile) bool {
-	original := emitContext.MostOriginal(node.AsNode())
-	if ast.IsSourceFile(original) {
-		node = original.AsSourceFile()
-	}
-	if node.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 {
-		return ast.ForEachDynamicImportOrRequireCall(node, false, false, func(node *ast.Node, _ *ast.Node) bool {
-			return ast.IsImportCall(node)
-		})
-	}
-	return false
-}
-
 func createEmptyImports(factory *ast.NodeFactory) *ast.Statement {
 	return factory.NewExportDeclaration(
 		nil,   /*modifiers*/
