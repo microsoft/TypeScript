@@ -61,7 +61,7 @@ func (tx *RuntimeSyntaxTransformer) pushScope(node *ast.Node) (savedCurrentScope
 	case ast.KindCaseBlock, ast.KindModuleBlock, ast.KindBlock:
 		tx.currentScope = node
 		tx.currentScopeFirstDeclarationsOfName = nil
-	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindEnumDeclaration, ast.KindModuleDeclaration, ast.KindVariableDeclaration:
+	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindEnumDeclaration, ast.KindModuleDeclaration, ast.KindVariableStatement:
 		tx.recordDeclarationInScope(node)
 	}
 	return savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName
@@ -78,10 +78,15 @@ func (tx *RuntimeSyntaxTransformer) popScope(savedCurrentScope *ast.Node, savedC
 
 // Visits each node in the AST
 func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
-	savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName := tx.pushScope(node)
 	grandparentNode := tx.pushNode(node)
 	defer tx.popNode(grandparentNode)
+
+	savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName := tx.pushScope(node)
 	defer tx.popScope(savedCurrentScope, savedCurrentScopeFirstDeclarationsOfName)
+
+	if node.SubtreeFacts()&ast.SubtreeContainsTypeScript == 0 && (tx.currentNamespace == nil && tx.currentEnum == nil || node.SubtreeFacts()&ast.SubtreeContainsIdentifier == 0) {
+		return node
+	}
 
 	switch node.Kind {
 	// TypeScript parameter property modifiers are elided
@@ -119,14 +124,33 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 
 // Records that a declaration was emitted in the current scope, if it was the first declaration for the provided symbol.
 func (tx *RuntimeSyntaxTransformer) recordDeclarationInScope(node *ast.Node) {
-	name := node.Name()
-	if name != nil && ast.IsIdentifier(name) {
-		if tx.currentScopeFirstDeclarationsOfName == nil {
-			tx.currentScopeFirstDeclarationsOfName = make(map[string]*ast.Node)
+	switch node.Kind {
+	case ast.KindVariableStatement:
+		tx.recordDeclarationInScope(node.AsVariableStatement().DeclarationList)
+		return
+	case ast.KindVariableDeclarationList:
+		for _, decl := range node.AsVariableDeclarationList().Declarations.Nodes {
+			tx.recordDeclarationInScope(decl)
 		}
-		text := name.Text()
-		if _, found := tx.currentScopeFirstDeclarationsOfName[text]; !found {
-			tx.currentScopeFirstDeclarationsOfName[text] = node
+		return
+	case ast.KindArrayBindingPattern, ast.KindObjectBindingPattern:
+		for _, element := range node.AsBindingPattern().Elements.Nodes {
+			tx.recordDeclarationInScope(element)
+		}
+		return
+	}
+	name := node.Name()
+	if name != nil {
+		if ast.IsIdentifier(name) {
+			if tx.currentScopeFirstDeclarationsOfName == nil {
+				tx.currentScopeFirstDeclarationsOfName = make(map[string]*ast.Node)
+			}
+			text := name.Text()
+			if _, found := tx.currentScopeFirstDeclarationsOfName[text]; !found {
+				tx.currentScopeFirstDeclarationsOfName[text] = node
+			}
+		} else if ast.IsBindingPattern(name) {
+			tx.recordDeclarationInScope(name)
 		}
 	}
 }

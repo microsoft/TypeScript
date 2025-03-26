@@ -40,7 +40,10 @@ func (tx *TypeEraserTransformer) elide(node *ast.Statement) *ast.Statement {
 }
 
 func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
-	// !!! TransformFlags were traditionally used here to skip over subtrees that contain no TypeScript syntax
+	if node.SubtreeFacts()&ast.SubtreeContainsTypeScript == 0 {
+		return node
+	}
+
 	if ast.IsStatement(node) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) {
 		return tx.elide(node)
 	}
@@ -260,6 +263,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			return nil
 		}
 		return tx.factory.UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, n.Attributes)
+
 	case ast.KindImportClause:
 		n := node.AsImportClause()
 		if n.IsTypeOnly {
@@ -273,14 +277,20 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			return nil
 		}
 		return tx.factory.UpdateImportClause(n, false /*isTypeOnly*/, name, namedBindings)
+
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()
+		if len(n.Elements.Nodes) == 0 {
+			// Do not elide a side-effect only import declaration.
+			return node
+		}
 		elements := tx.visitor.VisitNodes(n.Elements)
 		if !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && len(elements.Nodes) == 0 {
 			// all import specifiers were elided
 			return nil
 		}
 		return tx.factory.UpdateNamedImports(n, elements)
+
 	case ast.KindImportSpecifier:
 		n := node.AsImportSpecifier()
 		if n.IsTypeOnly {
@@ -288,6 +298,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			return nil
 		}
 		return node
+
 	case ast.KindExportDeclaration:
 		n := node.AsExportDeclaration()
 		if n.IsTypeOnly {
@@ -303,14 +314,21 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			}
 		}
 		return tx.factory.UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.visitor.VisitNode(n.ModuleSpecifier), tx.visitor.VisitNode(n.Attributes))
+
 	case ast.KindNamedExports:
 		n := node.AsNamedExports()
+		if len(n.Elements.Nodes) == 0 {
+			// Do not elide an empty export declaration.
+			return node
+		}
+
 		elements := tx.visitor.VisitNodes(n.Elements)
 		if !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && len(elements.Nodes) == 0 {
 			// all export specifiers were elided
 			return nil
 		}
 		return tx.factory.UpdateNamedExports(n, elements)
+
 	case ast.KindExportSpecifier:
 		n := node.AsExportSpecifier()
 		if n.IsTypeOnly {
@@ -318,6 +336,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 			return nil
 		}
 		return node
+
 	default:
 		return tx.visitor.VisitEachChild(node)
 	}

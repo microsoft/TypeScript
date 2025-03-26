@@ -1,0 +1,10 @@
+--- old.asyncConstructor_es6.js
++++ new.asyncConstructor_es6.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [asyncConstructor_es6.js]
+ class C {
+-    constructor() {
++    async constructor() {
+     }
+ }

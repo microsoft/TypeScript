@@ -136,12 +136,10 @@ func (tx *CommonJSModuleTransformer) visit(node *ast.Node) *ast.Node {
 
 // Visits source elements that are not top-level or top-level nested statements without ancestor tracking.
 func (tx *CommonJSModuleTransformer) visitNoStack(node *ast.Node, resultIsDiscarded bool) *ast.Node {
-	// !!!
-	////// This visitor does not need to descend into the tree if there is no dynamic import, destructuring assignment, or update expression
-	////// as export/import statements are only transformed at the top level of a file.
-	////if (!(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier)) && !importsAndRequiresToRewriteOrShim?.length) {
-	////	return node;
-	////}
+	// This visitor does not need to descend into the tree if there are no dynamic imports or identifiers in the subtree
+	if !ast.IsSourceFile(node) && node.SubtreeFacts()&(ast.SubtreeContainsDynamicImport|ast.SubtreeContainsIdentifier) == 0 {
+		return node
+	}
 
 	switch node.Kind {
 	case ast.KindSourceFile:
@@ -229,7 +227,7 @@ func (tx *CommonJSModuleTransformer) visitAssignmentPatternNoStack(node *ast.Nod
 func (tx *CommonJSModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 	if node.IsDeclarationFile ||
 		!(ast.IsEffectiveExternalModule(node, tx.compilerOptions) ||
-			containsDynamicImport(tx.emitContext, node) ||
+			node.SubtreeFacts()&ast.SubtreeContainsDynamicImport != 0 ||
 			ast.IsJsonSourceFile(node) && tx.compilerOptions.HasJsonModuleEmitEnabled() && len(tx.compilerOptions.OutFile) > 0) {
 		return node.AsNode()
 	}

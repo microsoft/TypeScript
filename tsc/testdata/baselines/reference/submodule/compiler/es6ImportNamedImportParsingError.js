@@ -18,7 +18,6 @@ export var m = a;
 //// [es6ImportNamedImportParsingError_1.js]
 from;
 "es6ImportNamedImportParsingError_0";
-import "es6ImportNamedImportParsingError_0";
 {
     a;
 }

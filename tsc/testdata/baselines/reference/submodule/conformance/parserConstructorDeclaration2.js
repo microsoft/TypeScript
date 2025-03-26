@@ -7,5 +7,5 @@ class C {
 
 //// [parserConstructorDeclaration2.js]
 class C {
-    constructor() { }
+    static constructor() { }
 }

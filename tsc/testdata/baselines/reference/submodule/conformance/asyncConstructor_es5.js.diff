@@ -7,7 +7,7 @@
 -var C = /** @class */ (function () {
 -    function C() {
 +class C {
-+    constructor() {
++    async constructor() {
      }
 -    return C;
 -}());

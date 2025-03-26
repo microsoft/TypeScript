@@ -8,6 +8,6 @@ class C {
 
 //// [asyncConstructor_es5.js]
 class C {
-    constructor() {
+    async constructor() {
     }
 }

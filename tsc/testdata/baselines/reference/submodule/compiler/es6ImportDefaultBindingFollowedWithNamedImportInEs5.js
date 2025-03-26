@@ -30,7 +30,6 @@ exports.m = exports.a;
 //// [es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
 const es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
 var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_1.a;
 const es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");

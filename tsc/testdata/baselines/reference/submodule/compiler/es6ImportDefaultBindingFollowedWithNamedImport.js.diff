@@ -1,14 +1,6 @@
 --- old.es6ImportDefaultBindingFollowedWithNamedImport.js
 +++ new.es6ImportDefaultBindingFollowedWithNamedImport.js
-@@= skipped -31, +31 lines =@@
- //// [es6ImportDefaultBindingFollowedWithNamedImport_1.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
-+require("./es6ImportDefaultBindingFollowedWithNamedImport_0");
- const es6ImportDefaultBindingFollowedWithNamedImport_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImport_0");
- var x1 = es6ImportDefaultBindingFollowedWithNamedImport_0_1.a;
- const es6ImportDefaultBindingFollowedWithNamedImport_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImport_0");
-@@= skipped -11, +12 lines =@@
+@@= skipped -42, +42 lines =@@
  var x1 = es6ImportDefaultBindingFollowedWithNamedImport_0_4.x;
  const es6ImportDefaultBindingFollowedWithNamedImport_0_5 = require("./es6ImportDefaultBindingFollowedWithNamedImport_0");
  var x1 = es6ImportDefaultBindingFollowedWithNamedImport_0_5.m;

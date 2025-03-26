@@ -53,7 +53,7 @@ class C1 {
     accessor i() { }
     accessor get j() { return false; }
     accessor set k(v) { }
-    constructor() { }
+    accessor constructor() { }
     accessor l;
     accessor m;
 }

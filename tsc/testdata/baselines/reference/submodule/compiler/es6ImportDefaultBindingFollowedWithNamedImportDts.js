@@ -49,7 +49,6 @@ exports.x11 = x11;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x6 = exports.x3 = exports.x5 = exports.x4 = exports.x2 = exports.x1 = void 0;
-require("./server");
 const server_1 = require("./server");
 exports.x1 = new server_1.a();
 const server_2 = require("./server");

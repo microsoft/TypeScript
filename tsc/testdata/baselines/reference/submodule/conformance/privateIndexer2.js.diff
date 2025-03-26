@@ -10,7 +10,6 @@
 -    _a.string = string,
 -    _a);
 +var x = {
-+    [x]: string,
-+    string,
++    [x]: string, string,
 +};
  var y;
