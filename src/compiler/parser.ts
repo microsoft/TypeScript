@@ -4408,6 +4408,7 @@ namespace Parser {
 
     function parseMappedType() {
         const pos = getNodePos();
+        const hasJSDoc = hasPrecedingJSDocComment();
         parseExpected(SyntaxKind.OpenBraceToken);
         let readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined;
         if (token() === SyntaxKind.ReadonlyKeyword || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
@@ -4431,7 +4432,10 @@ namespace Parser {
         parseSemicolon();
         const members = parseList(ParsingContext.TypeMembers, parseTypeMember);
         parseExpected(SyntaxKind.CloseBraceToken);
-        return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), pos);
+        return withJSDoc(
+            finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), pos),
+            hasJSDoc,
+        );
     }
 
     function parseTupleElementType() {
