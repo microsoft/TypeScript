@@ -221,7 +221,7 @@ func (p *Parser) parseErrorAtCurrentToken(message *diagnostics.Message, args ...
 
 func (p *Parser) parseErrorAtRange(loc core.TextRange, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	// Don't report another error if it would just be at the same location as the last error
-	if len(p.diagnostics) == 0 || p.diagnostics[len(p.diagnostics)-1].Loc() != loc {
+	if len(p.diagnostics) == 0 || p.diagnostics[len(p.diagnostics)-1].Loc().Pos() != loc.Pos() {
 		result := ast.NewDiagnostic(nil, loc, message, args...)
 		p.diagnostics = append(p.diagnostics, result)
 		return result

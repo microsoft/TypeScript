@@ -2,25 +2,15 @@
 +++ new.conflictMarkerTrivia3.errors.txt
 @@= skipped -0, +0 lines =@@
 -conflictMarkerTrivia3.tsx(1,11): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
-+conflictMarkerTrivia3.tsx(1,16): error TS17002: Expected corresponding JSX closing tag for 'div'.
-+conflictMarkerTrivia3.tsx(1,16): error TS1005: ',' expected.
  conflictMarkerTrivia3.tsx(1,16): error TS1005: '</' expected.
  conflictMarkerTrivia3.tsx(2,1): error TS1185: Merge conflict marker encountered.
  
  
 -==== conflictMarkerTrivia3.tsx (3 errors) ====
-+==== conflictMarkerTrivia3.tsx (4 errors) ====
++==== conflictMarkerTrivia3.tsx (2 errors) ====
      const x = <div>
 -              ~~~~~
 -!!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
                     
-+!!! error TS17002: Expected corresponding JSX closing tag for 'div'.
-+                   
-+                   
      <<<<<<< HEAD
      ~~~~~~~~~~~~
-+!!! error TS1005: ',' expected.
-+    ~~~~~~~~~~~~
- !!! error TS1005: '</' expected.
-     ~~~~~~~
- !!! error TS1185: Merge conflict marker encountered.

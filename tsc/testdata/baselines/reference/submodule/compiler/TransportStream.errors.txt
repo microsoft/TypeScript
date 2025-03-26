@@ -1,13 +1,11 @@
 TransportStream.ts(1,1): error TS1490: File appears to be binary.
 TransportStream.ts(1,1): error TS1434: Unexpected keyword or identifier.
 TransportStream.ts(1,1): error TS2304: Cannot find name 'G'.
-TransportStream.ts(1,3): error TS1146: Declaration expected.
 TransportStream.ts(1,3): error TS1127: Invalid character.
-TransportStream.ts(1,3): error TS1128: Declaration or statement expected.
 TransportStream.ts(1,4): error TS1128: Declaration or statement expected.
 
 
-==== TransportStream.ts (7 errors) ====
+==== TransportStream.ts (5 errors) ====
     G@’G@’G@’
     
 !!! error TS1490: File appears to be binary.
@@ -15,11 +13,7 @@ TransportStream.ts(1,4): error TS1128: Declaration or statement expected.
 !!! error TS1434: Unexpected keyword or identifier.
     ~
 !!! error TS2304: Cannot find name 'G'.
-      
-!!! error TS1146: Declaration expected.
       ~
 !!! error TS1127: Invalid character.
-      ~
-!!! error TS1128: Declaration or statement expected.
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1128: Declaration or statement expected.

@@ -38,15 +38,7 @@
  25.tsx(1,28): error TS1005: '>' expected.
  25.tsx(1,29): error TS1128: Declaration or statement expected.
  25.tsx(1,32): error TS2304: Cannot find name 'props'.
-@@= skipped -17, +15 lines =@@
- 28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
- 28.tsx(1,6): error TS1145: '{' or JSX element expected.
- 28.tsx(2,1): error TS1005: '</' expected.
-+29.tsx(1,7): error TS17008: JSX element '' has no corresponding closing tag.
- 29.tsx(1,7): error TS1003: Identifier expected.
- 29.tsx(2,1): error TS1005: '</' expected.
- 3.tsx(1,1): error TS1109: Expression expected.
-@@= skipped -79, +80 lines =@@
+@@= skipped -96, +94 lines =@@
  !!! error TS2304: Cannot find name 'c'.
                     ~
  !!! error TS1109: Expression expected.
@@ -115,15 +107,3 @@
                                 ~
  !!! error TS1005: '>' expected.
                                  ~~~
-@@= skipped -35, +33 lines =@@
-     
-     
- !!! error TS1005: '</' expected.
--==== 29.tsx (2 errors) ====
-+==== 29.tsx (3 errors) ====
-     <a b=<}>;
-+          
-+!!! error TS17008: JSX element '' has no corresponding closing tag.
-           ~
- !!! error TS1003: Identifier expected.
-     

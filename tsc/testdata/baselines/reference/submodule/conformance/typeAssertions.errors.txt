@@ -14,13 +14,12 @@ typeAssertions.ts(45,2): error TS2322: Type 'string | number' is not assignable 
 typeAssertions.ts(48,32): error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
 typeAssertions.ts(48,41): error TS1005: ')' expected.
 typeAssertions.ts(48,41): error TS2304: Cannot find name 'is'.
-typeAssertions.ts(48,41): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeAssertions.ts(48,44): error TS1434: Unexpected keyword or identifier.
 typeAssertions.ts(48,44): error TS2693: 'string' only refers to a type, but is being used as a value here.
 typeAssertions.ts(48,50): error TS1128: Declaration or statement expected.
 
 
-==== typeAssertions.ts (19 errors) ====
+==== typeAssertions.ts (18 errors) ====
     // Function call whose argument is a 1 arg generic function call with explicit type arguments
     function fn1<T>(t: T) { }
     function fn2(t: any) { }
@@ -105,8 +104,6 @@ typeAssertions.ts(48,50): error TS1128: Declaration or statement expected.
 !!! related TS1007 typeAssertions.ts:48:3: The parser expected to find a ')' to match the '(' token here.
                                             ~~
 !!! error TS2304: Cannot find name 'is'.
-                                            ~~~
-!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
                                                ~~~~~~
 !!! error TS1434: Unexpected keyword or identifier.
                                                ~~~~~~

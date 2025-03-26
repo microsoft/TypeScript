@@ -1,22 +1,6 @@
 --- old.manyCompilerErrorsInTheTwoFiles.errors.txt
 +++ new.manyCompilerErrorsInTheTwoFiles.errors.txt
-@@= skipped -0, +0 lines =@@
-+[96ma.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m1[0m const a =!@#!@$
-+[7m [0m [91m           ~[0m
-+
-+[96ma.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS1005: [0m',' expected.
-+
-+[7m1[0m const a =!@#!@$
-+[7m [0m [91m           ~[0m
-+
-+[96ma.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m1[0m const a =!@#!@$
-+[7m [0m [91m           ~[0m
-+
- [96ma.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
+@@= skipped -1, +1 lines =@@
  
  [7m1[0m const a =!@#!@$
  [7m [0m [91m           ~~[0m
@@ -32,21 +16,6 @@
 -[7m [0m [91m               [0m
 +[7m [0m [91m               ~[0m
 +
-+[96ma.ts[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m            ~[0m
-+
-+[96ma.ts[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS1005: [0m',' expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m            ~[0m
-+
-+[96ma.ts[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m            ~[0m
-+
  [96ma.ts[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
  
  [7m2[0m const b = !@#!@#!@#!
@@ -57,40 +26,10 @@
  [7m2[0m const b = !@#!@#!@#!
  [7m [0m [91m             ~[0m
 +
-+[96ma.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m               ~[0m
-+
-+[96ma.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS1005: [0m';' expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m               ~[0m
-+
-+[96ma.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m               ~[0m
-+
  [96ma.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
  
  [7m2[0m const b = !@#!@#!@#!
  [7m [0m [91m               ~~[0m
-+
-+[96ma.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m                  ~[0m
-+
-+[96ma.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1005: [0m';' expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m                  ~[0m
-+
-+[96ma.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1109: [0mExpression expected.
-+
-+[7m2[0m const b = !@#!@#!@#!
-+[7m [0m [91m                  ~[0m
 +
  [96ma.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
  
@@ -156,61 +95,8 @@
  [96mb.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'limit'.
  
  [7m3[0m limit
- [7m [0m [91m~~~~~[0m
- 
- 
--==== a.ts (16 errors) ====
-+==== a.ts (28 errors) ====
-     const a =!@#!@$
-+               
-+!!! error TS1109: Expression expected.
-+               ~
-+!!! error TS1005: ',' expected.
-+               ~
-+!!! error TS1109: Expression expected.
-                ~~
- !!! error TS18026: '#!' can only be used at the start of a file.
-                 ~
-@@= skipped -84, +168 lines =@@
-                    
- !!! error TS1109: Expression expected.
-     const b = !@#!@#!@#!
-+                
-+!!! error TS1109: Expression expected.
-+                ~
-+!!! error TS1005: ',' expected.
-+                ~
-+!!! error TS1109: Expression expected.
-                 ~~
- !!! error TS18026: '#!' can only be used at the start of a file.
-                  ~
- !!! error TS1134: Variable declaration expected.
-+                   
-+!!! error TS1109: Expression expected.
-+                   ~
-+!!! error TS1005: ';' expected.
-+                   ~
-+!!! error TS1109: Expression expected.
-                    ~~
- !!! error TS18026: '#!' can only be used at the start of a file.
-+                      
-+!!! error TS1109: Expression expected.
-+                      ~
-+!!! error TS1005: ';' expected.
-+                      ~
-+!!! error TS1109: Expression expected.
-                       ~~
- !!! error TS18026: '#!' can only be used at the start of a file.
-     OK!
-@@= skipped -40, +58 lines =@@
-     limit
-     ~~~~~
- !!! error TS2304: Cannot find name 'limit'.
--Found 19 errors in 2 files.
-+Found 31 errors in 2 files.
- 
+@@= skipped -128, +146 lines =@@
  Errors  Files
--    16  a.ts[90m:1[0m
-+    28  a.ts[90m:1[0m
+     16  a.ts[90m:1[0m
       3  b.ts[90m:1[0m
 +

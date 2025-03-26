@@ -1,15 +1,10 @@
 --- old.corrupted.errors.txt
 +++ new.corrupted.errors.txt
-@@= skipped -0, +0 lines =@@
- corrupted.ts(1,1): error TS1490: File appears to be binary.
-+corrupted.ts(1,1): error TS1128: Declaration or statement expected.
+@@= skipped -1, +1 lines =@@
  
  
--==== corrupted.ts (1 errors) ====
+ ==== corrupted.ts (1 errors) ====
 -    ï¿½ï¿½ï¿½
-+==== corrupted.ts (2 errors) ====
 +    Æ¼Á
      
  !!! error TS1490: File appears to be binary.
-+    ~~~~~~~~
-+!!! error TS1128: Declaration or statement expected.

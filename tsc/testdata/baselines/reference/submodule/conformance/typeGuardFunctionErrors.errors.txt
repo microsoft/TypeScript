@@ -2,7 +2,6 @@ typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
 typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
 typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
-typeGuardFunctionErrors.ts(17,57): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeGuardFunctionErrors.ts(17,60): error TS1434: Unexpected keyword or identifier.
 typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
@@ -38,7 +37,6 @@ typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
 typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
 typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
-typeGuardFunctionErrors.ts(97,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeGuardFunctionErrors.ts(97,25): error TS1434: Unexpected keyword or identifier.
 typeGuardFunctionErrors.ts(103,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'boolean' is not assignable to type 'D'.
@@ -49,7 +47,6 @@ typeGuardFunctionErrors.ts(110,9): error TS2408: Setters cannot return a value.
 typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeGuardFunctionErrors.ts(119,22): error TS2304: Cannot find name 'p1'.
 typeGuardFunctionErrors.ts(119,25): error TS1005: ';' expected.
-typeGuardFunctionErrors.ts(119,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeGuardFunctionErrors.ts(120,1): error TS1128: Declaration or statement expected.
 typeGuardFunctionErrors.ts(123,20): error TS1229: A type predicate cannot reference a rest parameter.
 typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
@@ -73,7 +70,7 @@ typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must b
 typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== typeGuardFunctionErrors.ts (56 errors) ====
+==== typeGuardFunctionErrors.ts (53 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
@@ -99,8 +96,6 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
 !!! error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
                                                             ~~
 !!! error TS1144: '{' or ';' expected.
-                                                            ~~~
-!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
                                                                ~
 !!! error TS1434: Unexpected keyword or identifier.
         return true;
@@ -247,8 +242,6 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
 !!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
                          ~~
 !!! error TS1144: '{' or ';' expected.
-                         ~~~
-!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
                             ~
 !!! error TS1434: Unexpected keyword or identifier.
         return true;
@@ -291,8 +284,6 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
 !!! error TS2304: Cannot find name 'p1'.
                             ~~
 !!! error TS1005: ';' expected.
-                            ~~~
-!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     }
     ~
 !!! error TS1128: Declaration or statement expected.

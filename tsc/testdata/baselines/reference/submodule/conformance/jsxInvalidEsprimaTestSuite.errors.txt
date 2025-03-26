@@ -52,7 +52,6 @@
 28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 28.tsx(1,6): error TS1145: '{' or JSX element expected.
 28.tsx(2,1): error TS1005: '</' expected.
-29.tsx(1,7): error TS17008: JSX element '' has no corresponding closing tag.
 29.tsx(1,7): error TS1003: Identifier expected.
 29.tsx(2,1): error TS1005: '</' expected.
 3.tsx(1,1): error TS1109: Expression expected.
@@ -277,10 +276,8 @@
     
     
 !!! error TS1005: '</' expected.
-==== 29.tsx (3 errors) ====
+==== 29.tsx (2 errors) ====
     <a b=<}>;
-          
-!!! error TS17008: JSX element '' has no corresponding closing tag.
           ~
 !!! error TS1003: Identifier expected.
     

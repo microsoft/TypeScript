@@ -1,32 +1,20 @@
 invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(2,16): error TS1177: Binary digit expected.
-invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(2,16): error TS1005: ',' expected.
 invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(3,17): error TS1177: Binary digit expected.
-invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(3,17): error TS1005: ',' expected.
 invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(4,15): error TS1178: Octal digit expected.
-invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(4,15): error TS1005: ',' expected.
 invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(5,15): error TS1178: Octal digit expected.
-invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts(5,15): error TS1005: ',' expected.
 
 
-==== invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts (8 errors) ====
+==== invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts (4 errors) ====
     // Error
     var binary = 0b21010;
                    
 !!! error TS1177: Binary digit expected.
-                   ~~~~~
-!!! error TS1005: ',' expected.
     var binary1 = 0B21010;
                     
 !!! error TS1177: Binary digit expected.
-                    ~~~~~
-!!! error TS1005: ',' expected.
     var octal = 0o81010;
                   
 !!! error TS1178: Octal digit expected.
-                  ~~~~~
-!!! error TS1005: ',' expected.
     var octal = 0O91010;
                   
 !!! error TS1178: Octal digit expected.
-                  ~~~~~
-!!! error TS1005: ',' expected.
