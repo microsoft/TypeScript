@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 5,000
+Instantiation count: 2,500
 
 === dependentDestructuredVariables.ts ===
 type Action =
@@ -1463,7 +1463,7 @@ const f60: Func = (kind, payload) => {
 // Repro from #48902
 
 function foo({
->foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { value1: any; test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; }) => void
+>foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
 >    : ^                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     value1,

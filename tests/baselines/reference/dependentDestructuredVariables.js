@@ -943,7 +943,6 @@ declare let fooAsyncGenM: FooAsyncGenMethod;
 type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
 declare const f60: Func;
 declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: {
-    value1: any;
     test1?: any;
     test2?: any;
     test3?: any;
@@ -953,6 +952,7 @@ declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, 
     test7?: any;
     test8?: any;
     test9?: any;
+    value1: any;
 }): void;
 declare function fa1(x: [true, number] | [false, string]): void;
 declare function fa2(x: {
