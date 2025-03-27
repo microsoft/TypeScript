@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/identityRelationEnumTypes.ts] ////
+
+=== identityRelationEnumTypes.ts ===
+namespace identityRelationEnumTypes {
+>identityRelationEnumTypes : typeof identityRelationEnumTypes
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Equals<A, B>
+>       : ^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    enum Enum {
+>Enum : Enum
+>     : ^^^^
+
+        A = 'a',
+>A : Enum.A
+>  : ^^^^^^
+>'a' : "a"
+>    : ^^^
+
+        B = 'b',
+>B : Enum.B
+>  : ^^^^^^
+>'b' : "b"
+>    : ^^^
+    }
+
+    enum DifferentEnum {
+>DifferentEnum : DifferentEnum
+>              : ^^^^^^^^^^^^^
+
+        A = 'a',
+>A : DifferentEnum.A
+>  : ^^^^^^^^^^^^^^^
+>'a' : "a"
+>    : ^^^
+
+        B = 'b',
+>B : DifferentEnum.B
+>  : ^^^^^^^^^^^^^^^
+>'b' : "b"
+>    : ^^^
+    }
+
+    type Identical1 = typeof Enum[keyof typeof Enum];
+>Identical1 : Enum
+>           : ^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+
+    type Identical2 = Enum.A | Enum.B;
+>Identical2 : Enum
+>           : ^^^^
+>Enum : any
+>     : ^^^
+>Enum : any
+>     : ^^^
+
+    type Identical3 = Enum.B | Enum.A | Enum.B;
+>Identical3 : Enum
+>           : ^^^^
+>Enum : any
+>     : ^^^
+>Enum : any
+>     : ^^^
+>Enum : any
+>     : ^^^
+
+    type Identical4 = Enum.B | (Enum.A | Enum.B);
+>Identical4 : Enum
+>           : ^^^^
+>Enum : any
+>     : ^^^
+>Enum : any
+>     : ^^^
+>Enum : any
+>     : ^^^
+
+    type Identical5 = (Enum.A & {}) | (Enum.B & {})
+>Identical5 : Enum
+>           : ^^^^
+>Enum : any
+>     : ^^^
+>Enum : any
+>     : ^^^
+
+    type Different1 = Enum.A | Enum.A;
+>Different1 : Enum.A
+>           : ^^^^^^
+>Enum : any
+>     : ^^^
+>Enum : any
+>     : ^^^
+
+    type Different2 = Enum.A | DifferentEnum.B;
+>Different2 : Different2
+>           : ^^^^^^^^^^
+>Enum : any
+>     : ^^^
+>DifferentEnum : any
+>              : ^^^
+
+    type Result1 = Equals<Enum, Identical1>;  // true
+>Result1 : true
+>        : ^^^^
+
+    type Result2 = Equals<Enum, Identical2>;  // true
+>Result2 : true
+>        : ^^^^
+
+    type Result3 = Equals<Enum, Identical3>;  // true
+>Result3 : true
+>        : ^^^^
+
+    type Result4 = Equals<Enum, Identical4>;  // true
+>Result4 : true
+>        : ^^^^
+
+    type Result5 = Equals<Enum, Identical5>;  // true
+>Result5 : true
+>        : ^^^^
+
+    type Result6 = Equals<Enum, Different1>;  // false
+>Result6 : false
+>        : ^^^^^
+
+    type Result7 = Equals<Enum, Different2>;  // false
+>Result7 : false
+>        : ^^^^^
+}
+
