@@ -4,7 +4,7 @@
  >"" : ""
  
  switch (/** @type {"foo" | "bar"} */ (value)) {
-->(value) : "foo" | "bar"
+->(value) : "bar" | "foo"
 +>(value) : string
  >value : string
  

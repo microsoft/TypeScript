@@ -1,11 +1,6 @@
 --- old.es2022IntlAPIs.types
 +++ new.es2022IntlAPIs.types
-@@= skipped -13, +13 lines =@@
- >'longGeneric' : "longGeneric"
- 
- for (const zoneName of timezoneNames) {
-->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
-+>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
+@@= skipped -17, +17 lines =@@
  >timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
  
    var formatter = new Intl.DateTimeFormat('en-US', {
@@ -19,18 +14,5 @@
 ->DateTimeFormat : Intl.DateTimeFormatConstructor
 +>DateTimeFormat : DateTimeFormatConstructor
  >'en-US' : "en-US"
-->{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
-+>{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"; }
+ >{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"; }
  
-     timeZone: 'America/Los_Angeles',
- >timeZone : string
- >'America/Los_Angeles' : "America/Los_Angeles"
- 
-     timeZoneName: zoneName,
-->timeZoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
-->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
-+>timeZoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
-+>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
- 
-   });
- }

@@ -1,11 +1,6 @@
 --- old.throwStatements.types
 +++ new.throwStatements.types
-@@= skipped -163, +163 lines =@@
- >aModule : typeof M
- 
- throw typeof M;
-->typeof M : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof M : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+@@= skipped -167, +167 lines =@@
  >M : typeof M
  
  var aClassInModule = new M.A();

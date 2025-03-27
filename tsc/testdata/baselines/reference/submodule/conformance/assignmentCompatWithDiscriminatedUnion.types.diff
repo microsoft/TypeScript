@@ -1,51 +1,6 @@
 --- old.assignmentCompatWithDiscriminatedUnion.types
 +++ new.assignmentCompatWithDiscriminatedUnion.types
-@@= skipped -50, +50 lines =@@
-     type T = { a: 0,     b: 1 | 4 }     // T0
- >T : T
- >a : 0
-->b : 4 | 1
-+>b : 1 | 4
- 
-            | { a: 1,     b: 2 }         // T1
- >a : 1
-@@= skipped -8, +8 lines =@@
- 
-            | { a: 2,     b: 3 | 4 };    // T2
- >a : 2
-->b : 4 | 3
-+>b : 3 | 4
- 
-     declare let s: S;
- >s : S
-@@= skipped -28, +28 lines =@@
-     type T = { a: 0,     b: 1 | 4 }     // T0
- >T : T
- >a : 0
-->b : 4 | 1
-+>b : 1 | 4
- 
-            | { a: 1,     b: 2 | 4 }     // T1
- >a : 1
-@@= skipped -37, +37 lines =@@
-     type T = { a: 0,     b: 1 | 4 }             // T0
- >T : T
- >a : 0
-->b : 4 | 1
-+>b : 1 | 4
- 
-            | { a: 1,     b: 2 }                 // T1
- >a : 1
-@@= skipped -8, +8 lines =@@
- 
-            | { a: 2,     b: 3 | 4, c: string }; // T2
- >a : 2
-->b : 4 | 3
-+>b : 3 | 4
- >c : string
- 
-     declare let s: S;
-@@= skipped -169, +169 lines =@@
+@@= skipped -300, +300 lines =@@
  >val : Blue | Yellow
  
      function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
@@ -54,28 +9,7 @@
  >currentColor : "blue" | "yellow"
  
          return draw({ color: currentColor });
-@@= skipped -60, +60 lines =@@
- 
-     good.type = getAxisType();
- >good.type = getAxisType() : IAxisType
-->good.type : "linear" | "categorical"
-+>good.type : "categorical" | "linear"
- >good : IAxis
-->type : "linear" | "categorical"
-+>type : "categorical" | "linear"
- >getAxisType() : IAxisType
- >getAxisType : () => IAxisType
- }
-@@= skipped -121, +121 lines =@@
- 
-     const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
- >a : A
-->b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["a" | "b", number] | ["c", string]
-+>b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["c", string] | ["a" | "b", number]
- >b === "a" || b === "b" : boolean
- >b === "a" : boolean
- >b : B
-@@= skipped -70, +70 lines =@@
+@@= skipped -251, +251 lines =@@
  >value : undefined
      
      function test(obj: { kind: "a" | "b", value: number | undefined }) {

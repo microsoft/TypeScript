@@ -3,13 +3,13 @@
 @@= skipped -0, +0 lines =@@
 -file.tsx(48,13): error TS2769: No overload matches this call.
 -  Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
--    Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+-    Type '{ to: string; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
 -      Property 'to' does not exist on type 'IntrinsicAttributes & ButtonProps'.
 -  Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
--    Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+-    Type '{ to: string; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
 -      Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
 -  Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
--    Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+-    Type '{ to: string; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 -      Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
 -file.tsx(54,51): error TS2769: No overload matches this call.
 -  Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
@@ -90,13 +90,13 @@
 -                ~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
--!!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+-!!! error TS2769:     Type '{ to: string; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
 -!!! error TS2769:       Property 'to' does not exist on type 'IntrinsicAttributes & ButtonProps'.
 -!!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
--!!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+-!!! error TS2769:     Type '{ to: string; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
 -!!! error TS2769:       Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
 -!!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
--!!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+-!!! error TS2769:     Type '{ to: string; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 -!!! error TS2769:       Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
 -!!! related TS2793 file.tsx:38:17: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
      const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;

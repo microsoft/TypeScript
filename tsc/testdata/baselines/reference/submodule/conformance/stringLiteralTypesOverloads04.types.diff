@@ -6,25 +6,14 @@
  declare function f(x: (p: "foo" | "bar") => "foo");
 ->f : (x: (p: "foo" | "bar") => "foo") => any
 ->x : (p: "foo" | "bar") => "foo"
-->p : "foo" | "bar"
 +>f : (x: (p: "bar" | "foo") => "foo") => any
 +>x : (p: "bar" | "foo") => "foo"
-+>p : "bar" | "foo"
+ >p : "bar" | "foo"
  
  f(y => {
  >f(y => {    const z = y = "foo";    return z;}) : any
 ->f : (x: (p: "foo" | "bar") => "foo") => any
-->y => {    const z = y = "foo";    return z;} : (y: "foo" | "bar") => "foo"
-->y : "foo" | "bar"
 +>f : (x: (p: "bar" | "foo") => "foo") => any
-+>y => {    const z = y = "foo";    return z;} : (y: "bar" | "foo") => "foo"
-+>y : "bar" | "foo"
+ >y => {    const z = y = "foo";    return z;} : (y: "bar" | "foo") => "foo"
+ >y : "bar" | "foo"
  
-     const z = y = "foo";
- >z : "foo"
- >y = "foo" : "foo"
-->y : "foo" | "bar"
-+>y : "bar" | "foo"
- >"foo" : "foo"
- 
-     return z;

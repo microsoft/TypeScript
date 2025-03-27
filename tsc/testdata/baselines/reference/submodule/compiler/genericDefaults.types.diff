@@ -823,7 +823,7 @@
  
  // function with a type parameter with a default that refers to an earier type parameter in a union
  declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : T
  >b : U
@@ -831,32 +831,32 @@
  // inference
  f11();
  >f11() : [unknown, unknown]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  
  f11(a);
  >f11(a) : [A, A | B]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  
  f11(a, a);
  >f11(a, a) : [A, A]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >a : A
  
  f11(a, b);
  >f11(a, b) : [A, B]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >b : B
  
  f11(a, c);
  >f11(a, c) : [A, C]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >c : C
@@ -864,25 +864,25 @@
  // no inference, partially supplied
  f11<A>();
  >f11<A>() : [A, A | B]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  
  f11<A>(a);
  >f11<A>(a) : [A, A | B]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  
  f11<A>(a, a);
  >f11<A>(a, a) : [A, A | B]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >a : A
  
  f11<A>(a, b);
  >f11<A>(a, b) : [A, A | B]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >b : B
@@ -890,18 +890,18 @@
  // no inference, fully supplied
  f11<A, C>();
  >f11<A, C>() : [A, C]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  
  f11<A, C>(a);
  >f11<A, C>(a) : [A, C]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  
  f11<A, C>(a, c);
  >f11<A, C>(a, c) : [A, C]
-->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
+->f11 : <T, U = T | B>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >c : C
@@ -1366,7 +1366,7 @@
  
  // function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
  declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : T
  >b : U
@@ -1374,32 +1374,32 @@
  // inference
  f17();
  >f17() : [unknown, unknown]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  
  f17(a);
  >f17(a) : [A, A | B]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  
  f17(a, a);
  >f17(a, a) : [A, A]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >a : A
  
  f17(a, b);
  >f17(a, b) : [A, B]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >b : B
  
  f17(a, c);
  >f17(a, c) : [A, C]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >c : C
@@ -1407,25 +1407,25 @@
  // no inference, partially supplied
  f17<A>();
  >f17<A>() : [A, A | B]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  
  f17<A>(a);
  >f17<A>(a) : [A, A | B]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  
  f17<A>(a, a);
  >f17<A>(a, a) : [A, A | B]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >a : A
  
  f17<A>(a, b);
  >f17<A>(a, b) : [A, A | B]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >b : B
@@ -1433,25 +1433,25 @@
  // no inference, fully supplied
  f17<A, C>();
  >f17<A, C>() : [A, C]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  
  f17<A, C>(a);
  >f17<A, C>(a) : [A, C]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  
  f17<A, C>(a, c);
  >f17<A, C>(a, c) : [A, C]
-->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
+->f17 : <T = U, U = T | B>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
  >a : A
  >c : C
  
  // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
  declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : T
  >b : U
@@ -1460,25 +1460,25 @@
  // inference
  f18();
  >f18() : [unknown, unknown, unknown]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  
  f18(a);
  >f18(a) : [A, unknown, unknown]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  
  f18(a, b);
  >f18(a, b) : [A, B, B | C]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
  
  f18(a, b, b);
  >f18(a, b, b) : [A, B, B]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
@@ -1486,7 +1486,7 @@
  
  f18(a, b, c);
  >f18(a, b, c) : [A, B, C]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
@@ -1495,25 +1495,25 @@
  // no inference, partially supplied
  f18<A>();
  >f18<A>() : [A, any, any]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  
  f18<A>(a);
  >f18<A>(a) : [A, any, any]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  
  f18<A>(a, b);
  >f18<A>(a, b) : [A, any, any]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
  
  f18<A>(a, b, b);
  >f18<A>(a, b, b) : [A, any, any]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
@@ -1521,7 +1521,7 @@
  
  f18<A>(a, b, c);
  >f18<A>(a, b, c) : [A, any, any]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
@@ -1529,25 +1529,25 @@
  
  f18<A, B>();
  >f18<A, B>() : [A, B, B | C]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  
  f18<A, B>(a);
  >f18<A, B>(a) : [A, B, B | C]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  
  f18<A, B>(a, b);
  >f18<A, B>(a, b) : [A, B, B | C]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
  
  f18<A, B>(a, b, b);
  >f18<A, B>(a, b, b) : [A, B, B | C]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
@@ -1555,7 +1555,7 @@
  
  f18<A, B>(a, b, c);
  >f18<A, B>(a, b, c) : [A, B, B | C]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
@@ -1564,25 +1564,25 @@
  // no inference, fully supplied
  f18<A, B, D>();
  >f18<A, B, D>() : [A, B, D]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  
  f18<A, B, D>(a);
  >f18<A, B, D>(a) : [A, B, D]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  
  f18<A, B, D>(a, b);
  >f18<A, B, D>(a, b) : [A, B, D]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B
  
  f18<A, B, D>(a, b, d);
  >f18<A, B, D>(a, b, d) : [A, B, D]
-->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
+->f18 : <T, U = V, V = U | C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
  >a : A
  >b : B

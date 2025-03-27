@@ -1,33 +1,6 @@
 --- old.controlFlowComputedPropertyNames.types
 +++ new.controlFlowComputedPropertyNames.types
-@@= skipped -7, +7 lines =@@
- 
-     if (typeof obj[key] === "string") {
- >typeof obj[key] === "string" : boolean
-->typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj[key] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj[key] : unknown
- >obj : Record<string, unknown>
- >key : string
-@@= skipped -100, +100 lines =@@
- 
-         if (typeof obj[key] === "string") {
- >typeof obj[key] === "string" : boolean
-->typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj[key] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj[key] : string | number
- >obj : Thing
- >key : keyof Thing
-@@= skipped -16, +16 lines =@@
-         }
-         if (typeof obj[key] === "number") {
- >typeof obj[key] === "number" : boolean
-->typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj[key] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj[key] : string | number
- >obj : Thing
- >key : keyof Thing
-@@= skipped -8, +8 lines =@@
+@@= skipped -131, +131 lines =@@
  
              obj[key].toFixed();
  >obj[key].toFixed() : string

@@ -9,40 +9,12 @@
  >f : (x: T) => T
  >x : T
  
-@@= skipped -38, +38 lines =@@
- >"foo" : "foo"
- 
+@@= skipped -40, +40 lines =@@
  let h = bar(x => x);
-->h : (x: "foo" | "bar") => "foo" | "bar"
-->bar(x => x) : (x: "foo" | "bar") => "foo" | "bar"
+ >h : (x: "bar" | "foo") => "bar" | "foo"
+ >bar(x => x) : (x: "bar" | "foo") => "bar" | "foo"
 ->bar : <T extends "foo" | "bar">(f: (x: T) => T) => (x: T) => T
-->x => x : (x: "foo" | "bar") => "foo" | "bar"
-->x : "foo" | "bar"
-->x : "foo" | "bar"
-+>h : (x: "bar" | "foo") => "bar" | "foo"
-+>bar(x => x) : (x: "bar" | "foo") => "bar" | "foo"
 +>bar : <T extends "bar" | "foo">(f: (x: T) => T) => (x: T) => T
-+>x => x : (x: "bar" | "foo") => "bar" | "foo"
-+>x : "bar" | "foo"
-+>x : "bar" | "foo"
- 
- let hResult = h("foo");
-->hResult : "foo" | "bar"
-->h("foo") : "foo" | "bar"
-->h : (x: "foo" | "bar") => "foo" | "bar"
-+>hResult : "bar" | "foo"
-+>h("foo") : "bar" | "foo"
-+>h : (x: "bar" | "foo") => "bar" | "foo"
- >"foo" : "foo"
- 
- hResult = h("bar");
-->hResult = h("bar") : "foo" | "bar"
-->hResult : "foo" | "bar"
-->h("bar") : "foo" | "bar"
-->h : (x: "foo" | "bar") => "foo" | "bar"
-+>hResult = h("bar") : "bar" | "foo"
-+>hResult : "bar" | "foo"
-+>h("bar") : "bar" | "foo"
-+>h : (x: "bar" | "foo") => "bar" | "foo"
- >"bar" : "bar"
- 
+ >x => x : (x: "bar" | "foo") => "bar" | "foo"
+ >x : "bar" | "foo"
+ >x : "bar" | "foo"

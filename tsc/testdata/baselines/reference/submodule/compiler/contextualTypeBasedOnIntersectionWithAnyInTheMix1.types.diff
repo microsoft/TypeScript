@@ -9,16 +9,7 @@
  
      U,
      NewA extends Partial<ComponentProps<C> & U> & {
-@@= skipped -25, +25 lines =@@
- 
- interface BaseProps {
-   as?: "select" | "input";
-->as : "select" | "input" | undefined
-+>as : "input" | "select" | undefined
- }
- 
- declare const Flex: (props: BaseProps) => null;
-@@= skipped -10, +10 lines =@@
+@@= skipped -35, +35 lines =@@
  export const StyledSelect = styled(Flex).attrs({
  >StyledSelect : StyledFunction<(props: BaseProps) => null, { as: "select"; }, "as">
  >styled(Flex).attrs({  as: "select",}) : StyledFunction<(props: BaseProps) => null, { as: "select"; }, "as">

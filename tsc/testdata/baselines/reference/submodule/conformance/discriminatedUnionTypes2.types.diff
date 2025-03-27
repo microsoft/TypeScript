@@ -69,12 +69,10 @@
  
      if (x.type === 'number') {
  >x.type === 'number' : boolean
-->x.type : "string" | "number"
+ >x.type : "number" | "string"
 ->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
-->type : "string" | "number"
-+>x.type : "number" | "string"
 +>x : RuntimeValue & ({ type: "number"; } | { type: "string"; })
-+>type : "number" | "string"
+ >type : "number" | "string"
  >'number' : "number"
  
          x.value;  // number

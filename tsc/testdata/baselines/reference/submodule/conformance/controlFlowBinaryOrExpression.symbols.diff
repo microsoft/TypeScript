@@ -17,38 +17,14 @@
  }
  
  declare function isNodeList(sourceObj: any): sourceObj is NodeList;
-@@= skipped -38, +38 lines =@@
+@@= skipped -60, +60 lines =@@
  >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
  
      sourceObj.length;
-->sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
-+>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
- >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
-->length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
-+>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
- }
- 
- if (isHTMLCollection(sourceObj)) {
-@@= skipped -10, +10 lines =@@
- >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
- 
-     sourceObj.length;
-->sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
-+>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
- >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
-->length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
-+>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33), Decl(controlFlowBinaryOrExpression.ts, 10, 27))
- }
- 
- if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
-@@= skipped -12, +12 lines =@@
- >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
- 
-     sourceObj.length;
-->sourceObj.length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+->sourceObj.length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 +>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
  >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
-->length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+->length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 +>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
  }
  

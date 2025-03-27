@@ -4,10 +4,10 @@
  >a : A
  
  ab = {...a, y: (null as any as string | undefined)}; // Should be allowed, since `y` is missing on `A`
-->ab = {...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string; x: string; }
+->ab = {...a, y: (null as any as string | undefined)} : { unused?: string; x: string; y: string | undefined; }
 +>ab = {...a, y: (null as any as string | undefined)} : { unused?: string | undefined; x: string; y: string | undefined; }
  >ab : A | B
-->{...a, y: (null as any as string | undefined)} : { y: string | undefined; unused?: string; x: string; }
+->{...a, y: (null as any as string | undefined)} : { unused?: string; x: string; y: string | undefined; }
 +>{...a, y: (null as any as string | undefined)} : { unused?: string | undefined; x: string; y: string | undefined; }
  >a : A
  >y : string | undefined

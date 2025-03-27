@@ -54,11 +54,9 @@
 +>members : Symbol(members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
  
          if (memberType.type === "const") {
-->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
-+>memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
- >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 23, 14))
-->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
-+>type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+ >memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+@@= skipped -10, +10 lines =@@
+ >type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
  
              memberType.idlType;  // string
 ->memberType.idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
@@ -94,7 +92,7 @@
  >IDLTypeDescription : Symbol(IDLTypeDescription, Decl(narrowingByDiscriminantInLoop.ts, 2, 63))
          }
      }
-@@= skipped -42, +42 lines =@@
+@@= skipped -32, +32 lines =@@
  
      for (const memberType of callbackType.members) {
  >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 35, 14))
@@ -105,11 +103,9 @@
 +>members : Symbol(members, Decl(narrowingByDiscriminantInLoop.ts, 8, 25))
  
          if (memberType.type === "operation") {
-->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
-+>memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
- >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 35, 14))
-->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
-+>type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+ >memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+@@= skipped -10, +10 lines =@@
+ >type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
  
              memberType.idlType.origin;  // string
 ->memberType.idlType.origin : Symbol(IDLTypeDescription.origin, Decl(narrowingByDiscriminantInLoop.ts, 4, 30))
@@ -124,15 +120,8 @@
          }
      }
  }
-@@= skipped -25, +25 lines =@@
- >IDLMemberTypes : Symbol(IDLMemberTypes, Decl(narrowingByDiscriminantInLoop.ts, 0, 0))
- 
-     if (memberType.type === "const") {
-->memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
-+>memberType.type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
- >memberType : Symbol(memberType, Decl(narrowingByDiscriminantInLoop.ts, 42, 13))
-->type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 12, 31), Decl(narrowingByDiscriminantInLoop.ts, 17, 30))
-+>type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
+@@= skipped -20, +20 lines =@@
+ >type : Symbol(type, Decl(narrowingByDiscriminantInLoop.ts, 17, 30), Decl(narrowingByDiscriminantInLoop.ts, 12, 31))
  
          memberType.idlType;  // string
 ->memberType.idlType : Symbol(ConstantMemberType.idlType, Decl(narrowingByDiscriminantInLoop.ts, 18, 18))
@@ -161,7 +150,7 @@
      }
  }
  
-@@= skipped -29, +29 lines =@@
+@@= skipped -24, +24 lines =@@
  >A : Symbol(A, Decl(narrowingByDiscriminantInLoop.ts, 49, 1))
  
      kind: true;

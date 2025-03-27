@@ -9,13 +9,3 @@
  >a : Fn<T>[]
  >b : Fn<T1>[]
  
-     b.concat(a);
- >b.concat(a) : Fn<T1>[]
-->b.concat : { (...items: ConcatArray<Fn<T1>>[]): Fn<T1>[]; (...items: (Fn<T1> | ConcatArray<Fn<T1>>)[]): Fn<T1>[]; }
-+>b.concat : { (...items: ConcatArray<Fn<T1>>[]): Fn<T1>[]; (...items: (ConcatArray<Fn<T1>> | Fn<T1>)[]): Fn<T1>[]; }
- >b : Fn<T1>[]
-->concat : { (...items: ConcatArray<Fn<T1>>[]): Fn<T1>[]; (...items: (Fn<T1> | ConcatArray<Fn<T1>>)[]): Fn<T1>[]; }
-+>concat : { (...items: ConcatArray<Fn<T1>>[]): Fn<T1>[]; (...items: (ConcatArray<Fn<T1>> | Fn<T1>)[]): Fn<T1>[]; }
- >a : Fn<T>[]
- }
- 

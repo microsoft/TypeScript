@@ -1,28 +1,6 @@
 --- old.templateLiteralTypes3.types
 +++ new.templateLiteralTypes3.types
-@@= skipped -305, +305 lines =@@
- >A : A<T>
- 
- type B = A<`test.1024`>;  // "test" | "1024"
-->B : "test" | "1024"
-+>B : "1024" | "test"
- 
- type C = A<`test.${number}`>;  // "test" | `${number}`
-->C : `${number}` | "test"
-+>C : "test" | `${number}`
- 
- type D<T> = T extends `${infer U}.${number}` ? U : never
- >D : D<T>
-@@= skipped -18, +18 lines =@@
- >G : G<T>
- 
- type H = G<`test.hoge`>;  // "test" | "hoge"
-->H : "test" | "hoge"
-+>H : "hoge" | "test"
- 
- type I = G<`test.${string}`>;  // string ("test" | string reduces to string)
- >I : string
-@@= skipped -66, +66 lines =@@
+@@= skipped -389, +389 lines =@@
  >c : number
  
  declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;

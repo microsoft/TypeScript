@@ -6,7 +6,7 @@
  export const o = () => null! as { [n]: string, foo: string, [poz]: number, [neg]: number }
 ->o : () => { [n]: string; foo: string; [poz]: number; [neg]: number; }
 ->() => null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : () => { [n]: string; foo: string; [poz]: number; [neg]: number; }
-->null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : { foo: string; A: string; 1: number; [-1]: number; }
+->null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : { A: string; foo: string; 1: number; [-1]: number; }
 +>o : () => { A: string; foo: string; [poz]: number; [neg]: number; }
 +>() => null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : () => { A: string; foo: string; [poz]: number; [neg]: number; }
 +>null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : { A: string; foo: string; [poz]: number; [neg]: number; }

@@ -87,17 +87,7 @@
  >options : [(string | undefined)?, (number | undefined)?] | undefined
  
      let [str, num] = options || [];
-@@= skipped -74, +74 lines =@@
-     let x1 = (options || {})[0];
- >x1 : string | undefined
- >(options || {})[0] : string | undefined
-->(options || {}) : [(string | undefined)?, (number | undefined)?] | {}
-->options || {} : [(string | undefined)?, (number | undefined)?] | {}
-+>(options || {}) : {} | [(string | undefined)?, (number | undefined)?]
-+>options || {} : {} | [(string | undefined)?, (number | undefined)?]
- >options : [(string | undefined)?, (number | undefined)?] | undefined
- >{} : {}
- >0 : 0
+@@= skipped -82, +82 lines =@@
  }
  
  function f3(options?: { color: string, width: number }) {
@@ -106,7 +96,7 @@
  >options : { color: string; width: number; } | undefined
  >color : string
  >width : number
-@@= skipped -50, +50 lines =@@
+@@= skipped -42, +42 lines =@@
  }
  
  function f4(options?: [string, number]) {
@@ -115,14 +105,21 @@
  >options : [string, number] | undefined
  
      let [str, num] = options || [];
-@@= skipped -22, +22 lines =@@
-     let x1 = (options || {})[0];
- >x1 : string | undefined
- >(options || {})[0] : string | undefined
-->(options || {}) : [string, number] | {}
-->options || {} : [string, number] | {}
-+>(options || {}) : {} | [string, number]
-+>options || {} : {} | [string, number]
+ >str : string | undefined
+ >num : number | undefined
+->options || [] : [string, number] | []
++>options || [] : [] | [string, number]
  >options : [string, number] | undefined
- >{} : {}
- >0 : 0
+ >[] : []
+ 
+     [str, num] = options || [];
+->[str, num] = options || [] : [string, number] | []
++>[str, num] = options || [] : [] | [string, number]
+ >[str, num] : [string | undefined, number | undefined]
+ >str : string | undefined
+ >num : number | undefined
+->options || [] : [string, number] | []
++>options || [] : [] | [string, number]
+ >options : [string, number] | undefined
+ >[] : []
+ 

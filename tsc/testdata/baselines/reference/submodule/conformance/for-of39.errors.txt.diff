@@ -2,21 +2,20 @@
 +++ new.for-of39.errors.txt
 @@= skipped -0, +0 lines =@@
 -for-of39.ts(1,15): error TS2769: No overload matches this call.
--  Overload 1 of 4, '(iterable?: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
--    Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.
+-  Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
+-    Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
 -      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
--        Type 'IteratorResult<[string, number] | [string, true], any>' is not assignable to type 'IteratorResult<readonly [string, boolean], any>'.
--          Type 'IteratorYieldResult<[string, number] | [string, true]>' is not assignable to type 'IteratorResult<readonly [string, boolean], any>'.
--            Type 'IteratorYieldResult<[string, number] | [string, true]>' is not assignable to type 'IteratorYieldResult<readonly [string, boolean]>'.
--              Type '[string, number] | [string, true]' is not assignable to type 'readonly [string, boolean]'.
--                Type '[string, number]' is not assignable to type 'readonly [string, boolean]'.
+-        Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
+-          Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
+-            Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
+-              Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
+-                Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
 -                  Type at position 1 in source is not compatible with type at position 1 in target.
--                    Type 'number' is not assignable to type 'boolean'.
--  Overload 2 of 4, '(entries?: readonly (readonly [string, boolean])[]): Map<string, boolean>', gave the following error.
--    Type 'number' is not assignable to type 'boolean'.
+-                    Type 'boolean' is not assignable to type 'number'.
+-  Overload 2 of 4, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
 +for-of39.ts(1,25): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
-+    Type 'boolean' is not assignable to type 'number'.
+     Type 'boolean' is not assignable to type 'number'.
  
  
  ==== for-of39.ts (1 errors) ====
@@ -24,20 +23,19 @@
 -                  ~~~
 +                            ~~~~
  !!! error TS2769: No overload matches this call.
--!!! error TS2769:   Overload 1 of 4, '(iterable?: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
--!!! error TS2769:     Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.
+-!!! error TS2769:   Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
+-!!! error TS2769:     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
 -!!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
--!!! error TS2769:         Type 'IteratorResult<[string, number] | [string, true], any>' is not assignable to type 'IteratorResult<readonly [string, boolean], any>'.
--!!! error TS2769:           Type 'IteratorYieldResult<[string, number] | [string, true]>' is not assignable to type 'IteratorResult<readonly [string, boolean], any>'.
--!!! error TS2769:             Type 'IteratorYieldResult<[string, number] | [string, true]>' is not assignable to type 'IteratorYieldResult<readonly [string, boolean]>'.
--!!! error TS2769:               Type '[string, number] | [string, true]' is not assignable to type 'readonly [string, boolean]'.
--!!! error TS2769:                 Type '[string, number]' is not assignable to type 'readonly [string, boolean]'.
+-!!! error TS2769:         Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
+-!!! error TS2769:           Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
+-!!! error TS2769:             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
+-!!! error TS2769:               Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
+-!!! error TS2769:                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
 -!!! error TS2769:                   Type at position 1 in source is not compatible with type at position 1 in target.
--!!! error TS2769:                     Type 'number' is not assignable to type 'boolean'.
--!!! error TS2769:   Overload 2 of 4, '(entries?: readonly (readonly [string, boolean])[]): Map<string, boolean>', gave the following error.
--!!! error TS2769:     Type 'number' is not assignable to type 'boolean'.
+-!!! error TS2769:                     Type 'boolean' is not assignable to type 'number'.
+-!!! error TS2769:   Overload 2 of 4, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
 +!!! error TS2769:   The last overload gave the following error.
-+!!! error TS2769:     Type 'boolean' is not assignable to type 'number'.
+ !!! error TS2769:     Type 'boolean' is not assignable to type 'number'.
 +!!! related TS2771 lib.es2015.collection.d.ts:--:--: The last overload is declared here.
      for (var [k, v] of map) {
          k;

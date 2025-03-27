@@ -168,12 +168,7 @@
  
  type Cb = (x: number) => string;
  >Cb : Cb
-@@= skipped -37, +37 lines =@@
- 
- interface PropsMixed {
-   children: Cb | Cb[];
-->children : Cb | Cb[]
-+>children : Cb[] | Cb
+@@= skipped -41, +41 lines =@@
  }
  
  export function Blah3(props: PropsMixed) {

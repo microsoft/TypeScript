@@ -38,8 +38,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point | Line
-+>value : Line | Point
+ >value : Line | Point
  
  declare var rhs4: { [Symbol.hasInstance](value: Point | Line): value is Line; };
 ->rhs4 : { [Symbol.hasInstance](value: Point | Line): value is Line; }
@@ -49,8 +48,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point | Line
-+>value : Line | Point
+ >value : Line | Point
  
  declare var rhs5: { [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; };
 ->rhs5 : { [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; }
@@ -60,8 +58,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point | Point3D | Line
-+>value : Line | Point | Point3D
+ >value : Line | Point | Point3D
  
  declare var rhs6: { [Symbol.hasInstance](value: Point3D | Line): value is Point3D; };
 ->rhs6 : { [Symbol.hasInstance](value: Point3D | Line): value is Point3D; }
@@ -71,11 +68,6 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point3D | Line
-+>value : Line | Point3D
- 
- declare class Rhs7 { static [Symbol.hasInstance](value: unknown): boolean; }
- >Rhs7 : Rhs7
 @@= skipped -57, +57 lines =@@
  
  declare class Rhs10 { static [Symbol.hasInstance](value: Point | Line): value is Point; }
@@ -85,8 +77,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point | Line
-+>value : Line | Point
+@@= skipped -8, +8 lines =@@
  
  declare class Rhs11 { static [Symbol.hasInstance](value: Point | Line): value is Line; }
  >Rhs11 : Rhs11
@@ -95,8 +86,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point | Line
-+>value : Line | Point
+@@= skipped -8, +8 lines =@@
  
  declare class Rhs12 { static [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; }
  >Rhs12 : Rhs12
@@ -105,8 +95,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point | Point3D | Line
-+>value : Line | Point | Point3D
+@@= skipped -8, +8 lines =@@
  
  declare class Rhs13 { static [Symbol.hasInstance](value: Point3D | Line): value is Point3D; }
  >Rhs13 : Rhs13
@@ -115,27 +104,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-->value : Point3D | Line
-+>value : Line | Point3D
- 
- declare var lhs0: any;
- >lhs0 : any
-@@= skipped -37, +37 lines =@@
- >lhs1 : object
- 
- declare var lhs2: Point | Point3D | Line;
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- 
- declare var lhs3: Point3D | Line;
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- 
- declare var lhs4: Point | Point3D2 | Line;
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- 
- lhs0 instanceof rhs0 && lhs0;
+@@= skipped -25, +25 lines =@@
  >lhs0 instanceof rhs0 && lhs0 : any
  >lhs0 instanceof rhs0 : boolean
  >lhs0 : any
@@ -192,7 +161,7 @@
  >lhs0 : Point3D
  
  lhs0 instanceof Rhs7 && lhs0;
-@@= skipped -110, +110 lines =@@
+@@= skipped -98, +98 lines =@@
  >lhs1 instanceof rhs0 && lhs1 : object
  >lhs1 instanceof rhs0 : boolean
  >lhs1 : object
@@ -217,365 +186,162 @@
  >lhs1 : Point
  
  lhs1 instanceof Rhs7 && lhs1;
-@@= skipped -39, +39 lines =@@
- >lhs1 : Point
- 
- lhs2 instanceof rhs0 && lhs2;
-->lhs2 instanceof rhs0 && lhs2 : Point | Point3D | Line
-+>lhs2 instanceof rhs0 && lhs2 : Line | Point | Point3D
+@@= skipped -42, +42 lines =@@
+ >lhs2 instanceof rhs0 && lhs2 : Line | Point | Point3D
  >lhs2 instanceof rhs0 : boolean
-->lhs2 : Point | Point3D | Line
+ >lhs2 : Line | Point | Point3D
 ->rhs0 : { [Symbol.hasInstance](value: unknown): boolean; }
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
 +>rhs0 : { [Symbol.hasInstance]: (value: unknown) => boolean; }
-+>lhs2 : Line | Point | Point3D
+ >lhs2 : Line | Point | Point3D
  
  lhs2 instanceof rhs1 && lhs2;
-->lhs2 instanceof rhs1 && lhs2 : Point | Point3D | Line
-+>lhs2 instanceof rhs1 && lhs2 : Line | Point | Point3D
+ >lhs2 instanceof rhs1 && lhs2 : Line | Point | Point3D
  >lhs2 instanceof rhs1 : boolean
-->lhs2 : Point | Point3D | Line
+ >lhs2 : Line | Point | Point3D
 ->rhs1 : { [Symbol.hasInstance](value: any): boolean; }
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
 +>rhs1 : { [Symbol.hasInstance]: (value: any) => boolean; }
-+>lhs2 : Line | Point | Point3D
+ >lhs2 : Line | Point | Point3D
  
  lhs2 instanceof rhs2 && lhs2;
  >lhs2 instanceof rhs2 && lhs2 : Point
  >lhs2 instanceof rhs2 : boolean
-->lhs2 : Point | Point3D | Line
+ >lhs2 : Line | Point | Point3D
 ->rhs2 : { [Symbol.hasInstance](value: any): value is Point; }
-+>lhs2 : Line | Point | Point3D
 +>rhs2 : { [Symbol.hasInstance]: (value: any) => value is Point; }
  >lhs2 : Point
  
  lhs2 instanceof rhs3 && lhs2;
  >lhs2 instanceof rhs3 && lhs2 : Point
  >lhs2 instanceof rhs3 : boolean
-->lhs2 : Point | Point3D | Line
+ >lhs2 : Line | Point | Point3D
 ->rhs3 : { [Symbol.hasInstance](value: Point | Line): value is Point; }
-+>lhs2 : Line | Point | Point3D
 +>rhs3 : { [Symbol.hasInstance]: (value: Line | Point) => value is Point; }
  >lhs2 : Point
  
  lhs2 instanceof rhs4 && lhs2;
  >lhs2 instanceof rhs4 && lhs2 : Line
  >lhs2 instanceof rhs4 : boolean
-->lhs2 : Point | Point3D | Line
+ >lhs2 : Line | Point | Point3D
 ->rhs4 : { [Symbol.hasInstance](value: Point | Line): value is Line; }
-+>lhs2 : Line | Point | Point3D
 +>rhs4 : { [Symbol.hasInstance]: (value: Line | Point) => value is Line; }
  >lhs2 : Line
  
  lhs2 instanceof rhs5 && lhs2;
  >lhs2 instanceof rhs5 && lhs2 : Point3D
  >lhs2 instanceof rhs5 : boolean
-->lhs2 : Point | Point3D | Line
+ >lhs2 : Line | Point | Point3D
 ->rhs5 : { [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; }
-+>lhs2 : Line | Point | Point3D
 +>rhs5 : { [Symbol.hasInstance]: (value: Line | Point | Point3D) => value is Point3D; }
  >lhs2 : Point3D
  
  lhs2 instanceof Rhs7 && lhs2;
-->lhs2 instanceof Rhs7 && lhs2 : Point | Point3D | Line
-+>lhs2 instanceof Rhs7 && lhs2 : Line | Point | Point3D
- >lhs2 instanceof Rhs7 : boolean
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- >Rhs7 : typeof Rhs7
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- 
- lhs2 instanceof Rhs8 && lhs2;
-->lhs2 instanceof Rhs8 && lhs2 : Point | Point3D | Line
-+>lhs2 instanceof Rhs8 && lhs2 : Line | Point | Point3D
- >lhs2 instanceof Rhs8 : boolean
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- >Rhs8 : typeof Rhs8
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- 
- lhs2 instanceof Rhs9 && lhs2;
- >lhs2 instanceof Rhs9 && lhs2 : Point
- >lhs2 instanceof Rhs9 : boolean
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- >Rhs9 : typeof Rhs9
- >lhs2 : Point
- 
- lhs2 instanceof Rhs10 && lhs2;
- >lhs2 instanceof Rhs10 && lhs2 : Point
- >lhs2 instanceof Rhs10 : boolean
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- >Rhs10 : typeof Rhs10
- >lhs2 : Point
- 
- lhs2 instanceof Rhs11 && lhs2;
- >lhs2 instanceof Rhs11 && lhs2 : Line
- >lhs2 instanceof Rhs11 : boolean
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- >Rhs11 : typeof Rhs11
- >lhs2 : Line
- 
- lhs2 instanceof Rhs12 && lhs2;
- >lhs2 instanceof Rhs12 && lhs2 : Point3D
- >lhs2 instanceof Rhs12 : boolean
-->lhs2 : Point | Point3D | Line
-+>lhs2 : Line | Point | Point3D
- >Rhs12 : typeof Rhs12
- >lhs2 : Point3D
- 
- lhs3 instanceof rhs0 && lhs3;
-->lhs3 instanceof rhs0 && lhs3 : Point3D | Line
-+>lhs3 instanceof rhs0 && lhs3 : Line | Point3D
+@@= skipped -84, +84 lines =@@
+ >lhs3 instanceof rhs0 && lhs3 : Line | Point3D
  >lhs3 instanceof rhs0 : boolean
-->lhs3 : Point3D | Line
+ >lhs3 : Line | Point3D
 ->rhs0 : { [Symbol.hasInstance](value: unknown): boolean; }
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
 +>rhs0 : { [Symbol.hasInstance]: (value: unknown) => boolean; }
-+>lhs3 : Line | Point3D
+ >lhs3 : Line | Point3D
  
  lhs3 instanceof rhs1 && lhs3;
-->lhs3 instanceof rhs1 && lhs3 : Point3D | Line
-+>lhs3 instanceof rhs1 && lhs3 : Line | Point3D
+ >lhs3 instanceof rhs1 && lhs3 : Line | Point3D
  >lhs3 instanceof rhs1 : boolean
-->lhs3 : Point3D | Line
+ >lhs3 : Line | Point3D
 ->rhs1 : { [Symbol.hasInstance](value: any): boolean; }
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
 +>rhs1 : { [Symbol.hasInstance]: (value: any) => boolean; }
-+>lhs3 : Line | Point3D
+ >lhs3 : Line | Point3D
  
  lhs3 instanceof rhs2 && lhs3;
-->lhs3 instanceof rhs2 && lhs3 : (Point3D | Line) & Point
-+>lhs3 instanceof rhs2 && lhs3 : (Line | Point3D) & Point
+ >lhs3 instanceof rhs2 && lhs3 : (Line | Point3D) & Point
  >lhs3 instanceof rhs2 : boolean
-->lhs3 : Point3D | Line
+ >lhs3 : Line | Point3D
 ->rhs2 : { [Symbol.hasInstance](value: any): value is Point; }
-->lhs3 : (Point3D | Line) & Point
-+>lhs3 : Line | Point3D
 +>rhs2 : { [Symbol.hasInstance]: (value: any) => value is Point; }
-+>lhs3 : (Line | Point3D) & Point
+ >lhs3 : (Line | Point3D) & Point
  
  lhs3 instanceof rhs3 && lhs3;
-->lhs3 instanceof rhs3 && lhs3 : (Point3D | Line) & Point
-+>lhs3 instanceof rhs3 && lhs3 : (Line | Point3D) & Point
+ >lhs3 instanceof rhs3 && lhs3 : (Line | Point3D) & Point
  >lhs3 instanceof rhs3 : boolean
-->lhs3 : Point3D | Line
+ >lhs3 : Line | Point3D
 ->rhs3 : { [Symbol.hasInstance](value: Point | Line): value is Point; }
-->lhs3 : (Point3D | Line) & Point
-+>lhs3 : Line | Point3D
 +>rhs3 : { [Symbol.hasInstance]: (value: Line | Point) => value is Point; }
-+>lhs3 : (Line | Point3D) & Point
+ >lhs3 : (Line | Point3D) & Point
  
  lhs3 instanceof rhs4 && lhs3;
  >lhs3 instanceof rhs4 && lhs3 : Line
  >lhs3 instanceof rhs4 : boolean
-->lhs3 : Point3D | Line
+ >lhs3 : Line | Point3D
 ->rhs4 : { [Symbol.hasInstance](value: Point | Line): value is Line; }
-+>lhs3 : Line | Point3D
 +>rhs4 : { [Symbol.hasInstance]: (value: Line | Point) => value is Line; }
  >lhs3 : Line
  
  lhs3 instanceof rhs5 && lhs3;
  >lhs3 instanceof rhs5 && lhs3 : Point3D
  >lhs3 instanceof rhs5 : boolean
-->lhs3 : Point3D | Line
+ >lhs3 : Line | Point3D
 ->rhs5 : { [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; }
-+>lhs3 : Line | Point3D
 +>rhs5 : { [Symbol.hasInstance]: (value: Line | Point | Point3D) => value is Point3D; }
  >lhs3 : Point3D
  
  lhs3 instanceof rhs6 && lhs3;
  >lhs3 instanceof rhs6 && lhs3 : Point3D
  >lhs3 instanceof rhs6 : boolean
-->lhs3 : Point3D | Line
+ >lhs3 : Line | Point3D
 ->rhs6 : { [Symbol.hasInstance](value: Point3D | Line): value is Point3D; }
-+>lhs3 : Line | Point3D
 +>rhs6 : { [Symbol.hasInstance]: (value: Line | Point3D) => value is Point3D; }
  >lhs3 : Point3D
  
  lhs3 instanceof Rhs7 && lhs3;
-->lhs3 instanceof Rhs7 && lhs3 : Point3D | Line
-+>lhs3 instanceof Rhs7 && lhs3 : Line | Point3D
- >lhs3 instanceof Rhs7 : boolean
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- >Rhs7 : typeof Rhs7
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- 
- lhs3 instanceof Rhs8 && lhs3;
-->lhs3 instanceof Rhs8 && lhs3 : Point3D | Line
-+>lhs3 instanceof Rhs8 && lhs3 : Line | Point3D
- >lhs3 instanceof Rhs8 : boolean
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- >Rhs8 : typeof Rhs8
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- 
- lhs3 instanceof Rhs9 && lhs3;
-->lhs3 instanceof Rhs9 && lhs3 : (Point3D | Line) & Point
-+>lhs3 instanceof Rhs9 && lhs3 : (Line | Point3D) & Point
- >lhs3 instanceof Rhs9 : boolean
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- >Rhs9 : typeof Rhs9
-->lhs3 : (Point3D | Line) & Point
-+>lhs3 : (Line | Point3D) & Point
- 
- lhs3 instanceof Rhs10 && lhs3;
-->lhs3 instanceof Rhs10 && lhs3 : (Point3D | Line) & Point
-+>lhs3 instanceof Rhs10 && lhs3 : (Line | Point3D) & Point
- >lhs3 instanceof Rhs10 : boolean
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- >Rhs10 : typeof Rhs10
-->lhs3 : (Point3D | Line) & Point
-+>lhs3 : (Line | Point3D) & Point
- 
- lhs3 instanceof Rhs11 && lhs3;
- >lhs3 instanceof Rhs11 && lhs3 : Line
- >lhs3 instanceof Rhs11 : boolean
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- >Rhs11 : typeof Rhs11
- >lhs3 : Line
- 
- lhs3 instanceof Rhs12 && lhs3;
- >lhs3 instanceof Rhs12 && lhs3 : Point3D
- >lhs3 instanceof Rhs12 : boolean
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- >Rhs12 : typeof Rhs12
- >lhs3 : Point3D
- 
- lhs3 instanceof Rhs13 && lhs3;
- >lhs3 instanceof Rhs13 && lhs3 : Point3D
- >lhs3 instanceof Rhs13 : boolean
-->lhs3 : Point3D | Line
-+>lhs3 : Line | Point3D
- >Rhs13 : typeof Rhs13
- >lhs3 : Point3D
- 
- lhs4 instanceof rhs0 && lhs4;
-->lhs4 instanceof rhs0 && lhs4 : Point | Point3D2 | Line
-+>lhs4 instanceof rhs0 && lhs4 : Line | Point | Point3D2
+@@= skipped -98, +98 lines =@@
+ >lhs4 instanceof rhs0 && lhs4 : Line | Point | Point3D2
  >lhs4 instanceof rhs0 : boolean
-->lhs4 : Point | Point3D2 | Line
+ >lhs4 : Line | Point | Point3D2
 ->rhs0 : { [Symbol.hasInstance](value: unknown): boolean; }
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
 +>rhs0 : { [Symbol.hasInstance]: (value: unknown) => boolean; }
-+>lhs4 : Line | Point | Point3D2
+ >lhs4 : Line | Point | Point3D2
  
  lhs4 instanceof rhs1 && lhs4;
-->lhs4 instanceof rhs1 && lhs4 : Point | Point3D2 | Line
-+>lhs4 instanceof rhs1 && lhs4 : Line | Point | Point3D2
+ >lhs4 instanceof rhs1 && lhs4 : Line | Point | Point3D2
  >lhs4 instanceof rhs1 : boolean
-->lhs4 : Point | Point3D2 | Line
+ >lhs4 : Line | Point | Point3D2
 ->rhs1 : { [Symbol.hasInstance](value: any): boolean; }
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
 +>rhs1 : { [Symbol.hasInstance]: (value: any) => boolean; }
-+>lhs4 : Line | Point | Point3D2
+ >lhs4 : Line | Point | Point3D2
  
  lhs4 instanceof rhs2 && lhs4;
  >lhs4 instanceof rhs2 && lhs4 : Point | Point3D2
  >lhs4 instanceof rhs2 : boolean
-->lhs4 : Point | Point3D2 | Line
+ >lhs4 : Line | Point | Point3D2
 ->rhs2 : { [Symbol.hasInstance](value: any): value is Point; }
-+>lhs4 : Line | Point | Point3D2
 +>rhs2 : { [Symbol.hasInstance]: (value: any) => value is Point; }
  >lhs4 : Point | Point3D2
  
  lhs4 instanceof rhs3 && lhs4;
  >lhs4 instanceof rhs3 && lhs4 : Point | Point3D2
  >lhs4 instanceof rhs3 : boolean
-->lhs4 : Point | Point3D2 | Line
+ >lhs4 : Line | Point | Point3D2
 ->rhs3 : { [Symbol.hasInstance](value: Point | Line): value is Point; }
-+>lhs4 : Line | Point | Point3D2
 +>rhs3 : { [Symbol.hasInstance]: (value: Line | Point) => value is Point; }
  >lhs4 : Point | Point3D2
  
  lhs4 instanceof rhs4 && lhs4;
  >lhs4 instanceof rhs4 && lhs4 : Line
  >lhs4 instanceof rhs4 : boolean
-->lhs4 : Point | Point3D2 | Line
+ >lhs4 : Line | Point | Point3D2
 ->rhs4 : { [Symbol.hasInstance](value: Point | Line): value is Line; }
-+>lhs4 : Line | Point | Point3D2
 +>rhs4 : { [Symbol.hasInstance]: (value: Line | Point) => value is Line; }
  >lhs4 : Line
  
  lhs4 instanceof rhs5 && lhs4;
  >lhs4 instanceof rhs5 && lhs4 : Point3D
  >lhs4 instanceof rhs5 : boolean
-->lhs4 : Point | Point3D2 | Line
+ >lhs4 : Line | Point | Point3D2
 ->rhs5 : { [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; }
-+>lhs4 : Line | Point | Point3D2
 +>rhs5 : { [Symbol.hasInstance]: (value: Line | Point | Point3D) => value is Point3D; }
  >lhs4 : Point3D
  
  lhs4 instanceof Rhs7 && lhs4;
-->lhs4 instanceof Rhs7 && lhs4 : Point | Point3D2 | Line
-+>lhs4 instanceof Rhs7 && lhs4 : Line | Point | Point3D2
- >lhs4 instanceof Rhs7 : boolean
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- >Rhs7 : typeof Rhs7
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- 
- lhs4 instanceof Rhs8 && lhs4;
-->lhs4 instanceof Rhs8 && lhs4 : Point | Point3D2 | Line
-+>lhs4 instanceof Rhs8 && lhs4 : Line | Point | Point3D2
- >lhs4 instanceof Rhs8 : boolean
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- >Rhs8 : typeof Rhs8
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- 
- lhs4 instanceof Rhs9 && lhs4;
- >lhs4 instanceof Rhs9 && lhs4 : Point | Point3D2
- >lhs4 instanceof Rhs9 : boolean
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- >Rhs9 : typeof Rhs9
- >lhs4 : Point | Point3D2
- 
- lhs4 instanceof Rhs10 && lhs4;
- >lhs4 instanceof Rhs10 && lhs4 : Point | Point3D2
- >lhs4 instanceof Rhs10 : boolean
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- >Rhs10 : typeof Rhs10
- >lhs4 : Point | Point3D2
- 
- lhs4 instanceof Rhs11 && lhs4;
- >lhs4 instanceof Rhs11 && lhs4 : Line
- >lhs4 instanceof Rhs11 : boolean
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- >Rhs11 : typeof Rhs11
- >lhs4 : Line
- 
- lhs4 instanceof Rhs12 && lhs4;
- >lhs4 instanceof Rhs12 && lhs4 : Point3D
- >lhs4 instanceof Rhs12 : boolean
-->lhs4 : Point | Point3D2 | Line
-+>lhs4 : Line | Point | Point3D2
- >Rhs12 : typeof Rhs12
- >lhs4 : Point3D
- 
-@@= skipped -274, +274 lines =@@
+@@= skipped -89, +89 lines =@@
      // approximation of `getInstanceType` behavior, with one caveat: the checker versions unions the return types of
      // all construct signatures, but we have no way of extracting individual construct signatures from a type.
      static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
@@ -584,15 +350,3 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-@@= skipped -97, +97 lines =@@
- >rhs15 : Rhs15
- 
- lhs0 instanceof rhs15 && lhs0;
-->lhs0 instanceof rhs15 && lhs0 : Point | Line
-+>lhs0 instanceof rhs15 && lhs0 : Line | Point
- >lhs0 instanceof rhs15 : boolean
- >lhs0 : any
- >rhs15 : Rhs15
-->lhs0 : Point | Line
-+>lhs0 : Line | Point
- 

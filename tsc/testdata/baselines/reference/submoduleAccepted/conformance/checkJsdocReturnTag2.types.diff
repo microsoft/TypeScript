@@ -17,8 +17,4 @@
 +>f1 : () => 5 | true
  
      return 5 || true;
-->5 || true : true | 5
-+>5 || true : 5 | true
- >5 : 5
- >true : true
- }
+ >5 || true : 5 | true

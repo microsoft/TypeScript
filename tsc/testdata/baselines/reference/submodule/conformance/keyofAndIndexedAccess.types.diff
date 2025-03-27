@@ -1,91 +1,6 @@
 --- old.keyofAndIndexedAccess.types
 +++ new.keyofAndIndexedAccess.types
-@@= skipped -38, +38 lines =@@
- >Options : Options
- 
-     visible: "yes" | "no";
-->visible : "yes" | "no"
-+>visible : "no" | "yes"
- }
- 
- type Dictionary<T> = { [x: string]: T };
-@@= skipped -21, +21 lines =@@
- >K00 : string | number | symbol
- 
- type K01 = keyof string;  // "toString" | "charAt" | ...
-->K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
-+>K01 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
- 
- type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
-->K02 : "toString" | "toLocaleString" | "toFixed" | "toExponential" | "toPrecision" | "valueOf"
-+>K02 : "toExponential" | "toFixed" | "toLocaleString" | "toPrecision" | "toString" | "valueOf"
- 
- type K03 = keyof boolean;  // "valueOf"
- >K03 : "valueOf"
-@@= skipped -39, +39 lines =@@
- >K14 : keyof Object
- 
- type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
-->K15 : "toString" | "toLocaleString" | "toFixed" | "toExponential" | "toPrecision" | "valueOf"
-+>K15 : "toExponential" | "toFixed" | "toLocaleString" | "toPrecision" | "toString" | "valueOf"
- 
- type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
- >K16 : keyof [string, number]
-@@= skipped -9, +9 lines =@@
- >K17 : "name"
- 
- type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
-->K18 : "name" | "width" | "height" | "visible" | "price"
-+>K18 : "height" | "name" | "price" | "visible" | "width"
- 
- type K19 = keyof NumericallyIndexed<Shape> // never
- >K19 : number
-@@= skipped -59, +59 lines =@@
- >Q36 : number
- 
- type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
-->Q40 : boolean | "yes" | "no"
-+>Q40 : "no" | "yes" | boolean
- 
- type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
- >Q41 : never
-@@= skipped -59, +59 lines =@@
- >getProperty(shape, cond ? "width" : "height") : number
- >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
- >shape : Shape
-->cond ? "width" : "height" : "width" | "height"
-+>cond ? "width" : "height" : "height" | "width"
- >cond : boolean
- >"width" : "width"
- >"height" : "height"
-@@= skipped -26, +26 lines =@@
- >setProperty(shape, cond ? "width" : "height", 10) : void
- >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
- >shape : Shape
-->cond ? "width" : "height" : "width" | "height"
-+>cond ? "width" : "height" : "height" | "width"
- >cond : boolean
- >"width" : "width"
- >"height" : "height"
-@@= skipped -140, +140 lines =@@
- >component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
- >component : Component<Shape>
- >getProperty : <K extends keyof Shape>(key: K) => Shape[K]
-->cond ? "width" : "height" : "width" | "height"
-+>cond ? "width" : "height" : "height" | "width"
- >cond : boolean
- >"width" : "width"
- >"height" : "height"
-@@= skipped -29, +29 lines =@@
- >component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
- >component : Component<Shape>
- >setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
-->cond ? "width" : "height" : "width" | "height"
-+>cond ? "width" : "height" : "height" | "width"
- >cond : boolean
- >"width" : "width"
- >"height" : "height"
-@@= skipped -87, +87 lines =@@
+@@= skipped -507, +507 lines =@@
  }
  
  function f32<K extends "width" | "height">(key: K) {
@@ -310,19 +225,7 @@
  >p : K
  
      let a: any;
-@@= skipped -96, +96 lines =@@
- 
-     handler.onChange('preset')
- >handler.onChange('preset') : void
-->handler.onChange : (name: keyof T | "preset") => void
-+>handler.onChange : (name: "preset" | keyof T) => void
- >handler : Handler<T & { preset: number; }>
-->onChange : (name: keyof T | "preset") => void
-+>onChange : (name: "preset" | keyof T) => void
- >'preset' : "preset"
- }
- 
-@@= skipped -80, +80 lines =@@
+@@= skipped -176, +176 lines =@@
  // Repro from #13514
  
  declare function head<T extends Array<any>>(list: T): T[0];

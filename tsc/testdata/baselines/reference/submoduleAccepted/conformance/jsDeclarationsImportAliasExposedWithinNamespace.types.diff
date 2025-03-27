@@ -43,9 +43,8 @@
  
      if (typeof input === 'number') {
  >typeof input === 'number' : boolean
-->typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->input : import("file2").testFnTypes.input
-+>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>input : any
  >'number' : "number"
  

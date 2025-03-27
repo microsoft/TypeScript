@@ -1,15 +1,6 @@
 --- old.deeplyNestedMappedTypes.types
 +++ new.deeplyNestedMappedTypes.types
-@@= skipped -67, +67 lines =@@
- >A : A
- >a : { b: { c: 1 | { d: 2000; }; }; } | undefined
- >b : { c: 1 | { d: 2000; }; }
-->c : { d: 2000; } | 1
-+>c : 1 | { d: 2000; }
- >d : 2000
- 
- type B = { a?: { b: { c: { d: { e: { f: { g: 2 }}}}, x: 1000 }}}
-@@= skipped -145, +145 lines =@@
+@@= skipped -212, +212 lines =@@
  })
  
  function problematicFunction1(ors: Input[]): Output[] {
@@ -36,21 +27,3 @@
  >ors : { level1: { level2: { foo: string; }; }; }[]
  >Input.static : { level1: { level2: { foo: string; }; }; }
  >Input : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }>
-@@= skipped -85, +85 lines =@@
- >OptionalPropertyKeys : OptionalPropertyKeys<T>
- 
- export type RequiredPropertyKeys<T extends TProperties> = keyof Omit<T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>
-->RequiredPropertyKeys : Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>
-+>RequiredPropertyKeys : Exclude<keyof T, OptionalPropertyKeys<T> | ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T>>
- 
- export type PropertiesReducer<T extends TProperties, R extends Record<keyof any, unknown>> = Evaluate<(
- >PropertiesReducer : PropertiesReducer<T, R>
-@@= skipped -27, +27 lines =@@
- >Kind : unique symbol
- 
-     static: PropertiesReduce<T, this['params']>
-->static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>>>>
-+>static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, OptionalPropertyKeys<T> | ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T>>>>>
- 
-     type: 'object'
- >type : "object"

@@ -44,17 +44,12 @@
  >prop : [string, number]
  >[101, 1234] : [number, number]
  >101 : 101
-@@= skipped -8, +8 lines =@@
- 
- interface StringUnion {
-     prop: "foo" | "bar";
-->prop : "foo" | "bar"
-+>prop : "bar" | "foo"
+@@= skipped -11, +11 lines =@@
+ >prop : "bar" | "foo"
  }
  function h({ prop = "baz" }: StringUnion) {}
 ->h : ({ prop }: StringUnion) => void
-->prop : "foo" | "bar"
 +>h : (__0: StringUnion) => void
-+>prop : "bar" | "foo"
+ >prop : "bar" | "foo"
  >"baz" : "baz"
  

@@ -2,7 +2,7 @@
 +++ new.jsdocBracelessTypeTag1.errors.txt
 @@= skipped -0, +0 lines =@@
 -index.js(3,3): error TS2322: Type 'number' is not assignable to type 'string'.
--index.js(20,16): error TS2322: Type '"other"' is not assignable to type '"foo" | "bar"'.
+-index.js(20,16): error TS2322: Type '"other"' is not assignable to type '"bar" | "foo"'.
 +index.js(12,14): error TS7006: Parameter 'arg' implicitly has an 'any' type.
  
  
@@ -30,6 +30,6 @@
      /** @type ({ type: 'foo' } | { type: 'bar' }) & { prop: number } */
      const obj2 = { type: "other", prop: 10 };
 -                   ~~~~
--!!! error TS2322: Type '"other"' is not assignable to type '"foo" | "bar"'.
+-!!! error TS2322: Type '"other"' is not assignable to type '"bar" | "foo"'.
 -!!! related TS6500 index.js:19:14: The expected type comes from property 'type' which is declared here on type '({ type: "foo"; } | { type: "bar"; }) & { prop: number; }'
      

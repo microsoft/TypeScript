@@ -5,9 +5,8 @@
  
  function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 ->download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
-->hostSpec : `http://${string}` | `https://${string}` | `ftp://${string}`
 +>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
-+>hostSpec : `ftp://${string}` | `http://${string}` | `https://${string}`
+ >hostSpec : `ftp://${string}` | `http://${string}` | `https://${string}`
  
  // ok, has protocol
  download("http://example.com/protocol");
@@ -64,9 +63,8 @@
  
  declare function nullishes(x: Pat<null | undefined>): void;
 ->nullishes : (x: Pat<null | undefined>) => void
-->x : "undefined" | "null"
 +>nullishes : (x: "null" | "undefined") => void
-+>x : "null" | "undefined"
+ >x : "null" | "undefined"
  
  // ok
  nullishes("null");
@@ -113,24 +111,7 @@
  >"other" : "other"
  
  declare function numbers(x: `${number}`): void;
-@@= skipped -515, +515 lines =@@
- // Remove string literals from unions with matching template literals
- 
- let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
-->t1 : `foo${string}` | "1foo"
-+>t1 : "1foo" | `foo${string}`
- 
- let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
-->t2 : `foo${string}` | "1foo" | "xfoo"
-+>t2 : "1foo" | "xfoo" | `foo${string}`
- 
- let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
-->t3 : `foo${string}` | "xfoo" | `${number}foo`
-+>t3 : "xfoo" | `${number}foo` | `foo${string}`
- 
- var bb: `${number}`;
- >bb : `${number}`
-@@= skipped -57, +57 lines =@@
+@@= skipped -572, +572 lines =@@
  >BB : BB
  
      abstract get(id: Id<AA>): void;
@@ -158,7 +139,7 @@
  // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
  function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
 ->conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | (`${string}Downcast` & {})) => void
-->groupName : (`${string}Downcast` & {}) | "downcast" | "dataDowncast" | "editingDowncast"
+->groupName : "dataDowncast" | "downcast" | "editingDowncast" | (`${string}Downcast` & {})
 +>conversionTest : (groupName: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast` & {}) => void
 +>groupName : "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast` & {}
  
@@ -170,7 +151,7 @@
  
  function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
 ->conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
-->groupName : "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)
+->groupName : "dataDowncast" | "downcast" | "editingDowncast" | ({} & `${string}Downcast`)
 +>conversionTest2 : (groupName: "dataDowncast" | "downcast" | "editingDowncast" | {} & `${string}Downcast`) => void
 +>groupName : "dataDowncast" | "downcast" | "editingDowncast" | {} & `${string}Downcast`
  

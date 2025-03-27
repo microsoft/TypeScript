@@ -199,17 +199,9 @@
  
  function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 ->f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
-->x : Func<"b"> | Func<"a">
 +>f4 : <K extends keyof ArgMap>(x: Func<"a"> | Func<"b">, y: Funcs[K]) => void
-+>x : Func<"a"> | Func<"b">
+ >x : Func<"a"> | Func<"b">
  >y : Funcs[K]
- 
-     x = y;
- >x = y : Funcs[K]
-->x : Func<"b"> | Func<"a">
-+>x : Func<"a"> | Func<"b">
- >y : Funcs[K]
- }
  
 @@= skipped -89, +89 lines =@@
  }
@@ -249,22 +241,3 @@
  
    K extends KeyOfOriginal,
    N extends NestedKeyOfOriginalFor<K>
-@@= skipped -63, +63 lines =@@
- >key : T
- 
-   const assertedCheck = userValue ? userValue! : defaultValue;
-->assertedCheck : Config[T]
-->userValue ? userValue! : defaultValue : Config[T]
-+>assertedCheck : NonNullable<Partial<Config>[T]>
-+>userValue ? userValue! : defaultValue : NonNullable<Partial<Config>[T]>
- >userValue : Partial<Config>[T]
- >userValue! : NonNullable<Partial<Config>[T]>
- >userValue : NonNullable<Partial<Config>[T]>
- >defaultValue : Config[T]
- 
-   return assertedCheck;
-->assertedCheck : Config[T]
-+>assertedCheck : NonNullable<Partial<Config>[T]>
- }
- 
- // repro from #47523

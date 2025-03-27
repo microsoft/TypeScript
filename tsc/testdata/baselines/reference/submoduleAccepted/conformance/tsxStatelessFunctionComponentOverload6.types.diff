@@ -41,35 +41,11 @@
  
  export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 ->MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
-->props : ButtonProps | LinkProps | HyphenProps
 +>MainButton : { (buttonProps: ButtonProps): Element; (linkProps: LinkProps): Element; (hyphenProps: HyphenProps): Element; }
-+>props : ButtonProps | HyphenProps | LinkProps
+ >props : ButtonProps | HyphenProps | LinkProps
  >JSX : any
  
-     const linkProps = props as LinkProps;
- >linkProps : LinkProps
- >props as LinkProps : LinkProps
-->props : ButtonProps | LinkProps | HyphenProps
-+>props : ButtonProps | HyphenProps | LinkProps
- 
-     if(linkProps.to) {
- >linkProps.to : string
-@@= skipped -34, +34 lines =@@
- >this._buildMainLink : any
- >this : any
- >_buildMainLink : any
-->props : ButtonProps | LinkProps | HyphenProps
-+>props : ButtonProps | HyphenProps | LinkProps
-     }
- 
-     return this._buildMainButton(props);
-@@= skipped -8, +8 lines =@@
- >this._buildMainButton : any
- >this : any
- >_buildMainButton : any
-->props : ButtonProps | LinkProps | HyphenProps
-+>props : ButtonProps | HyphenProps | LinkProps
- }
+@@= skipped -47, +47 lines =@@
  
  // OK
  const b0 = <MainButton to='/some/path'>GO</MainButton>;

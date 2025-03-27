@@ -30,9 +30,8 @@
  >!(typeof x === "string") : boolean
  >(typeof x === "string") : boolean
  >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->x : unknown
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>x : any
  >"string" : "string"
  >new Error() : Error
@@ -69,8 +68,7 @@
 ->assert : AssertFunc
 +>assert : (check: any) => void
  >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >x : any
  >"string" : "string"
  
@@ -91,8 +89,7 @@
 ->assert2 : (check: boolean) => asserts check
 +>assert2 : (check: any) => void
  >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >x : any
  >"string" : "string"
  
@@ -139,7 +136,7 @@
   * @param {boolean} b 
   */
  function f2(b) {
-->f2 : (b: boolean) => 1 | 0
+->f2 : (b: boolean) => 0 | 1
 ->b : boolean
 +>f2 : (b: any) => 0 | 1
 +>b : any

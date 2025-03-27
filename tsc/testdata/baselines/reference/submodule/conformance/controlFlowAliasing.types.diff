@@ -1,194 +1,6 @@
 --- old.controlFlowAliasing.types
 +++ new.controlFlowAliasing.types
-@@= skipped -9, +9 lines =@@
-     const isString = typeof x === "string";
- >isString : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
-@@= skipped -25, +25 lines =@@
-     const isString = typeof x === "string";
- >isString : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- 
-@@= skipped -20, +20 lines =@@
-     const isString = typeof x === "string";
- >isString : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-     const isNumber = typeof x === "number";
- >isNumber : boolean
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"number" : "number"
- 
-@@= skipped -34, +34 lines =@@
-     const isString = typeof x === "string";
- >isString : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-     const isNumber = typeof x === "number";
- >isNumber : boolean
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"number" : "number"
- 
-@@= skipped -56, +56 lines =@@
-     const isString = typeof obj.x === 'string';
- >isString : boolean
- >typeof obj.x === 'string' : boolean
-->typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj.x : string | number
- >obj : { readonly x: string | number; }
- >x : string | number
-@@= skipped -25, +25 lines =@@
-     const isString = typeof obj.x === 'string';
- >isString : boolean
- >typeof obj.x === 'string' : boolean
-->typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj.x : string | number
- >obj : { readonly x: string | number; }
- >x : string | number
-@@= skipped -31, +31 lines =@@
-     const isString = typeof obj[0] === 'string';
- >isString : boolean
- >typeof obj[0] === 'string' : boolean
-->typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj[0] : string | number
- >obj : readonly [string | number]
- >0 : 0
-@@= skipped -24, +24 lines =@@
-     const isString = typeof obj[0] === 'string';
- >isString : boolean
- >typeof obj[0] === 'string' : boolean
-->typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj[0] : string | number
- >obj : readonly [string | number]
- >0 : 0
-@@= skipped -34, +34 lines =@@
-     const isFoo = obj.kind === 'foo';
- >isFoo : boolean
- >obj.kind === 'foo' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo) {
-@@= skipped -32, +32 lines =@@
-     const isFoo: boolean = obj.kind === 'foo';
- >isFoo : boolean
- >obj.kind === 'foo' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo) {
-@@= skipped -32, +32 lines =@@
-     let isFoo = obj.kind === 'foo';
- >isFoo : boolean
- >obj.kind === 'foo' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo) {
-@@= skipped -32, +32 lines =@@
-     const isFoo = obj.kind === 'foo';
- >isFoo : boolean
- >obj.kind === 'foo' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     obj = obj;
-@@= skipped -41, +41 lines =@@
-     const isFoo = obj.kind === 'foo';
- >isFoo : boolean
- >obj.kind === 'foo' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo) {
-@@= skipped -36, +36 lines =@@
-     const isFoo = obj.kind === 'foo';
- >isFoo : boolean
- >obj.kind === 'foo' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo) {
-@@= skipped -33, +33 lines =@@
-     const isFoo = outer.obj.kind === 'foo';
- >isFoo : boolean
- >outer.obj.kind === 'foo' : boolean
-->outer.obj.kind : "foo" | "bar"
-+>outer.obj.kind : "bar" | "foo"
- >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
- >outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo) {
-@@= skipped -39, +39 lines =@@
-     const isFoo = outer.obj.kind === 'foo';
- >isFoo : boolean
- >outer.obj.kind === 'foo' : boolean
-->outer.obj.kind : "foo" | "bar"
-+>outer.obj.kind : "bar" | "foo"
- >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
- >outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo) {
-@@= skipped -28, +28 lines =@@
+@@= skipped -531, +531 lines =@@
  }
  
  function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
@@ -197,130 +9,7 @@
  >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
  >kind : "foo"
  >foo : string
-@@= skipped -12, +12 lines =@@
- >obj && obj.kind === 'foo' : boolean | undefined
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
- >obj.kind === 'foo' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     const isBar = obj && obj.kind === 'bar';
-@@= skipped -10, +10 lines =@@
- >obj && obj.kind === 'bar' : boolean | undefined
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
- >obj.kind === 'bar' : boolean
-->obj.kind : "foo" | "bar"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'bar' : "bar"
- 
-     if (isFoo) {
-@@= skipped -34, +34 lines =@@
- >bar : number
- 
-     const kind = obj.kind;
-->kind : "foo" | "bar"
-->obj.kind : "foo" | "bar"
-+>kind : "bar" | "foo"
-+>obj.kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- 
-     if (kind === 'foo') {
- >kind === 'foo' : boolean
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-         obj.foo;
-@@= skipped -32, +32 lines =@@
- >bar : number
- 
-     const { kind } = obj;
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
- 
-     if (kind === 'foo') {
- >kind === 'foo' : boolean
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-         obj.foo;
-@@= skipped -31, +31 lines =@@
- 
-     const { kind: k } = obj;
- >kind : any
-->k : "foo" | "bar"
-+>k : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
- 
-     if (k === 'foo') {
- >k === 'foo' : boolean
-->k : "foo" | "bar"
-+>k : "bar" | "foo"
- >'foo' : "foo"
- 
-         obj.foo;
-@@= skipped -30, +30 lines =@@
- >bar : number
- 
-     const { kind } = obj;
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
- 
-     switch (kind) {
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- 
-         case 'foo': obj.foo; break;
- >'foo' : "foo"
-@@= skipped -30, +30 lines =@@
-         const thisX_isString = typeof this.x === 'string';
- >thisX_isString : boolean
- >typeof this.x === 'string' : boolean
-->typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof this.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >this.x : string | number
- >this : this
- >x : string | number
-@@= skipped -9, +9 lines =@@
-         const xIsString = typeof x === 'string';
- >xIsString : boolean
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- 
-@@= skipped -36, +36 lines =@@
-         const thisX_isString = typeof this.x === 'string';
- >thisX_isString : boolean
- >typeof this.x === 'string' : boolean
-->typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof this.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >this.x : string | number
- >this : this
- >x : string | number
-@@= skipped -9, +9 lines =@@
-         const xIsString = typeof x === 'string';
- >xIsString : boolean
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- 
-@@= skipped -44, +44 lines =@@
+@@= skipped -277, +277 lines =@@
  // Mixing of aliased discriminants and conditionals
  
  function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
@@ -331,22 +20,16 @@
  >kind : "foo"
  >foo : string | undefined
  >kind : "bar"
- >bar : number | undefined
+@@= skipped -9, +9 lines =@@
  
      const { kind } = obj;
-->kind : "foo" | "bar"
+ >kind : "bar" | "foo"
 ->obj : { kind: "foo"; foo?: string; } | { kind: "bar"; bar?: number; }
-+>kind : "bar" | "foo"
 +>obj : { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }
  
      const isFoo = kind == 'foo';
  >isFoo : boolean
- >kind == 'foo' : boolean
-->kind : "foo" | "bar"
-+>kind : "bar" | "foo"
- >'foo' : "foo"
- 
-     if (isFoo && obj.foo) {
+@@= skipped -12, +12 lines =@@
  >isFoo && obj.foo : string | false | undefined
  >isFoo : boolean
  >obj.foo : string | undefined
@@ -363,31 +46,11 @@
      }
  }
 @@= skipped -47, +47 lines =@@
- 
-     if (obj.kind === 'str') {
- >obj.kind === 'str' : boolean
-->obj.kind : "str" | "num"
-+>obj.kind : "num" | "str"
- >obj : Data
-->kind : "str" | "num"
-+>kind : "num" | "str"
- >'str' : "str"
- 
-         let t: string = obj.payload;
-@@= skipped -21, +21 lines =@@
  }
  
  function foo({ kind, payload }: Data) {
 ->foo : ({ kind, payload }: Data) => void
-->kind : "str" | "num"
 +>foo : (__0: Data) => void
-+>kind : "num" | "str"
+ >kind : "num" | "str"
  >payload : string | number
  
-     if (kind === 'str') {
- >kind === 'str' : boolean
-->kind : "str" | "num"
-+>kind : "num" | "str"
- >'str' : "str"
- 
-         let t: string = payload;

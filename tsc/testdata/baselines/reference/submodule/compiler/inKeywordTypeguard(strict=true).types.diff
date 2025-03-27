@@ -20,43 +20,7 @@
      }
  }
  
-@@= skipped -43, +43 lines =@@
- >x && typeof x === "object" : unknown
- >x : unknown
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : {}
- >"object" : "object"
- >"a" in x : boolean
-@@= skipped -19, +19 lines =@@
- >x && typeof x === "object" : unknown
- >x : unknown
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : {}
- >"object" : "object"
- >"a" in x : boolean
-@@= skipped -105, +105 lines =@@
- >x && typeof x === "object" : boolean
- >x : T
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : NonNullable<T>
- >"object" : "object"
- >"a" in x : boolean
-@@= skipped -19, +19 lines =@@
- >x && typeof x === "object" : boolean
- >x : T
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : NonNullable<T>
- >"object" : "object"
- >"a" in x : boolean
-@@= skipped -319, +319 lines =@@
+@@= skipped -505, +505 lines =@@
  }
  
  function f13(x: { a?: string }) {
@@ -83,21 +47,16 @@
      }
  }
  
-@@= skipped -79, +79 lines =@@
- >typeof value === "object" && value !== null && "prop" in value : boolean
- >typeof value === "object" && value !== null : boolean
- >typeof value === "object" : boolean
-->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+@@= skipped -83, +83 lines =@@
  >value : A
  >"object" : "object"
  >value !== null : boolean
-->value : (A & object) | (A & null)
+->value : (A & null) | (A & object)
 +>value : A & null | A & object
  >"prop" in value : boolean
  >"prop" : "prop"
  >value : A & object
-@@= skipped -50, +50 lines =@@
+@@= skipped -46, +46 lines =@@
  // Repro from #51549
  
  const f = <P extends object>(a: P & {}) => {

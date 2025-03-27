@@ -1,15 +1,6 @@
 --- old.spreadObjectNoCircular1.types
 +++ new.spreadObjectNoCircular1.types
-@@= skipped -4, +4 lines =@@
- >Box : Box
- 
-   content?: Foo | Box;
-->content : Foo | Box | undefined
-+>content : Box | Foo | undefined
- 
- };
- 
-@@= skipped -11, +11 lines =@@
+@@= skipped -15, +15 lines =@@
  >Foo : Foo
  
    get foo() {
@@ -21,10 +12,4 @@
 +>{      content: this as Foo | Box,      ...b,    } : { content: Box | Foo; }
  
        content: this as Foo | Box,
-->content : Foo | Box
-->this as Foo | Box : Foo | Box
-+>content : Box | Foo
-+>this as Foo | Box : Box | Foo
- >this : this
- 
-       ...b,
+ >content : Box | Foo

@@ -73,16 +73,6 @@
  >0x20 : number
  >0 : 0
  >3.2e1 : number
- >0 : 0
- 
- var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
-->f17 : { readonly a: number; readonly b: number; }
-->{ a: 0, get b() { return 1; }, get a() { return 0; } } : { readonly a: number; readonly b: number; }
-+>f17 : { readonly b: number; readonly a: number; }
-+>{ a: 0, get b() { return 1; }, get a() { return 0; } } : { readonly b: number; readonly a: number; }
- >a : number
- >0 : 0
- >b : number
 @@= skipped -43, +43 lines =@@
  
  // Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)

@@ -1,45 +1,11 @@
 --- old.objectLiteralExcessProperties.types
 +++ new.objectLiteralExcessProperties.types
-@@= skipped -23, +23 lines =@@
- >"nope" : "nope"
- 
- var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
-->b3 : Book | Book[]
-+>b3 : Book[] | Book
- >[{ foreword: "hello" }, { forwards: "back" }] : ({ foreword: string; } | { forwards: string; })[]
- >{ foreword: "hello" } : { foreword: string; }
- >foreword : string
-@@= skipped -44, +44 lines =@@
- >10.99 : 10.99
- 
- var b8: Cover | Cover[] = { couleur : "non" };
-->b8 : Cover | Cover[]
-+>b8 : Cover[] | Cover
- >{ couleur : "non" } : { couleur: string; }
- >couleur : string
- >"non" : "non"
- 
- var b9: Book | Book[] = { forewarned: "still no" };
-->b9 : Book | Book[]
-+>b9 : Book[] | Book
- >{ forewarned: "still no" } : { forewarned: string; }
- >forewarned : string
- >"still no" : "still no"
-@@= skipped -66, +66 lines =@@
+@@= skipped -133, +133 lines =@@
  
      // Excess property checks only on non-generic parts of unions
      const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
-->obj4 : (T & { prop: boolean; }) | { name: string; }
+->obj4 : { name: string; } | (T & { prop: boolean; })
 +>obj4 : { name: string; } | T & { prop: boolean; }
  >prop : boolean
  >name : string
  >{ name: "test", prop: true } : { name: string; prop: boolean; }
-@@= skipped -11, +11 lines =@@
- 
-     // No excess property checks when union includes 'object' type
-     const obj5: object | { x: string } = { z: 'abc' }
-->obj5 : object | { x: string; }
-+>obj5 : { x: string; } | object
- >x : string
- >{ z: 'abc' } : { z: string; }
- >z : string

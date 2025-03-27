@@ -211,7 +211,7 @@
  >c : any
  
      d4({x, y, c}) { }
-->d4 : ({ x, y, c }: { x: any; y: any; c: any; }) => void
+->d4 : ({ x, y, c }: { c: any; x: any; y: any; }) => void
 +>d4 : (__0: { c: any; x: any; y: any; }) => void
  >x : any
  >y : any

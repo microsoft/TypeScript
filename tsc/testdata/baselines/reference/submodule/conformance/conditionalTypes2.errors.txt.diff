@@ -1,21 +1,6 @@
 --- old.conditionalTypes2.errors.txt
 +++ new.conditionalTypes2.errors.txt
-@@= skipped -12, +12 lines =@@
-             Type 'keyof B' is not assignable to type 'keyof A'.
-               Type 'string | number | symbol' is not assignable to type 'keyof A'.
-                 Type 'string' is not assignable to type 'keyof A'.
--                  Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
--                    Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
--                      Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
--                        Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-+                  Type 'string' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
-+                    Type 'keyof B' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
-+                      Type 'string | number | symbol' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
-+                        Type 'string' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
- conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
-   Types of property 'foo' are incompatible.
-     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
-@@= skipped -13, +13 lines =@@
+@@= skipped -25, +25 lines =@@
              'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
  conditionalTypes2.ts(73,12): error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
    Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
@@ -34,22 +19,7 @@
  
  
  ==== conditionalTypes2.ts (7 errors) ====
-@@= skipped -53, +56 lines =@@
- !!! error TS2322:             Type 'keyof B' is not assignable to type 'keyof A'.
- !!! error TS2322:               Type 'string | number | symbol' is not assignable to type 'keyof A'.
- !!! error TS2322:                 Type 'string' is not assignable to type 'keyof A'.
--!!! error TS2322:                   Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
--!!! error TS2322:                     Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
--!!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
--!!! error TS2322:                         Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-+!!! error TS2322:                   Type 'string' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
-+!!! error TS2322:                     Type 'keyof B' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
-+!!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
-+!!! error TS2322:                         Type 'string' is not assignable to type 'number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"'.
-         b = a;  // Error
-         ~
- !!! error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
-@@= skipped -66, +66 lines =@@
+@@= skipped -119, +122 lines =@@
                 ~
  !!! error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
  !!! error TS2345:   Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.

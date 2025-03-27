@@ -1,15 +1,6 @@
 --- old.conditionalTypes2.types
 +++ new.conditionalTypes2.types
-@@= skipped -70, +70 lines =@@
- 
-     return typeof value === "function";
- >typeof value === "function" : boolean
-->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >value : T
- >"function" : "function"
- }
-@@= skipped -11, +11 lines =@@
+@@= skipped -81, +81 lines =@@
  
      if (isFunction(item)) {
  >isFunction(item) : boolean
@@ -41,12 +32,10 @@
  
  declare function toString1(value: object | Function): string ;
 ->toString1 : (value: object | Function) => string
-->value : object | Function
 +>toString1 : (value: Function | object) => string
-+>value : Function | object
+ >value : Function | object
  
  declare function toString2(value: Function): string ;
- >toString2 : (value: Function) => string
 @@= skipped -13, +13 lines =@@
  
      if (isFunction(value)) {

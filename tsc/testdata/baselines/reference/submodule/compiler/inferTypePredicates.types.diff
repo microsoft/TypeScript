@@ -66,16 +66,7 @@
  >obj.data : string | undefined
  >obj : MyObj
  >data : string | undefined
-@@= skipped -81, +81 lines =@@
- >x => typeof x === "string" : (x: string | number) => x is string
- >x : string | number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
-@@= skipped -13, +13 lines =@@
+@@= skipped -94, +94 lines =@@
  
  // Defer to explicit type guards, even when they're incorrect.
  function backwardsGuard(x: number|string): x is number {
@@ -84,80 +75,7 @@
  >x : string | number
  
    return typeof x === 'string';
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- }
-@@= skipped -17, +17 lines =@@
- 
-   return typeof x === 'string';
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- }
-@@= skipped -30, +30 lines =@@
-   return typeof x === 'string' && Math.random() > 0.5;
- >typeof x === 'string' && Math.random() > 0.5 : boolean
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- >Math.random() > 0.5 : boolean
-@@= skipped -105, +105 lines =@@
- 
-   return typeof x === 'string';
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- }
-@@= skipped -25, +25 lines =@@
- 
-   return typeof x === 'string';
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- }
-@@= skipped -14, +14 lines =@@
-   return typeof x === 'number' && typeof y === 'number';
- >typeof x === 'number' && typeof y === 'number' : boolean
- >typeof x === 'number' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'number' : "number"
- >typeof y === 'number' : boolean
-->typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof y : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >y : string | number
- >'number' : "number"
- }
-@@= skipped -16, +16 lines =@@
- 
-   if (typeof x === 'string') {
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- 
-@@= skipped -19, +19 lines =@@
- 
-   return typeof b === 'string';
- >typeof b === 'string' : boolean
-->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >b : string | number
- >'string' : "string"
- }
+@@= skipped -233, +233 lines =@@
  
  // Checks that there are no string escaping issues
  function dunderguard(__x: number | string) {
@@ -166,22 +84,7 @@
  >__x : string | number
  
    return typeof __x  === 'string';
- >typeof __x  === 'string' : boolean
-->typeof __x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof __x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >__x : string | number
- >'string' : "string"
- }
-@@= skipped -31, +31 lines =@@
- >x : number | boolean
- >typeof x === 'number' || x : boolean
- >typeof x === 'number' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >'number' : "number"
- >x : boolean
-@@= skipped -8, +8 lines =@@
+@@= skipped -32, +32 lines =@@
  // inferred guards in methods
  interface NumberInferrer {
    isNumber(x: number | string): x is number;
@@ -198,12 +101,6 @@
  >x : string | number
  
      return typeof x === 'number';
- >typeof x === 'number' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'number' : "number"
-   }
 @@= skipped -27, +27 lines =@@
  
  if (inf.isNumber(numOrStr)) {
@@ -225,57 +122,7 @@
  >x : number | null
  >y : number
  >x : number | null
-@@= skipped -8, +8 lines =@@
- 
-   return typeof x === 'number';
- >typeof x === 'number' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | null
- >'number' : "number"
- }
-@@= skipped -13, +13 lines =@@
-   return typeof x === "string" && x.length < 10;
- >typeof x === "string" && x.length < 10 : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- >x.length < 10 : boolean
-@@= skipped -40, +40 lines =@@
- 
-   return typeof x === "string";
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- }
-@@= skipped -31, +31 lines =@@
- >(typeof x === "number" || typeof x === "string") : boolean
- >typeof x === "number" || typeof x === "string" : boolean
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"number" : "number"
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- }
-@@= skipped -37, +37 lines =@@
-   }
-   return typeof x === 'string';
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'string' : "string"
- }
-@@= skipped -19, +19 lines =@@
+@@= skipped -148, +148 lines =@@
  }
  
  function isNumberWithThis(this: Date, x: number | string) {
@@ -284,21 +131,7 @@
  >this : Date
  >x : string | number
  
-   return typeof x === 'number';
- >typeof x === 'number' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >'number' : "number"
- }
-@@= skipped -17, +17 lines =@@
- 
-   return typeof x === 'number';
- >typeof x === 'number' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : any
- >'number' : "number"
+@@= skipped -23, +23 lines =@@
  }
  
  const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
@@ -309,7 +142,7 @@
  >f : ["a" | "b"]
  >f[0] === "a" : boolean
  >f[0] : "a" | "b"
-@@= skipped -16, +16 lines =@@
+@@= skipped -10, +10 lines =@@
  >"a" : "a"
  
  const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
@@ -319,9 +152,8 @@
 +>(...f: []) => typeof f === "undefined" : (...f: []) => boolean
  >f : []
  >typeof f === "undefined" : boolean
-->typeof f : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof f : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >f : []
+ >typeof f : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+@@= skipped -9, +9 lines =@@
  >"undefined" : "undefined"
  
  function inferWithRest(x: string | null, ...f: ["a", "b"]) {
@@ -330,14 +162,7 @@
  >x : string | null
  >f : ["a", "b"]
  
-   return typeof x === 'string';
- >typeof x === 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | null
- >'string' : "string"
- }
-@@= skipped -33, +33 lines =@@
+@@= skipped -24, +24 lines =@@
  >bar : string
  
  const foobarPred = (fb: typeof foobar) => fb.type === "foo";

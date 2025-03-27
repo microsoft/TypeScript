@@ -4,7 +4,7 @@
  }
  
  function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
-->Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
+->Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { staticMixinMethod(): void; prototype: Mixin2<any>.MixinClass; }) & TBase
 +>Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
  >args : any[]
  >baseClass : TBase
@@ -21,14 +21,14 @@
  >staticMixinMethod : () => void
      }
      return MixinClass;
-->MixinClass : ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
+->MixinClass : ((abstract new (...args: any[]) => MixinClass) & { staticMixinMethod(): void; prototype: Mixin2<any>.MixinClass; }) & TBase
 +>MixinClass : { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
  }
  
  class DerivedFromAbstract2 extends Mixin2(AbstractBase) {
  >DerivedFromAbstract2 : DerivedFromAbstract2
 ->Mixin2(AbstractBase) : Mixin2<typeof AbstractBase>.MixinClass & AbstractBase
-->Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
+->Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { staticMixinMethod(): void; prototype: Mixin2<any>.MixinClass; }) & TBase
 +>Mixin2(AbstractBase) : MixinClass<typeof AbstractBase> & AbstractBase
 +>Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
  >AbstractBase : typeof AbstractBase

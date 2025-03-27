@@ -1,9 +1,0 @@
---- old.typeSatisfaction_vacuousIntersectionOfContextualTypes.types
-+++ new.typeSatisfaction_vacuousIntersectionOfContextualTypes.types
-@@= skipped -12, +12 lines =@@
- >{ xyz: "foo" } : { xyz: "foo"; }
- >xyz : "foo"
- >"foo" : "foo"
-->xyz : "foo" | "bar"
-+>xyz : "bar" | "foo"
- 

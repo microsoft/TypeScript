@@ -9,16 +9,7 @@
  >x : string | number
  
      function f() {
-@@= skipped -13, +13 lines =@@
-     }
-     if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
-@@= skipped -20, +20 lines =@@
+@@= skipped -33, +33 lines =@@
      }
  }
  function foo2(x: number | string) {
@@ -27,12 +18,6 @@
  >x : string | number
  
      if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
 @@= skipped -36, +36 lines =@@
  >f : () => number
  }
@@ -42,9 +27,3 @@
  >x : string | number
  
      if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 

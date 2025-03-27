@@ -9,23 +9,3 @@
  >arg : any
  
    return arg;
-@@= skipped -44, +44 lines =@@
- 
- interface Product {
-     users: (User | Guest)[];
-->users : (User | Guest)[]
-+>users : (Guest | User)[]
- }
- 
- declare var product: Transform<Product>;
- >product : Transform<Product>
- 
- product.users;  // (Transform<User> | Transform<Guest>)[]
-->product.users : Transform<User | Guest>[]
-+>product.users : Transform<Guest | User>[]
- >product : Transform<Product>
-->users : Transform<User | Guest>[]
-+>users : Transform<Guest | User>[]
- 
- // Repro from #29702
- 

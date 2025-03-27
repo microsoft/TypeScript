@@ -1,15 +1,6 @@
 --- old.unknownControlFlow.types
 +++ new.unknownControlFlow.types
-@@= skipped -53, +53 lines =@@
- >u : unknown
- 
-     let x3: {} | { x: string } | null | undefined = u;
-->x3 : {} | { x: string; } | null | undefined
-+>x3 : { x: string; } | {} | null | undefined
- >x : string
- >u : unknown
- 
-@@= skipped -281, +281 lines =@@
+@@= skipped -334, +334 lines =@@
  }
  
  function f23<T>(x: T | undefined | null) {
@@ -35,63 +26,31 @@
      }
      if (x != undefined) {
  >x != undefined : boolean
-@@= skipped -32, +32 lines =@@
- 
-     if (typeof x === "object") {
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : {}
- >"object" : "object"
- 
-@@= skipped -15, +15 lines =@@
- 
-     if (typeof x === "object") {
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : T
+@@= skipped -52, +52 lines =@@
  >"object" : "object"
  
          x;  // T & object | T & null
-->x : (T & object) | (T & null)
+->x : (T & null) | (T & object)
 +>x : T & null | T & object
      }
      if (x && typeof x === "object") {
  >x && typeof x === "object" : boolean
- >x : T
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : NonNullable<T>
- >"object" : "object"
- 
-@@= skipped -19, +19 lines =@@
+@@= skipped -14, +14 lines =@@
  >x : T & object
      }
      if (typeof x === "object" && x) {
-->typeof x === "object" && x : false | (T & object) | (T & null)
+->typeof x === "object" && x : false | (T & null) | (T & object)
 +>typeof x === "object" && x : false | T & null | T & object
  >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >x : T
  >"object" : "object"
-->x : (T & object) | (T & null)
+->x : (T & null) | (T & object)
 +>x : T & null | T & object
  
          x;  // T & object
  >x : T & object
-@@= skipped -18, +18 lines =@@
- 
-     if (typeof x === "object") {
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : T
- >"object" : "object"
- 
-@@= skipped -40, +40 lines =@@
+@@= skipped -58, +58 lines =@@
  
      return possiblyUndefined(possiblyNull(x));  // T | null | undefined
  >possiblyUndefined(possiblyNull(x)) : T | null | undefined
@@ -149,8 +108,8 @@
  >a : T
  
      let a4 = ensureNotUndefined(ensureNotUndefined(a));  // T & {} | T & null
-->a4 : (T & {}) | (T & null)
-->ensureNotUndefined(ensureNotUndefined(a)) : (T & {}) | (T & null)
+->a4 : (T & null) | (T & {})
+->ensureNotUndefined(ensureNotUndefined(a)) : (T & null) | (T & {})
 ->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 +>a4 : T & null | T & {}
 +>ensureNotUndefined(ensureNotUndefined(a)) : T & null | T & {}
@@ -219,29 +178,19 @@
  >a : T
  }
  
-@@= skipped -82, +82 lines =@@
- >typeof a !== 'object' || typeof b !== 'object' || !a : boolean
- >typeof a !== 'object' || typeof b !== 'object' : boolean
- >typeof a !== 'object' : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : T
- >'object' : "object"
- >typeof b !== 'object' : boolean
-->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+@@= skipped -90, +90 lines =@@
  >b : T
  >'object' : "object"
  >!a : boolean
-->a : (T & object) | (T & null)
+->a : (T & null) | (T & object)
 +>a : T & null | T & object
  >!b : boolean
-->b : (T & object) | (T & null)
+->b : (T & null) | (T & object)
 +>b : T & null | T & object
  
          return false;
  >false : false
-@@= skipped -95, +95 lines =@@
+@@= skipped -87, +87 lines =@@
  >k : keyof T
  
      t[k];

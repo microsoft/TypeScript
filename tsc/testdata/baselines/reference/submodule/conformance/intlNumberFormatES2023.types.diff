@@ -1,13 +1,7 @@
 --- old.intlNumberFormatES2023.types
 +++ new.intlNumberFormatES2023.types
-@@= skipped -2, +2 lines =@@
- === intlNumberFormatES2023.ts ===
- // New / updated resolved options in ES2023, including type change for useGrouping
- const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, useGrouping } =  new Intl.NumberFormat('en-GB').resolvedOptions();
-->roundingPriority : "auto" | "morePrecision" | "lessPrecision"
-->roundingMode : "ceil" | "floor" | "expand" | "trunc" | "halfCeil" | "halfFloor" | "halfExpand" | "halfTrunc" | "halfEven"
-+>roundingPriority : "auto" | "lessPrecision" | "morePrecision"
-+>roundingMode : "ceil" | "expand" | "floor" | "halfCeil" | "halfEven" | "halfExpand" | "halfFloor" | "halfTrunc" | "trunc"
+@@= skipped -6, +6 lines =@@
+ >roundingMode : "ceil" | "expand" | "floor" | "halfCeil" | "halfEven" | "halfExpand" | "halfFloor" | "halfTrunc" | "trunc"
  >roundingIncrement : 1 | 2 | 5 | 10 | 20 | 25 | 50 | 100 | 200 | 250 | 500 | 1000 | 2000 | 2500 | 5000
  >trailingZeroDisplay : "auto" | "stripIfInteger"
 ->useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
@@ -51,7 +45,7 @@
  >'en-GB' : "en-GB"
  >{ roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' } : { roundingPriority: "lessPrecision"; roundingIncrement: 100; roundingMode: "trunc"; }
  >roundingPriority : "lessPrecision"
-@@= skipped -40, +40 lines =@@
+@@= skipped -36, +36 lines =@@
  
  // Changes to signDisplay
  const { signDisplay } = new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions();

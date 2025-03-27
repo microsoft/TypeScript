@@ -11,84 +11,8 @@
  
      // Inside method
      method(param: string | number) {
-@@= skipped -14, +14 lines =@@
- >num : number
- >typeof var1 === "string" && var1.length : number
- >typeof var1 === "string" : boolean
-->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >var1 : string | number
- >"string" : "string"
- >var1.length : number
-@@= skipped -16, +16 lines =@@
- >num : number
- >typeof var2 === "string" && var2.length : number
- >typeof var2 === "string" : boolean
-->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >var2 : string | number
- >"string" : "string"
- >var2.length : number
-@@= skipped -13, +13 lines =@@
- >num : number
- >typeof param === "string" && param.length : number
- >typeof param === "string" : boolean
-->typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof param : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >param : string | number
- >"string" : "string"
- >param.length : number
-@@= skipped -20, +20 lines =@@
- >num : number
- >typeof var1 === "string" && var1.length : number
- >typeof var1 === "string" : boolean
-->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >var1 : string | number
- >"string" : "string"
- >var1.length : number
-@@= skipped -16, +16 lines =@@
- >num : number
- >typeof var2 === "string" && var2.length : number
- >typeof var2 === "string" : boolean
-->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >var2 : string | number
- >"string" : "string"
- >var2.length : number
-@@= skipped -21, +21 lines =@@
- >num : number
- >typeof var1 === "string" && var1.length : number
- >typeof var1 === "string" : boolean
-->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >var1 : string | number
- >"string" : "string"
- >var1.length : number
-@@= skipped -16, +16 lines =@@
- >num : number
- >typeof var2 === "string" && var2.length : number
- >typeof var2 === "string" : boolean
-->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >var2 : string | number
- >"string" : "string"
- >var2.length : number
-@@= skipped -13, +13 lines =@@
- >num : number
- >typeof param === "string" && param.length : number
- >typeof param === "string" : boolean
-->typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof param : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >param : string | number
- >"string" : "string"
- >param.length : number
-@@= skipped -14, +14 lines =@@
- >strOrNum : string | number
- >typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum) : string | number
- >typeof obj1.method(strOrNum) === "string" : boolean
-->typeof obj1.method(strOrNum) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj1.method(strOrNum) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+@@= skipped -146, +146 lines =@@
+ >typeof obj1.method(strOrNum) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >obj1.method(strOrNum) : string | number
  >obj1.method : (param: string | number) => string | number
 ->obj1 : { method(param: string | number): string | number; prop: string | number; }
@@ -103,12 +27,9 @@
  >method : (param: string | number) => string | number
  >strOrNum : string | number
  
-@@= skipped -19, +19 lines =@@
- >strOrNum : string | number
- >typeof obj1.prop === "string" && obj1.prop : string
+@@= skipped -18, +18 lines =@@
  >typeof obj1.prop === "string" : boolean
-->typeof obj1.prop : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj1.prop : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >typeof obj1.prop : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >obj1.prop : string | number
 ->obj1 : { method(param: string | number): string | number; prop: string | number; }
 +>obj1 : { method: (param: string | number) => string | number; prop: string | number; }

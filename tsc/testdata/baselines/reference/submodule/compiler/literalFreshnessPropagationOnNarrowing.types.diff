@@ -9,7 +9,7 @@
  >false : false
  
      type ElementOrArray = Element | Element[]; 
-->ElementOrArray : (string | false) | (string | false)[]
+->ElementOrArray : (string | false)[] | (string | false)
 +>ElementOrArray : ElementOrArray
  
      let el: Element = null as any;
@@ -23,25 +23,25 @@
  >null as any : any
  
      let elOrA: ElementOrArray = null as any;
-->elOrA : (string | false) | (string | false)[]
+->elOrA : (string | false)[] | (string | false)
 +>elOrA : ElementOrArray
  >null as any : any
  
      // Desired/actual: All OK
      let a1: ElementOrArray = el;
-->a1 : (string | false) | (string | false)[]
+->a1 : (string | false)[] | (string | false)
 ->el : string | false
 +>a1 : ElementOrArray
 +>el : Element
  
      let a2: ElementOrArray = arr;
-->a2 : (string | false) | (string | false)[]
+->a2 : (string | false)[] | (string | false)
 ->arr : (string | false)[]
 +>a2 : ElementOrArray
 +>arr : Element[]
  
      let a3: ElementOrArray = [el];
-->a3 : (string | false) | (string | false)[]
+->a3 : (string | false)[] | (string | false)
 ->[el] : (string | false)[]
 ->el : string | false
 +>a3 : ElementOrArray
@@ -49,7 +49,7 @@
 +>el : Element
  
      let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
-->a4 : (string | false) | (string | false)[]
+->a4 : (string | false)[] | (string | false)
 ->Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 +>a4 : ElementOrArray
 +>Array.isArray(elOrA) ? elOrA : [elOrA] : Element[]
@@ -57,7 +57,7 @@
  >Array.isArray : (arg: any) => arg is any[]
  >Array : ArrayConstructor
  >isArray : (arg: any) => arg is any[]
-->elOrA : (string | false) | (string | false)[]
+->elOrA : (string | false)[] | (string | false)
 ->elOrA : (string | false)[]
 ->[elOrA] : (string | false)[]
 ->elOrA : string | false
@@ -70,7 +70,7 @@
      // 3.0: Error
      // 3.1: OK
      let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
-->a5 : (string | false) | (string | false)[]
+->a5 : (string | false)[] | (string | false)
 ->[...Array.isArray(elOrA) ? elOrA : [elOrA]] : (string | false)[]
 ->...Array.isArray(elOrA) ? elOrA : [elOrA] : string | false
 ->Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
@@ -82,7 +82,7 @@
  >Array.isArray : (arg: any) => arg is any[]
  >Array : ArrayConstructor
  >isArray : (arg: any) => arg is any[]
-->elOrA : (string | false) | (string | false)[]
+->elOrA : (string | false)[] | (string | false)
 ->elOrA : (string | false)[]
 ->[elOrA] : (string | false)[]
 ->elOrA : string | false

@@ -47,17 +47,16 @@
  >num : 0
  >num : 0
  
- // Expect type error
+@@= skipped -8, +8 lines =@@
  // Argument of type '0' is not assignable to parameter of type "str" | "num"
  type KeyofObj = keyof typeof obj;
-->KeyofObj : unique symbol | 0 | "str" | "num"
+ >KeyofObj : "num" | "str" | 0 | unique symbol
 ->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
-+>KeyofObj : "num" | "str" | 0 | unique symbol
 +>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
  
  // "str" | "num"
  type Values<T> = T[keyof T];
-@@= skipped -16, +16 lines =@@
+@@= skipped -8, +8 lines =@@
  
  type ValuesOfObj = Values<typeof obj>;
  >ValuesOfObj : ValuesOfObj

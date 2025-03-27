@@ -1,17 +1,6 @@
 --- old.variadicTuples1.types
 +++ new.variadicTuples1.types
-@@= skipped -132, +132 lines =@@
- }
- 
- const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]
-->tc5 : (2 | 4 | 1 | 3 | 6 | 5)[]
-->concat2([1, 2, 3] as const, [4, 5, 6] as const) : (2 | 4 | 1 | 3 | 6 | 5)[]
-+>tc5 : (1 | 2 | 3 | 4 | 5 | 6)[]
-+>concat2([1, 2, 3] as const, [4, 5, 6] as const) : (1 | 2 | 3 | 4 | 5 | 6)[]
- >concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
- >[1, 2, 3] as const : readonly [1, 2, 3]
- >[1, 2, 3] : readonly [1, 2, 3]
-@@= skipped -289, +289 lines =@@
+@@= skipped -421, +421 lines =@@
  // Reverse mapping through mapped type applied to variadic tuple type
  
  declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;

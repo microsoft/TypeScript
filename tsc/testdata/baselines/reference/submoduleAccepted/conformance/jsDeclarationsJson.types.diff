@@ -4,19 +4,19 @@
  
  === index.js ===
  const j = require("./obj.json");
-->j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
-->require("./obj.json") : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
+->j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { y?: undefined; x: number; err: boolean; })[]; }; }
+->require("./obj.json") : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { y?: undefined; x: number; err: boolean; })[]; }; }
 +>j : any
 +>require("./obj.json") : any
  >require : any
  >"./obj.json" : "./obj.json"
  
  module.exports = j;
-->module.exports = j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
-->module.exports : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
-->module : { exports: { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }; }
-->exports : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
-->j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
+->module.exports = j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { y?: undefined; x: number; err: boolean; })[]; }; }
+->module.exports : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { y?: undefined; x: number; err: boolean; })[]; }; }
+->module : { exports: { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { y?: undefined; x: number; err: boolean; })[]; }; }; }
+->exports : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { y?: undefined; x: number; err: boolean; })[]; }; }
+->j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { y?: undefined; x: number; err: boolean; })[]; }; }
 +>module.exports = j : any
 +>module.exports : any
 +>module : any

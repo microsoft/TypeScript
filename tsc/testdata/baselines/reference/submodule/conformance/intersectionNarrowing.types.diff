@@ -5,12 +5,12 @@
  
  function f1<T>(x: T & string | T & undefined) {
 ->f1 : <T>(x: (T & string) | (T & undefined)) => void
-->x : (T & string) | (T & undefined)
+->x : (T & undefined) | (T & string)
 +>f1 : <T>(x: T & undefined | T & string) => void
 +>x : T & undefined | T & string
  
      if (x) {
-->x : (T & string) | (T & undefined)
+->x : (T & undefined) | (T & string)
 +>x : T & undefined | T & string
  
          x;  // Should narrow to T & string
@@ -20,13 +20,13 @@
  
  function f2<T>(x: T & string | T & undefined) {
 ->f2 : <T>(x: (T & string) | (T & undefined)) => void
-->x : (T & string) | (T & undefined)
+->x : (T & undefined) | (T & string)
 +>f2 : <T>(x: T & undefined | T & string) => void
 +>x : T & undefined | T & string
  
      if (x !== undefined) {
  >x !== undefined : boolean
-->x : (T & string) | (T & undefined)
+->x : (T & undefined) | (T & string)
 +>x : T & undefined | T & string
  >undefined : undefined
  
@@ -42,9 +42,8 @@
  
      if (typeof x === "string") {
  >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->x : (T & string) | (T & number)
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>x : T & string | T & number
  >"string" : "string"
  

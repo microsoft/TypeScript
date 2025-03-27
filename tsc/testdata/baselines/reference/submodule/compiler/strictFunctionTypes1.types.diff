@@ -1,17 +1,6 @@
 --- old.strictFunctionTypes1.types
 +++ new.strictFunctionTypes1.types
-@@= skipped -62, +62 lines =@@
- >fs : (x: string) => void
- 
- const x3 = f3("abc", fo, fx);  // "abc" | "def"
-->x3 : "def" | "abc"
-->f3("abc", fo, fx) : "def" | "abc"
-+>x3 : "abc" | "def"
-+>f3("abc", fo, fx) : "abc" | "def"
- >f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
- >"abc" : "abc"
- >fo : (x: Object) => void
-@@= skipped -36, +36 lines =@@
+@@= skipped -98, +98 lines =@@
  // Repro from #21112
  
  declare function foo<T>(a: ReadonlyArray<T>): T;

@@ -1,15 +1,6 @@
 --- old.promiseType.types
 +++ new.promiseType.types
-@@= skipped -31, +31 lines =@@
- }
- 
- async function C() {
-->C : () => Promise<1 | "error">
-+>C : () => Promise<"error" | 1>
- 
-     try {
-         const a = await p;
-@@= skipped -74, +74 lines =@@
+@@= skipped -105, +105 lines =@@
  
          return Promise.reject(Error());
  >Promise.reject(Error()) : Promise<never>
@@ -115,11 +106,9 @@
  >() => null : () => any
  
  const p16 = p.catch(() => {});
-->p16 : Promise<boolean | void>
-->p.catch(() => {}) : Promise<boolean | void>
+ >p16 : Promise<void | boolean>
+ >p.catch(() => {}) : Promise<void | boolean>
 ->p.catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
-+>p16 : Promise<void | boolean>
-+>p.catch(() => {}) : Promise<void | boolean>
 +>p.catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
  >p : Promise<boolean>
 ->catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
@@ -347,11 +336,9 @@
  >() => null : () => any
  
  const p36 = p.then(undefined, () => {});
-->p36 : Promise<boolean | void>
-->p.then(undefined, () => {}) : Promise<boolean | void>
+ >p36 : Promise<void | boolean>
+ >p.then(undefined, () => {}) : Promise<void | boolean>
 ->p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>p36 : Promise<void | boolean>
-+>p.then(undefined, () => {}) : Promise<void | boolean>
 +>p.then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >p : Promise<boolean>
 ->then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -464,11 +451,9 @@
  >() => null : () => any
  
  const p46 = p.then(null, () => {});
-->p46 : Promise<boolean | void>
-->p.then(null, () => {}) : Promise<boolean | void>
+ >p46 : Promise<void | boolean>
+ >p.then(null, () => {}) : Promise<void | boolean>
 ->p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>p46 : Promise<void | boolean>
-+>p.then(null, () => {}) : Promise<void | boolean>
 +>p.then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >p : Promise<boolean>
 ->then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -585,13 +570,11 @@
  >() => "1" : () => string
  >"1" : "1"
  >() => null : () => any
- 
+@@= skipped -10, +10 lines =@@
  const p56 = p.then(() => "1", () => {});
-->p56 : Promise<string | void>
-->p.then(() => "1", () => {}) : Promise<string | void>
+ >p56 : Promise<void | string>
+ >p.then(() => "1", () => {}) : Promise<void | string>
 ->p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>p56 : Promise<void | string>
-+>p.then(() => "1", () => {}) : Promise<void | string>
 +>p.then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >p : Promise<boolean>
 ->then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -599,7 +582,7 @@
  >() => "1" : () => string
  >"1" : "1"
  >() => {} : () => void
-@@= skipped -20, +20 lines =@@
+@@= skipped -10, +10 lines =@@
  const p57 = p.then(() => "1", () => {throw 1});
  >p57 : Promise<string>
  >p.then(() => "1", () => {throw 1}) : Promise<string>
@@ -1038,11 +1021,9 @@
  >() => {} : () => void
  
  const p92 = p.then(() => {}, () => 1);
-->p92 : Promise<number | void>
-->p.then(() => {}, () => 1) : Promise<number | void>
+ >p92 : Promise<void | number>
+ >p.then(() => {}, () => 1) : Promise<void | number>
 ->p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>p92 : Promise<void | number>
-+>p.then(() => {}, () => 1) : Promise<void | number>
 +>p.then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >p : Promise<boolean>
 ->then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -1108,13 +1089,11 @@
  >() => {} : () => void
  >() => {throw 1} : () => never
  >1 : 1
- 
+@@= skipped -28, +28 lines =@@
  const p98 = p.then(() => {}, () => Promise.resolve(1));
-->p98 : Promise<number | void>
-->p.then(() => {}, () => Promise.resolve(1)) : Promise<number | void>
+ >p98 : Promise<void | number>
+ >p.then(() => {}, () => Promise.resolve(1)) : Promise<void | number>
 ->p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>p98 : Promise<void | number>
-+>p.then(() => {}, () => Promise.resolve(1)) : Promise<void | number>
 +>p.then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >p : Promise<boolean>
 ->then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -1122,7 +1101,7 @@
  >() => {} : () => void
  >() => Promise.resolve(1) : () => Promise<number>
  >Promise.resolve(1) : Promise<number>
-@@= skipped -42, +42 lines =@@
+@@= skipped -14, +14 lines =@@
  const p99 = p.then(() => {}, () => Promise.reject(1));
  >p99 : Promise<void>
  >p.then(() => {}, () => Promise.reject(1)) : Promise<void>
@@ -1338,15 +1317,11 @@
  >() => Promise.resolve("1") : () => Promise<string>
  >Promise.resolve("1") : Promise<string>
  >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
-@@= skipped -12, +12 lines =@@
- >() => null : () => any
- 
+@@= skipped -14, +14 lines =@@
  const pb6 = p.then(() => Promise.resolve("1"), () => {});
-->pb6 : Promise<string | void>
-->p.then(() => Promise.resolve("1"), () => {}) : Promise<string | void>
+ >pb6 : Promise<void | string>
+ >p.then(() => Promise.resolve("1"), () => {}) : Promise<void | string>
 ->p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>pb6 : Promise<void | string>
-+>p.then(() => Promise.resolve("1"), () => {}) : Promise<void | string>
 +>p.then : <TResult1, TResult2>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >p : Promise<boolean>
 ->then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -1354,7 +1329,7 @@
  >() => Promise.resolve("1") : () => Promise<string>
  >Promise.resolve("1") : Promise<string>
  >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
-@@= skipped -16, +16 lines =@@
+@@= skipped -14, +14 lines =@@
  const pb7 = p.then(() => Promise.resolve("1"), () => {throw 1});
  >pb7 : Promise<string>
  >p.then(() => Promise.resolve("1"), () => {throw 1}) : Promise<string>

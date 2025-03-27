@@ -4,8 +4,8 @@
  >deepPromised : DeepPromised<T>
  
      for (const value of Object.values(deepPromisedWithIndexer)) {
-->value : {} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined
-->Object.values(deepPromisedWithIndexer) : ({} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined)[]
+->value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+->Object.values(deepPromisedWithIndexer) : (Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined)[]
 ->Object.values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
 +>value : Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
 +>Object.values(deepPromisedWithIndexer) : (Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | { [containsPromises]?: true | undefined; } & {} | null | undefined)[]
@@ -18,7 +18,7 @@
          const awaitedValue = await value;
 ->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 ->await value : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
-->value : {} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined
+->value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 +>awaitedValue : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
 +>await value : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
 +>value : Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | { [containsPromises]?: true | undefined; } & {} | null | undefined

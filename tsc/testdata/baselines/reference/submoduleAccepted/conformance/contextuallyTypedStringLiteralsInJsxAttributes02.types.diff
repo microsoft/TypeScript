@@ -9,12 +9,7 @@
  
  export interface ClickableProps {
      children?: string;
-@@= skipped -18, +18 lines =@@
- 
- export interface LinkProps extends ClickableProps {
-     goTo: "home" | "contact";
-->goTo : "home" | "contact"
-+>goTo : "contact" | "home"
+@@= skipped -22, +22 lines =@@
  }
  
  export function MainButton(buttonProps: ButtonProps): JSX.Element;
@@ -35,19 +30,7 @@
  >props : ButtonProps | LinkProps
  >JSX : any
  
-@@= skipped -24, +24 lines =@@
- >props : ButtonProps | LinkProps
- 
-     if(linkProps.goTo) {
-->linkProps.goTo : "home" | "contact"
-+>linkProps.goTo : "contact" | "home"
- >linkProps : LinkProps
-->goTo : "home" | "contact"
-+>goTo : "contact" | "home"
- 
-         return this._buildMainLink(props);
- >this._buildMainLink(props) : any
-@@= skipped -21, +21 lines =@@
+@@= skipped -41, +41 lines =@@
  }
  
  const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"

@@ -22,17 +22,10 @@
  
  function f4<T extends undefined>(a: object | T) {
 ->f4 : <T extends undefined>(a: object | T) => {}
-->a : object | T
 +>f4 : <T extends undefined>(a: T | object) => {}
-+>a : T | object
+ >a : T | object
  
      return { ...a };
- >{ ...a } : {}
-->a : object | T
-+>a : T | object
- }
- 
- function f5<S, T extends undefined>(a: S | T) {
 @@= skipped -29, +29 lines =@@
  // Repro from #46976
  

@@ -28,9 +28,9 @@
  >"../index.js" : "../index.js"
  
      const mod4 = await import ("./index.js");
-->mod4 : { default: typeof mod2; f(): Promise<void>; }
-->await import ("./index.js") : { default: typeof mod2; f(): Promise<void>; }
-->import ("./index.js") : Promise<{ default: typeof mod2; f(): Promise<void>; }>
+->mod4 : { f(): Promise<void>; default: typeof mod2; }
+->await import ("./index.js") : { f(): Promise<void>; default: typeof mod2; }
+->import ("./index.js") : Promise<{ f(): Promise<void>; default: typeof mod2; }>
 +>mod4 : typeof import("subfolder/index")
 +>await import ("./index.js") : typeof import("subfolder/index")
 +>import ("./index.js") : Promise<typeof import("subfolder/index")>
@@ -64,9 +64,9 @@
  >"./index.js" : "./index.js"
  
      const mod4 = await import ("./subfolder/index.js");
-->mod4 : { default: typeof mod2; f(): Promise<void>; }
-->await import ("./subfolder/index.js") : { default: typeof mod2; f(): Promise<void>; }
-->import ("./subfolder/index.js") : Promise<{ default: typeof mod2; f(): Promise<void>; }>
+->mod4 : { f(): Promise<void>; default: typeof mod2; }
+->await import ("./subfolder/index.js") : { f(): Promise<void>; default: typeof mod2; }
+->import ("./subfolder/index.js") : Promise<{ f(): Promise<void>; default: typeof mod2; }>
 +>mod4 : typeof import("subfolder/index")
 +>await import ("./subfolder/index.js") : typeof import("subfolder/index")
 +>import ("./subfolder/index.js") : Promise<typeof import("subfolder/index")>

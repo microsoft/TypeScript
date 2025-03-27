@@ -1,99 +1,14 @@
 --- old.literalTypes2.types
 +++ new.literalTypes2.types
-@@= skipped -224, +224 lines =@@
- >2 : 2
- 
-     const c2 = cond ? 1 : "two";
-->c2 : 1 | "two"
-->cond ? 1 : "two" : 1 | "two"
-+>c2 : "two" | 1
-+>cond ? 1 : "two" : "two" | 1
- >cond : boolean
- >1 : 1
- >"two" : "two"
- 
-     const c3 = cond ? E.A : cond ? true : 123;
-->c3 : true | E.A | 123
-->cond ? E.A : cond ? true : 123 : true | E.A | 123
-+>c3 : 123 | true | E.A
-+>cond ? E.A : cond ? true : 123 : 123 | true | E.A
- >cond : boolean
- >E.A : E.A
- >E : typeof E
- >A : E.A
-->cond ? true : 123 : true | 123
-+>cond ? true : 123 : 123 | true
- >cond : boolean
- >true : true
- >123 : 123
-@@= skipped -39, +39 lines =@@
- >123 : 123
- 
-     const c7: [1 | 2, "foo" | "bar"] = [1, "bar"];
-->c7 : [1 | 2, "foo" | "bar"]
-+>c7 : [1 | 2, "bar" | "foo"]
- >[1, "bar"] : [1, "bar"]
- >1 : 1
- >"bar" : "bar"
- 
-     const c8 = cond ? c6 : cond ? c7 : "hello";
-->c8 : { kind: 123; } | [1 | 2, "foo" | "bar"] | "hello"
-->cond ? c6 : cond ? c7 : "hello" : { kind: 123; } | [1 | 2, "foo" | "bar"] | "hello"
-+>c8 : "hello" | { kind: 123; } | [1 | 2, "bar" | "foo"]
-+>cond ? c6 : cond ? c7 : "hello" : "hello" | { kind: 123; } | [1 | 2, "bar" | "foo"]
- >cond : boolean
- >c6 : { kind: 123; }
-->cond ? c7 : "hello" : [1 | 2, "foo" | "bar"] | "hello"
-+>cond ? c7 : "hello" : "hello" | [1 | 2, "bar" | "foo"]
- >cond : boolean
-->c7 : [1 | 2, "foo" | "bar"]
-+>c7 : [1 | 2, "bar" | "foo"]
- >"hello" : "hello"
- 
-     let x1 = c1;
-@@= skipped -21, +21 lines =@@
- 
-     let x2 = c2;
- >x2 : string | number
-->c2 : 1 | "two"
-+>c2 : "two" | 1
- 
-     let x3 = c3;
- >x3 : number | boolean
-->c3 : true | E.A | 123
-+>c3 : 123 | true | E.A
- 
-     let x4 = c4;
- >x4 : string
-@@= skipped -19, +19 lines =@@
- >c6 : { kind: 123; }
- 
-     let x7 = c7;
-->x7 : [1 | 2, "foo" | "bar"]
-->c7 : [1 | 2, "foo" | "bar"]
-+>x7 : [1 | 2, "bar" | "foo"]
-+>c7 : [1 | 2, "bar" | "foo"]
- 
-     let x8 = c8;
-->x8 : string | { kind: 123; } | [1 | 2, "foo" | "bar"]
-->c8 : { kind: 123; } | [1 | 2, "foo" | "bar"] | "hello"
-+>x8 : string | { kind: 123; } | [1 | 2, "bar" | "foo"]
-+>c8 : "hello" | { kind: 123; } | [1 | 2, "bar" | "foo"]
- }
- 
- class C1 {
-@@= skipped -102, +102 lines =@@
+@@= skipped -405, +405 lines =@@
  >"foo" : "foo"
  
      const c2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
 ->c2 : { a: 0 | 1; b: "foo" | "bar"; }
 +>c2 : { a: 0 | 1; b: "bar" | "foo"; }
  >a : 0 | 1
-->b : "foo" | "bar"
-+>b : "bar" | "foo"
+ >b : "bar" | "foo"
  >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
- >a : 1
- >1 : 1
 @@= skipped -18, +18 lines =@@
  >"foo" : "foo"
  
@@ -101,76 +16,9 @@
 ->x2 : { a: 0 | 1; b: "foo" | "bar"; }
 +>x2 : { a: 0 | 1; b: "bar" | "foo"; }
  >a : 0 | 1
-->b : "foo" | "bar"
-+>b : "bar" | "foo"
+ >b : "bar" | "foo"
  >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
- >a : 1
- >1 : 1
-@@= skipped -20, +20 lines =@@
- >"foo" : "foo"
- 
-     const c2: (1 | "foo")[] = [1, "foo"];
-->c2 : (1 | "foo")[]
-->[1, "foo"] : (1 | "foo")[]
-+>c2 : ("foo" | 1)[]
-+>[1, "foo"] : ("foo" | 1)[]
- >1 : 1
- >"foo" : "foo"
- 
-@@= skipped -18, +18 lines =@@
- >"foo" : "foo"
- 
-     let x2: (1 | "foo")[] = [1, "foo"];
-->x2 : (1 | "foo")[]
-->[1, "foo"] : (1 | "foo")[]
-+>x2 : ("foo" | 1)[]
-+>[1, "foo"] : ("foo" | 1)[]
- >1 : 1
- >"foo" : "foo"
- 
-@@= skipped -18, +18 lines =@@
-     const { c1 = true, c2 = 0, c3 = "foo" } = { c1: false, c2: 1, c3: "bar" };
- >c1 : boolean
- >true : true
-->c2 : 1 | 0
-+>c2 : 0 | 1
- >0 : 0
-->c3 : "foo" | "bar"
-+>c3 : "bar" | "foo"
- >"foo" : "foo"
- >{ c1: false, c2: 1, c3: "bar" } : { c1?: false; c2?: 1; c3?: "bar"; }
- >c1 : false
-@@= skipped -36, +36 lines =@@
- }
- 
- function f11() {
-->f11 : () => 1 | "two"
-+>f11 : () => "two" | 1
- 
-     return cond ? 1 : "two";
-->cond ? 1 : "two" : 1 | "two"
-+>cond ? 1 : "two" : "two" | 1
- >cond : boolean
- >1 : 1
- >"two" : "two"
- }
- 
- function f12() {
-->f12 : () => 1 | "two"
-+>f12 : () => "two" | 1
- 
-     if (cond) {
- >cond : boolean
-@@= skipped -34, +34 lines =@@
- >0 : 0
-     }
-     bar() {
-->bar : () => 1 | 0
-+>bar : () => 0 | 1
- 
-         return cond ? 0 : 1;
- >cond ? 0 : 1 : 0 | 1
-@@= skipped -41, +41 lines =@@
+@@= skipped -167, +167 lines =@@
  >"foo" : "foo"
  
      const f6: () => "foo" | "bar" = () => "bar";
@@ -179,14 +27,3 @@
  >() => "bar" : () => "bar"
  >"bar" : "bar"
  
-@@= skipped -74, +74 lines =@@
- >2 : 2
- 
- const x4 = g3(1, "two");  // Type 1 | "two"
-->x4 : 1 | "two"
-->g3(1, "two") : 1 | "two"
-+>x4 : "two" | 1
-+>g3(1, "two") : "two" | 1
- >g3 : <T, U>(x: T, y: U) => T | U
- >1 : 1
- >"two" : "two"

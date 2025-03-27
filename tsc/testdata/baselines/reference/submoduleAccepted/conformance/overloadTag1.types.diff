@@ -14,37 +14,32 @@
    if (typeof a === "string" && typeof b === "string") {
  >typeof a === "string" && typeof b === "string" : boolean
  >typeof a === "string" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->a : string | number
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>a : any
  >"string" : "string"
  >typeof b === "string" : boolean
-->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->b : string | number
-+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>b : any
  >"string" : "string"
  
      return a + b;
-@@= skipped -23, +23 lines =@@
-   } else if (typeof a === "number" && typeof b === "number") {
+@@= skipped -24, +24 lines =@@
  >typeof a === "number" && typeof b === "number" : boolean
  >typeof a === "number" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->a : string | number
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>a : any
  >"number" : "number"
  >typeof b === "number" : boolean
-->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->b : string | number
-+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>b : any
  >"number" : "number"
  
      return a + b;
-@@= skipped -19, +19 lines =@@
+@@= skipped -18, +18 lines =@@
  >"Invalid arguments" : "Invalid arguments"
  }
  var o1 = overloaded(1,2)

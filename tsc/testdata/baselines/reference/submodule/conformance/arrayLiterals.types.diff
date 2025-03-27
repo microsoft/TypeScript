@@ -1,28 +1,6 @@
 --- old.arrayLiterals.types
 +++ new.arrayLiterals.types
-@@= skipped -3, +3 lines =@@
- // Empty array literal with no contextual type has type Undefined[]
- 
- var arr1= [[], [1], ['']];
-->arr1 : (number[] | string[])[]
-->[[], [1], ['']] : (number[] | string[])[]
-+>arr1 : (string[] | number[])[]
-+>[[], [1], ['']] : (string[] | number[])[]
- >[] : undefined[]
- >[1] : number[]
- >1 : 1
-@@= skipped -9, +9 lines =@@
- >'' : ""
- 
- var arr2 = [[null], [1], ['']];
-->arr2 : (number[] | string[])[]
-->[[null], [1], ['']] : (number[] | string[])[]
-+>arr2 : (string[] | number[])[]
-+>[[null], [1], ['']] : (string[] | number[])[]
- >[null] : null[]
- >[1] : number[]
- >1 : 1
-@@= skipped -53, +53 lines =@@
+@@= skipped -65, +65 lines =@@
  >C : typeof C
  
  var classTypeArray = [C, C, C];

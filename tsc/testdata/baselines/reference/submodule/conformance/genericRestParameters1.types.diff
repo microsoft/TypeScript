@@ -241,16 +241,7 @@
  
  declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
  >f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
-@@= skipped -154, +154 lines =@@
- >move : [number, "left" | "right"]
- 
-   jump: [number, 'up' | 'down'];
-->jump : [number, "up" | "down"]
-+>jump : [number, "down" | "up"]
- 
-   stop: string;
- >stop : string
-@@= skipped -13, +13 lines =@@
+@@= skipped -167, +167 lines =@@
  >EventType : EventType<T>
  
    emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 

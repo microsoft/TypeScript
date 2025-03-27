@@ -5,37 +5,16 @@
  
  function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {
 ->checksArrayOrObject1 : (obj: Record<string, any> | Record<string, any>[]) => void
-->obj : Record<string, any> | Record<string, any>[]
 +>checksArrayOrObject1 : (obj: Record<string, any>[] | Record<string, any>) => void
-+>obj : Record<string, any>[] | Record<string, any>
+ >obj : Record<string, any>[] | Record<string, any>
  
      // "accidentally" guards the first branch on the length
-     if (Array.isArray(obj) && obj.length) {
-@@= skipped -10, +10 lines =@@
- >Array.isArray : (arg: any) => arg is any[]
- >Array : ArrayConstructor
- >isArray : (arg: any) => arg is any[]
-->obj : Record<string, any> | Record<string, any>[]
-+>obj : Record<string, any>[] | Record<string, any>
- >obj.length : number
- >obj : any[] | Record<string, any>[]
- >length : number
-@@= skipped -54, +54 lines =@@
+@@= skipped -64, +64 lines =@@
  }
  
  function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) {
 ->checksArrayOrObject2 : (obj: Record<string, any> | Record<string, any>[]) => void
-->obj : Record<string, any> | Record<string, any>[]
 +>checksArrayOrObject2 : (obj: Record<string, any>[] | Record<string, any>) => void
-+>obj : Record<string, any>[] | Record<string, any>
+ >obj : Record<string, any>[] | Record<string, any>
  
      if (Array.isArray(obj)) {
- >Array.isArray(obj) : boolean
- >Array.isArray : (arg: any) => arg is any[]
- >Array : ArrayConstructor
- >isArray : (arg: any) => arg is any[]
-->obj : Record<string, any> | Record<string, any>[]
-+>obj : Record<string, any>[] | Record<string, any>
- 
-         // obj should only be an array type here
-         for (let key in obj) {

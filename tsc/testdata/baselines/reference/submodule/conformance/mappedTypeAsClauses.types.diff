@@ -9,23 +9,7 @@
  >foo : () => number
  >bar : (x: string) => boolean
  >x : string
-@@= skipped -17, +17 lines =@@
- >b : number
- 
- type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
-->TD2 : "a1" | "b1" | "a2" | "b2"
-+>TD2 : "a1" | "a2" | "b1" | "b2"
- 
- type TD3<U> = keyof DoubleProp<U>; // keyof DoubleProp<U>
- >TD3 : keyof DoubleProp<U>
- 
- type TD4 = TD3<{ a: string, b: number }>;  // 'a1' | 'a2' | 'b1' | 'b2'
-->TD4 : "a1" | "b1" | "a2" | "b2"
-+>TD4 : "a1" | "a2" | "b1" | "b2"
- >a : string
- >b : number
- 
-@@= skipped -183, +183 lines =@@
+@@= skipped -200, +200 lines =@@
  }
  
  function f(x: KeysExtendedBy<M, number>) {

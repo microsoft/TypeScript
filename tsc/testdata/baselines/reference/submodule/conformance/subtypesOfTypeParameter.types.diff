@@ -1,26 +1,6 @@
 --- old.subtypesOfTypeParameter.types
 +++ new.subtypesOfTypeParameter.types
-@@= skipped -169, +169 lines =@@
- >Date : DateConstructor
- 
-     var r5 = true ? /1/ : x;
-->r5 : RegExp | T
-->true ? /1/ : x : RegExp | T
-+>r5 : T | RegExp
-+>true ? /1/ : x : T | RegExp
- >true : true
- >/1/ : RegExp
- >x : T
- 
-     var r5 = true ? x : /1/;
-->r5 : RegExp | T
-->true ? x : /1/ : RegExp | T
-+>r5 : T | RegExp
-+>true ? x : /1/ : T | RegExp
- >true : true
- >x : T
- >/1/ : RegExp
-@@= skipped -46, +46 lines =@@
+@@= skipped -215, +215 lines =@@
  >() => { } : () => void
  
      var r8 = true ? <T>(x: T) => { return x } : x;
@@ -47,89 +27,7 @@
  >x : T
  >x : T
  
-@@= skipped -21, +21 lines =@@
- >i1 : I1
- 
-     var r9 = true ? i1 : x;
-->r9 : I1 | T
-->true ? i1 : x : I1 | T
-+>r9 : T | I1
-+>true ? i1 : x : T | I1
- >true : true
- >i1 : I1
- >x : T
- 
-     var r9 = true ? x : i1;
-->r9 : I1 | T
-->true ? x : i1 : I1 | T
-+>r9 : T | I1
-+>true ? x : i1 : T | I1
- >true : true
- >x : T
- >i1 : I1
-@@= skipped -17, +17 lines =@@
- >c1 : C1
- 
-     var r10 = true ? c1 : x;
-->r10 : C1 | T
-->true ? c1 : x : C1 | T
-+>r10 : T | C1
-+>true ? c1 : x : T | C1
- >true : true
- >c1 : C1
- >x : T
- 
-     var r10 = true ? x : c1;
-->r10 : C1 | T
-->true ? x : c1 : C1 | T
-+>r10 : T | C1
-+>true ? x : c1 : T | C1
- >true : true
- >x : T
- >c1 : C1
-@@= skipped -47, +47 lines =@@
- >E : typeof E
- 
-     var r14 = true ? E.A : x;
-->r14 : T | E
-->true ? E.A : x : T | E
-+>r14 : E | T
-+>true ? E.A : x : E | T
- >true : true
- >E.A : E
- >E : typeof E
-@@= skipped -9, +9 lines =@@
- >x : T
- 
-     var r14 = true ? x : E.A;
-->r14 : T | E
-->true ? x : E.A : T | E
-+>r14 : E | T
-+>true ? x : E.A : E | T
- >true : true
- >x : T
- >E.A : E
-@@= skipped -31, +31 lines =@@
- >c : typeof c
- 
-     var r16 = true ? ac : x;
-->r16 : typeof c | T
-->true ? ac : x : typeof c | T
-+>r16 : T | typeof c
-+>true ? ac : x : T | typeof c
- >true : true
- >ac : typeof c
- >x : T
- 
-     var r16 = true ? x : ac;
-->r16 : typeof c | T
-->true ? x : ac : typeof c | T
-+>r16 : T | typeof c
-+>true ? x : ac : T | typeof c
- >true : true
- >x : T
- >ac : typeof c
-@@= skipped -18, +18 lines =@@
+@@= skipped -143, +143 lines =@@
  >a : T
  
          var r17 = true ? x : a;

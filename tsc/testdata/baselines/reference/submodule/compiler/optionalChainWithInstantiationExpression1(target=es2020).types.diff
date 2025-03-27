@@ -4,7 +4,7 @@
  
  a?.b<c>.d;
  >a?.b<c>.d : number
-->a?.b<c> : { new (x: unknown): A.b<unknown>; prototype: A.b<any>; d: number; }
+->a?.b<c> : { new (x: unknown): A.b<unknown>; d: number; prototype: A.b<any>; }
 ->a?.b : typeof A.b
 +>a?.b<c> : { new (x: unknown): b<unknown>; d: number; prototype: b<any>; }
 +>a?.b : typeof b

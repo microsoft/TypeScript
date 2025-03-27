@@ -91,32 +91,12 @@
  >'abc' : "abc"
  }
  
-@@= skipped -55, +55 lines =@@
- >'resizeBy' : "resizeBy"
- 
- for (const action of actions) {
-->action : "resizeTo" | "resizeBy"
-+>action : "resizeBy" | "resizeTo"
- >actions : readonly ["resizeTo", "resizeBy"]
- 
- 	window[action] = (x, y) => {
- >window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
-->window[action] : ((width: number, height: number) => void) & ((width: number, height: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void)
-+>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((width: number, height: number) => void) & ((width: number, height: number) => void)
- >window : Window & typeof globalThis
-->action : "resizeTo" | "resizeBy"
-+>action : "resizeBy" | "resizeTo"
- >(x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
- >x : number
- >y : number
+@@= skipped -69, +69 lines =@@
  
  		window[action](x, y);
  >window[action](x, y) : void
 ->window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((width: number, height: number) => void) & ((width: number, height: number) => void))
 +>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) | ((width: number, height: number) => void) & ((width: number, height: number) => void)
  >window : Window & typeof globalThis
-->action : "resizeTo" | "resizeBy"
-+>action : "resizeBy" | "resizeTo"
+ >action : "resizeBy" | "resizeTo"
  >x : number
- >y : number
- 	}

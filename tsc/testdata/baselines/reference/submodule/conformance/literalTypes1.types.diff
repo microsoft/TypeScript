@@ -5,14 +5,7 @@
  
  function f4(x: 0 | 1 | true | string) {
 ->f4 : (x: 0 | 1 | true | string) => void
-->x : string | true | 0 | 1
 +>f4 : (x: string | 0 | 1 | true) => void
-+>x : string | 0 | 1 | true
+ >x : string | 0 | 1 | true
  >true : true
  
-     switch (x) {
-->x : string | true | 0 | 1
-+>x : string | 0 | 1 | true
- 
-         case 0:
- >0 : 0

@@ -58,7 +58,7 @@
  
  interface F1 {
      b5(z, y, [, a, b], {p, m: { q, r}});
-->b5 : (z: any, y: any, [, a, b]: [any, any, any], { p, m: { q, r } }: { p: any; m: { q: any; r: any; }; }) => any
+->b5 : (z: any, y: any, [, a, b]: [any, any, any], { p, m: { q, r } }: { m: { q: any; r: any; }; p: any; }) => any
 +>b5 : (z: any, y: any, __2: [any, any, any], __3: { m: { q: any; r: any; }; p: any; }) => any
  >z : any
  >y : any

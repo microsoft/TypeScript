@@ -16,9 +16,9 @@
 -    m(): void;
 -    bar?: undefined;
 -} | {
--    bar: number;
 -    foo?: undefined;
 -    m?: undefined;
+-    bar: number;
 -})[];
 +// repro from https://github.com/microsoft/TypeScript/issues/53914
 +exports.b = [{ foo: 0, m() { } }, { bar: 1 }];

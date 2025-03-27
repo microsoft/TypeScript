@@ -1,24 +1,6 @@
 --- old.typeGuardNarrowsIndexedAccessOfKnownProperty1.types
 +++ new.typeGuardNarrowsIndexedAccessOfKnownProperty1.types
-@@= skipped -52, +52 lines =@@
- >s : Shape
- 
-     switch(s['dash-ok']) {
-->s['dash-ok'] : "square" | "rectangle" | "circle"
-+>s['dash-ok'] : "circle" | "rectangle" | "square"
- >s : Shape
- >'dash-ok' : "dash-ok"
- 
-@@= skipped -44, +44 lines =@@
- >s : Subshape
- 
-     switch(s[0]["sub"].under["shape"]["dash-ok"]) {
-->s[0]["sub"].under["shape"]["dash-ok"] : "square" | "rectangle" | "circle"
-+>s[0]["sub"].under["shape"]["dash-ok"] : "circle" | "rectangle" | "square"
- >s[0]["sub"].under["shape"] : Shape
- >s[0]["sub"].under : { shape: Shape; }
- >s[0]["sub"] : { under: { shape: Shape; }; }
-@@= skipped -194, +194 lines =@@
+@@= skipped -290, +290 lines =@@
  }
  
  export function g(pair: [number, string?]): string {

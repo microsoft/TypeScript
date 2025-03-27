@@ -13,11 +13,11 @@
  >A : A
  
      getA() { // TS4053 error
-->getA : () => { a: string; "123123": string; "12312312312": string; }
+->getA : () => { "123123": string; "12312312312": string; a: string; }
 +>getA : () => { [TestEnum.Test1]: string; [TestEnum.Test2]: string; a: string; }
  
          return {
-->{            ...super.getA(),            a: '123',        } : { a: string; "123123": string; "12312312312": string; }
+->{            ...super.getA(),            a: '123',        } : { "123123": string; "12312312312": string; a: string; }
 +>{            ...super.getA(),            a: '123',        } : { [TestEnum.Test1]: string; [TestEnum.Test2]: string; a: string; }
  
              ...super.getA(),

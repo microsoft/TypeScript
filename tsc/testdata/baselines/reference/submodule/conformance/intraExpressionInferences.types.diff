@@ -147,63 +147,7 @@
  
      setup() {
  >setup : () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
-@@= skipped -106, +106 lines =@@
- whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) })
- >whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) }) : void
- >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
-->{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 2 | 1; receiver: (t: 2 | 1) => void; }
-->generator : (bob: any) => 2 | 1
-->(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
-+>{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 1 | 2; receiver: (t: 1 | 2) => void; }
-+>generator : (bob: any) => 1 | 2
-+>(bob) => bob ? 1 : 2 : (bob: any) => 1 | 2
- >bob : any
-->bob ? 1 : 2 : 2 | 1
-+>bob ? 1 : 2 : 1 | 2
- >bob : any
- >1 : 1
- >2 : 2
-->receiver : (t: 2 | 1) => void
-->(t) => console.log(t + 2) : (t: 2 | 1) => void
-->t : 2 | 1
-+>receiver : (t: 1 | 2) => void
-+>(t) => console.log(t + 2) : (t: 1 | 2) => void
-+>t : 1 | 2
- >console.log(t + 2) : void
- >console.log : (...data: any[]) => void
- >console : Console
- >log : (...data: any[]) => void
- >t + 2 : number
-->t : 2 | 1
-+>t : 1 | 2
- >2 : 2
- 
- nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
- >nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2)) : void
- >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
-->(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
-+>(bob) => bob ? 1 : 2 : (bob: any) => 1 | 2
- >bob : any
-->bob ? 1 : 2 : 2 | 1
-+>bob ? 1 : 2 : 1 | 2
- >bob : any
- >1 : 1
- >2 : 2
-->(t) => console.log(t + 2) : (t: 2 | 1) => void
-->t : 2 | 1
-+>(t) => console.log(t + 2) : (t: 1 | 2) => void
-+>t : 1 | 2
- >console.log(t + 2) : void
- >console.log : (...data: any[]) => void
- >console : Console
- >log : (...data: any[]) => void
- >t + 2 : number
-->t : 2 | 1
-+>t : 1 | 2
- >2 : 2
- 
- // Repro from #48466
-@@= skipped -229, +229 lines =@@
+@@= skipped -335, +335 lines =@@
  
        arg.toString();
  >arg.toString() : string

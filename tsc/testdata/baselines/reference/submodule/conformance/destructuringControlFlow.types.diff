@@ -40,83 +40,11 @@
  
  function f2(obj: [number, string] | null[]) {
 ->f2 : (obj: [number, string] | null[]) => void
-->obj : [number, string] | null[]
 +>f2 : (obj: null[] | [number, string]) => void
-+>obj : null[] | [number, string]
+ >obj : null[] | [number, string]
  
      let a0 = obj[0];  // number | null
- >a0 : number | null
- >obj[0] : number | null
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- >0 : 0
- 
-     let a1 = obj[1];  // string | null
- >a1 : string | null
- >obj[1] : string | null
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- >1 : 1
- 
-     let [b0, b1] = obj;
- >b0 : number | null
- >b1 : string | null
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- 
-     ([a0, a1] = obj);
-->([a0, a1] = obj) : [number, string] | null[]
-->[a0, a1] = obj : [number, string] | null[]
-+>([a0, a1] = obj) : null[] | [number, string]
-+>[a0, a1] = obj : null[] | [number, string]
- >[a0, a1] : [number | null, string | null]
- >a0 : number | null
- >a1 : string | null
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- 
-     if (obj[0] && obj[1]) {
- >obj[0] && obj[1] : string | 0 | null
- >obj[0] : number | null
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- >0 : 0
- >obj[1] : string | null
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- >1 : 1
- 
-         let c0 = obj[0];  // number
- >c0 : number
- >obj[0] : number
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- >0 : 0
- 
-         let c1 = obj[1];  // string
- >c1 : string
- >obj[1] : string
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- >1 : 1
- 
-         let [d0, d1] = obj;
- >d0 : number
- >d1 : string
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
- 
-         ([c0, c1] = obj);
-->([c0, c1] = obj) : [number, string] | null[]
-->[c0, c1] = obj : [number, string] | null[]
-+>([c0, c1] = obj) : null[] | [number, string]
-+>[c0, c1] = obj : null[] | [number, string]
- >[c0, c1] : [number, string]
- >c0 : number
- >c1 : string
-->obj : [number, string] | null[]
-+>obj : null[] | [number, string]
-     }
+@@= skipped -94, +94 lines =@@
  }
  
  function f3(obj: { a?: number, b?: string }) {

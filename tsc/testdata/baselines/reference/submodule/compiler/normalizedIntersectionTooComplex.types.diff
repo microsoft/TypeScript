@@ -8,7 +8,7 @@
 +>"0" : { common?: string | undefined; "0"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"0" : number | undefined
-->ref : Obj<{ common?: string; "0"?: number; ref?: Obj<Big["0"]> | Func<Big["0"]>; }> | Func<{ common?: string; "0"?: number; ref?: Obj<Big["0"]> | Func<Big["0"]>; }> | undefined
+->ref : Func<{ common?: string; "0"?: number; ref?: Obj<Big["0"]> | Func<Big["0"]>; }> | Obj<{ common?: string; "0"?: number; ref?: Obj<Big["0"]> | Func<Big["0"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "0"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "0"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "1": { common?: string; "1"?: number, ref?: Obj<Big["1"]> | Func<Big["1"]>; }
@@ -16,7 +16,7 @@
 +>"1" : { common?: string | undefined; "1"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"1" : number | undefined
-->ref : Obj<{ common?: string; "1"?: number; ref?: Obj<Big["1"]> | Func<Big["1"]>; }> | Func<{ common?: string; "1"?: number; ref?: Obj<Big["1"]> | Func<Big["1"]>; }> | undefined
+->ref : Func<{ common?: string; "1"?: number; ref?: Obj<Big["1"]> | Func<Big["1"]>; }> | Obj<{ common?: string; "1"?: number; ref?: Obj<Big["1"]> | Func<Big["1"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "1"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "1"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "2": { common?: string; "2"?: number, ref?: Obj<Big["2"]> | Func<Big["2"]>; }
@@ -24,7 +24,7 @@
 +>"2" : { common?: string | undefined; "2"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"2" : number | undefined
-->ref : Obj<{ common?: string; "2"?: number; ref?: Obj<Big["2"]> | Func<Big["2"]>; }> | Func<{ common?: string; "2"?: number; ref?: Obj<Big["2"]> | Func<Big["2"]>; }> | undefined
+->ref : Func<{ common?: string; "2"?: number; ref?: Obj<Big["2"]> | Func<Big["2"]>; }> | Obj<{ common?: string; "2"?: number; ref?: Obj<Big["2"]> | Func<Big["2"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "2"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "2"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "3": { common?: string; "3"?: number, ref?: Obj<Big["3"]> | Func<Big["3"]>; }
@@ -32,7 +32,7 @@
 +>"3" : { common?: string | undefined; "3"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"3" : number | undefined
-->ref : Obj<{ common?: string; "3"?: number; ref?: Obj<Big["3"]> | Func<Big["3"]>; }> | Func<{ common?: string; "3"?: number; ref?: Obj<Big["3"]> | Func<Big["3"]>; }> | undefined
+->ref : Func<{ common?: string; "3"?: number; ref?: Obj<Big["3"]> | Func<Big["3"]>; }> | Obj<{ common?: string; "3"?: number; ref?: Obj<Big["3"]> | Func<Big["3"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "3"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "3"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "4": { common?: string; "4"?: number, ref?: Obj<Big["4"]> | Func<Big["4"]>; }
@@ -40,7 +40,7 @@
 +>"4" : { common?: string | undefined; "4"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"4" : number | undefined
-->ref : Obj<{ common?: string; "4"?: number; ref?: Obj<Big["4"]> | Func<Big["4"]>; }> | Func<{ common?: string; "4"?: number; ref?: Obj<Big["4"]> | Func<Big["4"]>; }> | undefined
+->ref : Func<{ common?: string; "4"?: number; ref?: Obj<Big["4"]> | Func<Big["4"]>; }> | Obj<{ common?: string; "4"?: number; ref?: Obj<Big["4"]> | Func<Big["4"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "4"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "4"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "5": { common?: string; "5"?: number, ref?: Obj<Big["5"]> | Func<Big["5"]>; }
@@ -48,7 +48,7 @@
 +>"5" : { common?: string | undefined; "5"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"5" : number | undefined
-->ref : Obj<{ common?: string; "5"?: number; ref?: Obj<Big["5"]> | Func<Big["5"]>; }> | Func<{ common?: string; "5"?: number; ref?: Obj<Big["5"]> | Func<Big["5"]>; }> | undefined
+->ref : Func<{ common?: string; "5"?: number; ref?: Obj<Big["5"]> | Func<Big["5"]>; }> | Obj<{ common?: string; "5"?: number; ref?: Obj<Big["5"]> | Func<Big["5"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "5"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "5"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "6": { common?: string; "6"?: number, ref?: Obj<Big["6"]> | Func<Big["6"]>; }
@@ -56,7 +56,7 @@
 +>"6" : { common?: string | undefined; "6"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"6" : number | undefined
-->ref : Obj<{ common?: string; "6"?: number; ref?: Obj<Big["6"]> | Func<Big["6"]>; }> | Func<{ common?: string; "6"?: number; ref?: Obj<Big["6"]> | Func<Big["6"]>; }> | undefined
+->ref : Func<{ common?: string; "6"?: number; ref?: Obj<Big["6"]> | Func<Big["6"]>; }> | Obj<{ common?: string; "6"?: number; ref?: Obj<Big["6"]> | Func<Big["6"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "6"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "6"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "7": { common?: string; "7"?: number, ref?: Obj<Big["7"]> | Func<Big["7"]>; }
@@ -64,7 +64,7 @@
 +>"7" : { common?: string | undefined; "7"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"7" : number | undefined
-->ref : Obj<{ common?: string; "7"?: number; ref?: Obj<Big["7"]> | Func<Big["7"]>; }> | Func<{ common?: string; "7"?: number; ref?: Obj<Big["7"]> | Func<Big["7"]>; }> | undefined
+->ref : Func<{ common?: string; "7"?: number; ref?: Obj<Big["7"]> | Func<Big["7"]>; }> | Obj<{ common?: string; "7"?: number; ref?: Obj<Big["7"]> | Func<Big["7"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "7"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "7"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "8": { common?: string; "8"?: number, ref?: Obj<Big["8"]> | Func<Big["8"]>; }
@@ -72,7 +72,7 @@
 +>"8" : { common?: string | undefined; "8"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"8" : number | undefined
-->ref : Obj<{ common?: string; "8"?: number; ref?: Obj<Big["8"]> | Func<Big["8"]>; }> | Func<{ common?: string; "8"?: number; ref?: Obj<Big["8"]> | Func<Big["8"]>; }> | undefined
+->ref : Func<{ common?: string; "8"?: number; ref?: Obj<Big["8"]> | Func<Big["8"]>; }> | Obj<{ common?: string; "8"?: number; ref?: Obj<Big["8"]> | Func<Big["8"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "8"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "8"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "9": { common?: string; "9"?: number, ref?: Obj<Big["9"]> | Func<Big["9"]>; }
@@ -80,7 +80,7 @@
 +>"9" : { common?: string | undefined; "9"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"9" : number | undefined
-->ref : Obj<{ common?: string; "9"?: number; ref?: Obj<Big["9"]> | Func<Big["9"]>; }> | Func<{ common?: string; "9"?: number; ref?: Obj<Big["9"]> | Func<Big["9"]>; }> | undefined
+->ref : Func<{ common?: string; "9"?: number; ref?: Obj<Big["9"]> | Func<Big["9"]>; }> | Obj<{ common?: string; "9"?: number; ref?: Obj<Big["9"]> | Func<Big["9"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "9"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "9"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "10": { common?: string; "10"?: number, ref?: Obj<Big["10"]> | Func<Big["10"]>; }
@@ -88,7 +88,7 @@
 +>"10" : { common?: string | undefined; "10"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"10" : number | undefined
-->ref : Obj<{ common?: string; "10"?: number; ref?: Obj<Big["10"]> | Func<Big["10"]>; }> | Func<{ common?: string; "10"?: number; ref?: Obj<Big["10"]> | Func<Big["10"]>; }> | undefined
+->ref : Func<{ common?: string; "10"?: number; ref?: Obj<Big["10"]> | Func<Big["10"]>; }> | Obj<{ common?: string; "10"?: number; ref?: Obj<Big["10"]> | Func<Big["10"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "10"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "10"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "11": { common?: string; "11"?: number, ref?: Obj<Big["11"]> | Func<Big["11"]>; }
@@ -96,7 +96,7 @@
 +>"11" : { common?: string | undefined; "11"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"11" : number | undefined
-->ref : Obj<{ common?: string; "11"?: number; ref?: Obj<Big["11"]> | Func<Big["11"]>; }> | Func<{ common?: string; "11"?: number; ref?: Obj<Big["11"]> | Func<Big["11"]>; }> | undefined
+->ref : Func<{ common?: string; "11"?: number; ref?: Obj<Big["11"]> | Func<Big["11"]>; }> | Obj<{ common?: string; "11"?: number; ref?: Obj<Big["11"]> | Func<Big["11"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "11"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "11"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "12": { common?: string; "12"?: number, ref?: Obj<Big["12"]> | Func<Big["12"]>; }
@@ -104,7 +104,7 @@
 +>"12" : { common?: string | undefined; "12"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"12" : number | undefined
-->ref : Obj<{ common?: string; "12"?: number; ref?: Obj<Big["12"]> | Func<Big["12"]>; }> | Func<{ common?: string; "12"?: number; ref?: Obj<Big["12"]> | Func<Big["12"]>; }> | undefined
+->ref : Func<{ common?: string; "12"?: number; ref?: Obj<Big["12"]> | Func<Big["12"]>; }> | Obj<{ common?: string; "12"?: number; ref?: Obj<Big["12"]> | Func<Big["12"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "12"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "12"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "13": { common?: string; "13"?: number, ref?: Obj<Big["13"]> | Func<Big["13"]>; }
@@ -112,7 +112,7 @@
 +>"13" : { common?: string | undefined; "13"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"13" : number | undefined
-->ref : Obj<{ common?: string; "13"?: number; ref?: Obj<Big["13"]> | Func<Big["13"]>; }> | Func<{ common?: string; "13"?: number; ref?: Obj<Big["13"]> | Func<Big["13"]>; }> | undefined
+->ref : Func<{ common?: string; "13"?: number; ref?: Obj<Big["13"]> | Func<Big["13"]>; }> | Obj<{ common?: string; "13"?: number; ref?: Obj<Big["13"]> | Func<Big["13"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "13"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "13"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "14": { common?: string; "14"?: number, ref?: Obj<Big["14"]> | Func<Big["14"]>; }
@@ -120,7 +120,7 @@
 +>"14" : { common?: string | undefined; "14"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"14" : number | undefined
-->ref : Obj<{ common?: string; "14"?: number; ref?: Obj<Big["14"]> | Func<Big["14"]>; }> | Func<{ common?: string; "14"?: number; ref?: Obj<Big["14"]> | Func<Big["14"]>; }> | undefined
+->ref : Func<{ common?: string; "14"?: number; ref?: Obj<Big["14"]> | Func<Big["14"]>; }> | Obj<{ common?: string; "14"?: number; ref?: Obj<Big["14"]> | Func<Big["14"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "14"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "14"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "15": { common?: string; "15"?: number, ref?: Obj<Big["15"]> | Func<Big["15"]>; }
@@ -128,7 +128,7 @@
 +>"15" : { common?: string | undefined; "15"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"15" : number | undefined
-->ref : Obj<{ common?: string; "15"?: number; ref?: Obj<Big["15"]> | Func<Big["15"]>; }> | Func<{ common?: string; "15"?: number; ref?: Obj<Big["15"]> | Func<Big["15"]>; }> | undefined
+->ref : Func<{ common?: string; "15"?: number; ref?: Obj<Big["15"]> | Func<Big["15"]>; }> | Obj<{ common?: string; "15"?: number; ref?: Obj<Big["15"]> | Func<Big["15"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "15"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "15"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "16": { common?: string; "16"?: number, ref?: Obj<Big["16"]> | Func<Big["16"]>; }
@@ -136,7 +136,7 @@
 +>"16" : { common?: string | undefined; "16"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"16" : number | undefined
-->ref : Obj<{ common?: string; "16"?: number; ref?: Obj<Big["16"]> | Func<Big["16"]>; }> | Func<{ common?: string; "16"?: number; ref?: Obj<Big["16"]> | Func<Big["16"]>; }> | undefined
+->ref : Func<{ common?: string; "16"?: number; ref?: Obj<Big["16"]> | Func<Big["16"]>; }> | Obj<{ common?: string; "16"?: number; ref?: Obj<Big["16"]> | Func<Big["16"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "16"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "16"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  
      "17": { common?: string; "17"?: number, ref?: Obj<Big["17"]> | Func<Big["17"]>; }
@@ -144,7 +144,7 @@
 +>"17" : { common?: string | undefined; "17"?: number | undefined; ref?: (Func<???>) | Obj<???> | undefined; }
  >common : string | undefined
  >"17" : number | undefined
-->ref : Obj<{ common?: string; "17"?: number; ref?: Obj<Big["17"]> | Func<Big["17"]>; }> | Func<{ common?: string; "17"?: number; ref?: Obj<Big["17"]> | Func<Big["17"]>; }> | undefined
+->ref : Func<{ common?: string; "17"?: number; ref?: Obj<Big["17"]> | Func<Big["17"]>; }> | Obj<{ common?: string; "17"?: number; ref?: Obj<Big["17"]> | Func<Big["17"]>; }> | undefined
 +>ref : (Func<{ common?: string | undefined; "17"?: number | undefined; ref?: (???) | Obj<???> | undefined; }>) | Obj<{ common?: string | undefined; "17"?: number | undefined; ref?: (Func<???>) | ??? | undefined; }> | undefined
  }
  declare function getCtor<T extends keyof Big>(comp: T): CtorOf<Big[T]>

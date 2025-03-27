@@ -8,7 +8,7 @@
 +>createElementIsolated : <P extends {}>(type: string | (ComponentClass<P>) | (FunctionComponent<P>), props?: P | null | undefined) => void
  
    type: FunctionComponent<P> | ComponentClass<P> | string,
-->type : string | FunctionComponent<P> | ComponentClass<P>
+->type : string | ComponentClass<P> | FunctionComponent<P>
 +>type : string | (ComponentClass<P>) | (FunctionComponent<P>)
  
    props?: P | null,

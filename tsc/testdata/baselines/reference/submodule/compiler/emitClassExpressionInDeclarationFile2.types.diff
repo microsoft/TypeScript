@@ -4,12 +4,12 @@
  >args : any[]
  
  export function WithTags<T extends Constructor<FooItem>>(Base: T) {
-->WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
+->WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags<any>.(Anonymous class); } & T
 +>WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; getTags: () => void; prototype: (Anonymous class)<any>; } & T
  >Base : T
  
      return class extends Base {
-->class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
+->class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags<any>.(Anonymous class); } & T
 +>class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class)<T>; getTags: () => void; prototype: (Anonymous class)<any>; } & T
  >Base : FooItem
  
@@ -19,7 +19,7 @@
  export class Test extends WithTags(FooItem) {}
  >Test : Test
 ->WithTags(FooItem) : WithTags<typeof FooItem>.(Anonymous class) & FooItem
-->WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
+->WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags<any>.(Anonymous class); } & T
 +>WithTags(FooItem) : (Anonymous class)<typeof FooItem> & FooItem
 +>WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; getTags: () => void; prototype: (Anonymous class)<any>; } & T
  >FooItem : typeof FooItem

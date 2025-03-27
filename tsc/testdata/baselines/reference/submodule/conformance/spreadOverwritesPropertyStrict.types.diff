@@ -17,54 +17,13 @@
 +>abq : { a: number; b?: number | undefined; }
  
  var unused4 = { ...ab, b: 1 } // ok, we don't care that b in ab is overwritten
-->unused4 : { b: number; a: number; }
-->{ ...ab, b: 1 } : { b: number; a: number; }
-+>unused4 : { a: number; b: number; }
-+>{ ...ab, b: 1 } : { a: number; b: number; }
- >ab : { a: number; b: number; }
- >b : number
- >1 : 1
- 
+ >unused4 : { a: number; b: number; }
+@@= skipped -12, +12 lines =@@
  var unused5 = { ...abq, b: 1 } // ok
-->unused5 : { b: number; a: number; }
-->{ ...abq, b: 1 } : { b: number; a: number; }
+ >unused5 : { a: number; b: number; }
+ >{ ...abq, b: 1 } : { a: number; b: number; }
 ->abq : { a: number; b?: number; }
-+>unused5 : { a: number; b: number; }
-+>{ ...abq, b: 1 } : { a: number; b: number; }
 +>abq : { a: number; b?: number | undefined; }
  >b : number
  >1 : 1
  
-@@= skipped -51, +51 lines =@@
- >obj : { x: number; } | { x: string; }
- }
- function i(b: boolean, t: { command: string, ok: string }) {
-->i : (b: boolean, t: { command: string; ok: string; }) => { command: string; ok?: string | undefined; }
-+>i : (b: boolean, t: { command: string; ok: string; }) => { ok?: string | undefined; command: string; }
- >b : boolean
- >t : { command: string; ok: string; }
- >command : string
- >ok : string
- 
-     return { command: "hi", ...(b ? t : {}) } // ok
-->{ command: "hi", ...(b ? t : {}) } : { command: string; ok?: string | undefined; }
-+>{ command: "hi", ...(b ? t : {}) } : { ok?: string | undefined; command: string; }
- >command : string
- >"hi" : "hi"
- >(b ? t : {}) : { command: string; ok: string; } | {}
-@@= skipped -29, +29 lines =@@
- >"bye" : "bye"
- }
- function k(t: { command: string, ok: string }) {
-->k : (t: { command: string; ok: string; }) => { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
-+>k : (t: { command: string; ok: string; }) => { command: string; ok: string; spoiler: boolean; spoiler2: boolean; }
- >t : { command: string; ok: string; }
- >command : string
- >ok : string
- 
-     return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
-->{ command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } : { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
-+>{ command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } : { command: string; ok: string; spoiler: boolean; spoiler2: boolean; }
- >command : string
- >"hi" : "hi"
- >{ spoiler: true } : { spoiler: boolean; }

@@ -76,8 +76,8 @@
  >1 : 1
  
  var p10 = ([{ value, done }]) => { };
-->p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
-->([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
+->p10 : ([{ value, done }]: [{ done: any; value: any; }]) => void
+->([{ value, done }]) => { } : ([{ value, done }]: [{ done: any; value: any; }]) => void
 +>p10 : (__0: [{ done: any; value: any; }]) => void
 +>([{ value, done }]) => { } : (__0: [{ done: any; value: any; }]) => void
  >value : any

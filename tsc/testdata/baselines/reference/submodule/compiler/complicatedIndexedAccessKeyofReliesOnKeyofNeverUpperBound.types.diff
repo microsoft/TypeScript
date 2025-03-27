@@ -1,15 +1,6 @@
 --- old.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.types
 +++ new.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.types
-@@= skipped -26, +26 lines =@@
- >Channel : Channel
- 
- export type ChannelType = Channel extends { type: infer R } ? R : never;
-->ChannelType : "text" | "email"
-+>ChannelType : "email" | "text"
- >type : R
- 
- type Omit<T, K extends keyof T> = Pick<
-@@= skipped -28, +28 lines =@@
+@@= skipped -54, +54 lines =@@
  
  
  export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<ChannelOfType<T>> {

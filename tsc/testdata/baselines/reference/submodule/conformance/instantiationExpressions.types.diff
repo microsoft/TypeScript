@@ -83,8 +83,8 @@
  >f3 : () => void
  
      let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
-->c1 : { new (x: string): C<string>; prototype: C<any>; f<U>(x: U): U[]; }
-->C<string> : { new (x: string): C<string>; prototype: C<any>; f<U>(x: U): U[]; }
+->c1 : { new (x: string): C<string>; f<U>(x: U): U[]; prototype: C<any>; }
+->C<string> : { new (x: string): C<string>; f<U>(x: U): U[]; prototype: C<any>; }
 +>c1 : { new (x: string): C<string>; f: <U>(x: U) => U[]; prototype: C<any>; }
 +>C<string> : { new (x: string): C<string>; f: <U>(x: U) => U[]; prototype: C<any>; }
  >C : typeof C
@@ -108,24 +108,7 @@
  >f : { (a: string, b: number): string[]; new <T>(a: T): T; }
  >a : T
  >a : string
-@@= skipped -155, +155 lines =@@
- 
- function f32(f: (<T>(a: T) => T) | { x: string }) {
- >f32 : (f: (<T>(a: T) => T) | { x: string; }) => void
-->f : { x: string; } | (<T>(a: T) => T)
-+>f : (<T>(a: T) => T) | { x: string; }
- >a : T
- >x : string
- 
-     let fs = f<string>;  // ((a: string) => string) | { x: string }
- >fs : { x: string; } | ((a: string) => string)
- >f<string> : { x: string; } | ((a: string) => string)
-->f : { x: string; } | (<T>(a: T) => T)
-+>f : (<T>(a: T) => T) | { x: string; }
- }
- 
- function f33(f: { x: string } | { y: string }) {
-@@= skipped -97, +97 lines =@@
+@@= skipped -252, +252 lines =@@
  }
  
  type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }

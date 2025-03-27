@@ -1,42 +1,6 @@
 --- old.narrowingTypeofDiscriminant.types
 +++ new.narrowingTypeofDiscriminant.types
-@@= skipped -10, +10 lines =@@
- 
-     if (typeof obj.kind === "string") {
- >typeof obj.kind === "string" : boolean
-->typeof obj.kind : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj.kind : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj.kind : "a" | 1
- >obj : { kind: "a"; data: string; } | { kind: 1; data: number; }
- >kind : "a" | 1
-@@= skipped -25, +25 lines =@@
- 
-     if (typeof obj?.kind === "string") {
- >typeof obj?.kind === "string" : boolean
-->typeof obj?.kind : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj?.kind : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj?.kind : "a" | 1 | undefined
- >obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
- >kind : "a" | 1 | undefined
-@@= skipped -28, +28 lines =@@
- 
-     if (typeof wrapped?.value !== 'string') {
- >typeof wrapped?.value !== 'string' : boolean
-->typeof wrapped?.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof wrapped?.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >wrapped?.value : string | number | undefined
- >wrapped : WrappedStringOr<number> | null
- >value : string | number | undefined
-@@= skipped -20, +20 lines =@@
- 
-     if (typeof wrapped?.value !== 'string') {
- >typeof wrapped?.value !== 'string' : boolean
-->typeof wrapped?.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof wrapped?.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >wrapped?.value : string | boolean | undefined
- >wrapped : WrappedStringOr<boolean> | null
- >value : string | boolean | undefined
-@@= skipped -10, +10 lines =@@
+@@= skipped -93, +93 lines =@@
      }
      return wrapped.value;
  >wrapped.value : string
@@ -45,16 +9,7 @@
  >value : string
  }
  
-@@= skipped -10, +10 lines =@@
- 
-     if (typeof (wrapped?.value) !== 'string') {
- >typeof (wrapped?.value) !== 'string' : boolean
-->typeof (wrapped?.value) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof (wrapped?.value) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >(wrapped?.value) : string | boolean | undefined
- >wrapped?.value : string | boolean | undefined
- >wrapped : WrappedStringOr<boolean> | null
-@@= skipped -11, +11 lines =@@
+@@= skipped -21, +21 lines =@@
      }
      return wrapped.value;
  >wrapped.value : string

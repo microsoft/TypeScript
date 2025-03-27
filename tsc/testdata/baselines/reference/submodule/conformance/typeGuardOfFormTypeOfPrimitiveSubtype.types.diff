@@ -9,59 +9,29 @@
  >toString : () => string
  
  if (typeof a === "number") {
- >typeof a === "number" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : {}
- >"number" : "number"
- 
-@@= skipped -15, +15 lines =@@
- }
- if (typeof a === "string") {
- >typeof a === "string" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : {}
- >"string" : "string"
- 
-@@= skipped -10, +10 lines =@@
- }
- if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : {}
- >"boolean" : "boolean"
- 
-@@= skipped -11, +11 lines =@@
- 
+@@= skipped -37, +37 lines =@@
  if (typeof b === "number") {
  >typeof b === "number" : boolean
-->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->b : { toString(): string; }
-+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>b : { toString: () => string; }
  >"number" : "number"
  
      let c: number = b;
 @@= skipped -10, +10 lines =@@
- }
  if (typeof b === "string") {
  >typeof b === "string" : boolean
-->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->b : { toString(): string; }
-+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>b : { toString: () => string; }
  >"string" : "string"
  
      let c: string = b;
 @@= skipped -10, +10 lines =@@
- }
  if (typeof b === "boolean") {
  >typeof b === "boolean" : boolean
-->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->b : { toString(): string; }
-+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>b : { toString: () => string; }
  >"boolean" : "boolean"
  

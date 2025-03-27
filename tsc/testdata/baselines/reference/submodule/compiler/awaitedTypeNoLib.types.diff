@@ -8,19 +8,8 @@
 +>handleResolve : <TResult>(result: Thenable<NotPromise<TResult>> | NotPromise<TResult>, resolve: Receiver<TResult>) => void
  
      result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
-->result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
-+>result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
- 
-     resolve: Receiver<TResult>,
- >resolve : Receiver<TResult>
-@@= skipped -11, +11 lines =@@
-   ) {
-     if (result instanceof Thenable) {
- >result instanceof Thenable : boolean
-->result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
-+>result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
- >Thenable : typeof Thenable
- 
+ >result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
+@@= skipped -17, +17 lines =@@
        //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
        this.resolvePromise(result, resolve);
  >this.resolvePromise(result, resolve) : void
@@ -28,9 +17,7 @@
 +>this.resolvePromise : <TResult>(result: Thenable<TResult>, resolve: Receiver<TResult>) => void
  >this : this
 ->resolvePromise : <TResult_1>(result: Thenable<TResult_1>, resolve: Receiver<TResult_1>) => void
-->result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
 +>resolvePromise : <TResult>(result: Thenable<TResult>, resolve: Receiver<TResult>) => void
-+>result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
+ >result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
  >resolve : Receiver<TResult>
      }
-   }

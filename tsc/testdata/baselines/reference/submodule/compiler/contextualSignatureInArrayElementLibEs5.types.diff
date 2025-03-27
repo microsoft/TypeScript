@@ -8,11 +8,7 @@
 +>test : (arg: ((arg: number) => void)[] | Record<string, (arg: string) => void>) => void
  
    arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
-->arg : Record<string, (arg: string) => void> | ((arg: number) => void)[]
-+>arg : ((arg: number) => void)[] | Record<string, (arg: string) => void>
- >arg : string
- >arg : number
- 
+ >arg : ((arg: number) => void)[] | Record<string, (arg: string) => void>
 @@= skipped -11, +11 lines =@@
  
  test([

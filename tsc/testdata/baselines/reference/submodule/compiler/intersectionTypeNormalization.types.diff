@@ -1,18 +1,6 @@
 --- old.intersectionTypeNormalization.types
 +++ new.intersectionTypeNormalization.types
-@@= skipped -123, +123 lines =@@
- 
-     if (value.kind === 'int') {
- >value.kind === 'int' : boolean
-->value.kind : "string" | "int"
-+>value.kind : "int" | "string"
- >value : IntersectionFail
-->kind : "string" | "int"
-+>kind : "int" | "string"
- >'int' : "int"
- 
-         return '' + value.num;
-@@= skipped -83, +83 lines =@@
+@@= skipped -206, +206 lines =@@
  >Foo : Foo
  
      genreId: enums.Genre;

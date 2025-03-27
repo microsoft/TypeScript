@@ -15,8 +15,8 @@
  };
  
  const obj13 = {
-->obj13 : { [x: string]: 0 | 2 | 1 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; 1: 2; [sym]: 4; }
-->{    ['x']: 0 as const,    ['a' + 'b']: 1 as const,    [1]: 2 as const,    [1 + 2]: 3 as const,    [sym]: 4 as const,    [Symbol()]: 5 as const,} : { [x: string]: 0 | 2 | 1 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; 1: 2; [sym]: 4; }
+->obj13 : { [x: string]: 0 | 1 | 2 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; 1: 2; [sym]: 4; }
+->{    ['x']: 0 as const,    ['a' + 'b']: 1 as const,    [1]: 2 as const,    [1 + 2]: 3 as const,    [sym]: 4 as const,    [Symbol()]: 5 as const,} : { [x: string]: 0 | 1 | 2 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; 1: 2; [sym]: 4; }
 +>obj13 : { [x: string]: 0 | 1 | 2 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; [1]: 2; [sym]: 4; }
 +>{    ['x']: 0 as const,    ['a' + 'b']: 1 as const,    [1]: 2 as const,    [1 + 2]: 3 as const,    [sym]: 4 as const,    [Symbol()]: 5 as const,} : { [x: string]: 0 | 1 | 2 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; [1]: 2; [sym]: 4; }
  

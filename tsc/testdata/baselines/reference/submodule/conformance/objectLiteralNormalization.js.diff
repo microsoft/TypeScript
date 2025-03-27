@@ -81,11 +81,11 @@
 -    a: number;
 -    b: number;
 -} | {
+-    b?: undefined;
 -    a: string;
--    b?: undefined;
 -} | {
--    a?: undefined;
 -    b?: undefined;
+-    a?: undefined;
 -};
 -declare let b1: {
 -    a: string;
@@ -95,22 +95,22 @@
 -    c: string;
 -};
 -declare let b2: {
--    z: number;
 -    a: string;
 -    b: string;
--} | {
 -    z: number;
+-} | {
 -    b: string;
 -    c: string;
+-    z: number;
 -};
 -declare let b3: {
--    z: number;
 -    a: string;
 -    b: string;
--} | {
 -    z: number;
+-} | {
 -    b: string;
 -    c: string;
+-    z: number;
 -};
 -declare let opts: {
 -    foo?: string;
@@ -131,12 +131,12 @@
 -    a: number;
 -    b: number;
 -} | {
--    a?: undefined;
 -    b?: undefined;
+-    a?: undefined;
 -};
 -declare let c4: {
--    a?: undefined;
 -    b?: undefined;
+-    a?: undefined;
 -} | {
 -    a: number;
 -    b: number;
@@ -144,23 +144,23 @@
 -declare let d1: {
 -    kind: string;
 -    pos: {
+-        b?: undefined;
+-        a?: undefined;
 -        x: number;
 -        y: number;
--        a?: undefined;
--        b?: undefined;
 -    };
 -} | {
 -    kind: string;
 -    pos: {
--        a: string;
--        x?: undefined;
--        y?: undefined;
 -        b?: undefined;
--    } | {
--        b: number;
 -        x?: undefined;
 -        y?: undefined;
+-        a: string;
+-    } | {
 -        a?: undefined;
+-        x?: undefined;
+-        y?: undefined;
+-        b: number;
 -    };
 -};
 -declare function f<T>(...items: T[]): T;
@@ -173,18 +173,18 @@
 -    a: number;
 -    b: number;
 -} | {
+-    b?: undefined;
 -    a: string;
--    b?: undefined;
 -} | {
--    a?: undefined;
 -    b?: undefined;
+-    a?: undefined;
 -};
 -declare let e2: {
+-    b?: undefined;
 -    a?: undefined;
--    b?: undefined;
 -} | {
--    a: string;
 -    b?: undefined;
+-    a: string;
 -} | {
 -    a: number;
 -    b: number;

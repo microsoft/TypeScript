@@ -41,15 +41,8 @@
  }
  
  type Shape = Square | Rectangle | Circle;
-@@= skipped -41, +41 lines =@@
- >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
- 
-     if (s.kind === "square") {
-->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
- >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 18, 15))
-->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
+@@= skipped -46, +46 lines =@@
+ >kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
  
          return s.size * s.size;
 ->s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
@@ -64,11 +57,9 @@
 +>size : Symbol(size, Decl(discriminatedUnionTypes1.ts, 1, 19))
      }
      else if (s.kind === "circle") {
-->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21))
- >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 18, 15))
-->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21))
+ >s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21))
+@@= skipped -13, +13 lines =@@
+ >kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21))
  
          return Math.PI * s.radius * s.radius;
 ->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
@@ -108,15 +99,8 @@
      }
      else {
          return 0;
-@@= skipped -52, +52 lines =@@
- >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
- 
-     switch (s.kind) {
-->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
- >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 33, 15))
-->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
+@@= skipped -39, +39 lines =@@
+ >kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
  
          case "square": return s.size * s.size;
 ->s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
@@ -162,14 +146,7 @@
  }
  
 @@= skipped -48, +48 lines =@@
- >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
- 
-     switch (s.kind) {
-->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
- >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 45, 15))
-->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
+ >kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
  
          case "square": return s.size * s.size;
 ->s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))
@@ -215,14 +192,7 @@
          default: return assertNever(s);
  >assertNever : Symbol(assertNever, Decl(discriminatedUnionTypes1.ts, 39, 1))
 @@= skipped -43, +43 lines =@@
- >Shape : Symbol(Shape, Decl(discriminatedUnionTypes1.ts, 14, 1))
- 
-     switch (s.kind) {
-->s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>s.kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
- >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 54, 15))
-->kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 0, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
-+>kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
+ >kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 11, 18), Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 0, 18))
  
          case "square": return s.size * s.size;
 ->s.size : Symbol(Square.size, Decl(discriminatedUnionTypes1.ts, 1, 19))

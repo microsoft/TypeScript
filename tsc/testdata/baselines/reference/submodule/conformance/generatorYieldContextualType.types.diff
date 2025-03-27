@@ -25,10 +25,7 @@
  >value : T | Directive
  
      return typeof value === "number" && Directive[value] != null;
- >typeof value === "number" && Directive[value] != null : boolean
- >typeof value === "number" : boolean
-->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+@@= skipped -10, +10 lines =@@
  >value : T | Directive
  >"number" : "number"
  >Directive[value] != null : boolean
@@ -40,7 +37,7 @@
    }
  }
  
-@@= skipped -132, +132 lines =@@
+@@= skipped -122, +122 lines =@@
  };
  
  function canPickStepContinue<T extends QuickPickStep>(
@@ -58,26 +55,12 @@
  
    State extends PartialStepState & { repo: any },
  >repo : any
-@@= skipped -30, +30 lines =@@
- 
-   });
-   const selection: StepSelection<typeof step> = yield step;
-->selection : Directive | QuickPickItem[]
-+>selection : QuickPickItem[] | Directive
- >step : QuickPickStep<QuickPickItem>
- >yield step : any
- >step : QuickPickStep<QuickPickItem>
- 
+@@= skipped -38, +38 lines =@@
    return canPickStepContinue(step, state, selection)
-->canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : QuickPickItem | unique symbol
-+>canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : unique symbol | QuickPickItem
+ >canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : unique symbol | QuickPickItem
  >canPickStepContinue(step, state, selection) : boolean
 ->canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
 +>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
  >step : QuickPickStep<QuickPickItem>
  >state : State
-->selection : Directive | QuickPickItem[]
-+>selection : QuickPickItem[] | Directive
- 
-     ? selection[0]
- >selection[0] : QuickPickItem
+ >selection : QuickPickItem[] | Directive

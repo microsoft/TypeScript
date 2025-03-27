@@ -1,15 +1,6 @@
 --- old.mappedTypeErrors.errors.txt
 +++ new.mappedTypeErrors.errors.txt
-@@= skipped -1, +1 lines =@@
- mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
- mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
- mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
--mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint 'keyof Shape'.
-+mappedTypeErrors.ts(26,24): error TS2344: Type '"foo" | "name"' does not satisfy the constraint 'keyof Shape'.
-   Type '"foo"' is not assignable to type 'keyof Shape'.
- mappedTypeErrors.ts(28,24): error TS2344: Type 'keyof Point' does not satisfy the constraint 'keyof Shape'.
-   Type '"x"' is not assignable to type 'keyof Shape'.
-@@= skipped -13, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
  mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
  mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
@@ -19,16 +10,7 @@
  mappedTypeErrors.ts(77,59): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
  mappedTypeErrors.ts(83,58): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
  mappedTypeErrors.ts(105,17): error TS2322: Type 'undefined' is not assignable to type 'string'.
-@@= skipped -53, +52 lines =@@
- !!! error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
-     type T12 = Pick<Shape, "name" | "foo">;  // Error
-                            ~~~~~~~~~~~~~~
--!!! error TS2344: Type '"name" | "foo"' does not satisfy the constraint 'keyof Shape'.
-+!!! error TS2344: Type '"foo" | "name"' does not satisfy the constraint 'keyof Shape'.
- !!! error TS2344:   Type '"foo"' is not assignable to type 'keyof Shape'.
-     type T13 = Pick<Shape, keyof Named>;
-     type T14 = Pick<Shape, keyof Point>;  // Error
-@@= skipped -76, +76 lines =@@
+@@= skipped -129, +128 lines =@@
      function f20() {
          let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
                                                  ~~~~~~~~

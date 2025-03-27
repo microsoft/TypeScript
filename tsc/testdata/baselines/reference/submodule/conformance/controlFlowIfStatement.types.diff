@@ -1,15 +1,6 @@
 --- old.controlFlowIfStatement.types
 +++ new.controlFlowIfStatement.types
-@@= skipped -96, +96 lines =@@
- 
-     if (typeof data === 'string') {
- >typeof data === 'string' : boolean
-->typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >data : string | T
- >'string' : "string"
- 
-@@= skipped -9, +9 lines =@@
+@@= skipped -105, +105 lines =@@
  >JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
  >JSON : JSON
  >parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
@@ -18,12 +9,3 @@
      }
      else {
          return data;
-@@= skipped -13, +13 lines =@@
- 
-     if (typeof data === 'string') {
- >typeof data === 'string' : boolean
-->typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >data : string | T
- >'string' : "string"
- 

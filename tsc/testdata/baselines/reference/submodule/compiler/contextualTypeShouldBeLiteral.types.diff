@@ -1,15 +1,6 @@
 --- old.contextualTypeShouldBeLiteral.types
 +++ new.contextualTypeShouldBeLiteral.types
-@@= skipped -16, +16 lines =@@
- >type : "y"
- 
-     value: 'none' | 'done';
-->value : "none" | "done"
-+>value : "done" | "none"
- 
-     method(): void;
- >method : () => void
-@@= skipped -13, +13 lines =@@
+@@= skipped -29, +29 lines =@@
  foo({
  >foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
  >foo : (bar: X | Y) => void
@@ -18,28 +9,7 @@
  
      type: 'y',
  >type : "y"
-@@= skipped -22, +22 lines =@@
- >type : "y"
- 
-         this.value;
-->this.value : "none" | "done"
-+>this.value : "done" | "none"
- >this : Y
-->value : "none" | "done"
-+>value : "done" | "none"
-     }
- });
- 
-@@= skipped -22, +22 lines =@@
- >type2 : "y"
- 
-     value: 'none' | 'done';
-->value : "none" | "done"
-+>value : "done" | "none"
- 
-     method(): void;
- >method : () => void
-@@= skipped -13, +13 lines =@@
+@@= skipped -57, +57 lines =@@
  foo2({
  >foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
  >foo2 : (bar: X2 | Y2) => void

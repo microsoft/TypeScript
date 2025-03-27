@@ -1,28 +1,6 @@
 --- old.templateLiteralTypes1.types
 +++ new.templateLiteralTypes1.types
-@@= skipped -31, +31 lines =@@
- >EventName : `${S}Changed`
- 
- type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
-->EN1 : "FooChanged" | "BarChanged" | "BazChanged"
-+>EN1 : "BarChanged" | "BazChanged" | "FooChanged"
- 
- type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
-->Loc : "top-left" | "top-center" | "top-right" | "middle-left" | "middle-center" | "middle-right" | "bottom-left" | "bottom-center" | "bottom-right"
-+>Loc : "bottom-center" | "bottom-left" | "bottom-right" | "middle-center" | "middle-left" | "middle-right" | "top-center" | "top-left" | "top-right"
- 
- // Primitive literal types can be spread into templates
- 
-@@= skipped -11, +11 lines =@@
- >ToString : `${T}`
- 
- type TS1 = ToString<'abc' | 42 | true | -1234n>;
-->TS1 : "abc" | "true" | "42" | "-1234"
-+>TS1 : "-1234" | "42" | "abc" | "true"
- >true : true
- >-1234n : -1234n
- >1234n : 1234n
-@@= skipped -30, +30 lines =@@
+@@= skipped -72, +72 lines =@@
  // Assignability
  
  function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
@@ -31,18 +9,6 @@
  >name : `get${Capitalize<T>}`
  
      let s1: string = name;
- >s1 : string
-->name : "getFoo" | "getBar"
-+>name : "getBar" | "getFoo"
- 
-     let s2: 'getFoo' | 'getBar' = name;
-->s2 : "getFoo" | "getBar"
-->name : "getFoo" | "getBar"
-+>s2 : "getBar" | "getFoo"
-+>name : "getBar" | "getFoo"
- }
- 
- function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
 @@= skipped -190, +190 lines =@@
  // Inference and property name paths
  

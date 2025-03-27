@@ -4,12 +4,12 @@
  >'A' : "A"
  
        arg;
-->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "A"
+->arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
  
      } else {
        arg;
-->arg : { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "B"
+->arg : "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : "B" | { optional?: true | undefined; } | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
      }
  }

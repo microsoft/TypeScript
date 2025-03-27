@@ -9,34 +9,7 @@
  >required1 : () => boolean
  >required2 : () => boolean
  >b : boolean
-@@= skipped -80, +80 lines =@@
- 
-     // ok
-     required1() && console.log('required call');
-->required1() && console.log('required call') : false | void
-+>required1() && console.log('required call') : void | false
- >required1() : boolean
- >required1 : () => boolean
- >console.log('required call') : void
-@@= skipped -40, +40 lines =@@
- 
-     // error
-     required1 && required2 && required1() && console.log('foo');
-->required1 && required2 && required1() && console.log('foo') : false | void
-+>required1 && required2 && required1() && console.log('foo') : void | false
- >required1 && required2 && required1() : boolean
- >required1 && required2 : () => boolean
- >required1 : () => boolean
-@@= skipped -169, +169 lines =@@
- >typeof window !== 'undefined' && window.console &&        ((window.console as any).firebug || (window.console.error && window.console.table)) : any
- >typeof window !== 'undefined' && window.console : false | Console
- >typeof window !== 'undefined' : boolean
-->typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >window : Window & typeof globalThis
- >'undefined' : "undefined"
- >window.console : Console
-@@= skipped -17, +17 lines =@@
+@@= skipped -306, +306 lines =@@
  >window : Window & typeof globalThis
  >console : Console
  >firebug : any

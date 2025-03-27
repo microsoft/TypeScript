@@ -83,15 +83,7 @@
  
  type Shape = Square | Rectangle | Circle | Triangle;
  >Shape : Symbol(Shape, Decl(exhaustiveSwitchStatements1.ts, 60, 54))
-@@= skipped -35, +35 lines =@@
- >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
- 
-     switch (s.kind) {
-->s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
-+>s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
- >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
-->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
-+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+@@= skipped -41, +41 lines =@@
  
          case "square": area = s.size * s.size; break;
  >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
@@ -157,15 +149,8 @@
      }
      return area;
  >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
-@@= skipped -62, +62 lines =@@
- >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 76, 7))
- 
-         switch (s.kind) {
-->s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
-+>s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
- >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
-->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
-+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+@@= skipped -61, +61 lines =@@
+ >kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
  
              case "square": return s.size * s.size;
 ->s.size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
@@ -227,7 +212,7 @@
          }
      })();
      return area;
-@@= skipped -53, +53 lines =@@
+@@= skipped -48, +48 lines =@@
  >MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
  
  	A,
@@ -373,51 +358,7 @@
  }
  
  type Shape2 = Square2 | Circle2;
-@@= skipped -29, +29 lines =@@
- >Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
- 
-     switch (s1.kind) {
-->s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- >s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 155, 21))
-->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- 
-         case "square":
-             return "1";
-         case "circle":
-             switch (s2.kind) {
-->s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- >s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 155, 32))
-->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- 
-                 case "square":
-                     return "2";
-@@= skipped -30, +30 lines =@@
- >Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
- 
-     switch (s1.kind) {
-->s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- >s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 171, 24))
-->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- 
-         case "square":
-             return "1";
-         case "circle":
-             switch (s2.kind) {
-->s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- >s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 171, 35))
-->kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
-+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19), Decl(exhaustiveSwitchStatements1.ts, 143, 19))
- 
-                 case "square":
-                     return "2";
-@@= skipped -46, +46 lines =@@
+@@= skipped -105, +105 lines =@@
  
  enum Animal { DOG, CAT }
  >Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))

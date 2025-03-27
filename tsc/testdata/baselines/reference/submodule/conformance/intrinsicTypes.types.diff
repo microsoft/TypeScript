@@ -1,42 +1,6 @@
 --- old.intrinsicTypes.types
 +++ new.intrinsicTypes.types
-@@= skipped -4, +4 lines =@@
- >TU1 : "HELLO"
- 
- type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
-->TU2 : "FOO" | "BAR"
-+>TU2 : "BAR" | "FOO"
- 
- type TU3 = Uppercase<string>;  // Uppercase<string>
- >TU3 : Uppercase<string>
-@@= skipped -18, +18 lines =@@
- >TL1 : "hello"
- 
- type TL2 = Lowercase<'FOO' | 'BAR'>;  // "foo" | "bar"
-->TL2 : "foo" | "bar"
-+>TL2 : "bar" | "foo"
- 
- type TL3 = Lowercase<string>;  // Lowercase<string>
- >TL3 : Lowercase<string>
-@@= skipped -18, +18 lines =@@
- >TC1 : "Hello"
- 
- type TC2 = Capitalize<'foo' | 'bar'>;  // "Foo" | "Bar"
-->TC2 : "Foo" | "Bar"
-+>TC2 : "Bar" | "Foo"
- 
- type TC3 = Capitalize<string>;  // Capitalize<string>
- >TC3 : Capitalize<string>
-@@= skipped -18, +18 lines =@@
- >TN1 : "hello"
- 
- type TN2 = Uncapitalize<'Foo' | 'Bar'>;  // "foo" | "bar"
-->TN2 : "foo" | "bar"
-+>TN2 : "bar" | "foo"
- 
- type TN3 = Uncapitalize<string>;  // Uncapitalize<string>
- >TN3 : Uncapitalize<string>
-@@= skipped -70, +70 lines =@@
+@@= skipped -128, +128 lines =@@
  }
  
  function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
@@ -45,10 +9,3 @@
  >x : Uppercase<T>
  
      let s: 'FOO' | 'BAR' = x;
-->s : "FOO" | "BAR"
-->x : "FOO" | "BAR"
-+>s : "BAR" | "FOO"
-+>x : "BAR" | "FOO"
- }
- 
- declare function foo3<T extends string>(x: Uppercase<T>): T;

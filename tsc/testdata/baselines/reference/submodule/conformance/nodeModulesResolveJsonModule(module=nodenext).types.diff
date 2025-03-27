@@ -44,12 +44,12 @@
  >name : string
  
  import * as ns from "./package.json";
-->ns : { default: { name: string; version: string; type: string; default: string; }; name: string; version: string; type: string; }
+->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 +>ns : { name: string; version: string; type: string; default: string; }
  
  export const thing = ns;
-->thing : { default: { name: string; version: string; type: string; default: string; }; name: string; version: string; type: string; }
-->ns : { default: { name: string; version: string; type: string; default: string; }; name: string; version: string; type: string; }
+->thing : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
+->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 +>thing : { name: string; version: string; type: string; default: string; }
 +>ns : { name: string; version: string; type: string; default: string; }
  
@@ -57,7 +57,7 @@
 ->name2 : string
 ->ns.default.name : string
 ->ns.default : { name: string; version: string; type: string; default: string; }
-->ns : { default: { name: string; version: string; type: string; default: string; }; name: string; version: string; type: string; }
+->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 ->default : { name: string; version: string; type: string; default: string; }
 ->name : string
 +>name2 : any

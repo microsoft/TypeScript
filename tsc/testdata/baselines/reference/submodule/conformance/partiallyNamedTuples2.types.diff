@@ -6,12 +6,8 @@
  const matches = x.get(id1);
 ->matches : Iterable<[id2: string, object]>
 ->x.get(id1) : Iterable<[id2: string, object]>
-->x.get : <Key extends [id1: string, id2: string] | [id1: string] | []>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>
 +>matches : Iterable<[id2: string, object], any, any>
 +>x.get(id1) : Iterable<[id2: string, object], any, any>
-+>x.get : <Key extends [] | [id1: string] | [id1: string, id2: string]>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>
+ >x.get : <Key extends [] | [id1: string] | [id1: string, id2: string]>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>
  >x : MultiKeyMap<[id1: string, id2: string], object>
-->get : <Key extends [id1: string, id2: string] | [id1: string] | []>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>
-+>get : <Key extends [] | [id1: string] | [id1: string, id2: string]>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>
- >id1 : string
- 
+ >get : <Key extends [] | [id1: string] | [id1: string, id2: string]>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>

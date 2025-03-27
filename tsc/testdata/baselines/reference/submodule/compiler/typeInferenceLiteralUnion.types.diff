@@ -5,27 +5,15 @@
   */
  export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Primitive, T | Primitive] | [undefined, undefined] {
 ->extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
-->array : (Primitive | T)[]
 +>extent : <T extends Numeric>(array: (T | Primitive)[]) => [undefined, undefined] | [T | Primitive, T | Primitive]
-+>array : (T | Primitive)[]
+ >array : (T | Primitive)[]
  
      return [undefined, undefined];
- >[undefined, undefined] : [undefined, undefined]
-@@= skipped -11, +11 lines =@@
- 
- 
- let extentMixed: [Primitive | NumCoercible, Primitive | NumCoercible] | [undefined, undefined];
-->extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
-+>extentMixed : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
- 
- extentMixed = extent([new NumCoercible(10), 13, '12', true]);
-->extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
-->extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
-->extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+@@= skipped -17, +17 lines =@@
+ >extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
+ >extentMixed : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
+ >extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
 ->extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
-+>extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
-+>extentMixed : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
-+>extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]
 +>extent : <T extends Numeric>(array: (T | Primitive)[]) => [undefined, undefined] | [T | Primitive, T | Primitive]
  >[new NumCoercible(10), 13, '12', true] : (string | number | true | NumCoercible)[]
  >new NumCoercible(10) : NumCoercible

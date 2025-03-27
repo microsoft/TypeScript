@@ -5,17 +5,7 @@
  
  function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 ->bar : (x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) => void
-->x : Interface<Enum.A | Enum.B> | Interface<Enum.C>
 +>bar : (x: Interface<Enum.C> | Interface<Enum.A | Enum.B>) => void
-+>x : Interface<Enum.C> | Interface<Enum.A | Enum.B>
+ >x : Interface<Enum.C> | Interface<Enum.A | Enum.B>
  >Enum : any
  >Enum : any
- >Enum : any
-@@= skipped -9, +9 lines =@@
- 	foo(x);
- >foo(x) : void
- >foo : <T extends Enum>(x: Interface<T>) => void
-->x : Interface<Enum.A | Enum.B> | Interface<Enum.C>
-+>x : Interface<Enum.C> | Interface<Enum.A | Enum.B>
- }
- 

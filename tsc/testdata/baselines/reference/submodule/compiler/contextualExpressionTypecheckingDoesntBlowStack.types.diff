@@ -9,18 +9,3 @@
  
      validateParameters(parameterValues: any) : IValidationError[] | null {
  >validateParameters : (parameterValues: any) => IValidationError[] | null
-@@= skipped -63, +63 lines =@@
- >result = (result || []).concat(innerResult) : IValidationError[]
- >result : IValidationError[] | null
- >(result || []).concat(innerResult) : IValidationError[]
-->(result || []).concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
-+>(result || []).concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (ConcatArray<IValidationError> | IValidationError)[]): IValidationError[]; }
- >(result || []) : IValidationError[]
- >result || [] : IValidationError[]
- >result : IValidationError[] | null
- >[] : never[]
-->concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
-+>concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (ConcatArray<IValidationError> | IValidationError)[]): IValidationError[]; }
- >innerResult : any
-             }
-         }

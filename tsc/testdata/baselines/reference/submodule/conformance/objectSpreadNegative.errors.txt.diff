@@ -1,15 +1,6 @@
 --- old.objectSpreadNegative.errors.txt
 +++ new.objectSpreadNegative.errors.txt
-@@= skipped -2, +2 lines =@@
-   Types of property 'sn' are incompatible.
-     Type 'string | number | undefined' is not assignable to type 'string | number'.
-       Type 'undefined' is not assignable to type 'string | number'.
--objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
--objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
-+objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ b: boolean; s: string; }'.
-+objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ b: boolean; s: string; }'.
- objectSpreadNegative.ts(28,20): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
- objectSpreadNegative.ts(28,36): error TS1117: An object literal cannot have multiple properties with the same name.
+@@= skipped -9, +9 lines =@@
  objectSpreadNegative.ts(28,53): error TS1117: An object literal cannot have multiple properties with the same name.
  objectSpreadNegative.ts(32,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
  objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
@@ -17,7 +8,7 @@
  objectSpreadNegative.ts(39,14): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
  objectSpreadNegative.ts(41,53): error TS2783: 'd' is specified more than once, so this usage will be overwritten.
  objectSpreadNegative.ts(43,7): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
-@@= skipped -23, +24 lines =@@
+@@= skipped -16, +17 lines =@@
  objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
  
  
@@ -26,22 +17,7 @@
      let o = { a: 1, b: 'no' }
      
      /// private propagates
-@@= skipped -32, +32 lines =@@
-     let spread = { ...{ b: true }, ...{s: "foo" } };
-     spread = { s: "foo" };  // error, missing 'b'
-     ~~~~~~
--!!! error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
-+!!! error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ b: boolean; s: string; }'.
- !!! related TS2728 objectSpreadNegative.ts:22:21: 'b' is declared here.
-     let b = { b: false };
-     spread = b; // error, missing 's'
-     ~~~~~~
--!!! error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
-+!!! error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ b: boolean; s: string; }'.
- !!! related TS2728 objectSpreadNegative.ts:22:36: 's' is declared here.
-     
-     // literal repeats are not allowed, but spread repeats are fine
-@@= skipped -32, +32 lines =@@
+@@= skipped -64, +64 lines =@@
            ~~~~~~~
  !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
  !!! related TS2785 objectSpreadNegative.ts:37:16: This spread always overwrites this property.

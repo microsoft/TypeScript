@@ -61,15 +61,7 @@
  }
  
  /**
-@@= skipped -32, +32 lines =@@
- 
-     return typeof value === "boolean";
- >typeof value === "boolean" : boolean
-->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >value : any
- >"boolean" : "boolean"
- }
+@@= skipped -39, +39 lines =@@
  
  /** @param {boolean | number} val */
  function foo(val) {
@@ -86,7 +78,7 @@
  
          val;
  >val : boolean
-@@= skipped -28, +28 lines =@@
+@@= skipped -21, +21 lines =@@
  
  /** @type {Cb} */
  function isNumber(x) { return typeof x === "number" }
@@ -95,9 +87,8 @@
 +>isNumber : (x: any) => x is number
 +>x : any
  >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->x : unknown
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>x : any
  >"number" : "number"
  

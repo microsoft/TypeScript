@@ -8,11 +8,7 @@
 +>getPropFromRaw : <T>(prop: "exclude" | "files" | "include" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
  
    prop: "files" | "include" | "exclude" | "references",
-->prop : "files" | "include" | "exclude" | "references"
-+>prop : "exclude" | "files" | "include" | "references"
- 
-   validateElement: (value: unknown) => boolean,
- >validateElement : (value: unknown) => boolean
+ >prop : "exclude" | "files" | "include" | "references"
 @@= skipped -15, +15 lines =@@
  ): PropOfRaw<T>;
  
@@ -21,16 +17,13 @@
 +>getSpecsFromRaw : (prop: "exclude" | "files" | "include") => PropOfRaw<string>
  
    prop: "files" | "include" | "exclude"
-->prop : "files" | "include" | "exclude"
-+>prop : "exclude" | "files" | "include"
- 
+ >prop : "exclude" | "files" | "include"
+@@= skipped -8, +8 lines =@@
  ): PropOfRaw<string> {
    return getPropFromRaw(prop, isString, "string");
  >getPropFromRaw(prop, isString, "string") : PropOfRaw<string>
 ->getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
-->prop : "files" | "include" | "exclude"
 +>getPropFromRaw : <T>(prop: "exclude" | "files" | "include" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
-+>prop : "exclude" | "files" | "include"
+ >prop : "exclude" | "files" | "include"
  >isString : (text: unknown) => text is string
  >"string" : "string"
- }

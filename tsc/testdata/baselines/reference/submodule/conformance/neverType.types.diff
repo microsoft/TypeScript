@@ -4,50 +4,17 @@
  }
  
  function move1(direction: "up" | "down") {
-->move1 : (direction: "up" | "down") => 1 | -1
-->direction : "up" | "down"
+->move1 : (direction: "up" | "down") => -1 | 1
 +>move1 : (direction: "down" | "up") => -1 | 1
-+>direction : "down" | "up"
+ >direction : "down" | "up"
  
      switch (direction) {
-->direction : "up" | "down"
-+>direction : "down" | "up"
- 
-         case "up":
- >"up" : "up"
 @@= skipped -26, +26 lines =@@
  }
  
  function move2(direction: "up" | "down") {
-->move2 : (direction: "up" | "down") => 1 | -1
-->direction : "up" | "down"
+->move2 : (direction: "up" | "down") => -1 | 1
 +>move2 : (direction: "down" | "up") => -1 | 1
-+>direction : "down" | "up"
+ >direction : "down" | "up"
  
      return direction === "up" ? 1 :
-->direction === "up" ? 1 :        direction === "down" ? -1 :        error("Should never get here") : 1 | -1
-+>direction === "up" ? 1 :        direction === "down" ? -1 :        error("Should never get here") : -1 | 1
- >direction === "up" : boolean
-->direction : "up" | "down"
-+>direction : "down" | "up"
- >"up" : "up"
- >1 : 1
- 
-@@= skipped -73, +73 lines =@@
- 
-     if (typeof x === "boolean") {
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"boolean" : "boolean"
- 
-@@= skipped -18, +18 lines =@@
- 
-         if (typeof x === "boolean") {
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"boolean" : "boolean"
- 

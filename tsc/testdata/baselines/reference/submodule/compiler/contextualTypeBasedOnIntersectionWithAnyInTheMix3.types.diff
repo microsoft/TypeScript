@@ -24,10 +24,9 @@
  declare function test2(a: { type: "foo" | "bar" } & { type: any }): void;
 ->test2 : (a: { type: "foo" | "bar"; } & { type: any; }) => void
 ->a : { type: "foo" | "bar"; } & { type: any; }
-->type : "foo" | "bar"
 +>test2 : (a: { type: "bar" | "foo"; } & { type: any; }) => void
 +>a : { type: "bar" | "foo"; } & { type: any; }
-+>type : "bar" | "foo"
+ >type : "bar" | "foo"
  >type : any
  
  test2({ type: "foo" });

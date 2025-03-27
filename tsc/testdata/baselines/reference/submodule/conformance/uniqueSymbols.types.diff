@@ -67,34 +67,7 @@
  >N["s"] : unique symbol
  >N : typeof N
  >"s" : "s"
-@@= skipped -39, +39 lines =@@
- 
- // conditionals
- Math.random() * 2 ? s : "a";
-->Math.random() * 2 ? s : "a" : unique symbol | "a"
-+>Math.random() * 2 ? s : "a" : "a" | unique symbol
- >Math.random() * 2 : number
- >Math.random() : number
- >Math.random : () => number
-@@= skipped -11, +11 lines =@@
- >"a" : "a"
- 
- Math.random() * 2 ? N.s : "a";
-->Math.random() * 2 ? N.s : "a" : unique symbol | "a"
-+>Math.random() * 2 ? N.s : "a" : "a" | unique symbol
- >Math.random() * 2 : number
- >Math.random() : number
- >Math.random : () => number
-@@= skipped -13, +13 lines =@@
- >"a" : "a"
- 
- Math.random() * 2 ? N["s"] : "a";
-->Math.random() * 2 ? N["s"] : "a" : unique symbol | "a"
-+>Math.random() * 2 ? N["s"] : "a" : "a" | unique symbol
- >Math.random() * 2 : number
- >Math.random() : number
- >Math.random : () => number
-@@= skipped -59, +59 lines =@@
+@@= skipped -122, +122 lines =@@
  
  interface Context {
      method1(): typeof s;

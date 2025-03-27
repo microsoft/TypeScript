@@ -5,7 +5,7 @@
 -typeAssertions.ts(31,12): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 -  Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
 -typeAssertions.ts(35,15): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--  Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
+-  Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
 -typeAssertions.ts(37,13): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 -  Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
 -typeAssertions.ts(38,13): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -31,7 +31,7 @@
      someDerived = <SomeDerived>someOther; // Error
                    ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
+-!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
 +!!! error TS2739: Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
      
      someOther = <SomeOther>someDerived; // Error

@@ -1,14 +1,10 @@
 --- old.objectGroupBy.types
 +++ new.objectGroupBy.types
-@@= skipped -1, +1 lines =@@
- 
- === objectGroupBy.ts ===
+@@= skipped -3, +3 lines =@@
  const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
-->basic : Partial<Record<"small" | "large", number[]>>
-->Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Partial<Record<"small" | "large", number[]>>
+ >basic : Partial<Record<"large" | "small", number[]>>
+ >Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Partial<Record<"large" | "small", number[]>>
 ->Object.groupBy : <K extends PropertyKey, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Partial<Record<K, T[]>>
-+>basic : Partial<Record<"large" | "small", number[]>>
-+>Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Partial<Record<"large" | "small", number[]>>
 +>Object.groupBy : <K extends PropertyKey, T>(items: Iterable<T, any, any>, keySelector: (item: T, index: number) => K) => Partial<Record<K, T[]>>
  >Object : ObjectConstructor
 ->groupBy : <K extends PropertyKey, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Partial<Record<K, T[]>>
@@ -16,16 +12,7 @@
  >[0, 2, 8] : number[]
  >0 : 0
  >2 : 2
- >8 : 8
-->x => x < 5 ? 'small' : 'large' : (x: number) => "small" | "large"
-+>x => x < 5 ? 'small' : 'large' : (x: number) => "large" | "small"
- >x : number
-->x < 5 ? 'small' : 'large' : "small" | "large"
-+>x < 5 ? 'small' : 'large' : "large" | "small"
- >x < 5 : boolean
- >x : number
- >5 : 5
-@@= skipped -21, +21 lines =@@
+@@= skipped -19, +19 lines =@@
  const chars = Object.groupBy('a string', c => c);
  >chars : Partial<Record<string, string[]>>
  >Object.groupBy('a string', c => c) : Partial<Record<string, string[]>>

@@ -1232,12 +1232,3 @@
  >kind : Symbol(kind, Decl(index.ts, 6, 32))
  >NodeType : Symbol(NodeType, Decl(index.ts, 3, 3))
  
-     node?.kind === nodeType;
-->node?.kind : Symbol(kind, Decl(ast.ts, 2, 24), Decl(ast.ts, 3, 24), Decl(ast.ts, 4, 24), Decl(ast.ts, 5, 24), Decl(ast.ts, 6, 24) ... and 95 more)
-+>node?.kind : Symbol(kind, Decl(ast.ts, 2, 24), Decl(ast.ts, 3, 24), Decl(ast.ts, 12, 25), Decl(ast.ts, 13, 25), Decl(ast.ts, 14, 25) ... and 95 more)
- >node : Symbol(node, Decl(index.ts, 4, 3))
-->kind : Symbol(kind, Decl(ast.ts, 2, 24), Decl(ast.ts, 3, 24), Decl(ast.ts, 4, 24), Decl(ast.ts, 5, 24), Decl(ast.ts, 6, 24) ... and 95 more)
-+>kind : Symbol(kind, Decl(ast.ts, 2, 24), Decl(ast.ts, 3, 24), Decl(ast.ts, 12, 25), Decl(ast.ts, 13, 25), Decl(ast.ts, 14, 25) ... and 95 more)
- >nodeType : Symbol(nodeType, Decl(index.ts, 3, 36))
- 
- 

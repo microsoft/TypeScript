@@ -50,12 +50,10 @@
  
      off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
 ->off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
-->args : [K, number] | [unknown, string]
 +>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
-+>args : [unknown, string] | [K, number]
+ >args : [unknown, string] | [K, number]
  }
  function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
- >once : <ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET) => void
 @@= skipped -226, +226 lines =@@
  >title : string | undefined
  

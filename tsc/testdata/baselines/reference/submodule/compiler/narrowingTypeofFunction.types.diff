@@ -11,9 +11,8 @@
  
      if (typeof a === "function") {
  >typeof a === "function" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+ >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->a : string | (F & Meta)
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 +>a : string | F & Meta
  >"function" : "function"
  
@@ -23,25 +22,15 @@
  
  function f2<T>(x: (T & F) | T & string) {
 ->f2 : <T>(x: (T & F) | (T & string)) => void
-->x : (T & F) | (T & string)
+->x : (T & string) | (T & F)
 +>f2 : <T>(x: T & string | T & F) => void
 +>x : T & string | T & F
  
      if (typeof x === "function") {
  >typeof x === "function" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->x : (T & F) | (T & string)
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+->x : (T & string) | (T & F)
 +>x : T & string | T & F
  >"function" : "function"
  
          x;
-@@= skipped -25, +25 lines =@@
- 
-     if (typeof x === "function") {
- >typeof x === "function" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : { _foo: number; } & number
- >"function" : "function"
- 

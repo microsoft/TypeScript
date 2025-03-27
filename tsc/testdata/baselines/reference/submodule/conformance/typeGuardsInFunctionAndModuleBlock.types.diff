@@ -9,23 +9,7 @@
  >x : string | number | boolean
  
      return typeof x === "string"
- >typeof x === "string"        ? x        : function f() {            var b = x; // number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } () : string
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -25, +25 lines =@@
-             return typeof x === "boolean"
- >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"boolean" : "boolean"
- 
-@@= skipped -19, +19 lines =@@
+@@= skipped -44, +44 lines =@@
          } ();
  }
  function foo2(x: number | string | boolean) {
@@ -34,23 +18,7 @@
  >x : string | number | boolean
  
      return typeof x === "string"
- >typeof x === "string"        ? x        : function f(a: number | boolean) {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } (x) : string
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -26, +26 lines =@@
-             return typeof x === "boolean"
- >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"boolean" : "boolean"
- 
-@@= skipped -20, +20 lines =@@
+@@= skipped -46, +46 lines =@@
  >x : number | boolean
  }
  function foo3(x: number | string | boolean) {
@@ -59,23 +27,7 @@
  >x : string | number | boolean
  
      return typeof x === "string"
- >typeof x === "string"        ? x        : (() => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        })() : string
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -25, +25 lines =@@
-             return typeof x === "boolean"
- >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"boolean" : "boolean"
- 
-@@= skipped -19, +19 lines =@@
+@@= skipped -44, +44 lines =@@
          })();
  }
  function foo4(x: number | string | boolean) {
@@ -84,23 +36,7 @@
  >x : string | number | boolean
  
      return typeof x === "string"
- >typeof x === "string"        ? x        : ((a: number | boolean) => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        })(x) : string
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -26, +26 lines =@@
-             return typeof x === "boolean"
- >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"boolean" : "boolean"
- 
-@@= skipped -21, +21 lines =@@
+@@= skipped -47, +47 lines =@@
  }
  // Type guards do not affect nested function declarations
  function foo5(x: number | string | boolean) {
@@ -109,45 +45,3 @@
  >x : string | number | boolean
  
      if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -40, +40 lines =@@
- 
-         if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -15, +15 lines =@@
- >y : string
- >typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"boolean" : "boolean"
- 
-@@= skipped -37, +37 lines =@@
- 
-         if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -15, +15 lines =@@
- >y : string
- >typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"boolean" : "boolean"
- 

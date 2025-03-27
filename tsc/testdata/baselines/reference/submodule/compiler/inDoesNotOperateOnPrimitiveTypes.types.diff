@@ -1,15 +1,6 @@
 --- old.inDoesNotOperateOnPrimitiveTypes.types
 +++ new.inDoesNotOperateOnPrimitiveTypes.types
-@@= skipped -73, +73 lines =@@
- 
-   if (typeof thing === "object") {
- >typeof thing === "object" : boolean
-->typeof thing : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof thing : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >thing : T | U
- >"object" : "object"
- 
-@@= skipped -12, +12 lines =@@
+@@= skipped -85, +85 lines =@@
  }
  
  function union3<T>(thing: T | string | number) {
@@ -18,21 +9,7 @@
  >thing : string | number | T
  
    "key" in thing; // Error (because narrowing is possible)
-@@= skipped -11, +11 lines =@@
-   if (typeof thing !== "string" && typeof thing !== "number") {
- >typeof thing !== "string" && typeof thing !== "number" : boolean
- >typeof thing !== "string" : boolean
-->typeof thing : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof thing : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >thing : string | number | T
- >"string" : "string"
- >typeof thing !== "number" : boolean
-->typeof thing : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof thing : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >thing : number | T
- >"number" : "number"
- 
-@@= skipped -16, +16 lines =@@
+@@= skipped -27, +27 lines =@@
  }
  
  function union4<T extends object | "hello">(thing: T) {
@@ -50,15 +27,7 @@
  >p : T | U
  
      // For consistency, this should probably not be an error, because useful
-@@= skipped -18, +18 lines =@@
- 
-     if (typeof p === "object") {
- >typeof p === "object" : boolean
-->typeof p : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof p : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >p : T | U
- >"object" : "object"
- 
+@@= skipped -25, +25 lines =@@
          "key" in p;
  >"key" in p : boolean
  >"key" : "key"

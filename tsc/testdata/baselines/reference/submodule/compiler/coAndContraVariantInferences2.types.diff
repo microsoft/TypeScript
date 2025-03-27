@@ -21,20 +21,17 @@
  
  function bar(node: Identifier | FunctionDeclaration) {
 ->bar : (node: Identifier | FunctionDeclaration) => void
-->node : Identifier | FunctionDeclaration
 +>bar : (node: FunctionDeclaration | Identifier) => void
-+>node : FunctionDeclaration | Identifier
+ >node : FunctionDeclaration | Identifier
  
      const a = tryCast(node, isExpression);  // tryCast<Expression, Node>
  >a : Expression
  >tryCast(node, isExpression) : Expression
 ->tryCast : <TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
-->node : Identifier | FunctionDeclaration
 +>tryCast : <TOut extends TIn, TIn>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
-+>node : FunctionDeclaration | Identifier
+ >node : FunctionDeclaration | Identifier
  >isExpression : (node: Node) => node is Expression
  }
- 
 @@= skipped -64, +64 lines =@@
  const maybeClassStatement = tryCast(statement, isClassLike);  // ClassLike1
  >maybeClassStatement : ClassLike1

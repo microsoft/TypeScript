@@ -67,7 +67,7 @@
  }
  
  f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
-->f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : 101 | "nope"
+->f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : "nope" | 101
 ->f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
 +>f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : any
 +>f : (t: any, u: any, v: any, w: any, x: any) => any
@@ -89,7 +89,7 @@
  >'nope' : "nope"
  
  f({ a: 12  }, undefined, undefined, 101, 'nope');
-->f({ a: 12  }, undefined, undefined, 101, 'nope') : 101 | "nope"
+->f({ a: 12  }, undefined, undefined, 101, 'nope') : "nope" | 101
 ->f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
 +>f({ a: 12  }, undefined, undefined, 101, 'nope') : any
 +>f : (t: any, u: any, v: any, w: any, x: any) => any

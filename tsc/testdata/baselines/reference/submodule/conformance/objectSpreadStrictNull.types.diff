@@ -62,12 +62,3 @@
  }
  
  type Movie = {
-@@= skipped -24, +24 lines =@@
- // should error here because title: undefined is not assignable to string
- const x: Movie = { ...m, title: undefined };
- >x : Movie
-->{ ...m, title: undefined } : { title: undefined; yearReleased: number; }
-+>{ ...m, title: undefined } : { yearReleased: number; title: undefined; }
- >m : { title: string; yearReleased: number; }
- >title : undefined
- >undefined : undefined

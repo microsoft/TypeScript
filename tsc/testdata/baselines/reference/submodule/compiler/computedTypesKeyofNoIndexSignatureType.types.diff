@@ -9,10 +9,3 @@
  
  type EqualsTest<T> = <A>() => A extends T ? 1 : 0;
  >EqualsTest : EqualsTest<T>
-@@= skipped -39, +39 lines =@@
- >WithIndexKey : string | number
- 
- type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
-->WithoutIndexKey : "foo" | "bar"
-+>WithoutIndexKey : "bar" | "foo"
- 

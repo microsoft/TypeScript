@@ -1,25 +1,14 @@
 --- old.constEnum3.types
 +++ new.constEnum3.types
-@@= skipped -6, +6 lines =@@
- >bar : TestType.bar
- 
- type TestTypeStr = keyof typeof TestType;
-->TestTypeStr : "foo" | "bar"
-+>TestTypeStr : "bar" | "foo"
- >TestType : typeof TestType
- 
- function f1(f: TestType) { }
-@@= skipped -8, +8 lines =@@
+@@= skipped -14, +14 lines =@@
  >f : TestType
  
  function f2(f: TestTypeStr) { }
 ->f2 : (f: TestTypeStr) => void
-->f : "foo" | "bar"
 +>f2 : (f: "bar" | "foo") => void
-+>f : "bar" | "foo"
+ >f : "bar" | "foo"
  
  f1(TestType.foo)
- >f1(TestType.foo) : void
 @@= skipped -19, +19 lines =@@
  
  f2('foo')

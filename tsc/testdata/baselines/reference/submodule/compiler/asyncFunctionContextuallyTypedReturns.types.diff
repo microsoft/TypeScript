@@ -13,13 +13,11 @@
  f(v => v ? [0] : Promise.reject());
  >f(v => v ? [0] : Promise.reject()) : void
 ->f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
-->v => v ? [0] : Promise.reject() : (v: boolean) => [0] | Promise<[0]>
 +>f : (cb: (v: boolean) => PromiseLike<[0]> | [0]) => void
-+>v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]> | [0]
+ >v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]> | [0]
  >v : boolean
-->v ? [0] : Promise.reject() : [0] | Promise<[0]>
-+>v ? [0] : Promise.reject() : Promise<[0]> | [0]
- >v : boolean
+ >v ? [0] : Promise.reject() : Promise<[0]> | [0]
+@@= skipped -14, +14 lines =@@
  >[0] : [0]
  >0 : 0
  >Promise.reject() : Promise<[0]>
@@ -35,9 +33,8 @@
 +>f : (cb: (v: boolean) => PromiseLike<[0]> | [0]) => void
  >async v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]>
  >v : boolean
-->v ? [0] : Promise.reject() : [0] | Promise<[0]>
-+>v ? [0] : Promise.reject() : Promise<[0]> | [0]
- >v : boolean
+ >v ? [0] : Promise.reject() : Promise<[0]> | [0]
+@@= skipped -14, +14 lines =@@
  >[0] : [0]
  >0 : 0
  >Promise.reject() : Promise<[0]>
@@ -49,7 +46,7 @@
  
  declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
  >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
-@@= skipped -46, +46 lines =@@
+@@= skipped -18, +18 lines =@@
  >v : boolean
  >"contextuallyTypable" : "contextuallyTypable"
  >Promise.reject() : Promise<"contextuallyTypable">
@@ -73,16 +70,7 @@
  
  type MyCallback = (thing: string) => void;
  >MyCallback : MyCallback
-@@= skipped -16, +16 lines =@@
- h(v => v ? (abc) => { } : Promise.reject());
- >h(v => v ? (abc) => { } : Promise.reject()) : void
- >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
-->v => v ? (abc) => { } : Promise.reject() : (v: boolean) => ((abc: string) => void) | Promise<MyCallback>
-+>v => v ? (abc) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback> | ((abc: string) => void)
- >v : boolean
-->v ? (abc) => { } : Promise.reject() : ((abc: string) => void) | Promise<MyCallback>
-+>v ? (abc) => { } : Promise.reject() : Promise<MyCallback> | ((abc: string) => void)
- >v : boolean
+@@= skipped -23, +23 lines =@@
  >(abc) => { } : (abc: string) => void
  >abc : string
  >Promise.reject() : Promise<MyCallback>
@@ -94,7 +82,7 @@
  
  h(async v => v ? (def) => { } : Promise.reject());
  >h(async v => v ? (def) => { } : Promise.reject()) : void
-@@= skipped -21, +21 lines =@@
+@@= skipped -14, +14 lines =@@
  >(def) => { } : (def: string) => void
  >def : string
  >Promise.reject() : Promise<MyCallback>

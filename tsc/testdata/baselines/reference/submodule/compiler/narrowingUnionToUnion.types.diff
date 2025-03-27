@@ -4,7 +4,7 @@
  >x : T | undefined
  
          x;  // T & Falsy | undefined
-->x : (T & null) | (T & false) | (T & "") | (T & 0) | (T & 0n) | undefined
+->x : (T & null) | (T & "") | (T & 0) | (T & false) | (T & 0n) | undefined
 +>x : T & null | T & "" | T & 0 | T & 0n | T & false | undefined
      }
  }
@@ -81,13 +81,6 @@
  >x : unknown
  
  	return typeof x === "string" || x === 0;
- >typeof x === "string" || x === 0 : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- >x === 0 : boolean
 @@= skipped -15, +15 lines =@@
  }
  
@@ -97,22 +90,7 @@
  >x : unknown
  
  	return x === "hello" || x === 0;
-@@= skipped -20, +20 lines =@@
- 	if (typeof x === "string" || x === 0) {
- >typeof x === "string" || x === 0 : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- >x === 0 : boolean
-@@= skipped -20, +20 lines =@@
- >0 : 0
- 
- 			x;  // 0 | "hello"
-->x : 0 | "hello"
-+>x : "hello" | 0
- 		}
+@@= skipped -45, +45 lines =@@
  	}
  	if (check1(x)) {
  >check1(x) : boolean
@@ -121,7 +99,7 @@
  >x : unknown
  
  		x;  // string | 0
-@@= skipped -13, +13 lines =@@
+@@= skipped -8, +8 lines =@@
  
  		if (check2(x)) {
  >check2(x) : boolean
@@ -130,8 +108,3 @@
  >x : string | 0
  
  			x;  // 0 | "hello"
-->x : 0 | "hello"
-+>x : "hello" | 0
- 		}
- 	}
- }

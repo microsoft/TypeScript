@@ -20,26 +20,3 @@
  >x : T
  
      const [head, ...tail] = x;
- >head : string | number
- >tail : [string, string] | [number, number]
-->x : [number, string, string] | [string, number, number]
-+>x : [string, number, number] | [number, string, string]
- 
-     if (typeof x[0] === 'number') {
- >typeof x[0] === 'number' : boolean
-->typeof x[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x[0] : string | number
-->x : [number, string, string] | [string, number, number]
-+>x : [string, number, number] | [number, string, string]
- >0 : 0
- >'number' : "number"
- 
-         const [head, ...tail] = x;
- >head : number
- >tail : [string, string] | [number, number]
-->x : [number, string, string] | [string, number, number]
-+>x : [string, number, number] | [number, string, string]
-     }
- }
- 

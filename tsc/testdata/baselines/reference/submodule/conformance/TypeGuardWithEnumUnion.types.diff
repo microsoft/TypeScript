@@ -9,64 +9,12 @@
  >x : string | Color
  
      if (typeof x === "number") {
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | Color
- >"number" : "number"
- 
 @@= skipped -27, +27 lines =@@
  }
  
  function f2(x: Color | string | string[]) {
 ->f2 : (x: Color | string | string[]) => void
-->x : string | Color | string[]
 +>f2 : (x: string | string[] | Color) => void
-+>x : string | string[] | Color
+ >x : string | string[] | Color
  
      if (typeof x === "object") {
- >typeof x === "object" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->x : string | Color | string[]
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>x : string | string[] | Color
- >"object" : "object"
- 
-         var y = x;
-@@= skipped -18, +18 lines =@@
-     }
-     if (typeof x === "number") {
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->x : string | Color | string[]
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>x : string | string[] | Color
- >"number" : "number"
- 
-         var z = x;
-@@= skipped -21, +21 lines =@@
-     }
-     if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->x : string | Color | string[]
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>x : string | string[] | Color
- >"string" : "string"
- 
-         var a = x;
-@@= skipped -13, +13 lines =@@
-     }
-     else {
-         var b = x;
-->b : Color | string[]
-->x : Color | string[]
-+>b : string[] | Color
-+>x : string[] | Color
- 
-         var b: Color | string[];
-->b : Color | string[]
-+>b : string[] | Color
-     }
- }
- 

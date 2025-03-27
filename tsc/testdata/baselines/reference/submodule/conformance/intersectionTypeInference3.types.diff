@@ -1,11 +1,8 @@
 --- old.intersectionTypeInference3.types
 +++ new.intersectionTypeInference3.types
-@@= skipped -25, +25 lines =@@
- const c1 = Array.from(a).concat(Array.from(b));
- >c1 : A[]
+@@= skipped -27, +27 lines =@@
  >Array.from(a).concat(Array.from(b)) : A[]
-->Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
-+>Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
+ >Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
  >Array.from(a) : A[]
 ->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 +>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
@@ -13,8 +10,7 @@
 ->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 +>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
  >a : Set<A>
-->concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
-+>concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
+ >concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
  >Array.from(b) : A[]
 ->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 +>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }

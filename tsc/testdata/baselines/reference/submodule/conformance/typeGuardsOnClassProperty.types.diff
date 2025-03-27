@@ -1,24 +1,6 @@
 --- old.typeGuardsOnClassProperty.types
 +++ new.typeGuardsOnClassProperty.types
-@@= skipped -23, +23 lines =@@
-         return typeof data === "string" ? data : data.join(" ");
- >typeof data === "string" ? data : data.join(" ") : string
- >typeof data === "string" : boolean
-->typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >data : string | string[]
- >"string" : "string"
- >data : string
-@@= skipped -17, +17 lines =@@
-         return typeof this.data === "string" ? this.data : this.data.join(" ");
- >typeof this.data === "string" ? this.data : this.data.join(" ") : string
- >typeof this.data === "string" : boolean
-->typeof this.data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof this.data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >this.data : string | string[]
- >this : this
- >data : string | string[]
-@@= skipped -19, +19 lines =@@
+@@= skipped -59, +59 lines =@@
  }
  
  var o: {
@@ -27,12 +9,9 @@
  
      prop1: number|string;
  >prop1 : string | number
-@@= skipped -23, +23 lines =@@
- if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
- >typeof o.prop1 === "string" && o.prop1.toLowerCase() : string
+@@= skipped -25, +25 lines =@@
  >typeof o.prop1 === "string" : boolean
-->typeof o.prop1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof o.prop1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >typeof o.prop1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >o.prop1 : string | number
 ->o : { prop1: number | string; prop2: boolean | string; }
 +>o : { prop1: string | number; prop2: string | boolean; }
@@ -54,10 +33,3 @@
  >prop1 : string | number
  
  if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
- >typeof prop1 === "string" && prop1.toLocaleLowerCase() : string
- >typeof prop1 === "string" : boolean
-->typeof prop1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof prop1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >prop1 : string | number
- >"string" : "string"
- >prop1.toLocaleLowerCase() : string

@@ -28,14 +28,3 @@
  }
  function test(r: Real | Fake) {
  >test : Symbol(test, Decl(unionThisTypeInFunctions.ts, 7, 1))
-@@= skipped -25, +25 lines =@@
- >Fake : Symbol(Fake, Decl(unionThisTypeInFunctions.ts, 3, 1))
- 
-     r.method(12); // error
-->r.method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 0, 16), Decl(unionThisTypeInFunctions.ts, 4, 16))
-+>r.method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 4, 16), Decl(unionThisTypeInFunctions.ts, 0, 16))
- >r : Symbol(r, Decl(unionThisTypeInFunctions.ts, 8, 14))
-->method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 0, 16), Decl(unionThisTypeInFunctions.ts, 4, 16))
-+>method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 4, 16), Decl(unionThisTypeInFunctions.ts, 0, 16))
- }
- 

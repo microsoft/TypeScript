@@ -1,15 +1,6 @@
 --- old.narrowingInCaseClauseAfterCaseClauseWithReturn.types
 +++ new.narrowingInCaseClauseAfterCaseClauseWithReturn.types
-@@= skipped -59, +59 lines =@@
- }
- 
- function test2(arg: string | undefined) {
-->test2 : (arg: string | undefined) => "Not A, B, C or D" | "D" | "A, B or C"
-+>test2 : (arg: string | undefined) => "A, B or C" | "D" | "Not A, B, C or D"
- >arg : string | undefined
- 
-   if (!arg) throw new Error();
-@@= skipped -56, +56 lines =@@
+@@= skipped -115, +115 lines =@@
  }
  
  function test3(

@@ -5,9 +5,8 @@
  
  declare function f(options: DiscriminatorTrue | DiscriminatorFalse): any;
 ->f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
-->options : DiscriminatorTrue | DiscriminatorFalse
 +>f : (options: DiscriminatorFalse | DiscriminatorTrue) => any
-+>options : DiscriminatorFalse | DiscriminatorTrue
+ >options : DiscriminatorFalse | DiscriminatorTrue
  
  // simple inference
  f({

@@ -1,15 +1,6 @@
 --- old.templateLiteralTypes4.types
 +++ new.templateLiteralTypes4.types
-@@= skipped -437, +437 lines =@@
- >name : string
- 
-     readonly type: "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64";
-->type : "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64"
-+>type : "f32" | "f64" | "i16" | "i32" | "i64" | "i8" | "u16" | "u32" | "u64" | "u8"
- }
- 
- type FieldType<T extends FieldDefinition["type"]> =
-@@= skipped -42, +42 lines =@@
+@@= skipped -479, +479 lines =@@
  
      // get/set a field by index
      getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;

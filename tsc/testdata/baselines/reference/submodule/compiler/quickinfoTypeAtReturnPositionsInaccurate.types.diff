@@ -5,24 +5,20 @@
  }
  declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
 ->isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
-->program : Program | T
 +>isBuilderProgram : <T extends BuilderProgram>(program: T | Program) => program is T
-+>program : T | Program
+ >program : T | Program
  
  export function listFiles<T extends BuilderProgram>(program: Program | T) {
 ->listFiles : <T extends BuilderProgram>(program: Program | T) => void
-->program : Program | T
 +>listFiles : <T extends BuilderProgram>(program: T | Program) => void
-+>program : T | Program
+ >program : T | Program
  
      const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
  >x : Program
  >isBuilderProgram(program) ? program.getProgram() : program : Program
  >isBuilderProgram(program) : boolean
 ->isBuilderProgram : <T_1 extends BuilderProgram>(program: Program | T_1) => program is T_1
-->program : Program | T
 +>isBuilderProgram : <T extends BuilderProgram>(program: T | Program) => program is T
-+>program : T | Program
+ >program : T | Program
  >program.getProgram() : Program
  >program.getProgram : () => Program
- >program : T

@@ -1,159 +1,41 @@
 --- old.typeGuardTypeOfUndefined.types
 +++ new.typeGuardTypeOfUndefined.types
-@@= skipped -7, +7 lines =@@
- 
-     if (typeof a !== "undefined") {
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : any
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : any
- >"boolean" : "boolean"
- 
-@@= skipped -30, +30 lines =@@
- 
-     if (typeof a === "undefined") {
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : any
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : undefined
- >"boolean" : "boolean"
- 
-@@= skipped -31, +31 lines =@@
-     if (typeof a === "undefined" || typeof a === "boolean") {
- >typeof a === "undefined" || typeof a === "boolean" : boolean
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : any
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : any
- >"boolean" : "boolean"
- 
-@@= skipped -24, +24 lines =@@
-     if (typeof a !== "undefined" && typeof a === "boolean") {
- >typeof a !== "undefined" && typeof a === "boolean" : boolean
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : any
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : any
- >"boolean" : "boolean"
- 
-@@= skipped -18, +18 lines =@@
+@@= skipped -110, +110 lines =@@
  }
  
  function test5(a: boolean | void) {
 ->test5 : (a: boolean | void) => void
-->a : boolean | void
 +>test5 : (a: void | boolean) => void
-+>a : void | boolean
+ >a : void | boolean
  
      if (typeof a !== "undefined") {
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | boolean
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : boolean
- >"boolean" : "boolean"
- 
 @@= skipped -30, +30 lines =@@
  }
  
  function test6(a: boolean | void) {
 ->test6 : (a: boolean | void) => void
-->a : boolean | void
 +>test6 : (a: void | boolean) => void
-+>a : void | boolean
+ >a : void | boolean
  
      if (typeof a === "undefined") {
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | boolean
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : undefined
- >"boolean" : "boolean"
- 
 @@= skipped -30, +30 lines =@@
  }
  
  function test7(a: boolean | void) {
 ->test7 : (a: boolean | void) => void
-->a : boolean | void
 +>test7 : (a: void | boolean) => void
-+>a : void | boolean
+ >a : void | boolean
  
      if (typeof a === "undefined" || typeof a === "boolean") {
- >typeof a === "undefined" || typeof a === "boolean" : boolean
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | boolean
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : boolean
- >"boolean" : "boolean"
- 
 @@= skipped -24, +24 lines =@@
  }
  
  function test8(a: boolean | void) {
 ->test8 : (a: boolean | void) => void
-->a : boolean | void
 +>test8 : (a: void | boolean) => void
-+>a : void | boolean
+ >a : void | boolean
  
      if (typeof a !== "undefined" && typeof a === "boolean") {
- >typeof a !== "undefined" && typeof a === "boolean" : boolean
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | boolean
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : boolean
- >"boolean" : "boolean"
- 
 @@= skipped -24, +24 lines =@@
  }
  
@@ -163,19 +45,6 @@
  >a : number | boolean
  
      if (typeof a !== "undefined") {
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"boolean" : "boolean"
- 
 @@= skipped -30, +30 lines =@@
  }
  
@@ -185,19 +54,6 @@
  >a : number | boolean
  
      if (typeof a === "undefined") {
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : undefined
- >"boolean" : "boolean"
- 
 @@= skipped -30, +30 lines =@@
  }
  
@@ -207,18 +63,6 @@
  >a : number | boolean
  
      if (typeof a === "undefined" || typeof a === "boolean") {
- >typeof a === "undefined" || typeof a === "boolean" : boolean
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"boolean" : "boolean"
- 
 @@= skipped -24, +24 lines =@@
  }
  
@@ -228,109 +72,39 @@
  >a : number | boolean
  
      if (typeof a !== "undefined" && typeof a === "boolean") {
- >typeof a !== "undefined" && typeof a === "boolean" : boolean
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"boolean" : "boolean"
- 
 @@= skipped -24, +24 lines =@@
  }
  
  function test13(a: boolean | number | void) {
 ->test13 : (a: boolean | number | void) => void
-->a : number | boolean | void
 +>test13 : (a: void | number | boolean) => void
-+>a : void | number | boolean
+ >a : void | number | boolean
  
      if (typeof a !== "undefined") {
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : number | boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | number | boolean
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"boolean" : "boolean"
- 
 @@= skipped -30, +30 lines =@@
  }
  
  function test14(a: boolean | number | void) {
 ->test14 : (a: boolean | number | void) => void
-->a : number | boolean | void
 +>test14 : (a: void | number | boolean) => void
-+>a : void | number | boolean
+ >a : void | number | boolean
  
      if (typeof a === "undefined") {
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : number | boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | number | boolean
- >"undefined" : "undefined"
- 
-         if (typeof a === "boolean") {
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : undefined
- >"boolean" : "boolean"
- 
 @@= skipped -30, +30 lines =@@
  }
  
  function test15(a: boolean | number | void) {
 ->test15 : (a: boolean | number | void) => void
-->a : number | boolean | void
 +>test15 : (a: void | number | boolean) => void
-+>a : void | number | boolean
+ >a : void | number | boolean
  
      if (typeof a === "undefined" || typeof a === "boolean") {
- >typeof a === "undefined" || typeof a === "boolean" : boolean
- >typeof a === "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : number | boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | number | boolean
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"boolean" : "boolean"
- 
 @@= skipped -24, +24 lines =@@
  }
  
  function test16(a: boolean | number | void) {
 ->test16 : (a: boolean | number | void) => void
-->a : number | boolean | void
 +>test16 : (a: void | number | boolean) => void
-+>a : void | number | boolean
+ >a : void | number | boolean
  
      if (typeof a !== "undefined" && typeof a === "boolean") {
- >typeof a !== "undefined" && typeof a === "boolean" : boolean
- >typeof a !== "undefined" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-->a : number | boolean | void
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-+>a : void | number | boolean
- >"undefined" : "undefined"
- >typeof a === "boolean" : boolean
-->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >a : number | boolean
- >"boolean" : "boolean"
- 

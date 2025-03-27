@@ -60,7 +60,7 @@
  
      switch(s['dash-ok']) {
  >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 23, 14))
-->'dash-ok' : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19))
+->'dash-ok' : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
 +>'dash-ok' : Symbol(dash-ok, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
  
          case "square": return s['square-size'] * s['square-size'];
@@ -107,7 +107,7 @@
  >"sub" : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 15, 10))
  >under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 16, 14))
  >"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 17, 20))
-->"dash-ok" : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19))
+->"dash-ok" : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
 +>"dash-ok" : Symbol(dash-ok, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
  
          case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];

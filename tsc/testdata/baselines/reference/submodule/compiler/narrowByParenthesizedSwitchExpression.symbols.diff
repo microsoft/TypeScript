@@ -35,15 +35,7 @@
  }
  
  function getV(): Foo | Bar {
-@@= skipped -19, +19 lines =@@
- >getV : Symbol(getV, Decl(narrowByParenthesizedSwitchExpression.ts, 12, 1))
- 
- switch ((v.type)) {
-->v.type : Symbol(type, Decl(narrowByParenthesizedSwitchExpression.ts, 4, 28), Decl(narrowByParenthesizedSwitchExpression.ts, 9, 28))
-+>v.type : Symbol(type, Decl(narrowByParenthesizedSwitchExpression.ts, 9, 28), Decl(narrowByParenthesizedSwitchExpression.ts, 4, 28))
- >v : Symbol(v, Decl(narrowByParenthesizedSwitchExpression.ts, 18, 5))
-->type : Symbol(type, Decl(narrowByParenthesizedSwitchExpression.ts, 4, 28), Decl(narrowByParenthesizedSwitchExpression.ts, 9, 28))
-+>type : Symbol(type, Decl(narrowByParenthesizedSwitchExpression.ts, 9, 28), Decl(narrowByParenthesizedSwitchExpression.ts, 4, 28))
+@@= skipped -25, +25 lines =@@
  
    case "bar":
      v.bar;

@@ -17,18 +17,18 @@
  }
  === idx.ts ===
  import * as mod from "./mod";
-->mod : { default: mod.A & mod.B; a: string; b: string; }
+->mod : { a: string; b: string; default: mod.A & mod.B; }
 +>mod : A & B
  
  mod.a;
  >mod.a : string
-->mod : { default: mod.A & mod.B; a: string; b: string; }
+->mod : { a: string; b: string; default: mod.A & mod.B; }
 +>mod : A & B
  >a : string
  
  mod.b;
  >mod.b : string
-->mod : { default: mod.A & mod.B; a: string; b: string; }
+->mod : { a: string; b: string; default: mod.A & mod.B; }
 +>mod : A & B
  >b : string
  

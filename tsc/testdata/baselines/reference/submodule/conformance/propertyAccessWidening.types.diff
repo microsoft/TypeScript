@@ -1,30 +1,6 @@
 --- old.propertyAccessWidening.types
 +++ new.propertyAccessWidening.types
-@@= skipped -18, +18 lines =@@
-     const table = [{cells: headerNames }].concat(t);
- >table : { cells: any; }[]
- >[{cells: headerNames }].concat(t) : { cells: any; }[]
-->[{cells: headerNames }].concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
-+>[{cells: headerNames }].concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: (ConcatArray<{ cells: any; }> | { cells: any; })[]): { cells: any; }[]; }
- >[{cells: headerNames }] : { cells: any; }[]
- >{cells: headerNames } : { cells: any; }
- >cells : any
- >headerNames : any
-->concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
-+>concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: (ConcatArray<{ cells: any; }> | { cells: any; })[]): { cells: any; }[]; }
- >t : { hasLineBreak: boolean; cells: never[]; }[]
- }
- 
-@@= skipped -25, +25 lines =@@
-     const table = [{cells: headerNames }]["concat"](t);
- >table : { cells: any; }[]
- >[{cells: headerNames }]["concat"](t) : { cells: any; }[]
-->[{cells: headerNames }]["concat"] : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
-+>[{cells: headerNames }]["concat"] : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: (ConcatArray<{ cells: any; }> | { cells: any; })[]): { cells: any; }[]; }
- >[{cells: headerNames }] : { cells: any; }[]
- >{cells: headerNames } : { cells: any; }
- >cells : any
-@@= skipped -12, +12 lines =@@
+@@= skipped -55, +55 lines =@@
  // Object in property or element access is widened when target of assignment
  
  function foo(options?: { a: string, b: number }) {

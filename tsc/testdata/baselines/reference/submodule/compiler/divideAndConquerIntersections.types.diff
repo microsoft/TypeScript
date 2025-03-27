@@ -9,12 +9,8 @@
  
      filter: Q | Q[],
  >filter : Q | Q[]
-@@= skipped -13, +13 lines =@@
- >console : Console
- >log : (...data: any[]) => void
- >"Matching" : "Matching"
-->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
-+>filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
+@@= skipped -16, +16 lines =@@
+ >filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
  
      return (up: U): up is Filter<U, Q> => !!up;
 ->(up: U): up is Filter<U, Q> => !!up : (up: U) => up is Filter<U, Q>
@@ -22,16 +18,7 @@
  >up : U
  >!!up : true
  >!up : false
-@@= skipped -12, +12 lines =@@
- 
- /** All valid filter queries (every update key except update_id) */
- export type FilterQuery = keyof Omit<Update, "update_id">;
-->FilterQuery : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost"
-+>FilterQuery : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query"
- 
- /** Narrow down an update object based on a filter query */
- export type Filter<U extends Update, Q extends FilterQuery> = PerformQuery<
-@@= skipped -49, +49 lines =@@
+@@= skipped -58, +58 lines =@@
  >EventHub : EventHub<U>
  
      use(...middleware: Array<Middleware<U>>): EventHub<U> {
@@ -49,12 +36,3 @@
  
          filter: Q | Q[],
  >filter : Q | Q[]
-@@= skipped -20, +20 lines =@@
- >middleware : Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]
- >length : number
- >"handlers for" : "handlers for"
-->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
-+>filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
- 
-         return new EventHub<Filter<U, Q>>();
- >new EventHub<Filter<U, Q>>() : EventHub<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>

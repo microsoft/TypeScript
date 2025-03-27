@@ -1,15 +1,6 @@
 --- old.reservedWords2.types
 +++ new.reservedWords2.types
-@@= skipped -15, +15 lines =@@
- >"foo" : "foo"
- 
- var typeof = 10;
-->typeof : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- > : any
- >10 : 10
- 
-@@= skipped -46, +46 lines =@@
+@@= skipped -61, +61 lines =@@
  >2 : 2
  
  enum void {}

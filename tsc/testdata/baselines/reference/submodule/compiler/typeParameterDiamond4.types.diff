@@ -9,25 +9,3 @@
  
              var top: Top;
  >top : Top
- 
-             var middle: Top | T | U;
-->middle : Top | T | U
-+>middle : T | Top | U
- 
-             var bottom: Bottom;
- >bottom : Bottom
- 
-             top = middle;
-->top = middle : Top | T | U
-+>top = middle : T | Top | U
- >top : Top
-->middle : Top | T | U
-+>middle : T | Top | U
- 
-             middle = bottom;
- >middle = bottom : Bottom
-->middle : Top | T | U
-+>middle : T | Top | U
- >bottom : Bottom
- 
-             top = bottom;

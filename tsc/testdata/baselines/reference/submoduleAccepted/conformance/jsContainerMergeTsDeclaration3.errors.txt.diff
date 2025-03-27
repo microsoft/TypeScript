@@ -1,7 +1,7 @@
 --- old.jsContainerMergeTsDeclaration3.errors.txt
 +++ new.jsContainerMergeTsDeclaration3.errors.txt
 @@= skipped -0, +0 lines =@@
--b.js(1,7): error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
+-b.js(1,7): error TS2739: Type '{}' is missing the following properties from type 'typeof A': d, prototype
 +a.d.ts(1,15): error TS2451: Cannot redeclare block-scoped variable 'A'.
 +b.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'A'.
 +b.js(2,3): error TS2339: Property 'd' does not exist on type 'typeof A'.
@@ -17,7 +17,7 @@
 +==== b.js (2 errors) ====
      const A = { };
            ~
--!!! error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
+-!!! error TS2739: Type '{}' is missing the following properties from type 'typeof A': d, prototype
 +!!! error TS2451: Cannot redeclare block-scoped variable 'A'.
 +!!! related TS6203 a.d.ts:1:15: 'A' was also declared here.
      A.d = { };

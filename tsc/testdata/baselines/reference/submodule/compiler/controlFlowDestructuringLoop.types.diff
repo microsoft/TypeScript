@@ -1,15 +1,6 @@
 --- old.controlFlowDestructuringLoop.types
 +++ new.controlFlowDestructuringLoop.types
-@@= skipped -17, +17 lines =@@
- 
-     return typeof x.val === 'number';
- >typeof x.val === 'number' : boolean
-->typeof x.val : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x.val : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x.val : string | number
- >x : Val
- >val : string | number
-@@= skipped -26, +26 lines =@@
+@@= skipped -43, +43 lines =@@
  
              val.toFixed(2);
  >val.toFixed(2) : string

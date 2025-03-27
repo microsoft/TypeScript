@@ -75,15 +75,3 @@
  >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 35, 17))
  }
  
-@@= skipped -16, +16 lines =@@
- >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
- 
-         if (s.kind === "circle") {
-->s.kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14), Decl(partiallyDiscriminantedUnions.ts, 30, 14))
-+>s.kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14), Decl(partiallyDiscriminantedUnions.ts, 29, 14))
- >s : Symbol(s, Decl(partiallyDiscriminantedUnions.ts, 39, 14))
-->kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 29, 14), Decl(partiallyDiscriminantedUnions.ts, 30, 14))
-+>kind : Symbol(kind, Decl(partiallyDiscriminantedUnions.ts, 30, 14), Decl(partiallyDiscriminantedUnions.ts, 29, 14))
- 
-             let c: Circle = s;
- >c : Symbol(c, Decl(partiallyDiscriminantedUnions.ts, 42, 15))

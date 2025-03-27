@@ -276,27 +276,3 @@
  >c : string
                          }
                      }
-@@= skipped -53, +53 lines =@@
- 
-     if(pet.type === 'dog') {
- >pet.type === 'dog' : boolean
-->pet.type : "fish" | "dog"
-+>pet.type : "dog" | "fish"
- >pet : Pet
-->type : "fish" | "dog"
-+>type : "dog" | "fish"
- >'dog' : "dog"
- 
-         const _okay1 = pet.saysWoof;
-@@= skipped -28, +28 lines =@@
- 
-     if(pet.type === 'dog') {
- >pet.type === 'dog' : boolean
-->pet.type : "fish" | "dog"
-+>pet.type : "dog" | "fish"
- >pet : Pet
-->type : "fish" | "dog"
-+>type : "dog" | "fish"
- >'dog' : "dog"
- 
-         const _okay1 = pet.saysWoof;

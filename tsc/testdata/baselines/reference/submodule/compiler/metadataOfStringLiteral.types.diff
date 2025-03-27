@@ -1,9 +1,0 @@
---- old.metadataOfStringLiteral.types
-+++ new.metadataOfStringLiteral.types
-@@= skipped -12, +12 lines =@@
- >PropDeco : (target: Object, propKey: string | symbol) => void
- 
-     public foo: "foo" | "bar";
-->foo : "foo" | "bar"
-+>foo : "bar" | "foo"
- }

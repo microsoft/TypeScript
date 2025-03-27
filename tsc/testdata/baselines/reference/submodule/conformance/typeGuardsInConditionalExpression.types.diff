@@ -9,13 +9,6 @@
  >x : string | number
  
      return typeof x === "string"
- >typeof x === "string"        ? x.length // string        : x++ : number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
 @@= skipped -20, +20 lines =@@
  >x : number
  }
@@ -25,13 +18,6 @@
  >x : string | number
  
      return typeof x === "string"
- >typeof x === "string"        ? ((x = "hello") && x) // string        : x : string | number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
 @@= skipped -23, +23 lines =@@
  >x : number
  }
@@ -41,13 +27,6 @@
  >x : string | number
  
      return typeof x === "string"
- >typeof x === "string"        ? ((x = 10) && x) // number        : x : number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
 @@= skipped -23, +23 lines =@@
  >x : number
  }
@@ -57,13 +36,6 @@
  >x : string | number
  
      return typeof x === "string"
- >typeof x === "string"        ? x // string        : ((x = 10) && x) : string | number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
 @@= skipped -23, +23 lines =@@
  >x : number
  }
@@ -73,13 +45,6 @@
  >x : string | number
  
      return typeof x === "string"
- >typeof x === "string"        ? x // string        : ((x = "hello") && x) : string
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
 @@= skipped -23, +23 lines =@@
  >x : string
  }
@@ -89,14 +54,6 @@
  >x : string | number
  
      // Modify in both branches
-     return typeof x === "string"
- >typeof x === "string"        ? ((x = 10) && x) // number        : ((x = "hello") && x) : string | number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
 @@= skipped -30, +30 lines =@@
  >x : string
  }
@@ -106,23 +63,7 @@
  >x : string | number | boolean
  
      return typeof x === "string"
- >typeof x === "string"        ? x === "hello" // boolean        : typeof x === "boolean"        ? x // boolean        : x == 10 : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -18, +18 lines =@@
-         : typeof x === "boolean"
- >typeof x === "boolean"        ? x // boolean        : x == 10 : boolean
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"boolean" : "boolean"
- 
-@@= skipped -13, +13 lines =@@
+@@= skipped -31, +31 lines =@@
  >10 : 10
  }
  function foo8(x: number | string | boolean) {
@@ -131,25 +72,7 @@
  >x : string | number | boolean
  
      var b: number | boolean;
-@@= skipped -9, +9 lines =@@
-     return typeof x === "string"
- >typeof x === "string"        ? x === "hello"        : ((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -21, +21 lines =@@
- >(typeof x === "boolean"        ? x // boolean        : x == 10) : boolean
- >typeof x === "boolean"        ? x // boolean        : x == 10 : boolean
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | true
- >"boolean" : "boolean"
- 
-@@= skipped -13, +13 lines =@@
+@@= skipped -43, +43 lines =@@
  >10 : 10
  }
  function foo9(x: number | string) {
@@ -158,16 +81,7 @@
  >x : string | number
  
      var y = 10;
-@@= skipped -11, +11 lines =@@
-     return typeof x === "string"
- >typeof x === "string"        ? ((y = x.length) && x === "hello") // boolean        : x === 10 : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
-@@= skipped -23, +23 lines =@@
+@@= skipped -34, +34 lines =@@
  >10 : 10
  }
  function foo10(x: number | string | boolean) {
@@ -176,25 +90,7 @@
  >x : string | number | boolean
  
      // Mixing typeguards
-@@= skipped -10, +10 lines =@@
-     return typeof x === "string"
- >typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -18, +18 lines =@@
- 
-         && typeof x === "number"
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | true
- >"number" : "number"
- 
-@@= skipped -11, +11 lines =@@
+@@= skipped -39, +39 lines =@@
  >toString : (radix?: number) => string
  }
  function foo11(x: number | string | boolean) {
@@ -203,25 +99,7 @@
  >x : string | number | boolean
  
      // Mixing typeguards
-@@= skipped -10, +10 lines =@@
-     return typeof x === "string"
- >typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -19, +19 lines =@@
- 
-         && typeof x === "number"
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | true
- >"number" : "number"
- 
-@@= skipped -14, +14 lines =@@
+@@= skipped -43, +43 lines =@@
  >x : number
  }
  function foo12(x: number | string | boolean) {
@@ -230,21 +108,3 @@
  >x : string | number | boolean
  
      // Mixing typeguards
-@@= skipped -10, +10 lines =@@
-     return typeof x === "string"
- >typeof x === "string"        ? ((x = 10) && x.toString().length) // number        : ((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -29, +29 lines =@@
- 
-         && typeof x === "number"
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | true
- >"number" : "number"
- 

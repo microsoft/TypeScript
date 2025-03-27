@@ -9,7 +9,7 @@
 ->p2 : "literal"
 ->p3 : "literal" | "other"
 ->p4 : number | "literal"
-->p5 : true | 12 | "str"
+->p5 : "str" | 12 | true
 +>f : (p1: any, p2: any, p3: any, p4: any, p5: any) => string
 +>p1 : any
 +>p2 : any
@@ -27,7 +27,7 @@
 ->p2 : "literal"
 ->p3 : "literal" | "other"
 ->p4 : number | "literal"
-->p5 : true | 12 | "str"
+->p5 : "str" | 12 | true
 +>p1 + p2 + p3 + p4 + p5 : any
 +>p1 + p2 + p3 + p4 : any
 +>p1 + p2 + p3 : any

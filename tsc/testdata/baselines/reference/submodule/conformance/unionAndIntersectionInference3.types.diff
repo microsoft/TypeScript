@@ -5,9 +5,8 @@
  
  declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
 ->concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
-->args : (Maybe<T> | Maybe<T>[])[]
 +>concatMaybe : <T>(...args: (Maybe<T>[] | Maybe<T>)[]) => T[]
-+>args : (Maybe<T>[] | Maybe<T>)[]
+ >args : (Maybe<T>[] | Maybe<T>)[]
  
  concatMaybe([1, 2, 3], 4);
  >concatMaybe([1, 2, 3], 4) : number[]
@@ -40,15 +39,13 @@
  
  declare let f1: <T>(x: Foo1<T> | Bar1<T>) => Promise<T>;
 ->f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
-->x : Foo1<T> | Bar1<T>
 +>f1 : <T>(x: Bar1<T> | Foo1<T>) => Promise<T>
-+>x : Bar1<T> | Foo1<T>
+ >x : Bar1<T> | Foo1<T>
  
  declare let f2: <U>(x: Foo1<U> | Bar1<U>) => Promise<U>;
 ->f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
-->x : Foo1<U> | Bar1<U>
 +>f2 : <U>(x: Bar1<U> | Foo1<U>) => Promise<U>
-+>x : Bar1<U> | Foo1<U>
+ >x : Bar1<U> | Foo1<U>
  
  f1 = f2;
 ->f1 = f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
@@ -73,15 +70,13 @@
  
  declare let g1: <T>(x: Foo2<T> | Bar2<T>) => Promise<T>;
 ->g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
-->x : Foo2<T> | Bar2<T>
 +>g1 : <T>(x: Bar2<T> | Foo2<T>) => Promise<T>
-+>x : Bar2<T> | Foo2<T>
+ >x : Bar2<T> | Foo2<T>
  
  declare let g2: <U>(x: Foo2<U> | Bar2<U>) => Promise<U>;
 ->g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
-->x : Foo2<U> | Bar2<U>
 +>g2 : <U>(x: Bar2<U> | Foo2<U>) => Promise<U>
-+>x : Bar2<U> | Foo2<U>
+ >x : Bar2<U> | Foo2<U>
  
  g1 = g2;
 ->g1 = g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>

@@ -12,7 +12,7 @@
  >test1 : () => void
  
      type stringType1 = "foo" | "bar";
-->stringType1 : "foo" | "bar"
+->stringType1 : "bar" | "foo"
 +>stringType1 : stringType1
  
      type stringType2 = "baz" | "bar";
@@ -21,8 +21,8 @@
  
      interface Temp1 {
          getValue(name: stringType1): number;
-->getValue : (name: "foo" | "bar") => number
-->name : "foo" | "bar"
+->getValue : (name: "bar" | "foo") => number
+->name : "bar" | "foo"
 +>getValue : (name: stringType1) => number
 +>name : stringType1
      }
@@ -40,10 +40,10 @@
          const z = t.getValue("bar"); // Should be fine
  >z : string | number
  >t.getValue("bar") : string | number
-->t.getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
+->t.getValue : ((name: "bar" | "foo") => number) | ((name: "bar" | "baz") => string)
 +>t.getValue : ((name: stringType1) => number) | ((name: stringType2) => string)
  >t : Temp1 | Temp2
-->getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
+->getValue : ((name: "bar" | "foo") => number) | ((name: "bar" | "baz") => string)
 +>getValue : ((name: stringType1) => number) | ((name: stringType2) => string)
  >"bar" : "bar"
      }
@@ -54,20 +54,11 @@
      const test1 = (type: "foo" | "bar") =>
 ->test1 : (type: "foo" | "bar") => string
 ->(type: "foo" | "bar") =>        messages[type]({ a: "A", b: 0 }) : (type: "foo" | "bar") => string
-->type : "foo" | "bar"
 +>test1 : (type: "bar" | "foo") => string
 +>(type: "foo" | "bar") =>        messages[type]({ a: "A", b: 0 }) : (type: "bar" | "foo") => string
-+>type : "bar" | "foo"
+ >type : "bar" | "foo"
  
          messages[type]({ a: "A", b: 0 });
- >messages[type]({ a: "A", b: 0 }) : string
- >messages[type] : ((options: { [key: string]: any; b: number; }) => string) | ((options: { [key: string]: any; a: string; }) => string)
- >messages : Messages
-->type : "foo" | "bar"
-+>type : "bar" | "foo"
- >{ a: "A", b: 0 } : { a: string; b: number; }
- >a : string
- >"A" : "A"
 @@= skipped -35, +35 lines =@@
  }
  

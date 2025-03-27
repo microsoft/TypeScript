@@ -32,11 +32,8 @@
 ->foo : <const T>(path: T) => T
 +>foo : <T>(path: T) => T
  >[...staticPath3Level, randomID, 'doc.pdf'] : ["home", "user", "downloads", string, "doc.pdf"]
-->...staticPath3Level : "home" | "user" | "downloads"
-+>...staticPath3Level : "downloads" | "home" | "user"
+ >...staticPath3Level : "downloads" | "home" | "user"
  >staticPath3Level : readonly ["home", "user", "downloads"]
- >randomID : string
- >'doc.pdf' : "doc.pdf"
 @@= skipped -10, +10 lines =@@
  const b1 = foo([...staticPath1Level, randomID, 'folder', 'doc.pdf']);
  >b1 : readonly ["home", string, "folder", "doc.pdf"]
@@ -62,11 +59,8 @@
 ->foo : <const T>(path: T) => T
 +>foo : <T>(path: T) => T
  >[...staticPath3Level, randomID, 'folder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "doc.pdf"]
-->...staticPath3Level : "home" | "user" | "downloads"
-+>...staticPath3Level : "downloads" | "home" | "user"
+ >...staticPath3Level : "downloads" | "home" | "user"
  >staticPath3Level : readonly ["home", "user", "downloads"]
- >randomID : string
- >'folder' : "folder"
 @@= skipped -11, +11 lines =@@
  const c1 = foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'doc.pdf']);
  >c1 : readonly ["home", string, "folder", "subfolder", "doc.pdf"]
@@ -92,11 +86,8 @@
 ->foo : <const T>(path: T) => T
 +>foo : <T>(path: T) => T
  >[...staticPath3Level, randomID, 'folder', 'subfolder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "subfolder", "doc.pdf"]
-->...staticPath3Level : "home" | "user" | "downloads"
-+>...staticPath3Level : "downloads" | "home" | "user"
+ >...staticPath3Level : "downloads" | "home" | "user"
  >staticPath3Level : readonly ["home", "user", "downloads"]
- >randomID : string
- >'folder' : "folder"
 @@= skipped -12, +12 lines =@@
  const d1 = foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);
  >d1 : readonly ["home", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
@@ -122,8 +113,5 @@
 ->foo : <const T>(path: T) => T
 +>foo : <T>(path: T) => T
  >[...staticPath3Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
-->...staticPath3Level : "home" | "user" | "downloads"
-+>...staticPath3Level : "downloads" | "home" | "user"
+ >...staticPath3Level : "downloads" | "home" | "user"
  >staticPath3Level : readonly ["home", "user", "downloads"]
- >randomID : string
- >'folder' : "folder"

@@ -56,10 +56,10 @@
  >false : false
  
                  value={props.value}
-->value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
-->props.value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
+->value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
+->props.value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
 ->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
-->value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
+->value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
 +>value : any
 +>props.value : any
 +>props : any
@@ -263,16 +263,7 @@
  >JSX : any
  
      /**
-@@= skipped -54, +54 lines =@@
-      * initial field value
-      */
-     value?: Option<TValue> | Options<TValue> | string | string[] | number | number[] | boolean;
-->value : string | number | boolean | Option<TValue> | Options<TValue> | string[] | number[] | undefined
-+>value : string | number | boolean | string[] | number[] | Option<TValue> | Options<TValue> | undefined
- 
-     /**
-      * the option property to use for the value
-@@= skipped -20, +20 lines =@@
+@@= skipped -74, +74 lines =@@
       *  optional style to apply to the control
       */
      style?: React.CSSProperties;

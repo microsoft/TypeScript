@@ -12,21 +12,8 @@
  >bar => bar as Foo : (this: undefined, bar: unknown) => Foo
  >bar : unknown
  >bar as Foo : Foo
-@@= skipped -19, +19 lines =@@
- 
-     if (typeof value !== "string") {
- >typeof value !== "string" : boolean
-->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >value : unknown
- >"string" : "string"
- 
-@@= skipped -10, +10 lines =@@
- >"No" : "No"
-     }
-     const match = value.match(/anything/) || [];
-->match : [] | RegExpMatchArray
-+>match : RegExpMatchArray | []
+@@= skipped -32, +32 lines =@@
+ >match : RegExpMatchArray | []
  >value.match(/anything/) || [] : RegExpMatchArray | []
  >value.match(/anything/) : RegExpMatchArray | null
 ->value.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
@@ -40,8 +27,5 @@
      const [, extracted] = match;
 -> : undefined
  >extracted : string
-->match : [] | RegExpMatchArray
-+>match : RegExpMatchArray | []
- 
- };
+ >match : RegExpMatchArray | []
  

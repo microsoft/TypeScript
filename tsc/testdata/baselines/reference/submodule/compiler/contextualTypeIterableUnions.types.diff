@@ -31,7 +31,7 @@
  >false : false
  
  const i3: Iterable<number> | 1[] = [2];
-->i3 : Iterable<number> | 1[]
+->i3 : 1[] | Iterable<number>
 +>i3 : 1[] | Iterable<number, any, any>
  >[2] : 2[]
  >2 : 2

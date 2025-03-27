@@ -5,9 +5,8 @@
  
  declare function foo(foo: S | N): void;
 ->foo : (foo: S | N) => void
-->foo : S | N
 +>foo : (foo: N | S) => void
-+>foo : N | S
+ >foo : N | S
  
  foo({
  >foo({  d: `${"s"}`,  cb: (x) => {    x; // string  },}) : void

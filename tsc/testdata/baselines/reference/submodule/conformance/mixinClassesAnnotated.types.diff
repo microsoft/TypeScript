@@ -4,7 +4,7 @@
  >message : string
  
      class extends superClass {
-->class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
+->class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); message: string; prototype: Printable<any>.(Anonymous class); } & T
 +>class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
  >superClass : Base
  

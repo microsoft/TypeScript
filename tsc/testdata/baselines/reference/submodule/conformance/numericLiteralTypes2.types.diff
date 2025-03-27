@@ -5,64 +5,7 @@
  
  function f15(x: 0 | false, y: 1 | "one") {
 ->f15 : (x: 0 | false, y: 1 | "one") => void
-->x : false | 0
 +>f15 : (x: 0 | false, y: "one" | 1) => void
-+>x : 0 | false
+ >x : 0 | false
  >false : false
-->y : 1 | "one"
-+>y : "one" | 1
- 
-     var a = x && y;
-->a : false | 0
-->x && y : false | 0
-->x : false | 0
-->y : 1 | "one"
-+>a : 0 | false
-+>x && y : 0 | false
-+>x : 0 | false
-+>y : "one" | 1
- 
-     var b = y && x;
-->b : false | 0
-->y && x : false | 0
-->y : 1 | "one"
-->x : false | 0
-+>b : 0 | false
-+>y && x : 0 | false
-+>y : "one" | 1
-+>x : 0 | false
- 
-     var c = x || y;
-->c : 1 | "one"
-->x || y : 1 | "one"
-->x : false | 0
-->y : 1 | "one"
-+>c : "one" | 1
-+>x || y : "one" | 1
-+>x : 0 | false
-+>y : "one" | 1
- 
-     var d = y || x;
-->d : 1 | "one"
-->y || x : 1 | "one"
-->y : 1 | "one"
-->x : false | 0
-+>d : "one" | 1
-+>y || x : "one" | 1
-+>y : "one" | 1
-+>x : 0 | false
- 
-     var e = !x;
- >e : boolean
- >!x : true
-->x : false | 0
-+>x : 0 | false
- 
-     var f = !y;
- >f : boolean
- >!y : false
-->y : 1 | "one"
-+>y : "one" | 1
- }
- 
- type Item =
+ >y : "one" | 1

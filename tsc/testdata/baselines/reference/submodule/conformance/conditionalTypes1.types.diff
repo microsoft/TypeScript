@@ -1,15 +1,6 @@
 --- old.conditionalTypes1.types
 +++ new.conditionalTypes1.types
-@@= skipped -172, +172 lines =@@
- >T20 : T20
- 
- type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
-->T21 : "string" | "number" | "boolean" | "undefined" | "object" | "function"
-+>T21 : "boolean" | "function" | "number" | "object" | "string" | "undefined"
- 
- type T22 = TypeName<never>;  // never
- >T22 : never
-@@= skipped -162, +162 lines =@@
+@@= skipped -334, +334 lines =@@
  };
  
  function f10(part: DeepReadonly<Part>) {
@@ -27,25 +18,6 @@
  >value : T
  
      return <ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false);
- ><ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : ZeroOf<T>
-->(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : false | "" | 0
-->typeof value === "number" ? 0 : typeof value === "string" ? "" : false : false | "" | 0
-+>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : "" | 0 | false
-+>typeof value === "number" ? 0 : typeof value === "string" ? "" : false : "" | 0 | false
- >typeof value === "number" : boolean
-->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >value : T
- >"number" : "number"
- >0 : 0
-->typeof value === "string" ? "" : false : false | ""
-+>typeof value === "string" ? "" : false : "" | false
- >typeof value === "string" : boolean
-->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >value : T
- >"string" : "string"
- >"" : ""
 @@= skipped -30, +30 lines =@@
  
      zeroOf(5);  // 0
@@ -79,9 +51,8 @@
  >b : boolean
  
      zeroOf(x);  // 0 | false
-->zeroOf(x) : false | 0
+ >zeroOf(x) : 0 | false
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
-+>zeroOf(x) : 0 | false
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >x : number | boolean
  

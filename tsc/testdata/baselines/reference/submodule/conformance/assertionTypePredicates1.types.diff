@@ -1,47 +1,18 @@
 --- old.assertionTypePredicates1.types
 +++ new.assertionTypePredicates1.types
-@@= skipped -39, +39 lines =@@
- >assert(typeof x === "string") : void
- >assert : (value: unknown) => asserts value
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- 
-@@= skipped -36, +36 lines =@@
- >assert : (value: unknown) => asserts value
- >typeof x === "boolean" || typeof x === "number" : boolean
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"boolean" : "boolean"
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
+@@= skipped -84, +84 lines =@@
  >"number" : "number"
  
          x.toLocaleString;
-->x.toLocaleString : ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string) | (() => string)
+->x.toLocaleString : (() => string) | ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string)
 +>x.toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
  >x : number | boolean
-->toLocaleString : ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string) | (() => string)
+->toLocaleString : (() => string) | ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string)
 +>toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
      }
      if (!!true) {
  >!!true : true
-@@= skipped -75, +75 lines =@@
- >x : unknown
- >undefined : undefined
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : {} | null
- >"string" : "string"
- 
-@@= skipped -121, +121 lines =@@
+@@= skipped -187, +187 lines =@@
  >Debug : typeof Debug
  
      export declare function assert(value: unknown, message?: string): asserts value;
@@ -86,57 +57,3 @@
  >false : false
  
          x;  // Unreachable
-@@= skipped -77, +77 lines =@@
- >this : this
- >assert : (value: unknown) => asserts value
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- 
-@@= skipped -70, +70 lines =@@
- >super : Test
- >assert : (value: unknown) => asserts value
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- 
-@@= skipped -102, +102 lines =@@
- >assert(typeof x === "string") : void
- >assert : (value: unknown) => asserts value
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- 
-@@= skipped -15, +15 lines =@@
- >a : ((value: unknown) => asserts value)[]
- >0 : 0
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- 
-@@= skipped -15, +15 lines =@@
- >t1 : Test
- >assert : (value: unknown) => asserts value
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- 
-@@= skipped -15, +15 lines =@@
- >t2 : Test
- >assert : (value: unknown) => asserts value
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : unknown
- >"string" : "string"
- }

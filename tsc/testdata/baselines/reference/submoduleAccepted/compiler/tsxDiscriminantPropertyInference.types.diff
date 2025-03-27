@@ -5,9 +5,8 @@
  
  declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;
 ->Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
-->props : DiscriminatorTrue | DiscriminatorFalse
 +>Comp : (props: DiscriminatorFalse | DiscriminatorTrue) => Element
-+>props : DiscriminatorFalse | DiscriminatorTrue
+ >props : DiscriminatorFalse | DiscriminatorTrue
  >JSX : any
  
  // simple inference

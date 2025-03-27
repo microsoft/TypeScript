@@ -4,27 +4,21 @@
  }
  
  function clonePet(pet: Animal, fullCopy?: boolean) {
-->clonePet : (pet: Animal, fullCopy?: boolean) => { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
+->clonePet : (pet: Animal, fullCopy?: boolean) => { age?: number | undefined; location?: string | undefined; owner?: object | undefined; name: string; kind: string; }
 +>clonePet : (pet: Animal, fullCopy?: boolean | undefined) => { age?: number | undefined; location?: string | undefined; owner?: object | undefined; name: string; kind: string; }
  >pet : Animal
  >fullCopy : boolean | undefined
  
-     return {
-->{        name: pet.name,        kind: pet.kind,        ...(fullCopy && pet),    } : { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
-+>{        name: pet.name,        kind: pet.kind,        ...(fullCopy && pet),    } : { age?: number | undefined; location?: string | undefined; owner?: object | undefined; name: string; kind: string; }
- 
-         name: pet.name,
- >name : string
 @@= skipped -35, +35 lines =@@
  >owner : string | undefined
  }
  function billOwner(pet: Animal2) {
-->billOwner : (pet: Animal2) => { paid: boolean; name?: string | undefined; owner?: string; }
+->billOwner : (pet: Animal2) => { name?: string | undefined; owner?: string; paid: boolean; }
 +>billOwner : (pet: Animal2) => { name?: string | undefined; owner?: string | undefined; paid: boolean; }
  >pet : Animal2
  
      return {
-->{        ...(pet.owner && pet),        paid: false    } : { paid: boolean; name?: string | undefined; owner?: string; }
+->{        ...(pet.owner && pet),        paid: false    } : { name?: string | undefined; owner?: string; paid: boolean; }
 +>{        ...(pet.owner && pet),        paid: false    } : { name?: string | undefined; owner?: string | undefined; paid: boolean; }
  
          ...(pet.owner && pet),

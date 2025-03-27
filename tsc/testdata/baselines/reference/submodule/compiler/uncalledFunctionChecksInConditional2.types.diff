@@ -239,8 +239,5 @@
 ->typeof window !== 'undefined' &&      window.matchMedia : false | (((query: string) => MediaQueryList) & ((query: string) => MediaQueryList))
 +>typeof window !== 'undefined' &&      window.matchMedia : false | ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
  >typeof window !== 'undefined' : boolean
-->typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >window : Window & typeof globalThis
- >'undefined' : "undefined"
- 

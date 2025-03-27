@@ -1,11 +1,6 @@
 --- old.typeGuardsAsAssertions.types
 +++ new.typeGuardsAsAssertions.types
-@@= skipped -97, +97 lines =@@
- >x : string | number | boolean
- >typeof x === "string" ? x.slice() : "abc" : string
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+@@= skipped -101, +101 lines =@@
  >x : string | number
  >"string" : "string"
  >x.slice() : string
@@ -17,16 +12,7 @@
  >"abc" : "abc"
  
          x;  // string
-@@= skipped -34, +34 lines =@@
- 
-         if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- 
-@@= skipped -8, +8 lines =@@
+@@= skipped -38, +38 lines =@@
  >x = x.slice() : string
  >x : string | number | boolean
  >x.slice() : string
@@ -38,39 +24,7 @@
          }
          else {
              x = "abc";
-@@= skipped -51, +51 lines =@@
- 
-     if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : undefined
- >"string" : "string"
- 
-@@= skipped -43, +43 lines =@@
- 
-     if (typeof x === "boolean") {
- >typeof x === "boolean" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : undefined
- >"boolean" : "boolean"
- 
-@@= skipped -18, +18 lines =@@
-     if (typeof x === "string" && typeof x === "number") {
- >typeof x === "string" && typeof x === "number" : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string
- >"number" : "number"
- 
-@@= skipped -27, +27 lines =@@
+@@= skipped -139, +139 lines =@@
  
      x!.slice();
  >x!.slice() : string

@@ -279,27 +279,3 @@
  >b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
  >c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
                          }
-@@= skipped -54, +54 lines =@@
- >PetType : Symbol(PetType, Decl(narrowingOfQualifiedNames.ts, 73, 25))
- 
-     if(pet.type === 'dog') {
-->pet.type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
-+>pet.type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 69, 12), Decl(narrowingOfQualifiedNames.ts, 68, 13))
- >pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 73, 46))
-->type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
-+>type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 69, 12), Decl(narrowingOfQualifiedNames.ts, 68, 13))
- 
-         const _okay1 = pet.saysWoof;
- >_okay1 : Symbol(_okay1, Decl(narrowingOfQualifiedNames.ts, 75, 13))
-@@= skipped -27, +27 lines =@@
- >Pet : Symbol(Pet, Decl(narrowingOfQualifiedNames.ts, 69, 42))
- 
-     if(pet.type === 'dog') {
-->pet.type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
-+>pet.type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 69, 12), Decl(narrowingOfQualifiedNames.ts, 68, 13))
- >pet : Symbol(pet, Decl(narrowingOfQualifiedNames.ts, 80, 26))
-->type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 68, 13), Decl(narrowingOfQualifiedNames.ts, 69, 12))
-+>type : Symbol(type, Decl(narrowingOfQualifiedNames.ts, 69, 12), Decl(narrowingOfQualifiedNames.ts, 68, 13))
- 
-         const _okay1 = pet.saysWoof;
- >_okay1 : Symbol(_okay1, Decl(narrowingOfQualifiedNames.ts, 82, 13))

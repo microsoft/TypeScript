@@ -5,7 +5,7 @@
 -b.js(45,23): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 -  Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
 -b.js(49,26): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--  Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
+-  Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
 -b.js(51,24): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 -  Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
 -b.js(52,24): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -97,7 +97,7 @@
      someDerived = /** @type {SomeDerived} */(someOther); // Error
 -                             ~~~~~~~~~~~
 -!!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
--!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
+-!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': p, x
      
      someOther = /** @type {SomeOther} */(someDerived); // Error
 -                           ~~~~~~~~~

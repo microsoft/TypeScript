@@ -78,8 +78,8 @@
  };
  
  const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
-->arrayOfTypes : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
-->[PropTypes.string, PropTypes.bool, PropTypes.shape({    foo: PropTypes.string,    bar: PropTypes.number.isRequired})] : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
+->arrayOfTypes : (PropTypes.Requireable<string> | PropTypes.Requireable<boolean> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
+->[PropTypes.string, PropTypes.bool, PropTypes.shape({    foo: PropTypes.string,    bar: PropTypes.number.isRequired})] : (PropTypes.Requireable<string> | PropTypes.Requireable<boolean> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
 ->PropTypes.string : PropTypes.Requireable<string>
 ->PropTypes : typeof PropTypes
 ->string : PropTypes.Requireable<string>
@@ -201,7 +201,7 @@
 ->PropTypes.oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
 ->PropTypes : typeof PropTypes
 ->oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
-->arrayOfTypes : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
+->arrayOfTypes : (PropTypes.Requireable<string> | PropTypes.Requireable<boolean> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
 ->isRequired : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
 +>oneOfType : Validator<NonNullable<NonNullable<string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>>>>
 +>PropTypes.oneOfType(arrayOfTypes).isRequired : Validator<NonNullable<NonNullable<string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>>>>
@@ -284,7 +284,7 @@
 ->PropTypes.oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
 ->PropTypes : typeof PropTypes
 ->oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
-->arrayOfTypes : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
+->arrayOfTypes : (PropTypes.Requireable<string> | PropTypes.Requireable<boolean> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
 ->isRequired : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
 +>oneOfType : Validator<NonNullable<NonNullable<string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>>>>
 +>PropTypes.oneOfType(arrayOfTypes).isRequired : Validator<NonNullable<NonNullable<string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>>>>

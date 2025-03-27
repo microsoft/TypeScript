@@ -1,15 +1,6 @@
 --- old.importCallExpressionSpecifierNotStringTypeError.types
 +++ new.importCallExpressionSpecifierNotStringTypeError.types
-@@= skipped -21, +21 lines =@@
- const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
- >p2 : Promise<any>
- >import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
-->whatToLoad ? getSpecifier() : "defaulPath" : boolean | "defaulPath"
-+>whatToLoad ? getSpecifier() : "defaulPath" : "defaulPath" | boolean
- >whatToLoad : boolean
- >getSpecifier() : boolean
- >getSpecifier : () => boolean
-@@= skipped -8, +8 lines =@@
+@@= skipped -29, +29 lines =@@
  
  p1.then(zero => {
  >p1.then(zero => {    return zero.foo();  // ok, zero is any}) : Promise<any>

@@ -89,87 +89,24 @@
 ->0 : ([, modifiers, importClause, moduleSpecifier, assertClause, other]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
 ->([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : ([, modifiers, importClause, moduleSpecifier, assertClause, other]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
 -> : undefined
-->modifiers : readonly Modifier[] | readonly Decorator[] | undefined
 +>0 : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
 +>([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
-+>modifiers : readonly Decorator[] | readonly Modifier[] | undefined
+ >modifiers : readonly Decorator[] | readonly Modifier[] | undefined
  >importClause : ImportClause | readonly Modifier[] | undefined
  >moduleSpecifier : Expression | ImportClause | undefined
-->assertClause : Expression | AssertClause | undefined
-+>assertClause : AssertClause | Expression | undefined
- >other : AssertClause | undefined
- 
-             (other === undefined) &&
-@@= skipped -27, +26 lines =@@
- >(modifiers === undefined || every(modifiers, isModifier)) : boolean
- >modifiers === undefined || every(modifiers, isModifier) : boolean
- >modifiers === undefined : boolean
-->modifiers : readonly Modifier[] | readonly Decorator[] | undefined
-+>modifiers : readonly Decorator[] | readonly Modifier[] | undefined
- >undefined : undefined
- >every(modifiers, isModifier) : boolean
- >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
-->modifiers : readonly Modifier[] | readonly Decorator[]
-+>modifiers : readonly Decorator[] | readonly Modifier[]
- >isModifier : (node: Node) => node is Modifier
- 
-             (importClause === undefined || !isArray(importClause)) &&
-@@= skipped -32, +32 lines =@@
- >(assertClause === undefined || isAssertClause(assertClause)) : boolean
- >assertClause === undefined || isAssertClause(assertClause) : boolean
- >assertClause === undefined : boolean
-->assertClause : Expression | AssertClause | undefined
-+>assertClause : AssertClause | Expression | undefined
- >undefined : undefined
- >isAssertClause(assertClause) : boolean
- >isAssertClause : (node: Node) => node is AssertClause
-->assertClause : Expression | AssertClause
-+>assertClause : AssertClause | Expression
+@@= skipped -66, +65 lines =@@
+ >assertClause : AssertClause | Expression
  
          1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>
 ->1 : ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
 ->([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
 -> : undefined
-->decorators : readonly Modifier[] | readonly Decorator[] | undefined
 +>1 : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
 +>([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
-+>decorators : readonly Decorator[] | readonly Modifier[] | undefined
+ >decorators : readonly Decorator[] | readonly Modifier[] | undefined
  >modifiers : ImportClause | readonly Modifier[] | undefined
  >importClause : Expression | ImportClause | undefined
-->moduleSpecifier : Expression | AssertClause | undefined
-+>moduleSpecifier : AssertClause | Expression | undefined
- >assertClause : AssertClause | undefined
- 
-             (decorators === undefined || every(decorators, isDecorator)) &&
-@@= skipped -24, +23 lines =@@
- >(decorators === undefined || every(decorators, isDecorator)) : boolean
- >decorators === undefined || every(decorators, isDecorator) : boolean
- >decorators === undefined : boolean
-->decorators : readonly Modifier[] | readonly Decorator[] | undefined
-+>decorators : readonly Decorator[] | readonly Modifier[] | undefined
- >undefined : undefined
- >every(decorators, isDecorator) : boolean
- >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
-->decorators : readonly Modifier[] | readonly Decorator[]
-+>decorators : readonly Decorator[] | readonly Modifier[]
- >isDecorator : (node: Node) => node is Decorator
- 
-             (modifiers === undefined || isArray(modifiers)) &&
-@@= skipped -31, +31 lines =@@
- >(moduleSpecifier !== undefined && isExpression(moduleSpecifier)) : boolean
- >moduleSpecifier !== undefined && isExpression(moduleSpecifier) : boolean
- >moduleSpecifier !== undefined : boolean
-->moduleSpecifier : Expression | AssertClause | undefined
-+>moduleSpecifier : AssertClause | Expression | undefined
- >undefined : undefined
- >isExpression(moduleSpecifier) : boolean
- >isExpression : (node: Node) => node is Expression
-->moduleSpecifier : Expression | AssertClause
-+>moduleSpecifier : AssertClause | Expression
- 
-             (assertClause === undefined || isAssertClause(assertClause)),
- >(assertClause === undefined || isAssertClause(assertClause)) : boolean
-@@= skipped -18, +18 lines =@@
+@@= skipped -66, +65 lines =@@
  
      })
      .deprecate({
@@ -178,28 +115,3 @@
  >{        1: DISALLOW_DECORATORS    } : { 1: DeprecationOptions; }
  
          1: DISALLOW_DECORATORS
-@@= skipped -13, +13 lines =@@
- 
- 
- declare const modifiers: readonly Modifier[] | readonly Decorator[];
-->modifiers : readonly Modifier[] | readonly Decorator[]
-+>modifiers : readonly Decorator[] | readonly Modifier[]
- 
- function foo() {
- >foo : () => void
-@@= skipped -8, +8 lines =@@
-     every(modifiers, isModifier);
- >every(modifiers, isModifier) : boolean
- >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
-->modifiers : readonly Modifier[] | readonly Decorator[]
-+>modifiers : readonly Decorator[] | readonly Modifier[]
- >isModifier : (node: Node) => node is Modifier
- 
-     every(modifiers, isDecorator);
- >every(modifiers, isDecorator) : boolean
- >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
-->modifiers : readonly Modifier[] | readonly Decorator[]
-+>modifiers : readonly Decorator[] | readonly Modifier[]
- >isDecorator : (node: Node) => node is Decorator
- }
- 

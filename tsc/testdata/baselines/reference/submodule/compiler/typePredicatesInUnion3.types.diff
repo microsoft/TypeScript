@@ -7,16 +7,8 @@
 ->f2 : (x: unknown, p: P1 | P2 | F1) => void
 +>f2 : (x: unknown, p: F1 | P1 | P2) => void
  >x : unknown
-->p : P1 | P2 | F1
-+>p : F1 | P1 | P2
+ >p : F1 | P1 | P2
  
-     if (p(x)) {
- >p(x) : boolean
-->p : P1 | P2 | F1
-+>p : F1 | P1 | P2
- >x : unknown
- 
-         x;  // string | number
 @@= skipped -15, +15 lines =@@
  }
  
@@ -24,16 +16,8 @@
 ->f3 : (x: unknown, p: P1 | P2 | F2) => void
 +>f3 : (x: unknown, p: F2 | P1 | P2) => void
  >x : unknown
-->p : P1 | P2 | F2
-+>p : F2 | P1 | P2
+ >p : F2 | P1 | P2
  
-     if (p(x)) {
- >p(x) : boolean
-->p : P1 | P2 | F2
-+>p : F2 | P1 | P2
- >x : unknown
- 
-         x;  // unknown
 @@= skipped -15, +15 lines =@@
  }
  
@@ -41,13 +25,5 @@
 ->f4 : (x: unknown, p: P1 | P2 | F3) => void
 +>f4 : (x: unknown, p: F3 | P1 | P2) => void
  >x : unknown
-->p : P1 | P2 | F3
-+>p : F3 | P1 | P2
+ >p : F3 | P1 | P2
  
-     if (p(x)) {
- >p(x) : string | boolean
-->p : P1 | P2 | F3
-+>p : F3 | P1 | P2
- >x : unknown
- 
-         x;  // unknown

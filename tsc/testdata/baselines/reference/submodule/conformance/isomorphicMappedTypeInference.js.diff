@@ -219,7 +219,7 @@
 -    foo: number;
 -    bar: string;
 -};
--declare let x1: "foo" | "bar";
+-declare let x1: "bar" | "foo";
 -declare let x2: {
 -    foo: number;
 -    bar: string;
@@ -237,7 +237,7 @@
 -};
 -declare function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K>;
 -declare const myAny: any;
--declare const o1: Pick<any, "foo" | "bar">;
+-declare const o1: Pick<any, "bar" | "foo">;
 -declare const o2: {
 -    foo: any;
 -    bar: any;

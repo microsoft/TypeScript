@@ -1,82 +1,6 @@
 --- old.objectSpread.types
 +++ new.objectSpread.types
-@@= skipped -32, +32 lines =@@
- >c : boolean
- 
-     { ...o, c: false }
-->{ ...o, c: false } : { c: false; a: number; b: string; }
-+>{ ...o, c: false } : { a: number; b: string; c: false; }
- >o : { a: number; b: string; }
- >c : false
- >false : false
-@@= skipped -23, +23 lines =@@
- >b : string
- 
-     { ...o, b: 'override' }
-->{ ...o, b: 'override' } : { b: string; a: number; }
-+>{ ...o, b: 'override' } : { a: number; b: string; }
- >o : { a: number; b: string; }
- >b : string
- >'override' : "override"
-@@= skipped -12, +12 lines =@@
- >c : string
- 
-     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
-->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
-->{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
-+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { a: number; b: false; c: string; }
-+>{ a: 3, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
- >a : number
- >3 : 3
- >{ b: false, c: 'overriden' } : { b: false; c: string; }
-@@= skipped -19, +19 lines =@@
- >c : boolean
- 
-     { ...o, ...o2 }
-->{ ...o, ...o2 } : { b: string; c: boolean; a: number; }
-+>{ ...o, ...o2 } : { a: number; b: string; c: boolean; }
- >o : { a: number; b: string; }
- >o2 : { b: string; c: boolean; }
- 
-@@= skipped -11, +11 lines =@@
- >c : boolean
- 
-     { ...o, ...o2, b: 'ok' }
-->{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
-+>{ ...o, ...o2, b: 'ok' } : { a: number; c: boolean; b: string; }
- >o : { a: number; b: string; }
- >o2 : { b: string; c: boolean; }
- >b : string
-@@= skipped -13, +13 lines =@@
- >c : number
- 
-     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
-->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
-->{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
-+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { a: number; b: false; c: number; }
-+>{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
- >a : number
- >1 : 1
- >{ b: false, c: 'overriden' } : { b: false; c: string; }
-@@= skipped -39, +39 lines =@@
- >c : number
- 
-     { ...op, c: 7 }
-->{ ...op, c: 7 } : { c: number; a: number; }
-+>{ ...op, c: 7 } : { a: number; c: number; }
- >op : { readonly a: number; }
- >c : number
- >7 : 7
-@@= skipped -33, +33 lines =@@
- >authToken : string
- 
-     return {
-->{        ...this.header,        ...header,        ...authToken && { authToken }    } : { authToken: string; head: string; body: string; }
-+>{        ...this.header,        ...header,        ...authToken && { authToken }    } : { head: string; body: string; authToken: string; }
- 
-         ...this.header,
- >this.header : Header
-@@= skipped -171, +171 lines =@@
+@@= skipped -353, +353 lines =@@
  
  // own methods are enumerable
  let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
@@ -84,7 +8,7 @@
 +>cplus : { p: number; plus: () => void; }
  >p : number
  >plus : () => void
-->{ ...c, plus() { return this.p + 1; } } : { plus(): any; p: number; }
+->{ ...c, plus() { return this.p + 1; } } : { p: number; plus(): any; }
 +>{ ...c, plus() { return this.p + 1; } } : { p: number; plus: () => any; }
  >c : C
  >plus : () => any
@@ -98,16 +22,7 @@
  >plus : () => void
  
  // new field's type conflicting with existing field is OK
-@@= skipped -10, +10 lines =@@
- >b : string
- 
-     { ...o, a: 'wrong type?' }
-->{ ...o, a: 'wrong type?' } : { a: string; b: string; }
-+>{ ...o, a: 'wrong type?' } : { b: string; a: string; }
- >o : { a: number; b: string; }
- >a : string
- >'wrong type?' : "wrong type?"
-@@= skipped -17, +17 lines =@@
+@@= skipped -27, +27 lines =@@
  
  // optional
  function container(
@@ -164,7 +79,7 @@
  >"before everything" : number
  
          { ['before everything']: 12, ...o, b: 'yes' }
-->{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; "before everything": number; }
+->{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; "before everything": number; b: string; }
 +>{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; ['before everything']: number; b: string; }
  >['before everything'] : number
  >'before everything' : "before everything"
@@ -173,21 +88,12 @@
  >"at the end" : number
  
          { ...o, b: 'yeah', ['at the end']: 14 }
-->{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; "at the end": number; a: number; }
+->{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; "at the end": number; }
 +>{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; ['at the end']: number; }
  >o : { a: number; b: string; }
  >b : string
  >'yeah' : "yeah"
-@@= skipped -17, +17 lines =@@
- >shortCutted : { a: number; b: string; }
- >a : number
- >b : string
-->{ ...o, a } : { a: number; b: string; }
-+>{ ...o, a } : { b: string; a: number; }
- >o : { a: number; b: string; }
- >a : number
- 
-@@= skipped -89, +89 lines =@@
+@@= skipped -106, +106 lines =@@
  >d : string
  
      f({ a: 1, id: true }, { c: 1, d: 'no' })
@@ -211,8 +117,8 @@
  >w : T | { s: string; }
  
      let x14 = { ...w, ...obj };
-->x14 : (T & { x: number; }) | { x: number; s: string; }
-->{ ...w, ...obj } : (T & { x: number; }) | { x: number; s: string; }
+->x14 : { s: string; x: number; } | (T & { x: number; })
+->{ ...w, ...obj } : { s: string; x: number; } | (T & { x: number; })
 +>x14 : { s: string; x: number; } | T & { x: number; }
 +>{ ...w, ...obj } : { s: string; x: number; } | T & { x: number; }
  >w : T | { s: string; }
@@ -235,8 +141,8 @@
  >w : T | { s: string; }
  
      let x17 = { ...t, ...w, ...obj };
-->x17 : (T & { x: number; }) | (T & { x: number; s: string; })
-->{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { x: number; s: string; })
+->x17 : (T & { x: number; }) | (T & { s: string; x: number; })
+->{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { s: string; x: number; })
 +>x17 : T & { x: number; } | T & { s: string; x: number; }
 +>{ ...t, ...w, ...obj } : T & { x: number; } | T & { s: string; x: number; }
  >t : T

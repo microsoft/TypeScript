@@ -15,13 +15,11 @@
      reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 ->reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
 ->reducer : (reduction: V | R, value: V, key: K, iter: this) => R
-->reduction : V | R
 +>reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
 +>reducer : (reduction: R | V, value: V, key: K, iter: this) => R
-+>reduction : R | V
+ >reduction : R | V
  >value : V
  >key : K
- >iter : this
 @@= skipped -55, +55 lines =@@
  >Immutable : typeof Immutable
  
@@ -32,7 +30,7 @@
 ->reviver : (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any
 +>reviver : (key: string | number, sequence: Indexed<any> | Keyed<string, any>, path?: (string | number)[]) => any
  >key : string | number
-->sequence : Collection.Keyed<string, any> | Collection.Indexed<any>
+->sequence : Collection.Indexed<any> | Collection.Keyed<string, any>
 +>sequence : Indexed<any> | Keyed<string, any>
  >Collection : any
  >Collection : any
@@ -98,7 +96,7 @@
  
      merge(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 ->merge : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
-->collections : (Collection.Indexed<T> | T[])[]
+->collections : (T[] | Collection.Indexed<T>)[]
 +>merge : (...collections: (T[] | Indexed<T>)[]) => this
 +>collections : (T[] | Indexed<T>)[]
  >Collection : any
@@ -110,13 +108,13 @@
  >oldVal : T
  >newVal : T
  >key : number
-->collections : (Collection.Indexed<T> | T[])[]
+->collections : (T[] | Collection.Indexed<T>)[]
 +>collections : (T[] | Indexed<T>)[]
  >Collection : any
  
      mergeDeep(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 ->mergeDeep : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
-->collections : (Collection.Indexed<T> | T[])[]
+->collections : (T[] | Collection.Indexed<T>)[]
 +>mergeDeep : (...collections: (T[] | Indexed<T>)[]) => this
 +>collections : (T[] | Indexed<T>)[]
  >Collection : any
@@ -128,7 +126,7 @@
  >oldVal : T
  >newVal : T
  >key : number
-->collections : (Collection.Indexed<T> | T[])[]
+->collections : (T[] | Collection.Indexed<T>)[]
 +>collections : (T[] | Indexed<T>)[]
  >Collection : any
  
@@ -436,30 +434,25 @@
  
      union(...collections: Array<Collection<any, T> | Array<T>>): this;
 ->union : (...collections: Array<Collection<any, T> | Array<T>>) => this
-->collections : (Collection<any, T> | T[])[]
 +>union : (...collections: (T[] | Collection<any, T>)[]) => this
-+>collections : (T[] | Collection<any, T>)[]
+ >collections : (T[] | Collection<any, T>)[]
  
      merge(...collections: Array<Collection<any, T> | Array<T>>): this;
 ->merge : (...collections: Array<Collection<any, T> | Array<T>>) => this
-->collections : (Collection<any, T> | T[])[]
 +>merge : (...collections: (T[] | Collection<any, T>)[]) => this
-+>collections : (T[] | Collection<any, T>)[]
+ >collections : (T[] | Collection<any, T>)[]
  
      intersect(...collections: Array<Collection<any, T> | Array<T>>): this;
 ->intersect : (...collections: Array<Collection<any, T> | Array<T>>) => this
-->collections : (Collection<any, T> | T[])[]
 +>intersect : (...collections: (T[] | Collection<any, T>)[]) => this
-+>collections : (T[] | Collection<any, T>)[]
+ >collections : (T[] | Collection<any, T>)[]
  
      subtract(...collections: Array<Collection<any, T> | Array<T>>): this;
 ->subtract : (...collections: Array<Collection<any, T> | Array<T>>) => this
-->collections : (Collection<any, T> | T[])[]
 +>subtract : (...collections: (T[] | Collection<any, T>)[]) => this
-+>collections : (T[] | Collection<any, T>)[]
+ >collections : (T[] | Collection<any, T>)[]
  
      // Transient changes
-     withMutations(mutator: (mutable: this) => any): this;
 @@= skipped -29, +29 lines =@@
  
      // Sequence algorithms
@@ -659,11 +652,11 @@
  
      export interface Class<T extends Object> {
        (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
-->values : Partial<T> | Iterable<[string, any]>
+->values : Iterable<[string, any]> | Partial<T>
 +>values : Iterable<[string, any], any, any> | Partial<T>
  
        new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
-->values : Partial<T> | Iterable<[string, any]>
+->values : Iterable<[string, any]> | Partial<T>
 +>values : Iterable<[string, any], any, any> | Partial<T>
      }
      export interface Instance<T extends Object> {
@@ -1586,10 +1579,9 @@
      reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 ->reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
 ->reducer : (reduction: V | R, value: V, key: K, iter: this) => R
-->reduction : V | R
 +>reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
 +>reducer : (reduction: R | V, value: V, key: K, iter: this) => R
-+>reduction : R | V
+ >reduction : R | V
  >value : V
  >key : K
  >iter : this
@@ -1606,13 +1598,11 @@
      reduceRight<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 ->reduceRight : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
 ->reducer : (reduction: V | R, value: V, key: K, iter: this) => R
-->reduction : V | R
 +>reduceRight : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
 +>reducer : (reduction: R | V, value: V, key: K, iter: this) => R
-+>reduction : R | V
+ >reduction : R | V
  >value : V
  >key : K
- >iter : this
 @@= skipped -51, +51 lines =@@
  
      // Search for value

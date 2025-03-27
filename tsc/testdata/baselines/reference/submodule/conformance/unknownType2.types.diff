@@ -1,27 +1,6 @@
 --- old.unknownType2.types
 +++ new.unknownType2.types
-@@= skipped -15, +15 lines =@@
- let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
- >validate : (x: unknown) => SomeResponse
- >x : unknown
-->x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "yes" | "no" | "idk"
-+>x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "idk" | "no" | "yes"
- >x : unknown
-->(x === 'yes' || x === 'no') ? x : 'idk' : "yes" | "no" | "idk"
-+>(x === 'yes' || x === 'no') ? x : 'idk' : "idk" | "no" | "yes"
- >(x === 'yes' || x === 'no') : boolean
- >x === 'yes' || x === 'no' : boolean
- >x === 'yes' : boolean
-@@= skipped -11, +11 lines =@@
- >x === 'no' : boolean
- >x : unknown
- >'no' : "no"
-->x : "yes" | "no"
-+>x : "no" | "yes"
- >'idk' : "idk"
- 
- const u: unknown = undefined;
-@@= skipped -21, +21 lines =@@
+@@= skipped -47, +47 lines =@@
      const y = u.toString(10);
  >y : string
  >u.toString(10) : string
@@ -32,31 +11,4 @@
 +>toString : (radix?: number | undefined) => string
  >10 : 10
  }
- 
-@@= skipped -531, +531 lines =@@
- >'idk' : "idk"
- 
-             return x;
-->x : "yes" | "no" | "idk"
-+>x : "idk" | "no" | "yes"
- 
-         default:
-             throw new Error('unknown response');
-@@= skipped -31, +31 lines =@@
- >'maybe' : "maybe"
- 
-             return x; // error
-->x : "yes" | "no" | "maybe"
-+>x : "maybe" | "no" | "yes"
- 
-         default:
-             throw new Error('Can you repeat the question?');
-@@= skipped -26, +26 lines =@@
- >x : unknown
- >undefined : undefined
- >typeof x !== 'string' : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : {} | null
- >'string' : "string"
  

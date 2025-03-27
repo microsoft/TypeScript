@@ -18,52 +18,25 @@
  >[a] : 0 | 1 | 9
  >a : 0
  >b : 0 | 1 | 9
-@@= skipped -22, +22 lines =@@
- >0 : 0
- 
-     let b: 0 | 1 | 8 | 9;
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- 
-     [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+@@= skipped -28, +28 lines =@@
  >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
  >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
  >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
-->{ [(a = 1)]: b } : { 1: 0 | 1 | 9 | 8; }
-->[(a = 1)] : 0 | 1 | 9 | 8
+->{ [(a = 1)]: b } : { 1: 0 | 1 | 8 | 9; }
 +>{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 8 | 9; }
-+>[(a = 1)] : 0 | 1 | 8 | 9
+ >[(a = 1)] : 0 | 1 | 8 | 9
  >(a = 1) : 1
  >a = 1 : 1
- >a : 0 | 1
- >1 : 1
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- >[9, a] as const : readonly [9, 0]
- >[9, a] : readonly [9, 0]
- >9 : 9
 @@= skipped -33, +33 lines =@@
- >1 : 1
- 
-     let b: 0 | 1 | 8 | 9;
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- 
-     [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
  >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
  >[{ [a]: b } = [a = 0, 9] as const] : [readonly [0, 9]]
  >{ [a]: b } = [a = 0, 9] as const : readonly [0, 9]
-->{ [a]: b } : { 0: 0 | 1 | 9 | 8; }
-->[a] : 0 | 1 | 9 | 8
+->{ [a]: b } : { 0: 0 | 1 | 8 | 9; }
 +>{ [a]: b } : { [a]: 0 | 1 | 8 | 9; }
-+>[a] : 0 | 1 | 8 | 9
+ >[a] : 0 | 1 | 8 | 9
  >a : 0
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- >[a = 0, 9] as const : readonly [0, 9]
- >[a = 0, 9] : readonly [0, 9]
- >a = 0 : 0
-@@= skipped -40, +40 lines =@@
+ >b : 0 | 1 | 8 | 9
+@@= skipped -34, +34 lines =@@
  >[{ [(a = 1)]: b } = [9, a] as const] = [] : []
  >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
  >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
@@ -81,54 +54,25 @@
  >[a] : 0 | 1 | 9
  >a : 0
  >b : 0 | 1 | 9
-@@= skipped -24, +24 lines =@@
- >0 : 0
- 
-     let b: 0 | 1 | 8 | 9;
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- 
-     [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const], f();
- >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const], f() : void
+@@= skipped -31, +31 lines =@@
  >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
  >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
  >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
-->{ [(a = 1)]: b } : { 1: 0 | 1 | 9 | 8; }
-->[(a = 1)] : 0 | 1 | 9 | 8
+->{ [(a = 1)]: b } : { 1: 0 | 1 | 8 | 9; }
 +>{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 8 | 9; }
-+>[(a = 1)] : 0 | 1 | 8 | 9
+ >[(a = 1)] : 0 | 1 | 8 | 9
  >(a = 1) : 1
  >a = 1 : 1
- >a : 0 | 1
- >1 : 1
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- >[9, a] as const : readonly [9, 0]
- >[9, a] : readonly [9, 0]
- >9 : 9
 @@= skipped -36, +36 lines =@@
- >1 : 1
- 
-     let b: 0 | 1 | 8 | 9;
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- 
-     [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const], f();
- >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const], f() : void
  >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
  >[{ [a]: b } = [a = 0, 9] as const] : [readonly [0, 9]]
  >{ [a]: b } = [a = 0, 9] as const : readonly [0, 9]
-->{ [a]: b } : { 0: 0 | 1 | 9 | 8; }
-->[a] : 0 | 1 | 9 | 8
+->{ [a]: b } : { 0: 0 | 1 | 8 | 9; }
 +>{ [a]: b } : { [a]: 0 | 1 | 8 | 9; }
-+>[a] : 0 | 1 | 8 | 9
+ >[a] : 0 | 1 | 8 | 9
  >a : 0
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- >[a = 0, 9] as const : readonly [0, 9]
- >[a = 0, 9] : readonly [0, 9]
- >a = 0 : 0
-@@= skipped -45, +45 lines =@@
+ >b : 0 | 1 | 8 | 9
+@@= skipped -38, +38 lines =@@
  >[{ [(a = 1)]: b } = [9, a] as const] = [] : []
  >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
  >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
@@ -146,52 +90,21 @@
  >[a] : 0 | 1 | 9
  >a : 0
  >b : 0 | 1 | 9
-@@= skipped -22, +22 lines =@@
- >0 : 0
- 
-     let b: 0 | 1 | 8 | 9;
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- 
-     f(), [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
- >f(), [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
-@@= skipped -9, +9 lines =@@
+@@= skipped -31, +31 lines =@@
  >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
  >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
  >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
-->{ [(a = 1)]: b } : { 1: 0 | 1 | 9 | 8; }
-->[(a = 1)] : 0 | 1 | 9 | 8
+->{ [(a = 1)]: b } : { 1: 0 | 1 | 8 | 9; }
 +>{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 8 | 9; }
-+>[(a = 1)] : 0 | 1 | 8 | 9
+ >[(a = 1)] : 0 | 1 | 8 | 9
  >(a = 1) : 1
  >a = 1 : 1
- >a : 0 | 1
- >1 : 1
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- >[9, a] as const : readonly [9, 0]
- >[9, a] : readonly [9, 0]
- >9 : 9
-@@= skipped -27, +27 lines =@@
- >1 : 1
- 
-     let b: 0 | 1 | 8 | 9;
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- 
-     f(), [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
- >f(), [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
-@@= skipped -9, +9 lines =@@
+@@= skipped -36, +36 lines =@@
  >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
  >[{ [a]: b } = [a = 0, 9] as const] : [readonly [0, 9]]
  >{ [a]: b } = [a = 0, 9] as const : readonly [0, 9]
-->{ [a]: b } : { 0: 0 | 1 | 9 | 8; }
-->[a] : 0 | 1 | 9 | 8
+->{ [a]: b } : { 0: 0 | 1 | 8 | 9; }
 +>{ [a]: b } : { [a]: 0 | 1 | 8 | 9; }
-+>[a] : 0 | 1 | 8 | 9
+ >[a] : 0 | 1 | 8 | 9
  >a : 0
-->b : 0 | 1 | 9 | 8
-+>b : 0 | 1 | 8 | 9
- >[a = 0, 9] as const : readonly [0, 9]
- >[a = 0, 9] : readonly [0, 9]
- >a = 0 : 0
+ >b : 0 | 1 | 8 | 9

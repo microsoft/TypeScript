@@ -1,18 +1,52 @@
 --- old.genericRestParameters3.types
 +++ new.genericRestParameters3.types
-@@= skipped -261, +261 lines =@@
+@@= skipped -24, +24 lines =@@
+ >t1 : [string] | [number, boolean]
+ 
+ declare const t2: readonly [string] | [number, boolean];
+->t2 : readonly [string] | [number, boolean]
++>t2 : [number, boolean] | readonly [string]
+ 
+ declare const t3: [string] | readonly [number, boolean];
+ >t3 : [string] | readonly [number, boolean]
+ 
+ declare const t4: readonly [string] | readonly [number, boolean];
+->t4 : readonly [number, boolean] | readonly [string]
++>t4 : readonly [string] | readonly [number, boolean]
+ 
+ f1("foo", "abc");
+ >f1("foo", "abc") : void
+@@= skipped -33, +33 lines =@@
+ >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+ >"foo" : "foo"
+ >...t2 : string | number | boolean
+->t2 : readonly [string] | [number, boolean]
++>t2 : [number, boolean] | readonly [string]
+ 
+ f1("foo", ...t3);
+ >f1("foo", ...t3) : void
+@@= skipped -14, +14 lines =@@
+ >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+ >"foo" : "foo"
+ >...t4 : string | number | boolean
+->t4 : readonly [number, boolean] | readonly [string]
++>t4 : readonly [string] | readonly [number, boolean]
+ 
+ f1("foo", 10);  // Error
+ >f1("foo", 10) : void
+@@= skipped -190, +190 lines =@@
  >ff1 : (...rest: [string, string] | [string, number]) => void
  
  function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
 ->ff3 : <A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
 ->s1 : (...args: [x: string, ...rest: A | [number]]) => void
+->args : [x: string, ...rest: A] | [x: string, number]
 +>ff3 : <A extends unknown[]>(s1: (...args: [x: string, number] | [x: string, ...rest: A]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
 +>s1 : (...args: [x: string, number] | [x: string, ...rest: A]) => void
- >args : [x: string, number] | [x: string, ...rest: A]
++>args : [x: string, number] | [x: string, ...rest: A]
  >s2 : (x: string, ...rest: A | [number]) => void
  >x : string
-->rest : [number] | A
-+>rest : A | [number]
+ >rest : A | [number]
  
      s1 = s2;
  >s1 = s2 : (x: string, ...rest: A | [number]) => void

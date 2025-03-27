@@ -9,23 +9,7 @@
  
      (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>;
  >s1 : R
-@@= skipped -10, +10 lines =@@
- >s5 : W
- 
-     (streams: ReadonlyArray<R | W | RW>): Promise<void>;
-->streams : readonly (R | W | RW)[]
-+>streams : readonly (R | RW | W)[]
- 
-     (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>;
- >s1 : R
-->s2 : W | RW
-->streams : (W | RW)[]
-+>s2 : RW | W
-+>streams : (RW | W)[]
- }
- 
- declare var writes: W
-@@= skipped -29, +29 lines =@@
+@@= skipped -39, +39 lines =@@
  
  pli(
  >pli(    reads,    ...gun,    tr,    fun,    ...gz,    writes) : Promise<void>

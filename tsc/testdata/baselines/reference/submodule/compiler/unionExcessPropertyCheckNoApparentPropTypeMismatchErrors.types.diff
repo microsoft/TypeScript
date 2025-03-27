@@ -5,12 +5,10 @@
  
  declare function forEach<T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any);
 ->forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
-->from : IStringDictionary<T> | INumberDictionary<T>
 +>forEach : <T>(from: INumberDictionary<T> | IStringDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
-+>from : INumberDictionary<T> | IStringDictionary<T>
+ >from : INumberDictionary<T> | IStringDictionary<T>
  >callback : (entry: { key: any; value: T; }, remove: () => void) => any
  >entry : { key: any; value: T; }
- >key : any
 @@= skipped -14, +14 lines =@@
  
  forEach({ toString: 123 }, () => count++);

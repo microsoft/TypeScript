@@ -5,13 +5,7 @@
  >foo((y: "foo" | "bar") => y === "foo" ? y : "foo") : (x: "foo") => "foo"
  >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
 ->(y: "foo" | "bar") => y === "foo" ? y : "foo" : (y: "foo" | "bar") => "foo"
-->y : "foo" | "bar"
 +>(y: "foo" | "bar") => y === "foo" ? y : "foo" : (y: "bar" | "foo") => "foo"
-+>y : "bar" | "foo"
+ >y : "bar" | "foo"
  >y === "foo" ? y : "foo" : "foo"
  >y === "foo" : boolean
-->y : "foo" | "bar"
-+>y : "bar" | "foo"
- >"foo" : "foo"
- >y : "foo"
- >"foo" : "foo"

@@ -26,50 +26,7 @@
  
    next() {
  >next : () => { done: boolean; value: string; }
-@@= skipped -38, +38 lines =@@
- }
- 
- const mappedGen = gen().map(x => x === 0 ? "zero" : "other");
-->mappedGen : IteratorObject<"zero" | "other", undefined, unknown>
-->gen().map(x => x === 0 ? "zero" : "other") : IteratorObject<"zero" | "other", undefined, unknown>
-+>mappedGen : IteratorObject<"other" | "zero", undefined, unknown>
-+>gen().map(x => x === 0 ? "zero" : "other") : IteratorObject<"other" | "zero", undefined, unknown>
- >gen().map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
- >gen() : Generator<number, void, unknown>
- >gen : () => Generator<number, void, unknown>
- >map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
-->x => x === 0 ? "zero" : "other" : (x: number) => "zero" | "other"
-+>x => x === 0 ? "zero" : "other" : (x: number) => "other" | "zero"
- >x : number
-->x === 0 ? "zero" : "other" : "zero" | "other"
-+>x === 0 ? "zero" : "other" : "other" | "zero"
- >x === 0 : boolean
- >x : number
- >0 : 0
-@@= skipped -16, +16 lines =@@
- >"other" : "other"
- 
- const mappedValues = [0, 1, 2].values().map(x => x === 0 ? "zero" : "other");
-->mappedValues : IteratorObject<"zero" | "other", undefined, unknown>
-->[0, 1, 2].values().map(x => x === 0 ? "zero" : "other") : IteratorObject<"zero" | "other", undefined, unknown>
-+>mappedValues : IteratorObject<"other" | "zero", undefined, unknown>
-+>[0, 1, 2].values().map(x => x === 0 ? "zero" : "other") : IteratorObject<"other" | "zero", undefined, unknown>
- >[0, 1, 2].values().map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
- >[0, 1, 2].values() : ArrayIterator<number>
- >[0, 1, 2].values : () => ArrayIterator<number>
-@@= skipped -11, +11 lines =@@
- >2 : 2
- >values : () => ArrayIterator<number>
- >map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
-->x => x === 0 ? "zero" : "other" : (x: number) => "zero" | "other"
-+>x => x === 0 ? "zero" : "other" : (x: number) => "other" | "zero"
- >x : number
-->x === 0 ? "zero" : "other" : "zero" | "other"
-+>x === 0 ? "zero" : "other" : "other" | "zero"
- >x === 0 : boolean
- >x : number
- >0 : 0
-@@= skipped -127, +127 lines =@@
+@@= skipped -192, +192 lines =@@
  const iter1 = Iterator.from(g1);
  >iter1 : IteratorObject<string, undefined, unknown>
  >Iterator.from(g1) : IteratorObject<string, undefined, unknown>
@@ -81,15 +38,3 @@
  >g1 : Generator<string, number, boolean>
  
  declare const iter2: IteratorObject<string>;
-@@= skipped -11, +11 lines =@@
- const iter3 = iter2.flatMap(() => g1);
- >iter3 : IteratorObject<string, undefined, unknown>
- >iter2.flatMap(() => g1) : IteratorObject<string, undefined, unknown>
-->iter2.flatMap : <U>(callback: (value: string, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
-+>iter2.flatMap : <U>(callback: (value: string, index: number) => Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
- >iter2 : IteratorObject<string, unknown, unknown>
-->flatMap : <U>(callback: (value: string, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
-+>flatMap : <U>(callback: (value: string, index: number) => Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
- >() => g1 : () => Generator<string, number, boolean>
- >g1 : Generator<string, number, boolean>
- 

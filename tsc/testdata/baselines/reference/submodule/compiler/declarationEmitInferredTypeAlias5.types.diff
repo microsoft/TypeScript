@@ -9,9 +9,3 @@
  
  //let v2: Z.Data;
  let v = "str" || true;
- >v : string | boolean
-->"str" || true : true | "str"
-+>"str" || true : "str" | true
- >"str" : "str"
- >true : true
- 

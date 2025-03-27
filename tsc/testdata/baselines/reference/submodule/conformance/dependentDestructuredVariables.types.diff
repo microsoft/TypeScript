@@ -293,23 +293,11 @@
  
  let fooM: FooMethod = {
  >fooM : FooMethod
-->{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): void; }
+->{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): void; }
 +>{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => void; }
  
    method(type, cb) {
-->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => void
-->type : "str" | "num"
-+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => void
-+>type : "num" | "str"
- >cb : ((e: string) => void) | ((e: number) => void)
- 
-     if (type == 'num') {
- >type == 'num' : boolean
-->type : "str" | "num"
-+>type : "num" | "str"
- >'num' : "num"
- 
-       cb(123)
+ >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => void
 @@= skipped -30, +30 lines =@@
  >FooAsyncMethod : FooAsyncMethod
  
@@ -325,23 +313,11 @@
  
  let fooAsyncM: FooAsyncMethod = {
  >fooAsyncM : FooAsyncMethod
-->{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
+->{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
 +>{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>; }
  
    async method(type, cb) {
-->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
-->type : "str" | "num"
-+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
-+>type : "num" | "str"
- >cb : ((e: string) => void) | ((e: number) => void)
- 
-     if (type == 'num') {
- >type == 'num' : boolean
-->type : "str" | "num"
-+>type : "num" | "str"
- >'num' : "num"
- 
-       cb(123)
+ >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
 @@= skipped -30, +30 lines =@@
  >FooGenMethod : FooGenMethod
  
@@ -357,23 +333,11 @@
  
  let fooGenM: FooGenMethod = {
  >fooGenM : FooGenMethod
-->{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
+->{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
 +>{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>; }
  
    *method(type, cb) {
-->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
-->type : "str" | "num"
-+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
-+>type : "num" | "str"
- >cb : ((e: string) => void) | ((e: number) => void)
- 
-     if (type == 'num') {
- >type == 'num' : boolean
-->type : "str" | "num"
-+>type : "num" | "str"
- >'num' : "num"
- 
-       cb(123)
+ >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
 @@= skipped -30, +30 lines =@@
  >FooAsyncGenMethod : FooAsyncGenMethod
  
@@ -389,23 +353,11 @@
  
  let fooAsyncGenM: FooAsyncGenMethod = {
  >fooAsyncGenM : FooAsyncGenMethod
-->{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
+->{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
 +>{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>; }
  
    async *method(type, cb) {
-->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
-->type : "str" | "num"
-+>method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
-+>type : "num" | "str"
- >cb : ((e: string) => void) | ((e: number) => void)
- 
-     if (type == 'num') {
- >type == 'num' : boolean
-->type : "str" | "num"
-+>type : "num" | "str"
- >'num' : "num"
- 
-       cb(123)
+ >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
 @@= skipped -45, +45 lines =@@
  
          payload.toFixed();  // error
@@ -422,7 +374,7 @@
  // Repro from #48902
  
  function foo({
-->foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { value1: any; test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; }) => void
+->foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
 +>foo : (__0: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
  
      value1,
@@ -432,31 +384,19 @@
  
  function fa1(x: [true, number] | [false, string]) {
 ->fa1 : (x: [true, number] | [false, string]) => void
-->x : [true, number] | [false, string]
 +>fa1 : (x: [false, string] | [true, number]) => void
-+>x : [false, string] | [true, number]
+ >x : [false, string] | [true, number]
  >true : true
  >false : false
- 
-     const [guard, value] = x;
- >guard : boolean
- >value : string | number
-->x : [true, number] | [false, string]
-+>x : [false, string] | [true, number]
- 
-     if (guard) {
- >guard : boolean
 @@= skipped -66, +66 lines =@@
  }
  
  const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
 ->fa3 : (...args: [true, number] | [false, string]) => void
-->args : [true, number] | [false, string]
 +>fa3 : (...args: [false, string] | [true, number]) => void
-+>args : [false, string] | [true, number]
+ >args : [false, string] | [true, number]
  >true : true
  >false : false
- >(guard, value) => {    if (guard) {        for (;;) {            value;  // number        }    }    else {        while (!!true) {            value;  // string        }    }} : (guard: boolean, value: string | number) => void
 @@= skipped -104, +104 lines =@@
  // Destructuring tuple types with different arities
  
@@ -473,16 +413,8 @@
 ->tooNarrow : ([x, y]: [1, 1] | [1, 2] | [1]) => void
 +>tooNarrow : (__0: [1] | [1, 1] | [1, 2]) => void
  >x : 1
-->y : 2 | 1 | undefined
-+>y : 1 | 2 | undefined
+ >y : 1 | 2 | undefined
  
-     if (y === undefined) {
- >y === undefined : boolean
-->y : 2 | 1 | undefined
-+>y : 1 | 2 | undefined
- >undefined : undefined
- 
-         const shouldNotBeOk: never = x;  // Error
 @@= skipped -18, +18 lines =@@
  // https://github.com/microsoft/TypeScript/issues/56312
  

@@ -1,15 +1,6 @@
 --- old.noUncheckedIndexedAccess.types
 +++ new.noUncheckedIndexedAccess.types
-@@= skipped -77, +77 lines =@@
- >e7 : boolean
- >strMap["foo" as "foo" | "baz"] : boolean | undefined
- >strMap : { [s: string]: boolean; }
-->"foo" as "foo" | "baz" : "foo" | "baz"
-+>"foo" as "foo" | "baz" : "baz" | "foo"
- >"foo" : "foo"
- 
- const e8: boolean = strMap[NumericEnum1.A];
-@@= skipped -302, +302 lines =@@
+@@= skipped -379, +379 lines =@@
  >key : string
  
  const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK

@@ -5,14 +5,10 @@
  excessPropertyCheckWithMultipleDiscriminants.ts(50,5): error TS2353: Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
  excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
 -excessPropertyCheckWithMultipleDiscriminants.ts(83,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
--excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
--excessPropertyCheckWithMultipleDiscriminants.ts(131,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
 +excessPropertyCheckWithMultipleDiscriminants.ts(83,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | Common & A'.
-+excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A | Common'.
-+excessPropertyCheckWithMultipleDiscriminants.ts(131,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'OneToOneAttribute | StringAttribute'.
+ excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A | Common'.
+ excessPropertyCheckWithMultipleDiscriminants.ts(131,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'OneToOneAttribute | StringAttribute'.
  excessPropertyCheckWithMultipleDiscriminants.ts(137,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
- 
- 
 @@= skipped -99, +99 lines =@@
          a: 1,
          b: 1  // excess property
@@ -22,21 +18,3 @@
      }
      
      type CommonWithDisjointOverlappingOptionals = Common | A | B;
-@@= skipped -12, +12 lines =@@
-         a: 1,
-         b: 1  // excess property
-         ~
--!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
-+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A | Common'.
-     }
-     
-     // Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
-@@= skipped -40, +40 lines =@@
-         type: 'string',
-         autoIncrement: true,
-         ~~~~~~~~~~~~~
--!!! error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
-+!!! error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'OneToOneAttribute | StringAttribute'.
-         required: true,
-     };
-     

@@ -18,12 +18,3 @@
  >next : ((value: T) => void) | undefined
  >value : T
  >error : ((error: any) => void) | undefined
-@@= skipped -15, +15 lines =@@
-     return typeof input === 'string' ? of(input) : from(input)
- >typeof input === 'string' ? of(input) : from(input) : Observable<string>
- >typeof input === 'string' : boolean
-->typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >input : string | ObservableInput<string>
- >'string' : "string"
- >of(input) : Observable<string>

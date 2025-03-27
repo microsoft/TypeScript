@@ -22,7 +22,7 @@
  }
  
  function f10(x: true | false) {
-->f10 : (x: true | false) => "true" | "false"
+->f10 : (x: true | false) => "false" | "true"
 +>f10 : (x: boolean) => "false" | "true"
  >x : boolean
  >true : true
@@ -31,7 +31,7 @@
  }
  
  function f11(x: true | false) {
-->f11 : (x: true | false) => "true" | "false"
+->f11 : (x: true | false) => "false" | "true"
 +>f11 : (x: boolean) => "false" | "true"
  >x : boolean
  >true : true

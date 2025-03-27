@@ -1,15 +1,6 @@
 --- old.inferFromGenericFunctionReturnTypes3.types
 +++ new.inferFromGenericFunctionReturnTypes3.types
-@@= skipped -98, +98 lines =@@
- 
- interface FolderContentItem {
-     type: 'folder' | 'file';
-->type : "folder" | "file"
-+>type : "file" | "folder"
- }
- 
- let a: FolderContentItem[] = [];
-@@= skipped -41, +41 lines =@@
+@@= skipped -139, +139 lines =@@
  >arr.map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
  >arr : [number, number][]
  >map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
@@ -18,16 +9,7 @@
  >x : number
  >y : number
  
-@@= skipped -262, +262 lines =@@
- >age : number
- 
-     position: "STRIKER" | "GOALKEEPER",
-->position : "STRIKER" | "GOALKEEPER"
-+>position : "GOALKEEPER" | "STRIKER"
- 
- };
-  
-@@= skipped -13, +13 lines =@@
+@@= skipped -275, +275 lines =@@
  
      return Promise.all([
  >Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>

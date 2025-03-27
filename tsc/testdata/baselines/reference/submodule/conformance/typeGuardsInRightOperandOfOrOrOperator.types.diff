@@ -9,13 +9,6 @@
  >x : string | number
  
      return typeof x !== "string" || x.length === 10; // string
- >typeof x !== "string" || x.length === 10 : boolean
- >typeof x !== "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- >x.length === 10 : boolean
 @@= skipped -16, +16 lines =@@
  >10 : 10
  }
@@ -25,14 +18,6 @@
  >x : string | number
  
      // modify x in right hand operand
-     return typeof x !== "string" || ((x = 10) || x); // string | number
- >typeof x !== "string" || ((x = 10) || x) : number | true
- >typeof x !== "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- >((x = 10) || x) : number
 @@= skipped -19, +19 lines =@@
  >x : number
  }
@@ -42,14 +27,6 @@
  >x : string | number
  
      // modify x in right hand operand with string type itself
-     return typeof x !== "string" || ((x = "hello") || x); // string | number
- >typeof x !== "string" || ((x = "hello") || x) : string | true
- >typeof x !== "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
- >"string" : "string"
- >((x = "hello") || x) : string
 @@= skipped -19, +19 lines =@@
  >x : string
  }
@@ -59,21 +36,6 @@
  >x : string | number | boolean
  
      return typeof x === "string" // string | number | boolean
- >typeof x === "string" // string | number | boolean        || typeof x === "number"  // number | boolean        || x : boolean
- >typeof x === "string" // string | number | boolean        || typeof x === "number" : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-         || typeof x === "number"  // number | boolean
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"number" : "number"
- 
 @@= skipped -21, +21 lines =@@
  >x : boolean
  }
@@ -83,25 +45,7 @@
  >x : string | number | boolean
  
      // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
-@@= skipped -10, +10 lines =@@
-     return typeof x === "string" // string | number | boolean
- >typeof x === "string" // string | number | boolean        || ((b = x) || (typeof x === "number"  // number | boolean        || x)) : number | boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -14, +14 lines =@@
- >(typeof x === "number"  // number | boolean        || x) : boolean
- >typeof x === "number"  // number | boolean        || x : boolean
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"number" : "number"
- 
-@@= skipped -8, +8 lines =@@
+@@= skipped -32, +32 lines =@@
  >x : boolean
  }
  function foo6(x: number | string | boolean) {
@@ -110,24 +54,7 @@
  >x : string | number | boolean
  
      // Mixing typeguard
-     return typeof x === "string" // string | number | boolean
- >typeof x === "string" // string | number | boolean        || (typeof x !== "number" // number | boolean        ? x // boolean        : x === 10) : boolean
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -15, +15 lines =@@
- >(typeof x !== "number" // number | boolean        ? x // boolean        : x === 10) : boolean
- >typeof x !== "number" // number | boolean        ? x // boolean        : x === 10 : boolean
- >typeof x !== "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"number" : "number"
- 
-@@= skipped -13, +13 lines =@@
+@@= skipped -28, +28 lines =@@
  >10 : 10
  }
  function foo7(x: number | string | boolean) {
@@ -136,21 +63,3 @@
  >x : string | number | boolean
  
      var y: number| boolean | string;
-@@= skipped -13, +13 lines =@@
-     return typeof x === "string"
- >typeof x === "string"        || ((z = x) // number | boolean        || (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString()))) : string | number | true
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number | boolean
- >"string" : "string"
- 
-@@= skipped -16, +16 lines =@@
- >(typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString())) : string
- >typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString()) : string
- >typeof x === "number" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : number | boolean
- >"number" : "number"
- 

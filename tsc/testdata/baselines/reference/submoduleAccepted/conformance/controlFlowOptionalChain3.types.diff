@@ -28,11 +28,6 @@
  >div : any
  
        {foo?.bar === false && "foo"}
-->foo?.bar === false && "foo" : false | "foo"
-+>foo?.bar === false && "foo" : "foo" | false
- >foo?.bar === false : boolean
- >foo?.bar : boolean | undefined
- >foo : Foo | undefined
 @@= skipped -35, +35 lines =@@
  }
  

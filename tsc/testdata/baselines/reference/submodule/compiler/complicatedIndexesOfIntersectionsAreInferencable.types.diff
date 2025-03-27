@@ -8,11 +8,7 @@
 +>Func : <Values, ExtraProps>(x: string extends "initialValues" | "validate" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "initialValues" | "validate" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>) => void
  
      x: (string extends "validate" | "initialValues" | keyof ExtraProps
-->x : string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>
-+>x : string extends "initialValues" | "validate" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "initialValues" | "validate" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>
- 
-         ? Readonly<FormikConfig<Values> & ExtraProps>
-         : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">>
+ >x : string extends "initialValues" | "validate" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "initialValues" | "validate" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>
 @@= skipped -12, +12 lines =@@
  
  Func({

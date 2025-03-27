@@ -1,3 +1,4 @@
 [submodule "_submodules/TypeScript"]
 	path = _submodules/TypeScript
 	url = https://github.com/microsoft/TypeScript.git
+	branch = tsgo-port

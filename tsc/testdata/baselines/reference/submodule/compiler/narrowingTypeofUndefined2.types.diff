@@ -14,11 +14,7 @@
  >arg : T
  
      if (typeof arg !== "undefined") {
- >typeof arg !== "undefined" : boolean
-->typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >arg : T
- >"undefined" : "undefined"
+@@= skipped -15, +15 lines =@@
  
          takeArray(arg);
  >takeArray(arg) : void
@@ -27,7 +23,7 @@
  >arg : unknown[]
  
          const n: Array<unknown> = arg;
-@@= skipped -27, +27 lines =@@
+@@= skipped -12, +12 lines =@@
  >arg : T & {}
  
          const m = [...arg];

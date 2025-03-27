@@ -9,9 +9,8 @@
    Types of parameters 'y' and 'y' are incompatible.
      Type 'T' is not assignable to type 'Derived2[]'.
        Type 'Base[]' is not assignable to type 'Derived2[]'.
--        Type 'Base' is missing the following properties from type 'Derived2': baz, bar
+         Type 'Base' is missing the following properties from type 'Derived2': bar, baz
 -assignmentCompatWithCallSignatures3.ts(83,1): error TS2322: Type '(x: Base[], y: Derived[]) => Derived[]' is not assignable to type '<T extends Array<Derived>>(x: Base[], y: T) => T'.
-+        Type 'Base' is missing the following properties from type 'Derived2': bar, baz
 +assignmentCompatWithCallSignatures3.ts(83,1): error TS2322: Type '(x: Base[], y: Derived[]) => Derived[]' is not assignable to type '<T extends Derived[]>(x: Base[], y: T) => T'.
    Type 'Derived[]' is not assignable to type 'T'.
      'Derived[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived[]'.
@@ -25,9 +24,7 @@
  !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
  !!! error TS2322:     Type 'T' is not assignable to type 'Derived2[]'.
  !!! error TS2322:       Type 'Base[]' is not assignable to type 'Derived2[]'.
--!!! error TS2322:         Type 'Base' is missing the following properties from type 'Derived2': baz, bar
-+!!! error TS2322:         Type 'Base' is missing the following properties from type 'Derived2': bar, baz
-     var b13: <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
+@@= skipped -9, +9 lines =@@
      a13 = b13; // ok
      b13 = a13; // ok
      ~~~

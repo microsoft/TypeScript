@@ -21,28 +21,6 @@
  >fn() : T
  >fn : () => T
  
-   return promises.map((result) =>
- >promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] } : { [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }
-->promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) : ([undefined, Error] | [unknown, undefined])[]
-+>promises.map((result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))],  ) : ([unknown, undefined] | [undefined, Error])[]
- >promises.map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
- >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
- >map : <U>(callbackfn: (value: PromiseSettledResult<unknown>, index: number, array: PromiseSettledResult<unknown>[]) => U, thisArg?: any) => U[]
-->(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<unknown>) => [undefined, Error] | [unknown, undefined]
-+>(result) =>    result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : (result: PromiseSettledResult<unknown>) => [unknown, undefined] | [undefined, Error]
- >result : PromiseSettledResult<unknown>
- 
-     result.status === "fulfilled"
- >result.status === "fulfilled"      ? [result.value, undefined]      : [undefined, new Error(String(result.reason))] : [unknown, undefined] | [undefined, Error]
- >result.status === "fulfilled" : boolean
-->result.status : "rejected" | "fulfilled"
-+>result.status : "fulfilled" | "rejected"
- >result : PromiseSettledResult<unknown>
-->status : "rejected" | "fulfilled"
-+>status : "fulfilled" | "rejected"
- >"fulfilled" : "fulfilled"
- 
-       ? [result.value, undefined]
 @@= skipped -65, +65 lines =@@
  >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
  >0 : 0

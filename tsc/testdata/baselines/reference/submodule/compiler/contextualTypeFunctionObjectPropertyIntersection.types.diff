@@ -9,19 +9,7 @@
  
      [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
  >type : K
-@@= skipped -83, +83 lines =@@
- >ev : { type: "FOO"; } | { type: "BAR"; }
- 
-       ev.type; // should be 'FOO' | 'BAR'
-->ev.type : "FOO" | "BAR"
-+>ev.type : "BAR" | "FOO"
- >ev : { type: "FOO"; } | { type: "BAR"; }
-->type : "FOO" | "BAR"
-+>type : "BAR" | "FOO"
- 
-     },
-   },
-@@= skipped -19, +19 lines =@@
+@@= skipped -102, +102 lines =@@
  
    };
    on?: {

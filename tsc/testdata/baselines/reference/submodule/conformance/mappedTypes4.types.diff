@@ -1,19 +1,10 @@
 --- old.mappedTypes4.types
 +++ new.mappedTypes4.types
-@@= skipped -17, +17 lines =@@
- 
-     if (typeof obj === "object") {
- >typeof obj === "object" : boolean
-->typeof obj : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof obj : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >obj : T
- >"object" : "object"
- 
-@@= skipped -11, +11 lines =@@
+@@= skipped -28, +28 lines =@@
  
          for (let k in obj) {
  >k : Extract<keyof T, string>
-->obj : (T & object) | (T & null)
+->obj : (T & null) | (T & object)
 +>obj : T & null | T & object
  
              result[k] = { value: obj[k] };

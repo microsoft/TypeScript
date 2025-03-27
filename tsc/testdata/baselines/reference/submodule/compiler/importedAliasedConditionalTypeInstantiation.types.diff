@@ -4,13 +4,13 @@
  >Handler : any
  
  type Actual = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler>>;
-->Actual : lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error> | lambdaTester.VerifierFn<any>
+->Actual : lambdaTester.VerifierFn<any> | lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error>
 +>Actual : VerifierFn<any> | VerifierFn<string> | VerifierFn<Error>
  >lambdaTester : any
  >lambdaTester : any
  
  type Expected = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler<any, any>>>;
-->Expected : lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error> | lambdaTester.VerifierFn<any>
+->Expected : lambdaTester.VerifierFn<any> | lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error>
 +>Expected : VerifierFn<any> | VerifierFn<string> | VerifierFn<Error>
  >lambdaTester : any
  >lambdaTester : any

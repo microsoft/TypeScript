@@ -18,38 +18,7 @@
  >obj[k] : Boxified<T>[Extract<keyof T, string>]
  >obj : Boxified<T>
  >k : Extract<keyof T, string>
-@@= skipped -198, +198 lines =@@
- >s : string
- 
-     let b = makeRecord({
-->b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
-->makeRecord({        a: box(42),        b: box("hello"),        c: box(true)    }) : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
-+>b : { a: Box<string> | Box<number> | Box<boolean>; b: Box<string> | Box<number> | Box<boolean>; c: Box<string> | Box<number> | Box<boolean>; }
-+>makeRecord({        a: box(42),        b: box("hello"),        c: box(true)    }) : { a: Box<string> | Box<number> | Box<boolean>; b: Box<string> | Box<number> | Box<boolean>; c: Box<string> | Box<number> | Box<boolean>; }
- >makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
- >{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
- 
-@@= skipped -28, +28 lines =@@
- >v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
- >unboxify(b) : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
- >unboxify : <T extends object>(obj: Boxified<T>) => T
-->b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
-+>b : { a: Box<string> | Box<number> | Box<boolean>; b: Box<string> | Box<number> | Box<boolean>; c: Box<string> | Box<number> | Box<boolean>; }
- 
-     let x: string | number | boolean = v.a;
- >x : string | number | boolean
-@@= skipped -23, +23 lines =@@
- >s : string
- 
-     let b = makeDictionary({
-->b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
-->makeDictionary({        a: box(42),        b: box("hello"),        c: box(true)    }) : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
-+>b : { [x: string]: Box<string> | Box<number> | Box<boolean>; }
-+>makeDictionary({        a: box(42),        b: box("hello"),        c: box(true)    }) : { [x: string]: Box<string> | Box<number> | Box<boolean>; }
- >makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
- >{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
- 
-@@= skipped -25, +25 lines =@@
+@@= skipped -274, +274 lines =@@
  
      });
      let v = unboxify(b);
@@ -58,8 +27,7 @@
 +>v : { [x: string]: string | number | boolean; }
 +>unboxify(b) : { [x: string]: string | number | boolean; }
  >unboxify : <T extends object>(obj: Boxified<T>) => T
-->b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
-+>b : { [x: string]: Box<string> | Box<number> | Box<boolean>; }
+ >b : { [x: string]: Box<string> | Box<number> | Box<boolean>; }
  
      let x: string | number | boolean = v[s];
  >x : string | number | boolean
@@ -101,43 +69,4 @@
 +>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
  >foo : Foo
  }
- 
-@@= skipped -135, +135 lines =@@
- >"hello" : "hello"
- 
- let x1 = f21({ foo: 42, bar: "hello" });
-->x1 : "foo" | "bar"
-->f21({ foo: 42, bar: "hello" }) : "foo" | "bar"
-+>x1 : "bar" | "foo"
-+>f21({ foo: 42, bar: "hello" }) : "bar" | "foo"
- >f21 : <T, K extends keyof T>(obj: Pick<T, K>) => K
- >{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
- >foo : number
-@@= skipped -60, +60 lines =@@
- >{} : {}
- 
- const o1 = getProps(myAny, ['foo', 'bar']);
-->o1 : Pick<any, "foo" | "bar">
-->getProps(myAny, ['foo', 'bar']) : Pick<any, "foo" | "bar">
-+>o1 : Pick<any, "bar" | "foo">
-+>getProps(myAny, ['foo', 'bar']) : Pick<any, "bar" | "foo">
- >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
- >myAny : any
-->['foo', 'bar'] : ("foo" | "bar")[]
-+>['foo', 'bar'] : ("bar" | "foo")[]
- >'foo' : "foo"
- >'bar' : "bar"
- 
-@@= skipped -12, +12 lines =@@
- >o2 : { foo: any; bar: any; }
- >foo : any
- >bar : any
-->getProps(myAny, ['foo', 'bar']) : Pick<any, "foo" | "bar">
-+>getProps(myAny, ['foo', 'bar']) : Pick<any, "bar" | "foo">
- >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
- >myAny : any
-->['foo', 'bar'] : ("foo" | "bar")[]
-+>['foo', 'bar'] : ("bar" | "foo")[]
- >'foo' : "foo"
- >'bar' : "bar"
  

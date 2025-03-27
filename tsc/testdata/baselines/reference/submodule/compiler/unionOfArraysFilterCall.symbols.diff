@@ -32,23 +32,10 @@
 ->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 10, 31))
-->item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
+ >item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 10, 31))
-->id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
- 
- ([] as Fizz[] | readonly Buzz[]).filter(item => item.id < 5); 
- >([] as Fizz[] | readonly Buzz[]).filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-@@= skipped -32, +32 lines =@@
- >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
- >filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 11, 40))
-->item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
- >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 11, 40))
-->id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
+@@= skipped -37, +37 lines =@@
+ >id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
  
  ([] as Fizz[] | Buzz[]).find(item => item);
 ->([] as Fizz[] | Buzz[]).find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
@@ -60,7 +47,7 @@
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 13, 29))
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 13, 29))
  
-@@= skipped -19, +19 lines =@@
+@@= skipped -14, +14 lines =@@
  >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
  
  ([] as Fizz[] | Buzz[]).find(isFizz);
@@ -93,11 +80,9 @@
 ->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>every : Symbol(every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 19, 30))
-->item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
+ >item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 19, 30))
-->id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
+ >id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
  
  ([] as Fizz[] | Buzz[]).reduce(item => item);
 ->([] as Fizz[] | Buzz[]).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
@@ -108,14 +93,4 @@
 +>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 21, 31))
  >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 21, 31))
- 
-@@= skipped -31, +31 lines =@@
- >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
- >filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 24, 41))
-->item?.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>item?.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
- >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 24, 41))
-->id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
-+>id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 5, 16), Decl(unionOfArraysFilterCall.ts, 0, 16))
  

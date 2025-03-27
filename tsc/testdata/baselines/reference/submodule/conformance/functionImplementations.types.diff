@@ -36,21 +36,3 @@
  
  };
  
-@@= skipped -350, +350 lines =@@
- var f11: (x: number) => any = x => { // should be (x: number) => Base | AnotherClass
- >f11 : (x: number) => any
- >x : number
-->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => Base | AnotherClass
-+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => AnotherClass | Base
- >x : number
- 
-     return new Base();
-@@= skipped -14, +14 lines =@@
- var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherClass
- >f12 : (x: number) => any
- >x : number
-->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => Base | AnotherClass
-+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => AnotherClass | Base
- >x : number
- 
-     return new Base();

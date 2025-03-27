@@ -5,13 +5,13 @@
  === forAwaitForUnion.ts ===
  async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 ->f : <T>(source: Iterable<T> | AsyncIterable<T>) => Promise<void>
-->source : Iterable<T> | AsyncIterable<T>
+->source : AsyncIterable<T> | Iterable<T>
 +>f : <T>(source: AsyncIterable<T, any, any> | Iterable<T, any, any>) => Promise<void>
 +>source : AsyncIterable<T, any, any> | Iterable<T, any, any>
  
      for await (const x of source) {
  >x : Awaited<T>
-->source : Iterable<T> | AsyncIterable<T>
+->source : AsyncIterable<T> | Iterable<T>
 +>source : AsyncIterable<T, any, any> | Iterable<T, any, any>
      }
  }

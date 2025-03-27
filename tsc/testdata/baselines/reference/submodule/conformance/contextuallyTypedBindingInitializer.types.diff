@@ -45,18 +45,12 @@
  >prop : [string, number]
  >["hello", 1234] : [string, number]
  >"hello" : "hello"
-@@= skipped -8, +8 lines =@@
- 
- interface StringUnion {
-     prop: "foo" | "bar";
-->prop : "foo" | "bar"
-+>prop : "bar" | "foo"
+@@= skipped -11, +11 lines =@@
+ >prop : "bar" | "foo"
  }
  function h({ prop = "foo" }: StringUnion) {}
 ->h : ({ prop }: StringUnion) => void
-->prop : "foo" | "bar"
 +>h : (__0: StringUnion) => void
-+>prop : "bar" | "foo"
+ >prop : "bar" | "foo"
  >"foo" : "foo"
  
- interface StringIdentity {

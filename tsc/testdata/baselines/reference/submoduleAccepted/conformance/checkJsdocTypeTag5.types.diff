@@ -69,7 +69,7 @@
  /** @type {Argle} */
  function blargle(s) {
 ->blargle : (x: "hi" | "bye") => 0 | 1 | 2
-->s : "hi" | "bye"
+->s : "bye" | "hi"
 +>blargle : (s: any) => number
 +>s : any
  
@@ -88,16 +88,7 @@
  >'hi' : "hi"
  
  /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
-@@= skipped -15, +15 lines =@@
-     return typeof sb === 'string' ? 1 : 2;
- >typeof sb === 'string' ? 1 : 2 : 1 | 2
- >typeof sb === 'string' : boolean
-->typeof sb : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof sb : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >sb : any
- >'string' : "string"
- >1 : 1
-@@= skipped -9, +9 lines =@@
+@@= skipped -24, +24 lines =@@
  
  /** @type {2 | 3} - overloads are not supported, so there will be an error */
  var twothree = monaLisa(false);

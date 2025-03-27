@@ -91,11 +91,4 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  
          o.sayHi();
-->o.sayHi : Symbol(sayHi, Decl(narrowByInstanceof.ts, 51, 40), Decl(narrowByInstanceof.ts, 55, 11))
-+>o.sayHi : Symbol(sayHi, Decl(narrowByInstanceof.ts, 55, 11), Decl(narrowByInstanceof.ts, 51, 40))
- >o : Symbol(o, Decl(narrowByInstanceof.ts, 59, 14))
-->sayHi : Symbol(sayHi, Decl(narrowByInstanceof.ts, 51, 40), Decl(narrowByInstanceof.ts, 55, 11))
-+>sayHi : Symbol(sayHi, Decl(narrowByInstanceof.ts, 55, 11), Decl(narrowByInstanceof.ts, 51, 40))
-     }
- }
- 
+ >o.sayHi : Symbol(sayHi, Decl(narrowByInstanceof.ts, 55, 11), Decl(narrowByInstanceof.ts, 51, 40))

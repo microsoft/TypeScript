@@ -27,24 +27,3 @@
  >x : T
  >x : T
  }
-@@= skipped -217, +217 lines =@@
- >x : T
- 
-     var r19 = true ? new Object() : x; // ok
-->r19 : Object | T
-->true ? new Object() : x : Object | T
-+>r19 : T | Object
-+>true ? new Object() : x : T | Object
- >true : true
- >new Object() : Object
- >Object : ObjectConstructor
- >x : T
- 
-     var r19 = true ? x : new Object(); // ok
-->r19 : Object | T
-->true ? x : new Object() : Object | T
-+>r19 : T | Object
-+>true ? x : new Object() : T | Object
- >true : true
- >x : T
- >new Object() : Object

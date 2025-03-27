@@ -1,14 +1,10 @@
 --- old.mapGroupBy.types
 +++ new.mapGroupBy.types
-@@= skipped -1, +1 lines =@@
- 
- === mapGroupBy.ts ===
+@@= skipped -3, +3 lines =@@
  const basic = Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
-->basic : Map<"small" | "large", number[]>
-->Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Map<"small" | "large", number[]>
+ >basic : Map<"large" | "small", number[]>
+ >Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Map<"large" | "small", number[]>
 ->Map.groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
-+>basic : Map<"large" | "small", number[]>
-+>Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Map<"large" | "small", number[]>
 +>Map.groupBy : <K, T>(items: Iterable<T, any, any>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
  >Map : MapConstructor
 ->groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
@@ -16,16 +12,7 @@
  >[0, 2, 8] : number[]
  >0 : 0
  >2 : 2
- >8 : 8
-->x => x < 5 ? 'small' : 'large' : (x: number) => "small" | "large"
-+>x => x < 5 ? 'small' : 'large' : (x: number) => "large" | "small"
- >x : number
-->x < 5 ? 'small' : 'large' : "small" | "large"
-+>x < 5 ? 'small' : 'large' : "large" | "small"
- >x < 5 : boolean
- >x : number
- >5 : 5
-@@= skipped -21, +21 lines =@@
+@@= skipped -19, +19 lines =@@
  const chars = Map.groupBy('a string', c => c);
  >chars : Map<string, string[]>
  >Map.groupBy('a string', c => c) : Map<string, string[]>

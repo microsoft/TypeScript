@@ -14,9 +14,8 @@
  
  export function ComponentWithUnion(props: PM | PS) {
 ->ComponentWithUnion : (props: PM | PS) => JSX.Element
-->props : PS | PM
 +>ComponentWithUnion : (props: PM | PS) => any
-+>props : PM | PS
+ >props : PM | PS
  
      return <h1></h1>;
 -><h1></h1> : JSX.Element

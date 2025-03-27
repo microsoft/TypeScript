@@ -9,16 +9,7 @@
  
  export class TestCase {
  >TestCase : TestCase
-@@= skipped -106, +106 lines =@@
- 
-                 if (typeof testcase.errorMessageRegEx === "string") {
- >typeof testcase.errorMessageRegEx === "string" : boolean
-->typeof testcase.errorMessageRegEx : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof testcase.errorMessageRegEx : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >testcase.errorMessageRegEx : string
- >testcase : TestCase
- >errorMessageRegEx : string
-@@= skipped -204, +204 lines =@@
+@@= skipped -310, +310 lines =@@
  >fileExists : any
  >TestFileDir + "\\Test.txt" : string
  >TestFileDir : string

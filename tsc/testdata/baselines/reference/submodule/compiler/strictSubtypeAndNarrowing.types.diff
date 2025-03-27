@@ -71,34 +71,11 @@
  
  function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
 ->ff3 : (value: string | string[] | { [index: number]: boolean; length: number; } | [number, boolean] | number | { length: string; } | { a: string; } | null | undefined) => void
-->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
 +>ff3 : (value: string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined) => void
-+>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+ >value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
  >index : number
  >length : number
- >length : string
-@@= skipped -10, +10 lines =@@
-     if (isArrayLike(value)) {
- >isArrayLike(value) : boolean
- >isArrayLike : (value: any) => value is { length: number; }
-->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
-+>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
- 
-         value;
-->value : string | { [index: number]: boolean; length: number; } | [number, boolean] | string[]
-+>value : string | string[] | { [index: number]: boolean; length: number; } | [number, boolean]
- 
-     } else {
-         value;
- >value : number | { length: string; } | { a: string; } | null | undefined
-     }
-     value;
-->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
-+>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
- }
- 
- // Repro from comment in #52984
-@@= skipped -40, +40 lines =@@
+@@= skipped -50, +50 lines =@@
  
  
  declare function doesValueAtDeepPathSatisfy<

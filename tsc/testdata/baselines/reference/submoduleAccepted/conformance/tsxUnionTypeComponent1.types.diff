@@ -9,7 +9,7 @@
  
  interface ComponentProps {
      AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
-->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
+->AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 +>AnyComponent : any
  >React : any
  >React : any
@@ -29,7 +29,7 @@
 +>render : () => any
  
          const { AnyComponent } = this.props;
-->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
+->AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 ->this.props : ComponentProps & { children?: React.ReactNode; }
 +>AnyComponent : any
 +>this.props : any
@@ -40,7 +40,7 @@
          return (<AnyComponent />);
 ->(<AnyComponent />) : JSX.Element
 -><AnyComponent /> : JSX.Element
-->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
+->AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 +>(<AnyComponent />) : any
 +><AnyComponent /> : any
 +>AnyComponent : any

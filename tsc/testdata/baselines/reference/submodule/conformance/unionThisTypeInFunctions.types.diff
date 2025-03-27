@@ -5,15 +5,7 @@
  }
  function test(r: Real | Fake) {
 ->test : (r: Real | Fake) => void
-->r : Real | Fake
 +>test : (r: Fake | Real) => void
-+>r : Fake | Real
+ >r : Fake | Real
  
      r.method(12); // error
- >r.method(12) : void
- >r.method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
-->r : Real | Fake
-+>r : Fake | Real
- >method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
- >12 : 12
- }

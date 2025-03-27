@@ -58,9 +58,9 @@
 -declare const string: "string";
 -declare const number: "number";
 -declare const boolean: "boolean";
--declare const stringOrNumber: "string" | "number";
--declare const stringOrBoolean: "string" | "boolean";
--declare const booleanOrNumber: "number" | "boolean";
--declare const stringOrBooleanOrNumber: "string" | "number" | "boolean";
+-declare const stringOrNumber: "number" | "string";
+-declare const stringOrBoolean: "boolean" | "string";
+-declare const booleanOrNumber: "boolean" | "number";
+-declare const stringOrBooleanOrNumber: "boolean" | "number" | "string";
 -declare namespace Consts2 {
 -}

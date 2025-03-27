@@ -1,11 +1,7 @@
 --- old.typeGuardFunctionErrors.errors.txt
 +++ new.typeGuardFunctionErrors.errors.txt
-@@= skipped -51, +51 lines =@@
- typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
- typeGuardFunctionErrors.ts(132,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
- typeGuardFunctionErrors.ts(136,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
--typeGuardFunctionErrors.ts(152,68): error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
-+typeGuardFunctionErrors.ts(152,68): error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
+@@= skipped -54, +54 lines =@@
+ typeGuardFunctionErrors.ts(152,68): error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
    Type '"d"' is not assignable to type 'Keys'.
  typeGuardFunctionErrors.ts(159,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
 -  Types of property ''a'' are incompatible.
@@ -22,16 +18,7 @@
      Type 'number' is not assignable to type 'string'.
  typeGuardFunctionErrors.ts(165,51): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
  typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must be assignable to its parameter's type.
-@@= skipped -276, +276 lines =@@
-     // expected an error, since Keys doesn't have a 'd'
-     declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
-                                                                        ~~~~~
--!!! error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
-+!!! error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
- !!! error TS2344:   Type '"d"' is not assignable to type 'Keys'.
-     
-     type Foo = { 'a': string; }
-@@= skipped -11, +11 lines =@@
+@@= skipped -284, +284 lines =@@
          isFoo(): this is NeedsFoo<Bar>; // should error
                                    ~~~
  !!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.

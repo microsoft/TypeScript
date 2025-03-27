@@ -1,12 +1,6 @@
 --- old.gettersAndSetters.types
 +++ new.gettersAndSetters.types
-@@= skipped -150, +150 lines =@@
- 
- if (typeof x === "string") {
- >typeof x === "string" : boolean
-->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >x : string | number
+@@= skipped -155, +155 lines =@@
  >"string" : "string"
  
    let obj = {

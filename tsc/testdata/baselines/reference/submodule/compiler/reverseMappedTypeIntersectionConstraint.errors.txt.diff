@@ -6,29 +6,18 @@
  reverseMappedTypeIntersectionConstraint.ts(43,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
 -reverseMappedTypeIntersectionConstraint.ts(59,7): error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
 -  '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
--reverseMappedTypeIntersectionConstraint.ts(63,49): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
++reverseMappedTypeIntersectionConstraint.ts(59,7): error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is not assignable to type 'T'.
++  '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+ reverseMappedTypeIntersectionConstraint.ts(63,49): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
 -reverseMappedTypeIntersectionConstraint.ts(69,7): error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }[]' is not assignable to type 'T[]'.
 -  Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
 -    '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
--reverseMappedTypeIntersectionConstraint.ts(74,36): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
-+reverseMappedTypeIntersectionConstraint.ts(59,7): error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is not assignable to type 'T'.
-+  '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
-+reverseMappedTypeIntersectionConstraint.ts(63,49): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
 +reverseMappedTypeIntersectionConstraint.ts(69,7): error TS2322: Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }[]' is not assignable to type 'T[]'.
 +  Type '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is not assignable to type 'T'.
 +    '{ [K in keyof T & (keyof Stuff)]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
-+reverseMappedTypeIntersectionConstraint.ts(74,36): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
+ reverseMappedTypeIntersectionConstraint.ts(74,36): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
  reverseMappedTypeIntersectionConstraint.ts(87,12): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
  reverseMappedTypeIntersectionConstraint.ts(98,12): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; }'.
- reverseMappedTypeIntersectionConstraint.ts(100,22): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; y: "foo"; }'.
--reverseMappedTypeIntersectionConstraint.ts(113,67): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ prop: "foo"; nested: { prop: string; }; }'.
-+reverseMappedTypeIntersectionConstraint.ts(113,67): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ nested: { prop: string; }; prop: "foo"; }'.
- reverseMappedTypeIntersectionConstraint.ts(152,21): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
--reverseMappedTypeIntersectionConstraint.ts(164,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ types: { actors: { src: "str"; logic: () => any; }; }; invoke: { readonly src: "str"; }; }'.
-+reverseMappedTypeIntersectionConstraint.ts(164,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "str"; }; types: { actors: { src: "str"; logic: () => any; }; }; }'.
- reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "whatever"; }; }'.
- 
- 
 @@= skipped -84, +84 lines =@@
          } else {
            return s
@@ -40,13 +29,6 @@
          }
      }
      
-     doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
-                                                     ~~~~~
--!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
-+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
-     
-     function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
-         if(Math.random() > 0.5) {
 @@= skipped -15, +15 lines =@@
          } else {
            return arr
@@ -60,29 +42,3 @@
          }
      }
      
-     doStuffWithStuffArr([
-         { field: 1, anotherField: 'a', extra: 123 },
-                                        ~~~~~
--!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
-+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ anotherField: "a"; field: 1; }'.
-     ])
-     
-     // -----------------------------------------------------------------------------------------
-@@= skipped -56, +56 lines =@@
-     
-     const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
-                                                                       ~~~~~
--!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ prop: "foo"; nested: { prop: string; }; }'.
-+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ nested: { prop: string; }; prop: "foo"; }'.
-     
-     // -----------------------------------------------------------------------------------------
-     
-@@= skipped -55, +55 lines =@@
-       },
-       extra: 10
-       ~~~~~
--!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ types: { actors: { src: "str"; logic: () => any; }; }; invoke: { readonly src: "str"; }; }'.
-+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "str"; }; types: { actors: { src: "str"; logic: () => any; }; }; }'.
-     });
-     
-     const config2 = createXMachine({

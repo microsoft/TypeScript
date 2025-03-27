@@ -13,7 +13,7 @@
  >b : string
  
      children: string | JSX.Element | (string | JSX.Element)[];
-->children : string | JSX.Element | (string | JSX.Element)[]
+->children : string | (string | JSX.Element)[] | JSX.Element
 +>children : any
  >JSX : any
  >JSX : any

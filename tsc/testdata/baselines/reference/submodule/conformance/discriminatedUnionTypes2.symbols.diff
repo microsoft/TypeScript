@@ -1,18 +1,6 @@
 --- old.discriminatedUnionTypes2.symbols
 +++ new.discriminatedUnionTypes2.symbols
-@@= skipped -125, +125 lines =@@
- >Result : Symbol(Result, Decl(discriminatedUnionTypes2.ts, 33, 1))
- 
-     if (!x.error) {
-->x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
-+>x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 18), Decl(discriminatedUnionTypes2.ts, 35, 52))
- >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
-->error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52), Decl(discriminatedUnionTypes2.ts, 35, 18))
-+>error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 18), Decl(discriminatedUnionTypes2.ts, 35, 52))
- 
-         x.value;
- >x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 35, 37))
-@@= skipped -11, +11 lines =@@
+@@= skipped -136, +136 lines =@@
      }
      else {
          x.error.message;

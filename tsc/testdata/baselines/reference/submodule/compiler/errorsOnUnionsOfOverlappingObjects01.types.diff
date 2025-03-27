@@ -5,9 +5,8 @@
  
  declare function h(x: Foo | Bar | Other): any;
 ->h : (x: Foo | Bar | Other) => any
-->x : Foo | Bar | Other
 +>h : (x: Bar | Foo | Other) => any
-+>x : Bar | Foo | Other
+ >x : Bar | Foo | Other
  
  h(x);
  >h(x) : any

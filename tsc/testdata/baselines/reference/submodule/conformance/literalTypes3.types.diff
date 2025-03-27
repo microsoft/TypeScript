@@ -1,84 +1,20 @@
 --- old.literalTypes3.types
 +++ new.literalTypes3.types
-@@= skipped -22, +22 lines =@@
- >"bar" : "bar"
- 
-         s;  // "foo" | "bar"
-->s : "foo" | "bar"
-+>s : "bar" | "foo"
-     }
- }
- 
-@@= skipped -18, +18 lines =@@
- >"bar" : "bar"
- 
-             s;  // "foo" | "bar"
-->s : "foo" | "bar"
-+>s : "bar" | "foo"
- 
-         case "baz":
- >"baz" : "baz"
- 
-             s;  // "foo" | "bar" | "baz"
-->s : "foo" | "bar" | "baz"
-+>s : "bar" | "baz" | "foo"
- 
-             break;
-         default:
-@@= skipped -16, +16 lines =@@
- }
- 
- function f3(s: string) {
-->f3 : (s: string) => "foo" | "bar" | undefined
-+>f3 : (s: string) => "bar" | "foo" | undefined
- >s : string
- 
-     return s === "foo" || s === "bar" ? s : undefined;  // "foo" | "bar" | undefined
-->s === "foo" || s === "bar" ? s : undefined : "foo" | "bar" | undefined
-+>s === "foo" || s === "bar" ? s : undefined : "bar" | "foo" | undefined
- >s === "foo" || s === "bar" : boolean
- >s === "foo" : boolean
- >s : string
-@@= skipped -12, +12 lines =@@
- >s === "bar" : boolean
- >s : string
- >"bar" : "bar"
-->s : "foo" | "bar"
-+>s : "bar" | "foo"
- >undefined : undefined
- }
- 
-@@= skipped -64, +64 lines =@@
+@@= skipped -132, +132 lines =@@
  }
  
  function f7(x: number | "foo" | "bar", y: 1 | 2 | string) {
 ->f7 : (x: number | "foo" | "bar", y: 1 | 2 | string) => void
-->x : number | "foo" | "bar"
 +>f7 : (x: number | "bar" | "foo", y: string | 1 | 2) => void
-+>x : number | "bar" | "foo"
+ >x : number | "bar" | "foo"
  >y : string | 1 | 2
  
-     if (x === y) {
- >x === y : boolean
-->x : number | "foo" | "bar"
-+>x : number | "bar" | "foo"
- >y : string | 1 | 2
- 
-         x;  // "foo" | "bar" | 1 | 2
-->x : "foo" | "bar" | 1 | 2
-+>x : "bar" | "foo" | 1 | 2
-     }
+@@= skipped -15, +15 lines =@@
  }
  
  function f8(x: number | "foo" | "bar") {
 ->f8 : (x: number | "foo" | "bar") => void
-->x : number | "foo" | "bar"
 +>f8 : (x: number | "bar" | "foo") => void
-+>x : number | "bar" | "foo"
+ >x : number | "bar" | "foo"
  
      switch (x) {
-->x : number | "foo" | "bar"
-+>x : number | "bar" | "foo"
- 
-         case 1:
- >1 : 1

@@ -1,81 +1,6 @@
 --- old.literalTypeWidening.types
 +++ new.literalTypeWidening.types
-@@= skipped -43, +43 lines =@@
- >cond : boolean
- 
-     const c1 = cond ? "foo" : "bar";  // widening "foo" | widening "bar"
-->c1 : "foo" | "bar"
-->cond ? "foo" : "bar" : "foo" | "bar"
-+>c1 : "bar" | "foo"
-+>cond ? "foo" : "bar" : "bar" | "foo"
- >cond : boolean
- >"foo" : "foo"
- >"bar" : "bar"
- 
-     const c2: "foo" | "bar" = c1;  // "foo" | "bar"
-->c2 : "foo" | "bar"
-->c1 : "foo" | "bar"
-+>c2 : "bar" | "foo"
-+>c1 : "bar" | "foo"
- 
-     const c3 = cond ? c1 : c2;  // "foo" | "bar"
-->c3 : "foo" | "bar"
-->cond ? c1 : c2 : "foo" | "bar"
-+>c3 : "bar" | "foo"
-+>cond ? c1 : c2 : "bar" | "foo"
- >cond : boolean
-->c1 : "foo" | "bar"
-->c2 : "foo" | "bar"
-+>c1 : "bar" | "foo"
-+>c2 : "bar" | "foo"
- 
-     const c4 = cond ? c3 : "baz";  // "foo" | "bar" | widening "baz"
-->c4 : "foo" | "bar" | "baz"
-->cond ? c3 : "baz" : "foo" | "bar" | "baz"
-+>c4 : "bar" | "baz" | "foo"
-+>cond ? c3 : "baz" : "bar" | "baz" | "foo"
- >cond : boolean
-->c3 : "foo" | "bar"
-+>c3 : "bar" | "foo"
- >"baz" : "baz"
- 
-     const c5: "foo" | "bar" | "baz" = c4; // "foo" | "bar" | "baz"
-->c5 : "foo" | "bar" | "baz"
-->c4 : "foo" | "bar" | "baz"
-+>c5 : "bar" | "baz" | "foo"
-+>c4 : "bar" | "baz" | "foo"
- 
-     let v1 = c1;  // string
- >v1 : string
-->c1 : "foo" | "bar"
-+>c1 : "bar" | "foo"
- 
-     let v2 = c2;  // "foo" | "bar"
-->v2 : "foo" | "bar"
-->c2 : "foo" | "bar"
-+>v2 : "bar" | "foo"
-+>c2 : "bar" | "foo"
- 
-     let v3 = c3;  // "foo" | "bar"
-->v3 : "foo" | "bar"
-->c3 : "foo" | "bar"
-+>v3 : "bar" | "foo"
-+>c3 : "bar" | "foo"
- 
-     let v4 = c4;  // string
- >v4 : string
-->c4 : "foo" | "bar" | "baz"
-+>c4 : "bar" | "baz" | "foo"
- 
-     let v5 = c5;  // "foo" | "bar" | "baz"
-->v5 : "foo" | "bar" | "baz"
-->c5 : "foo" | "bar" | "baz"
-+>v5 : "bar" | "baz" | "foo"
-+>c5 : "bar" | "baz" | "foo"
- }
- 
- function f3() {
-@@= skipped -258, +258 lines =@@
+@@= skipped -301, +301 lines =@@
    return !isFailure(result);
  >!isFailure(result) : boolean
  >isFailure(result) : boolean
@@ -99,61 +24,12 @@
  >keys : K[]
  >true : true
  
-@@= skipped -42, +42 lines =@@
- 
- type Obj = { code: LangCode }
- >Obj : Obj
-->code : "fr" | "en" | "es" | "it" | "nl"
-+>code : "en" | "es" | "fr" | "it" | "nl"
- 
+@@= skipped -47, +47 lines =@@
  const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
-->langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
-->Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true>
+ >langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
+ >Set('fr', 'en', 'es', 'it', 'nl') : Record<"en" | "es" | "fr" | "it" | "nl", true>
 ->Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
-+>langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
-+>Set('fr', 'en', 'es', 'it', 'nl') : Record<"en" | "es" | "fr" | "it" | "nl", true>
 +>Set : <K extends string>(...keys: K[]) => Record<K, true>
  >'fr' : "fr"
  >'en' : "en"
  >'es' : "es"
-@@= skipped -13, +13 lines =@@
- >'nl' : "nl"
- 
- export type LangCode = keyof typeof langCodeSet
-->LangCode : "fr" | "en" | "es" | "it" | "nl"
-->langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
-+>LangCode : "en" | "es" | "fr" | "it" | "nl"
-+>langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
- 
- export const langCodes = keys(langCodeSet)
-->langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
-->keys(langCodeSet) : ("fr" | "en" | "es" | "it" | "nl")[]
-+>langCodes : ("en" | "es" | "fr" | "it" | "nl")[]
-+>keys(langCodeSet) : ("en" | "es" | "fr" | "it" | "nl")[]
- >keys : <K extends string, V>(obj: Record<K, V>) => K[]
-->langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
-+>langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
- 
- const arr: Obj[] = langCodes.map(code => ({ code }))
- >arr : Obj[]
-->langCodes.map(code => ({ code })) : { code: "fr" | "en" | "es" | "it" | "nl"; }[]
-->langCodes.map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
-->langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
-->map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
-->code => ({ code }) : (code: "fr" | "en" | "es" | "it" | "nl") => { code: "fr" | "en" | "es" | "it" | "nl"; }
-->code : "fr" | "en" | "es" | "it" | "nl"
-->({ code }) : { code: "fr" | "en" | "es" | "it" | "nl"; }
-->{ code } : { code: "fr" | "en" | "es" | "it" | "nl"; }
-->code : "fr" | "en" | "es" | "it" | "nl"
-+>langCodes.map(code => ({ code })) : { code: "en" | "es" | "fr" | "it" | "nl"; }[]
-+>langCodes.map : <U>(callbackfn: (value: "en" | "es" | "fr" | "it" | "nl", index: number, array: ("en" | "es" | "fr" | "it" | "nl")[]) => U, thisArg?: any) => U[]
-+>langCodes : ("en" | "es" | "fr" | "it" | "nl")[]
-+>map : <U>(callbackfn: (value: "en" | "es" | "fr" | "it" | "nl", index: number, array: ("en" | "es" | "fr" | "it" | "nl")[]) => U, thisArg?: any) => U[]
-+>code => ({ code }) : (code: "en" | "es" | "fr" | "it" | "nl") => { code: "en" | "es" | "fr" | "it" | "nl"; }
-+>code : "en" | "es" | "fr" | "it" | "nl"
-+>({ code }) : { code: "en" | "es" | "fr" | "it" | "nl"; }
-+>{ code } : { code: "en" | "es" | "fr" | "it" | "nl"; }
-+>code : "en" | "es" | "fr" | "it" | "nl"
- 
- // Repro from #29081
- 

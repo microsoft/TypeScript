@@ -90,33 +90,30 @@
  >true : true
  >false : false
  {
-     const [foo1, bar1] = getArrayResult();
+@@= skipped -27, +27 lines =@@
  >foo1 : boolean
  >bar1 : number | undefined
-->getArrayResult() : [true, number] | [false, undefined]
+ >getArrayResult() : [false, undefined] | [true, number]
 ->getArrayResult : () => [true, number] | [false, undefined]
-+>getArrayResult() : [false, undefined] | [true, number]
 +>getArrayResult : () => [false, undefined] | [true, number]
  
      const [foo2, bar2] = getArrayResult();
  >foo2 : boolean
  >bar2 : number | undefined
-->getArrayResult() : [true, number] | [false, undefined]
+ >getArrayResult() : [false, undefined] | [true, number]
 ->getArrayResult : () => [true, number] | [false, undefined]
-+>getArrayResult() : [false, undefined] | [true, number]
 +>getArrayResult : () => [false, undefined] | [true, number]
  
      const [foo3, bar3] = getArrayResult();
  >foo3 : boolean
  >bar3 : number | undefined
-->getArrayResult() : [true, number] | [false, undefined]
+ >getArrayResult() : [false, undefined] | [true, number]
 ->getArrayResult : () => [true, number] | [false, undefined]
-+>getArrayResult() : [false, undefined] | [true, number]
 +>getArrayResult : () => [false, undefined] | [true, number]
  
      const arrayAllSuccess = foo1 && foo2 && foo3;
  >arrayAllSuccess : boolean
-@@= skipped -54, +54 lines =@@
+@@= skipped -27, +27 lines =@@
  
          bar1.toExponential();  // should ok
  >bar1.toExponential() : string
@@ -144,34 +141,30 @@
      }
  }
  
-@@= skipped -22, +22 lines =@@
-     const [foo1, bar1] = getArrayResult();
+@@= skipped -23, +23 lines =@@
  >foo1 : boolean
  >bar1 : number | undefined
-->getArrayResult() : [true, number] | [false, undefined]
+ >getArrayResult() : [false, undefined] | [true, number]
 ->getArrayResult : () => [true, number] | [false, undefined]
-+>getArrayResult() : [false, undefined] | [true, number]
 +>getArrayResult : () => [false, undefined] | [true, number]
  
      let [foo2, bar2] = getArrayResult();
  >foo2 : boolean
  >bar2 : number | undefined
-->getArrayResult() : [true, number] | [false, undefined]
+ >getArrayResult() : [false, undefined] | [true, number]
 ->getArrayResult : () => [true, number] | [false, undefined]
-+>getArrayResult() : [false, undefined] | [true, number]
 +>getArrayResult : () => [false, undefined] | [true, number]
  
      let [foo3, bar3] = getArrayResult();
  >foo3 : boolean
  >bar3 : number | undefined
-->getArrayResult() : [true, number] | [false, undefined]
+ >getArrayResult() : [false, undefined] | [true, number]
 ->getArrayResult : () => [true, number] | [false, undefined]
-+>getArrayResult() : [false, undefined] | [true, number]
 +>getArrayResult : () => [false, undefined] | [true, number]
  
      const arrayAllSuccess = foo1 && foo2 && foo3;
  >arrayAllSuccess : boolean
-@@= skipped -28, +28 lines =@@
+@@= skipped -27, +27 lines =@@
  
          bar1.toExponential();   // should ok
  >bar1.toExponential() : string
@@ -199,61 +192,7 @@
      }
  }
  
-@@= skipped -49, +49 lines =@@
-     const { resp: { data }, type } = resp;
- >resp : any
- >data : string | number
-->type : "string" | "number"
-+>type : "number" | "string"
- >resp : Nested
- 
-     if (type === 'string') {
- >type === 'string' : boolean
-->type : "string" | "number"
-+>type : "number" | "string"
- >'string' : "string"
- 
-         data satisfies string;
-@@= skipped -14, +14 lines =@@
-     }
-     if (resp.type === 'string') {
- >resp.type === 'string' : boolean
-->resp.type : "string" | "number"
-+>resp.type : "number" | "string"
- >resp : Nested
-->type : "string" | "number"
-+>type : "number" | "string"
- >'string' : "string"
- 
-         resp.resp.data satisfies string;
-@@= skipped -24, +24 lines =@@
- >resp : any
- >data : any
- >dataAlias : string | number
-->type : "string" | "number"
-+>type : "number" | "string"
- >resp : Nested
- 
-     if (type === 'string') {
- >type === 'string' : boolean
-->type : "string" | "number"
-+>type : "number" | "string"
- >'string' : "string"
- 
-         dataAlias satisfies string;
-@@= skipped -14, +14 lines =@@
-     }
-     if (resp.type === 'string') {
- >resp.type === 'string' : boolean
-->resp.type : "string" | "number"
-+>resp.type : "number" | "string"
- >resp : Nested
-->type : "string" | "number"
-+>type : "number" | "string"
- >'string' : "string"
- 
-         resp.resp.data satisfies string;
-@@= skipped -16, +16 lines =@@
+@@= skipped -117, +117 lines =@@
  }
  
  function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {

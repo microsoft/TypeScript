@@ -26,8 +26,4 @@
 +>f2 : () => "hello" | 5
  
      return 5 || "hello";
-->5 || "hello" : 5 | "hello"
-+>5 || "hello" : "hello" | 5
- >5 : 5
- >"hello" : "hello"
- }
+ >5 || "hello" : "hello" | 5

@@ -1,15 +1,6 @@
 --- old.narrowingConstrainedTypeParameter.types
 +++ new.narrowingConstrainedTypeParameter.types
-@@= skipped -13, +13 lines =@@
- 
-     return typeof pet.name === "string";
- >typeof pet.name === "string" : boolean
-->typeof pet.name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
-+>typeof pet.name : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >pet.name : any
- >pet : any
- >name : any
-@@= skipped -22, +22 lines =@@
+@@= skipped -35, +35 lines =@@
          throw new Error("Expected \"pet\" to be a Pet");
  >new Error("Expected \"pet\" to be a Pet") : Error
  >Error : ErrorConstructor
