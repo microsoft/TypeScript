@@ -236,7 +236,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const require = "require";
             const fakeName = "Q".repeat(require.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
-            options.define ||= {};
+            options.define = options.define || {};
             options.define[require] = fakeName;
 
             // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
