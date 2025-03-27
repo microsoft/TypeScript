@@ -437,7 +437,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     );
                 }
                 if (signature) {
-                    addSignatureDisplayParts(signature, allSignatures, /*flags*/ TypeFormatFlags.None);
+                    addSignatureDisplayParts(signature, allSignatures);
                 }
                 hasAddedSymbolInfo = true;
                 hasMultipleSignatures = allSignatures.length > 1;
@@ -511,7 +511,6 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
             const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
-            // const isNamespace = !(declaration && declaration.name && declaration.name.kind === SyntaxKind.StringLiteral); // TODO: breaking change
             displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
