@@ -1717,7 +1717,7 @@
         },
         {
           "text": "Foo",
-          "kind": "text"
+          "kind": "interfaceName"
         },
         {
           "text": " ",
@@ -1897,7 +1897,7 @@
         },
         {
           "text": "Foo",
-          "kind": "text"
+          "kind": "interfaceName"
         },
         {
           "text": " ",

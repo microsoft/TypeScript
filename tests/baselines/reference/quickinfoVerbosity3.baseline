@@ -1178,7 +1178,7 @@
         },
         {
           "text": "c5b",
-          "kind": "text"
+          "kind": "className"
         },
         {
           "text": " ",
@@ -1342,7 +1342,7 @@
         },
         {
           "text": "c5b",
-          "kind": "text"
+          "kind": "className"
         },
         {
           "text": " ",

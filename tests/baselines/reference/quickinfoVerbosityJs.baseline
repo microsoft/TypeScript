@@ -913,7 +913,7 @@
         },
         {
           "text": "someFun",
-          "kind": "text"
+          "kind": "functionName"
         },
         {
           "text": " ",
