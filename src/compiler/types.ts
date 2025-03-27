@@ -10565,7 +10565,7 @@ export interface SyntacticTypeNodeBuilderResolver {
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
     isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
-    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature): TypeNode | undefined;
+    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature, symbol: Symbol | undefined): TypeNode | undefined;
     serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
     serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType | GetAccessorDeclaration | SetAccessorDeclaration, symbol: Symbol | undefined): TypeNode | undefined;
     serializeNameOfParameter(context: SyntacticTypeNodeBuilderContext, parameter: ParameterDeclaration): BindingName | string;
