@@ -15,10 +15,6 @@ var a0 = [, , 2, 3, 4]
 >   : ^^^^^^^^
 >[, , 2, 3, 4] : number[]
 >              : ^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >2 : 2
 >  : ^
 >3 : 3
@@ -41,12 +37,6 @@ var a2 = [, , , ...a0, "hello"];
 >   : ^^^^^^^^^^^^^^^^^^^
 >[, , , ...a0, "hello"] : (string | number)[]
 >                       : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >...a0 : number
 >      : ^^^^^^
 >a0 : number[]
@@ -59,10 +49,6 @@ var a3 = [, , ...a0]
 >   : ^^^^^^^^
 >[, , ...a0] : number[]
 >            : ^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >...a0 : number
 >      : ^^^^^^
 >a0 : number[]
@@ -87,8 +73,6 @@ var a5 = [...a0, , ]
 >      : ^^^^^^
 >a0 : number[]
 >   : ^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)

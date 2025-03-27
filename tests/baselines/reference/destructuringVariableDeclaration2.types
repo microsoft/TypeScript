@@ -103,8 +103,6 @@ var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
 >   : ^^^^^^
 >c5 : number
 >   : ^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >c6 : []
 >   : ^^
 >[1, 2, { c3: 4, c5: 0 }] : [number, number, { c3: number; c5: number; }]

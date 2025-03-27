@@ -556,8 +556,6 @@ function f5(t: [number, string?, boolean?]) {
 >        : ^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
-> : undefined
-> : ^^^^^^^^^
 
     t = [42, , ,];
 >t = [42, , ,] : [number, never?, never?]
@@ -568,10 +566,6 @@ function f5(t: [number, string?, boolean?]) {
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 
     t = [42, , , ,];  // Error
 >t = [42, , , ,] : [number, never?, never?, never?]
@@ -582,12 +576,6 @@ function f5(t: [number, string?, boolean?]) {
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 
     t = [, , true];  // Error
 >t = [, , true] : [never?, never?, true?]
@@ -596,10 +584,6 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[, , true] : [never?, never?, true?]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -645,8 +629,6 @@ function f6() {
 >  : ^
 >2 : 2
 >  : ^
-> : undefined
-> : ^^^^^^^^^
 
     const t3 = [1, 2, , ,] as const;
 >t3 : readonly [1, 2, never?, never?]
@@ -659,10 +641,6 @@ function f6() {
 >  : ^
 >2 : 2
 >  : ^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 
     const t4 = [1, , 2] as const;
 >t4 : readonly [1, never?, 2?]
@@ -673,8 +651,6 @@ function f6() {
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
-> : undefined
-> : ^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -687,10 +663,6 @@ function f6() {
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >2 : 2
 >  : ^
 }

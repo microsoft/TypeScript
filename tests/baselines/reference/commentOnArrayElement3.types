@@ -18,8 +18,5 @@ const array = [
 >  : ^
 
     /* end of element 2 */, ,
-> : undefined
-> : ^^^^^^^^^
-
     /* extra comment */
 ];

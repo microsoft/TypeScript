@@ -19,8 +19,6 @@ var a: any;
 >a : any
 
 var [,] = [1,2];
-> : undefined
-> : ^^^^^^^^^
 >[1,2] : [number, number]
 >      : ^^^^^^^^^^^^^^^^
 >1 : 1

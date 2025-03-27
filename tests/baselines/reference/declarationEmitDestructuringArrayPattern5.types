@@ -2,10 +2,6 @@
 
 === declarationEmitDestructuringArrayPattern5.ts ===
 var [, , z] = [1, 2, 4];
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >z : number
 >  : ^^^^^^
 >[1, 2, 4] : [number, number, number]
@@ -18,12 +14,8 @@ var [, , z] = [1, 2, 4];
 >  : ^
 
 var [, a, , ] = [3, 4, 5];
-> : undefined
-> : ^^^^^^^^^
 >a : number
 >  : ^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[3, 4, 5] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
@@ -34,12 +26,6 @@ var [, a, , ] = [3, 4, 5];
 >  : ^
 
 var [, , [, b, ]] = [3,5,[0, 1]];
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >[3,5,[0, 1]] : [number, number, [number, number]]
