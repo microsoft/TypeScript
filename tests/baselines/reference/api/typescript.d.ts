@@ -1487,7 +1487,10 @@ declare namespace ts {
                 arguments: FileLocationRequestArgs;
             }
             export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-                /** TODO */
+                /**
+                 * This controls how many levels of definitions will be expanded in the quick info response.
+                 * The default value is 0.
+                 */
                 verbosityLevel?: number;
             }
             /**
@@ -1524,7 +1527,7 @@ declare namespace ts {
                  */
                 tags: JSDocTagInfo[];
                 /**
-                 * TODO
+                 * Whether the verbosity level can be increased for this quick info response.
                  */
                 canIncreaseVerbosityLevel?: boolean;
             }
