@@ -1,6 +1,5 @@
 import {
     __String,
-    __TSGO_COMPAT__,
     AccessExpression,
     AccessFlags,
     AccessorDeclaration,
@@ -1065,6 +1064,7 @@ import {
     tryGetModuleSpecifierFromDeclaration,
     tryGetPropertyAccessOrIdentifierToString,
     TryStatement,
+    TSGO_COMPAT,
     TupleType,
     TupleTypeNode,
     TupleTypeReference,
@@ -5396,7 +5396,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createTypeofType() {
-        return getUnionType(map(__TSGO_COMPAT__ ? [...typeofNEFacts.keys()].sort() : arrayFrom(typeofNEFacts.keys()), getStringLiteralType));
+        return getUnionType(map(TSGO_COMPAT ? [...typeofNEFacts.keys()].sort() : arrayFrom(typeofNEFacts.keys()), getStringLiteralType));
     }
 
     function createTypeParameter(symbol?: Symbol) {
@@ -17655,11 +17655,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function containsType(types: readonly Type[], type: Type): boolean {
-        return __TSGO_COMPAT__ ? binarySearch(types, type, identity, compareTypes) >= 0 : binarySearch(types, type, getTypeId, compareValues) >= 0;
+        return TSGO_COMPAT ? binarySearch(types, type, identity, compareTypes) >= 0 : binarySearch(types, type, getTypeId, compareValues) >= 0;
     }
 
     function insertType(types: Type[], type: Type): boolean {
-        const index = __TSGO_COMPAT__ ? binarySearch(types, type, identity, compareTypes) : binarySearch(types, type, getTypeId, compareValues);
+        const index = TSGO_COMPAT ? binarySearch(types, type, identity, compareTypes) : binarySearch(types, type, getTypeId, compareValues);
         if (index < 0) {
             types.splice(~index, 0, type);
             return true;
@@ -17681,7 +17681,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const len = typeSet.length;
-                const index = __TSGO_COMPAT__ ? binarySearch(typeSet, type, identity, compareTypes) : (len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues));
+                const index = TSGO_COMPAT ? binarySearch(typeSet, type, identity, compareTypes) : (len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues));
                 if (index < 0) {
                     typeSet.splice(~index, 0, type);
                 }
@@ -52857,7 +52857,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function sortSymbolsIfTSGoCompat(array: Symbol[]): Symbol[];
     function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined;
     function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined {
-        if (__TSGO_COMPAT__ && array) {
+        if (TSGO_COMPAT && array) {
             return array.sort(compareSymbols); // eslint-disable-line local/no-array-mutating-method-expressions
         }
         return array;

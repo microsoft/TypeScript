@@ -8,7 +8,7 @@ export const version: string = `${versionMajorMinor}.0-dev`;
 const tsgoCompatEnv = typeof process !== "undefined" && process.env ? process.env.TSGO_COMPAT : undefined;
 
 /** @internal */
-export const __TSGO_COMPAT__: boolean = tsgoCompatEnv ? tsgoCompatEnv === "true" : true;
+export const TSGO_COMPAT: boolean = tsgoCompatEnv ? tsgoCompatEnv === "true" : true;
 
 /**
  * Type of objects whose values are all of the same type.
