@@ -52857,7 +52857,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined;
     function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined {
         if (__TSGO_COMPAT__ && array) {
-            return array.sort(compareSymbols);
+            return array.sort(compareSymbols); // eslint-disable-line local/no-array-mutating-method-expressions
         }
         return array;
     }

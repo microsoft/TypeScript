@@ -6,7 +6,7 @@ export const versionMajorMinor = "5.7";
 export const version: string = `${versionMajorMinor}.0-dev`;
 
 declare global {
-    var __TSGO_COMPAT__: boolean | undefined;
+    var __TSGO_COMPAT__: boolean | undefined; // eslint-disable-line no-var, @typescript-eslint/naming-convention
 }
 
 globalThis.__TSGO_COMPAT__ ??= false;
