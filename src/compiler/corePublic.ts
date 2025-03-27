@@ -5,11 +5,10 @@ export const versionMajorMinor = "5.7";
 /** The version of the TypeScript compiler release */
 export const version: string = `${versionMajorMinor}.0-dev`;
 
-declare global {
-    var __TSGO_COMPAT__: boolean | undefined; // eslint-disable-line no-var, @typescript-eslint/naming-convention
-}
+const tsgoCompatEnv = typeof process !== "undefined" && process.env ? process.env.TSGO_COMPAT : undefined;
 
-globalThis.__TSGO_COMPAT__ ??= false;
+/** @internal */
+export const __TSGO_COMPAT__: boolean = tsgoCompatEnv ? tsgoCompatEnv === "true" : true;
 
 /**
  * Type of objects whose values are all of the same type.

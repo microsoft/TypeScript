@@ -1,5 +1,6 @@
 import {
     __String,
+    __TSGO_COMPAT__,
     AccessExpression,
     AccessFlags,
     AccessorDeclaration,
