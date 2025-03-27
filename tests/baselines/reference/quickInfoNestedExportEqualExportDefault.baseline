@@ -6,7 +6,7 @@
 // | ----------------------------------------------------------------------
 // | class (Anonymous function).default
 // | enum (Anonymous function).default
-// | module (Anonymous function).default
+// | namespace (Anonymous function).default
 // | (enum member) (Anonymous function).default
 // | (enum member) (Anonymous function).default: {}
 // | ----------------------------------------------------------------------
@@ -14,7 +14,7 @@
 // | ----------------------------------------------------------------------
 // | class (Anonymous function).default
 // | enum (Anonymous function).default
-// | module (Anonymous function).default
+// | namespace (Anonymous function).default
 // | (enum member) (Anonymous function).default
 // | (enum member) (Anonymous function).default: {}
 // | ----------------------------------------------------------------------
@@ -85,7 +85,7 @@
           "kind": "lineBreak"
         },
         {
-          "text": "module",
+          "text": "namespace",
           "kind": "keyword"
         },
         {
@@ -251,7 +251,7 @@
           "kind": "lineBreak"
         },
         {
-          "text": "module",
+          "text": "namespace",
           "kind": "keyword"
         },
         {

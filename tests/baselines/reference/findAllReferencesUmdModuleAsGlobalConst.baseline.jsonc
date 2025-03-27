@@ -60,10 +60,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/node_modules/@types/three/index\"",
+    "name": "namespace \"/node_modules/@types/three/index\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {

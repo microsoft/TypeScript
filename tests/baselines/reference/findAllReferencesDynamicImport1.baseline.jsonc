@@ -24,10 +24,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/tests/cases/fourslash/foo\"",
+    "name": "namespace \"/tests/cases/fourslash/foo\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {
@@ -144,10 +144,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/tests/cases/fourslash/foo\"",
+    "name": "namespace \"/tests/cases/fourslash/foo\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {

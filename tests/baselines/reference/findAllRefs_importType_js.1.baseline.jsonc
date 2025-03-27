@@ -21,7 +21,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local class",
-    "name": "(local class) C\nmodule C",
+    "name": "(local class) C\nnamespace C",
     "displayParts": [
      {
       "text": "(",
@@ -48,7 +48,7 @@
       "kind": "lineBreak"
      },
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {

@@ -55,7 +55,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | module globalThis
+// | namespace globalThis
 // | if
 // | implements
 // | import
@@ -197,7 +197,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | module globalThis
+// | namespace globalThis
 // | if
 // | implements
 // | import
@@ -1729,7 +1729,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "module",
+              "text": "namespace",
               "kind": "keyword"
             },
             {
@@ -5635,7 +5635,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "module",
+              "text": "namespace",
               "kind": "keyword"
             },
             {

@@ -30,10 +30,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/tests/cases/fourslash/project/src/dir/jsx-runtime\"",
+    "name": "namespace \"/tests/cases/fourslash/project/src/dir/jsx-runtime\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {

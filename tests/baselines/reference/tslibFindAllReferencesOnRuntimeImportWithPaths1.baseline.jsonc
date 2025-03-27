@@ -19,10 +19,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/tests/cases/fourslash/project/src/dir/tslib\"",
+    "name": "namespace \"/tests/cases/fourslash/project/src/dir/tslib\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {

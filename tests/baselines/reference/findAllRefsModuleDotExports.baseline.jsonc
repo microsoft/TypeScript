@@ -49,10 +49,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/b\"",
+    "name": "namespace \"/b\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {
@@ -86,10 +86,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/b\"",
+    "name": "namespace \"/b\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {

@@ -148,10 +148,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/j\"",
+    "name": "namespace \"/j\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {
@@ -190,10 +190,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/j\"",
+    "name": "namespace \"/j\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {

@@ -8,5 +8,5 @@
 ////mod["/**/@@thing1"]["@@thing2"] = 0;
 
 goTo.marker();
-verify.quickInfoIs(`module mod["@@thing1"]
+verify.quickInfoIs(`namespace mod["@@thing1"]
 (property) mod["@@thing1"]: typeof mod.@@thing1`);

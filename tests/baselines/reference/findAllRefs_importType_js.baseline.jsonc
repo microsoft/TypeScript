@@ -20,10 +20,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/a\"",
+    "name": "namespace \"/a\"",
     "displayParts": [
      {
-      "text": "module",
+      "text": "namespace",
       "kind": "keyword"
      },
      {
