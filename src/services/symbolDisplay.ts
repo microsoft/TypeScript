@@ -805,7 +805,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         documentation,
         symbolKind,
         tags: tags.length === 0 ? undefined : tags,
-        canIncreaseVerbosityLevel: verbosityLevel !== undefined ? canIncreaseVerbosityLevel : undefined
+        canIncreaseVerbosityLevel: verbosityLevel !== undefined ? canIncreaseVerbosityLevel : undefined,
     };
 
     function getPrinter() {
@@ -871,7 +871,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
 
     function tryUnfoldSymbol(symbol: Symbol, meaning: SemanticMeaning): boolean {
-         if (hasUnfoldedSymbol) {
+        if (hasUnfoldedSymbol) {
             return true;
         }
         if (canUnfoldSymbol(symbol, typeWriterOut)) {
@@ -882,7 +882,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     symbolMeaning,
                     TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
                     verbosityLevel !== undefined ? verbosityLevel - 1 : undefined,
-                    typeWriterOut);
+                    typeWriterOut,
+                );
                 const printer = getPrinter();
                 nodes.forEach((node, i) => {
                     if (i > 0) writer.writeLine();

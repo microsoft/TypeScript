@@ -6049,7 +6049,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 /*internalFlags*/ undefined,
                 /*tracker*/ undefined,
                 verbosityLevel,
-                out);
+                out,
+            );
             const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonDeferringWriter(writer)); // TODO: GH#18217
@@ -6377,7 +6378,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 /*tracker*/ undefined,
                 verbosityLevel,
                 context => symbolToDeclarationsWorker(symbol, context),
-                out);
+                out,
+            );
             return mapDefined(nodes, node => {
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -6484,7 +6486,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 out: {
                     couldUnfoldMore: false,
                     truncated: false,
-                }
+                },
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -7011,17 +7013,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     // Always use 'typeof T' for type of class, enum, and module objects
                     else if (
-                        !forceExpansion && 
+                        !forceExpansion &&
                         (symbol.flags & SymbolFlags.Class
-                            && !forceClassExpansion
-                            && !getBaseTypeVariableOfClass(symbol)
-                            && !(symbol.valueDeclaration
-                                && isClassLike(symbol.valueDeclaration)
-                                && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
-                                && (!isClassDeclaration(symbol.valueDeclaration)
-                                    || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible))
-                        || symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)
-                        || shouldWriteTypeOfFunctionSymbol())
+                                && !forceClassExpansion
+                                && !getBaseTypeVariableOfClass(symbol)
+                                && !(symbol.valueDeclaration
+                                    && isClassLike(symbol.valueDeclaration)
+                                    && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+                                    && (!isClassDeclaration(symbol.valueDeclaration)
+                                        || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible))
+                            || symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)
+                            || shouldWriteTypeOfFunctionSymbol())
                     ) {
                         if (canUnfoldType(type, context)) {
                             context.depth += 1;
@@ -9787,7 +9789,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
-                const members =  getNamespaceMembersForSerialization(symbol);
+                const members = getNamespaceMembersForSerialization(symbol);
                 const unfolding = isUnfolding(context);
                 // Split NS members up by declaration - members whose parent symbol is the ns symbol vs those whose is not (but were added in later via merging)
                 const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol || unfolding ? "real" : "merged");
@@ -9871,7 +9873,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         initializer,
                     );
                     members.push(member);
-                };
+                }
                 addResult(
                     factory.createEnumDeclaration(
                         factory.createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
@@ -9898,7 +9900,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function createTruncationStatement(dotDotDotText: string): Statement {
-                return factory.createExpressionStatement(factory.createIdentifier(dotDotDotText))
+                return factory.createExpressionStatement(factory.createIdentifier(dotDotDotText));
             }
 
             function getSignatureTextRangeLocation(signature: Signature) {
@@ -10580,7 +10582,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             Debug.assert(!!setter);
                             const paramSymbol = isFunctionLikeDeclaration(setter) ? getSignatureFromDeclaration(setter).parameters[0] : undefined;
                             const setterDeclaration = p.declarations?.find(isSetAccessor);
-                            context.approximateLength += modifiersLength(flag) + 7 + (paramSymbol ? symbolName(paramSymbol).length : 5) + (omitType? 0 : 1); // `modifiers set name(param);`, approximate name
+                            context.approximateLength += modifiersLength(flag) + 7 + (paramSymbol ? symbolName(paramSymbol).length : 5) + (omitType ? 0 : 1); // `modifiers set name(param);`, approximate name
                             result.push(setTextRange(
                                 context,
                                 factory.createSetAccessorDeclaration(
@@ -10600,7 +10602,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         if (p.flags & SymbolFlags.GetAccessor) {
                             const getterDeclaration = p.declarations?.find(isGetAccessor);
-                            context.approximateLength += modifiersLength(flag) + 9 + (omitType? 0 : 1); // `modifiers get name(): ;`, approximate name
+                            context.approximateLength += modifiersLength(flag) + 9 + (omitType ? 0 : 1); // `modifiers get name(): ;`, approximate name
                             result.push(setTextRange(
                                 context,
                                 factory.createGetAccessorDeclaration(
@@ -10619,7 +10621,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // If this happens, we assume the accessor takes priority, as it imposes more constraints
                     else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable | SymbolFlags.Accessor)) {
                         const modifierFlags = (isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag;
-                        context.approximateLength += 1 + (omitType? 0 : 1) + modifiersLength(modifierFlags); // `modifiers name: ;`, approximate name
+                        context.approximateLength += 1 + (omitType ? 0 : 1) + modifiersLength(modifierFlags); // `modifiers name: ;`, approximate name
                         return setTextRange(
                             context,
                             createProperty(
