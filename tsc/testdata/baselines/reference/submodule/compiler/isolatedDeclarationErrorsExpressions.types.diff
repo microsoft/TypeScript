@@ -1,21 +1,10 @@
 --- old.isolatedDeclarationErrorsExpressions.types
 +++ new.isolatedDeclarationErrorsExpressions.types
-@@= skipped -541, +541 lines =@@
- >1 : 1
- 
- export const [, , b = 1]: [number, number, number | undefined] = [0, 1, 2];
--> : undefined
--> : undefined
- >b : number
- >1 : 1
- >[0, 1, 2] : [number, number, number]
-@@= skipped -10, +8 lines =@@
+@@= skipped -549, +549 lines =@@
  >2 : 2
  
  export function foo([, , b]: [
 ->foo : ([, , b]?: [number, number, number]) => void
--> : undefined
--> : undefined
 +>foo : (__0?: [number, number, number]) => void
  >b : number
  

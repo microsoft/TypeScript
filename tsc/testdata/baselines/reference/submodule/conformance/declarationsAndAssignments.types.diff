@@ -1,15 +1,6 @@
 --- old.declarationsAndAssignments.types
 +++ new.declarationsAndAssignments.types
-@@= skipped -30, +30 lines =@@
- >"hello" : "hello"
- 
-     var [,, x] = [0, 1, 2];
--> : undefined
--> : undefined
- >x : number
- >[0, 1, 2] : [number, number, number]
- >0 : 0
-@@= skipped -388, +386 lines =@@
+@@= skipped -416, +416 lines =@@
  }
  
  function f14([a = 1, [b = "hello", { x, y: c = false }]]) {

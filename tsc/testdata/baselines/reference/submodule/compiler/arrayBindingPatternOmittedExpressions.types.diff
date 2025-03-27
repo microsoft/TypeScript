@@ -1,31 +1,11 @@
 --- old.arrayBindingPatternOmittedExpressions.types
 +++ new.arrayBindingPatternOmittedExpressions.types
-@@= skipped -5, +5 lines =@@
- 
- {
-     let [, b, , a] = results;
--> : undefined
- >b : string
--> : undefined
- >a : string
- >results : string[]
- 
-@@= skipped -20, +18 lines =@@
+@@= skipped -23, +23 lines =@@
  
  
  function f([, a, , b, , , , s, , , ] = results) {
 ->f : ([, a, , b, , , , s, , ,]?: string[]) => void
--> : undefined
 +>f : (__0?: string[]) => void
  >a : string
--> : undefined
  >b : string
--> : undefined
--> : undefined
--> : undefined
  >s : string
--> : undefined
--> : undefined
- >results : string[]
- 
-     a = s[1];

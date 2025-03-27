@@ -62,11 +62,8 @@
 +>b5 : (z: any, y: any, __2: [any, any, any], __3: { m: { q: any; r: any; }; p: any; }) => any
  >z : any
  >y : any
--> : undefined
  >a : any
- >b : any
- >p : any
-@@= skipped -13, +12 lines =@@
+@@= skipped -12, +12 lines =@@
  }
  
  function b6([a, z, y] = [undefined, null, undefined]) { }

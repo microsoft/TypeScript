@@ -5,14 +5,11 @@
  === declarationEmitDestructuring5.ts ===
  function baz([, z, , ]) { }
 ->baz : ([, z, ,]: [any, any, any?]) => void
--> : undefined
 +>baz : (__0: [any, any, any?]) => void
  >z : any
--> : undefined
  
  function foo([, b, ]: [any, any]): void { }
 ->foo : ([, b,]: [any, any]) => void
--> : undefined
 +>foo : (__0: [any, any]) => void
  >b : any
  
@@ -20,27 +17,18 @@
 ->bar : ([z, , ,]: [any, any?, any?]) => void
 +>bar : (__0: [any, any?, any?]) => void
  >z : any
--> : undefined
--> : undefined
  
  function bar1([z, , , ] = [1, 3, 4, 6, 7]) { }
 ->bar1 : ([z, , ,]?: [number, number, number, number, number]) => void
 +>bar1 : (__0?: [number, number, number, number, number]) => void
  >z : number
--> : undefined
--> : undefined
  >[1, 3, 4, 6, 7] : [number, number, number, number, number]
  >1 : 1
- >3 : 3
-@@= skipped -29, +22 lines =@@
+@@= skipped -22, +22 lines =@@
  >7 : 7
  
  function bar2([,,z, , , ]) { }
 ->bar2 : ([, , z, , ,]: [any, any, any, any?, any?]) => void
--> : undefined
--> : undefined
 +>bar2 : (__0: [any, any, any, any?, any?]) => void
  >z : any
--> : undefined
--> : undefined
  

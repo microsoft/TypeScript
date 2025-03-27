@@ -9,7 +9,7 @@
  
      log(msg: any): void;
  >log : (msg: any) => void
-@@= skipped -336, +336 lines =@@
+@@= skipped -330, +330 lines =@@
      console.log(skillB);
  >console.log(skillB) : void
  >console.log : (msg: any) => void

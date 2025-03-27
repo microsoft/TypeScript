@@ -14,12 +14,11 @@
  
  function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
 ->foo1 : ([, skillA]?: Robot) => void
--> : undefined
 +>foo1 : (__0?: Robot) => void
  >skillA : string[]
  >["noSkill", "noSkill"] : string[]
  >"noSkill" : "noSkill"
-@@= skipped -15, +14 lines =@@
+@@= skipped -14, +14 lines =@@
      console.log(skillA);
  >console.log(skillA) : void
  >console.log : (msg: any) => void

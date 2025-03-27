@@ -9,15 +9,7 @@
  
      log(msg: string): void;
  >log : (msg: string) => void
-@@= skipped -24, +24 lines =@@
- >"trimming" : "trimming"
- 
- let [, nameA = "noName"] = robotA;
--> : undefined
- >nameA : string
- >"noName" : "noName"
- >robotA : Robot
-@@= skipped -58, +57 lines =@@
+@@= skipped -81, +81 lines =@@
      console.log(skillA2);
  >console.log(skillA2) : void
  >console.log : (msg: string) => void

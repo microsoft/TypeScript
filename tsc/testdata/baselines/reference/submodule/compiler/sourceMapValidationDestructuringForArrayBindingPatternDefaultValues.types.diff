@@ -9,15 +9,7 @@
  
      log(msg: any): void;
  >log : (msg: any) => void
-@@= skipped -50, +50 lines =@@
- }
- 
- for (let [, nameA ="name"] = robotA, i = 0; i < 1; i++) {
--> : undefined
- >nameA : string
- >"name" : "name"
- >robotA : Robot
-@@= skipped -15, +14 lines =@@
+@@= skipped -64, +64 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -26,12 +18,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
--> : undefined
- >nameA : string
- >"name" : "name"
- >getRobot() : Robot
-@@= skipped -21, +20 lines =@@
+@@= skipped -20, +20 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -40,12 +27,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
--> : undefined
- >nameA : string
- >"name" : "name"
- >[2, "trimmer", "trimming"] : [number, string, string]
-@@= skipped -23, +22 lines =@@
+@@= skipped -22, +22 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -54,13 +36,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, [
--> : undefined
--
-     primarySkillA = "primary",
- >primarySkillA : string
- >"primary" : "primary"
-@@= skipped -31, +29 lines =@@
+@@= skipped -29, +29 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void
@@ -69,13 +45,7 @@
  >log : (msg: any) => void
  >primarySkillA : string
  }
- for (let [, [
--> : undefined
--
-     primarySkillA = "primary",
- >primarySkillA : string
- >"primary" : "primary"
-@@= skipped -32, +30 lines =@@
+@@= skipped -30, +30 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void
@@ -84,13 +54,7 @@
  >log : (msg: any) => void
  >primarySkillA : string
  }
- for (let [, [
--> : undefined
--
-     primarySkillA = "primary",
- >primarySkillA : string
- >"primary" : "primary"
-@@= skipped -35, +33 lines =@@
+@@= skipped -33, +33 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void

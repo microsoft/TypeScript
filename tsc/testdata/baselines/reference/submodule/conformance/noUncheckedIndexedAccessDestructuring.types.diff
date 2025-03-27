@@ -1,15 +1,6 @@
 --- old.noUncheckedIndexedAccessDestructuring.types
 +++ new.noUncheckedIndexedAccessDestructuring.types
-@@= skipped -33, +33 lines =@@
- 
- // Destructuring a rest element -> do not include undefined
- const [, , ...s3] = strArray;
--> : undefined
--> : undefined
- >s3 : string[]
- >strArray : string[]
- 
-@@= skipped -55, +53 lines =@@
+@@= skipped -86, +86 lines =@@
  
      x.toFixed(); // Should OK
  >x.toFixed() : string

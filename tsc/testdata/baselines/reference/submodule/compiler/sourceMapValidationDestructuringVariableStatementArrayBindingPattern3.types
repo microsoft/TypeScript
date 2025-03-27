@@ -65,14 +65,12 @@ let multiRobotAInfo: (string | [string, string])[];
 [, nameA] = robotA;
 >[, nameA] = robotA : Robot
 >[, nameA] : [undefined, string]
-> : undefined
 >nameA : string
 >robotA : Robot
 
 [, nameB] = getRobotB();
 >[, nameB] = getRobotB() : Robot
 >[, nameB] : [undefined, string]
-> : undefined
 >nameB : string
 >getRobotB() : Robot
 >getRobotB : () => Robot
@@ -80,7 +78,6 @@ let multiRobotAInfo: (string | [string, string])[];
 [, nameB] = [2, "trimmer", "trimming"];
 >[, nameB] = [2, "trimmer", "trimming"] : [number, string, string]
 >[, nameB] : [undefined, string]
-> : undefined
 >nameB : string
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
@@ -90,14 +87,12 @@ let multiRobotAInfo: (string | [string, string])[];
 [, multiSkillB] = multiRobotB;
 >[, multiSkillB] = multiRobotB : MultiSkilledRobot
 >[, multiSkillB] : [undefined, [string, string]]
-> : undefined
 >multiSkillB : [string, string]
 >multiRobotB : MultiSkilledRobot
 
 [, multiSkillB] = getMultiRobotB();
 >[, multiSkillB] = getMultiRobotB() : MultiSkilledRobot
 >[, multiSkillB] : [undefined, [string, string]]
-> : undefined
 >multiSkillB : [string, string]
 >getMultiRobotB() : MultiSkilledRobot
 >getMultiRobotB : () => MultiSkilledRobot
@@ -105,7 +100,6 @@ let multiRobotAInfo: (string | [string, string])[];
 [, multiSkillB] = ["roomba", ["vacuum", "mopping"]];
 >[, multiSkillB] = ["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >[, multiSkillB] : [undefined, [string, string]]
-> : undefined
 >multiSkillB : [string, string]
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >"roomba" : "roomba"

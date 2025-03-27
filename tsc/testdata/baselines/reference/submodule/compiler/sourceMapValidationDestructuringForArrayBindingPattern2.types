@@ -78,7 +78,6 @@ for ([, nameA] = robotA, i = 0; i < 1; i++) {
 >[, nameA] = robotA, i = 0 : 0
 >[, nameA] = robotA : Robot
 >[, nameA] : [undefined, string]
-> : undefined
 >nameA : string
 >robotA : Robot
 >i = 0 : 0
@@ -101,7 +100,6 @@ for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
 >[, nameA] = getRobot(), i = 0 : 0
 >[, nameA] = getRobot() : Robot
 >[, nameA] : [undefined, string]
-> : undefined
 >nameA : string
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -125,7 +123,6 @@ for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[, nameA] = [2, "trimmer", "trimming"], i = 0 : 0
 >[, nameA] = [2, "trimmer", "trimming"] : [number, string, string]
 >[, nameA] : [undefined, string]
-> : undefined
 >nameA : string
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
@@ -151,7 +148,6 @@ for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
 >[, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0 : 0
 >[, [primarySkillA, secondarySkillA]] = multiRobotA : MultiSkilledRobot
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
-> : undefined
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
@@ -176,7 +172,6 @@ for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) 
 >[, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0 : 0
 >[, [primarySkillA, secondarySkillA]] = getMultiRobot() : MultiSkilledRobot
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
-> : undefined
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
@@ -202,7 +197,6 @@ for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]],
 >[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
 >[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
-> : undefined
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string

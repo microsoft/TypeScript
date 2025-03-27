@@ -9,15 +9,7 @@
  
      log(msg: any): void;
  >log : (msg: any) => void
-@@= skipped -50, +50 lines =@@
- }
- 
- for (let [, nameA] = robotA, i = 0; i < 1; i++) {
--> : undefined
- >nameA : string
- >robotA : Robot
- >i : number
-@@= skipped -14, +13 lines =@@
+@@= skipped -63, +63 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -26,12 +18,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, nameA] = getRobot(), i = 0; i < 1; i++) {
--> : undefined
- >nameA : string
- >getRobot() : Robot
- >getRobot : () => Robot
-@@= skipped -20, +19 lines =@@
+@@= skipped -19, +19 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -40,12 +27,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
--> : undefined
- >nameA : string
- >[2, "trimmer", "trimming"] : [number, string, string]
- >2 : 2
-@@= skipped -22, +21 lines =@@
+@@= skipped -21, +21 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -54,12 +36,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
--> : undefined
- >primarySkillA : string
- >secondarySkillA : string
- >multiRobotA : MultiSkilledRobot
-@@= skipped -20, +19 lines =@@
+@@= skipped -19, +19 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void
@@ -68,12 +45,7 @@
  >log : (msg: any) => void
  >primarySkillA : string
  }
- for (let [, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
--> : undefined
- >primarySkillA : string
- >secondarySkillA : string
- >getMultiRobot() : MultiSkilledRobot
-@@= skipped -21, +20 lines =@@
+@@= skipped -20, +20 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void
@@ -82,12 +54,7 @@
  >log : (msg: any) => void
  >primarySkillA : string
  }
- for (let [, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
--> : undefined
- >primarySkillA : string
- >secondarySkillA : string
- >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
-@@= skipped -24, +23 lines =@@
+@@= skipped -23, +23 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void

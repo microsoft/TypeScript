@@ -5,6 +5,5 @@ var v = [1,,1];
 >v : number[]
 >[1,,1] : number[]
 >1 : 1
-> : undefined
 >1 : 1
 

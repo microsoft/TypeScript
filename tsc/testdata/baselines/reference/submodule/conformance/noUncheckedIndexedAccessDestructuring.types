@@ -194,9 +194,6 @@ declare let target_string_arr: string[];
 [,,, ...target_string_arr] = strArray; // Should OK
 >[,,, ...target_string_arr] = strArray : string[]
 >[,,, ...target_string_arr] : [undefined, undefined, undefined, ...string[]]
-> : undefined
-> : undefined
-> : undefined
 >...target_string_arr : string
 >target_string_arr : string[]
 >strArray : string[]

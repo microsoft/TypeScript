@@ -341,6 +341,10 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 			return nil
 		}
 
+		if ast.IsOmittedExpression(node) {
+			return nil
+		}
+
 		var t *checker.Type
 		// Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
 		if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(node.Parent) {

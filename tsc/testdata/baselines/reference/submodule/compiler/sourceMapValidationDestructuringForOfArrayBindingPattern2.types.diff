@@ -9,7 +9,16 @@
  
      log(msg: any): void;
  >log : (msg: any) => void
-@@= skipped -97, +97 lines =@@
+@@= skipped -96, +96 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -13, +13 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -27,14 +36,14 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -15, +15 lines =@@
-     console.log(nameA);
- >console.log(nameA) : void
+@@= skipped -14, +14 lines =@@
+     console.log(primarySkillA);
+ >console.log(primarySkillA) : void
  >console.log : (msg: any) => void
 ->console : { log(msg: any): void; }
 +>console : { log: (msg: any) => void; }
  >log : (msg: any) => void
- >nameA : string
+ >primarySkillA : string
  }
 @@= skipped -15, +15 lines =@@
      console.log(primarySkillA);
@@ -46,15 +55,6 @@
  >primarySkillA : string
  }
 @@= skipped -16, +16 lines =@@
-     console.log(primarySkillA);
- >console.log(primarySkillA) : void
- >console.log : (msg: any) => void
-->console : { log(msg: any): void; }
-+>console : { log: (msg: any) => void; }
- >log : (msg: any) => void
- >primarySkillA : string
- }
-@@= skipped -17, +17 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void

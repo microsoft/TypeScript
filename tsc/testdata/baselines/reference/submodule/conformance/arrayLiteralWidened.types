@@ -10,8 +10,6 @@ var a = []; // any[]
 var a = [,,];
 >a : any[]
 >[,,] : undefined[]
-> : undefined
-> : undefined
 
 var a = [null, null];
 >a : any[]
@@ -70,7 +68,6 @@ var d = [x];
 var d = [, x];
 >d : undefined[]
 >[, x] : undefined[]
-> : undefined
 >x : undefined
 
 var d = [undefined, x];

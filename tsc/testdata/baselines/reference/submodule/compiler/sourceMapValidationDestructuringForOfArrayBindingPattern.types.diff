@@ -9,14 +9,7 @@
  
      log(msg: any): void;
  >log : (msg: any) => void
-@@= skipped -69, +69 lines =@@
- }
- 
- for (let [, nameA] of robots) {
--> : undefined
- >nameA : string
- >robots : Robot[]
- 
+@@= skipped -75, +75 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -25,12 +18,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, nameA] of getRobots()) {
--> : undefined
- >nameA : string
- >getRobots() : Robot[]
- >getRobots : () => Robot[]
-@@= skipped -20, +18 lines =@@
+@@= skipped -12, +12 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -39,12 +27,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, nameA] of [robotA, robotB]) {
--> : undefined
- >nameA : string
- >[robotA, robotB] : Robot[]
- >robotA : Robot
-@@= skipped -14, +13 lines =@@
+@@= skipped -13, +13 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -53,12 +36,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
- for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
--> : undefined
- >primarySkillA : string
- >secondarySkillA : string
- >multiRobots : MultiSkilledRobot[]
-@@= skipped -13, +12 lines =@@
+@@= skipped -12, +12 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void
@@ -67,12 +45,7 @@
  >log : (msg: any) => void
  >primarySkillA : string
  }
- for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
--> : undefined
- >primarySkillA : string
- >secondarySkillA : string
- >getMultiRobots() : MultiSkilledRobot[]
-@@= skipped -14, +13 lines =@@
+@@= skipped -13, +13 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void
@@ -81,12 +54,7 @@
  >log : (msg: any) => void
  >primarySkillA : string
  }
- for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
--> : undefined
- >primarySkillA : string
- >secondarySkillA : string
- >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
-@@= skipped -15, +14 lines =@@
+@@= skipped -14, +14 lines =@@
      console.log(primarySkillA);
  >console.log(primarySkillA) : void
  >console.log : (msg: any) => void

@@ -4,5 +4,4 @@
 var v = [,];
 >v : any[]
 >[,] : undefined[]
-> : undefined
 

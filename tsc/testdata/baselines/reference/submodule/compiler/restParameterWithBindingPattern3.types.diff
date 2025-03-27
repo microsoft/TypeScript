@@ -28,8 +28,6 @@
 ->d : (a: boolean, arg_1: string, arg_2: number) => void
 +>d : (...__0: [boolean, string, number]) => void
  >a : boolean
--> : undefined
--> : undefined
  >d : undefined
  
  function e(...{0: a = 1, 1: b = true, ...rest: rest}: [boolean, string, number]) { }

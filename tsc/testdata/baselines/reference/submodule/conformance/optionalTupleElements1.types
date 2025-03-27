@@ -144,7 +144,6 @@ t3 = [42,,true]
 >t3 : T3
 >[42,,true] : [number, undefined, true]
 >42 : 42
-> : undefined
 >true : true
 
 t3 = [42];
@@ -165,14 +164,12 @@ t4 = [42,,true];
 >t4 : T4
 >[42,,true] : [number, undefined, true]
 >42 : 42
-> : undefined
 >true : true
 
 t4 = [,"hello", true];
 >t4 = [,"hello", true] : [undefined, string, true]
 >t4 : T4
 >[,"hello", true] : [undefined, string, true]
-> : undefined
 >"hello" : "hello"
 >true : true
 
@@ -180,8 +177,6 @@ t4 = [,,true];
 >t4 = [,,true] : [undefined, undefined, true]
 >t4 : T4
 >[,,true] : [undefined, undefined, true]
-> : undefined
-> : undefined
 >true : true
 
 t4 = [];

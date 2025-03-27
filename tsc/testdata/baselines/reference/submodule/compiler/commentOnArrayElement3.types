@@ -14,7 +14,5 @@ const array = [
 >2 : 2
 
     /* end of element 2 */, ,
-> : undefined
-
     /* extra comment */
 ];

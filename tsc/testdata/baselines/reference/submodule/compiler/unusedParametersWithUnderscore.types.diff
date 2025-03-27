@@ -14,7 +14,5 @@
 ->f3 : ([_a, , __b]: [any, any, any]) => void
 +>f3 : (__0: [any, any, any]) => void
  >_a : any
--> : undefined
  >__b : any
  }
- 

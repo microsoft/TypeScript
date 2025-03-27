@@ -24,8 +24,3 @@
  >/anything/ : RegExp
  >[] : []
  
-     const [, extracted] = match;
--> : undefined
- >extracted : string
- >match : RegExpMatchArray | []
- 

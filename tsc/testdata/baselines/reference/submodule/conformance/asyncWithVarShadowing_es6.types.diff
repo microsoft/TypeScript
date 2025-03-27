@@ -1,14 +1,6 @@
 --- old.asyncWithVarShadowing_es6.types
 +++ new.asyncWithVarShadowing_es6.types
-@@= skipped -131, +131 lines =@@
- >x : any
- 
-     var [, x] = y;
--> : undefined
- >x : any
- >y : any
- }
-@@= skipped -34, +33 lines =@@
+@@= skipped -164, +164 lines =@@
  }
  
  async function fn18({ x }) {
