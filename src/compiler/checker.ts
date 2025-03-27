@@ -881,6 +881,7 @@ import {
     moduleExportNameTextUnescaped,
     ModuleInstanceState,
     ModuleKind,
+    ModuleName,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSupportsImportAttributes,
@@ -1134,7 +1135,6 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
-    ModuleName,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
