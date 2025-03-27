@@ -36,10 +36,6 @@ function d(...[a, , , d]: [boolean, string, number]) { }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >d : undefined
 >  : ^^^^^^^^^
 

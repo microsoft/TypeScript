@@ -183,8 +183,6 @@ interface F1 {
 >  : ^^^
 >y : any
 >  : ^^^
-> : undefined
-> : ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any

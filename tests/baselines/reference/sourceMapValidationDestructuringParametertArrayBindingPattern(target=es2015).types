@@ -29,8 +29,6 @@ var robotA: Robot = [1, "mower", "mowing"];
 function foo1([, nameA]: Robot) {
 >foo1 : ([, nameA]: Robot) => void
 >     : ^         ^^     ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 

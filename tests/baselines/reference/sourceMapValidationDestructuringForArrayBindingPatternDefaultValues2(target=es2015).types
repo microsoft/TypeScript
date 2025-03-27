@@ -119,8 +119,6 @@ for ([, nameA = "name"] = robotA, i = 0; i < 1; i++) {
 >                            : ^^^^^
 >[, nameA = "name"] : [undefined, string]
 >                   : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA = "name" : "name"
 >               : ^^^^^^
 >nameA : string
@@ -165,8 +163,6 @@ for ([, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 >                                : ^^^^^
 >[, nameA = "name"] : [undefined, string]
 >                   : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA = "name" : "name"
 >               : ^^^^^^
 >nameA : string
@@ -213,8 +209,6 @@ for ([, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[, nameA = "name"] : [undefined, string]
 >                   : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA = "name" : "name"
 >               : ^^^^^^
 >nameA : string
@@ -265,8 +259,6 @@ for ([, [
 >                                                                                                       : ^^^^^^^^^^^^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] : [undefined, [string, string]]
 >                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"] : [string, string]
 >                                                                                     : ^^^^^^^^^^^^^^^^
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] : [string, string]
@@ -333,8 +325,6 @@ for ([, [
 >                                                                                                           : ^^^^^^^^^^^^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] : [undefined, [string, string]]
 >                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"] : [string, string]
 >                                                                                     : ^^^^^^^^^^^^^^^^
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] : [string, string]
@@ -403,8 +393,6 @@ for ([, [
 >                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] : [undefined, [string, string]]
 >                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"] : [string, string]
 >                                                                                     : ^^^^^^^^^^^^^^^^
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] : [string, string]
