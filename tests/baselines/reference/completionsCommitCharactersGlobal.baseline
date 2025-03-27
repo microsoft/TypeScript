@@ -83,7 +83,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -255,7 +255,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -426,7 +426,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -595,7 +595,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -764,7 +764,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -932,7 +932,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -1103,7 +1103,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -1274,7 +1274,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -1455,7 +1455,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -1629,7 +1629,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -1800,7 +1800,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -1973,7 +1973,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -2147,7 +2147,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -2320,7 +2320,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -2495,7 +2495,7 @@
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | if
 // | implements
 // | import
@@ -2650,7 +2650,7 @@
 // | interface Function
 // | var Function: FunctionConstructor
 // | interface FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | interface IArguments
 // | interface ImportAttributes
 // | interface ImportCallOptions
@@ -2830,7 +2830,7 @@
 // | interface Function
 // | var Function: FunctionConstructor
 // | interface FunctionConstructor
-// | namespace globalThis
+// | module globalThis
 // | interface IArguments
 // | interface ImportAttributes
 // | interface ImportCallOptions
@@ -5240,7 +5240,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -9991,7 +9991,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -14741,7 +14741,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -19423,7 +19423,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -24110,7 +24110,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -28792,7 +28792,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -33542,7 +33542,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -38292,7 +38292,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -43050,7 +43050,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -47830,7 +47830,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -52581,7 +52581,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -57361,7 +57361,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -62141,7 +62141,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -66966,7 +66966,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -71791,7 +71791,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -78202,7 +78202,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {
@@ -87673,7 +87673,7 @@
           "sortText": "15",
           "displayParts": [
             {
-              "text": "namespace",
+              "text": "module",
               "kind": "keyword"
             },
             {

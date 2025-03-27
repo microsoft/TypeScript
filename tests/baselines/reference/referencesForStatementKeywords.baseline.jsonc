@@ -89,10 +89,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/a\"",
+    "name": "module \"/a\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -447,10 +447,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/b\"",
+    "name": "module \"/b\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -639,10 +639,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/c\"",
+    "name": "module \"/c\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -901,10 +901,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/d\"",
+    "name": "module \"/d\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -972,10 +972,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/e\"",
+    "name": "module \"/e\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -1108,10 +1108,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/f\"",
+    "name": "module \"/f\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -1150,10 +1150,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/g\"",
+    "name": "module \"/g\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -1192,10 +1192,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/g\"",
+    "name": "module \"/g\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -1234,10 +1234,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/g\"",
+    "name": "module \"/g\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -1426,10 +1426,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/h\"",
+    "name": "module \"/h\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -1688,10 +1688,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/i\"",
+    "name": "module \"/i\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -1762,10 +1762,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/j\"",
+    "name": "module \"/j\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {

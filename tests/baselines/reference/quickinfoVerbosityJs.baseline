@@ -81,7 +81,7 @@
 //          ^^^^^^^
 // | ----------------------------------------------------------------------
 // | function someFun(a: SomeType): SomeType
-// | namespace someFun
+// | module someFun
 // | @param a
 // | @returns 
 // | (verbosity level: 0)
@@ -734,7 +734,7 @@
           "kind": "lineBreak"
         },
         {
-          "text": "namespace",
+          "text": "module",
           "kind": "keyword"
         },
         {

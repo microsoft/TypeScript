@@ -30,10 +30,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
+    "name": "module \"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {

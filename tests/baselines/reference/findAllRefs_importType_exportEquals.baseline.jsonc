@@ -223,10 +223,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/a\"",
+    "name": "module \"/a\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {
@@ -323,10 +323,10 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "namespace \"/a\"",
+    "name": "module \"/a\"",
     "displayParts": [
      {
-      "text": "namespace",
+      "text": "module",
       "kind": "keyword"
      },
      {

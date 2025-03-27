@@ -510,7 +510,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         prefixNextMeaning();
         if (!tryUnfoldSymbol(symbol, semanticMeaning)) {
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
-            const isNamespace = !(declaration && declaration.name && declaration.name.kind === SyntaxKind.StringLiteral);
+            const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
             displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);

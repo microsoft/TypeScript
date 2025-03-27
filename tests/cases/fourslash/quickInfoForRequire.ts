@@ -9,7 +9,7 @@
 
 
 goTo.marker("1");
-verify.quickInfoIs("namespace a");
+verify.quickInfoIs("module a");
 
 goTo.marker("2");
-verify.quickInfoIs("namespace a");
+verify.quickInfoIs("module a");
