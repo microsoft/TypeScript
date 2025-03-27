@@ -84,6 +84,7 @@ import {
     compareComparableValues,
     compareDiagnostics,
     comparePaths,
+    compareValues,
     Comparison,
     CompilerOptions,
     ComputedPropertyName,
@@ -5394,7 +5395,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createTypeofType() {
-        return getUnionType(map([...typeofNEFacts.keys()].sort(), getStringLiteralType));
+        return getUnionType(map(__TSGO_COMPAT__ ? [...typeofNEFacts.keys()].sort() : arrayFrom(typeofNEFacts.keys()), getStringLiteralType));
     }
 
     function createTypeParameter(symbol?: Symbol) {
@@ -5420,7 +5421,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (result || (result = [])).push(symbol);
             }
         });
-        result?.sort(compareSymbols);
+        sortSymbolsIfTSGoCompat(result);
         return result || emptyArray;
     }
 
@@ -17653,11 +17654,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function containsType(types: readonly Type[], type: Type): boolean {
-        return binarySearch(types, type, identity, compareTypes) >= 0;
+        return __TSGO_COMPAT__ ? binarySearch(types, type, identity, compareTypes) >= 0 : binarySearch(types, type, getTypeId, compareValues) >= 0;
     }
 
     function insertType(types: Type[], type: Type): boolean {
-        const index = binarySearch(types, type, identity, compareTypes);
+        const index = __TSGO_COMPAT__ ? binarySearch(types, type, identity, compareTypes) : binarySearch(types, type, getTypeId, compareValues);
         if (index < 0) {
             types.splice(~index, 0, type);
             return true;
@@ -17678,7 +17679,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
             }
             else {
-                const index = binarySearch(typeSet, type, identity, compareTypes);
+                const len = typeSet.length;
+                const index = __TSGO_COMPAT__ ? binarySearch(typeSet, type, identity, compareTypes) : (len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues));
                 if (index < 0) {
                     typeSet.splice(~index, 0, type);
                 }
@@ -34717,7 +34719,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // So the table *contains* `x` but `x` isn't actually in scope.
         // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
         if (symbol) return symbol;
-        let candidates = arrayFrom(symbols.values()).sort(compareSymbols);
+        let candidates = arrayFrom(symbols.values());
         if (symbols === globals) {
             const primitives = mapDefined(
                 ["string", "number", "boolean", "object", "bigint", "symbol"],
@@ -34725,8 +34727,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
                     : undefined,
             );
-            candidates = concatenate(candidates, primitives);
+            candidates = concatenate(primitives, candidates);
         }
+        sortSymbolsIfTSGoCompat(candidates);
         return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
     }
     function getSuggestedSymbolForNonexistentSymbol(location: Node | undefined, outerName: __String, meaning: SymbolFlags): Symbol | undefined {
@@ -34736,7 +34739,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
-        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule).sort(compareSymbols), SymbolFlags.ModuleMember); // eslint-disable-line local/no-array-mutating-method-expressions
+        return targetModule.exports && getSpellingSuggestionForName(idText(name), sortSymbolsIfTSGoCompat(getExportsOfModuleAsArray(targetModule)), SymbolFlags.ModuleMember);
     }
 
     function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression, keyedType: Type): string | undefined {
@@ -52848,6 +52851,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const specifier = file.imports[0];
         Debug.assert(specifier && nodeIsSynthesized(specifier) && specifier.text === "tslib", `Expected sourceFile.imports[0] to be the synthesized tslib import`);
         return specifier;
+    }
+
+    function sortSymbolsIfTSGoCompat(array: Symbol[]): Symbol[];
+    function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined;
+    function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined {
+        if (__TSGO_COMPAT__ && array) {
+            return array.sort(compareSymbols);
+        }
+        return array;
     }
 
     function compareSymbols(s1: Symbol | undefined, s2: Symbol | undefined): number {

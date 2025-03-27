@@ -5,6 +5,12 @@ export const versionMajorMinor = "5.7";
 /** The version of the TypeScript compiler release */
 export const version: string = `${versionMajorMinor}.0-dev`;
 
+declare global {
+    var __TSGO_COMPAT__: boolean | undefined;
+}
+
+globalThis.__TSGO_COMPAT__ ??= false;
+
 /**
  * Type of objects whose values are all of the same type.
  * The `in` and `for-in` operators can *not* be safely used,

@@ -175,6 +175,7 @@ async function runDtsBundler(entrypoint, output) {
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
  * @property {boolean} [usePublicAPI]
+ * @property {boolean} [tsgoCompat]
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
@@ -196,6 +197,9 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             treeShaking: taskOptions.treeShaking,
             packages: "external",
             logLevel: "warning",
+            define: {
+                __TSGO_COMPAT__: taskOptions.tsgoCompat ? "true" : "false",
+            },
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
 
@@ -232,7 +236,8 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const require = "require";
             const fakeName = "Q".repeat(require.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
-            options.define = { [require]: fakeName };
+            options.define ||= {};
+            options.define[require] = fakeName;
 
             // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
             // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
@@ -541,6 +546,7 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
     output: testRunner,
     mainDeps: [generateLibs],
     bundlerOptions: {
+        tsgoCompat: true,
         // Ensure we never drop any dead code, which might be helpful while debugging.
         treeShaking: false,
         onWatchRebuild() {
