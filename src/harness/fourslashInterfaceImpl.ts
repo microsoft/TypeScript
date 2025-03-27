@@ -60,6 +60,7 @@ export class Test {
             code: tsDiag.code,
             reportsUnnecessary: tsDiag.reportsUnnecessary ? true : undefined,
             reportsDeprecated: !!tsDiag.reportsDeprecated ? true : undefined,
+            reportsExperimental: !!tsDiag.reportsExperimental ? true : undefined,
         }));
     }
 }
@@ -2000,6 +2001,7 @@ export interface Diagnostic {
     code: number;
     reportsUnnecessary?: true;
     reportsDeprecated?: true;
+    reportsExperimental?: true;
 }
 
 export interface GetEditsForFileRenameOptions {

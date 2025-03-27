@@ -420,6 +420,7 @@ export const enum SyntaxKind {
     JSDocImplementsTag,
     JSDocAuthorTag,
     JSDocDeprecatedTag,
+    JSDocExperimentalTag,
     JSDocClassTag,
     JSDocPublicTag,
     JSDocPrivateTag,
@@ -821,6 +822,7 @@ export const enum NodeFlags {
     JsonFile                                       = 1 << 27, // If node was parsed in a Json
     /** @internal */ TypeCached                    = 1 << 28, // If a type was cached for node at any point
     /** @internal */ Deprecated                    = 1 << 29, // If has '@deprecated' JSDoc tag
+    /** @internal */ Experimental                  = 1 << 30, // If has '@experimental' JSDoc tag
 
     BlockScoped = Let | Const | Using,
     Constant = Const | Using,
@@ -870,6 +872,7 @@ export const enum ModifierFlags {
 
     // JSDoc-only modifiers
     Deprecated =         1 << 16, // Deprecated tag.
+    Experimental =         1 << 17, // Experimental tag.
 
     // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
     /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
@@ -882,7 +885,7 @@ export const enum ModifierFlags {
     /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator,
     /** @internal */ SyntacticModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers,
     /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride,
-    /** @internal */ JSDocOnlyModifiers = Deprecated,
+    /** @internal */ JSDocOnlyModifiers = Deprecated | Experimental,
     /** @internal */ NonCacheOnlyModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers | JSDocOnlyModifiers,
 
     HasComputedJSDocModifiers = 1 << 28, // Indicates the computed modifier flags include modifiers from JSDoc.
@@ -895,7 +898,7 @@ export const enum ModifierFlags {
 
     TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
     ExportDefault = Export | Default,
-    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
+    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Experimental | Override | In | Out | Decorator,
     Modifier = All & ~Decorator,
 }
 
@@ -1048,6 +1051,7 @@ export type ForEachChildNodes =
     | JSDocProtectedTag
     | JSDocReadonlyTag
     | JSDocDeprecatedTag
+    | JSDocExperimentalTag
     | JSDocThrowsTag
     | JSDocOverrideTag
     | JSDocSatisfiesTag
@@ -4000,6 +4004,10 @@ export interface JSDocDeprecatedTag extends JSDocTag {
     kind: SyntaxKind.JSDocDeprecatedTag;
 }
 
+export interface JSDocExperimentalTag extends JSDocTag {
+    kind: SyntaxKind.JSDocExperimentalTag;
+}
+
 export interface JSDocClassTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocClassTag;
 }
@@ -6835,6 +6843,7 @@ export const enum AccessFlags {
     ReportDeprecated = 1 << 6,
     SuppressNoImplicitAnyError = 1 << 7,
     Contextual = 1 << 8,
+    ReportExperimental = 1 << 9,
     Persistent = IncludeUndefined,
 }
 
@@ -7166,6 +7175,7 @@ export interface DiagnosticMessage {
     message: string;
     reportsUnnecessary?: {};
     reportsDeprecated?: {};
+    reportsExperimental?: {},
     /** @internal */
     elidedInCompatabilityPyramid?: boolean;
 }
@@ -7205,6 +7215,7 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     reportsUnnecessary?: {};
 
     reportsDeprecated?: {};
+    reportsExperimental?: {};
     source?: string;
     relatedInformation?: DiagnosticRelatedInformation[];
     /** @internal */ skippedOn?: keyof CompilerOptions;
@@ -9133,8 +9144,13 @@ export interface NodeFactory {
     updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocReadonlyTag;
     createJSDocUnknownTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocUnknownTag;
     updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
+
     createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
     updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+
+    createJSDocExperimentalTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocExperimentalTag;
+    updateJSDocExperimentalTag(node: JSDocExperimentalTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocExperimentalTag;
+
     createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
