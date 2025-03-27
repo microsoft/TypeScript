@@ -71,6 +71,24 @@
 //     var z = 2;
 // }
 
+=== /tests/cases/fourslash/foo.ts ===
+// export function foo() { return "foo"; }
+// import("./foo")
+//        ^^^^^^^
+// | ----------------------------------------------------------------------
+// | module "/tests/cases/fourslash/foo" {
+// |     function foo(): string;
+// |     namespace foo { }
+// | }
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//        ^^^^^^^
+// | ----------------------------------------------------------------------
+// | module "/tests/cases/fourslash/foo"
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// var x = import("./foo")
+
 === /4.ts ===
 // class Foo<T> {
 //     y!: T;
@@ -276,7 +294,7 @@
         },
         {
           "text": "Foo",
-          "kind": "text"
+          "kind": "className"
         },
         {
           "text": " ",
@@ -468,7 +486,7 @@
         },
         {
           "text": "ns",
-          "kind": "text"
+          "kind": "moduleName"
         },
         {
           "text": " ",
@@ -688,7 +706,7 @@
         },
         {
           "text": "ns",
-          "kind": "text"
+          "kind": "moduleName"
         },
         {
           "text": " ",
@@ -980,7 +998,7 @@
         },
         {
           "text": "Two",
-          "kind": "text"
+          "kind": "moduleName"
         },
         {
           "text": " ",
@@ -1124,7 +1142,7 @@
         },
         {
           "text": "Two",
-          "kind": "text"
+          "kind": "moduleName"
         },
         {
           "text": " ",
@@ -1356,6 +1374,158 @@
         },
         {
           "text": "OnlyLocal",
+          "kind": "moduleName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/foo.ts",
+      "position": 48,
+      "name": "5"
+    },
+    "item": {
+      "kind": "module",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 47,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"/tests/cases/fourslash/foo\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/foo.ts",
+      "position": 48,
+      "name": "5"
+    },
+    "item": {
+      "kind": "module",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 47,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"/tests/cases/fourslash/foo\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "text"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
           "kind": "text"
         },
         {
@@ -1369,6 +1539,14 @@
         {
           "text": " ",
           "kind": "space"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
         },
         {
           "text": "}",

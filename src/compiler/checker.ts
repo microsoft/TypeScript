@@ -1134,6 +1134,7 @@ import {
     WithStatement,
     WriterContextOut,
     YieldExpression,
+    ModuleName,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -9802,7 +9803,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // than whatever scope we traverse to them in. That's a bit of a complex rewrite, since we're not _actually_ tracking privates at all in advance,
                 // so we don't even have placeholders to fill in.
                 if (length(realMembers) || unfolding) {
-                    const localName = getInternalSymbolName(symbol, symbolName);
+                    let localName: ModuleName;
+                    if (unfolding) {
+                        // Use the same name as symbol display.
+                        const oldFlags = context.flags;
+                        context.flags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName | SymbolFormatFlags.UseOnlyExternalAliasing;
+                        localName = symbolToNode(symbol, context, /*meaning*/ SymbolFlags.All) as ModuleName;
+                        context.flags = oldFlags;
+                    }
+                    else {
+                        const localText = getInternalSymbolName(symbol, symbolName);
+                        localName = factory.createIdentifier(localText);
+                        context.approximateLength += localText.length;
+                    }
                     serializeAsNamespaceDeclaration(realMembers, localName, modifierFlags, !!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Assignment)));
                 }
                 if (length(mergedMembers)) {
@@ -9898,7 +9911,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Module symbol emit will take care of module-y members, provided it has exports
                 if (!(symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) && !!symbol.exports && !!symbol.exports.size)) {
                     const props = filter(getPropertiesOfType(type), isNamespaceMember);
-                    serializeAsNamespaceDeclaration(props, localName, modifierFlags, /*suppressNewPrivateContext*/ true);
+                    context.approximateLength += localName.length;
+                    serializeAsNamespaceDeclaration(props, factory.createIdentifier(localName), modifierFlags, /*suppressNewPrivateContext*/ true);
                 }
             }
 
@@ -9919,10 +9933,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return signature.declaration;
             }
 
-            function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
+            function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: ModuleName, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
+                const nodeFlags = isIdentifier(localName) ? NodeFlags.Namespace : NodeFlags.None;
                 const unfolding = isUnfolding(context);
                 if (length(props)) {
-                    context.approximateLength += localName.length + 14; // "namespace localName { }"
+                    context.approximateLength += 14; // "namespace { }"
                     const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) || some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) || unfolding ? "local" : "remote");
                     const localProps = localVsRemoteMap.get("local") || emptyArray;
                     // handle remote props first - we need to make an `import` declaration that points at the module containing each remote
@@ -9942,7 +9957,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                     // Add a namespace
                     // Create namespace as non-synthetic so it is usable as an enclosing declaration
-                    let fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, factory.createIdentifier(localName), factory.createModuleBlock([]), NodeFlags.Namespace);
+                    let fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, localName, factory.createModuleBlock([]), nodeFlags);
                     setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                     fakespace.locals = createSymbolTable(props);
                     fakespace.symbol = props[0].parent!;
@@ -9977,13 +9992,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     addResult(fakespace, modifierFlags); // namespaces can never be default exported
                 }
                 else if (unfolding) {
-                    context.approximateLength += localName.length + 14; // "namespace { }"
+                    context.approximateLength += 14; // "namespace { }"
                     addResult(
                         factory.createModuleDeclaration(
                             /*modifiers*/ undefined,
-                            factory.createIdentifier(localName),
+                            localName,
                             factory.createModuleBlock([]),
-                            NodeFlags.Namespace,
+                            nodeFlags,
                         ),
                         modifierFlags,
                     );

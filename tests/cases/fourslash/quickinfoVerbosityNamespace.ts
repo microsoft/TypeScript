@@ -50,9 +50,15 @@
 ////     const bar: number;
 //// }
 
+// @filename: foo.ts
+//// export function foo() { return "foo"; }
+//// import("/*5*/./foo")
+//// var x = import("./foo")
+
 verify.baselineQuickInfo({
     1: [0, 1],
     2: [0, 1, 2],
     3: [0, 1, 2],
     4: [0, 1],
+    5: [0, 1],
 })
