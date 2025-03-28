@@ -1825,6 +1825,8 @@ func IsPartOfTypeNode(node *Node) bool {
 		KindBooleanKeyword, KindSymbolKeyword, KindObjectKeyword, KindUndefinedKeyword, KindNullKeyword,
 		KindNeverKeyword:
 		return true
+	case KindVoidKeyword:
+		return node.Parent.Kind != KindVoidExpression
 	case KindExpressionWithTypeArguments:
 		return isPartOfTypeExpressionWithTypeArguments(node)
 	case KindTypeParameter:
