@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : any
+>React : typeof __React
 
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => any
@@ -18,9 +18,9 @@ function Greet(x: {name?: string}) {
 
 class BigGreeter extends React.Component<{ name?: string }, {}> {
 >BigGreeter : BigGreeter
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{ name?: string; }, {}>
+>React : typeof __React
+>Component : typeof Component
 >name : string
 
 	render() {

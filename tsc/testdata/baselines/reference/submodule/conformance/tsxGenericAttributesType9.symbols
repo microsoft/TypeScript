@@ -9,24 +9,26 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 >P : Symbol(P, Decl(file.tsx, 2, 22))
 >Ctor : Symbol(Ctor, Decl(file.tsx, 2, 25))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->ComponentClass : Symbol(ComponentClass)
+>ComponentClass : Symbol(ComponentClass, Decl(react.d.ts, 205, 5))
 >P : Symbol(P, Decl(file.tsx, 2, 22))
 
 	return class extends React.PureComponent<P, void> {
->React.PureComponent : Symbol(unknown)
+>React.PureComponent : Symbol(PureComponent, Decl(react.d.ts, 180, 5))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->PureComponent : Symbol(unknown)
+>PureComponent : Symbol(PureComponent, Decl(react.d.ts, 180, 5))
 >P : Symbol(P, Decl(file.tsx, 2, 22))
 
 		public render(): JSX.Element {
 >render : Symbol(render, Decl(file.tsx, 3, 52))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 			return (
 				<Ctor {...this.props } />
 >Ctor : Symbol(Ctor, Decl(file.tsx, 2, 25))
+>this.props : Symbol(props, Decl(react.d.ts, 167, 37))
 >this : Symbol((Anonymous class), Decl(file.tsx, 3, 7))
+>props : Symbol(props, Decl(react.d.ts, 167, 37))
 
 			);
 		}

@@ -21,7 +21,7 @@
 +>onClick : Symbol(onClick, Decl(file.tsx, 7, 53))
  >React : Symbol(React, Decl(file.tsx, 0, 0))
 ->MouseEventHandler : Symbol(React.MouseEventHandler, Decl(react.d.ts, 389, 66))
-+>MouseEventHandler : Symbol(MouseEventHandler)
++>MouseEventHandler : Symbol(MouseEventHandler, Decl(react.d.ts, 389, 66))
  }
  
  export interface LinkProps extends ClickableProps {
@@ -43,47 +43,41 @@
  }
  
  let obj0 = {
-@@= skipped -35, +35 lines =@@
- >MainButton : Symbol(MainButton, Decl(file.tsx, 32, 14), Decl(file.tsx, 34, 66), Decl(file.tsx, 35, 62), Decl(file.tsx, 36, 66))
+@@= skipped -36, +36 lines =@@
  >buttonProps : Symbol(buttonProps, Decl(file.tsx, 34, 27))
  >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  export function MainButton(linkProps: LinkProps): JSX.Element;
  >MainButton : Symbol(MainButton, Decl(file.tsx, 32, 14), Decl(file.tsx, 34, 66), Decl(file.tsx, 35, 62), Decl(file.tsx, 36, 66))
  >linkProps : Symbol(linkProps, Decl(file.tsx, 35, 27))
  >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  export function MainButton(hyphenProps: HyphenProps): JSX.Element;
  >MainButton : Symbol(MainButton, Decl(file.tsx, 32, 14), Decl(file.tsx, 34, 66), Decl(file.tsx, 35, 62), Decl(file.tsx, 36, 66))
  >hyphenProps : Symbol(hyphenProps, Decl(file.tsx, 36, 27))
  >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 13, 1))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
  >MainButton : Symbol(MainButton, Decl(file.tsx, 32, 14), Decl(file.tsx, 34, 66), Decl(file.tsx, 35, 62), Decl(file.tsx, 36, 66))
 @@= skipped -23, +23 lines =@@
- >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
  >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
  >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 13, 1))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
      const linkProps = props as LinkProps;
  >linkProps : Symbol(linkProps, Decl(file.tsx, 38, 9))
-@@= skipped -9, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
  
      if(linkProps.to) {

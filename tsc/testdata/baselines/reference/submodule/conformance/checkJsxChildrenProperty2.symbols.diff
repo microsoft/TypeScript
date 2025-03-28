@@ -13,11 +13,10 @@
  
      children: string | JSX.Element
 ->children : Symbol(Prop.children, Decl(file.tsx, 4, 14))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
-->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>children : Symbol(children, Decl(file.tsx, 4, 14))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  }
  
  function Comp(p: Prop) {

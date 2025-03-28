@@ -6,9 +6,9 @@ import React = require('react');
 
 class Poisoned extends React.Component<{}, {}> {
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 0, 32))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 
     render() {
 >render : Symbol(render, Decl(file.tsx, 2, 48))

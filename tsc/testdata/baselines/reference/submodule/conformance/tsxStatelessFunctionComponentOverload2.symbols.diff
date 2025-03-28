@@ -1,23 +1,20 @@
 --- old.tsxStatelessFunctionComponentOverload2.symbols
 +++ new.tsxStatelessFunctionComponentOverload2.symbols
-@@= skipped -5, +5 lines =@@
- 
+@@= skipped -6, +6 lines =@@
  declare function OneThing(): JSX.Element;
  >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
  >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
- >l : Symbol(l, Decl(file.tsx, 2, 26))
+@@= skipped -8, +8 lines =@@
  >yy : Symbol(yy, Decl(file.tsx, 2, 30))
  >yy1 : Symbol(yy1, Decl(file.tsx, 2, 41))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  let obj = {
  >obj : Symbol(obj, Decl(file.tsx, 4, 3))

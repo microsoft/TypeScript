@@ -1,81 +1,68 @@
 --- old.tsxStatelessFunctionComponentOverload4.symbols
 +++ new.tsxStatelessFunctionComponentOverload4.symbols
-@@= skipped -5, +5 lines =@@
- 
+@@= skipped -6, +6 lines =@@
  declare function OneThing(): JSX.Element;
  >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
  >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
- >l : Symbol(l, Decl(file.tsx, 2, 26))
+@@= skipped -8, +8 lines =@@
  >yy : Symbol(yy, Decl(file.tsx, 2, 30))
  >yy1 : Symbol(yy1, Decl(file.tsx, 2, 41))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  let obj = {
  >obj : Symbol(obj, Decl(file.tsx, 4, 3))
-@@= skipped -74, +74 lines =@@
- >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
+@@= skipped -66, +66 lines =@@
  >j : Symbol(j, Decl(file.tsx, 20, 33))
  >"extra-data" : Symbol("extra-data", Decl(file.tsx, 20, 37))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
  >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
- >n : Symbol(n, Decl(file.tsx, 21, 33))
+@@= skipped -8, +8 lines =@@
  >yy : Symbol(yy, Decl(file.tsx, 21, 37))
  >direction : Symbol(direction, Decl(file.tsx, 21, 48))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // Error
  const d1 = <TestingOneThing extra-data />
-@@= skipped -28, +28 lines =@@
- >a : Symbol(a, Decl(file.tsx, 27, 33))
+@@= skipped -20, +20 lines =@@
  >y1 : Symbol(y1, Decl(file.tsx, 27, 37))
  >y2 : Symbol(y2, Decl(file.tsx, 27, 49))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
  >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
 @@= skipped -9, +9 lines =@@
- >y1 : Symbol(y1, Decl(file.tsx, 28, 37))
  >y2 : Symbol(y2, Decl(file.tsx, 28, 49))
  >children : Symbol(children, Decl(file.tsx, 28, 62))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
  >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
 @@= skipped -11, +11 lines =@@
- >y1 : Symbol(y1, Decl(file.tsx, 29, 37))
  >y2 : Symbol(y2, Decl(file.tsx, 29, 49))
  >y3 : Symbol(y3, Decl(file.tsx, 29, 62))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // Error
  const e1 = <TestingOptional y1 y3="hello"/>

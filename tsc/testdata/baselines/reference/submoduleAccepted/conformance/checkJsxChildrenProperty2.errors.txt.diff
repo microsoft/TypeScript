@@ -1,92 +1,80 @@
 --- old.checkJsxChildrenProperty2.errors.txt
 +++ new.checkJsxChildrenProperty2.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(14,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 -file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
 -file.tsx(31,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
 -file.tsx(37,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
 -file.tsx(43,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
 -file.tsx(49,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+file.tsx(6,24): error TS2503: Cannot find namespace 'JSX'.
- 
- 
+-
+-
 -==== file.tsx (6 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (2 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface Prop {
-         a: number,
-         b: string,
-         children: string | JSX.Element
-+                           ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     }
-     
-     function Comp(p: Prop) {
-@@= skipped -20, +36 lines =@@
-     
-     // Error: missing children
-     let k = <Comp a={10} b="hi" />;
+-    import React = require('react');
+-    
+-    interface Prop {
+-        a: number,
+-        b: string,
+-        children: string | JSX.Element
+-    }
+-    
+-    function Comp(p: Prop) {
+-        return <div>{p.b}</div>;
+-    }
+-    
+-    // Error: missing children
+-    let k = <Comp a={10} b="hi" />;
 -             ~~~~
 -!!! error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 -!!! related TS2728 file.tsx:6:5: 'children' is declared here.
-     
-     let k0 =
-         <Comp a={10} b="hi" children="Random" >
+-    
+-    let k0 =
+-        <Comp a={10} b="hi" children="Random" >
 -              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
-             hi hi hi!
-         </Comp>;
-     
-@@= skipped -22, +17 lines =@@
-     // Error: incorrect type
-     let k2 =
-         <Comp a={10} b="hi">
+-            hi hi hi!
+-        </Comp>;
+-    
+-    let o = {
+-         children:"Random"
+-    }
+-    let k1 =
+-        <Comp a={10} b="hi" {...o} >
+-            hi hi hi!
+-        </Comp>;
+-    
+-    // Error: incorrect type
+-    let k2 =
+-        <Comp a={10} b="hi">
 -         ~~~~
 -!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-             <div> My Div </div>
-             {(name: string) => <div> My name {name} </div>}
-         </Comp>;
-     
-     let k3 =
-         <Comp a={10} b="hi">
+-            <div> My Div </div>
+-            {(name: string) => <div> My name {name} </div>}
+-        </Comp>;
+-    
+-    let k3 =
+-        <Comp a={10} b="hi">
 -         ~~~~
 -!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-             <div> My Div </div>
-             {1000000}
-         </Comp>;
-     
-     let k4 =
-         <Comp a={10} b="hi" >
+-            <div> My Div </div>
+-            {1000000}
+-        </Comp>;
+-    
+-    let k4 =
+-        <Comp a={10} b="hi" >
 -         ~~~~
 -!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-             <div> My Div </div>
-             hi hi hi!
-         </Comp>;
-     
-     let k5 =
-         <Comp a={10} b="hi" >
+-            <div> My Div </div>
+-            hi hi hi!
+-        </Comp>;
+-    
+-    let k5 =
+-        <Comp a={10} b="hi" >
 -         ~~~~
 -!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-             <div> My Div </div>
-             <div> My Div </div>
-         </Comp>;
+-            <div> My Div </div>
+-            <div> My Div </div>
+-        </Comp>;
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

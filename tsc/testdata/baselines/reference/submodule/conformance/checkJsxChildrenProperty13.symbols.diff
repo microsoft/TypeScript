@@ -20,10 +20,10 @@
  class Button extends React.Component<ButtonProp, any> {
  >Button : Symbol(Button, Decl(file.tsx, 6, 1))
 ->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>React.Component : Symbol(unknown)
++>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >React : Symbol(React, Decl(file.tsx, 0, 0))
 ->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>Component : Symbol(unknown)
++>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >ButtonProp : Symbol(ButtonProp, Decl(file.tsx, 0, 32))
  
      render() {
@@ -34,8 +34,10 @@
          return (<InnerButton {...this.props} children="hi">
  >InnerButton : Symbol(InnerButton, Decl(file.tsx, 19, 1))
 ->this.props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
++>this.props : Symbol(props, Decl(react.d.ts, 167, 37))
  >this : Symbol(Button, Decl(file.tsx, 6, 1))
 ->props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
++>props : Symbol(props, Decl(react.d.ts, 167, 37))
  >children : Symbol(children, Decl(file.tsx, 11, 44))
  
              <div>Hello World</div>
@@ -45,7 +47,7 @@
              </InnerButton>);
  >InnerButton : Symbol(InnerButton, Decl(file.tsx, 19, 1))
      }
-@@= skipped -41, +36 lines =@@
+@@= skipped -41, +38 lines =@@
  >InnerButtonProp : Symbol(InnerButtonProp, Decl(file.tsx, 15, 1))
  
  	a: number
@@ -56,10 +58,10 @@
  class InnerButton extends React.Component<InnerButtonProp, any> {
  >InnerButton : Symbol(InnerButton, Decl(file.tsx, 19, 1))
 ->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>React.Component : Symbol(unknown)
++>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >React : Symbol(React, Decl(file.tsx, 0, 0))
 ->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>Component : Symbol(unknown)
++>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >InnerButtonProp : Symbol(InnerButtonProp, Decl(file.tsx, 15, 1))
  
  	render() {

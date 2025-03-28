@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react')
->React : any
+>React : typeof __React
 
 export interface ClickableProps {
     children?: string;
@@ -72,10 +72,10 @@ const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k h
 >onClick : (k: any) => void
 >(k) => {console.log(k)} : (k: any) => void
 >k : any
->console.log(k) : any
->console.log : any
->console : any
->log : any
+>console.log(k) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >k : any
 >extra : any
 
@@ -86,10 +86,10 @@ const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type 
 >onClick : any
 >(k)=>{console.log(k)} : (k: any) => void
 >k : any
->console.log(k) : any
->console.log : any
->console : any
->log : any
+>console.log(k) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >k : any
 >extra : any
 
@@ -123,10 +123,10 @@ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k 
 >onClick : (k: any) => void
 >(k) => {console.log(k)} : (k: any) => void
 >k : any
->console.log(k) : any
->console.log : any
->console : any
->log : any
+>console.log(k) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >k : any
 >extra : any
 

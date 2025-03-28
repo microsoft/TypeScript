@@ -1,46 +1,39 @@
 --- old.tsxStatelessFunctionComponentsWithTypeArguments2.symbols
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments2.symbols
-@@= skipped -10, +10 lines =@@
- >prop : Symbol(prop, Decl(file.tsx, 2, 43))
+@@= skipped -11, +11 lines =@@
  >U : Symbol(U, Decl(file.tsx, 2, 36))
  >"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 2, 51))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
  >ComponentSpecific2 : Symbol(ComponentSpecific2, Decl(file.tsx, 2, 89))
 @@= skipped -9, +9 lines =@@
- >l : Symbol(l, Decl(file.tsx, 3, 39))
  >prop : Symbol(prop, Decl(file.tsx, 3, 43))
  >U : Symbol(U, Decl(file.tsx, 3, 36))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // Error
  function Bar<T extends {prop: number}>(arg: T) {
 @@= skipped -38, +38 lines =@@
- >func : Symbol(func, Decl(file.tsx, 15, 29))
  >arg : Symbol(arg, Decl(file.tsx, 15, 36))
  >U : Symbol(U, Decl(file.tsx, 15, 22))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // Error
  function createLink(func: (a: number, b: string)=>void) {
-@@= skipped -22, +22 lines =@@
+@@= skipped -21, +21 lines =@@
  >T : Symbol(T, Decl(file.tsx, 22, 25))
  
      values: Array<T>;
 ->values : Symbol(InferParamProp.values, Decl(file.tsx, 22, 29))
-->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 +>values : Symbol(values, Decl(file.tsx, 22, 29))
-+>Array : Symbol(Array)
+ >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
  >T : Symbol(T, Decl(file.tsx, 22, 25))
  
      selectHandler: (selectedVal: T) => void;
@@ -49,14 +42,12 @@
  >selectedVal : Symbol(selectedVal, Decl(file.tsx, 24, 20))
  >T : Symbol(T, Decl(file.tsx, 22, 25))
  }
-@@= skipped -16, +16 lines =@@
- >attr : Symbol(attr, Decl(file.tsx, 27, 40))
+@@= skipped -17, +17 lines =@@
  >InferParamProp : Symbol(InferParamProp, Decl(file.tsx, 20, 1))
  >T : Symbol(T, Decl(file.tsx, 27, 37))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // Error
  let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;

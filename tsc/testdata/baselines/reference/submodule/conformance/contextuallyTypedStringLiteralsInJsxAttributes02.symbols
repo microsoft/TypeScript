@@ -35,23 +35,23 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 13, 1), Decl(file.tsx, 15, 66), Decl(file.tsx, 16, 62))
 >buttonProps : Symbol(buttonProps, Decl(file.tsx, 15, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 13, 1), Decl(file.tsx, 15, 66), Decl(file.tsx, 16, 62))
 >linkProps : Symbol(linkProps, Decl(file.tsx, 16, 27))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 >MainButton : Symbol(MainButton, Decl(file.tsx, 13, 1), Decl(file.tsx, 15, 66), Decl(file.tsx, 16, 62))
 >props : Symbol(props, Decl(file.tsx, 17, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
     const linkProps = props as LinkProps;
 >linkProps : Symbol(linkProps, Decl(file.tsx, 18, 9))
@@ -76,6 +76,9 @@ const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k h
 >MainButton : Symbol(MainButton, Decl(file.tsx, 13, 1), Decl(file.tsx, 15, 66), Decl(file.tsx, 16, 62))
 >onClick : Symbol(onClick, Decl(file.tsx, 26, 28))
 >k : Symbol(k, Decl(file.tsx, 26, 38))
+>console.log : Symbol(log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(log, Decl(lib.d.ts, --, --))
 >k : Symbol(k, Decl(file.tsx, 26, 38))
 >extra : Symbol(extra, Decl(file.tsx, 26, 62))
 
@@ -84,6 +87,9 @@ const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type 
 >MainButton : Symbol(MainButton, Decl(file.tsx, 13, 1), Decl(file.tsx, 15, 66), Decl(file.tsx, 16, 62))
 >onClick : Symbol(onClick, Decl(file.tsx, 27, 22))
 >k : Symbol(k, Decl(file.tsx, 27, 33))
+>console.log : Symbol(log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(log, Decl(lib.d.ts, --, --))
 >k : Symbol(k, Decl(file.tsx, 27, 33))
 >extra : Symbol(extra, Decl(file.tsx, 27, 54))
 
@@ -103,8 +109,8 @@ export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undef
 >NoOverload : Symbol(NoOverload, Decl(file.tsx, 29, 44))
 >buttonProps : Symbol(buttonProps, Decl(file.tsx, 31, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 >undefined : Symbol(undefined)
 
 const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
@@ -112,6 +118,9 @@ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k 
 >NoOverload : Symbol(NoOverload, Decl(file.tsx, 29, 44))
 >onClick : Symbol(onClick, Decl(file.tsx, 32, 29))
 >k : Symbol(k, Decl(file.tsx, 32, 39))
+>console.log : Symbol(log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(log, Decl(lib.d.ts, --, --))
 >k : Symbol(k, Decl(file.tsx, 32, 39))
 >extra : Symbol(extra, Decl(file.tsx, 32, 63))
 
@@ -119,8 +128,8 @@ export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefine
 >NoOverload1 : Symbol(NoOverload1, Decl(file.tsx, 32, 73))
 >linkProps : Symbol(linkProps, Decl(file.tsx, 34, 28))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 >undefined : Symbol(undefined)
 
 const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"

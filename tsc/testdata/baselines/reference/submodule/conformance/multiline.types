@@ -34,7 +34,7 @@ texts.push("100");
 
 === b.tsx ===
 import * as React from "react";
->React : any
+>React : typeof __React
 
 export function MyComponent(props: { foo: string }) {
 >MyComponent : (props: { foo: string; }) => any

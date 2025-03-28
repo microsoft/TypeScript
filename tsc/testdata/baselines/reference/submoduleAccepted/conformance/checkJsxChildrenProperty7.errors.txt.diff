@@ -1,57 +1,45 @@
 --- old.checkJsxChildrenProperty7.errors.txt
 +++ new.checkJsxChildrenProperty7.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(24,40): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
 -file.tsx(26,22): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
 -file.tsx(27,30): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+file.tsx(6,15): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(6,29): error TS2503: Cannot find namespace 'JSX'.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
- ==== file.tsx (3 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface Prop {
-         a: number,
-         b: string,
-         children: JSX.Element | JSX.Element[];
-+                  ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-+                                ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     }
-     
-     class Button extends React.Component<any, any> {
-@@= skipped -27, +49 lines =@@
-     
-     // Error: whitespaces matters
-     let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
+-
+-
+-==== file.tsx (3 errors) ====
+-    import React = require('react');
+-    
+-    interface Prop {
+-        a: number,
+-        b: string,
+-        children: JSX.Element | JSX.Element[];
+-    }
+-    
+-    class Button extends React.Component<any, any> {
+-        render() {
+-            return (<div>My Button</div>)
+-        }
+-    }
+-    
+-    function AnotherButton(p: any) {
+-        return <h1>Just Another Button</h1>;
+-    }
+-    
+-    function Comp(p: Prop) {
+-        return <div>{p.b}</div>;
+-    }
+-    
+-    // Error: whitespaces matters
+-    let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 -                                           ~~
 -!!! error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
-     let k2 = <Comp a={10} b="hi"><Button />
-         <AnotherButton />  </Comp>;
+-    let k2 = <Comp a={10} b="hi"><Button />
+-        <AnotherButton />  </Comp>;
 -                         ~~
 -!!! error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
-     let k3 = <Comp a={10} b="hi">    <Button />
+-    let k3 = <Comp a={10} b="hi">    <Button />
 -                                 ~~~~
 -!!! error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element[] | Element'.
-         <AnotherButton /></Comp>;
+-        <AnotherButton /></Comp>;
+@@= skipped --1, +1 lines =@@
++<no content>

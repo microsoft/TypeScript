@@ -5,10 +5,10 @@
  >T : Symbol(T, Decl(file.tsx, 2, 9))
  >x : Symbol(x, Decl(file.tsx, 2, 20))
 ->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>React.Component : Symbol(unknown)
++>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >React : Symbol(React, Decl(file.tsx, 0, 0))
 ->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>Component : Symbol(unknown)
++>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >T : Symbol(T, Decl(file.tsx, 2, 9))
  
      render() {
@@ -24,10 +24,10 @@
  >B : Symbol(B, Decl(file.tsx, 6, 1))
  >U : Symbol(U, Decl(file.tsx, 7, 8))
 ->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>React.Component : Symbol(unknown)
++>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >React : Symbol(React, Decl(file.tsx, 0, 0))
 ->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>Component : Symbol(unknown)
++>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >U : Symbol(U, Decl(file.tsx, 7, 8))
  
      render() {
@@ -37,8 +37,10 @@
          return <B1 {...this.props} x="hi" />;
  >B1 : Symbol(B1, Decl(file.tsx, 0, 32))
 ->this.props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
++>this.props : Symbol(props, Decl(react.d.ts, 167, 37))
  >this : Symbol(B, Decl(file.tsx, 6, 1))
 ->props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
++>props : Symbol(props, Decl(react.d.ts, 167, 37))
  >x : Symbol(x, Decl(file.tsx, 9, 34))
      }
  }

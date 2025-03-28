@@ -1,37 +1,25 @@
 --- old.tsxStatelessFunctionComponentWithDefaultTypeParameter2.errors.txt
 +++ new.tsxStatelessFunctionComponentWithDefaultTypeParameter2.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(13,24): error TS2322: Type 'number' is not assignable to type 'string'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
- ==== file.tsx (1 errors) ====
-     import React = require('react')
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface MyComponentProp {
-         values: string;
-@@= skipped -14, +32 lines =@@
-     
-     // Error
-     let i1 = <MyComponent1 values={5}/>;
+-
+-
+-==== file.tsx (1 errors) ====
+-    import React = require('react')
+-    
+-    interface MyComponentProp {
+-        values: string;
+-    }
+-    
+-    function MyComponent1<T extends MyComponentProp>(attr: T) {
+-        return <div>attr.values</div>
+-    }
+-    
+-    
+-    // Error
+-    let i1 = <MyComponent1 values={5}/>;
 -                           ~~~~~~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
 -!!! related TS6500 file.tsx:4:5: The expected type comes from property 'values' which is declared here on type 'IntrinsicAttributes & MyComponentProp'
+@@= skipped --1, +1 lines =@@
++<no content>

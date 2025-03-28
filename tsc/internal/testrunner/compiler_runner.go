@@ -29,14 +29,8 @@ var (
 	referencesRegex       = regexp.MustCompile(`reference\spath`)
 )
 
-var (
-	// Posix-style path to sources under test
-	srcFolder = "/.src"
-	// Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
-	builtFolder = "/.ts"
-	// Posix-style path to additional test libraries
-	testLibFolder = "/.lib"
-)
+// Posix-style path to sources under test
+var srcFolder = "/.src"
 
 type CompilerTestType int
 
@@ -254,10 +248,7 @@ func newCompilerTest(
 	}
 
 	harnessConfig := testCaseContentWithConfig.configuration
-	currentDirectory := harnessConfig["currentDirectory"]
-	if currentDirectory == "" {
-		currentDirectory = srcFolder
-	}
+	currentDirectory := tspath.GetNormalizedAbsolutePath(harnessConfig["currentdirectory"], srcFolder)
 
 	units := testCaseContentWithConfig.testUnitData
 	var toBeCompiled []*harnessutil.TestFile
@@ -283,9 +274,9 @@ func newCompilerTest(
 			}
 		}
 	} else {
-		baseUrl, ok := harnessConfig["baseUrl"]
+		baseUrl, ok := harnessConfig["baseurl"]
 		if ok && !tspath.IsRootedDiskPath(baseUrl) {
-			harnessConfig["baseUrl"] = tspath.GetNormalizedAbsolutePath(baseUrl, currentDirectory)
+			harnessConfig["baseurl"] = tspath.GetNormalizedAbsolutePath(baseUrl, currentDirectory)
 		}
 
 		lastUnit := units[len(units)-1]

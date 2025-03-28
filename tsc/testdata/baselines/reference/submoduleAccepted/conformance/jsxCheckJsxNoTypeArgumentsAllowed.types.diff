@@ -5,16 +5,16 @@
  === component.d.ts ===
  import * as React from "react";
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  export declare class MyComp<P> extends React.Component<P, {}> {
  >MyComp : MyComp<P>
 ->React.Component : React.Component<P, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<P, {}>
++>React : typeof __React
++>Component : typeof Component
  
      internalProp: P;
  >internalProp : P
@@ -23,7 +23,7 @@
  
  import * as React from "react";
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
 ->x : JSX.Element

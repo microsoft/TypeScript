@@ -21,7 +21,7 @@ export interface ButtonProps extends ClickableProps {
     onClick: React.MouseEventHandler<any>;
 >onClick : Symbol(onClick, Decl(file.tsx, 7, 53))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->MouseEventHandler : Symbol(MouseEventHandler)
+>MouseEventHandler : Symbol(MouseEventHandler, Decl(react.d.ts, 389, 66))
 }
 
 export interface LinkProps extends ClickableProps {
@@ -63,22 +63,22 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >buttonProps : Symbol(buttonProps, Decl(file.tsx, 28, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >linkProps : Symbol(linkProps, Decl(file.tsx, 29, 27))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >hyphenProps : Symbol(hyphenProps, Decl(file.tsx, 30, 27))
 >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
@@ -86,8 +86,8 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
 >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
     const linkProps = props as LinkProps;
 >linkProps : Symbol(linkProps, Decl(file.tsx, 32, 9))
@@ -152,6 +152,9 @@ const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
 >b7 : Symbol(b7, Decl(file.tsx, 48, 5))
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >onClick : Symbol(onClick, Decl(file.tsx, 48, 28))
+>console.log : Symbol(log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(log, Decl(lib.d.ts, --, --))
 
 const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
 >b8 : Symbol(b8, Decl(file.tsx, 49, 5))

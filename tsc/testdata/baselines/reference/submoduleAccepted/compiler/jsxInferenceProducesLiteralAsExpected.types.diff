@@ -5,7 +5,7 @@
  === jsxInferenceProducesLiteralAsExpected.tsx ===
  import React = require("react");
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
  >FunctionPropertyNames : FunctionPropertyNames<T>

@@ -1,58 +1,53 @@
 --- old.checkJsxChildrenProperty14.errors.txt
 +++ new.checkJsxChildrenProperty14.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(42,11): error TS2746: This JSX tag's 'children' prop expects a single child of type 'Element', but multiple children were provided.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+file.tsx(6,15): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(6,29): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(31,15): error TS2503: Cannot find namespace 'JSX'.
- 
- 
+-
+-
 -==== file.tsx (1 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (4 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface Prop {
-         a: number,
-         b: string,
-         children: JSX.Element | JSX.Element[];
-+                  ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-+                                ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     }
-     
-     class Button extends React.Component<any, any> {
-@@= skipped -32, +57 lines =@@
-         a: number,
-         b: string,
-         children: JSX.Element;
-+                  ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     }
-     
-     function SingleChildComp(p: SingleChildProp) {
-@@= skipped -11, +13 lines =@@
-     
-     // Error
-     let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
+-    import React = require('react');
+-    
+-    interface Prop {
+-        a: number,
+-        b: string,
+-        children: JSX.Element | JSX.Element[];
+-    }
+-    
+-    class Button extends React.Component<any, any> {
+-        render() {
+-            return (<div>My Button</div>)
+-        }
+-    }
+-    
+-    function AnotherButton(p: any) {
+-        return <h1>Just Another Button</h1>;
+-    }
+-    
+-    function Comp(p: Prop) {
+-        return <div>{p.b}</div>;
+-    }
+-    
+-    // OK
+-    let k1 = <Comp a={10} b="hi"><></><Button /><AnotherButton /></Comp>;
+-    let k2 = <Comp a={10} b="hi"><><Button /></><AnotherButton /></Comp>;
+-    let k3 = <Comp a={10} b="hi"><><Button /><AnotherButton /></></Comp>;
+-    
+-    interface SingleChildProp {
+-        a: number,
+-        b: string,
+-        children: JSX.Element;
+-    }
+-    
+-    function SingleChildComp(p: SingleChildProp) {
+-        return <div>{p.b}</div>;
+-    }
+-    
+-    // OK
+-    let k4 = <SingleChildComp a={10} b="hi"><><Button /><AnotherButton /></></SingleChildComp>;
+-    
+-    // Error
+-    let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
 -              ~~~~~~~~~~~~~~~
 -!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'Element', but multiple children were provided.
+@@= skipped --1, +1 lines =@@
++<no content>

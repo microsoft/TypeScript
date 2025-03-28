@@ -1,51 +1,51 @@
 --- old.tsxSpreadAttributesResolution5.errors.txt
 +++ new.tsxSpreadAttributesResolution5.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(20,10): error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'PoisonedProp'.
 -  Types of property 'y' are incompatible.
 -    Type 'number' is not assignable to type '2'.
 -file.tsx(33,10): error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<EmptyProp> & { children?: ReactNode; }'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (2 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface PoisonedProp {
-         x: string;
-@@= skipped -24, +39 lines =@@
-     
-     // Error as "obj" has type { x: string; y: number }
-     let p = <Poisoned {...obj} />;
+-    import React = require('react');
+-    
+-    interface PoisonedProp {
+-        x: string;
+-        y: 2;
+-    }
+-    
+-    class Poisoned extends React.Component<PoisonedProp, {}> {
+-        render() {
+-            return <div>Hello</div>;
+-        }
+-    }
+-    
+-    let obj = {
+-        x: "hello world",
+-        y: 2
+-    };
+-    
+-    // Error as "obj" has type { x: string; y: number }
+-    let p = <Poisoned {...obj} />;
 -             ~~~~~~~~
 -!!! error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'PoisonedProp'.
 -!!! error TS2322:   Types of property 'y' are incompatible.
 -!!! error TS2322:     Type 'number' is not assignable to type '2'.
-     
-     class EmptyProp extends React.Component<{}, {}> {
-         render() {
-@@= skipped -17, +13 lines =@@
-     }
-     // Ok
-     let e = <EmptyProp {...o} />;
+-    
+-    class EmptyProp extends React.Component<{}, {}> {
+-        render() {
+-            return <div>Default hi</div>;
+-        }
+-        greeting: string;
+-    }
+-    
+-    let o = {
+-        prop1: false
+-    }
+-    // Ok
+-    let e = <EmptyProp {...o} />;
 -             ~~~~~~~~~
 -!!! error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<EmptyProp> & { children?: ReactNode; }'.
+@@= skipped --1, +1 lines =@@
++<no content>

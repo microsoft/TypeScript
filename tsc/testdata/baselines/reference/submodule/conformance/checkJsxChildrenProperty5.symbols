@@ -20,9 +20,9 @@ interface Prop {
 
 class Button extends React.Component<any, any> {
 >Button : Symbol(Button, Decl(file.tsx, 6, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 
     render() {
 >render : Symbol(render, Decl(file.tsx, 8, 48))

@@ -9,10 +9,10 @@ const decorator = function <T>(Component: React.StatelessComponent<T>): React.St
 >T : Symbol(T, Decl(file.tsx, 2, 28))
 >Component : Symbol(Component, Decl(file.tsx, 2, 31))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
 >T : Symbol(T, Decl(file.tsx, 2, 28))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
 >T : Symbol(T, Decl(file.tsx, 2, 28))
 
     return (props) => <Component {...props}></Component>
@@ -29,10 +29,10 @@ const decorator2 = function <T extends { x: number }>(Component: React.Stateless
 >x : Symbol(x, Decl(file.tsx, 6, 40))
 >Component : Symbol(Component, Decl(file.tsx, 6, 54))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
 >T : Symbol(T, Decl(file.tsx, 6, 29))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
 >T : Symbol(T, Decl(file.tsx, 6, 29))
 
     return (props) => <Component {...props} x={2} ></Component>
@@ -52,10 +52,10 @@ const decorator3 = function <T extends { x: number }, U extends { x: number } >(
 >x : Symbol(x, Decl(file.tsx, 10, 65))
 >Component : Symbol(Component, Decl(file.tsx, 10, 80))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
 >T : Symbol(T, Decl(file.tsx, 10, 29))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
 >T : Symbol(T, Decl(file.tsx, 10, 29))
 
     return (props) => <Component x={2} {...props} ></Component>

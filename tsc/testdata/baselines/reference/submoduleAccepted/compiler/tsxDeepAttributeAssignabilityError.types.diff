@@ -5,7 +5,7 @@
  === my-component.tsx ===
  import * as React from 'react'
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  interface MyProps {
      x: string;
@@ -27,7 +27,7 @@
  === file1.tsx ===
  import * as React from 'react'
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  import { MyComponent } from './my-component'
 ->MyComponent : (_props: MyProps) => JSX.Element

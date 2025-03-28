@@ -2,19 +2,19 @@
 
 === file.tsx ===
 import React = require('react');
->React : any
+>React : typeof __React
 
 type Invalid1 = React.ComponentClass<any> | number;
->Invalid1 : any
+>Invalid1 : Invalid1
 >React : any
 
 const X: Invalid1 = 1;
->X : any
+>X : Invalid1
 >1 : 1
 
 <X />;
 ><X /> : any
->X : any
+>X : number
 
 
 

@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import * as React from "react";
->React : any
+>React : typeof __React
 
 interface BaseProps<T> {
   initialValues: T;
@@ -14,9 +14,9 @@ interface BaseProps<T> {
 }
 declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
 >GenericComponent : GenericComponent<Props, Values>
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<Props & BaseProps<Values>, {}>
+>React : typeof __React
+>Component : typeof Component
 
   iv: Values;
 >iv : Values

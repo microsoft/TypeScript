@@ -1,56 +1,48 @@
 --- old.tsxUnionElementType6.errors.txt
 +++ new.tsxUnionElementType6.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(18,23): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
 -  Property 'x' does not exist on type 'IntrinsicAttributes'.
 -file.tsx(19,27): error TS2322: Type 'string' is not assignable to type 'boolean'.
 -file.tsx(20,10): error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: boolean; }'.
 -file.tsx(21,10): error TS2741: Property 'x' is missing in type '{ "data-prop": true; }' but required in type '{ x: boolean; }'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (4 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     function EmptySFC1() {
-         return <div>Hi</div>
-@@= skipped -23, +37 lines =@@
-     var SFC2AndEmptyComp = SFC2 || EmptySFC1;
-     // Error
-     let a = <EmptySFCComp x />;
+-    import React = require('react');
+-    
+-    function EmptySFC1() {
+-        return <div>Hi</div>
+-    }
+-    
+-    function EmptySFC2() {
+-        return <div>Hello</div>
+-    }
+-    
+-    function SFC2(prop: { x: boolean }) {
+-        return <h1>World</h1>;
+-    }
+-    
+-    var EmptySFCComp = EmptySFC1 || EmptySFC2;
+-    var SFC2AndEmptyComp = SFC2 || EmptySFC1;
+-    // Error
+-    let a = <EmptySFCComp x />;
 -                          ~
 -!!! error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
 -!!! error TS2322:   Property 'x' does not exist on type 'IntrinsicAttributes'.
-     let b = <SFC2AndEmptyComp x="hi" />;
+-    let b = <SFC2AndEmptyComp x="hi" />;
 -                              ~
 -!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
 -!!! related TS6500 file.tsx:11:23: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & { x: boolean; }'
-     let c = <SFC2AndEmptyComp />;
+-    let c = <SFC2AndEmptyComp />;
 -             ~~~~~~~~~~~~~~~~
 -!!! error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: boolean; }'.
 -!!! related TS2728 file.tsx:11:23: 'x' is declared here.
-     let d = <SFC2AndEmptyComp data-prop />;
+-    let d = <SFC2AndEmptyComp data-prop />;
 -             ~~~~~~~~~~~~~~~~
 -!!! error TS2741: Property 'x' is missing in type '{ "data-prop": true; }' but required in type '{ x: boolean; }'.
 -!!! related TS2728 file.tsx:11:23: 'x' is declared here.
-     
-     
+-    
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

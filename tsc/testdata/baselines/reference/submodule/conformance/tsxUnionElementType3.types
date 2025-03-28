@@ -2,13 +2,13 @@
 
 === file.tsx ===
 import React = require('react');
->React : any
+>React : typeof __React
 
 class RC1 extends React.Component<{x : number}, {}> {
 >RC1 : RC1
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{ x: number; }, {}>
+>React : typeof __React
+>Component : typeof Component
 >x : number
 
     render() {
@@ -20,9 +20,9 @@ class RC1 extends React.Component<{x : number}, {}> {
 
 class RC2 extends React.Component<{ x: string }, {}> {
 >RC2 : RC2
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{ x: string; }, {}>
+>React : typeof __React
+>Component : typeof Component
 >x : string
 
     render() {
@@ -36,9 +36,9 @@ class RC2 extends React.Component<{ x: string }, {}> {
 
 class RC3 extends React.Component<{}, {}> {
 >RC3 : RC3
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{}, {}>
+>React : typeof __React
+>Component : typeof Component
 
     render() {
 >render : () => any
@@ -49,9 +49,9 @@ class RC3 extends React.Component<{}, {}> {
 
 class RC4 extends React.Component<{}, {}> {
 >RC4 : RC4
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{}, {}>
+>React : typeof __React
+>Component : typeof Component
 
     render() {
 >render : () => any
@@ -67,14 +67,14 @@ var EmptyRCComp = RC3 || RC4;
 >RC4 : typeof RC4
 
 var PartRCComp = RC1 || RC4;
->PartRCComp : typeof RC1
->RC1 || RC4 : typeof RC1
+>PartRCComp : typeof RC4
+>RC1 || RC4 : typeof RC4
 >RC1 : typeof RC1
 >RC4 : typeof RC4
 
 var RCComp = RC1 || RC2;
->RCComp : typeof RC1
->RC1 || RC2 : typeof RC1
+>RCComp : typeof RC1 | typeof RC2
+>RC1 || RC2 : typeof RC1 | typeof RC2
 >RC1 : typeof RC1
 >RC2 : typeof RC2
 
@@ -82,7 +82,7 @@ var RCComp = RC1 || RC2;
 let a = <RCComp x="Hi" />;
 >a : any
 ><RCComp x="Hi" /> : any
->RCComp : typeof RC1
+>RCComp : typeof RC1 | typeof RC2
 >x : any
 
 let a1 = <EmptyRCComp />;
@@ -99,11 +99,11 @@ let a2 = <EmptyRCComp data-prop="hello" />;
 let b = <PartRCComp />
 >b : any
 ><PartRCComp /> : any
->PartRCComp : typeof RC1
+>PartRCComp : typeof RC4
 
 let c = <PartRCComp data-extra="hello" />
 >c : any
 ><PartRCComp data-extra="hello" /> : any
->PartRCComp : typeof RC1
+>PartRCComp : typeof RC4
 >data-extra : any
 

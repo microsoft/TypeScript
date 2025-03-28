@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  class B1<T extends { x: string }> extends React.Component<T, {}> {
  >B1 : B1<T>
@@ -13,9 +13,9 @@
 ->React.Component : React.Component<T, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<T, {}>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
 ->render : () => JSX.Element
@@ -33,9 +33,9 @@
 ->React.Component : React.Component<U, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<U, {}>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
 ->render : () => JSX.Element
@@ -46,11 +46,11 @@
 +><B1 {...this.props} x="hi" /> : any
  >B1 : typeof B1
 ->this.props : U & { children?: React.ReactNode; }
-+>this.props : any
++>this.props : U & { children?: ReactNode; }
  >this : this
 ->props : U & { children?: React.ReactNode; }
 ->x : string
-+>props : any
++>props : U & { children?: ReactNode; }
 +>x : any
      }
  }

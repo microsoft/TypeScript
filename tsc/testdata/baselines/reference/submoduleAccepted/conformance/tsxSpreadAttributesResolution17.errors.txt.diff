@@ -1,34 +1,30 @@
 --- old.tsxSpreadAttributesResolution17.errors.txt
 +++ new.tsxSpreadAttributesResolution17.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(18,21): error TS2607: JSX element class does not support attributes because it does not have a 'props' property.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
- 
- 
+-
+-
 -==== file.tsx (1 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (0 errors) ====
-     declare global {
-         namespace JSX {
-             interface Element {}
-@@= skipped -19, +34 lines =@@
-     
-     // OK
-     let unionedSpread = <Empty {...obj} />;
+-    declare global {
+-        namespace JSX {
+-            interface Element {}
+-            interface ElementAttributesProperty { props: {} }
+-        }
+-    }
+-    declare var React: any;
+-    
+-    export class Empty extends React.Component<{}, {}> {
+-        render() {
+-            return <div>Hello</div>;
+-        }
+-    }
+-    
+-    declare const obj: { a: number | undefined } | undefined;
+-    
+-    // OK
+-    let unionedSpread = <Empty {...obj} />;
 -                        ~~~~~~~~~~~~~~~~~~
 -!!! error TS2607: JSX element class does not support attributes because it does not have a 'props' property.
-     
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

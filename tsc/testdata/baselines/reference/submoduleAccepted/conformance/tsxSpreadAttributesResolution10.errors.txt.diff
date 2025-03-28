@@ -1,54 +1,47 @@
 --- old.tsxSpreadAttributesResolution10.errors.txt
 +++ new.tsxSpreadAttributesResolution10.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(19,23): error TS2322: Type '3' is not assignable to type '2'.
 -file.tsx(20,25): error TS2322: Type 'string' is not assignable to type '2'.
 -file.tsx(21,25): error TS2322: Type '3' is not assignable to type '2'.
 -file.tsx(22,15): error TS2322: Type 'true' is not assignable to type '2'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (4 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface OptionProp {
-         x?: 2
-@@= skipped -23, +38 lines =@@
-     
-     // Error
-     let y = <Opt {...obj} x={3}/>;
+-    import React = require('react');
+-    
+-    interface OptionProp {
+-        x?: 2
+-    }
+-    
+-    class Opt extends React.Component<OptionProp, {}> {
+-        render() {
+-            return <div>Hello</div>;
+-        }
+-    }
+-    
+-    const obj: OptionProp = {};
+-    const obj1: OptionProp = {
+-        x: 2
+-    }
+-    
+-    // Error
+-    let y = <Opt {...obj} x={3}/>;
 -                          ~
 -!!! error TS2322: Type '3' is not assignable to type '2'.
 -!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
-     let y1 = <Opt {...obj1} x="Hi"/>;
+-    let y1 = <Opt {...obj1} x="Hi"/>;
 -                            ~
 -!!! error TS2322: Type 'string' is not assignable to type '2'.
 -!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
-     let y2 = <Opt {...obj1} x={3}/>;
+-    let y2 = <Opt {...obj1} x={3}/>;
 -                            ~
 -!!! error TS2322: Type '3' is not assignable to type '2'.
 -!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
-     let y3 = <Opt x />;
+-    let y3 = <Opt x />;
 -                  ~
 -!!! error TS2322: Type 'true' is not assignable to type '2'.
 -!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
-     
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

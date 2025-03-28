@@ -1,46 +1,31 @@
 --- old.tsxAttributeResolution15.errors.txt
 +++ new.tsxAttributeResolution15.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(11,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
 -  Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
 -file.tsx(14,39): error TS2532: Object is possibly 'undefined'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (2 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     class BigGreeter extends React.Component<{ }, {}> {
-         render() {
-@@= skipped -14, +30 lines =@@
-     
-     // Error
-     let a = <BigGreeter prop1="hello" />
+-    import React = require('react');
+-    
+-    class BigGreeter extends React.Component<{ }, {}> {
+-        render() {
+-            return <div>Default hi</div>;
+-        }
+-        greeting: string;
+-    }
+-    
+-    // Error
+-    let a = <BigGreeter prop1="hello" />
 -                        ~~~~~
 -!!! error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
 -!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
-     
-     // OK
-     let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
+-    
+-    // OK
+-    let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
 -                                          ~~~~
 -!!! error TS2532: Object is possibly 'undefined'.
-     let c = <BigGreeter data-extra="hi" />
+-    let c = <BigGreeter data-extra="hi" />
+@@= skipped --1, +1 lines =@@
++<no content>

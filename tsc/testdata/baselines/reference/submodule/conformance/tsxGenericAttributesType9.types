@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : any
+>React : typeof __React
 
 export function makeP<P>(Ctor: React.ComponentClass<P>) {
 >makeP : <P>(Ctor: ComponentClass<P>) => typeof (Anonymous class)
@@ -11,9 +11,9 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 
 	return class extends React.PureComponent<P, void> {
 >class extends React.PureComponent<P, void> {		public render(): JSX.Element {			return (				<Ctor {...this.props } />			);		}	} : typeof (Anonymous class)
->React.PureComponent : any
->React : any
->PureComponent : any
+>React.PureComponent : PureComponent<P, void>
+>React : typeof __React
+>PureComponent : typeof PureComponent
 
 		public render(): JSX.Element {
 >render : () => Element
@@ -25,9 +25,9 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 				<Ctor {...this.props } />
 ><Ctor {...this.props } /> : any
 >Ctor : ComponentClass<P>
->this.props : any
+>this.props : P & { children?: ReactNode; }
 >this : this
->props : any
+>props : P & { children?: ReactNode; }
 
 			);
 		}

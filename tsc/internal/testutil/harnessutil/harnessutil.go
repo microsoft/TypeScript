@@ -28,6 +28,9 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 )
 
+// Posix-style path to additional test libraries
+var testLibFolder = "/.lib"
+
 type TestFile struct {
 	UnitName string
 	Content  string
@@ -125,13 +128,17 @@ func CompileFilesEx(
 	// 	programFileNames = append(programFileNames, tspath.CombinePaths(builtFolder, harnessOptions.includeBuiltFile))
 	// }
 
-	// !!! This won't work until we have the actual lib files
-	// // Files from tests\lib that are requested by "@libFiles"
-	// if len(harnessOptions.libFiles) > 0 {
-	// 	for _, libFile := range harnessOptions.libFiles {
-	// 		programFileNames = append(programFileNames, tspath.CombinePaths(testLibFolder, libFile))
-	// 	}
-	// }
+	// Files from testdata\lib that are requested by "@libFiles"
+	if len(harnessOptions.LibFiles) > 0 {
+		for _, libFile := range harnessOptions.LibFiles {
+			if libFile == "lib.d.ts" && compilerOptions.NoLib != core.TSTrue {
+				// We used to override lib with a custom lib.d.ts for some reason. Skip this unless it becomes necessary.
+				continue
+			}
+			programFileNames = append(programFileNames, tspath.CombinePaths(testLibFolder, libFile))
+			otherFiles = append(otherFiles, createLibFile(libFile))
+		}
+	}
 
 	// !!!
 	// ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
@@ -194,6 +201,20 @@ func CompileFilesEx(
 		return CompileFilesEx(t, inputFiles, otherFiles, &newHarnessOptions, &newCompilerOptions, currentDirectory, symlinks)
 	}
 	return result
+}
+
+// Creates a test file as specified by "@libFiles".
+func createLibFile(libFile string) *TestFile {
+	libPath := filepath.Join(repo.TypeScriptSubmodulePath, "tests", "lib")
+	libFilePath := filepath.Join(libPath, libFile)
+	content, err := os.ReadFile(libFilePath)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to read lib file %s: %v", libFile, err))
+	}
+	return &TestFile{
+		UnitName: tspath.CombinePaths(testLibFolder, libFile),
+		Content:  string(content),
+	}
 }
 
 func setOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *HarnessOptions) {

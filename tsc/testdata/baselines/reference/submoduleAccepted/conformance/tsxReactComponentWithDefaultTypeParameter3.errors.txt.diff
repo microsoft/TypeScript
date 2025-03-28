@@ -1,47 +1,34 @@
 --- old.tsxReactComponentWithDefaultTypeParameter3.errors.txt
 +++ new.tsxReactComponentWithDefaultTypeParameter3.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(13,11): error TS2739: Type '{}' is missing the following properties from type 'Prop': a, b
 -file.tsx(19,18): error TS2322: Type 'string' is not assignable to type 'number'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (2 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface Prop {
-         a: number,
-@@= skipped -15, +32 lines =@@
-     
-     // Error
-     let x1 = <MyComp />
+-    import React = require('react');
+-    
+-    interface Prop {
+-        a: number,
+-        b: string
+-    }
+-    
+-    declare class MyComp<P extends Prop> extends React.Component<P, {}> {
+-        internalProp: P;
+-    }
+-    
+-    // Error
+-    let x1 = <MyComp />
 -              ~~~~~~
 -!!! error TS2739: Type '{}' is missing the following properties from type 'Prop': a, b
-     
-     // OK
-     let x = <MyComp a={10} b="hi" />
-     
-     // Error
-     let x2 = <MyComp a="hi"/>
+-    
+-    // OK
+-    let x = <MyComp a={10} b="hi" />
+-    
+-    // Error
+-    let x2 = <MyComp a="hi"/>
 -                     ~
 -!!! error TS2322: Type 'string' is not assignable to type 'number'.
 -!!! related TS6500 file.tsx:4:5: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'
+@@= skipped --1, +1 lines =@@
++<no content>

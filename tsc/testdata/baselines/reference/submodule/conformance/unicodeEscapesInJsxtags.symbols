@@ -8,10 +8,10 @@ declare global {
 >global : Symbol((Missing), Decl(file.tsx, 0, 31))
 
     namespace JSX {
->JSX : Symbol(JSX, Decl(file.tsx, 1, 16))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1), Decl(file.tsx, 1, 16))
 
         interface IntrinsicElements {
->IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 2, 19))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 2368, 78), Decl(file.tsx, 2, 19))
 
             "a-b": any;
 >"a-b" : Symbol("a-b", Decl(file.tsx, 3, 37))

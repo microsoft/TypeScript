@@ -2,7 +2,7 @@
 
 === jsxSpreadFirstUnionNoErrors.tsx ===
 import React from "react";
->React : any
+>React : typeof __React
 
 type InfoProps =
 >InfoProps : InfoProps

@@ -15,17 +15,17 @@ interface Prop {
 
     children: JSX.Element | JSX.Element[];
 >children : Symbol(children, Decl(file.tsx, 4, 14))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 }
 
 class Button extends React.Component<any, any> {
 >Button : Symbol(Button, Decl(file.tsx, 6, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 
     render() {
 >render : Symbol(render, Decl(file.tsx, 8, 48))

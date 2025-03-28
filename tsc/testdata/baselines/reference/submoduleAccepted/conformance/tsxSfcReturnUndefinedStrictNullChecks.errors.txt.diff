@@ -1,45 +1,28 @@
 --- old.tsxSfcReturnUndefinedStrictNullChecks.errors.txt
 +++ new.tsxSfcReturnUndefinedStrictNullChecks.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(9,14): error TS2786: 'Foo' cannot be used as a JSX component.
 -  Its return type 'undefined' is not a valid JSX element.
 -file.tsx(10,12): error TS2786: 'Greet' cannot be used as a JSX component.
 -  Its return type 'undefined' is not a valid JSX element.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (2 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     const Foo = (props: any) => undefined;
-     function Greet(x: {name?: string}) {
-@@= skipped -13, +28 lines =@@
-     
-     // Error
-     const foo = <Foo />;
+-    import React = require('react');
+-    
+-    const Foo = (props: any) => undefined;
+-    function Greet(x: {name?: string}) {
+-    	return undefined;
+-    }
+-    
+-    // Error
+-    const foo = <Foo />;
 -                 ~~~
 -!!! error TS2786: 'Foo' cannot be used as a JSX component.
 -!!! error TS2786:   Its return type 'undefined' is not a valid JSX element.
-     const G = <Greet />;
+-    const G = <Greet />;
 -               ~~~~~
 -!!! error TS2786: 'Greet' cannot be used as a JSX component.
 -!!! error TS2786:   Its return type 'undefined' is not a valid JSX element.
+@@= skipped --1, +1 lines =@@
++<no content>

@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react')
->React : any
+>React : typeof __React
 
 declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => Element
@@ -68,7 +68,7 @@ function createLink(func: (a: number, b: string)=>void) {
 
 interface InferParamProp<T> {
     values: Array<T>;
->values : Array<T>
+>values : T[]
 
     selectHandler: (selectedVal: T) => void;
 >selectHandler : (selectedVal: T) => void
@@ -86,7 +86,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) 
 ><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} /> : any
 >InferParamComponent : <T>(attr: InferParamProp<T>) => Element
 >values : any
->[1, 2, 3, 4] : {}
+>[1, 2, 3, 4] : number[]
 >1 : 1
 >2 : 2
 >3 : 3

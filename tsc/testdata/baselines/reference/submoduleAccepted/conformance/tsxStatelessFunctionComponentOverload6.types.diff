@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react')
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  export interface ClickableProps {
      children?: string;
@@ -136,14 +136,7 @@
  >{onClick: () => { console.log("hi") }} : { onClick: () => void; }
  >onClick : () => void
  >() => { console.log("hi") } : () => void
-->console.log("hi") : void
-->console.log : (message?: any, ...optionalParams: any[]) => void
-->console : Console
-->log : (message?: any, ...optionalParams: any[]) => void
-+>console.log("hi") : any
-+>console.log : any
-+>console : any
-+>log : any
+@@= skipped -63, +63 lines =@@
  >"hi" : "hi"
  
  const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)

@@ -1,41 +1,29 @@
 --- old.checkJsxGenericTagHasCorrectInferences.errors.txt
 +++ new.checkJsxGenericTagHasCorrectInferences.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(13,54): error TS2322: Type '(a: { x: string; }) => string' is not assignable to type '((a: { x: string; }) => string) & ((cur: { x: string; }) => { x: string; })'.
 -  Type '(a: { x: string; }) => string' is not assignable to type '(cur: { x: string; }) => { x: string; }'.
 -    Type 'string' is not assignable to type '{ x: string; }'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
- ==== file.tsx (1 errors) ====
-     import * as React from "react";
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     interface BaseProps<T> {
-       initialValues: T;
-       nextValues: (cur: T) => T;
-@@= skipped -16, +32 lines =@@
-     let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
-     let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} />; // No Error
-     let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
+-
+-
+-==== file.tsx (1 errors) ====
+-    import * as React from "react";
+-    interface BaseProps<T> {
+-      initialValues: T;
+-      nextValues: (cur: T) => T;
+-    }
+-    declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
+-      iv: Values;
+-    }
+-    
+-    let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // No error
+-    let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
+-    let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} />; // No Error
+-    let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
 -                                                         ~~~~~~~~~~
 -!!! error TS2322: Type '(a: { x: string; }) => string' is not assignable to type '((a: { x: string; }) => string) & ((cur: { x: string; }) => { x: string; })'.
 -!!! error TS2322:   Type '(a: { x: string; }) => string' is not assignable to type '(cur: { x: string; }) => { x: string; }'.
 -!!! error TS2322:     Type 'string' is not assignable to type '{ x: string; }'.
 -!!! related TS6500 file.tsx:13:54: The expected type comes from property 'nextValues' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<GenericComponent<{ initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; }, { x: string; }>> & { initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; } & BaseProps<{ x: string; }> & { children?: ReactNode; }'
+@@= skipped --1, +1 lines =@@
++<no content>

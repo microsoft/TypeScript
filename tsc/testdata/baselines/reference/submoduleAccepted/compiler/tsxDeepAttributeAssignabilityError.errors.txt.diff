@@ -1,47 +1,35 @@
 --- old.tsxDeepAttributeAssignabilityError.errors.txt
 +++ new.tsxDeepAttributeAssignabilityError.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file1.tsx(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file1.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+my-component.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== my-component.tsx (0 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== my-component.tsx (1 errors) ====
-     import * as React from 'react'
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface MyProps {
-         x: string;
-@@= skipped -18, +37 lines =@@
-     
- ==== file1.tsx (1 errors) ====
-     import * as React from 'react'
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     import { MyComponent } from './my-component'
-     
-     export const result = <MyComponent x="yes" y={{
-         value: 42
+-    import * as React from 'react'
+-    
+-    interface MyProps {
+-        x: string;
+-        y: MyInnerProps;
+-    }
+-    
+-    interface MyInnerProps {
+-        value: string;
+-    }
+-    
+-    export function MyComponent(_props: MyProps) {
+-        return <span>my component</span>;
+-    }
+-    
+-==== file1.tsx (1 errors) ====
+-    import * as React from 'react'
+-    import { MyComponent } from './my-component'
+-    
+-    export const result = <MyComponent x="yes" y={{
+-        value: 42
 -        ~~~~~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
 -!!! related TS6500 my-component.tsx:9:5: The expected type comes from property 'value' which is declared here on type 'MyInnerProps'
-     }} />;
-     
+-    }} />;
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

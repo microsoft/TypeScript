@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react')
->React : any
+>React : typeof __React
 
 declare function OneThing(k: {yxx: string}): JSX.Element;
 >OneThing : { (k: { yxx: string; }): Element; (k: { yxx1: string; children: string; }): Element; (l: { yy: number; yy1: string; }): Element; (l: { yy: number; yy1: string; yy2: boolean; }): Element; (l1: { data: string; "data-prop": boolean; }): Element; }

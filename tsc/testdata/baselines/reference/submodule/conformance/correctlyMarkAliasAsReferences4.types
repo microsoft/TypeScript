@@ -6,7 +6,7 @@ import * as cx from 'classnames';
 >cx : any
 
 import * as React from "react";
->React : any
+>React : typeof __React
 
 let buttonProps : {[attributeName: string]: ''}
 >buttonProps : { [attributeName: string]: ""; }

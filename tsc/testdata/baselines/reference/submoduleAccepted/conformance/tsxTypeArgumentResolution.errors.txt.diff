@@ -1,6 +1,6 @@
 --- old.tsxTypeArgumentResolution.errors.txt
 +++ new.tsxTypeArgumentResolution.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(16,26): error TS2322: Type 'number' is not assignable to type 'string'.
 -file.tsx(18,26): error TS2322: Type 'number' is not assignable to type 'string'.
 -file.tsx(20,13): error TS2558: Expected 1 type arguments, but got 2.
@@ -17,98 +17,94 @@
 -file.tsx(49,14): error TS2558: Expected 1-2 type arguments, but got 3.
 -file.tsx(51,47): error TS2322: Type 'string' is not assignable to type 'number'.
 -file.tsx(53,47): error TS2322: Type 'string' is not assignable to type 'number'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (12 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface Prop {
-         a: number,
-@@= skipped -32, +35 lines =@@
-     x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
-     
-     x = <MyComp<Prop> a={10} b={20} />; // error
+-    import React = require('react');
+-    
+-    interface Prop {
+-        a: number,
+-        b: string
+-    }
+-    
+-    declare class MyComp<P> extends React.Component<P, {}> {
+-        internalProp: P;
+-    }
+-    
+-    let x = <MyComp<Prop> a={10} b="hi" />; // OK
+-    
+-    x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
+-    
+-    x = <MyComp<Prop> a={10} b={20} />; // error
 -                             ~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
 -!!! related TS6500 file.tsx:5:5: The expected type comes from property 'b' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'
-     
-     x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
+-    
+-    x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
 -                             ~
 -!!! error TS2322: Type 'number' is not assignable to type 'string'.
 -!!! related TS6500 file.tsx:5:5: The expected type comes from property 'b' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'
-     
-     x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
+-    
+-    x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
 -                ~~~~~~~~~~
 -!!! error TS2558: Expected 1 type arguments, but got 2.
-     
-     x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
+-    
+-    x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
 -                ~~~~~~~~~~
 -!!! error TS2558: Expected 1 type arguments, but got 2.
-     
-     x = <MyComp<> a={10} b="hi" />; // error
+-    
+-    x = <MyComp<> a={10} b="hi" />; // error
 -               ~~
 -!!! error TS1099: Type argument list cannot be empty.
-     
-     x = <MyComp<> a={10} b="hi"></MyComp>; // error
+-    
+-    x = <MyComp<> a={10} b="hi"></MyComp>; // error
 -               ~~
 -!!! error TS1099: Type argument list cannot be empty.
-     
-     x= <MyComp<{}> /> // OK
-     
-@@= skipped -37, +23 lines =@@
-     x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2>; // OK
-     
-     x = <MyComp2<Prop> a={10} b="hi" />; // error
+-    
+-    x= <MyComp<{}> /> // OK
+-    
+-    x= <MyComp<{}>></MyComp> // OK
+-    
+-    declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<P & P2, {}> {
+-        internalProp: [P, P2];
+-    }
+-    x = <MyComp2<{a: string, b: string}> a="a" b="b" />; // OK
+-    
+-    x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2>; // OK
+-    
+-    x = <MyComp2<Prop> a={10} b="hi" />; // error
 -                 ~~~~
 -!!! error TS2344: Type 'Prop' does not satisfy the constraint '{ a: string; }'.
 -!!! error TS2344:   Types of property 'a' are incompatible.
 -!!! error TS2344:     Type 'number' is not assignable to type 'string'.
-     
-     x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
+-    
+-    x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
 -                 ~~~~
 -!!! error TS2344: Type 'Prop' does not satisfy the constraint '{ a: string; }'.
 -!!! error TS2344:   Types of property 'a' are incompatible.
 -!!! error TS2344:     Type 'number' is not assignable to type 'string'.
-     
-     x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" />; // OK
-     
-     x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2>; // OK
-     
-     x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" />; // error
+-    
+-    x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" />; // OK
+-    
+-    x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2>; // OK
+-    
+-    x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" />; // error
 -                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2558: Expected 1-2 type arguments, but got 3.
-     
-     x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
+-    
+-    x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
 -                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2558: Expected 1-2 type arguments, but got 3.
-     
-     x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" />; // error
+-    
+-    x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" />; // error
 -                                                  ~
 -!!! error TS2322: Type 'string' is not assignable to type 'number'.
 -!!! related TS6500 file.tsx:51:28: The expected type comes from property 'b' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, { b: number; }>> & { a: string; } & { b: number; } & { children?: ReactNode; }'
-     
-     x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2>; // error
+-    
+-    x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2>; // error
 -                                                  ~
 -!!! error TS2322: Type 'string' is not assignable to type 'number'.
 -!!! related TS6500 file.tsx:53:28: The expected type comes from property 'b' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp2<{ a: string; }, { b: number; }>> & { a: string; } & { b: number; } & { children?: ReactNode; }'
-     
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

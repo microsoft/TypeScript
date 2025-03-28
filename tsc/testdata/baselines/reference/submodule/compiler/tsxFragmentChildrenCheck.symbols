@@ -26,9 +26,9 @@ const MY_CLASSNAME: string = 'jeclass'
 
 class RenderString extends React.PureComponent<any, any> {
 >RenderString : Symbol(RenderString, Decl(file1.tsx, 4, 38))
->React.PureComponent : Symbol(unknown)
+>React.PureComponent : Symbol(PureComponent, Decl(react.d.ts, 180, 5))
 >React : Symbol(React, Decl(file1.tsx, 0, 6))
->PureComponent : Symbol(unknown)
+>PureComponent : Symbol(PureComponent, Decl(react.d.ts, 180, 5))
 
   render() {
 >render : Symbol(render, Decl(file1.tsx, 6, 58))

@@ -2,34 +2,34 @@
 
 === file.tsx ===
 import React = require('react');
->React : any
+>React : typeof __React
 
 interface ComponentProps {
     AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
->AnyComponent : any
+>AnyComponent : ComponentClass<any> | StatelessComponent<any>
 >React : any
 >React : any
 }
 
 class MyComponent extends React.Component<ComponentProps, {}> {
 >MyComponent : MyComponent
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<ComponentProps, {}>
+>React : typeof __React
+>Component : typeof Component
 
     render() {
 >render : () => any
 
         const { AnyComponent } = this.props;
->AnyComponent : any
->this.props : any
+>AnyComponent : ComponentClass<any> | StatelessComponent<any>
+>this.props : ComponentProps & { children?: ReactNode; }
 >this : this
->props : any
+>props : ComponentProps & { children?: ReactNode; }
 
         return (<AnyComponent />);
 >(<AnyComponent />) : any
 ><AnyComponent /> : any
->AnyComponent : any
+>AnyComponent : ComponentClass<any> | StatelessComponent<any>
     }
 }
 
@@ -46,9 +46,9 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 // Component Class as Props
 class MyButtonComponent extends React.Component<{},{}> {
 >MyButtonComponent : MyButtonComponent
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<{}, {}>
+>React : typeof __React
+>Component : typeof Component
 }
 
 <MyComponent AnyComponent={MyButtonComponent} />

@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  interface IUser {
      Name: string;
@@ -24,17 +24,17 @@
 ->React.Component : React.Component<IFetchUserProps, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<IFetchUserProps, any>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
 ->render : () => JSX.Element
-+>render : () => any
++>render : () => Element
  
          return this.state
 ->this.state            ? this.props.children(this.state.result)            : null : JSX.Element
-+>this.state            ? this.props.children(this.state.result)            : null : any
++>this.state            ? this.props.children(this.state.result)            : null : Element
  >this.state : any
  >this : this
  >state : any
@@ -43,14 +43,14 @@
 ->this.props.children(this.state.result) : JSX.Element
 ->this.props.children : ((user: IUser) => JSX.Element) & React.ReactNode
 ->this.props : IFetchUserProps & { children?: React.ReactNode; }
-+>this.props.children(this.state.result) : any
-+>this.props.children : any
-+>this.props : any
++>this.props.children(this.state.result) : Element
++>this.props.children : ((user: IUser) => Element) & ReactNode
++>this.props : IFetchUserProps & { children?: ReactNode; }
  >this : this
 ->props : IFetchUserProps & { children?: React.ReactNode; }
 ->children : ((user: IUser) => JSX.Element) & React.ReactNode
-+>props : any
-+>children : any
++>props : IFetchUserProps & { children?: ReactNode; }
++>children : ((user: IUser) => Element) & ReactNode
  >this.state.result : any
  >this.state : any
  >this : this

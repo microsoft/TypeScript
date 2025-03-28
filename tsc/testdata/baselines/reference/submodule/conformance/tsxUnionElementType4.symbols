@@ -6,9 +6,9 @@ import React = require('react');
 
 class RC1 extends React.Component<{x : number}, {}> {
 >RC1 : Symbol(RC1, Decl(file.tsx, 0, 32))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >x : Symbol(x, Decl(file.tsx, 2, 35))
 
     render() {
@@ -20,9 +20,9 @@ class RC1 extends React.Component<{x : number}, {}> {
 
 class RC2 extends React.Component<{ x: string }, {}> {
 >RC2 : Symbol(RC2, Decl(file.tsx, 6, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >x : Symbol(x, Decl(file.tsx, 8, 35))
 
     render() {
@@ -36,9 +36,9 @@ class RC2 extends React.Component<{ x: string }, {}> {
 
 class RC3 extends React.Component<{}, {}> {
 >RC3 : Symbol(RC3, Decl(file.tsx, 13, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 
     render() {
 >render : Symbol(render, Decl(file.tsx, 15, 43))
@@ -49,9 +49,9 @@ class RC3 extends React.Component<{}, {}> {
 
 class RC4 extends React.Component<{}, {}> {
 >RC4 : Symbol(RC4, Decl(file.tsx, 19, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 
     render() {
 >render : Symbol(render, Decl(file.tsx, 21, 43))

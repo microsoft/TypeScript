@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react')
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  declare function OverloadComponent<U>(): JSX.Element;
 ->OverloadComponent : { <U>(): JSX.Element; <U_1>(attr: { b: U_1; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U_1>(attr: { b: U_1; a: T; }): JSX.Element; }

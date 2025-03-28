@@ -1,13 +1,11 @@
 --- old.tsxGenericAttributesType7.symbols
 +++ new.tsxGenericAttributesType7.symbols
-@@= skipped -8, +8 lines =@@
- >T : Symbol(T, Decl(file.tsx, 2, 27))
+@@= skipped -9, +9 lines =@@
  >props : Symbol(props, Decl(file.tsx, 2, 30))
  >T : Symbol(T, Decl(file.tsx, 2, 27))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  const decorator = function <U>(props: U) {
  >decorator : Symbol(decorator, Decl(file.tsx, 3, 5))

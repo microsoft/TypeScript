@@ -13,9 +13,9 @@ interface OptionProp {
 
 class Opt extends React.Component<OptionProp, {}> {
 >Opt : Symbol(Opt, Decl(file.tsx, 4, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >OptionProp : Symbol(OptionProp, Decl(file.tsx, 0, 32))
 
     render() {

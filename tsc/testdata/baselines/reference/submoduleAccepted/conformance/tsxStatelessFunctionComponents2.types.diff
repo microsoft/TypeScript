@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  function Greet(x: {name?: string}) {
 ->Greet : (x: { name?: string; }) => JSX.Element
@@ -26,9 +26,9 @@
 ->React.Component : React.Component<{ name?: string; }, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<{ name?: string; }, {}>
++>React : typeof __React
++>Component : typeof Component
  >name : string
  
  	render() {

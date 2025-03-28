@@ -5,12 +5,12 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  interface ComponentProps {
      AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
 ->AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
-+>AnyComponent : any
++>AnyComponent : ComponentClass<any> | StatelessComponent<any>
  >React : any
  >React : any
  }
@@ -20,9 +20,9 @@
 ->React.Component : React.Component<ComponentProps, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<ComponentProps, {}>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
 ->render : () => JSX.Element
@@ -31,11 +31,11 @@
          const { AnyComponent } = this.props;
 ->AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 ->this.props : ComponentProps & { children?: React.ReactNode; }
-+>AnyComponent : any
-+>this.props : any
++>AnyComponent : ComponentClass<any> | StatelessComponent<any>
++>this.props : ComponentProps & { children?: ReactNode; }
  >this : this
 ->props : ComponentProps & { children?: React.ReactNode; }
-+>props : any
++>props : ComponentProps & { children?: ReactNode; }
  
          return (<AnyComponent />);
 ->(<AnyComponent />) : JSX.Element
@@ -43,7 +43,7 @@
 ->AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 +>(<AnyComponent />) : any
 +><AnyComponent /> : any
-+>AnyComponent : any
++>AnyComponent : ComponentClass<any> | StatelessComponent<any>
      }
  }
  
@@ -67,9 +67,9 @@
 ->React.Component : React.Component<{}, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<{}, {}>
++>React : typeof __React
++>Component : typeof Component
  }
  
  <MyComponent AnyComponent={MyButtonComponent} />

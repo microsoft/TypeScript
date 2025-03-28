@@ -1,38 +1,21 @@
 --- old.tsxUnionTypeComponent2.errors.txt
 +++ new.tsxUnionTypeComponent2.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(7,2): error TS2604: JSX element type 'X' does not have any construct or call signatures.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
- ==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     type Invalid1 = React.ComponentClass<any> | number;
-     
-     const X: Invalid1 = 1;
-     
-     <X />;
+-
+-
+-==== file.tsx (1 errors) ====
+-    import React = require('react');
+-    
+-    type Invalid1 = React.ComponentClass<any> | number;
+-    
+-    const X: Invalid1 = 1;
+-    
+-    <X />;
 -     ~
 -!!! error TS2604: JSX element type 'X' does not have any construct or call signatures.
-     
-     
-     
+-    
+-    
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

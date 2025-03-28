@@ -10,16 +10,16 @@ interface ComponentProps {
     AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
 >AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 2, 26))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->StatelessComponent : Symbol(StatelessComponent)
+>StatelessComponent : Symbol(StatelessComponent, Decl(react.d.ts, 198, 40))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->ComponentClass : Symbol(ComponentClass)
+>ComponentClass : Symbol(ComponentClass, Decl(react.d.ts, 205, 5))
 }
 
 class MyComponent extends React.Component<ComponentProps, {}> {
 >MyComponent : Symbol(MyComponent, Decl(file.tsx, 4, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 0, 32))
 
     render() {
@@ -27,7 +27,9 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 
         const { AnyComponent } = this.props;
 >AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 8, 15))
+>this.props : Symbol(props, Decl(react.d.ts, 167, 37))
 >this : Symbol(MyComponent, Decl(file.tsx, 4, 1))
+>props : Symbol(props, Decl(react.d.ts, 167, 37))
 
         return (<AnyComponent />);
 >AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 8, 15))
@@ -42,9 +44,9 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 // Component Class as Props
 class MyButtonComponent extends React.Component<{},{}> {
 >MyButtonComponent : Symbol(MyButtonComponent, Decl(file.tsx, 14, 57))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 }
 
 <MyComponent AnyComponent={MyButtonComponent} />

@@ -1,6 +1,6 @@
 --- old.tsxStatelessFunctionComponentOverload4.errors.txt
 +++ new.tsxStatelessFunctionComponentOverload4.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(12,22): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(): Element', gave the following error.
 -    Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
@@ -79,51 +79,21 @@
 -    'TestingOptional' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element'.
 -  Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
 -    Type 'string' is not assignable to type 'boolean'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+file.tsx(2,30): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(3,58): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(21,62): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(22,72): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(28,66): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(29,74): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(29,89): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(30,79): error TS2503: Cannot find namespace 'JSX'.
- 
- 
+-
+-
 -==== file.tsx (11 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (9 errors) ====
-     import React = require('react')
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     declare function OneThing(): JSX.Element;
-+                                 ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
-+                                                             ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     
-     let obj = {
-         yy: 10,
-@@= skipped -90, +43 lines =@@
-     
-     // Error
-     const c0 = <OneThing extraProp />;  // extra property;
+-    import React = require('react')
+-    declare function OneThing(): JSX.Element;
+-    declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
+-    
+-    let obj = {
+-        yy: 10,
+-        yy1: "hello"
+-    }
+-    let obj2: any;
+-    
+-    // Error
+-    const c0 = <OneThing extraProp />;  // extra property;
 -                         ~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
@@ -132,7 +102,7 @@
 -!!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
 -!!! error TS2769:     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
 -!!! error TS2769:       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-     const c1 = <OneThing yy={10}/>;  // missing property;
+-    const c1 = <OneThing yy={10}/>;  // missing property;
 -                ~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
@@ -141,7 +111,7 @@
 -!!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
 -!!! error TS2769:     Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
 -!!! related TS2728 file.tsx:3:43: 'yy1' is declared here.
-     const c2 = <OneThing {...obj} yy1 />; // type incompatible;
+-    const c2 = <OneThing {...obj} yy1 />; // type incompatible;
 -                                  ~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
@@ -150,8 +120,8 @@
 -!!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
 -!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 -!!! related TS6500 file.tsx:3:43: The expected type comes from property 'yy1' which is declared here on type 'IntrinsicAttributes & { yy: number; yy1: string; }'
-     const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
-     const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
+-    const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
+-    const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
 -                                  ~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
@@ -160,7 +130,7 @@
 -!!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
 -!!! error TS2769:     Type '{ yy: number; yy1: string; y1: number; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
 -!!! error TS2769:       Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-     const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
+-    const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
 -                ~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
@@ -169,18 +139,14 @@
 -!!! error TS2769:     Type '{ yy1: string; yy: boolean; }' is not assignable to type '{ yy: number; yy1: string; }'.
 -!!! error TS2769:       Types of property 'yy' are incompatible.
 -!!! error TS2769:         Type 'boolean' is not assignable to type 'number'.
-     const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
-     const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
-     
-     declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
-+                                                                 ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
-+                                                                           ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     
-     // Error
-     const d1 = <TestingOneThing extra-data />
+-    const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
+-    const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
+-    
+-    declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
+-    declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
+-    
+-    // Error
+-    const d1 = <TestingOneThing extra-data />
 -                ~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
@@ -190,7 +156,7 @@
 -!!! error TS2769:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
 -!!! error TS2769:     Property 'yy' is missing in type '{ "extra-data": true; }' but required in type '{ yy: string; direction?: number; }'.
 -!!! related TS2728 file.tsx:22:38: 'yy' is declared here.
-     const d2 = <TestingOneThing yy="hello" direction="left" />
+-    const d2 = <TestingOneThing yy="hello" direction="left" />
 -                ~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
@@ -199,21 +165,13 @@
 -!!! error TS2769:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
 -!!! error TS2769:     Type 'string' is not assignable to type 'number'.
 -!!! related TS6500 file.tsx:22:50: The expected type comes from property 'direction' which is declared here on type 'IntrinsicAttributes & { yy: string; direction?: number; }'
-     
-     declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
-+                                                                     ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
-+                                                                             ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-+                                                                                            ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
-+                                                                                  ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     
-     // Error
-     const e1 = <TestingOptional y1 y3="hello"/>
+-    
+-    declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
+-    declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
+-    declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
+-    
+-    // Error
+-    const e1 = <TestingOptional y1 y3="hello"/>
 -                ~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
@@ -225,7 +183,7 @@
 -!!! related TS6500 file.tsx:28:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'
 -!!! related TS6500 file.tsx:29:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
 -!!! related TS6500 file.tsx:30:64: The expected type comes from property 'y3' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
-     const e2 = <TestingOptional y1="hello" y2={1000} y3 />
+-    const e2 = <TestingOptional y1="hello" y2={1000} y3 />
 -                ~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
@@ -237,7 +195,7 @@
 -!!! error TS2769:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
 -!!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
 -!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
-     const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
+-    const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
 -                ~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
@@ -249,7 +207,7 @@
 -!!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
 -!!! related TS6500 file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
 -!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
-     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
+-    const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
 -                ~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
@@ -261,4 +219,6 @@
 -!!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
 -!!! related TS6500 file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
 -!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
-     
+-    
+@@= skipped --1, +1 lines =@@
++<no content>

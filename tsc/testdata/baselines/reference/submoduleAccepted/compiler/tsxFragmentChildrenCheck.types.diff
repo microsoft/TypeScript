@@ -18,7 +18,7 @@
  === file1.tsx ===
  import * as React from 'react'
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  import { MyComponent } from './my-component'
 ->MyComponent : (props: any) => JSX.Element
@@ -33,9 +33,9 @@
 ->React.PureComponent : React.PureComponent<any, any>
 ->React : typeof React
 ->PureComponent : typeof React.PureComponent
-+>React.PureComponent : any
-+>React : any
-+>PureComponent : any
++>React.PureComponent : PureComponent<any, any>
++>React : typeof __React
++>PureComponent : typeof PureComponent
  
    render() {
 ->render : () => JSX.Element

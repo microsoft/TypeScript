@@ -1,6 +1,6 @@
 --- old.tsxStatelessFunctionComponentsWithTypeArguments4.errors.txt
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments4.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(9,15): error TS2769: No overload matches this call.
 -  Overload 1 of 3, '(): Element', gave the following error.
 -    Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.
@@ -18,47 +18,18 @@
 -  Overload 3 of 3, '(attr: { b: unknown; a: unknown; }): Element', gave the following error.
 -    Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
 -      Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+file.tsx(3,42): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(4,89): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(5,63): error TS2503: Cannot find namespace 'JSX'.
- 
- 
+-
+-
 -==== file.tsx (2 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (4 errors) ====
-     import React = require('react')
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     declare function OverloadComponent<U>(): JSX.Element;
-+                                             ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
-+                                                                                            ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
-+                                                                  ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     
-     // Error
-     function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
-         let a0 = <OverloadComponent a={arg1.b}/>
+-    import React = require('react')
+-    
+-    declare function OverloadComponent<U>(): JSX.Element;
+-    declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
+-    declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
+-    
+-    // Error
+-    function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
+-        let a0 = <OverloadComponent a={arg1.b}/>
 -                  ~~~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(): Element', gave the following error.
@@ -70,7 +41,7 @@
 -!!! error TS2769:     Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
 -!!! related TS6500 file.tsx:4:52: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & { b: unknown; a: string; "ignore-prop": boolean; }'
 -!!! related TS2728 file.tsx:5:49: 'b' is declared here.
-         let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
+-        let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
 -                  ~~~~~~~~~~~~~~~~~
 -!!! error TS2769: No overload matches this call.
 -!!! error TS2769:   Overload 1 of 3, '(): Element', gave the following error.
@@ -83,4 +54,6 @@
 -!!! error TS2769:       Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
 -!!! related TS2728 file.tsx:4:52: 'a' is declared here.
 -!!! related TS2728 file.tsx:5:55: 'a' is declared here.
-     }
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

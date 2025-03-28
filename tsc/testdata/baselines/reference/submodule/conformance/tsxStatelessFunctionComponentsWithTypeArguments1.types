@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react')
->React : any
+>React : typeof __React
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
@@ -73,7 +73,7 @@ function createLink1(func: (a: number)=>boolean) {
 
 interface InferParamProp<T> {
     values: Array<T>;
->values : Array<T>
+>values : T[]
 
     selectHandler: (selectedVal: T) => void;
 >selectHandler : (selectedVal: T) => void
@@ -91,7 +91,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} 
 ><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} /> : any
 >InferParamComponent : <T>(attr: InferParamProp<T>) => Element
 >values : any
->[1, 2, 3, 4] : {}
+>[1, 2, 3, 4] : number[]
 >1 : 1
 >2 : 2
 >3 : 3

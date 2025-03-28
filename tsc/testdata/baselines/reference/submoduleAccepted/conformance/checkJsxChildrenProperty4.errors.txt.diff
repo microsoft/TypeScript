@@ -1,90 +1,68 @@
 --- old.checkJsxChildrenProperty4.errors.txt
 +++ new.checkJsxChildrenProperty4.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
 -file.tsx(36,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 -file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+file.tsx(8,32): error TS2503: Cannot find namespace 'JSX'.
-+file.tsx(13,21): error TS2339: Property 'state' does not exist on type 'FetchUser'.
-+file.tsx(14,20): error TS2339: Property 'props' does not exist on type 'FetchUser'.
-+file.tsx(14,40): error TS2339: Property 'state' does not exist on type 'FetchUser'.
- 
- 
+-
+-
 -==== file.tsx (3 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (5 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface IUser {
-         Name: string;
-@@= skipped -11, +31 lines =@@
-     
-     interface IFetchUserProps {
-         children: (user: IUser) => JSX.Element;
-+                                   ~~~
-+!!! error TS2503: Cannot find namespace 'JSX'.
-     }
-     
-     class FetchUser extends React.Component<IFetchUserProps, any> {
-         render() {
-             return this.state
-+                        ~~~~~
-+!!! error TS2339: Property 'state' does not exist on type 'FetchUser'.
-                 ? this.props.children(this.state.result)
-+                       ~~~~~
-+!!! error TS2339: Property 'props' does not exist on type 'FetchUser'.
-+                                           ~~~~~
-+!!! error TS2339: Property 'state' does not exist on type 'FetchUser'.
-                 : null;
-         }
-     }
-@@= skipped -16, +24 lines =@@
-             <FetchUser>
-                 { user => (
-                     <h1>{ user.NAme }</h1>
+-    import React = require('react');
+-    
+-    interface IUser {
+-        Name: string;
+-    }
+-    
+-    interface IFetchUserProps {
+-        children: (user: IUser) => JSX.Element;
+-    }
+-    
+-    class FetchUser extends React.Component<IFetchUserProps, any> {
+-        render() {
+-            return this.state
+-                ? this.props.children(this.state.result)
+-                : null;
+-        }
+-    }
+-    
+-    // Error
+-    function UserName() {
+-        return (
+-            <FetchUser>
+-                { user => (
+-                    <h1>{ user.NAme }</h1>
 -                               ~~~~
 -!!! error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
 -!!! related TS2728 file.tsx:4:5: 'Name' is declared here.
-                 ) }
-             </FetchUser>
-         );
-@@= skipped -15, +12 lines =@@
-     
-                 
-                 { user => (
+-                ) }
+-            </FetchUser>
+-        );
+-    }
+-    
+-    function UserName1() {
+-        return (
+-            <FetchUser>
+-    
+-    
+-                
+-                { user => (
 -                  ~~~~~~~~~
-                     <h1>{ user.Name }</h1>
+-                    <h1>{ user.Name }</h1>
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                 ) }
+-                ) }
 -    ~~~~~~~~~~~~~
 -!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 -!!! related TS6212 file.tsx:36:15: Did you mean to call this expression?
-                 { user => (
+-                { user => (
 -                  ~~~~~~~~~
-                     <h1>{ user.Name }</h1>
+-                    <h1>{ user.Name }</h1>
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                 ) }
+-                ) }
 -    ~~~~~~~~~~~~~
 -!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 -!!! related TS6212 file.tsx:39:15: Did you mean to call this expression?
-             </FetchUser>
-         );
-     }
+-            </FetchUser>
+-        );
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

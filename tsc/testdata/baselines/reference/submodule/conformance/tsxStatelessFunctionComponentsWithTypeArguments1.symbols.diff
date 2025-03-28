@@ -1,35 +1,30 @@
 --- old.tsxStatelessFunctionComponentsWithTypeArguments1.symbols
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments1.symbols
-@@= skipped -12, +12 lines =@@
- >K : Symbol(K, Decl(file.tsx, 2, 44))
+@@= skipped -13, +13 lines =@@
  >value : Symbol(value, Decl(file.tsx, 2, 61))
  >V : Symbol(V, Decl(file.tsx, 2, 46))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // OK
  function Baz<T,U>(key1: T, value: U) {
 @@= skipped -37, +37 lines =@@
- >func : Symbol(func, Decl(file.tsx, 10, 29))
  >arg : Symbol(arg, Decl(file.tsx, 10, 36))
  >U : Symbol(U, Decl(file.tsx, 10, 22))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // OK
  function createLink(func: (a: number)=>void) {
-@@= skipped -33, +33 lines =@@
+@@= skipped -32, +32 lines =@@
  >T : Symbol(T, Decl(file.tsx, 21, 25))
  
      values: Array<T>;
 ->values : Symbol(InferParamProp.values, Decl(file.tsx, 21, 29))
-->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 +>values : Symbol(values, Decl(file.tsx, 21, 29))
-+>Array : Symbol(Array)
+ >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
  >T : Symbol(T, Decl(file.tsx, 21, 25))
  
      selectHandler: (selectedVal: T) => void;
@@ -38,14 +33,12 @@
  >selectedVal : Symbol(selectedVal, Decl(file.tsx, 23, 20))
  >T : Symbol(T, Decl(file.tsx, 21, 25))
  }
-@@= skipped -16, +16 lines =@@
- >attr : Symbol(attr, Decl(file.tsx, 26, 40))
+@@= skipped -17, +17 lines =@@
  >InferParamProp : Symbol(InferParamProp, Decl(file.tsx, 19, 1))
  >T : Symbol(T, Decl(file.tsx, 26, 37))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // OK
  let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;

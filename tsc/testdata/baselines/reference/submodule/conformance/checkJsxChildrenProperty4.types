@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : any
+>React : typeof __React
 
 interface IUser {
     Name: string;
@@ -18,26 +18,26 @@ interface IFetchUserProps {
 
 class FetchUser extends React.Component<IFetchUserProps, any> {
 >FetchUser : FetchUser
->React.Component : any
->React : any
->Component : any
+>React.Component : Component<IFetchUserProps, any>
+>React : typeof __React
+>Component : typeof Component
 
     render() {
->render : () => any
+>render : () => Element
 
         return this.state
->this.state            ? this.props.children(this.state.result)            : null : any
+>this.state            ? this.props.children(this.state.result)            : null : Element
 >this.state : any
 >this : this
 >state : any
 
             ? this.props.children(this.state.result)
->this.props.children(this.state.result) : any
->this.props.children : any
->this.props : any
+>this.props.children(this.state.result) : Element
+>this.props.children : ((user: IUser) => Element) & ReactNode
+>this.props : IFetchUserProps & { children?: ReactNode; }
 >this : this
->props : any
->children : any
+>props : IFetchUserProps & { children?: ReactNode; }
+>children : ((user: IUser) => Element) & ReactNode
 >this.state.result : any
 >this.state : any
 >this : this

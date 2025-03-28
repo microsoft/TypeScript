@@ -7,9 +7,9 @@ import * as React from "react";
 export declare class MyComp<P> extends React.Component<P, {}> {
 >MyComp : Symbol(MyComp, Decl(component.d.ts, 0, 31))
 >P : Symbol(P, Decl(component.d.ts, 1, 28))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(component.d.ts, 0, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >P : Symbol(P, Decl(component.d.ts, 1, 28))
 
     internalProp: P;

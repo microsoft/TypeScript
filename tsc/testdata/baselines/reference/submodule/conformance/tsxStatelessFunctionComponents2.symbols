@@ -15,9 +15,9 @@ function Greet(x: {name?: string}) {
 
 class BigGreeter extends React.Component<{ name?: string }, {}> {
 >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 4, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >name : Symbol(name, Decl(file.tsx, 6, 42))
 
 	render() {

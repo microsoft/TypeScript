@@ -5,7 +5,7 @@
  === foo.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  type TypeProps = { foo?: boolean; };
  >TypeProps : TypeProps

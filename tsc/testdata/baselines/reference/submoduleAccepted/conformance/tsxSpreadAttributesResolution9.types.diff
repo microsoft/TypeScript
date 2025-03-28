@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  interface OptionProp {
      x?: 2
@@ -16,9 +16,9 @@
 ->React.Component : React.Component<OptionProp, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<OptionProp, {}>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
 ->render : () => JSX.Element

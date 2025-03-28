@@ -9,8 +9,8 @@ declare function Component<T>(props: T) : JSX.Element;
 >T : Symbol(T, Decl(file.tsx, 2, 27))
 >props : Symbol(props, Decl(file.tsx, 2, 30))
 >T : Symbol(T, Decl(file.tsx, 2, 27))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 const decorator = function <U>(props: U) {
 >decorator : Symbol(decorator, Decl(file.tsx, 3, 5))

@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  declare function Component<T>(props: T) : JSX.Element;
 ->Component : <T>(props: T) => JSX.Element

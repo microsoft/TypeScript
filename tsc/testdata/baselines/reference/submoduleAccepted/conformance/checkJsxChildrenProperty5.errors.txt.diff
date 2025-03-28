@@ -1,56 +1,50 @@
 --- old.checkJsxChildrenProperty5.errors.txt
 +++ new.checkJsxChildrenProperty5.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(20,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 -file.tsx(25,9): error TS2740: Type 'ReactElement<any>' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
 -file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
+-
+-
 -==== file.tsx (3 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
-+==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     interface Prop {
-         a: number,
-@@= skipped -23, +39 lines =@@
-     
-     // Error: no children specified
-     let k = <Comp a={10} b="hi" />;
+-    import React = require('react');
+-    
+-    interface Prop {
+-        a: number,
+-        b: string,
+-        children: Button;
+-    }
+-    
+-    class Button extends React.Component<any, any> {
+-        render() {
+-            return (<div>My Button</div>)
+-        }
+-    }
+-    
+-    function Comp(p: Prop) {
+-        return <div>{p.b}</div>;
+-    }
+-    
+-    // Error: no children specified
+-    let k = <Comp a={10} b="hi" />;
 -             ~~~~
 -!!! error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 -!!! related TS2728 file.tsx:6:5: 'children' is declared here.
-     
-     // Error: JSX.element is not the same as JSX.ElementClass
-     let k1 =
-         <Comp a={10} b="hi">
-             <Button />
+-    
+-    // Error: JSX.element is not the same as JSX.ElementClass
+-    let k1 =
+-        <Comp a={10} b="hi">
+-            <Button />
 -            ~~~~~~~~~~
 -!!! error TS2740: Type 'ReactElement<any>' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
 -!!! related TS6500 file.tsx:6:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & Prop'
-         </Comp>;
-     let k2 =
-         <Comp a={10} b="hi">
-             {Button}
+-        </Comp>;
+-    let k2 =
+-        <Comp a={10} b="hi">
+-            {Button}
 -             ~~~~~~
 -!!! error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
 -!!! related TS6213 file.tsx:29:10: Did you mean to use 'new' with this expression?
-         </Comp>;
+-        </Comp>;
+@@= skipped --1, +1 lines =@@
++<no content>

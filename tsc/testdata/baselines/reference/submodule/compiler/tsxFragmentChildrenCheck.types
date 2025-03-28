@@ -16,7 +16,7 @@ export function MyComponent(props: any) {
 
 === file1.tsx ===
 import * as React from 'react'
->React : any
+>React : typeof __React
 
 import { MyComponent } from './my-component'
 >MyComponent : (props: any) => any
@@ -31,9 +31,9 @@ const MY_CLASSNAME: string = 'jeclass'
 
 class RenderString extends React.PureComponent<any, any> {
 >RenderString : RenderString
->React.PureComponent : any
->React : any
->PureComponent : any
+>React.PureComponent : PureComponent<any, any>
+>React : typeof __React
+>PureComponent : typeof PureComponent
 
   render() {
 >render : () => any

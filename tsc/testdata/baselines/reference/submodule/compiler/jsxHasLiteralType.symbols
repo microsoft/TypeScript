@@ -15,9 +15,9 @@ class MyComponent<P extends Props = Props> extends React.Component<P, {}> {}
 >P : Symbol(P, Decl(jsxHasLiteralType.tsx, 5, 18))
 >Props : Symbol(Props, Decl(jsxHasLiteralType.tsx, 0, 31))
 >Props : Symbol(Props, Decl(jsxHasLiteralType.tsx, 0, 31))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(jsxHasLiteralType.tsx, 0, 6))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >P : Symbol(P, Decl(jsxHasLiteralType.tsx, 5, 18))
 
 const m = <MyComponent x="a"/>

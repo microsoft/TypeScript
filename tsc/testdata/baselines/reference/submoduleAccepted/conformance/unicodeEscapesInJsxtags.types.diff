@@ -5,7 +5,7 @@
  === file.tsx ===
  import * as React from "react";
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  declare global {
  >global : any

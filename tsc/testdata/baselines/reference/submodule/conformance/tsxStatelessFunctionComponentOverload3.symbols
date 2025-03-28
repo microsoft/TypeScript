@@ -9,8 +9,8 @@ interface Context {
 }
 declare function ZeroThingOrTwoThing(): JSX.Element;
 >ZeroThingOrTwoThing : Symbol(ZeroThingOrTwoThing, Decl(file.tsx, 2, 1), Decl(file.tsx, 3, 52))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Context): JSX.Element;
 >ZeroThingOrTwoThing : Symbol(ZeroThingOrTwoThing, Decl(file.tsx, 2, 1), Decl(file.tsx, 3, 52))
@@ -19,8 +19,8 @@ declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Cont
 >yy1 : Symbol(yy1, Decl(file.tsx, 4, 52))
 >context : Symbol(context, Decl(file.tsx, 4, 66))
 >Context : Symbol(Context, Decl(file.tsx, 0, 0))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 let obj2: any;
 >obj2 : Symbol(obj2, Decl(file.tsx, 6, 3))
@@ -57,15 +57,15 @@ declare function ThreeThing(l: {y1: string}): JSX.Element;
 >ThreeThing : Symbol(ThreeThing, Decl(file.tsx, 13, 58), Decl(file.tsx, 15, 58), Decl(file.tsx, 16, 58))
 >l : Symbol(l, Decl(file.tsx, 15, 28))
 >y1 : Symbol(y1, Decl(file.tsx, 15, 32))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 declare function ThreeThing(l: {y2: string}): JSX.Element;
 >ThreeThing : Symbol(ThreeThing, Decl(file.tsx, 13, 58), Decl(file.tsx, 15, 58), Decl(file.tsx, 16, 58))
 >l : Symbol(l, Decl(file.tsx, 16, 28))
 >y2 : Symbol(y2, Decl(file.tsx, 16, 32))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 declare function ThreeThing(l: {yy: number, yy1: string}, context: Context, updater: any): JSX.Element;
 >ThreeThing : Symbol(ThreeThing, Decl(file.tsx, 13, 58), Decl(file.tsx, 15, 58), Decl(file.tsx, 16, 58))
@@ -75,8 +75,8 @@ declare function ThreeThing(l: {yy: number, yy1: string}, context: Context, upda
 >context : Symbol(context, Decl(file.tsx, 17, 57))
 >Context : Symbol(Context, Decl(file.tsx, 0, 0))
 >updater : Symbol(updater, Decl(file.tsx, 17, 75))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 
 // OK
 const three1 = <ThreeThing yy={99} yy1="hello world" />;

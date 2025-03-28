@@ -17,9 +17,9 @@ interface Prop {
 declare class MyComp<P> extends React.Component<P, {}> {
 >MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
 >P : Symbol(P, Decl(file.tsx, 7, 21))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >P : Symbol(P, Decl(file.tsx, 7, 21))
 
     internalProp: P;
@@ -101,9 +101,9 @@ declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<
 >P : Symbol(P, Decl(file.tsx, 31, 22))
 >a : Symbol(a, Decl(file.tsx, 31, 33))
 >P2 : Symbol(P2, Decl(file.tsx, 31, 46))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >P : Symbol(P, Decl(file.tsx, 31, 22))
 >P2 : Symbol(P2, Decl(file.tsx, 31, 46))
 

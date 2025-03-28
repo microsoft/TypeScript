@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  interface ButtonProp {
      a: number,
@@ -16,9 +16,9 @@
 ->React.Component : React.Component<ButtonProp, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<ButtonProp, any>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
 ->render : () => JSX.Element
@@ -32,11 +32,11 @@
 +><InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton> : any
  >InnerButton : typeof InnerButton
 ->this.props : ButtonProp & { children?: React.ReactNode; }
-+>this.props : any
++>this.props : ButtonProp & { children?: ReactNode | undefined; }
  >this : this
 ->props : ButtonProp & { children?: React.ReactNode; }
 ->children : string
-+>props : any
++>props : ButtonProp & { children?: ReactNode | undefined; }
 +>children : any
  
              <div>Hello World</div>
@@ -52,9 +52,9 @@
 ->React.Component : React.Component<InnerButtonProp, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<InnerButtonProp, any>
++>React : typeof __React
++>Component : typeof Component
  
  	render() {
 ->render : () => JSX.Element

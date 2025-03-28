@@ -10,10 +10,10 @@
  class Poisoned extends React.Component<Prop, {}> {
  >Poisoned : Symbol(Poisoned, Decl(file.tsx, 4, 1))
 ->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>React.Component : Symbol(unknown)
++>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >React : Symbol(React, Decl(file.tsx, 0, 0))
 ->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
-+>Component : Symbol(unknown)
++>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
  
      render() {

@@ -5,7 +5,7 @@
  === b.tsx ===
  import * as React from "react";
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  export function MyComponent(props: { foo: string }) {
 ->MyComponent : (props: { foo: string; }) => JSX.Element

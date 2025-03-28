@@ -1,25 +1,8 @@
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'Boolean'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'Number'.
-error TS2318: Cannot find global type 'Object'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'String'.
-file1.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 file1.tsx(2,10): error TS6133: 'MyComponent' is declared but its value is never read.
 file1.tsx(4,7): error TS6133: 'MY_STRING' is declared but its value is never read.
 file1.tsx(5,7): error TS6133: 'MY_CLASSNAME' is declared but its value is never read.
 
 
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'Boolean'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'Number'.
-!!! error TS2318: Cannot find global type 'Object'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'String'.
 ==== my-component.tsx (0 errors) ====
     declare var React: any;
     
@@ -27,10 +10,8 @@ file1.tsx(5,7): error TS6133: 'MY_CLASSNAME' is declared but its value is never 
         return <span>my component</span>;
     }
     
-==== file1.tsx (4 errors) ====
+==== file1.tsx (3 errors) ====
     import * as React from 'react'
-                           ~~~~~~~
-!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
     import { MyComponent } from './my-component'
              ~~~~~~~~~~~
 !!! error TS6133: 'MyComponent' is declared but its value is never read.

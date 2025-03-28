@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : any
+>React : typeof __React
 
 const Tag = (x: {}) => <div></div>;
 >Tag : (x: {}) => any

@@ -5,16 +5,16 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  class RC1 extends React.Component<{x : number}, {}> {
  >RC1 : RC1
 ->React.Component : React.Component<{ x: number; }, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<{ x: number; }, {}>
++>React : typeof __React
++>Component : typeof Component
  >x : number
  
      render() {
@@ -25,9 +25,9 @@
 ->React.Component : React.Component<{ x: string; }, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<{ x: string; }, {}>
++>React : typeof __React
++>Component : typeof Component
  >x : string
  
      render() {
@@ -38,9 +38,9 @@
 ->React.Component : React.Component<{}, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<{}, {}>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
  >render : () => any
@@ -51,40 +51,22 @@
 ->React.Component : React.Component<{}, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>React.Component : any
-+>React : any
-+>Component : any
++>React.Component : Component<{}, {}>
++>React : typeof __React
++>Component : typeof Component
  
      render() {
  >render : () => any
-@@= skipped -18, +18 lines =@@
- >RC4 : typeof RC4
- 
- var PartRCComp = RC1 || RC4;
-->PartRCComp : typeof RC4
-->RC1 || RC4 : typeof RC4
-+>PartRCComp : typeof RC1
-+>RC1 || RC4 : typeof RC1
- >RC1 : typeof RC1
- >RC4 : typeof RC4
- 
- var RCComp = RC1 || RC2;
-->RCComp : typeof RC1 | typeof RC2
-->RC1 || RC2 : typeof RC1 | typeof RC2
-+>RCComp : typeof RC1
-+>RC1 || RC2 : typeof RC1
- >RC1 : typeof RC1
- >RC2 : typeof RC2
+@@= skipped -31, +31 lines =@@
  
  // OK
  let a = <RCComp x="Hi" />;
 ->a : JSX.Element
 -><RCComp x="Hi" /> : JSX.Element
-->RCComp : typeof RC1 | typeof RC2
-->x : string
 +>a : any
 +><RCComp x="Hi" /> : any
-+>RCComp : typeof RC1
+ >RCComp : typeof RC1 | typeof RC2
+->x : string
 +>x : any
  
  let a1 = <EmptyRCComp />;
@@ -106,18 +88,16 @@
  let b = <PartRCComp />
 ->b : JSX.Element
 -><PartRCComp /> : JSX.Element
-->PartRCComp : typeof RC4
 +>b : any
 +><PartRCComp /> : any
-+>PartRCComp : typeof RC1
+ >PartRCComp : typeof RC4
  
  let c = <PartRCComp data-extra="hello" />
 ->c : JSX.Element
 -><PartRCComp data-extra="hello" /> : JSX.Element
-->PartRCComp : typeof RC4
-->data-extra : string
 +>c : any
 +><PartRCComp data-extra="hello" /> : any
-+>PartRCComp : typeof RC1
+ >PartRCComp : typeof RC4
+->data-extra : string
 +>data-extra : any
  

@@ -5,7 +5,7 @@
  
  import * as React from "react";
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  let buttonProps;
  >buttonProps : any

@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  interface Prop {
      a: number,
@@ -14,7 +14,7 @@
  
      children: string | JSX.Element
 ->children : string | JSX.Element
-+>children : any
++>children : string | Element
  >JSX : any
  }
  

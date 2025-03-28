@@ -1,36 +1,23 @@
 --- old.tsxUnionElementType1.errors.txt
 +++ new.tsxUnionElementType1.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -file.tsx(12,10): error TS2322: Type 'true' is not assignable to type 'never'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
-+file.tsx(1,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
- 
- 
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
- ==== file.tsx (1 errors) ====
-     import React = require('react');
-+                           ~~~~~~~
-+!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-     
-     function SFC1(prop: { x: number }) {
-         return <div>hello</div>;
-@@= skipped -13, +31 lines =@@
-     
-     var SFCComp = SFC1 || SFC2;
-     <SFCComp x />
+-
+-
+-==== file.tsx (1 errors) ====
+-    import React = require('react');
+-    
+-    function SFC1(prop: { x: number }) {
+-        return <div>hello</div>;
+-    };
+-    
+-    function SFC2(prop: { x: boolean }) {
+-        return <h1>World </h1>;
+-    }
+-    
+-    var SFCComp = SFC1 || SFC2;
+-    <SFCComp x />
 -             ~
 -!!! error TS2322: Type 'true' is not assignable to type 'never'.
+@@= skipped --1, +1 lines =@@
++<no content>

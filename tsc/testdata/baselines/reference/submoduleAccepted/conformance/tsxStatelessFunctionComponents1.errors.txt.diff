@@ -11,32 +11,16 @@
 -  Property 'prop1' does not exist on type 'IntrinsicAttributes'.
 -file.tsx(38,24): error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
 -  Property 'ref' does not exist on type 'IntrinsicAttributes'.
-+error TS2318: Cannot find global type 'Array'.
-+error TS2318: Cannot find global type 'Boolean'.
-+error TS2318: Cannot find global type 'Function'.
-+error TS2318: Cannot find global type 'IArguments'.
-+error TS2318: Cannot find global type 'Number'.
-+error TS2318: Cannot find global type 'Object'.
-+error TS2318: Cannot find global type 'RegExp'.
-+error TS2318: Cannot find global type 'String'.
  file.tsx(41,16): error TS1005: ',' expected.
 -file.tsx(45,11): error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes'.
  
  
 -==== file.tsx (8 errors) ====
-+!!! error TS2318: Cannot find global type 'Array'.
-+!!! error TS2318: Cannot find global type 'Boolean'.
-+!!! error TS2318: Cannot find global type 'Function'.
-+!!! error TS2318: Cannot find global type 'IArguments'.
-+!!! error TS2318: Cannot find global type 'Number'.
-+!!! error TS2318: Cannot find global type 'Object'.
-+!!! error TS2318: Cannot find global type 'RegExp'.
-+!!! error TS2318: Cannot find global type 'String'.
 +==== file.tsx (1 errors) ====
      function EmptyPropSFC() {
          return <div> Default Greeting </div>;
      }
-@@= skipped -31, +36 lines =@@
+@@= skipped -31, +20 lines =@@
      let a1 = <Greet name='world' extra-prop />;
      // Error
      let b = <Greet naaame='world' />;

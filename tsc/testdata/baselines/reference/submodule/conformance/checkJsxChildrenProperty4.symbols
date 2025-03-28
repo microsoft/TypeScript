@@ -18,26 +18,34 @@ interface IFetchUserProps {
 >children : Symbol(children, Decl(file.tsx, 6, 27))
 >user : Symbol(user, Decl(file.tsx, 7, 15))
 >IUser : Symbol(IUser, Decl(file.tsx, 0, 32))
->JSX : Symbol(JSX)
->Element : Symbol(Element)
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
 }
 
 class FetchUser extends React.Component<IFetchUserProps, any> {
 >FetchUser : Symbol(FetchUser, Decl(file.tsx, 8, 1))
->React.Component : Symbol(unknown)
+>React.Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(unknown)
+>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >IFetchUserProps : Symbol(IFetchUserProps, Decl(file.tsx, 4, 1))
 
     render() {
 >render : Symbol(render, Decl(file.tsx, 10, 63))
 
         return this.state
+>this.state : Symbol(state, Decl(react.d.ts, 174, 44))
 >this : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+>state : Symbol(state, Decl(react.d.ts, 174, 44))
 
             ? this.props.children(this.state.result)
+>this.props.children : Symbol(children, Decl(file.tsx, 6, 27), Decl(react.d.ts, 174, 20))
+>this.props : Symbol(props, Decl(react.d.ts, 167, 37))
 >this : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+>props : Symbol(props, Decl(react.d.ts, 167, 37))
+>children : Symbol(children, Decl(file.tsx, 6, 27), Decl(react.d.ts, 174, 20))
+>this.state : Symbol(state, Decl(react.d.ts, 174, 44))
 >this : Symbol(FetchUser, Decl(file.tsx, 8, 1))
+>state : Symbol(state, Decl(react.d.ts, 174, 44))
 
             : null;
     }

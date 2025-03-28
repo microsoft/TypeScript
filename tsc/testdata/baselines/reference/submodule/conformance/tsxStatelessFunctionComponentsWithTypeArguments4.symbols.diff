@@ -1,35 +1,29 @@
 --- old.tsxStatelessFunctionComponentsWithTypeArguments4.symbols
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments4.symbols
-@@= skipped -6, +6 lines =@@
- declare function OverloadComponent<U>(): JSX.Element;
+@@= skipped -7, +7 lines =@@
  >OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
  >U : Symbol(U, Decl(file.tsx, 2, 35))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
  >OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
 @@= skipped -11, +11 lines =@@
- >U : Symbol(U, Decl(file.tsx, 3, 35))
  >a : Symbol(a, Decl(file.tsx, 3, 50))
  >"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 3, 61))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
  >OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
 @@= skipped -12, +12 lines =@@
- >U : Symbol(U, Decl(file.tsx, 4, 37))
  >a : Symbol(a, Decl(file.tsx, 4, 53))
  >T : Symbol(T, Decl(file.tsx, 4, 35))
-->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+ >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
-+>JSX : Symbol(JSX)
-+>Element : Symbol(Element)
++>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
  
  // Error
  function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {

@@ -14,10 +14,10 @@
  class RenderString extends React.PureComponent<any, any> {
  >RenderString : Symbol(RenderString, Decl(file1.tsx, 4, 38))
 ->React.PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 180, 5))
-+>React.PureComponent : Symbol(unknown)
++>React.PureComponent : Symbol(PureComponent, Decl(react.d.ts, 180, 5))
  >React : Symbol(React, Decl(file1.tsx, 0, 6))
 ->PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 180, 5))
-+>PureComponent : Symbol(unknown)
++>PureComponent : Symbol(PureComponent, Decl(react.d.ts, 180, 5))
  
    render() {
 ->render : Symbol(RenderString.render, Decl(file1.tsx, 6, 58))

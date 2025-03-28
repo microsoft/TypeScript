@@ -5,23 +5,16 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  type Invalid1 = React.ComponentClass<any> | number;
-->Invalid1 : Invalid1
-+>Invalid1 : any
- >React : any
- 
- const X: Invalid1 = 1;
-->X : Invalid1
-+>X : any
+ >Invalid1 : Invalid1
+@@= skipped -11, +11 lines =@@
  >1 : 1
  
  <X />;
 -><X /> : JSX.Element
-->X : number
 +><X /> : any
-+>X : any
- 
+ >X : number
  
  

@@ -5,7 +5,7 @@
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
-+>React : any
++>React : typeof __React
  
  const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
 ->decorator4 : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
@@ -25,11 +25,11 @@
 ->Component : React.StatelessComponent<T>
 ->props : T & { children?: React.ReactNode; }
 ->y : string
-+>(props) => <Component {...props} y={"blah"} ></Component> : (props: any) => any
-+>props : any
++>(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: ReactNode; }) => any
++>props : T & { children?: ReactNode; }
 +><Component {...props} y={"blah"} ></Component> : any
 +>Component : StatelessComponent<T>
-+>props : any
++>props : T & { children?: ReactNode; }
 +>y : any
  >"blah" : "blah"
 ->Component : React.StatelessComponent<T>
