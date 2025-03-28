@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/es2024/transferableArrayBuffer.ts] ////
+
+=== transferableArrayBuffer.ts ===
+const buffer = new ArrayBuffer(8);
+>buffer : ArrayBuffer
+>new ArrayBuffer(8) : ArrayBuffer
+>ArrayBuffer : ArrayBufferConstructor
+>8 : 8
+
+const buffer2 = buffer.transfer();
+>buffer2 : ArrayBuffer
+>buffer.transfer() : ArrayBuffer
+>buffer.transfer : (newByteLength?: number | undefined) => ArrayBuffer
+>buffer : ArrayBuffer
+>transfer : (newByteLength?: number | undefined) => ArrayBuffer
+
+buffer.detached;
+>buffer.detached : boolean
+>buffer : ArrayBuffer
+>detached : boolean
+
+buffer2.detached;
+>buffer2.detached : boolean
+>buffer2 : ArrayBuffer
+>detached : boolean
+

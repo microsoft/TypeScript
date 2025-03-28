@@ -1886,11 +1886,45 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"AsyncIterator": {
 			{lib: "es2015", props: []string{}},
 		},
+		"ArrayBuffer": {
+			{lib: "es2024", props: []string{
+				"maxByteLength",
+				"resizable",
+				"resize",
+				"detached",
+				"transfer",
+				"transferToFixedLength",
+			}},
+		},
 		"Atomics": {
-			{lib: "es2017", props: []string{}},
+			{lib: "es2017", props: []string{
+				"add",
+				"and",
+				"compareExchange",
+				"exchange",
+				"isLockFree",
+				"load",
+				"or",
+				"store",
+				"sub",
+				"wait",
+				"notify",
+				"xor",
+			}},
+			{lib: "es2024", props: []string{
+				"waitAsync",
+			}},
 		},
 		"SharedArrayBuffer": {
-			{lib: "es2017", props: []string{}},
+			{lib: "es2017", props: []string{
+				"byteLength",
+				"slice",
+			}},
+			{lib: "es2024", props: []string{
+				"growable",
+				"maxByteLength",
+				"grow",
+			}},
 		},
 		"AsyncIterable": {
 			{lib: "es2018", props: []string{}},
@@ -1907,6 +1941,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"RegExp": {
 			{lib: "es2015", props: []string{"flags", "sticky", "unicode"}},
 			{lib: "es2018", props: []string{"dotAll"}},
+			{lib: "es2024", props: []string{"unicodeSets"}},
 		},
 		"Reflect": {
 			{lib: "es2015", props: []string{"apply", "construct", "defineProperty", "deleteProperty", "get", "getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"}},
@@ -1920,6 +1955,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2017", props: []string{"values", "entries", "getOwnPropertyDescriptors"}},
 			{lib: "es2019", props: []string{"fromEntries"}},
 			{lib: "es2022", props: []string{"hasOwn"}},
+			{lib: "es2024", props: []string{"groupBy"}},
 		},
 		"NumberConstructor": {
 			{lib: "es2015", props: []string{"isFinite", "isInteger", "isNaN", "isSafeInteger", "parseFloat", "parseInt"}},
@@ -1930,13 +1966,26 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Map": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
 		},
+		"MapConstructor": {
+			{lib: "es2024", props: []string{"groupBy"}},
+		},
 		"Set": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
+			{lib: "esnext", props: []string{
+				"union",
+				"intersection",
+				"difference",
+				"symmetricDifference",
+				"isSubsetOf",
+				"isSupersetOf",
+				"isDisjointFrom",
+			}},
 		},
 		"PromiseConstructor": {
 			{lib: "es2015", props: []string{"all", "race", "reject", "resolve"}},
 			{lib: "es2020", props: []string{"allSettled"}},
 			{lib: "es2021", props: []string{"any"}},
+			{lib: "es2024", props: []string{"withResolvers"}},
 		},
 		"Symbol": {
 			{lib: "es2015", props: []string{"for", "keyFor"}},
@@ -1955,7 +2004,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2020", props: []string{"matchAll"}},
 			{lib: "es2021", props: []string{"replaceAll"}},
 			{lib: "es2022", props: []string{"at"}},
-			{lib: "esnext", props: []string{"isWellFormed", "toWellFormed"}},
+			{lib: "es2024", props: []string{"isWellFormed", "toWellFormed"}},
 		},
 		"StringConstructor": {
 			{lib: "es2015", props: []string{"fromCodePoint", "raw"}},
@@ -1981,6 +2030,11 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"SymbolConstructor": {
 			{lib: "es2020", props: []string{"matchAll"}},
+			{lib: "esnext", props: []string{
+				"metadata",
+				"dispose",
+				"asyncDispose",
+			}},
 		},
 		"DataView": {
 			{lib: "es2020", props: []string{"setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"}},

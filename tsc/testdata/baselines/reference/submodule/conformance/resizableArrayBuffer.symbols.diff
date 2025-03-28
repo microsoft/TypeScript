@@ -1,0 +1,12 @@
+--- old.resizableArrayBuffer.symbols
++++ new.resizableArrayBuffer.symbols
+@@= skipped -6, +6 lines =@@
+ >maxByteLength : Symbol(maxByteLength, Decl(resizableArrayBuffer.ts, 0, 35))
+ 
+ buffer.resizable;
+->buffer.resizable : Symbol(ArrayBuffer.resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>buffer.resizable : Symbol(resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ >buffer : Symbol(buffer, Decl(resizableArrayBuffer.ts, 0, 5))
+->resizable : Symbol(ArrayBuffer.resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>resizable : Symbol(resizable, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ 

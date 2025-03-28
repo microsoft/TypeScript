@@ -1,0 +1,10 @@
+--- old.callChainWithSuper(target=es2024).js
++++ new.callChainWithSuper(target=es2024).js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [callChainWithSuper.js]
+-"use strict";
+ // GH#34952
+ class Base {
+     method() { }

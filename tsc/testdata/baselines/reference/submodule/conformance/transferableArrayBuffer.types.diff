@@ -1,0 +1,14 @@
+--- old.transferableArrayBuffer.types
++++ new.transferableArrayBuffer.types
+@@= skipped -9, +9 lines =@@
+ const buffer2 = buffer.transfer();
+ >buffer2 : ArrayBuffer
+ >buffer.transfer() : ArrayBuffer
+->buffer.transfer : (newByteLength?: number) => ArrayBuffer
++>buffer.transfer : (newByteLength?: number | undefined) => ArrayBuffer
+ >buffer : ArrayBuffer
+->transfer : (newByteLength?: number) => ArrayBuffer
++>transfer : (newByteLength?: number | undefined) => ArrayBuffer
+ 
+ buffer.detached;
+ >buffer.detached : boolean

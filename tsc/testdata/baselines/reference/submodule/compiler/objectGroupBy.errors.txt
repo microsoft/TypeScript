@@ -13,5 +13,5 @@ objectGroupBy.ts(9,49): error TS2322: Type 'Employee' is not assignable to type 
     const byNonKey = Object.groupBy(employees, x => x);
                                                     ~
 !!! error TS2322: Type 'Employee' is not assignable to type 'PropertyKey'.
-!!! related TS6502 lib.esnext.object.d.ts:--:--: The expected type comes from the return type of this signature.
+!!! related TS6502 lib.es2024.object.d.ts:--:--: The expected type comes from the return type of this signature.
     

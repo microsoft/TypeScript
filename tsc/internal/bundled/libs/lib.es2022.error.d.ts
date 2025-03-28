@@ -16,6 +16,8 @@ and limitations under the License.
 
 /// <reference no-default-lib="true"/>
 
+/// <reference lib="es2021.promise" />
+
 interface ErrorOptions {
     cause?: unknown;
 }

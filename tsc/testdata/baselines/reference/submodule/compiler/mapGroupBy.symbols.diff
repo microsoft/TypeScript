@@ -4,21 +4,21 @@
  === mapGroupBy.ts ===
  const basic = Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
  >basic : Symbol(basic, Decl(mapGroupBy.ts, 0, 5))
-->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>Map.groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>Map.groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >x : Symbol(x, Decl(mapGroupBy.ts, 0, 36))
  >x : Symbol(x, Decl(mapGroupBy.ts, 0, 36))
  
  const chars = Map.groupBy('a string', c => c);
  >chars : Symbol(chars, Decl(mapGroupBy.ts, 2, 5))
-->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>Map.groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>Map.groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >c : Symbol(c, Decl(mapGroupBy.ts, 2, 37))
  >c : Symbol(c, Decl(mapGroupBy.ts, 2, 37))
  
@@ -26,11 +26,11 @@
  
  const byRole = Map.groupBy(employees, x => x.role);
  >byRole : Symbol(byRole, Decl(mapGroupBy.ts, 6, 5))
-->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>Map.groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>Map.groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >employees : Symbol(employees, Decl(mapGroupBy.ts, 5, 5))
  >x : Symbol(x, Decl(mapGroupBy.ts, 6, 37))
  >x.role : Symbol(role, Decl(mapGroupBy.ts, 4, 31))
@@ -38,11 +38,11 @@
  
  const byNonKey = Map.groupBy(employees, x => x);
  >byNonKey : Symbol(byNonKey, Decl(mapGroupBy.ts, 8, 5))
-->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>Map.groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>Map.groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.esnext.collection.d.ts, --, --))
-+>groupBy : Symbol(groupBy, Decl(lib.esnext.collection.d.ts, --, --))
+->groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
++>groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >employees : Symbol(employees, Decl(mapGroupBy.ts, 5, 5))
  >x : Symbol(x, Decl(mapGroupBy.ts, 8, 39))
  >x : Symbol(x, Decl(mapGroupBy.ts, 8, 39))

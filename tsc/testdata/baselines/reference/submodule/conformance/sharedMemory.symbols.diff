@@ -1,0 +1,60 @@
+--- old.sharedMemory.symbols
++++ new.sharedMemory.symbols
+@@= skipped -3, +3 lines =@@
+ const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
+ >sab : Symbol(sab, Decl(sharedMemory.ts, 0, 5))
+ >SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+->Int32Array.BYTES_PER_ELEMENT : Symbol(Int32ArrayConstructor.BYTES_PER_ELEMENT, Decl(lib.es5.d.ts, --, --))
++>Int32Array.BYTES_PER_ELEMENT : Symbol(BYTES_PER_ELEMENT, Decl(lib.es5.d.ts, --, --))
+ >Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+->BYTES_PER_ELEMENT : Symbol(Int32ArrayConstructor.BYTES_PER_ELEMENT, Decl(lib.es5.d.ts, --, --))
++>BYTES_PER_ELEMENT : Symbol(BYTES_PER_ELEMENT, Decl(lib.es5.d.ts, --, --))
+ 
+ const int32 = new Int32Array(sab);
+ >int32 : Symbol(int32, Decl(sharedMemory.ts, 1, 5))
+@@= skipped -12, +12 lines =@@
+ const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);
+ >sab64 : Symbol(sab64, Decl(sharedMemory.ts, 2, 5))
+ >SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+->BigInt64Array.BYTES_PER_ELEMENT : Symbol(BigInt64ArrayConstructor.BYTES_PER_ELEMENT, Decl(lib.es2020.bigint.d.ts, --, --))
++>BigInt64Array.BYTES_PER_ELEMENT : Symbol(BYTES_PER_ELEMENT, Decl(lib.es2020.bigint.d.ts, --, --))
+ >BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2022.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+->BYTES_PER_ELEMENT : Symbol(BigInt64ArrayConstructor.BYTES_PER_ELEMENT, Decl(lib.es2020.bigint.d.ts, --, --))
++>BYTES_PER_ELEMENT : Symbol(BYTES_PER_ELEMENT, Decl(lib.es2020.bigint.d.ts, --, --))
+ 
+ const int64 = new BigInt64Array(sab64);
+ >int64 : Symbol(int64, Decl(sharedMemory.ts, 3, 5))
+@@= skipped -11, +11 lines =@@
+ 
+ const waitValue = Atomics.wait(int32, 0, 0);
+ >waitValue : Symbol(waitValue, Decl(sharedMemory.ts, 4, 5))
+->Atomics.wait : Symbol(Atomics.wait, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --))
++>Atomics.wait : Symbol(wait, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --))
+ >Atomics : Symbol(Atomics, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+->wait : Symbol(Atomics.wait, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --))
++>wait : Symbol(wait, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --))
+ >int32 : Symbol(int32, Decl(sharedMemory.ts, 1, 5))
+ 
+ const { async, value } = Atomics.waitAsync(int32, 0, 0);
+ >async : Symbol(async, Decl(sharedMemory.ts, 5, 7))
+ >value : Symbol(value, Decl(sharedMemory.ts, 5, 14))
+->Atomics.waitAsync : Symbol(Atomics.waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
++>Atomics.waitAsync : Symbol(waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+ >Atomics : Symbol(Atomics, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+->waitAsync : Symbol(Atomics.waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
++>waitAsync : Symbol(waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+ >int32 : Symbol(int32, Decl(sharedMemory.ts, 1, 5))
+ 
+ const { async: async64, value: value64 } = Atomics.waitAsync(int64, 0, BigInt(0));
+@@= skipped -18, +18 lines =@@
+ >async64 : Symbol(async64, Decl(sharedMemory.ts, 6, 7))
+ >value : Symbol(value, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+ >value64 : Symbol(value64, Decl(sharedMemory.ts, 6, 23))
+->Atomics.waitAsync : Symbol(Atomics.waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
++>Atomics.waitAsync : Symbol(waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+ >Atomics : Symbol(Atomics, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2020.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+->waitAsync : Symbol(Atomics.waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
++>waitAsync : Symbol(waitAsync, Decl(lib.es2024.sharedmemory.d.ts, --, --), Decl(lib.es2024.sharedmemory.d.ts, --, --))
+ >int64 : Symbol(int64, Decl(sharedMemory.ts, 3, 5))
+ >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+ 

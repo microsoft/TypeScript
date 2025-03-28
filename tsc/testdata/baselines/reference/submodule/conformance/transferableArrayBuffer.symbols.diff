@@ -1,0 +1,26 @@
+--- old.transferableArrayBuffer.symbols
++++ new.transferableArrayBuffer.symbols
+@@= skipped -6, +6 lines =@@
+ 
+ const buffer2 = buffer.transfer();
+ >buffer2 : Symbol(buffer2, Decl(transferableArrayBuffer.ts, 1, 5))
+->buffer.transfer : Symbol(ArrayBuffer.transfer, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>buffer.transfer : Symbol(transfer, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ >buffer : Symbol(buffer, Decl(transferableArrayBuffer.ts, 0, 5))
+->transfer : Symbol(ArrayBuffer.transfer, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>transfer : Symbol(transfer, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ 
+ buffer.detached;
+->buffer.detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>buffer.detached : Symbol(detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ >buffer : Symbol(buffer, Decl(transferableArrayBuffer.ts, 0, 5))
+->detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>detached : Symbol(detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ 
+ buffer2.detached;
+->buffer2.detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>buffer2.detached : Symbol(detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ >buffer2 : Symbol(buffer2, Decl(transferableArrayBuffer.ts, 1, 5))
+->detached : Symbol(ArrayBuffer.detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
++>detached : Symbol(detached, Decl(lib.es2024.arraybuffer.d.ts, --, --))
+ 

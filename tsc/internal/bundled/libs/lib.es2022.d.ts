@@ -21,6 +21,5 @@ and limitations under the License.
 /// <reference lib="es2022.error" />
 /// <reference lib="es2022.intl" />
 /// <reference lib="es2022.object" />
-/// <reference lib="es2022.sharedmemory" />
-/// <reference lib="es2022.string" />
 /// <reference lib="es2022.regexp" />
+/// <reference lib="es2022.string" />

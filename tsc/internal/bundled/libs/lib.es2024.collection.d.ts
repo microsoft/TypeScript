@@ -16,11 +16,14 @@ and limitations under the License.
 
 /// <reference no-default-lib="true"/>
 
-/// <reference lib="es2016" />
-/// <reference lib="es2017.arraybuffer" />
-/// <reference lib="es2017.date" />
-/// <reference lib="es2017.intl" />
-/// <reference lib="es2017.object" />
-/// <reference lib="es2017.sharedmemory" />
-/// <reference lib="es2017.string" />
-/// <reference lib="es2017.typedarrays" />
+interface MapConstructor {
+    /**
+     * Groups members of an iterable according to the return value of the passed callback.
+     * @param items An iterable.
+     * @param keySelector A callback which will be invoked for each item in items.
+     */
+    groupBy<K, T>(
+        items: Iterable<T>,
+        keySelector: (item: T, index: number) => K,
+    ): Map<K, T[]>;
+}

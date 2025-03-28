@@ -400,6 +400,7 @@ const (
 	ScriptTargetES2021 ScriptTarget = 8
 	ScriptTargetES2022 ScriptTarget = 9
 	ScriptTargetES2023 ScriptTarget = 10
+	ScriptTargetES2024 ScriptTarget = 11
 	ScriptTargetESNext ScriptTarget = 99
 	ScriptTargetJSON   ScriptTarget = 100
 	ScriptTargetLatest ScriptTarget = ScriptTargetESNext
