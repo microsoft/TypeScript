@@ -106,10 +106,6 @@ extends:
                     * [fixed issues query for Typescript $(TAG_NAME)](https://github.com/microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue+milestone%3A%22TypeScript+3.3%22+is%3Aclosed+).
                     Downloads are available on:
                     * [npm](https://www.npmjs.com/package/typescript)
-                    * [Visual Studio 2017]() ([Select new version in project options](https://github.com/microsoft/TypeScript/wiki/Updating-TypeScript-in-Visual-Studio-2017))
-                    * [NuGet package](https://www.nuget.org/packages/Microsoft.TypeScript.MSBuild)
-                    Special thanks to all our contributors in this release:
-                    * [Empty list]
                   assets: $(System.ArtifactsDirectory)/**/typescript-*.tgz
                   isDraft: true
                   addChangeLog: false
