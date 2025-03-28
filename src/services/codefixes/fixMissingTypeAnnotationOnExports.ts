@@ -1102,7 +1102,7 @@ function withContext<T>(
         setEmitFlags(node, EmitFlags.NoComments);
         forEachChild(node, stripCommentsFromNode);
     }
-    
+
     function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
         const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
