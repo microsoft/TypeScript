@@ -266,7 +266,7 @@ type Q = HandleThunkActionCreator<typeof simpleAction>;
 const Test1 = connect(
 >Test1 : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
 >connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
->connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (...args: [param1: number, param2: string]) => Promise<string>; }, {}>
+>connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
 >connect : <no_state, TDispatchProps, TOwnProps>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
 
   null,

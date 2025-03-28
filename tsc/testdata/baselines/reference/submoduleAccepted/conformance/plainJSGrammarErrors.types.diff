@@ -20,13 +20,7 @@
  
      static m() {
  >m : () => void
-@@= skipped -10, +10 lines =@@
- 
- // rest parameters
- function restMustBeLast(...x, y) {
-->restMustBeLast : (...x: any[], y: any) => void
-+>restMustBeLast : (x: any[], y: any) => void
- >x : any[]
+@@= skipped -15, +15 lines =@@
  >y : any
  }
  function restCantHaveInitialiser(...x = [1,2,3]) {
@@ -35,7 +29,7 @@
  >x : number[]
  >[1,2,3] : number[]
  >1 : 1
-@@= skipped -99, +99 lines =@@
+@@= skipped -94, +94 lines =@@
  >`length` : "length"
  
  const o = {

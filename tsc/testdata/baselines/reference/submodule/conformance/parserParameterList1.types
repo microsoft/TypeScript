@@ -5,7 +5,7 @@ class C {
 >C : C
 
    F(...A, B) { }
->F : (A: any[], B: any) => void
+>F : (...A: any[], B: any) => void
 >A : any[]
 >B : any
 }

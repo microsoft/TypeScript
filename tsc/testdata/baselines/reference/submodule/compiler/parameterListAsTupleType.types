@@ -29,7 +29,7 @@ const a: Xps = ['should-not-work']; // works, but shouldn't
 >'should-not-work' : "should-not-work"
 
 function t(...args: Xps) {} // should work
->t : (...args: [a: number]) => void
+>t : (a: number) => void
 >args : [a: number]
 
 class C {

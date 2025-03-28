@@ -83,28 +83,7 @@
  >function (foo = 42) { return foo } : (foo?: number | undefined) => number
  >foo : number | undefined
  >42 : 42
-@@= skipped -57, +57 lines =@@
- 
- const f8: () => any = (...x) => 0;  // []
- >f8 : () => any
-->(...x) => 0 : () => number
-+>(...x) => 0 : (...x: []) => number
- >x : []
- >0 : 0
- 
-@@= skipped -85, +85 lines =@@
- >0 : 0
- 
- g6((...x) => 0);   // []
-->g6((...x) => 0) : () => number
-+>g6((...x) => 0) : (...x: []) => number
- >g6 : <T extends () => any>(x: T) => T
-->(...x) => 0 : () => number
-+>(...x) => 0 : (...x: []) => number
- >x : []
- >0 : 0
- 
-@@= skipped -14, +14 lines =@@
+@@= skipped -156, +156 lines =@@
  >input : T
  
  function getFoo ({ foo = 42 }) {

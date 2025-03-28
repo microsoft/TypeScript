@@ -2,7 +2,7 @@
 
 === spreadParameterTupleType.ts ===
 function f1() {
->f1 : () => (...args: [s: string, s: string]) => void
+>f1 : () => (s_1: string, s_2: string) => void
 
     type A = [s: string];
 >A : A
@@ -11,13 +11,13 @@ function f1() {
 >C : [s: string, s: string]
 
     return function fn(...args: C) { }
->function fn(...args: C) { } : (...args: [s: string, s: string]) => void
->fn : (...args: [s: string, s: string]) => void
+>function fn(...args: C) { } : (s_1: string, s_2: string) => void
+>fn : (s_1: string, s_2: string) => void
 >args : [s: string, s: string]
 }
 
 function f2() {
->f2 : () => (...args: [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]) => void
+>f2 : () => (a_1: string, a_2: string, b_1: string, a_3: string, b_2: string, b_3: string, a_4: string, c: string) => void
 
     type A = [a: string];
 >A : A
@@ -32,8 +32,8 @@ function f2() {
 >D : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]
 
     return function fn(...args: D) { }
->function fn(...args: D) { } : (...args: [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]) => void
->fn : (...args: [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]) => void
+>function fn(...args: D) { } : (a_1: string, a_2: string, b_1: string, a_3: string, b_2: string, b_3: string, a_4: string, c: string) => void
+>fn : (a_1: string, a_2: string, b_1: string, a_3: string, b_2: string, b_3: string, a_4: string, c: string) => void
 >args : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]
 }
 

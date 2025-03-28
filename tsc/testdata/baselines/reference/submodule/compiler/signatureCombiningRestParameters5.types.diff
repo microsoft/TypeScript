@@ -1,29 +1,6 @@
 --- old.signatureCombiningRestParameters5.types
 +++ new.signatureCombiningRestParameters5.types
-@@= skipped -1, +1 lines =@@
- 
- === signatureCombiningRestParameters5.ts ===
- declare const test1:
-->test1 : ((a: string | number, b: number | boolean) => void) | ((c: number | boolean, d: string | boolean) => void)
-+>test1 : ((...args: [a: string | number, b: number | boolean]) => void) | ((...args: [c: number | boolean, d: string | boolean]) => void)
- 
-   | ((...args: [a: string | number, b: number | boolean]) => void)
- >args : [a: string | number, b: number | boolean]
-@@= skipped -10, +10 lines =@@
- 
- test1(42, true);
- >test1(42, true) : void
-->test1 : ((a: string | number, b: number | boolean) => void) | ((c: number | boolean, d: string | boolean) => void)
-+>test1 : ((...args: [a: string | number, b: number | boolean]) => void) | ((...args: [c: number | boolean, d: string | boolean]) => void)
- >42 : 42
- >true : true
- 
- test1(42, [true]); // error
- >test1(42, [true]) : void
-->test1 : ((a: string | number, b: number | boolean) => void) | ((c: number | boolean, d: string | boolean) => void)
-+>test1 : ((...args: [a: string | number, b: number | boolean]) => void) | ((...args: [c: number | boolean, d: string | boolean]) => void)
- >42 : 42
- >[true] : boolean[]
+@@= skipped -23, +23 lines =@@
  >true : true
  
  declare function test2<
@@ -32,7 +9,7 @@
  
    A extends readonly unknown[],
    B extends readonly unknown[],
-@@= skipped -26, +26 lines =@@
+@@= skipped -14, +14 lines =@@
  >args : B
  
    e: (arg: typeof c | typeof d) => void,
@@ -50,26 +27,3 @@
  
    (a: number | boolean, b: string | number) => {},
  >(a: number | boolean, b: string | number) => {} : (a: number | boolean, b: string | number) => void
-@@= skipped -13, +13 lines =@@
- >d : number | boolean
- 
-   (cb) => {
-->(cb) => {    cb(true, 42);    cb(true, [42]); // error  } : (cb: ((a: number | boolean, b: string | number) => void) | ((c: string | boolean, d: number | boolean) => void)) => void
-->cb : ((a: number | boolean, b: string | number) => void) | ((c: string | boolean, d: number | boolean) => void)
-+>(cb) => {    cb(true, 42);    cb(true, [42]); // error  } : (cb: ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)) => void
-+>cb : ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)
- 
-     cb(true, 42);
- >cb(true, 42) : void
-->cb : ((a: number | boolean, b: string | number) => void) | ((c: string | boolean, d: number | boolean) => void)
-+>cb : ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)
- >true : true
- >42 : 42
- 
-     cb(true, [42]); // error
- >cb(true, [42]) : void
-->cb : ((a: number | boolean, b: string | number) => void) | ((c: string | boolean, d: number | boolean) => void)
-+>cb : ((...args: [a: number | boolean, b: string | number]) => void) | ((...args: [c: string | boolean, d: number | boolean]) => void)
- >true : true
- >[42] : number[]
- >42 : 42

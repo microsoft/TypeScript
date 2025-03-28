@@ -14,8 +14,8 @@ var f = function foo(...x: number) { }
 >x : number
 
 var f2 = (...x: Date, ...y: boolean) => { }
->f2 : (x?: Date, ...y: boolean) => void
->(...x: Date, ...y: boolean) => { } : (x?: Date, ...y: boolean) => void
+>f2 : (...x: Date, ...y: boolean) => void
+>(...x: Date, ...y: boolean) => { } : (...x: Date, ...y: boolean) => void
 >x : Date
 >y : boolean
 
@@ -32,7 +32,7 @@ interface I {
 >x : string
 
     foo(...x: number, ...y: number);
->foo : (x?: number, ...y: number) => any
+>foo : (...x: number, ...y: number) => any
 >x : number
 >y : number
 }
@@ -49,17 +49,17 @@ var a: {
 }
 
 var b = {
->b : { foo: (...x: string) => void; a: (x?: number, ...y: Date) => void; b: (...x: string) => void; }
->{    foo(...x: string) { },    a: function foo(...x: number, ...y: Date) { },    b: (...x: string) => { }} : { foo: (...x: string) => void; a: (x?: number, ...y: Date) => void; b: (...x: string) => void; }
+>b : { foo: (...x: string) => void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
+>{    foo(...x: string) { },    a: function foo(...x: number, ...y: Date) { },    b: (...x: string) => { }} : { foo: (...x: string) => void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
 
     foo(...x: string) { },
 >foo : (...x: string) => void
 >x : string
 
     a: function foo(...x: number, ...y: Date) { },
->a : (x?: number, ...y: Date) => void
->function foo(...x: number, ...y: Date) { } : (x?: number, ...y: Date) => void
->foo : (x?: number, ...y: Date) => void
+>a : (...x: number, ...y: Date) => void
+>function foo(...x: number, ...y: Date) { } : (...x: number, ...y: Date) => void
+>foo : (...x: number, ...y: Date) => void
 >x : number
 >y : Date
 

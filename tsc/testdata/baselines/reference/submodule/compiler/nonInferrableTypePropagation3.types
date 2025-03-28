@@ -21,8 +21,8 @@ const make = factory<{id: string, age: number}[]>();
 >age : number
 
 const usersOverAge = make((age: number) => data => {
->usersOverAge : (...args: [age: number]) => { id: string; age: number; }[]
->make((age: number) => data => {    return data.filter(user => user.age >= age);}) : (...args: [age: number]) => { id: string; age: number; }[]
+>usersOverAge : (age: number) => { id: string; age: number; }[]
+>make((age: number) => data => {    return data.filter(user => user.age >= age);}) : (age: number) => { id: string; age: number; }[]
 >make : <Args extends any[], R>(callback: Callback<Args, { id: string; age: number; }[], R>) => (...args: Args) => R
 >(age: number) => data => {    return data.filter(user => user.age >= age);} : (age: number) => (data: { id: string; age: number; }[]) => { id: string; age: number; }[]
 >age : number

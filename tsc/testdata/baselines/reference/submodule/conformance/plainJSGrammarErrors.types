@@ -206,7 +206,7 @@ const noStaticLiteralMethods = {
 
 // rest parameters
 function restMustBeLast(...x, y) {
->restMustBeLast : (x: any[], y: any) => void
+>restMustBeLast : (...x: any[], y: any) => void
 >x : any[]
 >y : any
 }

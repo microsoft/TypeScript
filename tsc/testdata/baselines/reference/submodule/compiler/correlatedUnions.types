@@ -491,7 +491,7 @@ function ff1() {
 >Keys : keyof ArgMap
 
     const funs: { [P in Keys]: (...args: ArgMap[P]) => void } = {
->funs : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }
+>funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
 >args : ArgMap[P]
 >{        sum: (a, b) => a + b,        concat: (a, b, c) => a + b + c    } : { sum: (a: number, b: number) => number; concat: (a: string, b: string, c: string) => string; }
 
@@ -522,14 +522,14 @@ function ff1() {
 >args : ArgMap[K]
 
         const fn = funs[funKey];
->fn : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }[K]
->funs[funKey] : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }[K]
->funs : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }
+>fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
+>funs[funKey] : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
+>funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
 >funKey : K
 
         fn(...args);
 >fn(...args) : void
->fn : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }[K]
+>fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
 >...args : string | number
 >args : ArgMap[K]
     }

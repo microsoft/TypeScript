@@ -56,13 +56,11 @@
  
  type Q = HandleThunkActionCreator<typeof simpleAction>;
  >Q : (payload: boolean) => { type: string; payload: boolean; }
-@@= skipped -12, +12 lines =@@
- const Test1 = connect(
+@@= skipped -13, +13 lines =@@
  >Test1 : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
  >connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
-->connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
+ >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
 ->connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
-+>connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (...args: [param1: number, param2: string]) => Promise<string>; }, {}>
 +>connect : <no_state, TDispatchProps, TOwnProps>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
  
    null,

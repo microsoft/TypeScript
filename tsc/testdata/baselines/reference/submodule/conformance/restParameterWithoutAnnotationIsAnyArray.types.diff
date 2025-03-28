@@ -1,24 +1,6 @@
 --- old.restParameterWithoutAnnotationIsAnyArray.types
 +++ new.restParameterWithoutAnnotationIsAnyArray.types
-@@= skipped -13, +13 lines =@@
- >x : any[]
- 
- var f2 = (...x, ...y) => { }
-->f2 : (...x: any[], ...y: any[]) => void
-->(...x, ...y) => { } : (...x: any[], ...y: any[]) => void
-+>f2 : (x?: any[], ...y: any[]) => void
-+>(...x, ...y) => { } : (x?: any[], ...y: any[]) => void
- >x : any[]
- >y : any[]
- 
-@@= skipped -18, +18 lines =@@
- >x : any[]
- 
-     foo(...x, ...y);
-->foo : (...x: any[], ...y: any[]) => any
-+>foo : (x?: any[], ...y: any[]) => any
- >x : any[]
- >y : any[]
+@@= skipped -37, +37 lines =@@
  }
  
  var a: {
@@ -27,26 +9,14 @@
  
      (...x);
  >x : any[]
-@@= skipped -17, +17 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  var b = {
 ->b : { foo(...x: any[]): void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
 ->{    foo(...x) { },    a: function foo(...x, ...y) { },    b: (...x) => { }} : { foo(...x: any[]): void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
-+>b : { foo: (...x: any[]) => void; a: (x?: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
-+>{    foo(...x) { },    a: function foo(...x, ...y) { },    b: (...x) => { }} : { foo: (...x: any[]) => void; a: (x?: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
++>b : { foo: (...x: any[]) => void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
++>{    foo(...x) { },    a: function foo(...x, ...y) { },    b: (...x) => { }} : { foo: (...x: any[]) => void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
  
      foo(...x) { },
  >foo : (...x: any[]) => void
- >x : any[]
- 
-     a: function foo(...x, ...y) { },
-->a : (...x: any[], ...y: any[]) => void
-->function foo(...x, ...y) { } : (...x: any[], ...y: any[]) => void
-->foo : (...x: any[], ...y: any[]) => void
-+>a : (x?: any[], ...y: any[]) => void
-+>function foo(...x, ...y) { } : (x?: any[], ...y: any[]) => void
-+>foo : (x?: any[], ...y: any[]) => void
- >x : any[]
- >y : any[]
- 

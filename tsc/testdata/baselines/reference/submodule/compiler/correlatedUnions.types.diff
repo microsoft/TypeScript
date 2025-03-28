@@ -143,9 +143,8 @@
 +>Keys : keyof ArgMap
  
      const funs: { [P in Keys]: (...args: ArgMap[P]) => void } = {
-->funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
+ >funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
 ->args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[P]
-+>funs : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }
 +>args : ArgMap[P]
  >{        sum: (a, b) => a + b,        concat: (a, b, c) => a + b + c    } : { sum: (a: number, b: number) => number; concat: (a: string, b: string, c: string) => string; }
  
@@ -161,18 +160,10 @@
 +>args : ArgMap[K]
  
          const fn = funs[funKey];
-->fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
-->funs[funKey] : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
-->funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
-+>fn : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }[K]
-+>funs[funKey] : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }[K]
-+>funs : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }
- >funKey : K
- 
-         fn(...args);
+ >fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
+@@= skipped -14, +14 lines =@@
  >fn(...args) : void
-->fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
-+>fn : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }[K]
+ >fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
  >...args : string | number
 ->args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]
 +>args : ArgMap[K]
@@ -185,7 +176,7 @@
  >'sum' : "sum"
  >1 : 1
  >2 : 2
-@@= skipped -27, +27 lines =@@
+@@= skipped -13, +13 lines =@@
      const x2 = apply('concat', 'str1', 'str2', 'str3' )
  >x2 : void
  >apply('concat', 'str1', 'str2', 'str3' ) : void

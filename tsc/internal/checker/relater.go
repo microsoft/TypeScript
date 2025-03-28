@@ -1927,54 +1927,56 @@ func (c *Checker) getTupleElementLabel(elementInfo TupleElementInfo, restSymbol 
 }
 
 func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index int, elementFlags ElementFlags) string {
-	switch node.Name().Kind {
-	case ast.KindIdentifier:
-		name := node.Name().Text()
-		if hasDotDotDotToken(node) {
+	if node.Name() != nil {
+		switch node.Name().Kind {
+		case ast.KindIdentifier:
+			name := node.Name().Text()
+			if hasDotDotDotToken(node) {
+				// given
+				//   (...[x, y, ...z]: [number, number, ...number[]]) => ...
+				// this produces
+				//   (x: number, y: number, ...z: number[]) => ...
+				// which preserves rest elements of 'z'
+
+				// given
+				//   (...[x, y, ...z]: [number, number, ...[...number[], number]]) => ...
+				// this produces
+				//   (x: number, y: number, ...z: number[], z_1: number) => ...
+				// which preserves rest elements of z but gives distinct numbers to fixed elements of 'z'
+				if elementFlags&ElementFlagsVariable != 0 {
+					return name
+				}
+				return name + "_" + strconv.Itoa(index)
+			}
 			// given
-			//   (...[x, y, ...z]: [number, number, ...number[]]) => ...
+			//   (...[x]: [number]) => ...
 			// this produces
-			//   (x: number, y: number, ...z: number[]) => ...
-			// which preserves rest elements of 'z'
+			//   (x: number) => ...
+			// which preserves fixed elements of 'x'
 
 			// given
-			//   (...[x, y, ...z]: [number, number, ...[...number[], number]]) => ...
+			//   (...[x]: ...number[]) => ...
 			// this produces
-			//   (x: number, y: number, ...z: number[], z_1: number) => ...
-			// which preserves rest elements of z but gives distinct numbers to fixed elements of 'z'
-			if elementFlags&ElementFlagsVariable != 0 {
+			//   (x_0: number) => ...
+			// which which numbers fixed elements of 'x' whose tuple element type is variable
+			if elementFlags&ElementFlagsFixed != 0 {
 				return name
 			}
-			return name + "_" + strconv.Itoa(index)
-		}
-		// given
-		//   (...[x]: [number]) => ...
-		// this produces
-		//   (x: number) => ...
-		// which preserves fixed elements of 'x'
-
-		// given
-		//   (...[x]: ...number[]) => ...
-		// this produces
-		//   (x_0: number) => ...
-		// which which numbers fixed elements of 'x' whose tuple element type is variable
-		if elementFlags&ElementFlagsFixed != 0 {
-			return name
-		}
-		return name + "_n"
-	case ast.KindArrayBindingPattern:
-		if hasDotDotDotToken(node) {
-			elements := node.Name().AsBindingPattern().Elements.Nodes
-			lastElement := core.LastOrNil(elements)
-			lastElementIsBindingElementRest := lastElement != nil && ast.IsBindingElement(lastElement) && hasDotDotDotToken(lastElement)
-			elementCount := len(elements) - core.IfElse(lastElementIsBindingElementRest, 1, 0)
-			if index < elementCount {
-				element := elements[index]
-				if ast.IsBindingElement(element) {
-					return c.getTupleElementLabelFromBindingElement(element, index, elementFlags)
+			return name + "_n"
+		case ast.KindArrayBindingPattern:
+			if hasDotDotDotToken(node) {
+				elements := node.Name().AsBindingPattern().Elements.Nodes
+				lastElement := core.LastOrNil(elements)
+				lastElementIsBindingElementRest := lastElement != nil && ast.IsBindingElement(lastElement) && hasDotDotDotToken(lastElement)
+				elementCount := len(elements) - core.IfElse(lastElementIsBindingElementRest, 1, 0)
+				if index < elementCount {
+					element := elements[index]
+					if ast.IsBindingElement(element) {
+						return c.getTupleElementLabelFromBindingElement(element, index, elementFlags)
+					}
+				} else if lastElementIsBindingElementRest {
+					return c.getTupleElementLabelFromBindingElement(lastElement, index-elementCount, elementFlags)
 				}
-			} else if lastElementIsBindingElementRest {
-				return c.getTupleElementLabelFromBindingElement(lastElement, index-elementCount, elementFlags)
 			}
 		}
 	}

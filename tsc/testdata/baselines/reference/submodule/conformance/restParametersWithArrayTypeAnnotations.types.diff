@@ -1,24 +1,6 @@
 --- old.restParametersWithArrayTypeAnnotations.types
 +++ new.restParametersWithArrayTypeAnnotations.types
-@@= skipped -13, +13 lines =@@
- >x : number[]
- 
- var f2 = (...x: number[], ...y: number[]) => { }
-->f2 : (...x: number[], ...y: number[]) => void
-->(...x: number[], ...y: number[]) => { } : (...x: number[], ...y: number[]) => void
-+>f2 : (x?: number[], ...y: number[]) => void
-+>(...x: number[], ...y: number[]) => { } : (x?: number[], ...y: number[]) => void
- >x : number[]
- >y : number[]
- 
-@@= skipped -18, +18 lines =@@
- >x : number[]
- 
-     foo(...x: number[], ...y: number[]);
-->foo : (...x: number[], ...y: number[]) => any
-+>foo : (x?: number[], ...y: number[]) => any
- >x : number[]
- >y : number[]
+@@= skipped -37, +37 lines =@@
  }
  
  var a: {
@@ -27,29 +9,17 @@
  
      (...x: number[]);
  >x : number[]
-@@= skipped -17, +17 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  var b = {
 ->b : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
 ->{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
-+>b : { foo: (...x: number[]) => void; a: (x?: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
-+>{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo: (...x: number[]) => void; a: (x?: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
++>b : { foo: (...x: number[]) => void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
++>{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo: (...x: number[]) => void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
  
      foo(...x: number[]) { },
  >foo : (...x: number[]) => void
- >x : number[]
- 
-     a: function foo(...x: number[], ...y: number[]) { },
-->a : (...x: number[], ...y: number[]) => void
-->function foo(...x: number[], ...y: number[]) { } : (...x: number[], ...y: number[]) => void
-->foo : (...x: number[], ...y: number[]) => void
-+>a : (x?: number[], ...y: number[]) => void
-+>function foo(...x: number[], ...y: number[]) { } : (x?: number[], ...y: number[]) => void
-+>foo : (x?: number[], ...y: number[]) => void
- >x : number[]
- >y : number[]
- 
 @@= skipped -24, +24 lines =@@
  
  
@@ -70,8 +40,8 @@
  var f4 = (...x: Array<string>, ...y: Array<string>) => { }
 ->f4 : (...x: Array<string>, ...y: Array<string>) => void
 ->(...x: Array<string>, ...y: Array<string>) => { } : (...x: Array<string>, ...y: Array<string>) => void
-+>f4 : (x?: string[], ...y: string[]) => void
-+>(...x: Array<string>, ...y: Array<string>) => { } : (x?: string[], ...y: string[]) => void
++>f4 : (...x: string[], ...y: string[]) => void
++>(...x: Array<string>, ...y: Array<string>) => { } : (...x: string[], ...y: string[]) => void
  >x : string[]
  >y : string[]
  
@@ -89,7 +59,7 @@
  
      foo(...x: Array<string>, ...y: Array<string>);
 ->foo : (...x: Array<string>, ...y: Array<string>) => any
-+>foo : (x?: string[], ...y: string[]) => any
++>foo : (...x: string[], ...y: string[]) => any
  >x : string[]
  >y : string[]
  }
@@ -110,8 +80,8 @@
  var b2 = {
 ->b2 : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
 ->{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
-+>b2 : { foo: (...x: string[]) => void; a: (x?: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
-+>{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo: (...x: string[]) => void; a: (x?: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
++>b2 : { foo: (...x: string[]) => void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
++>{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo: (...x: string[]) => void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
  
      foo(...x: Array<string>) { },
 ->foo : (...x: Array<string>) => void
@@ -122,9 +92,9 @@
 ->a : (...x: Array<string>, ...y: Array<string>) => void
 ->function foo(...x: Array<string>, ...y: Array<string>) { } : (...x: Array<string>, ...y: Array<string>) => void
 ->foo : (...x: Array<string>, ...y: Array<string>) => void
-+>a : (x?: string[], ...y: string[]) => void
-+>function foo(...x: Array<string>, ...y: Array<string>) { } : (x?: string[], ...y: string[]) => void
-+>foo : (x?: string[], ...y: string[]) => void
++>a : (...x: string[], ...y: string[]) => void
++>function foo(...x: Array<string>, ...y: Array<string>) { } : (...x: string[], ...y: string[]) => void
++>foo : (...x: string[], ...y: string[]) => void
  >x : string[]
  >y : string[]
  

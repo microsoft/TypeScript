@@ -19,11 +19,11 @@ let originalLog: typeof console.log;
 >log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
 
 console.log = (...args) => {
->console.log = (...args) => {  logs.push(...args);} : (...args: [any?, ...any[]]) => void
+>console.log = (...args) => {  logs.push(...args);} : (args_0?: any, ...args: any[]) => void
 >console.log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
 >console : Console
 >log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
->(...args) => {  logs.push(...args);} : (...args: [any?, ...any[]]) => void
+>(...args) => {  logs.push(...args);} : (args_0?: any, ...args: any[]) => void
 >args : [any?, ...any[]]
 
   logs.push(...args);

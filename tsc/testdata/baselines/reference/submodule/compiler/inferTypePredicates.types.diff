@@ -131,38 +131,7 @@
  >this : Date
  >x : string | number
  
-@@= skipped -23, +23 lines =@@
- }
- 
- const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
-->noInferenceFromRest : (f_0: "a" | "b") => boolean
-->(...f: ["a" | "b"]) => f[0] === "a" : (f_0: "a" | "b") => boolean
-+>noInferenceFromRest : (...f: ["a" | "b"]) => boolean
-+>(...f: ["a" | "b"]) => f[0] === "a" : (...f: ["a" | "b"]) => boolean
- >f : ["a" | "b"]
- >f[0] === "a" : boolean
- >f[0] : "a" | "b"
-@@= skipped -10, +10 lines =@@
- >"a" : "a"
- 
- const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
-->noInferenceFromImpossibleRest : () => boolean
-->(...f: []) => typeof f === "undefined" : () => boolean
-+>noInferenceFromImpossibleRest : (...f: []) => boolean
-+>(...f: []) => typeof f === "undefined" : (...f: []) => boolean
- >f : []
- >typeof f === "undefined" : boolean
- >typeof f : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
-@@= skipped -9, +9 lines =@@
- >"undefined" : "undefined"
- 
- function inferWithRest(x: string | null, ...f: ["a", "b"]) {
-->inferWithRest : (x: string | null, f_0: "a", f_1: "b") => x is string
-+>inferWithRest : (x: string | null, ...f: ["a", "b"]) => x is string
- >x : string | null
- >f : ["a", "b"]
- 
-@@= skipped -24, +24 lines =@@
+@@= skipped -66, +66 lines =@@
  >bar : string
  
  const foobarPred = (fb: typeof foobar) => fb.type === "foo";

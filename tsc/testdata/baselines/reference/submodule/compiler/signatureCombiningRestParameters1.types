@@ -18,7 +18,7 @@ type T2 = {
 };
 
 declare const map: {
->map : { A: (...args: []) => unknown; B: (...args: []) => unknown; C: (...args: [string]) => unknown; D: (...args: [number]) => unknown; }
+>map : { A: () => unknown; B: () => unknown; C: (args_0: string) => unknown; D: (args_0: number) => unknown; }
 
   [K in T1 | keyof T2]: (...args: K extends keyof T2 ? T2[K] : []) => unknown;
 >args : K extends keyof T2 ? T2[K] : []
@@ -30,22 +30,22 @@ declare const args: any;
 
 for (const [key, fn] of Object.entries(map)) {
 >key : string
->fn : ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)
->Object.entries(map) : [string, ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)][]
+>fn : (() => unknown) | (() => unknown) | ((args_0: string) => unknown) | ((args_0: number) => unknown)
+>Object.entries(map) : [string, (() => unknown) | (() => unknown) | ((args_0: string) => unknown) | ((args_0: number) => unknown)][]
 >Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
->map : { A: (...args: []) => unknown; B: (...args: []) => unknown; C: (...args: [string]) => unknown; D: (...args: [number]) => unknown; }
+>map : { A: () => unknown; B: () => unknown; C: (args_0: string) => unknown; D: (args_0: number) => unknown; }
 
   fn(...args);
 >fn(...args) : unknown
->fn : ((...args: []) => unknown) | ((...args: []) => unknown) | ((...args: [string]) => unknown) | ((...args: [number]) => unknown)
+>fn : (() => unknown) | (() => unknown) | ((args_0: string) => unknown) | ((args_0: number) => unknown)
 >...args : any
 >args : any
 }
 
 const test2: ((a: number, ...args: []) => void) &
->test2 : ((a: number, ...args: []) => void) & ((b: string) => void) & ((c: boolean) => void)
+>test2 : ((a: number) => void) & ((b: string) => void) & ((c: boolean) => void)
 >a : number
 >args : []
 

@@ -12,7 +12,7 @@ let t1: () => unknown[] = s;
 >s : (...items: never[]) => never[]
 
 let t2: (...args: []) => unknown[] = s;
->t2 : (...args: []) => unknown[]
+>t2 : () => unknown[]
 >args : []
 >s : (...items: never[]) => never[]
 

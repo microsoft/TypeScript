@@ -24,8 +24,8 @@ declare const itNum: Iterable<number>
 
 ;(function(a, ...rest) {})('', true, ...itNum)
 >(function(a, ...rest) {})('', true, ...itNum) : void
->(function(a, ...rest) {}) : (a: string, ...rest: [boolean, ...Iterable<number>[]]) => void
->function(a, ...rest) {} : (a: string, ...rest: [boolean, ...Iterable<number>[]]) => void
+>(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest: Iterable<number>[]) => void
+>function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest: Iterable<number>[]) => void
 >a : string
 >rest : [boolean, ...Iterable<number>[]]
 >'' : ""

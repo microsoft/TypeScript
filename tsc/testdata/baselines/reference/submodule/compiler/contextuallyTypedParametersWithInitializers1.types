@@ -155,7 +155,7 @@ const f7: () => any = (x?) => 0;  // Implicit any error
 
 const f8: () => any = (...x) => 0;  // []
 >f8 : () => any
->(...x) => 0 : (...x: []) => number
+>(...x) => 0 : () => number
 >x : []
 >0 : 0
 
@@ -240,9 +240,9 @@ g6((x?) => 0);     // Implicit any error
 >0 : 0
 
 g6((...x) => 0);   // []
->g6((...x) => 0) : (...x: []) => number
+>g6((...x) => 0) : () => number
 >g6 : <T extends () => any>(x: T) => T
->(...x) => 0 : (...x: []) => number
+>(...x) => 0 : () => number
 >x : []
 >0 : 0
 

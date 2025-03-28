@@ -76,19 +76,19 @@ declare function useReduxDispatch1<T extends IDestructuring<TFuncs1>>(destructur
 >destructuring : Destructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }, T>
 
 const {} = useReduxDispatch1(
->useReduxDispatch1(    (d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    })) : { funcA: (...p: [a: boolean]) => void; funcB: (...p: [b: string, bb: string]) => void; funcC: (...p: [c: number, cc: number, ccc: boolean]) => void; }
+>useReduxDispatch1(    (d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    })) : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 >useReduxDispatch1 : <T extends IDestructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }>>(destructuring: Destructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }, T>) => T
 
     (d, f) => ({
->(d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    }) : (d: Dispatch<any>, f: { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }) => { funcA: (...p: [a: boolean]) => void; funcB: (...p: [b: string, bb: string]) => void; funcC: (...p: [c: number, cc: number, ccc: boolean]) => void; }
+>(d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    }) : (d: Dispatch<any>, f: { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }) => { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 >d : Dispatch<any>
 >f : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    }) : { funcA: (...p: [a: boolean]) => void; funcB: (...p: [b: string, bb: string]) => void; funcC: (...p: [c: number, cc: number, ccc: boolean]) => void; }
->{        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    } : { funcA: (...p: [a: boolean]) => void; funcB: (...p: [b: string, bb: string]) => void; funcC: (...p: [c: number, cc: number, ccc: boolean]) => void; }
+>({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    }) : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
+>{        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    } : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 
         funcA: (...p) => d(f.funcA(...p)), // p should be inferrable
->funcA : (...p: [a: boolean]) => void
->(...p) => d(f.funcA(...p)) : (...p: [a: boolean]) => void
+>funcA : (a: boolean) => void
+>(...p) => d(f.funcA(...p)) : (a: boolean) => void
 >p : [a: boolean]
 >d(f.funcA(...p)) : void
 >d : Dispatch<any>
@@ -100,8 +100,8 @@ const {} = useReduxDispatch1(
 >p : [a: boolean]
 
         funcB: (...p) => d(f.funcB(...p)),
->funcB : (...p: [b: string, bb: string]) => void
->(...p) => d(f.funcB(...p)) : (...p: [b: string, bb: string]) => void
+>funcB : (b: string, bb: string) => void
+>(...p) => d(f.funcB(...p)) : (b: string, bb: string) => void
 >p : [b: string, bb: string]
 >d(f.funcB(...p)) : void
 >d : Dispatch<any>
@@ -113,8 +113,8 @@ const {} = useReduxDispatch1(
 >p : [b: string, bb: string]
 
         funcC: (...p) => d(f.funcC(...p)),
->funcC : (...p: [c: number, cc: number, ccc: boolean]) => void
->(...p) => d(f.funcC(...p)) : (...p: [c: number, cc: number, ccc: boolean]) => void
+>funcC : (c: number, cc: number, ccc: boolean) => void
+>(...p) => d(f.funcC(...p)) : (c: number, cc: number, ccc: boolean) => void
 >p : [c: number, cc: number, ccc: boolean]
 >d(f.funcC(...p)) : void
 >d : Dispatch<any>

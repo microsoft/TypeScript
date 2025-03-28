@@ -2,7 +2,7 @@
 
 === genericRestParameters1.ts ===
 declare let f1: (...x: [number, string, boolean]) => void;
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >x : [number, string, boolean]
 
 declare let f2: (x0: number, x1: string, x2: boolean) => void;
@@ -13,13 +13,13 @@ declare let f2: (x0: number, x1: string, x2: boolean) => void;
 
 f1 = f2;
 >f1 = f2 : (x0: number, x1: string, x2: boolean) => void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >f2 : (x0: number, x1: string, x2: boolean) => void
 
 f2 = f1;
->f2 = f1 : (...x: [number, string, boolean]) => void
+>f2 = f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >f2 : (x0: number, x1: string, x2: boolean) => void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 
 declare const t3: [number, string, boolean];
 >t3 : [number, string, boolean]
@@ -41,14 +41,14 @@ declare const sn: [string, number];
 
 f1(42, "hello", true);
 >f1(42, "hello", true) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >42 : 42
 >"hello" : "hello"
 >true : true
 
 f1(t3[0], t3[1], t3[2]);
 >f1(t3[0], t3[1], t3[2]) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >t3[0] : number
 >t3 : [number, string, boolean]
 >0 : 0
@@ -61,20 +61,20 @@ f1(t3[0], t3[1], t3[2]);
 
 f1(...t3);
 >f1(...t3) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >...t3 : string | number | boolean
 >t3 : [number, string, boolean]
 
 f1(42, ...t2);
 >f1(42, ...t2) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >42 : 42
 >...t2 : string | boolean
 >t2 : [string, boolean]
 
 f1(42, "hello", ...t1);
 >f1(42, "hello", ...t1) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >42 : 42
 >"hello" : "hello"
 >...t1 : boolean
@@ -82,7 +82,7 @@ f1(42, "hello", ...t1);
 
 f1(42, "hello", true, ...t0);
 >f1(42, "hello", true, ...t0) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >42 : 42
 >"hello" : "hello"
 >true : true
@@ -91,7 +91,7 @@ f1(42, "hello", true, ...t0);
 
 f1(ns[0], ns[1], true);
 >f1(ns[0], ns[1], true) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >ns[0] : number
 >ns : [number, string]
 >0 : 0
@@ -102,7 +102,7 @@ f1(ns[0], ns[1], true);
 
 f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f1(...ns, true) : void
->f1 : (...x: [number, string, boolean]) => void
+>f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >...ns : string | number
 >ns : [number, string]
 >true : true
@@ -529,24 +529,24 @@ declare const f20: (x: number, y: string, z: boolean) => string[];
 >z : boolean
 
 const f21 = bind(f20, 42);  // (y: string, z: boolean) => string[]
->f21 : (...rest: [y: string, z: boolean]) => string[]
->bind(f20, 42) : (...rest: [y: string, z: boolean]) => string[]
+>f21 : (y: string, z: boolean) => string[]
+>bind(f20, 42) : (y: string, z: boolean) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
 >f20 : (x: number, y: string, z: boolean) => string[]
 >42 : 42
 
 const f22 = bind(f21, "hello");  // (z: boolean) => string[]
->f22 : (...rest: [z: boolean]) => string[]
->bind(f21, "hello") : (...rest: [z: boolean]) => string[]
+>f22 : (z: boolean) => string[]
+>bind(f21, "hello") : (z: boolean) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
->f21 : (...rest: [y: string, z: boolean]) => string[]
+>f21 : (y: string, z: boolean) => string[]
 >"hello" : "hello"
 
 const f23 = bind(f22, true);  // () => string[]
->f23 : (...rest: []) => string[]
->bind(f22, true) : (...rest: []) => string[]
+>f23 : () => string[]
+>bind(f22, true) : () => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
->f22 : (...rest: [z: boolean]) => string[]
+>f22 : (z: boolean) => string[]
 >true : true
 
 f20(42, "hello", true);
@@ -558,18 +558,18 @@ f20(42, "hello", true);
 
 f21("hello", true);
 >f21("hello", true) : string[]
->f21 : (...rest: [y: string, z: boolean]) => string[]
+>f21 : (y: string, z: boolean) => string[]
 >"hello" : "hello"
 >true : true
 
 f22(true);
 >f22(true) : string[]
->f22 : (...rest: [z: boolean]) => string[]
+>f22 : (z: boolean) => string[]
 >true : true
 
 f23();
 >f23() : string[]
->f23 : (...rest: []) => string[]
+>f23 : () => string[]
 
 declare const g20: (x: number, y?: string, z?: boolean) => string[];
 >g20 : (x: number, y?: string | undefined, z?: boolean | undefined) => string[]
@@ -578,24 +578,24 @@ declare const g20: (x: number, y?: string, z?: boolean) => string[];
 >z : boolean | undefined
 
 const g21 = bind(g20, 42);  // (y: string, z: boolean) => string[]
->g21 : (...rest: [y?: string | undefined, z?: boolean | undefined]) => string[]
->bind(g20, 42) : (...rest: [y?: string | undefined, z?: boolean | undefined]) => string[]
+>g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
+>bind(g20, 42) : (y?: string | undefined, z?: boolean | undefined) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
 >g20 : (x: number, y?: string | undefined, z?: boolean | undefined) => string[]
 >42 : 42
 
 const g22 = bind(g21, "hello");  // (z: boolean) => string[]
->g22 : (...rest: [z?: boolean | undefined]) => string[]
->bind(g21, "hello") : (...rest: [z?: boolean | undefined]) => string[]
+>g22 : (z?: boolean | undefined) => string[]
+>bind(g21, "hello") : (z?: boolean | undefined) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
->g21 : (...rest: [y?: string | undefined, z?: boolean | undefined]) => string[]
+>g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
 >"hello" : "hello"
 
 const g23 = bind(g22, true);  // () => string[]
->g23 : (...rest: []) => string[]
->bind(g22, true) : (...rest: []) => string[]
+>g23 : () => string[]
+>bind(g22, true) : () => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
->g22 : (...rest: [z?: boolean | undefined]) => string[]
+>g22 : (z?: boolean | undefined) => string[]
 >true : true
 
 g20(42, "hello", true);
@@ -618,31 +618,31 @@ g20(42);
 
 g21("hello", true);
 >g21("hello", true) : string[]
->g21 : (...rest: [y?: string | undefined, z?: boolean | undefined]) => string[]
+>g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
 >"hello" : "hello"
 >true : true
 
 g21("hello");
 >g21("hello") : string[]
->g21 : (...rest: [y?: string | undefined, z?: boolean | undefined]) => string[]
+>g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
 >"hello" : "hello"
 
 g21();
 >g21() : string[]
->g21 : (...rest: [y?: string | undefined, z?: boolean | undefined]) => string[]
+>g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
 
 g22(true);
 >g22(true) : string[]
->g22 : (...rest: [z?: boolean | undefined]) => string[]
+>g22 : (z?: boolean | undefined) => string[]
 >true : true
 
 g22();
 >g22() : string[]
->g22 : (...rest: [z?: boolean | undefined]) => string[]
+>g22 : (z?: boolean | undefined) => string[]
 
 g23();
 >g23() : string[]
->g23 : (...rest: []) => string[]
+>g23 : () => string[]
 
 declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
 >f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
@@ -776,7 +776,7 @@ declare var ff2: () => void;
 >ff2 : () => void
 
 declare var ff3: (...args: []) => void;
->ff3 : (...args: []) => void
+>ff3 : () => void
 >args : []
 
 declare var ff4: (a: never) => void;
@@ -789,9 +789,9 @@ ff1 = ff2;
 >ff2 : () => void
 
 ff1 = ff3;
->ff1 = ff3 : (...args: []) => void
+>ff1 = ff3 : () => void
 >ff1 : (...args: any[]) => void
->ff3 : (...args: []) => void
+>ff3 : () => void
 
 ff1 = ff4;  // Error
 >ff1 = ff4 : (a: never) => void

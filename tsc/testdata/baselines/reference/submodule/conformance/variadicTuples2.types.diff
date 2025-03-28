@@ -12,12 +12,3 @@
  >0 : 0
  >-1 : -1
  >1 : 1
-@@= skipped -42, +42 lines =@@
- >"foo" : "foo"
- >123 : 123
- >true : true
-->(...x) => {    x;  // [string, number, boolean]} : (x_0: string, x_1: number, x_2: boolean) => void
-+>(...x) => {    x;  // [string, number, boolean]} : (...x: [string, number, boolean]) => void
- >x : [string, number, boolean]
- 
-     x;  // [string, number, boolean]

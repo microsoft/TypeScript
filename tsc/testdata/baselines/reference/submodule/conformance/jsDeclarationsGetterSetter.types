@@ -126,13 +126,13 @@ Object.defineProperty(G.prototype, "x", {
 >G : typeof G
 >prototype : G
 >"x" : "x"
->{    /**     * @param {number[]} args     */    set(...args) {}} : { set: (...args: [v: any]) => void; }
+>{    /**     * @param {number[]} args     */    set(...args) {}} : { set: (v: any) => void; }
 
     /**
      * @param {number[]} args
      */
     set(...args) {}
->set : (...args: [v: any]) => void
+>set : (v: any) => void
 >args : [v: any]
 
 });

@@ -105,7 +105,7 @@ testRest((t1, t2: D, t3) => {})
 testRest((t2: D, ...t3) => {})
 >testRest((t2: D, ...t3) => {}) : D
 >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
->(t2: D, ...t3) => {} : (t2: D, ...t3: [t1: D, ...ts: D[]]) => void
+>(t2: D, ...t3) => {} : (t2: D, t1: D, ...ts: D[]) => void
 >t2 : D
 >t3 : [t1: D, ...ts: D[]]
 

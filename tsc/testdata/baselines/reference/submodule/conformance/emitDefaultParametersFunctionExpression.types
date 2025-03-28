@@ -39,8 +39,8 @@ var x = function (str = "hello", ...rest) { }
 var y = (function (num = 10, boo = false, ...rest) { })()
 >y : void
 >(function (num = 10, boo = false, ...rest) { })() : void
->(function (num = 10, boo = false, ...rest) { }) : (num?: number, boo?: boolean, ...rest: []) => void
->function (num = 10, boo = false, ...rest) { } : (num?: number, boo?: boolean, ...rest: []) => void
+>(function (num = 10, boo = false, ...rest) { }) : (num?: number, boo?: boolean) => void
+>function (num = 10, boo = false, ...rest) { } : (num?: number, boo?: boolean) => void
 >num : number
 >10 : 10
 >boo : boolean
@@ -50,8 +50,8 @@ var y = (function (num = 10, boo = false, ...rest) { })()
 var z = (function (num: number, boo = false, ...rest) { })(10)
 >z : void
 >(function (num: number, boo = false, ...rest) { })(10) : void
->(function (num: number, boo = false, ...rest) { }) : (num: number, boo?: boolean, ...rest: []) => void
->function (num: number, boo = false, ...rest) { } : (num: number, boo?: boolean, ...rest: []) => void
+>(function (num: number, boo = false, ...rest) { }) : (num: number, boo?: boolean) => void
+>function (num: number, boo = false, ...rest) { } : (num: number, boo?: boolean) => void
 >num : number
 >boo : boolean
 >false : false

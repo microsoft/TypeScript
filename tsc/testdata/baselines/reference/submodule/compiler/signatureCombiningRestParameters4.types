@@ -104,8 +104,8 @@ declare function getExtensionField<T = any>(
 ): RemoveThis<T>;
 
 const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
->extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
->getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
+>extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
+>getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 >getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
 
   e,
@@ -120,11 +120,11 @@ declare const extension: Mark<any>;
 >extension : Mark<any>
 
 if (extendMarkSchema) {
->extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>) | null | undefined
+>extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 
   extendMarkSchema(extension); // error
 >extendMarkSchema(extension) : Record<string, any>
->extendMarkSchema : ((...args: [extension: Node<any>]) => Record<string, any>) | ((...args: [extension: Mark<any>]) => Record<string, any>)
+>extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>)
 >extension : Mark<any>
 }
 

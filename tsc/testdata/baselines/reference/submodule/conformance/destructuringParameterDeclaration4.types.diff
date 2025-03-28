@@ -1,11 +1,6 @@
 --- old.destructuringParameterDeclaration4.types
 +++ new.destructuringParameterDeclaration4.types
-@@= skipped -16, +16 lines =@@
- >stringOrNumArray : stringOrNumArray
- 
- function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
-->a0 : (x_0: number, x_1: number, x_2: string) => void
-+>a0 : (...x: [number, number, string]) => void
+@@= skipped -20, +20 lines =@@
  >x : [number, number, string]
  
  function a1(...x: (number|string)[]) { }
@@ -14,7 +9,7 @@
  >x : (string | number)[]
  
  function a2(...a: someArray) { }  // Error, rest parameter must be array type
-@@= skipped -12, +12 lines =@@
+@@= skipped -8, +8 lines =@@
  >a : someArray
  
  function a3(...b?) { }            // Error, can't be optional

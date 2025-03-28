@@ -17,7 +17,7 @@ type stringOrNumArray = Array<String|Number>;
 >stringOrNumArray : stringOrNumArray
 
 function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
->a0 : (...x: [number, number, string]) => void
+>a0 : (x_0: number, x_1: number, x_2: string) => void
 >x : [number, number, string]
 
 function a1(...x: (number|string)[]) { }

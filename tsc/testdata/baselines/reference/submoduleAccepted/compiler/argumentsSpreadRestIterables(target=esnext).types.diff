@@ -27,12 +27,7 @@
  
  ;(function(a, ...rest) {})('', true, ...itNum)
  >(function(a, ...rest) {})('', true, ...itNum) : void
-->(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest: number[]) => void
-->function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest: number[]) => void
-+>(function(a, ...rest) {}) : (a: string, ...rest: [boolean, ...number[]]) => void
-+>function(a, ...rest) {} : (a: string, ...rest: [boolean, ...number[]]) => void
- >a : string
- >rest : [boolean, ...number[]]
+@@= skipped -11, +11 lines =@@
  >'' : ""
  >true : true
  >...itNum : number
@@ -69,7 +64,7 @@
  >true : true
  >..."hello" : string
  >"hello" : "hello"
-@@= skipped -42, +42 lines =@@
+@@= skipped -31, +31 lines =@@
  const res4 = fn1(true, ...itNum);
  >res4 : readonly [true, ...number[]]
  >fn1(true, ...itNum) : readonly [true, ...number[]]

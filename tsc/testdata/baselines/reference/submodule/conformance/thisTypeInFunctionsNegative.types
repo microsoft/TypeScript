@@ -718,7 +718,7 @@ function modifiers(async this: C): number { return this.n; }
 >n : number
 
 function restParam(...this: C): number { return this.n; }
->restParam : (: any[], this: C) => number
+>restParam : (...: any[], this: C) => number
 > : any[]
 >this : C
 >this.n : any

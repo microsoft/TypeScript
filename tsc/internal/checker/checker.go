@@ -25833,6 +25833,73 @@ func (c *Checker) markPropertyAsReferenced(prop *ast.Symbol, nodeForCheckWriteOn
 	c.symbolReferenceLinks.Get(target).referenceKinds |= ast.SymbolFlagsAll
 }
 
+func (c *Checker) GetExpandedParameters(signature *Signature /* !!! skipUnionExpanding */) []*ast.Symbol {
+	if signatureHasRestParameter(signature) {
+		restIndex := len(signature.parameters) - 1
+		restSymbol := signature.parameters[restIndex]
+		restType := c.getTypeOfSymbol(restSymbol)
+		if isTupleType(restType) {
+			return c.expandSignatureParametersWithTupleMembers(signature, restType.AsTypeReference(), restIndex, restSymbol)
+		}
+	}
+	return signature.parameters
+}
+
+func (c *Checker) expandSignatureParametersWithTupleMembers(signature *Signature, restType *TypeReference, restIndex int, restSymbol *ast.Symbol) []*ast.Symbol {
+	elementTypes := c.getTypeArguments(restType.AsType())
+	elementInfos := restType.TargetTupleType().elementInfos
+	associatedNames := c.getUniqAssociatedNamesFromTupleType(restType, restSymbol)
+	expanded := append(make([]*ast.Symbol, 0, restIndex+len(elementTypes)), signature.parameters[:restIndex]...)
+	for i, t := range elementTypes {
+		flags := elementInfos[i].flags
+		checkFlags := ast.CheckFlagsNone
+		switch {
+		case flags&ElementFlagsVariable != 0:
+			checkFlags = ast.CheckFlagsRestParameter
+		case flags&ElementFlagsOptional != 0:
+			checkFlags = ast.CheckFlagsOptionalParameter
+		}
+		symbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, associatedNames[i], checkFlags)
+		links := c.valueSymbolLinks.Get(symbol)
+		if flags&ElementFlagsRest != 0 {
+			links.resolvedType = c.createArrayType(t)
+		} else {
+			links.resolvedType = t
+		}
+		expanded = append(expanded, symbol)
+	}
+	return expanded
+}
+
+func (c *Checker) getUniqAssociatedNamesFromTupleType(t *TypeReference, restSymbol *ast.Symbol) []string {
+	elementInfos := t.TargetTupleType().elementInfos
+	names := make([]string, len(elementInfos))
+	counters := make(map[string]int)
+	for i, info := range elementInfos {
+		names[i] = c.getTupleElementLabel(info, restSymbol, i)
+		// count duplicates using negative values
+		counters[names[i]]--
+	}
+	for i, name := range names {
+		if counters[name] == -1 {
+			continue
+		}
+		for {
+			if counters[name] < 0 {
+				// switch to a positive suffix counter
+				counters[name] = 0
+			}
+			counters[name]++
+			candidateName := name + "_" + strconv.Itoa(counters[name])
+			if counters[candidateName] == 0 {
+				names[i] = candidateName
+				break
+			}
+		}
+	}
+	return names
+}
+
 func hasRestParameter(signature *ast.Node) bool {
 	last := core.LastOrNil(signature.Parameters())
 	return last != nil && isRestParameter(last)

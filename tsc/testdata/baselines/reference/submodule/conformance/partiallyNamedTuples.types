@@ -5,11 +5,11 @@ type NamedAndAnonymous = [a: string, number];
 >NamedAndAnonymous : NamedAndAnonymous
 
 function fa1(...args: NamedAndAnonymous) {}
->fa1 : (...args: NamedAndAnonymous) => void
+>fa1 : (a: string, args_1: number) => void
 >args : NamedAndAnonymous
 
 function fa2(a: NamedAndAnonymous, ...args: NamedAndAnonymous) {}
->fa2 : (a: NamedAndAnonymous, ...args: NamedAndAnonymous) => void
+>fa2 : (a: NamedAndAnonymous, a: string, args_1: number) => void
 >a : NamedAndAnonymous
 >args : NamedAndAnonymous
 
@@ -17,16 +17,16 @@ type NamedAnonymousMixed = [a: string, number, c: number, NamedAndAnonymous];
 >NamedAnonymousMixed : NamedAnonymousMixed
 
 function fb1(...args: NamedAnonymousMixed) {}
->fb1 : (...args: NamedAnonymousMixed) => void
+>fb1 : (a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
 >args : NamedAnonymousMixed
 
 function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
->fb2 : (a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) => void
+>fb2 : (a: NamedAnonymousMixed, a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
 >a : NamedAnonymousMixed
 >args : NamedAnonymousMixed
 
 function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
->fb3 : (a: NamedAnonymousMixed, ...args: NamedAndAnonymous) => void
+>fb3 : (a: NamedAnonymousMixed, a: string, args_1: number) => void
 >a : NamedAnonymousMixed
 >args : NamedAndAnonymous
 

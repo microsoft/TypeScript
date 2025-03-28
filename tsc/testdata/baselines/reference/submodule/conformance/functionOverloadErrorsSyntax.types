@@ -21,11 +21,11 @@ function fn4b() { }
 
 //Function overload signature with rest param followed by non-optional parameter
 function fn5(x: string, ...y: any[], z: string);
->fn5 : (x: string, y: any[], z: string) => any
+>fn5 : (x: string, ...y: any[], z: string) => any
 >x : string
 >y : any[]
 >z : string
 
 function fn5() { }
->fn5 : (x: string, y: any[], z: string) => any
+>fn5 : (x: string, ...y: any[], z: string) => any
 

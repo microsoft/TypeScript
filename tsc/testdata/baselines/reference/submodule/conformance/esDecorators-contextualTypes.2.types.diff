@@ -1,17 +1,15 @@
 --- old.esDecorators-contextualTypes.2.types
 +++ new.esDecorators-contextualTypes.2.types
-@@= skipped -4, +4 lines =@@
- >C : C
+@@= skipped -5, +5 lines =@@
  
      @boundMethodLogger("Yadda", /*bound*/ true)
-->boundMethodLogger("Yadda", /*bound*/ true) : (target: (this: C) => void, context: ClassMethodDecoratorContext<C, (this: C) => void>) => (this: C) => void
+ >boundMethodLogger("Yadda", /*bound*/ true) : (target: (this: C) => void, context: ClassMethodDecoratorContext<C, (this: C) => void>) => (this: C) => void
 ->boundMethodLogger : <This, Args extends any[], Return>(source: string, bound?: boolean) => (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
-+>boundMethodLogger("Yadda", /*bound*/ true) : (target: (this: C, ...args: []) => void, context: ClassMethodDecoratorContext<C, (this: C, ...args: []) => void>) => (this: C, ...args: []) => void
 +>boundMethodLogger : <This, Args extends any[], Return>(source: string, bound?: boolean) => (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => (this: This, ...args: Args) => Return
  >"Yadda" : "Yadda"
  >true : true
  
-@@= skipped -30, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  >C : typeof C
  
  function boundMethodLogger<This, Args extends any[], Return>(source: string, bound = true) {
