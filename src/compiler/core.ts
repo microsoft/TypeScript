@@ -19,6 +19,12 @@ export const emptyArray: never[] = [] as never[];
 export const emptyMap: ReadonlyMap<never, never> = new Map<never, never>();
 
 /** @internal */
+export const voidMap: Map<never, never> = new Map<never, never>();
+voidMap.set = function () {
+    return this;
+};
+
+/** @internal */
 export function length(array: readonly any[] | undefined): number {
     return array !== undefined ? array.length : 0;
 }

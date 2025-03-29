@@ -1133,6 +1133,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    voidMap,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -19960,7 +19961,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function makeFunctionTypeMapper(func: (t: Type) => Type, debugInfo: () => string): TypeMapper {
-        return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
+        const mapper = Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
+        mapper.instantiations = voidMap;
+        return mapper;
     }
 
     function makeDeferredTypeMapper(sources: readonly TypeParameter[], targets: (() => Type)[]) {
