@@ -20105,16 +20105,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const combinedMapper = combineTypeMappers(type.mapper, mapper);
             const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
             const newAliasSymbol = aliasSymbol || type.aliasSymbol;
-            const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateList<Type>(type.aliasTypeArguments, mapper, (t, m) => {
-                m.instantiations ??= new Map();
-                const cached = m.instantiations.get(t.id);
-                if (cached) {
-                    return cached;
-                }
-                const result = instantiateType(t, m);
-                m.instantiations.set(t.id, result);
-                return result;
-            });
+            const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
             const id = (type.objectFlags & ObjectFlags.SingleSignatureType ? "S" : "") + getTypeListId(typeArguments) + getAliasId(newAliasSymbol, newAliasTypeArguments);
             if (!target.instantiations) {
                 target.instantiations = new Map<string, Type>();
@@ -20380,10 +20371,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
+        mapper.instantiations ??= new Map();
+        const cached = mapper.instantiations.get(type.id);
+        if (cached) {
+            return cached;
+        }
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
+        mapper.instantiations.set(type.id, result);
         instantiationDepth--;
         return result;
     }

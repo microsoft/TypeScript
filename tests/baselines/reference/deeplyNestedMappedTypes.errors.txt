@@ -2,8 +2,9 @@ deeplyNestedMappedTypes.ts(9,7): error TS2322: Type 'Id<{ x: { y: { z: { a: { b:
   The types of 'x.y.z.a.b.c' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
 deeplyNestedMappedTypes.ts(17,7): error TS2322: Type 'Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>' is not assignable to type 'Id2<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>'.
-  The types of 'x.y.z.a.b.c' are incompatible between these types.
-    Type 'number' is not assignable to type 'string'.
+  Type '{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }' is not assignable to type '{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }'.
+    The types of 'x.y.z.a.b.c' are incompatible between these types.
+      Type 'number' is not assignable to type 'string'.
 deeplyNestedMappedTypes.ts(69,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }[]' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }[]'.
   Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
     The types of 'level1.level2' are incompatible between these types.
@@ -40,8 +41,9 @@ deeplyNestedMappedTypes.ts(77,5): error TS2322: Type '{ level1: { level2: { foo:
     const foo4: Foo4 = foo3;  // Error expected
           ~~~~
 !!! error TS2322: Type 'Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>' is not assignable to type 'Id2<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>'.
-!!! error TS2322:   The types of 'x.y.z.a.b.c' are incompatible between these types.
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! error TS2322:   Type '{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }' is not assignable to type '{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }'.
+!!! error TS2322:     The types of 'x.y.z.a.b.c' are incompatible between these types.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
     
     // Repro from issue linked in #55535
     

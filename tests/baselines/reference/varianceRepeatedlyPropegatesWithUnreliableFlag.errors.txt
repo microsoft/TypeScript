@@ -1,0 +1,37 @@
+varianceRepeatedlyPropegatesWithUnreliableFlag.ts(17,7): error TS2322: Type 'I<A & B>' is not assignable to type 'I<A>'.
+  Types of property 'fn' are incompatible.
+    Type '<K extends "a" | "b">(p1: P1<Pick<A & B, K>>, p2: P2<Pick<A & B, K>>) => void' is not assignable to type '<K extends "a">(p1: P1<Pick<A, K>>, p2: P2<Pick<A, K>>) => void'.
+      Types of parameters 'p1' and 'p1' are incompatible.
+        Type 'P1<Pick<A, any>>' is not assignable to type 'P1<Pick<A & B, any>>'.
+          Type 'Pick<A, any>' is not assignable to type 'Pick<A & B, any>'.
+            Type 'A' is not assignable to type 'A & B'.
+              Property 'b' is missing in type 'A' but required in type 'B'.
+
+
+==== varianceRepeatedlyPropegatesWithUnreliableFlag.ts (1 errors) ====
+    type A = { a: number };
+    type B = { b: number };
+    type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];
+    type P1<T> = { data: X<T> };
+    type P2<T> = { data: X<T> };
+    
+    interface I<T> {
+        fn<K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>): void;
+    }
+    
+    const i: I<A & B> = null as any;
+    const p2: P2<A> = null as any;
+    
+    // Commenting out the below line will remove the error on the `const _i: I<A> = i;`
+    i.fn(null as any, p2);
+    
+    const _i: I<A> = i;
+          ~~
+!!! error TS2322: Type 'I<A & B>' is not assignable to type 'I<A>'.
+!!! error TS2322:   Types of property 'fn' are incompatible.
+!!! error TS2322:     Type '<K extends "a" | "b">(p1: P1<Pick<A & B, K>>, p2: P2<Pick<A & B, K>>) => void' is not assignable to type '<K extends "a">(p1: P1<Pick<A, K>>, p2: P2<Pick<A, K>>) => void'.
+!!! error TS2322:       Types of parameters 'p1' and 'p1' are incompatible.
+!!! error TS2322:         Type 'P1<Pick<A, any>>' is not assignable to type 'P1<Pick<A & B, any>>'.
+!!! error TS2322:           Type 'Pick<A, any>' is not assignable to type 'Pick<A & B, any>'.
+!!! error TS2322:             Type 'A' is not assignable to type 'A & B'.
+!!! error TS2322:               Property 'b' is missing in type 'A' but required in type 'B'.
