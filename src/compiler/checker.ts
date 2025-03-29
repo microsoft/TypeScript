@@ -20374,8 +20374,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
-        mapper.instantiations ??= new Map();
-        const cached = mapper.instantiations.get(type.id);
+        const key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
+        const cached = (mapper.instantiations ??= new Map()).get(key);
         if (cached) {
             return cached;
         }
@@ -20383,7 +20383,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         instantiationCount++;
         instantiationDepth++;
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
-        mapper.instantiations.set(type.id, result);
+        mapper.instantiations.set(key, result);
         instantiationDepth--;
         return result;
     }
