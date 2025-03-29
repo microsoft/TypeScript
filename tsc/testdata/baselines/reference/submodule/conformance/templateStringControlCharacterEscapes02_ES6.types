@@ -3,5 +3,5 @@
 === templateStringControlCharacterEscapes02_ES6.ts ===
 var x = `\x19\u0019 19`;
 >x : string
->`\x19\u0019 19` : " 19"
+>`\x19\u0019 19` : "\u0019\u0019 19"
 

@@ -29,7 +29,7 @@ func TestEscapeString(t *testing.T) {
 	for i, rec := range data {
 		t.Run(fmt.Sprintf("[%d] escapeString(%q, %v)", i, rec.s, rec.quoteChar), func(t *testing.T) {
 			t.Parallel()
-			actual := escapeString(rec.s, rec.quoteChar)
+			actual := EscapeString(rec.s, rec.quoteChar)
 			assert.Equal(t, actual, rec.expected)
 		})
 	}

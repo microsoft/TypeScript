@@ -1,9 +1,0 @@
---- old.templateStringControlCharacterEscapes02_ES6.types
-+++ new.templateStringControlCharacterEscapes02_ES6.types
-@@= skipped -2, +2 lines =@@
- === templateStringControlCharacterEscapes02_ES6.ts ===
- var x = `\x19\u0019 19`;
- >x : string
-->`\x19\u0019 19` : "\u0019\u0019 19"
-+>`\x19\u0019 19` : " 19"
- 

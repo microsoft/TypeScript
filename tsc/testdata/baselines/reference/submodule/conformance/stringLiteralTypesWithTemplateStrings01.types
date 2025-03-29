@@ -6,14 +6,12 @@ let ABC: "ABC" = `ABC`;
 >`ABC` : "ABC"
 
 let DE_NEWLINE_F: "DE\nF" = `DE
->DE_NEWLINE_F : "DE
-F"
->`DEF` : "DE
-F"
+>DE_NEWLINE_F : "DE\nF"
+>`DEF` : "DE\nF"
 
 F`;
 let G_QUOTE_HI: 'G"HI';
->G_QUOTE_HI : "G"HI"
+>G_QUOTE_HI : "G\"HI"
 
 let JK_BACKTICK_L: "JK`L" = `JK\`L`;
 >JK_BACKTICK_L : "JK`L"

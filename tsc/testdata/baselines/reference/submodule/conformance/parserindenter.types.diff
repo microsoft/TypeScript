@@ -64,25 +64,7 @@
  >log : any
  >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"" : string
  >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) : string
-@@= skipped -23, +23 lines =@@
- >edit.length : any
- >edit : any
- >length : any
-->", text=\"" : ", text=\""
-+>", text=\"" : ", text=""
- >TypeScript.stringToLiteral(edit.replaceWith, 30) : any
- >TypeScript.stringToLiteral : any
- >TypeScript : any
-@@= skipped -9, +9 lines =@@
- >edit : any
- >replaceWith : any
- >30 : 30
-->"\"" : "\""
-+>"\"" : """
-                 }
-             }
- 
-@@= skipped -451, +451 lines =@@
+@@= skipped -483, +483 lines =@@
          }
  
          static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
@@ -111,16 +93,7 @@
  >Services : any
  >includeNonIndentChars : boolean
  
-@@= skipped -46, +46 lines =@@
-                 if (c == '\t')
- >c == '\t' : boolean
- >c : string
-->'\t' : "\t"
-+>'\t' : "	"
- 
-                     indentSize = (indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize);
- >indentSize = (indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize) : number
-@@= skipped -10, +10 lines =@@
+@@= skipped -56, +56 lines =@@
  >indentSize + editorOptions.TabSize : any
  >indentSize : number
  >editorOptions.TabSize : any
@@ -180,25 +153,7 @@
  >ConvertTabsToSpaces : any
  
              if (level < 0) {
-@@= skipped -52, +52 lines =@@
-                     if (c == '\t')
- >c == '\t' : boolean
- >c : any
-->'\t' : "\t"
-+>'\t' : "	"
- 
-                         totalIndent += tabSize;
- >totalIndent += tabSize : any
-@@= skipped -74, +74 lines =@@
- >create : any
- >' ' : " "
- >tabSize : number
-->"\t" : "\t"
-+>"\t" : "	"
- 
-             var text = "";
- >text : string
-@@= skipped -219, +219 lines =@@
+@@= skipped -345, +345 lines =@@
              var currentIndentSize = Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions);
  >currentIndentSize : number
  >Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions) : number
@@ -305,12 +260,3 @@
                  }
  
                  indentationDeltaSize = newIndentSize - origIndentSize;
-@@= skipped -564, +564 lines =@@
- >lineText : any
- >charAt : any
- >index : number
-->'\t' : "\t"
-+>'\t' : "	"
- 
-                     ++index;
- >++index : number

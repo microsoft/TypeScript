@@ -5,6 +5,5 @@
  >f `\t\n\v\f\r\\` : void
  >f : (...args: any[]) => void
 ->`\t\n\v\f\r\\` : "\t\n\v\f\r\\"
-+>`\t\n\v\f\r\\` : "	
-+\"
++>`\t\n\v\f\r\\` : "\t\n\v\f\r\"
  

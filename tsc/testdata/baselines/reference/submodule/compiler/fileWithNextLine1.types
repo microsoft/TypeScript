@@ -5,5 +5,5 @@
 // 0.  It should be counted as a space and should not cause an error.
 var v = '';
 >v : string
->'' : ""
+>'' : "\u0085"
 

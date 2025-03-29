@@ -1,9 +1,0 @@
---- old.fileWithNextLine1.types
-+++ new.fileWithNextLine1.types
-@@= skipped -4, +4 lines =@@
- // 0.  It should be counted as a space and should not cause an error.
- var v = '';
- >v : string
-->'' : "\u0085"
-+>'' : ""
- 

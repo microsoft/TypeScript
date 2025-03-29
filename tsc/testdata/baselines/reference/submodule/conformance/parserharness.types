@@ -351,8 +351,7 @@ module Harness {
 >actual + '\n      ' + n.toString() : string
 >actual + '\n      ' : string
 >actual : string
->'\n      ' : "
-      "
+>'\n      ' : "\n      "
 >n.toString() : any
 >n.toString : any
 >n : any
@@ -482,8 +481,7 @@ module Harness {
 >actual + '\n     ' + err.toString() : string
 >actual + '\n     ' : string
 >actual : string
->'\n     ' : "
-     "
+>'\n     ' : "\n     "
 >err.toString() : string
 >err.toString : () => string
 >err : CompilerError
@@ -509,8 +507,7 @@ module Harness {
 >column : number
 >"): " : "): "
 >desc : string
->"\nActual errors follow: " : "
-Actual errors follow: "
+>"\nActual errors follow: " : "\nActual errors follow: "
 >actual : string
             }
         }
@@ -533,8 +530,7 @@ Actual errors follow: "
 >"" : ""
 >replace : any
 >/\r\n?/g : RegExp
->"\n" : "
-"
+>"\n" : "\n"
 
             text2 = text2.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n");
 >text2 = text2.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n") : any
@@ -549,8 +545,7 @@ Actual errors follow: "
 >"" : ""
 >replace : any
 >/\r\n?/g : RegExp
->"\n" : "
-"
+>"\n" : "\n"
 
             if (text1 !== text2) {
 >text1 !== text2 : boolean
@@ -607,8 +602,7 @@ Actual errors follow: "
 >i + 1 : number
 >i : number
 >1 : 1
->":\n" : ":
-"
+>":\n" : ":\n"
 
                         errorString += "                  Left File: " + text1Lines[i] + "\n";
 >errorString += "                  Left File: " + text1Lines[i] + "\n" : string
@@ -619,8 +613,7 @@ Actual errors follow: "
 >text1Lines[i] : any
 >text1Lines : any
 >i : number
->"\n" : "
-"
+>"\n" : "\n"
 
                         errorString += "                 Right File: " + text2Lines[i] + "\n\n";
 >errorString += "                 Right File: " + text2Lines[i] + "\n\n" : string
@@ -631,9 +624,7 @@ Actual errors follow: "
 >text2Lines[i] : any
 >text2Lines : any
 >i : number
->"\n\n" : "
-
-"
+>"\n\n" : "\n\n"
                     }
                 }
                 throwAssertError(new Error(errorString));
@@ -709,11 +700,11 @@ Actual errors follow: "
 >Error : ErrorConstructor
 >"Expected array to contain \"" + contains[i] + "\"" : string
 >"Expected array to contain \"" + contains[i] : string
->"Expected array to contain \"" : "Expected array to contain ""
+>"Expected array to contain \"" : "Expected array to contain \""
 >contains[i] : any
 >contains : any[]
 >i : number
->"\"" : """
+>"\"" : "\""
                 }
             }
         }
@@ -785,8 +776,7 @@ Actual errors follow: "
 >content.split : (separator: string | RegExp, limit?: number) => string[]
 >content : string
 >split : (separator: string | RegExp, limit?: number) => string[]
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 
         if (lines.length === 1) {
 >lines.length === 1 : boolean
@@ -802,8 +792,7 @@ Actual errors follow: "
 >content.split : (separator: string | RegExp, limit?: number) => string[]
 >content : string
 >split : (separator: string | RegExp, limit?: number) => string[]
->'\n' : "
-"
+>'\n' : "\n"
         }
         return lines;
 >lines : string[]
@@ -3133,14 +3122,12 @@ Actual errors follow: "
 
                 var testCode = 'class __test1__ {\n';
 >testCode : string
->'class __test1__ {\n' : "class __test1__ {
-"
+>'class __test1__ {\n' : "class __test1__ {\n"
 
                 testCode += '    public test() {\n';
 >testCode += '    public test() {\n' : string
 >testCode : string
->'    public test() {\n' : "    public test() {
-"
+>'    public test() {\n' : "    public test() {\n"
 
                 testCode += '        ' + other.code + ';\n';
 >testCode += '        ' + other.code + ';\n' : string
@@ -3151,8 +3138,7 @@ Actual errors follow: "
 >other.code : any
 >other : Type
 >code : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '        return ' + other.identifier + ';\n';
 >testCode += '        return ' + other.identifier + ';\n' : string
@@ -3163,32 +3149,27 @@ Actual errors follow: "
 >other.identifier : any
 >other : Type
 >identifier : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '    }\n';
 >testCode += '    }\n' : string
 >testCode : string
->'    }\n' : "    }
-"
+>'    }\n' : "    }\n"
 
                 testCode += '}\n';
 >testCode += '}\n' : string
 >testCode : string
->'}\n' : "}
-"
+>'}\n' : "}\n"
 
                 testCode += 'class __test2__ extends __test1__ {\n';
 >testCode += 'class __test2__ extends __test1__ {\n' : string
 >testCode : string
->'class __test2__ extends __test1__ {\n' : "class __test2__ extends __test1__ {
-"
+>'class __test2__ extends __test1__ {\n' : "class __test2__ extends __test1__ {\n"
 
                 testCode += '    public test() {\n';
 >testCode += '    public test() {\n' : string
 >testCode : string
->'    public test() {\n' : "    public test() {
-"
+>'    public test() {\n' : "    public test() {\n"
 
                 testCode += '        ' + this.code + ';\n';
 >testCode += '        ' + this.code + ';\n' : string
@@ -3199,8 +3180,7 @@ Actual errors follow: "
 >this.code : any
 >this : this
 >code : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '        return ' + other.identifier + ';\n';
 >testCode += '        return ' + other.identifier + ';\n' : string
@@ -3211,20 +3191,17 @@ Actual errors follow: "
 >other.identifier : any
 >other : Type
 >identifier : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '    }\n';
 >testCode += '    }\n' : string
 >testCode : string
->'    }\n' : "    }
-"
+>'    }\n' : "    }\n"
 
                 testCode += '}\n';
 >testCode += '}\n' : string
 >testCode : string
->'}\n' : "}
-"
+>'}\n' : "}\n"
 
                 return this.compilesOk(testCode);
 >this.compilesOk(testCode) : boolean
@@ -3378,8 +3355,7 @@ Actual errors follow: "
 
                 var testCode = 'module __test1__ {\n';
 >testCode : string
->'module __test1__ {\n' : "module __test1__ {
-"
+>'module __test1__ {\n' : "module __test1__ {\n"
 
                 testCode += '    ' + this.code + ';\n';
 >testCode += '    ' + this.code + ';\n' : string
@@ -3390,8 +3366,7 @@ Actual errors follow: "
 >this.code : any
 >this : this
 >code : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '    export var __val__ = ' + this.identifier + ';\n';
 >testCode += '    export var __val__ = ' + this.identifier + ';\n' : string
@@ -3402,26 +3377,22 @@ Actual errors follow: "
 >this.identifier : any
 >this : this
 >identifier : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '}\n';
 >testCode += '}\n' : string
 >testCode : string
->'}\n' : "}
-"
+>'}\n' : "}\n"
 
                 testCode += 'var __test1__val__ = __test1__.__val__;\n';
 >testCode += 'var __test1__val__ = __test1__.__val__;\n' : string
 >testCode : string
->'var __test1__val__ = __test1__.__val__;\n' : "var __test1__val__ = __test1__.__val__;
-"
+>'var __test1__val__ = __test1__.__val__;\n' : "var __test1__val__ = __test1__.__val__;\n"
 
                 testCode += 'module __test2__ {\n';
 >testCode += 'module __test2__ {\n' : string
 >testCode : string
->'module __test2__ {\n' : "module __test2__ {
-"
+>'module __test2__ {\n' : "module __test2__ {\n"
 
                 testCode += '    export ' + other.code + ';\n';
 >testCode += '    export ' + other.code + ';\n' : string
@@ -3432,8 +3403,7 @@ Actual errors follow: "
 >other.code : any
 >other : Type
 >code : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '    export var __val__ = ' + other.identifier + ';\n';
 >testCode += '    export var __val__ = ' + other.identifier + ';\n' : string
@@ -3444,20 +3414,17 @@ Actual errors follow: "
 >other.identifier : any
 >other : Type
 >identifier : any
->';\n' : ";
-"
+>';\n' : ";\n"
 
                 testCode += '}\n';
 >testCode += '}\n' : string
 >testCode : string
->'}\n' : "}
-"
+>'}\n' : "}\n"
 
                 testCode += 'var __test2__val__ = __test2__.__val__;\n';
 >testCode += 'var __test2__val__ = __test2__.__val__;\n' : string
 >testCode : string
->'var __test2__val__ = __test2__.__val__;\n' : "var __test2__val__ = __test2__.__val__;
-"
+>'var __test2__val__ = __test2__.__val__;\n' : "var __test2__val__ = __test2__.__val__;\n"
 
                 testCode += '__test2__val__ = __test1__val__;';
 >testCode += '__test2__val__ = __test1__val__;' : string
@@ -4470,11 +4437,11 @@ Actual errors follow: "
 >'Expression "' + expr + '" is of type "' + expectedType : string
 >'Expression "' + expr + '" is of type "' : string
 >'Expression "' + expr : string
->'Expression "' : "Expression ""
+>'Expression "' : "Expression \""
 >expr : string
->'" is of type "' : "" is of type ""
+>'" is of type "' : "\" is of type \""
 >expectedType : string
->'"' : """
+>'"' : "\""
 >function () {                    assert.equal(actualType.type, expectedType);                } : () => void
 
                     assert.equal(actualType.type, expectedType);
@@ -4676,8 +4643,7 @@ Actual errors follow: "
 >writer : WriterAggregator
 >lines : string[]
 >join : (separator?: string) => string
->'\n' : "
-"
+>'\n' : "\n"
 
                         if (verifyNoDeclFile && results != "") {
 >verifyNoDeclFile && results != "" : boolean
@@ -4820,8 +4786,7 @@ Actual errors follow: "
 >lines.join : (separator?: string) => string
 >lines : any[]
 >join : (separator?: string) => string
->"\n" : "
-"
+>"\n" : "\n"
 
                 this.errors = [];
 >this.errors = [] : undefined[]
@@ -6063,11 +6028,11 @@ Actual errors follow: "
 >'Unrecognized metadata name "' + testMetaData[1] + '". Available file metadata names are: ' + fileMetadataNames.join(', ') : string
 >'Unrecognized metadata name "' + testMetaData[1] + '". Available file metadata names are: ' : string
 >'Unrecognized metadata name "' + testMetaData[1] : string
->'Unrecognized metadata name "' : "Unrecognized metadata name ""
+>'Unrecognized metadata name "' : "Unrecognized metadata name \""
 >testMetaData[1] : any
 >testMetaData : any
 >1 : 1
->'". Available file metadata names are: ' : "". Available file metadata names are: "
+>'". Available file metadata names are: ' : "\". Available file metadata names are: "
 >fileMetadataNames.join(', ') : string
 >fileMetadataNames.join : (separator?: string) => string
 >fileMetadataNames : string[]
@@ -6182,8 +6147,7 @@ Actual errors follow: "
 >currentFileContent : string
 >currentFileContent + '\n' : string
 >currentFileContent : string
->'\n' : "
-"
+>'\n' : "\n"
                     }
                     currentFileContent = currentFileContent + line;
 >currentFileContent = currentFileContent + line : string
@@ -7878,8 +7842,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + (".code { font: 9pt 'Courier New'; }") : string
 >htmlLeader : string
 >'\r\n' + (".code { font: 9pt 'Courier New'; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >(".code { font: 9pt 'Courier New'; }") : ".code { font: 9pt 'Courier New'; }"
 >".code { font: 9pt 'Courier New'; }" : ".code { font: 9pt 'Courier New'; }"
 
@@ -7887,8 +7850,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + (".old { background-color: #EE1111; }") : string
 >htmlLeader : string
 >'\r\n' + (".old { background-color: #EE1111; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >(".old { background-color: #EE1111; }") : ".old { background-color: #EE1111; }"
 >".old { background-color: #EE1111; }" : ".old { background-color: #EE1111; }"
 
@@ -7896,8 +7858,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + (".new { background-color: #FFFF11; }") : string
 >htmlLeader : string
 >'\r\n' + (".new { background-color: #FFFF11; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >(".new { background-color: #FFFF11; }") : ".new { background-color: #FFFF11; }"
 >".new { background-color: #FFFF11; }" : ".new { background-color: #FFFF11; }"
 
@@ -7905,8 +7866,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + (".from { background-color: #EE1111; color: #1111EE; }") : string
 >htmlLeader : string
 >'\r\n' + (".from { background-color: #EE1111; color: #1111EE; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >(".from { background-color: #EE1111; color: #1111EE; }") : ".from { background-color: #EE1111; color: #1111EE; }"
 >".from { background-color: #EE1111; color: #1111EE; }" : ".from { background-color: #EE1111; color: #1111EE; }"
 
@@ -7914,8 +7874,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + (".to { background-color: #EEEE11; color: #1111EE; }") : string
 >htmlLeader : string
 >'\r\n' + (".to { background-color: #EEEE11; color: #1111EE; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >(".to { background-color: #EEEE11; color: #1111EE; }") : ".to { background-color: #EEEE11; color: #1111EE; }"
 >".to { background-color: #EEEE11; color: #1111EE; }" : ".to { background-color: #EEEE11; color: #1111EE; }"
 
@@ -7923,8 +7882,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + ("h2 { margin-bottom: 0px; }") : string
 >htmlLeader : string
 >'\r\n' + ("h2 { margin-bottom: 0px; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >("h2 { margin-bottom: 0px; }") : "h2 { margin-bottom: 0px; }"
 >"h2 { margin-bottom: 0px; }" : "h2 { margin-bottom: 0px; }"
 
@@ -7932,8 +7890,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + ("h2 { padding-bottom: 0px; }") : string
 >htmlLeader : string
 >'\r\n' + ("h2 { padding-bottom: 0px; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >("h2 { padding-bottom: 0px; }") : "h2 { padding-bottom: 0px; }"
 >"h2 { padding-bottom: 0px; }" : "h2 { padding-bottom: 0px; }"
 
@@ -7941,8 +7898,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + ("h4 { font-weight: normal; }") : string
 >htmlLeader : string
 >'\r\n' + ("h4 { font-weight: normal; }") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >("h4 { font-weight: normal; }") : "h4 { font-weight: normal; }"
 >"h4 { font-weight: normal; }" : "h4 { font-weight: normal; }"
 
@@ -7950,8 +7906,7 @@ Actual errors follow: "
 >htmlLeader += '\r\n' + ("</style>") : string
 >htmlLeader : string
 >'\r\n' + ("</style>") : string
->'\r\n' : "
-"
+>'\r\n' : "\r\n"
 >("</style>") : "</style>"
 >"</style>" : "</style>"
 
@@ -8156,7 +8111,7 @@ Actual errors follow: "
                 throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
 >new Error('The generated content was "undefined". Return "null" if no baselining is required."') : Error
 >Error : ErrorConstructor
->'The generated content was "undefined". Return "null" if no baselining is required."' : "The generated content was "undefined". Return "null" if no baselining is required.""
+>'The generated content was "undefined". Return "null" if no baselining is required."' : "The generated content was \"undefined\". Return \"null\" if no baselining is required.\""
             }
 
             // Store the content in the 'local' folder so we
@@ -8252,8 +8207,7 @@ Actual errors follow: "
 >expected : string
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/\r\n?/g : RegExp
->'\n' : "
-"
+>'\n' : "\n"
 
                 actual = actual.replace(/\r\n?/g, '\n')
 >actual = actual.replace(/\r\n?/g, '\n') : string
@@ -8263,8 +8217,7 @@ Actual errors follow: "
 >actual : string
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/\r\n?/g : RegExp
->'\n' : "
-"
+>'\n' : "\n"
             }
 
             return { expected: expected, actual: actual };
@@ -8359,7 +8312,7 @@ Actual errors follow: "
 >reportContentSoFar + header : string
 >reportContentSoFar : string
 >header : string
->'<div class="code">' : "<div class="code">"
+>'<div class="code">' : "<div class=\"code\">"
 >diff.mergedHtml : any
 >diff : any
 >mergedHtml : any

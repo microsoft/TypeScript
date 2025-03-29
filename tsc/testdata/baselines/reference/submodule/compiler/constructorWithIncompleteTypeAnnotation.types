@@ -238,7 +238,7 @@ module TypeScriptAllInOne {
             var quoted = '"', quoted2 = "'";
 > : any
 >quoted : string
->'"' : """
+>'"' : "\""
 >quoted2 : string
 >"'" : "'"
 

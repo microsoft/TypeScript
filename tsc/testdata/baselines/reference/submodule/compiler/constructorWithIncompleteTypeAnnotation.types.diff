@@ -18,16 +18,7 @@
  >fs.File : any
  >fs : any
  >File : any
-@@= skipped -36, +36 lines =@@
-             var quoted = '"', quoted2 = "'";
- > : any
- >quoted : string
-->'"' : "\""
-+>'"' : """
- >quoted2 : string
- >"'" : "'"
- 
-@@= skipped -729, +729 lines =@@
+@@= skipped -765, +765 lines =@@
  TypeScriptAllInOne.Program.Main();
  >TypeScriptAllInOne.Program.Main() : void
  >TypeScriptAllInOne.Program.Main : (...args: string[]) => void

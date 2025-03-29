@@ -264,7 +264,7 @@ module Formatting {
 >edit.length : any
 >edit : any
 >length : any
->", text=\"" : ", text=""
+>", text=\"" : ", text=\""
 >TypeScript.stringToLiteral(edit.replaceWith, 30) : any
 >TypeScript.stringToLiteral : any
 >TypeScript : any
@@ -273,7 +273,7 @@ module Formatting {
 >edit : any
 >replaceWith : any
 >30 : 30
->"\"" : """
+>"\"" : "\""
                 }
             }
 
@@ -770,7 +770,7 @@ module Formatting {
                 if (c == '\t')
 >c == '\t' : boolean
 >c : string
->'\t' : "	"
+>'\t' : "\t"
 
                     indentSize = (indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize);
 >indentSize = (indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize) : number
@@ -1676,7 +1676,7 @@ module Formatting {
                     if (c == '\t')
 >c == '\t' : boolean
 >c : any
->'\t' : "	"
+>'\t' : "\t"
 
                         totalIndent += tabSize;
 >totalIndent += tabSize : any
@@ -1750,7 +1750,7 @@ module Formatting {
 >create : any
 >' ' : " "
 >tabSize : number
->"\t" : "	"
+>"\t" : "\t"
 
             var text = "";
 >text : string
@@ -2750,7 +2750,7 @@ module Formatting {
 >lineText : any
 >charAt : any
 >index : number
->'\t' : "	"
+>'\t' : "\t"
 
                     ++index;
 >++index : number

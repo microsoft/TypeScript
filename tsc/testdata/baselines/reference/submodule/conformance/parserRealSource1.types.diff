@@ -50,7 +50,7 @@
  >result += "\\\"" : string
  >result : string
 ->"\\\"" : "\\\""
-+>"\\\"" : "\""
++>"\\\"" : "\\""
  
                      break;
                  case 0x27: // single quote

@@ -30,17 +30,7 @@
  >bug : any
  >bug : string
              }
-@@= skipped -54, +54 lines =@@
- >actual + '\n      ' + n.toString() : string
- >actual + '\n      ' : string
- >actual : string
-->'\n      ' : "\n      "
-+>'\n      ' : "
-+      "
- >n.toString() : any
- >n.toString : any
- >n : any
-@@= skipped -93, +94 lines =@@
+@@= skipped -147, +147 lines =@@
          }
  
          export function compilerWarning(result: Compiler.CompilerResult, line: number, column: number, desc: string) {
@@ -81,13 +71,8 @@
  
                      actual = actual + '\n     ' + err.toString();
  >actual = actual + '\n     ' + err.toString() : string
-@@= skipped -14, +14 lines =@@
- >actual + '\n     ' + err.toString() : string
- >actual + '\n     ' : string
- >actual : string
-->'\n     ' : "\n     "
-+>'\n     ' : "
-+     "
+@@= skipped -17, +17 lines =@@
+ >'\n     ' : "\n     "
  >err.toString() : string
  >err.toString : () => string
 ->err : Compiler.CompilerError
@@ -95,102 +80,7 @@
  >toString : () => string
  
                  });
-@@= skipped -26, +27 lines =@@
- >column : number
- >"): " : "): "
- >desc : string
-->"\nActual errors follow: " : "\nActual errors follow: "
-+>"\nActual errors follow: " : "
-+Actual errors follow: "
- >actual : string
-             }
-         }
-@@= skipped -23, +24 lines =@@
- >"" : ""
- >replace : any
- >/\r\n?/g : RegExp
-->"\n" : "\n"
-+>"\n" : "
-+"
- 
-             text2 = text2.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n");
- >text2 = text2.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n") : any
-@@= skipped -15, +16 lines =@@
- >"" : ""
- >replace : any
- >/\r\n?/g : RegExp
-->"\n" : "\n"
-+>"\n" : "
-+"
- 
-             if (text1 !== text2) {
- >text1 !== text2 : boolean
-@@= skipped -57, +58 lines =@@
- >i + 1 : number
- >i : number
- >1 : 1
-->":\n" : ":\n"
-+>":\n" : ":
-+"
- 
-                         errorString += "                  Left File: " + text1Lines[i] + "\n";
- >errorString += "                  Left File: " + text1Lines[i] + "\n" : string
-@@= skipped -11, +12 lines =@@
- >text1Lines[i] : any
- >text1Lines : any
- >i : number
-->"\n" : "\n"
-+>"\n" : "
-+"
- 
-                         errorString += "                 Right File: " + text2Lines[i] + "\n\n";
- >errorString += "                 Right File: " + text2Lines[i] + "\n\n" : string
-@@= skipped -11, +12 lines =@@
- >text2Lines[i] : any
- >text2Lines : any
- >i : number
-->"\n\n" : "\n\n"
-+>"\n\n" : "
-+
-+"
-                     }
-                 }
-                 throwAssertError(new Error(errorString));
-@@= skipped -76, +78 lines =@@
- >Error : ErrorConstructor
- >"Expected array to contain \"" + contains[i] + "\"" : string
- >"Expected array to contain \"" + contains[i] : string
-->"Expected array to contain \"" : "Expected array to contain \""
-+>"Expected array to contain \"" : "Expected array to contain ""
- >contains[i] : any
- >contains : any[]
- >i : number
-->"\"" : "\""
-+>"\"" : """
-                 }
-             }
-         }
-@@= skipped -76, +76 lines =@@
- >content.split : (separator: string | RegExp, limit?: number) => string[]
- >content : string
- >split : (separator: string | RegExp, limit?: number) => string[]
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- 
-         if (lines.length === 1) {
- >lines.length === 1 : boolean
-@@= skipped -16, +17 lines =@@
- >content.split : (separator: string | RegExp, limit?: number) => string[]
- >content : string
- >split : (separator: string | RegExp, limit?: number) => string[]
-->'\n' : "\n"
-+>'\n' : "
-+"
-         }
-         return lines;
- >lines : string[]
-@@= skipped -744, +745 lines =@@
+@@= skipped -1052, +1052 lines =@@
  >false : false
  >bugs : any
  >assert.bugIds : any
@@ -372,191 +262,7 @@
  >testCode : any
  >'test.ts' : "test.ts"
  >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
-@@= skipped -29, +29 lines =@@
- 
-                 var testCode = 'class __test1__ {\n';
- >testCode : string
-->'class __test1__ {\n' : "class __test1__ {\n"
-+>'class __test1__ {\n' : "class __test1__ {
-+"
- 
-                 testCode += '    public test() {\n';
- >testCode += '    public test() {\n' : string
- >testCode : string
-->'    public test() {\n' : "    public test() {\n"
-+>'    public test() {\n' : "    public test() {
-+"
- 
-                 testCode += '        ' + other.code + ';\n';
- >testCode += '        ' + other.code + ';\n' : string
-@@= skipped -16, +18 lines =@@
- >other.code : any
- >other : Type
- >code : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '        return ' + other.identifier + ';\n';
- >testCode += '        return ' + other.identifier + ';\n' : string
-@@= skipped -11, +12 lines =@@
- >other.identifier : any
- >other : Type
- >identifier : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '    }\n';
- >testCode += '    }\n' : string
- >testCode : string
-->'    }\n' : "    }\n"
-+>'    }\n' : "    }
-+"
- 
-                 testCode += '}\n';
- >testCode += '}\n' : string
- >testCode : string
-->'}\n' : "}\n"
-+>'}\n' : "}
-+"
- 
-                 testCode += 'class __test2__ extends __test1__ {\n';
- >testCode += 'class __test2__ extends __test1__ {\n' : string
- >testCode : string
-->'class __test2__ extends __test1__ {\n' : "class __test2__ extends __test1__ {\n"
-+>'class __test2__ extends __test1__ {\n' : "class __test2__ extends __test1__ {
-+"
- 
-                 testCode += '    public test() {\n';
- >testCode += '    public test() {\n' : string
- >testCode : string
-->'    public test() {\n' : "    public test() {\n"
-+>'    public test() {\n' : "    public test() {
-+"
- 
-                 testCode += '        ' + this.code + ';\n';
- >testCode += '        ' + this.code + ';\n' : string
-@@= skipped -31, +36 lines =@@
- >this.code : any
- >this : this
- >code : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '        return ' + other.identifier + ';\n';
- >testCode += '        return ' + other.identifier + ';\n' : string
-@@= skipped -11, +12 lines =@@
- >other.identifier : any
- >other : Type
- >identifier : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '    }\n';
- >testCode += '    }\n' : string
- >testCode : string
-->'    }\n' : "    }\n"
-+>'    }\n' : "    }
-+"
- 
-                 testCode += '}\n';
- >testCode += '}\n' : string
- >testCode : string
-->'}\n' : "}\n"
-+>'}\n' : "}
-+"
- 
-                 return this.compilesOk(testCode);
- >this.compilesOk(testCode) : boolean
-@@= skipped -164, +167 lines =@@
- 
-                 var testCode = 'module __test1__ {\n';
- >testCode : string
-->'module __test1__ {\n' : "module __test1__ {\n"
-+>'module __test1__ {\n' : "module __test1__ {
-+"
- 
-                 testCode += '    ' + this.code + ';\n';
- >testCode += '    ' + this.code + ';\n' : string
-@@= skipped -11, +12 lines =@@
- >this.code : any
- >this : this
- >code : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '    export var __val__ = ' + this.identifier + ';\n';
- >testCode += '    export var __val__ = ' + this.identifier + ';\n' : string
-@@= skipped -11, +12 lines =@@
- >this.identifier : any
- >this : this
- >identifier : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '}\n';
- >testCode += '}\n' : string
- >testCode : string
-->'}\n' : "}\n"
-+>'}\n' : "}
-+"
- 
-                 testCode += 'var __test1__val__ = __test1__.__val__;\n';
- >testCode += 'var __test1__val__ = __test1__.__val__;\n' : string
- >testCode : string
-->'var __test1__val__ = __test1__.__val__;\n' : "var __test1__val__ = __test1__.__val__;\n"
-+>'var __test1__val__ = __test1__.__val__;\n' : "var __test1__val__ = __test1__.__val__;
-+"
- 
-                 testCode += 'module __test2__ {\n';
- >testCode += 'module __test2__ {\n' : string
- >testCode : string
-->'module __test2__ {\n' : "module __test2__ {\n"
-+>'module __test2__ {\n' : "module __test2__ {
-+"
- 
-                 testCode += '    export ' + other.code + ';\n';
- >testCode += '    export ' + other.code + ';\n' : string
-@@= skipped -26, +30 lines =@@
- >other.code : any
- >other : Type
- >code : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '    export var __val__ = ' + other.identifier + ';\n';
- >testCode += '    export var __val__ = ' + other.identifier + ';\n' : string
-@@= skipped -11, +12 lines =@@
- >other.identifier : any
- >other : Type
- >identifier : any
-->';\n' : ";\n"
-+>';\n' : ";
-+"
- 
-                 testCode += '}\n';
- >testCode += '}\n' : string
- >testCode : string
-->'}\n' : "}\n"
-+>'}\n' : "}
-+"
- 
-                 testCode += 'var __test2__val__ = __test2__.__val__;\n';
- >testCode += 'var __test2__val__ = __test2__.__val__;\n' : string
- >testCode : string
-->'var __test2__val__ = __test2__.__val__;\n' : "var __test2__val__ = __test2__.__val__;\n"
-+>'var __test2__val__ = __test2__.__val__;\n' : "var __test2__val__ = __test2__.__val__;
-+"
- 
-                 testCode += '__test2__val__ = __test1__val__;';
- >testCode += '__test2__val__ = __test1__val__;' : string
-@@= skipped -296, +299 lines =@@
+@@= skipped -617, +617 lines =@@
  
                  compileString(code, 'test.ts', function (compilerResult) {
  >compileString(code, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
@@ -822,20 +528,7 @@
  
                          name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '';
  >name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '' : any
-@@= skipped -66, +66 lines =@@
- >'Expression "' + expr + '" is of type "' + expectedType : string
- >'Expression "' + expr + '" is of type "' : string
- >'Expression "' + expr : string
-->'Expression "' : "Expression \""
-+>'Expression "' : "Expression ""
- >expr : string
-->'" is of type "' : "\" is of type \""
-+>'" is of type "' : "" is of type ""
- >expectedType : string
-->'"' : "\""
-+>'"' : """
- >function () {                    assert.equal(actualType.type, expectedType);                } : () => void
- 
+@@= skipped -76, +76 lines =@@
                      assert.equal(actualType.type, expectedType);
  >assert.equal(actualType.type, expectedType) : any
  >assert.equal : any
@@ -844,7 +537,7 @@
  >equal : any
  >actualType.type : any
  >actualType : Type
-@@= skipped -28, +28 lines =@@
+@@= skipped -18, +18 lines =@@
            * @param references the set of referenced files used by the given code
            */
          export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
@@ -938,17 +631,7 @@
  >emitDeclarations : any
  
                  var results: string = null;
-@@= skipped -43, +43 lines =@@
- >writer : WriterAggregator
- >lines : string[]
- >join : (separator?: string) => string
-->'\n' : "\n"
-+>'\n' : "
-+"
- 
-                         if (verifyNoDeclFile && results != "") {
- >verifyNoDeclFile && results != "" : boolean
-@@= skipped -40, +41 lines =@@
+@@= skipped -83, +83 lines =@@
  >compiler.settings.generateDeclarationFiles = false : false
  >compiler.settings.generateDeclarationFiles : any
  >compiler.settings : any
@@ -984,17 +667,7 @@
  >TypeScript : any
  
                  var lines = [];
-@@= skipped -35, +35 lines =@@
- >lines.join : (separator?: string) => string
- >lines : any[]
- >join : (separator?: string) => string
-->"\n" : "\n"
-+>"\n" : "
-+"
- 
-                 this.errors = [];
- >this.errors = [] : undefined[]
-@@= skipped -54, +55 lines =@@
+@@= skipped -89, +89 lines =@@
                          var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
  >match : RegExpMatchArray
  >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
@@ -1661,21 +1334,7 @@
  >ref : { minChar: number; limChar: number; startLine: number; startCol: number; path: string; isResident: boolean; }
                      }
                  } else if (testMetaData) {
-@@= skipped -41, +41 lines =@@
- >'Unrecognized metadata name "' + testMetaData[1] + '". Available file metadata names are: ' + fileMetadataNames.join(', ') : string
- >'Unrecognized metadata name "' + testMetaData[1] + '". Available file metadata names are: ' : string
- >'Unrecognized metadata name "' + testMetaData[1] : string
-->'Unrecognized metadata name "' : "Unrecognized metadata name \""
-+>'Unrecognized metadata name "' : "Unrecognized metadata name ""
- >testMetaData[1] : any
- >testMetaData : any
- >1 : 1
-->'". Available file metadata names are: ' : "\". Available file metadata names are: "
-+>'". Available file metadata names are: ' : "". Available file metadata names are: "
- >fileMetadataNames.join(', ') : string
- >fileMetadataNames.join : (separator?: string) => string
- >fileMetadataNames : string[]
-@@= skipped -37, +37 lines =@@
+@@= skipped -78, +78 lines =@@
  
                          // Store result file
                          var newTestFile =
@@ -1716,17 +1375,7 @@
  >[] : undefined[]
  
                      } else {
-@@= skipped -31, +31 lines =@@
- >currentFileContent : string
- >currentFileContent + '\n' : string
- >currentFileContent : string
-->'\n' : "\n"
-+>'\n' : "
-+"
-                     }
-                     currentFileContent = currentFileContent + line;
- >currentFileContent = currentFileContent + line : string
-@@= skipped -26, +27 lines =@@
+@@= skipped -57, +57 lines =@@
  
              // EOF, push whatever remains
              var newTestFile = {
@@ -2578,131 +2227,3 @@
  >code : string
  >callback : (error: Error, result: any) => void
  
-@@= skipped -50, +50 lines =@@
- >htmlLeader += '\r\n' + (".code { font: 9pt 'Courier New'; }") : string
- >htmlLeader : string
- >'\r\n' + (".code { font: 9pt 'Courier New'; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >(".code { font: 9pt 'Courier New'; }") : ".code { font: 9pt 'Courier New'; }"
- >".code { font: 9pt 'Courier New'; }" : ".code { font: 9pt 'Courier New'; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + (".old { background-color: #EE1111; }") : string
- >htmlLeader : string
- >'\r\n' + (".old { background-color: #EE1111; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >(".old { background-color: #EE1111; }") : ".old { background-color: #EE1111; }"
- >".old { background-color: #EE1111; }" : ".old { background-color: #EE1111; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + (".new { background-color: #FFFF11; }") : string
- >htmlLeader : string
- >'\r\n' + (".new { background-color: #FFFF11; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >(".new { background-color: #FFFF11; }") : ".new { background-color: #FFFF11; }"
- >".new { background-color: #FFFF11; }" : ".new { background-color: #FFFF11; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + (".from { background-color: #EE1111; color: #1111EE; }") : string
- >htmlLeader : string
- >'\r\n' + (".from { background-color: #EE1111; color: #1111EE; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >(".from { background-color: #EE1111; color: #1111EE; }") : ".from { background-color: #EE1111; color: #1111EE; }"
- >".from { background-color: #EE1111; color: #1111EE; }" : ".from { background-color: #EE1111; color: #1111EE; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + (".to { background-color: #EEEE11; color: #1111EE; }") : string
- >htmlLeader : string
- >'\r\n' + (".to { background-color: #EEEE11; color: #1111EE; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >(".to { background-color: #EEEE11; color: #1111EE; }") : ".to { background-color: #EEEE11; color: #1111EE; }"
- >".to { background-color: #EEEE11; color: #1111EE; }" : ".to { background-color: #EEEE11; color: #1111EE; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + ("h2 { margin-bottom: 0px; }") : string
- >htmlLeader : string
- >'\r\n' + ("h2 { margin-bottom: 0px; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >("h2 { margin-bottom: 0px; }") : "h2 { margin-bottom: 0px; }"
- >"h2 { margin-bottom: 0px; }" : "h2 { margin-bottom: 0px; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + ("h2 { padding-bottom: 0px; }") : string
- >htmlLeader : string
- >'\r\n' + ("h2 { padding-bottom: 0px; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >("h2 { padding-bottom: 0px; }") : "h2 { padding-bottom: 0px; }"
- >"h2 { padding-bottom: 0px; }" : "h2 { padding-bottom: 0px; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + ("h4 { font-weight: normal; }") : string
- >htmlLeader : string
- >'\r\n' + ("h4 { font-weight: normal; }") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >("h4 { font-weight: normal; }") : "h4 { font-weight: normal; }"
- >"h4 { font-weight: normal; }" : "h4 { font-weight: normal; }"
- 
-@@= skipped -8, +9 lines =@@
- >htmlLeader += '\r\n' + ("</style>") : string
- >htmlLeader : string
- >'\r\n' + ("</style>") : string
-->'\r\n' : "\r\n"
-+>'\r\n' : "
-+"
- >("</style>") : "</style>"
- >"</style>" : "</style>"
- 
-@@= skipped -205, +206 lines =@@
-                 throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
- >new Error('The generated content was "undefined". Return "null" if no baselining is required."') : Error
- >Error : ErrorConstructor
-->'The generated content was "undefined". Return "null" if no baselining is required."' : "The generated content was \"undefined\". Return \"null\" if no baselining is required.\""
-+>'The generated content was "undefined". Return "null" if no baselining is required."' : "The generated content was "undefined". Return "null" if no baselining is required.""
-             }
- 
-             // Store the content in the 'local' folder so we
-@@= skipped -96, +96 lines =@@
- >expected : string
- >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
- >/\r\n?/g : RegExp
-->'\n' : "\n"
-+>'\n' : "
-+"
- 
-                 actual = actual.replace(/\r\n?/g, '\n')
- >actual = actual.replace(/\r\n?/g, '\n') : string
-@@= skipped -10, +11 lines =@@
- >actual : string
- >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
- >/\r\n?/g : RegExp
-->'\n' : "\n"
-+>'\n' : "
-+"
-             }
- 
-             return { expected: expected, actual: actual };
-@@= skipped -95, +96 lines =@@
- >reportContentSoFar + header : string
- >reportContentSoFar : string
- >header : string
-->'<div class="code">' : "<div class=\"code\">"
-+>'<div class="code">' : "<div class="code">"
- >diff.mergedHtml : any
- >diff : any
- >mergedHtml : any

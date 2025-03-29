@@ -6,6 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
+	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
@@ -235,7 +236,7 @@ func (p *Printer) printValue(value any) {
 
 func (p *Printer) printStringLiteral(s string) {
 	p.print("\"")
-	p.print(s)
+	p.print(printer.EscapeString(s, '"'))
 	p.print("\"")
 }
 

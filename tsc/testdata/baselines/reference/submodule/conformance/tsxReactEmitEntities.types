@@ -44,7 +44,7 @@ declare var React: any;
 ><div attr={"&#0123;&hellip;&#x7D;\""}></div> : any
 >div : any
 >attr : any
->"&#0123;&hellip;&#x7D;\"" : "&#0123;&hellip;&#x7D;""
+>"&#0123;&hellip;&#x7D;\"" : "&#0123;&hellip;&#x7D;\""
 >div : any
 
 // Preserves single quotes

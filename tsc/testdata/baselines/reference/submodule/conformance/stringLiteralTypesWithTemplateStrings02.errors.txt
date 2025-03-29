@@ -1,13 +1,9 @@
-stringLiteralTypesWithTemplateStrings02.ts(1,5): error TS2322: Type '"AB
-C"' is not assignable to type '"AB
-C"'.
+stringLiteralTypesWithTemplateStrings02.ts(1,5): error TS2322: Type '"AB\nC"' is not assignable to type '"AB\r\nC"'.
 
 
 ==== stringLiteralTypesWithTemplateStrings02.ts (1 errors) ====
     let abc: "AB\r\nC" = `AB
         ~~~
-!!! error TS2322: Type '"AB
-!!! error TS2322: C"' is not assignable to type '"AB
-!!! error TS2322: C"'.
+!!! error TS2322: Type '"AB\nC"' is not assignable to type '"AB\r\nC"'.
     C`;
     let de_NEWLINE_f: "DE\nF" = `DE${"\n"}F`;

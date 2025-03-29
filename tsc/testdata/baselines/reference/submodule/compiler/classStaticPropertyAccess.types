@@ -28,7 +28,7 @@ const a = new A();
 a["\""] // Error
 >a["\""] : any
 >a : A
->"\"" : """
+>"\"" : "\""
 
 a['y']  // Error
 >a['y'] : any

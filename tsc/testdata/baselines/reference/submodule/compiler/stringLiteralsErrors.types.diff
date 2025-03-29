@@ -1,12 +1,6 @@
 --- old.stringLiteralsErrors.types
 +++ new.stringLiteralsErrors.types
-@@= skipped -46, +46 lines =@@
- 
- var es8 = 'unterminated "
- >es8 : string
-->'unterminated " : "unterminated \""
-+>'unterminated " : "unterminated ""
- 
+@@= skipped -51, +51 lines =@@
  // wrong unicode sequences
  var es9 = "\u00";
  >es9 : string

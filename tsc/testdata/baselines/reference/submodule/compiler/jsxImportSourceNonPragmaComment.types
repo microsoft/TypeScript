@@ -20,9 +20,7 @@ export default function Component() {
 >css : any
 >css`        color: red;      ` : any
 >css : any
->`        color: red;      ` : "
-        color: red;
-      "
+>`        color: red;      ` : "\n        color: red;\n      "
 
         color: red;
       `}

@@ -6,13 +6,13 @@
 
 var stringContainingUnescapedLineSeparator1 = "
 >stringContainingUnescapedLineSeparator1 : string
->" STRING_CONTENT " : " STRING_CONTENT "
+>" STRING_CONTENT " : "\u2028STRING_CONTENT\u2028"
 
 STRING_CONTENT
 ";
 var stringContainingUnescapedParagraphSeparator1 = "
 >stringContainingUnescapedParagraphSeparator1 : string
->" STRING_CONTENT " : " STRING_CONTENT "
+>" STRING_CONTENT " : "\u2029STRING_CONTENT\u2029"
 
 STRING_CONTENT
 ";
@@ -20,13 +20,13 @@ STRING_CONTENT
 
 var stringContainingUnescapedLineSeparator2 = '
 >stringContainingUnescapedLineSeparator2 : string
->' STRING_CONTENT ' : " STRING_CONTENT "
+>' STRING_CONTENT ' : "\u2028STRING_CONTENT\u2028"
 
 STRING_CONTENT
 ';
 var stringContainingUnescapedParagraphSeparator2 = '
 >stringContainingUnescapedParagraphSeparator2 : string
->' STRING_CONTENT ' : " STRING_CONTENT "
+>' STRING_CONTENT ' : "\u2029STRING_CONTENT\u2029"
 
 STRING_CONTENT
 ';
@@ -34,13 +34,13 @@ STRING_CONTENT
 
 var stringContainingUnescapedLineSeparator3 = `
 >stringContainingUnescapedLineSeparator3 : string
->` STRING_CONTENT ` : " STRING_CONTENT "
+>` STRING_CONTENT ` : "\u2028STRING_CONTENT\u2028"
 
 STRING_CONTENT
 `;
 var stringContainingUnescapedParagraphSeparator3 = `
 >stringContainingUnescapedParagraphSeparator3 : string
->` STRING_CONTENT ` : " STRING_CONTENT "
+>` STRING_CONTENT ` : "\u2029STRING_CONTENT\u2029"
 
 STRING_CONTENT
 `;
@@ -52,13 +52,13 @@ var arr = [
 >[    "  STRING_CONTENT  ",    "   STRING_CONTENT   ",    "STRING_CONTENT ",    " STRING_CONTENT",    `\ `,    ' '] : string[]
 
     "
->"  STRING_CONTENT  " : "  STRING_CONTENT  "
+>"  STRING_CONTENT  " : "\u2029\u2028STRING_CONTENT\u2028\u2029"
 
 STRING_CONTENT
 
 ",
     "
->"   STRING_CONTENT   " : "   STRING_CONTENT   "
+>"   STRING_CONTENT   " : "\u2028\u2029\u2029STRING_CONTENT\u2029\u2029\u2028"
 
 
 STRING_CONTENT
@@ -66,11 +66,11 @@ STRING_CONTENT
 
 ",
     "STRING_CONTENT
->"STRING_CONTENT " : "STRING_CONTENT "
+>"STRING_CONTENT " : "STRING_CONTENT\u2029"
 
 ",
     "
->" STRING_CONTENT" : " STRING_CONTENT"
+>" STRING_CONTENT" : "\u2028STRING_CONTENT"
 
 STRING_CONTENT",
     `\
@@ -78,7 +78,7 @@ STRING_CONTENT",
 
 `,
     '
->' ' : " "
+>' ' : "\u2028"
 
 '
 ];

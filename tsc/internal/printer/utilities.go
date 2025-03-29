@@ -163,7 +163,7 @@ func escapeStringWorker(s string, quoteChar quoteChar, flags getLiteralTextFlags
 	}
 }
 
-func escapeString(s string, quoteChar quoteChar) string {
+func EscapeString(s string, quoteChar quoteChar) string {
 	var b strings.Builder
 	b.Grow(len(s) + 2)
 	escapeStringWorker(s, quoteChar, getLiteralTextFlagsNeverAsciiEscape, &b)

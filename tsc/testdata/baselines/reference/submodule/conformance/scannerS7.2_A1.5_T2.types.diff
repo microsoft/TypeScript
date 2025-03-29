@@ -5,7 +5,7 @@
  >$ERROR : any
  >'#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' + (x) : string
 ->'#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' : "#1: eval(\"\\u00A0var x\\u00A0= 1\\u00A0\"); x === 1. Actual: "
-+>'#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' : "#1: eval("\u00A0var x\u00A0= 1\u00A0"); x === 1. Actual: "
++>'#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' : "#1: eval(\"\u00A0var x\u00A0= 1\u00A0\"); x === 1. Actual: "
  >(x) : number
  >x : number
  }

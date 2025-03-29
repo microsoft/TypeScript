@@ -147,8 +147,7 @@ module M {
 >z : IEye[]
 >i : number
 >color : number
->"\r\n" : "
-"
+>"\r\n" : "\r\n"
         }
 
         var eeks:IFrenchEye[] = [];

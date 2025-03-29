@@ -9,9 +9,7 @@ function f(...args: any[]): void {
 f `
 >f `\` : void
 >f : (...args: any[]) => void
->`\` : "
-
-"
+>`\` : "\n\n"
 
 \
 

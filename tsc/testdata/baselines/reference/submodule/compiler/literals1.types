@@ -43,7 +43,7 @@ var j = '';
 
 var k = 'q\tq';
 >k : string
->'q\tq' : "q	q"
+>'q\tq' : "q\tq"
 
 var m = /q/;
 >m : RegExp

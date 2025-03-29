@@ -1,10 +1,0 @@
---- old.templateStringWhitespaceEscapes1.types
-+++ new.templateStringWhitespaceEscapes1.types
-@@= skipped -1, +1 lines =@@
- 
- === templateStringWhitespaceEscapes1.ts ===
- `\t\n\v\f\r`;
-->`\t\n\v\f\r` : "\t\n\v\f\r"
-+>`\t\n\v\f\r` : "	
-+"
- 

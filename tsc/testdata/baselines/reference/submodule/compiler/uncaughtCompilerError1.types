@@ -53,7 +53,7 @@ function f() {
             return { appendText: '\"\"', advanceCount: 1 };
 >{ appendText: '\"\"', advanceCount: 1 } : { appendText: string; advanceCount: number; }
 >appendText : string
->'\"\"' : """"
+>'\"\"' : "\"\""
 >advanceCount : number
 >1 : 1
         }
@@ -81,7 +81,7 @@ function f() {
             return { appendText: '\"\"', advanceCount: 1 };
 >{ appendText: '\"\"', advanceCount: 1 } : { appendText: string; advanceCount: number; }
 >appendText : string
->'\"\"' : """"
+>'\"\"' : "\"\""
 >advanceCount : number
 >1 : 1
         }

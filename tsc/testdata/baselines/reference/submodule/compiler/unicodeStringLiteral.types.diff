@@ -1,9 +1,0 @@
---- old.unicodeStringLiteral.types
-+++ new.unicodeStringLiteral.types
-@@= skipped -2, +2 lines =@@
- === unicodeStringLiteral.ts ===
- var ੳ = "Ü­ਲĭ";
- >ੳ : string
-->"Ü­ਲĭ" : "Ü­ਲ\u000Eĭ"
-+>"Ü­ਲĭ" : "Ü­ਲĭ"
- 

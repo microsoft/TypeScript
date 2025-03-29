@@ -47,7 +47,7 @@ var es7 = "unterminated '
 
 var es8 = 'unterminated "
 >es8 : string
->'unterminated " : "unterminated ""
+>'unterminated " : "unterminated \""
 
 // wrong unicode sequences
 var es9 = "\u00";

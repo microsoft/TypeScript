@@ -11005,8 +11005,7 @@ module TypeScript {
 >this : this
 >content : string
 >split : (separator: string | RegExp, limit?: number) => string[]
->"\n" : "
-"
+>"\n" : "\n"
 
                     for (var i = 0; i < this.text.length; i++) {
 >i : number
