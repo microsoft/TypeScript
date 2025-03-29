@@ -1,60 +1,6 @@
 --- old.intersectionReductionStrict.types
 +++ new.intersectionReductionStrict.types
-@@= skipped -103, +103 lines =@@
- >foo : number
- 
- declare let ab: A & B;
-->ab : never
-+>ab : A & B
- 
- ab.kind;  // Error
- >ab.kind : any
-->ab : never
-+>ab : A & B
- >kind : any
- 
- declare let x: A | (B & C);  // A
-->x : A
-+>x : A | B & C
- 
- let a: A = x;
- >a : A
-->x : A
-+>x : A | B & C
- 
- type AB = A & B;  // never
-->AB : never
-+>AB : AB
- 
- type BC = B & C;  // never
-->BC : never
-+>BC : BC
- 
- type U1 = Partial<A & B>;  // never
- >U1 : never
-@@= skipped -30, +30 lines =@@
- >U3 : never
- 
- type U4 = A & B | B & C;  // never
-->U4 : never
-+>U4 : U4
- 
- type U5 = A | B & C;  // A
-->U5 : A
-+>U5 : U5
- 
- type K1 = keyof (A & B);  // string | number | symbol
- >K1 : string | number | symbol
-@@= skipped -18, +18 lines =@@
- >Merge2 : Merge2<T, U>
- 
- type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
-->M1 : never
-+>M1 : M1
- >a : 1
- >b : 2
- >a : 2
-@@= skipped -98, +98 lines =@@
+@@= skipped -249, +249 lines =@@
  // Repro from #36736
  
  const f1 = (t: "a" | ("b" & "c")): "a" => t;
@@ -71,32 +17,25 @@
  const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t;
 ->f2 : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
 ->(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
-->t : Container<"a">
-->t : Container<"a">
 +>f2 : (t: Container<"a"> | Container<"b"> & Container<"c">) => Container<"a">
 +>(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a"> | Container<"b"> & Container<"c">) => Container<"a">
-+>t : Container<"a"> | Container<"b"> & Container<"c">
-+>t : Container<"a"> | Container<"b"> & Container<"c">
+ >t : Container<"a">
+ >t : Container<"a">
  
  const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t;
 ->f3 : (t: Container<"a"> | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => Container<"a">
 ->(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => Container<"a">
-->t : Container<"a">
 +>f3 : (t: Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">) => Container<"a">
 +>(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">) => Container<"a">
-+>t : Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">
+ >t : Container<"a">
  >dataB : boolean
-->t : Container<"a">
-+>t : Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">
+ >t : Container<"a">
  
  const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t;
 ->f4 : (t: number | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => number
 ->(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => number
-->t : number
 +>f4 : (t: number | Container<"b"> & { dataB: boolean; } & Container<"a">) => number
 +>(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | Container<"b"> & { dataB: boolean; } & Container<"a">) => number
-+>t : number | Container<"b"> & { dataB: boolean; } & Container<"a">
+ >t : number
  >dataB : boolean
-->t : number
-+>t : number | Container<"b"> & { dataB: boolean; } & Container<"a">
- 
+ >t : number

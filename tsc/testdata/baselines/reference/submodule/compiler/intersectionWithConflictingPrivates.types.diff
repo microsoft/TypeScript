@@ -1,28 +1,6 @@
 --- old.intersectionWithConflictingPrivates.types
 +++ new.intersectionWithConflictingPrivates.types
-@@= skipped -11, +11 lines =@@
- >y : string | undefined
- 
- declare let ab: A & B;
-->ab : never
-+>ab : A & B
- 
- ab.y = 'hello';
- >ab.y = 'hello' : "hello"
- >ab.y : any
-->ab : never
-+>ab : A & B
- >y : any
- >'hello' : "hello"
- 
- ab = {};
- >ab = {} : {}
-->ab : never
-+>ab : A & B
- >{} : {}
- 
- function f1(node: A | B) {
-@@= skipped -121, +121 lines =@@
+@@= skipped -132, +132 lines =@@
  		await this.bar(node);
  >await this.bar(node) : undefined
  >this.bar(node) : Promise<undefined>

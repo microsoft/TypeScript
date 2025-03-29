@@ -1,15 +1,6 @@
 --- old.unionWithIndexSignature.types
 +++ new.unionWithIndexSignature.types
-@@= skipped -22, +22 lines =@@
-   let zz = arr[1];  // Error
- >zz : string | number
- >arr[1] : string | number
-->arr : NumList | StrList
-+>arr : NumList | StrList | NumList & StrList | StrList & NumList
- >1 : 1
- }
- 
-@@= skipped -10, +10 lines =@@
+@@= skipped -32, +32 lines =@@
  >TypedArray : TypedArray
  
  export function isTypedArray(a: {}): a is Int32Array | Uint8Array {

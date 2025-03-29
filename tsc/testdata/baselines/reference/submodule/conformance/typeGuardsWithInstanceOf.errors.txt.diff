@@ -1,8 +1,7 @@
 --- old.typeGuardsWithInstanceOf.errors.txt
 +++ new.typeGuardsWithInstanceOf.errors.txt
 @@= skipped -0, +0 lines =@@
--typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
-+typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'I & RegExp'.
+ typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
    The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
 -typeGuardsWithInstanceOf.ts(36,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
 +typeGuardsWithInstanceOf.ts(36,11): error TS2339: Property 'onChanges' does not exist on type 'C | Validator & Partial<OnChanges>'.
@@ -12,16 +11,7 @@
    Property 'onChanges' does not exist on type 'C'.
  
  
-@@= skipped -14, +14 lines =@@
-         result = result2;
-     } else if (!result.global) {
-                        ~~~~~~
--!!! error TS2339: Property 'global' does not exist on type 'never'.
-+!!! error TS2339: Property 'global' does not exist on type 'I & RegExp'.
- !!! error TS2339:   The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
-     }
-     
-@@= skipped -32, +32 lines =@@
+@@= skipped -46, +46 lines =@@
          // before 4.1.
          if (v.onChanges) {
                ~~~~~~~~~

@@ -89,7 +89,7 @@ interface B {
 }
 
 type Union = A & B;
->Union : Union
+>Union : never
 
 function func(): { value: Union[] } {
 >func : () => { value: Union[]; }

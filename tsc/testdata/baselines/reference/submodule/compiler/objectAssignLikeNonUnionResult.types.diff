@@ -1,31 +1,11 @@
 --- old.objectAssignLikeNonUnionResult.types
 +++ new.objectAssignLikeNonUnionResult.types
-@@= skipped -18, +18 lines =@@
- // Displayed type: Interface & { field: number }
- // Underlying type: Something else...
- const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
-->data1 : Interface & { field: number; }
-->assign(defaultValue, Date.now() > 3 ? { field: 2 } : {}) : Interface & { field: number; }
-+>data1 : Interface & ({ field: number; } | { field?: undefined; })
-+>assign(defaultValue, Date.now() > 3 ? { field: 2 } : {}) : Interface & ({ field: number; } | { field?: undefined; })
- >assign : <T, U>(target: T, source: U) => T & U
- >defaultValue : Interface
- >Date.now() > 3 ? { field: 2 } : {} : { field: number; } | {}
-@@= skipped -21, +21 lines =@@
+@@= skipped -39, +39 lines =@@
  >__raw : C
  
  type t1 = ExtractRawComponent<typeof data1>;
 ->t1 : [R1: Interface & { field: number; }]
-->data1 : Interface & { field: number; }
 +>t1 : [R1: Interface & ({ field: number; } | { field?: undefined; })]
-+>data1 : Interface & ({ field: number; } | { field?: undefined; })
+ >data1 : Interface & { field: number; }
  
  // ???
- type Explode<T> = T extends { x: infer A } ? [A] : 'X';
-@@= skipped -11, +11 lines =@@
- // 'X' | [unknown] -- why?
- type e1 = Explode<typeof data1>;
- >e1 : "X"
-->data1 : Interface & { field: number; }
-+>data1 : Interface & ({ field: number; } | { field?: undefined; })
- 

@@ -567,7 +567,7 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >d : string
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
->f({ a: 1, id: true }, { c: 1, d: 'no' }) : { a: number; id: boolean; } & { c: number; d: string; } & { id: string; }
+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : never
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >{ a: 1, id: true } : { a: number; id: true; }
 >a : number

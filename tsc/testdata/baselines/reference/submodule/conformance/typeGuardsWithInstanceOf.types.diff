@@ -1,15 +1,6 @@
 --- old.typeGuardsWithInstanceOf.types
 +++ new.typeGuardsWithInstanceOf.types
-@@= skipped -24, +24 lines =@@
- } else if (!result.global) {
- >!result.global : boolean
- >result.global : any
-->result : never
-+>result : I & RegExp
- >global : any
- }
- 
-@@= skipped -13, +13 lines =@@
+@@= skipped -37, +37 lines =@@
  }
  interface Validator {
      validate(): null | Record<string, unknown>;

@@ -85,117 +85,28 @@
  
  const
      a = new A(),
-@@= skipped -18, +18 lines =@@
- >A : typeof A
- 
+@@= skipped -20, +20 lines =@@
      ab = new AB(),
-->ab : never
-->new AB() : never
+ >ab : never
+ >new AB() : never
 ->AB : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
-+>ab : (Anonymous class)<typeof A> & A
-+>new AB() : (Anonymous class)<typeof A> & A
 +>AB : { new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A
  
      abc = new ABC(),
-->abc : never
-->new ABC() : never
+ >abc : never
+ >new ABC() : never
 ->ABC : { new (...args: any[]): mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
-+>abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
-+>new ABC() : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
 +>ABC : { new (...args: any[]): (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A>; prototype: (Anonymous class)<any>; } & { new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A
  
      ab2c = new AB2C();
-->ab2c : never
-->new AB2C() : never
+ >ab2c : never
+ >new AB2C() : never
 ->AB2C : { new (...args: any[]): mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
-+>ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
-+>new AB2C() : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
 +>AB2C : { new (...args: any[]): (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A>; prototype: (Anonymous class)<any>; } & { new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A
  
  a.pb.toFixed();
  >a.pb.toFixed() : string
-@@= skipped -42, +42 lines =@@
- >ab.pb.toFixed() : any
- >ab.pb.toFixed : any
- >ab.pb : any
-->ab : never
-+>ab : (Anonymous class)<typeof A> & A
- >pb : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >ab.ptd.toFixed() : any
- >ab.ptd.toFixed : any
- >ab.ptd : any
-->ab : never
-+>ab : (Anonymous class)<typeof A> & A
- >ptd : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >ab.pvt.toFixed() : any
- >ab.pvt.toFixed : any
- >ab.pvt : any
-->ab : never
-+>ab : (Anonymous class)<typeof A> & A
- >pvt : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >abc.pb.toFixed() : any
- >abc.pb.toFixed : any
- >abc.pb : any
-->abc : never
-+>abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
- >pb : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >abc.ptd.toFixed() : any
- >abc.ptd.toFixed : any
- >abc.ptd : any
-->abc : never
-+>abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
- >ptd : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >abc.pvt.toFixed() : any
- >abc.pvt.toFixed : any
- >abc.pvt : any
-->abc : never
-+>abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
- >pvt : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >ab2c.pb.toFixed() : any
- >ab2c.pb.toFixed : any
- >ab2c.pb : any
-->ab2c : never
-+>ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
- >pb : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >ab2c.ptd.toFixed() : any
- >ab2c.ptd.toFixed : any
- >ab2c.ptd : any
-->ab2c : never
-+>ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
- >ptd : any
- >toFixed : any
- 
-@@= skipped -8, +8 lines =@@
- >ab2c.pvt.toFixed() : any
- >ab2c.pvt.toFixed : any
- >ab2c.pvt : any
-->ab2c : never
-+>ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
- >pvt : any
- >toFixed : any
- 
-@@= skipped -20, +20 lines =@@
+@@= skipped -124, +124 lines =@@
  }
  
  function PersonMixin<T extends Constructor<Person>>(Base: T) {

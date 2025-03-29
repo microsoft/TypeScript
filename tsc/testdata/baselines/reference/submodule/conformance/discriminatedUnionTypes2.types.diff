@@ -1,69 +1,11 @@
 --- old.discriminatedUnionTypes2.types
 +++ new.discriminatedUnionTypes2.types
-@@= skipped -318, +318 lines =@@
- 
- function f(problem: abc & (b | c)) {
- >f : (problem: abc & (b | c)) => void
-->problem : b | c
-+>problem : abc & (b | c)
- 
-     if (problem.type === 'b') {
- >problem.type === 'b' : boolean
- >problem.type : "b" | "c"
-->problem : b | c
-+>problem : abc & (b | c)
- >type : "b" | "c"
- >'b' : "b"
- 
-         problem.name;
- >problem.name : string
-->problem : b
-+>problem : b | a & b | a & c | b & c | c & b
- >name : string
-     }
-     else {
-         problem.other;
- >problem.other : string
-->problem : c
-+>problem : c | a & b | a & c | b & c | c & b
- >other : string
-     }
- }
-@@= skipped -39, +39 lines =@@
- 
- function foo1(x: RuntimeValue & { type: 'number' }) {
- >foo1 : (x: RuntimeValue & { type: "number"; }) => void
-->x : { type: "number"; value: number; } & { type: "number"; }
-+>x : RuntimeValue & { type: "number"; }
- >type : "number"
- 
-     if (x.type === 'number') {
- >x.type === 'number' : boolean
- >x.type : "number"
-->x : { type: "number"; value: number; } & { type: "number"; }
-+>x : RuntimeValue & { type: "number"; }
- >type : "number"
- >'number' : "number"
- 
-         x.value;  // number
- >x.value : number
-->x : { type: "number"; value: number; } & { type: "number"; }
-+>x : RuntimeValue & { type: "number"; }
- >value : number
-     }
-     else {
-         x.value;  // number
- >x.value : number
-->x : { type: "number"; value: number; } & { type: "number"; }
-+>x : RuntimeValue & { type: "number"; }
- >value : number
-     }
- }
+@@= skipped -382, +382 lines =@@
  
  function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
  >foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
 ->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
-+>x : RuntimeValue & ({ type: "number"; } | { type: "string"; })
++>x : { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }
  >type : "number"
  >type : "string"
  
@@ -71,21 +13,7 @@
  >x.type === 'number' : boolean
  >x.type : "number" | "string"
 ->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
-+>x : RuntimeValue & ({ type: "number"; } | { type: "string"; })
++>x : { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }
  >type : "number" | "string"
  >'number' : "number"
  
-         x.value;  // number
- >x.value : number
-->x : { type: "number"; value: number; } & { type: "number"; }
-+>x : { type: "number"; value: number; } & { type: "number"; } | { type: "number"; value: number; } & { type: "string"; } | { type: "string"; value: string; } & { type: "number"; } | { type: "boolean"; value: boolean; } & { type: "number"; } | { type: "boolean"; value: boolean; } & { type: "string"; }
- >value : number
-     }
-     else {
-         x.value;  // string
- >x.value : string
-->x : { type: "string"; value: string; } & { type: "string"; }
-+>x : { type: "number"; value: number; } & { type: "string"; } | { type: "string"; value: string; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; } | { type: "boolean"; value: boolean; } & { type: "number"; } | { type: "boolean"; value: boolean; } & { type: "string"; }
- >value : string
-     }
- }

@@ -3,102 +3,83 @@
 @@= skipped -0, +0 lines =@@
  mixinPrivateAndProtected.ts(46,3): error TS2445: Property 'ptd' is protected and only accessible within class 'A' and its subclasses.
  mixinPrivateAndProtected.ts(47,3): error TS2341: Property 'pvt' is private and only accessible within class 'A'.
--mixinPrivateAndProtected.ts(49,4): error TS2339: Property 'pb' does not exist on type 'never'.
+ mixinPrivateAndProtected.ts(49,4): error TS2339: Property 'pb' does not exist on type 'never'.
 -  The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(50,4): error TS2339: Property 'ptd' does not exist on type 'never'.
++  The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
+ mixinPrivateAndProtected.ts(50,4): error TS2339: Property 'ptd' does not exist on type 'never'.
 -  The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(51,4): error TS2339: Property 'pvt' does not exist on type 'never'.
++  The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
+ mixinPrivateAndProtected.ts(51,4): error TS2339: Property 'pvt' does not exist on type 'never'.
 -  The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(53,5): error TS2339: Property 'pb' does not exist on type 'never'.
--  The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(54,5): error TS2339: Property 'ptd' does not exist on type 'never'.
--  The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(55,5): error TS2339: Property 'pvt' does not exist on type 'never'.
--  The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(57,6): error TS2339: Property 'pb' does not exist on type 'never'.
--  The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(58,6): error TS2339: Property 'ptd' does not exist on type 'never'.
--  The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
--mixinPrivateAndProtected.ts(59,6): error TS2339: Property 'pvt' does not exist on type 'never'.
--  The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(49,4): error TS2339: Property 'pb' does not exist on type '(Anonymous class)<typeof A> & A'.
 +  The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(50,4): error TS2339: Property 'ptd' does not exist on type '(Anonymous class)<typeof A> & A'.
-+  The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(51,4): error TS2339: Property 'pvt' does not exist on type '(Anonymous class)<typeof A> & A'.
-+  The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(53,5): error TS2339: Property 'pb' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
+ mixinPrivateAndProtected.ts(53,5): error TS2339: Property 'pb' does not exist on type 'never'.
+-  The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
 +  The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(54,5): error TS2339: Property 'ptd' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
+ mixinPrivateAndProtected.ts(54,5): error TS2339: Property 'ptd' does not exist on type 'never'.
+-  The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
 +  The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(55,5): error TS2339: Property 'pvt' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
+ mixinPrivateAndProtected.ts(55,5): error TS2339: Property 'pvt' does not exist on type 'never'.
+-  The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
 +  The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(57,6): error TS2339: Property 'pb' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
+ mixinPrivateAndProtected.ts(57,6): error TS2339: Property 'pb' does not exist on type 'never'.
+-  The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
 +  The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(58,6): error TS2339: Property 'ptd' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
+ mixinPrivateAndProtected.ts(58,6): error TS2339: Property 'ptd' does not exist on type 'never'.
+-  The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
 +  The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+mixinPrivateAndProtected.ts(59,6): error TS2339: Property 'pvt' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
+ mixinPrivateAndProtected.ts(59,6): error TS2339: Property 'pvt' does not exist on type 'never'.
+-  The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
 +  The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
  
  
  ==== mixinPrivateAndProtected.ts (11 errors) ====
-@@= skipped -74, +74 lines =@@
-     
+@@= skipped -75, +75 lines =@@
      ab.pb.toFixed();
         ~~
--!!! error TS2339: Property 'pb' does not exist on type 'never'.
+ !!! error TS2339: Property 'pb' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'pb' does not exist on type '(Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      ab.ptd.toFixed();   // Error
         ~~~
--!!! error TS2339: Property 'ptd' does not exist on type 'never'.
+ !!! error TS2339: Property 'ptd' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'ptd' does not exist on type '(Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      ab.pvt.toFixed();   // Error
         ~~~
--!!! error TS2339: Property 'pvt' does not exist on type 'never'.
+ !!! error TS2339: Property 'pvt' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'pvt' does not exist on type '(Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      
      abc.pb.toFixed();
          ~~
--!!! error TS2339: Property 'pb' does not exist on type 'never'.
+ !!! error TS2339: Property 'pb' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'pb' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      abc.ptd.toFixed();  // Error
          ~~~
--!!! error TS2339: Property 'ptd' does not exist on type 'never'.
+ !!! error TS2339: Property 'ptd' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'ptd' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      abc.pvt.toFixed();  // Error
          ~~~
--!!! error TS2339: Property 'pvt' does not exist on type 'never'.
+ !!! error TS2339: Property 'pvt' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'pvt' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      
      ab2c.pb.toFixed();
           ~~
--!!! error TS2339: Property 'pb' does not exist on type 'never'.
+ !!! error TS2339: Property 'pb' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'pb' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      ab2c.ptd.toFixed(); // Error
           ~~~
--!!! error TS2339: Property 'ptd' does not exist on type 'never'.
+ !!! error TS2339: Property 'ptd' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'ptd' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      ab2c.pvt.toFixed(); // Error
           ~~~
--!!! error TS2339: Property 'pvt' does not exist on type 'never'.
+ !!! error TS2339: Property 'pvt' does not exist on type 'never'.
 -!!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-+!!! error TS2339: Property 'pvt' does not exist on type '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A'.
 +!!! error TS2339:   The intersection '(Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
      
      // Repro from #13924

@@ -1,11 +1,6 @@
 --- old.neverTypeErrors1.types
 +++ new.neverTypeErrors1.types
-@@= skipped -88, +88 lines =@@
- }
- 
- type Union = A & B;
-->Union : never
-+>Union : Union
+@@= skipped -92, +92 lines =@@
  
  function func(): { value: Union[] } {
  >func : () => { value: Union[]; }

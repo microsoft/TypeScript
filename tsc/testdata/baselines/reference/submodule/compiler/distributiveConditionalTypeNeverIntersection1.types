@@ -9,7 +9,7 @@ type IsNumber<T> = T extends number ? true : false;
 >false : false
 
 type Conflicted = { x: true } & { x: false };
->Conflicted : Conflicted
+>Conflicted : never
 >x : true
 >true : true
 >x : false

@@ -69,6 +69,9 @@ func (c *Checker) TypeToString(t *Type) string {
 
 func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
 	p := c.newPrinter(flags)
+	if flags&TypeFormatFlagsNoTypeReduction == 0 {
+		t = c.getReducedType(t)
+	}
 	p.printType(t)
 	return p.string()
 }

@@ -10,34 +10,22 @@
    "one": option => option.s,
 ->"one" : (option: OptionOne & { kind: "one"; }) => string
 ->option => option.s : (option: OptionOne & { kind: "one"; }) => string
-->option : OptionOne & { kind: "one"; }
 +>"one" : (option: Options & { kind: "one"; }) => string
 +>option => option.s : (option: Options & { kind: "one"; }) => string
-+>option : Options & { kind: "one"; }
+ >option : OptionOne & { kind: "one"; }
  >option.s : string
-->option : OptionOne & { kind: "one"; }
-+>option : Options & { kind: "one"; }
+ >option : OptionOne & { kind: "one"; }
  >s : string
  
    "two": option => option.x + "," + option.y,
 ->"two" : (option: OptionTwo & { kind: "two"; }) => string
 ->option => option.x + "," + option.y : (option: OptionTwo & { kind: "two"; }) => string
-->option : OptionTwo & { kind: "two"; }
 +>"two" : (option: Options & { kind: "two"; }) => string
 +>option => option.x + "," + option.y : (option: Options & { kind: "two"; }) => string
-+>option : Options & { kind: "two"; }
+ >option : OptionTwo & { kind: "two"; }
  >option.x + "," + option.y : string
  >option.x + "," : string
- >option.x : number
-->option : OptionTwo & { kind: "two"; }
-+>option : Options & { kind: "two"; }
- >x : number
- >"," : ","
- >option.y : number
-->option : OptionTwo & { kind: "two"; }
-+>option : Options & { kind: "two"; }
- >y : number
- 
+@@= skipped -27, +27 lines =@@
  };
  
  function handleOption<K extends Options['kind']>(option: Options & { kind: K }): string {

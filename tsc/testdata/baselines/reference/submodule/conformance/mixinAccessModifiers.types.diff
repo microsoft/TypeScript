@@ -1,44 +1,6 @@
 --- old.mixinAccessModifiers.types
 +++ new.mixinAccessModifiers.types
-@@= skipped -78, +78 lines =@@
- 
- function f1(x: Private & Private2) {
- >f1 : (x: Private & Private2) => void
-->x : never
-+>x : Private & Private2
- 
- 	x.p;  // Error, private constituent makes property inaccessible
- >x.p : any
-->x : never
-+>x : Private & Private2
- >p : any
- }
- 
- function f2(x: Private & Protected) {
- >f2 : (x: Private & Protected) => void
-->x : never
-+>x : Private & Protected
- 
- 	x.p;  // Error, private constituent makes property inaccessible
- >x.p : any
-->x : never
-+>x : Private & Protected
- >p : any
- }
- 
- function f3(x: Private & Public) {
- >f3 : (x: Private & Public) => void
-->x : never
-+>x : Private & Public
- 
- 	x.p;  // Error, private constituent makes property inaccessible
- >x.p : any
-->x : never
-+>x : Private & Public
- >p : any
- }
- 
-@@= skipped -251, +251 lines =@@
+@@= skipped -329, +329 lines =@@
  }
  
  function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
@@ -47,28 +9,3 @@
  >x : ProtectedGeneric<{}>
  
  	x.privateMethod(); // Error, private constituent makes method inaccessible
-@@= skipped -18, +18 lines =@@
- 
- function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
- >f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
-->x : never
-+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
- >a : void
- >a : void
- >b : void
-@@= skipped -8, +8 lines =@@
- 	x.privateMethod(); // Error, private constituent makes method inaccessible
- >x.privateMethod() : any
- >x.privateMethod : any
-->x : never
-+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
- >privateMethod : any
- 
- 	x.protectedMethod(); // Error, protected when all constituents are protected
- >x.protectedMethod() : any
- >x.protectedMethod : any
-->x : never
-+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
- >protectedMethod : any
- }
- 

@@ -211,23 +211,23 @@ const optionHandlers: OptionHandlers = {
   "one": option => option.s,
 >"one" : (option: Options & { kind: "one"; }) => string
 >option => option.s : (option: Options & { kind: "one"; }) => string
->option : Options & { kind: "one"; }
+>option : OptionOne & { kind: "one"; }
 >option.s : string
->option : Options & { kind: "one"; }
+>option : OptionOne & { kind: "one"; }
 >s : string
 
   "two": option => option.x + "," + option.y,
 >"two" : (option: Options & { kind: "two"; }) => string
 >option => option.x + "," + option.y : (option: Options & { kind: "two"; }) => string
->option : Options & { kind: "two"; }
+>option : OptionTwo & { kind: "two"; }
 >option.x + "," + option.y : string
 >option.x + "," : string
 >option.x : number
->option : Options & { kind: "two"; }
+>option : OptionTwo & { kind: "two"; }
 >x : number
 >"," : ","
 >option.y : number
->option : Options & { kind: "two"; }
+>option : OptionTwo & { kind: "two"; }
 >y : number
 
 };

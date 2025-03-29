@@ -93,16 +93,7 @@
  >o : { a: number; b: string; }
  >b : string
  >'yeah' : "yeah"
-@@= skipped -106, +106 lines =@@
- >d : string
- 
-     f({ a: 1, id: true }, { c: 1, d: 'no' })
-->f({ a: 1, id: true }, { c: 1, d: 'no' }) : never
-+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : { a: number; id: boolean; } & { c: number; d: string; } & { id: string; }
- >f : <T, U>(t: T, u: U) => T & U & { id: string; }
- >{ a: 1, id: true } : { a: number; id: true; }
- >a : number
-@@= skipped -105, +105 lines =@@
+@@= skipped -211, +211 lines =@@
  >v : T | U
  
      let x12 = { ...v, ...obj };

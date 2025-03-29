@@ -109,18 +109,18 @@ const
 >A : typeof A
 
     ab = new AB(),
->ab : (Anonymous class)<typeof A> & A
->new AB() : (Anonymous class)<typeof A> & A
+>ab : never
+>new AB() : never
 >AB : { new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A
 
     abc = new ABC(),
->abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
->new ABC() : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>abc : never
+>new ABC() : never
 >ABC : { new (...args: any[]): (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A>; prototype: (Anonymous class)<any>; } & { new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A
 
     ab2c = new AB2C();
->ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
->new AB2C() : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>ab2c : never
+>new AB2C() : never
 >AB2C : { new (...args: any[]): (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A>; prototype: (Anonymous class)<any>; } & { new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A
 
 a.pb.toFixed();
@@ -151,7 +151,7 @@ ab.pb.toFixed();
 >ab.pb.toFixed() : any
 >ab.pb.toFixed : any
 >ab.pb : any
->ab : (Anonymous class)<typeof A> & A
+>ab : never
 >pb : any
 >toFixed : any
 
@@ -159,7 +159,7 @@ ab.ptd.toFixed();   // Error
 >ab.ptd.toFixed() : any
 >ab.ptd.toFixed : any
 >ab.ptd : any
->ab : (Anonymous class)<typeof A> & A
+>ab : never
 >ptd : any
 >toFixed : any
 
@@ -167,7 +167,7 @@ ab.pvt.toFixed();   // Error
 >ab.pvt.toFixed() : any
 >ab.pvt.toFixed : any
 >ab.pvt : any
->ab : (Anonymous class)<typeof A> & A
+>ab : never
 >pvt : any
 >toFixed : any
 
@@ -175,7 +175,7 @@ abc.pb.toFixed();
 >abc.pb.toFixed() : any
 >abc.pb.toFixed : any
 >abc.pb : any
->abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>abc : never
 >pb : any
 >toFixed : any
 
@@ -183,7 +183,7 @@ abc.ptd.toFixed();  // Error
 >abc.ptd.toFixed() : any
 >abc.ptd.toFixed : any
 >abc.ptd : any
->abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>abc : never
 >ptd : any
 >toFixed : any
 
@@ -191,7 +191,7 @@ abc.pvt.toFixed();  // Error
 >abc.pvt.toFixed() : any
 >abc.pvt.toFixed : any
 >abc.pvt : any
->abc : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>abc : never
 >pvt : any
 >toFixed : any
 
@@ -199,7 +199,7 @@ ab2c.pb.toFixed();
 >ab2c.pb.toFixed() : any
 >ab2c.pb.toFixed : any
 >ab2c.pb : any
->ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>ab2c : never
 >pb : any
 >toFixed : any
 
@@ -207,7 +207,7 @@ ab2c.ptd.toFixed(); // Error
 >ab2c.ptd.toFixed() : any
 >ab2c.ptd.toFixed : any
 >ab2c.ptd : any
->ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>ab2c : never
 >ptd : any
 >toFixed : any
 
@@ -215,7 +215,7 @@ ab2c.pvt.toFixed(); // Error
 >ab2c.pvt.toFixed() : any
 >ab2c.pvt.toFixed : any
 >ab2c.pvt : any
->ab2c : (Anonymous class)<{ new (...args: any[]): (Anonymous class)<typeof A>; prototype: (Anonymous class)<any>; } & typeof A> & (Anonymous class)<typeof A> & A
+>ab2c : never
 >pvt : any
 >toFixed : any
 

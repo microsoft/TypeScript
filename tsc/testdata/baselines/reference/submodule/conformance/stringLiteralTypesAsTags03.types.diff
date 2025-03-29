@@ -39,12 +39,3 @@
  >x : A
  >"B" : "B"
  
-@@= skipped -10, +10 lines =@@
- }
- else {
-     let d = x;
-->d : never
-->x : never
-+>d : A & B
-+>x : A & B
- }

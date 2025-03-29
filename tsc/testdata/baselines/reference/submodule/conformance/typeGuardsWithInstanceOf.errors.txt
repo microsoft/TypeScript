@@ -1,4 +1,4 @@
-typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'I & RegExp'.
+typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
   The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
 typeGuardsWithInstanceOf.ts(36,11): error TS2339: Property 'onChanges' does not exist on type 'C | Validator & Partial<OnChanges>'.
   Property 'onChanges' does not exist on type 'C'.
@@ -15,7 +15,7 @@ typeGuardsWithInstanceOf.ts(37,11): error TS2339: Property 'onChanges' does not 
         result = result2;
     } else if (!result.global) {
                        ~~~~~~
-!!! error TS2339: Property 'global' does not exist on type 'I & RegExp'.
+!!! error TS2339: Property 'global' does not exist on type 'never'.
 !!! error TS2339:   The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
     }
     

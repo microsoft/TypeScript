@@ -23,7 +23,7 @@ export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
   let zz = arr[1];  // Error
 >zz : string | number
 >arr[1] : string | number
->arr : NumList | StrList | NumList & StrList | StrList & NumList
+>arr : NumList | StrList
 >1 : 1
 }
 

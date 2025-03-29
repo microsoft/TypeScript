@@ -104,25 +104,25 @@ type C = { kind: 'c', foo: number };
 >foo : number
 
 declare let ab: A & B;
->ab : A & B
+>ab : never
 
 ab.kind;  // Error
 >ab.kind : any
->ab : A & B
+>ab : never
 >kind : any
 
 declare let x: A | (B & C);  // A
->x : A | B & C
+>x : A
 
 let a: A = x;
 >a : A
->x : A | B & C
+>x : A
 
 type AB = A & B;  // never
->AB : AB
+>AB : never
 
 type BC = B & C;  // never
->BC : BC
+>BC : never
 
 type U1 = Partial<A & B>;  // never
 >U1 : never
@@ -134,10 +134,10 @@ type U3 = (A & B)['kind'];  // never
 >U3 : never
 
 type U4 = A & B | B & C;  // never
->U4 : U4
+>U4 : never
 
 type U5 = A | B & C;  // A
->U5 : U5
+>U5 : A
 
 type K1 = keyof (A & B);  // string | number | symbol
 >K1 : string | number | symbol
@@ -152,7 +152,7 @@ type Merge2<T, U> = { [P in keyof T | keyof U]: P extends keyof T ? T[P] : U[P &
 >Merge2 : Merge2<T, U>
 
 type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
->M1 : M1
+>M1 : never
 >a : 1
 >b : 2
 >a : 2
@@ -265,20 +265,20 @@ type Container<Type extends string> = {
 const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t;
 >f2 : (t: Container<"a"> | Container<"b"> & Container<"c">) => Container<"a">
 >(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a"> | Container<"b"> & Container<"c">) => Container<"a">
->t : Container<"a"> | Container<"b"> & Container<"c">
->t : Container<"a"> | Container<"b"> & Container<"c">
+>t : Container<"a">
+>t : Container<"a">
 
 const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t;
 >f3 : (t: Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">) => Container<"a">
 >(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">) => Container<"a">
->t : Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">
+>t : Container<"a">
 >dataB : boolean
->t : Container<"a"> | Container<"b"> & { dataB: boolean; } & Container<"a">
+>t : Container<"a">
 
 const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t;
 >f4 : (t: number | Container<"b"> & { dataB: boolean; } & Container<"a">) => number
 >(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | Container<"b"> & { dataB: boolean; } & Container<"a">) => number
->t : number | Container<"b"> & { dataB: boolean; } & Container<"a">
+>t : number
 >dataB : boolean
->t : number | Container<"b"> & { dataB: boolean; } & Container<"a">
+>t : number
 
