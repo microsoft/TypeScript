@@ -1,13 +1,8 @@
-error TS2468: Cannot find global value 'Promise'.
-/src/buzz.mts(2,1): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 /src/buzz.mts(2,8): error TS2307: Cannot find module './foo' or its corresponding type declarations.
 
 
-!!! error TS2468: Cannot find global value 'Promise'.
-==== /src/buzz.mts (2 errors) ====
+==== /src/buzz.mts (1 errors) ====
     // Extensionless relative path dynamic import in an ES module
     import("./foo").then(x => x); // should error, ask for extension
-    ~~~~~~~~~~~~~~~
-!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
            ~~~~~~~
 !!! error TS2307: Cannot find module './foo' or its corresponding type declarations.

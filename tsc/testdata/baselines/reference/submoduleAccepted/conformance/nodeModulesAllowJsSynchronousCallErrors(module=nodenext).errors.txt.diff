@@ -1,6 +1,6 @@
 --- old.nodeModulesAllowJsSynchronousCallErrors(module=nodenext).errors.txt
 +++ new.nodeModulesAllowJsSynchronousCallErrors(module=nodenext).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 -index.js(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 -index.js(5,1): error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -9,64 +9,54 @@
 -subfolder/index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 -subfolder/index.js(3,22): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 -subfolder/index.js(5,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-+error TS2468: Cannot find global value 'Promise'.
-+index.js(6,23): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.js(7,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.js(8,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+subfolder/index.js(6,23): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+subfolder/index.js(7,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+subfolder/index.js(8,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
- 
- 
+-
+-
 -==== subfolder/index.js (4 errors) ====
-+!!! error TS2468: Cannot find global value 'Promise'.
-+==== subfolder/index.js (3 errors) ====
-     // cjs format file
-     import {h} from "../index.js";
+-    // cjs format file
+-    import {h} from "../index.js";
 -                    ~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("../index.js")' call instead.
 -!!! error TS1479:   To convert this file to an ECMAScript module, change its file extension to '.mjs' or create a local package.json file with `{ "type": "module" }`.
-     import mod = require("../index.js");
+-    import mod = require("../index.js");
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS8002: 'import ... =' can only be used in TypeScript files.
 -                         ~~~~~~~~~~~~~
 -!!! error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import {f as _f} from "./index.js";
-     import mod2 = require("./index.js");
+-    import {f as _f} from "./index.js";
+-    import mod2 = require("./index.js");
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS8002: 'import ... =' can only be used in TypeScript files.
-     export async function f() {
-+                          ~
-+!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-         const mod3 = await import ("../index.js");
-+                           ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-         const mod4 = await import ("./index.js");
-+                           ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-         h();
-     }
- ==== index.js (3 errors) ====
-     // esm format file
-     import {h as _h} from "./index.js";
-     import mod = require("./index.js");
+-    export async function f() {
+-        const mod3 = await import ("../index.js");
+-        const mod4 = await import ("./index.js");
+-        h();
+-    }
+-==== index.js (3 errors) ====
+-    // esm format file
+-    import {h as _h} from "./index.js";
+-    import mod = require("./index.js");
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS8002: 'import ... =' can only be used in TypeScript files.
 -                         ~~~~~~~~~~~~
 -!!! error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import {f} from "./subfolder/index.js";
-     import mod2 = require("./subfolder/index.js");
+-    import {f} from "./subfolder/index.js";
+-    import mod2 = require("./subfolder/index.js");
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS8002: 'import ... =' can only be used in TypeScript files.
-     export async function h() {
-+                          ~
-+!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-         const mod3 = await import ("./index.js");
-+                           ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-         const mod4 = await import ("./subfolder/index.js");
-+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-         f();
-     }
- ==== package.json (0 errors) ====
+-    export async function h() {
+-        const mod3 = await import ("./index.js");
+-        const mod4 = await import ("./subfolder/index.js");
+-        f();
+-    }
+-==== package.json (0 errors) ====
+-    {
+-        "name": "package",
+-        "private": true,
+-        "type": "module"
+-    }
+-==== subfolder/package.json (0 errors) ====
+-    {
+-        "type": "commonjs"
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

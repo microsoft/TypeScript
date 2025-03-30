@@ -142,7 +142,14 @@ func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
 	if options.Target != ScriptTargetNone {
 		return options.Target
 	}
-	return ScriptTargetES5
+	switch options.GetEmitModuleKind() {
+	case ModuleKindNode16:
+		return ScriptTargetES2022
+	case ModuleKindNodeNext:
+		return ScriptTargetESNext
+	default:
+		return ScriptTargetES5
+	}
 }
 
 func (options *CompilerOptions) GetEmitModuleKind() ModuleKind {

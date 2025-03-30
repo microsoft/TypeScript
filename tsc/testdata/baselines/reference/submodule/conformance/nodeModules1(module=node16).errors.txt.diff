@@ -1,6 +1,6 @@
 --- old.nodeModules1(module=node16).errors.txt
 +++ new.nodeModules1(module=node16).errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -0, +-1 lines =@@
 -index.cts(2,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
 -index.cts(3,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
 -index.cts(6,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
@@ -82,452 +82,488 @@
 -index.ts(82,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 -index.ts(83,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 -index.ts(84,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-+error TS2468: Cannot find global value 'Promise'.
-+index.cts(75,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(76,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(77,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(78,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(79,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(80,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(81,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(82,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(83,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(84,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.cts(85,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(74,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(75,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(76,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(77,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(78,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(79,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(80,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(81,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(82,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(83,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.mts(84,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(74,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(75,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(76,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(77,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(78,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(79,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(80,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(81,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(82,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(83,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+index.ts(84,14): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
- 
- 
-+!!! error TS2468: Cannot find global value 'Promise'.
- ==== subfolder/index.ts (0 errors) ====
-     // cjs format file
-     const x = 1;
-@@= skipped -116, +70 lines =@@
-     // cjs format file
-     const x = 1;
-     export {x};
+-
+-
+-==== subfolder/index.ts (0 errors) ====
+-    // cjs format file
+-    const x = 1;
+-    export {x};
+-==== subfolder/index.cts (0 errors) ====
+-    // cjs format file
+-    const x = 1;
+-    export {x};
+-==== subfolder/index.mts (0 errors) ====
+-    // esm format file
+-    const x = 1;
+-    export {x};
+-==== subfolder2/index.ts (0 errors) ====
+-    // cjs format file
+-    const x = 1;
+-    export {x};
+-==== subfolder2/index.cts (0 errors) ====
+-    // cjs format file
+-    const x = 1;
+-    export {x};
+-==== subfolder2/index.mts (0 errors) ====
+-    // esm format file
+-    const x = 1;
+-    export {x};
+-==== subfolder2/another/index.ts (0 errors) ====
+-    // esm format file
+-    const x = 1;
+-    export {x};
+-==== subfolder2/another/index.mts (0 errors) ====
+-    // esm format file
+-    const x = 1;
+-    export {x};
+-==== subfolder2/another/index.cts (0 errors) ====
+-    // cjs format file
+-    const x = 1;
+-    export {x};
 -==== index.mts (27 errors) ====
-+==== index.mts (11 errors) ====
-     import * as m1 from "./index.js";
-     import * as m2 from "./index.mjs";
-     import * as m3 from "./index.cjs";
-@@= skipped -15, +15 lines =@@
-     import * as m12 from "./subfolder2/another/index.cjs";
-     // The next ones should all fail - esm format files have no index resolution or extension resolution
-     import * as m13 from "./";
+-    import * as m1 from "./index.js";
+-    import * as m2 from "./index.mjs";
+-    import * as m3 from "./index.cjs";
+-    import * as m4 from "./subfolder/index.js";
+-    import * as m5 from "./subfolder/index.mjs";
+-    import * as m6 from "./subfolder/index.cjs";
+-    import * as m7 from "./subfolder2/index.js";
+-    import * as m8 from "./subfolder2/index.mjs";
+-    import * as m9 from "./subfolder2/index.cjs";
+-    import * as m10 from "./subfolder2/another/index.js";
+-    import * as m11 from "./subfolder2/another/index.mjs";
+-    import * as m12 from "./subfolder2/another/index.cjs";
+-    // The next ones should all fail - esm format files have no index resolution or extension resolution
+-    import * as m13 from "./";
 -                         ~~~~
 -!!! error TS2307: Cannot find module './' or its corresponding type declarations.
-     import * as m14 from "./index";
+-    import * as m14 from "./index";
 -                         ~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
-     import * as m15 from "./subfolder";
+-    import * as m15 from "./subfolder";
 -                         ~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m16 from "./subfolder/";
+-    import * as m16 from "./subfolder/";
 -                         ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m17 from "./subfolder/index";
+-    import * as m17 from "./subfolder/index";
 -                         ~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
-     import * as m18 from "./subfolder2";
+-    import * as m18 from "./subfolder2";
 -                         ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m19 from "./subfolder2/";
+-    import * as m19 from "./subfolder2/";
 -                         ~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m20 from "./subfolder2/index";
+-    import * as m20 from "./subfolder2/index";
 -                         ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
-     import * as m21 from "./subfolder2/another";
+-    import * as m21 from "./subfolder2/another";
 -                         ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m22 from "./subfolder2/another/";
+-    import * as m22 from "./subfolder2/another/";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m23 from "./subfolder2/another/index";
+-    import * as m23 from "./subfolder2/another/index";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-     void m1;
-     void m2;
-     void m3;
-@@= skipped -58, +36 lines =@@
-     
-     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
-     import m24 = require("./");
+-    void m1;
+-    void m2;
+-    void m3;
+-    void m4;
+-    void m5;
+-    void m6;
+-    void m7;
+-    void m8;
+-    void m9;
+-    void m10;
+-    void m11;
+-    void m12;
+-    void m13;
+-    void m14;
+-    void m15;
+-    void m16;
+-    void m17;
+-    void m18;
+-    void m19;
+-    void m20;
+-    void m21;
+-    void m22;
+-    void m23;
+-    
+-    // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+-    import m24 = require("./");
 -                         ~~~~
 -!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m25 = require("./index");
+-    import m25 = require("./index");
 -                         ~~~~~~~~~
 -!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m26 = require("./subfolder");
-     import m27 = require("./subfolder/");
-     import m28 = require("./subfolder/index");
-@@= skipped -12, +8 lines =@@
-     import m30 = require("./subfolder2/");
-     import m31 = require("./subfolder2/index");
-     import m32 = require("./subfolder2/another");
+-    import m26 = require("./subfolder");
+-    import m27 = require("./subfolder/");
+-    import m28 = require("./subfolder/index");
+-    import m29 = require("./subfolder2");
+-    import m30 = require("./subfolder2/");
+-    import m31 = require("./subfolder2/index");
+-    import m32 = require("./subfolder2/another");
 -                         ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m33 = require("./subfolder2/another/");
+-    import m33 = require("./subfolder2/another/");
 -                         ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m34 = require("./subfolder2/another/index");
+-    import m34 = require("./subfolder2/another/index");
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     void m24;
-     void m25;
-     void m26;
-@@= skipped -22, +16 lines =@@
-     
-     // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
-     const _m35 = import("./");
+-    void m24;
+-    void m25;
+-    void m26;
+-    void m27;
+-    void m28;
+-    void m29;
+-    void m30;
+-    void m31;
+-    void m32;
+-    void m33;
+-    void m34;
+-    
+-    // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+-    const _m35 = import("./");
 -                        ~~~~
 -!!! error TS2307: Cannot find module './' or its corresponding type declarations.
-+                 ~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m36 = import("./index");
+-    const _m36 = import("./index");
 -                        ~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m37 = import("./subfolder");
+-    const _m37 = import("./subfolder");
 -                        ~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m38 = import("./subfolder/");
+-    const _m38 = import("./subfolder/");
 -                        ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m39 = import("./subfolder/index");
+-    const _m39 = import("./subfolder/index");
 -                        ~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m40 = import("./subfolder2");
+-    const _m40 = import("./subfolder2");
 -                        ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m41 = import("./subfolder2/");
+-    const _m41 = import("./subfolder2/");
 -                        ~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m42 = import("./subfolder2/index");
+-    const _m42 = import("./subfolder2/index");
 -                        ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m43 = import("./subfolder2/another");
+-    const _m43 = import("./subfolder2/another");
 -                        ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m44 = import("./subfolder2/another/");
+-    const _m44 = import("./subfolder2/another/");
 -                        ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m45 = import("./subfolder2/another/index");
+-    const _m45 = import("./subfolder2/another/index");
 -                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     
-     // esm format file
-     const x = 1;
-     export {x};
+-    
+-    // esm format file
+-    const x = 1;
+-    export {x};
 -==== index.cts (27 errors) ====
-+==== index.cts (11 errors) ====
-     // ESM-format imports below should issue errors
-     import * as m1 from "./index.js";
+-    // ESM-format imports below should issue errors
+-    import * as m1 from "./index.js";
 -                        ~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
-     import * as m2 from "./index.mjs";
+-    import * as m2 from "./index.mjs";
 -                        ~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
-     import * as m3 from "./index.cjs";
-     import * as m4 from "./subfolder/index.js";
-     import * as m5 from "./subfolder/index.mjs";
+-    import * as m3 from "./index.cjs";
+-    import * as m4 from "./subfolder/index.js";
+-    import * as m5 from "./subfolder/index.mjs";
 -                        ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
-     import * as m6 from "./subfolder/index.cjs";
-     import * as m7 from "./subfolder2/index.js";
-     import * as m8 from "./subfolder2/index.mjs";
+-    import * as m6 from "./subfolder/index.cjs";
+-    import * as m7 from "./subfolder2/index.js";
+-    import * as m8 from "./subfolder2/index.mjs";
 -                        ~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/index.mjs")' call instead.
-     import * as m9 from "./subfolder2/index.cjs";
-     import * as m10 from "./subfolder2/another/index.js";
+-    import * as m9 from "./subfolder2/index.cjs";
+-    import * as m10 from "./subfolder2/another/index.js";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.js")' call instead.
-     import * as m11 from "./subfolder2/another/index.mjs";
+-    import * as m11 from "./subfolder2/another/index.mjs";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.mjs")' call instead.
-     import * as m12 from "./subfolder2/another/index.cjs";
-     // The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
-     import * as m13 from "./";
+-    import * as m12 from "./subfolder2/another/index.cjs";
+-    // The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
+-    import * as m13 from "./";
 -                         ~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./")' call instead.
-     import * as m14 from "./index";
+-    import * as m14 from "./index";
 -                         ~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index")' call instead.
-     import * as m15 from "./subfolder";
-     import * as m16 from "./subfolder/";
-     import * as m17 from "./subfolder/index";
-@@= skipped -76, +60 lines =@@
-     import * as m19 from "./subfolder2/";
-     import * as m20 from "./subfolder2/index";
-     import * as m21 from "./subfolder2/another";
+-    import * as m15 from "./subfolder";
+-    import * as m16 from "./subfolder/";
+-    import * as m17 from "./subfolder/index";
+-    import * as m18 from "./subfolder2";
+-    import * as m19 from "./subfolder2/";
+-    import * as m20 from "./subfolder2/index";
+-    import * as m21 from "./subfolder2/another";
 -                         ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another")' call instead.
-     import * as m22 from "./subfolder2/another/";
+-    import * as m22 from "./subfolder2/another/";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/")' call instead.
-     import * as m23 from "./subfolder2/another/index";
+-    import * as m23 from "./subfolder2/another/index";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index")' call instead.
-     void m1;
-     void m2;
-     void m3;
-@@= skipped -34, +28 lines =@@
-     
-     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
-     import m24 = require("./");
+-    void m1;
+-    void m2;
+-    void m3;
+-    void m4;
+-    void m5;
+-    void m6;
+-    void m7;
+-    void m8;
+-    void m9;
+-    void m10;
+-    void m11;
+-    void m12;
+-    void m13;
+-    void m14;
+-    void m15;
+-    void m16;
+-    void m17;
+-    void m18;
+-    void m19;
+-    void m20;
+-    void m21;
+-    void m22;
+-    void m23;
+-    
+-    // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+-    import m24 = require("./");
 -                         ~~~~
 -!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m25 = require("./index");
+-    import m25 = require("./index");
 -                         ~~~~~~~~~
 -!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m26 = require("./subfolder");
-     import m27 = require("./subfolder/");
-     import m28 = require("./subfolder/index");
-@@= skipped -12, +8 lines =@@
-     import m30 = require("./subfolder2/");
-     import m31 = require("./subfolder2/index");
-     import m32 = require("./subfolder2/another");
+-    import m26 = require("./subfolder");
+-    import m27 = require("./subfolder/");
+-    import m28 = require("./subfolder/index");
+-    import m29 = require("./subfolder2");
+-    import m30 = require("./subfolder2/");
+-    import m31 = require("./subfolder2/index");
+-    import m32 = require("./subfolder2/another");
 -                         ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m33 = require("./subfolder2/another/");
+-    import m33 = require("./subfolder2/another/");
 -                         ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m34 = require("./subfolder2/another/index");
+-    import m34 = require("./subfolder2/another/index");
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     void m24;
-     void m25;
-     void m26;
-@@= skipped -22, +16 lines =@@
-     
-     // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
-     const _m35 = import("./");
+-    void m24;
+-    void m25;
+-    void m26;
+-    void m27;
+-    void m28;
+-    void m29;
+-    void m30;
+-    void m31;
+-    void m32;
+-    void m33;
+-    void m34;
+-    
+-    // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+-    const _m35 = import("./");
 -                        ~~~~
 -!!! error TS2307: Cannot find module './' or its corresponding type declarations.
-+                 ~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m36 = import("./index");
+-    const _m36 = import("./index");
 -                        ~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m37 = import("./subfolder");
+-    const _m37 = import("./subfolder");
 -                        ~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m38 = import("./subfolder/");
+-    const _m38 = import("./subfolder/");
 -                        ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m39 = import("./subfolder/index");
+-    const _m39 = import("./subfolder/index");
 -                        ~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m40 = import("./subfolder2");
+-    const _m40 = import("./subfolder2");
 -                        ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m41 = import("./subfolder2/");
+-    const _m41 = import("./subfolder2/");
 -                        ~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m42 = import("./subfolder2/index");
+-    const _m42 = import("./subfolder2/index");
 -                        ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m43 = import("./subfolder2/another");
+-    const _m43 = import("./subfolder2/another");
 -                        ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m44 = import("./subfolder2/another/");
+-    const _m44 = import("./subfolder2/another/");
 -                        ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m45 = import("./subfolder2/another/index");
+-    const _m45 = import("./subfolder2/another/index");
 -                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     // cjs format file
-     const x = 1;
-     export {x};
+-    // cjs format file
+-    const x = 1;
+-    export {x};
 -==== index.ts (27 errors) ====
-+==== index.ts (11 errors) ====
-     import * as m1 from "./index.js";
-     import * as m2 from "./index.mjs";
-     import * as m3 from "./index.cjs";
-@@= skipped -50, +50 lines =@@
-     import * as m12 from "./subfolder2/another/index.cjs";
-     // The next ones shouldn't all work - esm format files have no index resolution or extension resolution
-     import * as m13 from "./";
+-    import * as m1 from "./index.js";
+-    import * as m2 from "./index.mjs";
+-    import * as m3 from "./index.cjs";
+-    import * as m4 from "./subfolder/index.js";
+-    import * as m5 from "./subfolder/index.mjs";
+-    import * as m6 from "./subfolder/index.cjs";
+-    import * as m7 from "./subfolder2/index.js";
+-    import * as m8 from "./subfolder2/index.mjs";
+-    import * as m9 from "./subfolder2/index.cjs";
+-    import * as m10 from "./subfolder2/another/index.js";
+-    import * as m11 from "./subfolder2/another/index.mjs";
+-    import * as m12 from "./subfolder2/another/index.cjs";
+-    // The next ones shouldn't all work - esm format files have no index resolution or extension resolution
+-    import * as m13 from "./";
 -                         ~~~~
 -!!! error TS2307: Cannot find module './' or its corresponding type declarations.
-     import * as m14 from "./index";
+-    import * as m14 from "./index";
 -                         ~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
-     import * as m15 from "./subfolder";
+-    import * as m15 from "./subfolder";
 -                         ~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m16 from "./subfolder/";
+-    import * as m16 from "./subfolder/";
 -                         ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m17 from "./subfolder/index";
+-    import * as m17 from "./subfolder/index";
 -                         ~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
-     import * as m18 from "./subfolder2";
+-    import * as m18 from "./subfolder2";
 -                         ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m19 from "./subfolder2/";
+-    import * as m19 from "./subfolder2/";
 -                         ~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m20 from "./subfolder2/index";
+-    import * as m20 from "./subfolder2/index";
 -                         ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
-     import * as m21 from "./subfolder2/another";
+-    import * as m21 from "./subfolder2/another";
 -                         ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m22 from "./subfolder2/another/";
+-    import * as m22 from "./subfolder2/another/";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-     import * as m23 from "./subfolder2/another/index";
+-    import * as m23 from "./subfolder2/another/index";
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-     void m1;
-     void m2;
-     void m3;
-@@= skipped -58, +36 lines =@@
-     
-     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
-     import m24 = require("./");
+-    void m1;
+-    void m2;
+-    void m3;
+-    void m4;
+-    void m5;
+-    void m6;
+-    void m7;
+-    void m8;
+-    void m9;
+-    void m10;
+-    void m11;
+-    void m12;
+-    void m13;
+-    void m14;
+-    void m15;
+-    void m16;
+-    void m17;
+-    void m18;
+-    void m19;
+-    void m20;
+-    void m21;
+-    void m22;
+-    void m23;
+-    
+-    // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+-    import m24 = require("./");
 -                         ~~~~
 -!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m25 = require("./index");
+-    import m25 = require("./index");
 -                         ~~~~~~~~~
 -!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m26 = require("./subfolder");
-     import m27 = require("./subfolder/");
-     import m28 = require("./subfolder/index");
-@@= skipped -12, +8 lines =@@
-     import m30 = require("./subfolder2/");
-     import m31 = require("./subfolder2/index");
-     import m32 = require("./subfolder2/another");
+-    import m26 = require("./subfolder");
+-    import m27 = require("./subfolder/");
+-    import m28 = require("./subfolder/index");
+-    import m29 = require("./subfolder2");
+-    import m30 = require("./subfolder2/");
+-    import m31 = require("./subfolder2/index");
+-    import m32 = require("./subfolder2/another");
 -                         ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m33 = require("./subfolder2/another/");
+-    import m33 = require("./subfolder2/another/");
 -                         ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     import m34 = require("./subfolder2/another/index");
+-    import m34 = require("./subfolder2/another/index");
 -                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
-     void m24;
-     void m25;
-     void m26;
-@@= skipped -22, +16 lines =@@
-     
-     // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
-     const _m35 = import("./");
+-    void m24;
+-    void m25;
+-    void m26;
+-    void m27;
+-    void m28;
+-    void m29;
+-    void m30;
+-    void m31;
+-    void m32;
+-    void m33;
+-    void m34;
+-    
+-    // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+-    const _m35 = import("./");
 -                        ~~~~
 -!!! error TS2307: Cannot find module './' or its corresponding type declarations.
-+                 ~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m36 = import("./index");
+-    const _m36 = import("./index");
 -                        ~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m37 = import("./subfolder");
+-    const _m37 = import("./subfolder");
 -                        ~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m38 = import("./subfolder/");
+-    const _m38 = import("./subfolder/");
 -                        ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m39 = import("./subfolder/index");
+-    const _m39 = import("./subfolder/index");
 -                        ~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m40 = import("./subfolder2");
+-    const _m40 = import("./subfolder2");
 -                        ~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m41 = import("./subfolder2/");
+-    const _m41 = import("./subfolder2/");
 -                        ~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m42 = import("./subfolder2/index");
+-    const _m42 = import("./subfolder2/index");
 -                        ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m43 = import("./subfolder2/another");
+-    const _m43 = import("./subfolder2/another");
 -                        ~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m44 = import("./subfolder2/another/");
+-    const _m44 = import("./subfolder2/another/");
 -                        ~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     const _m45 = import("./subfolder2/another/index");
+-    const _m45 = import("./subfolder2/another/index");
 -                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-     // esm format file
-     const x = 1;
-     export {x};
+-    // esm format file
+-    const x = 1;
+-    export {x};
+-==== package.json (0 errors) ====
+-    {
+-        "name": "package",
+-        "private": true,
+-        "type": "module"
+-    }
+-==== subfolder/package.json (0 errors) ====
+-    {
+-        "type": "commonjs"
+-    }
+-==== subfolder2/package.json (0 errors) ====
+-    {
+-    }
+-==== subfolder2/another/package.json (0 errors) ====
+-    {
+-        "type": "module"
+-    }
+@@= skipped --1, +1 lines =@@
++<no content>

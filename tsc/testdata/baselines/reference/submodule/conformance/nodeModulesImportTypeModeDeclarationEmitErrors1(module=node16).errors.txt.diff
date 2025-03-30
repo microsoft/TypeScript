@@ -1,7 +1,6 @@
 --- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node16).errors.txt
 +++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node16).errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2468: Cannot find global value 'Promise'.
  /index.ts(2,51): error TS1453: `resolution-mode` should be either `require` or `import`.
 +/index.ts(3,64): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
  /index.ts(5,78): error TS1453: `resolution-mode` should be either `require` or `import`.
@@ -9,48 +8,34 @@
  /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
  /other.ts(3,22): error TS1005: 'with' expected.
  /other.ts(3,39): error TS1005: ';' expected.
-@@= skipped -6, +9 lines =@@
- /other.ts(3,51): error TS1128: Declaration or statement expected.
+@@= skipped -7, +9 lines =@@
  /other.ts(3,52): error TS1128: Declaration or statement expected.
  /other.ts(3,53): error TS2304: Cannot find name 'RequireInterface'.
-+/other.ts(4,7): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
  /other.ts(4,22): error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
 -/other.ts(4,52): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 +/other.ts(4,52): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/require"); }>'.
  /other.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
  /other.ts(6,49): error TS1005: 'with' expected.
  /other.ts(6,66): error TS1005: ';' expected.
-@@= skipped -32, +33 lines =@@
- /other3.ts(3,55): error TS1005: ';' expected.
+@@= skipped -32, +32 lines =@@
  /other3.ts(3,56): error TS1128: Declaration or statement expected.
  /other3.ts(3,57): error TS2304: Cannot find name 'RequireInterface'.
-+/other3.ts(4,7): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
  /other3.ts(4,21): error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
 -/other3.ts(4,56): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 +/other3.ts(4,56): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/require"); }>'.
  /other3.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
  /other3.ts(6,48): error TS1005: '{' expected.
  /other3.ts(6,50): error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
-@@= skipped -16, +17 lines =@@
- /other4.ts(6,29): error TS1128: Declaration or statement expected.
+@@= skipped -16, +16 lines =@@
  /other4.ts(6,30): error TS1128: Declaration or statement expected.
  /other4.ts(6,31): error TS2448: Block-scoped variable 'RequireInterface' used before its declaration.
-+/other4.ts(7,7): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
  /other4.ts(7,21): error TS2448: Block-scoped variable 'Asserts2' used before its declaration.
 -/other4.ts(7,31): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 +/other4.ts(7,31): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/require"); }>'.
  /other4.ts(9,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
  /other4.ts(9,48): error TS1005: '{' expected.
  /other4.ts(9,56): error TS1005: ',' expected.
-@@= skipped -20, +21 lines =@@
- /other5.ts(6,64): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
- 
- 
-+!!! error TS2468: Cannot find global value 'Promise'.
- ==== /node_modules/pkg/package.json (0 errors) ====
-     {
-         "name": "pkg",
-@@= skipped -13, +14 lines =@@
+@@= skipped -32, +32 lines =@@
      export interface ImportInterface {}
  ==== /node_modules/pkg/require.d.ts (0 errors) ====
      export interface RequireInterface {}
@@ -68,19 +53,12 @@
                                                                                   ~~~~~~~~
  !!! error TS1453: `resolution-mode` should be either `require` or `import`.
      export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
--==== /other.ts (27 errors) ====
 +                                                                                              ~~~~~~~~~~~~~~~
 +!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
-+==== /other.ts (28 errors) ====
+ ==== /other.ts (27 errors) ====
      // missing assert:
      export type LocalInterface =
-         & import("pkg", {"resolution-mode": "require"}).RequireInterface
-@@= skipped -31, +35 lines =@@
-                                                         ~~~~~~~~~~~~~~~~
- !!! error TS2304: Cannot find name 'RequireInterface'.
-         & import("pkg", {"resolution-mode": "import"}).ImportInterface;
-+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+@@= skipped -34, +38 lines =@@
                           ~~~~~~~~~~~~~~~~~
  !!! error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
                                                         ~~~~~~~~~~~~~~~
@@ -89,21 +67,7 @@
      
      export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
                                       ~~~~~~~~~~~~~~~
-@@= skipped -65, +67 lines =@@
- !!! error TS1455: `resolution-mode` is the only valid key for type import assertions.
-                                                                                   ~~~~~~~~~~~~~~~
- !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
--==== /other3.ts (16 errors) ====
-+==== /other3.ts (17 errors) ====
-     // Array instead of object-y thing
-     export type LocalInterface =
-         & import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface
-@@= skipped -18, +18 lines =@@
-                                                             ~~~~~~~~~~~~~~~~
- !!! error TS2304: Cannot find name 'RequireInterface'.
-         & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
-+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+@@= skipped -83, +83 lines =@@
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
                                                             ~~~~~~~~~~~~~~~
@@ -112,22 +76,7 @@
      
      export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
                                       ~~~~~~~~~~~~~
-@@= skipped -25, +27 lines =@@
- !!! error TS2538: Type '{ "resolution-mode": "import"; }' cannot be used as an index type.
-                                                                                                      ~
- !!! error TS1005: ',' expected.
--==== /other4.ts (18 errors) ====
-+==== /other4.ts (19 errors) ====
-     // Indirected assertion objecty-thing - not allowed
-     type Asserts1 = { assert: {"resolution-mode": "require"} };
-     type Asserts2 = { assert: {"resolution-mode": "import"} };
-@@= skipped -23, +23 lines =@@
- !!! error TS2448: Block-scoped variable 'RequireInterface' used before its declaration.
- !!! related TS2728 /other4.ts:9:58: 'RequireInterface' is declared here.
-         & import("pkg", Asserts2).ImportInterface;
-+          ~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-                         ~~~~~~~~
+@@= skipped -49, +49 lines =@@
  !!! error TS2448: Block-scoped variable 'Asserts2' used before its declaration.
  !!! related TS2728 /other4.ts:10:48: 'Asserts2' is declared here.
                                    ~~~~~~~~~~~~~~~

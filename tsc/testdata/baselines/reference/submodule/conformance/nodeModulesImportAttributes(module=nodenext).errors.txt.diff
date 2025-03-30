@@ -1,26 +1,15 @@
 --- old.nodeModulesImportAttributes(module=nodenext).errors.txt
 +++ new.nodeModulesImportAttributes(module=nodenext).errors.txt
 @@= skipped -0, +0 lines =@@
-+error TS2468: Cannot find global value 'Promise'.
 +index.ts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
  otherc.cts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-+otherc.cts(2,15): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
  
  
 -==== index.ts (0 errors) ====
-+!!! error TS2468: Cannot find global value 'Promise'.
 +==== index.ts (1 errors) ====
      import json from "./package.json" with { type: "json" };
--==== otherc.cts (1 errors) ====
 +                                      ~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-+==== otherc.cts (2 errors) ====
+ ==== otherc.cts (1 errors) ====
      import json from "./package.json" with { type: "json" }; // should error, cjs mode imports don't support attributes
                                        ~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-     const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
-+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
- ==== package.json (0 errors) ====
-     {
-         "name": "pkg",
