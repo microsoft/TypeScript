@@ -323,3 +323,80 @@ const o50 = merge(o49, { p51: 51 });
 >o49 : Symbol(o49, Decl(longObjectInstantiationChain1.ts, 52, 5))
 >p51 : Symbol(p51, Decl(longObjectInstantiationChain1.ts, 53, 24))
 
+o1.p1;
+>o1.p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+>o1 : Symbol(o1, Decl(longObjectInstantiationChain1.ts, 4, 5))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+
+o1.p51; // error
+>o1 : Symbol(o1, Decl(longObjectInstantiationChain1.ts, 4, 5))
+
+o2.p1;
+>o2.p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain1.ts, 5, 5))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+
+o2.p2;
+>o2.p2 : Symbol(p2, Decl(longObjectInstantiationChain1.ts, 4, 29))
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain1.ts, 5, 5))
+>p2 : Symbol(p2, Decl(longObjectInstantiationChain1.ts, 4, 29))
+
+o2.p3;
+>o2.p3 : Symbol(p3, Decl(longObjectInstantiationChain1.ts, 5, 22))
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain1.ts, 5, 5))
+>p3 : Symbol(p3, Decl(longObjectInstantiationChain1.ts, 5, 22))
+
+o2.p4; // error
+>o2 : Symbol(o2, Decl(longObjectInstantiationChain1.ts, 5, 5))
+
+o25.p1;
+>o25.p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain1.ts, 28, 5))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+
+o25.p10;
+>o25.p10 : Symbol(p10, Decl(longObjectInstantiationChain1.ts, 12, 22))
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain1.ts, 28, 5))
+>p10 : Symbol(p10, Decl(longObjectInstantiationChain1.ts, 12, 22))
+
+o25.p26;
+>o25.p26 : Symbol(p26, Decl(longObjectInstantiationChain1.ts, 28, 24))
+>o25 : Symbol(o25, Decl(longObjectInstantiationChain1.ts, 28, 5))
+>p26 : Symbol(p26, Decl(longObjectInstantiationChain1.ts, 28, 24))
+
+o30.p1;
+>o30.p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain1.ts, 33, 5))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+
+o30.p31;
+>o30.p31 : Symbol(p31, Decl(longObjectInstantiationChain1.ts, 33, 24))
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain1.ts, 33, 5))
+>p31 : Symbol(p31, Decl(longObjectInstantiationChain1.ts, 33, 24))
+
+o30.p38; // error
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain1.ts, 33, 5))
+
+o30.p51; // error
+>o30 : Symbol(o30, Decl(longObjectInstantiationChain1.ts, 33, 5))
+
+o50.p1;
+>o50.p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain1.ts, 53, 5))
+>p1 : Symbol(p1, Decl(longObjectInstantiationChain1.ts, 4, 18))
+
+o50.p31;
+>o50.p31 : Symbol(p31, Decl(longObjectInstantiationChain1.ts, 33, 24))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain1.ts, 53, 5))
+>p31 : Symbol(p31, Decl(longObjectInstantiationChain1.ts, 33, 24))
+
+o50.p38;
+>o50.p38 : Symbol(p38, Decl(longObjectInstantiationChain1.ts, 40, 24))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain1.ts, 53, 5))
+>p38 : Symbol(p38, Decl(longObjectInstantiationChain1.ts, 40, 24))
+
+o50.p51;
+>o50.p51 : Symbol(p51, Decl(longObjectInstantiationChain1.ts, 53, 24))
+>o50 : Symbol(o50, Decl(longObjectInstantiationChain1.ts, 53, 5))
+>p51 : Symbol(p51, Decl(longObjectInstantiationChain1.ts, 53, 24))
+

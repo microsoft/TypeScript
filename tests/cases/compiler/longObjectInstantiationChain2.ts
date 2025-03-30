@@ -4,6 +4,7 @@
 type merge<base, props> = Omit<base, keyof props & keyof base> & props;
 
 type Type<t> = {
+  shape: t;
   merge: <r>(r: r) => Type<merge<t, r>>;
 };
 
@@ -58,3 +59,24 @@ const o47 = o46.merge({ p47: 47 });
 const o48 = o47.merge({ p48: 48 });
 const o49 = o48.merge({ p49: 49 });
 const o50 = o49.merge({ p50: 50 });
+
+o1.shape.p1;
+o1.shape.p51; // error
+
+o2.shape.p1;
+o2.shape.p2;
+o2.shape.p3; // error
+
+o25.shape.p1;
+o25.shape.p10;
+o25.shape.p25;
+
+o30.shape.p1;
+o30.shape.p31;
+o30.shape.p38; // error
+o30.shape.p50; // error
+
+o50.shape.p1;
+o50.shape.p31;
+o50.shape.p38;
+o50.shape.p50;

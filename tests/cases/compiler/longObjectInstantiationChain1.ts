@@ -55,3 +55,25 @@ const o47 = merge(o46, { p48: 48 });
 const o48 = merge(o47, { p49: 49 });
 const o49 = merge(o48, { p50: 50 });
 const o50 = merge(o49, { p51: 51 });
+
+o1.p1;
+o1.p51; // error
+
+o2.p1;
+o2.p2;
+o2.p3;
+o2.p4; // error
+
+o25.p1;
+o25.p10;
+o25.p26;
+
+o30.p1;
+o30.p31;
+o30.p38; // error
+o30.p51; // error
+
+o50.p1;
+o50.p31;
+o50.p38;
+o50.p51;
