@@ -7,7 +7,7 @@ parserErrorRecovery_ClassElement3.ts(7,5): error TS1005: '}' expected.
 ==== parserErrorRecovery_ClassElement3.ts (4 errors) ====
     module M {
        ¬
-       ~~
+       ~
 !!! error TS1127: Invalid character.
        class C {
        }
@@ -16,7 +16,7 @@ parserErrorRecovery_ClassElement3.ts(7,5): error TS1005: '}' expected.
        ~~~~
 !!! error TS1109: Expression expected.
        ¬
-       ~~
+       ~
 !!! error TS1127: Invalid character.
         
 !!! error TS1005: '}' expected.

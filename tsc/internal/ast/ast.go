@@ -2164,6 +2164,10 @@ func (node *IfStatement) computeSubtreeFacts() SubtreeFacts {
 		propagateSubtreeFacts(node.ElseStatement)
 }
 
+func IsIfStatement(node *Node) bool {
+	return node.Kind == KindIfStatement
+}
+
 // DoStatement
 
 type DoStatement struct {

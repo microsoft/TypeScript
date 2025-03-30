@@ -20,7 +20,7 @@ parserSkippedTokens16.ts(8,14): error TS1109: Expression expected.
            ~~~
 !!! error TS2304: Cannot find name 'Bar'.
     function Foo      () ¬   { }
-                         ~~
+                         ~
 !!! error TS1127: Invalid character.
     4+:5
       ~

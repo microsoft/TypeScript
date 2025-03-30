@@ -1,16 +1,12 @@
-unusedLocalsAndObjectSpread2.ts(3,5): error TS6133: 'children' is declared but its value is never read.
 unusedLocalsAndObjectSpread2.ts(5,6): error TS6133: 'rest' is declared but its value is never read.
 unusedLocalsAndObjectSpread2.ts(8,10): error TS6133: 'foo' is declared but its value is never read.
-unusedLocalsAndObjectSpread2.ts(10,9): error TS6133: 'children' is declared but its value is never read.
 unusedLocalsAndObjectSpread2.ts(12,12): error TS6133: 'rest' is declared but its value is never read.
 
 
-==== unusedLocalsAndObjectSpread2.ts (5 errors) ====
+==== unusedLocalsAndObjectSpread2.ts (3 errors) ====
     declare let props: any;
     const {
         children, // here!
-        ~~~~~~~~
-!!! error TS6133: 'children' is declared but its value is never read.
         active: _a, // here!
       ...rest
          ~~~~
@@ -22,8 +18,6 @@ unusedLocalsAndObjectSpread2.ts(12,12): error TS6133: 'rest' is declared but its
 !!! error TS6133: 'foo' is declared but its value is never read.
         const {
             children,
-            ~~~~~~~~
-!!! error TS6133: 'children' is declared but its value is never read.
             active: _a,
             ...rest
                ~~~~

@@ -188,9 +188,7 @@ func canUseOriginalText(node *ast.LiteralLikeNode, flags getLiteralTextFlags) bo
 	// A synthetic node has no original text, nor does a node without a parent as we would be unable to find the
 	// containing SourceFile. We also cannot use the original text if the literal was unterminated and the caller has
 	// requested proper termination of unterminated literals
-	if ast.NodeIsSynthesized(node) || node.Parent == nil ||
-		flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 &&
-			node.LiteralLikeData().TokenFlags&ast.TokenFlagsUnterminated != 0 {
+	if ast.NodeIsSynthesized(node) || node.Parent == nil || flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
 		return false
 	}
 
@@ -307,8 +305,7 @@ func getLiteralText(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags
 		return node.Text()
 
 	case ast.KindRegularExpressionLiteral:
-		if flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 &&
-			node.LiteralLikeData().TokenFlags&ast.TokenFlagsUnterminated != 0 {
+		if flags&getLiteralTextFlagsTerminateUnterminatedLiterals != 0 && ast.IsUnterminatedLiteral(node) {
 			var b strings.Builder
 			text := node.Text()
 			if len(text) > 0 && text[len(text)-1] == '\\' {

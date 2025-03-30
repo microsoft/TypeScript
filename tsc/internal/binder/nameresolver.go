@@ -489,7 +489,7 @@ func isTypeParameterSymbolDeclaredInContainer(symbol *ast.Symbol, container *ast
 func isSelfReferenceLocation(node *ast.Node, lastLocation *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindParameter:
-		return lastLocation != nil && lastLocation == node.AsParameterDeclaration().Name()
+		return lastLocation != nil && lastLocation == node.Name()
 	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration,
 		ast.KindTypeAliasDeclaration, ast.KindModuleDeclaration: // For `namespace N { N; }`
 		return true

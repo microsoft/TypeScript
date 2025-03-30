@@ -1,9 +1,7 @@
-switchStatementsWithMultipleDefaults.ts(8,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
-switchStatementsWithMultipleDefaults.ts(20,13): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
-switchStatementsWithMultipleDefaults.ts(27,22): error TS1108: A 'return' statement can only be used within a function body.
+switchStatementsWithMultipleDefaults.ts(25,13): error TS1260: Keywords cannot contain escape characters.
 
 
-==== switchStatementsWithMultipleDefaults.ts (3 errors) ====
+==== switchStatementsWithMultipleDefaults.ts (1 errors) ====
     var x = 10;
     
     switch (x) {
@@ -12,8 +10,6 @@ switchStatementsWithMultipleDefaults.ts(27,22): error TS1108: A 'return' stateme
         default:    // No issues.
             break;
         default:    // Error; second 'default' clause.
-        ~~~~~~~~
-!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
         default:    // Error; third 'default' clause.
         case 3:
             x *= x;
@@ -26,17 +22,15 @@ switchStatementsWithMultipleDefaults.ts(27,22): error TS1108: A 'return' stateme
             switch (x * x) {
                 default:    // No issues.
                 default:    // Error; second 'default' clause.
-                ~~~~~~~~
-!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
                     break;
                 case 10000:
                     x /= x;
                 default:    // Error, third 'default' clause
                 def\u0061ult: // Error, fourth 'default' clause.
+                ~~~~~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
                 // Errors on fifth-seventh
                 default: return;
-                         ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
                 default: default:
             }
     }

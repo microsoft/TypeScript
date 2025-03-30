@@ -6,6 +6,6 @@ parseErrorInHeritageClause1.ts(1,19): error TS1127: Invalid character.
     class C extends A ¬ {
                     ~
 !!! error TS2304: Cannot find name 'A'.
-                      ~~
+                      ~
 !!! error TS1127: Invalid character.
     }

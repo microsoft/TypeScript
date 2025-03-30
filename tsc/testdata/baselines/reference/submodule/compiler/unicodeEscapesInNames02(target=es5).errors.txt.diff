@@ -54,7 +54,7 @@
      // U+102A7 CARIAN LETTER A2
      var 𐊧: string;
 -        ~~
-+        ~~~~
++        ~
  !!! error TS1127: Invalid character.
 -          ~
 +         ~
@@ -70,7 +70,7 @@
      if (Math.random()) {
          𐊧 = "hello";
 -        ~~
-+        ~~~~
++        ~
  !!! error TS1127: Invalid character.
 -           ~
 +          ~
@@ -106,7 +106,7 @@
  !!! error TS1005: ';' expected.
              return this.𐊧;
 -                        ~~
-+                        ~~~~
++                        ~
  !!! error TS1127: Invalid character.
          }
      }
@@ -115,7 +115,7 @@
      
      export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
 -                ~~
-+                ~~~~
++                ~
  !!! error TS1127: Invalid character.
 -                   ~
 +                  ~
@@ -147,7 +147,7 @@
  ==== astralAsSurrogatePair.ts (6 errors) ====
      import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
 -              ~~
-+              ~~~~
++              ~
  !!! error TS1127: Invalid character.
 -                 ~~
 -!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'as'.

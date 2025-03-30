@@ -151,5 +151,20 @@ func AnyToString(v any) string {
 	case jsnum.PseudoBigInt:
 		return v.String()
 	}
-	panic("Unhandled case in anyToString")
+	panic("Unhandled case in AnyToString")
+}
+
+func IsTruthy(v any) bool {
+	// !!! This function should behave identically to the expression `!!v` in JS
+	switch v := v.(type) {
+	case string:
+		return len(v) != 0
+	case jsnum.Number:
+		return v != 0 && !v.IsNaN()
+	case bool:
+		return v
+	case jsnum.PseudoBigInt:
+		return v != jsnum.PseudoBigInt{}
+	}
+	panic("Unhandled case in IsTruthy")
 }

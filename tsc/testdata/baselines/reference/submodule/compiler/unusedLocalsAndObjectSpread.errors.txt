@@ -1,17 +1,14 @@
-unusedLocalsAndObjectSpread.ts(6,12): error TS6133: 'a' is declared but its value is never read.
-unusedLocalsAndObjectSpread.ts(20,11): error TS6198: All destructured elements are unused.
+unusedLocalsAndObjectSpread.ts(20,18): error TS6133: 'bar' is declared but its value is never read.
 unusedLocalsAndObjectSpread.ts(27,21): error TS6133: 'bar' is declared but its value is never read.
 
 
-==== unusedLocalsAndObjectSpread.ts (3 errors) ====
+==== unusedLocalsAndObjectSpread.ts (2 errors) ====
     declare var console: { log(a: any): void };
     
     function one() {
         const foo = { a: 1, b: 2 };
         // 'a' is declared but never used
         const {a, ...bar} = foo;
-               ~
-!!! error TS6133: 'a' is declared but its value is never read.
         console.log(bar);
     }
     
@@ -26,8 +23,8 @@ unusedLocalsAndObjectSpread.ts(27,21): error TS6133: 'bar' is declared but its v
         const foo = { a: 1, b: 2 };
         // 'a' is declared but never used
         const {a, ...bar} = foo; // bar should be unused
-              ~~~~~~~~~~~
-!!! error TS6198: All destructured elements are unused.
+                     ~~~
+!!! error TS6133: 'bar' is declared but its value is never read.
         //console.log(bar);
     }
     

@@ -1,4 +1,5 @@
 constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
+constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
 constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
 constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -89,7 +90,7 @@ constructorWithIncompleteTypeAnnotation.ts(259,55): error TS1005: ';' expected.
 constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
 
-==== constructorWithIncompleteTypeAnnotation.ts (89 errors) ====
+==== constructorWithIncompleteTypeAnnotation.ts (90 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -103,6 +104,8 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
     import fs = module("fs");
                 ~~~~~~
 !!! error TS2503: Cannot find namespace 'module'.
+                ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
                       ~
 !!! error TS1005: ';' expected.
     

@@ -1785,7 +1785,7 @@ func (c *Checker) isConstantReference(node *ast.Node) bool {
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
 		// The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
 		if c.isConstantReference(node.Expression()) {
-			symbol := c.typeNodeLinks.Get(node).resolvedSymbol
+			symbol := c.getResolvedSymbolOrNil(node)
 			if symbol != nil {
 				return c.isReadonlySymbol(symbol)
 			}

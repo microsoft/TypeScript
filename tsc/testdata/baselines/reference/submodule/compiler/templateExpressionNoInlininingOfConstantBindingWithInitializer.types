@@ -19,7 +19,7 @@ function example(parameters: Params) {
 
   return `${value}` === '345'
 >`${value}` === '345' : boolean
->`${value}` : "123"
+>`${value}` : string
 >value : string | number
 >'345' : "345"
 }
@@ -34,11 +34,11 @@ function example2(parameters: Params) {
 >parameters : Params
 
   const b = `${value}`;
->b : "123"
->`${value}` : "123"
+>b : string
+>`${value}` : string
 >value : string | number
 
   return b;
->b : "123"
+>b : string
 }
 

@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 	"testing"
+	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -207,8 +208,8 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 					outputLines.WriteString("    ")
 					outputLines.WriteString(nonWhitespace.ReplaceAllString(line[:squiggleStart], " "))
 					// This was `new Array(count).join("~")`; which maps 0 to "", 1 to "", 2 to "~", 3 to "~~", etc.
-					outputLines.WriteString(strings.Repeat("~", max(0, min(length, len(line)-squiggleStart))))
-
+					squiggleEnd := max(squiggleStart, min(squiggleStart+length, len(line)))
+					outputLines.WriteString(strings.Repeat("~", utf8.RuneCountInString(line[squiggleStart:squiggleEnd])))
 					// If the error ended here, or we're at the end of the file, emit its message
 					if lineIndex == len(lines)-1 || nextLineStart > end {
 						outputErrorText(errDiagnostic)

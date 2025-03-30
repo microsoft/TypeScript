@@ -66,6 +66,7 @@ type Binder struct {
 	hasFlowEffects         bool
 	inStrictMode           bool
 	inAssignmentPattern    bool
+	seenParseError         bool
 	symbolCount            int
 	classifiableNames      core.Set[string]
 	symbolPool             core.Pool[ast.Symbol]
@@ -713,16 +714,23 @@ func (b *Binder) bind(node *ast.Node) bool {
 	// the current 'container' node when it changes. This helps us know which symbol table
 	// a local should go into for example. Since terminal nodes are known not to have
 	// children, as an optimization we don't process those.
+	thisNodeOrAnySubnodesHasError := node.Flags&ast.NodeFlagsThisNodeHasError != 0
 	if node.Kind > ast.KindLastToken {
 		saveParent := b.parent
+		saveSeenParseError := b.seenParseError
 		b.parent = node
+		b.seenParseError = false
 		containerFlags := GetContainerFlags(node)
 		if containerFlags == ContainerFlagsNone {
 			b.bindChildren(node)
 		} else {
 			b.bindContainer(node, containerFlags)
 		}
+		if b.seenParseError {
+			thisNodeOrAnySubnodesHasError = true
+		}
 		b.parent = saveParent
+		b.seenParseError = saveSeenParseError
 	} else {
 		saveParent := b.parent
 		if node.Kind == ast.KindEndOfFile {
@@ -730,6 +738,10 @@ func (b *Binder) bind(node *ast.Node) bool {
 		}
 		b.bindJSDoc(node)
 		b.parent = saveParent
+	}
+	if thisNodeOrAnySubnodesHasError {
+		node.Flags |= ast.NodeFlagsThisNodeOrAnySubNodesHasError
+		b.seenParseError = true
 	}
 	b.inStrictMode = saveInStrictMode
 	return false

@@ -1600,17 +1600,10 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		return "\""
 	case 'u':
 		// '\uDDDD' and '\U{DDDDDD}'
-		extended := s.char() == '{'
 		s.pos -= 2
 		codePoint := s.scanUnicodeEscape(flags&EscapeSequenceScanningFlagsReportInvalidEscapeErrors != 0)
 		if codePoint < 0 {
-			s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 			return s.text[start:s.pos]
-		}
-		if extended {
-			s.tokenFlags |= ast.TokenFlagsExtendedUnicodeEscape
-		} else {
-			s.tokenFlags |= ast.TokenFlagsUnicodeEscape
 		}
 		return string(codePoint)
 	case 'x':
@@ -1654,11 +1647,14 @@ func (s *Scanner) scanUnicodeEscape(shouldEmitInvalidEscapeError bool) rune {
 	var hexDigits string
 	if extended {
 		s.pos++
+		s.tokenFlags |= ast.TokenFlagsExtendedUnicodeEscape
 		hexDigits = s.scanHexDigits(1, true, false)
 	} else {
+		s.tokenFlags |= ast.TokenFlagsUnicodeEscape
 		hexDigits = s.scanHexDigits(4, false, false)
 	}
 	if hexDigits == "" {
+		s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 		if shouldEmitInvalidEscapeError {
 			s.error(diagnostics.Hexadecimal_digit_expected)
 		}
@@ -1667,12 +1663,14 @@ func (s *Scanner) scanUnicodeEscape(shouldEmitInvalidEscapeError bool) rune {
 	hexValue, _ := strconv.ParseInt(hexDigits, 16, 32)
 	if extended {
 		if hexValue > 0x10FFFF {
+			s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 			if shouldEmitInvalidEscapeError {
 				s.errorAt(diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive, start+1, s.pos-start-1)
 			}
 			return -1
 		}
 		if s.char() != '}' {
+			s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 			if shouldEmitInvalidEscapeError {
 				s.error(diagnostics.Unterminated_Unicode_escape_sequence)
 			}
@@ -1687,9 +1685,11 @@ func (s *Scanner) scanUnicodeEscape(shouldEmitInvalidEscapeError bool) rune {
 // or '\u{XXXXXX}' and return code point value if valid Unicode escape is found. Otherwise return -1.
 func (s *Scanner) peekUnicodeEscape() rune {
 	if s.charAt(1) == 'u' {
-		start := s.pos
+		savePos := s.pos
+		saveTokenFlags := s.tokenFlags
 		codePoint := s.scanUnicodeEscape(false)
-		s.pos = start
+		s.pos = savePos
+		s.tokenFlags = saveTokenFlags
 		return codePoint
 	}
 	return -1

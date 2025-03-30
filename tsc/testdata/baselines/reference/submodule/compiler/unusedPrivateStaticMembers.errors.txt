@@ -1,9 +1,10 @@
 unusedPrivateStaticMembers.ts(16,20): error TS6133: 'p1' is declared but its value is never read.
 unusedPrivateStaticMembers.ts(17,20): error TS6133: 'm1' is declared but its value is never read.
+unusedPrivateStaticMembers.ts(21,20): error TS6133: 'm1' is declared but its value is never read.
 unusedPrivateStaticMembers.ts(25,20): error TS6133: 'm2' is declared but its value is never read.
 
 
-==== unusedPrivateStaticMembers.ts (3 errors) ====
+==== unusedPrivateStaticMembers.ts (4 errors) ====
     class Test1 {
         private static m1() {}
         public static test() {
@@ -29,6 +30,8 @@ unusedPrivateStaticMembers.ts(25,20): error TS6133: 'm2' is declared but its val
     
     class Test4 {
         private static m1(n: number): number {
+                       ~~
+!!! error TS6133: 'm1' is declared but its value is never read.
             return (n === 0) ? 1 : (n * Test4.m1(n - 1));
         }
     

@@ -3,6 +3,6 @@ parserErrorRecovery_ParameterList4.ts(1,14): error TS1127: Invalid character.
 
 ==== parserErrorRecovery_ParameterList4.ts (1 errors) ====
     function f(a,¬) {
-                 ~~
+                 ~
 !!! error TS1127: Invalid character.
     }

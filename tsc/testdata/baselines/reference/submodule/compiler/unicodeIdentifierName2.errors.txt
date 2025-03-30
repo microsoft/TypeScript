@@ -6,11 +6,11 @@ unicodeIdentifierName2.ts(1,26): error TS1127: Invalid character.
 
 ==== unicodeIdentifierName2.ts (4 errors) ====
     var a₁ = "hello"; alert(a₁)
-         ~~~
+         ~
 !!! error TS1127: Invalid character.
            ~
 !!! error TS1134: Variable declaration expected.
              ~~~~~~~
 !!! error TS1134: Variable declaration expected.
-                             ~~~
+                             ~
 !!! error TS1127: Invalid character.

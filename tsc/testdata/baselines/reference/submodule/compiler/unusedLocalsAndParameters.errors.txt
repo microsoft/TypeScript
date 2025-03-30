@@ -21,12 +21,11 @@ unusedLocalsAndParameters.ts(79,11): error TS6133: 'N' is declared but its value
 unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is declared but its value is never read.
 unusedLocalsAndParameters.ts(83,13): error TS2304: Cannot find name 'y'.
 unusedLocalsAndParameters.ts(83,14): error TS1005: ',' expected.
-unusedLocalsAndParameters.ts(84,5): error TS6133: 'z' is declared but its value is never read.
 unusedLocalsAndParameters.ts(84,6): error TS1005: ',' expected.
 unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
 
 
-==== unusedLocalsAndParameters.ts (26 errors) ====
+==== unusedLocalsAndParameters.ts (25 errors) ====
     export { };
     
     // function declaration paramter
@@ -157,8 +156,6 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
                  ~
 !!! error TS1005: ',' expected.
         z(x);
-        ~
-!!! error TS6133: 'z' is declared but its value is never read.
          ~
 !!! error TS1005: ',' expected.
     }

@@ -1,15 +1,11 @@
-taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(5,1): error TS2554: Expected 3 arguments, but got 1.
 taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(5,15): error TS1160: Unterminated template literal.
 
 
-==== taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts (2 errors) ====
+==== taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts (1 errors) ====
     function f(x: TemplateStringsArray, y: string, z: string) {
     }
     
     // Incomplete call, not enough parameters.
     f `123qdawdrqw
-    ~~~~~~~~~~~~~~
-!!! error TS2554: Expected 3 arguments, but got 1.
-!!! related TS6210 taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts:1:37: An argument for 'y' was not provided.
                   
 !!! error TS1160: Unterminated template literal.

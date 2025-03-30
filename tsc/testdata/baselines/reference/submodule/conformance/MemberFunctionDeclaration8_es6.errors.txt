@@ -12,7 +12,7 @@ MemberFunctionDeclaration8_es6.ts(5,12): error TS2304: Cannot find name 'bar'.
         if (a) ¬ * bar;
             ~
 !!! error TS2304: Cannot find name 'a'.
-               ~~
+               ~
 !!! error TS1127: Invalid character.
                  ~
 !!! error TS1109: Expression expected.

@@ -1,9 +1,9 @@
-foo.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+foo.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
 
 
 ==== foo.tsx (1 errors) ====
     import React = require("react");
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           ~~~~~
 !!! error TS6133: 'React' is declared but its value is never read.
     
     export const FooComponent = <div></div>

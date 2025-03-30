@@ -5,9 +5,8 @@
 +a.ts(1,10): error TS6133: 'Member' is declared but its value is never read.
  a.ts(2,1): error TS6192: All imports in import declaration are unused.
 -a.ts(3,1): error TS6133: 'ns' is declared but its value is never read.
--a.ts(4,8): error TS6133: 'r' is declared but its value is never read.
 +a.ts(3,13): error TS6133: 'ns' is declared but its value is never read.
-+a.ts(4,1): error TS6133: 'r' is declared but its value is never read.
+ a.ts(4,8): error TS6133: 'r' is declared but its value is never read.
  
  
  ==== a.ts (4 errors) ====
@@ -23,8 +22,4 @@
 +                ~~
  !!! error TS6133: 'ns' is declared but its value is never read.
      import r = require("./b");
--           ~
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS6133: 'r' is declared but its value is never read.
-     
- ==== b.ts (0 errors) ====
+            ~
