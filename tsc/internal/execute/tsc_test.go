@@ -103,7 +103,15 @@ func TestTsc(t *testing.T) {
 			commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
 		},
 		{
-			subScenario:     "Parse watch interval option",
+			subScenario: "Parse watch interval option",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/project/first.ts":      `export const a = 1`,
+				"/home/src/workspaces/project/tsconfig.json": `{ "compilerOptions": { "strict": true, "noEmit": true  } }`,
+			}, ""),
+			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
+		},
+		{
+			subScenario:     "Parse watch interval option without tsconfig.json",
 			sys:             newTestSys(nil, ""),
 			commandLineArgs: []string{"-w", "--watchInterval", "1000"},
 		},

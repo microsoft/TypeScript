@@ -1,17 +1,17 @@
 
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
-Input::--help
+Input::-w --watchInterval 1000
 
-ExitStatus:: 0
+ExitStatus:: 1
 
 ParsedCommandLine::{
     "parsedConfig": {
         "compilerOptions": {
-            "help": true
+            "watch": true
         },
         "watchOptions": {
-            "watchInterval": null,
+            "watchInterval": 1000,
             "watchFile": 0,
             "watchDirectory": 0,
             "fallbackPolling": 0,
@@ -25,11 +25,14 @@ ParsedCommandLine::{
     "configFile": null,
     "errors": [],
     "raw": {
-        "help": true
+        "watch": true,
+        "watchInterval": 1000
     },
     "compileOnSave": null
 }
 Output::
+Version 7.0.0-dev
+
 tsc: The TypeScript Compiler - Version 7.0.0-dev
 
 COMMON COMMANDS

@@ -2,8 +2,12 @@
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::-w --watchInterval 1000
+//// [/home/src/workspaces/project/first.ts] new file
+export const a = 1
+//// [/home/src/workspaces/project/tsconfig.json] new file
+{ "compilerOptions": { "strict": true, "noEmit": true  } }
 
-ExitStatus:: 1
+ExitStatus:: 0
 
 ParsedCommandLine::{
     "parsedConfig": {
@@ -31,38 +35,7 @@ ParsedCommandLine::{
     "compileOnSave": null
 }
 Output::
-Version 7.0.0-dev
-
-tsc: The TypeScript Compiler - Version 7.0.0-dev
-
-COMMON COMMANDS
-
-  tsc
-  Compiles the current project (tsconfig.json in the working directory.)
-
-  tsc app.ts util.ts
-  Ignoring tsconfig.json, compiles the specified files with default compiler options.
-
-  tsc -b
-  Build a composite project in the working directory.
-
-  tsc --init
-  Creates a tsconfig.json with the recommended settings in the working directory.
-
-  tsc -p ./path/to/tsconfig.json
-  Compiles the TypeScript project located at the specified path.
-
-  tsc --help --all
-  An expanded version of this information, showing all possible compiler options
-
-  tsc --noEmit
-  tsc --target esnext
-  Compiles the current project, with additional settings.
-
-COMMAND LINE FLAGS
-
-COMMON COMPILER OPTIONS
-
-You can learn about all of the compiler options at https://aka.ms/tsc
-
+No output
+//// [/home/src/workspaces/project/first.ts] no change
+//// [/home/src/workspaces/project/tsconfig.json] no change
 
