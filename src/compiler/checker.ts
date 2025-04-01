@@ -1124,6 +1124,7 @@ import {
     Visitor,
     VisitResult,
     VoidExpression,
+    voidMap,
     walkUpBindingElementsAndPatterns,
     walkUpOuterExpressions,
     walkUpParenthesizedExpressions,
@@ -1133,7 +1134,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    voidMap,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
