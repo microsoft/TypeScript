@@ -1423,7 +1423,6 @@ func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles co
 // options is the Compiler options.
 // host is the host used to resolve files and directories.
 // extraFileExtensions optionally file extra file extension information from host
-
 func getFileNamesFromConfigSpecs(
 	configFileSpecs configFileSpecs,
 	basePath string, // considering this is the current directory
