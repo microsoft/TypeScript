@@ -1,1 +1,3 @@
 # Diff files to instead write to submoduleAccepted as "accepted" changes.
+conformance/node10Alternateresult_noTypes.errors.txt.diff
+conformance/node10AlternateResult_noResolution.errors.txt.diff

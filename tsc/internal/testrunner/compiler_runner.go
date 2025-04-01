@@ -341,7 +341,7 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 		tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{
 			Subfolder:           suiteName,
 			IsSubmodule:         isSubmodule,
-			IsSubmoduleAccepted: len(c.result.Program.UnsupportedExtensions()) != 0, // TODO(jakebailey): read submoduleAccepted.txt
+			IsSubmoduleAccepted: c.containsUnsupportedOptions(),
 		})
 	})
 }
@@ -433,4 +433,22 @@ func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
 			}
 		}
 	})
+}
+
+func (c *compilerTest) containsUnsupportedOptions() bool {
+	if len(c.result.Program.UnsupportedExtensions()) != 0 {
+		return true
+	}
+	switch c.options.GetEmitModuleKind() {
+	case core.ModuleKindAMD, core.ModuleKindUMD, core.ModuleKindSystem:
+		return true
+	}
+	if c.options.BaseUrl != "" {
+		return true
+	}
+	if c.options.RootDirs != nil {
+		return true
+	}
+
+	return false
 }
