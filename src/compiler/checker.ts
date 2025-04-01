@@ -20384,7 +20384,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         instantiationCount++;
         instantiationDepth++;
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
-        mapper.instantiations.set(key, result);
+        mapper.instantiations?.set(key, result);
         instantiationDepth--;
         return result;
     }
@@ -26958,6 +26958,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
+                    // instantiating the constraint could reenter this function if the type parameter's constraint depends on that parameter
+                    // in such a case the reentering call just returns the preemptively set `.inferredType`
+                    // but given the `.inferredType` gets changed changed above, the cached instantiations have to be cleared because they were cached for the wrong type
+                    context.nonFixingMapper.instantiations = undefined;
                 }
             }
         }
