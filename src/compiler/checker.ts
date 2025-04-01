@@ -2101,6 +2101,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var numericStringType = getTemplateLiteralType(["", ""], [numberType]); // The `${number}` type
 
     var restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(t as TypeParameter) : t, () => "(restrictive mapper)");
+    restrictiveMapper.instantiations = voidMap;
     var permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t, () => "(permissive mapper)");
     var uniqueLiteralType = createIntrinsicType(TypeFlags.Never, "never", /*objectFlags*/ undefined, "unique literal"); // `uniqueLiteralType` is a special `never` flagged by union reduction to behave as a literal
     var uniqueLiteralMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? uniqueLiteralType : t, () => "(unique literal mapper)"); // replace all type parameters with the unique literal type (disregarding constraints)
@@ -2111,12 +2112,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return t;
     }, () => "(unmeasurable reporter)");
+    reportUnreliableMapper.instantiations = voidMap;
     var reportUnmeasurableMapper = makeFunctionTypeMapper(t => {
         if (outofbandVarianceMarkerHandler && (t === markerSuperType || t === markerSubType || t === markerOtherType)) {
             outofbandVarianceMarkerHandler(/*onlyUnreliable*/ false);
         }
         return t;
     }, () => "(unreliable reporter)");
+    reportUnmeasurableMapper.instantiations = voidMap;
 
     var emptyObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var emptyJsxObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
@@ -19961,9 +19964,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function makeFunctionTypeMapper(func: (t: Type) => Type, debugInfo: () => string): TypeMapper {
-        const mapper = Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
-        mapper.instantiations = voidMap;
-        return mapper;
+        return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
     }
 
     function makeDeferredTypeMapper(sources: readonly TypeParameter[], targets: (() => Type)[]) {

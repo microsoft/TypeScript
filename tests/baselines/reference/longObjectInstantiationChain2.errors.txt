@@ -1,17 +1,11 @@
 longObjectInstantiationChain2.ts(61,10): error TS2339: Property 'p51' does not exist on type '{ p1: 1; }'.
 longObjectInstantiationChain2.ts(65,10): error TS2339: Property 'p3' does not exist on type 'merge<{ p1: 1; }, { p2: number; }>'.
-longObjectInstantiationChain2.ts(67,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
-longObjectInstantiationChain2.ts(68,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
-longObjectInstantiationChain2.ts(71,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
 longObjectInstantiationChain2.ts(72,11): error TS2339: Property 'p31' does not exist on type 'merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<{ p1: 1; }, { p2: number; }>, { p3: number; }>, { p4: number; }>, { p5: number; }>, { p6: number; }>, { p7: number; }>, { p8: number; }>, { p9: number; }>, { p10: number; }>, { p11: number; }>, { p12: number; }>, { p13: number; }>, { p14: number; }>, { p15: number; }>, { p16: number; }>, { p17: number; }>, { p18: number; }>, { p19: number; }>, { p20: number; }>, { p21: number; }>, { p22: number; }>, { p23: number; }>, { p24: number; }>, { p25: number; }>, { p26: number; }>, { p27: number; }>, { p28: number; }>, { p29: number; }>, { p30: number; }>'.
 longObjectInstantiationChain2.ts(73,11): error TS2339: Property 'p38' does not exist on type 'merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<{ p1: 1; }, { p2: number; }>, { p3: number; }>, { p4: number; }>, { p5: number; }>, { p6: number; }>, { p7: number; }>, { p8: number; }>, { p9: number; }>, { p10: number; }>, { p11: number; }>, { p12: number; }>, { p13: number; }>, { p14: number; }>, { p15: number; }>, { p16: number; }>, { p17: number; }>, { p18: number; }>, { p19: number; }>, { p20: number; }>, { p21: number; }>, { p22: number; }>, { p23: number; }>, { p24: number; }>, { p25: number; }>, { p26: number; }>, { p27: number; }>, { p28: number; }>, { p29: number; }>, { p30: number; }>'.
 longObjectInstantiationChain2.ts(74,11): error TS2339: Property 'p50' does not exist on type 'merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<{ p1: 1; }, { p2: number; }>, { p3: number; }>, { p4: number; }>, { p5: number; }>, { p6: number; }>, { p7: number; }>, { p8: number; }>, { p9: number; }>, { p10: number; }>, { p11: number; }>, { p12: number; }>, { p13: number; }>, { p14: number; }>, { p15: number; }>, { p16: number; }>, { p17: number; }>, { p18: number; }>, { p19: number; }>, { p20: number; }>, { p21: number; }>, { p22: number; }>, { p23: number; }>, { p24: number; }>, { p25: number; }>, { p26: number; }>, { p27: number; }>, { p28: number; }>, { p29: number; }>, { p30: number; }>'.
-longObjectInstantiationChain2.ts(76,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
-longObjectInstantiationChain2.ts(77,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
-longObjectInstantiationChain2.ts(78,1): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-==== longObjectInstantiationChain2.ts (11 errors) ====
+==== longObjectInstantiationChain2.ts (5 errors) ====
     type merge<base, props> = Omit<base, keyof props & keyof base> & props;
     
     type Type<t> = {
@@ -83,16 +77,10 @@ longObjectInstantiationChain2.ts(78,1): error TS2589: Type instantiation is exce
 !!! error TS2339: Property 'p3' does not exist on type 'merge<{ p1: 1; }, { p2: number; }>'.
     
     o25.shape.p1;
-    ~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     o25.shape.p10;
-    ~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     o25.shape.p25;
     
     o30.shape.p1;
-    ~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     o30.shape.p31;
               ~~~
 !!! error TS2339: Property 'p31' does not exist on type 'merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<{ p1: 1; }, { p2: number; }>, { p3: number; }>, { p4: number; }>, { p5: number; }>, { p6: number; }>, { p7: number; }>, { p8: number; }>, { p9: number; }>, { p10: number; }>, { p11: number; }>, { p12: number; }>, { p13: number; }>, { p14: number; }>, { p15: number; }>, { p16: number; }>, { p17: number; }>, { p18: number; }>, { p19: number; }>, { p20: number; }>, { p21: number; }>, { p22: number; }>, { p23: number; }>, { p24: number; }>, { p25: number; }>, { p26: number; }>, { p27: number; }>, { p28: number; }>, { p29: number; }>, { p30: number; }>'.
@@ -104,13 +92,7 @@ longObjectInstantiationChain2.ts(78,1): error TS2589: Type instantiation is exce
 !!! error TS2339: Property 'p50' does not exist on type 'merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<merge<{ p1: 1; }, { p2: number; }>, { p3: number; }>, { p4: number; }>, { p5: number; }>, { p6: number; }>, { p7: number; }>, { p8: number; }>, { p9: number; }>, { p10: number; }>, { p11: number; }>, { p12: number; }>, { p13: number; }>, { p14: number; }>, { p15: number; }>, { p16: number; }>, { p17: number; }>, { p18: number; }>, { p19: number; }>, { p20: number; }>, { p21: number; }>, { p22: number; }>, { p23: number; }>, { p24: number; }>, { p25: number; }>, { p26: number; }>, { p27: number; }>, { p28: number; }>, { p29: number; }>, { p30: number; }>'.
     
     o50.shape.p1;
-    ~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     o50.shape.p31;
-    ~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     o50.shape.p38;
-    ~~~~~~~~~~~~~
-!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     o50.shape.p50;
     
