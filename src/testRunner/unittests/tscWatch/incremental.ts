@@ -219,6 +219,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                     relatedInformation: undefined,
                     reportsUnnecessary: undefined,
                     reportsDeprecated: undefined,
+                    reportsExperimental: undefined,
                     source: undefined,
                     skippedOn: undefined,
                 }]);
