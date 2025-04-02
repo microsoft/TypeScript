@@ -59,6 +59,7 @@
         "es2020.symbol.wellknown",
         "es2020.intl",
         "es2020.number",
+        "es2021.symbol.wellknown",
         "es2021.string",
         "es2021.promise",
         "es2021.weakref",
