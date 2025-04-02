@@ -4,28 +4,28 @@
 // This is not accurate to the original repro, but I think that's a separate
 // bug, which, if fixed, would prevent the later crash.
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "compilerOptions": { "module": "commonjs" } }
 
-// @Filename: /packages/mylib/package.json
+// @Filename: /home/src/workspaces/project/packages/mylib/package.json
 //// { "name": "mylib", "version": "1.0.0", "main": "index.js" }
 
-// @Filename: /packages/mylib/index.ts
+// @Filename: /home/src/workspaces/project/packages/mylib/index.ts
 //// export * from "./mySubDir";
 
-// @Filename: /packages/mylib/mySubDir/index.ts
+// @Filename: /home/src/workspaces/project/packages/mylib/mySubDir/index.ts
 //// export * from "./myClass";
 //// export * from "./myClass2";
 
-// @Filename: /packages/mylib/mySubDir/myClass.ts
+// @Filename: /home/src/workspaces/project/packages/mylib/mySubDir/myClass.ts
 //// export class MyClass {}
 
-// @Filename: /packages/mylib/mySubDir/myClass2.ts
+// @Filename: /home/src/workspaces/project/packages/mylib/mySubDir/myClass2.ts
 //// export class MyClass2 {}
 
-// @link: /packages/mylib -> /node_modules/mylib
+// @link: /home/src/workspaces/project/packages/mylib -> /home/src/workspaces/project/node_modules/mylib
 
-// @Filename: /src/index.ts
+// @Filename: /home/src/workspaces/project/src/index.ts
 //// 
 //// const a = new MyClass/*1*/();
 //// const b = new MyClass2/*2*/();
@@ -55,7 +55,7 @@ verify.applyCodeActionFromCompletion("1", {
   description: `Add import from "../packages/mylib"`,
   data: {
     exportName: "MyClass",
-    fileName: "/packages/mylib/index.ts",
+    fileName: "/home/src/workspaces/project/packages/mylib/index.ts",
   },
   preferences: {
     includeCompletionsForModuleExports: true,

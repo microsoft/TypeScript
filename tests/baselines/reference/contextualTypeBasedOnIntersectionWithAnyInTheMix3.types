@@ -1,0 +1,159 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts ===
+type TypeMap = {
+>TypeMap : TypeMap
+>        : ^^^^^^^
+
+  str: "a" | "b" | "c";
+>str : "a" | "b" | "c"
+>    : ^^^^^^^^^^^^^^^
+
+  num: 1 | 2 | 3;
+>num : 1 | 2 | 3
+>    : ^^^^^^^^^
+
+};
+
+declare function test1<
+>test1 : <T extends { [K in keyof TypeMap]: TypeMap[K][]; } & { [k: string]: any[]; }>(arg: T) => T
+>      : ^ ^^^^^^^^^                                                                 ^^   ^^ ^^^^^ 
+
+  T extends { [K in keyof TypeMap]: TypeMap[K][] } & { [k: string]: any[] },
+>k : string
+>  : ^^^^^^
+
+>(arg: T): T;
+>arg : T
+>    : ^
+
+const result = test1({
+>result : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1({  num: [1, 2],  str: ["a", "b"],  bool: [true, false],}) : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1 : <T extends { [K in keyof TypeMap]: TypeMap[K][]; } & { [k: string]: any[]; }>(arg: T) => T
+>      : ^ ^^^^^^^^^                                                                 ^^   ^^ ^^^^^ 
+>{  num: [1, 2],  str: ["a", "b"],  bool: [true, false],} : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  num: [1, 2],
+>num : (1 | 2)[]
+>    : ^^^^^^^^^
+>[1, 2] : (1 | 2)[]
+>       : ^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+  str: ["a", "b"],
+>str : ("a" | "b")[]
+>    : ^^^^^^^^^^^^^
+>["a", "b"] : ("a" | "b")[]
+>           : ^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+
+  bool: [true, false],
+>bool : boolean[]
+>     : ^^^^^^^^^
+>[true, false] : boolean[]
+>              : ^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+});
+
+declare function test2(a: { type: "foo" | "bar" } & { type: any }): void;
+>test2 : (a: { type: "foo" | "bar"; } & { type: any; }) => void
+>      : ^ ^^                                         ^^^^^    
+>a : { type: "foo" | "bar"; } & { type: any; }
+>  : ^^^^^^^^             ^^^^^^^^^^^^^^   ^^^
+>type : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
+>type : any
+
+test2({ type: "foo" });
+>test2({ type: "foo" }) : void
+>                       : ^^^^
+>test2 : (a: { type: "foo" | "bar"; } & { type: any; }) => void
+>      : ^ ^^                                         ^^^^^    
+>{ type: "foo" } : { type: "foo"; }
+>                : ^^^^^^^^^^^^^^^^
+>type : "foo"
+>     : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/59473
+
+const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' };
+>x : { ml: any; } & { ml: "edge"; }
+>  : ^^^^^^   ^^^^^^^^^^^^      ^^^
+>ml : any
+>ml : "edge"
+>   : ^^^^^^
+>{ ml: 'edge' } : { ml: "edge"; }
+>               : ^^^^^^^^^^^^^^^
+>ml : "edge"
+>   : ^^^^^^
+>'edge' : "edge"
+>       : ^^^^^^
+
+const a: [any] & [1] = [1];
+>a : [any] & [1]
+>  : ^^^^^^^^^^^
+>[1] : [1]
+>    : ^^^
+>1 : 1
+>  : ^
+
+const b: any[] & 1[] = [1, 1];
+>b : any[] & 1[]
+>  : ^^^^^^^^^^^
+>[1, 1] : 1[]
+>       : ^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+const c: { a: any } & { a: 1 } = { a: 1 };
+>c : { a: any; } & { a: 1; }
+>  : ^^^^^   ^^^^^^^^^^^ ^^^
+>a : any
+>a : 1
+>  : ^
+>{ a: 1 } : { a: 1; }
+>         : ^^^^^^^^^
+>a : 1
+>  : ^
+>1 : 1
+>  : ^
+
+const d: (() => { a: 1 }) & (() => { a: any }) = () => ({
+>d : (() => { a: 1; }) & (() => { a: any; })
+>  : ^^^^^^^         ^^^^^^^^^^^           ^
+>a : 1
+>  : ^
+>a : any
+>() => ({  a: 1,}) : () => { a: 1; }
+>                  : ^^^^^^^^^^^^^^^
+>({  a: 1,}) : { a: 1; }
+>            : ^^^^^^^^^
+>{  a: 1,} : { a: 1; }
+>          : ^^^^^^^^^
+
+  a: 1,
+>a : 1
+>  : ^
+>1 : 1
+>  : ^
+
+});
+

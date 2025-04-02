@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverride2.ts] ////
+
+=== /index.ts ===
+/// <reference types="pkg" />
+foo; // foo should resolve while bar should not, since index.js is esm
+>foo : Symbol(foo, Decl(import.d.ts, 2, 7))
+
+bar;
+export {};
+=== /node_modules/pkg/import.d.ts ===
+export {};
+declare global {
+>global : Symbol(global, Decl(import.d.ts, 0, 10))
+
+    var foo: number;
+>foo : Symbol(foo, Decl(import.d.ts, 2, 7))
+}

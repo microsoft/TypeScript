@@ -332,6 +332,7 @@ import {
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
+    NotEmittedTypeElement,
     NullLiteral,
     nullNodeConverters,
     nullParenthesizerRules,
@@ -476,7 +477,7 @@ export const enum NodeFactoryFlags {
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
 /** @internal @knipignore */
-export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
+export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void): void {
     nodeFactoryPatchers.push(fn);
 }
 
@@ -1007,6 +1008,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createSyntheticExpression,
         createSyntaxList,
         createNotEmittedStatement,
+        createNotEmittedTypeElement,
         createPartiallyEmittedExpression,
         updatePartiallyEmittedExpression,
         createCommaListExpression,
@@ -3479,6 +3481,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateChildFlags(node.whenTrue) |
             propagateChildFlags(node.colonToken) |
             propagateChildFlags(node.whenFalse);
+        node.flowNodeWhenFalse = undefined;
+        node.flowNodeWhenTrue = undefined;
         return node;
     }
 
@@ -6263,6 +6267,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
+    // @api
+    function createNotEmittedTypeElement() {
+        return createBaseNode<NotEmittedTypeElement>(SyntaxKind.NotEmittedTypeElement);
+    }
+
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
         if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
             if (isCommaListExpression(node)) {
@@ -7389,7 +7398,7 @@ const syntheticFactory: BaseNodeFactory = {
     createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
 };
 
-export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
+export const factory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
 
 let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 

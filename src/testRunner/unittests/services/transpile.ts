@@ -294,6 +294,11 @@ var x = 0;`,
         testVerbatimModuleSyntax: true,
     });
 
+    transpilesCorrectly("Supports setting 'declarationMap'", "x;", {
+        options: { compilerOptions: { declarationMap: true }, fileName: "input.js", reportDiagnostics: true },
+        testVerbatimModuleSyntax: true,
+    });
+
     transpilesCorrectly("Supports setting 'declarationDir'", "x;", {
         options: { compilerOptions: { declarationDir: "out/declarations" }, fileName: "input.js", reportDiagnostics: true },
         testVerbatimModuleSyntax: true,

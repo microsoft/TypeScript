@@ -383,7 +383,7 @@ export function getJSDocTagNameCompletions(): CompletionEntry[] {
 }
 
 /** @internal */
-export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
+export const getJSDocTagNameCompletionDetails: typeof getJSDocTagCompletionDetails = getJSDocTagCompletionDetails;
 
 /** @internal */
 export function getJSDocTagCompletions(): CompletionEntry[] {

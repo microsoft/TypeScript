@@ -117,10 +117,10 @@ const bigNum: bigint = 0n;
 >   : ^^
 
 const typedArray = new Uint8Array(3);
->typedArray : Uint8Array
->           : ^^^^^^^^^^
->new Uint8Array(3) : Uint8Array
->                  : ^^^^^^^^^^
+>typedArray : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array(3) : Uint8Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
@@ -131,8 +131,8 @@ typedArray[bigNum] = 0xAA; // should error
 >                          : ^^^
 >typedArray[bigNum] : any
 >                   : ^^^
->typedArray : Uint8Array
->           : ^^^^^^^^^^
+>typedArray : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >bigNum : bigint
 >       : ^^^^^^
 >0xAA : 170
@@ -143,8 +143,8 @@ typedArray[String(bigNum)] = 0xAA;
 >                                  : ^^^
 >typedArray[String(bigNum)] : any
 >                           : ^^^
->typedArray : Uint8Array
->           : ^^^^^^^^^^
+>typedArray : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >String(bigNum) : string
 >               : ^^^^^^
 >String : StringConstructor
@@ -159,8 +159,8 @@ typedArray["1"] = 0xBB;
 >                       : ^^^
 >typedArray["1"] : number
 >                : ^^^^^^
->typedArray : Uint8Array
->           : ^^^^^^^^^^
+>typedArray : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >"1" : "1"
 >    : ^^^
 >0xBB : 187
@@ -171,8 +171,8 @@ typedArray[2] = 0xCC;
 >                     : ^^^
 >typedArray[2] : number
 >              : ^^^^^^
->typedArray : Uint8Array
->           : ^^^^^^^^^^
+>typedArray : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >0xCC : 204

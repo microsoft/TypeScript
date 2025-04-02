@@ -458,6 +458,11 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
+        preparePasteEdits(options: {
+            copiedFromFile: string,
+            copiedTextRange: { pos: number, end: number }[],
+            providePasteEdits: boolean
+        }): void;
         pasteEdits(options: {
             newFileContents: { readonly [fileName: string]: string };
             args: {

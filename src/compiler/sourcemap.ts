@@ -360,12 +360,12 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
 // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
 /** @internal */
-export const sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
+export const sourceMapCommentRegExpDontCareLineStart: RegExp = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 /** @internal */
-export const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
+export const sourceMapCommentRegExp: RegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 
 /** @internal */
-export const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
+export const whitespaceOrMapCommentRegExp: RegExp = /^\s*(\/\/[@#] .*)?$/;
 
 /** @internal */
 export interface LineInfo {
@@ -386,7 +386,7 @@ export function getLineInfo(text: string, lineStarts: readonly number[]): LineIn
  *
  * @internal
  */
-export function tryGetSourceMappingURL(lineInfo: LineInfo) {
+export function tryGetSourceMappingURL(lineInfo: LineInfo): string | undefined {
     for (let index = lineInfo.getLineCount() - 1; index >= 0; index--) {
         const line = lineInfo.getLineText(index);
         const comment = sourceMapCommentRegExp.exec(line);
@@ -419,7 +419,7 @@ function isRawSourceMap(x: any): x is RawSourceMap {
 /* eslint-enable no-restricted-syntax */
 
 /** @internal */
-export function tryParseRawSourceMap(text: string) {
+export function tryParseRawSourceMap(text: string): RawSourceMap | undefined {
     try {
         const parsed = JSON.parse(text);
         if (isRawSourceMap(parsed)) {
@@ -616,7 +616,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
 }
 
 /** @internal */
-export function sameMapping<T extends Mapping>(left: T, right: T) {
+export function sameMapping<T extends Mapping>(left: T, right: T): boolean {
     return left === right
         || left.generatedLine === right.generatedLine
             && left.generatedCharacter === right.generatedCharacter

@@ -183,7 +183,7 @@ export function getDocumentPositionMapper(
     generatedFileName: string,
     generatedFileLineInfo: LineInfo,
     readMapFile: ReadMapFile,
-) {
+): DocumentPositionMapper | undefined {
     let mapFileName = tryGetSourceMappingURL(generatedFileLineInfo);
     if (mapFileName) {
         const match = base64UrlRegExp.exec(mapFileName);

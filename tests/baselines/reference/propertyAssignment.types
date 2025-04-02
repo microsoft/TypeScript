@@ -12,8 +12,8 @@ var bar1: { x : number; }
 >  : ^^^^^^
 
 var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
->foo2 : {}
->     : ^^
+>foo2 : { [x: number]: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >[index] : any
 >        : ^^^
 >index : any
@@ -48,8 +48,8 @@ foo1 = bar1; // should be an error
 foo2 = bar2; 
 >foo2 = bar2 : { x: number; }
 >            : ^^^^^      ^^^
->foo2 : {}
->     : ^^
+>foo2 : { [x: number]: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >bar2 : { x: number; }
 >     : ^^^^^      ^^^
 

@@ -38,7 +38,7 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 export class ProjectRunner extends Harness.RunnerBase {
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
         if (Harness.shards === 1) {
             return all;
@@ -50,7 +50,7 @@ export class ProjectRunner extends Harness.RunnerBase {
         return "project";
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         describe("projects tests", () => {
             const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
             for (const test of tests) {

@@ -120,6 +120,7 @@ export default tseslint.config(
             "@typescript-eslint/ban-ts-comment": "off",
             "@typescript-eslint/class-literal-property-style": "off",
             "@typescript-eslint/consistent-indexed-object-style": "off",
+            "@typescript-eslint/consistent-generic-constructors": "off",
             "@typescript-eslint/no-duplicate-enum-values": "off",
             "@typescript-eslint/no-empty-function": "off",
             "@typescript-eslint/no-namespace": "off",
@@ -183,9 +184,12 @@ export default tseslint.config(
 
             // likely yes
             "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
+            "unicorn/prefer-math-min-max": "off",
+            "unicorn/prefer-global-this": "off",
 
             // likely no
             "unicorn/prefer-string-raw": "off",
+            "unicorn/consistent-existence-index-check": "off",
 
             // no
             "unicorn/filename-case": "off",
@@ -241,6 +245,7 @@ export default tseslint.config(
             "unicorn/no-unreadable-array-destructuring": "off",
             "unicorn/no-negation-in-equality-check": "off", // inaccurate
             "unicorn/prefer-structured-clone": "off", // Unavailable until Node 17
+            "unicorn/consistent-assert": "off", // Noisy style
             "local/no-array-mutating-method-expressions": "error",
         },
     },

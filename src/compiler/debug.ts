@@ -113,7 +113,7 @@ export interface LoggingHost {
 export namespace Debug {
     /* eslint-disable prefer-const */
     let currentAssertionLevel = AssertionLevel.None;
-    export let currentLogLevel = LogLevel.Warning;
+    export let currentLogLevel: LogLevel = LogLevel.Warning;
     export let isDebugging = false;
     export let loggingHost: LoggingHost | undefined;
     /* eslint-enable prefer-const */
@@ -154,11 +154,11 @@ export namespace Debug {
 
     const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel; assertion: AnyFunction; }>> = {};
 
-    export function getAssertionLevel() {
+    export function getAssertionLevel(): AssertionLevel {
         return currentAssertionLevel;
     }
 
-    export function setAssertionLevel(level: AssertionLevel) {
+    export function setAssertionLevel(level: AssertionLevel): void {
         const prevAssertionLevel = currentAssertionLevel;
         currentAssertionLevel = level;
 
@@ -365,7 +365,7 @@ export namespace Debug {
     export function type<T>(value: unknown): asserts value is T;
     export function type(_value: unknown) {}
 
-    export function getFunctionName(func: AnyFunction) {
+    export function getFunctionName(func: AnyFunction): string {
         if (typeof func !== "function") {
             return "";
         }
@@ -386,7 +386,7 @@ export namespace Debug {
     /**
      * Formats an enum value as a string for debugging and debug assertions.
      */
-    export function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
+    export function formatEnum(value = 0, enumObject: any, isFlags?: boolean): string {
         const members = getEnumMembers(enumObject);
         if (value === 0) {
             return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
@@ -549,7 +549,7 @@ export namespace Debug {
         }
     }
 
-    export function attachFlowNodeDebugInfo(flowNode: FlowNode) {
+    export function attachFlowNodeDebugInfo(flowNode: FlowNode): FlowNode {
         if (isDebugInfoEnabled) {
             if (typeof Object.setPrototypeOf === "function") {
                 // if we're in es2015, attach the method to a shared prototype for `FlowNode`
@@ -589,7 +589,7 @@ export namespace Debug {
         }
     }
 
-    export function attachNodeArrayDebugInfo(array: NodeArray<Node>) {
+    export function attachNodeArrayDebugInfo(array: NodeArray<Node>): void {
         if (isDebugInfoEnabled) {
             if (typeof Object.setPrototypeOf === "function") {
                 // if we're in es2015, attach the method to a shared prototype for `NodeArray`
@@ -610,7 +610,7 @@ export namespace Debug {
     /**
      * Injects debug information into frequently used types.
      */
-    export function enableDebugInfo() {
+    export function enableDebugInfo(): void {
         if (isDebugInfoEnabled) return;
 
         // avoid recomputing
@@ -806,7 +806,7 @@ export namespace Debug {
         isDebugInfoEnabled = true;
     }
 
-    export function formatVariance(varianceFlags: VarianceFlags) {
+    export function formatVariance(varianceFlags: VarianceFlags): string {
         const variance = varianceFlags & VarianceFlags.VarianceMask;
         let result = variance === VarianceFlags.Invariant ? "in out" :
             variance === VarianceFlags.Bivariant ? "[bivariant]" :
@@ -861,11 +861,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         return mapper;
     }
 
-    export function printControlFlowGraph(flowNode: FlowNode) {
+    export function printControlFlowGraph(flowNode: FlowNode): void {
         return console.log(formatControlFlowGraph(flowNode));
     }
 
-    export function formatControlFlowGraph(flowNode: FlowNode) {
+    export function formatControlFlowGraph(flowNode: FlowNode): string {
         let nextDebugFlowId = -1;
 
         function getDebugFlowNodeId(f: FlowNode) {

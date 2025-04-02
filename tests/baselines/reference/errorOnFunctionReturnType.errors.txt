@@ -5,7 +5,7 @@ foo.js(16,60): error TS2355: A function whose declared type is neither 'undefine
 foo.js(21,20): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 foo.js(31,10): error TS2534: A function returning 'never' cannot have a reachable end point.
 foo.js(35,12): error TS1065: The return type of an async function or method must be the global Promise<T> type.
-foo.js(37,5): error TS2322: Type 'string' is not assignable to type 'never'.
+foo.js(37,5): error TS2322: Type '"asd"' is not assignable to type 'never'.
 foo.js(40,56): error TS2534: A function returning 'never' cannot have a reachable end point.
 foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachable end point.
 
@@ -64,7 +64,7 @@ foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachabl
     async function testNever2() {
         return "asd";
         ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'never'.
+!!! error TS2322: Type '"asd"' is not assignable to type 'never'.
     }
     
     var testNever3 = /** @type {FunctionReturningNever} */ function() {

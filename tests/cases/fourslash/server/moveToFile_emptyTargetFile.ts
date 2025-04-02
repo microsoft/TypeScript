@@ -1,27 +1,27 @@
 /// <reference path='../fourslash.ts' />
 
-// @Filename: /source.ts
+// @Filename: /home/src/workspaces/project/source.ts
 ////[|export const a = 1;|]
 ////const b = 2;
 ////console.log(a, b);
 
-// @Filename: /target.ts
+// @Filename: /home/src/workspaces/project/target.ts
 /////** empty */
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ///// { "compilerOptions": { "newLine": "lf" } }
 
 verify.moveToFile({
     newFileContents: {
-        "/source.ts":
+        "/home/src/workspaces/project/source.ts":
 `import { a } from "./target";
 
 const b = 2;
 console.log(a, b);`,
-        "/target.ts":
+        "/home/src/workspaces/project/target.ts":
 `/** empty */
 export const a = 1;
 `,
     },
-    interactiveRefactorArguments: { targetFile: "/target.ts" },
+    interactiveRefactorArguments: { targetFile: "/home/src/workspaces/project/target.ts" },
 });
