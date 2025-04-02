@@ -390,7 +390,7 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
     });
 
     class NodeTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapter {
-        protected override installer!: childProcess.ChildProcess;
+        declare protected installer: childProcess.ChildProcess;
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
         // (see https://github.com/nodejs/node/issues/7657).
