@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/typeIdentifierAssertionExpressionWithTypeParameters.ts] ////
+
+=== typeIdentifierAssertionExpressionWithTypeParameters.ts ===
+const type = <T,>(x: T) => x;
+>type : Symbol(type, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 0, 5))
+>T : Symbol(T, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 0, 14))
+>x : Symbol(x, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 0, 18))
+>T : Symbol(T, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 0, 14))
+>x : Symbol(x, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 0, 18))
+
+type satisfies <T>(x: T) => T;
+>type : Symbol(type, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 0, 5))
+>T : Symbol(T, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 2, 16))
+>x : Symbol(x, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 2, 19))
+>T : Symbol(T, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 2, 16))
+>T : Symbol(T, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 2, 16))
+
+type as <T>() => T;
+>type : Symbol(type, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 0, 5))
+>T : Symbol(T, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 3, 9))
+>T : Symbol(T, Decl(typeIdentifierAssertionExpressionWithTypeParameters.ts, 3, 9))
+

@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/interfaceIdentifierAssertionExpressionWithParseError.ts] ////
+
+=== interfaceIdentifierAssertionExpressionWithParseError.ts ===
+const interface = 'x';
+>interface : Symbol(interface, Decl(interfaceIdentifierAssertionExpressionWithParseError.ts, 0, 5))
+
+interface satisfies string;
+>satisfies : Symbol(satisfies, Decl(interfaceIdentifierAssertionExpressionWithParseError.ts, 0, 22))
+
+interface as string;
+>as : Symbol(as, Decl(interfaceIdentifierAssertionExpressionWithParseError.ts, 2, 27))
+
