@@ -187,8 +187,8 @@ declare const ExpandoExpr: {
         x: number;
         y?: undefined;
     } | {
-        y: string;
         x?: undefined;
+        y: string;
     };
     m(n: number): number;
 };

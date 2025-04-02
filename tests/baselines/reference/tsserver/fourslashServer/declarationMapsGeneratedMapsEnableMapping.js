@@ -19,8 +19,8 @@ export declare class Foo {
         x: number;
         y?: undefined;
     } | {
-        y: string;
         x?: undefined;
+        y: string;
     };
 }
 export interface SomeType {
@@ -416,7 +416,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/home/src/workspaces/project/dist/index.d.ts",
             "writeByteOrderMark": false,
-            "text": "export declare class Foo {\n    member: string;\n    methodName(propName: SomeType): SomeType;\n    otherMethod(): {\n        x: number;\n        y?: undefined;\n    } | {\n        y: string;\n        x?: undefined;\n    };\n}\nexport interface SomeType {\n    member: number;\n}\n//# sourceMappingURL=index.d.ts.map"
+            "text": "export declare class Foo {\n    member: string;\n    methodName(propName: SomeType): SomeType;\n    otherMethod(): {\n        x: number;\n        y?: undefined;\n    } | {\n        x?: undefined;\n        y: string;\n    };\n}\nexport interface SomeType {\n    member: number;\n}\n//# sourceMappingURL=index.d.ts.map"
           }
         ],
         "emitSkipped": false,
@@ -464,7 +464,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/dist/index.d.ts Text-1 "export declare class Foo {\n    member: string;\n    methodName(propName: SomeType): SomeType;\n    otherMethod(): {\n        x: number;\n        y?: undefined;\n    } | {\n        y: string;\n        x?: undefined;\n    };\n}\nexport interface SomeType {\n    member: number;\n}\n//# sourceMappingURL=index.d.ts.map"
+	/home/src/workspaces/project/dist/index.d.ts Text-1 "export declare class Foo {\n    member: string;\n    methodName(propName: SomeType): SomeType;\n    otherMethod(): {\n        x: number;\n        y?: undefined;\n    } | {\n        x?: undefined;\n        y: string;\n    };\n}\nexport interface SomeType {\n    member: number;\n}\n//# sourceMappingURL=index.d.ts.map"
 	/home/src/workspaces/project/mymodule.ts SVC-1-0 "import * as mod from \"/home/src/workspaces/project/dist/index\";\nconst instance = new mod.Foo();\ninstance.methodName({member: 12});"
 
 
