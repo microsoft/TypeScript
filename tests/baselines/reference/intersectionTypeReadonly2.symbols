@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeReadonly2.ts] ////
+
+=== intersectionTypeReadonly2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61344
+
+type A = { k: number };
+>A : Symbol(A, Decl(intersectionTypeReadonly2.ts, 0, 0))
+>k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 2, 10))
+
+type B = { readonly k: number };
+>B : Symbol(B, Decl(intersectionTypeReadonly2.ts, 2, 23))
+>k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10))
+
+(({}) as A & B).k = 0; // ok
+>(({}) as A & B).k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 2, 10), Decl(intersectionTypeReadonly2.ts, 3, 10))
+>A : Symbol(A, Decl(intersectionTypeReadonly2.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionTypeReadonly2.ts, 2, 23))
+>k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 2, 10), Decl(intersectionTypeReadonly2.ts, 3, 10))
+
+(({}) as B & A).k = 0; // ok
+>(({}) as B & A).k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10), Decl(intersectionTypeReadonly2.ts, 2, 10))
+>B : Symbol(B, Decl(intersectionTypeReadonly2.ts, 2, 23))
+>A : Symbol(A, Decl(intersectionTypeReadonly2.ts, 0, 0))
+>k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10), Decl(intersectionTypeReadonly2.ts, 2, 10))
+
+type MakeWritable<T> = { -readonly [K in keyof T]: T[K] };
+>MakeWritable : Symbol(MakeWritable, Decl(intersectionTypeReadonly2.ts, 6, 22))
+>T : Symbol(T, Decl(intersectionTypeReadonly2.ts, 8, 18))
+>K : Symbol(K, Decl(intersectionTypeReadonly2.ts, 8, 36))
+>T : Symbol(T, Decl(intersectionTypeReadonly2.ts, 8, 18))
+>T : Symbol(T, Decl(intersectionTypeReadonly2.ts, 8, 18))
+>K : Symbol(K, Decl(intersectionTypeReadonly2.ts, 8, 36))
+
+type C = MakeWritable<B>;
+>C : Symbol(C, Decl(intersectionTypeReadonly2.ts, 8, 58))
+>MakeWritable : Symbol(MakeWritable, Decl(intersectionTypeReadonly2.ts, 6, 22))
+>B : Symbol(B, Decl(intersectionTypeReadonly2.ts, 2, 23))
+
+(({}) as C).k = 0; // ok
+>(({}) as C).k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10))
+>C : Symbol(C, Decl(intersectionTypeReadonly2.ts, 8, 58))
+>k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10))
+
+(({}) as C & B).k = 0; // ok
+>(({}) as C & B).k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10), Decl(intersectionTypeReadonly2.ts, 3, 10))
+>C : Symbol(C, Decl(intersectionTypeReadonly2.ts, 8, 58))
+>B : Symbol(B, Decl(intersectionTypeReadonly2.ts, 2, 23))
+>k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10), Decl(intersectionTypeReadonly2.ts, 3, 10))
+
+(({}) as B & C).k = 0; // ok
+>(({}) as B & C).k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10), Decl(intersectionTypeReadonly2.ts, 3, 10))
+>B : Symbol(B, Decl(intersectionTypeReadonly2.ts, 2, 23))
+>C : Symbol(C, Decl(intersectionTypeReadonly2.ts, 8, 58))
+>k : Symbol(k, Decl(intersectionTypeReadonly2.ts, 3, 10), Decl(intersectionTypeReadonly2.ts, 3, 10))
+
