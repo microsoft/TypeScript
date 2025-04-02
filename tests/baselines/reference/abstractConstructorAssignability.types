@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/abstractConstructorAssignability.ts] ////
+
+=== abstractConstructorAssignability.ts ===
+type ConcreteConstructor = new () => void;
+>ConcreteConstructor : ConcreteConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+type AbstractConstructor = abstract new () => void;
+>AbstractConstructor : AbstractConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+declare let concreteConstructor: ConcreteConstructor;
+>concreteConstructor : ConcreteConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+declare let abstractConstructor: AbstractConstructor;
+>abstractConstructor : AbstractConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+concreteConstructor = abstractConstructor; // should error
+>concreteConstructor = abstractConstructor : AbstractConstructor
+>                                          : ^^^^^^^^^^^^^^^^^^^
+>concreteConstructor : ConcreteConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+>abstractConstructor : AbstractConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+abstractConstructor = concreteConstructor; // should work
+>abstractConstructor = concreteConstructor : ConcreteConstructor
+>                                          : ^^^^^^^^^^^^^^^^^^^
+>abstractConstructor : AbstractConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+>concreteConstructor : ConcreteConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+class ConcreteClass {}
+>ConcreteClass : ConcreteClass
+>              : ^^^^^^^^^^^^^
+
+abstract class AbstractClass {}
+>AbstractClass : AbstractClass
+>              : ^^^^^^^^^^^^^
+
+declare let concreteClass: typeof ConcreteClass
+>concreteClass : typeof ConcreteClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+>ConcreteClass : typeof ConcreteClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+declare let abstractClass: typeof AbstractClass
+>abstractClass : typeof AbstractClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+>AbstractClass : typeof AbstractClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+concreteClass = abstractClass; // should error
+>concreteClass = abstractClass : typeof AbstractClass
+>                              : ^^^^^^^^^^^^^^^^^^^^
+>concreteClass : typeof ConcreteClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+>abstractClass : typeof AbstractClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+abstractClass = concreteClass; // should work
+>abstractClass = concreteClass : typeof ConcreteClass
+>                              : ^^^^^^^^^^^^^^^^^^^^
+>abstractClass : typeof AbstractClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+>concreteClass : typeof ConcreteClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+
