@@ -1,15 +1,25 @@
 trigger: none
 pr: none
 
+parameters:
+  - name: _REMINDER
+    default: Review & undraft the release at https://github.com/microsoft/TypeScript/releases once it appears!
+  - name: PUBLISH_TAG
+    default: dev
+  - name: RELEASE_TITLE_NAME
+    default: 0.0.0 Test
+  - name: TAG_NAME
+    default: v0.0.0-SetMe
+
 variables:
   - name: _REMINDER
-    value: Review & undraft the release at https://github.com/microsoft/TypeScript/releases once it appears!
+    value: ${{ parameters._REMINDER }}
   - name: PUBLISH_TAG
-    value: dev
+    value: ${{ parameters.PUBLISH_TAG }}
   - name: RELEASE_TITLE_NAME
-    value: 0.0.0 Test
+    value: ${{ parameters.RELEASE_TITLE_NAME }}
   - name: TAG_NAME
-    value: v0.0.0-SetMe
+    value: ${{ parameters.TAG_NAME }}
 
 resources:
   pipelines:
