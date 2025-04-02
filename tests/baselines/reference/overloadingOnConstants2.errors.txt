@@ -1,13 +1,13 @@
-tests/cases/compiler/overloadingOnConstants2.ts(9,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2769: No overload matches this call.
+overloadingOnConstants2.ts(9,10): error TS2394: This overload signature is not compatible with its implementation signature.
+overloadingOnConstants2.ts(15,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: "hi", items: string[]): D', gave the following error.
     Argument of type '"um"' is not assignable to parameter of type '"hi"'.
   Overload 2 of 2, '(x: "bye", items: string[]): E', gave the following error.
     Argument of type '"um"' is not assignable to parameter of type '"bye"'.
-tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2394: This overload signature is not compatible with its implementation signature.
+overloadingOnConstants2.ts(19,10): error TS2394: This overload signature is not compatible with its implementation signature.
 
 
-==== tests/cases/compiler/overloadingOnConstants2.ts (3 errors) ====
+==== overloadingOnConstants2.ts (3 errors) ====
     class C {
        private x = 1;
     }
@@ -19,7 +19,7 @@ tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2394: This overl
     function foo(x: "bye", items: string[]): E;
              ~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/overloadingOnConstants2.ts:10:10: The implementation signature is declared here.
+!!! related TS2750 overloadingOnConstants2.ts:10:10: The implementation signature is declared here.
     function foo(x: string, items: string[]): C {
        return null;
     }
@@ -32,14 +32,14 @@ tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2394: This overl
 !!! error TS2769:     Argument of type '"um"' is not assignable to parameter of type '"hi"'.
 !!! error TS2769:   Overload 2 of 2, '(x: "bye", items: string[]): E', gave the following error.
 !!! error TS2769:     Argument of type '"um"' is not assignable to parameter of type '"bye"'.
-!!! related TS2793 tests/cases/compiler/overloadingOnConstants2.ts:10:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+!!! related TS2793 overloadingOnConstants2.ts:10:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     
     //function bar(x: "hi", items: string[]): D;
     function bar(x: "bye", items: string[]): E;
              ~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/overloadingOnConstants2.ts:21:10: The implementation signature is declared here.
+!!! related TS2750 overloadingOnConstants2.ts:21:10: The implementation signature is declared here.
     function bar(x: string, items: string[]): C;
     function bar(x: string, items: string[]): C {
        return null;

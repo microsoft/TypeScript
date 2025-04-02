@@ -1,379 +1,665 @@
-=== tests/cases/compiler/commaOperatorLeftSideUnused.ts ===
+//// [tests/cases/compiler/commaOperatorLeftSideUnused.ts] ////
+
+=== commaOperatorLeftSideUnused.ts ===
 var xx: any;
 >xx : any
+>   : ^^^
 
 var yy: any;
 >yy : any
+>   : ^^^
 
 function fn() {
 >fn : () => "zero or one" | "more than one"
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   let arr: any[] = [];
 >arr : any[]
+>    : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
   switch(arr.length) {
 >arr.length : number
+>           : ^^^^^^
 >arr : any[]
+>    : ^^^^^
 >length : number
+>       : ^^^^^^
 
     // Should error
     case 0, 1:
 >0, 1 : 1
+>     : ^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 
       return 'zero or one';
 >'zero or one' : "zero or one"
+>              : ^^^^^^^^^^^^^
 
     default:
       return 'more than one';
 >'more than one' : "more than one"
+>                : ^^^^^^^^^^^^^^^
   }
 }
 
 // Should error
 let x = Math.pow((3, 5), 2);
 >x : number
+>  : ^^^^^^
 >Math.pow((3, 5), 2) : number
+>                    : ^^^^^^
 >Math.pow : (x: number, y: number) => number
+>         : ^ ^^      ^^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >pow : (x: number, y: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >(3, 5) : 5
+>       : ^
 >3, 5 : 5
+>     : ^
 >3 : 3
+>  : ^
 >5 : 5
+>  : ^
 >2 : 2
+>  : ^
 
 // Should error
 let a = [(3 + 4), ((1 + 1, 8) * 4)];
 >a : number[]
+>  : ^^^^^^^^
 >[(3 + 4), ((1 + 1, 8) * 4)] : number[]
+>                            : ^^^^^^^^
 >(3 + 4) : number
+>        : ^^^^^^
 >3 + 4 : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >((1 + 1, 8) * 4) : number
+>                 : ^^^^^^
 >(1 + 1, 8) * 4 : number
+>               : ^^^^^^
 >(1 + 1, 8) : 8
+>           : ^
 >1 + 1, 8 : 8
+>         : ^
 >1 + 1 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 >8 : 8
+>  : ^
 >4 : 4
+>  : ^
 
 // Error cases
 xx = (1, 2);
 >xx = (1, 2) : 2
+>            : ^
 >xx : any
+>   : ^^^
 >(1, 2) : 2
+>       : ^
 >1, 2 : 2
+>     : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 xx = ('', xx);
 >xx = ('', xx) : any
+>              : ^^^
 >xx : any
+>   : ^^^
 >('', xx) : any
+>         : ^^^
 >'', xx : any
+>       : ^^^
 >'' : ""
+>   : ^^
 >xx : any
+>   : ^^^
 
 xx = (/323/, 5);
 >xx = (/323/, 5) : 5
+>                : ^
 >xx : any
+>   : ^^^
 >(/323/, 5) : 5
+>           : ^
 >/323/, 5 : 5
+>         : ^
 >/323/ : RegExp
+>      : ^^^^^^
 >5 : 5
+>  : ^
 
 xx = (`wat`, 'ok'),
 >xx = (`wat`, 'ok'),xx = (true, false) : false
+>                                      : ^^^^^
 >xx = (`wat`, 'ok') : "ok"
+>                   : ^^^^
 >xx : any
+>   : ^^^
 >(`wat`, 'ok') : "ok"
+>              : ^^^^
 >`wat`, 'ok' : "ok"
+>            : ^^^^
 >`wat` : "wat"
+>      : ^^^^^
 >'ok' : "ok"
+>     : ^^^^
 
 xx = (true, false);
 >xx = (true, false) : false
+>                   : ^^^^^
 >xx : any
+>   : ^^^
 >(true, false) : false
+>              : ^^^^^
 >true, false : false
+>            : ^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 xx = (false, true);
 >xx = (false, true) : true
+>                   : ^^^^
 >xx : any
+>   : ^^^
 >(false, true) : true
+>              : ^^^^
 >false, true : true
+>            : ^^^^
 >false : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 xx = (null, xx);
 >xx = (null, xx) : any
+>                : ^^^
 >xx : any
+>   : ^^^
 >(null, xx) : any
+>           : ^^^
 >null, xx : any
+>         : ^^^
 >xx : any
+>   : ^^^
 
 xx = (undefined, 10);
 >xx = (undefined, 10) : 10
+>                     : ^^
 >xx : any
+>   : ^^^
 >(undefined, 10) : 10
+>                : ^^
 >undefined, 10 : 10
+>              : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >10 : 10
+>   : ^^
 
 xx = (() => {}, 'no');
 >xx = (() => {}, 'no') : "no"
+>                      : ^^^^
 >xx : any
+>   : ^^^
 >(() => {}, 'no') : "no"
+>                 : ^^^^
 >() => {}, 'no' : "no"
+>               : ^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 xx = (function() { }, 100);
 >xx = (function() { }, 100) : 100
+>                           : ^^^
 >xx : any
+>   : ^^^
 >(function() { }, 100) : 100
+>                      : ^^^
 >function() { }, 100 : 100
+>                    : ^^^
 >function() { } : () => void
+>               : ^^^^^^^^^^
 >100 : 100
+>    : ^^^
 
 xx = ({}, {});
 >xx = ({}, {}) : {}
+>              : ^^
 >xx : any
+>   : ^^^
 >({}, {}) : {}
+>         : ^^
 >{}, {} : {}
+>       : ^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 xx = (typeof xx, 'unused');
 >xx = (typeof xx, 'unused') : "unused"
+>                           : ^^^^^^^^
 >xx : any
+>   : ^^^
 >(typeof xx, 'unused') : "unused"
+>                      : ^^^^^^^^
 >typeof xx, 'unused' : "unused"
+>                    : ^^^^^^^^
 >typeof xx : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xx : any
+>   : ^^^
 >'unused' : "unused"
+>         : ^^^^^^^^
 
 xx = ([1, 2, x++], xx);
 >xx = ([1, 2, x++], xx) : any
+>                       : ^^^
 >xx : any
+>   : ^^^
 >([1, 2, x++], xx) : any
+>                  : ^^^
 >[1, 2, x++], xx : any
+>                : ^^^
 >[1, 2, x++] : number[]
+>            : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >xx : any
+>   : ^^^
 
 xx = (xx!, xx);
 >xx = (xx!, xx) : any
+>               : ^^^
 >xx : any
+>   : ^^^
 >(xx!, xx) : any
+>          : ^^^
 >xx!, xx : any
+>        : ^^^
 >xx! : any
+>    : ^^^
 >xx : any
+>   : ^^^
 >xx : any
+>   : ^^^
 
 xx = (xx ? 3 : 4, 10);
 >xx = (xx ? 3 : 4, 10) : 10
+>                      : ^^
 >xx : any
+>   : ^^^
 >(xx ? 3 : 4, 10) : 10
+>                 : ^^
 >xx ? 3 : 4, 10 : 10
+>               : ^^
 >xx ? 3 : 4 : 3 | 4
+>           : ^^^^^
 >xx : any
+>   : ^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >10 : 10
+>   : ^^
 
 xx = (3 + 4, 10);
 >xx = (3 + 4, 10) : 10
+>                 : ^^
 >xx : any
+>   : ^^^
 >(3 + 4, 10) : 10
+>            : ^^
 >3 + 4, 10 : 10
+>          : ^^
 >3 + 4 : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >10 : 10
+>   : ^^
 
 xx = (!xx, 10);
 >xx = (!xx, 10) : 10
+>               : ^^
 >xx : any
+>   : ^^^
 >(!xx, 10) : 10
+>          : ^^
 >!xx, 10 : 10
+>        : ^^
 >!xx : boolean
+>    : ^^^^^^^
 >xx : any
+>   : ^^^
 >10 : 10
+>   : ^^
 
 xx = (~xx, 10);
 >xx = (~xx, 10) : 10
+>               : ^^
 >xx : any
+>   : ^^^
 >(~xx, 10) : 10
+>          : ^^
 >~xx, 10 : 10
+>        : ^^
 >~xx : number
+>    : ^^^^^^
 >xx : any
+>   : ^^^
 >10 : 10
+>   : ^^
 
 xx = (-xx, 10);
 >xx = (-xx, 10) : 10
+>               : ^^
 >xx : any
+>   : ^^^
 >(-xx, 10) : 10
+>          : ^^
 >-xx, 10 : 10
+>        : ^^
 >-xx : number
+>    : ^^^^^^
 >xx : any
+>   : ^^^
 >10 : 10
+>   : ^^
 
 xx = (+xx, 10);
 >xx = (+xx, 10) : 10
+>               : ^^
 >xx : any
+>   : ^^^
 >(+xx, 10) : 10
+>          : ^^
 >+xx, 10 : 10
+>        : ^^
 >+xx : number
+>    : ^^^^^^
 >xx : any
+>   : ^^^
 >10 : 10
+>   : ^^
 
 xx = (0, xx)();
 >xx = (0, xx)() : any
+>               : ^^^
 >xx : any
+>   : ^^^
 >(0, xx)() : any
+>          : ^^^
 >(0, xx) : any
+>        : ^^^
 >0, xx : any
+>      : ^^^
 >0 : 0
+>  : ^
 >xx : any
+>   : ^^^
 
 // OK cases
 xx = (xx ? x++ : 4, 10);
 >xx = (xx ? x++ : 4, 10) : 10
+>                        : ^^
 >xx : any
+>   : ^^^
 >(xx ? x++ : 4, 10) : 10
+>                   : ^^
 >xx ? x++ : 4, 10 : 10
+>                 : ^^
 >xx ? x++ : 4 : number
+>             : ^^^^^^
 >xx : any
+>   : ^^^
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >10 : 10
+>   : ^^
 
 xx = (--xx, 3);
 >xx = (--xx, 3) : 3
+>               : ^
 >xx : any
+>   : ^^^
 >(--xx, 3) : 3
+>          : ^
 >--xx, 3 : 3
+>        : ^
 >--xx : number
+>     : ^^^^^^
 >xx : any
+>   : ^^^
 >3 : 3
+>  : ^
 
 xx = (xx = 3, 1);
 >xx = (xx = 3, 1) : 1
+>                 : ^
 >xx : any
+>   : ^^^
 >(xx = 3, 1) : 1
+>            : ^
 >xx = 3, 1 : 1
+>          : ^
 >xx = 3 : 3
+>       : ^
 >xx : any
+>   : ^^^
 >3 : 3
+>  : ^
 >1 : 1
+>  : ^
 
 xx = ((xx = 3), 5);
 >xx = ((xx = 3), 5) : 5
+>                   : ^
 >xx : any
+>   : ^^^
 >((xx = 3), 5) : 5
+>              : ^
 >(xx = 3), 5 : 5
+>            : ^
 >(xx = 3) : 3
+>         : ^
 >xx = 3 : 3
+>       : ^
 >xx : any
+>   : ^^^
 >3 : 3
+>  : ^
 >5 : 5
+>  : ^
 
 xx = (xx+= 4, xx);
 >xx = (xx+= 4, xx) : any
+>                  : ^^^
 >xx : any
+>   : ^^^
 >(xx+= 4, xx) : any
+>             : ^^^
 >xx+= 4, xx : any
+>           : ^^^
 >xx+= 4 : any
+>       : ^^^
 >xx : any
+>   : ^^^
 >4 : 4
+>  : ^
 >xx : any
+>   : ^^^
 
 xx = ((xx+= 4), xx);
 >xx = ((xx+= 4), xx) : any
+>                    : ^^^
 >xx : any
+>   : ^^^
 >((xx+= 4), xx) : any
+>               : ^^^
 >(xx+= 4), xx : any
+>             : ^^^
 >(xx+= 4) : any
+>         : ^^^
 >xx+= 4 : any
+>       : ^^^
 >xx : any
+>   : ^^^
 >4 : 4
+>  : ^
 >xx : any
+>   : ^^^
 
 xx = (Math.pow(3, 2), 4);
 >xx = (Math.pow(3, 2), 4) : 4
+>                         : ^
 >xx : any
+>   : ^^^
 >(Math.pow(3, 2), 4) : 4
+>                    : ^
 >Math.pow(3, 2), 4 : 4
+>                  : ^
 >Math.pow(3, 2) : number
+>               : ^^^^^^
 >Math.pow : (x: number, y: number) => number
+>         : ^ ^^      ^^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >pow : (x: number, y: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >3 : 3
+>  : ^
 >2 : 2
+>  : ^
 >4 : 4
+>  : ^
 
 xx = (void xx, 10);
 >xx = (void xx, 10) : 10
+>                   : ^^
 >xx : any
+>   : ^^^
 >(void xx, 10) : 10
+>              : ^^
 >void xx, 10 : 10
+>            : ^^
 >void xx : undefined
+>        : ^^^^^^^^^
 >xx : any
+>   : ^^^
 >10 : 10
+>   : ^^
 
 xx = (xx as any, 100);
 >xx = (xx as any, 100) : 100
+>                      : ^^^
 >xx : any
+>   : ^^^
 >(xx as any, 100) : 100
+>                 : ^^^
 >xx as any, 100 : 100
+>               : ^^^
 >xx as any : any
+>          : ^^^
 >xx : any
+>   : ^^^
 >100 : 100
+>    : ^^^
 
 xx = (0, xx.fn)();
 >xx = (0, xx.fn)() : any
+>                  : ^^^
 >xx : any
+>   : ^^^
 >(0, xx.fn)() : any
+>             : ^^^
 >(0, xx.fn) : any
+>           : ^^^
 >0, xx.fn : any
+>         : ^^^
 >0 : 0
+>  : ^
 >xx.fn : any
+>      : ^^^
 >xx : any
+>   : ^^^
 >fn : any
+>   : ^^^
 
 xx = (0, xx['fn'])();
 >xx = (0, xx['fn'])() : any
+>                     : ^^^
 >xx : any
+>   : ^^^
 >(0, xx['fn'])() : any
+>                : ^^^
 >(0, xx['fn']) : any
+>              : ^^^
 >0, xx['fn'] : any
+>            : ^^^
 >0 : 0
+>  : ^
 >xx['fn'] : any
+>         : ^^^
 >xx : any
+>   : ^^^
 >'fn' : "fn"
+>     : ^^^^
 
 xx = (0, xx.fn)``;
 >xx = (0, xx.fn)`` : any
+>                  : ^^^
 >xx : any
+>   : ^^^
 >(0, xx.fn)`` : any
+>             : ^^^
 >(0, xx.fn) : any
+>           : ^^^
 >0, xx.fn : any
+>         : ^^^
 >0 : 0
+>  : ^
 >xx.fn : any
+>      : ^^^
 >xx : any
+>   : ^^^
 >fn : any
+>   : ^^^
 >`` : ""
+>   : ^^
 

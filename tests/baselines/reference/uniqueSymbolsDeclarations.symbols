@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarations.ts ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarations.ts] ////
+
+=== uniqueSymbolsDeclarations.ts ===
 // declarations with call initializer
 const constCall = Symbol();
 >constCall : Symbol(constCall, Decl(uniqueSymbolsDeclarations.ts, 1, 5))
@@ -665,13 +667,13 @@ N["s"] || "";
 // conditionals
 Math.random() * 2 ? s : "a";
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarations.ts, 115, 13))
 
 Math.random() * 2 ? N.s : "a";
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >N.s : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
@@ -679,7 +681,7 @@ Math.random() * 2 ? N.s : "a";
 
 Math.random() * 2 ? N["s"] : "a";
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >N : Symbol(N, Decl(uniqueSymbolsDeclarations.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbolsDeclarations.ts, 116, 27))

@@ -1,165 +1,250 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts] ////
+
+=== equalityStrictNulls.ts ===
 function f1(x: string) {
 >f1 : (x: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     if (x == undefined) {
 >x == undefined : boolean
+>               : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (x != undefined) {
 >x != undefined : boolean
+>               : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (x === undefined) {
 >x === undefined : boolean
+>                : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (x !== undefined) {
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (x == null) {
 >x == null : boolean
+>          : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (x != null) {
 >x != null : boolean
+>          : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (x === null) {
 >x === null : boolean
+>           : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (x !== null) {
 >x !== null : boolean
+>           : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (undefined == x) {
 >undefined == x : boolean
+>               : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (undefined != x) {
 >undefined != x : boolean
+>               : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (undefined === x) {
 >undefined === x : boolean
+>                : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (undefined !== x) {
 >undefined !== x : boolean
+>                : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (null == x) {
 >null == x : boolean
+>          : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (null != x) {
 >null != x : boolean
+>          : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (null === x) {
 >null === x : boolean
+>           : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     if (null !== x) {
 >null !== x : boolean
+>           : ^^^^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     if (undefined == undefined) {
 >undefined == undefined : boolean
+>                       : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (undefined == null) {
 >undefined == null : boolean
+>                  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (null == undefined) {
 >null == undefined : boolean
+>                  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (null == null) {
 >null == null : boolean
+>             : ^^^^^^^
     }
 }
 
 function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
->f3 : (a: number, b: boolean, c: {    x: number;}, d: number | string) => void
+>f3 : (a: number, b: boolean, c: { x: number; }, d: number | string) => void
+>   : ^ ^^      ^^ ^^       ^^ ^^              ^^ ^^               ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : { x: number; }
+>  : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >d : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (a == null) {
 >a == null : boolean
+>          : ^^^^^^^
 >a : number
+>  : ^^^^^^
     }
     if (b == null) {
 >b == null : boolean
+>          : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
     }
     if (c == null) {
 >c == null : boolean
+>          : ^^^^^^^
 >c : { x: number; }
+>  : ^^^^^      ^^^
     }
     if (d == null) {
 >d == null : boolean
+>          : ^^^^^^^
 >d : string | number
+>  : ^^^^^^^^^^^^^^^
     }
 }
 
 function f4(x: number) {
 >f4 : (x: number) => void
+>   : ^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     if (x > undefined) {
 >x > undefined : boolean
+>              : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (x < undefined) {
 >x < undefined : boolean
+>              : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (x >= undefined) {
 >x >= undefined : boolean
+>               : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     if (x <= undefined) {
 >x <= undefined : boolean
+>               : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 }
 function f5(x: string) {
 >f5 : (x: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     switch(x) {
 >x : string
+>  : ^^^^^^
 
         case null:
             break;
         case undefined:
 >undefined : undefined
+>          : ^^^^^^^^^
 
             break;
         default:

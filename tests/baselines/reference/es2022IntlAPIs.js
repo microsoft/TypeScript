@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2022/es2022IntlAPIs.ts] ////
+
 //// [es2022IntlAPIs.ts]
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#using_timezonename
 const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const;

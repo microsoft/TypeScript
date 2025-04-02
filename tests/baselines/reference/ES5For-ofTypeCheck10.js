@@ -1,6 +1,8 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts] ////
+
 //// [ES5For-ofTypeCheck10.ts]
 // In ES3/5, you cannot for...of over an arbitrary iterable.
-class StringIterator {
+class MyStringIterator {
     next() {
         return {
             done: true,
@@ -12,24 +14,24 @@ class StringIterator {
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }
 
 //// [ES5For-ofTypeCheck10.js]
 // In ES3/5, you cannot for...of over an arbitrary iterable.
-var StringIterator = /** @class */ (function () {
-    function StringIterator() {
+var MyStringIterator = /** @class */ (function () {
+    function MyStringIterator() {
     }
-    StringIterator.prototype.next = function () {
+    MyStringIterator.prototype.next = function () {
         return {
             done: true,
             value: ""
         };
     };
-    StringIterator.prototype[Symbol.iterator] = function () {
+    MyStringIterator.prototype[Symbol.iterator] = function () {
         return this;
     };
-    return StringIterator;
+    return MyStringIterator;
 }());
-for (var _i = 0, _a = new StringIterator; _i < _a.length; _i++) {
+for (var _i = 0, _a = new MyStringIterator; _i < _a.length; _i++) {
     var v = _a[_i];
 }

@@ -1,7 +1,16 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 2,500
+
+=== parserStrictMode8.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 function eval() {
 >eval : { (x: string): any; (): void; }
+>     : ^^^ ^^      ^^^   ^^^^^^^^^^^^^
 }

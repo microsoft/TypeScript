@@ -1,7 +1,10 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution9.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { something; }
 >something : any
+>          : ^^^
 
 	interface IntrinsicElements { }
 }
@@ -9,51 +12,75 @@ declare module JSX {
 interface Obj1 {
 	new(n: string): { x: number };
 >n : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 	new(n: number): { y: string };
 >n : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 var Obj1: Obj1;
 >Obj1 : Obj1
+>     : ^^^^
 
 <Obj1 />; // Error, return type is not an object type
 ><Obj1 /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Obj1 : Obj1
+>     : ^^^^
 
 interface Obj2 {
 	(n: string): { x: number };
 >n : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 	(n: number): { y: string };
 >n : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 var Obj2: Obj2;
 >Obj2 : Obj2
+>     : ^^^^
 
 <Obj2 />; // Error, return type is not an object type
 ><Obj2 /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Obj2 : Obj2
+>     : ^^^^
 
 interface Obj3 {
 	(n: string): { x: number };
 >n : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 	(n: number): { x: number; y: string };
 >n : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 var Obj3: Obj3;
 >Obj3 : Obj3
+>     : ^^^^
 
 <Obj3 x={42} />; // OK
 ><Obj3 x={42} /> : JSX.Element
+>                : ^^^^^^^^^^^
 >Obj3 : Obj3
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 

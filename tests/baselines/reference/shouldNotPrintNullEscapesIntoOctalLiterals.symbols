@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shouldNotPrintNullEscapesIntoOctalLiterals.ts ===
+//// [tests/cases/compiler/shouldNotPrintNullEscapesIntoOctalLiterals.ts] ////
+
+=== shouldNotPrintNullEscapesIntoOctalLiterals.ts ===
 
 "use strict";
 `\x001`;

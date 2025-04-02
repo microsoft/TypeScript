@@ -1,26 +1,41 @@
-=== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts] ////
+
+=== superCallParameterContextualTyping2.ts ===
 class A<T1, T2> {
 >A : A<T1, T2>
+>  : ^^^^^^^^^
 
     constructor(private map: (value: T1) => T2) {
 >map : (value: T1) => T2
+>    : ^     ^^  ^^^^^  
 >value : T1
+>      : ^^
 
     }
 }
 
 class C extends A<number, string> {
 >C : C
+>  : ^
 >A : A<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 
     // Ensure 'value' is not of type 'any' by invoking it with type arguments.
     constructor() { super(value => String(value<string>())); }
 >super(value => String(value<string>())) : void
+>                                        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
 >value => String(value<string>()) : (value: number) => string
+>                                 : ^     ^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >String(value<string>()) : string
+>                        : ^^^^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >value<string>() : any
+>                : ^^^
 >value : number
+>      : ^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedInferentialTyping.ts] ////
+
 //// [undefinedInferentialTyping.ts]
 function f<T>(arr: T[], elemnt: T): T {
     return null;

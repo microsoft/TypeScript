@@ -1,96 +1,161 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment3.ts] ////
+
+=== a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
 >mod1 : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require('./mod1') : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : (name: string) => any
+>        : ^    ^^      ^^^^^   
 >'./mod1' : "./mod1"
+>         : ^^^^^^^^
 
 mod1.justExport.toFixed()
 >mod1.justExport.toFixed() : string
+>                          : ^^^^^^
 >mod1.justExport.toFixed : (fractionDigits?: number) => string
+>                        : ^              ^^^      ^^^^^      
 >mod1.justExport : number
+>                : ^^^^^^
 >mod1 : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >justExport : number
+>           : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 mod1.bothBefore.toFixed() // error, 'toFixed' not on 'string | number'
 >mod1.bothBefore.toFixed() : any
+>                          : ^^^
 >mod1.bothBefore.toFixed : any
+>                        : ^^^
 >mod1.bothBefore : number | "string"
+>                : ^^^^^^^^^^^^^^^^^
 >mod1 : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bothBefore : number | "string"
+>           : ^^^^^^^^^^^^^^^^^
 >toFixed : any
+>        : ^^^
 
 mod1.bothAfter.toFixed() // error, 'toFixed' not on 'string | number'
 >mod1.bothAfter.toFixed() : any
+>                         : ^^^
 >mod1.bothAfter.toFixed : any
+>                       : ^^^
 >mod1.bothAfter : number | "string"
+>               : ^^^^^^^^^^^^^^^^^
 >mod1 : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bothAfter : number | "string"
+>          : ^^^^^^^^^^^^^^^^^
 >toFixed : any
+>        : ^^^
 
 mod1.justProperty.length
 >mod1.justProperty.length : number
+>                         : ^^^^^^
 >mod1.justProperty : "string"
+>                  : ^^^^^^^^
 >mod1 : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >justProperty : "string"
+>             : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 
-=== tests/cases/conformance/salsa/requires.d.ts ===
+=== requires.d.ts ===
 declare var module: { exports: any };
 >module : { exports: any; }
+>       : ^^^^^^^^^^^   ^^^
 >exports : any
+>        : ^^^
 
 declare function require(name: string): any;
 >require : (name: string) => any
+>        : ^    ^^      ^^^^^   
 >name : string
+>     : ^^^^^^
 
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"
+>                                     : ^^^^^^^^
 >module.exports.bothBefore : number | "string"
+>                          : ^^^^^^^^^^^^^^^^^
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bothBefore : number | "string"
+>           : ^^^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 module.exports = {
 >module.exports = {    justExport: 1,    bothBefore: 2,    bothAfter: 3,} : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    justExport: 1,    bothBefore: 2,    bothAfter: 3,} : { justExport: number; bothBefore: number; bothAfter: number; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     justExport: 1,
 >justExport : number
+>           : ^^^^^^
 >1 : 1
+>  : ^
 
     bothBefore: 2,
 >bothBefore : number
+>           : ^^^^^^
 >2 : 2
+>  : ^
 
     bothAfter: 3,
 >bothAfter : number
+>          : ^^^^^^
 >3 : 3
+>  : ^
 }
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter = 'string' : "string"
+>                                    : ^^^^^^^^
 >module.exports.bothAfter : number | "string"
+>                         : ^^^^^^^^^^^^^^^^^
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bothAfter : number | "string"
+>          : ^^^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 module.exports.justProperty = 'string'
 >module.exports.justProperty = 'string' : "string"
+>                                       : ^^^^^^^^
 >module.exports.justProperty : "string"
+>                            : ^^^^^^^^
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >justProperty : "string"
+>             : ^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 

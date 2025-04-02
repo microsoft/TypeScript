@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts] ////
+
 //// [invalidTaggedTemplateEscapeSequences.ts]
 function tag (str: any, ...args: any[]): any {
   return str
@@ -44,11 +46,11 @@ const a3 = tag(__makeTemplateObject(["", void 0], ["", "\\u"]), 100); // \\u
 const a4 = tag(__makeTemplateObject(["", void 0], ["", "\\u0"]), 100); // \\u0
 const a5 = tag(__makeTemplateObject(["", void 0], ["", "\\u00"]), 100); // \\u00
 const a6 = tag(__makeTemplateObject(["", void 0], ["", "\\u000"]), 100); // \\u000
-const a7 = tag(__makeTemplateObject(["", "\0"], ["", "\\u0000"]), 100); // \u0000
+const a7 = tag `${100}\u0000`; // \u0000
 const a8 = tag(__makeTemplateObject(["", void 0], ["", "\\u{"]), 100); // \\u{
-const a9 = tag(__makeTemplateObject(["", "\uDBFF\uDFFF"], ["", "\\u{10FFFF}"]), 100); // \\u{10FFFF
+const a9 = tag `${100}\u{10FFFF}`; // \\u{10FFFF
 const a10 = tag(__makeTemplateObject(["", void 0], ["", "\\u{1f622"]), 100); // \\u{1f622
-const a11 = tag(__makeTemplateObject(["", "\uD83D\uDE22"], ["", "\\u{1f622}"]), 100); // \u{1f622}
+const a11 = tag `${100}\u{1f622}`; // \u{1f622}
 const a12 = tag(__makeTemplateObject(["", void 0], ["", "\\x"]), 100); // \\x
 const a13 = tag(__makeTemplateObject(["", void 0], ["", "\\x0"]), 100); // \\x0
-const a14 = tag(__makeTemplateObject(["", "\0"], ["", "\\x00"]), 100); // \x00
+const a14 = tag `${100}\x00`; // \x00

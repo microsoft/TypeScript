@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/constructorNameInGenerator.ts ===
+//// [tests/cases/conformance/salsa/constructorNameInGenerator.ts] ////
+
+=== constructorNameInGenerator.ts ===
 class C2 {
 >C2 : Symbol(C2, Decl(constructorNameInGenerator.ts, 0, 0))
 

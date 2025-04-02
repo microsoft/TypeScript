@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypingRestParameters.ts ===
+//// [tests/cases/compiler/contextuallyTypingRestParameters.ts] ////
+
+=== contextuallyTypingRestParameters.ts ===
 var x: (...y: string[]) => void = function (.../*3*/y) { 
 >x : Symbol(x, Decl(contextuallyTypingRestParameters.ts, 0, 3))
 >y : Symbol(y, Decl(contextuallyTypingRestParameters.ts, 0, 8))

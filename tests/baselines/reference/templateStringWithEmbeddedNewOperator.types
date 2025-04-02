@@ -1,8 +1,15 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedNewOperator.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedNewOperator.ts] ////
+
+=== templateStringWithEmbeddedNewOperator.ts ===
 var x = `abc${ new String("Hi") }def`;
 >x : string
+>  : ^^^^^^
 >`abc${ new String("Hi") }def` : string
+>                              : ^^^^^^
 >new String("Hi") : String
+>                 : ^^^^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"Hi" : "Hi"
+>     : ^^^^
 

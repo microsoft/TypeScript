@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadInvalidType.tsx] ////
+
+=== a.tsx ===
 namespace JSX {
 >JSX : Symbol(JSX, Decl(a.tsx, 0, 0))
 
@@ -19,16 +21,16 @@ const c = undefined;
 
 const d = <div { ...a } />
 >d : Symbol(d, Decl(a.tsx, 8, 5))
->div : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 0, 15))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 1, 40))
 >a : Symbol(a, Decl(a.tsx, 4, 5))
 
 const e = <div { ...b } />
 >e : Symbol(e, Decl(a.tsx, 9, 5))
->div : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 0, 15))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 1, 40))
 >b : Symbol(b, Decl(a.tsx, 5, 5))
 
 const f = <div { ...c } />
 >f : Symbol(f, Decl(a.tsx, 10, 5))
->div : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 0, 15))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 1, 40))
 >c : Symbol(c, Decl(a.tsx, 6, 5))
 

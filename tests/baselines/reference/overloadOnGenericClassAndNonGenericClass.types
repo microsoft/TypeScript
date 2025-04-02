@@ -1,50 +1,72 @@
-=== tests/cases/compiler/overloadOnGenericClassAndNonGenericClass.ts ===
+//// [tests/cases/compiler/overloadOnGenericClassAndNonGenericClass.ts] ////
+
+=== overloadOnGenericClassAndNonGenericClass.ts ===
 class A { a; }
 >A : A
+>  : ^
 >a : any
 
 class B { b; }
 >B : B
+>  : ^
 >b : any
 
 class C { c; }
 >C : C
+>  : ^
 >c : any
 
 class X<T> { x: T; }
 >X : X<T>
+>  : ^^^^
 >x : T
+>  : ^
 
 class X1 { x: string; }
 >X1 : X1
+>   : ^^
 >x : string
+>  : ^^^^^^
 
 class X2 { x: string; }
 >X2 : X2
+>   : ^^
 >x : string
+>  : ^^^^^^
 
 function f(a: X1): A;
 >f : { (a: X1): A; <T>(a: X<T>): B; }
+>  : ^^^ ^^  ^^^ ^^^ ^^ ^^    ^^^ ^^^
 >a : X1
+>  : ^^
 
 function f<T>(a: X<T>): B;
 >f : { (a: X1): A; <T>(a: X<T>): B; }
+>  : ^^^ ^^  ^^^ ^^^ ^^ ^^    ^^^ ^^^
 >a : X<T>
+>  : ^^^^
 
 function f(a): any {
 >f : { (a: X1): A; <T>(a: X<T>): B; }
+>  : ^^^ ^^  ^^^ ^^^ ^^ ^^    ^^^ ^^^
 >a : any
 }
 
 var xs: X<string>;
 >xs : X<string>
+>   : ^^^^^^^^^
 
 var t3 = f(xs);
 >t3 : A
+>   : ^
 >f(xs) : A
+>      : ^
 >f : { (a: X1): A; <T>(a: X<T>): B; }
+>  : ^^^ ^^  ^^^ ^^^ ^^ ^^    ^^^ ^^^
 >xs : X<string>
+>   : ^^^^^^^^^
 
 var t3: A; // should not error
 >t3 : A
+>   : ^
 

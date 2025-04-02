@@ -1,4 +1,6 @@
-=== tests/cases/conformance/functions/strictBindCallApply1.ts ===
+//// [tests/cases/conformance/functions/strictBindCallApply1.ts] ////
+
+=== strictBindCallApply1.ts ===
 declare function foo(a: number, b: string): string;
 >foo : Symbol(foo, Decl(strictBindCallApply1.ts, 0, 0))
 >a : Symbol(a, Decl(strictBindCallApply1.ts, 0, 21))

@@ -1,78 +1,126 @@
-=== tests/cases/conformance/controlFlow/controlFlowAssignmentExpression.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowAssignmentExpression.ts] ////
+
+=== controlFlowAssignmentExpression.ts ===
 let x: string | boolean | number;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let obj: any;
 >obj : any
 
 x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 x = x.length;
 >x = x.length : number
+>             : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
 x; // number
 >x : number
+>  : ^^^^^^
 
 x = true;
 >x = true : true
+>         : ^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 (x = "", obj).foo = (x = x.length);
 >(x = "", obj).foo = (x = x.length) : number
+>                                   : ^^^^^^
 >(x = "", obj).foo : any
 >(x = "", obj) : any
+>              : ^^^
 >x = "", obj : any
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >obj : any
 >foo : any
+>    : ^^^
 >(x = x.length) : number
+>               : ^^^^^^
 >x = x.length : number
+>             : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
 x; // number
 >x : number
+>  : ^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/35484
 type D = { done: true, value: 1 } | { done: false, value: 2 };
->D : { done: true; value: 1; } | { done: false; value: 2; }
+>D : D
+>  : ^
 >done : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >value : 1
+>      : ^
 >done : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 >value : 2
+>      : ^
 
 declare function fn(): D;
 >fn : () => D
+>   : ^^^^^^ 
 
 let o: D;
 >o : D
+>  : ^
 
 if ((o = fn()).done) {
 >(o = fn()).done : boolean
+>                : ^^^^^^^
 >(o = fn()) : D
+>           : ^
 >o = fn() : D
+>         : ^
 >o : D
+>  : ^
 >fn() : D
+>     : ^
 >fn : () => D
+>   : ^^^^^^ 
 >done : boolean
+>     : ^^^^^^^
 
     const y: 1 = o.value;
 >y : 1
+>  : ^
 >o.value : 1
+>        : ^
 >o : { done: true; value: 1; }
+>  : ^^^^^^^^    ^^^^^^^^^ ^^^
 >value : 1
+>      : ^
 }

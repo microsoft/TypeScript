@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts] ////
+
 //// [newLexicalEnvironmentForConvertedLoop.ts]
 function baz(x: any) {
   return [[x, x]];

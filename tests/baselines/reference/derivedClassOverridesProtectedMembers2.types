@@ -1,235 +1,373 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts] ////
+
+=== derivedClassOverridesProtectedMembers2.ts ===
 var x: { foo: string; }
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 
 var y: { foo: string; bar: string; }
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     protected a: typeof x;
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected b(a: typeof x) { }
 >b : (a: typeof x) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected get c() { return x; }
 >c : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected set c(v: typeof x) { }
 >c : { foo: string; }
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected d: (a: typeof x) => void ;
 >d : (a: typeof x) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static r: typeof x;
 >r : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static s(a: typeof x) { }
 >s : (a: typeof x) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static get t() { return x; }
 >t : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static set t(v: typeof x) { }
 >t : { foo: string; }
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static u: (a: typeof x) => void ;
 >u : (a: typeof x) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
 constructor(a: typeof x) { }
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 }
 
 // Increase visibility of all protected members to public
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     a: typeof y;
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     b(a: typeof y) { }
 >b : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     get c() { return y; }
 >c : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     set c(v: typeof y) { }
 >c : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >v : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     d: (a: typeof y) => void;
 >d : (a: typeof y) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     static r: typeof y;
 >r : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     static s(a: typeof y) { }
 >s : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     static get t() { return y; }
 >t : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     static set t(a: typeof y) { }
 >t : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     static u: (a: typeof y) => void;
 >u : (a: typeof y) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     constructor(a: typeof y) { super(a); }
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >super(a) : void
+>         : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 }
 
 var d: Derived = new Derived(y);
 >d : Derived
+>  : ^^^^^^^
 >new Derived(y) : Derived
+>               : ^^^^^^^
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r1 = d.a;
 >r1 : { foo: string; bar: string; }
+>   : ^^^^^^^      ^^^^^^^      ^^^
 >d.a : { foo: string; bar: string; }
+>    : ^^^^^^^      ^^^^^^^      ^^^
 >d : Derived
+>  : ^^^^^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r2 = d.b(y);
 >r2 : void
+>   : ^^^^
 >d.b(y) : void
->d.b : (a: { foo: string; bar: string; }) => void
+>       : ^^^^
+>d.b : (a: typeof y) => void
+>    : ^ ^^        ^^^^^^^^^
 >d : Derived
->b : (a: { foo: string; bar: string; }) => void
+>  : ^^^^^^^
+>b : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r3 = d.c;
 >r3 : { foo: string; bar: string; }
+>   : ^^^^^^^      ^^^^^^^      ^^^
 >d.c : { foo: string; bar: string; }
+>    : ^^^^^^^      ^^^^^^^      ^^^
 >d : Derived
+>  : ^^^^^^^
 >c : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r3a = d.d;
->r3a : (a: { foo: string; bar: string; }) => void
->d.d : (a: { foo: string; bar: string; }) => void
+>r3a : (a: typeof y) => void
+>    : ^ ^^        ^^^^^    
+>d.d : (a: typeof y) => void
+>    : ^ ^^        ^^^^^    
 >d : Derived
->d : (a: { foo: string; bar: string; }) => void
+>  : ^^^^^^^
+>d : (a: typeof y) => void
+>  : ^ ^^        ^^^^^    
 
 d.c = y;
 >d.c = y : { foo: string; bar: string; }
+>        : ^^^^^^^      ^^^^^^^      ^^^
 >d.c : { foo: string; bar: string; }
+>    : ^^^^^^^      ^^^^^^^      ^^^
 >d : Derived
+>  : ^^^^^^^
 >c : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r4 = Derived.r;
 >r4 : { foo: string; bar: string; }
+>   : ^^^^^^^      ^^^^^^^      ^^^
 >Derived.r : { foo: string; bar: string; }
+>          : ^^^^^^^      ^^^^^^^      ^^^
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 >r : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r5 = Derived.s(y);
 >r5 : void
+>   : ^^^^
 >Derived.s(y) : void
->Derived.s : (a: { foo: string; bar: string; }) => void
+>             : ^^^^
+>Derived.s : (a: typeof y) => void
+>          : ^ ^^        ^^^^^^^^^
 >Derived : typeof Derived
->s : (a: { foo: string; bar: string; }) => void
+>        : ^^^^^^^^^^^^^^
+>s : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r6 = Derived.t;
 >r6 : { foo: string; bar: string; }
+>   : ^^^^^^^      ^^^^^^^      ^^^
 >Derived.t : { foo: string; bar: string; }
+>          : ^^^^^^^      ^^^^^^^      ^^^
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 >t : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 var r6a = Derived.u;
->r6a : (a: { foo: string; bar: string; }) => void
->Derived.u : (a: { foo: string; bar: string; }) => void
+>r6a : (a: typeof y) => void
+>    : ^ ^^        ^^^^^    
+>Derived.u : (a: typeof y) => void
+>          : ^ ^^        ^^^^^    
 >Derived : typeof Derived
->u : (a: { foo: string; bar: string; }) => void
+>        : ^^^^^^^^^^^^^^
+>u : (a: typeof y) => void
+>  : ^ ^^        ^^^^^    
 
 Derived.t = y;
 >Derived.t = y : { foo: string; bar: string; }
+>              : ^^^^^^^      ^^^^^^^      ^^^
 >Derived.t : { foo: string; bar: string; }
+>          : ^^^^^^^      ^^^^^^^      ^^^
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 >t : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
 class Base2 {
 >Base2 : Base2
+>      : ^^^^^
 
     [i: string]: Object;
 >i : string
+>  : ^^^^^^
 
     [i: number]: typeof x;
 >i : number
+>  : ^^^^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 }
 
 class Derived2 extends Base2 {
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base2 : Base2
+>      : ^^^^^
 
     [i: string]: typeof x;
 >i : string
+>  : ^^^^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     [i: number]: typeof y;
 >i : number
+>  : ^^^^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 }
 
 var d2: Derived2;
 >d2 : Derived2
+>   : ^^^^^^^^
 
 var r7 = d2[''];
 >r7 : { foo: string; }
+>   : ^^^^^^^      ^^^
 >d2[''] : { foo: string; }
+>       : ^^^^^^^      ^^^
 >d2 : Derived2
+>   : ^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r8 = d2[1];
 >r8 : { foo: string; bar: string; }
+>   : ^^^^^^^      ^^^^^^^      ^^^
 >d2[1] : { foo: string; bar: string; }
+>      : ^^^^^^^      ^^^^^^^      ^^^
 >d2 : Derived2
+>   : ^^^^^^^^
 >1 : 1
+>  : ^
 
 

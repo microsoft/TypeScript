@@ -1,44 +1,70 @@
-=== tests/cases/compiler/weird.js ===
+//// [tests/cases/compiler/checkIndexConstraintOfJavascriptClassExpression.ts] ////
+
+=== weird.js ===
 someFunction(function(BaseClass) {
 >someFunction(function(BaseClass) {    'use strict';    const DEFAULT_MESSAGE = "nop!";    class Hello extends BaseClass {        constructor() {            super();            this.foo = "bar";        }        _render(error) {            const message = error.message || DEFAULT_MESSAGE;        }    }}) : any
+>                                                                                                                                                                                                                                                                                                                : ^^^
 >someFunction : any
+>             : ^^^
 >function(BaseClass) {    'use strict';    const DEFAULT_MESSAGE = "nop!";    class Hello extends BaseClass {        constructor() {            super();            this.foo = "bar";        }        _render(error) {            const message = error.message || DEFAULT_MESSAGE;        }    }} : (BaseClass: any) => void
+>                                                                                                                                                                                                                                                                                                  : ^         ^^^^^^^^^^^^^^
 >BaseClass : any
+>          : ^^^
 
     'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
     const DEFAULT_MESSAGE = "nop!";
 >DEFAULT_MESSAGE : "nop!"
+>                : ^^^^^^
 >"nop!" : "nop!"
+>       : ^^^^^^
 
     class Hello extends BaseClass {
 >Hello : Hello
+>      : ^^^^^
 >BaseClass : any
+>          : ^^^
 
         constructor() {
             super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
             this.foo = "bar";
 >this.foo = "bar" : "bar"
+>                 : ^^^^^
 >this.foo : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >foo : any
+>    : ^^^
 >"bar" : "bar"
+>      : ^^^^^
         }
         _render(error) {
 >_render : (error: any) => void
+>        : ^     ^^^^^^^^^^^^^^
 >error : any
+>      : ^^^
 
             const message = error.message || DEFAULT_MESSAGE;
 >message : any
+>        : ^^^
 >error.message || DEFAULT_MESSAGE : any
+>                                 : ^^^
 >error.message : any
+>              : ^^^
 >error : any
+>      : ^^^
 >message : any
+>        : ^^^
 >DEFAULT_MESSAGE : "nop!"
+>                : ^^^^^^
         }
     }
 });

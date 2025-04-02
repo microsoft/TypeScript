@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticPropSuper.ts] ////
+
 //// [staticPropSuper.ts]
 class A {
 }

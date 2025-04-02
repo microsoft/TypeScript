@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration2.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration2.d.ts] ////
+
+=== parserModuleDeclaration2.d.ts ===
 
 module M {
 }

@@ -1,76 +1,105 @@
-=== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsReference.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsReference.ts] ////
+
+=== assignmentLHSIsReference.ts ===
 var value: any;
 >value : any
 
 // identifiers: variable and parameter
 var x1: number;
 >x1 : number
+>   : ^^^^^^
 
 x1 = value;
 >x1 = value : any
 >x1 : number
+>   : ^^^^^^
 >value : any
 
 function fn1(x2: number) {
 >fn1 : (x2: number) => void
+>    : ^  ^^      ^^^^^^^^^
 >x2 : number
+>   : ^^^^^^
 
     x2 = value;
 >x2 = value : any
 >x2 : number
+>   : ^^^^^^
 >value : any
 }
 
 // property accesses
 var x3: { a: string  };
 >x3 : { a: string; }
+>   : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 x3.a = value;
 >x3.a = value : any
 >x3.a : string
+>     : ^^^^^^
 >x3 : { a: string; }
+>   : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >value : any
 
 x3['a'] = value;
 >x3['a'] = value : any
 >x3['a'] : string
+>        : ^^^^^^
 >x3 : { a: string; }
+>   : ^^^^^      ^^^
 >'a' : "a"
+>    : ^^^
 >value : any
 
 // parentheses, the contained expression is reference
 (x1) = value;
 >(x1) = value : any
 >(x1) : number
+>     : ^^^^^^
 >x1 : number
+>   : ^^^^^^
 >value : any
 
 function fn2(x4: number) {
 >fn2 : (x4: number) => void
+>    : ^  ^^      ^^^^^^^^^
 >x4 : number
+>   : ^^^^^^
 
     (x4) = value;
 >(x4) = value : any
 >(x4) : number
+>     : ^^^^^^
 >x4 : number
+>   : ^^^^^^
 >value : any
 }
 
 (x3.a) = value;
 >(x3.a) = value : any
 >(x3.a) : string
+>       : ^^^^^^
 >x3.a : string
+>     : ^^^^^^
 >x3 : { a: string; }
+>   : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >value : any
 
 (x3['a']) = value;
 >(x3['a']) = value : any
 >(x3['a']) : string
+>          : ^^^^^^
 >x3['a'] : string
+>        : ^^^^^^
 >x3 : { a: string; }
+>   : ^^^^^      ^^^
 >'a' : "a"
+>    : ^^^
 >value : any
 

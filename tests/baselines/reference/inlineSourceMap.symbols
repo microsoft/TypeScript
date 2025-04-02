@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inlineSourceMap.ts ===
+//// [tests/cases/compiler/inlineSourceMap.ts] ////
+
+=== inlineSourceMap.ts ===
 var x = 0;
 >x : Symbol(x, Decl(inlineSourceMap.ts, 0, 3))
 

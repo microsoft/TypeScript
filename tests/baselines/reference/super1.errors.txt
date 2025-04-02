@@ -1,10 +1,10 @@
-tests/cases/compiler/super1.ts(16,22): error TS2339: Property 'super' does not exist on type 'Sub1'.
-tests/cases/compiler/super1.ts(29,22): error TS2339: Property 'prototype' does not exist on type 'Base2'.
-tests/cases/compiler/super1.ts(42,22): error TS2339: Property 'bar' does not exist on type 'Base3'.
-tests/cases/compiler/super1.ts(62,20): error TS2335: 'super' can only be referenced in a derived class.
+super1.ts(16,22): error TS2339: Property 'super' does not exist on type 'Sub1'.
+super1.ts(29,22): error TS2339: Property 'prototype' does not exist on type 'Base2'.
+super1.ts(42,22): error TS2339: Property 'bar' does not exist on type 'Base3'.
+super1.ts(62,20): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== tests/cases/compiler/super1.ts (4 errors) ====
+==== super1.ts (4 errors) ====
     // Case 1
     class Base1 {
         public foo() {

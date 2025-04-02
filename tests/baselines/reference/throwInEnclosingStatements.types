@@ -1,6 +1,9 @@
-=== tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
+//// [tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts] ////
+
+=== throwInEnclosingStatements.ts ===
 function fn(x) {
 >fn : (x: any) => void
+>   : ^ ^^^^^^^^^^^^^^
 >x : any
 
     throw x;
@@ -9,93 +12,132 @@ function fn(x) {
 
 <T>(x: T) => { throw x; }
 ><T>(x: T) => { throw x; } : <T>(x: T) => never
+>                          : ^ ^^ ^^ ^^^^^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 var y: string;
 >y : string
+>  : ^^^^^^
 
 switch (y) {
 >y : string
+>  : ^^^^^^
 
     case 'a':
 >'a' : "a"
+>    : ^^^
 
         throw y;
 >y : "a"
+>  : ^^^
 
     default:
         throw y;
 >y : string
+>  : ^^^^^^
 }
 
 var z = 0;
 >z : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 while (z < 10) {
 >z < 10 : boolean
+>       : ^^^^^^^
 >z : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     throw z;
 >z : number
+>  : ^^^^^^
 }
 
 for (var i = 0; ;) { throw i; }
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i : number
+>  : ^^^^^^
 
 for (var idx in {}) { throw idx; }
 >idx : string
+>    : ^^^^^^
 >{} : {}
+>   : ^^
 >idx : string
+>    : ^^^^^^
 
 do { throw null; }while(true)
 >true : true
+>     : ^^^^
 
 var j = 0;
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 while (j < 0) { throw j; }
 >j < 0 : boolean
+>      : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j : number
+>  : ^^^^^^
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     private value: T;
 >value : T
+>      : ^
 
     biz() {
 >biz : () => void
+>    : ^^^^^^^^^^
 
         throw this.value;
 >this.value : T
+>           : ^
 >this : this
+>     : ^^^^
 >value : T
+>      : ^
     }
 
     constructor() {
         throw this;
 >this : this
+>     : ^^^^
     }
 }
 
 var aa = {
 >aa : { id: number; biz(): never; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    id:12,    biz() {        throw this;    }} : { id: number; biz(): never; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     id:12,
 >id : number
+>   : ^^^^^^
 >12 : 12
+>   : ^^
 
     biz() {
 >biz : () => never
+>    : ^^^^^^^^^^^
 
         throw this;
 >this : any

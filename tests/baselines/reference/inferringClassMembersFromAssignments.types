@@ -1,439 +1,709 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments.ts] ////
+
+=== a.js ===
 class C {
 >C : C
+>  : ^
 
     constructor() {
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inConstructor = 0;
 >this.inConstructor = 0 : 0
+>                       : ^
 >this.inConstructor : any
+>                   : ^^^
 >this : this
+>     : ^^^^
 >inConstructor : any
+>              : ^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inConstructor = "string"
 >this.inConstructor = "string" : "string"
+>                              : ^^^^^^^^
 >this.inConstructor : any
+>                   : ^^^
 >this : this
+>     : ^^^^
 >inConstructor : any
+>              : ^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
         this.inMultiple = 0;
 >this.inMultiple = 0 : 0
+>                    : ^
 >this.inMultiple : any
+>                : ^^^
 >this : this
+>     : ^^^^
 >inMultiple : any
+>           : ^^^
 >0 : 0
+>  : ^
     }
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inMethod = 0;
 >this.inMethod = 0 : 0
+>                  : ^
 >this.inMethod : string | number | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inMethod : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
             this.inMethodNullable = null;
 >this.inMethodNullable = null : null
+>                             : ^^^^
 >this.inMethodNullable : any
+>                      : ^^^
 >this : this
+>     : ^^^^
 >inMethodNullable : any
+>                 : ^^^
         }
         else {
             this.inMethod = "string"
 >this.inMethod = "string" : "string"
+>                         : ^^^^^^^^
 >this.inMethod : string | number | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inMethod : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
             this.inMethodNullable = undefined;
 >this.inMethodNullable = undefined : undefined
+>                                  : ^^^^^^^^^
 >this.inMethodNullable : any
+>                      : ^^^
 >this : this
+>     : ^^^^
 >inMethodNullable : any
+>                 : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
         }
         this.inMultiple = "string";
 >this.inMultiple = "string" : "string"
+>                           : ^^^^^^^^
 >this.inMultiple : number
+>                : ^^^^^^
 >this : this
+>     : ^^^^
 >inMultiple : number
+>           : ^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         this.inMultipleMethods = "string";
 >this.inMultipleMethods = "string" : "string"
+>                                  : ^^^^^^^^
 >this.inMultipleMethods : string | boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inMultipleMethods : string | boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         var action = () => {
 >action : () => void
+>       : ^^^^^^^^^^
 >() => {            if (Math.random()) {                this.inNestedArrowFunction = 0;            }            else {                this.inNestedArrowFunction = "string"            }        } : () => void
+>                                                                                                                                                                                                 : ^^^^^^^^^^
 
             if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
                 this.inNestedArrowFunction = 0;
 >this.inNestedArrowFunction = 0 : 0
+>                               : ^
 >this.inNestedArrowFunction : string | number | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inNestedArrowFunction : string | number | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
             }
             else {
                 this.inNestedArrowFunction = "string"
 >this.inNestedArrowFunction = "string" : "string"
+>                                      : ^^^^^^^^
 >this.inNestedArrowFunction : string | number | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inNestedArrowFunction : string | number | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
             }
         };
     }
     get() {
 >get : () => void
+>    : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inGetter = 0;
 >this.inGetter = 0 : 0
+>                  : ^
 >this.inGetter : string | number | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inGetter : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inGetter = "string"
 >this.inGetter = "string" : "string"
+>                         : ^^^^^^^^
 >this.inGetter : string | number | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inGetter : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
         this.inMultiple = false;
 >this.inMultiple = false : false
+>                        : ^^^^^
 >this.inMultiple : number
+>                : ^^^^^^
 >this : this
+>     : ^^^^
 >inMultiple : number
+>           : ^^^^^^
 >false : false
+>      : ^^^^^
 
         this.inMultipleMethods = false;
 >this.inMultipleMethods = false : false
+>                               : ^^^^^
 >this.inMultipleMethods : string | boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inMultipleMethods : string | boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
     }
     set() {
 >set : () => void
+>    : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inSetter = 0;
 >this.inSetter = 0 : 0
+>                  : ^
 >this.inSetter : string | number | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inSetter : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inSetter = "string"
 >this.inSetter = "string" : "string"
+>                         : ^^^^^^^^
 >this.inSetter : string | number | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inSetter : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
     }
     prop = () => {
 >prop : () => void
+>     : ^^^^^^^^^^
 >() => {        if (Math.random()) {            this.inPropertyDeclaration = 0;        }        else {            this.inPropertyDeclaration = "string"        }    } : () => void
+>                                                                                                                                                                     : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inPropertyDeclaration = 0;
 >this.inPropertyDeclaration = 0 : 0
+>                               : ^
 >this.inPropertyDeclaration : string | number | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inPropertyDeclaration : string | number | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inPropertyDeclaration = "string"
 >this.inPropertyDeclaration = "string" : "string"
+>                                      : ^^^^^^^^
 >this.inPropertyDeclaration : string | number | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >inPropertyDeclaration : string | number | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
     }
     static method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inStaticMethod = 0;
 >this.inStaticMethod = 0 : 0
+>                        : ^
 >this.inStaticMethod : string | number | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticMethod : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inStaticMethod = "string"
 >this.inStaticMethod = "string" : "string"
+>                               : ^^^^^^^^
 >this.inStaticMethod : string | number | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticMethod : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
 
         var action = () => {
 >action : () => void
+>       : ^^^^^^^^^^
 >() => {            if (Math.random()) {                this.inStaticNestedArrowFunction = 0;            }            else {                this.inStaticNestedArrowFunction = "string"            }        } : () => void
+>                                                                                                                                                                                                             : ^^^^^^^^^^
 
             if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
                 this.inStaticNestedArrowFunction = 0;
 >this.inStaticNestedArrowFunction = 0 : 0
+>                                     : ^
 >this.inStaticNestedArrowFunction : string | number | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticNestedArrowFunction : string | number | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
             }
             else {
                 this.inStaticNestedArrowFunction = "string"
 >this.inStaticNestedArrowFunction = "string" : "string"
+>                                            : ^^^^^^^^
 >this.inStaticNestedArrowFunction : string | number | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticNestedArrowFunction : string | number | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
             }
         };
     }
     static get() {
 >get : () => void
+>    : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inStaticGetter = 0;
 >this.inStaticGetter = 0 : 0
+>                        : ^
 >this.inStaticGetter : string | number | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticGetter : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inStaticGetter = "string"
 >this.inStaticGetter = "string" : "string"
+>                               : ^^^^^^^^
 >this.inStaticGetter : string | number | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticGetter : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
     }
     static set() {
 >set : () => void
+>    : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inStaticSetter = 0;
 >this.inStaticSetter = 0 : 0
+>                        : ^
 >this.inStaticSetter : string | number | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticSetter : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inStaticSetter = "string"
 >this.inStaticSetter = "string" : "string"
+>                               : ^^^^^^^^
 >this.inStaticSetter : string | number | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticSetter : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
     }
     static prop = () => {
 >prop : () => void
+>     : ^^^^^^^^^^
 >() => {        if (Math.random()) {            this.inStaticPropertyDeclaration = 0;        }        else {            this.inStaticPropertyDeclaration = "string"        }    } : () => void
+>                                                                                                                                                                                 : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             this.inStaticPropertyDeclaration = 0;
 >this.inStaticPropertyDeclaration = 0 : 0
+>                                     : ^
 >this.inStaticPropertyDeclaration : string | number | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticPropertyDeclaration : string | number | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
         else {
             this.inStaticPropertyDeclaration = "string"
 >this.inStaticPropertyDeclaration = "string" : "string"
+>                                            : ^^^^^^^^
 >this.inStaticPropertyDeclaration : string | number | undefined
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >inStaticPropertyDeclaration : string | number | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
         }
     }
 }
 
-=== tests/cases/conformance/salsa/b.ts ===
+=== b.ts ===
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var stringOrNumber: string | number;
 >stringOrNumber : string | number
+>               : ^^^^^^^^^^^^^^^
 
 var stringOrNumber = c.inConstructor;
 >stringOrNumber : string | number
+>               : ^^^^^^^^^^^^^^^
 >c.inConstructor : string | number
+>                : ^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >inConstructor : string | number
+>              : ^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined: string | number | undefined;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = c.inMethod;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.inMethod : string | number | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >inMethod : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = c.inGetter;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.inGetter : string | number | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >inGetter : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = c.inSetter;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.inSetter : string | number | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >inSetter : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = c.inPropertyDeclaration;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.inPropertyDeclaration : string | number | undefined
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >inPropertyDeclaration : string | number | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = c.inNestedArrowFunction
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.inNestedArrowFunction : string | number | undefined
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >inNestedArrowFunction : string | number | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrBoolean: string | number | boolean;
 >stringOrNumberOrBoolean : string | number | boolean
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var number: number;
 >number : number
+>       : ^^^^^^
 
 var number = c.inMultiple;
 >number : number
+>       : ^^^^^^
 >c.inMultiple : number
+>             : ^^^^^^
 >c : C
+>  : ^
 >inMultiple : number
+>           : ^^^^^^
 
 var stringOrBooleanOrUndefined : string | boolean | undefined;
 >stringOrBooleanOrUndefined : string | boolean | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrBooleanOrUndefined = c.inMultipleMethods;
 >stringOrBooleanOrUndefined : string | boolean | undefined
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.inMultipleMethods : string | boolean | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >inMultipleMethods : string | boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var any: any;
 >any : any
+>    : ^^^
 
 var any = c.inMethodNullable;
 >any : any
+>    : ^^^
 >c.inMethodNullable : any
+>                   : ^^^
 >c : C
+>  : ^
 >inMethodNullable : any
+>                 : ^^^
 
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C.inStaticMethod : string | number | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >inStaticMethod : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = C.inStaticGetter;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C.inStaticGetter : string | number | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >inStaticGetter : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = C.inStaticSetter;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C.inStaticSetter : string | number | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >inStaticSetter : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = C.inStaticPropertyDeclaration;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C.inStaticPropertyDeclaration : string | number | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >inStaticPropertyDeclaration : string | number | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
 >stringOrNumberOrUndefined : string | number | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C.inStaticNestedArrowFunction : string | number | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >inStaticNestedArrowFunction : string | number | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

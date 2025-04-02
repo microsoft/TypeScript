@@ -1,4 +1,6 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts] ////
+
+=== noUncheckedIndexedAccessDestructuring.ts ===
 declare const strArray: string[];
 >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
 

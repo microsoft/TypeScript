@@ -1,299 +1,422 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts] ////
+
+=== stringLiteralTypeIsSubtypeOfString.ts ===
 // string literal types are subtypes of string, any
 
 // ok
 function f1(x: 'a');
->f1 : { (x: 'a'): any; (x: string): any; }
+>f1 : { (x: "a"): any; (x: string): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f1(x: string);
 >f1 : { (x: "a"): any; (x: string): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 function f1(x: string) { }
 >f1 : { (x: "a"): any; (x: string): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 // ok
 function f2(x: 'a');
->f2 : { (x: 'a'): any; (x: any): any; }
+>f2 : { (x: "a"): any; (x: any): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f2(x: any);
 >f2 : { (x: "a"): any; (x: any): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 
 function f2(x: any) { }
 >f2 : { (x: "a"): any; (x: any): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 
 // errors
 function f3(x: 'a');
->f3 : { (x: 'a'): any; (x: Object): any; }
+>f3 : { (x: "a"): any; (x: Object): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f3(x: Object);
 >f3 : { (x: "a"): any; (x: Object): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : Object
+>  : ^^^^^^
 
 function f3(x: any) { }
 >f3 : { (x: "a"): any; (x: Object): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 
 function f4(x: 'a');
->f4 : { (x: 'a'): any; (x: {}): any; }
+>f4 : { (x: "a"): any; (x: {}): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f4(x: {});
 >f4 : { (x: "a"): any; (x: {}): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : {}
+>  : ^^
 
 function f4(x: any) { }
 >f4 : { (x: "a"): any; (x: {}): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : any
 
 function f5(x: 'a');
->f5 : { (x: 'a'): any; (x: number): any; }
+>f5 : { (x: "a"): any; (x: number): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f5(x: number);
 >f5 : { (x: "a"): any; (x: number): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function f5(x: any) { }
 >f5 : { (x: "a"): any; (x: number): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 
 function f6(x: 'a');
->f6 : { (x: 'a'): any; (x: boolean): any; }
+>f6 : { (x: "a"): any; (x: boolean): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^       ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f6(x: boolean);
 >f6 : { (x: "a"): any; (x: boolean): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^       ^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
 function f6(x: any) { }
 >f6 : { (x: "a"): any; (x: boolean): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^       ^^^^^^^^^
 >x : any
 
 function f7(x: 'a');
->f7 : { (x: 'a'): any; (x: Date): any; }
+>f7 : { (x: "a"): any; (x: Date): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^    ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f7(x: Date);
 >f7 : { (x: "a"): any; (x: Date): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^    ^^^^^^^^^
 >x : Date
+>  : ^^^^
 
 function f7(x: any) { }
 >f7 : { (x: "a"): any; (x: Date): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^    ^^^^^^^^^
 >x : any
 
 function f8(x: 'a');
->f8 : { (x: 'a'): any; (x: RegExp): any; }
+>f8 : { (x: "a"): any; (x: RegExp): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f8(x: RegExp);
 >f8 : { (x: "a"): any; (x: RegExp): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : RegExp
+>  : ^^^^^^
 
 function f8(x: any) { }
 >f8 : { (x: "a"): any; (x: RegExp): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 
 function f9(x: 'a');
->f9 : { (x: 'a'): any; (x: () => {}): any; }
+>f9 : { (x: "a"): any; (x: () => {}): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f9(x: () => {});
 >f9 : { (x: "a"): any; (x: () => {}): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : () => {}
+>  : ^^^^^^  
 
 function f9(x: any) { }
 >f9 : { (x: "a"): any; (x: () => {}): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 
 class C implements String {
 >C : C
+>  : ^
 
     toString(): string { return null; }
 >toString : () => string
+>         : ^^^^^^      
 
     charAt(pos: number): string { return null; }
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >pos : number
+>    : ^^^^^^
 
     charCodeAt(index: number): number { return null; }
 >charCodeAt : (index: number) => number
+>           : ^     ^^      ^^^^^      
 >index : number
+>      : ^^^^^^
 
     concat(...strings: string[]): string { return null; }
 >concat : (...strings: string[]) => string
+>       : ^^^^       ^^        ^^^^^      
 >strings : string[]
+>        : ^^^^^^^^
 
     indexOf(searchString: string, position?: number): number { return null; }
 >indexOf : (searchString: string, position?: number) => number
+>        : ^            ^^      ^^        ^^^      ^^^^^      
 >searchString : string
+>             : ^^^^^^
 >position : number
+>         : ^^^^^^
 
     lastIndexOf(searchString: string, position?: number): number { return null; }
 >lastIndexOf : (searchString: string, position?: number) => number
+>            : ^            ^^      ^^        ^^^      ^^^^^      
 >searchString : string
+>             : ^^^^^^
 >position : number
+>         : ^^^^^^
 
     localeCompare(that: string): number { return null; }
 >localeCompare : (that: string) => number
+>              : ^    ^^      ^^^^^      
 >that : string
+>     : ^^^^^^
 
     match(regexp: any): RegExpMatchArray { return null; }
 >match : (regexp: any) => RegExpMatchArray
+>      : ^      ^^   ^^^^^                
 >regexp : any
 
     replace(searchValue: any, replaceValue: any): string { return null; }
 >replace : (searchValue: any, replaceValue: any) => string
+>        : ^           ^^   ^^            ^^   ^^^^^      
 >searchValue : any
 >replaceValue : any
 
     search(regexp: any): number { return null; }
 >search : (regexp: any) => number
+>       : ^      ^^   ^^^^^      
 >regexp : any
 
     slice(start?: number, end?: number): string { return null; }
 >slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     split(separator: any, limit?: number): string[] { return null; }
 >split : (separator: any, limit?: number) => string[]
+>      : ^         ^^   ^^     ^^^      ^^^^^        
 >separator : any
 >limit : number
+>      : ^^^^^^
 
     substring(start: number, end?: number): string { return null; }
 >substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >start : number
+>      : ^^^^^^
 >end : number
+>    : ^^^^^^
 
     toLowerCase(): string { return null; }
 >toLowerCase : () => string
+>            : ^^^^^^      
 
     toLocaleLowerCase(): string { return null; }
 >toLocaleLowerCase : () => string
+>                  : ^^^^^^      
 
     toUpperCase(): string { return null; }
 >toUpperCase : () => string
+>            : ^^^^^^      
 
     toLocaleUpperCase(): string { return null; }
 >toLocaleUpperCase : () => string
+>                  : ^^^^^^      
 
     trim(): string { return null; }
 >trim : () => string
+>     : ^^^^^^      
 
     length: number;
 >length : number
+>       : ^^^^^^
 
     substr(from: number, length?: number): string { return null; }
 >substr : (from: number, length?: number) => string
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >from : number
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     valueOf(): string { return null; }
 >valueOf : () => string
+>        : ^^^^^^      
 
     [index: number]: string;
 >index : number
+>      : ^^^^^^
 }
 
 // BUG 831846
 function f10(x: 'a');
->f10 : { (x: 'a'): any; (x: C): any; }
+>f10 : { (x: "a"): any; (x: C): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f10(x: C);
 >f10 : { (x: "a"): any; (x: C): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : C
+>  : ^
 
 function f10(x: any) { }
 >f10 : { (x: "a"): any; (x: C): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 
 interface I extends String {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 // BUG 831846
 function f11(x: 'a');
->f11 : { (x: 'a'): any; (x: I): any; }
+>f11 : { (x: "a"): any; (x: I): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f11(x: I);
 >f11 : { (x: "a"): any; (x: I): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : I
+>  : ^
 
 function f11(x: any) { }
 >f11 : { (x: "a"): any; (x: I): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 
 function f12<T>(x: 'a');
->f12 : { <T>(x: 'a'): any; <T>(x: T): any; }
+>f12 : { <T>(x: "a"): any; <T_1>(x: T_1): any; }
+>    : ^^^ ^^ ^^   ^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f12<T>(x: T);
->f12 : { <T>(x: "a"): any; <T>(x: T): any; }
+>f12 : { <T_1>(x: "a"): any; <T>(x: T): any; }
+>    : ^^^^^^^^ ^^   ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
 function f12<T>(x: any) { }
->f12 : { <T>(x: "a"): any; <T>(x: T): any; }
+>f12 : { <T_1>(x: "a"): any; <T_1>(x: T_1): any; }
+>    : ^^^^^^^^ ^^   ^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 
 function f13<T extends String>(x: 'a');
->f13 : { <T extends String>(x: 'a'): any; <T extends String>(x: T): any; }
+>f13 : { <T extends String>(x: "a"): any; <T_1 extends String>(x: T_1): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^      ^^ ^^   ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f13<T extends String>(x: T);
->f13 : { <T extends String>(x: "a"): any; <T extends String>(x: T): any; }
+>f13 : { <T_1 extends String>(x: "a"): any; <T extends String>(x: T): any; }
+>    : ^^^^^^^^^^^^^^^      ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
 function f13<T extends String>(x: any) { }
->f13 : { <T extends String>(x: "a"): any; <T extends String>(x: T): any; }
+>f13 : { <T_1 extends String>(x: "a"): any; <T_1 extends String>(x: T_1): any; }
+>    : ^^^^^^^^^^^^^^^      ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^      ^^ ^^   ^^^^^^^^^
 >x : any
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 function f14(x: 'a');
->f14 : { (x: 'a'): any; (x: E): any; }
+>f14 : { (x: "a"): any; (x: E): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f14(x: E);
 >f14 : { (x: "a"): any; (x: E): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : E
+>  : ^
 
 function f14(x: any) { }
 >f14 : { (x: "a"): any; (x: E): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 
 function f15<T, U extends T>(x: 'a');
->f15 : { <T, U extends T>(x: 'a'): any; <T, U extends T>(x: U): any; }
+>f15 : { <T, U extends T>(x: "a"): any; <T_1, U_1 extends T_1>(x: U_1): any; }
+>    : ^^^ ^^ ^^^^^^^^^ ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f15<T, U extends T>(x: U);
->f15 : { <T, U extends T>(x: "a"): any; <T, U extends T>(x: U): any; }
+>f15 : { <T_1, U_1 extends T_1>(x: "a"): any; <T, U extends T>(x: U): any; }
+>    : ^^^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : U
+>  : ^
 
 function f15<T, U extends T>(x: any) { }
->f15 : { <T, U extends T>(x: "a"): any; <T, U extends T>(x: U): any; }
+>f15 : { <T_1, U_1 extends T_1>(x: "a"): any; <T_1, U_1 extends T_1>(x: U_1): any; }
+>    : ^^^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : any
 
 function f16<T extends String, U extends T>(x: 'a');
->f16 : { <T extends String, U extends T>(x: 'a'): any; <T extends String, U extends T>(x: U): any; }
+>f16 : { <T extends String, U extends T>(x: "a"): any; <T_1 extends String, U_1 extends T_1>(x: U_1): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^ ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function f16<T extends String, U extends T>(x: U);
->f16 : { <T extends String, U extends T>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
+>f16 : { <T_1 extends String, U_1 extends T_1>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
+>    : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : U
+>  : ^
 
 function f16<T extends String, U extends T>(x: any) { }
->f16 : { <T extends String, U extends T>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
+>f16 : { <T_1 extends String, U_1 extends T_1>(x: "a"): any; <T_1 extends String, U_1 extends T_1>(x: U_1): any; }
+>    : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : any
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/test.js ===
+//// [tests/cases/conformance/salsa/contextualTypedSpecialAssignment.ts] ////
+
+=== test.js ===
 /** @typedef {{
     status: 'done'
     m(n: number): void
@@ -7,86 +9,129 @@
 // property assignment
 var ns = {}
 >ns : typeof ns
+>   : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /** @type {DoneStatus} */
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >ns.x : DoneStatus
+>     : ^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >x : DoneStatus
+>  : ^^^^^^^^^^
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: 'done',
 >status : "done"
+>       : ^^^^^^
 >'done' : "done"
+>       : ^^^^^^
 
     m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >ns.x : DoneStatus
+>     : ^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >x : DoneStatus
+>  : ^^^^^^^^^^
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: 'done',
 >status : "done"
+>       : ^^^^^^
 >'done' : "done"
+>       : ^^^^^^
 
     m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 ns.x
 >ns.x : DoneStatus
+>     : ^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >x : DoneStatus
+>  : ^^^^^^^^^^
 
 
 // this-property assignment
 class Thing {
 >Thing : Thing
+>      : ^^^^^
 
     constructor() {
         /** @type {DoneStatus} */
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >this.s : DoneStatus
+>       : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >s : DoneStatus
+>  : ^^^^^^^^^^
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
             status: 'done',
 >status : "done"
+>       : ^^^^^^
 >'done' : "done"
+>       : ^^^^^^
 
             m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
         }
     }
 
     fail() {
 >fail : () => void
+>     : ^^^^^^^^^^
 
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >this.s : DoneStatus
+>       : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >s : DoneStatus
+>  : ^^^^^^^^^^
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
             status: 'done',
 >status : "done"
+>       : ^^^^^^
 >'done' : "done"
+>       : ^^^^^^
 
             m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
         }
     }
 }
@@ -96,112 +141,175 @@ class Thing {
 /** @type {DoneStatus} */
 exports.x = {
 >exports.x = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >exports.x : DoneStatus
->exports : typeof import("tests/cases/conformance/salsa/test")
+>          : ^^^^^^^^^^
+>exports : typeof import("test")
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >x : DoneStatus
+>  : ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
+>       : ^^^^^^
 >"done" : "done"
+>       : ^^^^^^
 
     m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 exports.x
 >exports.x : DoneStatus
->exports : typeof import("tests/cases/conformance/salsa/test")
+>          : ^^^^^^^^^^
+>exports : typeof import("test")
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >x : DoneStatus
+>  : ^^^^^^^^^^
 
 /** @type {DoneStatus} */
 module.exports.y = {
 >module.exports.y = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >module.exports.y : DoneStatus
+>                 : ^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >y : DoneStatus
+>  : ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
+>       : ^^^^^^
 >"done" : "done"
+>       : ^^^^^^
 
     m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 module.exports.y
 >module.exports.y : DoneStatus
+>                 : ^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >y : DoneStatus
+>  : ^^^^^^^^^^
 
 // prototype-property assignment
 /** @type {DoneStatus} */
 Thing.prototype.x = {
 >Thing.prototype.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >Thing.prototype.x : DoneStatus
+>                  : ^^^^^^^^^^
 >Thing.prototype : Thing
+>                : ^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 >prototype : Thing
+>          : ^^^^^
 >x : DoneStatus
+>  : ^^^^^^^^^^
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: 'done',
 >status : "done"
+>       : ^^^^^^
 >'done' : "done"
+>       : ^^^^^^
 
     m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 Thing.prototype.x
 >Thing.prototype.x : DoneStatus
+>                  : ^^^^^^^^^^
 >Thing.prototype : Thing
+>                : ^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 >prototype : Thing
+>          : ^^^^^
 >x : DoneStatus
+>  : ^^^^^^^^^^
 
 // prototype assignment
 function F() {
 >F : typeof F
+>  : ^^^^^^^^
 }
 /** @type {DoneStatus} */
 F.prototype = {
 >F.prototype = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >F.prototype : DoneStatus
+>            : ^^^^^^^^^^
 >F : typeof F
+>  : ^^^^^^^^
 >prototype : DoneStatus
+>          : ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
+>       : ^^^^^^
 >"done" : "done"
+>       : ^^^^^^
 
     m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 // module.exports assignment
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
->module.exports = {    status: "done",    m(n) { }} : { status: 'done'; m(n: number): void; }
+>module.exports = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                                   : ^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^
 >module.exports : { status: "done"; m(n: number): void; }
+>               : ^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^
 >module : { exports: { status: "done"; m(n: number): void; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^^^^
 >exports : { status: "done"; m(n: number): void; }
+>        : ^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
+>       : ^^^^^^
 >"done" : "done"
+>       : ^^^^^^
 
     m(n) { }
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 

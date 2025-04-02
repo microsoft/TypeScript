@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx] ////
+
 //// [contextuallyTypedStringLiteralsInJsxAttributes01.tsx]
 namespace JSX {
     export interface IntrinsicElements {

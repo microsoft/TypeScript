@@ -1,40 +1,63 @@
-=== tests/cases/compiler/invalidThisEmitInContextualObjectLiteral.ts ===
+//// [tests/cases/compiler/invalidThisEmitInContextualObjectLiteral.ts] ////
+
+=== invalidThisEmitInContextualObjectLiteral.ts ===
 interface IDef {
 	p1: (e:string) => void;
 >p1 : (e: string) => void
+>   : ^ ^^      ^^^^^    
 >e : string
+>  : ^^^^^^
 
 	p2: () => (n: number) => any;
 >p2 : () => (n: number) => any
+>   : ^^^^^^                  
 >n : number
+>  : ^^^^^^
 }
 
 class TestController {
 >TestController : TestController
+>               : ^^^^^^^^^^^^^^
 
 	public m(def: IDef) { }
 >m : (def: IDef) => void
+>  : ^   ^^    ^^^^^^^^^
 >def : IDef
+>    : ^^^^
 
 	public p = this.m({
 >p : void
+>  : ^^^^
 >this.m({		p1: e => { },		p2: () => { return vvvvvvvvv => this; },	}) : void
+>                                                                     : ^^^^
 >this.m : (def: IDef) => void
+>       : ^   ^^    ^^^^^^^^^
 >this : this
+>     : ^^^^
 >m : (def: IDef) => void
+>  : ^   ^^    ^^^^^^^^^
 >{		p1: e => { },		p2: () => { return vvvvvvvvv => this; },	} : { p1: (e: string) => void; p2: () => (vvvvvvvvv: number) => this; }
+>                                                             : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^
 
 		p1: e => { },
 >p1 : (e: string) => void
+>   : ^ ^^^^^^^^^^^^^^^^^
 >e => { } : (e: string) => void
+>         : ^ ^^^^^^^^^^^^^^^^^
 >e : string
+>  : ^^^^^^
 
 		p2: () => { return vvvvvvvvv => this; },
 >p2 : () => (vvvvvvvvv: number) => this
+>   : ^^^^^^^         ^^^^^^^^^^^^^^^^^
 >() => { return vvvvvvvvv => this; } : () => (vvvvvvvvv: number) => this
+>                                    : ^^^^^^^         ^^^^^^^^^^^^^^^^^
 >vvvvvvvvv => this : (vvvvvvvvv: number) => this
+>                  : ^         ^^^^^^^^^^^^^^^^^
 >vvvvvvvvv : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 
 	});
 }

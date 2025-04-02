@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invalidUseOfTypeAsNamespace.ts ===
+//// [tests/cases/compiler/invalidUseOfTypeAsNamespace.ts] ////
+
+=== invalidUseOfTypeAsNamespace.ts ===
 interface OhNo {
 >OhNo : Symbol(OhNo, Decl(invalidUseOfTypeAsNamespace.ts, 0, 0))
 }

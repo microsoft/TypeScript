@@ -1,25 +1,30 @@
-tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts(33,5): error TS2322: Type '{ type: T; localChannelId: string; }' is not assignable to type 'NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>'.
+complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts(33,5): error TS2322: Type '{ type: T; localChannelId: string; }' is not assignable to type 'NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>'.
   Type '{ type: T; localChannelId: string; }' is not assignable to type 'Pick<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>, "type">'.
     Types of property 'type' are incompatible.
       Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
         Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
           Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
             Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-              Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-                Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-                  Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-                    Type '"text"' is not assignable to type 'T & "text"'.
-                      Type 'T' is not assignable to type 'T & "text"'.
-                        Type '"text" | "email"' is not assignable to type 'T & "text"'.
+              Type '"text"' is not assignable to type 'T & "text"'.
+                Type '"text"' is not assignable to type 'T'.
+                  '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
+                    Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+                      Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+                        Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
                           Type '"text"' is not assignable to type 'T & "text"'.
                             Type '"text"' is not assignable to type 'T'.
                               '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
-                                Type 'T' is not assignable to type '"text"'.
-                                  Type '"text" | "email"' is not assignable to type '"text"'.
-                                    Type '"email"' is not assignable to type '"text"'.
+                                Type 'T' is not assignable to type 'T & "text"'.
+                                  Type '"text" | "email"' is not assignable to type 'T & "text"'.
+                                    Type '"text"' is not assignable to type 'T & "text"'.
+                                      Type '"text"' is not assignable to type 'T'.
+                                        '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
+                                          Type 'T' is not assignable to type '"text"'.
+                                            Type '"text" | "email"' is not assignable to type '"text"'.
+                                              Type '"email"' is not assignable to type '"text"'.
 
 
-==== tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts (1 errors) ====
+==== complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts (1 errors) ====
     interface TextChannel {
         id: string;
         type: 'text';
@@ -61,18 +66,23 @@ tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.t
 !!! error TS2322:         Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
 !!! error TS2322:           Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
 !!! error TS2322:             Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:               Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                 Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                   Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                     Type '"text"' is not assignable to type 'T & "text"'.
-!!! error TS2322:                       Type 'T' is not assignable to type 'T & "text"'.
-!!! error TS2322:                         Type '"text" | "email"' is not assignable to type 'T & "text"'.
+!!! error TS2322:               Type '"text"' is not assignable to type 'T & "text"'.
+!!! error TS2322:                 Type '"text"' is not assignable to type 'T'.
+!!! error TS2322:                   '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
+!!! error TS2322:                     Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+!!! error TS2322:                       Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
+!!! error TS2322:                         Type 'string' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
 !!! error TS2322:                           Type '"text"' is not assignable to type 'T & "text"'.
 !!! error TS2322:                             Type '"text"' is not assignable to type 'T'.
 !!! error TS2322:                               '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
-!!! error TS2322:                                 Type 'T' is not assignable to type '"text"'.
-!!! error TS2322:                                   Type '"text" | "email"' is not assignable to type '"text"'.
-!!! error TS2322:                                     Type '"email"' is not assignable to type '"text"'.
+!!! error TS2322:                                 Type 'T' is not assignable to type 'T & "text"'.
+!!! error TS2322:                                   Type '"text" | "email"' is not assignable to type 'T & "text"'.
+!!! error TS2322:                                     Type '"text"' is not assignable to type 'T & "text"'.
+!!! error TS2322:                                       Type '"text"' is not assignable to type 'T'.
+!!! error TS2322:                                         '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
+!!! error TS2322:                                           Type 'T' is not assignable to type '"text"'.
+!!! error TS2322:                                             Type '"text" | "email"' is not assignable to type '"text"'.
+!!! error TS2322:                                               Type '"email"' is not assignable to type '"text"'.
     }
     
     const newTextChannel = makeNewChannel('text');

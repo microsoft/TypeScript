@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedTypeDeepDeclarationEmit.ts] ////
+
 //// [reverseMappedTypeDeepDeclarationEmit.ts]
 export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>
 

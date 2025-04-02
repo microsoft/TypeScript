@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts] ////
+
 //// [genericIndexedAccessMethodIntersectionCanBeAccessed.ts]
 type ExtendedService<T> = {
     [K in keyof T]: T[K] & {

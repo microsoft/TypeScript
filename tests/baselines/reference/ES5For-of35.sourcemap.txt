@@ -5,7 +5,7 @@ sourceRoot:
 sources: ES5For-of35.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of35.js
+emittedFile:ES5For-of35.js
 sourceFile:ES5For-of35.ts
 -------------------------------------------------------------------
 >>>var __values = (this && this.__values) || function(o) {
@@ -35,7 +35,8 @@ sourceFile:ES5For-of35.ts
 11>                                 ^
 12>                                  ^^^^^^^^^^^^^^^^
 13>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-14>                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+14>                                                                              ^
+15>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    for (const {x: a = 0, y: b = 1} of 
 3 >         
@@ -49,6 +50,7 @@ sourceFile:ES5For-of35.ts
 11>                                 
 12>                                  
 13>                                                  ) 
+14>                                                                              {
 1 >Emitted(14, 5) Source(1, 1) + SourceIndex(0)
 2 >Emitted(14, 10) Source(1, 36) + SourceIndex(0)
 3 >Emitted(14, 14) Source(1, 36) + SourceIndex(0)
@@ -62,6 +64,7 @@ sourceFile:ES5For-of35.ts
 11>Emitted(14, 35) Source(1, 42) + SourceIndex(0)
 12>Emitted(14, 51) Source(1, 42) + SourceIndex(0)
 13>Emitted(14, 79) Source(1, 44) + SourceIndex(0)
+14>Emitted(14, 80) Source(1, 45) + SourceIndex(0)
 ---
 >>>        var _d = _c.value, _e = _d.x, a = _e === void 0 ? 0 : _e, _f = _d.y, b = _f === void 0 ? 1 : _f;
 1->^^^^^^^^
@@ -142,10 +145,13 @@ sourceFile:ES5For-of35.ts
 3 >Emitted(17, 11) Source(3, 7) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
+1 >^^^^
+2 >    ^
 1 >
-  >}
-1 >Emitted(18, 6) Source(4, 2) + SourceIndex(0)
+  >
+2 >    }
+1 >Emitted(18, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(18, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_1_1) { e_1 = { error: e_1_1 }; }

@@ -1,60 +1,91 @@
-=== tests/cases/compiler/discriminantsAndNullOrUndefined.ts ===
+//// [tests/cases/compiler/discriminantsAndNullOrUndefined.ts] ////
+
+=== discriminantsAndNullOrUndefined.ts ===
 // Repro from #10228
 
 interface A { kind: 'A'; }
 >kind : "A"
+>     : ^^^
 
 interface B { kind: 'B'; }
 >kind : "B"
+>     : ^^^
 
 type C = A | B | undefined;
->C : A | B | undefined
+>C : C
+>  : ^
 
 function never(_: never): never {
 >never : (_: never) => never
+>      : ^ ^^     ^^^^^     
 >_ : never
+>  : ^^^^^
 
     throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 }
 
 function useA(_: A): void { }
 >useA : (_: A) => void
+>     : ^ ^^ ^^^^^    
 >_ : A
+>  : ^
 
 function useB(_: B): void { }
 >useB : (_: B) => void
+>     : ^ ^^ ^^^^^    
 >_ : B
+>  : ^
 
 declare var c: C;
 >c : C
+>  : ^
 
 if (c !== undefined) {
 >c !== undefined : boolean
+>                : ^^^^^^^
 >c : C
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     switch (c.kind) {
 >c.kind : "A" | "B"
+>       : ^^^^^^^^^
 >c : A | B
+>  : ^^^^^
 >kind : "A" | "B"
+>     : ^^^^^^^^^
 
         case 'A': useA(c); break;
 >'A' : "A"
+>    : ^^^
 >useA(c) : void
+>        : ^^^^
 >useA : (_: A) => void
+>     : ^ ^^ ^^^^^    
 >c : A
+>  : ^
 
         case 'B': useB(c); break;
 >'B' : "B"
+>    : ^^^
 >useB(c) : void
+>        : ^^^^
 >useB : (_: B) => void
+>     : ^ ^^ ^^^^^    
 >c : B
+>  : ^
 
         default: never(c);
 >never(c) : never
+>         : ^^^^^
 >never : (_: never) => never
+>      : ^ ^^     ^^^^^     
 >c : never
+>  : ^^^^^
     }
 }

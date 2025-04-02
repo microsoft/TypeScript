@@ -1,4 +1,7 @@
+//// [tests/cases/compiler/importWithTrailingSlash_noResolve.ts] ////
+
 === /a.ts ===
 import foo from "./foo/";
 >foo : any
+>    : ^^^
 

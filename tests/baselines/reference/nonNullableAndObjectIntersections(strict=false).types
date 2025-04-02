@@ -1,36 +1,49 @@
-=== tests/cases/compiler/nonNullableAndObjectIntersections.ts ===
+//// [tests/cases/compiler/nonNullableAndObjectIntersections.ts] ////
+
+=== nonNullableAndObjectIntersections.ts ===
 // These should all resolve to never
 
 type T0 = NonNullable<null>;
 >T0 : never
+>   : ^^^^^
 
 type T1 = NonNullable<undefined>;
 >T1 : never
+>   : ^^^^^
 
 type T2 = null & {};
 >T2 : never
+>   : ^^^^^
 
 type T3 = undefined & {};
 >T3 : never
+>   : ^^^^^
 
 type T4 = null & undefined;
 >T4 : never
+>   : ^^^^^
 
 type T6 = null & { a: string } & {};
 >T6 : never
+>   : ^^^^^
 >a : string
+>  : ^^^^^^
 
 // Repro from #50519
 
 type NonNullableNew<T> = T & {};
 >NonNullableNew : NonNullableNew<T>
+>               : ^^^^^^^^^^^^^^^^^
 
 type NonNullableOld<T> = T extends null | undefined ? never : T;
 >NonNullableOld : NonNullableOld<T>
+>               : ^^^^^^^^^^^^^^^^^
 
 type TestNew = NonNullableNew<null>;
 >TestNew : never
+>        : ^^^^^
 
 type TestOld = NonNullableOld<null>;
 >TestOld : never
+>        : ^^^^^
 

@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts] ////
+
+=== parserErrorRecovery_ArgumentList7.ts ===
 
 Foo(a,,

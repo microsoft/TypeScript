@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadsAndContextualTupleTypes.ts ===
+//// [tests/cases/compiler/spreadsAndContextualTupleTypes.ts] ////
+
+=== spreadsAndContextualTupleTypes.ts ===
 declare function fx1<T extends [string, string, string, 'a' | 'b']>(x: T): T;
 >fx1 : Symbol(fx1, Decl(spreadsAndContextualTupleTypes.ts, 0, 0))
 >T : Symbol(T, Decl(spreadsAndContextualTupleTypes.ts, 0, 21))

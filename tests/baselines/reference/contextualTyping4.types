@@ -1,11 +1,21 @@
-=== tests/cases/compiler/contextualTyping4.ts ===
+//// [tests/cases/compiler/contextualTyping4.ts] ////
+
+=== contextualTyping4.ts ===
 class foo { public bar:{id:number;} = {id:5, name:"foo"}; }
 >foo : foo
+>    : ^^^
 >bar : { id: number; }
+>    : ^^^^^^      ^^^
 >id : number
+>   : ^^^^^^
 >{id:5, name:"foo"} : { id: number; name: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >name : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 

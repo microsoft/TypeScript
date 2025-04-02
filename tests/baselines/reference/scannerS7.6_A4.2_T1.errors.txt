@@ -1,39 +1,39 @@
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(18,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(22,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(26,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(30,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(34,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(38,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(42,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(46,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(50,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(54,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(58,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(62,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(66,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(70,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(74,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(78,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(82,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(86,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(90,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(94,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(98,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(102,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(106,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(110,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(114,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(118,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(122,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(126,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(130,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(134,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(138,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(142,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(18,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(22,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(26,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(30,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(34,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(38,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(42,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(46,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(50,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.6_A4.2_T1.ts(54,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(58,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(62,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(66,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(70,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(74,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(78,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(82,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(86,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(90,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(94,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(98,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(102,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(106,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(110,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(114,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(118,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(122,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(126,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(130,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(134,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(138,3): error TS2304: Cannot find name '$ERROR'.
+scannerS7.6_A4.2_T1.ts(142,3): error TS2304: Cannot find name '$ERROR'.
 
 
-==== tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts (33 errors) ====
+==== scannerS7.6_A4.2_T1.ts (33 errors) ====
     // Copyright 2009 the Sputnik authors.  All rights reserved.
     // This code is governed by the BSD license found in the LICENSE file.
     
@@ -50,70 +50,70 @@ tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts(142,3): error
       $ERROR('#А');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0411 = 1;
     if (Б !== 1) {
       $ERROR('#Б');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0412 = 1;
     if (В !== 1) {
       $ERROR('#В');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0413 = 1;
     if (Г !== 1) {
       $ERROR('#Г');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0414 = 1;
     if (Д !== 1) {
       $ERROR('#Д');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0415 = 1;
     if (Е !== 1) {
       $ERROR('#Е');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0416 = 1;
     if (Ж !== 1) {
       $ERROR('#Ж');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0417 = 1;
     if (З !== 1) {
       $ERROR('#З');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0418 = 1;
     if (И !== 1) {
       $ERROR('#И');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u0419 = 1;
     if (Й !== 1) {
       $ERROR('#Й');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     var \u041A = 1;
     if (К !== 1) {

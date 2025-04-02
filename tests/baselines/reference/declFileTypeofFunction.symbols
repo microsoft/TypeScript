@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeofFunction.ts ===
+//// [tests/cases/compiler/declFileTypeofFunction.ts] ////
+
+=== declFileTypeofFunction.ts ===
 function f(n: typeof f): string;
 >f : Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 0, 32), Decl(declFileTypeofFunction.ts, 1, 32))
 >n : Symbol(n, Decl(declFileTypeofFunction.ts, 0, 11))

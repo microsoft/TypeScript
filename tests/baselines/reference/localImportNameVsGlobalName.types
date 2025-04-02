@@ -1,45 +1,74 @@
-=== tests/cases/compiler/localImportNameVsGlobalName.ts ===
+//// [tests/cases/compiler/localImportNameVsGlobalName.ts] ////
+
+=== localImportNameVsGlobalName.ts ===
 module Keyboard {
 >Keyboard : typeof Keyboard
+>         : ^^^^^^^^^^^^^^^
 
   export enum Key { UP, DOWN, LEFT, RIGHT }
 >Key : Key
+>    : ^^^
 >UP : Key.UP
+>   : ^^^^^^
 >DOWN : Key.DOWN
+>     : ^^^^^^^^
 >LEFT : Key.LEFT
+>     : ^^^^^^^^
 >RIGHT : Key.RIGHT
+>      : ^^^^^^^^^
 }
 
 module App {
 >App : typeof App
+>    : ^^^^^^^^^^
 
   import Key = Keyboard.Key;
 >Key : typeof Key
+>    : ^^^^^^^^^^
 >Keyboard : typeof Keyboard
+>         : ^^^^^^^^^^^^^^^
 >Key : Key
+>    : ^^^
 
   export function foo(key: Key): void {}
 >foo : (key: Key) => void
+>    : ^   ^^   ^^^^^    
 >key : Key
+>    : ^^^
 
   foo(Key.UP);
 >foo(Key.UP) : void
+>            : ^^^^
 >foo : (key: Key) => void
+>    : ^   ^^   ^^^^^    
 >Key.UP : Key.UP
+>       : ^^^^^^
 >Key : typeof Key
+>    : ^^^^^^^^^^
 >UP : Key.UP
+>   : ^^^^^^
 
   foo(Key.DOWN);
 >foo(Key.DOWN) : void
+>              : ^^^^
 >foo : (key: Key) => void
+>    : ^   ^^   ^^^^^    
 >Key.DOWN : Key.DOWN
+>         : ^^^^^^^^
 >Key : typeof Key
+>    : ^^^^^^^^^^
 >DOWN : Key.DOWN
+>     : ^^^^^^^^
 
   foo(Key.LEFT);
 >foo(Key.LEFT) : void
+>              : ^^^^
 >foo : (key: Key) => void
+>    : ^   ^^   ^^^^^    
 >Key.LEFT : Key.LEFT
+>         : ^^^^^^^^
 >Key : typeof Key
+>    : ^^^^^^^^^^
 >LEFT : Key.LEFT
+>     : ^^^^^^^^
 }

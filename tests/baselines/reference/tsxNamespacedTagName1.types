@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/tsxNamespacedTagName1.tsx] ////
+
+=== a.tsx ===
 const a = <svg:path></svg:path>;
 >a : error
 ><svg:path></svg:path> : error

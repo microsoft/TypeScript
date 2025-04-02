@@ -1,16 +1,16 @@
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(49,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<T>'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(55,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<unknown>'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(81,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
+controlFlowGenericTypes.ts(49,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<T>'.
+controlFlowGenericTypes.ts(55,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<unknown>'.
+controlFlowGenericTypes.ts(81,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
+controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(156,16): error TS18048: 'obj' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(167,9): error TS18048: 'iSpec' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined'.
+controlFlowGenericTypes.ts(156,16): error TS18048: 'obj' is possibly 'undefined'.
+controlFlowGenericTypes.ts(167,9): error TS18048: 'iSpec' is possibly 'undefined'.
+controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts (8 errors) ====
+==== controlFlowGenericTypes.ts (8 errors) ====
     function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
         if (x) {
             x;

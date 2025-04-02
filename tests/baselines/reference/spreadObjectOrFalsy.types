@@ -1,74 +1,107 @@
-=== tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts ===
+//// [tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts] ////
+
+=== spreadObjectOrFalsy.ts ===
 function f1<T>(a: T & undefined) {
 >f1 : <T>(a: T & undefined) => any
+>   : ^ ^^ ^^             ^^^^^^^^
 >a : T & undefined
+>  : ^^^^^^^^^^^^^
 
     return { ...a };  // Error
 >{ ...a } : any
+>         : ^^^
 >a : T & undefined
+>  : ^^^^^^^^^^^^^
 }
 
 function f2<T>(a: T | T & undefined) {
 >f2 : <T>(a: T | (T & undefined)) => T | (T & undefined)
+>   : ^ ^^ ^^    ^             ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T | (T & undefined)
+>  : ^^^^^^^^^^^^^^^^^^^
 
     return { ...a };
 >{ ...a } : T | (T & undefined)
+>         : ^^^^^^^^^^^^^^^^^^^
 >a : T | (T & undefined)
+>  : ^^^^^^^^^^^^^^^^^^^
 }
 
 function f3<T extends undefined>(a: T) {
 >f3 : <T extends undefined>(a: T) => any
+>   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^^^^
 >a : T
+>  : ^
 
     return { ...a };  // Error
 >{ ...a } : any
+>         : ^^^
 >a : T
+>  : ^
 }
 
 function f4<T extends undefined>(a: object | T) {
 >f4 : <T extends undefined>(a: object | T) => {}
+>   : ^ ^^^^^^^^^         ^^ ^^          ^^^^^^^
 >a : object | T
+>  : ^^^^^^^^^^
 
     return { ...a };
 >{ ...a } : {}
+>         : ^^
 >a : object | T
+>  : ^^^^^^^^^^
 }
 
 function f5<S, T extends undefined>(a: S | T) {
 >f5 : <S, T extends undefined>(a: S | T) => S | T
+>   : ^ ^^ ^^^^^^^^^         ^^ ^^     ^^^^^^^^^^
 >a : S | T
+>  : ^^^^^
 
     return { ...a };
 >{ ...a } : S | T
+>         : ^^^^^
 >a : S | T
+>  : ^^^^^
 }
 
 function f6<T extends object | undefined>(a: T) {
 >f6 : <T extends object | undefined>(a: T) => T
+>   : ^ ^^^^^^^^^                  ^^ ^^ ^^^^^^
 >a : T
+>  : ^
 
     return { ...a };
 >{ ...a } : T
+>         : ^
 >a : T
+>  : ^
 }
 
 // Repro from #46976
 
 function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
->g1 : <T extends {}, A extends { z: (T | undefined) & T; }>(a: A) => T | (undefined & T)
->z : T | (undefined & T)
+>g1 : <T extends {}, A extends { z: (T | undefined) & T; }>(a: A) => T
+>   : ^ ^^^^^^^^^  ^^ ^^^^^^^^^                           ^^ ^^ ^^^^^^
+>z : T
+>  : ^
 >a : A
+>  : ^
 
     const { z } = a;
->z : T | (undefined & T)
+>z : T
+>  : ^
 >a : A
+>  : ^
 
     return {
->{        ...z    } : T | (undefined & T)
+>{        ...z    } : T
+>                   : ^
 
         ...z
->z : T | (undefined & T)
+>z : T
+>  : ^
 
     };
 }
@@ -78,37 +111,53 @@ function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
 interface DatafulFoo<T> {
     data: T;
 >data : T
+>     : ^
 }
 
 class Foo<T extends string> {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     data: T | undefined;
 >data : T | undefined
+>     : ^^^^^^^^^^^^^
 
     bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         if (this.hasData()) {
 >this.hasData() : boolean
+>               : ^^^^^^^
 >this.hasData : () => this is DatafulFoo<T>
+>             : ^^^^^^                     
 >this : this
+>     : ^^^^
 >hasData : () => this is DatafulFoo<T>
+>        : ^^^^^^                     
 
             this.data.toLocaleLowerCase();
 >this.data.toLocaleLowerCase() : string
->this.data.toLocaleLowerCase : (locales?: string | string[] | undefined) => string
->this.data : T | (undefined & T)
+>                              : ^^^^^^
+>this.data.toLocaleLowerCase : (locales?: string | string[]) => string
+>                            : ^       ^^^                 ^^^^^      
+>this.data : T
+>          : ^
 >this : this & DatafulFoo<T>
->data : T | (undefined & T)
->toLocaleLowerCase : (locales?: string | string[] | undefined) => string
+>     : ^^^^^^^^^^^^^^^^^^^^
+>data : T
+>     : ^
+>toLocaleLowerCase : (locales?: string | string[]) => string
+>                  : ^       ^^^                 ^^^^^      
         }
     }
     hasData(): this is DatafulFoo<T> {
 >hasData : () => this is DatafulFoo<T>
+>        : ^^^^^^                     
 
         return true;
 >true : true
+>     : ^^^^
     }
 }
 

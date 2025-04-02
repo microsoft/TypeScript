@@ -1,151 +1,216 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesJsx.tsx ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesJsx.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== intraExpressionInferencesJsx.tsx ===
 /// <reference path="react16.d.ts" />
 
 // repro from #52798
 
 type A = {
->A : { a: boolean; }
+>A : A
+>  : ^
 
   a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
 };
 
 type B = {
->B : { b: string; }
+>B : B
+>  : ^
 
   b: string;
 >b : string
+>  : ^^^^^^
 
 };
 
 type C = {
->C : { c: number; }
+>C : C
+>  : ^
 
   c: number;
 >c : number
+>  : ^^^^^^
 
 };
 
 type Animations = {
->Animations : { [key: string]: { value: number; } & (({ kind: "a"; func?(): Partial<A>; } & A) | ({ kind: "b"; func?(): Partial<B>; } & B) | ({ kind: "c"; func?(): Partial<C>; } & C)); }
+>Animations : Animations
+>           : ^^^^^^^^^^
 
   [key: string]: { value: number } & (
 >key : string
+>    : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     | ({ kind: "a"; func?(): Partial<A> } & A)
 >kind : "a"
+>     : ^^^
 >func : (() => Partial<A>) | undefined
+>     : ^^^^^^^          ^^^^^^^^^^^^^
 
     | ({ kind: "b"; func?(): Partial<B> } & B)
 >kind : "b"
+>     : ^^^
 >func : (() => Partial<B>) | undefined
+>     : ^^^^^^^          ^^^^^^^^^^^^^
 
     | ({ kind: "c"; func?(): Partial<C> } & C)
 >kind : "c"
+>     : ^^^
 >func : (() => Partial<C>) | undefined
+>     : ^^^^^^^          ^^^^^^^^^^^^^
 
   );
 };
 
 type StyleParam<T extends Animations> = Record<keyof T, string>;
 >StyleParam : StyleParam<T>
+>           : ^^^^^^^^^^^^^
 
 type AnimatedViewProps<T extends Animations> = {
 >AnimatedViewProps : AnimatedViewProps<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
   style: (animationsValues: StyleParam<T>) => string;
 >style : (animationsValues: StyleParam<T>) => string
+>      : ^                ^^             ^^^^^      
 >animationsValues : StyleParam<T>
+>                 : ^^^^^^^^^^^^^
 
   animations: T;
 >animations : T
+>           : ^
 
 };
 
 const Component = <T extends Animations>({
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 ><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
+>                                                                               : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations,
 >animations : T
+>           : ^
 
   style,
 >style : (animationsValues: StyleParam<T>) => string
+>      : ^                ^^^^^^^^^^^^^^^^^^^^      
 
 }: AnimatedViewProps<T>) => <></>;
 ><></> : JSX.Element
+>      : ^^^^^^^^^^^
 
 <Component
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
+>                                                                                                                                    : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; }; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: {      kind: "a",      value: 1,      a: true,    },  } : { test: { kind: "a"; value: number; a: true; }; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     test: {
 >test : { kind: "a"; value: number; a: true; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      kind: "a",      value: 1,      a: true,    } : { kind: "a"; value: number; a: true; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       kind: "a",
 >kind : "a"
+>     : ^^^
 >"a" : "a"
+>    : ^^^
 
       value: 1,
 >value : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
       a: true,
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
     },
   }}
   style={(anim) => {
 >style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>) => string
+>                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anim : StyleParam<{ test: { kind: "a"; value: number; a: true; }; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return "";
 >"" : ""
+>   : ^^
 
   }}
 />;
 <Component
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
+>                                                                                                                                                                                                      : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  } : { test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     test: {
 >test : { kind: "a"; value: number; a: true; func(): { a: true; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func(): { a: true; }; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       kind: "a",
 >kind : "a"
+>     : ^^^
 >"a" : "a"
+>    : ^^^
 
       value: 1,
 >value : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
       a: true,
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
       func() {
 >func : () => { a: true; }
+>     : ^^^^^^^^^^^^^^^^^^
 
         return {
 >{          a: true,        } : { a: true; }
+>                             : ^^^^^^^^^^^^
 
           a: true,
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
         };
       },
@@ -153,48 +218,69 @@ const Component = <T extends Animations>({
   }}
   style={(anim) => {
 >style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>) => string
+>      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>) => string
+>                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return "";
 >"" : ""
+>   : ^^
 
   }}
 />;
 <Component
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
+>                                                                                                                                                                                                           : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  } : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     test: {
 >test : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       kind: "a",
 >kind : "a"
+>     : ^^^
 >"a" : "a"
+>    : ^^^
 
       value: 1,
 >value : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
       a: true,
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
       func: () => {
 >func : () => { a: true; }
+>     : ^^^^^^^^^^^^^^^^^^
 >() => {        return {          a: true,        };      } : () => { a: true; }
+>                                                           : ^^^^^^^^^^^^^^^^^^
 
         return {
 >{          a: true,        } : { a: true; }
+>                             : ^^^^^^^^^^^^
 
           a: true,
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
         };
       },
@@ -202,11 +288,15 @@ const Component = <T extends Animations>({
   }}
   style={(anim) => {
 >style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
+>      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
+>                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return "";
 >"" : ""
+>   : ^^
 
   }}
 />;
@@ -216,82 +306,129 @@ const Component = <T extends Animations>({
 interface Props<T> {
   a: (x: string) => T;
 >a : (x: string) => T
+>  : ^ ^^      ^^^^^ 
 >x : string
+>  : ^^^^^^
 
   b: (arg: T) => void;
 >b : (arg: T) => void
+>  : ^   ^^ ^^^^^    
 >arg : T
+>    : ^
 }
 
 function Foo<T>(props: Props<T>) {
 >Foo : <T>(props: Props<T>) => JSX.Element
+>    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
 >props : Props<T>
+>      : ^^^^^^^^
 
   return <div />;
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 }
 
 <Foo
 ><Foo  a={() => 10}  b={(arg) => { arg.toString(); }}/> : JSX.Element
+>                                                       : ^^^^^^^^^^^
 >Foo : <T>(props: Props<T>) => JSX.Element
+>    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
 
   a={() => 10}
 >a : () => number
+>  : ^^^^^^^^^^^^
 >() => 10 : () => number
+>         : ^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
   b={(arg) => { arg.toString(); }}
 >b : (arg: number) => void
+>  : ^   ^^^^^^^^^^^^^^^^^
 >(arg) => { arg.toString(); } : (arg: number) => void
+>                             : ^   ^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
+>               : ^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >arg : number
->toString : (radix?: number | undefined) => string
+>    : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 />;
 
 <Foo
 ><Foo  a={(x) => 10}  b={(arg) => { arg.toString(); }}/> : JSX.Element
+>                                                        : ^^^^^^^^^^^
 >Foo : <T>(props: Props<T>) => JSX.Element
+>    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
 
   a={(x) => 10}
 >a : (x: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => 10 : (x: string) => number
+>          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
   b={(arg) => { arg.toString(); }}
 >b : (arg: number) => void
+>  : ^   ^^^^^^^^^^^^^^^^^
 >(arg) => { arg.toString(); } : (arg: number) => void
+>                             : ^   ^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
+>               : ^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >arg : number
->toString : (radix?: number | undefined) => string
+>    : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 />;
 
 <Foo {...{
 ><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : JSX.Element
+>                                                                 : ^^^^^^^^^^^
 >Foo : <T>(props: Props<T>) => JSX.Element
+>    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
 >{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: string) => number; b: (arg: number) => void; }
+>                                                    : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
 
   a: (x) => 10,
 >a : (x: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => 10 : (x: string) => number
+>          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
   b: (arg) => { arg.toString(); },
 >b : (arg: number) => void
+>  : ^   ^^^^^^^^^^^^^^^^^
 >(arg) => { arg.toString(); } : (arg: number) => void
+>                             : ^   ^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
+>               : ^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >arg : number
->toString : (radix?: number | undefined) => string
+>    : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 }} />;
 

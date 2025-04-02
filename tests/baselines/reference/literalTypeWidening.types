@@ -1,480 +1,749 @@
-=== tests/cases/conformance/types/literal/literalTypeWidening.ts ===
+//// [tests/cases/conformance/types/literal/literalTypeWidening.ts] ////
+
+=== literalTypeWidening.ts ===
 // Widening vs. non-widening literal types
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     const c1 = "hello";  // Widening type "hello"
 >c1 : "hello"
+>   : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     let v1 = c1;  // Type string
 >v1 : string
+>   : ^^^^^^
 >c1 : "hello"
+>   : ^^^^^^^
 
     const c2 = c1;  // Widening type "hello"
 >c2 : "hello"
+>   : ^^^^^^^
 >c1 : "hello"
+>   : ^^^^^^^
 
     let v2 = c2;  // Type string
 >v2 : string
+>   : ^^^^^^
 >c2 : "hello"
+>   : ^^^^^^^
 
     const c3: "hello" = "hello";  // Type "hello"
 >c3 : "hello"
+>   : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     let v3 = c3;  // Type "hello"
 >v3 : "hello"
+>   : ^^^^^^^
 >c3 : "hello"
+>   : ^^^^^^^
 
     const c4: "hello" = c1;  // Type "hello"
 >c4 : "hello"
+>   : ^^^^^^^
 >c1 : "hello"
+>   : ^^^^^^^
 
     let v4 = c4;  // Type "hello"
 >v4 : "hello"
+>   : ^^^^^^^
 >c4 : "hello"
+>   : ^^^^^^^
 }
 
 function f2(cond: boolean) {
 >f2 : (cond: boolean) => void
+>   : ^    ^^       ^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 
     const c1 = cond ? "foo" : "bar";  // widening "foo" | widening "bar"
 >c1 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >cond ? "foo" : "bar" : "foo" | "bar"
+>                     : ^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
     const c2: "foo" | "bar" = c1;  // "foo" | "bar"
 >c2 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >c1 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 
     const c3 = cond ? c1 : c2;  // "foo" | "bar"
 >c3 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >cond ? c1 : c2 : "foo" | "bar"
+>               : ^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >c1 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >c2 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 
     const c4 = cond ? c3 : "baz";  // "foo" | "bar" | widening "baz"
 >c4 : "foo" | "bar" | "baz"
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >cond ? c3 : "baz" : "foo" | "bar" | "baz"
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >c3 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
     const c5: "foo" | "bar" | "baz" = c4; // "foo" | "bar" | "baz"
 >c5 : "foo" | "bar" | "baz"
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >c4 : "foo" | "bar" | "baz"
+>   : ^^^^^^^^^^^^^^^^^^^^^
 
     let v1 = c1;  // string
 >v1 : string
+>   : ^^^^^^
 >c1 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 
     let v2 = c2;  // "foo" | "bar"
 >v2 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >c2 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 
     let v3 = c3;  // "foo" | "bar"
 >v3 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 >c3 : "foo" | "bar"
+>   : ^^^^^^^^^^^^^
 
     let v4 = c4;  // string
 >v4 : string
+>   : ^^^^^^
 >c4 : "foo" | "bar" | "baz"
+>   : ^^^^^^^^^^^^^^^^^^^^^
 
     let v5 = c5;  // "foo" | "bar" | "baz"
 >v5 : "foo" | "bar" | "baz"
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >c5 : "foo" | "bar" | "baz"
+>   : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     const c1 = 123;  // Widening type 123
 >c1 : 123
+>   : ^^^
 >123 : 123
+>    : ^^^
 
     let v1 = c1;  // Type number
 >v1 : number
+>   : ^^^^^^
 >c1 : 123
+>   : ^^^
 
     const c2 = c1;  // Widening type 123
 >c2 : 123
+>   : ^^^
 >c1 : 123
+>   : ^^^
 
     let v2 = c2;  // Type number
 >v2 : number
+>   : ^^^^^^
 >c2 : 123
+>   : ^^^
 
     const c3: 123 = 123;  // Type 123
 >c3 : 123
+>   : ^^^
 >123 : 123
+>    : ^^^
 
     let v3 = c3;  // Type 123
 >v3 : 123
+>   : ^^^
 >c3 : 123
+>   : ^^^
 
     const c4: 123 = c1;  // Type 123
 >c4 : 123
+>   : ^^^
 >c1 : 123
+>   : ^^^
 
     let v4 = c4;  // Type 123
 >v4 : 123
+>   : ^^^
 >c4 : 123
+>   : ^^^
 }
 
 function f4(cond: boolean) {
 >f4 : (cond: boolean) => void
+>   : ^    ^^       ^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 
     const c1 = cond ? 123 : 456;  // widening 123 | widening 456
 >c1 : 123 | 456
+>   : ^^^^^^^^^
 >cond ? 123 : 456 : 123 | 456
+>                 : ^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 
     const c2: 123 | 456 = c1;  // 123 | 456
 >c2 : 123 | 456
+>   : ^^^^^^^^^
 >c1 : 123 | 456
+>   : ^^^^^^^^^
 
     const c3 = cond ? c1 : c2;  // 123 | 456
 >c3 : 123 | 456
+>   : ^^^^^^^^^
 >cond ? c1 : c2 : 123 | 456
+>               : ^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >c1 : 123 | 456
+>   : ^^^^^^^^^
 >c2 : 123 | 456
+>   : ^^^^^^^^^
 
     const c4 = cond ? c3 : 789;  // 123 | 456 | widening 789
 >c4 : 123 | 456 | 789
+>   : ^^^^^^^^^^^^^^^
 >cond ? c3 : 789 : 123 | 456 | 789
+>                : ^^^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >c3 : 123 | 456
+>   : ^^^^^^^^^
 >789 : 789
+>    : ^^^
 
     const c5: 123 | 456 | 789 = c4; // 123 | 456 | 789
 >c5 : 123 | 456 | 789
+>   : ^^^^^^^^^^^^^^^
 >c4 : 123 | 456 | 789
+>   : ^^^^^^^^^^^^^^^
 
     let v1 = c1;  // number
 >v1 : number
+>   : ^^^^^^
 >c1 : 123 | 456
+>   : ^^^^^^^^^
 
     let v2 = c2;  // 123 | 456
 >v2 : 123 | 456
+>   : ^^^^^^^^^
 >c2 : 123 | 456
+>   : ^^^^^^^^^
 
     let v3 = c3;  // 123 | 456
 >v3 : 123 | 456
+>   : ^^^^^^^^^
 >c3 : 123 | 456
+>   : ^^^^^^^^^
 
     let v4 = c4;  // number
 >v4 : number
+>   : ^^^^^^
 >c4 : 123 | 456 | 789
+>   : ^^^^^^^^^^^^^^^
 
     let v5 = c5;  // 123 | 456 | 789
 >v5 : 123 | 456 | 789
+>   : ^^^^^^^^^^^^^^^
 >c5 : 123 | 456 | 789
+>   : ^^^^^^^^^^^^^^^
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     const c1 = "foo";
 >c1 : "foo"
+>   : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     let v1 = c1;
 >v1 : string
+>   : ^^^^^^
 >c1 : "foo"
+>   : ^^^^^
 
     const c2: "foo" = "foo";
 >c2 : "foo"
+>   : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     let v2 = c2;
 >v2 : "foo"
+>   : ^^^^^
 >c2 : "foo"
+>   : ^^^^^
 
     const c3 = "foo" as "foo";
 >c3 : "foo"
+>   : ^^^^^
 >"foo" as "foo" : "foo"
+>               : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     let v3 = c3;
 >v3 : "foo"
+>   : ^^^^^
 >c3 : "foo"
+>   : ^^^^^
 
     const c4 = <"foo">"foo";
 >c4 : "foo"
+>   : ^^^^^
 ><"foo">"foo" : "foo"
+>             : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     let v4 = c4;
 >v4 : "foo"
+>   : ^^^^^
 >c4 : "foo"
+>   : ^^^^^
 }
 
 declare function widening<T>(x: T): T;
 >widening : <T>(x: T) => T
+>         : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 declare function nonWidening<T extends string | number | symbol>(x: T): T;
 >nonWidening : <T extends string | number | symbol>(x: T) => T
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 function f6(cond: boolean) {
 >f6 : (cond: boolean) => void
+>   : ^    ^^       ^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 
     let x1 = widening('a');
 >x1 : string
+>   : ^^^^^^
 >widening('a') : "a"
+>              : ^^^
 >widening : <T>(x: T) => T
+>         : ^ ^^ ^^ ^^^^^ 
 >'a' : "a"
+>    : ^^^
 
     let x2 = widening(10);
 >x2 : number
+>   : ^^^^^^
 >widening(10) : 10
+>             : ^^
 >widening : <T>(x: T) => T
+>         : ^ ^^ ^^ ^^^^^ 
 >10 : 10
+>   : ^^
 
     let x3 = widening(cond ? 'a' : 10);
 >x3 : string | number
+>   : ^^^^^^^^^^^^^^^
 >widening(cond ? 'a' : 10) : "a" | 10
+>                          : ^^^^^^^^
 >widening : <T>(x: T) => T
+>         : ^ ^^ ^^ ^^^^^ 
 >cond ? 'a' : 10 : "a" | 10
+>                : ^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >10 : 10
+>   : ^^
 
     let y1 = nonWidening('a');
 >y1 : "a"
+>   : ^^^
 >nonWidening('a') : "a"
+>                 : ^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >'a' : "a"
+>    : ^^^
 
     let y2 = nonWidening(10);
 >y2 : 10
+>   : ^^
 >nonWidening(10) : 10
+>                : ^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >10 : 10
+>   : ^^
 
     let y3 = nonWidening(cond ? 'a' : 10);
 >y3 : "a" | 10
+>   : ^^^^^^^^
 >nonWidening(cond ? 'a' : 10) : "a" | 10
+>                             : ^^^^^^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >cond ? 'a' : 10 : "a" | 10
+>                : ^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >10 : 10
+>   : ^^
 }
 
 // Repro from #10898
 
 type FAILURE = "FAILURE";
 >FAILURE : "FAILURE"
+>        : ^^^^^^^^^
 
 const FAILURE = "FAILURE";
 >FAILURE : "FAILURE"
+>        : ^^^^^^^^^
 >"FAILURE" : "FAILURE"
+>          : ^^^^^^^^^
 
 type Result<T> = T | FAILURE;
 >Result : Result<T>
+>       : ^^^^^^^^^
 
 function doWork<T>(): Result<T> {
 >doWork : <T>() => Result<T>
+>       : ^ ^^^^^^^         
 
   return FAILURE;
 >FAILURE : "FAILURE"
+>        : ^^^^^^^^^
 }
 
 function isSuccess<T>(result: Result<T>): result is T {
 >isSuccess : <T>(result: Result<T>) => result is T
+>          : ^ ^^      ^^         ^^^^^           
 >result : Result<T>
+>       : ^^^^^^^^^
 
   return !isFailure(result);
 >!isFailure(result) : boolean
+>                   : ^^^^^^^
 >isFailure(result) : boolean
->isFailure : <T>(result: Result<T>) => result is "FAILURE"
+>                  : ^^^^^^^
+>isFailure : <T_1>(result: Result<T_1>) => result is FAILURE
+>          : ^^^^^^      ^^           ^^^^^                 
 >result : Result<T>
+>       : ^^^^^^^^^
 }
 
 function isFailure<T>(result: Result<T>): result is FAILURE {
->isFailure : <T>(result: Result<T>) => result is "FAILURE"
+>isFailure : <T>(result: Result<T>) => result is FAILURE
+>          : ^ ^^      ^^         ^^^^^                 
 >result : Result<T>
+>       : ^^^^^^^^^
 
   return result === FAILURE;
 >result === FAILURE : boolean
+>                   : ^^^^^^^
 >result : Result<T>
+>       : ^^^^^^^^^
 >FAILURE : "FAILURE"
+>        : ^^^^^^^^^
 }
 
 function increment(x: number): number {
 >increment : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
   return x + 1;
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 let result = doWork<number>();
 >result : Result<number>
+>       : ^^^^^^^^^^^^^^
 >doWork<number>() : Result<number>
+>                 : ^^^^^^^^^^^^^^
 >doWork : <T>() => Result<T>
+>       : ^ ^^^^^^^         
 
 if (isSuccess(result)) {
 >isSuccess(result) : boolean
+>                  : ^^^^^^^
 >isSuccess : <T>(result: Result<T>) => result is T
+>          : ^ ^^      ^^         ^^^^^           
 >result : Result<number>
+>       : ^^^^^^^^^^^^^^
 
   increment(result);
 >increment(result) : number
+>                  : ^^^^^^
 >increment : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >result : number
+>       : ^^^^^^
 }
 
 // Repro from #10898
 
 type TestEvent = "onmouseover" | "onmouseout";
->TestEvent : "onmouseover" | "onmouseout"
+>TestEvent : TestEvent
+>          : ^^^^^^^^^
 
 function onMouseOver(): TestEvent { return "onmouseover"; }
 >onMouseOver : () => TestEvent
+>            : ^^^^^^         
 >"onmouseover" : "onmouseover"
+>              : ^^^^^^^^^^^^^
 
 let x = onMouseOver();
 >x : TestEvent
+>  : ^^^^^^^^^
 >onMouseOver() : TestEvent
+>              : ^^^^^^^^^
 >onMouseOver : () => TestEvent
+>            : ^^^^^^         
 
 // Repro from #23649
 
 export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
 >Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
+>    : ^ ^^^^^^^^^      ^^^^^    ^^   ^^^^^                           
 >keys : K[]
+>     : ^^^
 >true : true
+>     : ^^^^
 
   const result = {} as Record<K, true | undefined>
 >result : Record<K, true>
+>       : ^^^^^^^^^^^^^^^
 >{} as Record<K, true | undefined> : Record<K, true>
+>                                  : ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >true : true
+>     : ^^^^
 
   keys.forEach(key => result[key] = true)
 >keys.forEach(key => result[key] = true) : void
+>                                        : ^^^^
 >keys.forEach : (callbackfn: (value: K, index: number, array: K[]) => void, thisArg?: any) => void
+>             : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >keys : K[]
+>     : ^^^
 >forEach : (callbackfn: (value: K, index: number, array: K[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >key => result[key] = true : (key: K) => boolean
+>                          : ^   ^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 >result[key] = true : true
+>                   : ^^^^
 >result[key] : Record<K, true>[K]
+>            : ^^^^^^^^^^^^^^^^^^
 >result : Record<K, true>
+>       : ^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 >true : true
+>     : ^^^^
 
   return result
 >result : Record<K, true>
+>       : ^^^^^^^^^^^^^^^
 }
 
 export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
+>     : ^ ^^^^^^^^^      ^^ ^^   ^^            ^^^^^   
 >obj : Record<K, V>
+>    : ^^^^^^^^^^^^
 
   return Object.keys(obj) as K[]
 >Object.keys(obj) as K[] : K[]
+>                        : ^^^
 >Object.keys(obj) : string[]
+>                 : ^^^^^^^^
 >Object.keys : (o: object) => string[]
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
+>     : ^ ^^      ^^^^^        
 >obj : Record<K, V>
+>    : ^^^^^^^^^^^^
 }
 
 type Obj = { code: LangCode }
->Obj : { code: LangCode; }
+>Obj : Obj
+>    : ^^^
 >code : "fr" | "en" | "es" | "it" | "nl"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
 >langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true>
->Set : <K extends string>(...keys: K[]) => Record<K, true>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
+>    : ^ ^^^^^^^^^      ^^^^^    ^^   ^^^^^                           
 >'fr' : "fr"
+>     : ^^^^
 >'en' : "en"
+>     : ^^^^
 >'es' : "es"
+>     : ^^^^
 >'it' : "it"
+>     : ^^^^
 >'nl' : "nl"
+>     : ^^^^
 
 export type LangCode = keyof typeof langCodeSet
 >LangCode : "fr" | "en" | "es" | "it" | "nl"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const langCodes = keys(langCodeSet)
 >langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys(langCodeSet) : ("fr" | "en" | "es" | "it" | "nl")[]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
+>     : ^ ^^^^^^^^^      ^^ ^^   ^^            ^^^^^   
 >langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const arr: Obj[] = langCodes.map(code => ({ code }))
 >arr : Obj[]
+>    : ^^^^^
 >langCodes.map(code => ({ code })) : { code: "fr" | "en" | "es" | "it" | "nl"; }[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >langCodes.map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
+>              : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >code => ({ code }) : (code: "fr" | "en" | "es" | "it" | "nl") => { code: "fr" | "en" | "es" | "it" | "nl"; }
+>                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >code : "fr" | "en" | "es" | "it" | "nl"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ code }) : { code: "fr" | "en" | "es" | "it" | "nl"; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ code } : { code: "fr" | "en" | "es" | "it" | "nl"; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >code : "fr" | "en" | "es" | "it" | "nl"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Repro from #29081
 
 function test<T extends { a: string, b: string }>(obj: T): T {
 >test : <T extends { a: string; b: string; }>(obj: T) => T
+>     : ^ ^^^^^^^^^                         ^^   ^^ ^^^^^ 
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >obj : T
+>    : ^
 
     let { a, ...rest } = obj;
 >a : string
+>  : ^^^^^^
 >rest : Omit<T, "a">
+>     : ^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     return { a: 'hello', ...rest } as T;
 >{ a: 'hello', ...rest } as T : T
+>                             : ^
 >{ a: 'hello', ...rest } : { a: string; } & Omit<T, "a">
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >rest : Omit<T, "a">
+>     : ^^^^^^^^^^^^
 }
 
 // Repro from #32169
 
 declare function f<T>(x: T): NonNullable<T>;
 >f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^              
 >x : T
+>  : ^
 
 enum E { A, B }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 
 const a = f(E.A);
 >a : E.A
+>  : ^^^
 >f(E.A) : E.A
+>       : ^^^
 >f : <T>(x: T) => NonNullable<T>
+>  : ^ ^^ ^^ ^^^^^              
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
 const b: E.A = a;
 >b : E.A
+>  : ^^^
 >E : any
+>  : ^^^
 >a : E.A
+>  : ^^^
 

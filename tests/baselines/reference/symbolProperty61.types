@@ -1,80 +1,125 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty61.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty61.ts] ////
+
+=== symbolProperty61.ts ===
 declare global {
 >global : any
+>       : ^^^
 
   interface SymbolConstructor {
     readonly obs: symbol
 >obs : unique symbol
+>    : ^^^^^^^^^^^^^
   }
 }
 
 const observable: typeof Symbol.obs = Symbol.obs
 >observable : unique symbol
+>           : ^^^^^^^^^^^^^
 >Symbol.obs : unique symbol
+>           : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >obs : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol.obs : unique symbol
+>           : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >obs : unique symbol
+>    : ^^^^^^^^^^^^^
 
 export class MyObservable<T> {
 >MyObservable : MyObservable<T>
+>             : ^^^^^^^^^^^^^^^
 
     constructor(private _val: T) {}
 >_val : T
+>     : ^
 
     subscribe(next: (val: T) => void) {
 >subscribe : (next: (val: T) => void) => void
+>          : ^    ^^                ^^^^^^^^^
 >next : (val: T) => void
+>     : ^   ^^ ^^^^^    
 >val : T
+>    : ^
 
         next(this._val)
 >next(this._val) : void
+>                : ^^^^
 >next : (val: T) => void
+>     : ^   ^^ ^^^^^    
 >this._val : T
+>          : ^
 >this : this
+>     : ^^^^
 >_val : T
+>     : ^
     }
 
     [observable]() {
 >[observable] : () => this
+>             : ^^^^^^^^^^
 >observable : unique symbol
+>           : ^^^^^^^^^^^^^
 
         return this
 >this : this
+>     : ^^^^
     }
 }
 
 type InteropObservable<T> = {
 >InteropObservable : InteropObservable<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
 >[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
+>             : ^^^^^^                                            
 >Symbol.obs : unique symbol
+>           : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >obs : unique symbol
+>    : ^^^^^^^^^^^^^
 >subscribe : (next: (val: T) => void) => void
+>          : ^    ^^                ^^^^^    
 >next : (val: T) => void
+>     : ^   ^^ ^^^^^    
 >val : T
+>    : ^
 }
 
 function from<T>(obs: InteropObservable<T>) {
 >from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
+>     : ^ ^^   ^^                    ^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >obs : InteropObservable<T>
+>    : ^^^^^^^^^^^^^^^^^^^^
 
     return obs[Symbol.obs]()
 >obs[Symbol.obs]() : { subscribe(next: (val: T) => void): void; }
+>                  : ^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >obs[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
+>                : ^^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >obs : InteropObservable<T>
+>    : ^^^^^^^^^^^^^^^^^^^^
 >Symbol.obs : unique symbol
+>           : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >obs : unique symbol
+>    : ^^^^^^^^^^^^^
 }
 
 from(new MyObservable(42))
 >from(new MyObservable(42)) : { subscribe(next: (val: number) => void): void; }
+>                           : ^^^^^^^^^^^^    ^^^   ^^^^^^^^^^^^^    ^^^    ^^^
 >from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
+>     : ^ ^^   ^^                    ^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >new MyObservable(42) : MyObservable<number>
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >MyObservable : typeof MyObservable
+>             : ^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 

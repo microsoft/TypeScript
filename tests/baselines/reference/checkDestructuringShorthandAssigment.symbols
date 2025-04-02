@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bug25434.js ===
+//// [tests/cases/compiler/checkDestructuringShorthandAssigment.ts] ////
+
+=== bug25434.js ===
 // should not crash while checking
 function Test({ b = '' } = {}) {}
 >Test : Symbol(Test, Decl(bug25434.js, 0, 0))

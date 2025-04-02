@@ -1,8 +1,8 @@
-error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
 
 
-!!! error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts (0 errors) ====
+!!! error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
+==== lateBoundConstraintTypeChecksCorrectly.ts (0 errors) ====
     declare const fooProp: unique symbol;
     declare const barProp: unique symbol;
     

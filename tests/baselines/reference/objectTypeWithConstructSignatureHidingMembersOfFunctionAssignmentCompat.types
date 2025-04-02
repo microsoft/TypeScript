@@ -1,36 +1,53 @@
-=== tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts] ////
+
+=== objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
 interface I {
     new(): any;
 }
 
 var i: I;
 >i : I
+>  : ^
 
 var f: Object;
 >f : Object
+>  : ^^^^^^
 
 f = i;
 >f = i : I
+>      : ^
 >f : Object
+>  : ^^^^^^
 >i : I
+>  : ^
 
 i = f;
 >i = f : Object
+>      : ^^^^^^
 >i : I
+>  : ^
 >f : Object
+>  : ^^^^^^
 
 var a: {
 >a : new () => any
+>  : ^^^^^^^^^^   
 
     new(): any
 }
 f = a;
 >f = a : new () => any
+>      : ^^^^^^^^^^   
 >f : Object
+>  : ^^^^^^
 >a : new () => any
+>  : ^^^^^^^^^^   
 
 a = f;
 >a = f : Object
+>      : ^^^^^^
 >a : new () => any
+>  : ^^^^^^^^^^   
 >f : Object
+>  : ^^^^^^
 

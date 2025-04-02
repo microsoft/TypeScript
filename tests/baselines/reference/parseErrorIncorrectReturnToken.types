@@ -1,41 +1,66 @@
-=== tests/cases/compiler/parseErrorIncorrectReturnToken.ts ===
+//// [tests/cases/compiler/parseErrorIncorrectReturnToken.ts] ////
+
+=== parseErrorIncorrectReturnToken.ts ===
 type F1 = {
->F1 : (n: number) => string
+>F1 : F1
+>   : ^^
 
     (n: number) => string; // should be : not =>
 >n : number
+>  : ^^^^^^
 }
 type F2 = (n: number): string; // should be => not :
->F2 : (n: number) => any
+>F2 : F2
+>   : ^^
 >n : number
+>  : ^^^^^^
 >string : any
+>       : ^^^
 
 // doesn't work in non-type contexts, where the return type is optional
 let f = (n: number) => string => n.toString();
 >f : (n: number) => (string: any) => string
+>  : ^ ^^      ^^^^^^        ^^^^^^^^^^^^^^
 >(n: number) => string => n.toString() : (n: number) => (string: any) => string
+>                                      : ^ ^^      ^^^^^^        ^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >string => n.toString() : (string: any) => string
+>                       : ^      ^^^^^^^^^^^^^^^^
 >string : any
+>       : ^^^
 >n.toString() : string
+>             : ^^^^^^
 >n.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >n : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let o = {
 >o : { m(n: number): any; }
+>  : ^^^^ ^^      ^^^^^^^^^
 >{    m(n: number) : { m(n: number): any; }
+>                  : ^^^^ ^^      ^^^^^^^^^
 
     m(n: number) => string {
 >m : (n: number) => any
+>  : ^ ^^      ^^^^^^^^
 >n : number
+>  : ^^^^^^
 >string : any
+>       : ^^^
 
         return n.toString();
 >n.toString() : any
+>             : ^^^
 >n.toString : any
+>           : ^^^
 >n : any
+>  : ^^^
 >toString : any
+>         : ^^^
     }
 };
 

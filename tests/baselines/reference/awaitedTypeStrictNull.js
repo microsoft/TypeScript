@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
+
 //// [awaitedTypeStrictNull.ts]
 type T1 = Awaited<number>;
 type T2 = Awaited<Promise<number>>;

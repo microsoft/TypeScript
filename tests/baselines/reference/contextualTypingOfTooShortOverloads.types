@@ -1,35 +1,52 @@
-=== tests/cases/compiler/contextualTypingOfTooShortOverloads.ts ===
+//// [tests/cases/compiler/contextualTypingOfTooShortOverloads.ts] ////
+
+=== contextualTypingOfTooShortOverloads.ts ===
 // small repro from #11875
 var use: Overload;
 >use : Overload
+>    : ^^^^^^^^
 
 use((req, res) => {});
 >use((req, res) => {}) : void
+>                      : ^^^^
 >use : Overload
+>    : ^^^^^^^^
 >(req, res) => {} : (req: any, res: any) => void
+>                 : ^   ^^^^^^^   ^^^^^^^^^^^^^^
 >req : any
 >res : any
 
 interface Overload {
     (handler1: (req1: string) => void): void;
 >handler1 : (req1: string) => void
+>         : ^    ^^      ^^^^^    
 >req1 : string
+>     : ^^^^^^
 
     (handler2: (req2: number, res2: number) => void): void;
 >handler2 : (req2: number, res2: number) => void
+>         : ^    ^^      ^^    ^^      ^^^^^    
 >req2 : number
+>     : ^^^^^^
 >res2 : number
+>     : ^^^^^^
 }
 // larger repro from #11875
 let app: MyApp;
 >app : MyApp
+>    : ^^^^^
 
 app.use((err: any, req, res, next) => { return; });
 >app.use((err: any, req, res, next) => { return; }) : MyApp
+>                                                   : ^^^^^
 >app.use : IRouterHandler<MyApp> & IRouterMatcher<MyApp>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >app : MyApp
+>    : ^^^^^
 >use : IRouterHandler<MyApp> & IRouterMatcher<MyApp>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(err: any, req, res, next) => { return; } : (err: any, req: any, res: any, next: any) => void
+>                                          : ^   ^^   ^^   ^^^^^^^   ^^^^^^^    ^^^^^^^^^^^^^^
 >err : any
 >req : any
 >res : any
@@ -39,55 +56,72 @@ app.use((err: any, req, res, next) => { return; });
 interface MyApp {
     use: IRouterHandler<this> & IRouterMatcher<this>;
 >use : IRouterHandler<this> & IRouterMatcher<this>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface IRouterHandler<T> {
     (...handlers: RequestHandler[]): T;
 >handlers : RequestHandler[]
+>         : ^^^^^^^^^^^^^^^^
 
     (...handlers: RequestHandlerParams[]): T;
 >handlers : RequestHandlerParams[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface IRouterMatcher<T> {
     (path: PathParams, ...handlers: RequestHandler[]): T;
 >path : PathParams
+>     : ^^^^^^^^^^
 >handlers : RequestHandler[]
+>         : ^^^^^^^^^^^^^^^^
 
     (path: PathParams, ...handlers: RequestHandlerParams[]): T;
 >path : PathParams
+>     : ^^^^^^^^^^
 >handlers : RequestHandlerParams[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type PathParams = string | RegExp | (string | RegExp)[];
->PathParams : string | RegExp | (string | RegExp)[]
+>PathParams : PathParams
+>           : ^^^^^^^^^^
 
 type RequestHandlerParams = RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[];
->RequestHandlerParams : RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[]
+>RequestHandlerParams : RequestHandlerParams
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
 interface RequestHandler {
     (req: Request, res: Response, next: NextFunction): any;
 >req : Request
+>    : ^^^^^^^
 >res : Response
+>    : ^^^^^^^^
 >next : NextFunction
+>     : ^^^^^^^^^^^^
 }
 
 interface ErrorRequestHandler {
     (err: any, req: Request, res: Response, next: NextFunction): any;
 >err : any
 >req : Request
+>    : ^^^^^^^
 >res : Response
+>    : ^^^^^^^^
 >next : NextFunction
+>     : ^^^^^^^^^^^^
 }
 
 interface Request {
     method: string;
 >method : string
+>       : ^^^^^^
 }
 
 interface Response {
     statusCode: number;
 >statusCode : number
+>           : ^^^^^^
 }
 
 interface NextFunction {

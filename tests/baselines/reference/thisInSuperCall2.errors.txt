@@ -1,8 +1,8 @@
-tests/cases/compiler/thisInSuperCall2.ts(8,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/thisInSuperCall2.ts(16,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+thisInSuperCall2.ts(8,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+thisInSuperCall2.ts(16,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/thisInSuperCall2.ts (2 errors) ====
+==== thisInSuperCall2.ts (2 errors) ====
     class Base { 
         constructor(a: any) {}
     }

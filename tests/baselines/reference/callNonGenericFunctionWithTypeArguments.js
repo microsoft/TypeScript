@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts] ////
+
 //// [callNonGenericFunctionWithTypeArguments.ts]
 // it is always illegal to provide type arguments to a non-generic function
 // all invocations here are illegal

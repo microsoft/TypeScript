@@ -1,13 +1,23 @@
-=== tests/cases/compiler/substitutionTypePassedToExtends.ts ===
+//// [tests/cases/compiler/substitutionTypePassedToExtends.ts] ////
+
+=== Performance Stats ===
+Type Count: 500 -> 1,000
+Instantiation count: 100 -> 2,500
+
+=== substitutionTypePassedToExtends.ts ===
 type Foo1<A,B> = [A, B] extends unknown[][] ? Bar1<[A, B]> : 'else'
 >Foo1 : Foo1<A, B>
+>     : ^^^^^^^^^^
 
 type Bar1<T extends unknown[][]> = T
 >Bar1 : T
+>     : ^
 
 type Foo2<A> = Set<A> extends Set<unknown[]> ? Bar2<Set<A>> : 'else'
 >Foo2 : Foo2<A>
+>     : ^^^^^^^
 
 type Bar2<T extends Set<unknown[]>> = T
 >Bar2 : T
+>     : ^
 

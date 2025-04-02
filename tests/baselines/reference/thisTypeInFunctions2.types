@@ -1,145 +1,213 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts] ////
+
+=== thisTypeInFunctions2.ts ===
 interface IndexedWithThis {
     // this is a workaround for React
     init?: (this: this) => void;
 >init : (this: this) => void
+>     : ^    ^^    ^^^^^    
 >this : this
+>     : ^^^^
 
     willDestroy?: (this: any) => void;
 >willDestroy : (this: any) => void
+>            : ^    ^^   ^^^^^    
 >this : any
+>     : ^^^
 
     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
 >propName : string
+>         : ^^^^^^
 >this : any
+>     : ^^^
 >args : any[]
+>     : ^^^^^
 }
 interface IndexedWithoutThis {
     // this is what React would like to write (and what they write today)
     init?: () => void;
 >init : () => void
+>     : ^^^^^^    
 
     willDestroy?: () => void;
 >willDestroy : () => void
+>            : ^^^^^^    
 
     [propName: string]: any;
 >propName : string
+>         : ^^^^^^
 }
 interface SimpleInterface {
     foo(n: string);
 >foo : (n: string) => any
+>    : ^ ^^      ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
     bar(): number;
 >bar : () => number
+>    : ^^^^^^      
 }
 declare function extend1(args: IndexedWithThis): void;
 >extend1 : (args: IndexedWithThis) => void
+>        : ^    ^^               ^^^^^    
 >args : IndexedWithThis
+>     : ^^^^^^^^^^^^^^^
 
 declare function extend2(args: IndexedWithoutThis): void;
 >extend2 : (args: IndexedWithoutThis) => void
+>        : ^    ^^                  ^^^^^    
 >args : IndexedWithoutThis
+>     : ^^^^^^^^^^^^^^^^^^
 
 declare function simple(arg: SimpleInterface): void;
 >simple : (arg: SimpleInterface) => void
+>       : ^   ^^               ^^^^^    
 >arg : SimpleInterface
+>    : ^^^^^^^^^^^^^^^
 
 extend1({
 >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
+>                                                                                                                                                                                                                                                                          : ^^^^
 >extend1 : (args: IndexedWithThis) => void
+>        : ^    ^^               ^^^^^    
 >{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
+>                                                                                                                                                                                                                                                                 : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^
 
     init() {
 >init : (this: IndexedWithThis) => void
+>     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         this // this: IndexedWithThis because of contextual typing.
 >this : IndexedWithThis
+>     : ^^^^^^^^^^^^^^^
 
         // this.mine
         this.willDestroy
 >this.willDestroy : (this: any) => void
+>                 : ^    ^^   ^^^^^    
 >this : IndexedWithThis
+>     : ^^^^^^^^^^^^^^^
 >willDestroy : (this: any) => void
+>            : ^    ^^   ^^^^^    
 
     },
     mine: 12,
 >mine : number
+>     : ^^^^^^
 >12 : 12
+>   : ^^
 
     foo() {
 >foo : (this: any) => void
+>    : ^    ^^   ^^^^^^^^^
 
         this.url; // this: any because 'foo' matches the string indexer
 >this.url : any
+>         : ^^^
 >this : any
+>     : ^^^
 >url : any
+>    : ^^^
 
         this.willDestroy;
 >this.willDestroy : any
+>                 : ^^^
 >this : any
+>     : ^^^
 >willDestroy : any
+>            : ^^^
     }
 });
 extend2({
 >extend2({    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }}) : void
+>                                                                                                                                                                                                                                       : ^^^^
 >extend2 : (args: IndexedWithoutThis) => void
+>        : ^    ^^                  ^^^^^    
 >{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init(): void; mine: number; foo(): void; }
+>                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     init() {
 >init : () => void
+>     : ^^^^^^^^^^
 
         this // this: IndexedWithoutThis because of contextual typing
 >this : IndexedWithoutThis
+>     : ^^^^^^^^^^^^^^^^^^
 
         this.mine
 >this.mine : any
+>          : ^^^
 >this : IndexedWithoutThis
+>     : ^^^^^^^^^^^^^^^^^^
 >mine : any
+>     : ^^^
 
     },
     mine: 13,
 >mine : number
+>     : ^^^^^^
 >13 : 13
+>   : ^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         this // this: IndexedWithoutThis because of contextual typing
 >this : IndexedWithoutThis
+>     : ^^^^^^^^^^^^^^^^^^
 
         this.mine
 >this.mine : any
+>          : ^^^
 >this : IndexedWithoutThis
+>     : ^^^^^^^^^^^^^^^^^^
 >mine : any
+>     : ^^^
     }
 });
 
 simple({
 >simple({    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }}) : void
+>                                                                                                    : ^^^^
 >simple : (arg: SimpleInterface) => void
+>       : ^   ^^               ^^^^^    
 >{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): number; bar(): number; }
+>                                                                                            : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo(n) {
 >foo : (n: string) => number
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 
         return n.length + this.bar();
 >n.length + this.bar() : number
+>                      : ^^^^^^
 >n.length : number
+>         : ^^^^^^
 >n : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >this.bar() : number
+>           : ^^^^^^
 >this.bar : () => number
+>         : ^^^^^^      
 >this : SimpleInterface
+>     : ^^^^^^^^^^^^^^^
 >bar : () => number
+>    : ^^^^^^      
 
     },
     bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
         return 14;
 >14 : 14
+>   : ^^
     }
 })
 

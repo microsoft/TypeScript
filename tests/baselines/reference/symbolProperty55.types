@@ -1,29 +1,45 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty55.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty55.ts] ////
+
+=== symbolProperty55.ts ===
 var obj = {
 >obj : { [Symbol.iterator]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.iterator]: 0} : { [Symbol.iterator]: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.iterator]: 0
 >[Symbol.iterator] : number
+>                  : ^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 };
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var Symbol: SymbolConstructor;
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     // The following should be of type 'any'. This is because even though obj has a property keyed by Symbol.iterator,
     // the key passed in here is the *wrong* Symbol.iterator. It is not the iterator property of the global Symbol.
     obj[Symbol.iterator];
 >obj[Symbol.iterator] : number
+>                     : ^^^^^^
 >obj : { [Symbol.iterator]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 }

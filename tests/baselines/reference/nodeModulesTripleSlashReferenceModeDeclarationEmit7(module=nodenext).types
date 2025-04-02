@@ -1,50 +1,68 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit7.ts] ////
+
 === /index.ts ===
 // only an esm file can `import` both kinds of files
 import obj1 from "./sub1/uses.js"
 >obj1 : ImportInterface
+>     : ^^^^^^^^^^^^^^^
 
 import obj2 from "./sub2/uses.js"
 >obj2 : typeof obj2
+>     : ^^^^^^^^^^^
 
 export default [obj1, obj2.default] as const;
 >[obj1, obj2.default] as const : readonly [ImportInterface, RequireInterface]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[obj1, obj2.default] : readonly [ImportInterface, RequireInterface]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1 : ImportInterface
+>     : ^^^^^^^^^^^^^^^
 >obj2.default : RequireInterface
+>             : ^^^^^^^^^^^^^^^^
 >obj2 : typeof obj2
+>     : ^^^^^^^^^^^
 >default : RequireInterface
+>        : ^^^^^^^^^^^^^^^^
 
 === /node_modules/pkg/import.d.ts ===
 export {};
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     interface ImportInterface { _i: any; }
 >_i : any
 
     function getInterI(): ImportInterface;
 >getInterI : () => ImportInterface
+>          : ^^^^^^               
 }
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     interface RequireInterface { _r: any; }
 >_r : any
 
     function getInterR(): RequireInterface;
 >getInterR : () => RequireInterface
+>          : ^^^^^^                
 }
 === /sub1/uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterI();
 >getInterI() : ImportInterface
+>            : ^^^^^^^^^^^^^^^
 >getInterI : () => ImportInterface
+>          : ^^^^^^               
 
 === /sub2/uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 >getInterR() : RequireInterface
+>            : ^^^^^^^^^^^^^^^^
 >getInterR : () => RequireInterface
+>          : ^^^^^^                
 

@@ -1,9 +1,9 @@
 // @allowJs: true
-// @out: tests/cases/compiler/b.js
-// @filename: a.ts
+// @outFile: /b.js
+// @filename: /a.ts
 class c {
 }
 
-// @filename: b.js
+// @filename: /b.js
 function foo() {
 }

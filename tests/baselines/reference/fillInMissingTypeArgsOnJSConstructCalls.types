@@ -1,53 +1,74 @@
-=== tests/cases/compiler/BaseA.js ===
-// regression test for #18254
+//// [tests/cases/compiler/fillInMissingTypeArgsOnJSConstructCalls.ts] ////
+
+=== BaseA.js ===
 export default class BaseA {
 >BaseA : BaseA
+>      : ^^^^^
 }
-=== tests/cases/compiler/SubA.js ===
+=== SubA.js ===
 import BaseA from './BaseA';
 >BaseA : typeof BaseA
+>      : ^^^^^^^^^^^^
 
 export default class SubA extends BaseA {
 >SubA : SubA
+>     : ^^^^
 >BaseA : BaseA
+>      : ^^^^^
 }
-=== tests/cases/compiler/BaseB.js ===
+=== BaseB.js ===
 import BaseA from './BaseA';
 >BaseA : typeof BaseA
+>      : ^^^^^^^^^^^^
 
 export default class B<T: BaseA> {
 >B : B<T, BaseA>
+>  : ^^^^^^^^^^^
 
     _AClass: Class<T>;
 >_AClass : Class<T>
+>        : ^^^^^^^^
 
     constructor(AClass: Class<T>) {
 >AClass : Class<T>
+>       : ^^^^^^^^
 
         this._AClass = AClass;
 >this._AClass = AClass : Class<T>
+>                      : ^^^^^^^^
 >this._AClass : Class<T>
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >_AClass : Class<T>
+>        : ^^^^^^^^
 >AClass : Class<T>
+>       : ^^^^^^^^
     }
 }
-=== tests/cases/compiler/SubB.js ===
+=== SubB.js ===
 import SubA from './SubA';
 >SubA : typeof SubA
+>     : ^^^^^^^^^^^
 
 import BaseB from './BaseB';
 >BaseB : typeof BaseB
+>      : ^^^^^^^^^^^^
 
 export default class SubB extends BaseB<SubA> {
 >SubB : SubB
+>     : ^^^^
 >BaseB : BaseB<SubA, any>
+>      : ^^^^^^^^^^^^^^^^
 
     constructor() {
         super(SubA);
 >super(SubA) : void
+>            : ^^^^
 >super : typeof BaseB
+>      : ^^^^^^^^^^^^
 >SubA : typeof SubA
+>     : ^^^^^^^^^^^
     }
 }
 

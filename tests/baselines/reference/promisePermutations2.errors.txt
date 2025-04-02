@@ -1,101 +1,107 @@
-tests/cases/compiler/promisePermutations2.ts(73,70): error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
+promisePermutations2.ts(73,70): error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'IPromise<number>' is not assignable to type 'number'.
-tests/cases/compiler/promisePermutations2.ts(78,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(78,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Types of parameters 'x' and 'value' are incompatible.
         Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/promisePermutations2.ts(81,19): error TS2345: Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+promisePermutations2.ts(81,19): error TS2345: Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/promisePermutations2.ts(82,19): error TS2345: Argument of type '(x: number, y?: string) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
+promisePermutations2.ts(82,19): error TS2345: Argument of type '(x: number, y?: string) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/promisePermutations2.ts(83,19): error TS2345: Argument of type '(x: number, y?: string) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+promisePermutations2.ts(83,19): error TS2345: Argument of type '(x: number, y?: string) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/promisePermutations2.ts(87,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(87,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(90,19): error TS2345: Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+promisePermutations2.ts(90,19): error TS2345: Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(91,19): error TS2345: Argument of type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
+promisePermutations2.ts(91,19): error TS2345: Argument of type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(92,19): error TS2345: Argument of type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+promisePermutations2.ts(92,19): error TS2345: Argument of type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(96,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(96,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(99,19): error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+promisePermutations2.ts(99,19): error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(100,19): error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
+promisePermutations2.ts(100,19): error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(101,19): error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+promisePermutations2.ts(101,19): error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(105,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(105,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Types of parameters 'cb' and 'value' are incompatible.
         Type 'string' is not assignable to type '<T>(a: T) => T'.
-tests/cases/compiler/promisePermutations2.ts(108,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(108,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
-tests/cases/compiler/promisePermutations2.ts(109,19): error TS2769: No overload matches this call.
+      Types of parameters 'cb' and 'value' are incompatible.
+        Type 'string' is not assignable to type '<T>(a: T) => T'.
+promisePermutations2.ts(109,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
       Types of parameters 'cb' and 'value' are incompatible.
         Type 'string' is not assignable to type '<T>(a: T) => T'.
-tests/cases/compiler/promisePermutations2.ts(110,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(110,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
       Types of parameters 'cb' and 'value' are incompatible.
         Type 'string' is not assignable to type '<T>(a: T) => T'.
-tests/cases/compiler/promisePermutations2.ts(116,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(116,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(119,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+promisePermutations2.ts(119,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(120,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<any>'.
+promisePermutations2.ts(120,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<any>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(121,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+promisePermutations2.ts(121,19): error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(125,19): error TS2769: No overload matches this call.
+promisePermutations2.ts(125,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(128,33): error TS2769: No overload matches this call.
+promisePermutations2.ts(128,33): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
       Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/promisePermutations2.ts(131,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+promisePermutations2.ts(131,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(132,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<any>'.
+promisePermutations2.ts(132,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<any>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(133,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+promisePermutations2.ts(133,19): error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/promisePermutations2.ts(136,33): error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
+promisePermutations2.ts(136,33): error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
   Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
-tests/cases/compiler/promisePermutations2.ts(143,35): error TS2769: No overload matches this call.
+    Type 'string' is not assignable to type 'number'.
+promisePermutations2.ts(143,35): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
-tests/cases/compiler/promisePermutations2.ts(151,36): error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
+      Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+        Type 'string' is not assignable to type 'number'.
+promisePermutations2.ts(151,36): error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
   Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
-tests/cases/compiler/promisePermutations2.ts(155,21): error TS2769: No overload matches this call.
+promisePermutations2.ts(155,21): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
       Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
         Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/promisePermutations2.ts(157,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
+promisePermutations2.ts(157,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
   Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
-tests/cases/compiler/promisePermutations2.ts(158,21): error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.
+    Type 'number' is not assignable to type 'string'.
+promisePermutations2.ts(158,21): error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.
   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
+promisePermutations2.ts(159,21): error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
   Call signature return types 'Promise<number>' and 'IPromise<string>' are incompatible.
     The types of 'then' are incompatible between these types.
       Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
@@ -104,7 +110,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
             Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/promisePermutations2.ts (33 errors) ====
+==== promisePermutations2.ts (33 errors) ====
     // same as promisePermutations but without the same overloads in Promise<T>
     
     interface Promise<T> {
@@ -193,7 +199,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:     Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
 !!! error TS2769:       Types of parameters 'x' and 'value' are incompatible.
 !!! error TS2769:         Type 'string' is not assignable to type 'number'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
     var s4: Promise<string>;
     var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
@@ -220,7 +226,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
 !!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s5: Promise<string>;
     var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
@@ -244,7 +250,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
 !!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s6: Promise<string>;
     var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
@@ -269,7 +275,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
 !!! error TS2769:       Types of parameters 'cb' and 'value' are incompatible.
 !!! error TS2769:         Type 'string' is not assignable to type '<T>(a: T) => T'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s7: Promise<string>;
     var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
@@ -277,7 +283,9 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! error TS2769:       Types of parameters 'cb' and 'value' are incompatible.
+!!! error TS2769:         Type 'string' is not assignable to type '<T>(a: T) => T'.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
                       ~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -285,7 +293,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:     Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
 !!! error TS2769:       Types of parameters 'cb' and 'value' are incompatible.
 !!! error TS2769:         Type 'string' is not assignable to type '<T>(a: T) => T'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error
                       ~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -293,7 +301,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:     Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
 !!! error TS2769:       Types of parameters 'cb' and 'value' are incompatible.
 !!! error TS2769:         Type 'string' is not assignable to type '<T>(a: T) => T'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok?
     
     var r8: IPromise<number>;
@@ -305,7 +313,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
 !!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
     var s8: Promise<number>;
     var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
@@ -329,7 +337,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
 !!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
     var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
     var r9d = r9.then(testFunction, sIPromise, nIPromise); // error
@@ -339,7 +347,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
 !!! error TS2769:       Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
 !!! error TS2769:         Type 'string' is not assignable to type 'number'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s9: Promise<number>;
     var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
@@ -360,6 +368,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
                                     ~~~~~~~~~
 !!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
 !!! error TS2345:   Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r10 = testFunction10(x => x);
@@ -371,7 +380,9 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! error TS2769:       Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s10 = testFunction10P(x => x);
     var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
@@ -383,7 +394,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
                                        ~~~~~~~~~
 !!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
 !!! error TS2345:   Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'catch' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'catch' is declared here.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
     var r11: IPromise<number>;
@@ -394,12 +405,13 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
 !!! error TS2769:     Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 !!! error TS2769:       Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
 !!! error TS2769:         Type 'number' is not assignable to type 'string'.
-!!! related TS2771 tests/cases/compiler/promisePermutations2.ts:12:5: The last overload is declared here.
+!!! related TS2771 promisePermutations2.ts:12:5: The last overload is declared here.
     var s11: Promise<number>;
     var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
                         ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 !!! error TS2345:   Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
     var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // ok
                         ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.

@@ -1,43 +1,60 @@
-=== tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts ===
+//// [tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts] ////
+
+=== computedTypesKeyofNoIndexSignatureType.ts ===
 type Compute<A> = { [K in keyof A]: Compute<A[K]>; } & {};
->Compute : { [K in keyof A]: { [K in keyof A[K]]: { [K in keyof A[K][K]]: { [K in keyof A[K][K][K]]: { [K in keyof A[K][K][K][K]]: { [K in keyof A[K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K][K][K][K]]: any; }; }; }; }; }; }; }; }; }; }; }
+>Compute : { [K in keyof A]: A[K] extends infer T ? { [K_1 in keyof T]: A[K][K_1] extends infer T_1 ? { [K_2 in keyof T_1]: A[K][K_1][K_2] extends infer T_2 ? { [K_3 in keyof T_2]: A[K][K_1][K_2][K_3] extends infer T_3 ? { [K_4 in keyof T_3]: A[K][K_1][K_2][K_3][K_4] extends infer T_4 ? { [K_5 in keyof T_4]: A[K][K_1][K_2][K_3][K_4][K_5] extends infer T_5 ? { [K_6 in keyof T_5]: A[K][K_1][K_2][K_3][K_4][K_5][K_6] extends infer T_6 ? { [K_7 in keyof T_6]: A[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7] extends infer T_7 ? { [K_8 in keyof T_7]: A[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8] extends infer T_8 ? { [K_9 in keyof T_8]: A[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9] extends infer T_9 ? { [K_10 in keyof T_9]: any; } : never; } : never; } : never; } : never; } : never; } : never; } : never; } : never; } : never; } : never; }
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type EqualsTest<T> = <A>() => A extends T ? 1 : 0;
 >EqualsTest : EqualsTest<T>
+>           : ^^^^^^^^^^^^^
 
 type Equals<A1, A2> = EqualsTest<A2> extends EqualsTest<A1> ? 1 : 0;
 >Equals : Equals<A1, A2>
+>       : ^^^^^^^^^^^^^^
 
 type Filter<K, I> = Equals<K, I> extends 1 ? never : K;
 >Filter : Filter<K, I>
+>       : ^^^^^^^^^^^^
 
 type OmitIndex<T, I extends string | number> = {
 >OmitIndex : OmitIndex<T, I>
+>          : ^^^^^^^^^^^^^^^
 
   [K in keyof T as Filter<K, I>]: T[K];
 };
 
 type IndexObject = { [key: string]: unknown; };
->IndexObject : { [key: string]: unknown; }
+>IndexObject : IndexObject
+>            : ^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 type FooBar = { foo: "hello"; bar: "world"; };
->FooBar : { foo: "hello"; bar: "world"; }
+>FooBar : FooBar
+>       : ^^^^^^
 >foo : "hello"
+>    : ^^^^^^^
 >bar : "world"
+>    : ^^^^^^^
 
 type WithIndex = Compute<FooBar & IndexObject>;   // { [x: string]: {}; foo: "hello"; bar: "world"; } <-- OK
 >WithIndex : { [x: string]: {}; foo: "hello"; bar: "world"; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^       ^^^
 
 type WithoutIndex = OmitIndex<WithIndex, string>; // { foo: "hello"; bar: "world"; }                  <-- OK
 >WithoutIndex : OmitIndex<{ [x: string]: {}; foo: "hello"; bar: "world"; }, string>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^
 
 type FooBarKey = keyof FooBar;             // "foo" | "bar"   <-- OK
 >FooBarKey : keyof FooBar
+>          : ^^^^^^^^^^^^
 
 type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: string 
 >WithIndexKey : string | number
+>             : ^^^^^^^^^^^^^^^
 
 type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
 >WithoutIndexKey : "foo" | "bar"
+>                : ^^^^^^^^^^^^^
 

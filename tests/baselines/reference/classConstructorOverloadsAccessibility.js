@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts] ////
+
 //// [classConstructorOverloadsAccessibility.ts]
 class A {
 	public constructor(a: boolean) // error

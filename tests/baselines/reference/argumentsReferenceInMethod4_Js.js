@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod4_Js.ts] ////
+
 //// [a.js]
 class A {
 	/**

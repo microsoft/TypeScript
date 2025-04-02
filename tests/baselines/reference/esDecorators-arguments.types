@@ -1,34 +1,57 @@
-=== tests/cases/conformance/esDecorators/esDecorators-arguments.ts ===
+//// [tests/cases/conformance/esDecorators/esDecorators-arguments.ts] ////
+
+=== esDecorators-arguments.ts ===
 @(() => {})
 >(() => {}) : () => void
+>           : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 
 @((a: any) => {})
 >((a: any) => {}) : (a: any) => void
+>                 : ^ ^^   ^^^^^^^^^
 >(a: any) => {} : (a: any) => void
+>               : ^ ^^   ^^^^^^^^^
 >a : any
+>  : ^^^
 
 @((a: any, b: any) => {})
 >((a: any, b: any) => {}) : (a: any, b: any) => void
+>                         : ^ ^^   ^^ ^^   ^^^^^^^^^
 >(a: any, b: any) => {} : (a: any, b: any) => void
+>                       : ^ ^^   ^^ ^^   ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 @((a: any, b: any, c: any) => {})
 >((a: any, b: any, c: any) => {}) : (a: any, b: any, c: any) => void
+>                                 : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^
 >(a: any, b: any, c: any) => {} : (a: any, b: any, c: any) => void
+>                               : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 @((a: any, b: any, c: any, ...d: any[]) => {})
 >((a: any, b: any, c: any, ...d: any[]) => {}) : (a: any, b: any, c: any, ...d: any[]) => void
+>                                              : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^ ^^     ^^^^^^^^^
 >(a: any, b: any, c: any, ...d: any[]) => {} : (a: any, b: any, c: any, ...d: any[]) => void
+>                                            : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^ ^^     ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any[]
+>  : ^^^^^
 
 class C1 {}
 >C1 : C1
+>   : ^^
 

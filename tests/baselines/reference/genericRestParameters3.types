@@ -1,280 +1,441 @@
-=== tests/cases/conformance/types/rest/genericRestParameters3.ts ===
+//// [tests/cases/conformance/types/rest/genericRestParameters3.ts] ////
+
+=== genericRestParameters3.ts ===
 declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >x : string
+>  : ^^^^^^
 >args : [string] | [number, boolean]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let f2: (x: string, y: string) => void;
 >f2 : (x: string, y: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^    
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 declare let f3: (x: string, y: number, z: boolean) => void;
 >f3 : (x: string, y: number, z: boolean) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^    
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
 
 declare let f4: (...args: [string, string] | [string, number, boolean]) => void;
 >f4 : (...args: [string, string] | [string, number, boolean]) => void
+>   : ^^^^    ^^                                            ^^^^^    
 >args : [string, string] | [string, number, boolean]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const t1: [string] | [number, boolean];
 >t1 : [string] | [number, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const t2: readonly [string] | [number, boolean];
 >t2 : [number, boolean] | readonly [string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const t3: [string] | readonly [number, boolean];
 >t3 : [string] | readonly [number, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const t4: readonly [string] | readonly [number, boolean];
 >t4 : readonly [string] | readonly [number, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1("foo", "abc");
 >f1("foo", "abc") : void
+>                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 f1("foo", 10, true);
 >f1("foo", 10, true) : void
+>                    : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 >10 : 10
+>   : ^^
 >true : true
+>     : ^^^^
 
 f1("foo", ...t1);
 >f1("foo", ...t1) : void
+>                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 >...t1 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [string] | [number, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1("foo", ...t2);
 >f1("foo", ...t2) : void
+>                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 >...t2 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean] | readonly [string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1("foo", ...t3);
 >f1("foo", ...t3) : void
+>                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 >...t3 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t3 : [string] | readonly [number, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1("foo", ...t4);
 >f1("foo", ...t4) : void
+>                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 >...t4 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t4 : readonly [string] | readonly [number, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1("foo", 10);  // Error
 >f1("foo", 10) : void
+>              : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 >10 : 10
+>   : ^^
 
 f1("foo");  // Error
 >f1("foo") : void
+>          : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >"foo" : "foo"
+>      : ^^^^^
 
 f2 = f1;
 >f2 = f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>        : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >f2 : (x: string, y: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^    
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 
 f3 = f1;
 >f3 = f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>        : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >f3 : (x: string, y: number, z: boolean) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^    
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 
 f4 = f1;
 >f4 = f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>        : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >f4 : (...args: [string, string] | [string, number, boolean]) => void
+>   : ^^^^    ^^                                            ^^^^^    
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 
 f1 = f2;  // Error
 >f1 = f2 : (x: string, y: string) => void
+>        : ^ ^^      ^^ ^^      ^^^^^    
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >f2 : (x: string, y: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^    
 
 f1 = f3;  // Error
 >f1 = f3 : (x: string, y: number, z: boolean) => void
+>        : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^    
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >f3 : (x: string, y: number, z: boolean) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^    
 
 f1 = f4;
 >f1 = f4 : (...args: [string, string] | [string, number, boolean]) => void
+>        : ^^^^    ^^                                            ^^^^^    
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >f4 : (...args: [string, string] | [string, number, boolean]) => void
+>   : ^^^^    ^^                                            ^^^^^    
 
 // Repro from #26110
 
 interface CoolArray<E> extends Array<E> { 
     hello: number;
 >hello : number
+>      : ^^^^^^
 }
 
 declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^    
 >cb : (...args: T) => void
+>   : ^^^^    ^^ ^^^^^    
 >args : T
+>     : ^
 
 foo<CoolArray<any>>();     // Error
 >foo<CoolArray<any>>() : void
+>                      : ^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^    
 
 foo<CoolArray<any>>(100);  // Error
 >foo<CoolArray<any>>(100) : void
+>                         : ^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^    
 >100 : 100
+>    : ^^^
 
 foo<CoolArray<any>>(foo);  // Error
 >foo<CoolArray<any>>(foo) : void
+>                         : ^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^    
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^    
 
 function bar<T extends any[]>(...args: T): T {
 >bar : <T extends any[]>(...args: T) => T
+>    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^ 
 >args : T
+>     : ^
 
     return args;
 >args : T
+>     : ^
 }
 
 let a = bar(10, 20);
 >a : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 >bar(10, 20) : [number, number]
+>            : ^^^^^^^^^^^^^^^^
 >bar : <T extends any[]>(...args: T) => T
+>    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^ 
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 let b = bar<CoolArray<number>>(10, 20);  // Error
 >b : CoolArray<number>
+>  : ^^^^^^^^^^^^^^^^^
 >bar<CoolArray<number>>(10, 20) : CoolArray<number>
+>                               : ^^^^^^^^^^^^^^^^^
 >bar : <T extends any[]>(...args: T) => T
+>    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^ 
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
 declare function baz<T>(...args: CoolArray<T>): void;
 >baz : <T>(...args: CoolArray<T>) => void
+>    : ^ ^^^^^    ^^            ^^^^^    
 >args : CoolArray<T>
+>     : ^^^^^^^^^^^^
 
 declare const ca: CoolArray<number>;
 >ca : CoolArray<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 baz();       // Error
 >baz() : void
+>      : ^^^^
 >baz : <T>(...args: CoolArray<T>) => void
+>    : ^ ^^^^^    ^^            ^^^^^    
 
 baz(1);      // Error
 >baz(1) : void
+>       : ^^^^
 >baz : <T>(...args: CoolArray<T>) => void
+>    : ^ ^^^^^    ^^            ^^^^^    
 >1 : 1
+>  : ^
 
 baz(1, 2);   // Error
 >baz(1, 2) : void
+>          : ^^^^
 >baz : <T>(...args: CoolArray<T>) => void
+>    : ^ ^^^^^    ^^            ^^^^^    
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 baz(...ca);  // Error
 >baz(...ca) : void
+>           : ^^^^
 >baz : <T>(...args: CoolArray<T>) => void
+>    : ^ ^^^^^    ^^            ^^^^^    
 >...ca : number
+>      : ^^^^^^
 >ca : CoolArray<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 // Repro from #26491
 
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
 >hmm : <A extends [] | [number, string]>(...args: A) => void
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^    
 >args : A
+>     : ^
 
 hmm(); // okay, A = []
 >hmm() : void
+>      : ^^^^
 >hmm : <A extends [] | [number, string]>(...args: A) => void
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^    
 
 hmm(1, "s"); // okay, A = [1, "s"]
 >hmm(1, "s") : void
+>            : ^^^^
 >hmm : <A extends [] | [number, string]>(...args: A) => void
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^    
 >1 : 1
+>  : ^
 >"s" : "s"
+>    : ^^^
 
 hmm("what"); // no error?  A = [] | [number, string] ?
 >hmm("what") : void
+>            : ^^^^
 >hmm : <A extends [] | [number, string]>(...args: A) => void
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^    
 >"what" : "what"
+>       : ^^^^^^
 
 // Repro from #35066
 
 declare function foo2(...args: string[] | number[]): void;
 >foo2 : (...args: string[] | number[]) => void
+>     : ^^^^    ^^                   ^^^^^    
 >args : string[] | number[]
+>     : ^^^^^^^^^^^^^^^^^^^
 
 let x2: ReadonlyArray<string> = ["hello"];
 >x2 : readonly string[]
+>   : ^^^^^^^^^^^^^^^^^
 >["hello"] : string[]
+>          : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 foo2(...x2);
 >foo2(...x2) : void
+>            : ^^^^
 >foo2 : (...args: string[] | number[]) => void
+>     : ^^^^    ^^                   ^^^^^    
 >...x2 : string
+>      : ^^^^^^
 >x2 : readonly string[]
+>   : ^^^^^^^^^^^^^^^^^
 
 // Repros from #47754
 
 type RestParams = [y: string] | [y: number];
->RestParams : [y: string] | [y: number]
+>RestParams : RestParams
+>           : ^^^^^^^^^^
 
 type Signature = (x: string, ...rest: RestParams) => void;
->Signature : (x: string, ...rest: RestParams) => void
+>Signature : Signature
+>          : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >rest : RestParams
+>     : ^^^^^^^^^^
 
 type MergedParams = Parameters<Signature>;  // [x: string, y: string] | [x: string, y: number]
 >MergedParams : [x: string, y: string] | [x: string, y: number]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let ff1: (...rest: [string, string] | [string, number]) => void;
 >ff1 : (...rest: [string, string] | [string, number]) => void
+>    : ^^^^    ^^                                   ^^^^^    
 >rest : [string, string] | [string, number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let ff2: (x: string, ...rest: [string] | [number]) => void;
 >ff2 : (x: string, ...rest: [string] | [number]) => void
+>    : ^ ^^      ^^^^^    ^^                   ^^^^^    
 >x : string
+>  : ^^^^^^
 >rest : [string] | [number]
+>     : ^^^^^^^^^^^^^^^^^^^
 
 ff1 = ff2;
 >ff1 = ff2 : (x: string, ...rest: [string] | [number]) => void
+>          : ^ ^^      ^^^^^    ^^                   ^^^^^    
 >ff1 : (...rest: [string, string] | [string, number]) => void
+>    : ^^^^    ^^                                   ^^^^^    
 >ff2 : (x: string, ...rest: [string] | [number]) => void
+>    : ^ ^^      ^^^^^    ^^                   ^^^^^    
 
 ff2 = ff1;
 >ff2 = ff1 : (...rest: [string, string] | [string, number]) => void
+>          : ^^^^    ^^                                   ^^^^^    
 >ff2 : (x: string, ...rest: [string] | [number]) => void
+>    : ^ ^^      ^^^^^    ^^                   ^^^^^    
 >ff1 : (...rest: [string, string] | [string, number]) => void
+>    : ^^^^    ^^                                   ^^^^^    
 
 function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
 >ff3 : <A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
+>    : ^ ^^^^^^^^^         ^^  ^^                                                     ^^  ^^                                          ^^^^^^^^^
 >s1 : (...args: [x: string, ...rest: A | [number]]) => void
->args : [string, number] | [x: string, ...rest: A]
+>   : ^^^^    ^^                                  ^^^^^    
+>args : [x: string, number] | [x: string, ...rest: A]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : (x: string, ...rest: A | [number]) => void
+>   : ^ ^^      ^^^^^    ^^            ^^^^^    
 >x : string
+>  : ^^^^^^
 >rest : [number] | A
+>     : ^^^^^^^^^^^^
 
     s1 = s2;
->s1 = s2 : (x: string, ...rest: [number] | A) => void
->s1 : (...args: [string, number] | [x: string, ...rest: A]) => void
->s2 : (x: string, ...rest: [number] | A) => void
+>s1 = s2 : (x: string, ...rest: A | [number]) => void
+>        : ^ ^^      ^^^^^    ^^            ^^^^^    
+>s1 : (...args: [x: string, ...rest: A | [number]]) => void
+>   : ^^^^    ^^                                  ^^^^^    
+>s2 : (x: string, ...rest: A | [number]) => void
+>   : ^ ^^      ^^^^^    ^^            ^^^^^    
 
     s2 = s1;
->s2 = s1 : (...args: [string, number] | [x: string, ...rest: A]) => void
->s2 : (x: string, ...rest: [number] | A) => void
->s1 : (...args: [string, number] | [x: string, ...rest: A]) => void
+>s2 = s1 : (...args: [x: string, ...rest: A | [number]]) => void
+>        : ^^^^    ^^                                  ^^^^^    
+>s2 : (x: string, ...rest: A | [number]) => void
+>   : ^ ^^      ^^^^^    ^^            ^^^^^    
+>s1 : (...args: [x: string, ...rest: A | [number]]) => void
+>   : ^^^^    ^^                                  ^^^^^    
 }
 

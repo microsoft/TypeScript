@@ -1,36 +1,46 @@
-=== tests/cases/conformance/ambient/ambientInsideNonAmbient.ts ===
+//// [tests/cases/conformance/ambient/ambientInsideNonAmbient.ts] ////
+
+=== ambientInsideNonAmbient.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export declare var x;
 >x : any
 
     export declare function f();
 >f : () => any
+>  : ^^^^^^^^^
 
     export declare class C { }
 >C : C
+>  : ^
 
     export declare enum E { }
 >E : E
+>  : ^
 
     export declare module M { }
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     declare var x;
 >x : any
 
     declare function f();
 >f : () => any
+>  : ^^^^^^^^^
 
     declare class C { }
 >C : C
+>  : ^
 
     declare enum E { }
 >E : E
+>  : ^
 
     declare module M { }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultAlias_excludesEverything.ts ===
+//// [tests/cases/compiler/exportDefaultAlias_excludesEverything.ts] ////
+
+=== exportDefaultAlias_excludesEverything.ts ===
 export default interface A {}
 >A : Symbol(A, Decl(exportDefaultAlias_excludesEverything.ts, 0, 0))
 

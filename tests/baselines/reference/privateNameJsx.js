@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateNameJsx.tsx] ////
+
 //// [privateNameJsx.tsx]
 class Test {
     #prop = () => <div />;

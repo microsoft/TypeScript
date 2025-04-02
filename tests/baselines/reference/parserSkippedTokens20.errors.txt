@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts(1,8): error TS2304: Cannot find name 'X'.
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts(1,10): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts(1,12): error TS1127: Invalid character.
+parserSkippedTokens20.ts(1,8): error TS2304: Cannot find name 'X'.
+parserSkippedTokens20.ts(1,10): error TS2304: Cannot find name 'T'.
+parserSkippedTokens20.ts(1,12): error TS1127: Invalid character.
 
 
-==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts (3 errors) ====
+==== parserSkippedTokens20.ts (3 errors) ====
     var v: X<T \
            ~
 !!! error TS2304: Cannot find name 'X'.

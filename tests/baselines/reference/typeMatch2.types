@@ -1,221 +1,369 @@
-=== tests/cases/compiler/typeMatch2.ts ===
+//// [tests/cases/compiler/typeMatch2.ts] ////
+
+=== typeMatch2.ts ===
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
 	var a = { x: 1, y: 2 };
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 	a = {}; // error
 >a = {} : {}
+>       : ^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
     a = { x: 1 }; // error
 >a = { x: 1 } : { x: number; }
+>             : ^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 	a = { x: 1, y: 2, z: 3 };
 >a = { x: 1, y: 2, z: 3 } : { x: number; y: number; z: number; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 2, z: 3 } : { x: number; y: number; z: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >z : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
     a = { x: 1, z: 3 };  // error
 >a = { x: 1, z: 3 } : { x: number; z: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, z: 3 } : { x: number; z: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >z : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 }
 
 class Animal { private a; }
 >Animal : Animal
+>       : ^^^^^^
 >a : any
+>  : ^^^
 
 class Giraffe extends Animal { private g; }
 >Giraffe : Giraffe
+>        : ^^^^^^^
 >Animal : Animal
+>       : ^^^^^^
 >g : any
+>  : ^^^
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     var a = new Animal();
 >a : Animal
+>  : ^^^^^^
 >new Animal() : Animal
+>             : ^^^^^^
 >Animal : typeof Animal
+>       : ^^^^^^^^^^^^^
 
     var g = new Giraffe();
 >g : Giraffe
+>  : ^^^^^^^
 >new Giraffe() : Giraffe
+>              : ^^^^^^^
 >Giraffe : typeof Giraffe
+>        : ^^^^^^^^^^^^^^
 
     var aa = [ a, a, a ];
 >aa : Animal[]
+>   : ^^^^^^^^
 >[ a, a, a ] : Animal[]
+>            : ^^^^^^^^
 >a : Animal
+>  : ^^^^^^
 >a : Animal
+>  : ^^^^^^
 >a : Animal
+>  : ^^^^^^
 
     var gg = [ g, g, g ];
 >gg : Giraffe[]
+>   : ^^^^^^^^^
 >[ g, g, g ] : Giraffe[]
+>            : ^^^^^^^^^
 >g : Giraffe
+>  : ^^^^^^^
 >g : Giraffe
+>  : ^^^^^^^
 >g : Giraffe
+>  : ^^^^^^^
 
     aa = gg;
 >aa = gg : Giraffe[]
+>        : ^^^^^^^^^
 >aa : Animal[]
+>   : ^^^^^^^^
 >gg : Giraffe[]
+>   : ^^^^^^^^^
 
     gg = aa; // error
 >gg = aa : Animal[]
+>        : ^^^^^^^^
 >gg : Giraffe[]
+>   : ^^^^^^^^^
 >aa : Animal[]
+>   : ^^^^^^^^
 
     var xa = { f1: 5, f2: aa };
 >xa : { f1: number; f2: Animal[]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ f1: 5, f2: aa } : { f1: number; f2: Animal[]; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >f2 : Animal[]
+>   : ^^^^^^^^
 >aa : Animal[]
+>   : ^^^^^^^^
 
     var xb = { f1: 5, f2: gg };
 >xb : { f1: number; f2: Giraffe[]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ f1: 5, f2: gg } : { f1: number; f2: Giraffe[]; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >f2 : Giraffe[]
+>   : ^^^^^^^^^
 >gg : Giraffe[]
+>   : ^^^^^^^^^
 
     xa = xb; // Should be ok
 >xa = xb : { f1: number; f2: Giraffe[]; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xa : { f1: number; f2: Animal[]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xb : { f1: number; f2: Giraffe[]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     xb = xa; // Not ok
 >xb = xa : { f1: number; f2: Animal[]; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xb : { f1: number; f2: Giraffe[]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xa : { f1: number; f2: Animal[]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     var _any: any = 0;
 >_any : any
+>     : ^^^
 >0 : 0
+>  : ^
 
     var i = 5;
 >i : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
     i = null; 
 >i = null : null
+>         : ^^^^
 >i : number
+>  : ^^^^^^
 
     i = undefined;
 >i = undefined : undefined
+>              : ^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     var a = { x: 1, y: 1 };
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 1 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     a = { x: 1, y: null }; 
 >a = { x: 1, y: null } : { x: number; y: null; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: null } : { x: number; y: null; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : null
+>  : ^^^^
 
     a = { x: 1, y: undefined }; 
 >a = { x: 1, y: undefined } : { x: number; y: undefined; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: undefined } : { x: number; y: undefined; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     a = { x: 1, y: _any }; 
 >a = { x: 1, y: _any } : { x: number; y: any; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: _any } : { x: number; y: any; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : any
+>  : ^^^
 >_any : any
+>     : ^^^
 
     a = { x: 1, y: _any, z:1 }; 
 >a = { x: 1, y: _any, z:1 } : { x: number; y: any; z: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: _any, z:1 } : { x: number; y: any; z: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : any
+>  : ^^^
 >_any : any
+>     : ^^^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     a = { x: 1 }; // error
 >a = { x: 1 } : { x: number; }
+>             : ^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     var mf = function m(n) { return false; };
 >mf : (n: any) => boolean
+>   : ^ ^^^^^^^^^^^^^^^^^
 >function m(n) { return false; } : (n: any) => boolean
+>                                : ^ ^^^^^^^^^^^^^^^^^
 >m : (n: any) => boolean
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : any
+>  : ^^^
 >false : false
+>      : ^^^^^
 
     var zf = function z(n: number) { return true; };
 >zf : (n: number) => boolean
+>   : ^ ^^      ^^^^^^^^^^^^
 >function z(n: number) { return true; } : (n: number) => boolean
+>                                       : ^ ^^      ^^^^^^^^^^^^
 >z : (n: number) => boolean
+>  : ^ ^^      ^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >true : true
+>     : ^^^^
 
     mf=zf;
 >mf=zf : (n: number) => boolean
+>      : ^ ^^      ^^^^^^^^^^^^
 >mf : (n: any) => boolean
+>   : ^ ^^^^^^^^^^^^^^^^^
 >zf : (n: number) => boolean
+>   : ^ ^^      ^^^^^^^^^^^^
 
     mf(_any);
 >mf(_any) : boolean
+>         : ^^^^^^^
 >mf : (n: any) => boolean
+>   : ^ ^^^^^^^^^^^^^^^^^
 >_any : any
+>     : ^^^
 
     zf(_any);
 >zf(_any) : boolean
+>         : ^^^^^^^
 >zf : (n: number) => boolean
+>   : ^ ^^      ^^^^^^^^^^^^
 >_any : any
+>     : ^^^
 }
 
 

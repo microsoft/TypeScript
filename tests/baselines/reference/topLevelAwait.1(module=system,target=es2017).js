@@ -93,16 +93,11 @@ System.register([], function (exports_1, context_1) {
             // for-await-of
             arr = [Promise.resolve()];
             try {
-                for (var _a = true, arr_1 = __asyncValues(arr), arr_1_1; arr_1_1 = await arr_1.next(), _a = arr_1_1.done, !_a;) {
+                for (var _a = true, arr_1 = __asyncValues(arr), arr_1_1; arr_1_1 = await arr_1.next(), _a = arr_1_1.done, !_a; _a = true) {
                     _c = arr_1_1.value;
                     _a = false;
-                    try {
-                        const item = _c;
-                        item;
-                    }
-                    finally {
-                        _a = true;
-                    }
+                    const item = _c;
+                    item;
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }

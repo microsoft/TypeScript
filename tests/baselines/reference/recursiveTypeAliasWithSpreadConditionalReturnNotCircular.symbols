@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts ===
+//// [tests/cases/compiler/recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts] ////
+
+=== recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts ===
 export {}
 export interface Option<T> {
 >Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))

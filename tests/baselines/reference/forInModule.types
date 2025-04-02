@@ -1,19 +1,32 @@
-=== tests/cases/compiler/forInModule.ts ===
+//// [tests/cases/compiler/forInModule.ts] ////
+
+=== forInModule.ts ===
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 	for (var i = 0; i < 1; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
 		i+i;
 >i+i : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 	}
 }

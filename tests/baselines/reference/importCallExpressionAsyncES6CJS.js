@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionAsyncES6CJS.ts] ////
+
 //// [test.ts]
 export async function fn() {
     const req = await import('./test') // ONE
@@ -40,13 +42,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
+exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
+exports.fn = fn;
 function fn() {
     return __awaiter(this, void 0, void 0, function* () {
         const req = yield Promise.resolve().then(() => require('./test')); // ONE
     });
 }
-exports.fn = fn;
 class cl1 {
     m() {
         return __awaiter(this, void 0, void 0, function* () {

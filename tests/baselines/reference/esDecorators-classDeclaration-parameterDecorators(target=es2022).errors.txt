@@ -1,16 +1,16 @@
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(4,17): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(5,12): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(6,11): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(7,19): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(8,18): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(12,17): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(13,12): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(14,11): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(15,19): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts(16,18): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(4,17): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(5,12): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(6,11): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(7,19): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(8,18): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(12,17): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(13,12): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(14,11): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(15,19): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-parameterDecorators.ts(16,18): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterDecorators.ts (10 errors) ====
+==== esDecorators-classDeclaration-parameterDecorators.ts (10 errors) ====
     declare let dec: any;
     
     class C {

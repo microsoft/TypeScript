@@ -1,805 +1,1280 @@
-=== tests/cases/conformance/controlFlow/controlFlowAliasing.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowAliasing.ts] ////
+
+=== controlFlowAliasing.ts ===
 // Narrowing by aliased conditional expressions
 
 function f10(x: string | number) {
 >f10 : (x: string | number) => void
+>    : ^ ^^               ^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     const isString = typeof x === "string";
 >isString : boolean
+>         : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         let t: string = x;
 >t : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
     }
     else {
         let t: number = x;
 >t : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }
 
 function f11(x: unknown) {
 >f11 : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     const isString = typeof x === "string";
 >isString : boolean
+>         : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         let t: string = x;
 >t : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 function f12(x: string | number | boolean) {
 >f12 : (x: string | number | boolean) => void
+>    : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const isString = typeof x === "string";
 >isString : boolean
+>         : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     const isNumber = typeof x === "number";
 >isNumber : boolean
+>         : ^^^^^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     if (isString || isNumber) {
 >isString || isNumber : boolean
+>                     : ^^^^^^^
 >isString : boolean
+>         : ^^^^^^^
 >isNumber : boolean
+>         : ^^^^^^^
 
         let t: string | number = x;
 >t : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     else {
         let t: boolean = x;
 >t : boolean
+>  : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
     }
 }
 
 function f13(x: string | number | boolean) {
 >f13 : (x: string | number | boolean) => void
+>    : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const isString = typeof x === "string";
 >isString : boolean
+>         : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     const isNumber = typeof x === "number";
 >isNumber : boolean
+>         : ^^^^^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     const isStringOrNumber = isString || isNumber;
 >isStringOrNumber : boolean
+>                 : ^^^^^^^
 >isString || isNumber : boolean
+>                     : ^^^^^^^
 >isString : boolean
+>         : ^^^^^^^
 >isNumber : boolean
+>         : ^^^^^^^
 
     if (isStringOrNumber) {
 >isStringOrNumber : boolean
+>                 : ^^^^^^^
 
         let t: string | number = x;
 >t : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     else {
         let t: boolean = x;
 >t : boolean
+>  : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
     }
 }
 
 function f14(x: number | null | undefined): number | null {
 >f14 : (x: number | null | undefined) => number | null
+>    : ^ ^^                         ^^^^^             
 >x : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const notUndefined = x !== undefined;
 >notUndefined : boolean
+>             : ^^^^^^^
 >x !== undefined : boolean
+>                : ^^^^^^^
 >x : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     return notUndefined ? x : 0;
 >notUndefined ? x : 0 : number | null
+>                     : ^^^^^^^^^^^^^
 >notUndefined : boolean
+>             : ^^^^^^^
 >x : number | null
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 function f15(obj: { readonly x: string | number }) {
->f15 : (obj: {    readonly x: string | number;}) => void
+>f15 : (obj: { readonly x: string | number; }) => void
+>    : ^   ^^                                ^^^^^^^^^
 >obj : { readonly x: string | number; }
+>    : ^^^^^^^^^^^^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     const isString = typeof obj.x === 'string';
 >isString : boolean
+>         : ^^^^^^^
 >typeof obj.x === 'string' : boolean
+>                          : ^^^^^^^
 >typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.x : string | number
+>      : ^^^^^^^^^^^^^^^
 >obj : { readonly x: string | number; }
+>    : ^^^^^^^^^^^^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         let s: string = obj.x;
 >s : string
+>  : ^^^^^^
 >obj.x : string
+>      : ^^^^^^
 >obj : { readonly x: string | number; }
+>    : ^^^^^^^^^^^^^^               ^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 function f16(obj: { readonly x: string | number }) {
->f16 : (obj: {    readonly x: string | number;}) => void
+>f16 : (obj: { readonly x: string | number; }) => void
+>    : ^   ^^                                ^^^^^^^^^
 >obj : { readonly x: string | number; }
+>    : ^^^^^^^^^^^^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     const isString = typeof obj.x === 'string';
 >isString : boolean
+>         : ^^^^^^^
 >typeof obj.x === 'string' : boolean
+>                          : ^^^^^^^
 >typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.x : string | number
+>      : ^^^^^^^^^^^^^^^
 >obj : { readonly x: string | number; }
+>    : ^^^^^^^^^^^^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
     obj = { x: 42 };
 >obj = { x: 42 } : { x: number; }
+>                : ^^^^^^^^^^^^^^
 >obj : { readonly x: string | number; }
+>    : ^^^^^^^^^^^^^^               ^^^
 >{ x: 42 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         let s: string = obj.x;  // Not narrowed because of is assigned in function body
 >s : string
+>  : ^^^^^^
 >obj.x : string | number
+>      : ^^^^^^^^^^^^^^^
 >obj : { readonly x: string | number; }
+>    : ^^^^^^^^^^^^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
 }
 
 function f17(obj: readonly [string | number]) {
 >f17 : (obj: readonly [string | number]) => void
+>    : ^   ^^                          ^^^^^^^^^
 >obj : readonly [string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const isString = typeof obj[0] === 'string';
 >isString : boolean
+>         : ^^^^^^^
 >typeof obj[0] === 'string' : boolean
+>                           : ^^^^^^^
 >typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[0] : string | number
+>       : ^^^^^^^^^^^^^^^
 >obj : readonly [string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'string' : "string"
+>         : ^^^^^^^^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         let s: string = obj[0];
 >s : string
+>  : ^^^^^^
 >obj[0] : string
+>       : ^^^^^^
 >obj : readonly [string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
     }
 }
 
 function f18(obj: readonly [string | number]) {
 >f18 : (obj: readonly [string | number]) => void
+>    : ^   ^^                          ^^^^^^^^^
 >obj : readonly [string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const isString = typeof obj[0] === 'string';
 >isString : boolean
+>         : ^^^^^^^
 >typeof obj[0] === 'string' : boolean
+>                           : ^^^^^^^
 >typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[0] : string | number
+>       : ^^^^^^^^^^^^^^^
 >obj : readonly [string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'string' : "string"
+>         : ^^^^^^^^
 
     obj = [42];
 >obj = [42] : [number]
+>           : ^^^^^^^^
 >obj : readonly [string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42] : [number]
+>     : ^^^^^^^^
 >42 : 42
+>   : ^^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         let s: string = obj[0];  // Not narrowed because of is assigned in function body
 >s : string
+>  : ^^^^^^
 >obj[0] : string | number
+>       : ^^^^^^^^^^^^^^^
 >obj : readonly [string | number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
     }
 }
 
 function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f20 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f20 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >obj.kind === 'foo' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
         obj.foo;
 >obj.foo : string
+>        : ^^^^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
     else {
         obj.bar;
 >obj.bar : number
+>        : ^^^^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 function f21(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f21 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f21 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const isFoo: boolean = obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >obj.kind === 'foo' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
         obj.foo;  // Not narrowed because isFoo has type annotation
 >obj.foo : any
+>        : ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >foo : any
+>    : ^^^
     }
     else {
         obj.bar;  // Not narrowed because isFoo has type annotation
 >obj.bar : any
+>        : ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >bar : any
+>    : ^^^
     }
 }
 
 function f22(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f22 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f22 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     let isFoo = obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >obj.kind === 'foo' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
         obj.foo;  // Not narrowed because isFoo is mutable
 >obj.foo : any
+>        : ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >foo : any
+>    : ^^^
     }
     else {
         obj.bar;  // Not narrowed because isFoo is mutable
 >obj.bar : any
+>        : ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >bar : any
+>    : ^^^
     }
 }
 
 function f23(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f23 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f23 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >obj.kind === 'foo' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     obj = obj;
 >obj = obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>          : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
         obj.foo;  // Not narrowed because obj is assigned in function body
 >obj.foo : any
+>        : ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >foo : any
+>    : ^^^
     }
     else {
         obj.bar;  // Not narrowed because obj is assigned in function body
 >obj.bar : any
+>        : ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >bar : any
+>    : ^^^
     }
 }
 
 function f24(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f24 : (arg: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->arg : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f24 : (arg: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const obj = arg;
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >obj.kind === 'foo' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
         obj.foo;
 >obj.foo : string
+>        : ^^^^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
     else {
         obj.bar;
 >obj.bar : number
+>        : ^^^^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f25 : (arg: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->arg : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f25 : (arg: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     let obj = arg;
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >obj.kind === 'foo' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
-        obj.foo;  // Not narrowed because obj is mutable
->obj.foo : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->foo : any
+        obj.foo;
+>obj.foo : string
+>        : ^^^^^^
+>obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
+>foo : string
+>    : ^^^^^^
     }
     else {
-        obj.bar;  // Not narrowed because obj is mutable
->obj.bar : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->bar : any
+        obj.bar;
+>obj.bar : number
+>        : ^^^^^^
+>obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
+>bar : number
+>    : ^^^^^^
     }
 }
 
 function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
->f26 : (outer: {    readonly obj: {        kind: 'foo';        foo: string;    } | {        kind: 'bar';        bar: number;    };}) => void
->outer : { readonly obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}; }
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f26 : (outer: { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }) => void
+>    : ^     ^^                                                                                ^^^^^^^^^
+>outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^^^^^^^^^^                                                             ^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const isFoo = outer.obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >outer.obj.kind === 'foo' : boolean
+>                         : ^^^^^^^
 >outer.obj.kind : "foo" | "bar"
+>               : ^^^^^^^^^^^^^
 >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>          : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^^^^^^^^^^                                                             ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
         outer.obj.foo;
 >outer.obj.foo : string
+>              : ^^^^^^
 >outer.obj : { kind: "foo"; foo: string; }
+>          : ^^^^^^^^     ^^^^^^^      ^^^
 >outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^^^^^^^^^^                                                             ^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
     else {
         outer.obj.bar;
 >outer.obj.bar : number
+>              : ^^^^^^
 >outer.obj : { kind: "bar"; bar: number; }
+>          : ^^^^^^^^     ^^^^^^^      ^^^
 >outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^^^^^^^^^^                                                             ^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
->f27 : (outer: {    obj: {        kind: 'foo';        foo: string;    } | {        kind: 'bar';        bar: number;    };}) => void
->outer : { obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}; }
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f27 : (outer: { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }) => void
+>    : ^     ^^                                                                       ^^^^^^^^^
+>outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^                                                             ^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const isFoo = outer.obj.kind === 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >outer.obj.kind === 'foo' : boolean
+>                         : ^^^^^^^
 >outer.obj.kind : "foo" | "bar"
+>               : ^^^^^^^^^^^^^
 >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>          : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^                                                             ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean
+>      : ^^^^^^^
 
         outer.obj.foo;  // Not narrowed because obj is mutable
 >outer.obj.foo : any
+>              : ^^^
 >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>          : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^                                                             ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >foo : any
+>    : ^^^
     }
     else {
         outer.obj.bar;  // Not narrowed because obj is mutable
 >outer.obj.bar : any
+>              : ^^^
 >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>          : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
+>      : ^^^^^^^                                                             ^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >bar : any
+>    : ^^^
     }
 }
 
 function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f28 : (obj?: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; } | undefined
+>f28 : (obj?: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const isFoo = obj && obj.kind === 'foo';
 >isFoo : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 >obj && obj.kind === 'foo' : boolean | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^^
 >obj.kind === 'foo' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     const isBar = obj && obj.kind === 'bar';
 >isBar : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 >obj && obj.kind === 'bar' : boolean | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^^
 >obj.kind === 'bar' : boolean
+>                   : ^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
     if (isFoo) {
 >isFoo : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 
         obj.foo;
 >obj.foo : string
+>        : ^^^^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
     if (isBar) {
 >isBar : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 
         obj.bar;
 >obj.bar : number
+>        : ^^^^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 // Narrowing by aliased discriminant property access
 
 function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f30 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f30 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const kind = obj.kind;
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >obj.kind : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 
     if (kind === 'foo') {
 >kind === 'foo' : boolean
+>               : ^^^^^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
         obj.foo;
 >obj.foo : string
+>        : ^^^^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
     else {
         obj.bar;
 >obj.bar : number
+>        : ^^^^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f31 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f31 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const { kind } = obj;
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 
     if (kind === 'foo') {
 >kind === 'foo' : boolean
+>               : ^^^^^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
         obj.foo;
 >obj.foo : string
+>        : ^^^^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
     else {
         obj.bar;
 >obj.bar : number
+>        : ^^^^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f32 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f32 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const { kind: k } = obj;
 >kind : any
+>     : ^^^
 >k : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 
     if (k === 'foo') {
 >k === 'foo' : boolean
+>            : ^^^^^^^
 >k : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
         obj.foo;
 >obj.foo : string
+>        : ^^^^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
     else {
         obj.bar;
 >obj.bar : number
+>        : ^^^^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f33 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
->obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>f33 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
+>    : ^   ^^                                                             ^^^^^^^^^
+>obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string
+>    : ^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     const { kind } = obj;
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
 
     switch (kind) {
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 
         case 'foo': obj.foo; break;
 >'foo' : "foo"
+>      : ^^^^^
 >obj.foo : string
+>        : ^^^^^^
 >obj : { kind: "foo"; foo: string; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 
         case 'bar': obj.bar; break;
 >'bar' : "bar"
+>      : ^^^^^
 >obj.bar : number
+>        : ^^^^^^
 >obj : { kind: "bar"; bar: number; }
+>    : ^^^^^^^^     ^^^^^^^      ^^^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 
 class C10 {
 >C10 : C10
+>    : ^^^
 
     constructor(readonly x: string | number) {
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         const thisX_isString = typeof this.x === 'string';
 >thisX_isString : boolean
+>               : ^^^^^^^
 >typeof this.x === 'string' : boolean
+>                           : ^^^^^^^
 >typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.x : string | number
+>       : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
         const xIsString = typeof x === 'string';
 >xIsString : boolean
+>          : ^^^^^^^
 >typeof x === 'string' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
         if (thisX_isString && xIsString) {
 >thisX_isString && xIsString : boolean
+>                            : ^^^^^^^
 >thisX_isString : boolean
+>               : ^^^^^^^
 >xIsString : boolean
+>          : ^^^^^^^
 
             let s: string;
 >s : string
+>  : ^^^^^^
 
             s = this.x;
->s = this.x : string | number
+>s = this.x : string
+>           : ^^^^^^
 >s : string
->this.x : string | number
+>  : ^^^^^^
+>this.x : string
+>       : ^^^^^^
 >this : this
->x : string | number
+>     : ^^^^
+>x : string
+>  : ^^^^^^
 
             s = x;
 >s = x : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
         }
     }
 }
 
 class C11 {
 >C11 : C11
+>    : ^^^
 
     constructor(readonly x: string | number) {
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         const thisX_isString = typeof this.x === 'string';
 >thisX_isString : boolean
+>               : ^^^^^^^
 >typeof this.x === 'string' : boolean
+>                           : ^^^^^^^
 >typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.x : string | number
+>       : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
         const xIsString = typeof x === 'string';
 >xIsString : boolean
+>          : ^^^^^^^
 >typeof x === 'string' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
         if (thisX_isString && xIsString) {
 >thisX_isString && xIsString : boolean
+>                            : ^^^^^^^
 >thisX_isString : boolean
+>               : ^^^^^^^
 >xIsString : boolean
+>          : ^^^^^^^
 
             // Some narrowings may be invalidated due to later assignments.
             let s: string;
 >s : string
+>  : ^^^^^^
 
             s = this.x;
->s = this.x : string | number
+>s = this.x : string
+>           : ^^^^^^
 >s : string
->this.x : string | number
+>  : ^^^^^^
+>this.x : string
+>       : ^^^^^^
 >this : this
->x : string | number
+>     : ^^^^
+>x : string
+>  : ^^^^^^
 
             s = x;
 >s = x : string | number
+>      : ^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
         }
         else {
             this.x = 10;
 >this.x = 10 : 10
+>            : ^^
 >this.x : string | number
+>       : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
             x = 10;
 >x = 10 : 10
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
         }
     }
 }
@@ -807,91 +1282,142 @@ class C11 {
 // Mixing of aliased discriminants and conditionals
 
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
->f40 : (obj: { kind: 'foo'; foo?: string | undefined; } | { kind: 'bar'; bar?: number | undefined; }) => void
->obj : { kind: 'foo'; foo?: string | undefined; } | { kind: 'bar'; bar?: number | undefined; }
+>f40 : (obj: { kind: "foo"; foo?: string; } | { kind: "bar"; bar?: number; }) => void
+>    : ^   ^^                                                               ^^^^^^^^^
+>obj : { kind: "foo"; foo?: string; } | { kind: "bar"; bar?: number; }
+>    : ^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^      ^^^
 >kind : "foo"
+>     : ^^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >kind : "bar"
+>     : ^^^^^
 >bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     const { kind } = obj;
 >kind : "foo" | "bar"
->obj : { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }
+>     : ^^^^^^^^^^^^^
+>obj : { kind: "foo"; foo?: string; } | { kind: "bar"; bar?: number; }
+>    : ^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^      ^^^
 
     const isFoo = kind == 'foo';
 >isFoo : boolean
+>      : ^^^^^^^
 >kind == 'foo' : boolean
+>              : ^^^^^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     if (isFoo && obj.foo) {
 >isFoo && obj.foo : string | false | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isFoo : boolean
+>      : ^^^^^^^
 >obj.foo : string | undefined
->obj : { kind: "foo"; foo?: string | undefined; }
+>        : ^^^^^^^^^^^^^^^^^^
+>obj : { kind: "foo"; foo?: string; }
+>    : ^^^^^^^^     ^^^^^^^^      ^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
         let t: string = obj.foo;
 >t : string
+>  : ^^^^^^
 >obj.foo : string
->obj : { kind: "foo"; foo?: string | undefined; }
+>        : ^^^^^^
+>obj : { kind: "foo"; foo?: string; }
+>    : ^^^^^^^^     ^^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
     }
 }
 
 // Unsupported narrowing of destructured payload by destructured discriminant
 
 type Data = { kind: 'str', payload: string } | { kind: 'num', payload: number };
->Data : { kind: 'str'; payload: string; } | { kind: 'num'; payload: number; }
+>Data : Data
+>     : ^^^^
 >kind : "str"
+>     : ^^^^^
 >payload : string
+>        : ^^^^^^
 >kind : "num"
+>     : ^^^^^
 >payload : number
+>        : ^^^^^^
 
 function gg2(obj: Data) {
 >gg2 : (obj: Data) => void
+>    : ^   ^^    ^^^^^^^^^
 >obj : Data
+>    : ^^^^
 
     if (obj.kind === 'str') {
 >obj.kind === 'str' : boolean
+>                   : ^^^^^^^
 >obj.kind : "str" | "num"
+>         : ^^^^^^^^^^^^^
 >obj : Data
+>    : ^^^^
 >kind : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >'str' : "str"
+>      : ^^^^^
 
         let t: string = obj.payload;
 >t : string
+>  : ^^^^^^
 >obj.payload : string
+>            : ^^^^^^
 >obj : { kind: "str"; payload: string; }
+>    : ^^^^^^^^     ^^^^^^^^^^^      ^^^
 >payload : string
+>        : ^^^^^^
     }
     else {
         let t: number = obj.payload;
 >t : number
+>  : ^^^^^^
 >obj.payload : number
+>            : ^^^^^^
 >obj : { kind: "num"; payload: number; }
+>    : ^^^^^^^^     ^^^^^^^^^^^      ^^^
 >payload : number
+>        : ^^^^^^
     }
 }
 
 function foo({ kind, payload }: Data) {
 >foo : ({ kind, payload }: Data) => void
+>    : ^                 ^^    ^^^^^^^^^
 >kind : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >payload : string | number
+>        : ^^^^^^^^^^^^^^^
 
     if (kind === 'str') {
 >kind === 'str' : boolean
+>               : ^^^^^^^
 >kind : "str" | "num"
+>     : ^^^^^^^^^^^^^
 >'str' : "str"
+>      : ^^^^^
 
         let t: string = payload;
 >t : string
+>  : ^^^^^^
 >payload : string
+>        : ^^^^^^
     }
     else {
         let t: number = payload;
 >t : number
+>  : ^^^^^^
 >payload : number
+>        : ^^^^^^
     }
 }
 
@@ -899,22 +1425,98 @@ function foo({ kind, payload }: Data) {
 
 const obj = {
 >obj : { fn: () => boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >{    fn: () => true} : { fn: () => boolean; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
 
     fn: () => true
 >fn : () => boolean
+>   : ^^^^^^^^^^^^^
 >() => true : () => boolean
+>           : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 };
 
 if (a) { }
 >a : boolean
+>  : ^^^^^^^
 
 const a = obj.fn();
 >a : boolean
+>  : ^^^^^^^
 >obj.fn() : boolean
+>         : ^^^^^^^
 >obj.fn : () => boolean
+>       : ^^^^^^^^^^^^^
 >obj : { fn: () => boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >fn : () => boolean
+>   : ^^^^^^^^^^^^^
 
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+class Utils {
+>Utils : Utils
+>      : ^^^^^
+
+  static isDefined<T>(value: T): value is NonNullable<T> {
+>isDefined : <T>(value: T) => value is NonNullable<T>
+>          : ^ ^^     ^^ ^^^^^                       
+>value : T
+>      : ^
+
+    return value != null;
+>value != null : boolean
+>              : ^^^^^^^
+>value : T
+>      : ^
+  }
+}
+
+class A53267 {
+>A53267 : A53267
+>       : ^^^^^^
+
+  public readonly testNumber: number | undefined;
+>testNumber : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+
+  foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    const isNumber = Utils.isDefined(this.testNumber);
+>isNumber : boolean
+>         : ^^^^^^^
+>Utils.isDefined(this.testNumber) : boolean
+>                                 : ^^^^^^^
+>Utils.isDefined : <T>(value: T) => value is NonNullable<T>
+>                : ^ ^^     ^^ ^^^^^                       
+>Utils : typeof Utils
+>      : ^^^^^^^^^^^^
+>isDefined : <T>(value: T) => value is NonNullable<T>
+>          : ^ ^^     ^^ ^^^^^                       
+>this.testNumber : number | undefined
+>                : ^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>testNumber : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+
+    if (isNumber) {
+>isNumber : boolean
+>         : ^^^^^^^
+
+      const x: number = this.testNumber;
+>x : number
+>  : ^^^^^^
+>this.testNumber : number
+>                : ^^^^^^
+>this : this
+>     : ^^^^
+>testNumber : number
+>           : ^^^^^^
+    }
+  }
+}

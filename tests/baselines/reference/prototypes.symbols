@@ -1,4 +1,6 @@
-=== tests/cases/compiler/prototypes.ts ===
+//// [tests/cases/compiler/prototypes.ts] ////
+
+=== prototypes.ts ===
 Object.prototype; // ok
 >Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

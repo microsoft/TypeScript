@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/a.ts ===
+//// [tests/cases/conformance/decorators/missingDecoratorType.ts] ////
+
+=== a.ts ===
 
 interface Object { }
 interface Array<T> { }
@@ -9,21 +11,28 @@ interface Function { }
 interface RegExp { }
 interface IArguments { }
 
-=== tests/cases/conformance/decorators/b.ts ===
+=== b.ts ===
 declare function dec(t, k, d);
 >dec : (t: any, k: any, d: any) => any
+>    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >t : any
+>  : ^^^
 >k : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 
     @dec
 >dec : (t: any, k: any, d: any) => any
+>    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 
     method() {}
 >method : () => void
+>       : ^^^^^^^^^^
 }
 
 

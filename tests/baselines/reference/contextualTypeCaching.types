@@ -1,55 +1,80 @@
-=== tests/cases/compiler/contextualTypeCaching.ts ===
+//// [tests/cases/compiler/contextualTypeCaching.ts] ////
+
+=== contextualTypeCaching.ts ===
 // Repro from #52575
 
 export interface Event<T> {
     callback: (response: T) => void;
 >callback : (response: T) => void
+>         : ^        ^^ ^^^^^    
 >response : T
+>         : ^
 
     nested: {
 >nested : { nestedCallback: (response: T) => void; }
+>       : ^^^^^^^^^^^^^^^^^^                     ^^^
 
         nestedCallback: (response: T) => void;
 >nestedCallback : (response: T) => void
+>               : ^        ^^ ^^^^^    
 >response : T
+>         : ^
     }
 }
 
 export type CustomEvents = {
->CustomEvents : { a: Event<string>; b: Event<number>; }
+>CustomEvents : CustomEvents
+>             : ^^^^^^^^^^^^
 
     a: Event<string>
 >a : Event<string>
+>  : ^^^^^^^^^^^^^
 
     b: Event<number>
 >b : Event<number>
+>  : ^^^^^^^^^^^^^
 
 };
 
 declare function emit<T extends keyof CustomEvents>(type: T, data: CustomEvents[T]): void
 >emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
+>     : ^ ^^^^^^^^^                  ^^    ^^ ^^    ^^               ^^^^^    
 >type : T
+>     : ^
 >data : CustomEvents[T]
+>     : ^^^^^^^^^^^^^^^
 
 emit('a', {
 >emit('a', {    callback: (r) => {},    nested: {        nestedCallback: (r) => {},    },}) : void
+>                                                                                           : ^^^^
 >emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
+>     : ^ ^^^^^^^^^                  ^^    ^^ ^^    ^^               ^^^^^    
 >'a' : "a"
+>    : ^^^
 >{    callback: (r) => {},    nested: {        nestedCallback: (r) => {},    },} : { callback: (r: string) => void; nested: { nestedCallback: (r: string) => void; }; }
+>                                                                                : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 
     callback: (r) => {},
 >callback : (r: string) => void
+>         : ^ ^^^^^^^^^^^^^^^^^
 >(r) => {} : (r: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
 >r : string
+>  : ^^^^^^
 
     nested: {
 >nested : { nestedCallback: (r: string) => void; }
+>       : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >{        nestedCallback: (r) => {},    } : { nestedCallback: (r: string) => void; }
+>                                         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
         nestedCallback: (r) => {},
 >nestedCallback : (r: string) => void
+>               : ^ ^^^^^^^^^^^^^^^^^
 >(r) => {} : (r: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
 >r : string
+>  : ^^^^^^
 
     },
 });
@@ -57,56 +82,81 @@ emit('a', {
 // simplified repro from 52589#issuecomment-1416180638
 declare class MyCompiler {
 >MyCompiler : MyCompiler
+>           : ^^^^^^^^^^
 
   compile(): void;
 >compile : () => void
+>        : ^^^^^^    
 }
 interface WebpackPluginInstance {
   apply: (compiler: MyCompiler) => void;
 >apply : (compiler: MyCompiler) => void
+>      : ^        ^^          ^^^^^    
 >compiler : MyCompiler
+>         : ^^^^^^^^^^
 }
 type WebpackPluginFunction = (this: MyCompiler, compiler: MyCompiler) => void;
->WebpackPluginFunction : (this: MyCompiler, compiler: MyCompiler) => void
+>WebpackPluginFunction : WebpackPluginFunction
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >this : MyCompiler
+>     : ^^^^^^^^^^
 >compiler : MyCompiler
+>         : ^^^^^^^^^^
 
 interface Optimization {
   minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
 >minimizer : (WebpackPluginInstance | WebpackPluginFunction)[] | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare const A: <T, P extends keyof T>(
 >A : <T, P extends keyof T>(obj: T, prop: P, factory: () => T[P]) => void
+>  : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^ ^^       ^^          ^^^^^    
 
   obj: T,
 >obj : T
+>    : ^
 
   prop: P,
 >prop : P
+>     : ^
 
   factory: () => T[P]
 >factory : () => T[P]
+>        : ^^^^^^    
 
 ) => void;
 export const applyOptimizationDefaults = (optimization: Optimization) => {
 >applyOptimizationDefaults : (optimization: Optimization) => void
+>                          : ^            ^^            ^^^^^^^^^
 >(optimization: Optimization) => {  A(optimization, "minimizer", () => [    {      apply: (compiler) => {},    },  ]);} : (optimization: Optimization) => void
+>                                                                                                                       : ^            ^^            ^^^^^^^^^
 >optimization : Optimization
+>             : ^^^^^^^^^^^^
 
   A(optimization, "minimizer", () => [
 >A(optimization, "minimizer", () => [    {      apply: (compiler) => {},    },  ]) : void
+>                                                                                  : ^^^^
 >A : <T, P extends keyof T>(obj: T, prop: P, factory: () => T[P]) => void
+>  : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^ ^^       ^^          ^^^^^    
 >optimization : Optimization
+>             : ^^^^^^^^^^^^
 >"minimizer" : "minimizer"
+>            : ^^^^^^^^^^^
 >() => [    {      apply: (compiler) => {},    },  ] : () => { apply: (compiler: MyCompiler) => void; }[]
+>                                                    : ^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[    {      apply: (compiler) => {},    },  ] : { apply: (compiler: MyCompiler) => void; }[]
+>                                              : ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^
     {
 >{      apply: (compiler) => {},    } : { apply: (compiler: MyCompiler) => void; }
+>                                     : ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^
 
       apply: (compiler) => {},
 >apply : (compiler: MyCompiler) => void
+>      : ^        ^^^^^^^^^^^^^^^^^^^^^
 >(compiler) => {} : (compiler: MyCompiler) => void
+>                 : ^        ^^^^^^^^^^^^^^^^^^^^^
 >compiler : MyCompiler
+>         : ^^^^^^^^^^
 
     },
   ]);

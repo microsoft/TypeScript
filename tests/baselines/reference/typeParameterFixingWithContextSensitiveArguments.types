@@ -1,57 +1,99 @@
-=== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments.ts ===
+//// [tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments.ts] ////
+
+=== typeParameterFixingWithContextSensitiveArguments.ts ===
 function f<T, U>(y: T, f: (x: T) => U, x: T): [T, U] { return [y, f(x)]; }
 >f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>  : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^ ^^^^^      
 >y : T
+>  : ^
 >f : (x: T) => U
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >x : T
+>  : ^
 >[y, f(x)] : [T, U]
+>          : ^^^^^^
 >y : T
+>  : ^
 >f(x) : U
+>     : ^
 >f : (x: T) => U
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 interface A { a: A; }
 >a : A
+>  : ^
 
 interface B extends A { b; }
 >b : any
 
 var a: A, b: B;
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 var d = f(b, x => x.a, a); // type [A, A]
 >d : [A, A]
+>  : ^^^^^^
 >f(b, x => x.a, a) : [A, A]
+>                  : ^^^^^^
 >f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>  : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^ ^^^^^      
 >b : B
+>  : ^
 >x => x.a : (x: A) => A
+>         : ^ ^^^^^^^^^
 >x : A
+>  : ^
 >x.a : A
+>    : ^
 >x : A
+>  : ^
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 var d2 = f(b, x => x.a, null); // type [B, A]
 >d2 : [B, A]
+>   : ^^^^^^
 >f(b, x => x.a, null) : [B, A]
+>                     : ^^^^^^
 >f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>  : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^ ^^^^^      
 >b : B
+>  : ^
 >x => x.a : (x: B) => A
+>         : ^ ^^^^^^^^^
 >x : B
+>  : ^
 >x.a : A
+>    : ^
 >x : B
+>  : ^
 >a : A
+>  : ^
 
 var d3 = f(b, x => x.b, null); // type [B, any]
 >d3 : [B, any]
+>   : ^^^^^^^^
 >f(b, x => x.b, null) : [B, any]
+>                     : ^^^^^^^^
 >f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>  : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^ ^^^^^      
 >b : B
+>  : ^
 >x => x.b : (x: B) => any
+>         : ^ ^^^^^^^^^^^
 >x : B
+>  : ^
 >x.b : any
 >x : B
+>  : ^
 >b : any
+>  : ^^^
 

@@ -1,596 +1,1035 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringForArrayBindingPatternDefaultValues.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringForArrayBindingPatternDefaultValues.ts] ////
+
+=== sourceMapValidationDestructuringForArrayBindingPatternDefaultValues.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 
     log(msg: any): void;
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >msg : any
 }
 type Robot = [number, string, string];
->Robot : [number, string, string]
+>Robot : Robot
+>      : ^^^^^
 
 type MultiSkilledRobot = [string, string[]];
->MultiSkilledRobot : [string, string[]]
+>MultiSkilledRobot : MultiSkilledRobot
+>                  : ^^^^^^^^^^^^^^^^^
 
 let robotA: Robot = [1, "mower", "mowing"];
 >robotA : Robot
+>       : ^^^^^
 >[1, "mower", "mowing"] : [number, string, string]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"mower" : "mower"
+>        : ^^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 
 function getRobot() {
 >getRobot : () => Robot
+>         : ^^^^^^^^^^^
 
     return robotA;
 >robotA : Robot
+>       : ^^^^^
 }
 
 let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >["mower", ["mowing", ""]] : [string, string[]]
+>                          : ^^^^^^^^^^^^^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >["mowing", ""] : string[]
+>               : ^^^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >"" : ""
+>   : ^^
 
 let multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
+>                                    : ^^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : string[]
+>                       : ^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 
 function getMultiRobot() {
 >getMultiRobot : () => MultiSkilledRobot
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return multiRobotA;
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 }
 
 for (let [, nameA ="name"] = robotA, i = 0; i < 1; i++) {
 > : undefined
+> : ^^^^^^^^^
 >nameA : string
+>      : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >robotA : Robot
+>       : ^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 > : undefined
+> : ^^^^^^^^^
 >nameA : string
+>      : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >getRobot() : Robot
+>           : ^^^^^
 >getRobot : () => Robot
+>         : ^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 > : undefined
+> : ^^^^^^^^^
 >nameA : string
+>      : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA : string
+>      : ^^^^^^
 }
 for (let [, [
 > : undefined
+> : ^^^^^^^^^
 
     primarySkillA = "primary",
 >primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
 ] = ["none", "none"]] = multiRobotA, i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
+>                 : ^^^^^^^^^^^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
+>                           : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >primarySkillA : string
+>              : ^^^^^^
 }
 for (let [, [
 > : undefined
+> : ^^^^^^^^^
 
     primarySkillA = "primary",
 >primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
 ] = ["none", "none"]] = getMultiRobot(), i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
+>                 : ^^^^^^^^^^^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >getMultiRobot() : MultiSkilledRobot
+>                : ^^^^^^^^^^^^^^^^^
 >getMultiRobot : () => MultiSkilledRobot
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
+>                           : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >primarySkillA : string
+>              : ^^^^^^
 }
 for (let [, [
 > : undefined
+> : ^^^^^^^^^
 
     primarySkillA = "primary",
 >primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
 ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
+>                 : ^^^^^^^^^^^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : [string, string]
+>                       : ^^^^^^^^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
+>                           : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >primarySkillA : string
+>              : ^^^^^^
 }
 
 for (let [numberB = -1] = robotA, i = 0; i < 1; i++) {
 >numberB : number
+>        : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >robotA : Robot
+>       : ^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(numberB);
 >console.log(numberB) : void
+>                     : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >numberB : number
+>        : ^^^^^^
 }
 for (let [numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 >numberB : number
+>        : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >getRobot() : Robot
+>           : ^^^^^
 >getRobot : () => Robot
+>         : ^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(numberB);
 >console.log(numberB) : void
+>                     : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >numberB : number
+>        : ^^^^^^
 }
 for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >numberB : number
+>        : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >[2, "trimmer", "trimming"] : [number, string, string]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(numberB);
 >console.log(numberB) : void
+>                     : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >numberB : number
+>        : ^^^^^^
 }
 for (let [nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
 >nameB : string
+>      : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameB);
 >console.log(nameB) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameB : string
+>      : ^^^^^^
 }
 for (let [nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
 >nameB : string
+>      : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >getMultiRobot() : MultiSkilledRobot
+>                : ^^^^^^^^^^^^^^^^^
 >getMultiRobot : () => MultiSkilledRobot
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameB);
 >console.log(nameB) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameB : string
+>      : ^^^^^^
 }
 for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >nameB : string
+>      : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
+>                                    : ^^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : string[]
+>                       : ^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameB);
 >console.log(nameB) : void
+>                   : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameB : string
+>      : ^^^^^^
 }
 
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i < 1; i++) {
 >numberA2 : number
+>         : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >nameA2 : string
+>       : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >skillA2 : string
+>        : ^^^^^^
 >"skill" : "skill"
+>        : ^^^^^^^
 >robotA : Robot
+>       : ^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameA2);
 >console.log(nameA2) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA2 : string
+>       : ^^^^^^
 }
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0; i < 1; i++) {
 >numberA2 : number
+>         : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >nameA2 : string
+>       : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >skillA2 : string
+>        : ^^^^^^
 >"skill" : "skill"
+>        : ^^^^^^^
 >getRobot() : Robot
+>           : ^^^^^
 >getRobot : () => Robot
+>         : ^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameA2);
 >console.log(nameA2) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA2 : string
+>       : ^^^^^^
 }
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >numberA2 : number
+>         : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >nameA2 : string
+>       : ^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >skillA2 : string
+>        : ^^^^^^
 >"skill" : "skill"
+>        : ^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameA2);
 >console.log(nameA2) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameA2 : string
+>       : ^^^^^^
 }
 for (let
     [nameMA = "noName",
 >nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 
         [
             primarySkillA = "primary",
 >primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
             secondarySkillA = "secondary"
 >secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
         ] = ["none", "none"]
 >["none", "none"] : [string, string]
+>                 : ^^^^^^^^^^^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 
     ] = multiRobotA, i = 0; i < 1; i++) {
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameMA);
 >console.log(nameMA) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameMA : string
+>       : ^^^^^^
 }
 for (let [nameMA = "noName",
 >nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 
     [
         primarySkillA = "primary",
 >primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
         secondarySkillA = "secondary"
 >secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     ] = ["none", "none"]
 >["none", "none"] : [string, string]
+>                 : ^^^^^^^^^^^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 
 ]  = getMultiRobot(), i = 0; i < 1; i++) {
 >getMultiRobot() : MultiSkilledRobot
+>                : ^^^^^^^^^^^^^^^^^
 >getMultiRobot : () => MultiSkilledRobot
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameMA);
 >console.log(nameMA) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameMA : string
+>       : ^^^^^^
 }
 for (let [nameMA = "noName",
 >nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 
     [
         primarySkillA = "primary",
 >primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
         secondarySkillA = "secondary"
 >secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
     ] = ["none", "none"]
 >["none", "none"] : [string, string]
+>                 : ^^^^^^^^^^^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 >"none" : "none"
+>       : ^^^^^^
 
 ]  = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : [string, string]
+>                       : ^^^^^^^^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(nameMA);
 >console.log(nameMA) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameMA : string
+>       : ^^^^^^
 }
 
 for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >numberA3 : number
+>         : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >robotAInfo : [string, string]
+>           : ^^^^^^^^^^^^^^^^
 >robotA : Robot
+>       : ^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(numberA3);
 >console.log(numberA3) : void
+>                      : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >numberA3 : number
+>         : ^^^^^^
 }
 for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >numberA3 : number
+>         : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >robotAInfo : [string, string]
+>           : ^^^^^^^^^^^^^^^^
 >getRobot() : Robot
+>           : ^^^^^
 >getRobot : () => Robot
+>         : ^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(numberA3);
 >console.log(numberA3) : void
+>                      : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >numberA3 : number
+>         : ^^^^^^
 }
 for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >numberA3 : number
+>         : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >robotAInfo : [string, string]
+>           : ^^^^^^^^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 1 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     console.log(numberA3);
 >console.log(numberA3) : void
+>                      : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >numberA3 : number
+>         : ^^^^^^
 }

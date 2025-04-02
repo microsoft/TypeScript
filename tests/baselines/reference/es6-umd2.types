@@ -1,6 +1,9 @@
-=== tests/cases/compiler/es6-umd2.ts ===
+//// [tests/cases/compiler/es6-umd2.ts] ////
+
+=== es6-umd2.ts ===
 export class A
 >A : A
+>  : ^
 {
     constructor ()
     {
@@ -9,8 +12,10 @@ export class A
 
     public B()
 >B : () => number
+>  : ^^^^^^^^^^^^
     {
         return 42;
 >42 : 42
+>   : ^^
     }
 }

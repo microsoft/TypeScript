@@ -1,45 +1,60 @@
-=== tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts ===
+//// [tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts] ////
+
+=== complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts ===
 interface TextChannel {
     id: string;
 >id : string
+>   : ^^^^^^
 
     type: 'text';
 >type : "text"
+>     : ^^^^^^
 
     phoneNumber: string;
 >phoneNumber : string
+>            : ^^^^^^
 }
 
 interface EmailChannel {
     id: string;
 >id : string
+>   : ^^^^^^
 
     type: 'email';
 >type : "email"
+>     : ^^^^^^^
 
     addres: string;
 >addres : string
+>       : ^^^^^^
 }
 
 type Channel = TextChannel | EmailChannel;
->Channel : TextChannel | EmailChannel
+>Channel : Channel
+>        : ^^^^^^^
 
 export type ChannelType = Channel extends { type: infer R } ? R : never;
 >ChannelType : "text" | "email"
+>            : ^^^^^^^^^^^^^^^^
 >type : R
+>     : ^
 
 type Omit<T, K extends keyof T> = Pick<
 >Omit : Omit<T, K>
+>     : ^^^^^^^^^^
 
     T,
     ({ [P in keyof T]: P } & { [P in K]: never } & { [x: string]: never })[keyof T]
 >x : string
+>  : ^^^^^^
 
 >;
 
 type ChannelOfType<T extends ChannelType, A = Channel> = A extends { type: T }
 >ChannelOfType : ChannelOfType<T, A>
+>              : ^^^^^^^^^^^^^^^^^^^
 >type : T
+>     : ^
 
     ? A
     : never;
@@ -47,50 +62,77 @@ type ChannelOfType<T extends ChannelType, A = Channel> = A extends { type: T }
 
 export type NewChannel<T extends Channel> = Pick<T, 'type'> &
 >NewChannel : NewChannel<T>
+>           : ^^^^^^^^^^^^^
 
     Partial<Omit<T, 'type' | 'id'>> & { localChannelId: string };
 >localChannelId : string
+>               : ^^^^^^
 
 
 export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<ChannelOfType<T>> {
->makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T>>
+>makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
+>               : ^ ^^^^^^^^^           ^^    ^^ ^^^^^                            
 >type : T
+>     : ^
 
     const localChannelId = `blahblahblah`;
 >localChannelId : "blahblahblah"
+>               : ^^^^^^^^^^^^^^
 >`blahblahblah` : "blahblahblah"
+>               : ^^^^^^^^^^^^^^
 
     return { type, localChannelId };
 >{ type, localChannelId } : { type: T; localChannelId: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : T
+>     : ^
 >localChannelId : string
+>               : ^^^^^^
 }
 
 const newTextChannel = makeNewChannel('text');
 >newTextChannel : NewChannel<TextChannel>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >makeNewChannel('text') : NewChannel<TextChannel>
->makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
+>               : ^ ^^^^^^^^^           ^^    ^^ ^^^^^                            
 >'text' : "text"
+>       : ^^^^^^
 
 // This should work
 newTextChannel.phoneNumber = '613-555-1234';
 >newTextChannel.phoneNumber = '613-555-1234' : "613-555-1234"
+>                                            : ^^^^^^^^^^^^^^
 >newTextChannel.phoneNumber : string
+>                           : ^^^^^^
 >newTextChannel : NewChannel<TextChannel>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >phoneNumber : string
+>            : ^^^^^^
 >'613-555-1234' : "613-555-1234"
+>               : ^^^^^^^^^^^^^^
 
 const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
 >newTextChannel2 : NewChannel<TextChannel>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >makeNewChannel('text') : NewChannel<TextChannel>
->makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
+>               : ^ ^^^^^^^^^           ^^    ^^ ^^^^^                            
 >'text' : "text"
+>       : ^^^^^^
 
 // Compare with this, which ofc works.
 newTextChannel2.phoneNumber = '613-555-1234';
 >newTextChannel2.phoneNumber = '613-555-1234' : "613-555-1234"
+>                                             : ^^^^^^^^^^^^^^
 >newTextChannel2.phoneNumber : string
+>                            : ^^^^^^
 >newTextChannel2 : NewChannel<TextChannel>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >phoneNumber : string
+>            : ^^^^^^
 >'613-555-1234' : "613-555-1234"
+>               : ^^^^^^^^^^^^^^
 

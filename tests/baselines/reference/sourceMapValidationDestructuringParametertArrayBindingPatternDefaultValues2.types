@@ -1,126 +1,211 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts] ////
+
+=== sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 
     log(msg: any): void;
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >msg : any
 }
 type Robot = [string, string[]];
->Robot : [string, string[]]
+>Robot : Robot
+>      : ^^^^^
 
 var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 >robotA : Robot
+>       : ^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
+>                                    : ^^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : string[]
+>                       : ^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 
 function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
 >foo1 : ([, skillA]?: Robot) => void
+>     : ^          ^^^     ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >skillA : string[]
+>       : ^^^^^^^^
 >["noSkill", "noSkill"] : string[]
+>                       : ^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >["name", ["skill1", "skill2"]] : [string, string[]]
+>                               : ^^^^^^^^^^^^^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >["skill1", "skill2"] : string[]
+>                     : ^^^^^^^^
 >"skill1" : "skill1"
+>         : ^^^^^^^^
 >"skill2" : "skill2"
+>         : ^^^^^^^^
 
     console.log(skillA);
 >console.log(skillA) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >skillA : string[]
+>       : ^^^^^^^^
 }
 
 function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
 >foo2 : ([nameMB]?: Robot) => void
+>     : ^        ^^^     ^^^^^^^^^
 >nameMB : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >["name", ["skill1", "skill2"]] : [string, string[]]
+>                               : ^^^^^^^^^^^^^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >["skill1", "skill2"] : string[]
+>                     : ^^^^^^^^
 >"skill1" : "skill1"
+>         : ^^^^^^^^
 >"skill2" : "skill2"
+>         : ^^^^^^^^
 
     console.log(nameMB);
 >console.log(nameMB) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameMB : string
+>       : ^^^^^^
 }
 
 function foo3([nameMA = "noName", [
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
+>     : ^                                          ^^     ^^^^^^^^^
 >nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 
     primarySkillA = "primary",
 >primarySkillA : string
+>              : ^^^^^^
 >"primary" : "primary"
+>          : ^^^^^^^^^
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
+>                : ^^^^^^
 >"secondary" : "secondary"
+>            : ^^^^^^^^^^^
 
 ] = ["noSkill", "noSkill"]]: Robot) {
 >["noSkill", "noSkill"] : [string, string]
+>                       : ^^^^^^^^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 
     console.log(nameMA);
 >console.log(nameMA) : void
+>                    : ^^^^
 >console.log : (msg: any) => void
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
+>    : ^   ^^   ^^^^^    
 >nameMA : string
+>       : ^^^^^^
 }
 
 foo1(robotA);
 >foo1(robotA) : void
+>             : ^^^^
 >foo1 : ([, skillA]?: Robot) => void
+>     : ^          ^^^     ^^^^^^^^^
 >robotA : Robot
+>       : ^^^^^
 
 foo1(["roomba", ["vacuum", "mopping"]]);
 >foo1(["roomba", ["vacuum", "mopping"]]) : void
+>                                        : ^^^^
 >foo1 : ([, skillA]?: Robot) => void
+>     : ^          ^^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+>                                  : ^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : string[]
+>                      : ^^^^^^^^
 >"vacuum" : "vacuum"
+>         : ^^^^^^^^
 >"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 foo2(robotA);
 >foo2(robotA) : void
+>             : ^^^^
 >foo2 : ([nameMB]?: Robot) => void
+>     : ^        ^^^     ^^^^^^^^^
 >robotA : Robot
+>       : ^^^^^
 
 foo2(["roomba", ["vacuum", "mopping"]]);
 >foo2(["roomba", ["vacuum", "mopping"]]) : void
+>                                        : ^^^^
 >foo2 : ([nameMB]?: Robot) => void
+>     : ^        ^^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+>                                  : ^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : string[]
+>                      : ^^^^^^^^
 >"vacuum" : "vacuum"
+>         : ^^^^^^^^
 >"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 foo3(robotA);
 >foo3(robotA) : void
+>             : ^^^^
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
+>     : ^                                          ^^     ^^^^^^^^^
 >robotA : Robot
+>       : ^^^^^
 
 foo3(["roomba", ["vacuum", "mopping"]]);
 >foo3(["roomba", ["vacuum", "mopping"]]) : void
+>                                        : ^^^^
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
+>     : ^                                          ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+>                                  : ^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : string[]
+>                      : ^^^^^^^^
 >"vacuum" : "vacuum"
+>         : ^^^^^^^^
 >"mopping" : "mopping"
+>          : ^^^^^^^^^
 

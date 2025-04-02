@@ -1,69 +1,106 @@
-=== tests/cases/compiler/assignmentCompatWithOverloads.ts ===
+//// [tests/cases/compiler/assignmentCompatWithOverloads.ts] ////
+
+=== assignmentCompatWithOverloads.ts ===
 function f1(x: string): number { return null; }
 >f1 : (x: string) => number
+>   : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
 function f2(x: string): string { return null; }
 >f2 : (x: string) => string
+>   : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
 function f3(x: number): number { return null; }
 >f3 : (x: number) => number
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
 function f4(x: string): string;
 >f4 : { (x: string): string; (x: number): number; }
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
+>  : ^^^^^^
 
 function f4(x: number): number;
 >f4 : { (x: string): string; (x: number): number; }
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 function f4(x: any): any { return undefined; }
 >f4 : { (x: string): string; (x: number): number; }
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var g: (s1: string) => number;
 >g : (s1: string) => number
+>  : ^  ^^      ^^^^^      
 >s1 : string
+>   : ^^^^^^
 
 g = f1; // OK 
 >g = f1 : (x: string) => number
+>       : ^ ^^      ^^^^^      
 >g : (s1: string) => number
+>  : ^  ^^      ^^^^^      
 >f1 : (x: string) => number
+>   : ^ ^^      ^^^^^      
 
 g = f2; // Error
 >g = f2 : (x: string) => string
+>       : ^ ^^      ^^^^^      
 >g : (s1: string) => number
+>  : ^  ^^      ^^^^^      
 >f2 : (x: string) => string
+>   : ^ ^^      ^^^^^      
 
 g = f3; // Error
 >g = f3 : (x: number) => number
+>       : ^ ^^      ^^^^^      
 >g : (s1: string) => number
+>  : ^  ^^      ^^^^^      
 >f3 : (x: number) => number
+>   : ^ ^^      ^^^^^      
 
 g = f4; // Error
 >g = f4 : { (x: string): string; (x: number): number; }
+>       : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >g : (s1: string) => number
+>  : ^  ^^      ^^^^^      
 >f4 : { (x: string): string; (x: number): number; }
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
 class C {
 >C : C
+>  : ^
 
     constructor(x: string);
 >x : string
+>  : ^^^^^^
 
 constructor(x: any) {}
 >x : any
+>  : ^^^
 }
 
 var d: new(x: number) => void;
 >d : new (x: number) => void
+>  : ^^^^^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 
 d = C; // Error
 >d = C : typeof C
+>      : ^^^^^^^^
 >d : new (x: number) => void
+>  : ^^^^^ ^^      ^^^^^    
 >C : typeof C
+>  : ^^^^^^^^
 

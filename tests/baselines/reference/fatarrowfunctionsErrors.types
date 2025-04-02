@@ -1,66 +1,112 @@
-=== tests/cases/compiler/fatarrowfunctionsErrors.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsErrors.ts] ////
+
+=== fatarrowfunctionsErrors.ts ===
 foo((...Far:any[])=>{return 0;})
 >foo((...Far:any[])=>{return 0;}) : any
+>                                 : ^^^
 >foo : any
+>    : ^^^
 >(...Far:any[])=>{return 0;} : (...Far: any[]) => number
+>                            : ^^^^   ^^     ^^^^^^^^^^^
 >Far : any[]
+>    : ^^^^^
 >0 : 0
+>  : ^
 
 foo((1)=>{return 0;}); 
 >foo((1)=>{return 0;}) : any
+>                      : ^^^
 >foo : any
+>    : ^^^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 >{return 0;} : { return: number; }
+>            : ^^^^^^^^^^^^^^^^^^^
 >return : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 foo((x?)=>{return x;})
 >foo((x?)=>{return x;}) : any
+>                       : ^^^
 >foo : any
+>    : ^^^
 >(x?)=>{return x;} : (x?: any) => any
+>                  : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 foo((x=0)=>{return x;})
 >foo((x=0)=>{return x;}) : any
+>                        : ^^^
 >foo : any
+>    : ^^^
 >(x=0)=>{return x;} : (x?: number) => number
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >x : number
+>  : ^^^^^^
 
 var y = x:number => x*x;
 >y : any
+>  : ^^^
 >x : any
+>  : ^^^
 >number : any
+>       : ^^^
 >x*x : number
+>    : ^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 false? (() => null): null;
 >false? (() => null): null : () => any
+>                          : ^^^^^^^^^
 >false : false
+>      : ^^^^^
 >(() => null) : () => any
+>             : ^^^^^^^^^
 >() => null : () => any
+>           : ^^^^^^^^^
 
 // missing fatarrow
 var x1 = () :void {};
 >x1 : () => void
+>   : ^^^^^^    
 >() :void {} : () => void
+>            : ^^^^^^    
 
 var x2 = (a:number) :void {};
 >x2 : (a: number) => void
+>   : ^ ^^      ^^^^^    
 >(a:number) :void {} : (a: number) => void
+>                    : ^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 
 var x3 = (a:number) {};
 >x3 : (a: number) => void
+>   : ^ ^^      ^^^^^^^^^
 >(a:number) {} : (a: number) => void
+>              : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var x4= (...a: any[]) { };
 >x4 : (...a: any[]) => void
+>   : ^^^^ ^^     ^^^^^^^^^
 >(...a: any[]) { } : (...a: any[]) => void
+>                  : ^^^^ ^^     ^^^^^^^^^
 >a : any[]
+>  : ^^^^^
 

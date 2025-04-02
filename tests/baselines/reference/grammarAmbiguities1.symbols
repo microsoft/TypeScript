@@ -1,4 +1,6 @@
-=== tests/cases/compiler/grammarAmbiguities1.ts ===
+//// [tests/cases/compiler/grammarAmbiguities1.ts] ////
+
+=== grammarAmbiguities1.ts ===
 class A { foo() { } }
 >A : Symbol(A, Decl(grammarAmbiguities1.ts, 0, 0))
 >foo : Symbol(A.foo, Decl(grammarAmbiguities1.ts, 0, 9))

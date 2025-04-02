@@ -1,15 +1,23 @@
-=== tests/cases/compiler/exportInterfaceClassAndValueWithDuplicatesInImportList.ts ===
+//// [tests/cases/compiler/exportInterfaceClassAndValueWithDuplicatesInImportList.ts] ////
+
+=== exportInterfaceClassAndValueWithDuplicatesInImportList.ts ===
 const foo = 1
 >foo : 1
+>    : ^
 >1 : 1
+>  : ^
 
 class Foo {}
 >Foo : Foo
+>    : ^^^
 
 interface Foo {}
 
 export {foo, Foo, Foo}
 >foo : 1
+>    : ^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 

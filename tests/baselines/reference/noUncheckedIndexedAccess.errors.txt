@@ -1,43 +1,62 @@
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(3,32): error TS2344: Type 'boolean | undefined' does not satisfy the constraint 'boolean'.
+noUncheckedIndexedAccess.ts(3,32): error TS2344: Type 'boolean | undefined' does not satisfy the constraint 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(12,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(12,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(13,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(14,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(15,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(16,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(17,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(18,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(19,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(20,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(21,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(22,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(23,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(24,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(25,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(38,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(39,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(40,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(41,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(46,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(47,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(48,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(49,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(50,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(55,5): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(63,5): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(79,7): error TS2322: Type 'number | boolean | undefined' is not assignable to type 'number | boolean'.
+noUncheckedIndexedAccess.ts(13,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(14,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(15,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(16,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(17,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(18,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(19,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(20,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(21,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(22,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(23,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(24,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(25,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(38,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(39,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(40,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(41,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(46,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(47,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(48,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(49,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(50,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(55,5): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(63,5): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+noUncheckedIndexedAccess.ts(79,7): error TS2322: Type 'number | boolean | undefined' is not assignable to type 'number | boolean'.
   Type 'undefined' is not assignable to type 'number | boolean'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(85,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(90,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+noUncheckedIndexedAccess.ts(85,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
+noUncheckedIndexedAccess.ts(90,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(98,5): error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
+noUncheckedIndexedAccess.ts(98,5): error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
   Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
+noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'undefined' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (31 errors) ====
+==== noUncheckedIndexedAccess.ts (31 errors) ====
     type CheckBooleanOnly<T extends boolean> = any;
     // Validate CheckBooleanOnly works - should error
     type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
@@ -59,42 +78,55 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
     const e2: boolean = strMap.bar;
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e3: boolean = strMap[0];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e4: boolean = strMap[0 as string | number];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e5: boolean = strMap[0 as string | 0 | 1];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e6: boolean = strMap[0 as 0 | 1];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e7: boolean = strMap["foo" as "foo" | "baz"];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e8: boolean = strMap[NumericEnum1.A];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e9: boolean = strMap[NumericEnum2.A];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e10: boolean = strMap[StringEnum1.A];
           ~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e11: boolean = strMap[StringEnum1.A as StringEnum1];
           ~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e12: boolean = strMap[NumericEnum1.A as NumericEnum1];
           ~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e13: boolean = strMap[NumericEnum2.A as NumericEnum2];
           ~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e14: boolean = strMap[null as any];
           ~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     
     // Should be OK
     const ok1: boolean | undefined = strMap["foo"];
@@ -126,18 +158,23 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
     const num_ok1: boolean = numMap[0];
           ~~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const num_ok2: boolean = numMap[0 as number];
           ~~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const num_ok3: boolean = numMap[0 as 0 | 1];
           ~~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const num_ok4: boolean = numMap[NumericEnum1.A];
           ~~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const num_ok5: boolean = numMap[NumericEnum2.A];
           ~~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     
     // Generics
     function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
@@ -145,6 +182,7 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
         return arg["blah"];
         ~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     }
     function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
         // Should OK
@@ -155,6 +193,7 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
         return strMap[arg];
         ~~~~~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     }
     
     // Element access into known properties is ok
@@ -203,8 +242,7 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
         const v: string = myRecord2[key]; // Should error
               ~
-!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     };
     
     

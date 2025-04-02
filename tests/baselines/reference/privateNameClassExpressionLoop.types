@@ -1,39 +1,63 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameClassExpressionLoop.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameClassExpressionLoop.ts] ////
+
+=== privateNameClassExpressionLoop.ts ===
 const array = [];
 >array : any[]
+>      : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 for (let i = 0; i < 10; ++i) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 10 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >++i : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     array.push(class C {
 >array.push(class C {        #myField = "hello";        #method() {}        get #accessor() { return 42; }        set #accessor(val) { }    }) : number
+>                                                                                                                                              : ^^^^^^
 >array.push : (...items: any[]) => number
+>           : ^^^^     ^^^^^^^^^^^^      
 >array : any[]
+>      : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >class C {        #myField = "hello";        #method() {}        get #accessor() { return 42; }        set #accessor(val) { }    } : typeof C
+>                                                                                                                                  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         #myField = "hello";
 >#myField : string
+>         : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
         #method() {}
 >#method : () => void
+>        : ^^^^^^^^^^
 
         get #accessor() { return 42; }
 >#accessor : number
+>          : ^^^^^^
 >42 : 42
+>   : ^^
 
         set #accessor(val) { }
 >#accessor : number
+>          : ^^^^^^
 >val : number
+>    : ^^^^^^
 
     });
 }

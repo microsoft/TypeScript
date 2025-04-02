@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidStaticToString.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidStaticToString.ts] ////
+
+=== instanceofOperatorWithInvalidStaticToString.ts ===
 declare class StaticToString {
 >StaticToString : Symbol(StaticToString, Decl(instanceofOperatorWithInvalidStaticToString.ts, 0, 0))
 

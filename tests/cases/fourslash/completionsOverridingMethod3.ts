@@ -23,8 +23,9 @@ verify.completions({
     includes: [
         {
             name: "boo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "boo(): string;",
+            filterText: "boo",
         }
     ],
 });

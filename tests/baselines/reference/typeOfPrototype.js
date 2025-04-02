@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfPrototype.ts] ////
+
 //// [typeOfPrototype.ts]
 class Foo {
     bar = 3;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypes1.ts] ////
+
 //// [inferTypes1.ts]
 type Unpacked<T> =
     T extends (infer U)[] ? U :
@@ -217,3 +219,197 @@ function invoker(key) {
     return function (obj) { return obj[key].apply(obj, args); };
 }
 var result = invoker('test', true)({ test: function (a) { return 123; } });
+
+
+//// [inferTypes1.d.ts]
+type Unpacked<T> = T extends (infer U)[] ? U : T extends (...args: any[]) => infer U ? U : T extends Promise<infer U> ? U : T;
+type T00 = Unpacked<string>;
+type T01 = Unpacked<string[]>;
+type T02 = Unpacked<() => string>;
+type T03 = Unpacked<Promise<string>>;
+type T04 = Unpacked<Unpacked<Promise<string>[]>>;
+type T05 = Unpacked<any>;
+type T06 = Unpacked<never>;
+declare function f1(s: string): {
+    a: number;
+    b: string;
+};
+declare class C {
+    x: number;
+    y: number;
+}
+declare abstract class Abstract {
+    x: number;
+    y: number;
+}
+type T10 = ReturnType<() => string>;
+type T11 = ReturnType<(s: string) => void>;
+type T12 = ReturnType<(<T>() => T)>;
+type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;
+type T14 = ReturnType<typeof f1>;
+type T15 = ReturnType<any>;
+type T16 = ReturnType<never>;
+type T17 = ReturnType<string>;
+type T18 = ReturnType<Function>;
+type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;
+type U10 = InstanceType<typeof C>;
+type U11 = InstanceType<any>;
+type U12 = InstanceType<never>;
+type U13 = InstanceType<string>;
+type U14 = InstanceType<Function>;
+type U15 = InstanceType<typeof Abstract>;
+type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;
+type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;
+type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
+type T20 = ArgumentType<() => void>;
+type T21 = ArgumentType<(x: string) => number>;
+type T22 = ArgumentType<(x?: string) => number>;
+type T23 = ArgumentType<(...args: string[]) => number>;
+type T24 = ArgumentType<(x: string, y: string) => number>;
+type T25 = ArgumentType<Function>;
+type T26 = ArgumentType<any>;
+type T27 = ArgumentType<never>;
+type X1<T extends {
+    x: any;
+    y: any;
+}> = T extends {
+    x: infer X;
+    y: infer Y;
+} ? [X, Y] : any;
+type T30 = X1<{
+    x: any;
+    y: any;
+}>;
+type T31 = X1<{
+    x: number;
+    y: string;
+}>;
+type T32 = X1<{
+    x: number;
+    y: string;
+    z: boolean;
+}>;
+type X2<T> = T extends {
+    a: infer U;
+    b: infer U;
+} ? U : never;
+type T40 = X2<{}>;
+type T41 = X2<{
+    a: string;
+}>;
+type T42 = X2<{
+    a: string;
+    b: string;
+}>;
+type T43 = X2<{
+    a: number;
+    b: string;
+}>;
+type T44 = X2<{
+    a: number;
+    b: string;
+    c: boolean;
+}>;
+type X3<T> = T extends {
+    a: (x: infer U) => void;
+    b: (x: infer U) => void;
+} ? U : never;
+type T50 = X3<{}>;
+type T51 = X3<{
+    a: (x: string) => void;
+}>;
+type T52 = X3<{
+    a: (x: string) => void;
+    b: (x: string) => void;
+}>;
+type T53 = X3<{
+    a: (x: number) => void;
+    b: (x: string) => void;
+}>;
+type T54 = X3<{
+    a: (x: number) => void;
+    b: () => void;
+}>;
+type T60 = infer U;
+type T61<T> = (infer A) extends infer B ? infer C : infer D;
+type T62<T> = U extends (infer U)[] ? U : U;
+type T63<T> = T extends ((infer A) extends infer B ? infer C : infer D) ? string : number;
+type T70<T extends string> = {
+    x: T;
+};
+type T71<T> = T extends T70<infer U> ? T70<U> : never;
+type T72<T extends number> = {
+    y: T;
+};
+type T73<T> = T extends T72<infer U> ? T70<U> : never;
+type T74<T extends number, U extends string> = {
+    x: T;
+    y: U;
+};
+type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
+type T76<T extends T[], U extends T> = {
+    x: T;
+};
+type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
+type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
+type Foo<T extends string, U extends T> = [T, U];
+type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
+type T90 = Bar<[string, string]>;
+type T91 = Bar<[string, "a"]>;
+type T92 = Bar<[string, "a"] & {
+    x: string;
+}>;
+type T93 = Bar<["a", string]>;
+type T94 = Bar<[number, number]>;
+type JsonifiedObject<T extends object> = {
+    [K in keyof T]: Jsonified<T[K]>;
+};
+type Jsonified<T> = T extends string | number | boolean | null ? T : T extends undefined | Function ? never : T extends {
+    toJSON(): infer R;
+} ? R : T extends object ? JsonifiedObject<T> : "what is this";
+type Example = {
+    str: "literalstring";
+    fn: () => void;
+    date: Date;
+    customClass: MyClass;
+    obj: {
+        prop: "property";
+        clz: MyClass;
+        nested: {
+            attr: Date;
+        };
+    };
+};
+declare class MyClass {
+    toJSON(): "correct";
+}
+type JsonifiedExample = Jsonified<Example>;
+declare let ex: JsonifiedExample;
+declare const z1: "correct";
+declare const z2: string;
+type A1<T, U extends A1<any, any>> = [T, U];
+type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
+type A2<T, U extends void> = [T, U];
+type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
+type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
+type A<T> = T extends string ? {
+    [P in T]: void;
+} : T;
+type B<T> = string extends T ? {
+    [P in T]: void;
+} : T;
+type MatchingKeys<T, U, K extends keyof T = keyof T> = K extends keyof T ? T[K] extends U ? K : never : never;
+type VoidKeys<T> = MatchingKeys<T, void>;
+interface test {
+    a: 1;
+    b: void;
+}
+type T80 = MatchingKeys<test, void>;
+type T81 = VoidKeys<test>;
+type MustBeString<T extends string> = T;
+type EnsureIsString<T> = T extends MustBeString<infer U> ? U : never;
+type Test1 = EnsureIsString<"hello">;
+type Test2 = EnsureIsString<42>;
+declare function invoker<K extends string | number | symbol, A extends any[]>(key: K, ...args: A): <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>;
+declare const result: number;
+type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;

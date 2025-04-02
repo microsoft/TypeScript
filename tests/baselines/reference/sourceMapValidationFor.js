@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationFor.ts] ////
+
 //// [sourceMapValidationFor.ts]
 for (var i = 0; i < 10; i++) {
     WScript.Echo("i: " + i);

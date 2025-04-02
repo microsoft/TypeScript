@@ -1,32 +1,34 @@
-=== tests/cases/compiler/identifierVariableWithEscape1.ts ===
+//// [tests/cases/compiler/unicodeEscapesInNames01.ts] ////
+
+=== identifierVariableWithEscape1.ts ===
 export let \u0078 = 10;
 >\u0078 : Symbol(\u0078, Decl(identifierVariableWithEscape1.ts, 0, 10))
 
 x++;
 >x : Symbol(\u0078, Decl(identifierVariableWithEscape1.ts, 0, 10))
 
-=== tests/cases/compiler/identifierVariableWithEscape2.ts ===
+=== identifierVariableWithEscape2.ts ===
 export let x\u0078 = 10;
 >x\u0078 : Symbol(x\u0078, Decl(identifierVariableWithEscape2.ts, 0, 10))
 
 xx++;
 >xx : Symbol(x\u0078, Decl(identifierVariableWithEscape2.ts, 0, 10))
 
-=== tests/cases/compiler/identifierVariableWithExtendedEscape1.ts ===
+=== identifierVariableWithExtendedEscape1.ts ===
 export let \u{78} = 10;
 >\u{78} : Symbol(\u{78}, Decl(identifierVariableWithExtendedEscape1.ts, 0, 10))
 
 x++;
 >x : Symbol(\u{78}, Decl(identifierVariableWithExtendedEscape1.ts, 0, 10))
 
-=== tests/cases/compiler/identifierVariableWithExtendedEscape2.ts ===
+=== identifierVariableWithExtendedEscape2.ts ===
 export let x\u{78} = 10;
 >x\u{78} : Symbol(x\u{78}, Decl(identifierVariableWithExtendedEscape2.ts, 0, 10))
 
 xx++;
 >xx : Symbol(x\u{78}, Decl(identifierVariableWithExtendedEscape2.ts, 0, 10))
 
-=== tests/cases/compiler/IdentifierNameWithEscape1.ts ===
+=== IdentifierNameWithEscape1.ts ===
 export class IdentifierNameWithEscape1 {
 >IdentifierNameWithEscape1 : Symbol(IdentifierNameWithEscape1, Decl(IdentifierNameWithEscape1.ts, 0, 0))
 
@@ -50,7 +52,7 @@ export class IdentifierNameWithEscape1 {
     }
 }
 
-=== tests/cases/compiler/IdentifierNameWithEscape2.ts ===
+=== IdentifierNameWithEscape2.ts ===
 export class IdentifierNameWithEscape2 {
 >IdentifierNameWithEscape2 : Symbol(IdentifierNameWithEscape2, Decl(IdentifierNameWithEscape2.ts, 0, 0))
 
@@ -74,7 +76,7 @@ export class IdentifierNameWithEscape2 {
     }
 }
 
-=== tests/cases/compiler/IdentifierNameWithExtendedEscape1.ts ===
+=== IdentifierNameWithExtendedEscape1.ts ===
 export class IdentifierNameWithExtendedEscape1 {
 >IdentifierNameWithExtendedEscape1 : Symbol(IdentifierNameWithExtendedEscape1, Decl(IdentifierNameWithExtendedEscape1.ts, 0, 0))
 
@@ -98,7 +100,7 @@ export class IdentifierNameWithExtendedEscape1 {
     }
 }
 
-=== tests/cases/compiler/IdentifierNameWithExtendedEscape2.ts ===
+=== IdentifierNameWithExtendedEscape2.ts ===
 export class IdentifierNameWithExtendedEscape2 {
 >IdentifierNameWithExtendedEscape2 : Symbol(IdentifierNameWithExtendedEscape2, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 0))
 
@@ -122,7 +124,7 @@ export class IdentifierNameWithExtendedEscape2 {
     }
 }
 
-=== tests/cases/compiler/PrivateIdentifierNameWithEscape1.ts ===
+=== PrivateIdentifierNameWithEscape1.ts ===
 export class PrivateIdentifierWithEscape1 {
 >PrivateIdentifierWithEscape1 : Symbol(PrivateIdentifierWithEscape1, Decl(PrivateIdentifierNameWithEscape1.ts, 0, 0))
 
@@ -144,7 +146,7 @@ export class PrivateIdentifierWithEscape1 {
     }
 }
 
-=== tests/cases/compiler/PrivateIdentifierNameWithEscape2.ts ===
+=== PrivateIdentifierNameWithEscape2.ts ===
 export class PrivateIdentifierWithEscape2 {
 >PrivateIdentifierWithEscape2 : Symbol(PrivateIdentifierWithEscape2, Decl(PrivateIdentifierNameWithEscape2.ts, 0, 0))
 
@@ -166,7 +168,7 @@ export class PrivateIdentifierWithEscape2 {
     }
 }
 
-=== tests/cases/compiler/PrivateIdentifierNameWithExtendedEscape1.ts ===
+=== PrivateIdentifierNameWithExtendedEscape1.ts ===
 export class PrivateIdentifierWithExtendedEscape1 {
 >PrivateIdentifierWithExtendedEscape1 : Symbol(PrivateIdentifierWithExtendedEscape1, Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 0))
 
@@ -188,7 +190,7 @@ export class PrivateIdentifierWithExtendedEscape1 {
     }
 }
 
-=== tests/cases/compiler/PrivateIdentifierNameWithExtendedEscape2.ts ===
+=== PrivateIdentifierNameWithExtendedEscape2.ts ===
 export class PrivateIdentifierWithExtendedEscape2 {
 >PrivateIdentifierWithExtendedEscape2 : Symbol(PrivateIdentifierWithExtendedEscape2, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 0))
 

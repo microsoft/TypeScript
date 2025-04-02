@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts] ////
+
 //// [taggedTemplatesWithIncompleteTemplateExpressions5.ts]
 function f(x: TemplateStringsArray, y: string, z: string) {
 }

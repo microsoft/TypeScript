@@ -1,160 +1,264 @@
-=== tests/cases/compiler/objectLiteralExcessProperties.ts ===
+//// [tests/cases/compiler/objectLiteralExcessProperties.ts] ////
+
+=== objectLiteralExcessProperties.ts ===
 interface Book {
     foreword: string;
 >foreword : string
+>         : ^^^^^^
 }
 
 interface Cover {
     color?: string;
 >color : string
+>      : ^^^^^^
 }
 
 var b1: Book = { forword: "oops" };
 >b1 : Book
+>   : ^^^^
 >{ forword: "oops" } : { forword: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >forword : string
+>        : ^^^^^^
 >"oops" : "oops"
+>       : ^^^^^^
 
 var b2: Book | string = { foreward: "nope" };
 >b2 : string | Book
+>   : ^^^^^^^^^^^^^
 >{ foreward: "nope" } : { foreward: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >foreward : string
+>         : ^^^^^^
 >"nope" : "nope"
+>       : ^^^^^^
 
 var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
 >b3 : Book | Book[]
+>   : ^^^^^^^^^^^^^
 >[{ foreword: "hello" }, { forwards: "back" }] : ({ foreword: string; } | { forwards: string; })[]
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foreword: "hello" } : { foreword: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
+>         : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >{ forwards: "back" } : { forwards: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >forwards : string
+>         : ^^^^^^
 >"back" : "back"
+>       : ^^^^^^
 
 var b4: Book & Cover = { foreword: "hi", colour: "blue" };
 >b4 : Book & Cover
+>   : ^^^^^^^^^^^^
 >{ foreword: "hi", colour: "blue" } : { foreword: string; colour: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
+>         : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 >colour : string
+>       : ^^^^^^
 >"blue" : "blue"
+>       : ^^^^^^
 
 var b5: Book & Cover = { foreward: "hi", color: "blue" };
 >b5 : Book & Cover
+>   : ^^^^^^^^^^^^
 >{ foreward: "hi", color: "blue" } : { foreward: string; color: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foreward : string
+>         : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 >color : string
+>      : ^^^^^^
 >"blue" : "blue"
+>       : ^^^^^^
 
 var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 >b6 : Book & Cover
+>   : ^^^^^^^^^^^^
 >{ foreword: "hi", color: "blue", price: 10.99 } : { foreword: string; color: string; price: number; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
+>         : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 >color : string
+>      : ^^^^^^
 >"blue" : "blue"
+>       : ^^^^^^
 >price : number
+>      : ^^^^^^
 >10.99 : 10.99
+>      : ^^^^^
 
 var b7: Book & number = { foreword: "hi", price: 10.99 };
 >b7 : Book & number
+>   : ^^^^^^^^^^^^^
 >{ foreword: "hi", price: 10.99 } : { foreword: string; price: number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
+>         : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 >price : number
+>      : ^^^^^^
 >10.99 : 10.99
+>      : ^^^^^
 
 var b8: Cover | Cover[] = { couleur : "non" };
 >b8 : Cover | Cover[]
+>   : ^^^^^^^^^^^^^^^
 >{ couleur : "non" } : { couleur: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >couleur : string
+>        : ^^^^^^
 >"non" : "non"
+>      : ^^^^^
 
 var b9: Book | Book[] = { forewarned: "still no" };
 >b9 : Book | Book[]
+>   : ^^^^^^^^^^^^^
 >{ forewarned: "still no" } : { forewarned: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >forewarned : string
+>           : ^^^^^^
 >"still no" : "still no"
+>           : ^^^^^^^^^^
 
 interface Indexed {
     [n: number]: Cover;
 >n : number
+>  : ^^^^^^
 }
 
 var b10: Indexed = { 0: { }, '1': { } }; // ok
 >b10 : Indexed
+>    : ^^^^^^^
 >{ 0: { }, '1': { } } : { 0: {}; '1': {}; }
+>                     : ^^^^^^^^^^^^^^^^^^^
 >0 : {}
+>  : ^^
 >{ } : {}
+>    : ^^
 >'1' : {}
+>    : ^^
 >{ } : {}
+>    : ^^
 
 var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
 >b11 : Indexed
+>    : ^^^^^^^
 >{ 0: { colour: "blue" } } : { 0: { colour: string; }; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : { colour: string; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >{ colour: "blue" } : { colour: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >colour : string
+>       : ^^^^^^
 >"blue" : "blue"
+>       : ^^^^^^
 
 // Repros inspired by #28752
 
 function test<T extends IFoo>() {
 >test : <T extends IFoo>() => void
+>     : ^ ^^^^^^^^^    ^^^^^^^^^^^
 
     // No excess property checks on generic types
     const obj1: T = { name: "test" };
 >obj1 : T
+>     : ^
 >{ name: "test" } : { name: string; }
+>                 : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
     // No excess property checks on intersections involving generics
     const obj2: T & { prop: boolean } = { name: "test", prop: true };
 >obj2 : T & { prop: boolean; }
+>     : ^^^^^^^^^^^^       ^^^
 >prop : boolean
+>     : ^^^^^^^
 >{ name: "test", prop: true } : { name: string; prop: boolean; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     // Excess property checks only on non-generic parts of unions
     const obj3: T | { prop: boolean } = { name: "test", prop: true };
 >obj3 : T | { prop: boolean; }
+>     : ^^^^^^^^^^^^       ^^^
 >prop : boolean
+>     : ^^^^^^^
 >{ name: "test", prop: true } : { name: string; prop: true; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 >prop : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
     // Excess property checks only on non-generic parts of unions
     const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
 >obj4 : (T & { prop: boolean; }) | { name: string; }
+>     : ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^      ^^^
 >prop : boolean
+>     : ^^^^^^^
 >name : string
+>     : ^^^^^^
 >{ name: "test", prop: true } : { name: string; prop: boolean; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     // No excess property checks when union includes 'object' type
     const obj5: object | { x: string } = { z: 'abc' }
 >obj5 : object | { x: string; }
+>     : ^^^^^^^^^^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >{ z: 'abc' } : { z: string; }
+>             : ^^^^^^^^^^^^^^
 >z : string
+>  : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
     // The 'object' type has no effect on intersections
     const obj6: object & { x: string } = { z: 'abc' }
 >obj6 : object & { x: string; }
+>     : ^^^^^^^^^^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >{ z: 'abc' } : { z: string; }
+>             : ^^^^^^^^^^^^^^
 >z : string
+>  : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 }
 

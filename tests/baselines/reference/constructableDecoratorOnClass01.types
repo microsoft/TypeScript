@@ -1,12 +1,17 @@
-=== tests/cases/conformance/decorators/class/constructableDecoratorOnClass01.ts ===
+//// [tests/cases/conformance/decorators/class/constructableDecoratorOnClass01.ts] ////
+
+=== constructableDecoratorOnClass01.ts ===
 class CtorDtor {}
 >CtorDtor : CtorDtor
+>         : ^^^^^^^^
 
 @CtorDtor
 >CtorDtor : typeof CtorDtor
+>         : ^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
 }
 

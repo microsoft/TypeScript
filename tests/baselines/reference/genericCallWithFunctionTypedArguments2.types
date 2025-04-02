@@ -1,142 +1,228 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts] ////
+
+=== genericCallWithFunctionTypedArguments2.ts ===
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using construct signature arguments, no errors expected
 
 function foo<T>(x: new(a: T) => T) {
 >foo : <T>(x: new (a: T) => T) => T
+>    : ^ ^^ ^^               ^^^^^^
 >x : new (a: T) => T
+>  : ^^^^^ ^^ ^^^^^ 
 >a : T
+>  : ^
 
     return new x(null);
 >new x(null) : T
+>            : ^
 >x : new (a: T) => T
+>  : ^^^^^ ^^ ^^^^^ 
 }
 
 interface I {
     new <T>(x: T): T;
 >x : T
+>  : ^
 }
 interface I2<T> {
     new (x: T): T;
 >x : T
+>  : ^
 }
 var i: I;
 >i : I
+>  : ^
 
 var i2: I2<string>;
 >i2 : I2<string>
+>   : ^^^^^^^^^^
 
 var a: {
 >a : new <T>(x: T) => T
+>  : ^^^^^ ^^ ^^ ^^^^^ 
 
     new <T>(x: T): T;
 >x : T
+>  : ^
 }
 
 var r = foo(i); // any
 >r : unknown
+>  : ^^^^^^^
 >foo(i) : unknown
+>       : ^^^^^^^
 >foo : <T>(x: new (a: T) => T) => T
+>    : ^ ^^ ^^               ^^^^^^
 >i : I
+>  : ^
 
 var r2 = foo<string>(i); // string 
 >r2 : string
+>   : ^^^^^^
 >foo<string>(i) : string
+>               : ^^^^^^
 >foo : <T>(x: new (a: T) => T) => T
+>    : ^ ^^ ^^               ^^^^^^
 >i : I
+>  : ^
 
 var r3 = foo(i2); // string
 >r3 : string
+>   : ^^^^^^
 >foo(i2) : string
+>        : ^^^^^^
 >foo : <T>(x: new (a: T) => T) => T
+>    : ^ ^^ ^^               ^^^^^^
 >i2 : I2<string>
+>   : ^^^^^^^^^^
 
 var r3b = foo(a); // any
 >r3b : unknown
+>    : ^^^^^^^
 >foo(a) : unknown
+>       : ^^^^^^^
 >foo : <T>(x: new (a: T) => T) => T
+>    : ^ ^^ ^^               ^^^^^^
 >a : new <T>(x: T) => T
+>  : ^^^^^ ^^ ^^ ^^^^^ 
 
 function foo2<T, U>(x: T, cb: new(a: T) => U) {
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^^^^^
 >x : T
+>  : ^
 >cb : new (a: T) => U
+>   : ^^^^^ ^^ ^^^^^ 
 >a : T
+>  : ^
 
     return new cb(x);
 >new cb(x) : U
+>          : ^
 >cb : new (a: T) => U
+>   : ^^^^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 var r4 = foo2(1, i2); // error
 >r4 : string
+>   : ^^^^^^
 >foo2(1, i2) : string
+>            : ^^^^^^
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^^^^^
 >1 : 1
+>  : ^
 >i2 : I2<string>
+>   : ^^^^^^^^^^
 
 var r4b = foo2(1, a); // any
 >r4b : number
+>    : ^^^^^^
 >foo2(1, a) : number
+>           : ^^^^^^
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^^^^^
 >1 : 1
+>  : ^
 >a : new <T>(x: T) => T
+>  : ^^^^^ ^^ ^^ ^^^^^ 
 
 var r5 = foo2(1, i); // any
 >r5 : number
+>   : ^^^^^^
 >foo2(1, i) : number
+>           : ^^^^^^
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^^^^^
 >1 : 1
+>  : ^
 >i : I
+>  : ^
 
 var r6 = foo2<string, string>('', i2); // string
 >r6 : string
+>   : ^^^^^^
 >foo2<string, string>('', i2) : string
+>                             : ^^^^^^
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^^^^^
 >'' : ""
+>   : ^^
 >i2 : I2<string>
+>   : ^^^^^^^^^^
 
 function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 >cb : new (a: T) => U
+>   : ^^^^^ ^^ ^^^^^ 
 >a : T
+>  : ^
 >y : U
+>  : ^
 
     return new cb(x);
 >new cb(x) : U
+>          : ^
 >cb : new (a: T) => U
+>   : ^^^^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 var r7 = foo3(null, i, ''); // any
 >r7 : any
+>   : ^^^
 >foo3(null, i, '') : any
+>                  : ^^^
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >i : I
+>  : ^
 >'' : ""
+>   : ^^
 
 var r7b = foo3(null, a, ''); // any
 >r7b : any
+>    : ^^^
 >foo3(null, a, '') : any
+>                  : ^^^
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >a : new <T>(x: T) => T
+>  : ^^^^^ ^^ ^^ ^^^^^ 
 >'' : ""
+>   : ^^
 
 var r8 = foo3(1, i2, 1); // error
 >r8 : string
+>   : ^^^^^^
 >foo3(1, i2, 1) : string
+>               : ^^^^^^
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 >i2 : I2<string>
+>   : ^^^^^^^^^^
 >1 : 1
+>  : ^
 
 var r9 = foo3<string, string>('', i2, ''); // string
 >r9 : string
+>   : ^^^^^^
 >foo3<string, string>('', i2, '') : string
+>                                 : ^^^^^^
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
+>     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >'' : ""
+>   : ^^
 >i2 : I2<string>
+>   : ^^^^^^^^^^
 >'' : ""
+>   : ^^
 

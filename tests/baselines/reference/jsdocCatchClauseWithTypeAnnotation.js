@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocCatchClauseWithTypeAnnotation.ts] ////
+
 //// [foo.js]
 /**
  * @typedef {any} Any

@@ -1,16 +1,16 @@
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(1,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(99,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(107,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(120,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
+functionsMissingReturnStatementsAndExpressions.ts(1,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressions.ts(99,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressions.ts(107,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressions.ts(120,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(124,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
+functionsMissingReturnStatementsAndExpressions.ts(124,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(130,16): error TS2378: A 'get' accessor must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(152,15): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(153,5): error TS1003: Identifier expected.
+functionsMissingReturnStatementsAndExpressions.ts(130,16): error TS2378: A 'get' accessor must return a value.
+functionsMissingReturnStatementsAndExpressions.ts(152,15): error TS18050: The value 'undefined' cannot be used here.
+functionsMissingReturnStatementsAndExpressions.ts(153,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (8 errors) ====
+==== functionsMissingReturnStatementsAndExpressions.ts (8 errors) ====
     function f1(): string {
                    ~~~~~~
 !!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.

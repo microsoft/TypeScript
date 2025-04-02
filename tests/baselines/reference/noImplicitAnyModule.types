@@ -1,6 +1,9 @@
-=== tests/cases/compiler/noImplicitAnyModule.ts ===
+//// [tests/cases/compiler/noImplicitAnyModule.ts] ////
+
+=== noImplicitAnyModule.ts ===
 declare module Module {
 >Module : typeof Module
+>       : ^^^^^^^^^^^^^
 
     interface Interface {
         // Should return error for implicit any on return type.
@@ -9,25 +12,34 @@ declare module Module {
 
     class Class {
 >Class : Class
+>      : ^^^^^
 
         // Should return error for implicit `any` on parameter.
         public f(x): any;
 >f : (x: any) => any
+>  : ^ ^^^^^^^^^^   
 >x : any
+>  : ^^^
 
         public g(x: any);
 >g : (x: any) => any
+>  : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 
         // Should not return error at all.
         private h(x);
 >h : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
     }
 
     // Should return error for implicit any on return type.
     function f(x: number);
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 

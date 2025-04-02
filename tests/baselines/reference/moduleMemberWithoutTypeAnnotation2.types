@@ -1,14 +1,20 @@
-=== tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts ===
+//// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts] ////
+
+=== moduleMemberWithoutTypeAnnotation2.ts ===
 module TypeScript {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 
     export module CompilerDiagnostics {
 >CompilerDiagnostics : typeof CompilerDiagnostics
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         export interface IDiagnosticWriter {
             Alert(output: string): void;
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^    
 >output : string
+>       : ^^^^^^
         }
 
         export var diagnosticWriter = null;
@@ -16,7 +22,9 @@ module TypeScript {
 
         export function Alert(output: string) {
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^^^^^
 >output : string
+>       : ^^^^^^
 
             if (diagnosticWriter) {
 >diagnosticWriter : any
@@ -25,8 +33,11 @@ module TypeScript {
 >diagnosticWriter.Alert(output) : any
 >diagnosticWriter.Alert : any
 >diagnosticWriter : any
+>                 : ^^^
 >Alert : any
+>      : ^^^
 >output : string
+>       : ^^^^^^
             }
         }
     }

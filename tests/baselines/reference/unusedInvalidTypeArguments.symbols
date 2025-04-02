@@ -1,16 +1,15 @@
+//// [tests/cases/compiler/unusedInvalidTypeArguments.ts] ////
+
 === /typeReference.ts ===
-// Tests that types are marked as used, even if used in places that don't accept type arguments.
-
-
 type N = number;
 >N : Symbol(N, Decl(typeReference.ts, 0, 0))
 
 type U = number;
->U : Symbol(U, Decl(typeReference.ts, 3, 16))
+>U : Symbol(U, Decl(typeReference.ts, 0, 16))
 
 export type Z = U<N>;
->Z : Symbol(Z, Decl(typeReference.ts, 4, 16))
->U : Symbol(U, Decl(typeReference.ts, 3, 16))
+>Z : Symbol(Z, Decl(typeReference.ts, 1, 16))
+>U : Symbol(U, Decl(typeReference.ts, 0, 16))
 >N : Symbol(N, Decl(typeReference.ts, 0, 0))
 
 === /classReference.ts ===

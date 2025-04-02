@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts ===
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts] ////
+
+=== arrayLiterals3.ts ===
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
 //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
@@ -10,14 +12,21 @@
 
 var a0: [any, any, any] = [];                             // Error
 >a0 : [any, any, any]
+>   : ^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
 var a1: [boolean, string, number] = ["string", 1, true];  // Error
 >a1 : [boolean, string, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >["string", 1, true] : [string, number, boolean]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 
 // The resulting type an array literal expression is determined as follows:
 //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
@@ -25,67 +34,109 @@ var a1: [boolean, string, number] = ["string", 1, true];  // Error
 
 var [b1, b2]: [number, number] = [1, 2, "string", true];
 >b1 : number
+>   : ^^^^^^
 >b2 : number
+>   : ^^^^^^
 >[1, 2, "string", true] : [number, number, string, boolean]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 >true : true
+>     : ^^^^
 
 // The resulting type an array literal expression is determined as follows:
 //      - the resulting type is an array type with an element type that is the union of the types of the
 //        non - spread element expressions and the numeric index signature types of the spread element expressions
 var temp = ["s", "t", "r"];
 >temp : string[]
+>     : ^^^^^^^^
 >["s", "t", "r"] : string[]
+>                : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 >"t" : "t"
+>    : ^^^
 >"r" : "r"
+>    : ^^^
 
 var temp1 = [1, 2, 3];
 >temp1 : number[]
+>      : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >temp2 : [number[], string[]]
+>      : ^^^^^^^^^^^^^^^^^^^^
 >[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
+>                                 : ^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >["hello", "string"] : string[]
+>                    : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 interface tup {
     0: number[]|string[];
 >0 : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 
     1: number[]|string[];
 >1 : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 }
 interface myArray extends Array<Number> { }
 interface myArray2 extends Array<Number|String> { }
 var c0: tup = [...temp2];                         // Error
 >c0 : tup
+>   : ^^^
 >[...temp2] : [number[], string[]]
+>           : ^^^^^^^^^^^^^^^^^^^^
 >...temp2 : number[] | string[]
+>         : ^^^^^^^^^^^^^^^^^^^
 >temp2 : [number[], string[]]
+>      : ^^^^^^^^^^^^^^^^^^^^
 
 var c1: [number, number, number] = [...temp1];    // Error cannot assign number[] to [number, number, number]
 >c1 : [number, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[...temp1] : number[]
+>           : ^^^^^^^^
 >...temp1 : number
+>         : ^^^^^^
 >temp1 : number[]
+>      : ^^^^^^^^
 
 var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
 >c2 : myArray
+>   : ^^^^^^^
 >[...temp1, ...temp] : (string | number)[]
+>                    : ^^^^^^^^^^^^^^^^^^^
 >...temp1 : number
+>         : ^^^^^^
 >temp1 : number[]
+>      : ^^^^^^^^
 >...temp : string
+>        : ^^^^^^
 >temp : string[]
+>     : ^^^^^^^^
 

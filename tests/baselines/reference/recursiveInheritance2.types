@@ -1,33 +1,50 @@
-=== tests/cases/compiler/recursiveInheritance2.ts ===
+//// [tests/cases/compiler/recursiveInheritance2.ts] ////
+
+=== recursiveInheritance2.ts ===
 interface A { (): B; };
 declare var a: A;
 >a : A
+>  : ^
 
 var x = a();
 >x : B
+>  : ^
 >a() : B
+>    : ^
 >a : A
+>  : ^
 
 interface B { (): C; };
 declare var b: B;
 >b : B
+>  : ^
 
 var y = b();
 >y : C
+>  : ^
 >b() : C
+>    : ^
 >b : B
+>  : ^
 
 interface C { (): A; };
 declare var c: C;
 >c : C
+>  : ^
 
 var z = c();
 >z : A
+>  : ^
 >c() : A
+>    : ^
 >c : C
+>  : ^
 
 x = y;
 >x = y : C
+>      : ^
 >x : B
+>  : ^
 >y : C
+>  : ^
 

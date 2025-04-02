@@ -1,6 +1,9 @@
+//// [tests/cases/compiler/keepImportsInDts3.ts] ////
+
 === c:/test.ts ===
 
 export {};
 === c:/app/main.ts ===
 
 import "test"
+

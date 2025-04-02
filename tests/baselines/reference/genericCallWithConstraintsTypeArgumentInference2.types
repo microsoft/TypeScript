@@ -1,45 +1,72 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts] ////
+
+=== genericCallWithConstraintsTypeArgumentInference2.ts ===
 // Generic call with parameters of T and U, U extends T, no parameter of type U
 
 function foo<T, U extends T>(t: T) {
 >foo : <T, U extends T>(t: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 
     var u: U;
 >u : U
+>  : ^
 
     return u;
 >u : U
+>  : ^
 }
 
 var r = foo(1); // ok
 >r : number
+>  : ^^^^^^
 >foo(1) : number
+>       : ^^^^^^
 >foo : <T, U extends T>(t: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 
 var r2 = foo(null); // {}
 >r2 : any
+>   : ^^^
 >foo(null) : any
+>          : ^^^
 >foo : <T, U extends T>(t: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 
 var r3 = foo(new Object()); // {}
 >r3 : Object
+>   : ^^^^^^
 >foo(new Object()) : Object
+>                  : ^^^^^^
 >foo : <T, U extends T>(t: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var r4 = foo<Date, Date>(1); // error
 >r4 : Date
+>   : ^^^^
 >foo<Date, Date>(1) : Date
+>                   : ^^^^
 >foo : <T, U extends T>(t: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 
 var r5 = foo<Date, Date>(new Date()); // no error
 >r5 : Date
+>   : ^^^^
 >foo<Date, Date>(new Date()) : Date
+>                            : ^^^^
 >foo : <T, U extends T>(t: T) => U
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 

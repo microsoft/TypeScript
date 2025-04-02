@@ -1,33 +1,44 @@
-=== tests/cases/compiler/bar.d.ts ===
+//// [tests/cases/compiler/crashDeclareGlobalTypeofExport.ts] ////
+
+=== bar.d.ts ===
 import * as foo from './foo'
 >foo : { default: Root; }
+>    : ^^^^^^^^^^^^^^^^^^
 
 export as namespace foo
 >foo : { default: Root; }
+>    : ^^^^^^^^^^^^^^^^^^
 
 export = foo;
 >foo : { default: Root; }
+>    : ^^^^^^^^^^^^^^^^^^
 
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     const foo: typeof foo;
->foo : Root
->foo : Root
+>foo : any
+>    : ^^^
+>foo : any
+>    : ^^^
 }
 
-=== tests/cases/compiler/foo.d.ts ===
+=== foo.d.ts ===
 interface Root {
     /**
      * A .default property for ES6 default import compatibility
      */
     default: Root;
 >default : Root
+>        : ^^^^
 }
 
 declare const root: Root;
 >root : Root
+>     : ^^^^
 
 export = root;
 >root : Root
+>     : ^^^^
 

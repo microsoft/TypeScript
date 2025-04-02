@@ -1,5 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/parserVoidExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserVoidExpression1.ts] ////
+
+=== parserVoidExpression1.ts ===
 void 0;
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 

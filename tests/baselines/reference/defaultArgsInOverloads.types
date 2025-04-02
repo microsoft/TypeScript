@@ -1,60 +1,92 @@
-=== tests/cases/compiler/defaultArgsInOverloads.ts ===
+//// [tests/cases/compiler/defaultArgsInOverloads.ts] ////
+
+=== defaultArgsInOverloads.ts ===
 function fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 function fun(a = 3);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 function fun(a = null) { }
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 
 	fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 	fun(a = 3);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 	fun(a = null) { }
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
 	static fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 	static fun(a = 3);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 	static fun(a = null) { }
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 }
 
 interface I {
     fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
     fun(a = 3);
 >fun : { (a: string): any; (a?: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 }
 
 var f: (a = 3) => number;
 >f : (a?: number) => number
+>  : ^ ^^^^^^^^^^^^^^      
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 

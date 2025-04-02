@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts] ////
+
 //// [typeParameterIndirectlyConstrainedToItself.ts]
 class C<U extends T, T extends U> { }
 class C2<T extends U, U extends V, V extends T> { }

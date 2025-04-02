@@ -1,10 +1,13 @@
 import { CancelError } from "@esfx/canceltoken";
 import assert from "assert";
-import chalk from "chalk";
 import { spawn } from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
+import pc from "picocolors";
 import which from "which";
+
+/** @import { CancelToken } from "@esfx/canceltoken" */
+void 0;
 
 /**
  * Executes the provided command once with the supplied arguments.
@@ -16,14 +19,15 @@ import which from "which";
  * @property {boolean} [ignoreExitCode]
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
- * @property {import("@esfx/canceltoken").CancelToken} [token]
+ * @property {boolean} [ignoreStdout]
+ * @property {CancelToken} [token]
  */
 export async function exec(cmd, args, options = {}) {
-    return /**@type {Promise<{exitCode?: number}>}*/(new Promise((resolve, reject) => {
-        const { ignoreExitCode, waitForExit = true } = options;
+    return /**@type {Promise<{exitCode?: number}>}*/ (new Promise((resolve, reject) => {
+        const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
-        if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? "inherit" : "ignore" });
+        if (!options.hidePrompt) console.log(`> ${pc.green(cmd)} ${args.join(" ")}`);
+        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore", detached: !waitForExit });
         if (waitForExit) {
             const onCanceled = () => {
                 proc.kill();
@@ -35,7 +39,7 @@ export async function exec(cmd, args, options = {}) {
                 }
                 else {
                     const reason = options.token?.signaled ? options.token.reason ?? new CancelError() :
-                        new Error(`Process exited with code: ${exitCode}`);
+                        new ExecError(exitCode);
                     reject(reason);
                 }
                 subscription?.unsubscribe();
@@ -47,19 +51,37 @@ export async function exec(cmd, args, options = {}) {
         }
         else {
             proc.unref();
-            // wait a short period in order to allow the process to start successfully before Node exits.
-            setTimeout(() => resolve({ exitCode: undefined }), 100);
+            resolve({ exitCode: undefined });
         }
     }));
 }
 
+export class ExecError extends Error {
+    exitCode;
+
+    /**
+     * @param {number | null} exitCode
+     * @param {string} message
+     */
+    constructor(exitCode, message = `Process exited with code: ${exitCode}`) {
+        super(message);
+        this.exitCode = exitCode;
+    }
+}
+
 /**
- * Reads JSON data with optional comments using the LKG TypeScript compiler
+ * Reads JSON data with optional comments
  * @param {string} jsonPath
  */
 export function readJson(jsonPath) {
     const jsonText = fs.readFileSync(jsonPath, "utf8");
-    return JSONC.parse(jsonText);
+    /** @type {JSONC.ParseError[]} */
+    const errors = [];
+    const result = JSONC.parse(jsonText, errors);
+    if (errors.length) {
+        throw new Error(`Error parsing ${jsonPath}`);
+    }
+    return result;
 }
 
 /**
@@ -70,18 +92,18 @@ export function readJson(jsonPath) {
 export function needsUpdate(source, dest) {
     if (typeof source === "string" && typeof dest === "string") {
         if (fs.existsSync(dest)) {
-            const {mtime: outTime} = fs.statSync(dest);
-            const {mtime: inTime} = fs.statSync(source);
+            const { mtime: outTime } = fs.statSync(dest);
+            const { mtime: inTime } = fs.statSync(source);
             if (+inTime <= +outTime) {
                 return false;
             }
         }
     }
     else if (typeof source === "string" && typeof dest !== "string") {
-        const {mtime: inTime} = fs.statSync(source);
+        const { mtime: inTime } = fs.statSync(source);
         for (const filepath of dest) {
             if (fs.existsSync(filepath)) {
-                const {mtime: outTime} = fs.statSync(filepath);
+                const { mtime: outTime } = fs.statSync(filepath);
                 if (+inTime > +outTime) {
                     return true;
                 }
@@ -94,10 +116,10 @@ export function needsUpdate(source, dest) {
     }
     else if (typeof source !== "string" && typeof dest === "string") {
         if (fs.existsSync(dest)) {
-            const {mtime: outTime} = fs.statSync(dest);
+            const { mtime: outTime } = fs.statSync(dest);
             for (const filepath of source) {
                 if (fs.existsSync(filepath)) {
-                    const {mtime: inTime} = fs.statSync(filepath);
+                    const { mtime: inTime } = fs.statSync(filepath);
                     if (+inTime > +outTime) {
                         return true;
                     }
@@ -115,8 +137,8 @@ export function needsUpdate(source, dest) {
                 continue;
             }
             if (fs.existsSync(dest[i])) {
-                const {mtime: outTime} = fs.statSync(dest[i]);
-                const {mtime: inTime} = fs.statSync(source[i]);
+                const { mtime: outTime } = fs.statSync(dest[i]);
+                const { mtime: inTime } = fs.statSync(source[i]);
                 if (+inTime > +outTime) {
                     return true;
                 }
@@ -162,7 +184,9 @@ export class Debouncer {
         this._action = action;
     }
 
-    get empty() { return !this._deferred; }
+    get empty() {
+        return !this._deferred;
+    }
 
     enqueue() {
         if (this._timer) {
@@ -211,4 +235,12 @@ export function memoize(fn) {
         }
         return value;
     };
+}
+
+/**
+ * @param {fs.PathLike} p
+ */
+export function rimraf(p) {
+    // The rimraf package uses maxRetries=10 on Windows, but Node's fs.rm does not have that special case.
+    return fs.promises.rm(p, { recursive: true, force: true, maxRetries: process.platform === "win32" ? 10 : 0 });
 }

@@ -1,89 +1,127 @@
-=== tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts] ////
+
+=== intersectionWithUnionConstraint.ts ===
 function f1<T extends string | number, U extends string | number>(x: T & U) {
 >f1 : <T extends string | number, U extends string | number>(x: T & U) => void
+>   : ^ ^^^^^^^^^               ^^ ^^^^^^^^^               ^^ ^^     ^^^^^^^^^
 >x : T & U
+>  : ^^^^^
 
     // Combined constraint of 'T & U' is 'string | number'
     let y: string | number = x;
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
 >f2 : <T extends string | number | undefined, U extends string | null | undefined>(x: T & U) => void
+>   : ^ ^^^^^^^^^                           ^^ ^^^^^^^^^                         ^^ ^^     ^^^^^^^^^
 >x : T & U
+>  : ^^^^^
 
     let y1: string | number = x;     // Error
 >y1 : string | number
+>   : ^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let y2: string | null = x;       // Error
 >y2 : string | null
+>   : ^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let y3: string | undefined = x;
 >y3 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let y4: number | null = x;       // Error
 >y4 : number | null
+>   : ^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let y5: number | undefined = x;  // Error
 >y5 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let y6: null | undefined = x;    // Error
 >y6 : null | undefined
+>   : ^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined
 >T1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
 function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
 >f3 : <T extends string | number | undefined>(x: T & (number | object | undefined)) => void
->x : T & (number | object | undefined)
+>   : ^ ^^^^^^^^^                           ^^ ^^                                 ^^^^^^^^^
+>x : (T & undefined) | (T & number)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const y: number | undefined = x;
 >y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 function f4<T extends string | number>(x: T & (number | object)) {
 >f4 : <T extends string | number>(x: T & (number | object)) => void
->x : T & (number | object)
+>   : ^ ^^^^^^^^^               ^^ ^^                     ^^^^^^^^^
+>x : T & number
+>  : ^^^^^^^^^^
 
     const y: number = x;
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 function f5<T, U extends keyof T>(x: keyof T & U) {
 >f5 : <T, U extends keyof T>(x: keyof T & U) => void
+>   : ^ ^^ ^^^^^^^^^       ^^ ^^           ^^^^^^^^^
 >x : keyof T & U
+>  : ^^^^^^^^^^^
 
     let y: keyof any = x;
 >y : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #23648
 
 type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : NoErrorHere<K> }
 >Example : Example<T, U>
+>        : ^^^^^^^^^^^^^
 
 type UnexpectedError<T extends PropertyKey> = T
 >UnexpectedError : T
+>                : ^
 
 type NoErrorHere<T extends PropertyKey> = T
 >NoErrorHere : T
+>            : ^
 
 // Repro from #30331
 
 type a<T> = T extends Array<infer U> ? U : never;
 >a : a<T>
+>  : ^^^^
 
 type b<T> = { [K in a<T> & keyof T ]: 42 };
 >b : b<T>
+>  : ^^^^
 

@@ -1,40 +1,59 @@
-=== tests/cases/compiler/exhaustiveSwitchCheckCircularity.ts ===
+//// [tests/cases/compiler/exhaustiveSwitchCheckCircularity.ts] ////
+
+=== exhaustiveSwitchCheckCircularity.ts ===
 // Repro from #47539
 
 declare function isNever(n: never): boolean;
 >isNever : (n: never) => boolean
+>        : ^ ^^     ^^^^^       
 >n : never
+>  : ^^^^^
 
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     let foo: "aaa" | "bbb" = "aaa";
 >foo : "aaa" | "bbb"
+>    : ^^^^^^^^^^^^^
 >"aaa" : "aaa"
+>      : ^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         switch (foo) {
 >foo : "aaa" | "bbb"
+>    : ^^^^^^^^^^^^^
 
             case "aaa":
 >"aaa" : "aaa"
+>      : ^^^^^
         }
         if (foo === "aaa") {
 >foo === "aaa" : boolean
+>              : ^^^^^^^
 >foo : "aaa" | "bbb"
+>    : ^^^^^^^^^^^^^
 >"aaa" : "aaa"
+>      : ^^^^^
 
             foo = "bbb";
 >foo = "bbb" : "bbb"
+>            : ^^^^^
 >foo : "aaa" | "bbb"
+>    : ^^^^^^^^^^^^^
 >"bbb" : "bbb"
+>      : ^^^^^
         }
         else if (isNever(foo)) {  // Error expected
 >isNever(foo) : boolean
+>             : ^^^^^^^
 >isNever : (n: never) => boolean
+>        : ^ ^^     ^^^^^       
 >foo : "bbb"
+>    : ^^^^^
 
             break;
         }
@@ -45,39 +64,54 @@ function f() {
 
 declare function functionB(key: string): string;
 >functionB : (key: string) => string
+>          : ^   ^^      ^^^^^      
 >key : string
+>    : ^^^^^^
 
 function functionC(): void {
 >functionC : () => void
+>          : ^^^^^^    
 
     let unionVal: "A" | "B" = "A";
 >unionVal : "A" | "B"
+>         : ^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         let key: string;
 >key : string
+>    : ^^^^^^
 
         switch (unionVal) {
 >unionVal : "A"
+>         : ^^^
 
             case "A": {
 >"A" : "A"
+>    : ^^^
 
                 key = "AA";
 >key = "AA" : "AA"
+>           : ^^^^
 >key : string
+>    : ^^^^^^
 >"AA" : "AA"
+>     : ^^^^
 
                 break;
             }
         }
         functionB(key);
 >functionB(key) : string
+>               : ^^^^^^
 >functionB : (key: string) => string
+>          : ^   ^^      ^^^^^      
 >key : string
+>    : ^^^^^^
     }
 }
 

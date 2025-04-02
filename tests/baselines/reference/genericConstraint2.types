@@ -1,69 +1,110 @@
-=== tests/cases/compiler/genericConstraint2.ts ===
+//// [tests/cases/compiler/genericConstraint2.ts] ////
+
+=== genericConstraint2.ts ===
 interface Comparable<T> {
     comparer(other: T): number;
 >comparer : (other: T) => number
+>         : ^     ^^ ^^^^^      
 >other : T
+>      : ^
 }
 
 function compare<T extends Comparable<T>>(x: T, y: T): number {
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
+>        : ^ ^^^^^^^^^             ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : T
+>  : ^
 
     if (x == null) return y == null ? 0 : -1;
 >x == null : boolean
+>          : ^^^^^^^
 >x : T
+>  : ^
 >y == null ? 0 : -1 : 0 | -1
+>                   : ^^^^^^
 >y == null : boolean
+>          : ^^^^^^^
 >y : T
+>  : ^
 >0 : 0
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
     if (y == null) return 1;
 >y == null : boolean
+>          : ^^^^^^^
 >y : T
+>  : ^
 >1 : 1
+>  : ^
 
     return x.comparer(y);
 >x.comparer(y) : number
+>              : ^^^^^^
 >x.comparer : (other: T) => number
+>           : ^     ^^^^^^^^      
 >x : T
+>  : ^
 >comparer : (other: T) => number
+>         : ^     ^^^^^^^^      
 >y : T
+>  : ^
 }
 
 class ComparableString implements Comparable<string>{
 >ComparableString : ComparableString
+>                 : ^^^^^^^^^^^^^^^^
 
     constructor(public currentValue: string) { }
 >currentValue : string
+>             : ^^^^^^
 
     localeCompare(other) {
 >localeCompare : (other: any) => number
+>              : ^     ^^^^^^^^^^^^^^^^
 >other : any
+>      : ^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 
 var a = new ComparableString("a");
 >a : ComparableString
+>  : ^^^^^^^^^^^^^^^^
 >new ComparableString("a") : ComparableString
+>                          : ^^^^^^^^^^^^^^^^
 >ComparableString : typeof ComparableString
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
 var b = new ComparableString("b");
 >b : ComparableString
+>  : ^^^^^^^^^^^^^^^^
 >new ComparableString("b") : ComparableString
+>                          : ^^^^^^^^^^^^^^^^
 >ComparableString : typeof ComparableString
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
 var c = compare<ComparableString>(a, b);
 >c : number
+>  : ^^^^^^
 >compare<ComparableString>(a, b) : number
+>                                : ^^^^^^
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
+>        : ^ ^^^^^^^^^             ^^ ^^ ^^ ^^ ^^^^^      
 >a : ComparableString
+>  : ^^^^^^^^^^^^^^^^
 >b : ComparableString
+>  : ^^^^^^^^^^^^^^^^
 

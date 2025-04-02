@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithNoConstructorOrBaseClass.ts ===
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithNoConstructorOrBaseClass.ts] ////
+
+=== classWithNoConstructorOrBaseClass.ts ===
 class C {
 >C : Symbol(C, Decl(classWithNoConstructorOrBaseClass.ts, 0, 0))
 

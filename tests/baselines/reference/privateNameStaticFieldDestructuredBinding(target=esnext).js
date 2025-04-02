@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDestructuredBinding.ts] ////
+
 //// [privateNameStaticFieldDestructuredBinding.ts]
 class A {
     static #field = 1;

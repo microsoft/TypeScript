@@ -1,40 +1,60 @@
-=== tests/cases/conformance/declarationEmit/button.ts ===
+//// [tests/cases/conformance/declarationEmit/typeofImportTypeOnlyExport.ts] ////
+
+=== button.ts ===
 import {classMap} from './lit.js';
->classMap : () => { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
+>classMap : () => { directive: typeof import("lit").ClassMapDirective; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const c = classMap();
->c : { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
->classMap() : { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
->classMap : () => { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
+>c : { directive: typeof import("lit").ClassMapDirective; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>classMap() : { directive: typeof import("lit").ClassMapDirective; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>classMap : () => { directive: typeof import("lit").ClassMapDirective; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/declarationEmit/lit.ts ===
+=== lit.ts ===
 class ClassMapDirective {}
 >ClassMapDirective : ClassMapDirective
+>                  : ^^^^^^^^^^^^^^^^^
 
 export type {ClassMapDirective};
 >ClassMapDirective : ClassMapDirective
+>                  : ^^^^^^^^^^^^^^^^^
 
 export const directive =
 >directive : <C>(class_: C) => () => { directive: C; }
+>          : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   <C>(class_: C) =>
 ><C>(class_: C) =>  () => ({    directive: class_,  }) : <C>(class_: C) => () => { directive: C; }
+>                                                      : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >class_ : C
+>       : ^
 
   () => ({
 >() => ({    directive: class_,  }) : () => { directive: C; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >({    directive: class_,  }) : { directive: C; }
+>                             : ^^^^^^^^^^^^^^^^^
 >{    directive: class_,  } : { directive: C; }
+>                           : ^^^^^^^^^^^^^^^^^
 
     directive: class_,
 >directive : C
+>          : ^
 >class_ : C
+>       : ^
 
   });
 
 export const classMap = directive(ClassMapDirective);
 >classMap : () => { directive: typeof ClassMapDirective; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >directive(ClassMapDirective) : () => { directive: typeof ClassMapDirective; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >directive : <C>(class_: C) => () => { directive: C; }
+>          : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassMapDirective : typeof ClassMapDirective
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 

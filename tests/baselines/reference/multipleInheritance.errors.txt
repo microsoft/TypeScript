@@ -1,12 +1,12 @@
-tests/cases/compiler/multipleInheritance.ts(9,21): error TS1174: Classes can only extend a single class.
-tests/cases/compiler/multipleInheritance.ts(18,21): error TS1174: Classes can only extend a single class.
-tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
-tests/cases/compiler/multipleInheritance.ts(36,12): error TS2416: Property 'g' in type 'Baad' is not assignable to the same property in base type 'Good'.
+multipleInheritance.ts(9,21): error TS1174: Classes can only extend a single class.
+multipleInheritance.ts(18,21): error TS1174: Classes can only extend a single class.
+multipleInheritance.ts(35,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
+multipleInheritance.ts(36,12): error TS2416: Property 'g' in type 'Baad' is not assignable to the same property in base type 'Good'.
   Type '(n: number) => number' is not assignable to type '() => number'.
     Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
-==== tests/cases/compiler/multipleInheritance.ts (4 errors) ====
+==== multipleInheritance.ts (4 errors) ====
     class B1 {
         public x;
     }

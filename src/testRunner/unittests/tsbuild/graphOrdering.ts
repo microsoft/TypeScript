@@ -1,9 +1,9 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild - graph-ordering", () => {
-    let host: fakes.SolutionBuilderHost | undefined;
+describe("unittests:: tsbuild:: graphOrdering::", () => {
+    let host: ts.SolutionBuilderHost<ts.EmitAndSemanticDiagnosticsBuilderProgram> | undefined;
     const deps: [string, string][] = [
         ["A", "B"],
         ["B", "C"],
@@ -15,13 +15,13 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         ["H", "I"],
         ["I", "J"],
         ["J", "H"],
-        ["J", "E"]
+        ["J", "E"],
     ];
 
     before(() => {
-        const fs = new vfs.FileSystem(/*ignoreCase*/ false);
-        host = fakes.SolutionBuilderHost.create(fs);
-        writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
+        const sys = TestServerHost.createWatchedSystem(ts.emptyArray, { useCaseSensitiveFileNames: true });
+        host = ts.createSolutionBuilderHost(sys);
+        writeProjects(sys, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
     });
 
     after(() => {
@@ -59,7 +59,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         if (!circular) {
             for (const dep of deps) {
                 const child = getProjectFileName(dep[0]);
-                if (buildQueue.indexOf(child) < 0) continue;
+                if (!buildQueue.includes(child)) continue;
                 const parent = getProjectFileName(dep[1]);
                 assert.isAbove(buildQueue.indexOf(child), buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
             }
@@ -67,25 +67,25 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     }
 
     function getProjectFileName(proj: string) {
-        return `/project/${proj}/tsconfig.json` as ts.ResolvedConfigFileName;
+        return `/home/src/workspaces/project/${proj}/tsconfig.json` as ts.ResolvedConfigFileName;
     }
 
-    function writeProjects(fileSystem: vfs.FileSystem, projectNames: string[], deps: [string, string][]): string[] {
+    function writeProjects(sys: TestServerHost, projectNames: string[], deps: [string, string][]): string[] {
         const projFileNames: string[] = [];
         for (const dep of deps) {
-            if (projectNames.indexOf(dep[0]) < 0) throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
-            if (projectNames.indexOf(dep[1]) < 0) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
+            if (!projectNames.includes(dep[0])) throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
+            if (!projectNames.includes(dep[1])) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
         }
         for (const proj of projectNames) {
-            fileSystem.mkdirpSync(`/project/${proj}`);
-            fileSystem.writeFileSync(`/project/${proj}/${proj}.ts`, "export {}");
+            sys.ensureFileOrFolder({ path: `/home/src/workspaces/project/${proj}` });
+            sys.writeFile(`/home/src/workspaces/project/${proj}/${proj}.ts`, "export {}");
             const configFileName = getProjectFileName(proj);
-            const configContent = JSON.stringify({
+            const configContent = jsonToReadableText({
                 compilerOptions: { composite: true },
                 files: [`./${proj}.ts`],
-                references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` }))
-            }, undefined, 2);
-            fileSystem.writeFileSync(configFileName, configContent);
+                references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` })),
+            });
+            sys.writeFile(configFileName, configContent);
             projFileNames.push(configFileName);
         }
         return projFileNames;

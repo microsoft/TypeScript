@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmitSpreadAttribute.ts] ////
+
+=== test.tsx ===
 /// <reference path="react16.d.ts" />
 
 export function T1(a: any) {

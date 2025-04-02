@@ -1,7 +1,7 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendingOptionalChain.ts(5,22): error TS2499: An interface can only extend an identifier/qualified-name with optional type arguments.
+interfaceExtendingOptionalChain.ts(5,22): error TS2499: An interface can only extend an identifier/qualified-name with optional type arguments.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendingOptionalChain.ts (1 errors) ====
+==== interfaceExtendingOptionalChain.ts (1 errors) ====
     namespace Foo {
         export class Bar {}
     }

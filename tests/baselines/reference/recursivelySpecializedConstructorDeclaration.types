@@ -1,27 +1,38 @@
-=== tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts ===
+//// [tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts] ////
+
+=== recursivelySpecializedConstructorDeclaration.ts ===
 module MsPortal.Controls.Base.ItemList {
 >MsPortal : typeof MsPortal
+>         : ^^^^^^^^^^^^^^^
 >Controls : typeof Controls
+>         : ^^^^^^^^^^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >ItemList : typeof ItemList
+>         : ^^^^^^^^^^^^^^^
 
     export interface Interface<TValue> {
         // Removing this line fixes the constructor of ItemValue
         options: ViewModel<TValue>;
 >options : ViewModel<TValue>
+>        : ^^^^^^^^^^^^^^^^^
     }    
 
     export class ItemValue<T> {
 >ItemValue : ItemValue<T>
+>          : ^^^^^^^^^^^^
 
         constructor(value: T) {
 >value : T
+>      : ^
         }
     }    
  
     export class ViewModel<TValue> extends ItemValue<TValue> {
 >ViewModel : ViewModel<TValue>
+>          : ^^^^^^^^^^^^^^^^^
 >ItemValue : ItemValue<TValue>
+>          : ^^^^^^^^^^^^^^^^^
     }
 }
 

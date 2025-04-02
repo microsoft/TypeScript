@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts] ////
+
+=== mappedTypeConstraints2.ts ===
 type Mapped1<K extends string> = { [P in K]: { a: P } };
 >Mapped1 : Symbol(Mapped1, Decl(mappedTypeConstraints2.ts, 0, 0))
 >K : Symbol(K, Decl(mappedTypeConstraints2.ts, 0, 13))
@@ -78,94 +80,180 @@ function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
 >key : Symbol(key, Decl(mappedTypeConstraints2.ts, 14, 46))
 }
 
+type Mapped4<K extends `_${string}`> = {
+>Mapped4 : Symbol(Mapped4, Decl(mappedTypeConstraints2.ts, 16, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 18, 13))
+
+  [P in K]: P;
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 19, 3))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 18, 13))
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 19, 3))
+
+};
+
+function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
+>f4 : Symbol(f4, Decl(mappedTypeConstraints2.ts, 20, 2))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 22, 12))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 22, 36))
+>Mapped4 : Symbol(Mapped4, Decl(mappedTypeConstraints2.ts, 16, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 22, 12))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 22, 52))
+>Mapped4 : Symbol(Mapped4, Decl(mappedTypeConstraints2.ts, 16, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 22, 12))
+
+  let s: `_${string}` = obj[key];
+>s : Symbol(s, Decl(mappedTypeConstraints2.ts, 23, 5))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 22, 36))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 22, 52))
+}
+
+type Mapped5<K extends string> = {
+>Mapped5 : Symbol(Mapped5, Decl(mappedTypeConstraints2.ts, 24, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 26, 13))
+
+  [P in K as P extends `_${string}` ? P : never]: P;
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 27, 3))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 26, 13))
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 27, 3))
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 27, 3))
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 27, 3))
+
+};
+
+function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
+>f5 : Symbol(f5, Decl(mappedTypeConstraints2.ts, 28, 2))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 30, 12))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 30, 30))
+>Mapped5 : Symbol(Mapped5, Decl(mappedTypeConstraints2.ts, 24, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 30, 12))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 30, 46))
+>Mapped5 : Symbol(Mapped5, Decl(mappedTypeConstraints2.ts, 24, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 30, 12))
+
+  let s: `_${string}` = obj[key];
+>s : Symbol(s, Decl(mappedTypeConstraints2.ts, 31, 5))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 30, 30))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 30, 46))
+}
+
+// repro from #53066#issuecomment-1913384757
+
+type Mapped6<K extends string> = {
+>Mapped6 : Symbol(Mapped6, Decl(mappedTypeConstraints2.ts, 32, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 36, 13))
+
+  [P in K as `_${P}`]: P;
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 37, 3))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 36, 13))
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 37, 3))
+>P : Symbol(P, Decl(mappedTypeConstraints2.ts, 37, 3))
+
+};
+
+function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
+>f6 : Symbol(f6, Decl(mappedTypeConstraints2.ts, 38, 2))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 40, 12))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 40, 30))
+>Mapped6 : Symbol(Mapped6, Decl(mappedTypeConstraints2.ts, 32, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 40, 12))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 40, 46))
+>Mapped6 : Symbol(Mapped6, Decl(mappedTypeConstraints2.ts, 32, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 40, 12))
+
+  let s: `_${string}` = obj[key]; // Error
+>s : Symbol(s, Decl(mappedTypeConstraints2.ts, 41, 5))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 40, 30))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 40, 46))
+}
+
 // Repro from #47794
 
 type Foo<T extends string> = {
->Foo : Symbol(Foo, Decl(mappedTypeConstraints2.ts, 16, 1))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 20, 9))
+>Foo : Symbol(Foo, Decl(mappedTypeConstraints2.ts, 42, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 46, 9))
 
     [RemappedT in T as `get${RemappedT}`]: RemappedT;
->RemappedT : Symbol(RemappedT, Decl(mappedTypeConstraints2.ts, 21, 5))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 20, 9))
->RemappedT : Symbol(RemappedT, Decl(mappedTypeConstraints2.ts, 21, 5))
->RemappedT : Symbol(RemappedT, Decl(mappedTypeConstraints2.ts, 21, 5))
+>RemappedT : Symbol(RemappedT, Decl(mappedTypeConstraints2.ts, 47, 5))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 46, 9))
+>RemappedT : Symbol(RemappedT, Decl(mappedTypeConstraints2.ts, 47, 5))
+>RemappedT : Symbol(RemappedT, Decl(mappedTypeConstraints2.ts, 47, 5))
 
 };
 
 const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
->get : Symbol(get, Decl(mappedTypeConstraints2.ts, 24, 5))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 24, 13))
->t : Symbol(t, Decl(mappedTypeConstraints2.ts, 24, 31))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 24, 13))
->foo : Symbol(foo, Decl(mappedTypeConstraints2.ts, 24, 36))
->Foo : Symbol(Foo, Decl(mappedTypeConstraints2.ts, 16, 1))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 24, 13))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 24, 13))
->foo : Symbol(foo, Decl(mappedTypeConstraints2.ts, 24, 36))
->t : Symbol(t, Decl(mappedTypeConstraints2.ts, 24, 31))
+>get : Symbol(get, Decl(mappedTypeConstraints2.ts, 50, 5))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 50, 13))
+>t : Symbol(t, Decl(mappedTypeConstraints2.ts, 50, 31))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 50, 13))
+>foo : Symbol(foo, Decl(mappedTypeConstraints2.ts, 50, 36))
+>Foo : Symbol(Foo, Decl(mappedTypeConstraints2.ts, 42, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 50, 13))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 50, 13))
+>foo : Symbol(foo, Decl(mappedTypeConstraints2.ts, 50, 36))
+>t : Symbol(t, Decl(mappedTypeConstraints2.ts, 50, 31))
 
 // Repro from #48626
 
 interface Bounds {
->Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 24, 71))
+>Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 50, 71))
 
     min: number;
->min : Symbol(Bounds.min, Decl(mappedTypeConstraints2.ts, 28, 18))
+>min : Symbol(Bounds.min, Decl(mappedTypeConstraints2.ts, 54, 18))
 
     max: number;
->max : Symbol(Bounds.max, Decl(mappedTypeConstraints2.ts, 29, 16))
+>max : Symbol(Bounds.max, Decl(mappedTypeConstraints2.ts, 55, 16))
 }
 
 type NumericBoundsOf<T> = {
->NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 31, 1))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 33, 21))
+>NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 57, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 59, 21))
 
     [K in keyof T as T[K] extends number | undefined ? K : never]: Bounds;
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 34, 5))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 33, 21))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 33, 21))
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 34, 5))
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 34, 5))
->Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 24, 71))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 60, 5))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 59, 21))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 59, 21))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 60, 5))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 60, 5))
+>Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 50, 71))
 }
 
 function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
->validate : Symbol(validate, Decl(mappedTypeConstraints2.ts, 35, 1))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
->obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 37, 36))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
->bounds : Symbol(bounds, Decl(mappedTypeConstraints2.ts, 37, 43))
->NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 31, 1))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
+>validate : Symbol(validate, Decl(mappedTypeConstraints2.ts, 61, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 63, 18))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 63, 36))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 63, 18))
+>bounds : Symbol(bounds, Decl(mappedTypeConstraints2.ts, 63, 43))
+>NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 57, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 63, 18))
 
     for (const [key, val] of Object.entries(obj)) {
->key : Symbol(key, Decl(mappedTypeConstraints2.ts, 38, 16))
->val : Symbol(val, Decl(mappedTypeConstraints2.ts, 38, 20))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 64, 16))
+>val : Symbol(val, Decl(mappedTypeConstraints2.ts, 64, 20))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
->obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 37, 36))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 63, 36))
 
         const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];
->boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 39, 13))
->bounds : Symbol(bounds, Decl(mappedTypeConstraints2.ts, 37, 43))
->key : Symbol(key, Decl(mappedTypeConstraints2.ts, 38, 16))
->NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 31, 1))
->T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
+>boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 65, 13))
+>bounds : Symbol(bounds, Decl(mappedTypeConstraints2.ts, 63, 43))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 64, 16))
+>NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 57, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 63, 18))
 
         if (boundsForKey) {
->boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 39, 13))
+>boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 65, 13))
 
             const { min, max } = boundsForKey;
->min : Symbol(min, Decl(mappedTypeConstraints2.ts, 41, 19))
->max : Symbol(max, Decl(mappedTypeConstraints2.ts, 41, 24))
->boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 39, 13))
+>min : Symbol(min, Decl(mappedTypeConstraints2.ts, 67, 19))
+>max : Symbol(max, Decl(mappedTypeConstraints2.ts, 67, 24))
+>boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 65, 13))
 
             if (min > val || max < val) return false;
->min : Symbol(min, Decl(mappedTypeConstraints2.ts, 41, 19))
->val : Symbol(val, Decl(mappedTypeConstraints2.ts, 38, 20))
->max : Symbol(max, Decl(mappedTypeConstraints2.ts, 41, 24))
->val : Symbol(val, Decl(mappedTypeConstraints2.ts, 38, 20))
+>min : Symbol(min, Decl(mappedTypeConstraints2.ts, 67, 19))
+>val : Symbol(val, Decl(mappedTypeConstraints2.ts, 64, 20))
+>max : Symbol(max, Decl(mappedTypeConstraints2.ts, 67, 24))
+>val : Symbol(val, Decl(mappedTypeConstraints2.ts, 64, 20))
         }
     }
     return true;
@@ -174,28 +262,28 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 // repro from #50030
 
 type ObjectWithUnderscoredKeys<K extends string> = {
->ObjectWithUnderscoredKeys : Symbol(ObjectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 46, 1))
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 50, 31))
+>ObjectWithUnderscoredKeys : Symbol(ObjectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 72, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 76, 31))
 
     [k in K as `_${k}`]: true;
->k : Symbol(k, Decl(mappedTypeConstraints2.ts, 51, 5))
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 50, 31))
->k : Symbol(k, Decl(mappedTypeConstraints2.ts, 51, 5))
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 77, 5))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 76, 31))
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 77, 5))
 
 };
 
 function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
->genericTest : Symbol(genericTest, Decl(mappedTypeConstraints2.ts, 52, 2))
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 54, 21))
->objectWithUnderscoredKeys : Symbol(objectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 54, 39))
->ObjectWithUnderscoredKeys : Symbol(ObjectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 46, 1))
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 54, 21))
->key : Symbol(key, Decl(mappedTypeConstraints2.ts, 54, 95))
->K : Symbol(K, Decl(mappedTypeConstraints2.ts, 54, 21))
+>genericTest : Symbol(genericTest, Decl(mappedTypeConstraints2.ts, 78, 2))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 80, 21))
+>objectWithUnderscoredKeys : Symbol(objectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 80, 39))
+>ObjectWithUnderscoredKeys : Symbol(ObjectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 72, 1))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 80, 21))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 80, 95))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 80, 21))
 
-  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`];
->shouldBeTrue : Symbol(shouldBeTrue, Decl(mappedTypeConstraints2.ts, 55, 7))
->objectWithUnderscoredKeys : Symbol(objectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 54, 39))
->key : Symbol(key, Decl(mappedTypeConstraints2.ts, 54, 95))
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`]; // assignability fails here, but ideally should not
+>shouldBeTrue : Symbol(shouldBeTrue, Decl(mappedTypeConstraints2.ts, 81, 7))
+>objectWithUnderscoredKeys : Symbol(objectWithUnderscoredKeys, Decl(mappedTypeConstraints2.ts, 80, 39))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 80, 95))
 }
 

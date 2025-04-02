@@ -1,4 +1,7 @@
-=== tests/cases/compiler/voidConstructor.ts ===
+//// [tests/cases/compiler/voidConstructor.ts] ////
+
+=== voidConstructor.ts ===
 var foo:{ new ( ): void; }
 >foo : new () => void
+>    : ^^^^^^^^^^    
 

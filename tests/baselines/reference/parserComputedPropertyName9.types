@@ -1,8 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName9.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName9.ts] ////
+
+=== parserComputedPropertyName9.ts ===
 class C {
 >C : C
+>  : ^
 
    [e]: Type
 >[e] : Type
+>    : ^^^^
 >e : any
+>  : ^^^
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonIdenticalTypeConstraints.ts ===
+//// [tests/cases/compiler/nonIdenticalTypeConstraints.ts] ////
+
+=== nonIdenticalTypeConstraints.ts ===
 class Different {
 >Different : Symbol(Different, Decl(nonIdenticalTypeConstraints.ts, 0, 0))
 

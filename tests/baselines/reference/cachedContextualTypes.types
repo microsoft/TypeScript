@@ -1,47 +1,67 @@
-=== tests/cases/compiler/cachedContextualTypes.ts ===
+//// [tests/cases/compiler/cachedContextualTypes.ts] ////
+
+=== cachedContextualTypes.ts ===
 // Repro from #52198
 
 declare function createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>): R;
 >createInstance : <Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>) => R
+>               : ^    ^^^^^^^^^                           ^^ ^^^^^^^^^                  ^^    ^^    ^^^^^    ^^                           ^^^^^ 
 >args : any[]
+>     : ^^^^^
 >ctor : Ctor
+>     : ^^^^
 >args : ConstructorParameters<Ctor>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export interface IMenuWorkbenchToolBarOptions {
     toolbarOptions: {
 >toolbarOptions : { foo(bar: string): string; }
+>               : ^^^^^^   ^^      ^^^      ^^^
 
         foo(bar: string): string
 >foo : (bar: string) => string
+>    : ^   ^^      ^^^^^      
 >bar : string
+>    : ^^^^^^
 
     };
 }
 
 class MenuWorkbenchToolBar {
 >MenuWorkbenchToolBar : MenuWorkbenchToolBar
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
     constructor(
         options: IMenuWorkbenchToolBarOptions | undefined,
 >options : IMenuWorkbenchToolBarOptions | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ) { }
 }
 
 createInstance(MenuWorkbenchToolBar, {
 >createInstance(MenuWorkbenchToolBar, {    toolbarOptions: {        foo(bar) { return bar; }    }}) : MenuWorkbenchToolBar
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^
 >createInstance : <Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>) => R
+>               : ^    ^^^^^^^^^                           ^^ ^^^^^^^^^                  ^^    ^^    ^^^^^    ^^                           ^^^^^ 
 >MenuWorkbenchToolBar : typeof MenuWorkbenchToolBar
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    toolbarOptions: {        foo(bar) { return bar; }    }} : { toolbarOptions: { foo(bar: string): string; }; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 
     toolbarOptions: {
 >toolbarOptions : { foo(bar: string): string; }
+>               : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^
 >{        foo(bar) { return bar; }    } : { foo(bar: string): string; }
+>                                       : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^
 
         foo(bar) { return bar; }
 >foo : (bar: string) => string
+>    : ^   ^^^^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
     }
 });
 

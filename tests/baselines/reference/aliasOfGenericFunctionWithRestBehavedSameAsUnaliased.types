@@ -1,89 +1,127 @@
-=== tests/cases/compiler/aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts ===
+//// [tests/cases/compiler/aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts] ////
+
+=== aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts ===
 // the type printback for every `test` below should be "y"
 
 type ExtendedMapper<HandledInputT, OutputT, ArgsT extends any[]> = (name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT;
 >ExtendedMapper : ExtendedMapper<HandledInputT, OutputT, ArgsT>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >mixed : HandledInputT
+>      : ^^^^^^^^^^^^^
 >args : ArgsT
+>     : ^^^^^
 
 type a = ExtendedMapper<any, any, [any]>;
->a : (name: string, mixed: any, args_0: any) => any
+>a : a
+>  : ^
 
 type b = ExtendedMapper<any, any, any[]>;
->b : (name: string, mixed: any, ...args: any[]) => any
+>b : b
+>  : ^
 
 type test = a extends b ? "y" : "n"
 >test : "y"
+>     : ^^^
 
 let check: test = "y";
 >check : "y"
+>      : ^^^
 >"y" : "y"
+>    : ^^^
 
 
 type ExtendedMapper1<HandledInputT, OutputT, ArgsT extends any[]> = (
 >ExtendedMapper1 : ExtendedMapper1<HandledInputT, OutputT, ArgsT>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     (name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT
 >name : string
+>     : ^^^^^^
 >mixed : HandledInputT
+>      : ^^^^^^^^^^^^^
 >args : ArgsT
+>     : ^^^^^
 
 );
 
 type a1 = ExtendedMapper1<any, any, [any]>;
->a1 : (name: string, mixed: any, args_0: any) => any
+>a1 : a1
+>   : ^^
 
 type b1 = ExtendedMapper1<any, any, any[]>;
->b1 : (name: string, mixed: any, ...args: any[]) => any
+>b1 : b1
+>   : ^^
 
 type test1 = a1 extends b1 ? "y" : "n"
 >test1 : "y"
+>      : ^^^
 
 let check1: test1 = "y";
 >check1 : "y"
+>       : ^^^
 >"y" : "y"
+>    : ^^^
 
 type ExtendedMapper2<HandledInputT, OutputT, ArgsT extends any[]> = (
 >ExtendedMapper2 : (name: string, mixed: HandledInputT, ...args: ArgsT) => OutputT
+>                : ^    ^^      ^^     ^^             ^^^^^    ^^     ^^^^^       
 
     {x:(name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT}["x"]
 >x : (name: string, mixed: HandledInputT, ...args: ArgsT) => OutputT
+>  : ^    ^^      ^^     ^^             ^^^^^    ^^     ^^^^^       
 >name : string
+>     : ^^^^^^
 >mixed : HandledInputT
+>      : ^^^^^^^^^^^^^
 >args : ArgsT
+>     : ^^^^^
 
 );
 
 type a2 = ExtendedMapper2<any, any, [any]>;
->a2 : (name: string, mixed: any, args_0: any) => any
+>a2 : a2
+>   : ^^
 
 type b2 = ExtendedMapper2<any, any, any[]>;
->b2 : (name: string, mixed: any, ...args: any[]) => any
+>b2 : b2
+>   : ^^
 
 type test2 = a2 extends b2 ? "y" : "n"
 >test2 : "y"
+>      : ^^^
 
 let check2: test2 = "y";
 >check2 : "y"
+>       : ^^^
 >"y" : "y"
+>    : ^^^
 
 type a3 = (name: string, mixed: any, args_0: any) => any
->a3 : (name: string, mixed: any, args_0: any) => any
+>a3 : a3
+>   : ^^
 >name : string
+>     : ^^^^^^
 >mixed : any
 >args_0 : any
 
 type b3 = (name: string, mixed: any, ...args: any[]) => any
->b3 : (name: string, mixed: any, ...args: any[]) => any
+>b3 : b3
+>   : ^^
 >name : string
+>     : ^^^^^^
 >mixed : any
 >args : any[]
+>     : ^^^^^
 
 type test3 = a3 extends b3 ? "y" : "n"
 >test3 : "y"
+>      : ^^^
 
 let check3: test3 = "y";
 >check3 : "y"
+>       : ^^^
 >"y" : "y"
+>    : ^^^
 

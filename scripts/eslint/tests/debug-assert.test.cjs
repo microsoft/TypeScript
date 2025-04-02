@@ -2,10 +2,11 @@ const { RuleTester } = require("./support/RuleTester.cjs");
 const rule = require("../rules/debug-assert.cjs");
 
 const ruleTester = new RuleTester({
-    parserOptions: {
-        warnOnUnsupportedTypeScriptVersion: false,
+    languageOptions: {
+        parserOptions: {
+            warnOnUnsupportedTypeScriptVersion: false,
+        },
     },
-    parser: require.resolve("@typescript-eslint/parser"),
 });
 
 ruleTester.run("debug-assert", rule, {
@@ -45,6 +46,6 @@ ruleTester.run("debug-assert", rule, {
                 { messageId: "secondArgumentDebugAssertError" },
                 { messageId: "thirdArgumentDebugAssertError" },
             ],
-        }
+        },
     ],
 });

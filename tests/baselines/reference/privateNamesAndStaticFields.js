@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts] ////
+
 //// [privateNamesAndStaticFields.ts]
 class A {
     static #foo: number;
@@ -38,7 +40,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _a, _A_foo, _A_bar, _b, _B_foo;
 class A {
     constructor() {
-        __classPrivateFieldSet(A, _a, 3, "f", _A_foo);
+        __classPrivateFieldSet(_a, _a, 3, "f", _A_foo);
         __classPrivateFieldGet(B, _a, "f", _A_foo); // Error
         __classPrivateFieldGet(B, _a, "f", _A_bar); // Error
     }
@@ -49,7 +51,7 @@ _A_bar = { value: void 0 };
 class B extends A {
     constructor() {
         super();
-        __classPrivateFieldSet(B, _b, "some string", "f", _B_foo);
+        __classPrivateFieldSet(_b, _b, "some string", "f", _B_foo);
     }
 }
 _b = B;

@@ -1,10 +1,12 @@
-error TS5101: Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts(19,9): error TS2339: Property 'hi' does not exist on type '{}'.
-tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts(22,9): error TS2339: Property '10' does not exist on type '{}'.
+error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+noImplicitAnyIndexingSuppressed.ts(12,37): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+noImplicitAnyIndexingSuppressed.ts(19,9): error TS2339: Property 'hi' does not exist on type '{}'.
+noImplicitAnyIndexingSuppressed.ts(22,9): error TS2339: Property '10' does not exist on type '{}'.
+noImplicitAnyIndexingSuppressed.ts(29,10): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
 
 
-!!! error TS5101: Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts (2 errors) ====
+!!! error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+==== noImplicitAnyIndexingSuppressed.ts (4 errors) ====
     enum MyEmusEnum {
         emu
     }
@@ -17,6 +19,8 @@ tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts(22,9): error TS2339: Pro
     
     // Should be okay, as we suppress implicit 'any' property access checks
     var strRepresentation3 = MyEmusEnum["monehh"];
+                                        ~~~~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
     
     // Should be okay; should be a MyEmusEnum
     var strRepresentation4 = MyEmusEnum["emu"];
@@ -38,6 +42,8 @@ tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts(22,9): error TS2339: Pro
     
     // Should be okay, as we suppress implicit 'any' property access checks
     var z1 = emptyObj[hi];
+             ~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
     var z2 = (<any>emptyObj)[hi];
     
     interface MyMap<T> {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty.ts ===
+//// [tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty.ts] ////
+
+=== mappedTypeWithAsClauseAndLateBoundProperty.ts ===
 declare let tgt2: number[];
 >tgt2 : Symbol(tgt2, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 0, 11))
 

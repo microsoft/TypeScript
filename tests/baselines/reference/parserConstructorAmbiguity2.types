@@ -1,7 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity2.ts] ////
+
+=== parserConstructorAmbiguity2.ts ===
 new Date<A
 >new Date<A : boolean
+>           : ^^^^^^^
 >new Date : Date
+>         : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >A : any
+>  : ^^^
 

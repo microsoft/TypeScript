@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNonExportedBindingPattern.ts] ////
+
 //// [test.ts]
 function getFoo() {
   return { foo: { test: 42 } }

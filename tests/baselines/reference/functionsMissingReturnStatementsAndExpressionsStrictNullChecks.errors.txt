@@ -1,16 +1,16 @@
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(9,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(17,7): error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(9,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(17,7): error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
   Type 'void' is not assignable to type 'number | undefined'.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(21,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(21,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(29,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(33,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => undefined'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(29,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(33,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => undefined'.
   Type 'void' is not assignable to type 'undefined'.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (7 errors) ====
+==== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (7 errors) ====
     function f10(): undefined {
         // Ok, return type allows implicit return of undefined
     }

@@ -1,7 +1,7 @@
-tests/cases/compiler/invalidReferenceSyntax1.ts(1,1): error TS1084: Invalid 'reference' directive syntax.
+invalidReferenceSyntax1.ts(1,1): error TS1084: Invalid 'reference' directive syntax.
 
 
-==== tests/cases/compiler/invalidReferenceSyntax1.ts (1 errors) ====
+==== invalidReferenceSyntax1.ts (1 errors) ====
     /// <reference path="missingquote.ts />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1084: Invalid 'reference' directive syntax.

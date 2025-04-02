@@ -1,21 +1,29 @@
-=== tests/cases/compiler/functionTypeArgumentArrayAssignment.ts ===
+//// [tests/cases/compiler/functionTypeArgumentArrayAssignment.ts] ////
+
+=== functionTypeArgumentArrayAssignment.ts ===
 module test {
 >test : typeof test
+>     : ^^^^^^^^^^^
 
     interface Array<T> {
         foo: T;
 >foo : T
+>    : ^
 
         length: number;
 >length : number
+>       : ^^^^^^
     }
 
     function map<U>() {
 >map : <U>() => void
+>    : ^ ^^^^^^^^^^^
 
         var ys: U[] = [];
 >ys : U[]
+>   : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
     }
 }
 

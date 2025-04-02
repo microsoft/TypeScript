@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitPinnedCommentsOnTopOfFile.ts ===
+//// [tests/cases/compiler/emitPinnedCommentsOnTopOfFile.ts] ////
+
+=== emitPinnedCommentsOnTopOfFile.ts ===
 /*!
 
     multi line

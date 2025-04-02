@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts] ////
+
 //// [assignmentCompatWithEnumIndexer.ts]
 enum E {
     A

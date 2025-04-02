@@ -1,24 +1,36 @@
-=== tests/cases/conformance/externalModules/foo2.ts ===
+//// [tests/cases/conformance/externalModules/exportDeclaredModule.ts] ////
+
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 
 var x: number = foo1.b();
 >x : number
+>  : ^^^^^^
 >foo1.b() : number
+>         : ^^^^^^
 >foo1.b : () => number
+>       : ^^^^^^      
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 >b : () => number
+>  : ^^^^^^      
 
-=== tests/cases/conformance/externalModules/foo1.ts ===
+=== foo1.ts ===
 declare module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
 	export var a: string; 
 >a : string
+>  : ^^^^^^
 
 	export function b(): number;
 >b : () => number
+>  : ^^^^^^      
 }
 export = M1;
 >M1 : typeof M1
+>   : ^^^^^^^^^
 

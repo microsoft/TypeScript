@@ -1,89 +1,126 @@
-=== tests/cases/compiler/constraintWithIndexedAccess.ts ===
+//// [tests/cases/compiler/constraintWithIndexedAccess.ts] ////
+
+=== constraintWithIndexedAccess.ts ===
 // #52399
 type DataFetchFns = {
->DataFetchFns : { Boat: { requiresLicense: (id: string) => boolean; maxGroundSpeed: (id: string) => number; description: (id: string) => string; displacement: (id: string) => number; name: (id: string) => string; }; Plane: { requiresLicense: (id: string) => boolean; maxGroundSpeed: (id: string) => number; maxTakeoffWeight: (id: string) => number; maxCruisingAltitude: (id: string) => number; name: (id: string) => string; }; }
+>DataFetchFns : DataFetchFns
+>             : ^^^^^^^^^^^^
 
     Boat: {
 >Boat : { requiresLicense: (id: string) => boolean; maxGroundSpeed: (id: string) => number; description: (id: string) => string; displacement: (id: string) => number; name: (id: string) => string; }
+>     : ^^^^^^^^^^^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^                      ^^^^^^^^                      ^^^
 
         requiresLicense: (id: string) => boolean;
 >requiresLicense : (id: string) => boolean
+>                : ^  ^^      ^^^^^       
 >id : string
+>   : ^^^^^^
 
         maxGroundSpeed: (id: string) => number;
 >maxGroundSpeed : (id: string) => number
+>               : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
 
         description: (id: string) => string;
 >description : (id: string) => string
+>            : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
 
         displacement: (id: string) => number;
 >displacement : (id: string) => number
+>             : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
 
         name: (id: string) => string;
 >name : (id: string) => string
+>     : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
 
     };
     Plane: {
 >Plane : { requiresLicense: (id: string) => boolean; maxGroundSpeed: (id: string) => number; maxTakeoffWeight: (id: string) => number; maxCruisingAltitude: (id: string) => number; name: (id: string) => string; }
+>      : ^^^^^^^^^^^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^                      ^^^
 
         requiresLicense: (id: string) => boolean;
 >requiresLicense : (id: string) => boolean
+>                : ^  ^^      ^^^^^       
 >id : string
+>   : ^^^^^^
 
         maxGroundSpeed: (id: string) => number;
 >maxGroundSpeed : (id: string) => number
+>               : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
 
         maxTakeoffWeight: (id: string) => number;
 >maxTakeoffWeight : (id: string) => number
+>                 : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
 
         maxCruisingAltitude: (id: string) => number;
 >maxCruisingAltitude : (id: string) => number
+>                    : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
 
         name: (id: string) => string;
 >name : (id: string) => string
+>     : ^  ^^      ^^^^^      
 >id : string
+>   : ^^^^^^
     }
 }
 export type NoTypeParamBoatRequired<F extends keyof DataFetchFns['Boat']> = ReturnType<DataFetchFns['Boat'][F]>;
 >NoTypeParamBoatRequired : NoTypeParamBoatRequired<F>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TypeHardcodedAsParameterWithoutReturnType<T extends 'Boat', F extends keyof DataFetchFns[T]> = DataFetchFns[T][F];
 >TypeHardcodedAsParameterWithoutReturnType : TypeHardcodedAsParameterWithoutReturnType<T, F>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type allAreFunctionsAsExpected = TypeHardcodedAsParameterWithoutReturnType<'Boat', keyof DataFetchFns['Boat']>;
->allAreFunctionsAsExpected : ((id: string) => boolean) | ((id: string) => number) | ((id: string) => string) | ((id: string) => number) | ((id: string) => string)
+>allAreFunctionsAsExpected : allAreFunctionsAsExpected
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type returnTypeOfFunctions = ReturnType<allAreFunctionsAsExpected>; //string | number | boolean as expected
->returnTypeOfFunctions : string | number | boolean
+>returnTypeOfFunctions : returnTypeOfFunctions
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
 export type SucceedingCombo = ReturnType<TypeHardcodedAsParameterWithoutReturnType<'Boat', keyof DataFetchFns['Boat']>>;
->SucceedingCombo : string | number | boolean
+>SucceedingCombo : SucceedingCombo
+>                : ^^^^^^^^^^^^^^^
 
 export type FailingCombo<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<TypeHardcodedAsParameterWithoutReturnType<T,F>>;
 >FailingCombo : FailingCombo<T, F>
+>             : ^^^^^^^^^^^^^^^^^^
 
 export type TypeHardcodedAsParameter<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
 >TypeHardcodedAsParameter : TypeHardcodedAsParameter<T, F>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type VehicleSelector<T extends keyof DataFetchFns> = DataFetchFns[T];
 >VehicleSelector : VehicleSelector<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
 export type TypeHardcodedAsParameter2<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<VehicleSelector<T>[F]>;
 >TypeHardcodedAsParameter2 : TypeHardcodedAsParameter2<T, F>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type TypeGeneric1<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
 >TypeGeneric1 : TypeGeneric1<T, F>
+>             : ^^^^^^^^^^^^^^^^^^
 
 export type TypeGeneric2<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][T]>; // error
 >TypeGeneric2 : TypeGeneric2<T, F>
+>             : ^^^^^^^^^^^^^^^^^^
 
 export type TypeGeneric3<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[F][F]>; // error
 >TypeGeneric3 : TypeGeneric3<T, F>
+>             : ^^^^^^^^^^^^^^^^^^
 

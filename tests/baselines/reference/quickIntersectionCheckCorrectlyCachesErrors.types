@@ -1,38 +1,58 @@
-=== tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx ===
+//// [tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.ts] ////
+
+=== quickIntersectionCheckCorrectlyCachesErrors.tsx ===
 interface F<P> {
     (props: P & { children?: boolean }): void;
 >props : P & { children?: boolean; }
+>      : ^^^^^^^^^^^^^^^^^       ^^^
 >children : boolean
+>         : ^^^^^^^
 
     propTypes: { [K in keyof P]: null extends P ? K : K };
 >propTypes : { [K in keyof P]: null extends P ? K : K; }
+>          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare function g(C: F<unknown>): string;
 >g : (C: F<unknown>) => string
+>  : ^ ^^          ^^^^^      
 >C : F<unknown>
+>  : ^^^^^^^^^^
 
 export function wu<CP extends { o: object }>(CC: F<CP>) {
 >wu : <CP extends { o: object; }>(CC: F<CP>) => void
+>   : ^  ^^^^^^^^^              ^^  ^^     ^^^^^^^^^
 >o : object
+>  : ^^^^^^
 >CC : F<CP>
+>   : ^^^^^
 
     class WU {
 >WU : WU
+>   : ^^
 
         m() {
 >m : () => any
+>  : ^^^^^^^^^
 
             g(CC)
 >g(CC) : string
+>      : ^^^^^^
 >g : (C: F<unknown>) => string
+>  : ^ ^^          ^^^^^      
 >CC : F<CP>
+>   : ^^^^^
 
             return <CC {...(null as unknown as CP)} />;
 ><CC {...(null as unknown as CP)} /> : any
+>                                    : ^^^
 >CC : F<CP>
+>   : ^^^^^
 >(null as unknown as CP) : CP
+>                        : ^^
 >null as unknown as CP : CP
+>                      : ^^
 >null as unknown : unknown
+>                : ^^^^^^^
         }
     }
 }

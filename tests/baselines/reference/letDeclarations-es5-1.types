@@ -1,28 +1,40 @@
-=== tests/cases/compiler/letDeclarations-es5-1.ts ===
+//// [tests/cases/compiler/letDeclarations-es5-1.ts] ////
+
+=== letDeclarations-es5-1.ts ===
     let l1;
 >l1 : any
 
     let l2: number;
 >l2 : number
+>   : ^^^^^^
 
     let l3, l4, l5 :string, l6;    
 >l3 : any
 >l4 : any
 >l5 : string
+>   : ^^^^^^
 >l6 : any
 
     let l7 = false;
 >l7 : boolean
+>   : ^^^^^^^
 >false : false
+>      : ^^^^^
 
     let l8: number = 23;
 >l8 : number
+>   : ^^^^^^
 >23 : 23
+>   : ^^
 
     let l9 = 0, l10 :string = "", l11 = null;
 >l9 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >l10 : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 >l11 : any
 

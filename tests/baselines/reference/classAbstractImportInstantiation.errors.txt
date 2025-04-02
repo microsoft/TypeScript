@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts(4,5): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts(9,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractImportInstantiation.ts(4,5): error TS2511: Cannot create an instance of an abstract class.
+classAbstractImportInstantiation.ts(9,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts (2 errors) ====
+==== classAbstractImportInstantiation.ts (2 errors) ====
     module M {
         export abstract class A {}
         

@@ -1,192 +1,242 @@
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.unicodeEscape.ts] ////
+
+=== 1.ts ===
 "\u{10_ffff}"
 >"\u{10_ffff}" : "\\u{10_ffff}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
+=== 2.ts ===
 '\u{10_ffff}'
 >'\u{10_ffff}' : "\\u{10_ffff}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
+=== 3.ts ===
 `\u{10_ffff}`
 >`\u{10_ffff}` : "\\u{10_ffff}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
+=== 4.ts ===
 /\u{10_ffff}/u
 >/\u{10_ffff}/u : RegExp
+>               : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
+=== 5.ts ===
 "\uff_ff"
 >"\uff_ff" : "\\uff_ff"
+>          : ^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
+=== 6.ts ===
 '\uff_ff'
 >'\uff_ff' : "\\uff_ff"
+>          : ^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/7.ts ===
+=== 7.ts ===
 `\uff_ff`
 >`\uff_ff` : "\\uff_ff"
+>          : ^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/8.ts ===
+=== 8.ts ===
 /\uff_ff/u
 >/\uff_ff/u : RegExp
+>           : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts ===
+=== 9.ts ===
 "\xf_f"
 >"\xf_f" : "\\xf_f"
+>        : ^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/10.ts ===
+=== 10.ts ===
 '\xf_f'
 >'\xf_f' : "\\xf_f"
+>        : ^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/11.ts ===
+=== 11.ts ===
 `\xf_f`
 >`\xf_f` : "\\xf_f"
+>        : ^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/12.ts ===
+=== 12.ts ===
 /\xf_f/u
 >/\xf_f/u : RegExp
+>         : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/13.ts ===
+=== 13.ts ===
 "\u{_10ffff}"
 >"\u{_10ffff}" : "\\u{_10ffff}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/14.ts ===
+=== 14.ts ===
 '\u{_10ffff}'
 >'\u{_10ffff}' : "\\u{_10ffff}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/15.ts ===
+=== 15.ts ===
 `\u{_10ffff}`
 >`\u{_10ffff}` : "\\u{_10ffff}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts ===
+=== 16.ts ===
 /\u{_10ffff}/u
 >/\u{_10ffff}/u : RegExp
+>               : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts ===
+=== 17.ts ===
 "\u_ffff"
 >"\u_ffff" : "\\u_ffff"
+>          : ^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/18.ts ===
+=== 18.ts ===
 '\u_ffff'
 >'\u_ffff' : "\\u_ffff"
+>          : ^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/19.ts ===
+=== 19.ts ===
 `\u_ffff`
 >`\u_ffff` : "\\u_ffff"
+>          : ^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/20.ts ===
+=== 20.ts ===
 /\u_ffff/u
 >/\u_ffff/u : RegExp
+>           : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/21.ts ===
+=== 21.ts ===
 "\x_ff"
 >"\x_ff" : "\\x_ff"
+>        : ^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/22.ts ===
+=== 22.ts ===
 '\x_ff'
 >'\x_ff' : "\\x_ff"
+>        : ^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/23.ts ===
+=== 23.ts ===
 `\x_ff`
 >`\x_ff` : "\\x_ff"
+>        : ^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/24.ts ===
+=== 24.ts ===
 /\x_ff/u
 >/\x_ff/u : RegExp
+>         : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/25.ts ===
+=== 25.ts ===
 "\u{10ffff_}"
 >"\u{10ffff_}" : "\\u{10ffff_}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/26.ts ===
+=== 26.ts ===
 '\u{10ffff_}'
 >'\u{10ffff_}' : "\\u{10ffff_}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/27.ts ===
+=== 27.ts ===
 `\u{10ffff_}`
 >`\u{10ffff_}` : "\\u{10ffff_}"
+>              : ^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/28.ts ===
+=== 28.ts ===
 /\u{10ffff_}/u
 >/\u{10ffff_}/u : RegExp
+>               : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts ===
+=== 29.ts ===
 "\uffff_"
 >"\uffff_" : "￿_"
+>          : ^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/30.ts ===
+=== 30.ts ===
 '\uffff_'
 >'\uffff_' : "￿_"
+>          : ^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/31.ts ===
+=== 31.ts ===
 `\uffff_`
 >`\uffff_` : "￿_"
+>          : ^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/32.ts ===
+=== 32.ts ===
 /\uffff_/u
 >/\uffff_/u : RegExp
+>           : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/33.ts ===
+=== 33.ts ===
 "\xff_"
 >"\xff_" : "ÿ_"
+>        : ^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/34.ts ===
+=== 34.ts ===
 '\xff_'
 >'\xff_' : "ÿ_"
+>        : ^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/35.ts ===
+=== 35.ts ===
 `\xff_`
 >`\xff_` : "ÿ_"
+>        : ^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/36.ts ===
+=== 36.ts ===
 /\xff_/u
 >/\xff_/u : RegExp
+>         : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/37.ts ===
+=== 37.ts ===
 "\u{10__ffff}"
 >"\u{10__ffff}" : "\\u{10__ffff}"
+>               : ^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/38.ts ===
+=== 38.ts ===
 '\u{10__ffff}'
 >'\u{10__ffff}' : "\\u{10__ffff}"
+>               : ^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/39.ts ===
+=== 39.ts ===
 `\u{10__ffff}`
 >`\u{10__ffff}` : "\\u{10__ffff}"
+>               : ^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/40.ts ===
+=== 40.ts ===
 /\u{10__ffff}/u
 >/\u{10__ffff}/u : RegExp
+>                : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/41.ts ===
+=== 41.ts ===
 "\uff__ff"
 >"\uff__ff" : "\\uff__ff"
+>           : ^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts ===
+=== 42.ts ===
 '\uff__ff'
 >'\uff__ff' : "\\uff__ff"
+>           : ^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts ===
+=== 43.ts ===
 `\uff__ff`
 >`\uff__ff` : "\\uff__ff"
+>           : ^^^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/44.ts ===
+=== 44.ts ===
 /\uff__ff/u
 >/\uff__ff/u : RegExp
+>            : ^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/45.ts ===
+=== 45.ts ===
 "\xf__f"
 >"\xf__f" : "\\xf__f"
+>         : ^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/46.ts ===
+=== 46.ts ===
 '\xf__f'
 >'\xf__f' : "\\xf__f"
+>         : ^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/47.ts ===
+=== 47.ts ===
 `\xf__f`
 >`\xf__f` : "\\xf__f"
+>         : ^^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/48.ts ===
+=== 48.ts ===
 /\xf__f/u
 >/\xf__f/u : RegExp
+>          : ^^^^^^
 

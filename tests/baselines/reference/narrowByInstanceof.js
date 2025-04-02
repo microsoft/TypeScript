@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowByInstanceof.ts] ////
+
 //// [narrowByInstanceof.ts]
 interface A { a: string }
 interface B { b: string }

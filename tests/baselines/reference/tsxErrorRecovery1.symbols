@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxErrorRecovery1.tsx] ////
+
+=== file.tsx ===
 declare namespace JSX { interface Element { } }
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 >Element : Symbol(Element, Decl(file.tsx, 0, 23))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts] ////
+
 //// [errorsOnUnionsOfOverlappingObjects01.ts]
 interface Foo {
     a: string;

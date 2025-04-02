@@ -1,9 +1,14 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateUntypedTagCall01.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateUntypedTagCall01.ts] ////
+
+=== taggedTemplateUntypedTagCall01.ts ===
 var tag: Function;
 >tag : Function
+>    : ^^^^^^^^
 
 tag `Hello world!`;
 >tag `Hello world!` : any
 >tag : Function
+>    : ^^^^^^^^
 >`Hello world!` : "Hello world!"
+>               : ^^^^^^^^^^^^^^
 

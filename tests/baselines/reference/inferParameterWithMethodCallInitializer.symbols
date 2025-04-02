@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferParameterWithMethodCallInitializer.ts ===
+//// [tests/cases/compiler/inferParameterWithMethodCallInitializer.ts] ////
+
+=== inferParameterWithMethodCallInitializer.ts ===
 function getNumber(): number {
 >getNumber : Symbol(getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 0, 0))
 

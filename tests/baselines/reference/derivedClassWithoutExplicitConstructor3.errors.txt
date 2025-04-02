@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(21,9): error TS2554: Expected 2 arguments, but got 0.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(22,10): error TS2554: Expected 2 arguments, but got 1.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(44,9): error TS2554: Expected 2 arguments, but got 0.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(45,10): error TS2554: Expected 2 arguments, but got 1.
+derivedClassWithoutExplicitConstructor3.ts(21,9): error TS2554: Expected 2 arguments, but got 0.
+derivedClassWithoutExplicitConstructor3.ts(22,10): error TS2554: Expected 2 arguments, but got 1.
+derivedClassWithoutExplicitConstructor3.ts(44,9): error TS2554: Expected 2 arguments, but got 0.
+derivedClassWithoutExplicitConstructor3.ts(45,10): error TS2554: Expected 2 arguments, but got 1.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts (4 errors) ====
+==== derivedClassWithoutExplicitConstructor3.ts (4 errors) ====
     // automatic constructors with a class hieararchy of depth > 2
     
     class Base {
@@ -28,11 +28,11 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var r = new Derived(); // error
             ~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts:10:17: An argument for 'y' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor3.ts:10:17: An argument for 'y' was not provided.
     var r2 = new Derived2(1); // error
              ~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts:10:28: An argument for 'z' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor3.ts:10:28: An argument for 'z' was not provided.
     var r3 = new Derived('', '');
     
     class Base2<T> {
@@ -57,9 +57,9 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var d = new D2(); // error
             ~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts:32:17: An argument for 'y' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor3.ts:32:17: An argument for 'y' was not provided.
     var d2 = new D2(new Date()); // error
              ~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts:32:23: An argument for 'z' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor3.ts:32:23: An argument for 'z' was not provided.
     var d3 = new D2(new Date(), new Date()); // ok

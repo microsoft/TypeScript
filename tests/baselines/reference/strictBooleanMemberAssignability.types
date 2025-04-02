@@ -1,16 +1,25 @@
-=== tests/cases/compiler/strictBooleanMemberAssignability.ts ===
+//// [tests/cases/compiler/strictBooleanMemberAssignability.ts] ////
+
+=== strictBooleanMemberAssignability.ts ===
 class Abc {
 >Abc : Abc
+>    : ^^^
 
     def: boolean
 >def : boolean
+>    : ^^^^^^^
 
     constructor() {
         this.def = true
 >this.def = true : true
+>                : ^^^^
 >this.def : boolean
+>         : ^^^^^^^
 >this : this
+>     : ^^^^
 >def : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
     }
 }

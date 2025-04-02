@@ -1,28 +1,40 @@
-=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/implementsClause.ts] ////
+
+=== types.ts ===
 
 export interface Component {}
 
-=== tests/cases/conformance/externalModules/typeOnly/ns.ts ===
+=== ns.ts ===
 import type * as types from './types';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 export { types };
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+=== index.ts ===
 import type * as types from './types';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 import * as nestedNamespace from './ns';
 >nestedNamespace : typeof nestedNamespace
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
 class C implements types.Component {}
 >C : C
+>  : ^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 class D implements nestedNamespace.types.Component {}
 >D : D
+>  : ^
 >nestedNamespace.types : any
+>                      : ^^^
 >nestedNamespace : typeof nestedNamespace
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >types : any
+>      : ^^^
 

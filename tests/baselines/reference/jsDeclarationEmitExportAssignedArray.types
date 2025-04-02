@@ -1,15 +1,29 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/jsDeclarationEmitExportAssignedArray.ts] ////
+
+=== file.js ===
 module.exports = [{ name: 'other', displayName: 'Other', defaultEnabled: true }];
 >module.exports = [{ name: 'other', displayName: 'Other', defaultEnabled: true }] : { name: string; displayName: string; defaultEnabled: boolean; }[]
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { name: string; displayName: string; defaultEnabled: boolean; }[]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { name: string; displayName: string; defaultEnabled: boolean; }[]; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { name: string; displayName: string; defaultEnabled: boolean; }[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ name: 'other', displayName: 'Other', defaultEnabled: true }] : { name: string; displayName: string; defaultEnabled: boolean; }[]
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: 'other', displayName: 'Other', defaultEnabled: true } : { name: string; displayName: string; defaultEnabled: boolean; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >'other' : "other"
+>        : ^^^^^^^
 >displayName : string
+>            : ^^^^^^
 >'Other' : "Other"
+>        : ^^^^^^^
 >defaultEnabled : boolean
+>               : ^^^^^^^
 >true : true
+>     : ^^^^
 

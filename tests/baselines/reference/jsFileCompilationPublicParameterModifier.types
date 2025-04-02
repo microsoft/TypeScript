@@ -1,5 +1,9 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationPublicParameterModifier.ts] ////
+
+=== a.js ===
 class C { constructor(public x) { }}
 >C : C
+>  : ^
 >x : any
+>  : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxExcessPropsAndAssignability.tsx] ////
+
 //// [jsxExcessPropsAndAssignability.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

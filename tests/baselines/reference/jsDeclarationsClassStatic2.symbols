@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/Foo.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStatic2.ts] ////
+
+=== Foo.js ===
 class Base {
 >Base : Symbol(Base, Decl(Foo.js, 0, 0))
 
@@ -14,7 +16,7 @@ Foo.foo = "foo";
 >Foo : Symbol(Foo, Decl(Foo.js, 2, 1), Decl(Foo.js, 3, 32))
 >foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
 
-=== tests/cases/conformance/jsdoc/declarations/Bar.ts ===
+=== Bar.ts ===
 import { Foo } from "./Foo.js";
 >Foo : Symbol(Foo, Decl(Bar.ts, 0, 8))
 

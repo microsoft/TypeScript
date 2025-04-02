@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyGenericTypeInference.ts ===
+//// [tests/cases/compiler/implicitAnyGenericTypeInference.ts] ////
+
+=== implicitAnyGenericTypeInference.ts ===
 interface Comparer<T> {
 >Comparer : Symbol(Comparer, Decl(implicitAnyGenericTypeInference.ts, 0, 0))
 >T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 0, 19))
@@ -29,4 +31,80 @@ var r = c.compareTo(1, '');
 >c.compareTo : Symbol(Comparer.compareTo, Decl(implicitAnyGenericTypeInference.ts, 0, 23))
 >c : Symbol(c, Decl(implicitAnyGenericTypeInference.ts, 4, 3))
 >compareTo : Symbol(Comparer.compareTo, Decl(implicitAnyGenericTypeInference.ts, 0, 23))
+
+declare function f1<T>(cb: () => T): void;
+>f1 : Symbol(f1, Decl(implicitAnyGenericTypeInference.ts, 6, 27))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 8, 20))
+>cb : Symbol(cb, Decl(implicitAnyGenericTypeInference.ts, 8, 23))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 8, 20))
+
+f1(() => null);
+>f1 : Symbol(f1, Decl(implicitAnyGenericTypeInference.ts, 6, 27))
+
+declare function f2<T>(cb: () => PromiseLike<T>): void;
+>f2 : Symbol(f2, Decl(implicitAnyGenericTypeInference.ts, 9, 15))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 11, 20))
+>cb : Symbol(cb, Decl(implicitAnyGenericTypeInference.ts, 11, 23))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 11, 20))
+
+f2(async () => null);
+>f2 : Symbol(f2, Decl(implicitAnyGenericTypeInference.ts, 9, 15))
+
+declare function f3<T>(cb: () => Generator<T>): void;
+>f3 : Symbol(f3, Decl(implicitAnyGenericTypeInference.ts, 12, 21))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 14, 20))
+>cb : Symbol(cb, Decl(implicitAnyGenericTypeInference.ts, 14, 23))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 14, 20))
+
+f3(function* () { yield null; });
+>f3 : Symbol(f3, Decl(implicitAnyGenericTypeInference.ts, 12, 21))
+
+declare function f4<T>(cb: () => Generator<unknown, T>): void;
+>f4 : Symbol(f4, Decl(implicitAnyGenericTypeInference.ts, 15, 33))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 17, 20))
+>cb : Symbol(cb, Decl(implicitAnyGenericTypeInference.ts, 17, 23))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 17, 20))
+
+f4(function* () { return null; });
+>f4 : Symbol(f4, Decl(implicitAnyGenericTypeInference.ts, 15, 33))
+
+declare function f5<T>(cb: () => AsyncGenerator<T>): void;
+>f5 : Symbol(f5, Decl(implicitAnyGenericTypeInference.ts, 18, 34))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 20, 20))
+>cb : Symbol(cb, Decl(implicitAnyGenericTypeInference.ts, 20, 23))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 20, 20))
+
+f5(async function* () { yield null; });
+>f5 : Symbol(f5, Decl(implicitAnyGenericTypeInference.ts, 18, 34))
+
+declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
+>f6 : Symbol(f6, Decl(implicitAnyGenericTypeInference.ts, 21, 39))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 23, 20))
+>cb : Symbol(cb, Decl(implicitAnyGenericTypeInference.ts, 23, 23))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 23, 20))
+
+f6(async function* () { return null; });
+>f6 : Symbol(f6, Decl(implicitAnyGenericTypeInference.ts, 21, 39))
+
+// https://github.com/microsoft/TypeScript/issues/44913
+Promise.resolve().catch(e => null);
+>Promise.resolve().catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(implicitAnyGenericTypeInference.ts, 27, 24))
+
+Promise.resolve().then(v => null);
+>Promise.resolve().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(implicitAnyGenericTypeInference.ts, 28, 23))
 

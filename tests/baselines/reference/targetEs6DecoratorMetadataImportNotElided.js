@@ -35,7 +35,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Input, TemplateRef } from './deps';
-export var MyComponent = /** @class */ (function () {
+var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }
     Object.defineProperty(MyComponent.prototype, "ref", {
@@ -51,3 +51,4 @@ export var MyComponent = /** @class */ (function () {
     ], MyComponent.prototype, "ref", null);
     return MyComponent;
 }());
+export { MyComponent };

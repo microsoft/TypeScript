@@ -1,154 +1,233 @@
-=== tests/cases/compiler/commentsExternalModules_1.ts ===
+//// [tests/cases/compiler/commentsExternalModules.ts] ////
+
+=== commentsExternalModules_1.ts ===
 /**This is on import declaration*/
 import extMod = require("commentsExternalModules_0"); // trailing comment1
 >extMod : typeof extMod
+>       : ^^^^^^^^^^^^^
 
 extMod.m1.fooExport();
 >extMod.m1.fooExport() : number
+>                      : ^^^^^^
 >extMod.m1.fooExport : () => number
+>                    : ^^^^^^^^^^^^
 >extMod.m1 : typeof extMod.m1
+>          : ^^^^^^^^^^^^^^^^
 >extMod : typeof extMod
+>       : ^^^^^^^^^^^^^
 >m1 : typeof extMod.m1
+>   : ^^^^^^^^^^^^^^^^
 >fooExport : () => number
+>          : ^^^^^^^^^^^^
 
 var newVar = new extMod.m1.m2.c();
 >newVar : extMod.m1.m2.c
+>       : ^^^^^^^^^^^^^^
 >new extMod.m1.m2.c() : extMod.m1.m2.c
+>                     : ^^^^^^^^^^^^^^
 >extMod.m1.m2.c : typeof extMod.m1.m2.c
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >extMod.m1.m2 : typeof extMod.m1.m2
+>             : ^^^^^^^^^^^^^^^^^^^
 >extMod.m1 : typeof extMod.m1
+>          : ^^^^^^^^^^^^^^^^
 >extMod : typeof extMod
+>       : ^^^^^^^^^^^^^
 >m1 : typeof extMod.m1
+>   : ^^^^^^^^^^^^^^^^
 >m2 : typeof extMod.m1.m2
+>   : ^^^^^^^^^^^^^^^^^^^
 >c : typeof extMod.m1.m2.c
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 extMod.m4.fooExport();
 >extMod.m4.fooExport() : number
+>                      : ^^^^^^
 >extMod.m4.fooExport : () => number
+>                    : ^^^^^^^^^^^^
 >extMod.m4 : typeof extMod.m4
+>          : ^^^^^^^^^^^^^^^^
 >extMod : typeof extMod
+>       : ^^^^^^^^^^^^^
 >m4 : typeof extMod.m4
+>   : ^^^^^^^^^^^^^^^^
 >fooExport : () => number
+>          : ^^^^^^^^^^^^
 
 var newVar2 = new extMod.m4.m2.c();
 >newVar2 : extMod.m4.m2.c
+>        : ^^^^^^^^^^^^^^
 >new extMod.m4.m2.c() : extMod.m4.m2.c
+>                     : ^^^^^^^^^^^^^^
 >extMod.m4.m2.c : typeof extMod.m4.m2.c
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >extMod.m4.m2 : typeof extMod.m4.m2
+>             : ^^^^^^^^^^^^^^^^^^^
 >extMod.m4 : typeof extMod.m4
+>          : ^^^^^^^^^^^^^^^^
 >extMod : typeof extMod
+>       : ^^^^^^^^^^^^^
 >m4 : typeof extMod.m4
+>   : ^^^^^^^^^^^^^^^^
 >m2 : typeof extMod.m4.m2
+>   : ^^^^^^^^^^^^^^^^^^^
 >c : typeof extMod.m4.m2.c
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/commentsExternalModules_0.ts ===
+=== commentsExternalModules_0.ts ===
 /** Module comment*/
 export module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     /** b's comment*/
     export var b: number;
 >b : number
+>  : ^^^^^^
 
     /** foo's comment*/
     function foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
         return b;
 >b : number
+>  : ^^^^^^
     }
     /** m2 comments*/
     export module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
         /** class comment;*/
         export class c {
 >c : c
+>  : ^
 
         };
         /** i*/
         export var i = new c();
 >i : c
+>  : ^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
     }
     /** exported function*/
     export function fooExport() {
 >fooExport : () => number
+>          : ^^^^^^^^^^^^
 
         return foo();
 >foo() : number
+>      : ^^^^^^
 >foo : () => number
+>    : ^^^^^^^^^^^^
     }
 }
 m1.fooExport();
 >m1.fooExport() : number
+>               : ^^^^^^
 >m1.fooExport : () => number
+>             : ^^^^^^^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >fooExport : () => number
+>          : ^^^^^^^^^^^^
 
 var myvar = new m1.m2.c();
 >myvar : m1.m2.c
+>      : ^^^^^^^
 >new m1.m2.c() : m1.m2.c
+>              : ^^^^^^^
 >m1.m2.c : typeof m1.m2.c
+>        : ^^^^^^^^^^^^^^
 >m1.m2 : typeof m1.m2
+>      : ^^^^^^^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >m2 : typeof m1.m2
+>   : ^^^^^^^^^^^^
 >c : typeof m1.m2.c
+>  : ^^^^^^^^^^^^^^
 
 /** Module comment */
 export module m4 {
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
     /** b's comment */
     export var b: number;
 >b : number
+>  : ^^^^^^
 
     /** foo's comment
     */
     function foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
         return b;
 >b : number
+>  : ^^^^^^
     }
     /** m2 comments
     */
     export module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
         /** class comment; */
         export class c {
 >c : c
+>  : ^
 
         };
         /** i */
         export var i = new c();
 >i : c
+>  : ^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
     }
     /** exported function */
     export function fooExport() {
 >fooExport : () => number
+>          : ^^^^^^^^^^^^
 
         return foo();
 >foo() : number
+>      : ^^^^^^
 >foo : () => number
+>    : ^^^^^^^^^^^^
     }
 }
 m4.fooExport();
 >m4.fooExport() : number
+>               : ^^^^^^
 >m4.fooExport : () => number
+>             : ^^^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >fooExport : () => number
+>          : ^^^^^^^^^^^^
 
 var myvar2 = new m4.m2.c();
 >myvar2 : m4.m2.c
+>       : ^^^^^^^
 >new m4.m2.c() : m4.m2.c
+>              : ^^^^^^^
 >m4.m2.c : typeof m4.m2.c
+>        : ^^^^^^^^^^^^^^
 >m4.m2 : typeof m4.m2
+>      : ^^^^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 >m2 : typeof m4.m2
+>   : ^^^^^^^^^^^^
 >c : typeof m4.m2.c
+>  : ^^^^^^^^^^^^^^
 

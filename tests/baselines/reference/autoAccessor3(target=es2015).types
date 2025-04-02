@@ -1,19 +1,26 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor3.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor3.ts] ////
+
+=== autoAccessor3.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     accessor "w": any;
 >"w" : any
 
     accessor "x" = 1;
 >"x" : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     static accessor "y": any;
 >"y" : any
 
     static accessor "z" = 2;
 >"z" : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 }
 

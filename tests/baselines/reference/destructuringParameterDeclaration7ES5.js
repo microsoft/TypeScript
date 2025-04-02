@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration7ES5.ts] ////
+
 //// [destructuringParameterDeclaration7ES5.ts]
 interface ISomething {
     foo: string,

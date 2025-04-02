@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisShadowingErrorSpans.ts] ////
+
 //// [thisShadowingErrorSpans.ts]
 class C {
     m() {

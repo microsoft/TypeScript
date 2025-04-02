@@ -1,46 +1,70 @@
-=== tests/cases/compiler/foo.d.ts ===
+//// [tests/cases/compiler/namedImportNonExistentName.ts] ////
+
+=== foo.d.ts ===
 export = Foo;
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export as namespace Foo;
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 declare namespace Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 }
 
-=== tests/cases/compiler/foo2.ts ===
+=== foo2.ts ===
 let x: { a: string; c: string; } | { b: number; c: number; };
 >x : { a: string; c: string; } | { b: number; c: number; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 export = x
 >x : { a: string; c: string; } | { b: number; c: number; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 import { Bar, toString, foo } from './foo';
 >Bar : any
+>    : ^^^
 >toString : any
+>         : ^^^
 >foo : () => any
+>    : ^^^^^^^^^
 
 foo();
 >foo() : any
+>      : ^^^
 >foo : () => any
+>    : ^^^^^^^^^
 
 import { a, b, c, d, toString as foo2String } from './foo2';
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : string | number
+>  : ^^^^^^^^^^^^^^^
 >d : any
+>  : ^^^
 >toString : any
+>         : ^^^
 >foo2String : any
+>           : ^^^
 
 c;
 >c : string | number
+>  : ^^^^^^^^^^^^^^^
 

@@ -1,0 +1,19 @@
+error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+
+!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+==== /types.d.ts (0 errors) ====
+    export declare type User = {
+        name: string;
+    }
+    
+==== /a.ts (0 errors) ====
+    import type { User } from "./types.d.ts";
+    export type { User } from "./types.d.ts";
+    
+    export const user: User = { name: "John" };
+    
+    export function getUser(): import("./types.d.ts").User {
+        return user;
+    }
+    

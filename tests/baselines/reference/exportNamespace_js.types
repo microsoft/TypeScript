@@ -1,15 +1,20 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.js ===
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace_js.ts] ////
+
+=== a.js ===
 export class A {}
 >A : A
+>  : ^
 
-=== tests/cases/conformance/externalModules/typeOnly/b.js ===
+=== b.js ===
 
 export type * from './a';
 
-=== tests/cases/conformance/externalModules/typeOnly/c.js ===
+=== c.js ===
 import { A } from './b';
 >A : typeof A
+>  : ^^^^^^^^
 
 A;
 >A : typeof A
+>  : ^^^^^^^^
 

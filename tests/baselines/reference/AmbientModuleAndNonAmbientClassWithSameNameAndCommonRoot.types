@@ -1,55 +1,82 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndNonAmbientClassWithSameNameAndCommonRoot.ts] ////
+
+=== module.d.ts ===
 declare module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export module Point {
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 
         export var Origin: {
 >Origin : { x: number; y: number; }
+>       : ^^^^^      ^^^^^      ^^^
 
             x: number;
 >x : number
+>  : ^^^^^^
 
             y: number;
 >y : number
+>  : ^^^^^^
         }
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/classPoint.ts ===
+=== classPoint.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class Point {
 >Point : Point
+>      : ^^^^^
 
         constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p = A.Point.Origin;
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >A.Point.Origin : { x: number; y: number; }
+>               : ^^^^^      ^^^^^      ^^^
 >A.Point : typeof A.Point
+>        : ^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >Point : typeof A.Point
+>      : ^^^^^^^^^^^^^^
 >Origin : { x: number; y: number; }
+>       : ^^^^^      ^^^^^      ^^^
 
 var p = new A.Point(0, 0); // unexpected error here, bug 840000
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >new A.Point(0, 0) : A.Point
+>                  : ^^^^^^^
 >A.Point : typeof A.Point
+>        : ^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >Point : typeof A.Point
+>      : ^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 

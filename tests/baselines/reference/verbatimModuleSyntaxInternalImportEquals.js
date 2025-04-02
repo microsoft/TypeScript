@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts] ////
+
 //// [verbatimModuleSyntaxInternalImportEquals.ts]
 export {};
 import f1 = NonExistent;

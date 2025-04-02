@@ -1,25 +1,25 @@
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(1,21): error TS6053: File 'tests/cases/conformance/scanner/ecmascript5/References.ts' not found.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(5,21): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(5,47): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(9,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(10,22): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(10,47): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(11,22): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(11,47): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(15,9): error TS2304: Cannot find name 'Debug'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(15,22): error TS2662: Cannot find name 'isHexDigit'. Did you mean the static member 'CharacterInfo.isHexDigit'?
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(16,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(17,20): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(18,21): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(18,46): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(19,23): error TS2304: Cannot find name 'CharacterCodes'.
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(20,23): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(1,21): error TS6053: File 'References.ts' not found.
+scannertest1.ts(5,21): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(5,47): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(9,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
+scannertest1.ts(10,22): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(10,47): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(11,22): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(11,47): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(15,9): error TS2304: Cannot find name 'Debug'.
+scannertest1.ts(15,22): error TS2662: Cannot find name 'isHexDigit'. Did you mean the static member 'CharacterInfo.isHexDigit'?
+scannertest1.ts(16,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
+scannertest1.ts(17,20): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(18,21): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(18,46): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(19,23): error TS2304: Cannot find name 'CharacterCodes'.
+scannertest1.ts(20,23): error TS2304: Cannot find name 'CharacterCodes'.
 
 
-==== tests/cases/conformance/scanner/ecmascript5/scannertest1.ts (16 errors) ====
+==== scannertest1.ts (16 errors) ====
     ///<reference path='References.ts' />
                         ~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/scanner/ecmascript5/References.ts' not found.
+!!! error TS6053: File 'References.ts' not found.
     
     class CharacterInfo {
         public static isDecimalDigit(c: number): boolean {

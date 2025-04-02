@@ -1,75 +1,106 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts] ////
+
+=== parserErrantSemicolonInClass1.ts ===
 class a {
 >a : a
+>  : ^
 
     //constructor ();
     constructor (n: number);
 >n : number
+>  : ^^^^^^
 
     constructor (s: string);
 >s : string
+>  : ^^^^^^
 
     constructor (ns: any) {
 >ns : any
+>   : ^^^
 
     }
 
     public pgF() { };
 >pgF : () => void
+>    : ^^^^^^^^^^
 
     public pv;
 >pv : any
+>   : ^^^
 
     public get d() {
 >d : number
+>  : ^^^^^^
 
         return 30;
 >30 : 30
+>   : ^^
     }
     public set d() {
 >d : number
+>  : ^^^^^^
     }
 
     public static get p2() {
 >p2 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return { x: 30, y: 40 };
 >{ x: 30, y: 40 } : { x: number; y: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >30 : 30
+>   : ^^
 >y : number
+>  : ^^^^^^
 >40 : 40
+>   : ^^
     }
 
     private static d2() {
 >d2 : () => void
+>   : ^^^^^^^^^^
     }
     private static get p3() {
 >p3 : string
+>   : ^^^^^^
 
         return "string";
 >"string" : "string"
+>         : ^^^^^^^^
     }
     private pv3;
 >pv3 : any
+>    : ^^^
 
     private foo(n: number): string;
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     private foo(s: string): string;
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
     private foo(ns: any) {
 >foo : { (n: number): string; (s: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
+>   : ^^^
 
         return ns.toString();
 >ns.toString() : any
+>              : ^^^
 >ns.toString : any
+>            : ^^^
 >ns : any
+>   : ^^^
 >toString : any
+>         : ^^^
     }
 }
 

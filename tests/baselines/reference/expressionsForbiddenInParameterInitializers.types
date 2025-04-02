@@ -1,16 +1,27 @@
-=== tests/cases/compiler/bar.ts ===
+//// [tests/cases/compiler/expressionsForbiddenInParameterInitializers.ts] ////
+
+=== bar.ts ===
 export async function foo({ foo = await import("./bar") }) {
->foo : ({ foo }: { foo?: typeof import("tests/cases/compiler/bar"); }) => Promise<void>
->foo : typeof import("tests/cases/compiler/bar")
->await import("./bar") : typeof import("tests/cases/compiler/bar")
->import("./bar") : Promise<typeof import("tests/cases/compiler/bar")>
+>foo : ({ foo }: { foo?: typeof import("bar"); }) => Promise<void>
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : typeof import("bar")
+>    : ^^^^^^^^^^^^^^^^^^^^
+>await import("./bar") : typeof import("bar")
+>                      : ^^^^^^^^^^^^^^^^^^^^
+>import("./bar") : Promise<typeof import("bar")>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./bar" : "./bar"
+>        : ^^^^^^^
 }
 
 export function* foo2({ foo = yield "a" }) {
 >foo2 : ({ foo }: { foo?: any; }) => Generator<never, void, unknown>
+>     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >yield "a" : any
+>          : ^^^
 >"a" : "a"
+>    : ^^^
 }
 

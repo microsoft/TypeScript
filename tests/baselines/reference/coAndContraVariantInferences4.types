@@ -1,57 +1,85 @@
-=== tests/cases/compiler/coAndContraVariantInferences4.ts ===
+//// [tests/cases/compiler/coAndContraVariantInferences4.ts] ////
+
+=== coAndContraVariantInferences4.ts ===
 const enum SyntaxKind {
 >SyntaxKind : SyntaxKind
+>           : ^^^^^^^^^^
 
     Modifier,
 >Modifier : SyntaxKind.Modifier
+>         : ^^^^^^^^^^^^^^^^^^^
 
     Decorator,
 >Decorator : SyntaxKind.Decorator
+>          : ^^^^^^^^^^^^^^^^^^^^
 }
 
 interface Node {
     kind: SyntaxKind;
 >kind : SyntaxKind
+>     : ^^^^^^^^^^
 }
 
 interface Modifier extends Node { kind: SyntaxKind.Modifier; }
 >kind : SyntaxKind.Modifier
+>     : ^^^^^^^^^^^^^^^^^^^
 >SyntaxKind : any
+>           : ^^^
 
 interface Decorator extends Node { kind: SyntaxKind.Decorator; }
 >kind : SyntaxKind.Decorator
+>     : ^^^^^^^^^^^^^^^^^^^^
 >SyntaxKind : any
+>           : ^^^
 
 declare function isModifier(node: Node): node is Modifier;
 >isModifier : (node: Node) => node is Modifier
+>           : ^    ^^    ^^^^^                
 >node : Node
+>     : ^^^^
 
 declare function isDecorator(node: Node): node is Decorator;
 >isDecorator : (node: Node) => node is Decorator
+>            : ^    ^^    ^^^^^                 
 >node : Node
+>     : ^^^^
 
 declare function every<T, U extends T>(array: readonly T[], callback: (element: T) => element is U): array is readonly U[];
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^                     
 >array : readonly T[]
+>      : ^^^^^^^^^^^^
 >callback : (element: T) => element is U
+>         : ^       ^^ ^^^^^            
 >element : T
+>        : ^
 
 declare const modifiers: readonly Decorator[] | readonly Modifier[];
 >modifiers : readonly Decorator[] | readonly Modifier[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     every(modifiers, isModifier);
 >every(modifiers, isModifier) : boolean
+>                             : ^^^^^^^
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^                     
 >modifiers : readonly Decorator[] | readonly Modifier[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isModifier : (node: Node) => node is Modifier
+>           : ^    ^^    ^^^^^                
 
     every(modifiers, isDecorator);
 >every(modifiers, isDecorator) : boolean
+>                              : ^^^^^^^
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^                     
 >modifiers : readonly Decorator[] | readonly Modifier[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isDecorator : (node: Node) => node is Decorator
+>            : ^    ^^    ^^^^^                 
 }
 

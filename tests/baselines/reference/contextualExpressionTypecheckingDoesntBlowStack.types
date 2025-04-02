@@ -1,26 +1,37 @@
-=== tests/cases/compiler/contextualExpressionTypecheckingDoesntBlowStack.ts ===
+//// [tests/cases/compiler/contextualExpressionTypecheckingDoesntBlowStack.ts] ////
+
+=== contextualExpressionTypecheckingDoesntBlowStack.ts ===
 // repro for: https://github.com/Microsoft/TypeScript/issues/23661
 export interface IValidationError {
     message: string;
 >message : string
+>        : ^^^^^^
 }
 
 export default class Operation {
 >Operation : Operation
+>          : ^^^^^^^^^
 
     validateParameters(parameterValues: any) : IValidationError[] | null {
 >validateParameters : (parameterValues: any) => IValidationError[] | null
+>                   : ^               ^^   ^^^^^                         
 >parameterValues : any
 
         let result: IValidationError[] | null = null;
 >result : IValidationError[] | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         for(const parameterLocation of Object.keys(parameterValues)) {
 >parameterLocation : string
+>                  : ^^^^^^
 >Object.keys(parameterValues) : string[]
+>                             : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >parameterValues : any
 
             const parameter: any = (this as any).getParameter();;
@@ -28,58 +39,84 @@ export default class Operation {
 >(this as any).getParameter() : any
 >(this as any).getParameter : any
 >(this as any) : any
+>              : ^^^
 >this as any : any
 >this : this
+>     : ^^^^
 >getParameter : any
+>             : ^^^
 
             const values = (this as any).getValues();
 >values : any
 >(this as any).getValues() : any
 >(this as any).getValues : any
 >(this as any) : any
+>              : ^^^
 >this as any : any
 >this : this
+>     : ^^^^
 >getValues : any
+>          : ^^^
 
             const innerResult = parameter.validate(values[parameter.oaParameter.name]);
 >innerResult : any
 >parameter.validate(values[parameter.oaParameter.name]) : any
 >parameter.validate : any
 >parameter : any
+>          : ^^^
 >validate : any
+>         : ^^^
 >values[parameter.oaParameter.name] : any
 >values : any
 >parameter.oaParameter.name : any
 >parameter.oaParameter : any
+>                      : ^^^
 >parameter : any
+>          : ^^^
 >oaParameter : any
+>            : ^^^
 >name : any
+>     : ^^^
 
             if(innerResult && innerResult.length > 0) {
 >innerResult && innerResult.length > 0 : any
 >innerResult : any
 >innerResult.length > 0 : boolean
+>                       : ^^^^^^^
 >innerResult.length : any
 >innerResult : any
+>            : ^^^
 >length : any
+>       : ^^^
 >0 : 0
+>  : ^
 
                 // Commenting out this line will fix the problem.
                 result = (result || []).concat(innerResult);
 >result = (result || []).concat(innerResult) : IValidationError[]
+>                                            : ^^^^^^^^^^^^^^^^^^
 >result : IValidationError[] | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(result || []).concat(innerResult) : IValidationError[]
+>                                   : ^^^^^^^^^^^^^^^^^^
 >(result || []).concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
+>                      : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(result || []) : IValidationError[]
+>               : ^^^^^^^^^^^^^^^^^^
 >result || [] : IValidationError[]
+>             : ^^^^^^^^^^^^^^^^^^
 >result : IValidationError[] | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 >concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >innerResult : any
             }
         }
 
         return result;
 >result : IValidationError[] | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

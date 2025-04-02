@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName25.ts] ////
+
 //// [parserComputedPropertyName25.ts]
 class C {
     // No ASI

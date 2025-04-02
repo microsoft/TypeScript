@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mutuallyRecursiveCallbacks.ts ===
+//// [tests/cases/compiler/mutuallyRecursiveCallbacks.ts] ////
+
+=== mutuallyRecursiveCallbacks.ts ===
 // Repro from #18277
 
 interface Foo<T> { (bar: Bar<T>): void };

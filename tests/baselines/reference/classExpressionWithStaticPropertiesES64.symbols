@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionWithStaticPropertiesES64.ts ===
+//// [tests/cases/compiler/classExpressionWithStaticPropertiesES64.ts] ////
+
+=== classExpressionWithStaticPropertiesES64.ts ===
 (class { static x = 0; });
 >x : Symbol((Anonymous class).x, Decl(classExpressionWithStaticPropertiesES64.ts, 0, 8))
 

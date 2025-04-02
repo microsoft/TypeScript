@@ -1,38 +1,54 @@
-=== tests/cases/compiler/arrayOfExportedClass_1.ts ===
+//// [tests/cases/compiler/arrayOfExportedClass.ts] ////
+
+=== arrayOfExportedClass_1.ts ===
 ///<reference path='arrayOfExportedClass_0.ts'/>
 import Car = require('./arrayOfExportedClass_0');
 >Car : typeof Car
+>    : ^^^^^^^^^^
 
 class Road {
 >Road : Road
+>     : ^^^^
 
     public cars: Car[];
 >cars : Car[]
+>     : ^^^^^
 
     public AddCars(cars: Car[]) {
 >AddCars : (cars: Car[]) => void
+>        : ^    ^^     ^^^^^^^^^
 >cars : Car[]
+>     : ^^^^^
 
         this.cars = cars;
 >this.cars = cars : Car[]
+>                 : ^^^^^
 >this.cars : Car[]
+>          : ^^^^^
 >this : this
+>     : ^^^^
 >cars : Car[]
+>     : ^^^^^
 >cars : Car[]
+>     : ^^^^^
     }
 }
 
 export = Road;
 >Road : Road
+>     : ^^^^
 
-=== tests/cases/compiler/arrayOfExportedClass_0.ts ===
+=== arrayOfExportedClass_0.ts ===
 class Car {
 >Car : Car
+>    : ^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 export = Car;
 >Car : Car
+>    : ^^^
 

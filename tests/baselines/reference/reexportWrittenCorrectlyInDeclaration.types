@@ -1,29 +1,40 @@
-=== tests/cases/compiler/ThingA.ts ===
-// https://github.com/Microsoft/TypeScript/issues/8612
+//// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
+
+=== ThingA.ts ===
 export class ThingA { } 
 >ThingA : ThingA
+>       : ^^^^^^
 
-=== tests/cases/compiler/ThingB.ts ===
+=== ThingB.ts ===
 export class ThingB { }
 >ThingB : ThingB
+>       : ^^^^^^
 
-=== tests/cases/compiler/Things.ts ===
+=== Things.ts ===
 export {ThingA} from "./ThingA";
->ThingA : typeof import("tests/cases/compiler/ThingA").ThingA
+>ThingA : typeof import("ThingA").ThingA
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export {ThingB} from "./ThingB";
->ThingB : typeof import("tests/cases/compiler/ThingB").ThingB
+>ThingB : typeof import("ThingB").ThingB
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/Test.ts ===
+=== Test.ts ===
 import * as things from "./Things";
 >things : typeof things
+>       : ^^^^^^^^^^^^^
 
 export class Test {
 >Test : Test
+>     : ^^^^
 
     public method = (input: things.ThingA)  => { };
 >method : (input: things.ThingA) => void
+>       : ^     ^^             ^^^^^^^^^
 >(input: things.ThingA)  => { } : (input: things.ThingA) => void
+>                               : ^     ^^             ^^^^^^^^^
 >input : things.ThingA
+>      : ^^^^^^^^^^^^^
 >things : any
+>       : ^^^
 }

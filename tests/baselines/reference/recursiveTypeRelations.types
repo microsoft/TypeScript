@@ -1,109 +1,169 @@
-=== tests/cases/compiler/recursiveTypeRelations.ts ===
+//// [tests/cases/compiler/recursiveTypeRelations.ts] ////
+
+=== recursiveTypeRelations.ts ===
 // Repro from #14896
 
 type Attributes<Keys extends keyof any> = {
 >Attributes : Attributes<Keys>
+>           : ^^^^^^^^^^^^^^^^
 
     [Key in Keys]: string;
 }
 
 class Query<A extends Attributes<keyof A>> {
 >Query : Query<A>
+>      : ^^^^^^^^
 
     multiply<B extends Attributes<keyof B>>(x: B): Query<A & B>;
 >multiply : <B extends Attributes<keyof B>>(x: B) => Query<A & B>
+>         : ^ ^^^^^^^^^                   ^^ ^^ ^^^^^            
 >x : B
+>  : ^
 }
 
 // Repro from #14940
 
 type ClassName<S> = keyof S;
 >ClassName : keyof S
+>          : ^^^^^^^
 
 type ClassNameMap<S> = { [K in keyof S]?: boolean }
 >ClassNameMap : ClassNameMap<S>
+>             : ^^^^^^^^^^^^^^^
 
 type ClassNameObjectMap<S> = object & ClassNameMap<S>;
 >ClassNameObjectMap : ClassNameObjectMap<S>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 
 type ClassNameArg<S> = ClassName<S> | ClassNameObjectMap<S>;
 >ClassNameArg : ClassNameArg<S>
+>             : ^^^^^^^^^^^^^^^
 
 export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]): string {
 >css : <S extends { [K in keyof S]: string; }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
+>    : ^ ^^^^^^^^^                           ^^      ^^ ^^^^^          ^^                 ^^^^^      
 >styles : S
+>       : ^
 >classNames : ClassNameArg<S>[]
+>           : ^^^^^^^^^^^^^^^^^
 
   const args = classNames.map(arg => {
 >args : string[]
+>     : ^^^^^^^^
 >classNames.map(arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  }) : string[]
+>                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^
 >classNames.map : <U>(callbackfn: (value: ClassNameArg<S>, index: number, array: ClassNameArg<S>[]) => U, thisArg?: any) => U[]
+>               : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >classNames : ClassNameArg<S>[]
+>           : ^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: ClassNameArg<S>, index: number, array: ClassNameArg<S>[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  } : (arg: ClassNameArg<S>) => string
+>                                                                                                                                                                                                                                                                                                                                                                                                           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : ClassNameArg<S>
+>    : ^^^^^^^^^^^^^^^
 
     if (arg == null) {
 >arg == null : boolean
+>            : ^^^^^^^
 >arg : ClassNameArg<S>
+>    : ^^^^^^^^^^^^^^^
 
       return null;
     }
     if (typeof arg == "string") {
 >typeof arg == "string" : boolean
+>                       : ^^^^^^^
 >typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : ClassNameArg<S>
+>    : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
       return styles[arg];
 >styles[arg] : S[keyof S & string]
+>            : ^^^^^^^^^^^^^^^^^^^
 >styles : S
+>       : ^
 >arg : keyof S & string
+>    : ^^^^^^^^^^^^^^^^
     }
     if (typeof arg == "object") {
 >typeof arg == "object" : boolean
+>                       : ^^^^^^^
 >typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : ClassNameArg<S>
+>    : ^^^^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 
       return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {
 >Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {}) : string
+>                                                                                                                                                                                                                                : ^^^^^^
 >Object.keys(arg).reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>                        : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >Object.keys(arg) : string[]
+>                 : ^^^^^^^^
 >Object.keys : (o: object) => string[]
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
+>     : ^ ^^      ^^^^^        
 >arg : ClassNameObjectMap<S>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>       : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      } : (obj: ClassNameObject, key: keyof S) => ClassNameObject
+>                                                                                                                                                                                  : ^   ^^               ^^   ^^       ^^^^^^^^^^^^^^^^^^^^
 >obj : ClassNameObject
+>    : ^^^^^^^^^^^^^^^
 >key : keyof S
+>    : ^^^^^^^
 
         const exportedClassName = styles[key];
 >exportedClassName : S[keyof S]
+>                  : ^^^^^^^^^^
 >styles[key] : S[keyof S]
+>            : ^^^^^^^^^^
 >styles : S
+>       : ^
 >key : keyof S
+>    : ^^^^^^^
 
         obj[exportedClassName] = (arg as ClassNameMap<S>)[key]; 
 >obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : boolean
+>                                                       : ^^^^^^^
 >obj[exportedClassName] : ClassNameObject
+>                       : ^^^^^^^^^^^^^^^
 >obj : ClassNameObject
+>    : ^^^^^^^^^^^^^^^
 >exportedClassName : S[keyof S]
+>                  : ^^^^^^^^^^
 >(arg as ClassNameMap<S>)[key] : boolean
+>                              : ^^^^^^^
 >(arg as ClassNameMap<S>) : ClassNameMap<S>
+>                         : ^^^^^^^^^^^^^^^
 >arg as ClassNameMap<S> : ClassNameMap<S>
+>                       : ^^^^^^^^^^^^^^^
 >arg : ClassNameObjectMap<S>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >key : keyof S
+>    : ^^^^^^^
 
         return obj;
 >obj : ClassNameObject
+>    : ^^^^^^^^^^^^^^^
 
       }, {});
 >{} : {}
+>   : ^^
     }
   });
   return "";
 >"" : ""
+>   : ^^
 }
 

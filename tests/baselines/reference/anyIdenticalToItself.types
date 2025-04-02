@@ -1,31 +1,46 @@
-=== tests/cases/compiler/anyIdenticalToItself.ts ===
+//// [tests/cases/compiler/anyIdenticalToItself.ts] ////
+
+=== anyIdenticalToItself.ts ===
 function foo(x: any);
 >foo : { (x: any): any; (x: any): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
+>  : ^^^
 
 function foo(x: any);
 >foo : { (x: any): any; (x: any): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
+>  : ^^^
 
 function foo(x: any, y: number) { }
 >foo : { (x: any): any; (x: any): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : number
+>  : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     get X(): any {
 >X : any
+>  : ^^^
 
         var y: any;
 >y : any
+>  : ^^^
 
         return y;
 >y : any
+>  : ^^^
     }
     set X(v: any) {
 >X : any
+>  : ^^^
 >v : any
+>  : ^^^
     }
 }

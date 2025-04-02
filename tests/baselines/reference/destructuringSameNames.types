@@ -1,228 +1,409 @@
-=== tests/cases/conformance/es6/destructuring/destructuringSameNames.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringSameNames.ts] ////
+
+=== destructuringSameNames.ts ===
 // Valid cases
 
 let { foo, foo: bar } = { foo: 1 };
 >foo : number
+>    : ^^^^^^
 >foo : any
+>    : ^^^
 >bar : number
+>    : ^^^^^^
 >{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 ({ foo, foo } = { foo: 2 });
 >({ foo, foo } = { foo: 2 }) : { foo: number; }
+>                            : ^^^^^^^^^^^^^^^^
 >{ foo, foo } = { foo: 2 } : { foo: number; }
+>                          : ^^^^^^^^^^^^^^^^
 >{ foo, foo } : { foo: number; }
+>             : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >{ foo: 2 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
 ({ foo, foo: bar } = { foo: 3 });
 >({ foo, foo: bar } = { foo: 3 }) : { foo: number; }
+>                                 : ^^^^^^^^^^^^^^^^
 >{ foo, foo: bar } = { foo: 3 } : { foo: number; }
+>                               : ^^^^^^^^^^^^^^^^
 >{ foo, foo: bar } : { foo: number; }
+>                  : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >{ foo: 3 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 
 ({ foo: bar, foo } = { foo: 4 });
 >({ foo: bar, foo } = { foo: 4 }) : { foo: number; }
+>                                 : ^^^^^^^^^^^^^^^^
 >{ foo: bar, foo } = { foo: 4 } : { foo: number; }
+>                               : ^^^^^^^^^^^^^^^^
 >{ foo: bar, foo } : { foo: number; }
+>                  : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >{ foo: 4 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >4 : 4
+>  : ^
 
 ({ foo, bar: foo } = { foo: 3, bar: 33 });
 >({ foo, bar: foo } = { foo: 3, bar: 33 }) : { foo: number; bar: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo, bar: foo } = { foo: 3, bar: 33 } : { foo: number; bar: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo, bar: foo } : { foo: number; bar: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >{ foo: 3, bar: 33 } : { foo: number; bar: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 >bar : number
+>    : ^^^^^^
 >33 : 33
+>   : ^^
 
 ({ bar: foo, foo } = { foo: 4, bar: 44 });
 >({ bar: foo, foo } = { foo: 4, bar: 44 }) : { foo: number; bar: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ bar: foo, foo } = { foo: 4, bar: 44 } : { foo: number; bar: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ bar: foo, foo } : { bar: number; foo: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >{ foo: 4, bar: 44 } : { foo: number; bar: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >4 : 4
+>  : ^
 >bar : number
+>    : ^^^^^^
 >44 : 44
+>   : ^^
 
 ({ foo: bar, foo: bar } = { foo: 5 });
 >({ foo: bar, foo: bar } = { foo: 5 }) : { foo: number; }
+>                                      : ^^^^^^^^^^^^^^^^
 >{ foo: bar, foo: bar } = { foo: 5 } : { foo: number; }
+>                                    : ^^^^^^^^^^^^^^^^
 >{ foo: bar, foo: bar } : { foo: number; }
+>                       : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >{ foo: 5 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >5 : 5
+>  : ^
 
 ({ foo: bar, bar: foo } = { foo: 6, bar: 66 });
 >({ foo: bar, bar: foo } = { foo: 6, bar: 66 }) : { foo: number; bar: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: bar, bar: foo } = { foo: 6, bar: 66 } : { foo: number; bar: number; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: bar, bar: foo } : { foo: number; bar: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >{ foo: 6, bar: 66 } : { foo: number; bar: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >6 : 6
+>  : ^
 >bar : number
+>    : ^^^^^^
 >66 : 66
+>   : ^^
 
 ({ foo: bar, foo: bar } = { foo: 7 });
 >({ foo: bar, foo: bar } = { foo: 7 }) : { foo: number; }
+>                                      : ^^^^^^^^^^^^^^^^
 >{ foo: bar, foo: bar } = { foo: 7 } : { foo: number; }
+>                                    : ^^^^^^^^^^^^^^^^
 >{ foo: bar, foo: bar } : { foo: number; }
+>                       : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >{ foo: 7 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >7 : 7
+>  : ^
 
 [foo, foo] = [111, 1111];
 >[foo, foo] = [111, 1111] : [number, number]
+>                         : ^^^^^^^^^^^^^^^^
 >[foo, foo] : [number, number]
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >[111, 1111] : [number, number]
+>            : ^^^^^^^^^^^^^^^^
 >111 : 111
+>    : ^^^
 >1111 : 1111
+>     : ^^^^
 
 [foo, foo] = [222, 2222];
 >[foo, foo] = [222, 2222] : [number, number]
+>                         : ^^^^^^^^^^^^^^^^
 >[foo, foo] : [number, number]
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >[222, 2222] : [number, number]
+>            : ^^^^^^^^^^^^^^^^
 >222 : 222
+>    : ^^^
 >2222 : 2222
+>     : ^^^^
 
 [bar, foo, foo] = [333, 3333, 33333];
 >[bar, foo, foo] = [333, 3333, 33333] : [number, number, number]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[bar, foo, foo] : [number, number, number]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >[333, 3333, 33333] : [number, number, number]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >333 : 333
+>    : ^^^
 >3333 : 3333
+>     : ^^^^
 >33333 : 33333
+>      : ^^^^^
 
 [foo, bar, foo] = [333, 3333, 33333];
 >[foo, bar, foo] = [333, 3333, 33333] : [number, number, number]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[foo, bar, foo] : [number, number, number]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >[333, 3333, 33333] : [number, number, number]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >333 : 333
+>    : ^^^
 >3333 : 3333
+>     : ^^^^
 >33333 : 33333
+>      : ^^^^^
 
 [foo, foo, bar] = [444, 4444, 44444];
 >[foo, foo, bar] = [444, 4444, 44444] : [number, number, number]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[foo, foo, bar] : [number, number, number]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >[444, 4444, 44444] : [number, number, number]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >444 : 444
+>    : ^^^
 >4444 : 4444
+>     : ^^^^
 >44444 : 44444
+>      : ^^^^^
 
 // Error cases
 
 let { foo1, foo1 } = { foo1: 10 };
 >foo1 : number
+>     : ^^^^^^
 >foo1 : number
+>     : ^^^^^^
 >{ foo1: 10 } : { foo1: number; }
+>             : ^^^^^^^^^^^^^^^^^
 >foo1 : number
+>     : ^^^^^^
 >10 : 10
+>   : ^^
 
 let { foo2, bar2: foo2 } = { foo2: 20, bar2: 220 };
 >foo2 : number
+>     : ^^^^^^
 >bar2 : any
+>     : ^^^
 >foo2 : number
+>     : ^^^^^^
 >{ foo2: 20, bar2: 220 } : { foo2: number; bar2: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo2 : number
+>     : ^^^^^^
 >20 : 20
+>   : ^^
 >bar2 : number
+>     : ^^^^^^
 >220 : 220
+>    : ^^^
 
 let { bar3: foo3, foo3 } = { foo3: 30, bar3: 330 };
 >bar3 : any
+>     : ^^^
 >foo3 : number
+>     : ^^^^^^
 >foo3 : number
+>     : ^^^^^^
 >{ foo3: 30, bar3: 330 } : { foo3: number; bar3: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo3 : number
+>     : ^^^^^^
 >30 : 30
+>   : ^^
 >bar3 : number
+>     : ^^^^^^
 >330 : 330
+>    : ^^^
 
 const { foo4, foo4 } = { foo4: 40 };
 >foo4 : number
+>     : ^^^^^^
 >foo4 : number
+>     : ^^^^^^
 >{ foo4: 40 } : { foo4: number; }
+>             : ^^^^^^^^^^^^^^^^^
 >foo4 : number
+>     : ^^^^^^
 >40 : 40
+>   : ^^
 
 const { foo5, bar5: foo5 } = { foo5: 50, bar5: 550 };
 >foo5 : number
+>     : ^^^^^^
 >bar5 : any
+>     : ^^^
 >foo5 : number
+>     : ^^^^^^
 >{ foo5: 50, bar5: 550 } : { foo5: number; bar5: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo5 : number
+>     : ^^^^^^
 >50 : 50
+>   : ^^
 >bar5 : number
+>     : ^^^^^^
 >550 : 550
+>    : ^^^
 
 const { bar6: foo6, foo6 } = { foo6: 60, bar6: 660 };
 >bar6 : any
+>     : ^^^
 >foo6 : number
+>     : ^^^^^^
 >foo6 : number
+>     : ^^^^^^
 >{ foo6: 60, bar6: 660 } : { foo6: number; bar6: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo6 : number
+>     : ^^^^^^
 >60 : 60
+>   : ^^
 >bar6 : number
+>     : ^^^^^^
 >660 : 660
+>    : ^^^
 
 let [blah1, blah1] = [111, 222];
 >blah1 : number
+>      : ^^^^^^
 >blah1 : number
+>      : ^^^^^^
 >[111, 222] : [number, number]
+>           : ^^^^^^^^^^^^^^^^
 >111 : 111
+>    : ^^^
 >222 : 222
+>    : ^^^
 
 const [blah2, blah2] = [333, 444];
 >blah2 : number
+>      : ^^^^^^
 >blah2 : number
+>      : ^^^^^^
 >[333, 444] : [number, number]
+>           : ^^^^^^^^^^^^^^^^
 >333 : 333
+>    : ^^^
 >444 : 444
+>    : ^^^
 

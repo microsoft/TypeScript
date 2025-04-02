@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts] ////
+
+=== twoGenericInterfacesWithDifferentConstraints.ts ===
 interface A<T extends Date> {
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 0), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 2, 1))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 4, 12))

@@ -1,7 +1,7 @@
-tests/cases/compiler/genericGetter3.ts(11,5): error TS2322: Type 'A<number>' is not assignable to type 'string'.
+genericGetter3.ts(11,5): error TS2322: Type 'A<number>' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/genericGetter3.ts (1 errors) ====
+==== genericGetter3.ts (1 errors) ====
     class A<T> { }
     
     class C<T> {

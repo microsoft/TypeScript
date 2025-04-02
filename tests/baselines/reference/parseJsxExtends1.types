@@ -1,15 +1,21 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/parseJsxExtends1.ts] ////
+
+=== index.tsx ===
 declare const React: any;
 >React : any
 
 export function Foo() {
 >Foo : () => any
+>    : ^^^^^^^^^
 
     // No error; "const" is lowercase and therefore intrinsic.
     return <const T extends/>
 ><const T extends/> : error
 >const : any
+>      : ^^^
 >T : true
+>  : ^^^^
 >extends : true
+>        : ^^^^
 }
 

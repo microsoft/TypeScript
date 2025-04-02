@@ -1,15 +1,23 @@
-=== tests/cases/compiler/jsdocArrayObjectPromiseImplicitAny.js ===
+//// [tests/cases/compiler/jsdocArrayObjectPromiseImplicitAny.ts] ////
+
+=== jsdocArrayObjectPromiseImplicitAny.js ===
 /** @type {Array} */
 var anyArray = [5];
 >anyArray : any[]
+>         : ^^^^^
 >[5] : number[]
+>    : ^^^^^^^^
 >5 : 5
+>  : ^
 
 /** @type {Array<number>} */
 var numberArray = [5];
 >numberArray : number[]
+>            : ^^^^^^^^
 >[5] : number[]
+>    : ^^^^^^^^
 >5 : 5
+>  : ^
 
 /**
  * @param {Array} arr
@@ -17,29 +25,44 @@ var numberArray = [5];
  */
 function returnAnyArray(arr) {
 >returnAnyArray : (arr: any[]) => any[]
+>               : ^   ^^^^^^^^^^^^^^^^^
 >arr : any[]
+>    : ^^^^^
 
   return arr;
 >arr : any[]
+>    : ^^^^^
 }
 
 /** @type {Promise} */
 var anyPromise = Promise.resolve(5);
 >anyPromise : Promise<any>
+>           : ^^^^^^^^^^^^
 >Promise.resolve(5) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >5 : 5
+>  : ^
 
 /** @type {Promise<number>} */
 var numberPromise = Promise.resolve(5);
 >numberPromise : Promise<number>
+>              : ^^^^^^^^^^^^^^^
 >Promise.resolve(5) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >5 : 5
+>  : ^
 
 /**
  * @param {Promise} pr
@@ -47,25 +70,35 @@ var numberPromise = Promise.resolve(5);
  */
 function returnAnyPromise(pr) {
 >returnAnyPromise : (pr: Promise<any>) => Promise<any>
+>                 : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pr : Promise<any>
+>   : ^^^^^^^^^^^^
 
   return pr;
 >pr : Promise<any>
+>   : ^^^^^^^^^^^^
 }
 
 /** @type {Object} */
 var anyObject = {valueOf: 1}; // not an error since assigning to any.
 >anyObject : any
 >{valueOf: 1} : { valueOf: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^
 >valueOf : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 /** @type {Object<string, number>} */
 var paramedObject = {valueOf: 1};
 >paramedObject : { [x: string]: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{valueOf: 1} : { valueOf: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^
 >valueOf : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 /**
  * @param {Object} obj
@@ -73,6 +106,7 @@ var paramedObject = {valueOf: 1};
  */
 function returnAnyObject(obj) {
 >returnAnyObject : (obj: any) => any
+>                : ^   ^^^^^^^^^^^^^
 >obj : any
 
   return obj;

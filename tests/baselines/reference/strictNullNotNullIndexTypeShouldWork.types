@@ -1,72 +1,106 @@
-=== tests/cases/compiler/strictNullNotNullIndexTypeShouldWork.ts ===
+//// [tests/cases/compiler/strictNullNotNullIndexTypeShouldWork.ts] ////
+
+=== strictNullNotNullIndexTypeShouldWork.ts ===
 interface A {
     params?: { name: string; };
 >params : { name: string; } | undefined
+>       : ^^^^^^^^      ^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 }
 
 class Test<T extends A> {
 >Test : Test<T>
+>     : ^^^^^^^
 
     attrs: Readonly<T>;
 >attrs : Readonly<T>
+>      : ^^^^^^^^^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.attrs.params!.name;
 >this.attrs.params!.name : string
+>                        : ^^^^^^
 >this.attrs.params! : NonNullable<T["params"]>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.attrs.params : T["params"] | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >this.attrs : Readonly<T>
+>           : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >attrs : Readonly<T>
+>      : ^^^^^^^^^^^
 >params : T["params"] | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
     }
 }
 
 interface Foo {
     foo?: number;
 >foo : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 class FooClass<P extends Foo = Foo> {
 >FooClass : FooClass<P>
+>         : ^^^^^^^^^^^
 
     properties: Readonly<P>;
 >properties : Readonly<P>
+>           : ^^^^^^^^^^^
 
     foo(): number {
 >foo : () => number
+>    : ^^^^^^      
 
         const { foo = 42 } = this.properties;
 >foo : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 >this.properties : Readonly<P>
+>                : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >properties : Readonly<P>
+>           : ^^^^^^^^^^^
 
         return foo;
 >foo : number
+>    : ^^^^^^
     }
 }
 
 class Test2<T extends A> {
 >Test2 : Test2<T>
+>      : ^^^^^^^^
 
     attrs: Readonly<T>;
 >attrs : Readonly<T>
+>      : ^^^^^^^^^^^
 
     m() {
 >m : () => NonNullable<T["params"]>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return this.attrs.params!; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
 >this.attrs.params! : NonNullable<T["params"]>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.attrs.params : T["params"] | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >this.attrs : Readonly<T>
+>           : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >attrs : Readonly<T>
+>      : ^^^^^^^^^^^
 >params : T["params"] | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

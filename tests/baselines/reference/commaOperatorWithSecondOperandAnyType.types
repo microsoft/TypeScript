@@ -1,18 +1,24 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandAnyType.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandAnyType.ts] ////
+
+=== commaOperatorWithSecondOperandAnyType.ts ===
 var ANY: any;
 >ANY : any
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var OBJECT: Object;
 >OBJECT : Object
+>       : ^^^^^^
 
 //The second operand type is any
 ANY, ANY;
@@ -23,21 +29,25 @@ ANY, ANY;
 BOOLEAN, ANY;
 >BOOLEAN, ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >ANY : any
 
 NUMBER, ANY;
 >NUMBER, ANY : any
 >NUMBER : number
+>       : ^^^^^^
 >ANY : any
 
 STRING, ANY;
 >STRING, ANY : any
 >STRING : string
+>       : ^^^^^^
 >ANY : any
 
 OBJECT, ANY;
 >OBJECT, ANY : any
 >OBJECT : Object
+>       : ^^^^^^
 >ANY : any
 
 //Return type is any
@@ -53,6 +63,7 @@ var resultIsAny2 = (BOOLEAN, ANY);
 >(BOOLEAN, ANY) : any
 >BOOLEAN, ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >ANY : any
 
 var resultIsAny3 = (NUMBER, ANY);
@@ -60,6 +71,7 @@ var resultIsAny3 = (NUMBER, ANY);
 >(NUMBER, ANY) : any
 >NUMBER, ANY : any
 >NUMBER : number
+>       : ^^^^^^
 >ANY : any
 
 var resultIsAny4 = (STRING, ANY);
@@ -67,6 +79,7 @@ var resultIsAny4 = (STRING, ANY);
 >(STRING, ANY) : any
 >STRING, ANY : any
 >STRING : string
+>       : ^^^^^^
 >ANY : any
 
 var resultIsAny5 = (OBJECT, ANY);
@@ -74,6 +87,7 @@ var resultIsAny5 = (OBJECT, ANY);
 >(OBJECT, ANY) : any
 >OBJECT, ANY : any
 >OBJECT : Object
+>       : ^^^^^^
 >ANY : any
 
 //Literal and expression
@@ -83,51 +97,73 @@ var x: any;
 1, ANY;
 >1, ANY : any
 >1 : 1
+>  : ^
 >ANY : any
 
 ++NUMBER, ANY;
 >++NUMBER, ANY : any
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >ANY : any
 
 "string", [null, 1];
 >"string", [null, 1] : number[]
+>                    : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >[null, 1] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 
 "string".charAt(0), [null, 1];
 >"string".charAt(0), [null, 1] : number[]
+>                              : ^^^^^^^^
 >"string".charAt(0) : string
+>                   : ^^^^^^
 >"string".charAt : (pos: number) => string
+>                : ^   ^^      ^^^^^      
 >"string" : "string"
+>         : ^^^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 >[null, 1] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 
 true, x("any");
 >true, x("any") : any
 >true : true
+>     : ^^^^
 >x("any") : any
 >x : any
 >"any" : "any"
+>      : ^^^^^
 
 !BOOLEAN, x.doSomeThing();
 >!BOOLEAN, x.doSomeThing() : any
 >!BOOLEAN : boolean
+>         : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >x.doSomeThing() : any
 >x.doSomeThing : any
 >x : any
+>  : ^^^
 >doSomeThing : any
+>            : ^^^
 
 var resultIsAny6 = (1, ANY);
 >resultIsAny6 : any
 >(1, ANY) : any
 >1, ANY : any
 >1 : 1
+>  : ^
 >ANY : any
 
 var resultIsAny7 = (++NUMBER, ANY);
@@ -135,43 +171,62 @@ var resultIsAny7 = (++NUMBER, ANY);
 >(++NUMBER, ANY) : any
 >++NUMBER, ANY : any
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >ANY : any
 
 var resultIsAny8 = ("string", null);
 >resultIsAny8 : any
 >("string", null) : null
+>                 : ^^^^
 >"string", null : null
+>               : ^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 var resultIsAny9 = ("string".charAt(0), undefined);
 >resultIsAny9 : any
 >("string".charAt(0), undefined) : undefined
+>                                : ^^^^^^^^^
 >"string".charAt(0), undefined : undefined
+>                              : ^^^^^^^^^
 >"string".charAt(0) : string
+>                   : ^^^^^^
 >"string".charAt : (pos: number) => string
+>                : ^   ^^      ^^^^^      
 >"string" : "string"
+>         : ^^^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var resultIsAny10 = (true, x("any"));
 >resultIsAny10 : any
 >(true, x("any")) : any
 >true, x("any") : any
 >true : true
+>     : ^^^^
 >x("any") : any
 >x : any
 >"any" : "any"
+>      : ^^^^^
 
 var resultIsAny11 = (!BOOLEAN, x.doSomeThing());
 >resultIsAny11 : any
 >(!BOOLEAN, x.doSomeThing()) : any
 >!BOOLEAN, x.doSomeThing() : any
 >!BOOLEAN : boolean
+>         : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >x.doSomeThing() : any
 >x.doSomeThing : any
 >x : any
+>  : ^^^
 >doSomeThing : any
+>            : ^^^
 

@@ -1,30 +1,45 @@
-=== tests/cases/compiler/genericRecursiveImplicitConstructorErrors1.ts ===
+//// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors1.ts] ////
+
+=== genericRecursiveImplicitConstructorErrors1.ts ===
 export declare module TypeScript {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 
   class PullSymbol { }
 >PullSymbol : PullSymbol
+>           : ^^^^^^^^^^
 
   class PullSignatureSymbol <A,B,C> extends PullSymbol {
 >PullSignatureSymbol : PullSignatureSymbol<A, B, C>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PullSymbol : PullSymbol
+>           : ^^^^^^^^^^
 
   public addSpecialization<A,B,C>(signature: PullSignatureSymbol<A,B,C>, typeArguments: PullTypeSymbol<any,any,any>[]): void;
 >addSpecialization : <A, B, C>(signature: PullSignatureSymbol<A, B, C>, typeArguments: PullTypeSymbol<any, any, any>[]) => void
+>                  : ^ ^^ ^^ ^^         ^^                            ^^             ^^                               ^^^^^    
 >signature : PullSignatureSymbol<A, B, C>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeArguments : PullTypeSymbol<any, any, any>[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
   class PullTypeSymbol <A,B,C> extends PullSymbol {
 >PullTypeSymbol : PullTypeSymbol<A, B, C>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >PullSymbol : PullSymbol
+>           : ^^^^^^^^^^
 
     public findTypeParameter<A,B,C>(name: string): PullTypeParameterSymbol<A,B,C>;
 >findTypeParameter : <A, B, C>(name: string) => PullTypeParameterSymbol<A, B, C>
+>                  : ^ ^^ ^^ ^^    ^^      ^^^^^                                
 >name : string
+>     : ^^^^^^
   }
   class PullTypeParameterSymbol <A,B,C> extends PullTypeSymbol {
 >PullTypeParameterSymbol : PullTypeParameterSymbol<A, B, C>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PullTypeSymbol : typeof PullTypeSymbol
+>               : ^^^^^^^^^^^^^^^^^^^^^
   }
 }
  

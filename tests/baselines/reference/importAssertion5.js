@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAssertion/importAssertion5.ts] ////
+
 //// [importAssertion5.ts]
 import * as f from "./first" assert {
 

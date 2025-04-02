@@ -1,44 +1,73 @@
-=== tests/cases/compiler/Types.ts ===
+//// [tests/cases/compiler/declarationEmitExportAliasVisibiilityMarking.ts] ////
+
+=== Types.ts ===
 type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
->Suit : "Hearts" | "Spades" | "Clubs" | "Diamonds"
+>Suit : Suit
+>     : ^^^^
 
 type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'King';
->Rank : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | "Jack" | "Queen" | "King"
+>Rank : Rank
+>     : ^^^^
 
 export { Suit, Rank };
 >Suit : any
+>     : ^^^
 >Rank : any
+>     : ^^^
 
-=== tests/cases/compiler/Card.ts ===
+=== Card.ts ===
 import { Suit, Rank } from './Types';
 >Suit : any
+>     : ^^^
 >Rank : any
+>     : ^^^
 
 export default (suit: Suit, rank: Rank) => ({suit, rank});
 >(suit: Suit, rank: Rank) => ({suit, rank}) : (suit: Suit, rank: Rank) => { suit: Suit; rank: Rank; }
+>                                           : ^    ^^    ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >suit : Suit
+>     : ^^^^
 >rank : Rank
+>     : ^^^^
 >({suit, rank}) : { suit: Suit; rank: Rank; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{suit, rank} : { suit: Suit; rank: Rank; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >suit : Suit
+>     : ^^^^
 >rank : Rank
+>     : ^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 export let lazyCard = () => import('./Card').then(a => a.default);
->lazyCard : () => Promise<(suit: import("tests/cases/compiler/Types").Suit, rank: import("tests/cases/compiler/Types").Rank) => { suit: import("tests/cases/compiler/Types").Suit; rank: import("tests/cases/compiler/Types").Rank; }>
->() => import('./Card').then(a => a.default) : () => Promise<(suit: import("tests/cases/compiler/Types").Suit, rank: import("tests/cases/compiler/Types").Rank) => { suit: import("tests/cases/compiler/Types").Suit; rank: import("tests/cases/compiler/Types").Rank; }>
->import('./Card').then(a => a.default) : Promise<(suit: import("tests/cases/compiler/Types").Suit, rank: import("tests/cases/compiler/Types").Rank) => { suit: import("tests/cases/compiler/Types").Suit; rank: import("tests/cases/compiler/Types").Rank; }>
->import('./Card').then : <TResult1 = typeof import("tests/cases/compiler/Card"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/compiler/Card")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->import('./Card') : Promise<typeof import("tests/cases/compiler/Card")>
+>lazyCard : () => Promise<(suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }>
+>         : ^^^^^^^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => import('./Card').then(a => a.default) : () => Promise<(suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }>
+>                                            : ^^^^^^^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./Card').then(a => a.default) : Promise<(suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }>
+>                                      : ^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./Card').then : <TResult1 = typeof import("Card"), TResult2 = never>(onfulfilled?: (value: typeof import("Card")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./Card') : Promise<typeof import("Card")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./Card' : "./Card"
->then : <TResult1 = typeof import("tests/cases/compiler/Card"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/compiler/Card")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->a => a.default : (a: typeof import("tests/cases/compiler/Card")) => (suit: import("tests/cases/compiler/Types").Suit, rank: import("tests/cases/compiler/Types").Rank) => { suit: import("tests/cases/compiler/Types").Suit; rank: import("tests/cases/compiler/Types").Rank; }
->a : typeof import("tests/cases/compiler/Card")
->a.default : (suit: import("tests/cases/compiler/Types").Suit, rank: import("tests/cases/compiler/Types").Rank) => { suit: import("tests/cases/compiler/Types").Suit; rank: import("tests/cases/compiler/Types").Rank; }
->a : typeof import("tests/cases/compiler/Card")
->default : (suit: import("tests/cases/compiler/Types").Suit, rank: import("tests/cases/compiler/Types").Rank) => { suit: import("tests/cases/compiler/Types").Suit; rank: import("tests/cases/compiler/Types").Rank; }
+>         : ^^^^^^^^
+>then : <TResult1 = typeof import("Card"), TResult2 = never>(onfulfilled?: (value: typeof import("Card")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a => a.default : (a: typeof import("Card")) => (suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : typeof import("Card")
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>a.default : (suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }
+>          : ^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : typeof import("Card")
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>default : (suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }
+>        : ^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export { Suit, Rank } from './Types';
 >Suit : any
+>     : ^^^
 >Rank : any
+>     : ^^^
 

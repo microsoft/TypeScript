@@ -1,204 +1,336 @@
-=== tests/cases/compiler/truthinessCallExpressionCoercion1.ts ===
+//// [tests/cases/compiler/truthinessCallExpressionCoercion1.ts] ////
+
+=== truthinessCallExpressionCoercion1.ts ===
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
 >onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
+>                                             : ^        ^^             ^^        ^^^             ^^^^^^^^^
 >required : () => boolean
+>         : ^^^^^^       
 >optional : (() => boolean) | undefined
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 
     // error
     required ? console.log('required') : undefined;
 >required ? console.log('required') : undefined : void
+>                                               : ^^^^
 >required : () => boolean
+>         : ^^^^^^       
 >console.log('required') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'required' : "required"
+>           : ^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // ok
     optional ? console.log('optional') : undefined;
 >optional ? console.log('optional') : undefined : void
+>                                               : ^^^^
 >optional : (() => boolean) | undefined
+>         : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('optional') : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'optional' : "optional"
+>           : ^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // ok
     !!required ? console.log('not required') : undefined;
 >!!required ? console.log('not required') : undefined : void
+>                                                     : ^^^^
 >!!required : true
+>           : ^^^^
 >!required : false
+>          : ^^^^^
 >required : () => boolean
+>         : ^^^^^^       
 >console.log('not required') : void
+>                            : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'not required' : "not required"
+>               : ^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // ok
     required() ? console.log('required call') : undefined;
 >required() ? console.log('required call') : undefined : void
+>                                                      : ^^^^
 >required() : boolean
+>           : ^^^^^^^
 >required : () => boolean
+>         : ^^^^^^       
 >console.log('required call') : void
+>                             : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'required call' : "required call"
+>                : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 function onlyErrorsWhenUnusedInBody() {
 >onlyErrorsWhenUnusedInBody : () => void
+>                           : ^^^^^^^^^^
 
     function test() { return Math.random() > 0.5; }
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 >Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
+>    : ^^^
 
     // error
     test ? console.log('test') : undefined;
 >test ? console.log('test') : undefined : void
+>                                       : ^^^^
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 >console.log('test') : void
+>                    : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'test' : "test"
+>       : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // ok
     test ? console.log(test) : undefined;
 >test ? console.log(test) : undefined : void
+>                                     : ^^^^
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 >console.log(test) : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // ok
     test ? test() : undefined;
 >test ? test() : undefined : boolean | undefined
+>                          : ^^^^^^^^^^^^^^^^^^^
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 >test() : boolean
+>       : ^^^^^^^
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // ok
     test
 >test        ? [() => null].forEach(() => { test(); })        : undefined : void
+>                                                                         : ^^^^
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 
         ? [() => null].forEach(() => { test(); })
 >[() => null].forEach(() => { test(); }) : void
+>                                        : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[() => null] : (() => null)[]
+>             : ^^^^^^^^^^^^^^
 >() => null : () => null
+>           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >() => { test(); } : () => void
+>                  : ^^^^^^^^^^
 >test() : boolean
+>       : ^^^^^^^
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 
         : undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // error
     test
 >test        ? [() => null].forEach(test => { test() })        : undefined : void
+>                                                                          : ^^^^
 >test : () => boolean
+>     : ^^^^^^^^^^^^^
 
         ? [() => null].forEach(test => { test() })
 >[() => null].forEach(test => { test() }) : void
+>                                         : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[() => null] : (() => null)[]
+>             : ^^^^^^^^^^^^^^
 >() => null : () => null
+>           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >test => { test() } : (test: () => null) => void
+>                   : ^    ^^^^^^^^^^^^^^^^^^^^^
 >test : () => null
+>     : ^^^^^^^^^^
 >test() : null
+>       : ^^^^
 >test : () => null
+>     : ^^^^^^^^^^
 
         : undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 function checksPropertyAccess() {
 >checksPropertyAccess : () => void
+>                     : ^^^^^^^^^^
 
     const x = {
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         foo: {
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >{            bar() { return true; }        } : { bar(): boolean; }
+>                                             : ^^^^^^^^^^^^^^^^^^^
 
             bar() { return true; }
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
         }
     }
 
     // error
     x.foo.bar ? console.log('x.foo.bar') : undefined;
 >x.foo.bar ? console.log('x.foo.bar') : undefined : void
+>                                                 : ^^^^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >console.log('x.foo.bar') : void
+>                         : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'x.foo.bar' : "x.foo.bar"
+>            : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     // ok
     x.foo.bar ? x.foo.bar : undefined;
 >x.foo.bar ? x.foo.bar : undefined : (() => boolean) | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >x.foo.bar : () => boolean
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar(): boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     var chrome = {
 >chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        platformKeys: {            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        }    } : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
+>                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         platformKeys: {
 >platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        } : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             subtleCrypto() {
 >subtleCrypto : () => { sign(): void; exportKey(): boolean; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 return {
 >{                    sign() {},                    exportKey() { return true }                } : { sign(): void; exportKey(): boolean; }
+>                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                     sign() {},
 >sign : () => void
+>     : ^^^^^^^^^^
 
                     exportKey() { return true }
 >exportKey : () => boolean
+>          : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
                 }
             }
         }
@@ -206,79 +338,127 @@ function checksPropertyAccess() {
     // ok
     if (chrome.platformKeys.subtleCrypto().exportKey) {
 >chrome.platformKeys.subtleCrypto().exportKey : () => boolean
+>                                             : ^^^^^^^^^^^^^
 >chrome.platformKeys.subtleCrypto() : { sign(): void; exportKey(): boolean; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chrome.platformKeys.subtleCrypto : () => { sign(): void; exportKey(): boolean; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chrome.platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >subtleCrypto : () => { sign(): void; exportKey(): boolean; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exportKey : () => boolean
+>          : ^^^^^^^^^^^^^
 
         chrome.platformKeys.subtleCrypto().exportKey
 >chrome.platformKeys.subtleCrypto().exportKey : () => boolean
+>                                             : ^^^^^^^^^^^^^
 >chrome.platformKeys.subtleCrypto() : { sign(): void; exportKey(): boolean; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chrome.platformKeys.subtleCrypto : () => { sign(): void; exportKey(): boolean; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chrome.platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >subtleCrypto : () => { sign(): void; exportKey(): boolean; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exportKey : () => boolean
+>          : ^^^^^^^^^^^^^
     }
 }
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     maybeIsUser?: () => boolean;
 >maybeIsUser : (() => boolean) | undefined
+>            : ^^^^^^^       ^^^^^^^^^^^^^
 
     isUser() {
 >isUser : () => boolean
+>       : ^^^^^^^^^^^^^
 
         return true;
 >true : true
+>     : ^^^^
     }
 
     test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         // error
         this.isUser ? console.log('this.isUser') : undefined;
 >this.isUser ? console.log('this.isUser') : undefined : void
+>                                                     : ^^^^
 >this.isUser : () => boolean
+>            : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >isUser : () => boolean
+>       : ^^^^^^^^^^^^^
 >console.log('this.isUser') : void
+>                           : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'this.isUser' : "this.isUser"
+>              : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         // ok
         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
 >this.maybeIsUser ? console.log('this.maybeIsUser') : undefined : void
+>                                                               : ^^^^
 >this.maybeIsUser : (() => boolean) | undefined
+>                 : ^^^^^^^       ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >maybeIsUser : (() => boolean) | undefined
+>            : ^^^^^^^       ^^^^^^^^^^^^^
 >console.log('this.maybeIsUser') : void
+>                                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'this.maybeIsUser' : "this.maybeIsUser"
+>                   : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         // ok
         if (this.isUser) {
 >this.isUser : () => boolean
+>            : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >isUser : () => boolean
+>       : ^^^^^^^^^^^^^
 
             this.isUser();
 >this.isUser() : boolean
+>              : ^^^^^^^
 >this.isUser : () => boolean
+>            : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >isUser : () => boolean
+>       : ^^^^^^^^^^^^^
         }
     }
 }

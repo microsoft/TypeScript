@@ -1,78 +1,80 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 const scenario = "emit";
-describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
+describe("unittests:: tscWatch:: emit:: with outFile or out setting", () => {
     function verifyOutAndOutFileSetting(subScenario: string, out?: string, outFile?: string) {
         verifyTscWatch({
             scenario,
             subScenario: `emit with outFile or out setting/${subScenario}`,
-            commandLineArgs: ["--w", "-p", "/a/tsconfig.json"],
-            sys: () => createWatchedSystem({
-                "/a/a.ts": "let x = 1",
-                "/a/b.ts": "let y = 1",
-                "/a/tsconfig.json": JSON.stringify({ compilerOptions: { out, outFile } }),
-                [libFile.path]: libFile.content,
-            }),
+            commandLineArgs: ["--w", "-p", "/home/src/projects/a/tsconfig.json"],
+            sys: () =>
+                TestServerHost.createWatchedSystem({
+                    "/home/src/projects/a/a.ts": "let x = 1",
+                    "/home/src/projects/a/b.ts": "let y = 1",
+                    "/home/src/projects/a/tsconfig.json": jsonToReadableText({ compilerOptions: { out, outFile } }),
+                }, { currentDirectory: "/home/src/projects/a" }),
             edits: [
                 {
                     caption: "Make change in the file",
-                    edit: sys => sys.writeFile("/a/a.ts", "let x = 11"),
-                    timeouts: sys => sys.runQueuedTimeoutCallbacks()
+                    edit: sys => sys.writeFile("/home/src/projects/a/a.ts", "let x = 11"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Make change in the file again",
-                    edit: sys => sys.writeFile("/a/a.ts", "let xy = 11"),
-                    timeouts: sys => sys.runQueuedTimeoutCallbacks()
-                }
-            ]
+                    edit: sys => sys.writeFile("/home/src/projects/a/a.ts", "let xy = 11"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ],
         });
     }
     verifyOutAndOutFileSetting("config does not have out or outFile");
-    verifyOutAndOutFileSetting("config has out", "/a/out.js");
-    verifyOutAndOutFileSetting("config has outFile", /*out*/ undefined, "/a/out.js");
+    verifyOutAndOutFileSetting("config has out", "/home/src/projects/a/out.js");
+    verifyOutAndOutFileSetting("config has outFile", /*out*/ undefined, "/home/src/projects/a/out.js");
 
     function verifyFilesEmittedOnce(subScenario: string, useOutFile: boolean) {
         verifyTscWatch({
             scenario,
             subScenario: `emit with outFile or out setting/${subScenario}`,
-            commandLineArgs: ["--w", "-p", "/a/b/project/tsconfig.json"],
+            commandLineArgs: ["--w"],
             sys: () => {
                 const file1: File = {
-                    path: "/a/b/output/AnotherDependency/file1.d.ts",
-                    content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }"
+                    path: "/home/src/projects/a/b/output/AnotherDependency/file1.d.ts",
+                    content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }",
                 };
                 const file2: File = {
-                    path: "/a/b/dependencies/file2.d.ts",
-                    content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }"
+                    path: "/home/src/projects/a/b/dependencies/file2.d.ts",
+                    content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }",
                 };
                 const file3: File = {
-                    path: "/a/b/project/src/main.ts",
-                    content: "namespace Main { export function fooBar() {} }"
+                    path: "/home/src/projects/a/b/project/src/main.ts",
+                    content: "namespace Main { export function fooBar() {} }",
                 };
                 const file4: File = {
-                    path: "/a/b/project/src/main2.ts",
-                    content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }"
+                    path: "/home/src/projects/a/b/project/src/main2.ts",
+                    content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }",
                 };
                 const configFile: File = {
-                    path: "/a/b/project/tsconfig.json",
-                    content: JSON.stringify({
+                    path: "/home/src/projects/a/b/project/tsconfig.json",
+                    content: jsonToReadableText({
                         compilerOptions: useOutFile ?
                             { outFile: "../output/common.js", target: "es5" } :
                             { outDir: "../output", target: "es5" },
-                        files: [file1.path, file2.path, file3.path, file4.path]
-                    })
+                        files: [file1.path, file2.path, file3.path, file4.path],
+                    }),
                 };
-                return createWatchedSystem([file1, file2, file3, file4, libFile, configFile]);
+                return TestServerHost.createWatchedSystem(
+                    [file1, file2, file3, file4, configFile],
+                    { currentDirectory: "/home/src/projects/a/b/project" },
+                );
             },
         });
     }
@@ -80,13 +82,13 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
     verifyFilesEmittedOnce("without --outFile and multiple declaration files in the program", /*useOutFile*/ false);
 });
 
-describe("unittests:: tsc-watch:: emit for configured projects", () => {
-    const file1Consumer1Path = "/a/b/file1Consumer1.ts";
-    const file1Consumer2Path = "/a/b/file1Consumer2.ts";
-    const moduleFile1Path = "/a/b/moduleFile1.ts";
-    const moduleFile2Path = "/a/b/moduleFile2.ts";
-    const globalFilePath = "/a/b/globalFile3.ts";
-    const configFilePath = "/a/b/tsconfig.json";
+describe("unittests:: tscWatch:: emit:: for configured projects", () => {
+    const file1Consumer1Path = "/home/src/projects/a/b/file1Consumer1.ts";
+    const file1Consumer2Path = "/home/src/projects/a/b/file1Consumer2.ts";
+    const moduleFile1Path = "/home/src/projects/a/b/moduleFile1.ts";
+    const moduleFile2Path = "/home/src/projects/a/b/moduleFile2.ts";
+    const globalFilePath = "/home/src/projects/a/b/globalFile3.ts";
+    const configFilePath = "/home/src/projects/a/b/tsconfig.json";
     interface VerifyTscWatchEmit {
         subScenario: string;
         /** custom config file options */
@@ -95,19 +97,19 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
         getAdditionalFileOrFolder?: () => File[];
         /** initial list of files to emit if not the default list */
         firstReloadFileList?: string[];
-        changes: TscWatchCompileChange[]
+        changes: TscWatchCompileChange[];
     }
     function verifyTscWatchEmit({
         subScenario,
         configObj,
         getAdditionalFileOrFolder,
         firstReloadFileList,
-        changes
+        changes,
     }: VerifyTscWatchEmit) {
         verifyTscWatch({
             scenario,
             subScenario: `emit for configured projects/${subScenario}`,
-            commandLineArgs: ["--w", "-p", configFilePath],
+            commandLineArgs: ["--w"],
             sys: () => {
                 const moduleFile1: File = {
                     path: moduleFile1Path,
@@ -131,20 +133,22 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
 
                 const globalFile3: File = {
                     path: globalFilePath,
-                    content: `interface GlobalFoo { age: number }`
+                    content: `interface GlobalFoo { age: number }`,
                 };
                 const configFile: File = {
                     path: configFilePath,
-                    content: JSON.stringify(configObj || {})
+                    content: jsonToReadableText(configObj || {}),
                 };
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
-                const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
-                return createWatchedSystem(firstReloadFileList ?
-                    ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
-                    files
+                const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, ...additionalFiles];
+                return TestServerHost.createWatchedSystem(
+                    firstReloadFileList ?
+                        ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
+                        files,
+                    { currentDirectory: ts.getDirectoryPath(configFilePath) },
                 );
             },
-            edits: changes
+            edits: changes,
         });
     }
 
@@ -165,8 +169,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 caption: "Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`",
                 edit: sys => sys.writeFile(moduleFile1Path, `export var T: number;export function Foo() { console.log('hi'); };`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
@@ -197,8 +201,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     modifyModuleFile1Shape(sys);
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
@@ -211,8 +215,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     sys.deleteFile(file1Consumer2Path);
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
@@ -221,12 +225,12 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
             {
                 caption: "change moduleFile1 shape and create file1Consumer3",
                 edit: sys => {
-                    sys.writeFile("/a/b/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
+                    sys.writeFile("/home/src/projects/a/b/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
                     modifyModuleFile1Shape(sys);
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
@@ -238,8 +242,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 caption: "change file1 internal, and verify only file1 is affected",
                 edit: sys => sys.appendFile(moduleFile1Path, "var T1: number;"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
@@ -249,31 +253,31 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 caption: "change shape of global file",
                 edit: sys => sys.appendFile(globalFilePath, "var T2: string;"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
         subScenario: "should always return the file itself if '--isolatedModules' is specified",
         configObj: { compilerOptions: { isolatedModules: true } },
         changes: [
-            changeModuleFile1Shape
-        ]
+            changeModuleFile1Shape,
+        ],
     });
 
     verifyTscWatchEmit({
         subScenario: "should always return the file itself if '--out' or '--outFile' is specified",
-        configObj: { compilerOptions: { module: "system", outFile: "/a/b/out.js" } },
+        configObj: { compilerOptions: { module: "system", outFile: "/home/src/projects/a/b/out.js" } },
         changes: [
-            changeModuleFile1Shape
-        ]
+            changeModuleFile1Shape,
+        ],
     });
 
     verifyTscWatchEmit({
         subScenario: "should return cascaded affected file list",
         getAdditionalFileOrFolder: () => [{
-            path: "/a/b/file1Consumer1Consumer1.ts",
-            content: `import {y} from "./file1Consumer1";`
+            path: "/home/src/projects/a/b/file1Consumer1Consumer1.ts",
+            content: `import {y} from "./file1Consumer1";`,
         }],
         changes: [
             {
@@ -289,96 +293,94 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     sys.writeFile(moduleFile1Path, `export var T2: number;export function Foo() { };`);
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
         subScenario: "should work fine for files with circular references",
         getAdditionalFileOrFolder: () => [
             {
-                path: "/a/b/file1.ts",
+                path: "/home/src/projects/a/b/file1.ts",
                 content: `/// <reference path="./file2.ts" />
-export var t1 = 10;`
+export var t1 = 10;`,
             },
             {
-                path: "/a/b/file2.ts",
+                path: "/home/src/projects/a/b/file2.ts",
                 content: `/// <reference path="./file1.ts" />
-export var t2 = 10;`
-            }
+export var t2 = 10;`,
+            },
         ],
-        firstReloadFileList: [libFile.path, "/a/b/file1.ts", "/a/b/file2.ts", configFilePath],
+        firstReloadFileList: ["/home/src/projects/a/b/file1.ts", "/home/src/projects/a/b/file2.ts", configFilePath],
         changes: [
             {
                 caption: "change file1",
-                edit: sys => sys.appendFile("/a/b/file1.ts", "export var t3 = 10;"),
+                edit: sys => sys.appendFile("/home/src/projects/a/b/file1.ts", "export var t3 = 10;"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
         subScenario: "should detect removed code file",
         getAdditionalFileOrFolder: () => [{
-            path: "/a/b/referenceFile1.ts",
+            path: "/home/src/projects/a/b/referenceFile1.ts",
             content: `/// <reference path="./moduleFile1.ts" />
-export var x = Foo();`
+export var x = Foo();`,
         }],
-        firstReloadFileList: [libFile.path, "/a/b/referenceFile1.ts", moduleFile1Path, configFilePath],
+        firstReloadFileList: ["/home/src/projects/a/b/referenceFile1.ts", moduleFile1Path, configFilePath],
         changes: [
             {
                 caption: "delete moduleFile1",
                 edit: sys => sys.deleteFile(moduleFile1Path),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatchEmit({
         subScenario: "should detect non existing code file",
         getAdditionalFileOrFolder: () => [{
-            path: "/a/b/referenceFile1.ts",
+            path: "/home/src/projects/a/b/referenceFile1.ts",
             content: `/// <reference path="./moduleFile2.ts" />
-export var x = Foo();`
+export var x = Foo();`,
         }],
-        firstReloadFileList: [libFile.path, "/a/b/referenceFile1.ts", configFilePath],
+        firstReloadFileList: ["/home/src/projects/a/b/referenceFile1.ts", configFilePath],
         changes: [
             {
                 caption: "edit refereceFile1",
-                edit: sys => sys.appendFile("/a/b/referenceFile1.ts", "export var yy = Foo();"),
+                edit: sys => sys.appendFile("/home/src/projects/a/b/referenceFile1.ts", "export var yy = Foo();"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "create moduleFile2",
                 edit: sys => sys.writeFile(moduleFile2Path, "export var Foo4 = 10;"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 });
 
-describe("unittests:: tsc-watch:: emit file content", () => {
+describe("unittests:: tscWatch:: emit:: file content", () => {
     function verifyNewLine(subScenario: string, newLine: string) {
         verifyTscWatch({
             scenario,
             subScenario: `emit file content/${subScenario}`,
-            commandLineArgs: ["--w", "/a/app.ts"],
-            sys: () => createWatchedSystem(
-                [
-                    {
-                        path: "/a/app.ts",
-                        content: ["var x = 1;", "var y = 2;"].join(newLine)
-                    },
-                    libFile
-                ],
-                { newLine }
-            ),
+            commandLineArgs: ["--w", "/home/src/projects/a/app.ts"],
+            sys: () =>
+                TestServerHost.createWatchedSystem(
+                    [{
+                        path: "/home/src/projects/a/app.ts",
+                        content: ["var x = 1;", "var y = 2;"].join(newLine),
+                    }],
+                    { newLine, currentDirectory: "/home/src/projects/a" },
+                ),
             edits: [
                 {
                     caption: "Append a line",
-                    edit: sys => sys.appendFile("/a/app.ts", newLine + "var z = 3;"),
+                    edit: sys => sys.appendFile("/home/src/projects/a/app.ts", newLine + "var z = 3;"),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                }
+                },
             ],
         });
     }
@@ -388,40 +390,43 @@ describe("unittests:: tsc-watch:: emit file content", () => {
     verifyTscWatch({
         scenario,
         subScenario: "emit file content/should emit specified file",
-        commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+        commandLineArgs: ["-w", "-p", "/home/src/projects/a/b/tsconfig.json"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
-                content: `export function Foo() { return 10; }`
+                path: "/home/src/projects/a/b/f1.ts",
+                content: `export function Foo() { return 10; }`,
             };
 
             const file2 = {
-                path: "/a/b/f2.ts",
-                content: `import {Foo} from "./f1"; export let y = Foo();`
+                path: "/home/src/projects/a/b/f2.ts",
+                content: `import {Foo} from "./f1"; export let y = Foo();`,
             };
 
             const file3 = {
-                path: "/a/b/f3.ts",
-                content: `import {y} from "./f2"; let x = y;`
+                path: "/home/src/projects/a/b/f3.ts",
+                content: `import {y} from "./f2"; let x = y;`,
             };
 
             const configFile = {
-                path: "/a/b/tsconfig.json",
-                content: "{}"
+                path: "/home/src/projects/a/b/tsconfig.json",
+                content: "{}",
             };
-            return createWatchedSystem([file1, file2, file3, configFile, libFile]);
+            return TestServerHost.createWatchedSystem(
+                [file1, file2, file3, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFile.path) },
+            );
         },
         edits: [
             {
                 caption: "Append content to f1",
-                edit: sys => sys.appendFile("/a/b/f1.ts", "export function foo2() { return 2; }"),
+                edit: sys => sys.appendFile("/home/src/projects/a/b/f1.ts", "export function foo2() { return 2; }"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Again Append content to f1",
-                edit: sys => sys.appendFile("/a/b/f1.ts", "export function fooN() { return 2; }"),
+                edit: sys => sys.appendFile("/home/src/projects/a/b/f1.ts", "export function fooN() { return 2; }"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ],
     });
 
@@ -433,24 +438,27 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             const currentDirectory = "/user/someone/projects/myproject";
             const file1: File = {
                 path: `${currentDirectory}/file1.ts`,
-                content: "export const enum E1 { V = 1 }"
+                content: "export const enum E1 { V = 1 }",
             };
             const file2: File = {
                 path: `${currentDirectory}/file2.ts`,
-                content: `import { E1 } from "./file1"; export const enum E2 { V = E1.V }`
+                content: `import { E1 } from "./file1"; export const enum E2 { V = E1.V }`,
             };
             const file3: File = {
                 path: `${currentDirectory}/file3.ts`,
-                content: `import { E2 } from "./file2"; const v: E2 = E2.V;`
+                content: `import { E2 } from "./file2"; const v: E2 = E2.V;`,
             };
-            return createWatchedSystem([file1, file2, file3, libFile]);
+            return TestServerHost.createWatchedSystem(
+                [file1, file2, file3],
+                { currentDirectory },
+            );
         },
         edits: [
             {
                 caption: "Append content to file3",
                 edit: sys => sys.appendFile("/user/someone/projects/myproject/file3.ts", "function foo2() { return 2; }"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ],
     });
 
@@ -459,71 +467,80 @@ describe("unittests:: tsc-watch:: emit file content", () => {
         subScenario: "emit file content/file is deleted and created as part of change",
         commandLineArgs: ["-w"],
         sys: () => {
-            const projectLocation = "/home/username/project";
+            const projectLocation = "/home/username/projects/project";
             const file: File = {
                 path: `${projectLocation}/app/file.ts`,
-                content: "var a = 10;"
+                content: "var a = 10;",
             };
             const configFile: File = {
                 path: `${projectLocation}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     include: [
-                        "app/**/*.ts"
-                    ]
-                })
+                        "app/**/*.ts",
+                    ],
+                }),
             };
-            const files = [file, configFile, libFile];
-            return createWatchedSystem(files, { currentDirectory: projectLocation, useCaseSensitiveFileNames: true });
+            return TestServerHost.createWatchedSystem(
+                [file, configFile],
+                {
+                    currentDirectory: projectLocation,
+                    useCaseSensitiveFileNames: true,
+                },
+            );
         },
         edits: [
             {
                 caption: "file is deleted and then created to modify content",
-                edit: sys => sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                edit: sys => sys.appendFile("/home/username/projects/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 });
 
-describe("unittests:: tsc-watch:: emit with when module emit is specified as node", () => {
+describe("unittests:: tscWatch:: emit:: with when module emit is specified as node", () => {
     verifyTscWatch({
         scenario,
         subScenario: "when module emit is specified as node/when instead of filechanged recursive directory watcher is invoked",
-        commandLineArgs: ["--w", "--p", "/a/rootFolder/project/tsconfig.json"],
+        commandLineArgs: ["--w"],
         sys: () => {
             const configFile: File = {
-                path: "/a/rootFolder/project/tsconfig.json",
-                content: JSON.stringify({
+                path: "/home/src/projects/a/rootFolder/project/tsconfig.json",
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         allowJs: true,
-                        outDir: "Static/scripts/"
+                        outDir: "Static/scripts/",
                     },
                     include: [
-                        "Scripts/**/*"
+                        "Scripts/**/*",
                     ],
-                })
+                }),
             };
             const file1: File = {
-                path: "/a/rootFolder/project/Scripts/TypeScript.ts",
-                content: "var z = 10;"
+                path: "/home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts",
+                content: "var z = 10;",
             };
             const file2: File = {
-                path: "/a/rootFolder/project/Scripts/Javascript.js",
-                content: "var zz = 10;"
+                path: "/home/src/projects/a/rootFolder/project/Scripts/Javascript.js",
+                content: "var zz = 10;",
             };
-            return createWatchedSystem([configFile, file1, file2, libFile]);
+            return TestServerHost.createWatchedSystem(
+                [configFile, file1, file2],
+                { currentDirectory: ts.getDirectoryPath(configFile.path) },
+            );
         },
         edits: [
             {
                 caption: "Modify typescript file",
-                edit: sys => sys.modifyFile(
-                    "/a/rootFolder/project/Scripts/TypeScript.ts",
-                    "var zz30 = 100;",
-                    { invokeDirectoryWatcherInsteadOfFileChanged: true },
-                ),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/home/src/projects/a/rootFolder/project/Scripts/TypeScript.ts",
+                        "var zz30 = 100;",
+                        { invokeDirectoryWatcherInsteadOfFileChanged: true },
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ],
     });
 });

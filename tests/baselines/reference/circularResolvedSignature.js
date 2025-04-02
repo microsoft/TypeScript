@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularResolvedSignature.ts] ////
+
 //// [circularResolvedSignature.ts]
 declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
 
@@ -19,12 +21,11 @@ export function Component() {
 //// [circularResolvedSignature.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Component = void 0;
+exports.Component = Component;
 function Component() {
     var _a = useState(function () { return ({
-        value: "string",
+        value: "string", // this should be a number
         foo: function (arg) { return setState(arg); },
         bar: function (arg) { return setState(arg); },
     }); }), state = _a[0], setState = _a[1];
 }
-exports.Component = Component;

@@ -1,12 +1,12 @@
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(1,11): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(5,11): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(10,15): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(14,15): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(32,22): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts(38,22): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithTheSameNameButDifferentArity.ts(1,11): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithTheSameNameButDifferentArity.ts(5,11): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithTheSameNameButDifferentArity.ts(10,15): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithTheSameNameButDifferentArity.ts(14,15): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithTheSameNameButDifferentArity.ts(32,22): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithTheSameNameButDifferentArity.ts(38,22): error TS2428: All declarations of 'A' must have identical type parameters.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts (6 errors) ====
+==== twoGenericInterfacesWithTheSameNameButDifferentArity.ts (6 errors) ====
     interface A<T> {
               ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.

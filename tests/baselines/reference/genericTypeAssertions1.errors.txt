@@ -1,12 +1,12 @@
-tests/cases/compiler/genericTypeAssertions1.ts(3,5): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
+genericTypeAssertions1.ts(3,5): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/genericTypeAssertions1.ts(4,5): error TS2322: Type 'A<A<number>>' is not assignable to type 'A<number>'.
+genericTypeAssertions1.ts(4,5): error TS2322: Type 'A<A<number>>' is not assignable to type 'A<number>'.
   Type 'A<number>' is not assignable to type 'number'.
-tests/cases/compiler/genericTypeAssertions1.ts(4,21): error TS2352: Conversion of type 'A<number>' to type 'A<A<number>>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+genericTypeAssertions1.ts(4,21): error TS2352: Conversion of type 'A<number>' to type 'A<A<number>>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'number' is not comparable to type 'A<number>'.
 
 
-==== tests/cases/compiler/genericTypeAssertions1.ts (3 errors) ====
+==== genericTypeAssertions1.ts (3 errors) ====
     class A<T> { foo(x: T) { }}
     var foo = new A<number>();
     var r: A<string> = <A<number>>new A(); // error

@@ -1,28 +1,37 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceLowerPriorityThanReturn.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceLowerPriorityThanReturn.ts] ////
+
+=== keyofInferenceLowerPriorityThanReturn.ts ===
 // #22736
 declare class Write {
 >Write : Write
+>      : ^^^^^
 
     protected dummy: Write;
 >dummy : Write
+>      : ^^^^^
 }
 
 declare class Col<s, a> {
 >Col : Col<s, a>
+>    : ^^^^^^^^^
 
     protected dummy: [Col<s, a>, s, a];
 >dummy : [Col<s, a>, s, a]
+>      : ^^^^^^^^^^^^^^^^^
 }
 
 declare class Table<Req, Def> {
 >Table : Table<Req, Def>
+>      : ^^^^^^^^^^^^^^^
 
     protected dummy: [Table<Req, Def>, Req, Def];
 >dummy : [Table<Req, Def>, Req, Def]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type MakeTable<T1 extends object, T2 extends object> = {
 >MakeTable : MakeTable<T1, T2>
+>          : ^^^^^^^^^^^^^^^^^
 
     [P in keyof T1]: Col<Write, T1[P]>;
 } & {
@@ -31,60 +40,84 @@ type MakeTable<T1 extends object, T2 extends object> = {
 
 declare class ConflictTarget<Cols> {
 >ConflictTarget : ConflictTarget<Cols>
+>               : ^^^^^^^^^^^^^^^^^^^^
 
     public static tableColumns<Cols>(cols: (keyof Cols)[]): ConflictTarget<Cols>;
 >tableColumns : <Cols>(cols: (keyof Cols)[]) => ConflictTarget<Cols>
+>             : ^    ^^    ^^              ^^^^^                    
 >cols : (keyof Cols)[]
+>     : ^^^^^^^^^^^^^^
 
     protected dummy: [ConflictTarget<Cols>, Cols];
 >dummy : [ConflictTarget<Cols>, Cols]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 
 
 const bookTable: Table<BookReq, BookDef> = null as any
 >bookTable : Table<BookReq, BookDef>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
 
 interface BookReq {
     readonly title: string;
 >title : string
+>      : ^^^^^^
 
     readonly serial: number;
 >serial : number
+>       : ^^^^^^
 }
 
 interface BookDef {
     readonly author: string;
 >author : string
+>       : ^^^^^^
 
     readonly numPages: number | null;
 >numPages : number
+>         : ^^^^^^
 }
 
 
 function insertOnConflictDoNothing<Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>): boolean {
 >insertOnConflictDoNothing : <Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>) => boolean
+>                          : ^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^      ^^               ^^               ^^                         ^^^^^       
 >_table : Table<Req, Def>
+>       : ^^^^^^^^^^^^^^^
 >_conflictTarget : ConflictTarget<Req & Def>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 }
 
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"]));  // <-- No error here; should use the type inferred for the return type of `tableColumns`
 >insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"])) : boolean
+>                                                                              : ^^^^^^^
 >insertOnConflictDoNothing : <Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>) => boolean
+>                          : ^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^      ^^               ^^               ^^                         ^^^^^       
 >bookTable : Table<BookReq, BookDef>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >ConflictTarget.tableColumns(["serial"]) : ConflictTarget<BookReq & BookDef>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ConflictTarget.tableColumns : <Cols>(cols: (keyof Cols)[]) => ConflictTarget<Cols>
+>                            : ^    ^^    ^^              ^^^^^                    
 >ConflictTarget : typeof ConflictTarget
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >tableColumns : <Cols>(cols: (keyof Cols)[]) => ConflictTarget<Cols>
+>             : ^    ^^    ^^              ^^^^^                    
 >["serial"] : "serial"[]
+>           : ^^^^^^^^^^
 >"serial" : "serial"
+>         : ^^^^^^^^
 }
 

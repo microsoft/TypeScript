@@ -1,55 +1,86 @@
-=== tests/cases/compiler/propertySignatures.ts ===
+//// [tests/cases/compiler/propertySignatures.ts] ////
+
+=== propertySignatures.ts ===
 // Should be error - duplicate identifiers
 var foo1: { a:string; a: string; };
 >foo1 : { a: string; }
+>     : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
 // Should be OK
 var foo2: { a; };
 >foo2 : { a: any; }
+>     : ^^^^^^^^^^^
 >a : any
+>  : ^^^
 
 foo2.a = 2;
 >foo2.a = 2 : 2
+>           : ^
 >foo2.a : any
+>       : ^^^
 >foo2 : { a: any; }
+>     : ^^^^^^^^^^^
 >a : any
+>  : ^^^
 >2 : 2
+>  : ^
 
 foo2.a = "0";
 >foo2.a = "0" : "0"
+>             : ^^^
 >foo2.a : any
+>       : ^^^
 >foo2 : { a: any; }
+>     : ^^^^^^^^^^^
 >a : any
+>  : ^^^
 >"0" : "0"
+>    : ^^^
 
 // Should be error
 var foo3: { (): string; (): string; };
 >foo3 : { (): string; (): string; }
+>     : ^^^^^^      ^^^^^^      ^^^
 
 // Should be OK
 var foo4: { (): void; };
 >foo4 : () => void
+>     : ^^^^^^    
 
 var test = foo();
 >test : any
+>     : ^^^
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
 
 // Should be OK
 var foo5: {();};
 >foo5 : () => any
+>     : ^^^^^^^^^
 
 var test = foo5();
 >test : any
+>     : ^^^
 >foo5() : any
+>       : ^^^
 >foo5 : () => any
+>     : ^^^^^^^^^
 
 test.bar = 2;
 >test.bar = 2 : 2
+>             : ^
 >test.bar : any
+>         : ^^^
 >test : any
+>     : ^^^
 >bar : any
+>    : ^^^
 >2 : 2
+>  : ^
 

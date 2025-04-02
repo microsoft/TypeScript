@@ -1,23 +1,23 @@
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(10,5): error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
+stringEnumLiteralTypes3.ts(10,5): error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
   Type 'Choice.No' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(11,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.
+stringEnumLiteralTypes3.ts(11,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.
   Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(12,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(18,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'YesNo'.
+stringEnumLiteralTypes3.ts(12,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+stringEnumLiteralTypes3.ts(18,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'YesNo'.
   Type 'Choice.Unknown' is not assignable to type 'YesNo'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(19,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(40,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(52,5): error TS2367: This comparison appears to be unintentional because the types 'Choice.Yes' and 'Choice.Unknown' have no overlap.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(54,5): error TS2367: This comparison appears to be unintentional because the types 'Choice.Yes' and 'Choice.No' have no overlap.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(55,5): error TS2367: This comparison appears to be unintentional because the types 'YesNo' and 'Choice.Unknown' have no overlap.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(87,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(89,14): error TS2678: Type 'Choice.No' is not comparable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(96,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'YesNo'.
+stringEnumLiteralTypes3.ts(19,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
+stringEnumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
+stringEnumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+stringEnumLiteralTypes3.ts(40,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
+stringEnumLiteralTypes3.ts(52,5): error TS2367: This comparison appears to be unintentional because the types 'Choice.Yes' and 'Choice.Unknown' have no overlap.
+stringEnumLiteralTypes3.ts(54,5): error TS2367: This comparison appears to be unintentional because the types 'Choice.Yes' and 'Choice.No' have no overlap.
+stringEnumLiteralTypes3.ts(55,5): error TS2367: This comparison appears to be unintentional because the types 'YesNo' and 'Choice.Unknown' have no overlap.
+stringEnumLiteralTypes3.ts(87,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'Choice.Yes'.
+stringEnumLiteralTypes3.ts(89,14): error TS2678: Type 'Choice.No' is not comparable to type 'Choice.Yes'.
+stringEnumLiteralTypes3.ts(96,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'YesNo'.
 
 
-==== tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts (14 errors) ====
+==== stringEnumLiteralTypes3.ts (14 errors) ====
     const enum Choice { Unknown = "", Yes = "yes", No = "no" };
     
     type Yes = Choice.Yes;

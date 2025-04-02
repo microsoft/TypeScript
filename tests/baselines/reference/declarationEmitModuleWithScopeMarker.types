@@ -1,21 +1,31 @@
-=== tests/cases/compiler/declarationEmitModuleWithScopeMarker.ts ===
+//// [tests/cases/compiler/declarationEmitModuleWithScopeMarker.ts] ////
+
+=== declarationEmitModuleWithScopeMarker.ts ===
 declare module "bar" {
 >"bar" : typeof import("bar")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     var before: typeof func;
 >before : () => typeof func
+>       : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 
     export function normal(): void;
 >normal : () => void
+>       : ^^^^^^    
 
     export default function func(): typeof func;
 >func : () => typeof func
+>     : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 
     var after: typeof func;
 >after : () => typeof func
+>      : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 
     export {}
 }

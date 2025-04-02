@@ -1,31 +1,42 @@
-=== tests/cases/conformance/externalModules/constants.ts ===
-// @strict
+//// [tests/cases/conformance/externalModules/typeAndNamespaceExportMerge.ts] ////
 
+=== constants.ts ===
 export const COFFEE = 0;
 >COFFEE : 0
+>       : ^
 >0 : 0
+>  : ^
 
 export const TEA = 1;
 >TEA : 1
+>    : ^
 >1 : 1
+>  : ^
 
 
-=== tests/cases/conformance/externalModules/drink.ts ===
+=== drink.ts ===
 export type Drink = 0 | 1;
->Drink : 0 | 1
+>Drink : Drink
+>      : ^^^^^
 
 export * as Drink from "./constants";
->Drink : typeof import("tests/cases/conformance/externalModules/constants")
+>Drink : typeof import("constants")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-=== tests/cases/conformance/externalModules/index.ts ===
+=== index.ts ===
 import { Drink } from "./drink";
->Drink : typeof import("tests/cases/conformance/externalModules/constants")
+>Drink : typeof import("constants")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // 'Drink' only refers to a type, but is being used as a value here
 const x: Drink = Drink.TEA;
 >x : Drink
+>  : ^^^^^
 >Drink.TEA : 1
->Drink : typeof import("tests/cases/conformance/externalModules/constants")
+>          : ^
+>Drink : typeof import("constants")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TEA : 1
+>    : ^
 

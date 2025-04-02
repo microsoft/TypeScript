@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitToDeclarationDirWithDeclarationOption.ts] ////
+
 //// [test.ts]
 interface Foo {
     x: number;

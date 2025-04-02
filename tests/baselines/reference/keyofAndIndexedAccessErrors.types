@@ -1,526 +1,807 @@
-=== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts ===
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts] ////
+
+=== keyofAndIndexedAccessErrors.ts ===
 class Shape {
 >Shape : Shape
+>      : ^^^^^
 
     name: string;
 >name : string
+>     : ^^^^^^
 
     width: number;
 >width : number
+>      : ^^^^^^
 
     height: number;
 >height : number
+>       : ^^^^^^
 
     visible: boolean;
 >visible : boolean
+>        : ^^^^^^^
 }
 
 type Dictionary<T> = { [x: string]: T };
 >Dictionary : Dictionary<T>
+>           : ^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 type T00 = keyof K0;  // Error
 >T00 : string | number | symbol
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T01 = keyof Object;
 >T01 : keyof Object
+>    : ^^^^^^^^^^^^
 
 type T02 = keyof keyof Object;
 >T02 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T03 = keyof keyof keyof Object;
 >T03 : "toString" | "valueOf"
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type T04 = keyof keyof keyof keyof Object;
 >T04 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T05 = keyof keyof keyof keyof keyof Object;
 >T05 : "toString" | "valueOf"
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
 >T06 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T10 = Shape["name"];
 >T10 : string
+>    : ^^^^^^
 
 type T11 = Shape["foo"];  // Error
 >T11 : any
+>    : ^^^
 
 type T12 = Shape["name" | "foo"];  // Error
 >T12 : any
+>    : ^^^
 
 type T13 = Shape[any];  // Error
 >T13 : any
+>    : ^^^
 
 type T14 = Shape[string];  // Error
 >T14 : any
+>    : ^^^
 
 type T15 = Shape[number];  // Error
 >T15 : any
+>    : ^^^
 
 type T16 = Shape[boolean];  // Error
 >T16 : any
+>    : ^^^
 
 type T17 = Shape[void];  // Error
 >T17 : any
+>    : ^^^
 
 type T18 = Shape[undefined];  // Error
 >T18 : any
+>    : ^^^
 
 type T19 = Shape[{ x: string }];  // Error
 >T19 : any
+>    : ^^^
 >x : string
+>  : ^^^^^^
 
 type T20 = Shape[string | number];  // Error
 >T20 : any
+>    : ^^^
 
 type T21 = Shape[string & number];
 >T21 : never
+>    : ^^^^^
 
 type T22 = Shape[string | boolean];  // Error
 >T22 : any
+>    : ^^^
 
 type T30 = string[]["length"];
 >T30 : number
+>    : ^^^^^^
 
 type T31 = string[][number];
 >T31 : string
+>    : ^^^^^^
 
 type T32 = string[][string];  // Error
 >T32 : any
+>    : ^^^
 
 type T33 = string[][boolean];  // Error
 >T33 : any
+>    : ^^^
 
 type T40 = Dictionary<string>[any];
 >T40 : string
+>    : ^^^^^^
 
 type T41 = Dictionary<string>[number];
 >T41 : string
+>    : ^^^^^^
 
 type T42 = Dictionary<string>[string];
 >T42 : string
+>    : ^^^^^^
 
 type T43 = Dictionary<string>[boolean];  // Error
 >T43 : any
+>    : ^^^
 
 type T50 = any[any];
 >T50 : any
+>    : ^^^
 
 type T51 = any[number];
 >T51 : any
+>    : ^^^
 
 type T52 = any[string];
 >T52 : any
+>    : ^^^
 
 type T53 = any[boolean];  // Error
 >T53 : any
+>    : ^^^
 
 type T60 = {}["toString"];
 >T60 : () => string
+>    : ^^^^^^      
 
 type T61 = []["toString"];
 >T61 : () => string
+>    : ^^^^^^      
 
 declare let cond: boolean;
 >cond : boolean
+>     : ^^^^^^^
 
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 
     return obj[key];
 >obj[key] : T[K]
+>         : ^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 }
 
 function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 >value : T[K]
+>      : ^^^^
 
     obj[key] = value;
 >obj[key] = value : T[K]
+>                 : ^^^^
 >obj[key] : T[K]
+>         : ^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 >value : T[K]
+>      : ^^^^
 }
 
 function f10(shape: Shape) {
 >f10 : (shape: Shape) => void
+>    : ^     ^^     ^^^^^^^^^
 >shape : Shape
+>      : ^^^^^
 
     let x1 = getProperty(shape, "name");
 >x1 : string
+>   : ^^^^^^
 >getProperty(shape, "name") : string
+>                           : ^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
+>      : ^^^^^
 >"name" : "name"
+>       : ^^^^^^
 
     let x2 = getProperty(shape, "size");  // Error
 >x2 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty(shape, "size") : string | number | boolean
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
+>      : ^^^^^
 >"size" : "size"
+>       : ^^^^^^
 
     let x3 = getProperty(shape, cond ? "name" : "size");  // Error
 >x3 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty(shape, cond ? "name" : "size") : string | number | boolean
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
+>      : ^^^^^
 >cond ? "name" : "size" : "name" | "size"
+>                       : ^^^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >"size" : "size"
+>       : ^^^^^^
 
     setProperty(shape, "name", "rectangle");
 >setProperty(shape, "name", "rectangle") : void
+>                                        : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
+>      : ^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 
     setProperty(shape, "size", 10);  // Error
 >setProperty(shape, "size", 10) : void
+>                               : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
+>      : ^^^^^
 >"size" : "size"
+>       : ^^^^^^
 >10 : 10
+>   : ^^
 
     setProperty(shape, cond ? "name" : "size", 10);  // Error
 >setProperty(shape, cond ? "name" : "size", 10) : void
+>                                               : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
+>      : ^^^^^
 >cond ? "name" : "size" : "name" | "size"
+>                       : ^^^^^^^^^^^^^^^
 >cond : boolean
+>     : ^^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >"size" : "size"
+>       : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
 >f20 : <T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) => void
+>    : ^ ^^ ^^ ^^     ^^ ^^     ^^  ^^             ^^  ^^                 ^^  ^^             ^^  ^^                 ^^^^^^^^^
 >x : T | U
+>  : ^^^^^
 >y : T & U
+>  : ^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     x[k1];
 >x[k1] : (T | U)[keyof T & keyof U]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T | U
+>  : ^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     x[k2];
 >x[k2] : (T | U)[keyof T & keyof U]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T | U
+>  : ^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     x[k3];  // Error
 >x[k3] : any
+>      : ^^^
 >x : T | U
+>  : ^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     x[k4];  // Error
 >x[k4] : any
+>      : ^^^
 >x : T | U
+>  : ^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     y[k1];
 >y[k1] : (T & U)[keyof T & keyof U]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : T & U
+>  : ^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     y[k2];
 >y[k2] : (T & U)[keyof T & keyof U]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : T & U
+>  : ^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     y[k3];
 >y[k3] : (T & U)[keyof T | keyof U]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : T & U
+>  : ^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     y[k4];
 >y[k4] : (T & U)[keyof T | keyof U]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : T & U
+>  : ^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k1 = k2;
 >k1 = k2 : keyof T & keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k1 = k3;  // Error
 >k1 = k3 : keyof T | keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k1 = k4;  // Error
 >k1 = k4 : keyof T | keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k2 = k1;
 >k2 = k1 : keyof T & keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k2 = k3;  // Error
 >k2 = k3 : keyof T | keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k2 = k4;  // Error
 >k2 = k4 : keyof T | keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k3 = k1;
 >k3 = k1 : keyof T & keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k3 = k2;
 >k3 = k2 : keyof T & keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k3 = k4;
 >k3 = k4 : keyof T | keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k4 = k1;
 >k4 = k1 : keyof T & keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k4 = k2;
 >k4 = k2 : keyof T & keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
+>   : ^^^^^^^^^^^^^^^^^
 
     k4 = k3;
 >k4 = k3 : keyof T | keyof U
+>        : ^^^^^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 >k3 : keyof T | keyof U
+>   : ^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #17166
 function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >f3 : <T, K extends Extract<keyof T, string>, U extends T, J extends K>(t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]) => void
+>   : ^ ^^ ^^^^^^^^^                        ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^  ^^    ^^ ^^ ^^ ^^ ^^  ^^    ^^  ^^    ^^  ^^    ^^^^^    
 
     t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
 >t : T
+>  : ^
 >k : K
+>  : ^
 >tk : T[K]
+>   : ^^^^
 >u : U
+>  : ^
 >j : J
+>  : ^
 >uk : U[K]
+>   : ^^^^
 >tj : T[J]
+>   : ^^^^
 >uj : U[J]
+>   : ^^^^
 
     for (let key in t) {
 >key : Extract<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 
         key = k // ok, K ==> keyof T
 >key = k : K
+>        : ^
 >key : Extract<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >k : K
+>  : ^
 
         k = key // error, keyof T =/=> K
 >k = key : Extract<keyof T, string>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >k : K
+>  : ^
 >key : Extract<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         t[key] = tk; // ok, T[K] ==> T[keyof T]
 >t[key] = tk : T[K]
+>            : ^^^^
 >t[key] : T[Extract<keyof T, string>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 >key : Extract<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >tk : T[K]
+>   : ^^^^
 
         tk = t[key]; // error, T[keyof T] =/=> T[K]
 >tk = t[key] : T[Extract<keyof T, string>]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tk : T[K]
+>   : ^^^^
 >t[key] : T[Extract<keyof T, string>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 >key : Extract<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
     }
     tk = uk;
 >tk = uk : U[K]
+>        : ^^^^
 >tk : T[K]
+>   : ^^^^
 >uk : U[K]
+>   : ^^^^
 
     uk = tk; // error
 >uk = tk : T[K]
+>        : ^^^^
 >uk : U[K]
+>   : ^^^^
 >tk : T[K]
+>   : ^^^^
 
     tj = uj;
 >tj = uj : U[J]
+>        : ^^^^
 >tj : T[J]
+>   : ^^^^
 >uj : U[J]
+>   : ^^^^
 
     uj = tj; // error
 >uj = tj : T[J]
+>        : ^^^^
 >uj : U[J]
+>   : ^^^^
 >tj : T[J]
+>   : ^^^^
 
     tk = tj;
 >tk = tj : T[J]
+>        : ^^^^
 >tk : T[K]
+>   : ^^^^
 >tj : T[J]
+>   : ^^^^
 
     tj = tk; // error
 >tj = tk : T[K]
+>        : ^^^^
 >tj : T[J]
+>   : ^^^^
 >tk : T[K]
+>   : ^^^^
 
     tk = uj;
 >tk = uj : U[J]
+>        : ^^^^
 >tk : T[K]
+>   : ^^^^
 >uj : U[J]
+>   : ^^^^
 
     uj = tk; // error
 >uj = tk : T[K]
+>        : ^^^^
 >uj : U[J]
+>   : ^^^^
 >tk : T[K]
+>   : ^^^^
 }
 
 // The constraint of 'keyof T' is 'keyof T'
 function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
 >f4 : <T extends { [K in keyof T]: string; }>(k: keyof T) => void
+>   : ^ ^^^^^^^^^                           ^^ ^^       ^^^^^^^^^
 >k : keyof T
+>  : ^^^^^^^
 
     k = 42; // error
 >k = 42 : 42
+>       : ^^
 >k : keyof T
+>  : ^^^^^^^
 >42 : 42
+>   : ^^
 
     k = "hello"; // error
 >k = "hello" : "hello"
+>            : ^^^^^^^
 >k : keyof T
+>  : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 // Repro from #27470
 
 type UndefinedKeys<T extends Record<string, any>> = {
 >UndefinedKeys : UndefinedKeys<T>
+>              : ^^^^^^^^^^^^^^^^
 
   [K in keyof T]: undefined extends T[K] ? K : never
 };
 
 type MyType = {a: string, b: string | undefined}
->MyType : { a: string; b: string | undefined; }
+>MyType : MyType
+>       : ^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 type Result1 = UndefinedKeys<MyType>;
 >Result1 : UndefinedKeys<MyType>
+>        : ^^^^^^^^^^^^^^^^^^^^^
 
 const a1: Result1['a'] = 'a';  // Error
 >a1 : "a"
+>   : ^^^
 >'a' : "a"
+>    : ^^^
 
 const b1: Result1['b'] = 'b';
 >b1 : "b"
+>   : ^^^
 >'b' : "b"
+>    : ^^^
 
 function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 >test1 : <T extends Record<string, any>, K extends keyof T>(t: T, k: K) => void
+>      : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >k : K
+>  : ^
 
     t[k] = 42;  // Error
 >t[k] = 42 : 42
+>          : ^^
 >t[k] : T[K]
+>     : ^^^^
 >t : T
+>  : ^
 >k : K
+>  : ^
 >42 : 42
+>   : ^^
 
     t[k] = "hello";  // Error
 >t[k] = "hello" : "hello"
+>               : ^^^^^^^
 >t[k] : T[K]
+>     : ^^^^
 >t : T
+>  : ^
 >k : K
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     t[k] = [10, 20];  // Error
 >t[k] = [10, 20] : number[]
+>                : ^^^^^^^^
 >t[k] : T[K]
+>     : ^^^^
 >t : T
+>  : ^
 >k : K
+>  : ^
 >[10, 20] : number[]
+>         : ^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 }
 
 // Repro from #28839
 
 function f30<T, K extends keyof T>() {
 >f30 : <T, K extends keyof T>() => void
+>    : ^ ^^ ^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 >x : Partial<Record<keyof T, string>>[K]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 function f31<T, K extends keyof T>() {
 >f31 : <T, K extends keyof T>() => void
+>    : ^ ^^ ^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 >x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 // Repro from #51069
 
 class Test<T extends Record<string, number>> {
 >Test : Test<T>
+>     : ^^^^^^^
 
   testy: T;
 >testy : T
+>      : ^
 
   constructor(t: T) {
 >t : T
+>  : ^
 
     this.testy = t;
 >this.testy = t : T
+>               : ^
 >this.testy : T
+>           : ^
 >this : this
+>     : ^^^^
 >testy : T
+>      : ^
 >t : T
+>  : ^
   }
 
   public t(key: keyof T): number {
 >t : (key: keyof T) => number
+>  : ^   ^^       ^^^^^      
 >key : keyof T
+>    : ^^^^^^^
 
     this.testy[key] += 1; // Error
 >this.testy[key] += 1 : number
+>                     : ^^^^^^
 >this.testy[key] : T[keyof T]
+>                : ^^^^^^^^^^
 >this.testy : T
+>           : ^
 >this : this
+>     : ^^^^
 >testy : T
+>      : ^
 >key : keyof T
+>    : ^^^^^^^
 >1 : 1
+>  : ^
 
     return this.testy[key];
 >this.testy[key] : T[keyof T]
+>                : ^^^^^^^^^^
 >this.testy : T
+>           : ^
 >this : this
+>     : ^^^^
 >testy : T
+>      : ^
 >key : keyof T
+>    : ^^^^^^^
   }
 }
 

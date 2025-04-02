@@ -1,35 +1,53 @@
-=== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression4.ts] ////
+
+=== parserSuperExpression4.ts ===
 class C {
 >C : C
+>  : ^
 
     private foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         super.foo = 1
 >super.foo = 1 : 1
+>              : ^
 >super.foo : any
+>          : ^^^
 >super : any
+>      : ^^^
 >foo : any
+>    : ^^^
 >1 : 1
+>  : ^
     }
 }
 
 module M1.M2 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         private foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
             super.foo = 1
 >super.foo = 1 : 1
+>              : ^
 >super.foo : any
+>          : ^^^
 >super : any
+>      : ^^^
 >foo : any
+>    : ^^^
 >1 : 1
+>  : ^
         }
     }
 }

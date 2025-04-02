@@ -1,37 +1,61 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts] ////
+
+=== decrementOperatorWithEnumType.ts ===
 // -- operator on enum type
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
+>      : ^^^^^
 >A : ENUM1.A
+>  : ^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 >"" : (typeof ENUM1)[""]
+>   : ^^^^^^^^^^^^^^^^^^
 
 // expression
 var ResultIsNumber1 = --ENUM1["A"];
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >--ENUM1["A"] : number
+>             : ^^^^^^
 >ENUM1["A"] : any
+>           : ^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
 var ResultIsNumber2 = ENUM1.A--;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >ENUM1.A-- : number
+>          : ^^^^^^
 >ENUM1.A : any
+>        : ^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >A : any
+>  : ^^^
 
 // miss assignment operator
 --ENUM1["A"];
 >--ENUM1["A"] : number
+>             : ^^^^^^
 >ENUM1["A"] : any
+>           : ^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
 ENUM1[A]--;
 >ENUM1[A]-- : number
+>           : ^^^^^^
 >ENUM1[A] : string
+>         : ^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >A : any
+>  : ^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts] ////
+
+=== typeQueryOnClass.ts ===
 class C<T> {
 >C : Symbol(C, Decl(typeQueryOnClass.ts, 0, 0))
 >T : Symbol(T, Decl(typeQueryOnClass.ts, 0, 8))

@@ -1,95 +1,145 @@
-=== tests/cases/compiler/nonNullableTypes1.ts ===
+//// [tests/cases/compiler/nonNullableTypes1.ts] ////
+
+=== nonNullableTypes1.ts ===
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     let y = x || "hello";  // NonNullable<T> | string
 >y : string | NonNullable<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >x || "hello" : "hello" | NonNullable<T>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 function error(): never {
 >error : () => never
+>      : ^^^^^^     
 
     throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 }
 
 function f2<T>(x: T) {  // NonNullable<T>
 >f2 : <T>(x: T) => NonNullable<T>
+>   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     return x || error();
 >x || error() : NonNullable<T>
+>             : ^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >error() : never
+>        : ^^^^^
 >error : () => never
+>      : ^^^^^^     
 }
 
 function f3(x: unknown) {
 >f3 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     let y = x!;  // {}
 >y : {}
+>  : ^^
 >x! : {}
+>   : ^^
 >x : unknown
+>  : ^^^^^^^
 }
 
 function f4<T extends { x: string } | undefined>(obj: T) {
 >f4 : <T extends { x: string; } | undefined>(obj: T) => void
+>   : ^ ^^^^^^^^^                          ^^   ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >obj : T
+>    : ^
 
     if (obj?.x === "hello") {
 >obj?.x === "hello" : boolean
+>                   : ^^^^^^^
 >obj?.x : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >obj : { x: string; } | undefined
+>    : ^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
         obj;  // NonNullable<T>
 >obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
     }
     if (obj?.x) {
 >obj?.x : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >obj : { x: string; } | undefined
+>    : ^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         obj;  // NonNullable<T>
 >obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
     }
     if (typeof obj?.x === "string") {
 >typeof obj?.x === "string" : boolean
+>                           : ^^^^^^^
 >typeof obj?.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj?.x : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >obj : { x: string; } | undefined
+>    : ^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         obj;  // NonNullable<T>
 >obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
     }
 }
 
 class A {
 >A : A
+>  : ^
 
     x = "hello";
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         let zz = this?.x;  // string
 >zz : string
+>   : ^^^^^^
 >this?.x : string
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 

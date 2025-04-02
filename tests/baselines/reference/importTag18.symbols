@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/jsdoc/importTag18.ts] ////
+
+=== a.ts ===
+export interface Foo {}
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+=== b.js ===
+/**
+ * @import {
+ *    Foo
+ * } from "./a"
+ */
+
+/**
+ * @param {Foo} a
+ */
+export function foo(a) {}
+>foo : Symbol(foo, Decl(b.js, 0, 0))
+>a : Symbol(a, Decl(b.js, 9, 20))
+

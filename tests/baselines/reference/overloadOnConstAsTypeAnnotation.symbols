@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts ===
+//// [tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts] ////
+
+=== overloadOnConstAsTypeAnnotation.ts ===
 var f: (x: 'hi') => number = (x: 'hi') => { return 1; };
 >f : Symbol(f, Decl(overloadOnConstAsTypeAnnotation.ts, 0, 3))
 >x : Symbol(x, Decl(overloadOnConstAsTypeAnnotation.ts, 0, 8))

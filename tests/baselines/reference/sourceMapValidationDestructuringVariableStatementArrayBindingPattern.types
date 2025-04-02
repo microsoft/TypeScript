@@ -1,74 +1,122 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern.ts] ////
+
+=== sourceMapValidationDestructuringVariableStatementArrayBindingPattern.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 
     log(msg: string): void;
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >msg : string
+>    : ^^^^^^
 }
 type Robot = [number, string, string];
->Robot : [number, string, string]
+>Robot : Robot
+>      : ^^^^^
 
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : Robot
+>       : ^^^^^
 >[1, "mower", "mowing"] : [number, string, string]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"mower" : "mower"
+>        : ^^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 
 var robotB: Robot = [2, "trimmer", "trimming"];
 >robotB : Robot
+>       : ^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
 
 let [, nameA] = robotA;
 > : undefined
+> : ^^^^^^^^^
 >nameA : string
+>      : ^^^^^^
 >robotA : Robot
+>       : ^^^^^
 
 let [numberB] = robotB;
 >numberB : number
+>        : ^^^^^^
 >robotB : Robot
+>       : ^^^^^
 
 let [numberA2, nameA2, skillA2] = robotA;
 >numberA2 : number
+>         : ^^^^^^
 >nameA2 : string
+>       : ^^^^^^
 >skillA2 : string
+>        : ^^^^^^
 >robotA : Robot
+>       : ^^^^^
 
 let [numberC2] = [3, "edging", "Trimming edges"];
 >numberC2 : number
+>         : ^^^^^^
 >[3, "edging", "Trimming edges"] : [number, string, string]
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >"edging" : "edging"
+>         : ^^^^^^^^
 >"Trimming edges" : "Trimming edges"
+>                 : ^^^^^^^^^^^^^^^^
 
 let [numberC, nameC, skillC] = [3, "edging", "Trimming edges"];
 >numberC : number
+>        : ^^^^^^
 >nameC : string
+>      : ^^^^^^
 >skillC : string
+>       : ^^^^^^
 >[3, "edging", "Trimming edges"] : [number, string, string]
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >"edging" : "edging"
+>         : ^^^^^^^^
 >"Trimming edges" : "Trimming edges"
+>                 : ^^^^^^^^^^^^^^^^
 
 let [numberA3, ...robotAInfo] = robotA;
 >numberA3 : number
+>         : ^^^^^^
 >robotAInfo : [string, string]
+>           : ^^^^^^^^^^^^^^^^
 >robotA : Robot
+>       : ^^^^^
 
 if (nameA == nameA2) {
 >nameA == nameA2 : boolean
+>                : ^^^^^^^
 >nameA : string
+>      : ^^^^^^
 >nameA2 : string
+>       : ^^^^^^
 
     console.log(skillA2);
 >console.log(skillA2) : void
+>                     : ^^^^
 >console.log : (msg: string) => void
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >skillA2 : string
+>        : ^^^^^^
 }

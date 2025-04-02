@@ -1,50 +1,84 @@
-=== tests/cases/compiler/keyofIsLiteralContexualType.ts ===
+//// [tests/cases/compiler/keyofIsLiteralContexualType.ts] ////
+
+=== keyofIsLiteralContexualType.ts ===
 // keyof T is a literal contextual type
 
 function foo<T extends { a: string, b: string }>() {
 >foo : <T extends { a: string; b: string; }>() => void
+>    : ^ ^^^^^^^^^                         ^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     let a: (keyof T)[] = ["a", "b"];
 >a : (keyof T)[]
+>  : ^^^^^^^^^^^
 >["a", "b"] : ("a" | "b")[]
+>           : ^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 >"b" : "b"
+>    : ^^^
 
     let b: (keyof T)[] = ["a", "b", "c"];
 >b : (keyof T)[]
+>  : ^^^^^^^^^^^
 >["a", "b", "c"] : ("a" | "b" | "c")[]
+>                : ^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 >"b" : "b"
+>    : ^^^
 >"c" : "c"
+>    : ^^^
 }
 
 // Repro from #12455
 
 declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
 >pick : <T, K extends keyof T>(obj: T, propNames: K[]) => Pick<T, K>
+>     : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^         ^^   ^^^^^          
 >obj : T
+>    : ^
 >propNames : K[]
+>          : ^^^
 
 let x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
 >x : Pick<{ a: number; b: number; c: number; }, "a" | "c">
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick({ a: 10, b: 20, c: 30 }, ["a", "c"]) : Pick<{ a: number; b: number; c: number; }, "a" | "c">
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick : <T, K extends keyof T>(obj: T, propNames: K[]) => Pick<T, K>
+>     : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^         ^^   ^^^^^          
 >{ a: 10, b: 20, c: 30 } : { a: number; b: number; c: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >b : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 >c : number
+>  : ^^^^^^
 >30 : 30
+>   : ^^
 >["a", "c"] : ("a" | "c")[]
+>           : ^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 >"c" : "c"
+>    : ^^^
 
 let b = x.b;  // Error
 >b : any
+>  : ^^^
 >x.b : any
+>    : ^^^
 >x : Pick<{ a: number; b: number; c: number; }, "a" | "c">
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 

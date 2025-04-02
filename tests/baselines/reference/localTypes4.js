@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/localTypes/localTypes4.ts] ////
+
 //// [localTypes4.ts]
 function f1() {
     // Type parameters are in scope in parameters and return types

@@ -1,31 +1,57 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator9.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator9.ts] ////
+
+=== nullishCoalescingOperator9.ts ===
 declare let f: null | ((x: string) => void);
 >f : ((x: string) => void) | null
+>  : ^^ ^^      ^^^^^    ^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 let g = f || (abc => { void abc.toLowerCase() })
 >g : (x: string) => void
+>  : ^ ^^      ^^^^^    
 >f || (abc => { void abc.toLowerCase() }) : (x: string) => void
+>                                         : ^ ^^      ^^^^^    
 >f : ((x: string) => void) | null
+>  : ^^ ^^      ^^^^^    ^^^^^^^^
 >(abc => { void abc.toLowerCase() }) : (abc: string) => void
+>                                    : ^   ^^^^^^^^^^^^^^^^^
 >abc => { void abc.toLowerCase() } : (abc: string) => void
+>                                  : ^   ^^^^^^^^^^^^^^^^^
 >abc : string
+>    : ^^^^^^
 >void abc.toLowerCase() : undefined
+>                       : ^^^^^^^^^
 >abc.toLowerCase() : string
+>                  : ^^^^^^
 >abc.toLowerCase : () => string
+>                : ^^^^^^      
 >abc : string
+>    : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
 let gg = f ?? (abc => { void abc.toLowerCase() })
 >gg : (x: string) => void
+>   : ^ ^^      ^^^^^    
 >f ?? (abc => { void abc.toLowerCase() }) : (x: string) => void
+>                                         : ^ ^^      ^^^^^    
 >f : ((x: string) => void) | null
+>  : ^^ ^^      ^^^^^    ^^^^^^^^
 >(abc => { void abc.toLowerCase() }) : (abc: string) => void
+>                                    : ^   ^^^^^^^^^^^^^^^^^
 >abc => { void abc.toLowerCase() } : (abc: string) => void
+>                                  : ^   ^^^^^^^^^^^^^^^^^
 >abc : string
+>    : ^^^^^^
 >void abc.toLowerCase() : undefined
+>                       : ^^^^^^^^^
 >abc.toLowerCase() : string
+>                  : ^^^^^^
 >abc.toLowerCase : () => string
+>                : ^^^^^^      
 >abc : string
+>    : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 

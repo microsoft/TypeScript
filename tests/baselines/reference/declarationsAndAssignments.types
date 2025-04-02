@@ -1,844 +1,1389 @@
-=== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts ===
+//// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
+
+=== Performance Stats ===
+Type Count: 500 -> 1,000
+
+=== declarationsAndAssignments.ts ===
 function f0() {
 >f0 : () => void
+>   : ^^^^^^^^^^
 
     var [] = [1, "hello"];
 >[1, "hello"] : (string | number)[]
+>             : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var [x] = [1, "hello"];
 >x : number
+>  : ^^^^^^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var [x, y] = [1, "hello"];
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var [x, y, z] = [1, "hello"];
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var [,, x] = [0, 1, 2];
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >[0, 1, 2] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: string;
 >y : string
+>  : ^^^^^^
 }
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     var a = [1, "hello"];
 >a : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >[1, "hello"] : (string | number)[]
+>             : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var [x] = a;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >a : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var [x, y] = a;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >a : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var [x, y, z] = a;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >z : string | number
+>  : ^^^^^^^^^^^^^^^
 >a : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var x: number | string;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     var y: number | string;
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 
     var z: number | string;
 >z : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     var { } = { x: 5, y: "hello" };       // Ok, empty binding pattern means nothing
 >{ x: 5, y: "hello" } : { x: number; y: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { x } = { x: 5, y: "hello" };     // Error, no y in target
 >x : number
+>  : ^^^^^^
 >{ x: 5, y: "hello" } : { x: number; y: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { y } = { x: 5, y: "hello" };     // Error, no x in target
 >y : string
+>  : ^^^^^^
 >{ x: 5, y: "hello" } : { x: number; y: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { x, y } = { x: 5, y: "hello" };
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >{ x: 5, y: "hello" } : { x: number; y: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: string;
 >y : string
+>  : ^^^^^^
 
     var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 >{ x: 5, y: "hello" } : { x: number; y: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
 >y : any
+>  : ^^^
 >b : string
+>  : ^^^^^^
 >{ x: 5, y: "hello" } : { x: number; y: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { x: a, y: b } = { x: 5, y: "hello" };
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 >y : any
+>  : ^^^
 >b : string
+>  : ^^^^^^
 >{ x: 5, y: "hello" } : { x: number; y: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var a: number;
 >a : number
+>  : ^^^^^^
 
     var b: string;
 >b : string
+>  : ^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     var [x, [y, [z]]] = [1, ["hello", [true]]];
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
 >[1, ["hello", [true]]] : [number, [string, [boolean]]]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >["hello", [true]] : [string, [boolean]]
+>                  : ^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >[true] : [boolean]
+>       : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: string;
 >y : string
+>  : ^^^^^^
 
     var z: boolean;
 >z : boolean
+>  : ^^^^^^^
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     var { a: x, b: { a: y, b: { a: z }}} = { a: 1, b: { a: "hello", b: { a: true } } };
 >a : any
+>  : ^^^
 >x : number
+>  : ^^^^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : string
+>  : ^^^^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 >z : boolean
+>  : ^^^^^^^
 >{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : { a: string; b: { a: boolean; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "hello", b: { a: true } } : { a: string; b: { a: boolean; }; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >b : { a: boolean; }
+>  : ^^^^^^^^^^^^^^^
 >{ a: true } : { a: boolean; }
+>            : ^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: string;
 >y : string
+>  : ^^^^^^
 
     var z: boolean;
 >z : boolean
+>  : ^^^^^^^
 }
 
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     var [x = 0, y = ""] = [1, "hello"];
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: string;
 >y : string
+>  : ^^^^^^
 }
 
 function f7() {
 >f7 : () => void
+>   : ^^^^^^^^^^
 
     var [x = 0, y = 1] = [1, "hello"];  // Error, initializer for y must be string
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: string;
 >y : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function f8() {
 >f8 : () => void
+>   : ^^^^^^^^^^
 
     var [a, b, c] = [];   // Error, [] is an empty tuple
 >a : undefined
+>  : ^^^^^^^^^
 >b : undefined
+>  : ^^^^^^^^^
 >c : undefined
+>  : ^^^^^^^^^
 >[] : []
+>   : ^^
 
     var [d, e, f] = [1];  // Error, [1] is a tuple
 >d : number
+>  : ^^^^^^
 >e : undefined
+>  : ^^^^^^^^^
 >f : undefined
+>  : ^^^^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 }
 
 function f9() {
 >f9 : () => void
+>   : ^^^^^^^^^^
 
     var [a, b] = {};                // Error, not array type
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >{} : {}
+>   : ^^
 
     var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >{ 0: 10, 1: 20 } : { 0: number; 1: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >1 : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     var [e, f] = [10, 20];
 >e : number
+>  : ^^^^^^
 >f : number
+>  : ^^^^^^
 >[10, 20] : [number, number]
+>         : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 }
 
 function f10() {
 >f10 : () => void
+>    : ^^^^^^^^^^
 
     var { a, b } = {};  // Error
 >a : any
+>  : ^^^
 >b : any
->{} : { a: any; b: any; }
+>  : ^^^
+>{} : {}
+>   : ^^
 
     var { a, b } = [];  // Error
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }
 
 function f11() {
 >f11 : () => void
+>    : ^^^^^^^^^^
 
     var { x: a, y: b } = { x: 10, y: "hello" };
 >x : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 >y : any
+>  : ^^^
 >b : string
+>  : ^^^^^^
 >{ x: 10, y: "hello" } : { x: number; y: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { 0: a, 1: b } = { 0: 10, 1: "hello" };
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >{ 0: 10, 1: "hello" } : { 0: number; 1: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >1 : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { "<": a, ">": b } = { "<": 10, ">": "hello" };
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >{ "<": 10, ">": "hello" } : { "<": number; ">": string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"<" : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 >">" : string
+>    : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var { 0: a, 1: b } = [10, "hello"];
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >[10, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var a: number;
 >a : number
+>  : ^^^^^^
 
     var b: string;
 >b : string
+>  : ^^^^^^
 }
 
 function f12() {
 >f12 : () => void
+>    : ^^^^^^^^^^
 
     var [a, [b, { x, y: c }] = ["abc", { x: 10, y: false }]] = [1, ["hello", { x: 5, y: true }]];
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : any
+>  : ^^^
 >c : boolean
+>  : ^^^^^^^
 >["abc", { x: 10, y: false }] : [string, { x: number; y: boolean; }]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >{ x: 10, y: false } : { x: number; y: boolean; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >y : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 >[1, ["hello", { x: 5, y: true }]] : [number, [string, { x: number; y: true; }]]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >["hello", { x: 5, y: true }] : [string, { x: number; y: true; }]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >{ x: 5, y: true } : { x: number; y: true; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
     var a: number;
 >a : number
+>  : ^^^^^^
 
     var b: string;
 >b : string
+>  : ^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var c: boolean;
 >c : boolean
+>  : ^^^^^^^
 }
 
 function f13() {
 >f13 : () => void
+>    : ^^^^^^^^^^
 
     var [x, y] = [1, "hello"];
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var [a, b] = [[x, y], { x: x, y: y }];
 >a : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >b : { x: number; y: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[[x, y], { x: x, y: y }] : [(string | number)[], { x: number; y: string; }]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[x, y] : (string | number)[]
+>       : ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >{ x: x, y: y } : { x: number; y: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 
 function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>    : ^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >c : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
     var a: number;
 >a : number
+>  : ^^^^^^
 
     var b: string;
 >b : string
+>  : ^^^^^^
 
     var c: boolean;
 >c : boolean
+>  : ^^^^^^^
 }
 f14([2, ["abc", { x: 0, y: true }]]);
 >f14([2, ["abc", { x: 0, y: true }]]) : void
+>                                     : ^^^^
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>    : ^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[2, ["abc", { x: 0, y: true }]] : [number, [string, { x: number; y: true; }]]
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >["abc", { x: 0, y: true }] : [string, { x: number; y: true; }]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >{ x: 0, y: true } : { x: number; y: true; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 f14([2, ["abc", { x: 0 }]]);
 >f14([2, ["abc", { x: 0 }]]) : void
+>                            : ^^^^
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>    : ^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[2, ["abc", { x: 0 }]] : [number, [string, { x: number; }]]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >["abc", { x: 0 }] : [string, { x: number; }]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >{ x: 0 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 f14([2, ["abc", { y: false }]]);  // Error, no x
 >f14([2, ["abc", { y: false }]]) : void
+>                                : ^^^^
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>    : ^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[2, ["abc", { y: false }]] : [number, [string, { y: false; }]]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >["abc", { y: false }] : [string, { y: false; }]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >{ y: false } : { y: false; }
+>             : ^^^^^^^^^^^^^
 >y : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var [a, b] = [1, 2];
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 }
 
 function f15() {
 >f15 : () => { a: string; b: number; c: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var a = "hello";
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     var b = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     var c = true;
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
     return { a, b, c };
 >{ a, b, c } : { a: string; b: number; c: boolean; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 }
 
 function f16() {
 >f16 : () => void
+>    : ^^^^^^^^^^
 
     var { a, b, c } = f15();
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >f15() : { a: string; b: number; c: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f15 : () => { a: string; b: number; c: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f17({ a = "", b = 0, c = false }) {
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >c : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 }
 
 f17({});
 >f17({}) : void
+>        : ^^^^
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 f17({ a: "hello" });
 >f17({ a: "hello" }) : void
+>                    : ^^^^
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "hello" } : { a: string; }
+>               : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 f17({ c: true });
 >f17({ c: true }) : void
+>                 : ^^^^
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ c: true } : { c: true; }
+>            : ^^^^^^^^^^^^
 >c : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 f17(f15());
 >f17(f15()) : void
+>           : ^^^^
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f15() : { a: string; b: number; c: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f15 : () => { a: string; b: number; c: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f18() {
 >f18 : () => void
+>    : ^^^^^^^^^^
 
     var a: number;
 >a : number
+>  : ^^^^^^
 
     var b: string;
 >b : string
+>  : ^^^^^^
 
     var aa: number[];
 >aa : number[]
+>   : ^^^^^^^^
 
     ({ a, b } = { a, b });
 >({ a, b } = { a, b }) : { a: number; b: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a, b } = { a, b } : { a: number; b: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a, b } : { a: number; b: string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >{ a, b } : { a: number; b: string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     ({ a, b } = { b, a });
 >({ a, b } = { b, a }) : { b: string; a: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a, b } = { b, a } : { b: string; a: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a, b } : { a: number; b: string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >{ b, a } : { b: string; a: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
     [aa[0], b] = [a, b];
 >[aa[0], b] = [a, b] : [number, string]
+>                    : ^^^^^^^^^^^^^^^^
 >[aa[0], b] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >aa[0] : number
+>      : ^^^^^^
 >aa : number[]
+>   : ^^^^^^^^
 >0 : 0
+>  : ^
 >b : string
+>  : ^^^^^^
 >[a, b] : [number, string]
+>       : ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     [a, b] = [b, a];  // Error
 >[a, b] = [b, a] : [string, number]
+>                : ^^^^^^^^^^^^^^^^
 >[a, b] : [number, string]
+>       : ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >[b, a] : [string, number]
+>       : ^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
     [a = 1, b = "abc"] = [2, "def"];
 >[a = 1, b = "abc"] = [2, "def"] : [number, string]
+>                                : ^^^^^^^^^^^^^^^^
 >[a = 1, b = "abc"] : [number, string]
+>                   : ^^^^^^^^^^^^^^^^
 >a = 1 : 1
+>      : ^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b = "abc" : "abc"
+>          : ^^^^^
 >b : string
+>  : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >[2, "def"] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"def" : "def"
+>      : ^^^^^
 }
 
 function f19() {
 >f19 : () => void
+>    : ^^^^^^^^^^
 
     var a, b;
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     [a, b] = [1, 2];
 >[a, b] = [1, 2] : [number, number]
+>                : ^^^^^^^^^^^^^^^^
 >[a, b] : [any, any]
+>       : ^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     [a, b] = [b, a];
 >[a, b] = [b, a] : [any, any]
+>                : ^^^^^^^^^^
 >[a, b] : [any, any]
+>       : ^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[b, a] : [any, any]
+>       : ^^^^^^^^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     ({ a, b } = { b, a });
 >({ a, b } = { b, a }) : { b: any; a: any; }
+>                      : ^^^^^^^^^^^^^^^^^^^
 >{ a, b } = { b, a } : { b: any; a: any; }
+>                    : ^^^^^^^^^^^^^^^^^^^
 >{ a, b } : { a: any; b: any; }
+>         : ^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >{ b, a } : { b: any; a: any; }
+>         : ^^^^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     [[a, b] = [1, 2]] = [[2, 3]];
 >[[a, b] = [1, 2]] = [[2, 3]] : [[number, number]]
+>                             : ^^^^^^^^^^^^^^^^^^
 >[[a, b] = [1, 2]] : [[number, number]]
+>                  : ^^^^^^^^^^^^^^^^^^
 >[a, b] = [1, 2] : [number, number]
+>                : ^^^^^^^^^^^^^^^^
 >[a, b] : [any, any]
+>       : ^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >[[2, 3]] : [[number, number]]
+>         : ^^^^^^^^^^^^^^^^^^
 >[2, 3] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     var x = ([a, b] = [1, 2]);
 >x : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 >([a, b] = [1, 2]) : [number, number]
+>                  : ^^^^^^^^^^^^^^^^
 >[a, b] = [1, 2] : [number, number]
+>                : ^^^^^^^^^^^^^^^^
 >[a, b] : [any, any]
+>       : ^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 }
 
 function f20(v: [number, number, number]) {
 >f20 : (v: [number, number, number]) => void
+>    : ^ ^^                        ^^^^^^^^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: number;
 >y : number
+>  : ^^^^^^
 
     var z: number;
 >z : number
+>  : ^^^^^^
 
     var a0: [];
 >a0 : []
+>   : ^^
 
     var a1: [number];
 >a1 : [number]
+>   : ^^^^^^^^
 
     var a2: [number, number];
 >a2 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 
     var a3: [number, number, number];
 >a3 : [number, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     var [...a3] = v;
 >a3 : [number, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     var [x, ...a2] = v;
 >x : number
+>  : ^^^^^^
 >a2 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     var [x, y, ...a1] = v;
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >a1 : [number]
+>   : ^^^^^^^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     var [x, y, z, ...a0] = v;
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >a0 : []
+>   : ^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [...a3] = v;
 >[...a3] = v : [number, number, number]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[...a3] : [number, number, number]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >...a3 : number
+>      : ^^^^^^
 >a3 : [number, number, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x, ...a2] = v;
 >[x, ...a2] = v : [number, number, number]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[x, ...a2] : [number, number, number]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >...a2 : number
+>      : ^^^^^^
 >a2 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x, y, ...a1] = v;
 >[x, y, ...a1] = v : [number, number, number]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[x, y, ...a1] : [number, number, number]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >...a1 : number
+>      : ^^^^^^
 >a1 : [number]
+>   : ^^^^^^^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x, y, z, ...a0] = v;
 >[x, y, z, ...a0] = v : [number, number, number]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[x, y, z, ...a0] : [number, number, number]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >...a0 : never
+>      : ^^^^^
 >a0 : []
+>   : ^^
 >v : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f21(v: [number, string, boolean]) {
 >f21 : (v: [number, string, boolean]) => void
+>    : ^ ^^                         ^^^^^^^^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     var y: string;
 >y : string
+>  : ^^^^^^
 
     var z: boolean;
 >z : boolean
+>  : ^^^^^^^
 
     var a0: [number, string, boolean];
 >a0 : [number, string, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var a1: [string, boolean];
 >a1 : [string, boolean]
+>   : ^^^^^^^^^^^^^^^^^
 
     var a2: [boolean];
 >a2 : [boolean]
+>   : ^^^^^^^^^
 
     var a3: [];
 >a3 : []
+>   : ^^
 
     var [...a0] = v;
 >a0 : [number, string, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var [x, ...a1] = v;
 >x : number
+>  : ^^^^^^
 >a1 : [string, boolean]
+>   : ^^^^^^^^^^^^^^^^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var [x, y, ...a2] = v;
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >a2 : [boolean]
+>   : ^^^^^^^^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var [x, y, z, ...a3] = v;
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
 >a3 : []
+>   : ^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [...a0] = v;
 >[...a0] = v : [number, string, boolean]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[...a0] : [number, string, boolean]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >...a0 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a0 : [number, string, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x, ...a1] = v;
 >[x, ...a1] = v : [number, string, boolean]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[x, ...a1] : [number, string, boolean]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >...a1 : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >a1 : [string, boolean]
+>   : ^^^^^^^^^^^^^^^^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x, y, ...a2] = v;
 >[x, y, ...a2] = v : [number, string, boolean]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[x, y, ...a2] : [number, string, boolean]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >...a2 : boolean
+>      : ^^^^^^^
 >a2 : [boolean]
+>   : ^^^^^^^^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x, y, z, ...a3] = v;
 >[x, y, z, ...a3] = v : [number, string, boolean]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[x, y, z, ...a3] : [number, string, boolean]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
 >...a3 : never
+>      : ^^^^^
 >a3 : []
+>   : ^^
 >v : [number, string, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

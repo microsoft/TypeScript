@@ -1,28 +1,41 @@
-=== tests/cases/compiler/callOverloads5.ts ===
+//// [tests/cases/compiler/callOverloads5.ts] ////
+
+=== callOverloads5.ts ===
 function Foo():Foo; // error
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 function Foo(s:string):Foo; // error
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 class Foo { // error
 >Foo : Foo
+>    : ^^^
 
 	bar1(s:string);
 >bar1 : { (s: string): any; (n: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 	bar1(n:number);
 >bar1 : { (s: string): any; (n: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     bar1(a:any) { /*WScript.Echo(a);*/ }
 >bar1 : { (s: string): any; (n: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >a : any
+>  : ^^^
 
     constructor(x: any) {
 >x : any
+>  : ^^^
 
         // WScript.Echo("Constructor function has executed");
     }
@@ -31,24 +44,38 @@ class Foo { // error
 
 var f1 = new Foo("hey");
 >f1 : Foo
+>   : ^^^
 >new Foo("hey") : Foo
+>               : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"hey" : "hey"
+>      : ^^^^^
 
 
 f1.bar1("a");
 >f1.bar1("a") : any
+>             : ^^^
 >f1.bar1 : { (s: string): any; (n: number): any; }
+>        : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >f1 : Foo
+>   : ^^^
 >bar1 : { (s: string): any; (n: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
 Foo();
 >Foo() : Foo
+>      : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 Foo("s");
 >Foo("s") : Foo
+>         : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"s" : "s"
+>    : ^^^
 

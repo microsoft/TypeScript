@@ -1,42 +1,61 @@
-=== tests/cases/compiler/mutuallyRecursiveInference.ts ===
+//// [tests/cases/compiler/mutuallyRecursiveInference.ts] ////
+
+=== mutuallyRecursiveInference.ts ===
 class T<A> {
 >T : T<A>
+>  : ^^^^
 
     a: A;
 >a : A
+>  : ^
 
     b: any
 >b : any
 }
 class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {
 >L : L<RT>
+>  : ^^^^^
 >a : "a" | "b"
+>  : ^^^^^^^^^
 >b : any
 >T : T<RT[RT["a"]]>
+>  : ^^^^^^^^^^^^^^
 
     m() { this.a }
 >m : () => void
+>  : ^^^^^^^^^^
 >this.a : RT[RT["a"]]
+>       : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >a : RT[RT["a"]]
+>  : ^^^^^^^^^^^
 }
 class X extends L<X> {
 >X : X
+>  : ^
 >L : L<X>
+>  : ^^^^
 
     a: 'a' | 'b'
 >a : "a" | "b"
+>  : ^^^^^^^^^
 
     b: number
 >b : number
+>  : ^^^^^^
 
     m2() {
 >m2 : () => void
+>   : ^^^^^^^^^^
 
         this.a
 >this.a : "a" | "b"
+>       : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >a : "a" | "b"
+>  : ^^^^^^^^^
     }
 }
 

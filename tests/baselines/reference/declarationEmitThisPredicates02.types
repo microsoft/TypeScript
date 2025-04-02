@@ -1,42 +1,67 @@
-=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates02.ts ===
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates02.ts] ////
+
+=== declarationEmitThisPredicates02.ts ===
 export interface Foo {
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 }
 
 export const obj = {
 >obj : { m(): this is Foo; }
+>    : ^^^^^^^           ^^^
 >{    m(): this is Foo {        let dis = this as {} as Foo;        return dis.a != null && dis.b != null && dis.c != null;    }} : { m(): this is Foo; }
+>                                                                                                                                 : ^^^^^^^           ^^^
 
     m(): this is Foo {
 >m : () => this is Foo
+>  : ^^^^^^           
 
         let dis = this as {} as Foo;
 >dis : Foo
+>    : ^^^
 >this as {} as Foo : Foo
+>                  : ^^^
 >this as {} : {}
+>           : ^^
 >this : any
 
         return dis.a != null && dis.b != null && dis.c != null;
 >dis.a != null && dis.b != null && dis.c != null : boolean
+>                                                : ^^^^^^^
 >dis.a != null && dis.b != null : boolean
+>                               : ^^^^^^^
 >dis.a != null : boolean
+>              : ^^^^^^^
 >dis.a : string
+>      : ^^^^^^
 >dis : Foo
+>    : ^^^
 >a : string
+>  : ^^^^^^
 >dis.b != null : boolean
+>              : ^^^^^^^
 >dis.b : number
+>      : ^^^^^^
 >dis : Foo
+>    : ^^^
 >b : number
+>  : ^^^^^^
 >dis.c != null : boolean
+>              : ^^^^^^^
 >dis.c : boolean
+>      : ^^^^^^^
 >dis : Foo
+>    : ^^^
 >c : boolean
+>  : ^^^^^^^
     }
 }

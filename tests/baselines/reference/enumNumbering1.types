@@ -1,31 +1,50 @@
-=== tests/cases/compiler/enumNumbering1.ts ===
+//// [tests/cases/compiler/enumNumbering1.ts] ////
+
+=== enumNumbering1.ts ===
 enum Test {
 >Test : Test
+>     : ^^^^
 
     A,
 >A : Test.A
+>  : ^^^^^^
 
     B,
 >B : Test.B
+>  : ^^^^^^
 
     C = Math.floor(Math.random() * 1000),
 >C : Test.C
+>  : ^^^^^^
 >Math.floor(Math.random() * 1000) : number
+>                                 : ^^^^^^
 >Math.floor : (x: number) => number
+>           : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >floor : (x: number) => number
+>      : ^ ^^      ^^^^^      
 >Math.random() * 1000 : number
+>                     : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >1000 : 1000
+>     : ^^^^
 
     D = 10,
 >D : Test.D
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     E // Error but shouldn't be
 >E : Test.E
+>  : ^^^^^^
 }
 

@@ -1,25 +1,38 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions3.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions3.ts] ////
+
+=== thisTypeInFunctions3.ts ===
 declare class Base {
 >Base : Base
+>     : ^^^^
 
     check<TProp extends this>(prop: TProp): boolean;
 >check : <TProp extends this>(prop: TProp) => boolean
+>      : ^     ^^^^^^^^^    ^^    ^^     ^^^^^       
 >prop : TProp
+>     : ^^^^^
 }
 
 class Test extends Base {
 >Test : Test
+>     : ^^^^
 >Base : Base
+>     : ^^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.check(this);
 >this.check(this) : boolean
+>                 : ^^^^^^^
 >this.check : <TProp extends this>(prop: TProp) => boolean
+>           : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       
 >this : this
+>     : ^^^^
 >check : <TProp extends this>(prop: TProp) => boolean
+>      : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       
 >this : this
+>     : ^^^^
     }
 }
 

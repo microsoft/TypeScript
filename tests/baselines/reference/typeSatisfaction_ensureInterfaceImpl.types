@@ -1,29 +1,41 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_ensureInterfaceImpl.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_ensureInterfaceImpl.ts] ////
+
+=== typeSatisfaction_ensureInterfaceImpl.ts ===
 type Movable = {
->Movable : { move(distance: number): void; }
+>Movable : Movable
+>        : ^^^^^^^
 
     move(distance: number): void;
 >move : (distance: number) => void
+>     : ^        ^^      ^^^^^    
 >distance : number
+>         : ^^^^^^
 
 };
 
 const car = {
 >car : { start(): void; move(d: number): void; stop(): void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    start() { },    move(d) {        // d should be number    },    stop() { }} satisfies Movable & Record<string, unknown> : { start(): void; move(d: number): void; stop(): void; }
+>                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    start() { },    move(d) {        // d should be number    },    stop() { }} : { start(): void; move(d: number): void; stop(): void; }
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     start() { },
 >start : () => void
+>      : ^^^^^^^^^^
 
     move(d) {
 >move : (d: number) => void
+>     : ^ ^^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 
         // d should be number
     },
     stop() { }
 >stop : () => void
+>     : ^^^^^^^^^^
 
 } satisfies Movable & Record<string, unknown>;
 

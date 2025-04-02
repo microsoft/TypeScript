@@ -1,680 +1,1194 @@
-=== tests/cases/compiler/bluebirdStaticThis.ts ===
+//// [tests/cases/compiler/bluebirdStaticThis.ts] ////
+
+=== bluebirdStaticThis.ts ===
 // This version is reduced from the full d.ts by removing almost all the tests
 // and all the comments.
 // Then it adds explicit `this` arguments to the static members.
 // Tests by: Bart van der Schoor <https://github.com/Bartvds>
 export declare class Promise<R> implements Promise.Thenable<R> {
 >Promise : Promise<R>
+>        : ^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 
 	constructor(callback: (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void);
 >callback : (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void
+>         : ^       ^^                                                   ^^      ^^                    ^^^^^    
 >resolve : (thenableOrResult: R | Promise.Thenable<R>) => void
+>        : ^                ^^                       ^^^^^    
 >thenableOrResult : R | Promise.Thenable<R>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >reject : (error: any) => void
+>       : ^     ^^   ^^^^^    
 >error : any
+>      : ^^^
 
     static try<R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>;
->try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R_1>(dit: typeof Promise, fn: () => R_1, args?: any[], ctx?: any): Promise<R_1>; }
+>    : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^^^^^^   ^^              ^^  ^^         ^^    ^^^     ^^   ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >fn : () => Promise.Thenable<R>
+>   : ^^^^^^                   
 >Promise : any
+>        : ^^^
 >args : any[]
+>     : ^^^^^
 >ctx : any
+>    : ^^^
 
     static try<R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>;
->try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>try : { <R_1>(dit: typeof Promise, fn: () => Promise.Thenable<R_1>, args?: any[], ctx?: any): Promise<R_1>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>    : ^^^^^^^^   ^^              ^^  ^^                           ^^    ^^^     ^^   ^^^   ^^^            ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >fn : () => R
+>   : ^^^^^^ 
 >args : any[]
+>     : ^^^^^
 >ctx : any
+>    : ^^^
 
     static attempt<R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>;
->attempt : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>attempt : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R_1>(dit: typeof Promise, fn: () => R_1, args?: any[], ctx?: any): Promise<R_1>; }
+>        : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^^^^^^   ^^              ^^  ^^         ^^    ^^^     ^^   ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >fn : () => Promise.Thenable<R>
+>   : ^^^^^^                   
 >Promise : any
+>        : ^^^
 >args : any[]
+>     : ^^^^^
 >ctx : any
+>    : ^^^
 
     static attempt<R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>;
->attempt : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>attempt : { <R_1>(dit: typeof Promise, fn: () => Promise.Thenable<R_1>, args?: any[], ctx?: any): Promise<R_1>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>        : ^^^^^^^^   ^^              ^^  ^^                           ^^    ^^^     ^^   ^^^   ^^^            ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >fn : () => R
+>   : ^^^^^^ 
 >args : any[]
+>     : ^^^^^
 >ctx : any
+>    : ^^^
 
     static method(dit: typeof Promise, fn: Function): Function;
 >method : (dit: typeof Promise, fn: Function) => Function
+>       : ^   ^^              ^^  ^^        ^^^^^        
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >fn : Function
+>   : ^^^^^^^^
 
     static resolve(dit: typeof Promise): Promise<void>;
 >resolve : { (dit: typeof Promise): Promise<void>; <R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>; <R>(dit: typeof Promise, value: R): Promise<R>; }
+>        : ^^^   ^^              ^^^             ^^^ ^^   ^^              ^^     ^^                   ^^^          ^^^ ^^   ^^              ^^     ^^ ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 
     static resolve<R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>;
->resolve : { (dit: typeof Promise): Promise<void>; <R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>; <R>(dit: typeof Promise, value: R): Promise<R>; }
+>resolve : { (dit: typeof Promise): Promise<void>; <R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>; <R_1>(dit: typeof Promise, value: R_1): Promise<R_1>; }
+>        : ^^^   ^^              ^^^             ^^^ ^^   ^^              ^^     ^^                   ^^^          ^^^^^^^^   ^^              ^^     ^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >value : Promise.Thenable<R>
+>      : ^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static resolve<R>(dit: typeof Promise, value: R): Promise<R>;
->resolve : { (dit: typeof Promise): Promise<void>; <R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>; <R>(dit: typeof Promise, value: R): Promise<R>; }
+>resolve : { (dit: typeof Promise): Promise<void>; <R_1>(dit: typeof Promise, value: Promise.Thenable<R_1>): Promise<R_1>; <R>(dit: typeof Promise, value: R): Promise<R>; }
+>        : ^^^   ^^              ^^^             ^^^^^^^^   ^^              ^^     ^^                     ^^^            ^^^ ^^   ^^              ^^     ^^ ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >value : R
+>      : ^
 
     static reject(dit: typeof Promise, reason: any): Promise<any>;
 >reject : { (dit: typeof Promise, reason: any): Promise<any>; <R>(dit: typeof Promise, reason: any): Promise<R>; }
+>       : ^^^   ^^              ^^      ^^   ^^^            ^^^ ^^   ^^              ^^      ^^   ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >reason : any
+>       : ^^^
 
     static reject<R>(dit: typeof Promise, reason: any): Promise<R>;
 >reject : { (dit: typeof Promise, reason: any): Promise<any>; <R>(dit: typeof Promise, reason: any): Promise<R>; }
+>       : ^^^   ^^              ^^      ^^   ^^^            ^^^ ^^   ^^              ^^      ^^   ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >reason : any
+>       : ^^^
 
     static defer<R>(dit: typeof Promise): Promise.Resolver<R>;
 >defer : <R>(dit: typeof Promise) => Promise.Resolver<R>
+>      : ^ ^^   ^^              ^^^^^                   
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static cast<R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>;
->cast : { <R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>; <R>(dit: typeof Promise, value: R): Promise<R>; }
+>cast : { <R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>; <R_1>(dit: typeof Promise, value: R_1): Promise<R_1>; }
+>     : ^^^ ^^   ^^              ^^     ^^                   ^^^          ^^^^^^^^   ^^              ^^     ^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >value : Promise.Thenable<R>
+>      : ^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static cast<R>(dit: typeof Promise, value: R): Promise<R>;
->cast : { <R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>; <R>(dit: typeof Promise, value: R): Promise<R>; }
+>cast : { <R_1>(dit: typeof Promise, value: Promise.Thenable<R_1>): Promise<R_1>; <R>(dit: typeof Promise, value: R): Promise<R>; }
+>     : ^^^^^^^^   ^^              ^^     ^^                     ^^^            ^^^ ^^   ^^              ^^     ^^ ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >value : R
+>      : ^
 
     static bind(dit: typeof Promise, thisArg: any): Promise<void>;
 >bind : (dit: typeof Promise, thisArg: any) => Promise<void>
+>     : ^   ^^              ^^       ^^   ^^^^^             
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >thisArg : any
+>        : ^^^
 
     static is(dit: typeof Promise, value: any): boolean;
 >is : (dit: typeof Promise, value: any) => boolean
+>   : ^   ^^              ^^     ^^   ^^^^^       
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 
     static longStackTraces(dit: typeof Promise): void;
 >longStackTraces : (dit: typeof Promise) => void
+>                : ^   ^^              ^^^^^    
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 
     static delay<R>(dit: typeof Promise, value: Promise.Thenable<R>, ms: number): Promise<R>;
->delay : { <R>(dit: typeof Promise, value: Promise.Thenable<R>, ms: number): Promise<R>; <R>(dit: typeof Promise, value: R, ms: number): Promise<R>; (dit: typeof Promise, ms: number): Promise<void>; }
+>delay : { <R>(dit: typeof Promise, value: Promise.Thenable<R>, ms: number): Promise<R>; <R_1>(dit: typeof Promise, value: R_1, ms: number): Promise<R_1>; (dit: typeof Promise, ms: number): Promise<void>; }
+>      : ^^^ ^^   ^^              ^^     ^^                   ^^  ^^      ^^^          ^^^^^^^^   ^^              ^^     ^^   ^^  ^^      ^^^            ^^^   ^^              ^^  ^^      ^^^             ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >value : Promise.Thenable<R>
+>      : ^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >ms : number
+>   : ^^^^^^
 
     static delay<R>(dit: typeof Promise, value: R, ms: number): Promise<R>;
->delay : { <R>(dit: typeof Promise, value: Promise.Thenable<R>, ms: number): Promise<R>; <R>(dit: typeof Promise, value: R, ms: number): Promise<R>; (dit: typeof Promise, ms: number): Promise<void>; }
+>delay : { <R_1>(dit: typeof Promise, value: Promise.Thenable<R_1>, ms: number): Promise<R_1>; <R>(dit: typeof Promise, value: R, ms: number): Promise<R>; (dit: typeof Promise, ms: number): Promise<void>; }
+>      : ^^^^^^^^   ^^              ^^     ^^                     ^^  ^^      ^^^            ^^^ ^^   ^^              ^^     ^^ ^^  ^^      ^^^          ^^^   ^^              ^^  ^^      ^^^             ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >value : R
+>      : ^
 >ms : number
+>   : ^^^^^^
 
     static delay(dit: typeof Promise, ms: number): Promise<void>;
 >delay : { <R>(dit: typeof Promise, value: Promise.Thenable<R>, ms: number): Promise<R>; <R>(dit: typeof Promise, value: R, ms: number): Promise<R>; (dit: typeof Promise, ms: number): Promise<void>; }
+>      : ^^^ ^^   ^^              ^^     ^^                   ^^  ^^      ^^^          ^^^ ^^   ^^              ^^     ^^ ^^  ^^      ^^^          ^^^   ^^              ^^  ^^      ^^^             ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >ms : number
+>   : ^^^^^^
 
     static promisify(dit: typeof Promise, nodeFunction: Function, receiver?: any): Function;
 >promisify : (dit: typeof Promise, nodeFunction: Function, receiver?: any) => Function
+>          : ^   ^^              ^^            ^^        ^^        ^^^   ^^^^^        
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >nodeFunction : Function
+>             : ^^^^^^^^
 >receiver : any
+>         : ^^^
 
     static promisifyAll(dit: typeof Promise, target: Object): Object;
 >promisifyAll : (dit: typeof Promise, target: Object) => Object
+>             : ^   ^^              ^^      ^^      ^^^^^      
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >target : Object
+>       : ^^^^^^
 
     static coroutine<R>(dit: typeof Promise, generatorFunction: Function): Function;
 >coroutine : <R>(dit: typeof Promise, generatorFunction: Function) => Function
+>          : ^ ^^   ^^              ^^                 ^^        ^^^^^        
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >generatorFunction : Function
+>                  : ^^^^^^^^
 
     static spawn<R>(dit: typeof Promise, generatorFunction: Function): Promise<R>;
 >spawn : <R>(dit: typeof Promise, generatorFunction: Function) => Promise<R>
+>      : ^ ^^   ^^              ^^                 ^^        ^^^^^          
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >generatorFunction : Function
+>                  : ^^^^^^^^
 
     static noConflict(dit: typeof Promise): typeof Promise;
 >noConflict : (dit: typeof Promise) => typeof Promise
+>           : ^   ^^              ^^^^^              
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 
     static onPossiblyUnhandledRejection(dit: typeof Promise, handler: (reason: any) => any): void;
 >onPossiblyUnhandledRejection : (dit: typeof Promise, handler: (reason: any) => any) => void
+>                             : ^   ^^              ^^       ^^                    ^^^^^    
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >handler : (reason: any) => any
+>        : ^      ^^   ^^^^^   
 >reason : any
+>       : ^^^
 
     static all<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R[]>;
->all : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R[]>; <R>(dit: typeof Promise, values: R[]): Promise<R[]>; }
+>all : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1[]>; }
+>    : ^^^ ^^   ^^              ^^      ^^                                       ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 
     static all<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R[]>;
->all : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R[]>; <R>(dit: typeof Promise, values: R[]): Promise<R[]>; }
+>all : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1[]>; }
+>    : ^^^^^^^^   ^^              ^^      ^^                                         ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static all<R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R[]>;
->all : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R[]>; <R>(dit: typeof Promise, values: R[]): Promise<R[]>; }
+>all : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R[]>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1[]>; }
+>    : ^^^^^^^^   ^^              ^^      ^^                                         ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static all<R>(dit: typeof Promise, values: R[]): Promise<R[]>;
->all : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R[]>; <R>(dit: typeof Promise, values: R[]): Promise<R[]>; }
+>all : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1[]>; <R>(dit: typeof Promise, values: R[]): Promise<R[]>; }
+>    : ^^^^^^^^   ^^              ^^      ^^                                         ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^^              ^^^ ^^   ^^              ^^      ^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 
     static props(dit: typeof Promise, object: Promise<Object>): Promise<Object>;
 >props : { (dit: typeof Promise, object: Promise<Object>): Promise<Object>; (dit: typeof Promise, object: Object): Promise<Object>; }
+>      : ^^^   ^^              ^^      ^^               ^^^               ^^^   ^^              ^^      ^^      ^^^               ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >object : Promise<Object>
+>       : ^^^^^^^^^^^^^^^
 
     static props(dit: typeof Promise, object: Object): Promise<Object>;
 >props : { (dit: typeof Promise, object: Promise<Object>): Promise<Object>; (dit: typeof Promise, object: Object): Promise<Object>; }
+>      : ^^^   ^^              ^^      ^^               ^^^               ^^^   ^^              ^^      ^^      ^^^               ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >object : Object
+>       : ^^^^^^
 
     static settle<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
+>settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<Promise.Inspection<R_1>[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<Promise.Inspection<R_1>[]>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<Promise.Inspection<R_1>[]>; }
+>       : ^^^ ^^   ^^              ^^      ^^                                       ^^^                                ^^^^^^^^   ^^              ^^      ^^                       ^^^                                  ^^^^^^^^   ^^              ^^      ^^                       ^^^                                  ^^^^^^^^   ^^              ^^      ^^     ^^^                                  ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 
     static settle<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
+>settle : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<Promise.Inspection<R_1>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<Promise.Inspection<R_1>[]>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<Promise.Inspection<R_1>[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^^                                  ^^^ ^^   ^^              ^^      ^^                     ^^^                                ^^^^^^^^   ^^              ^^      ^^                       ^^^                                  ^^^^^^^^   ^^              ^^      ^^     ^^^                                  ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 
     static settle<R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
+>settle : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<Promise.Inspection<R_1>[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<Promise.Inspection<R_1>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<Promise.Inspection<R_1>[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^^                                  ^^^^^^^^   ^^              ^^      ^^                       ^^^                                  ^^^ ^^   ^^              ^^      ^^                     ^^^                                ^^^^^^^^   ^^              ^^      ^^     ^^^                                  ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 
     static settle<R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
+>settle : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<Promise.Inspection<R_1>[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<Promise.Inspection<R_1>[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<Promise.Inspection<R_1>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^^                                  ^^^^^^^^   ^^              ^^      ^^                       ^^^                                  ^^^^^^^^   ^^              ^^      ^^                       ^^^                                  ^^^ ^^   ^^              ^^      ^^   ^^^                                ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >Promise : any
+>        : ^^^
 
     static any<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>;
->any : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>any : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1>; }
+>    : ^^^ ^^   ^^              ^^      ^^                                       ^^^          ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 
     static any<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>;
->any : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>any : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1>; }
+>    : ^^^^^^^^   ^^              ^^      ^^                                         ^^^            ^^^ ^^   ^^              ^^      ^^                     ^^^          ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static any<R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>;
->any : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>any : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1>; }
+>    : ^^^^^^^^   ^^              ^^      ^^                                         ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^ ^^   ^^              ^^      ^^                     ^^^          ^^^^^^^^   ^^              ^^      ^^     ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static any<R>(dit: typeof Promise, values: R[]): Promise<R>;
->any : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>any : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>    : ^^^^^^^^   ^^              ^^      ^^                                         ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^ ^^   ^^              ^^      ^^   ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 
     static race<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>;
->race : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>race : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1>; }
+>     : ^^^ ^^   ^^              ^^      ^^                                       ^^^          ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 
     static race<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>;
->race : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>race : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1>; }
+>     : ^^^^^^^^   ^^              ^^      ^^                                         ^^^            ^^^ ^^   ^^              ^^      ^^                     ^^^          ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static race<R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>;
->race : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>race : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R_1>(dit: typeof Promise, values: R_1[]): Promise<R_1>; }
+>     : ^^^^^^^^   ^^              ^^      ^^                                         ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^ ^^   ^^              ^^      ^^                     ^^^          ^^^^^^^^   ^^              ^^      ^^     ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static race<R>(dit: typeof Promise, values: R[]): Promise<R>;
->race : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<R>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>race : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>): Promise<R_1>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[]): Promise<R_1>; <R>(dit: typeof Promise, values: R[]): Promise<R>; }
+>     : ^^^^^^^^   ^^              ^^      ^^                                         ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^^            ^^^ ^^   ^^              ^^      ^^   ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 
     static some<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, count: number): Promise<R[]>;
->some : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], count: number): Promise<R[]>; <R>(dit: typeof Promise, values: R[], count: number): Promise<R[]>; }
+>some : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, count: number): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, count: number): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], count: number): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], count: number): Promise<R_1[]>; }
+>     : ^^^ ^^   ^^              ^^      ^^                                       ^^     ^^      ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^     ^^      ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^     ^^      ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^     ^^      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >count : number
+>      : ^^^^^^
 
     static some<R>(dit: typeof Promise, values: Promise.Thenable<R[]>, count: number): Promise<R[]>;
->some : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], count: number): Promise<R[]>; <R>(dit: typeof Promise, values: R[], count: number): Promise<R[]>; }
+>some : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, count: number): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, count: number): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], count: number): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], count: number): Promise<R_1[]>; }
+>     : ^^^^^^^^   ^^              ^^      ^^                                         ^^     ^^      ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^     ^^      ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^     ^^      ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^     ^^      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >count : number
+>      : ^^^^^^
 
     static some<R>(dit: typeof Promise, values: Promise.Thenable<R>[], count: number): Promise<R[]>;
->some : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], count: number): Promise<R[]>; <R>(dit: typeof Promise, values: R[], count: number): Promise<R[]>; }
+>some : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, count: number): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, count: number): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], count: number): Promise<R[]>; <R_1>(dit: typeof Promise, values: R_1[], count: number): Promise<R_1[]>; }
+>     : ^^^^^^^^   ^^              ^^      ^^                                         ^^     ^^      ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^     ^^      ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^     ^^      ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^     ^^      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >count : number
+>      : ^^^^^^
 
     static some<R>(dit: typeof Promise, values: R[], count: number): Promise<R[]>;
->some : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, count: number): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], count: number): Promise<R[]>; <R>(dit: typeof Promise, values: R[], count: number): Promise<R[]>; }
+>some : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, count: number): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, count: number): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], count: number): Promise<R_1[]>; <R>(dit: typeof Promise, values: R[], count: number): Promise<R[]>; }
+>     : ^^^^^^^^   ^^              ^^      ^^                                         ^^     ^^      ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^     ^^      ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^     ^^      ^^^              ^^^ ^^   ^^              ^^      ^^   ^^     ^^      ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >count : number
+>      : ^^^^^^
 
     static join<R>(dit: typeof Promise, ...values: Promise.Thenable<R>[]): Promise<R[]>;
->join : { <R>(dit: typeof Promise, ...values: Promise.Thenable<R>[]): Promise<R[]>; <R>(dit: typeof Promise, ...values: R[]): Promise<R[]>; }
+>join : { <R>(dit: typeof Promise, ...values: Promise.Thenable<R>[]): Promise<R[]>; <R_1>(dit: typeof Promise, ...values: R_1[]): Promise<R_1[]>; }
+>     : ^^^ ^^   ^^              ^^^^^      ^^                     ^^^            ^^^^^^^^   ^^              ^^^^^      ^^     ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 
     static join<R>(dit: typeof Promise, ...values: R[]): Promise<R[]>;
->join : { <R>(dit: typeof Promise, ...values: Promise.Thenable<R>[]): Promise<R[]>; <R>(dit: typeof Promise, ...values: R[]): Promise<R[]>; }
+>join : { <R_1>(dit: typeof Promise, ...values: Promise.Thenable<R_1>[]): Promise<R_1[]>; <R>(dit: typeof Promise, ...values: R[]): Promise<R[]>; }
+>     : ^^^^^^^^   ^^              ^^^^^      ^^                       ^^^              ^^^ ^^   ^^              ^^^^^      ^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 
     static map<R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; }
+>    : ^^^ ^^ ^^   ^^              ^^      ^^                                       ^^      ^^                                                                    ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static map<R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; }
+>    : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                                        ^^^              ^^^ ^^ ^^   ^^              ^^      ^^                                       ^^      ^^                                                  ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => U
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 
     static map<R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; }
+>    : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                      ^^^              ^^^ ^^ ^^   ^^              ^^      ^^                     ^^      ^^                                                                    ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static map<R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; }
+>    : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^ ^^ ^^   ^^              ^^      ^^                     ^^      ^^                                                  ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => U
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 
     static map<R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; }
+>    : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^ ^^ ^^   ^^              ^^      ^^                     ^^      ^^                                                                    ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static map<R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; }
+>    : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^ ^^ ^^   ^^              ^^      ^^                     ^^      ^^                                                  ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => U
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 
     static map<R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; }
+>    : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^ ^^ ^^   ^^              ^^      ^^   ^^      ^^                                                                    ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                      ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static map<R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>;
->map : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => Promise.Thenable<U>): Promise<U[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>map : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], mapper: (item: R_1, index: number, arrayLength: number) => U_1): Promise<U_1[]>; <R_1, U_1>(dit: typeof Promise, values: R_1[], mapper: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>): Promise<U_1[]>; <R, U>(dit: typeof Promise, values: R[], mapper: (item: R, index: number, arrayLength: number) => U): Promise<U[]>; }
+>    : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                                        ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^      ^^                                                      ^^^              ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^      ^^                                                                        ^^^              ^^^ ^^ ^^   ^^              ^^      ^^   ^^      ^^                                                  ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >mapper : (item: R, index: number, arrayLength: number) => U
+>       : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 
     static reduce<R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; }
+>       : ^^^ ^^ ^^   ^^              ^^      ^^                                       ^^       ^^                                                                                 ^^            ^^^ ^^^          ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 >initialValue : U
+>             : ^
 
     static reduce<R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; }
+>       : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^ ^^ ^^   ^^              ^^      ^^                                       ^^       ^^                                                               ^^            ^^^ ^^^          ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => U
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >initialValue : U
+>             : ^
 
     static reduce<R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; }
+>       : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^ ^^ ^^   ^^              ^^      ^^                     ^^       ^^                                                                                 ^^            ^^^ ^^^          ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 >initialValue : U
+>             : ^
 
     static reduce<R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; }
+>       : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^ ^^ ^^   ^^              ^^      ^^                     ^^       ^^                                                               ^^            ^^^ ^^^          ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => U
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >initialValue : U
+>             : ^
 
     static reduce<R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; }
+>       : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^ ^^ ^^   ^^              ^^      ^^                     ^^       ^^                                                                                 ^^            ^^^ ^^^          ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 >initialValue : U
+>             : ^
 
     static reduce<R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; }
+>       : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^ ^^ ^^   ^^              ^^      ^^                     ^^       ^^                                                               ^^            ^^^ ^^^          ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => U
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >initialValue : U
+>             : ^
 
     static reduce<R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; }
+>       : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^ ^^ ^^   ^^              ^^      ^^   ^^       ^^                                                                                 ^^            ^^^ ^^^          ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^                   
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 >initialValue : U
+>             : ^
 
     static reduce<R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>;
->reduce : { <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R[]>, reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: Promise.Thenable<R>[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => Promise.Thenable<U>, initialValue?: U): Promise<U>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>reduce : { <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => U_1, initialValue?: U_1): Promise<U_1>; <R_1, U_1>(dit: typeof Promise, values: R_1[], reducer: (total: U_1, current: R_1, index: number, arrayLength: number) => Promise.Thenable<U_1>, initialValue?: U_1): Promise<U_1>; <R, U>(dit: typeof Promise, values: R[], reducer: (total: U, current: R, index: number, arrayLength: number) => U, initialValue?: U): Promise<U>; }
+>       : ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                                         ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^                       ^^       ^^                                                                     ^^            ^^^   ^^^            ^^^^^^^^^^^^^   ^^              ^^      ^^     ^^       ^^                                                                                       ^^            ^^^   ^^^            ^^^ ^^ ^^   ^^              ^^      ^^   ^^       ^^                                                               ^^            ^^^ ^^^          ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >reducer : (total: U, current: R, index: number, arrayLength: number) => U
+>        : ^     ^^ ^^       ^^ ^^     ^^      ^^           ^^      ^^^^^ 
 >total : U
+>      : ^
 >current : R
+>        : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >initialValue : U
+>             : ^
 
     static filter<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; }
+>       : ^^^ ^^   ^^              ^^      ^^                                       ^^        ^^                                                                          ^^^            ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                          ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                         
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static filter<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                                            ^^^              ^^^ ^^   ^^              ^^      ^^                                       ^^        ^^                                                        ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                          ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<Promise.Thenable<R>[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >Promise : any
+>        : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => boolean
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^       
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 
     static filter<R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                          ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^        ^^                                                                          ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                          ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                         
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static filter<R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^        ^^                                                        ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                          ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => boolean
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^       
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 
     static filter<R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^        ^^                                                                          ^^^            ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                          ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                         
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static filter<R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^ ^^   ^^              ^^      ^^                     ^^        ^^                                                        ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                          ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : Promise.Thenable<R>[]
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >Promise : any
+>        : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => boolean
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^       
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 
     static filter<R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^ ^^   ^^              ^^      ^^   ^^        ^^                                                                          ^^^            ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                          ^^^              ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^                         
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 >Promise : any
+>        : ^^^
 
     static filter<R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>;
->filter : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>, filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>filter : { <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R_1>[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1[]>, filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: Promise.Thenable<R_1>[], filterer: (item: R_1, index: number, arrayLength: number) => boolean): Promise<R_1[]>; <R_1>(dit: typeof Promise, values: R_1[], filterer: (item: R_1, index: number, arrayLength: number) => Promise.Thenable<boolean>): Promise<R_1[]>; <R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>; }
+>       : ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                                         ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                                            ^^^              ^^^^^^^^   ^^              ^^      ^^                       ^^        ^^                                                          ^^^              ^^^^^^^^   ^^              ^^      ^^     ^^        ^^                                                                            ^^^              ^^^ ^^   ^^              ^^      ^^   ^^        ^^                                                        ^^^            ^^^
 >dit : typeof Promise
+>    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >values : R[]
+>       : ^^^
 >filterer : (item: R, index: number, arrayLength: number) => boolean
+>         : ^    ^^ ^^     ^^      ^^           ^^      ^^^^^       
 >item : R
+>     : ^
 >index : number
+>      : ^^^^^^
 >arrayLength : number
+>            : ^^^^^^
 }
 
 export declare module Promise {
 	export interface Thenable<R> {
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>;
->then : { <U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>; <U>(onFulfilled: (value: R) => U, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled?: (value: R) => U, onRejected?: (error: any) => U): Thenable<U>; }
+>then : { <U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U_1>(onFulfilled: (value: R) => Thenable<U_1>, onRejected?: (error: any) => U_1): Thenable<U_1>; <U_1>(onFulfilled: (value: R) => U_1, onRejected: (error: any) => Thenable<U_1>): Thenable<U_1>; <U_1>(onFulfilled?: (value: R) => U_1, onRejected?: (error: any) => U_1): Thenable<U_1>; }
+>     : ^^^ ^^           ^^                         ^^          ^^                           ^^^           ^^^^^^^^           ^^                           ^^          ^^^                   ^^^             ^^^^^^^^           ^^                 ^^          ^^                             ^^^             ^^^^^^^^           ^^^                 ^^          ^^^                   ^^^             ^^^
 >onFulfilled : (value: R) => Thenable<U>
+>            : ^     ^^ ^^^^^           
 >value : R
+>      : ^
 >onRejected : (error: any) => Thenable<U>
+>           : ^     ^^   ^^^^^           
 >error : any
+>      : ^^^
 
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>;
->then : { <U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>; <U>(onFulfilled: (value: R) => U, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled?: (value: R) => U, onRejected?: (error: any) => U): Thenable<U>; }
+>then : { <U_1>(onFulfilled: (value: R) => Thenable<U_1>, onRejected: (error: any) => Thenable<U_1>): Thenable<U_1>; <U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>; <U_1>(onFulfilled: (value: R) => U_1, onRejected: (error: any) => Thenable<U_1>): Thenable<U_1>; <U_1>(onFulfilled?: (value: R) => U_1, onRejected?: (error: any) => U_1): Thenable<U_1>; }
+>     : ^^^^^^^^           ^^                           ^^          ^^                             ^^^             ^^^ ^^           ^^                         ^^          ^^^                 ^^^           ^^^^^^^^           ^^                 ^^          ^^                             ^^^             ^^^^^^^^           ^^^                 ^^          ^^^                   ^^^             ^^^
 >onFulfilled : (value: R) => Thenable<U>
+>            : ^     ^^ ^^^^^           
 >value : R
+>      : ^
 >onRejected : (error: any) => U
+>           : ^     ^^   ^^^^^ 
 >error : any
+>      : ^^^
 
 		then<U>(onFulfilled: (value: R) => U, onRejected: (error: any) => Thenable<U>): Thenable<U>;
->then : { <U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>; <U>(onFulfilled: (value: R) => U, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled?: (value: R) => U, onRejected?: (error: any) => U): Thenable<U>; }
+>then : { <U_1>(onFulfilled: (value: R) => Thenable<U_1>, onRejected: (error: any) => Thenable<U_1>): Thenable<U_1>; <U_1>(onFulfilled: (value: R) => Thenable<U_1>, onRejected?: (error: any) => U_1): Thenable<U_1>; <U>(onFulfilled: (value: R) => U, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U_1>(onFulfilled?: (value: R) => U_1, onRejected?: (error: any) => U_1): Thenable<U_1>; }
+>     : ^^^^^^^^           ^^                           ^^          ^^                             ^^^             ^^^^^^^^           ^^                           ^^          ^^^                   ^^^             ^^^ ^^           ^^               ^^          ^^                           ^^^           ^^^^^^^^           ^^^                 ^^          ^^^                   ^^^             ^^^
 >onFulfilled : (value: R) => U
+>            : ^     ^^ ^^^^^ 
 >value : R
+>      : ^
 >onRejected : (error: any) => Thenable<U>
+>           : ^     ^^   ^^^^^           
 >error : any
+>      : ^^^
 
 		then<U>(onFulfilled?: (value: R) => U, onRejected?: (error: any) => U): Thenable<U>;
->then : { <U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>; <U>(onFulfilled: (value: R) => U, onRejected: (error: any) => Thenable<U>): Thenable<U>; <U>(onFulfilled?: (value: R) => U, onRejected?: (error: any) => U): Thenable<U>; }
+>then : { <U_1>(onFulfilled: (value: R) => Thenable<U_1>, onRejected: (error: any) => Thenable<U_1>): Thenable<U_1>; <U_1>(onFulfilled: (value: R) => Thenable<U_1>, onRejected?: (error: any) => U_1): Thenable<U_1>; <U_1>(onFulfilled: (value: R) => U_1, onRejected: (error: any) => Thenable<U_1>): Thenable<U_1>; <U>(onFulfilled?: (value: R) => U, onRejected?: (error: any) => U): Thenable<U>; }
+>     : ^^^^^^^^           ^^                           ^^          ^^                             ^^^             ^^^^^^^^           ^^                           ^^          ^^^                   ^^^             ^^^^^^^^           ^^                 ^^          ^^                             ^^^             ^^^ ^^           ^^^               ^^          ^^^                 ^^^           ^^^
 >onFulfilled : (value: R) => U
+>            : ^     ^^ ^^^^^ 
 >value : R
+>      : ^
 >onRejected : (error: any) => U
+>           : ^     ^^   ^^^^^ 
 >error : any
+>      : ^^^
 	}
 
 }
@@ -682,66 +1196,102 @@ export declare module Promise {
 interface Foo {
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: string;
 >b : string
+>  : ^^^^^^
 }
 var x: any;
 >x : any
+>  : ^^^
 
 var arr: any[];
 >arr : any[]
+>    : ^^^^^
 
 var foo: Foo;
 >foo : Foo
+>    : ^^^
 
 var fooProm: Promise<Foo>;
 >fooProm : Promise<Foo>
+>        : ^^^^^^^^^^^^
 
 fooProm = Promise.try(Promise, () => {
 >fooProm = Promise.try(Promise, () => {	return foo;}) : Promise<Foo>
+>                                                     : ^^^^^^^^^^^^
 >fooProm : Promise<Foo>
+>        : ^^^^^^^^^^^^
 >Promise.try(Promise, () => {	return foo;}) : Promise<Foo>
+>                                           : ^^^^^^^^^^^^
 >Promise.try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>            : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>    : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >() => {	return foo;} : () => Foo
+>                     : ^^^^^^^^^
 
 	return foo;
 >foo : Foo
+>    : ^^^
 
 });
 fooProm = Promise.try(Promise, () => {
 >fooProm = Promise.try(Promise, () => {	return foo;}, arr) : Promise<Foo>
+>                                                          : ^^^^^^^^^^^^
 >fooProm : Promise<Foo>
+>        : ^^^^^^^^^^^^
 >Promise.try(Promise, () => {	return foo;}, arr) : Promise<Foo>
+>                                                : ^^^^^^^^^^^^
 >Promise.try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>            : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>    : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >() => {	return foo;} : () => Foo
+>                     : ^^^^^^^^^
 
 	return foo;
 >foo : Foo
+>    : ^^^
 
 }, arr);
 >arr : any[]
+>    : ^^^^^
 
 fooProm = Promise.try(Promise, () => {
 >fooProm = Promise.try(Promise, () => {	return foo;}, arr, x) : Promise<Foo>
+>                                                             : ^^^^^^^^^^^^
 >fooProm : Promise<Foo>
+>        : ^^^^^^^^^^^^
 >Promise.try(Promise, () => {	return foo;}, arr, x) : Promise<Foo>
+>                                                   : ^^^^^^^^^^^^
 >Promise.try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>            : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
+>    : ^^^ ^^   ^^              ^^  ^^                         ^^    ^^^     ^^   ^^^   ^^^          ^^^ ^^   ^^              ^^  ^^       ^^    ^^^     ^^   ^^^   ^^^          ^^^
 >Promise : typeof Promise
+>        : ^^^^^^^^^^^^^^
 >() => {	return foo;} : () => Foo
+>                     : ^^^^^^^^^
 
 	return foo;
 >foo : Foo
+>    : ^^^
 
 }, arr, x);
 >arr : any[]
+>    : ^^^^^
 >x : any
+>  : ^^^
 

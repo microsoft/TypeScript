@@ -1,21 +1,21 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(8,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(9,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(13,9): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(13,14): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(17,9): error TS2662: Cannot find name 'arguments'. Did you mean the static member 'C.arguments'?
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(18,9): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(18,14): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(19,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(32,17): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(41,13): error TS2815: 'arguments' cannot be referenced in property initializers.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(42,13): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(42,18): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(45,17): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(46,22): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers.
+classStaticBlock6.ts(8,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+classStaticBlock6.ts(9,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+classStaticBlock6.ts(13,9): error TS18037: 'await' expression cannot be used inside a class static block.
+classStaticBlock6.ts(13,14): error TS1109: Expression expected.
+classStaticBlock6.ts(17,9): error TS2662: Cannot find name 'arguments'. Did you mean the static member 'C.arguments'?
+classStaticBlock6.ts(18,9): error TS18037: 'await' expression cannot be used inside a class static block.
+classStaticBlock6.ts(18,14): error TS1109: Expression expected.
+classStaticBlock6.ts(19,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+classStaticBlock6.ts(32,17): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+classStaticBlock6.ts(41,13): error TS2815: 'arguments' cannot be referenced in property initializers.
+classStaticBlock6.ts(42,13): error TS18037: 'await' expression cannot be used inside a class static block.
+classStaticBlock6.ts(42,18): error TS1109: Expression expected.
+classStaticBlock6.ts(45,17): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
+classStaticBlock6.ts(46,22): error TS1109: Expression expected.
+classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts (15 errors) ====
+==== classStaticBlock6.ts (15 errors) ====
     class B {
         static a = 1;
     }
@@ -34,7 +34,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(55,13): er
         static {
             await: if (true) {
             ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
+!!! error TS18037: 'await' expression cannot be used inside a class static block.
                  ~
 !!! error TS1109: Expression expected.
     
@@ -45,7 +45,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(55,13): er
 !!! error TS2662: Cannot find name 'arguments'. Did you mean the static member 'C.arguments'?
             await;
             ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
+!!! error TS18037: 'await' expression cannot be used inside a class static block.
                  ~
 !!! error TS1109: Expression expected.
             super();
@@ -79,14 +79,14 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(55,13): er
 !!! error TS2815: 'arguments' cannot be referenced in property initializers.
                 await;
                 ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
+!!! error TS18037: 'await' expression cannot be used inside a class static block.
                      ~
 !!! error TS1109: Expression expected.
     
                 async function ff () {
                     arguments;
                     ~~~~~~~~~
-!!! error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.
+!!! error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
                     await;
                          ~
 !!! error TS1109: Expression expected.

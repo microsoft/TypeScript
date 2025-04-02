@@ -1,66 +1,102 @@
-=== tests/cases/compiler/recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts ===
+//// [tests/cases/compiler/recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts] ////
+
+=== recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts ===
 export {}
 export interface Option<T> {
 	zip1<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray1<O>]>;
->zip1 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray1<O>]>
+>zip1 : <O extends Array<Option<any>>>(...others: O) => Option<[T, ...UnzipOptionArray1<O>]>
+>     : ^ ^^^^^^^^^                  ^^^^^      ^^ ^^^^^                                    
 >others : O
+>       : ^
 
 	zip2<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray2<O>]>;
->zip2 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray2<O>]>
+>zip2 : <O extends Array<Option<any>>>(...others: O) => Option<[T, ...UnzipOptionArray2<O>]>
+>     : ^ ^^^^^^^^^                  ^^^^^      ^^ ^^^^^                                    
 >others : O
+>       : ^
 
 	zip3<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray3<O>]>;
->zip3 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray3<O>]>
+>zip3 : <O extends Array<Option<any>>>(...others: O) => Option<[T, ...UnzipOptionArray3<O>]>
+>     : ^ ^^^^^^^^^                  ^^^^^      ^^ ^^^^^                                    
 >others : O
+>       : ^
 }
 
 type UnzipOption<T> = T extends Option<infer V> ? V : never;
 >UnzipOption : UnzipOption<T>
+>            : ^^^^^^^^^^^^^^
 
 /// This doesn't work
 type UnzipOptionArray1<T> = { [k in keyof T]: T[k] extends Option<any> ? UnzipOption<T[k]> : never };
 >UnzipOptionArray1 : UnzipOptionArray1<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
 /// But these work
 type UnzipOptionArray2<T> = { [k in keyof T]: UnzipOption<T[k]> };
 >UnzipOptionArray2 : UnzipOptionArray2<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
 type UnzipOptionArray3<T> = { [k in keyof T]: T[k] extends Option<infer V> ? V : never };
 >UnzipOptionArray3 : UnzipOptionArray3<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
 declare const opt1: Option<number>;
 >opt1 : Option<number>
+>     : ^^^^^^^^^^^^^^
 
 declare const opt2: Option<string>;
 >opt2 : Option<string>
+>     : ^^^^^^^^^^^^^^
 
 declare const opt3: Option<boolean>;
 >opt3 : Option<boolean>
+>     : ^^^^^^^^^^^^^^^
 
 const zipped1 = opt1.zip1(opt2, opt3);
 >zipped1 : Option<[number, string, boolean]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt1.zip1(opt2, opt3) : Option<[number, string, boolean]>
->opt1.zip1 : <O extends Option<any>[]>(...others: O) => Option<[number, ...UnzipOptionArray1<O>]>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opt1.zip1 : <O extends Array<Option<any>>>(...others: O) => Option<[number, ...UnzipOptionArray1<O>]>
+>          : ^ ^^^^^^^^^                  ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt1 : Option<number>
->zip1 : <O extends Option<any>[]>(...others: O) => Option<[number, ...UnzipOptionArray1<O>]>
+>     : ^^^^^^^^^^^^^^
+>zip1 : <O extends Array<Option<any>>>(...others: O) => Option<[number, ...UnzipOptionArray1<O>]>
+>     : ^ ^^^^^^^^^                  ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt2 : Option<string>
+>     : ^^^^^^^^^^^^^^
 >opt3 : Option<boolean>
+>     : ^^^^^^^^^^^^^^^
 
 const zipped2 = opt1.zip2(opt2, opt3);
 >zipped2 : Option<[number, string, boolean]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt1.zip2(opt2, opt3) : Option<[number, string, boolean]>
->opt1.zip2 : <O extends Option<any>[]>(...others: O) => Option<[number, ...UnzipOptionArray2<O>]>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opt1.zip2 : <O extends Array<Option<any>>>(...others: O) => Option<[number, ...UnzipOptionArray2<O>]>
+>          : ^ ^^^^^^^^^                  ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt1 : Option<number>
->zip2 : <O extends Option<any>[]>(...others: O) => Option<[number, ...UnzipOptionArray2<O>]>
+>     : ^^^^^^^^^^^^^^
+>zip2 : <O extends Array<Option<any>>>(...others: O) => Option<[number, ...UnzipOptionArray2<O>]>
+>     : ^ ^^^^^^^^^                  ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt2 : Option<string>
+>     : ^^^^^^^^^^^^^^
 >opt3 : Option<boolean>
+>     : ^^^^^^^^^^^^^^^
 
 const zipped3 = opt1.zip3(opt2, opt3);
 >zipped3 : Option<[number, string, boolean]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt1.zip3(opt2, opt3) : Option<[number, string, boolean]>
->opt1.zip3 : <O extends Option<any>[]>(...others: O) => Option<[number, ...UnzipOptionArray3<O>]>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opt1.zip3 : <O extends Array<Option<any>>>(...others: O) => Option<[number, ...UnzipOptionArray3<O>]>
+>          : ^ ^^^^^^^^^                  ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt1 : Option<number>
->zip3 : <O extends Option<any>[]>(...others: O) => Option<[number, ...UnzipOptionArray3<O>]>
+>     : ^^^^^^^^^^^^^^
+>zip3 : <O extends Array<Option<any>>>(...others: O) => Option<[number, ...UnzipOptionArray3<O>]>
+>     : ^ ^^^^^^^^^                  ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opt2 : Option<string>
+>     : ^^^^^^^^^^^^^^
 >opt3 : Option<boolean>
+>     : ^^^^^^^^^^^^^^^
 

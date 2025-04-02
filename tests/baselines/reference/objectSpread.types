@@ -1,326 +1,544 @@
-=== tests/cases/conformance/types/spread/objectSpread.ts ===
+//// [tests/cases/conformance/types/spread/objectSpread.ts] ////
+
+=== objectSpread.ts ===
 let o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 'no' } : { a: number; b: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 let o2 = { b: 'yes', c: true }
 >o2 : { b: string; c: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: 'yes', c: true } : { b: string; c: boolean; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'yes' : "yes"
+>      : ^^^^^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 let swap = { a: 'yes', b: -1 };
 >swap : { a: string; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 'yes', b: -1 } : { a: string; b: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'yes' : "yes"
+>      : ^^^^^
 >b : number
+>  : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 let addAfter: { a: number, b: string, c: boolean } =
 >addAfter : { a: number; b: string; c: boolean; }
+>         : ^^^^^      ^^^^^      ^^^^^       ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
     { ...o, c: false }
 >{ ...o, c: false } : { c: false; a: number; b: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 let addBefore: { a: number, b: string, c: boolean } =
 >addBefore : { a: number; b: string; c: boolean; }
+>          : ^^^^^      ^^^^^      ^^^^^       ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
     { c: false, ...o }
 >{ c: false, ...o } : { a: number; b: string; c: false; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let override: { a: number, b: string } =
 >override : { a: number; b: string; }
+>         : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     { ...o, b: 'override' }
 >{ ...o, b: 'override' } : { b: string; a: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'override' : "override"
+>           : ^^^^^^^^^^
 
 let nested: { a: number, b: boolean, c: string } =
 >nested : { a: number; b: boolean; c: string; }
+>       : ^^^^^      ^^^^^       ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
 >{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >{ b: false, c: 'overriden' } : { b: false; c: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >c : string
+>  : ^^^^^^
 >'overriden' : "overriden"
+>            : ^^^^^^^^^^^
 >c : string
+>  : ^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 let combined: { a: number, b: string, c: boolean } =
 >combined : { a: number; b: string; c: boolean; }
+>         : ^^^^^      ^^^^^      ^^^^^       ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
     { ...o, ...o2 }
 >{ ...o, ...o2 } : { b: string; c: boolean; a: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { b: string; c: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let combinedAfter: { a: number, b: string, c: boolean } =
 >combinedAfter : { a: number; b: string; c: boolean; }
+>              : ^^^^^      ^^^^^      ^^^^^       ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
     { ...o, ...o2, b: 'ok' }
 >{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { b: string; c: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'ok' : "ok"
+>     : ^^^^
 
 let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >combinedNestedChangeType : { a: number; b: boolean; c: number; }
+>                         : ^^^^^      ^^^^^       ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : number
+>  : ^^^^^^
 
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
 >{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ b: false, c: 'overriden' } : { b: false; c: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >c : string
+>  : ^^^^^^
 >'overriden' : "overriden"
+>            : ^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 let propertyNested: { a: { a: number, b: string } } =
->propertyNested : { a: {    a: number;    b: string;}; }
+>propertyNested : { a: { a: number; b: string; }; }
+>               : ^^^^^                         ^^^
 >a : { a: number; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     { a: { ... o } }
 >{ a: { ... o } } : { a: { a: number; b: string; }; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ... o } : { a: number; b: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // accessors don't copy the descriptor
 // (which means that readonly getters become read/write properties)
 let op = { get a () { return 6 } };
 >op : { readonly a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ get a () { return 6 } } : { readonly a: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 
 let getter: { a: number, c: number } =
 >getter : { a: number; c: number; }
+>       : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
     { ...op, c: 7 }
 >{ ...op, c: 7 } : { c: number; a: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >op : { readonly a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >7 : 7
+>  : ^
 
 getter.a = 12;
 >getter.a = 12 : 12
+>              : ^^
 >getter.a : number
+>         : ^^^^^^
 >getter : { a: number; c: number; }
+>       : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
 >spreadFunc : {}
+>           : ^^
 >{ ...(function () { }) } : {}
+>                         : ^^
 >(function () { }) : () => void
+>                  : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 type Header = { head: string, body: string, authToken: string }
->Header : { head: string; body: string; authToken: string; }
+>Header : Header
+>       : ^^^^^^
 >head : string
+>     : ^^^^^^
 >body : string
+>     : ^^^^^^
 >authToken : string
+>          : ^^^^^^
 
 function from16326(this: { header: Header }, header: Header, authToken: string): Header {
->from16326 : (this: {    header: Header;}, header: Header, authToken: string) => Header
+>from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
+>          : ^    ^^                   ^^      ^^      ^^         ^^      ^^^^^      
 >this : { header: Header; }
+>     : ^^^^^^^^^^      ^^^
 >header : Header
+>       : ^^^^^^
 >header : Header
+>       : ^^^^^^
 >authToken : string
+>          : ^^^^^^
 
     return {
 >{        ...this.header,        ...header,        ...authToken && { authToken }    } : { authToken: string; head: string; body: string; }
+>                                                                                     : ^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^      ^^^
 
         ...this.header,
 >this.header : Header
+>            : ^^^^^^
 >this : { header: Header; }
+>     : ^^^^^^^^^^      ^^^
 >header : Header
+>       : ^^^^^^
 
         ...header,
 >header : Header
+>       : ^^^^^^
 
         ...authToken && { authToken }
 >authToken && { authToken } : "" | { authToken: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >authToken : string
+>          : ^^^^^^
 >{ authToken } : { authToken: string; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 >authToken : string
+>          : ^^^^^^
     }
 }
 // boolean && T results in Partial<T>
 function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
->conditionalSpreadBoolean : (b: boolean) => {    x: number;    y: number;}
+>conditionalSpreadBoolean : (b: boolean) => { x: number; y: number; }
+>                         : ^ ^^       ^^^^^                         
 >b : boolean
+>  : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     let o = { x: 12, y: 13 }
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 12, y: 13 } : { x: number; y: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >y : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 
     o = {
 >o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...o,
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...b && { x: 14 }
 >b && { x: 14 } : false | { x: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >{ x: 14 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >14 : 14
+>   : ^^
     }
     let o2 = { ...b && { x: 21 }}
 >o2 : { x?: number | undefined; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...b && { x: 21 }} : { x?: number | undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b && { x: 21 } : false | { x: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >{ x: 21 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >21 : 21
+>   : ^^
 
     return o;
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 function conditionalSpreadNumber(nt: number): { x: number, y: number } {
->conditionalSpreadNumber : (nt: number) => {    x: number;    y: number;}
+>conditionalSpreadNumber : (nt: number) => { x: number; y: number; }
+>                        : ^  ^^      ^^^^^                         
 >nt : number
+>   : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     let o = { x: 15, y: 16 }
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 15, y: 16 } : { x: number; y: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >15 : 15
+>   : ^^
 >y : number
+>  : ^^^^^^
 >16 : 16
+>   : ^^
 
     o = {
 >o = {        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...o,
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...nt && { x: nt }
 >nt && { x: nt } : 0 | { x: number; }
+>                : ^^^^^^^^^^^^^^^^^^
 >nt : number
+>   : ^^^^^^
 >{ x: nt } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >nt : number
+>   : ^^^^^^
     }
     let o2 = { ...nt && { x: nt }}
 >o2 : { x?: number | undefined; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...nt && { x: nt }} : { x?: number | undefined; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nt && { x: nt } : 0 | { x: number; }
+>                : ^^^^^^^^^^^^^^^^^^
 >nt : number
+>   : ^^^^^^
 >{ x: nt } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >nt : number
+>   : ^^^^^^
 
     return o;
 >o : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 function conditionalSpreadString(st: string): { x: string, y: number } {
->conditionalSpreadString : (st: string) => {    x: string;    y: number;}
+>conditionalSpreadString : (st: string) => { x: string; y: number; }
+>                        : ^  ^^      ^^^^^                         
 >st : string
+>   : ^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     let o = { x: 'hi', y: 17 }
 >o : { x: string; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'hi', y: 17 } : { x: string; y: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >17 : 17
+>   : ^^
 
     o = {
 >o = {        ...o,        ...st && { x: st }    } : { x: string; y: number; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { x: string; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        ...o,        ...st && { x: st }    } : { x: string; y: number; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...o,
 >o : { x: string; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...st && { x: st }
 >st && { x: st } : "" | { x: string; }
+>                : ^^^^^^^^^^^^^^^^^^^
 >st : string
+>   : ^^^^^^
 >{ x: st } : { x: string; }
+>          : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >st : string
+>   : ^^^^^^
     }
     let o2 = { ...st && { x: st }}
 >o2 : { x?: string | undefined; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...st && { x: st }} : { x?: string | undefined; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >st && { x: st } : "" | { x: string; }
+>                : ^^^^^^^^^^^^^^^^^^^
 >st : string
+>   : ^^^^^^
 >{ x: st } : { x: string; }
+>          : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >st : string
+>   : ^^^^^^
 
     return o;
 >o : { x: string; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // any results in any
@@ -335,381 +553,645 @@ let spreadAny = { ...anything };
 // methods are not enumerable
 class C { p = 1; m() { } }
 >C : C
+>  : ^
 >p : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >m : () => void
+>  : ^^^^^^^^^^
 
 let c: C = new C()
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 let spreadC: { p: number } = { ...c }
 >spreadC : { p: number; }
+>        : ^^^^^      ^^^
 >p : number
+>  : ^^^^^^
 >{ ...c } : { p: number; }
+>         : ^^^^^^^^^^^^^^
 >c : C
+>  : ^
 
 // own methods are enumerable
 let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
 >cplus : { p: number; plus(): void; }
+>      : ^^^^^      ^^^^^^^^^^    ^^^
 >p : number
+>  : ^^^^^^
 >plus : () => void
+>     : ^^^^^^    
 >{ ...c, plus() { return this.p + 1; } } : { plus(): any; p: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
+>  : ^
 >plus : () => any
+>     : ^^^^^^^^^
 >this.p + 1 : any
 >this.p : any
 >this : any
+>     : ^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 cplus.plus();
 >cplus.plus() : void
+>             : ^^^^
 >cplus.plus : () => void
+>           : ^^^^^^    
 >cplus : { p: number; plus(): void; }
+>      : ^^^^^      ^^^^^^^^^^    ^^^
 >plus : () => void
+>     : ^^^^^^    
 
 // new field's type conflicting with existing field is OK
 let changeTypeAfter: { a: string, b: string } =
 >changeTypeAfter : { a: string; b: string; }
+>                : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     { ...o, a: 'wrong type?' }
 >{ ...o, a: 'wrong type?' } : { a: string; b: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'wrong type?' : "wrong type?"
+>              : ^^^^^^^^^^^^^
 
 let changeTypeBoth: { a: string, b: number } =
 >changeTypeBoth : { a: string; b: number; }
+>               : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     { ...o, ...swap };
 >{ ...o, ...swap } : { a: string; b: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >swap : { a: string; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // optional
 function container(
->container : (definiteBoolean: {    sn: boolean;}, definiteString: {    sn: string;}, optionalString: {    sn?: string;}, optionalNumber: {    sn?: number;}) => void
+>container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string; }, optionalNumber: { sn?: number; }) => void
+>          : ^               ^^                ^^              ^^               ^^              ^^                ^^              ^^                ^^^^^^^^^
 
     definiteBoolean: { sn: boolean },
 >definiteBoolean : { sn: boolean; }
+>                : ^^^^^^       ^^^
 >sn : boolean
+>   : ^^^^^^^
 
     definiteString: { sn: string },
 >definiteString : { sn: string; }
+>               : ^^^^^^      ^^^
 >sn : string
+>   : ^^^^^^
 
     optionalString: { sn?: string },
->optionalString : { sn?: string | undefined; }
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
 >sn : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
     optionalNumber: { sn?: number }) {
->optionalNumber : { sn?: number | undefined; }
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 >sn : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
     let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
 >optionalUnionStops : { sn: string | number | boolean; }
+>                   : ^^^^^^                         ^^^
 >sn : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >definiteBoolean : { sn: boolean; }
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->optionalNumber : { sn?: number | undefined; }
+>               : ^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
+>                        : ^^^^^^               ^^^
 >sn : string | number
+>   : ^^^^^^^^^^^^^^^
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >definiteBoolean : { sn: boolean; }
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->optionalString : { sn?: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>               : ^^^^^^      ^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
->allOptional : { sn?: string | number | undefined; }
+>allOptional : { sn?: string | number; }
+>            : ^^^^^^^               ^^^
 >sn : string | number | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
->optionalString : { sn?: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     // computed property
     let computedFirst: { a: number, b: string, "before everything": number } =
 >computedFirst : { a: number; b: string; "before everything": number; }
+>              : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >"before everything" : number
+>                    : ^^^^^^
 
         { ['before everything']: 12, ...o, b: 'yes' }
 >{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; "before everything": number; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['before everything'] : number
+>                      : ^^^^^^
 >'before everything' : "before everything"
+>                    : ^^^^^^^^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'yes' : "yes"
+>      : ^^^^^
 
     let computedAfter: { a: number, b: string, "at the end": number } =
 >computedAfter : { a: number; b: string; "at the end": number; }
+>              : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >"at the end" : number
+>             : ^^^^^^
 
         { ...o, b: 'yeah', ['at the end']: 14 }
 >{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; "at the end": number; a: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'yeah' : "yeah"
+>       : ^^^^^^
 >['at the end'] : number
+>               : ^^^^^^
 >'at the end' : "at the end"
+>             : ^^^^^^^^^^^^
 >14 : 14
+>   : ^^
 }
 // shortcut syntax
 let a = 12;
 >a : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 let shortCutted: { a: number, b: string } = { ...o, a }
 >shortCutted : { a: number; b: string; }
+>            : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >{ ...o, a } : { a: number; b: string; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 // non primitive
 let spreadNonPrimitive = { ...<object>{}};
 >spreadNonPrimitive : {}
+>                   : ^^
 >{ ...<object>{}} : {}
+>                 : ^^
 ><object>{} : object
+>           : ^^^^^^
 >{} : {}
+>   : ^^
 
 // generic spreads
 
 function f<T, U>(t: T, u: U) {
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     return { ...t, ...u, id: 'id' };
 >{ ...t, ...u, id: 'id' } : T & U & { id: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 >id : string
+>   : ^^^^^^
 >'id' : "id"
+>     : ^^^^
 }
 
 let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >exclusive : { id: string; a: number; b: string; c: string; d: boolean; }
+>          : ^^^^^^      ^^^^^      ^^^^^      ^^^^^      ^^^^^       ^^^
 >id : string
+>   : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 >d : boolean
+>  : ^^^^^^^
 
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
 >f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { a: number; b: string; } & { c: string; d: boolean; } & { id: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 'yes' } : { a: number; b: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >'yes' : "yes"
+>      : ^^^^^
 >{ c: 'no', d: false } : { c: string; d: false; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 >d : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 let overlap: { id: string, a: number, b: string } =
 >overlap : { id: string; a: number; b: string; }
+>        : ^^^^^^      ^^^^^      ^^^^^      ^^^
 >id : string
+>   : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     f({ a: 1 }, { a: 2, b: 'extra' })
 >f({ a: 1 }, { a: 2, b: 'extra' }) : { a: number; } & { a: number; b: string; } & { id: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ a: 2, b: 'extra' } : { a: number; b: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >b : string
+>  : ^^^^^^
 >'extra' : "extra"
+>        : ^^^^^^^
 
 let overlapConflict: { id:string, a: string } =
 >overlapConflict : { id: string; a: string; }
+>                : ^^^^^^      ^^^^^      ^^^
 >id : string
+>   : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     f({ a: 1 }, { a: 'mismatch' })
 >f({ a: 1 }, { a: 'mismatch' }) : { a: number; } & { a: string; } & { id: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ a: 'mismatch' } : { a: string; }
+>                  : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'mismatch' : "mismatch"
+>           : ^^^^^^^^^^
 
 let overwriteId: { id: string, a: number, c: number, d: string } =
 >overwriteId : { id: string; a: number; c: number; d: string; }
+>            : ^^^^^^      ^^^^^      ^^^^^      ^^^^^      ^^^
 >id : string
+>   : ^^^^^^
 >a : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
 >f({ a: 1, id: true }, { c: 1, d: 'no' }) : never
+>                                         : ^^^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, id: true } : { a: number; id: true; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >id : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 >{ c: 1, d: 'no' } : { c: number; d: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >d : string
+>  : ^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
->genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | {    s: string;}, obj: {    x: number;}) => void
+>genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^     ^^ ^^                  ^^   ^^              ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 >v : T | U
+>  : ^^^^^
 >w : T | { s: string; }
+>  : ^^^^^^^^^      ^^^
 >s : string
+>  : ^^^^^^
 >obj : { x: number; }
+>    : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 
     let x01 = { ...t };
 >x01 : T
+>    : ^
 >{ ...t } : T
+>         : ^
 >t : T
+>  : ^
 
     let x02 = { ...t, ...t };
 >x02 : T
+>    : ^
 >{ ...t, ...t } : T
+>               : ^
 >t : T
+>  : ^
 >t : T
+>  : ^
 
     let x03 = { ...t, ...u };
 >x03 : T & U
+>    : ^^^^^
 >{ ...t, ...u } : T & U
+>               : ^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     let x04 = { ...u, ...t };
 >x04 : U & T
+>    : ^^^^^
 >{ ...u, ...t } : U & T
+>               : ^^^^^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     let x05 = { a: 5, b: 'hi', ...t };
 >x05 : { a: number; b: string; } & T
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 5, b: 'hi', ...t } : { a: number; b: string; } & T
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >b : string
+>  : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >t : T
+>  : ^
 
     let x06 = { ...t, a: 5, b: 'hi' };
 >x06 : T & { a: number; b: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...t, a: 5, b: 'hi' } : T & { a: number; b: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >b : string
+>  : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
     let x07 = { a: 5, b: 'hi', ...t, c: true, ...obj };
 >x07 : { a: number; b: string; } & T & { x: number; c: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{ a: 5, b: 'hi', ...t, c: true, ...obj } : { a: number; b: string; } & T & { x: number; c: boolean; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >b : string
+>  : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >t : T
+>  : ^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >obj : { x: number; }
+>    : ^^^^^      ^^^
 
     let x09 = { a: 5, ...t, b: 'hi', c: true, ...obj };
 >x09 : { a: number; } & T & { x: number; b: string; c: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 5, ...t, b: 'hi', c: true, ...obj } : { a: number; } & T & { x: number; b: string; c: boolean; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >t : T
+>  : ^
 >b : string
+>  : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >obj : { x: number; }
+>    : ^^^^^      ^^^
 
     let x10 = { a: 5, ...t, b: 'hi', ...u, ...obj };
 >x10 : { a: number; } & T & { b: string; } & U & { x: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >{ a: 5, ...t, b: 'hi', ...u, ...obj } : { a: number; } & T & { b: string; } & U & { x: number; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >t : T
+>  : ^
 >b : string
+>  : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >u : U
+>  : ^
 >obj : { x: number; }
+>    : ^^^^^      ^^^
 
     let x11 = { ...v };
 >x11 : T | U
+>    : ^^^^^
 >{ ...v } : T | U
+>         : ^^^^^
 >v : T | U
+>  : ^^^^^
 
     let x12 = { ...v, ...obj };
 >x12 : (T & { x: number; }) | (U & { x: number; })
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^
 >{ ...v, ...obj } : (T & { x: number; }) | (U & { x: number; })
+>                 : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^
 >v : T | U
+>  : ^^^^^
 >obj : { x: number; }
+>    : ^^^^^      ^^^
 
     let x13 = { ...w };
 >x13 : T | { s: string; }
+>    : ^^^^^^^^^      ^^^
 >{ ...w } : T | { s: string; }
+>         : ^^^^^^^^^      ^^^
 >w : T | { s: string; }
+>  : ^^^^^^^^^      ^^^
 
     let x14 = { ...w, ...obj };
 >x14 : (T & { x: number; }) | { x: number; s: string; }
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
 >{ ...w, ...obj } : (T & { x: number; }) | { x: number; s: string; }
+>                 : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
 >w : T | { s: string; }
+>  : ^^^^^^^^^      ^^^
 >obj : { x: number; }
+>    : ^^^^^      ^^^
 
     let x15 = { ...t, ...v };
 >x15 : T | (T & U)
+>    : ^^^^^^^^^^^
 >{ ...t, ...v } : T | (T & U)
+>               : ^^^^^^^^^^^
 >t : T
+>  : ^
 >v : T | U
+>  : ^^^^^
 
     let x16 = { ...t, ...w };
 >x16 : T | (T & { s: string; })
+>    : ^^^^^^^^^^^^^^      ^^^^
 >{ ...t, ...w } : T | (T & { s: string; })
+>               : ^^^^^^^^^^^^^^      ^^^^
 >t : T
+>  : ^
 >w : T | { s: string; }
+>  : ^^^^^^^^^      ^^^
 
     let x17 = { ...t, ...w, ...obj };
 >x17 : (T & { x: number; }) | (T & { x: number; s: string; })
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
 >{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { x: number; s: string; })
+>                       : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
 >t : T
+>  : ^
 >w : T | { s: string; }
+>  : ^^^^^^^^^      ^^^
 >obj : { x: number; }
+>    : ^^^^^      ^^^
 
     let x18 = { ...t, ...v, ...w };
 >x18 : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >{ ...t, ...v, ...w } : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >t : T
+>  : ^
 >v : T | U
+>  : ^^^^^
 >w : T | { s: string; }
+>  : ^^^^^^^^^      ^^^
 }
 

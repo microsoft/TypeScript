@@ -1,0 +1,198 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue6.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue6.ts ===
+interface A {
+>A : Symbol(A, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 0))
+
+    kind: "a";
+>kind : Symbol(A.kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13))
+
+    aProps: string;
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+}
+
+interface B {
+>B : Symbol(B, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 3, 1))
+
+    kind: "b";
+>kind : Symbol(B.kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13))
+
+    bProps: string;
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+}
+
+interface C {
+>C : Symbol(C, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 8, 1))
+
+    kind: "c";
+>kind : Symbol(C.kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+    cProps: string;
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+}
+
+
+type MyType = A | B | C;
+>MyType : Symbol(MyType, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 13, 1))
+>A : Symbol(A, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 0))
+>B : Symbol(B, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 3, 1))
+>C : Symbol(C, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 8, 1))
+
+function isA(x: MyType) {
+>isA : Symbol(isA, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 16, 24))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>MyType : Symbol(MyType, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 13, 1))
+
+    switch (true) {
+        default:
+            const never: never = x;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 21, 17))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+
+        case x.kind === "a":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.aProps;
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+
+            break;
+        case x.kind === "b":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.bProps;
+>x.bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+
+            break;
+        case x.kind === "c":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.cProps;
+>x.cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+
+            break;
+    }
+
+    switch (true) {
+        default:
+            const never: never = x;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 35, 17))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+
+        case x.kind === "a": {
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.aProps;
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+
+            break;
+        }
+        case x.kind === "b": {
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.bProps;
+>x.bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+
+            break;
+        }
+        case x.kind === "c": {
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.cProps;
+>x.cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+
+            break;
+        }
+    }
+    
+    switch (true) {
+        default:
+            x.aProps;
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+
+            break;
+        case x.kind === "b":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.bProps;
+>x.bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>bProps : Symbol(B.bProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 6, 14))
+
+            break;
+        case x.kind === "c":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.cProps;
+>x.cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>cProps : Symbol(C.cProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 11, 14))
+
+            break;
+    }
+
+    switch (true) {
+        default:
+            const never: never = x;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 64, 17))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+
+        case x.kind === "a":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.aProps;
+>x.aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>aProps : Symbol(A.aProps, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 1, 14))
+
+            // fallthrough
+        case x.kind === "b":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.bProps;
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+
+            // fallthrough
+        case x.kind === "c":
+>x.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 0, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 5, 13), Decl(narrowByClauseExpressionInSwitchTrue6.ts, 10, 13))
+
+            x.cProps;
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue6.ts, 18, 13))
+    }
+}
+

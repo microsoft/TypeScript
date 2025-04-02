@@ -1,32 +1,47 @@
-=== tests/cases/compiler/File.js ===
+//// [tests/cases/compiler/superNoModifiersCrash.ts] ////
+
+=== File.js ===
 class Parent {
 >Parent : Parent
+>       : ^^^^^^
 
     initialize() {
 >initialize : (...args: any[]) => string
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         super.initialize(...arguments)
 >super.initialize(...arguments) : error
 >super.initialize : error
 >super : any
+>      : ^^^
 >initialize : any
+>           : ^^^
 >...arguments : any
 >arguments : IArguments
+>          : ^^^^^^^^^^
 
         return this.asdf = ''
 >this.asdf = '' : ""
+>               : ^^
 >this.asdf : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >asdf : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
     }
   }
 
 class Child extends Parent {
 >Child : Child
+>      : ^^^^^
 >Parent : Parent
+>       : ^^^^^^
 
     initialize() {
 >initialize : () => void
+>           : ^^^^^^^^^^
     }
 }

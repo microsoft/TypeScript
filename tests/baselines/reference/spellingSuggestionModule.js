@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spellingSuggestionModule.ts] ////
+
 //// [spellingSuggestionModule.ts]
 declare module "foobar" { export const x: number; }
 foobar;

@@ -1,16 +1,12 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-tests/cases/compiler/a.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'number'.
+a.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'number'.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/compiler/b.js (0 errors) ====
+==== b.js (0 errors) ====
     var x = "hello";
     
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== a.ts (1 errors) ====
     var x = 10; // Error reported
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'number'.
-!!! related TS6203 tests/cases/compiler/b.js:1:5: 'x' was also declared here.
+!!! related TS6203 b.js:1:5: 'x' was also declared here.
     

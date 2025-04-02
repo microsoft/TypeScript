@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts] ////
+
 //// [genericWithIndexerOfTypeParameterType2.ts]
 export class Collection<TItem extends CollectionItem> {
     _itemsByKey: { [key: string]: TItem; };

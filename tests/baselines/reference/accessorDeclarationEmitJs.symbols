@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/accessorDeclarationEmitJs.ts] ////
+
+=== /a.js ===
+export const t1 = {
+>t1 : Symbol(t1, Decl(a.js, 0, 12))
+
+    p: 'value',
+>p : Symbol(p, Decl(a.js, 0, 19))
+
+    get getter() {
+>getter : Symbol(getter, Decl(a.js, 1, 15))
+
+        return 'value';
+    },
+}
+
+export const t2 = {
+>t2 : Symbol(t2, Decl(a.js, 7, 12))
+
+    v: 'value',
+>v : Symbol(v, Decl(a.js, 7, 19))
+
+    set setter(v) {},
+>setter : Symbol(setter, Decl(a.js, 8, 15))
+>v : Symbol(v, Decl(a.js, 9, 15))
+}
+
+export const t3 = {
+>t3 : Symbol(t3, Decl(a.js, 12, 12))
+
+    p: 'value',
+>p : Symbol(p, Decl(a.js, 12, 19))
+
+    get value() {
+>value : Symbol(value, Decl(a.js, 13, 15), Decl(a.js, 16, 6))
+
+        return 'value';
+    },
+    set value(v) {},
+>value : Symbol(value, Decl(a.js, 13, 15), Decl(a.js, 16, 6))
+>v : Symbol(v, Decl(a.js, 17, 14))
+}
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/bigintMissingES2020.ts] ////
+
 //// [bigintMissingES2020.ts]
 declare function test<A, B extends A>(): void;
 

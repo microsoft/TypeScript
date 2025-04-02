@@ -1,470 +1,757 @@
-=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndValidOperands.ts] ////
+
+=== arithmeticOperatorWithNullValueAndValidOperands.ts ===
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.
 
 enum E {
 >E : E
+>  : ^
 
     a,
 >a : E.a
+>  : ^^^
 
     b
 >b : E.b
+>  : ^^^
 }
 
 var a: any;
 >a : any
+>  : ^^^
 
 var b: number;
 >b : number
+>  : ^^^^^^
 
 // operator *
 var ra1 = null * a;
 >ra1 : number
+>    : ^^^^^^
 >null * a : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var ra2 = null * b;
 >ra2 : number
+>    : ^^^^^^
 >null * b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var ra3 = null * 1;
 >ra3 : number
+>    : ^^^^^^
 >null * 1 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 var ra4 = null * E.a;
 >ra4 : number
+>    : ^^^^^^
 >null * E.a : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var ra5 = a * null;
 >ra5 : number
+>    : ^^^^^^
 >a * null : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var ra6 = b * null;
 >ra6 : number
+>    : ^^^^^^
 >b * null : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var ra7 = 0 * null;
 >ra7 : number
+>    : ^^^^^^
 >0 * null : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
 var ra8 = E.b * null;
 >ra8 : number
+>    : ^^^^^^
 >E.b * null : number
+>           : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator /
 var rb1 = null / a;
 >rb1 : number
+>    : ^^^^^^
 >null / a : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rb2 = null / b;
 >rb2 : number
+>    : ^^^^^^
 >null / b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rb3 = null / 1;
 >rb3 : number
+>    : ^^^^^^
 >null / 1 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 var rb4 = null / E.a;
 >rb4 : number
+>    : ^^^^^^
 >null / E.a : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var rb5 = a / null;
 >rb5 : number
+>    : ^^^^^^
 >a / null : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rb6 = b / null;
 >rb6 : number
+>    : ^^^^^^
 >b / null : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rb7 = 0 / null;
 >rb7 : number
+>    : ^^^^^^
 >0 / null : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
 var rb8 = E.b / null;
 >rb8 : number
+>    : ^^^^^^
 >E.b / null : number
+>           : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator %
 var rc1 = null % a;
 >rc1 : number
+>    : ^^^^^^
 >null % a : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rc2 = null % b;
 >rc2 : number
+>    : ^^^^^^
 >null % b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rc3 = null % 1;
 >rc3 : number
+>    : ^^^^^^
 >null % 1 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 var rc4 = null % E.a;
 >rc4 : number
+>    : ^^^^^^
 >null % E.a : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var rc5 = a % null;
 >rc5 : number
+>    : ^^^^^^
 >a % null : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rc6 = b % null;
 >rc6 : number
+>    : ^^^^^^
 >b % null : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rc7 = 0 % null;
 >rc7 : number
+>    : ^^^^^^
 >0 % null : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
 var rc8 = E.b % null;
 >rc8 : number
+>    : ^^^^^^
 >E.b % null : number
+>           : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator -
 var rd1 = null - a;
 >rd1 : number
+>    : ^^^^^^
 >null - a : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rd2 = null - b;
 >rd2 : number
+>    : ^^^^^^
 >null - b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rd3 = null - 1;
 >rd3 : number
+>    : ^^^^^^
 >null - 1 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 var rd4 = null - E.a;
 >rd4 : number
+>    : ^^^^^^
 >null - E.a : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var rd5 = a - null;
 >rd5 : number
+>    : ^^^^^^
 >a - null : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rd6 = b - null;
 >rd6 : number
+>    : ^^^^^^
 >b - null : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rd7 = 0 - null;
 >rd7 : number
+>    : ^^^^^^
 >0 - null : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
 var rd8 = E.b - null;
 >rd8 : number
+>    : ^^^^^^
 >E.b - null : number
+>           : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator <<
 var re1 = null << a;
 >re1 : number
+>    : ^^^^^^
 >null << a : number
+>          : ^^^^^^
 >a : any
+>  : ^^^
 
 var re2 = null << b;
 >re2 : number
+>    : ^^^^^^
 >null << b : number
+>          : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var re3 = null << 1;
 >re3 : number
+>    : ^^^^^^
 >null << 1 : number
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
 var re4 = null << E.a;
 >re4 : number
+>    : ^^^^^^
 >null << E.a : number
+>            : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var re5 = a << null;
 >re5 : number
+>    : ^^^^^^
 >a << null : number
+>          : ^^^^^^
 >a : any
+>  : ^^^
 
 var re6 = b << null;
 >re6 : number
+>    : ^^^^^^
 >b << null : number
+>          : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var re7 = 0 << null;
 >re7 : number
+>    : ^^^^^^
 >0 << null : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 var re8 = E.b << null;
 >re8 : number
+>    : ^^^^^^
 >E.b << null : number
+>            : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator >>
 var rf1 = null >> a;
 >rf1 : number
+>    : ^^^^^^
 >null >> a : number
+>          : ^^^^^^
 >a : any
+>  : ^^^
 
 var rf2 = null >> b;
 >rf2 : number
+>    : ^^^^^^
 >null >> b : number
+>          : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rf3 = null >> 1;
 >rf3 : number
+>    : ^^^^^^
 >null >> 1 : number
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
 var rf4 = null >> E.a;
 >rf4 : number
+>    : ^^^^^^
 >null >> E.a : number
+>            : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var rf5 = a >> null;
 >rf5 : number
+>    : ^^^^^^
 >a >> null : number
+>          : ^^^^^^
 >a : any
+>  : ^^^
 
 var rf6 = b >> null;
 >rf6 : number
+>    : ^^^^^^
 >b >> null : number
+>          : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rf7 = 0 >> null;
 >rf7 : number
+>    : ^^^^^^
 >0 >> null : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 var rf8 = E.b >> null;
 >rf8 : number
+>    : ^^^^^^
 >E.b >> null : number
+>            : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator >>>
 var rg1 = null >>> a;
 >rg1 : number
+>    : ^^^^^^
 >null >>> a : number
+>           : ^^^^^^
 >a : any
+>  : ^^^
 
 var rg2 = null >>> b;
 >rg2 : number
+>    : ^^^^^^
 >null >>> b : number
+>           : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rg3 = null >>> 1;
 >rg3 : number
+>    : ^^^^^^
 >null >>> 1 : number
+>           : ^^^^^^
 >1 : 1
+>  : ^
 
 var rg4 = null >>> E.a;
 >rg4 : number
+>    : ^^^^^^
 >null >>> E.a : number
+>             : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var rg5 = a >>> null;
 >rg5 : number
+>    : ^^^^^^
 >a >>> null : number
+>           : ^^^^^^
 >a : any
+>  : ^^^
 
 var rg6 = b >>> null;
 >rg6 : number
+>    : ^^^^^^
 >b >>> null : number
+>           : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rg7 = 0 >>> null;
 >rg7 : number
+>    : ^^^^^^
 >0 >>> null : number
+>           : ^^^^^^
 >0 : 0
+>  : ^
 
 var rg8 = E.b >>> null;
 >rg8 : number
+>    : ^^^^^^
 >E.b >>> null : number
+>             : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator &
 var rh1 = null & a;
 >rh1 : number
+>    : ^^^^^^
 >null & a : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rh2 = null & b;
 >rh2 : number
+>    : ^^^^^^
 >null & b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rh3 = null & 1;
 >rh3 : number
+>    : ^^^^^^
 >null & 1 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 var rh4 = null & E.a;
 >rh4 : number
+>    : ^^^^^^
 >null & E.a : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var rh5 = a & null;
 >rh5 : number
+>    : ^^^^^^
 >a & null : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rh6 = b & null;
 >rh6 : number
+>    : ^^^^^^
 >b & null : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rh7 = 0 & null;
 >rh7 : number
+>    : ^^^^^^
 >0 & null : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
 var rh8 = E.b & null;
 >rh8 : number
+>    : ^^^^^^
 >E.b & null : number
+>           : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator ^
 var ri1 = null ^ a;
 >ri1 : number
+>    : ^^^^^^
 >null ^ a : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var ri2 = null ^ b;
 >ri2 : number
+>    : ^^^^^^
 >null ^ b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var ri3 = null ^ 1;
 >ri3 : number
+>    : ^^^^^^
 >null ^ 1 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 var ri4 = null ^ E.a;
 >ri4 : number
+>    : ^^^^^^
 >null ^ E.a : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var ri5 = a ^ null;
 >ri5 : number
+>    : ^^^^^^
 >a ^ null : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var ri6 = b ^ null;
 >ri6 : number
+>    : ^^^^^^
 >b ^ null : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var ri7 = 0 ^ null;
 >ri7 : number
+>    : ^^^^^^
 >0 ^ null : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
 var ri8 = E.b ^ null;
 >ri8 : number
+>    : ^^^^^^
 >E.b ^ null : number
+>           : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 
 // operator |
 var rj1 = null | a;
 >rj1 : number
+>    : ^^^^^^
 >null | a : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rj2 = null | b;
 >rj2 : number
+>    : ^^^^^^
 >null | b : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rj3 = null | 1;
 >rj3 : number
+>    : ^^^^^^
 >null | 1 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 var rj4 = null | E.a;
 >rj4 : number
+>    : ^^^^^^
 >null | E.a : number
+>           : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var rj5 = a | null;
 >rj5 : number
+>    : ^^^^^^
 >a | null : number
+>         : ^^^^^^
 >a : any
+>  : ^^^
 
 var rj6 = b | null;
 >rj6 : number
+>    : ^^^^^^
 >b | null : number
+>         : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var rj7 = 0 | null;
 >rj7 : number
+>    : ^^^^^^
 >0 | null : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
 var rj8 = E.b | null;
 >rj8 : number
+>    : ^^^^^^
 >E.b | null : number
+>           : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
+>  : ^^^
 

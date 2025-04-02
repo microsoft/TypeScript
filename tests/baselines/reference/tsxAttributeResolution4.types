@@ -1,36 +1,57 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution4.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: Attribs1;
 >test1 : Attribs1
+>      : ^^^^^^^^
 	}
 }
 interface Attribs1 {
 	x(n: string): void;
 >x : (n: string) => void
+>  : ^ ^^      ^^^^^    
 >n : string
+>  : ^^^^^^
 }
 
 // OK
 <test1 {... {x: (n) => 0} } />;
 ><test1 {... {x: (n) => 0} } /> : JSX.Element
+>                               : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >{x: (n) => 0} : { x: (n: string) => number; }
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : (n: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => 0 : (n: string) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 // Error, no member 'len' on 'string'
 <test1 {... {x: (n) => n.len} } />;
 ><test1 {... {x: (n) => n.len} } /> : JSX.Element
+>                                   : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >{x: (n) => n.len} : { x: (n: string) => any; }
+>                  : ^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : (n: string) => any
+>  : ^ ^^^^^^^^^^^^^^^^
 >(n) => n.len : (n: string) => any
+>             : ^ ^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >n.len : any
+>      : ^^^
 >n : string
+>  : ^^^^^^
 >len : any
+>    : ^^^
 

@@ -1,33 +1,52 @@
-=== tests/cases/compiler/overloadCrash.ts ===
+//// [tests/cases/compiler/overloadCrash.ts] ////
+
+=== overloadCrash.ts ===
 interface I1 {a:number; b:number;};
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 interface I2 {c:number; d:number;};
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 
 interface I3 {a:number; b:number; c:number; d:number;};
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 
 declare function foo(...n:I1[]);
 >foo : { (...n: I1[]): any; (n1: I2, n3: I2): any; }
+>    : ^^^^^^ ^^    ^^^^^^^^^  ^^  ^^  ^^  ^^^^^^^^^
 >n : I1[]
+>  : ^^^^
 
 declare function foo(n1:I2, n3:I2);
 >foo : { (...n: I1[]): any; (n1: I2, n3: I2): any; }
+>    : ^^^^^^ ^^    ^^^^^^^^^  ^^  ^^  ^^  ^^^^^^^^^
 >n1 : I2
+>   : ^^
 >n3 : I2
+>   : ^^
 
 var i3:I3;
 >i3 : I3
+>   : ^^
 
 foo(i3, i3); // should not crash the compiler :)
 >foo(i3, i3) : any
 >foo : { (...n: I1[]): any; (n1: I2, n3: I2): any; }
+>    : ^^^^^^ ^^    ^^^^^^^^^  ^^  ^^  ^^  ^^^^^^^^^
 >i3 : I3
+>   : ^^
 >i3 : I3
+>   : ^^
 

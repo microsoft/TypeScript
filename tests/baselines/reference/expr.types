@@ -1,999 +1,1585 @@
-=== tests/cases/compiler/expr.ts ===
+//// [tests/cases/compiler/expr.ts] ////
+
+=== expr.ts ===
 interface I {
 }
 
 enum E {
 >E : E
+>  : ^
 
     Red, Green, Blue
 >Red : E.Red
+>    : ^^^^^
 >Green : E.Green
+>      : ^^^^^^^
 >Blue : E.Blue
+>     : ^^^^^^
 }
 
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     var a: any;
 >a : any
+>  : ^^^
 
     var n=3;
 >n : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
     var s="";
 >s : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
     var b=false;
 >b : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
     var i:I;
 >i : I
+>  : ^
 
     var e:E;
 >e : E
+>  : ^
 
     n&&a;
 >n&&a : any
+>     : ^^^
 >n : number
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     n&&s;
 >n&&s : string
+>     : ^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     n&&b;
 >n&&b : false
+>     : ^^^^^
 >n : number
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     n&&i;
 >n&&i : I
+>     : ^
 >n : number
+>  : ^^^^^^
 >i : I
+>  : ^
 
     n&&n;
 >n&&n : number
+>     : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     n&&e;
 >n&&e : E
+>     : ^
 >n : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
     s&&a;
 >s&&a : any
+>     : ^^^
 >s : string
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     s&&n;
 >s&&n : number
+>     : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     s&&b;
 >s&&b : false
+>     : ^^^^^
 >s : string
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     s&&i;
 >s&&i : I
+>     : ^
 >s : string
+>  : ^^^^^^
 >i : I
+>  : ^
 
     s&&s;
 >s&&s : string
+>     : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     s&&e;
 >s&&e : E
+>     : ^
 >s : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
     a&&n;
 >a&&n : number
+>     : ^^^^^^
 >a : any
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
     a&&s;
 >a&&s : string
+>     : ^^^^^^
 >a : any
+>  : ^^^
 >s : string
+>  : ^^^^^^
 
     a&&b;
 >a&&b : false
+>     : ^^^^^
 >a : any
+>  : ^^^
 >b : false
+>  : ^^^^^
 
     a&&i;
 >a&&i : I
+>     : ^
 >a : any
+>  : ^^^
 >i : I
+>  : ^
 
     a&&a;
 >a&&a : any
+>     : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     a&&e;
 >a&&e : E
+>     : ^
 >a : any
+>  : ^^^
 >e : E
+>  : ^
 
     i&&n;
 >i&&n : number
+>     : ^^^^^^
 >i : I
+>  : ^
 >n : number
+>  : ^^^^^^
 
     i&&s;
 >i&&s : string
+>     : ^^^^^^
 >i : I
+>  : ^
 >s : string
+>  : ^^^^^^
 
     i&&b;
 >i&&b : false
+>     : ^^^^^
 >i : I
+>  : ^
 >b : false
+>  : ^^^^^
 
     i&&a;
 >i&&a : any
+>     : ^^^
 >i : I
+>  : ^
 >a : any
+>  : ^^^
 
     i&&i;
 >i&&i : I
+>     : ^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
     i&&e;
 >i&&e : E
+>     : ^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     e&&n;
 >e&&n : number
+>     : ^^^^^^
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
     e&&s;
 >e&&s : string
+>     : ^^^^^^
 >e : E
+>  : ^
 >s : string
+>  : ^^^^^^
 
     e&&b;
 >e&&b : false
+>     : ^^^^^
 >e : E
+>  : ^
 >b : false
+>  : ^^^^^
 
     e&&a;
 >e&&a : any
+>     : ^^^
 >e : E
+>  : ^
 >a : any
+>  : ^^^
 
     e&&i;
 >e&&i : I
+>     : ^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e&&e;
 >e&&e : E
+>     : ^
 >e : E
+>  : ^
 >e : E.Green | E.Blue
+>  : ^^^^^^^^^^^^^^^^
 
     n||a;
 >n||a : any
+>     : ^^^
 >n : number
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     n||s;
 >n||s : string | number
+>     : ^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     n||b;
 >n||b : number | false
+>     : ^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     n||i;
 >n||i : I
+>     : ^
 >n : number
+>  : ^^^^^^
 >i : I
+>  : ^
 
     n||n;
 >n||n : number
+>     : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     n||e;
 >n||e : number
+>     : ^^^^^^
 >n : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
     s||a;
 >s||a : any
+>     : ^^^
 >s : string
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     s||n;
 >s||n : string | number
+>     : ^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     s||b;
 >s||b : string | false
+>     : ^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     s||i;
 >s||i : I
+>     : ^
 >s : string
+>  : ^^^^^^
 >i : I
+>  : ^
 
     s||s;
 >s||s : string
+>     : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     s||e;
 >s||e : string | E
+>     : ^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
     a||n;
 >a||n : any
+>     : ^^^
 >a : any
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
     a||s;
 >a||s : any
+>     : ^^^
 >a : any
+>  : ^^^
 >s : string
+>  : ^^^^^^
 
     a||b;
 >a||b : any
+>     : ^^^
 >a : any
+>  : ^^^
 >b : false
+>  : ^^^^^
 
     a||i;
 >a||i : any
+>     : ^^^
 >a : any
+>  : ^^^
 >i : I
+>  : ^
 
     a||a;
 >a||a : any
+>     : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     a||e;
 >a||e : any
+>     : ^^^
 >a : any
+>  : ^^^
 >e : E
+>  : ^
 
     i||n;
 >i||n : I
+>     : ^
 >i : I
+>  : ^
 >n : number
+>  : ^^^^^^
 
     i||s;
 >i||s : I
+>     : ^
 >i : I
+>  : ^
 >s : string
+>  : ^^^^^^
 
     i||b;
 >i||b : I
+>     : ^
 >i : I
+>  : ^
 >b : false
+>  : ^^^^^
 
     i||a;
 >i||a : any
+>     : ^^^
 >i : I
+>  : ^
 >a : any
+>  : ^^^
 
     i||i;
 >i||i : I
+>     : ^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
     i||e;
 >i||e : I
+>     : ^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     e||n;
 >e||n : number
+>     : ^^^^^^
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
     e||s;
 >e||s : string | E.Green | E.Blue
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : E
+>  : ^
 >s : string
+>  : ^^^^^^
 
     e||b;
 >e||b : false | E.Green | E.Blue
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >e : E
+>  : ^
 >b : false
+>  : ^^^^^
 
     e||a;
 >e||a : any
+>     : ^^^
 >e : E
+>  : ^
 >a : any
+>  : ^^^
 
     e||i;
 >e||i : I
+>     : ^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e||e;
 >e||e : E
+>     : ^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
     n==a;
 >n==a : boolean
+>     : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     n==s;
 >n==s : boolean
+>     : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     n==b;
 >n==b : boolean
+>     : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     n==i;
 >n==i : boolean
+>     : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >i : I
+>  : ^
 
     n==n;
 >n==n : boolean
+>     : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     n==e;
 >n==e : boolean
+>     : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
     s==a;
 >s==a : boolean
+>     : ^^^^^^^
 >s : string
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     s==n;
 >s==n : boolean
+>     : ^^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     s==b;
 >s==b : boolean
+>     : ^^^^^^^
 >s : string
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     s==i;
 >s==i : boolean
+>     : ^^^^^^^
 >s : string
+>  : ^^^^^^
 >i : I
+>  : ^
 
     s==s;
 >s==s : boolean
+>     : ^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     s==e;
 >s==e : boolean
+>     : ^^^^^^^
 >s : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
     a==n;
 >a==n : boolean
+>     : ^^^^^^^
 >a : any
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
     a==s;
 >a==s : boolean
+>     : ^^^^^^^
 >a : any
+>  : ^^^
 >s : string
+>  : ^^^^^^
 
     a==b;
 >a==b : boolean
+>     : ^^^^^^^
 >a : any
+>  : ^^^
 >b : false
+>  : ^^^^^
 
     a==i;
 >a==i : boolean
+>     : ^^^^^^^
 >a : any
+>  : ^^^
 >i : I
+>  : ^
 
     a==a;
 >a==a : boolean
+>     : ^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     a==e;
 >a==e : boolean
+>     : ^^^^^^^
 >a : any
+>  : ^^^
 >e : E
+>  : ^
 
     i==n;
 >i==n : boolean
+>     : ^^^^^^^
 >i : I
+>  : ^
 >n : number
+>  : ^^^^^^
 
     i==s;
 >i==s : boolean
+>     : ^^^^^^^
 >i : I
+>  : ^
 >s : string
+>  : ^^^^^^
 
     i==b;
 >i==b : boolean
+>     : ^^^^^^^
 >i : I
+>  : ^
 >b : false
+>  : ^^^^^
 
     i==a;
 >i==a : boolean
+>     : ^^^^^^^
 >i : I
+>  : ^
 >a : any
+>  : ^^^
 
     i==i;
 >i==i : boolean
+>     : ^^^^^^^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
     i==e;
 >i==e : boolean
+>     : ^^^^^^^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     e==n;
 >e==n : boolean
+>     : ^^^^^^^
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
     e==s;
 >e==s : boolean
+>     : ^^^^^^^
 >e : E
+>  : ^
 >s : string
+>  : ^^^^^^
 
     e==b;
 >e==b : boolean
+>     : ^^^^^^^
 >e : E
+>  : ^
 >b : false
+>  : ^^^^^
 
     e==a;
 >e==a : boolean
+>     : ^^^^^^^
 >e : E
+>  : ^
 >a : any
+>  : ^^^
 
     e==i;
 >e==i : boolean
+>     : ^^^^^^^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e==e;
 >e==e : boolean
+>     : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
     +i;
 >+i : number
+>   : ^^^^^^
 >i : I
+>  : ^
 
     +s;
 >+s : number
+>   : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     +n;
 >+n : number
+>   : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     +a;
 >+a : number
+>   : ^^^^^^
 >a : any
+>  : ^^^
 
     +b;
 >+b : number
+>   : ^^^^^^
 >b : false
+>  : ^^^^^
 
     -i;
 >-i : number
+>   : ^^^^^^
 >i : I
+>  : ^
 
     -s;
 >-s : number
+>   : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     -n;
 >-n : number
+>   : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     -a;
 >-a : number
+>   : ^^^^^^
 >a : any
+>  : ^^^
 
     -b;
 >-b : number
+>   : ^^^^^^
 >b : false
+>  : ^^^^^
 
     !i;
 >!i : boolean
+>   : ^^^^^^^
 >i : I
+>  : ^
 
     !s;
 >!s : boolean
+>   : ^^^^^^^
 >s : string
+>  : ^^^^^^
 
     !n;
 >!n : boolean
+>   : ^^^^^^^
 >n : number
+>  : ^^^^^^
 
     !a;
 >!a : boolean
+>   : ^^^^^^^
 >a : any
+>  : ^^^
 
     !b;
 >!b : true
+>   : ^^^^
 >b : false
+>  : ^^^^^
 
 
     n+a;
 >n+a : any
+>    : ^^^
 >n : number
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     n+s;
 >n+s : string
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     n+b;
 >n+b : any
+>    : ^^^
 >n : number
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     n+i;
 >n+i : any
+>    : ^^^
 >n : number
+>  : ^^^^^^
 >i : I
+>  : ^
 
     n+n;
 >n+n : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     n+e;
 >n+e : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
     s+a;
 >s+a : string
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     s+n;
 >s+n : string
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     s+b;
 >s+b : string
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     s+i;
 >s+i : string
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >i : I
+>  : ^
 
     s+s;
 >s+s : string
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     s+e;
 >s+e : string
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
     a+n;
 >a+n : any
+>    : ^^^
 >a : any
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
     a+s;
 >a+s : string
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >s : string
+>  : ^^^^^^
 
     a+b;
 >a+b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : false
+>  : ^^^^^
 
     a+i;
 >a+i : any
+>    : ^^^
 >a : any
+>  : ^^^
 >i : I
+>  : ^
 
     a+a;
 >a+a : any
+>    : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     a+e;
 >a+e : any
+>    : ^^^
 >a : any
+>  : ^^^
 >e : E
+>  : ^
 
     i+n;
 >i+n : any
+>    : ^^^
 >i : I
+>  : ^
 >n : number
+>  : ^^^^^^
 
     i+s;
 >i+s : string
+>    : ^^^^^^
 >i : I
+>  : ^
 >s : string
+>  : ^^^^^^
 
     i+b;
 >i+b : any
+>    : ^^^
 >i : I
+>  : ^
 >b : false
+>  : ^^^^^
 
     i+a;
 >i+a : any
+>    : ^^^
 >i : I
+>  : ^
 >a : any
+>  : ^^^
 
     i+i;
 >i+i : any
+>    : ^^^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
     i+e;
 >i+e : any
+>    : ^^^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     e+n;
 >e+n : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
     e+s;
 >e+s : string
+>    : ^^^^^^
 >e : E
+>  : ^
 >s : string
+>  : ^^^^^^
 
     e+b;
 >e+b : any
+>    : ^^^
 >e : E
+>  : ^
 >b : false
+>  : ^^^^^
 
     e+a;
 >e+a : any
+>    : ^^^
 >e : E
+>  : ^
 >a : any
+>  : ^^^
 
     e+i;
 >e+i : any
+>    : ^^^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e+e;
 >e+e : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
     n^a;
 >n^a : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     n^s;
 >n^s : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     n^b;
 >n^b : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     n^i;
 >n^i : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >i : I
+>  : ^
 
     n^n;
 >n^n : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     n^e;
 >n^e : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
     s^a;
 >s^a : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     s^n;
 >s^n : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     s^b;
 >s^b : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     s^i;
 >s^i : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >i : I
+>  : ^
 
     s^s;
 >s^s : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     s^e;
 >s^e : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
     a^n;
 >a^n : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
     a^s;
 >a^s : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >s : string
+>  : ^^^^^^
 
     a^b;
 >a^b : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >b : false
+>  : ^^^^^
 
     a^i;
 >a^i : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >i : I
+>  : ^
 
     a^a;
 >a^a : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     a^e;
 >a^e : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >e : E
+>  : ^
 
     i^n;
 >i^n : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >n : number
+>  : ^^^^^^
 
     i^s;
 >i^s : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >s : string
+>  : ^^^^^^
 
     i^b;
 >i^b : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >b : false
+>  : ^^^^^
 
     i^a;
 >i^a : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >a : any
+>  : ^^^
 
     i^i;
 >i^i : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
     i^e;
 >i^e : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     e^n;
 >e^n : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
     e^s;
 >e^s : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >s : string
+>  : ^^^^^^
 
     e^b;
 >e^b : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >b : false
+>  : ^^^^^
 
     e^a;
 >e^a : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >a : any
+>  : ^^^
 
     e^i;
 >e^i : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e^e;
 >e^e : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
     n-a;
 >n-a : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     n-s;
 >n-s : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     n-b;
 >n-b : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     n-i;
 >n-i : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >i : I
+>  : ^
 
     n-n;
 >n-n : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     n-e;
 >n-e : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
     s-a;
 >s-a : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >a : any
+>  : ^^^
 
     s-n;
 >s-n : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     s-b;
 >s-b : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >b : false
+>  : ^^^^^
 
     s-i;
 >s-i : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >i : I
+>  : ^
 
     s-s;
 >s-s : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     s-e;
 >s-e : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >e : E
+>  : ^
 
     a-n;
 >a-n : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
     a-s;
 >a-s : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >s : string
+>  : ^^^^^^
 
     a-b;
 >a-b : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >b : false
+>  : ^^^^^
 
     a-i;
 >a-i : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >i : I
+>  : ^
 
     a-a;
 >a-a : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     a-e;
 >a-e : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >e : E
+>  : ^
 
     i-n;
 >i-n : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >n : number
+>  : ^^^^^^
 
     i-s;
 >i-s : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >s : string
+>  : ^^^^^^
 
     i-b;
 >i-b : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >b : false
+>  : ^^^^^
 
     i-a;
 >i-a : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >a : any
+>  : ^^^
 
     i-i;
 >i-i : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
     i-e;
 >i-e : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     e-n;
 >e-n : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
     e-s;
 >e-s : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >s : string
+>  : ^^^^^^
 
     e-b;
 >e-b : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >b : false
+>  : ^^^^^
 
     e-a;
 >e-a : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >a : any
+>  : ^^^
 
     e-i;
 >e-i : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e-e;
 >e-e : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 }

@@ -1,36 +1,54 @@
-=== tests/cases/conformance/types/conditional/inferTypes2.ts ===
+//// [tests/cases/conformance/types/conditional/inferTypes2.ts] ////
+
+=== inferTypes2.ts ===
 // Repros from #22755
 
 export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
 >foo : <T>(obj: T) => T extends () => infer P ? P : never
+>    : ^ ^^   ^^ ^^^^^                                   
 >obj : T
+>    : ^
 
 export function bar<T>(obj: T) {
 >bar : <T>(obj: T) => T extends () => infer P ? P : never
+>    : ^ ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     return foo(obj);
 >foo(obj) : T extends () => infer P ? P : never
->foo : <T>(obj: T) => T extends () => infer P ? P : never
+>         : ^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^
+>foo : <T_1>(obj: T_1) => T_1 extends () => infer P ? P : never
+>    : ^^^^^^   ^^   ^^^^^                                     
 >obj : T
+>    : ^
 }
 
 export type BadNested<T> = { x: T extends number ? T : string };
 >BadNested : BadNested<T>
+>          : ^^^^^^^^^^^^
 >x : T extends number ? T : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export declare function foo2<T>(obj: T): T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K] } ? P : never;
->foo2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
+>foo2 : <T>(obj: T) => T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K]; } ? P : never
+>     : ^ ^^   ^^ ^^^^^                                                                                 
 >obj : T
+>    : ^
 
 export function bar2<T>(obj: T) {
 >bar2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
+>     : ^ ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     return foo2(obj);
 >foo2(obj) : T extends { x: infer P extends number ? infer P : string; } ? P : never
->foo2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
+>          : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo2 : <T_1>(obj: T_1) => T_1 extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K]; } ? P : never
+>     : ^^^^^^   ^^   ^^^^^                                                                                   
 >obj : T
+>    : ^
 }
 
 // Repros from #31099
@@ -40,11 +58,13 @@ type Weird = any extends infer U ? U : never;
 
 type AlsoWeird = unknown extends infer U ? U : never;
 >AlsoWeird : unknown
+>          : ^^^^^^^
 
 const a: Weird = null;
 >a : any
 
 const b: string = a;
 >b : string
+>  : ^^^^^^
 >a : any
 

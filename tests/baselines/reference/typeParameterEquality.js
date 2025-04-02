@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterEquality.ts] ////
+
 //// [typeParameterEquality.ts]
 class C {
     get x(): <T>(a: T) => T { return null; }

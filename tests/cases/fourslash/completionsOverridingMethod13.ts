@@ -21,11 +21,12 @@ verify.completions({
         includeCompletionsWithClassMemberSnippets: true,
     },
     exact: [
-        ...completion.classElementKeywords,
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "protected foo(): void {\n}",
+            filterText: "foo",
         },
+        ...completion.classElementKeywords,
     ],
 });

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping29.ts] ////
+
 //// [contextualTyping29.ts]
 function foo(param:number[]){}; foo([1, 3]);
 

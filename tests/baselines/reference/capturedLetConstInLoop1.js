@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop1.ts] ////
+
 //// [capturedLetConstInLoop1.ts]
 declare function use(x: any): any;
 

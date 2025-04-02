@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolType7.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType7.ts] ////
+
+=== symbolType7.ts ===
 var s = Symbol.for("shift");
 >s : Symbol(s, Decl(symbolType7.ts, 0, 3))
 >Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))

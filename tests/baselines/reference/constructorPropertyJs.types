@@ -1,19 +1,25 @@
+//// [tests/cases/compiler/constructorPropertyJs.ts] ////
+
 === /a.js ===
 class C {
 >C : C
+>  : ^
 
     /**
      * @param {any} a
      */
     foo(a) {
 >foo : (a: any) => void
+>    : ^ ^^   ^^^^^^^^^
 >a : any
 
         this.constructor = a;
 >this.constructor = a : any
 >this.constructor : any
 >this : this
+>     : ^^^^
 >constructor : any
+>            : ^^^
 >a : any
     }
 }

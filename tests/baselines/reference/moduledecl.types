@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduledecl.ts ===
+//// [tests/cases/compiler/moduledecl.ts] ////
+
+=== moduledecl.ts ===
 module a {
 }
 
@@ -8,57 +10,76 @@ module b.a {
 module c.a.b {
     import ma = a;
 >ma : any
+>   : ^^^
 >a : error
 }
 
 module mImport {
     import d = a;
 >d : any
+>  : ^^^
 >a : error
 
     import e = b.a;
 >e : any
+>  : ^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     import d1 = a;
 >d1 : any
+>   : ^^^
 >a : error
 
     import e1 = b.a;
 >e1 : any
+>   : ^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 }
 
 module m0 {
 >m0 : typeof m0
+>   : ^^^^^^^^^
 
     function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
     }
 
     function f2(s: string);
 >f2 : { (s: string): any; (n: number): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     function f2(n: number);
 >f2 : { (s: string): any; (n: number): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     function f2(ns: any) {
 >f2 : { (s: string): any; (n: number): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >ns : any
     }
 
     class c1 {
 >c1 : c1
+>   : ^^
 
         public a : ()=>string;
 >a : () => string
+>  : ^^^^^^      
 
         private b: ()=>number;
 >b : () => number
+>  : ^^^^^^      
 
         private static s1;
 >s1 : any
@@ -71,65 +92,89 @@ module m0 {
         () : Object;
         [n: number]: c1;
 >n : number
+>  : ^^^^^^
     }
 
     import m2 = a;
 >m2 : any
+>   : ^^^
 >a : error
 
     import m3 = b;
 >m3 : any
+>   : ^^^
 >b : error
 
     import m4 = b.a;
 >m4 : any
+>   : ^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     import m5 = c;
 >m5 : any
+>   : ^^^
 >c : error
 
     import m6 = c.a;
 >m6 : any
+>   : ^^^
 >c : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     import m7 = c.a.b;
 >m7 : any
+>   : ^^^
 >c : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 }
 
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
     }
 
     export function f2(s: string);
 >f2 : { (s: string): any; (n: number): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     export function f2(n: number);
 >f2 : { (s: string): any; (n: number): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     export function f2(ns: any) {
 >f2 : { (s: string): any; (n: number): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >ns : any
     }
 
     export class c1 {
 >c1 : c1
+>   : ^^
 
         public a: () =>string;
 >a : () => string
+>  : ^^^^^^      
 
         private b: () =>number;
 >b : () => number
+>  : ^^^^^^      
 
         private static s1;
 >s1 : any
@@ -139,21 +184,28 @@ module m1 {
 
         public d() {
 >d : () => string
+>  : ^^^^^^^^^^^^
 
             return "Hello";
 >"Hello" : "Hello"
+>        : ^^^^^^^
         }
 
         public e: { x: number; y: string; };
 >e : { x: number; y: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
         constructor (public n, public n2: number, private n3, private n4: string) {
 >n : any
 >n2 : number
+>   : ^^^^^^
 >n3 : any
 >n4 : string
+>   : ^^^^^^
         }
     }
 
@@ -161,102 +213,135 @@ module m1 {
         () : Object;
         [n: number]: c1;
 >n : number
+>  : ^^^^^^
     }
 
     import m2 = a;
 >m2 : any
+>   : ^^^
 >a : error
 
     import m3 = b;
 >m3 : any
+>   : ^^^
 >b : error
 
     import m4 = b.a;
 >m4 : any
+>   : ^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     import m5 = c;
 >m5 : any
+>   : ^^^
 >c : error
 
     import m6 = c.a;
 >m6 : any
+>   : ^^^
 >c : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     import m7 = c.a.b;
 >m7 : any
+>   : ^^^
 >c : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 }
 
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
         var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         export var b: number;
 >b : number
+>  : ^^^^^^
     }
 
     export module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
         export var c: number;
 >c : number
+>  : ^^^^^^
     }
 }
 
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export module m25 {
 >m25 : typeof m25
+>    : ^^^^^^^^^^
 
         export module m5 {
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
             export var c: number;
 >c : number
+>  : ^^^^^^
         }
     }
 }
 
 module m13 {
 >m13 : typeof m13
+>    : ^^^^^^^^^^
 
     export module m4 {
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
         export module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
             export module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
                 export var c: number;
 >c : number
+>  : ^^^^^^
             }
         }
 
         export function f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
             return 20;
 >20 : 20
+>   : ^^
         }
     }
 }
 
 declare module m4 {
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
     export var b;
 >b : any
@@ -264,6 +349,7 @@ declare module m4 {
 
 declare module m5 {
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
     export var c;
 >c : any
@@ -271,6 +357,7 @@ declare module m5 {
 
 declare module m43 {
 >m43 : typeof m43
+>    : ^^^^^^^^^^
 
     export var b;
 >b : any
@@ -278,6 +365,7 @@ declare module m43 {
 
 declare module m55 {
 >m55 : typeof m55
+>    : ^^^^^^^^^^
 
     export var c;
 >c : any
@@ -285,233 +373,329 @@ declare module m55 {
 
 declare module "m3" {
 >"m3" : typeof import("m3")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     export var b: number;
 >b : number
+>  : ^^^^^^
 }
 
 module exportTests {
 >exportTests : typeof exportTests
+>            : ^^^^^^^^^^^^^^^^^^
 
     export class C1_public {
 >C1_public : C1_public
+>          : ^^^^^^^^^
 
         private f2() {
 >f2 : () => number
+>   : ^^^^^^^^^^^^
 
             return 30;
 >30 : 30
+>   : ^^
         }
 
         public f3() {
 >f3 : () => string
+>   : ^^^^^^^^^^^^
 
             return "string";
 >"string" : "string"
+>         : ^^^^^^^^
         }
     }
     class C2_private {
 >C2_private : C2_private
+>           : ^^^^^^^^^^
 
         private f2() {
 >f2 : () => number
+>   : ^^^^^^^^^^^^
 
             return 30;
 >30 : 30
+>   : ^^
         }
 
         public f3() {
 >f3 : () => string
+>   : ^^^^^^^^^^^^
 
             return "string";
 >"string" : "string"
+>         : ^^^^^^^^
         }
     }
 
     export class C3_public {
 >C3_public : C3_public
+>          : ^^^^^^^^^
 
         private getC2_private() {
 >getC2_private : () => C2_private
+>              : ^^^^^^^^^^^^^^^^
 
             return new C2_private();
 >new C2_private() : C2_private
+>                 : ^^^^^^^^^^
 >C2_private : typeof C2_private
+>           : ^^^^^^^^^^^^^^^^^
         }
         private setC2_private(arg: C2_private) {
 >setC2_private : (arg: C2_private) => void
+>              : ^   ^^          ^^^^^^^^^
 >arg : C2_private
+>    : ^^^^^^^^^^
         }
         private get c2() {
 >c2 : C2_private
+>   : ^^^^^^^^^^
 
             return new C2_private();
 >new C2_private() : C2_private
+>                 : ^^^^^^^^^^
 >C2_private : typeof C2_private
+>           : ^^^^^^^^^^^^^^^^^
         }
         public getC1_public() {
 >getC1_public : () => C1_public
+>             : ^^^^^^^^^^^^^^^
 
             return new C1_public();
 >new C1_public() : C1_public
+>                : ^^^^^^^^^
 >C1_public : typeof C1_public
+>          : ^^^^^^^^^^^^^^^^
         }
         public setC1_public(arg: C1_public) {
 >setC1_public : (arg: C1_public) => void
+>             : ^   ^^         ^^^^^^^^^
 >arg : C1_public
+>    : ^^^^^^^^^
         }
         public get c1() {
 >c1 : C1_public
+>   : ^^^^^^^^^
 
             return new C1_public();
 >new C1_public() : C1_public
+>                : ^^^^^^^^^
 >C1_public : typeof C1_public
+>          : ^^^^^^^^^^^^^^^^
         }
     }
 }
 
 declare module mAmbient {
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         public myProp: number;
 >myProp : number
+>       : ^^^^^^
     }
 
     function foo() : C;
 >foo : () => C
+>    : ^^^^^^ 
 
     var aVar: C;
 >aVar : C
+>     : ^
 
     interface B {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: C;
 >y : C
+>  : ^
     }
     enum e {
 >e : e
+>  : ^
 
         x,
 >x : e.x
+>  : ^^^
 
         y,
 >y : e.y
+>  : ^^^
 
         z
 >z : e.z
+>  : ^^^
     }
 
     module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
         class C {
 >C : C
+>  : ^
 
             public myProp: number;
 >myProp : number
+>       : ^^^^^^
         }
 
         function foo(): C;
 >foo : () => C
+>    : ^^^^^^ 
 
         var aVar: C;
 >aVar : C
+>     : ^
 
         interface B {
             x: number;
 >x : number
+>  : ^^^^^^
 
             y: C;
 >y : C
+>  : ^
         }
         enum e {
 >e : e
+>  : ^
 
             x,
 >x : e.x
+>  : ^^^
 
             y,
 >y : e.y
+>  : ^^^
 
             z
 >z : e.z
+>  : ^^^
         }
     }
 }
 
 function foo() {
 >foo : () => mAmbient.C
+>    : ^^^^^^^^^^^^^^^^
 
     return mAmbient.foo();
 >mAmbient.foo() : mAmbient.C
+>               : ^^^^^^^^^^
 >mAmbient.foo : () => mAmbient.C
+>             : ^^^^^^^^^^^^^^^^
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 >foo : () => mAmbient.C
+>    : ^^^^^^^^^^^^^^^^
 }
 
 var cVar = new mAmbient.C();
 >cVar : mAmbient.C
+>     : ^^^^^^^^^^
 >new mAmbient.C() : mAmbient.C
+>                 : ^^^^^^^^^^
 >mAmbient.C : typeof mAmbient.C
+>           : ^^^^^^^^^^^^^^^^^
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 >C : typeof mAmbient.C
+>  : ^^^^^^^^^^^^^^^^^
 
 var aVar = mAmbient.aVar;
 >aVar : mAmbient.C
+>     : ^^^^^^^^^^
 >mAmbient.aVar : mAmbient.C
+>              : ^^^^^^^^^^
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 >aVar : mAmbient.C
+>     : ^^^^^^^^^^
 
 var bB: mAmbient.B;
 >bB : mAmbient.B
+>   : ^^^^^^^^^^
 >mAmbient : any
+>         : ^^^
 
 var eVar: mAmbient.e;
 >eVar : mAmbient.e
+>     : ^^^^^^^^^^
 >mAmbient : any
+>         : ^^^
 
 function m3foo() {
 >m3foo : () => mAmbient.m3.C
+>      : ^^^^^^^^^^^^^^^^^^^
 
     return mAmbient.m3.foo();
 >mAmbient.m3.foo() : mAmbient.m3.C
+>                  : ^^^^^^^^^^^^^
 >mAmbient.m3.foo : () => mAmbient.m3.C
+>                : ^^^^^^^^^^^^^^^^^^^
 >mAmbient.m3 : typeof mAmbient.m3
+>            : ^^^^^^^^^^^^^^^^^^
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 >m3 : typeof mAmbient.m3
+>   : ^^^^^^^^^^^^^^^^^^
 >foo : () => mAmbient.m3.C
+>    : ^^^^^^^^^^^^^^^^^^^
 }
 
 var m3cVar = new mAmbient.m3.C();
 >m3cVar : mAmbient.m3.C
+>       : ^^^^^^^^^^^^^
 >new mAmbient.m3.C() : mAmbient.m3.C
+>                    : ^^^^^^^^^^^^^
 >mAmbient.m3.C : typeof mAmbient.m3.C
+>              : ^^^^^^^^^^^^^^^^^^^^
 >mAmbient.m3 : typeof mAmbient.m3
+>            : ^^^^^^^^^^^^^^^^^^
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 >m3 : typeof mAmbient.m3
+>   : ^^^^^^^^^^^^^^^^^^
 >C : typeof mAmbient.m3.C
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 var m3aVar = mAmbient.m3.aVar;
 >m3aVar : mAmbient.m3.C
+>       : ^^^^^^^^^^^^^
 >mAmbient.m3.aVar : mAmbient.m3.C
+>                 : ^^^^^^^^^^^^^
 >mAmbient.m3 : typeof mAmbient.m3
+>            : ^^^^^^^^^^^^^^^^^^
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 >m3 : typeof mAmbient.m3
+>   : ^^^^^^^^^^^^^^^^^^
 >aVar : mAmbient.m3.C
+>     : ^^^^^^^^^^^^^
 
 var m3bB: mAmbient.m3.B;
 >m3bB : mAmbient.m3.B
+>     : ^^^^^^^^^^^^^
 >mAmbient : any
+>         : ^^^
 >m3 : any
+>   : ^^^
 
 var m3eVar: mAmbient.m3.e;
 >m3eVar : mAmbient.m3.e
+>       : ^^^^^^^^^^^^^
 >mAmbient : any
+>         : ^^^
 >m3 : any
+>   : ^^^
 
 

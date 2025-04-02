@@ -1,13 +1,13 @@
-tests/cases/compiler/typeParameterDiamond3.ts(8,13): error TS2322: Type 'T | U' is not assignable to type 'Top'.
+typeParameterDiamond3.ts(8,13): error TS2322: Type 'T | U' is not assignable to type 'Top'.
   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-tests/cases/compiler/typeParameterDiamond3.ts(9,13): error TS2322: Type 'Bottom' is not assignable to type 'T | U'.
+typeParameterDiamond3.ts(9,13): error TS2322: Type 'Bottom' is not assignable to type 'T | U'.
   Type 'Top | T | U' is not assignable to type 'T | U'.
     Type 'Top' is not assignable to type 'T | U'.
-tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom' is not assignable to type 'Top'.
+typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom' is not assignable to type 'Top'.
   'Top' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
 
 
-==== tests/cases/compiler/typeParameterDiamond3.ts (3 errors) ====
+==== typeParameterDiamond3.ts (3 errors) ====
     function diamondTop<Top>() {
         function diamondMiddle<T, U>() {
             function diamondBottom<Bottom extends Top | T | U>() {
@@ -19,13 +19,13 @@ tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom
                 ~~~
 !!! error TS2322: Type 'T | U' is not assignable to type 'Top'.
 !!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! related TS2208 tests/cases/compiler/typeParameterDiamond3.ts:2:28: This type parameter might need an `extends Top` constraint.
+!!! related TS2208 typeParameterDiamond3.ts:2:28: This type parameter might need an `extends Top` constraint.
                 middle = bottom;
                 ~~~~~~
 !!! error TS2322: Type 'Bottom' is not assignable to type 'T | U'.
 !!! error TS2322:   Type 'Top | T | U' is not assignable to type 'T | U'.
 !!! error TS2322:     Type 'Top' is not assignable to type 'T | U'.
-!!! related TS2208 tests/cases/compiler/typeParameterDiamond3.ts:1:21: This type parameter might need an `extends T | U` constraint.
+!!! related TS2208 typeParameterDiamond3.ts:1:21: This type parameter might need an `extends T | U` constraint.
                 top = bottom;
                 ~~~
 !!! error TS2322: Type 'Bottom' is not assignable to type 'Top'.

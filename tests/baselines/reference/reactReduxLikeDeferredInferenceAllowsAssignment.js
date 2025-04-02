@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
+
 //// [reactReduxLikeDeferredInferenceAllowsAssignment.ts]
 declare class Component<P> {
   constructor(props: Readonly<P>);
@@ -174,8 +176,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -205,14 +207,12 @@ var simpleAction = function (payload) { return ({
     type: "SIMPLE_ACTION",
     payload: payload
 }); };
-var thunkAction = function (param1, param2) { return function (dispatch, _a) {
-    var foo = _a.foo;
-    return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_b) {
-            return [2 /*return*/, foo];
-        });
+var thunkAction = function (param1, param2) { return function (dispatch_1, _a) { return __awaiter(void 0, [dispatch_1, _a], void 0, function (dispatch, _b) {
+    var foo = _b.foo;
+    return __generator(this, function (_c) {
+        return [2 /*return*/, foo];
     });
-}; };
+}); }; };
 var TestComponent = /** @class */ (function (_super) {
     __extends(TestComponent, _super);
     function TestComponent() {

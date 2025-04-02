@@ -1,4 +1,6 @@
-=== tests/cases/compiler/silentNeverPropagation.ts ===
+//// [tests/cases/compiler/silentNeverPropagation.ts] ////
+
+=== silentNeverPropagation.ts ===
 // Repro from #45041
 
 type ModuleWithState<TState> = {

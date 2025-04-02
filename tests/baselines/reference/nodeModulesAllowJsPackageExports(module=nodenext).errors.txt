@@ -1,14 +1,9 @@
-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
-tests/cases/conformance/node/allowJs/index.cjs(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
-tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
-tests/cases/conformance/node/allowJs/index.cjs(9,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
-tests/cases/conformance/node/allowJs/node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
-tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
-tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
+error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 
 
-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
-==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== index.js (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
@@ -22,7 +17,7 @@ tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(3,22): error 
     cjsi;
     mjsi;
     typei;
-==== tests/cases/conformance/node/allowJs/index.mjs (0 errors) ====
+==== index.mjs (0 errors) ====
     // esm format file
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
@@ -36,39 +31,31 @@ tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(3,22): error 
     cjsi;
     mjsi;
     typei;
-==== tests/cases/conformance/node/allowJs/index.cjs (3 errors) ====
+==== index.cjs (0 errors) ====
     // cjs format file
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
     cjs;
     mjs;
     type;
     import * as cjsi from "inner/cjs";
     import * as mjsi from "inner/mjs";
-                          ~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
     import * as typei from "inner";
     cjsi;
     mjsi;
     typei;
-==== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts (2 errors) ====
+==== node_modules/inner/index.d.ts (1 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs";
                 ~~~
 !!! error TS2303: Circular definition of import alias 'cjs'.
     import * as mjs from "inner/mjs";
-                         ~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
     import * as type from "inner";
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.mts (0 errors) ====
+==== node_modules/inner/index.d.mts (0 errors) ====
     // esm format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
@@ -76,17 +63,15 @@ tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(3,22): error 
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.cts (1 errors) ====
+==== node_modules/inner/index.d.cts (0 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
-                         ~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs")' call instead.
     import * as type from "inner";
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
@@ -97,7 +82,7 @@ tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(3,22): error 
             ".": "./index.js"
         }
     }
-==== tests/cases/conformance/node/allowJs/node_modules/inner/package.json (0 errors) ====
+==== node_modules/inner/package.json (0 errors) ====
     {
         "name": "inner",
         "private": true,

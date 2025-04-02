@@ -1,129 +1,196 @@
-=== tests/cases/conformance/externalModules/index.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwait.1.ts] ////
+
+=== index.ts ===
 export const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 await x;
 >await x : 1
+>        : ^
 >x : 1
+>  : ^
 
 // reparse element access as await
 await [x];
 >await [x] : number[]
+>          : ^^^^^^^^
 >[x] : number[]
+>    : ^^^^^^^^
 >x : 1
+>  : ^
 
 await [x, x];
 >await [x, x] : number[]
+>             : ^^^^^^^^
 >[x, x] : number[]
+>       : ^^^^^^^^
 >x : 1
+>  : ^
 >x : 1
+>  : ^
 
 // reparse call as await
 declare function f(): number;
 >f : () => number
+>  : ^^^^^^      
 
 await (x);
 >await (x) : 1
+>          : ^
 >(x) : 1
+>    : ^
 >x : 1
+>  : ^
 
 await (f(), x);
 >await (f(), x) : 1
+>               : ^
 >(f(), x) : 1
+>         : ^
 >f(), x : 1
+>       : ^
 >f() : number
+>    : ^^^^^^
 >f : () => number
+>  : ^^^^^^      
 >x : 1
+>  : ^
 
 await <number>(x);
 >await <number>(x) : number
+>                  : ^^^^^^
 ><number>(x) : number
+>            : ^^^^^^
 >(x) : 1
+>    : ^
 >x : 1
+>  : ^
 
 await <number>(f(), x);
 >await <number>(f(), x) : number
+>                       : ^^^^^^
 ><number>(f(), x) : number
+>                 : ^^^^^^
 >(f(), x) : 1
+>         : ^
 >f(), x : 1
+>       : ^
 >f() : number
+>    : ^^^^^^
 >f : () => number
+>  : ^^^^^^      
 >x : 1
+>  : ^
 
 // reparse tagged template as await
 await ``;
 >await `` : ""
+>         : ^^
 >`` : ""
+>   : ^^
 
 await <string> ``;
 >await <string> `` : string
+>                  : ^^^^^^
 ><string> `` : string
+>            : ^^^^^^
 >`` : ""
+>   : ^^
 
 // member names should be ok
 class C1 {
 >C1 : C1
+>   : ^^
 
     await() {}
 >await : () => void
+>      : ^^^^^^^^^^
 }
 class C2 {
 >C2 : C2
+>   : ^^
 
     get await() { return 1; }
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
     set await(value) { }
 >await : number
+>      : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 class C3 {
 >C3 : C3
+>   : ^^
 
     await = 1;
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 }
 ({
 >({    await() {}}) : { await(): void; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >{    await() {}} : { await(): void; }
+>                 : ^^^^^^^^^^^^^^^^^^
 
     await() {}
 >await : () => void
+>      : ^^^^^^^^^^
 
 });
 ({
 >({    get await() { return 1 },    set await(value) { }}) : { await: number; }
+>                                                          : ^^^^^^^^^^^^^^^^^^
 >{    get await() { return 1 },    set await(value) { }} : { await: number; }
+>                                                        : ^^^^^^^^^^^^^^^^^^
 
     get await() { return 1 },
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
     set await(value) { }
 >await : number
+>      : ^^^^^^
 >value : number
+>      : ^^^^^^
 
 });
 ({
 >({    await: 1}) : { await: number; }
+>                 : ^^^^^^^^^^^^^^^^^^
 >{    await: 1} : { await: number; }
+>               : ^^^^^^^^^^^^^^^^^^
 
     await: 1
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 });
 
 // property access name should be ok
 C1.prototype.await;
 >C1.prototype.await : () => void
+>                   : ^^^^^^^^^^
 >C1.prototype : C1
+>             : ^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >prototype : C1
+>          : ^^
 >await : () => void
+>      : ^^^^^^^^^^
 
 // await in decorators
 declare const dec: any;
@@ -136,60 +203,83 @@ declare const dec: any;
 
 class C {
 >C : C
+>  : ^
 }
 
 // await allowed in aliased import
 import { await as _await } from "./other";
 >await : 1
+>      : ^
 >_await : 1
+>       : ^
 
 // newlines
 // await in throw
 throw await
 >await    1 : 1
+>           : ^
 
     1;
 >1 : 1
+>  : ^
 
 // await in var
 let y = await
 >y : number
+>  : ^^^^^^
 >await    1 : 1
+>           : ^
 
     1;
 >1 : 1
+>  : ^
 
 // await in expression statement;
 await
 >await    1 : 1
+>           : ^
 
     1;
 >1 : 1
+>  : ^
 
-=== tests/cases/conformance/externalModules/other.ts ===
+=== other.ts ===
 const _await = 1;
 >_await : 1
+>       : ^
 >1 : 1
+>  : ^
 
 // await allowed in aliased export
 export { _await as await };
 >_await : 1
+>       : ^
 >await : 1
+>      : ^
 
 // for-await-of
 const arr = [Promise.resolve()];
 >arr : Promise<void>[]
+>    : ^^^^^^^^^^^^^^^
 >[Promise.resolve()] : Promise<void>[]
+>                    : ^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
+>                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 
 for await (const item of arr) {
 >item : void
+>     : ^^^^
 >arr : Promise<void>[]
+>    : ^^^^^^^^^^^^^^^
 
   item;
 >item : void
+>     : ^^^^
 }
 

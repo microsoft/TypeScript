@@ -1,238 +1,359 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts] ////
+
+=== assignmentCompatWithObjectMembersOptionality.ts ===
 // Derived member is not optional but base member is, should be ok
 
 class Base { foo: string; }
 >Base : Base
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
 class Derived extends Base { bar: string; }
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : string
+>    : ^^^^^^
 
 class Derived2 extends Derived { baz: string; }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Derived : Derived
+>        : ^^^^^^^
 >baz : string
+>    : ^^^^^^
 
 module TargetHasOptional {
 >TargetHasOptional : typeof TargetHasOptional
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     // targets
     interface C {
         opt?: Base
 >opt : Base
+>    : ^^^^
     }
     var c: C;
 >c : C
+>  : ^
 
     var a: { opt?: Base; }
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >opt : Base
+>    : ^^^^
 
     var b: typeof a = { opt: new Base() }
 >b : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >{ opt: new Base() } : { opt: Base; }
+>                    : ^^^^^^^^^^^^^^
 >opt : Base
+>    : ^^^^
 >new Base() : Base
+>           : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
     // sources
     interface D {
         opt: Base;
 >opt : Base
+>    : ^^^^
     }
     interface E {
         opt: Derived;
 >opt : Derived
+>    : ^^^^^^^
     }
     interface F {
         opt?: Derived;
 >opt : Derived
+>    : ^^^^^^^
     }
     var d: D;
 >d : D
+>  : ^
 
     var e: E;
 >e : E
+>  : ^
 
     var f: F;
 >f : F
+>  : ^
 
     // all ok
     c = d;
 >c = d : D
+>      : ^
 >c : C
+>  : ^
 >d : D
+>  : ^
 
     c = e;
 >c = e : E
+>      : ^
 >c : C
+>  : ^
 >e : E
+>  : ^
 
     c = f;
 >c = f : F
+>      : ^
 >c : C
+>  : ^
 >f : F
+>  : ^
 
     c = a;
 >c = a : { opt?: Base; }
+>      : ^^^^^^^^    ^^^
 >c : C
+>  : ^
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 
     a = d;
 >a = d : D
+>      : ^
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >d : D
+>  : ^
 
     a = e;
 >a = e : E
+>      : ^
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >e : E
+>  : ^
 
     a = f;
 >a = f : F
+>      : ^
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >f : F
+>  : ^
 
     a = c;
 >a = c : C
+>      : ^
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >c : C
+>  : ^
 
     b = d;
 >b = d : D
+>      : ^
 >b : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >d : D
+>  : ^
 
     b = e;
 >b = e : E
+>      : ^
 >b : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >e : E
+>  : ^
 
     b = f;
 >b = f : F
+>      : ^
 >b : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >f : F
+>  : ^
 
     b = a;
 >b = a : { opt?: Base; }
+>      : ^^^^^^^^    ^^^
 >b : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >a : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 
     b = c;
 >b = c : C
+>      : ^
 >b : { opt?: Base; }
+>  : ^^^^^^^^    ^^^
 >c : C
+>  : ^
 }
 
 module SourceHasOptional {
 >SourceHasOptional : typeof SourceHasOptional
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     // targets
     interface C {
         opt: Base
 >opt : Base
+>    : ^^^^
     }
     var c: C;
 >c : C
+>  : ^
 
     var a: { opt: Base; }
 >a : { opt: Base; }
+>  : ^^^^^^^    ^^^
 >opt : Base
+>    : ^^^^
 
     var b = { opt: new Base() }
 >b : { opt: Base; }
+>  : ^^^^^^^^^^^^^^
 >{ opt: new Base() } : { opt: Base; }
+>                    : ^^^^^^^^^^^^^^
 >opt : Base
+>    : ^^^^
 >new Base() : Base
+>           : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
     // sources
     interface D {
         opt?: Base;
 >opt : Base
+>    : ^^^^
     }
     interface E {
         opt?: Derived;
 >opt : Derived
+>    : ^^^^^^^
     }
     interface F {
         opt: Derived;
 >opt : Derived
+>    : ^^^^^^^
     }
     var d: D;
 >d : D
+>  : ^
 
     var e: E;
 >e : E
+>  : ^
 
     var f: F;
 >f : F
+>  : ^
 
     c = d; // error
 >c = d : D
+>      : ^
 >c : C
+>  : ^
 >d : D
+>  : ^
 
     c = e; // error
 >c = e : E
+>      : ^
 >c : C
+>  : ^
 >e : E
+>  : ^
 
     c = f; // ok
 >c = f : F
+>      : ^
 >c : C
+>  : ^
 >f : F
+>  : ^
 
     c = a; // ok
 >c = a : { opt: Base; }
+>      : ^^^^^^^    ^^^
 >c : C
+>  : ^
 >a : { opt: Base; }
+>  : ^^^^^^^    ^^^
 
     a = d; // error
 >a = d : D
+>      : ^
 >a : { opt: Base; }
+>  : ^^^^^^^    ^^^
 >d : D
+>  : ^
 
     a = e; // error
 >a = e : E
+>      : ^
 >a : { opt: Base; }
+>  : ^^^^^^^    ^^^
 >e : E
+>  : ^
 
     a = f; // ok
 >a = f : F
+>      : ^
 >a : { opt: Base; }
+>  : ^^^^^^^    ^^^
 >f : F
+>  : ^
 
     a = c; // ok
 >a = c : C
+>      : ^
 >a : { opt: Base; }
+>  : ^^^^^^^    ^^^
 >c : C
+>  : ^
 
     b = d; // error
 >b = d : D
+>      : ^
 >b : { opt: Base; }
+>  : ^^^^^^^^^^^^^^
 >d : D
+>  : ^
 
     b = e; // error
 >b = e : E
+>      : ^
 >b : { opt: Base; }
+>  : ^^^^^^^^^^^^^^
 >e : E
+>  : ^
 
     b = f; // ok
 >b = f : F
+>      : ^
 >b : { opt: Base; }
+>  : ^^^^^^^^^^^^^^
 >f : F
+>  : ^
 
     b = a; // ok
 >b = a : { opt: Base; }
+>      : ^^^^^^^    ^^^
 >b : { opt: Base; }
+>  : ^^^^^^^^^^^^^^
 >a : { opt: Base; }
+>  : ^^^^^^^    ^^^
 
     b = c; // ok
 >b = c : C
+>      : ^
 >b : { opt: Base; }
+>  : ^^^^^^^^^^^^^^
 >c : C
+>  : ^
 }

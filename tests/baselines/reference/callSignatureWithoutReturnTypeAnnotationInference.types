@@ -1,83 +1,120 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithoutReturnTypeAnnotationInference.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithoutReturnTypeAnnotationInference.ts] ////
+
+=== callSignatureWithoutReturnTypeAnnotationInference.ts ===
 // Call signatures without a return type should infer one from the function body (if present)
 
 // Simple types
 function foo(x) {
 >foo : (x: any) => number
+>    : ^ ^^^^^^^^^^^^^^^^
 >x : any
 
     return 1;
 >1 : 1
+>  : ^
 }
 var r = foo(1);
 >r : number
+>  : ^^^^^^
 >foo(1) : number
+>       : ^^^^^^
 >foo : (x: any) => number
+>    : ^ ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 function foo2(x) {
 >foo2 : (x: any) => number
+>     : ^ ^^^^^^^^^^^^^^^^
 >x : any
 
     return foo(x);
 >foo(x) : number
+>       : ^^^^^^
 >foo : (x: any) => number
+>    : ^ ^^^^^^^^^^^^^^^^
 >x : any
 }
 var r2 = foo2(1);
 >r2 : number
+>   : ^^^^^^
 >foo2(1) : number
+>        : ^^^^^^
 >foo2 : (x: any) => number
+>     : ^ ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 function foo3() {
->foo3 : () => any
+>foo3 : () => never
+>     : ^^^^^^^^^^^
 
     return foo3();
->foo3() : any
->foo3 : () => any
+>foo3() : never
+>       : ^^^^^
+>foo3 : () => never
+>     : ^^^^^^^^^^^
 }
 var r3 = foo3();
->r3 : any
->foo3() : any
->foo3 : () => any
+>r3 : never
+>   : ^^^^^
+>foo3() : never
+>       : ^^^^^
+>foo3 : () => never
+>     : ^^^^^^^^^^^
 
 function foo4<T>(x: T) {
 >foo4 : <T>(x: T) => T
+>     : ^ ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 var r4 = foo4(1);
 >r4 : number
+>   : ^^^^^^
 >foo4(1) : 1
+>        : ^
 >foo4 : <T>(x: T) => T
+>     : ^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 
 function foo5(x) {
 >foo5 : (x: any) => 1 | 2
+>     : ^ ^^^^^^^^^^^^^^^
 >x : any
 
     if (true) {
 >true : true
+>     : ^^^^
 
         return 1;
 >1 : 1
+>  : ^
 
     } else {
         return 2;
 >2 : 2
+>  : ^
     }
 }
 var r5 = foo5(1);
 >r5 : number
+>   : ^^^^^^
 >foo5(1) : 1 | 2
+>        : ^^^^^
 >foo5 : (x: any) => 1 | 2
+>     : ^ ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 function foo6(x) {
 >foo6 : (x: any) => any[]
+>     : ^ ^^^^^^^^^^^^^^^
 >x : any
 
     try {
@@ -87,199 +124,287 @@ function foo6(x) {
 
         return [];
 >[] : undefined[]
+>   : ^^^^^^^^^^^
     }
     finally {
         return [];
 >[] : undefined[]
+>   : ^^^^^^^^^^^
     }
 }
 var r6 = foo6(1);
 >r6 : any[]
+>   : ^^^^^
 >foo6(1) : any[]
+>        : ^^^^^
 >foo6 : (x: any) => any[]
+>     : ^ ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 function foo7(x) {
 >foo7 : (x: any) => "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     return typeof x;
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 }
 var r7 = foo7(1);
 >r7 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo7(1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo7 : (x: any) => "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 // object types
 function foo8(x: number) {
 >foo8 : (x: number) => { x: number; }
+>     : ^ ^^      ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     return { x: x };
 >{ x: x } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 var r8 = foo8(1);
 >r8 : { x: number; }
+>   : ^^^^^^^^^^^^^^
 >foo8(1) : { x: number; }
+>        : ^^^^^^^^^^^^^^
 >foo8 : (x: number) => { x: number; }
+>     : ^ ^^      ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 interface I {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 function foo9(x: number) {
 >foo9 : (x: number) => I
+>     : ^ ^^      ^^^^^^
 >x : number
+>  : ^^^^^^
 
     var i: I;
 >i : I
+>  : ^
 
     return i;    
 >i : I
+>  : ^
 }
 var r9 = foo9(1);
 >r9 : I
+>   : ^
 >foo9(1) : I
+>        : ^
 >foo9 : (x: number) => I
+>     : ^ ^^      ^^^^^^
 >1 : 1
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 function foo10(x: number) {
 >foo10 : (x: number) => C
+>      : ^ ^^      ^^^^^^
 >x : number
+>  : ^^^^^^
 
     var c: C;
 >c : C
+>  : ^
 
     return c;
 >c : C
+>  : ^
 }
 var r10 = foo10(1);
 >r10 : C
+>    : ^
 >foo10(1) : C
+>         : ^
 >foo10 : (x: number) => C
+>      : ^ ^^      ^^^^^^
 >1 : 1
+>  : ^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     export class C { foo: string }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 }
 function foo11() {
 >foo11 : () => typeof M
+>      : ^^^^^^^^^^^^^^
 
     return M;
 >M : typeof M
+>  : ^^^^^^^^
 }
 var r11 = foo11();
 >r11 : typeof M
+>    : ^^^^^^^^
 >foo11() : typeof M
+>        : ^^^^^^^^
 >foo11 : () => typeof M
+>      : ^^^^^^^^^^^^^^
 
 // merged declarations
 interface I2 {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 interface I2 {
     y: number;
 >y : number
+>  : ^^^^^^
 }
 function foo12() {
 >foo12 : () => I2
+>      : ^^^^^^^^
 
     var i2: I2;
 >i2 : I2
+>   : ^^
 
     return i2;
 >i2 : I2
+>   : ^^
 }
 var r12 = foo12();
 >r12 : I2
+>    : ^^
 >foo12() : I2
+>        : ^^
 >foo12 : () => I2
+>      : ^^^^^^^^
 
 function m1() { return 1; }
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
 module m1 { export var y = 2; }
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 function foo13() {
 >foo13 : () => typeof m1
+>      : ^^^^^^^^^^^^^^^
 
     return m1;
 >m1 : typeof m1
+>   : ^^^^^^^^^
 }
 var r13 = foo13();
 >r13 : typeof m1
+>    : ^^^^^^^^^
 >foo13() : typeof m1
+>        : ^^^^^^^^^
 >foo13 : () => typeof m1
+>      : ^^^^^^^^^^^^^^^
 
 class c1 {
 >c1 : c1
+>   : ^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     constructor(x) { }
 >x : any
 }
 module c1 {
 >c1 : typeof c1
+>   : ^^^^^^^^^
 
     export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 function foo14() {
 >foo14 : () => typeof c1
+>      : ^^^^^^^^^^^^^^^
 
     return c1;
 >c1 : typeof c1
+>   : ^^^^^^^^^
 }
 var r14 = foo14();
 >r14 : typeof c1
+>    : ^^^^^^^^^
 >foo14() : typeof c1
+>        : ^^^^^^^^^
 >foo14 : () => typeof c1
+>      : ^^^^^^^^^^^^^^^
 
 enum e1 { A }
 >e1 : e1
+>   : ^^
 >A : e1.A
+>  : ^^^^
 
 module e1 { export var y = 1; }
 >e1 : typeof e1
+>   : ^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 function foo15() {
 >foo15 : () => typeof e1
+>      : ^^^^^^^^^^^^^^^
 
     return e1;
 >e1 : typeof e1
+>   : ^^^^^^^^^
 }
 var r15 = foo15();
 >r15 : typeof e1
+>    : ^^^^^^^^^
 >foo15() : typeof e1
+>        : ^^^^^^^^^
 >foo15 : () => typeof e1
+>      : ^^^^^^^^^^^^^^^
 

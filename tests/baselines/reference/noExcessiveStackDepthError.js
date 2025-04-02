@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noExcessiveStackDepthError.ts] ////
+
 //// [noExcessiveStackDepthError.ts]
 // Repro from #46631
 

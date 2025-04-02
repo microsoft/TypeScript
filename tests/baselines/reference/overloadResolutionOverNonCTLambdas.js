@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts] ////
+
 //// [overloadResolutionOverNonCTLambdas.ts]
 module Bugs {
   class A {

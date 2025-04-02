@@ -1,55 +1,74 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality3.ts] ////
+
+=== subtypingWithObjectMembersOptionality3.ts ===
 // Base property is optional and derived type has no property of that name
 
 interface Base { foo: string; }
 >foo : string
+>    : ^^^^^^
 
 interface Derived extends Base { bar: string; }
 >bar : string
+>    : ^^^^^^
 
 interface T {
     Foo?: Base;
 >Foo : Base
+>    : ^^^^
 }
 
 interface S extends T {
     Foo2: Derived // ok
 >Foo2 : Derived
+>     : ^^^^^^^
 }
 
 interface T2 {
     1?: Base;
 >1 : Base
+>  : ^^^^
 }
 
 interface S2 extends T2 {
     2: Derived; // ok
 >2 : Derived
+>  : ^^^^^^^
 }
 
 interface T3 {
     '1'?: Base;
 >'1' : Base
+>    : ^^^^
 }
 
 interface S3 extends T3 {
     '1.0': Derived; // ok
 >'1.0' : Derived
+>      : ^^^^^^^
 }
 
 // object literal case
 var a: { Foo?: Base; }
 >a : { Foo?: Base; }
+>  : ^^^^^^^^    ^^^
 >Foo : Base
+>    : ^^^^
 
 var b: { Foo2: Derived; }
 >b : { Foo2: Derived; }
+>  : ^^^^^^^^       ^^^
 >Foo2 : Derived
+>     : ^^^^^^^
 
 var r = true ? a : b; // ok
 >r : { Foo?: Base; } | { Foo2: Derived; }
+>  : ^^^^^^^^    ^^^^^^^^^^^^^^       ^^^
 >true ? a : b : { Foo?: Base; } | { Foo2: Derived; }
+>             : ^^^^^^^^    ^^^^^^^^^^^^^^       ^^^
 >true : true
+>     : ^^^^
 >a : { Foo?: Base; }
+>  : ^^^^^^^^    ^^^
 >b : { Foo2: Derived; }
+>  : ^^^^^^^^       ^^^
 

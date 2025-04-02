@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx ===
+//// [tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx] ////
+
+=== genericInferenceDefaultTypeParameterJsxReact.tsx ===
 /// <reference path="react16.d.ts" />
 
 // Repro from #50858

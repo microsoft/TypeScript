@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts] ////
+
 //// [typeGuardsWithInstanceOf.ts]
 interface I { global: string; }
 var result!: I;

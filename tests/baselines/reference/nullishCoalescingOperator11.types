@@ -1,15 +1,25 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts] ////
+
+=== nullishCoalescingOperator11.ts ===
 declare const f11: 1 | 0 | '' | null | undefined;
 >f11 : "" | 0 | 1 | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let g11 = f11 ?? f11.toFixed()
 >g11 : any
+>    : ^^^
 >f11 ?? f11.toFixed() : any
+>                     : ^^^
 >f11 : "" | 0 | 1 | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f11.toFixed() : any
+>              : ^^^
 >f11.toFixed : any
+>            : ^^^
 >f11 : null | undefined
+>    : ^^^^^^^^^^^^^^^^
 >toFixed : any
+>        : ^^^
 
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithTypeParameter.ts] ////
+
 //// [exponentiationOperatorWithTypeParameter.ts]
 // type parameter type is not valid for arithmetic operand
 function foo<T>(t: T) {

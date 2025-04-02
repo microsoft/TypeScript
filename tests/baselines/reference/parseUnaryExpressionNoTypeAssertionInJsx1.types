@@ -1,13 +1,22 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx1.ts] ////
+
+=== index.js ===
 const x = "oops";
 >x : "oops"
+>  : ^^^^^^
 >"oops" : "oops"
+>       : ^^^^^^
 
 const y = + <number> x;
 >y : number
+>  : ^^^^^^
 >+ <number> x; : number
+>              : ^^^^^^
 ><number> x; : any
+>            : ^^^
 >number : any
+>       : ^^^
 
 > : any
+> : ^^^
 

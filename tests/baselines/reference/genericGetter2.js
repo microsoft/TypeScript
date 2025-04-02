@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericGetter2.ts] ////
+
 //// [genericGetter2.ts]
 class A<T> { }
 

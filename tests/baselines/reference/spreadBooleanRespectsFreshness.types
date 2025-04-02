@@ -1,32 +1,53 @@
-=== tests/cases/compiler/spreadBooleanRespectsFreshness.ts ===
+//// [tests/cases/compiler/spreadBooleanRespectsFreshness.ts] ////
+
+=== spreadBooleanRespectsFreshness.ts ===
 type Foo = FooBase | FooArray;
->Foo : FooBase | FooArray
+>Foo : Foo
+>    : ^^^
 
 type FooBase = string | false;
->FooBase : string | false
+>FooBase : FooBase
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 type FooArray = FooBase[];
->FooArray : FooBase[]
+>FooArray : FooArray
+>         : ^^^^^^^^
 
 declare let foo1: Foo;
 >foo1 : Foo
+>     : ^^^
 
 declare let foo2: Foo;
 >foo2 : Foo
+>     : ^^^
 
 foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
 >foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]] : FooBase[]
+>                                                : ^^^^^^^^^
 >foo1 : Foo
+>     : ^^^
 >[...Array.isArray(foo2) ? foo2 : [foo2]] : FooBase[]
+>                                         : ^^^^^^^^^
 >...Array.isArray(foo2) ? foo2 : [foo2] : FooBase
+>                                       : ^^^^^^^
 >Array.isArray(foo2) ? foo2 : [foo2] : FooArray
+>                                    : ^^^^^^^^
 >Array.isArray(foo2) : boolean
+>                    : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >foo2 : Foo
+>     : ^^^
 >foo2 : FooArray
+>     : ^^^^^^^^
 >[foo2] : FooBase[]
+>       : ^^^^^^^^^
 >foo2 : FooBase
+>     : ^^^^^^^
 

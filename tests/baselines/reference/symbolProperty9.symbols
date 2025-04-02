@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty9.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty9.ts] ////
+
+=== symbolProperty9.ts ===
 class C {
 >C : Symbol(C, Decl(symbolProperty9.ts, 0, 0))
 

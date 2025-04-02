@@ -1,29 +1,29 @@
-tests/cases/conformance/node/allowJs/subfolder/index.js(2,9): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+subfolder/index.js(2,9): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
-==== tests/cases/conformance/node/allowJs/subfolder/index.js (1 errors) ====
+==== subfolder/index.js (1 errors) ====
     // cjs format file
     export {default} from "fs";
             ~~~~~~~
 !!! error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
     export {default as foo} from "fs";
     export {bar as baz} from "fs";
-==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+==== index.js (0 errors) ====
     // esm format file
     export {default} from "fs";
     export {default as foo} from "fs";
     export {bar as baz} from "fs";
-==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/allowJs/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }
-==== tests/cases/conformance/node/allowJs/types.d.ts (0 errors) ====
+==== types.d.ts (0 errors) ====
     declare module "fs";
     declare module "tslib" {
         export {};

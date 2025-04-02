@@ -1,47 +1,66 @@
-=== tests/cases/conformance/functions/functionOverloadErrors.ts ===
+//// [tests/cases/conformance/functions/functionOverloadErrors.ts] ////
+
+=== functionOverloadErrors.ts ===
 //Function overload signature with initializer
 function fn1(x = 3);
 >fn1 : (x?: number) => any
+>    : ^ ^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 function fn1() { }
 >fn1 : (x?: number) => any
+>    : ^ ^^^^^^^^^^^^^^^^^
 
 //Multiple function overload signatures that are identical
 function fn2a();
 >fn2a : { (): any; (): any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
 function fn2a();
 >fn2a : { (): any; (): any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
 function fn2a() {
 >fn2a : { (): any; (): any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
 }
 function fn2b(n: number[]);
->fn2b : { (n: number[]): any; (n: number[]): any; }
+>fn2b : { (n: number[]): any; (n: Array<number>): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^             ^^^^^^^^^
 >n : number[]
+>  : ^^^^^^^^
 
 function fn2b(n: Array<number>);
 >fn2b : { (n: number[]): any; (n: Array<number>): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^             ^^^^^^^^^
 >n : number[]
+>  : ^^^^^^^^
 
 function fn2b() {
->fn2b : { (n: number[]): any; (n: number[]): any; }
+>fn2b : { (n: number[]): any; (n: Array<number>): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^             ^^^^^^^^^
 }
 
 //Multiple function overload signatures that differ only by return type
 function fn3(x: string): string;
 >fn3 : { (x: string): string; (y: string): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
+>  : ^^^^^^
 
 function fn3(y: string): number;
 >fn3 : { (x: string): string; (y: string): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >y : string
+>  : ^^^^^^
 
 function fn3(): any {
 >fn3 : { (x: string): string; (y: string): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
     return null;
 }
@@ -49,211 +68,289 @@ function fn3(): any {
 //Function overload with rest param and another with only an optional parameter
 function fn6(...t: any[]);
 >fn6 : { (...t: any[]): any; (x?: any): any; }
+>    : ^^^^^^ ^^     ^^^^^^^^^ ^^^   ^^^^^^^^^
 >t : any[]
+>  : ^^^^^
 
 function fn6(x?: any);
 >fn6 : { (...t: any[]): any; (x?: any): any; }
+>    : ^^^^^^ ^^     ^^^^^^^^^ ^^^   ^^^^^^^^^
 >x : any
+>  : ^^^
 
 function fn6() { }
 >fn6 : { (...t: any[]): any; (x?: any): any; }
+>    : ^^^^^^ ^^     ^^^^^^^^^ ^^^   ^^^^^^^^^
 
 //Function overload with rest param and another with only optional parameters
 function fn7(...t: any[]);
 >fn7 : { (...t: any[]): any; (x?: any, y?: any, z?: any): any; }
+>    : ^^^^^^ ^^     ^^^^^^^^^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^^^^^
 >t : any[]
+>  : ^^^^^
 
 function fn7(x?: any, y?: any, z?: any);
 >fn7 : { (...t: any[]): any; (x?: any, y?: any, z?: any): any; }
+>    : ^^^^^^ ^^     ^^^^^^^^^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 
 function fn7() { }
 >fn7 : { (...t: any[]): any; (x?: any, y?: any, z?: any): any; }
+>    : ^^^^^^ ^^     ^^^^^^^^^ ^^^   ^^ ^^^   ^^ ^^^   ^^^^^^^^^
 
 //Function overloads that differ only by type parameter name
 function fn8<T>(n: string);
 >fn8 : { <T>(n: string): any; <S>(n: string): any; }
+>    : ^^^ ^^ ^^      ^^^^^^^^^ ^^ ^^      ^^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 function fn8<S>(n: string);
 >fn8 : { <T>(n: string): any; <S>(n: string): any; }
+>    : ^^^ ^^ ^^      ^^^^^^^^^ ^^ ^^      ^^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 function fn8() { }
 >fn8 : { <T>(n: string): any; <S>(n: string): any; }
+>    : ^^^ ^^ ^^      ^^^^^^^^^ ^^ ^^      ^^^^^^^^^
 
 //Function overloads that differ only by type parameter name when used in parameter type annotations
 function fn9<T>(n: T);
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
+>    : ^^^ ^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >n : T
+>  : ^
 
 function fn9<S>(n: S);
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
+>    : ^^^ ^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >n : S
+>  : ^
 
 function fn9() { }
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
+>    : ^^^ ^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 
 //Function overloads that differ only by type parameter constraints
 function fn10<T extends Window>();
 >fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
+>     : ^^^ ^^^^^^^^^      ^^^^^^^^^^^ ^^^^^^^^^    ^^^^^^^^^^^
 
 function fn10<S extends Date>();
 >fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
+>     : ^^^ ^^^^^^^^^      ^^^^^^^^^^^ ^^^^^^^^^    ^^^^^^^^^^^
 
 function fn10() { }
 >fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
+>     : ^^^ ^^^^^^^^^      ^^^^^^^^^^^ ^^^^^^^^^    ^^^^^^^^^^^
 
 // (actually OK)
 
 //Function overloads that differ only by type parameter constraints where constraints are structually identical
 function fn11<T extends Window>();
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
+>     : ^^^ ^^^^^^^^^      ^^^^^^^^^^^ ^^^^^^^^^             ^^^^^^^^^^^
 
 function fn11<S extends typeof window>();
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
+>     : ^^^ ^^^^^^^^^      ^^^^^^^^^^^ ^^^^^^^^^             ^^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function fn11() { }
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
+>     : ^^^ ^^^^^^^^^      ^^^^^^^^^^^ ^^^^^^^^^             ^^^^^^^^^^^
 
 //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
 interface List<T> {
     parents: List<List<T>>;
 >parents : List<List<T>>
+>        : ^^^^^^^^^^^^^
 }
 function fn12<T extends List<List<any>>>();
->fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
+>     : ^^^ ^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^
 
 function fn12<T extends List<any>>();
->fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>fn12 : { <T_1 extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>     : ^^^^^^^^^^^^^^^               ^^^^^^^^^^^ ^^^^^^^^^         ^^^^^^^^^^^
 
 function fn12() { }
 >fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>     : ^^^ ^^^^^^^^^               ^^^^^^^^^^^ ^^^^^^^^^         ^^^^^^^^^^^
 
 //Function overloads that differ by accessibility
 class cls {
 >cls : cls
+>    : ^^^
 
     public f();
 >f : { (): any; (s: string): any; }
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
     private f(s: string);
 >f : { (): any; (s: string): any; }
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     f() { }
 >f : { (): any; (s: string): any; }
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
     private g(s: string);
 >g : { (s: string): any; (): any; }
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     public g();
 >g : { (s: string): any; (): any; }
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^
 
     g() { }
 >g : { (s: string): any; (): any; }
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^
 }
 
 //Function overloads with differing export
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function fn1();
 >fn1 : () => any
+>    : ^^^^^^^^^
 
     function fn1(n: string);
 >fn1 : { (): any; (n: string): any; }
+>    : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >n : string
+>  : ^^^^^^
 
     function fn1() { } 
 >fn1 : { (): any; (n: string): any; }
+>    : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
     function fn2(n: string);
 >fn2 : { (n: string): any; (): any; }
+>    : ^^^ ^^      ^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 
     export function fn2();
 >fn2 : () => any
+>    : ^^^^^^^^^
 
     export function fn2() { } 
 >fn2 : () => any
+>    : ^^^^^^^^^
 }
 
 //Function overloads with differing ambience
 declare function dfn1();
 >dfn1 : { (): any; (s: string): any; }
+>     : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
 function dfn1(s: string);
 >dfn1 : { (): any; (s: string): any; }
+>     : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 function dfn1() { }
 >dfn1 : { (): any; (s: string): any; }
+>     : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
 function dfn2();
 >dfn2 : { (): any; (s: string): any; }
+>     : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
 declare function dfn2(s: string);
 >dfn2 : { (): any; (s: string): any; }
+>     : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 function dfn2() { }
 >dfn2 : { (): any; (s: string): any; }
+>     : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
 //Function overloads with fewer params than implementation signature
 function fewerParams();
 >fewerParams : () => any
+>            : ^^^^^^^^^
 
 function fewerParams(n: string) {
 >fewerParams : () => any
+>            : ^^^^^^^^^
 >n : string
+>  : ^^^^^^
 }
 
 //Function implementation whose parameter types are not assignable to all corresponding overload signature parameters
 function fn13(n: string);
 >fn13 : (n: string) => any
+>     : ^ ^^      ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 function fn13(n: number) { }
 >fn13 : (n: string) => any
+>     : ^ ^^      ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 //Function overloads where return types are not all subtype of implementation return type
 function fn14(n: string): string;
 >fn14 : (n: string) => string
+>     : ^ ^^      ^^^^^      
 >n : string
+>  : ^^^^^^
 
 function fn14() {
 >fn14 : (n: string) => string
+>     : ^ ^^      ^^^^^      
 
     return 3;
 >3 : 3
+>  : ^
 }
 
 //Function overloads where return types are different infinitely recursive type reference
 function fn15<T extends List<List<any>>>(): T;
->fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
+>fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
+>     : ^^^ ^^^^^^^^^               ^^^^^ ^^^^^^^^^^^^^^^         ^^^^^   ^^^
 
 function fn15<T extends List<any>>(): T;
->fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
+>fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
+>     : ^^^^^^^^^^^^^^^               ^^^^^   ^^^ ^^^^^^^^^         ^^^^^ ^^^
 
 function fn15() {
 >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
+>     : ^^^ ^^^^^^^^^               ^^^^^ ^^^ ^^^^^^^^^         ^^^^^ ^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 //Function overloads which use initializer expressions
 function initExpr(n = 13);
 >initExpr : (n?: number) => any
+>         : ^ ^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 
 function initExpr() { }
 >initExpr : (n?: number) => any
+>         : ^ ^^^^^^^^^^^^^^^^^
 

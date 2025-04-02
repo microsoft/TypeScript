@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParameterTypeInstantiation.ts ===
+//// [tests/cases/compiler/restParameterTypeInstantiation.ts] ////
+
+=== restParameterTypeInstantiation.ts ===
 // Repro from #33823
 
 interface TestGeneric<TG> {

@@ -1,20 +1,25 @@
-=== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts ===
+//// [tests/cases/conformance/types/mapped/recursiveMappedTypes.ts] ////
+
+=== recursiveMappedTypes.ts ===
 // Recursive mapped types simply appear empty
 
 type Recurse = {
 >Recurse : any
+>        : ^^^
 
     [K in keyof Recurse]: Recurse[K]
 }
 
 type Recurse1 = {
 >Recurse1 : any
+>         : ^^^
 
     [K in keyof Recurse2]: Recurse2[K]
 }
 
 type Recurse2 = {
 >Recurse2 : any
+>         : ^^^
 
     [K in keyof Recurse1]: Recurse1[K]
 }
@@ -23,126 +28,163 @@ type Recurse2 = {
 
 export type Circular<T> = {[P in keyof T]: Circular<T>};
 >Circular : Circular<T>
+>         : ^^^^^^^^^^^
 
 type tup = [number, number, number, number];
->tup : [number, number, number, number]
+>tup : tup
+>    : ^^^
 
 function foo(arg: Circular<tup>): tup {
->foo : (arg: any) => tup
+>foo : (arg: Circular<tup>) => tup
+>    : ^   ^^             ^^^^^   
 >arg : any
+>    : ^^^
 
   return arg;
 >arg : any
+>    : ^^^
 }
 
 // Repro from #29442
 
 type DeepMap<T extends unknown[], R> = {
 >DeepMap : DeepMap<T, R>
+>        : ^^^^^^^^^^^^^
 
   [K in keyof T]: T[K] extends unknown[] ? DeepMap<T[K], R> : R;
 };
 
 type tpl = [string, [string, [string]]];
->tpl : [string, [string, [string]]]
+>tpl : tpl
+>    : ^^^
 
 type arr = string[][];
->arr : string[][]
+>arr : arr
+>    : ^^^
 
 type t1 = DeepMap<tpl, number>;  // [number, [number, [number]]]
 >t1 : [number, [number, [number]]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type t2 = DeepMap<arr, number>;  // number[][]
 >t2 : number[][]
+>   : ^^^^^^^^^^
 
 // Repro from #29577
 
 type Transform<T> = { [K in keyof T]: Transform<T[K]> };
 >Transform : Transform<T>
+>          : ^^^^^^^^^^^^
 
 interface User {
     avatar: string;
 >avatar : string
+>       : ^^^^^^
 }
 
 interface Guest {
     displayName: string;
 >displayName : string
+>            : ^^^^^^
 }
 
 interface Product {
     users: (User | Guest)[];
 >users : (User | Guest)[]
+>      : ^^^^^^^^^^^^^^^^
 }
 
 declare var product: Transform<Product>;
 >product : Transform<Product>
+>        : ^^^^^^^^^^^^^^^^^^
 
 product.users;  // (Transform<User> | Transform<Guest>)[]
 >product.users : Transform<User | Guest>[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >product : Transform<Product>
+>        : ^^^^^^^^^^^^^^^^^^
 >users : Transform<User | Guest>[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Repro from #29702
 
 type Remap1<T> = { [P in keyof T]: Remap1<T[P]>; };
 >Remap1 : Remap1<T>
+>       : ^^^^^^^^^
 
 type Remap2<T> = T extends object ? { [P in keyof T]: Remap2<T[P]>; } : T;
 >Remap2 : Remap2<T>
+>       : ^^^^^^^^^
   
 type a = Remap1<string[]>;  // string[]
 >a : string[]
+>  : ^^^^^^^^
 
 type b = Remap2<string[]>;  // string[]
 >b : string[]
+>  : ^^^^^^^^
 
 // Repro from #29992
 
 type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
 >NonOptionalKeys : NonOptionalKeys<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
 type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
 >Child : Child<T>
+>      : ^^^^^^^^
 
 export interface ListWidget {
     "type": "list",
 >"type" : "list"
+>       : ^^^^^^
 
     "minimum_count": number,
 >"minimum_count" : number
+>                : ^^^^^^
 
     "maximum_count": number,
 >"maximum_count" : number
+>                : ^^^^^^
 
     "collapsable"?: boolean, //default to false, means all expanded
 >"collapsable" : boolean
+>              : ^^^^^^^
 
     "each": Child<ListWidget>;
 >"each" : any
+>       : ^^^
 }
 
 type ListChild = Child<ListWidget>
->ListChild : { [x: string]: any; }
+>ListChild : ListChild
+>          : ^^^^^^^^^
 
 declare let x: ListChild;
 >x : ListChild
+>  : ^^^^^^^^^
 
 x.type;
 >x.type : any
+>       : ^^^
 >x : ListChild
+>  : ^^^^^^^^^
 >type : any
+>     : ^^^
 
 // Repros from #41790
 
 export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
 >TV : TV<T, K>
+>   : ^^^^^^^^
 
 export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
 >ObjectOrArray : ObjectOrArray<T, K>
+>              : ^^^^^^^^^^^^^^^^^^^
 
 export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
 >ThemeValue : ThemeValue<K, ThemeType, TVal>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ThemeType[K] extends TVal[] ? number :
     ThemeType[K] extends Record<infer E, TVal> ? E :
@@ -150,4 +192,5 @@ export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
 
 export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
 >Foo : Foo<T>
+>    : ^^^^^^
 

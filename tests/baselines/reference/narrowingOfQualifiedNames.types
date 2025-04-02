@@ -1,255 +1,421 @@
-=== tests/cases/compiler/narrowingOfQualifiedNames.ts ===
+//// [tests/cases/compiler/narrowingOfQualifiedNames.ts] ////
+
+=== narrowingOfQualifiedNames.ts ===
 // Repro from #43411
 
 interface IProperties {
     foo?: {
 >foo : { aaa: string; bbb: string; } | undefined
+>    : ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^
 
         aaa: string
 >aaa : string
+>    : ^^^^^^
 
         bbb: string
 >bbb : string
+>    : ^^^^^^
     }
 }
 
 function init(properties: IProperties) {
 >init : (properties: IProperties) => void
+>     : ^          ^^           ^^^^^^^^^
 >properties : IProperties
+>           : ^^^^^^^^^^^
 
     if (properties.foo) {
 >properties.foo : { aaa: string; bbb: string; } | undefined
+>               : ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^
 >properties : IProperties
+>           : ^^^^^^^^^^^
 >foo : { aaa: string; bbb: string; } | undefined
+>    : ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^
 
         type FooOK = typeof properties.foo;
 >FooOK : { aaa: string; bbb: string; }
+>      : ^^^^^^^      ^^^^^^^      ^^^
 >properties.foo : { aaa: string; bbb: string; }
+>               : ^^^^^^^      ^^^^^^^      ^^^
 >properties : IProperties
+>           : ^^^^^^^^^^^
 >foo : { aaa: string; bbb: string; }
+>    : ^^^^^^^      ^^^^^^^      ^^^
 
         properties.foo; // type is { aaa: string; bbb: string; }
 >properties.foo : { aaa: string; bbb: string; }
+>               : ^^^^^^^      ^^^^^^^      ^^^
 >properties : IProperties
+>           : ^^^^^^^^^^^
 >foo : { aaa: string; bbb: string; }
+>    : ^^^^^^^      ^^^^^^^      ^^^
 
         for (const x of [1, 2, 3]) {
 >x : number
+>  : ^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
           properties.foo; // type is { aaa: string; bbb: string; }
 >properties.foo : { aaa: string; bbb: string; }
+>               : ^^^^^^^      ^^^^^^^      ^^^
 >properties : IProperties
+>           : ^^^^^^^^^^^
 >foo : { aaa: string; bbb: string; }
+>    : ^^^^^^^      ^^^^^^^      ^^^
 
           type FooOrUndefined = typeof properties.foo; // type should be { aaa: string; bbb: string; }
 >FooOrUndefined : { aaa: string; bbb: string; }
+>               : ^^^^^^^      ^^^^^^^      ^^^
 >properties.foo : { aaa: string; bbb: string; }
+>               : ^^^^^^^      ^^^^^^^      ^^^
 >properties : IProperties
+>           : ^^^^^^^^^^^
 >foo : { aaa: string; bbb: string; }
+>    : ^^^^^^^      ^^^^^^^      ^^^
         }
     }
 }
 
 interface DeepOptional {
     a?: {
->a : { b?: { c?: string | undefined; } | undefined; } | undefined
+>a : { b?: { c?: string; }; } | undefined
+>  : ^^^^^^               ^^^^^^^^^^^^^^^
 
         b?: {
->b : { c?: string | undefined; } | undefined
+>b : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 
             c?: string
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
         }
     }
 }
 
 function init2(foo: DeepOptional) {
 >init2 : (foo: DeepOptional) => void
+>      : ^   ^^            ^^^^^^^^^
 >foo : DeepOptional
+>    : ^^^^^^^^^^^^
 
     if (foo.a) {
->foo.a : { b?: { c?: string | undefined; } | undefined; } | undefined
+>foo.a : { b?: { c?: string; }; } | undefined
+>      : ^^^^^^               ^^^^^^^^^^^^^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; } | undefined
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; } | undefined
+>  : ^^^^^^               ^^^^^^^^^^^^^^^
 
         type A = typeof foo.a;
->A : { b?: { c?: string | undefined; } | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>A : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
 
         type B = typeof foo.a.b;
->B : { c?: string | undefined; } | undefined
->foo.a.b : { c?: string | undefined; } | undefined
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>B : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
+>foo.a.b : { c?: string; } | undefined
+>        : ^^^^^^      ^^^^^^^^^^^^^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; } | undefined
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 
         type C = typeof foo.a.b.c;
 >C : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo.a.b.c : string | undefined
->foo.a.b : { c?: string | undefined; } | undefined
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>          : ^^^^^^^^^^^^^^^^^^
+>foo.a.b : { c?: string; } | undefined
+>        : ^^^^^^      ^^^^^^^^^^^^^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; } | undefined
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         for(const _ of [1]) {
 >_ : number
+>  : ^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
             type A = typeof foo.a;
->A : { b?: { c?: string | undefined; } | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>A : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
 
             type B = typeof foo.a.b;
->B : { c?: string | undefined; } | undefined
->foo.a.b : { c?: string | undefined; } | undefined
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>B : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
+>foo.a.b : { c?: string; } | undefined
+>        : ^^^^^^      ^^^^^^^^^^^^^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; } | undefined
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 
             type C = typeof foo.a.b.c;
 >C : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo.a.b.c : string | undefined
->foo.a.b : { c?: string | undefined; } | undefined
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>          : ^^^^^^^^^^^^^^^^^^
+>foo.a.b : { c?: string; } | undefined
+>        : ^^^^^^      ^^^^^^^^^^^^^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; } | undefined
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
             if (foo.a.b) {
->foo.a.b : { c?: string | undefined; } | undefined
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo.a.b : { c?: string; } | undefined
+>        : ^^^^^^      ^^^^^^^^^^^^^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; } | undefined
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 
                 type A = typeof foo.a;
->A : { b?: { c?: string | undefined; } | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>A : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
 
                 type B = typeof foo.a.b;
->B : { c?: string | undefined; }
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>B : { c?: string; }
+>  : ^^^^^^      ^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 
                 type C = typeof foo.a.b.c;
 >C : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo.a.b.c : string | undefined
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>          : ^^^^^^^^^^^^^^^^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
                 for(const _ of [1]) {
 >_ : number
+>  : ^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
                     type A = typeof foo.a;
->A : { b?: { c?: string | undefined; } | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>A : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
 
                     type B = typeof foo.a.b;
->B : { c?: string | undefined; }
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>B : { c?: string; }
+>  : ^^^^^^      ^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 
                     type C = typeof foo.a.b.c;
 >C : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo.a.b.c : string | undefined
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>          : ^^^^^^^^^^^^^^^^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
                     if (foo.a.b.c) {
 >foo.a.b.c : string | undefined
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>          : ^^^^^^^^^^^^^^^^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
                         type A = typeof foo.a;
->A : { b?: { c?: string | undefined; } | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>A : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
 
                         type B = typeof foo.a.b;
->B : { c?: string | undefined; }
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>B : { c?: string; }
+>  : ^^^^^^      ^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 
                         type C = typeof foo.a.b.c;
 >C : string
+>  : ^^^^^^
 >foo.a.b.c : string
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>          : ^^^^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 >c : string
+>  : ^^^^^^
 
                         for(const _ of [1]) {
 >_ : number
+>  : ^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
                             type A = typeof foo.a;
->A : { b?: { c?: string | undefined; } | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>A : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
 
                             type B = typeof foo.a.b;
->B : { c?: string | undefined; }
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>B : { c?: string; }
+>  : ^^^^^^      ^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 
                             type C = typeof foo.a.b.c;
 >C : string
+>  : ^^^^^^
 >foo.a.b.c : string
->foo.a.b : { c?: string | undefined; }
->foo.a : { b?: { c?: string | undefined; } | undefined; }
+>          : ^^^^^^
+>foo.a.b : { c?: string; }
+>        : ^^^^^^      ^^^
+>foo.a : { b?: { c?: string; }; }
+>      : ^^^^^^               ^^^
 >foo : DeepOptional
->a : { b?: { c?: string | undefined; } | undefined; }
->b : { c?: string | undefined; }
+>    : ^^^^^^^^^^^^
+>a : { b?: { c?: string; }; }
+>  : ^^^^^^               ^^^
+>b : { c?: string; }
+>  : ^^^^^^      ^^^
 >c : string
+>  : ^^^^^^
                         }
                     }
                 }
@@ -261,72 +427,117 @@ function init2(foo: DeepOptional) {
 // Repro from #48289
 
 type Fish = { type: 'fish', hasFins: true }
->Fish : { type: 'fish'; hasFins: true; }
+>Fish : Fish
+>     : ^^^^
 >type : "fish"
+>     : ^^^^^^
 >hasFins : true
+>        : ^^^^
 >true : true
+>     : ^^^^
 
 type Dog = { type: 'dog', saysWoof: true }
->Dog : { type: 'dog'; saysWoof: true; }
+>Dog : Dog
+>    : ^^^
 >type : "dog"
+>     : ^^^^^
 >saysWoof : true
+>         : ^^^^
 >true : true
+>     : ^^^^
 
 type Pet = Fish | Dog;
->Pet : Fish | Dog
+>Pet : Pet
+>    : ^^^
 
 function handleDogBroken<PetType extends Pet>(pet: PetType) {
 >handleDogBroken : <PetType extends Pet>(pet: PetType) => void
+>                : ^       ^^^^^^^^^   ^^   ^^       ^^^^^^^^^
 >pet : PetType
+>    : ^^^^^^^
 
     if(pet.type === 'dog') {
 >pet.type === 'dog' : boolean
+>                   : ^^^^^^^
 >pet.type : "fish" | "dog"
+>         : ^^^^^^^^^^^^^^
 >pet : Pet
+>    : ^^^
 >type : "fish" | "dog"
+>     : ^^^^^^^^^^^^^^
 >'dog' : "dog"
+>      : ^^^^^
 
         const _okay1 = pet.saysWoof;
 >_okay1 : true
+>       : ^^^^
 >pet.saysWoof : true
+>             : ^^^^
 >pet : Dog
+>    : ^^^
 >saysWoof : true
+>         : ^^^^
 
         const _okay2: typeof pet.saysWoof = pet.saysWoof;
 >_okay2 : true
+>       : ^^^^
 >pet.saysWoof : true
+>             : ^^^^
 >pet : Dog
+>    : ^^^
 >saysWoof : true
+>         : ^^^^
 >pet.saysWoof : true
+>             : ^^^^
 >pet : Dog
+>    : ^^^
 >saysWoof : true
+>         : ^^^^
     }
 }
 
 function handleDogWorking(pet: Pet) {
 >handleDogWorking : (pet: Pet) => void
+>                 : ^   ^^   ^^^^^^^^^
 >pet : Pet
+>    : ^^^
 
     if(pet.type === 'dog') {
 >pet.type === 'dog' : boolean
+>                   : ^^^^^^^
 >pet.type : "fish" | "dog"
+>         : ^^^^^^^^^^^^^^
 >pet : Pet
+>    : ^^^
 >type : "fish" | "dog"
+>     : ^^^^^^^^^^^^^^
 >'dog' : "dog"
+>      : ^^^^^
 
         const _okay1 = pet.saysWoof;
 >_okay1 : true
+>       : ^^^^
 >pet.saysWoof : true
+>             : ^^^^
 >pet : Dog
+>    : ^^^
 >saysWoof : true
+>         : ^^^^
 
         const _okay2: typeof pet.saysWoof = pet.saysWoof;
 >_okay2 : true
+>       : ^^^^
 >pet.saysWoof : true
+>             : ^^^^
 >pet : Dog
+>    : ^^^
 >saysWoof : true
+>         : ^^^^
 >pet.saysWoof : true
+>             : ^^^^
 >pet : Dog
+>    : ^^^
 >saysWoof : true
+>         : ^^^^
     }
 }

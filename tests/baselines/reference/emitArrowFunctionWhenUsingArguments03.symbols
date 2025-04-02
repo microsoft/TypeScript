@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments03.ts ===
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments03.ts] ////
+
+=== emitArrowFunctionWhenUsingArguments03.ts ===
 var arguments;
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments03.ts, 0, 3))
 

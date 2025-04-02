@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts(2,11): error TS1434: Unexpected keyword or identifier.
+parserIndexMemberDeclaration10.ts(2,11): error TS1434: Unexpected keyword or identifier.
 
 
-==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts (1 errors) ====
+==== parserIndexMemberDeclaration10.ts (1 errors) ====
     class C {
        static static [x: string]: string;
               ~~~~~~

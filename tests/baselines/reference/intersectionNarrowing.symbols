@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionNarrowing.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionNarrowing.ts] ////
+
+=== intersectionNarrowing.ts ===
 // Repros from #43130
 
 function f1<T>(x: T & string | T & undefined) {

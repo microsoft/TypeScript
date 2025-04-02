@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeContextualTypeSimplificationsSuceeds.ts] ////
+
 //// [conditionalTypeContextualTypeSimplificationsSuceeds.ts]
 // repro from https://github.com/Microsoft/TypeScript/issues/26395
 interface Props {

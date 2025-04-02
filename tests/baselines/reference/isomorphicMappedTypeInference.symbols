@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts ===
+//// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
+
+=== isomorphicMappedTypeInference.ts ===
 type Box<T> = {
 >Box : Symbol(Box, Decl(isomorphicMappedTypeInference.ts, 0, 0))
 >T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 0, 9))

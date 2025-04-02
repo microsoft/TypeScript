@@ -1,5 +1,9 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationImportEqualsSyntax.ts] ////
+
+=== a.js ===
 import a = b;
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

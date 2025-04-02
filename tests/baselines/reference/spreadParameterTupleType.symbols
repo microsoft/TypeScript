@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadParameterTupleType.ts ===
+//// [tests/cases/compiler/spreadParameterTupleType.ts] ////
+
+=== spreadParameterTupleType.ts ===
 function f1() {
 >f1 : Symbol(f1, Decl(spreadParameterTupleType.ts, 0, 0))
 
@@ -10,7 +12,7 @@ function f1() {
 >A : Symbol(A, Decl(spreadParameterTupleType.ts, 0, 15))
 >A : Symbol(A, Decl(spreadParameterTupleType.ts, 0, 15))
 
-    return function fn(...args: C) { }
+    return function fn(...args: C) { } satisfies any
 >fn : Symbol(fn, Decl(spreadParameterTupleType.ts, 4, 10))
 >args : Symbol(args, Decl(spreadParameterTupleType.ts, 4, 23))
 >C : Symbol(C, Decl(spreadParameterTupleType.ts, 1, 25))
@@ -39,7 +41,7 @@ function f2() {
 >A : Symbol(A, Decl(spreadParameterTupleType.ts, 7, 15))
 >C : Symbol(C, Decl(spreadParameterTupleType.ts, 9, 25))
 
-    return function fn(...args: D) { }
+    return function fn(...args: D) { } satisfies any;
 >fn : Symbol(fn, Decl(spreadParameterTupleType.ts, 13, 10))
 >args : Symbol(args, Decl(spreadParameterTupleType.ts, 13, 23))
 >D : Symbol(D, Decl(spreadParameterTupleType.ts, 10, 25))

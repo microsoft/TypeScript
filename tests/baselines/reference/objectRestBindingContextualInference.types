@@ -1,55 +1,75 @@
-=== tests/cases/compiler/objectRestBindingContextualInference.ts ===
+//// [tests/cases/compiler/objectRestBindingContextualInference.ts] ////
+
+=== objectRestBindingContextualInference.ts ===
 // slimmed-down repro from #52629
 
 type ImageHolder<K extends string> = {
 >ImageHolder : ImageHolder<K>
+>            : ^^^^^^^^^^^^^^
 
   [P in K]: string;
 };
 
 type SetupImageRefs<K extends string> = {
 >SetupImageRefs : SetupImageRefs<K>
+>               : ^^^^^^^^^^^^^^^^^
 
   [P in K]: File;
 };
 
 type SetupImages<K extends string> = SetupImageRefs<K> & {
 >SetupImages : SetupImages<K>
+>            : ^^^^^^^^^^^^^^
 
   prepare: () => { type: K };
->prepare : () => {    type: K;}
+>prepare : () => { type: K; }
+>        : ^^^^^^            
 >type : K
+>     : ^
 
 };
 
 interface TestInterface {
   name: string;
 >name : string
+>     : ^^^^^^
 
   image: string;
 >image : string
+>      : ^^^^^^
 }
 
 declare function setupImages<R extends ImageHolder<K>, K extends string>(
 >setupImages : <R extends ImageHolder<K>, K extends string>(item: R, keys: K[]) => SetupImages<K>
+>            : ^ ^^^^^^^^^              ^^ ^^^^^^^^^      ^^    ^^ ^^    ^^   ^^^^^              
 
   item: R,
 >item : R
+>     : ^
 
   keys: K[]
 >keys : K[]
+>     : ^^^
 
 ): SetupImages<K>;
 
 declare const test: TestInterface;
 >test : TestInterface
+>     : ^^^^^^^^^^^^^
 
 const { prepare, ...rest } = setupImages(test, ["image"]);
 >prepare : () => { type: "image"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : { image: File; }
+>     : ^^^^^^^^^^^^^^^^
 >setupImages(test, ["image"]) : SetupImages<"image">
+>                             : ^^^^^^^^^^^^^^^^^^^^
 >setupImages : <R extends ImageHolder<K>, K extends string>(item: R, keys: K[]) => SetupImages<K>
+>            : ^ ^^^^^^^^^              ^^ ^^^^^^^^^      ^^    ^^ ^^    ^^   ^^^^^              
 >test : TestInterface
+>     : ^^^^^^^^^^^^^
 >["image"] : "image"[]
+>          : ^^^^^^^^^
 >"image" : "image"
+>        : ^^^^^^^
 

@@ -1,15 +1,15 @@
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(3,6): error TS2456: Type alias 'Recurse' circularly references itself.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(4,11): error TS2313: Type parameter 'K' has a circular constraint.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(7,6): error TS2456: Type alias 'Recurse1' circularly references itself.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(8,11): error TS2313: Type parameter 'K' has a circular constraint.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly references itself.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(20,19): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(73,5): error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(73,13): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
+recursiveMappedTypes.ts(3,6): error TS2456: Type alias 'Recurse' circularly references itself.
+recursiveMappedTypes.ts(4,11): error TS2313: Type parameter 'K' has a circular constraint.
+recursiveMappedTypes.ts(7,6): error TS2456: Type alias 'Recurse1' circularly references itself.
+recursiveMappedTypes.ts(8,11): error TS2313: Type parameter 'K' has a circular constraint.
+recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly references itself.
+recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
+recursiveMappedTypes.ts(20,19): error TS2589: Type instantiation is excessively deep and possibly infinite.
+recursiveMappedTypes.ts(73,5): error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
+recursiveMappedTypes.ts(73,13): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
 
 
-==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (9 errors) ====
+==== recursiveMappedTypes.ts (9 errors) ====
     // Recursive mapped types simply appear empty
     
     type Recurse = {
@@ -34,7 +34,7 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(73,13): error TS261
         [K in keyof Recurse1]: Recurse1[K]
               ~~~~~~~~~~~~~~
 !!! error TS2313: Type parameter 'K' has a circular constraint.
-!!! related TS2751 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts:8:17: Circularity originates in type at this location.
+!!! related TS2751 recursiveMappedTypes.ts:8:17: Circularity originates in type at this location.
     }
     
     // Repro from #27881

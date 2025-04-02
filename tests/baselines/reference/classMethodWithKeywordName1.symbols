@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classMethodWithKeywordName1.ts ===
+//// [tests/cases/compiler/classMethodWithKeywordName1.ts] ////
+
+=== classMethodWithKeywordName1.ts ===
 class C {
 >C : Symbol(C, Decl(classMethodWithKeywordName1.ts, 0, 0))
 

@@ -1,79 +1,109 @@
-=== tests/cases/compiler/narrowByInstanceof.ts ===
+//// [tests/cases/compiler/narrowByInstanceof.ts] ////
+
+=== narrowByInstanceof.ts ===
 interface A { a: string }
 >a : string
+>  : ^^^^^^
 
 interface B { b: string }
 >b : string
+>  : ^^^^^^
 
 interface C { c: string }
 >c : string
+>  : ^^^^^^
 
 type AA = {
->AA : { (): void; prototype: A; }
+>AA : AA
+>   : ^^
 
     (): void;
     prototype: A;
 >prototype : A
+>          : ^
 }
 
 type BB = {
->BB : new () => B
+>BB : BB
+>   : ^^
 
     new(): B;
 }
 
 function foo(x: A | B | C, A: AA, B: BB, AB: AA | BB) {
 >foo : (x: A | B | C, A: AA, B: BB, AB: AA | BB) => void
+>    : ^ ^^         ^^ ^^  ^^ ^^  ^^  ^^       ^^^^^^^^^
 >x : A | B | C
+>  : ^^^^^^^^^
 >A : AA
+>  : ^^
 >B : BB
+>  : ^^
 >AB : AA | BB
+>   : ^^^^^^^
 
     if (x instanceof A) {
 >x instanceof A : boolean
+>               : ^^^^^^^
 >x : A | B | C
+>  : ^^^^^^^^^
 >A : AA
+>  : ^^
 
         x;  // A
 >x : A
+>  : ^
     }
     else {
         x;  // B | C
 >x : B | C
+>  : ^^^^^
     }
     if (x instanceof B) {
 >x instanceof B : boolean
+>               : ^^^^^^^
 >x : A | B | C
+>  : ^^^^^^^^^
 >B : BB
+>  : ^^
 
         x;  // B
 >x : B
+>  : ^
     }
     else {
         x;  // A | C
 >x : A | C
+>  : ^^^^^
     }
     if (x instanceof AB) {
 >x instanceof AB : boolean
+>                : ^^^^^^^
 >x : A | B | C
+>  : ^^^^^^^^^
 >AB : AA | BB
+>   : ^^^^^^^
 
         x;  // A | B
 >x : A | B
+>  : ^^^^^
     }
     else {
         x;  // A | B | C
 >x : A | B | C
+>  : ^^^^^^^^^
     }
 }
 
 function bar(target: any, Promise: any) {
 >bar : (target: any, Promise: any) => void
+>    : ^      ^^   ^^       ^^   ^^^^^^^^^
 >target : any
 >Promise : any
 
     if (target instanceof Promise) {
 >target instanceof Promise : boolean
+>                          : ^^^^^^^
 >target : any
 >Promise : any
 
@@ -81,7 +111,9 @@ function bar(target: any, Promise: any) {
 >target.__then() : any
 >target.__then : any
 >target : any
+>       : ^^^
 >__then : any
+>       : ^^^
     }
 }
 
@@ -89,101 +121,160 @@ function bar(target: any, Promise: any) {
 
 class PersonMixin extends Function {
 >PersonMixin : PersonMixin
+>            : ^^^^^^^^^^^
 >Function : Function
+>         : ^^^^^^^^
 
     public check(o: any) {
->check : (o: any) => boolean
+>check : (o: any) => o is Person
+>      : ^ ^^   ^^^^^^^^^^^^^^^^
 >o : any
 
         return typeof o === "object" && o !== null && o instanceof Person;
 >typeof o === "object" && o !== null && o instanceof Person : boolean
+>                                                           : ^^^^^^^
 >typeof o === "object" && o !== null : boolean
+>                                    : ^^^^^^^
 >typeof o === "object" : boolean
+>                      : ^^^^^^^
 >typeof o : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : any
 >"object" : "object"
+>         : ^^^^^^^^
 >o !== null : boolean
+>           : ^^^^^^^
 >o : any
 >o instanceof Person : boolean
+>                    : ^^^^^^^
 >o : any
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
     }    
 }
 
 const cls = new PersonMixin();
 >cls : PersonMixin
+>    : ^^^^^^^^^^^
 >new PersonMixin() : PersonMixin
+>                  : ^^^^^^^^^^^
 >PersonMixin : typeof PersonMixin
+>            : ^^^^^^^^^^^^^^^^^^
 
 class Person {
 >Person : Person
+>       : ^^^^^^
 
     work(): void { console.log("work") }
 >work : () => void
+>     : ^^^^^^    
 >console.log("work") : void
+>                    : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"work" : "work"
+>       : ^^^^^^
 
     sayHi(): void { console.log("Hi") }
 >sayHi : () => void
+>      : ^^^^^^    
 >console.log("Hi") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"Hi" : "Hi"
+>     : ^^^^
 }
 
 class Car {
 >Car : Car
+>    : ^^^
 
     sayHi(): void { console.log("Wof Wof") }
 >sayHi : () => void
+>      : ^^^^^^    
 >console.log("Wof Wof") : void
+>                       : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"Wof Wof" : "Wof Wof"
+>          : ^^^^^^^^^
 }
 
 function test(o: Person | Car) {
 >test : (o: Person | Car) => void
+>     : ^ ^^            ^^^^^^^^^
 >o : Person | Car
+>  : ^^^^^^^^^^^^
 
     if (o instanceof cls) {
 >o instanceof cls : boolean
+>                 : ^^^^^^^
 >o : Person | Car
+>  : ^^^^^^^^^^^^
 >cls : PersonMixin
+>    : ^^^^^^^^^^^
 
         console.log("Is Person");
 >console.log("Is Person") : void
+>                         : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"Is Person" : "Is Person"
+>            : ^^^^^^^^^^^
 
         (o as Person).work()
 >(o as Person).work() : void
+>                     : ^^^^
 >(o as Person).work : () => void
+>                   : ^^^^^^    
 >(o as Person) : Person
+>              : ^^^^^^
 >o as Person : Person
+>            : ^^^^^^
 >o : Person | Car
+>  : ^^^^^^^^^^^^
 >work : () => void
+>     : ^^^^^^    
     }
     else {
         console.log("Is Car")
 >console.log("Is Car") : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"Is Car" : "Is Car"
+>         : ^^^^^^^^
 
         o.sayHi();
 >o.sayHi() : void
+>          : ^^^^
 >o.sayHi : (() => void) | (() => void)
+>        : ^^^^^^^    ^^^^^^^^^^^    ^
 >o : Person | Car
+>  : ^^^^^^^^^^^^
 >sayHi : (() => void) | (() => void)
+>      : ^^^^^^^    ^^^^^^^^^^^    ^
     }
 }
 

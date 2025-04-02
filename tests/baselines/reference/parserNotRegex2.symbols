@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserNotRegex2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserNotRegex2.ts] ////
+
+=== parserNotRegex2.ts ===
 declare const A: any;
 >A : Symbol(A, Decl(parserNotRegex2.ts, 0, 13))
 

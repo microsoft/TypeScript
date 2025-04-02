@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceDeclaration5.ts] ////
+
 //// [interfaceDeclaration5.ts]
 export interface I1 { item:string; }
 export class C1 { }

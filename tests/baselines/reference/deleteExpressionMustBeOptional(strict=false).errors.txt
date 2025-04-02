@@ -1,7 +1,7 @@
-tests/cases/compiler/deleteExpressionMustBeOptional.ts(34,10): error TS2339: Property 'j' does not exist on type 'Foo'.
+deleteExpressionMustBeOptional.ts(34,10): error TS2339: Property 'j' does not exist on type 'Foo'.
 
 
-==== tests/cases/compiler/deleteExpressionMustBeOptional.ts (1 errors) ====
+==== deleteExpressionMustBeOptional.ts (1 errors) ====
     interface Foo {
         a: number
         b: number | undefined

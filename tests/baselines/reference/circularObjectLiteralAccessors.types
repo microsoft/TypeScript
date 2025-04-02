@@ -1,37 +1,56 @@
-=== tests/cases/compiler/circularObjectLiteralAccessors.ts ===
+//// [tests/cases/compiler/circularObjectLiteralAccessors.ts] ////
+
+=== circularObjectLiteralAccessors.ts ===
 // Repro from #6000
 
 const a = {
 >a : { b: { foo: string; }; foo: string; }
+>  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 >{    b: {        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    },    foo: ''} : { b: { foo: string; }; foo: string; }
+>                                                                                                                                                             : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 
     b: {
 >b : { foo: string; }
+>  : ^^^^^^^      ^^^
 >{        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    } : { foo: string; }
+>                                                                                                                                        : ^^^^^^^      ^^^
 
         get foo(): string {
 >foo : string
+>    : ^^^^^^
 
             return a.foo;
 >a.foo : string
+>      : ^^^^^^
 >a : { b: { foo: string; }; foo: string; }
+>  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
         },
         set foo(value: string) {
 >foo : string
+>    : ^^^^^^
 >value : string
+>      : ^^^^^^
 
             a.foo = value;
 >a.foo = value : string
+>              : ^^^^^^
 >a.foo : string
+>      : ^^^^^^
 >a : { b: { foo: string; }; foo: string; }
+>  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >value : string
+>      : ^^^^^^
         }
     },
     foo: ''
 >foo : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
 };

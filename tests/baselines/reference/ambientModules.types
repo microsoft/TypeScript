@@ -1,15 +1,25 @@
-=== tests/cases/compiler/ambientModules.ts ===
+//// [tests/cases/compiler/ambientModules.ts] ////
+
+=== ambientModules.ts ===
 declare module Foo.Bar { export var foo; };
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >foo : any
 
 Foo.Bar.foo = 5; 
 >Foo.Bar.foo = 5 : 5
+>                : ^
 >Foo.Bar.foo : any
 >Foo.Bar : typeof Foo.Bar
+>        : ^^^^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Bar : typeof Foo.Bar
+>    : ^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >5 : 5
+>  : ^
 

@@ -1,12 +1,21 @@
-=== tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts ===
+//// [tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts] ////
+
+=== emptyTuplesTypeAssertion01.ts ===
 let x = <[]>[];
 >x : []
+>  : ^^
 ><[]>[] : []
+>       : ^^
 >[] : []
+>   : ^^
 
 let y = x[0];
 >y : undefined
+>  : ^^^^^^^^^
 >x[0] : undefined
+>     : ^^^^^^^^^
 >x : []
+>  : ^^
 >0 : 0
+>  : ^
 

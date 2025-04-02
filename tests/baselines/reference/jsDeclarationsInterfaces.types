@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsInterfaces.ts] ////
+
+=== index.js ===
 // Pretty much all of this should be an error, (since interfaces are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
 
@@ -7,99 +9,128 @@ export interface A {}
 export interface B {
     cat: string;
 >cat : string
+>    : ^^^^^^
 }
 
 export interface C<T, U> {
     field: T & U;
 >field : T & U
+>      : ^^^^^
 
     optionalField?: T;
 >optionalField : T
+>              : ^
 
     readonly readonlyField: T & U;
 >readonlyField : T & U
+>              : ^^^^^
 
     readonly readonlyOptionalField?: U;
 >readonlyOptionalField : U
+>                      : ^
 
     (): number;
     (x: T): U;
 >x : T
+>  : ^
 
     <Q>(x: Q): T & Q;
 >x : Q
+>  : ^
 
     new (): string;
     new (x: T): U;
 >x : T
+>  : ^
 
     new <Q>(x: Q): T & Q;
 >x : Q
+>  : ^
 
     method<Q = number>(): number;
->method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>method : { <Q = number>(): number; <Q_1>(a: T & Q_1): Q_1 & number; (a?: number): number; (...args: any[]): number; }
+>       : ^^^ ^^^^^^^^^^^^^^      ^^^^^^^^ ^^       ^^^            ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
 
     method<Q>(a: T & Q): Q & number;
->method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>method : { <Q_1 = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>       : ^^^^^^^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
 >a : T & Q
+>  : ^^^^^
 
     method(a?: number): number;
 >method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>       : ^^^ ^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     method(...args: any[]): number;
 >method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>       : ^^^ ^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
 >args : any[]
+>     : ^^^^^
 
     optMethod?(): number;
 >optMethod : () => number
+>          : ^^^^^^      
 }
 
 interface G {}
 
 export { G };
 >G : any
+>  : ^^^
 
 interface HH {}
 
 export { HH as H };
 >HH : any
+>   : ^^^
 >H : any
+>  : ^^^
 
 export interface I {}
 export { I as II };
 >I : any
+>  : ^^^
 >II : any
+>   : ^^^
 
 export { J as JJ };
 >J : any
+>  : ^^^
 >JJ : any
+>   : ^^^
 
 export interface J {}
 
 export interface K extends I,J {
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 export interface L extends K {
     y: string;
 >y : string
+>  : ^^^^^^
 }
 
 export interface M<T> {
     field: T;
 >field : T
+>      : ^
 }
 
 export interface N<U> extends M<U> {
     other: U;
 >other : U
+>      : ^
 }
 
 export interface O {
     [idx: string]: string;
 >idx : string
+>    : ^^^^^^
 }
 
 export interface P extends O {}
@@ -107,24 +138,29 @@ export interface P extends O {}
 export interface Q extends O {
     [idx: string]: "ok";
 >idx : string
+>    : ^^^^^^
 }
 
 export interface R extends O {
     [idx: number]: "ok";
 >idx : number
+>    : ^^^^^^
 }
 
 export interface S extends O {
     [idx: string]: "ok";
 >idx : string
+>    : ^^^^^^
 
     [idx: number]: never;
 >idx : number
+>    : ^^^^^^
 }
 
 export interface T {
     [idx: number]: string;
 >idx : number
+>    : ^^^^^^
 }
 
 export interface U extends T {}
@@ -133,30 +169,39 @@ export interface U extends T {}
 export interface V extends T {
     [idx: string]: string;
 >idx : string
+>    : ^^^^^^
 }
 
 export interface W extends T {
     [idx: number]: "ok";
 >idx : number
+>    : ^^^^^^
 }
 
 export interface X extends T {
     [idx: string]: string;
 >idx : string
+>    : ^^^^^^
 
     [idx: number]: "ok";
 >idx : number
+>    : ^^^^^^
 }
 
 export interface Y {
     [idx: string]: {x: number};
 >idx : string
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     [idx: number]: {x: number, y: number};
 >idx : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 export interface Z extends Y {}
@@ -164,26 +209,38 @@ export interface Z extends Y {}
 export interface AA extends Y {
     [idx: string]: {x: number, y: number};
 >idx : string
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 export interface BB extends Y {
     [idx: number]: {x: 0, y: 0};
 >idx : number
+>    : ^^^^^^
 >x : 0
+>  : ^
 >y : 0
+>  : ^
 }
 
 export interface CC extends Y {
     [idx: string]: {x: number, y: number};
 >idx : string
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     [idx: number]: {x: 0, y: 0};
 >idx : number
+>    : ^^^^^^
 >x : 0
+>  : ^
 >y : 0
+>  : ^
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeGenericInstantiationPreservesInlineForm.ts] ////
+
 //// [mappedTypeGenericInstantiationPreservesInlineForm.ts]
 // repro from #53109
 

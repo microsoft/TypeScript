@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution8.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -7,28 +9,39 @@ declare module JSX {
 // Error
 var Div = 3;
 >Div : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 
 <Div />;
 ><Div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >Div : number
+>    : ^^^^^^
 
 // OK
 function Fact(): any { return null; }
 >Fact : () => any
+>     : ^^^^^^   
 
 <Fact />
 ><Fact /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Fact : () => any
+>     : ^^^^^^   
 
 // Error
 function Fnum(): number{ return 42; }
 >Fnum : () => number
+>     : ^^^^^^      
 >42 : 42
+>   : ^^
 
 <Fnum />
 ><Fnum /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Fnum : () => number
+>     : ^^^^^^      
 
 interface Obj1 {
 	new(): {};
@@ -36,27 +49,36 @@ interface Obj1 {
 }
 var Obj1: Obj1;
 >Obj1 : Obj1
+>     : ^^^^
 
 <Obj1 />; // OK, prefer construct signatures
 ><Obj1 /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Obj1 : Obj1
+>     : ^^^^
 
 interface Obj2 {
 	(): number;
 }
 var Obj2: Obj2;
 >Obj2 : Obj2
+>     : ^^^^
 
 <Obj2 />; // Error
 ><Obj2 /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Obj2 : Obj2
+>     : ^^^^
 
 interface Obj3 {
 }
 var Obj3: Obj3;
 >Obj3 : Obj3
+>     : ^^^^
 
 <Obj3 />; // Error
 ><Obj3 /> : JSX.Element
+>         : ^^^^^^^^^^^
 >Obj3 : Obj3
+>     : ^^^^
 

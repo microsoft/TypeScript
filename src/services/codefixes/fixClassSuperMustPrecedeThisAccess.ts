@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     CallExpression,
     ConstructorDeclaration,
@@ -16,12 +21,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "classSuperMustPrecedeThisAccess";
 const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
@@ -38,7 +38,7 @@ registerCodeFix({
     fixIds: [fixId],
     getAllCodeActions(context) {
         const { sourceFile } = context;
-        const seenClasses = new Map<number, true>(); // Ensure we only do this once per class.
+        const seenClasses = new Set<number>(); // Ensure we only do this once per class.
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const nodes = getNodes(diag.file, diag.start);
             if (!nodes) return;
@@ -55,7 +55,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, co
     changes.delete(sourceFile, superCall);
 }
 
-function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration, readonly superCall: ExpressionStatement } | undefined {
+function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration; readonly superCall: ExpressionStatement; } | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (token.kind !== SyntaxKind.ThisKeyword) return undefined;
     const constructor = getContainingFunction(token) as ConstructorDeclaration;
@@ -65,10 +65,10 @@ function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: 
     return superCall && !superCall.expression.arguments.some(arg => isPropertyAccessExpression(arg) && arg.expression === token) ? { constructor, superCall } : undefined;
 }
 
-function findSuperCall(n: Node): ExpressionStatement & { expression: CallExpression } | undefined {
+function findSuperCall(n: Node): ExpressionStatement & { expression: CallExpression; } | undefined {
     return isExpressionStatement(n) && isSuperCall(n.expression)
-        ? n as ExpressionStatement & { expression: CallExpression }
+        ? n as ExpressionStatement & { expression: CallExpression; }
         : isFunctionLike(n)
-            ? undefined
-            : forEachChild(n, findSuperCall);
+        ? undefined
+        : forEachChild(n, findSuperCall);
 }

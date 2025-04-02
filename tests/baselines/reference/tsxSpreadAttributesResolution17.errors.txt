@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(18,21): error TS2607: JSX element class does not support attributes because it does not have a 'props' property.
+file.tsx(18,21): error TS2607: JSX element class does not support attributes because it does not have a 'props' property.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     declare global {
         namespace JSX {
             interface Element {}

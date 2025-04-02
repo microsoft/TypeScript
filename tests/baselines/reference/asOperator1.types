@@ -1,34 +1,55 @@
-=== tests/cases/conformance/expressions/asOperator/asOperator1.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperator1.ts] ////
+
+=== asOperator1.ts ===
 var as = 43;
 >as : number
+>   : ^^^^^^
 >43 : 43
+>   : ^^
 
 var x = undefined as number;
 >x : number
+>  : ^^^^^^
 >undefined as number : number
+>                    : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var y = (null as string).length;
 >y : number
+>  : ^^^^^^
 >(null as string).length : number
+>                        : ^^^^^^
 >(null as string) : string
+>                 : ^^^^^^
 >null as string : string
+>               : ^^^^^^
 >length : number
+>       : ^^^^^^
 
 var z = Date as any as string;
 >z : string
+>  : ^^^^^^
 >Date as any as string : string
+>                      : ^^^^^^
 >Date as any : any
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
 // Should parse as a union type, not a bitwise 'or' of (32 as number) and 'string'
 var j = 32 as number|string;
 >j : string | number
+>  : ^^^^^^^^^^^^^^^
 >32 as number|string : string | number
+>                    : ^^^^^^^^^^^^^^^
 >32 : 32
+>   : ^^
 
 j = '';
 >j = '' : ""
+>       : ^^
 >j : string | number
+>  : ^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 

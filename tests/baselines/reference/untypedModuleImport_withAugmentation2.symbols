@@ -1,15 +1,15 @@
+//// [tests/cases/compiler/untypedModuleImport_withAugmentation2.ts] ////
+
 === /a.ts ===
 
 import { } from "augmenter";
 
 === /node_modules/augmenter/index.d.ts ===
-// This tests that augmenting an untyped module is forbidden even in an ambient context. Contrast with `moduleAugmentationInDependency.ts`.
-
 declare module "js" {
 >"js" : Symbol("js", Decl(index.d.ts, 0, 0))
 
     export const j: number;
->j : Symbol(j, Decl(index.d.ts, 3, 16))
+>j : Symbol(j, Decl(index.d.ts, 1, 16))
 }
 export {};
 

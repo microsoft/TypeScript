@@ -1,37 +1,58 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/thisTag1.ts] ////
+
+=== a.js ===
 /** @this {{ n: number }} Mount Holyoke Preparatory School
  * @param {string} s
  * @return {number}
  */
 function f(s) {
 >f : (this: { n: number; }, s: string) => number
+>  : ^^^^^^^^^^^^      ^^^^^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 
     return this.n + s.length
 >this.n + s.length : number
+>                  : ^^^^^^
 >this.n : number
+>       : ^^^^^^
 >this : { n: number; }
+>     : ^^^^^      ^^^
 >n : number
+>  : ^^^^^^
 >s.length : number
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 const o = {
 >o : { f: (this: { n: number; }, s: string) => number; n: number; }
+>  : ^^^^^^^^^^^^^^^^^      ^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^
 >{    f,    n: 1} : { f: (this: { n: number; }, s: string) => number; n: number; }
+>                 : ^^^^^^^^^^^^^^^^^      ^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^
 
     f,
 >f : (this: { n: number; }, s: string) => number
+>  : ^^^^^^^^^^^^      ^^^^^ ^^      ^^^^^      
 
     n: 1
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 o.f('hi')
 >o.f('hi') : number
+>          : ^^^^^^
 >o.f : (this: { n: number; }, s: string) => number
+>    : ^^^^^^^^^^^^      ^^^^^ ^^      ^^^^^      
 >o : { f: (this: { n: number; }, s: string) => number; n: number; }
+>  : ^^^^^^^^^^^^^^^^^      ^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^
 >f : (this: { n: number; }, s: string) => number
+>  : ^^^^^^^^^^^^      ^^^^^ ^^      ^^^^^      
 >'hi' : "hi"
+>     : ^^^^
 

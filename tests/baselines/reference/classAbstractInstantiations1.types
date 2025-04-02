@@ -1,60 +1,91 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts] ////
+
+=== classAbstractInstantiations1.ts ===
 //
 // Calling new with (non)abstract classes.
 //
 
 abstract class A {}
 >A : A
+>  : ^
 
 class B extends A {}
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 abstract class C extends B {}
 >C : C
+>  : ^
 >B : B
+>  : ^
 
 new A;
 >new A : any
+>      : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 new A(1); // should report 1 error
 >new A(1) : any
+>         : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
 new B;
 >new B : B
+>      : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 new C;
 >new C : any
+>      : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var a : A;
 >a : A
+>  : ^
 
 var b : B;
 >b : B
+>  : ^
 
 var c : C;
 >c : C
+>  : ^
 
 a = new B;
 >a = new B : B
+>          : ^
 >a : A
+>  : ^
 >new B : B
+>      : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 b = new B;
 >b = new B : B
+>          : ^
 >b : B
+>  : ^
 >new B : B
+>      : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 c = new B;
 >c = new B : B
+>          : ^
 >c : C
+>  : ^
 >new B : B
+>      : ^
 >B : typeof B
+>  : ^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInAMD4.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : Symbol(B, Decl(0.ts, 0, 0))
 
@@ -9,11 +11,11 @@ export class B {
 export function foo() { return "foo" }
 >foo : Symbol(foo, Decl(0.ts, 2, 1))
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 export function backup() { return "backup"; }
 >backup : Symbol(backup, Decl(1.ts, 0, 0))
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 declare var console: any;
 >console : Symbol(console, Decl(2.ts, 0, 11))
 
@@ -22,14 +24,14 @@ class C {
 
     private myModule = import("./0");
 >myModule : Symbol(C.myModule, Decl(2.ts, 1, 9))
->"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
     method() {
 >method : Symbol(C.method, Decl(2.ts, 2, 37))
 
         const loadAsync = import("./0");
 >loadAsync : Symbol(loadAsync, Decl(2.ts, 4, 13))
->"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
         this.myModule.then(Zero => {
 >this.myModule.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
@@ -54,7 +56,7 @@ class C {
 
             let one = await import("./1");
 >one : Symbol(one, Decl(2.ts, 9, 15))
->"./1" : Symbol("tests/cases/conformance/dynamicImport/1", Decl(1.ts, 0, 0))
+>"./1" : Symbol("1", Decl(1.ts, 0, 0))
 
             console.log(one.backup());
 >console : Symbol(console, Decl(2.ts, 0, 11))
@@ -71,14 +73,14 @@ export class D {
 
     private myModule = import("./0");
 >myModule : Symbol(D.myModule, Decl(2.ts, 15, 16))
->"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
     method() {
 >method : Symbol(D.method, Decl(2.ts, 16, 37))
 
         const loadAsync = import("./0");
 >loadAsync : Symbol(loadAsync, Decl(2.ts, 18, 13))
->"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
         this.myModule.then(Zero => {
 >this.myModule.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
@@ -103,7 +105,7 @@ export class D {
 
             let one = await import("./1");
 >one : Symbol(one, Decl(2.ts, 23, 15))
->"./1" : Symbol("tests/cases/conformance/dynamicImport/1", Decl(1.ts, 0, 0))
+>"./1" : Symbol("1", Decl(1.ts, 0, 0))
 
             console.log(one.backup());
 >console : Symbol(console, Decl(2.ts, 0, 11))

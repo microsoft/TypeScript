@@ -1,82 +1,123 @@
-=== tests/cases/compiler/narrowTypeByInstanceof.ts ===
+//// [tests/cases/compiler/narrowTypeByInstanceof.ts] ////
+
+=== narrowTypeByInstanceof.ts ===
     class Match {
 >Match : Match
+>      : ^^^^^
 
         public range(): any {
 >range : () => any
+>      : ^^^^^^   
 
             return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
         }
     }
 
     class FileMatch {
 >FileMatch : FileMatch
+>          : ^^^^^^^^^
 
         public resource(): any {
 >resource : () => any
+>         : ^^^^^^   
 
             return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
         }
     }
 
 type FileMatchOrMatch = FileMatch | Match;
->FileMatchOrMatch : Match | FileMatch
+>FileMatchOrMatch : FileMatchOrMatch
+>                 : ^^^^^^^^^^^^^^^^
 
 
 let elementA: FileMatchOrMatch, elementB: FileMatchOrMatch;
 >elementA : FileMatchOrMatch
+>         : ^^^^^^^^^^^^^^^^
 >elementB : FileMatchOrMatch
+>         : ^^^^^^^^^^^^^^^^
 
 if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 >elementA instanceof FileMatch && elementB instanceof FileMatch : boolean
+>                                                               : ^^^^^^^
 >elementA instanceof FileMatch : boolean
+>                              : ^^^^^^^
 >elementA : FileMatchOrMatch
+>         : ^^^^^^^^^^^^^^^^
 >FileMatch : typeof FileMatch
+>          : ^^^^^^^^^^^^^^^^
 >elementB instanceof FileMatch : boolean
+>                              : ^^^^^^^
 >elementB : FileMatchOrMatch
+>         : ^^^^^^^^^^^^^^^^
 >FileMatch : typeof FileMatch
+>          : ^^^^^^^^^^^^^^^^
 
     let a = elementA.resource().path;
 >a : any
 >elementA.resource().path : any
 >elementA.resource() : any
+>                    : ^^^
 >elementA.resource : () => any
+>                  : ^^^^^^   
 >elementA : FileMatch
+>         : ^^^^^^^^^
 >resource : () => any
+>         : ^^^^^^   
 >path : any
+>     : ^^^
 
     let b = elementB.resource().path;
 >b : any
 >elementB.resource().path : any
 >elementB.resource() : any
+>                    : ^^^
 >elementB.resource : () => any
+>                  : ^^^^^^   
 >elementB : FileMatch
+>         : ^^^^^^^^^
 >resource : () => any
+>         : ^^^^^^   
 >path : any
+>     : ^^^
 
 } else if (elementA instanceof Match && elementB instanceof Match) {
 >elementA instanceof Match && elementB instanceof Match : boolean
+>                                                       : ^^^^^^^
 >elementA instanceof Match : boolean
+>                          : ^^^^^^^
 >elementA : FileMatchOrMatch
+>         : ^^^^^^^^^^^^^^^^
 >Match : typeof Match
+>      : ^^^^^^^^^^^^
 >elementB instanceof Match : boolean
+>                          : ^^^^^^^
 >elementB : FileMatchOrMatch
+>         : ^^^^^^^^^^^^^^^^
 >Match : typeof Match
+>      : ^^^^^^^^^^^^
 
     let a = elementA.range();
 >a : any
 >elementA.range() : any
 >elementA.range : () => any
+>               : ^^^^^^   
 >elementA : Match
+>         : ^^^^^
 >range : () => any
+>      : ^^^^^^   
 
     let b = elementB.range();
 >b : any
 >elementB.range() : any
 >elementB.range : () => any
+>               : ^^^^^^   
 >elementB : Match
+>         : ^^^^^
 >range : () => any
+>      : ^^^^^^   
 }
 

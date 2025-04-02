@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticsInAFunction.ts] ////
+
 //// [staticsInAFunction.ts]
 function boo{
    static test()

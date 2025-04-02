@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendsClauseAlreadySeen.ts] ////
+
 //// [extendsClauseAlreadySeen.ts]
 class C {
 

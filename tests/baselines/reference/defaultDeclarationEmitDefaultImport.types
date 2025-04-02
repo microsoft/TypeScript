@@ -1,18 +1,27 @@
-=== tests/cases/compiler/root.ts ===
+//// [tests/cases/compiler/defaultDeclarationEmitDefaultImport.ts] ////
+
+=== root.ts ===
 export function getSomething(): Something { return null as any }
 >getSomething : () => Something
+>             : ^^^^^^         
 >null as any : any
 
 export default class Something {}
 >Something : Something
+>          : ^^^^^^^^^
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import Thing, { getSomething } from "./root";
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 >getSomething : () => Thing
+>             : ^^^^^^^^^^^
 
 export const instance = getSomething();
 >instance : Thing
+>         : ^^^^^
 >getSomething() : Thing
+>               : ^^^^^
 >getSomething : () => Thing
+>             : ^^^^^^^^^^^
 

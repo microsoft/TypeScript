@@ -14,7 +14,6 @@ use(undefined);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.undefined = void 0;
 var undefined;
-exports.undefined = undefined;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

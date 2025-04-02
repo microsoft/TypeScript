@@ -1,46 +1,67 @@
-=== tests/cases/compiler/assignmentToReferenceTypes.ts ===
+//// [tests/cases/compiler/assignmentToReferenceTypes.ts] ////
+
+=== assignmentToReferenceTypes.ts ===
 // Should all be allowed
 
 module M {
 }
 M = null;
 >M = null : null
+>         : ^^^^
 >M : any
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 }
 C = null;
 >C = null : null
+>         : ^^^^
 >C : any
+>  : ^^^
 
 enum E {
 >E : E
+>  : ^
 }
 E = null;
 >E = null : null
+>         : ^^^^
 >E : any
+>  : ^^^
 
 function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
 f = null;
 >f = null : null
+>         : ^^^^
 >f : any
+>  : ^^^
 
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 x = null;
 >x = null : null
+>         : ^^^^
 >x : number
+>  : ^^^^^^
 
 function g(x) {
 >g : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     x = null;
 >x = null : null
+>         : ^^^^
 >x : any
+>  : ^^^
 }

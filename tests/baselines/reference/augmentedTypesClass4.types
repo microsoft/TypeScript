@@ -1,10 +1,16 @@
-=== tests/cases/compiler/augmentedTypesClass4.ts ===
+//// [tests/cases/compiler/augmentedTypesClass4.ts] ////
+
+=== augmentedTypesClass4.ts ===
 //// class then class
 class c3 { public foo() { } } // error
 >c3 : c3
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 class c3 { public bar() { } } // error
 >c3 : c3
+>   : ^^
 >bar : () => void
+>    : ^^^^^^^^^^
 

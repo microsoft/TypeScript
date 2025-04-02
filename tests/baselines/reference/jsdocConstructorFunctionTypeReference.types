@@ -1,39 +1,60 @@
-=== tests/cases/conformance/salsa/jsdocConstructorFunctionTypeReference.js ===
+//// [tests/cases/conformance/salsa/jsdocConstructorFunctionTypeReference.ts] ////
+
+=== jsdocConstructorFunctionTypeReference.js ===
 var Validator = function VFunc() {
 >Validator : typeof VFunc
+>          : ^^^^^^^^^^^^
 >function VFunc() {    this.flags = "gim"} : typeof VFunc
+>                                          : ^^^^^^^^^^^^
 >VFunc : typeof VFunc
+>      : ^^^^^^^^^^^^
 
     this.flags = "gim"
 >this.flags = "gim" : "gim"
+>                   : ^^^^^
 >this.flags : any
 >this : this
+>     : ^^^^
 >flags : any
+>      : ^^^
 >"gim" : "gim"
+>      : ^^^^^
 
 };
 
 Validator.prototype.num = 12
 >Validator.prototype.num = 12 : 12
+>                             : ^^
 >Validator.prototype.num : any
 >Validator.prototype : any
+>                    : ^^^
 >Validator : typeof VFunc
+>          : ^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >num : any
+>    : ^^^
 >12 : 12
+>   : ^^
 
 /**
  * @param {Validator} state
  */
 var validateRegExpFlags = function(state) {
 >validateRegExpFlags : (state: Validator) => string
+>                    : ^     ^^         ^^^^^^^^^^^
 >function(state) {    return state.flags} : (state: Validator) => string
+>                                         : ^     ^^         ^^^^^^^^^^^
 >state : VFunc
+>      : ^^^^^
 
     return state.flags
 >state.flags : string
+>            : ^^^^^^
 >state : VFunc
+>      : ^^^^^
 >flags : string
+>      : ^^^^^^
 
 };
 

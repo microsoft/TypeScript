@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsFileFunctionOverloads2.js ===
+//// [tests/cases/compiler/jsFileFunctionOverloads2.ts] ////
+
+=== jsFileFunctionOverloads2.js ===
 // Also works if all @overload tags are combined in one comment.
 /**
  * @overload
@@ -17,12 +19,16 @@
  * @returns {string}
  */
  function getTypeName(x) {
->getTypeName : { (x: number): 'number'; (x: string): 'string'; (x: boolean): 'boolean'; }
+>getTypeName : { (x: number): "number"; (x: string): "string"; (x: boolean): "boolean"; }
+>            : ^^^ ^^      ^^^        ^^^ ^^      ^^^        ^^^ ^^       ^^^         ^^^
 >x : unknown
+>  : ^^^^^^^
 
   return typeof x;
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 }
 
 /**
@@ -32,9 +38,13 @@
  */
 const identity = x => x;
 >identity : <T>(x: T) => T
+>         : ^ ^^ ^^ ^^^^^ 
 >x => x : <T>(x: T) => T
+>       : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 /**
  * @template T
@@ -54,41 +64,69 @@ const identity = x => x;
  */
 function flatMap(array, iterable = identity) {
 >flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T, U>(array: T[][]): T[]; }
+>        : ^^^ ^^ ^^     ^^   ^^        ^^             ^^^   ^^^ ^^ ^^     ^^     ^^^   ^^^
 >array : unknown[]
+>      : ^^^^^^^^^
 >iterable : (x: unknown) => unknown
->identity : <T>(x: T) => T
+>         : ^ ^^       ^^^^^       
+>identity : <T_1>(x: T_1) => T_1
+>         : ^^^^^^ ^^   ^^^^^   
 
   /** @type {unknown[]} */
   const result = [];
 >result : unknown[]
+>       : ^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
   for (let i = 0; i < array.length; i += 1) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < array.length : boolean
+>                 : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >array.length : number
+>             : ^^^^^^
 >array : unknown[]
+>      : ^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >i += 1 : number
+>       : ^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     result.push(.../** @type {unknown[]} */(iterable(array[i])));
 >result.push(.../** @type {unknown[]} */(iterable(array[i]))) : number
+>                                                             : ^^^^^^
 >result.push : (...items: unknown[]) => number
+>            : ^^^^     ^^^^^^^^^^^^^^^^      
 >result : unknown[]
+>       : ^^^^^^^^^
 >push : (...items: unknown[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^      
 >.../** @type {unknown[]} */(iterable(array[i])) : unknown
+>                                                : ^^^^^^^
 >(iterable(array[i])) : unknown[]
+>                     : ^^^^^^^^^
 >iterable(array[i]) : unknown
+>                   : ^^^^^^^
 >iterable : (x: unknown) => unknown
+>         : ^ ^^       ^^^^^       
 >array[i] : unknown
+>         : ^^^^^^^
 >array : unknown[]
+>      : ^^^^^^^^^
 >i : number
+>  : ^^^^^^
   }
   return result;
 >result : unknown[]
+>       : ^^^^^^^^^
 }
 

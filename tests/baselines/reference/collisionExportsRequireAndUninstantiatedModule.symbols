@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndUninstantiatedModule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndUninstantiatedModule.ts] ////
+
+=== collisionExportsRequireAndUninstantiatedModule.ts ===
 export module require { // no error 
 >require : Symbol(require, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 0))
 

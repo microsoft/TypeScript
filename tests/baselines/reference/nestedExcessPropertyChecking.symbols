@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedExcessPropertyChecking.ts ===
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
+=== nestedExcessPropertyChecking.ts ===
 type A1 = { x: { a?: string } };
 >A1 : Symbol(A1, Decl(nestedExcessPropertyChecking.ts, 0, 0))
 >x : Symbol(x, Decl(nestedExcessPropertyChecking.ts, 0, 11))
@@ -161,5 +163,58 @@ const response: Query = {
 
         },
     },
+};
+
+// Repro from #53412
+
+type BaseItem = {
+>BaseItem : Symbol(BaseItem, Decl(nestedExcessPropertyChecking.ts, 62, 2))
+
+    id: number;
+>id : Symbol(id, Decl(nestedExcessPropertyChecking.ts, 66, 17))
+}
+type ExtendedItem = BaseItem & {
+>ExtendedItem : Symbol(ExtendedItem, Decl(nestedExcessPropertyChecking.ts, 68, 1))
+>BaseItem : Symbol(BaseItem, Decl(nestedExcessPropertyChecking.ts, 62, 2))
+
+    description: string | null
+>description : Symbol(description, Decl(nestedExcessPropertyChecking.ts, 69, 32))
+
+};
+  
+type BaseValue = {
+>BaseValue : Symbol(BaseValue, Decl(nestedExcessPropertyChecking.ts, 71, 2))
+
+    // there are other fields
+    items: BaseItem[];
+>items : Symbol(items, Decl(nestedExcessPropertyChecking.ts, 73, 18))
+>BaseItem : Symbol(BaseItem, Decl(nestedExcessPropertyChecking.ts, 62, 2))
+}
+type ExtendedValue = BaseValue & {
+>ExtendedValue : Symbol(ExtendedValue, Decl(nestedExcessPropertyChecking.ts, 76, 1))
+>BaseValue : Symbol(BaseValue, Decl(nestedExcessPropertyChecking.ts, 71, 2))
+
+    // there are other fields
+    items: ExtendedItem[];
+>items : Symbol(items, Decl(nestedExcessPropertyChecking.ts, 77, 34))
+>ExtendedItem : Symbol(ExtendedItem, Decl(nestedExcessPropertyChecking.ts, 68, 1))
+}
+
+const TEST_VALUE: ExtendedValue = {
+>TEST_VALUE : Symbol(TEST_VALUE, Decl(nestedExcessPropertyChecking.ts, 82, 5))
+>ExtendedValue : Symbol(ExtendedValue, Decl(nestedExcessPropertyChecking.ts, 76, 1))
+
+    items: [
+>items : Symbol(items, Decl(nestedExcessPropertyChecking.ts, 82, 35))
+
+        {id: 1, description: null},
+>id : Symbol(id, Decl(nestedExcessPropertyChecking.ts, 84, 9))
+>description : Symbol(description, Decl(nestedExcessPropertyChecking.ts, 84, 15))
+
+        {id: 2, description: 'wigglytubble'},
+>id : Symbol(id, Decl(nestedExcessPropertyChecking.ts, 85, 9))
+>description : Symbol(description, Decl(nestedExcessPropertyChecking.ts, 85, 15))
+
+    ]
 };
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/destructuringSpread.ts(16,21): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+destructuringSpread.ts(16,21): error TS2339: Property 'g' does not exist on type '{ f: number; e: number; d: number; c: number; }'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringSpread.ts (1 errors) ====
+==== destructuringSpread.ts (1 errors) ====
     const { x } = {
       ...{},
       x: 0
@@ -19,7 +19,7 @@ tests/cases/conformance/es6/destructuring/destructuringSpread.ts(16,21): error T
     
     const { c, d, e, f, g } = {
                         ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'g' does not exist on type '{ f: number; e: number; d: number; c: number; }'.
       ...{
         ...{
           ...{

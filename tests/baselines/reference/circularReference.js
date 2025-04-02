@@ -49,7 +49,7 @@ var M1;
         return C1;
     }());
     M1.C1 = C1;
-})(M1 = exports.M1 || (exports.M1 = {}));
+})(M1 || (exports.M1 = M1 = {}));
 //// [foo2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -69,4 +69,4 @@ var M1;
         return C1;
     }());
     M1.C1 = C1;
-})(M1 = exports.M1 || (exports.M1 = {}));
+})(M1 || (exports.M1 = M1 = {}));

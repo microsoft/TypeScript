@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxEmitSpreadAttribute.ts] ////
+
+=== test.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(test.tsx, 0, 13))
 

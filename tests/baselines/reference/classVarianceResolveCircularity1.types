@@ -1,33 +1,53 @@
-=== tests/cases/compiler/classVarianceResolveCircularity1.ts ===
+//// [tests/cases/compiler/classVarianceResolveCircularity1.ts] ////
+
+=== classVarianceResolveCircularity1.ts ===
 // Issue #52813
 
 class Bar<T> {
 >Bar : Bar<T>
+>    : ^^^^^^
 
     num!: number;
 >num : number
+>    : ^^^^^^
 
     Value = callme(this).num;
 >Value : number
+>      : ^^^^^^
 >callme(this).num : number
+>                 : ^^^^^^
 >callme(this) : Bar<any>
+>             : ^^^^^^^^
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >this : this
+>     : ^^^^
 >num : number
+>    : ^^^^^^
 
     Field: number = callme(this).num;
 >Field : number
+>      : ^^^^^^
 >callme(this).num : number
+>                 : ^^^^^^
 >callme(this) : Bar<any>
+>             : ^^^^^^^^
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >this : this
+>     : ^^^^
 >num : number
+>    : ^^^^^^
 }
 declare function callme(x: Bar<any>): Bar<any>;
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : Bar<any>
+>  : ^^^^^^^^
 
 declare function callme(x: object): string;
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : object
+>  : ^^^^^^
 

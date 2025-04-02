@@ -1,20 +1,35 @@
-=== tests/cases/compiler/widenToAny1.ts ===
+//// [tests/cases/compiler/widenToAny1.ts] ////
+
+=== widenToAny1.ts ===
 function foo1<T>(f1: { x: T; y: T }): T {
->foo1 : <T>(f1: {    x: T;    y: T;}) => T
+>foo1 : <T>(f1: { x: T; y: T; }) => T
+>     : ^ ^^  ^^               ^^^^^ 
 >f1 : { x: T; y: T; }
+>   : ^^^^^ ^^^^^ ^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 var z1: number = foo1({ x: undefined, y: "def" });  // Best common type is any
 >z1 : number
+>   : ^^^^^^
 >foo1({ x: undefined, y: "def" }) : string
+>                                 : ^^^^^^
 >foo1 : <T>(f1: { x: T; y: T; }) => T
+>     : ^ ^^  ^^               ^^^^^ 
 >{ x: undefined, y: "def" } : { x: undefined; y: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >"def" : "def"
+>      : ^^^^^
 

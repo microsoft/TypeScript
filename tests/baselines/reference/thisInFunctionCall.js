@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInFunctionCall.ts] ////
+
 //// [thisInFunctionCall.ts]
 class Test {
   data: number[]

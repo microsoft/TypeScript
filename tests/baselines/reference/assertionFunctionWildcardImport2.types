@@ -1,48 +1,74 @@
-=== tests/cases/compiler/asserts.ts ===
+//// [tests/cases/compiler/assertionFunctionWildcardImport2.ts] ////
+
+=== asserts.ts ===
 function isNonNullable<T>(obj: T): asserts obj is NonNullable<T> {
 >isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
+>              : ^ ^^   ^^ ^^^^^                             
 >obj : T
+>    : ^
 
     if (obj === undefined || obj === null) {
 >obj === undefined || obj === null : boolean
+>                                  : ^^^^^^^
 >obj === undefined : boolean
+>                  : ^^^^^^^
 >obj : T
+>    : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >obj === null : boolean
+>             : ^^^^^^^
 >obj : T & ({} | null)
+>    : ^^^^^^^^^^^^^^^
 
         throw new Error("Must not be a nullable value");
 >new Error("Must not be a nullable value") : Error
+>                                          : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"Must not be a nullable value" : "Must not be a nullable value"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 export {
     isNonNullable
 >isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
+>              : ^ ^^   ^^ ^^^^^                             
 
 };
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import * as asserts from "./asserts";
 >asserts : typeof asserts
+>        : ^^^^^^^^^^^^^^
 
 function test(obj: string | null): void {
 >test : (obj: string | null) => void
+>     : ^   ^^             ^^^^^    
 >obj : string | null
+>    : ^^^^^^^^^^^^^
 
     asserts.isNonNullable(obj);
 >asserts.isNonNullable(obj) : void
+>                           : ^^^^
 >asserts.isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
+>                      : ^ ^^   ^^ ^^^^^                             
 >asserts : typeof asserts
+>        : ^^^^^^^^^^^^^^
 >isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
+>              : ^ ^^   ^^ ^^^^^                             
 >obj : string | null
+>    : ^^^^^^^^^^^^^
 
     obj.trim();
 >obj.trim() : string
+>           : ^^^^^^
 >obj.trim : () => string
+>         : ^^^^^^      
 >obj : string
+>    : ^^^^^^
 >trim : () => string
+>     : ^^^^^^      
 }
 

@@ -1,11 +1,11 @@
-error TS5071: Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.
+error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
 
 
-!!! error TS5071: Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.
-==== tests/cases/compiler/file1.ts (0 errors) ====
+!!! error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
+==== file1.ts (0 errors) ====
     import * as b from './b.json';
     
-==== tests/cases/compiler/b.json (0 errors) ====
+==== b.json (0 errors) ====
     {
         "a": true,
         "b": "hello"

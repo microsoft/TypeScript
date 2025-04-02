@@ -1,49 +1,79 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessors.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessors.ts] ////
+
+=== privateNameStaticAccessors.ts ===
 class A1 {
 >A1 : A1
+>   : ^^
 
     static get #prop() { return ""; }
 >#prop : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
     static set #prop(param: string) { }
 >#prop : string
+>      : ^^^^^^
 >param : string
+>      : ^^^^^^
 
     static get #roProp() { return ""; }
 >#roProp : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 
     constructor(name: string) {
 >name : string
+>     : ^^^^^^
 
         A1.#prop = "";
 >A1.#prop = "" : ""
+>              : ^^
 >A1.#prop : string
+>         : ^^^^^^
 >A1 : typeof A1
+>   : ^^^^^^^^^
 >"" : ""
+>   : ^^
 
         A1.#roProp = ""; // Error
 >A1.#roProp = "" : ""
+>                : ^^
 >A1.#roProp : any
+>           : ^^^
 >A1 : typeof A1
+>   : ^^^^^^^^^
 >"" : ""
+>   : ^^
 
         console.log(A1.#prop);
 >console.log(A1.#prop) : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >A1.#prop : string
+>         : ^^^^^^
 >A1 : typeof A1
+>   : ^^^^^^^^^
 
         console.log(A1.#roProp);
 >console.log(A1.#roProp) : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >A1.#roProp : string
+>           : ^^^^^^
 >A1 : typeof A1
+>   : ^^^^^^^^^
     }
 }
 

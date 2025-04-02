@@ -1,22 +1,33 @@
-=== tests/cases/compiler/symbolObserverMismatchingPolyfillsWorkTogether.ts ===
+//// [tests/cases/compiler/symbolObserverMismatchingPolyfillsWorkTogether.ts] ////
+
+=== symbolObserverMismatchingPolyfillsWorkTogether.ts ===
 interface SymbolConstructor {
     readonly observer: symbol;
 >observer : unique symbol
+>         : ^^^^^^^^^^^^^
 }
 interface SymbolConstructor {
     readonly observer: unique symbol;
 >observer : unique symbol
+>         : ^^^^^^^^^^^^^
 }
 
 const obj = {
 >obj : { [Symbol.observer]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.observer]: 0} : { [Symbol.observer]: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.observer]: 0
 >[Symbol.observer] : number
+>                  : ^^^^^^
 >Symbol.observer : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >observer : unique symbol
+>         : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 };

@@ -1,415 +1,662 @@
-=== tests/cases/conformance/types/literal/enumLiteralTypes1.ts ===
+//// [tests/cases/conformance/types/literal/enumLiteralTypes1.ts] ////
+
+=== enumLiteralTypes1.ts ===
 const enum Choice { Unknown, Yes, No };
 >Choice : Choice
+>       : ^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
 type YesNo = Choice.Yes | Choice.No;
->YesNo : Choice.Yes | Choice.No
+>YesNo : YesNo
+>      : ^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : Choice.Yes | Choice.No
+>NoYes : NoYes
+>      : ^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
->UnknownYesNo : Choice
+>UnknownYesNo : UnknownYesNo
+>             : ^^^^^^^^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     var a: YesNo;
 >a : YesNo
+>  : ^^^^^
 
     var a: NoYes;
 >a : YesNo
+>  : ^^^^^
 
     var a: Choice.Yes | Choice.No;
 >a : YesNo
+>  : ^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 
     var a: Choice.No | Choice.Yes;
 >a : YesNo
+>  : ^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 }
 
 function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
 >f2 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
+>   : ^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : YesNo
+>  : ^^^^^
 >b : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >c : Choice
+>  : ^^^^^^
 
     b = a;
 >b = a : YesNo
+>      : ^^^^^
 >b : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >a : YesNo
+>  : ^^^^^
 
     c = a;
 >c = a : YesNo
+>      : ^^^^^
 >c : Choice
+>  : ^^^^^^
 >a : YesNo
+>  : ^^^^^
 
     c = b;
 >c = b : Choice.Yes | Choice.No
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 >c : Choice
+>  : ^^^^^^
 >b : Choice.Yes | Choice.No
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f3(a: Choice.Yes, b: YesNo) {
 >f3 : (a: Choice.Yes, b: YesNo) => void
+>   : ^ ^^          ^^ ^^     ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice : any
+>       : ^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a + b;
 >x : number
+>  : ^^^^^^
 >a + b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a - b;
 >x : number
+>  : ^^^^^^
 >a - b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a * b;
 >x : number
+>  : ^^^^^^
 >a * b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a / b;
 >x : number
+>  : ^^^^^^
 >a / b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a % b;
 >x : number
+>  : ^^^^^^
 >a % b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a | b;
 >x : number
+>  : ^^^^^^
 >a | b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a & b;
 >x : number
+>  : ^^^^^^
 >a & b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = a ^ b;
 >x : number
+>  : ^^^^^^
 >a ^ b : number
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = -b;
 >x : number
+>  : ^^^^^^
 >-b : number
+>   : ^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var x = ~b;
 >x : number
+>  : ^^^^^^
 >~b : number
+>   : ^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a == b;
 >y : boolean
+>  : ^^^^^^^
 >a == b : boolean
+>       : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a != b;
 >y : boolean
+>  : ^^^^^^^
 >a != b : boolean
+>       : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a === b;
 >y : boolean
+>  : ^^^^^^^
 >a === b : boolean
+>        : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a !== b;
 >y : boolean
+>  : ^^^^^^^
 >a !== b : boolean
+>        : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a > b;
 >y : boolean
+>  : ^^^^^^^
 >a > b : boolean
+>      : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a < b;
 >y : boolean
+>  : ^^^^^^^
 >a < b : boolean
+>      : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a >= b;
 >y : boolean
+>  : ^^^^^^^
 >a >= b : boolean
+>       : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = a <= b;
 >y : boolean
+>  : ^^^^^^^
 >a <= b : boolean
+>       : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     var y = !b;
 >y : boolean
+>  : ^^^^^^^
 >!b : boolean
+>   : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 }
 
 function f4(a: Choice.Yes, b: YesNo) {
 >f4 : (a: Choice.Yes, b: YesNo) => void
+>   : ^ ^^          ^^ ^^     ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice : any
+>       : ^^^
 >b : YesNo
+>  : ^^^^^
 
     a++;
 >a++ : number
+>    : ^^^^^^
 >a : Choice
+>  : ^^^^^^
 
     b++;
 >b++ : number
+>    : ^^^^^^
 >b : Choice
+>  : ^^^^^^
 }
 
 declare function g(x: Choice.Yes): string;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >x : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice : any
+>       : ^^^
 
 declare function g(x: Choice.No): boolean;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >x : Choice.No
+>  : ^^^^^^^^^
 >Choice : any
+>       : ^^^
 
 declare function g(x: Choice): number;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >x : Choice
+>  : ^^^^^^
 
 function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >f5 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
+>   : ^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : YesNo
+>  : ^^^^^
 >b : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >c : Choice
+>  : ^^^^^^
 
     var z1 = g(Choice.Yes);
 >z1 : string
+>   : ^^^^^^
 >g(Choice.Yes) : string
+>              : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     var z2 = g(Choice.No);
 >z2 : boolean
+>   : ^^^^^^^
 >g(Choice.No) : boolean
+>             : ^^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
     var z3 = g(a);
 >z3 : number
+>   : ^^^^^^
 >g(a) : number
+>     : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >a : YesNo
+>  : ^^^^^
 
     var z4 = g(b);
 >z4 : number
+>   : ^^^^^^
 >g(b) : number
+>     : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >b : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     var z5 = g(c);
 >z5 : number
+>   : ^^^^^^
 >g(c) : number
+>     : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^       ^^^ ^^      ^^^      ^^^
 >c : Choice
+>  : ^^^^^^
 }
 
 function assertNever(x: never): never {
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >x : never
+>  : ^^^^^
 
     throw new Error("Unexpected value");
 >new Error("Unexpected value") : Error
+>                              : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"Unexpected value" : "Unexpected value"
+>                   : ^^^^^^^^^^^^^^^^^^
 }
 
 function f10(x: YesNo) {
 >f10 : (x: YesNo) => "true" | "false"
+>    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^
 >x : YesNo
+>  : ^^^^^
 
     switch (x) {
 >x : YesNo
+>  : ^^^^^
 
         case Choice.Yes: return "true";
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >"true" : "true"
+>       : ^^^^^^
 
         case Choice.No: return "false";
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >"false" : "false"
+>        : ^^^^^^^
     }
 }
 
 function f11(x: YesNo) {
 >f11 : (x: YesNo) => "true" | "false"
+>    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^
 >x : YesNo
+>  : ^^^^^
 
     switch (x) {
 >x : YesNo
+>  : ^^^^^
 
         case Choice.Yes: return "true";
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >"true" : "true"
+>       : ^^^^^^
 
         case Choice.No: return "false";
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >"false" : "false"
+>        : ^^^^^^^
     }
     return assertNever(x);
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >x : never
+>  : ^^^^^
 }
 
 function f12(x: UnknownYesNo) {
 >f12 : (x: UnknownYesNo) => void
+>    : ^ ^^            ^^^^^^^^^
 >x : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     if (x) {
 >x : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
         x;
 >x : Choice.Yes | Choice.No
+>  : ^^^^^^^^^^^^^^^^^^^^^^
     }
     else {
         x;
 >x : UnknownYesNo
+>  : ^^^^^^^^^^^^
     }
 }
 
 function f13(x: UnknownYesNo) {
 >f13 : (x: UnknownYesNo) => void
+>    : ^ ^^            ^^^^^^^^^
 >x : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     if (x === Choice.Yes) {
 >x === Choice.Yes : boolean
+>                 : ^^^^^^^
 >x : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
         x;
 >x : Choice.Yes
+>  : ^^^^^^^^^^
     }
     else {
         x;
 >x : Choice.Unknown | Choice.No
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 type Item =
->Item : { kind: Choice.Yes; a: string; } | { kind: Choice.No; b: string; }
+>Item : Item
+>     : ^^^^
 
     { kind: Choice.Yes, a: string } |
 >kind : Choice.Yes
+>     : ^^^^^^^^^^
 >Choice : any
+>       : ^^^
 >a : string
+>  : ^^^^^^
 
     { kind: Choice.No, b: string };
 >kind : Choice.No
+>     : ^^^^^^^^^
 >Choice : any
+>       : ^^^
 >b : string
+>  : ^^^^^^
 
 function f20(x: Item) {
 >f20 : (x: Item) => string
+>    : ^ ^^    ^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     switch (x.kind) {
 >x.kind : Choice.Yes | Choice.No
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >kind : Choice.Yes | Choice.No
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
         case Choice.Yes: return x.a;
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >x.a : string
+>    : ^^^^^^
 >x : { kind: Choice.Yes; a: string; }
+>  : ^^^^^^^^          ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
         case Choice.No: return x.b;
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >x.b : string
+>    : ^^^^^^
 >x : { kind: Choice.No; b: string; }
+>  : ^^^^^^^^         ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
     }
 }
 
 function f21(x: Item) {
 >f21 : (x: Item) => string
+>    : ^ ^^    ^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     switch (x.kind) {
 >x.kind : Choice.Yes | Choice.No
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 >kind : Choice.Yes | Choice.No
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
         case Choice.Yes: return x.a;
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >x.a : string
+>    : ^^^^^^
 >x : { kind: Choice.Yes; a: string; }
+>  : ^^^^^^^^          ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
         case Choice.No: return x.b;
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >x.b : string
+>    : ^^^^^^
 >x : { kind: Choice.No; b: string; }
+>  : ^^^^^^^^         ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
     }
     return assertNever(x);
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >x : never
+>  : ^^^^^
 }

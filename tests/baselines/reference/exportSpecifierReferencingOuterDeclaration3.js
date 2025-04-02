@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportSpecifierReferencingOuterDeclaration3.ts] ////
+
 //// [exportSpecifierReferencingOuterDeclaration3.ts]
 declare module X { export interface bar { } }
 declare module "m" {

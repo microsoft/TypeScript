@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionWithStaticProperties3.ts ===
+//// [tests/cases/compiler/classExpressionWithStaticProperties3.ts] ////
+
+=== classExpressionWithStaticProperties3.ts ===
 declare var console: any;
 >console : Symbol(console, Decl(classExpressionWithStaticProperties3.ts, 0, 11))
 

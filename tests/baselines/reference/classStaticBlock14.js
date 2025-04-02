@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock14.ts] ////
+
 //// [classStaticBlock14.ts]
 class C {
   static #_1 = 1;

@@ -1,14 +1,22 @@
-=== tests/cases/compiler/duplicateVarAndImport2.ts ===
+//// [tests/cases/compiler/duplicateVarAndImport2.ts] ////
+
+=== duplicateVarAndImport2.ts ===
 // error since module is instantiated
 var a;
 >a : any
+>  : ^^^
 
 module M { export var x = 1; }
 >M : typeof M
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 import a = M;
 >a : any
+>  : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 

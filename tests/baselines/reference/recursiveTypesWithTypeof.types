@@ -1,183 +1,286 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts] ////
+
+=== recursiveTypesWithTypeof.ts ===
 // The following are errors because of circular references
 var c: typeof c;
 >c : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 var c: any;
 >c : any
+>  : ^^^
 
 var d: typeof e;
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 
 var d: any;
 >d : any
+>  : ^^^
 
 var e: typeof d;
 >e : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 var e: any;
 >e : any
+>  : ^^^
 
 interface Foo<T> { }
 var f: Array<typeof f>;
 >f : any
+>  : ^^^
 >f : any
+>  : ^^^
 
 var f: any;
 >f : any
+>  : ^^^
 
 var f2: Foo<typeof f2>;
 >f2 : any
+>   : ^^^
 >f2 : any
+>   : ^^^
 
 var f2: any;
 >f2 : any
+>   : ^^^
 
 var f3: Foo<typeof f3>[];
 >f3 : any
+>   : ^^^
 >f3 : any
+>   : ^^^
 
 var f3: any;
 >f3 : any
+>   : ^^^
 
 // None of these declarations should have any errors!
 // Truly recursive types
 var g: { x: typeof g; };
 >g : { x: typeof g; }
+>  : ^^^^^        ^^^
 >x : { x: typeof g; }
->g : { x: any; }
+>  : ^^^^^        ^^^
+>g : { x: typeof g; }
+>  : ^^^^^        ^^^
 
 var g: typeof g.x;
->g : { x: any; }
->g.x : { x: any; }
->g : { x: any; }
->x : { x: any; }
+>g : { x: typeof g; }
+>  : ^^^^^        ^^^
+>g.x : { x: typeof g; }
+>    : ^^^^^        ^^^
+>g : { x: typeof g; }
+>  : ^^^^^        ^^^
+>x : { x: typeof g; }
+>  : ^^^^^        ^^^
 
 var h: () => typeof h;
 >h : () => typeof h
+>  : ^^^^^^        
 >h : () => typeof h
+>  : ^^^^^^        
 
 var h = h();
->h : () => any
->h() : () => any
->h : () => any
+>h : () => typeof h
+>  : ^^^^^^        
+>h() : () => typeof h
+>    : ^^^^^^        
+>h : () => typeof h
+>  : ^^^^^^        
 
 var i: (x: typeof i) => typeof x;
 >i : (x: typeof i) => typeof x
->x : (x: typeof i) => any
->i : (x: any) => any
->x : (x: any) => typeof x
+>  : ^ ^^        ^^^^^        
+>x : (x: typeof i) => typeof x
+>  : ^ ^^        ^^^^^        
+>i : (x: typeof i) => typeof x
+>  : ^ ^^        ^^^^^        
+>x : (x: typeof i) => typeof x
+>  : ^ ^^        ^^^^^        
 
 var i = i(i);
->i : (x: any) => any
->i(i) : (x: any) => any
->i : (x: any) => any
->i : (x: any) => any
+>i : (x: typeof i) => typeof x
+>  : ^ ^^        ^^^^^        
+>i(i) : (x: typeof i) => typeof x
+>     : ^ ^^        ^^^^^        
+>i : (x: typeof i) => typeof x
+>  : ^ ^^        ^^^^^        
+>i : (x: typeof i) => typeof x
+>  : ^ ^^        ^^^^^        
 
 var j: <T extends typeof j>(x: T) => T;
->j : <T extends any>(x: T) => T
->j : <T extends any>(x: T) => T
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 var j = j(j);
->j : <T extends any>(x: T) => T
->j(j) : <T extends any>(x: T) => T
->j : <T extends any>(x: T) => T
->j : <T extends any>(x: T) => T
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
+>j(j) : <T extends typeof j>(x: T) => T
+>     : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 
 // Same as h, i, j with construct signatures
 var h2: new () => typeof h2;
 >h2 : new () => typeof h2
+>   : ^^^^^^^^^^         
 >h2 : new () => typeof h2
+>   : ^^^^^^^^^^         
 
 var h2 = new h2();
->h2 : new () => any
->new h2() : new () => any
->h2 : new () => any
+>h2 : new () => typeof h2
+>   : ^^^^^^^^^^         
+>new h2() : new () => typeof h2
+>         : ^^^^^^^^^^         
+>h2 : new () => typeof h2
+>   : ^^^^^^^^^^         
 
 var i2: new (x: typeof i2) => typeof x;
 >i2 : new (x: typeof i2) => typeof x
->x : new (x: typeof i2) => any
->i2 : new (x: any) => any
->x : new (x: any) => typeof x
+>   : ^^^^^ ^^         ^^^^^        
+>x : new (x: typeof i2) => typeof x
+>  : ^^^^^ ^^         ^^^^^        
+>i2 : new (x: typeof i2) => typeof x
+>   : ^^^^^ ^^         ^^^^^        
+>x : new (x: typeof i2) => typeof x
+>  : ^^^^^ ^^         ^^^^^        
 
 var i2 = new i2(i2);
->i2 : new (x: any) => any
->new i2(i2) : new (x: any) => any
->i2 : new (x: any) => any
->i2 : new (x: any) => any
+>i2 : new (x: typeof i2) => typeof x
+>   : ^^^^^ ^^         ^^^^^        
+>new i2(i2) : new (x: typeof i2) => typeof x
+>           : ^^^^^ ^^         ^^^^^        
+>i2 : new (x: typeof i2) => typeof x
+>   : ^^^^^ ^^         ^^^^^        
+>i2 : new (x: typeof i2) => typeof x
+>   : ^^^^^ ^^         ^^^^^        
 
 var j2: new <T extends typeof j2>(x: T) => T;
->j2 : new <T extends any>(x: T) => T
->j2 : new <T extends any>(x: T) => T
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 var j2 = new j2(j2);
->j2 : new <T extends any>(x: T) => T
->new j2(j2) : new <T extends any>(x: T) => T
->j2 : new <T extends any>(x: T) => T
->j2 : new <T extends any>(x: T) => T
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
+>new j2(j2) : new <T extends typeof j2>(x: T) => T
+>           : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
 
 // Indexers
 var k: { [n: number]: typeof k;[s: string]: typeof k };
 >k : { [n: number]: any; [s: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >k : { [n: number]: any; [s: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >k : { [n: number]: any; [s: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var k = k[0];
 >k : { [n: number]: any; [s: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k[0] : { [n: number]: any; [s: string]: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : { [n: number]: any; [s: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 var k = k[''];
 >k : { [n: number]: any; [s: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k[''] : { [n: number]: any; [s: string]: any; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : { [n: number]: any; [s: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 
 // Hybrid - contains type literals as well as type arguments
 // These two are recursive
 var hy1: { x: typeof hy1 }[];
 >hy1 : { x: typeof hy1; }[]
+>    : ^^^^^          ^^^^^
 >x : { x: typeof hy1; }[]
->hy1 : { x: any[]; }[]
+>  : ^^^^^          ^^^^^
+>hy1 : { x: typeof hy1; }[]
+>    : ^^^^^          ^^^^^
 
 var hy1 = hy1[0].x;
->hy1 : { x: any[]; }[]
->hy1[0].x : { x: any[]; }[]
->hy1[0] : { x: any[]; }
->hy1 : { x: any[]; }[]
+>hy1 : { x: typeof hy1; }[]
+>    : ^^^^^          ^^^^^
+>hy1[0].x : { x: typeof hy1; }[]
+>         : ^^^^^          ^^^^^
+>hy1[0] : { x: typeof hy1; }
+>       : ^^^^^          ^^^
+>hy1 : { x: typeof hy1; }[]
+>    : ^^^^^          ^^^^^
 >0 : 0
->x : { x: any[]; }[]
+>  : ^
+>x : { x: typeof hy1; }[]
+>  : ^^^^^          ^^^^^
 
 var hy2: { x: Array<typeof hy2> };
 >hy2 : { x: Array<typeof hy2>; }
+>    : ^^^^^                 ^^^
 >x : { x: Array<typeof hy2>; }[]
->hy2 : { x: any[]; }
+>  : ^^^^^                 ^^^^^
+>hy2 : { x: Array<typeof hy2>; }
+>    : ^^^^^                 ^^^
 
 var hy2 = hy2.x[0];
->hy2 : { x: any[]; }
->hy2.x[0] : { x: any[]; }
->hy2.x : { x: any[]; }[]
->hy2 : { x: any[]; }
->x : { x: any[]; }[]
+>hy2 : { x: Array<typeof hy2>; }
+>    : ^^^^^                 ^^^
+>hy2.x[0] : { x: Array<typeof hy2>; }
+>         : ^^^^^                 ^^^
+>hy2.x : { x: Array<typeof hy2>; }[]
+>      : ^^^^^                 ^^^^^
+>hy2 : { x: Array<typeof hy2>; }
+>    : ^^^^^                 ^^^
+>x : { x: Array<typeof hy2>; }[]
+>  : ^^^^^                 ^^^^^
 >0 : 0
+>  : ^
 
 interface Foo2<T, U> { }
 
 // This one should be an error because the first type argument is not contained inside a type literal
 var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
 >hy3 : any
+>    : ^^^
 >hy3 : any
+>    : ^^^
 >x : any
+>  : ^^^
 >hy3 : any
+>    : ^^^
 
 var hy3: any;
 >hy3 : any
+>    : ^^^
 

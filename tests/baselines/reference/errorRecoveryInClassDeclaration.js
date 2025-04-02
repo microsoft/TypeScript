@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorRecoveryInClassDeclaration.ts] ////
+
 //// [errorRecoveryInClassDeclaration.ts]
 class C {
     public bar() {

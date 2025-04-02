@@ -1,76 +1,123 @@
-=== tests/cases/compiler/staticMemberExportAccess.ts ===
+//// [tests/cases/compiler/staticMemberExportAccess.ts] ////
+
+=== staticMemberExportAccess.ts ===
 class Sammy {
 >Sammy : Sammy
+>      : ^^^^^
 
    foo() { return "hi"; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
   static bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
     return -1;
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
    }
 }
 module Sammy {
 >Sammy : typeof Sammy
+>      : ^^^^^^^^^^^^
 
     export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 interface JQueryStatic {
     sammy: Sammy; // class instance
 >sammy : Sammy
+>      : ^^^^^
 }
 var $: JQueryStatic;
 >$ : JQueryStatic
+>  : ^^^^^^^^^^^^
 
 var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
 >instanceOfClassSammy : Sammy
+>                     : ^^^^^
 >new $.sammy() : any
+>              : ^^^
 >$.sammy : Sammy
+>        : ^^^^^
 >$ : JQueryStatic
+>  : ^^^^^^^^^^^^
 >sammy : Sammy
+>      : ^^^^^
 
 var r1 = instanceOfClassSammy.foo(); // r1 is string
 >r1 : string
+>   : ^^^^^^
 >instanceOfClassSammy.foo() : string
+>                           : ^^^^^^
 >instanceOfClassSammy.foo : () => string
+>                         : ^^^^^^^^^^^^
 >instanceOfClassSammy : Sammy
+>                     : ^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
 var r2 = $.sammy.foo();
 >r2 : string
+>   : ^^^^^^
 >$.sammy.foo() : string
+>              : ^^^^^^
 >$.sammy.foo : () => string
+>            : ^^^^^^^^^^^^
 >$.sammy : Sammy
+>        : ^^^^^
 >$ : JQueryStatic
+>  : ^^^^^^^^^^^^
 >sammy : Sammy
+>      : ^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
 var r3 = $.sammy.bar(); // error
 >r3 : any
+>   : ^^^
 >$.sammy.bar() : any
+>              : ^^^
 >$.sammy.bar : any
+>            : ^^^
 >$.sammy : Sammy
+>        : ^^^^^
 >$ : JQueryStatic
+>  : ^^^^^^^^^^^^
 >sammy : Sammy
+>      : ^^^^^
 >bar : any
+>    : ^^^
 
 var r4 = $.sammy.x; // error
 >r4 : any
+>   : ^^^
 >$.sammy.x : any
+>          : ^^^
 >$.sammy : Sammy
+>        : ^^^^^
 >$ : JQueryStatic
+>  : ^^^^^^^^^^^^
 >sammy : Sammy
+>      : ^^^^^
 >x : any
+>  : ^^^
 
 Sammy.bar();
 >Sammy.bar() : number
+>            : ^^^^^^
 >Sammy.bar : () => number
+>          : ^^^^^^^^^^^^
 >Sammy : typeof Sammy
+>      : ^^^^^^^^^^^^
 >bar : () => number
+>    : ^^^^^^^^^^^^
 

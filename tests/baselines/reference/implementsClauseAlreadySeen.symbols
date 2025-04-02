@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implementsClauseAlreadySeen.ts ===
+//// [tests/cases/compiler/implementsClauseAlreadySeen.ts] ////
+
+=== implementsClauseAlreadySeen.ts ===
 class C {
 >C : Symbol(C, Decl(implementsClauseAlreadySeen.ts, 0, 0))
     

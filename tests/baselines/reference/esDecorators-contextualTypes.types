@@ -1,206 +1,329 @@
-=== tests/cases/conformance/esDecorators/esDecorators-contextualTypes.ts ===
+//// [tests/cases/conformance/esDecorators/esDecorators-contextualTypes.ts] ////
+
+=== esDecorators-contextualTypes.ts ===
 @((t, c) => { })
 >((t, c) => { }) : (t: typeof C, c: ClassDecoratorContext<typeof C>) => void
+>                : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: typeof C, c: ClassDecoratorContext<typeof C>) => void
+>              : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : typeof C
+>  : ^^^^^^^^
 >c : ClassDecoratorContext<typeof C>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => void, c: ClassMethodDecoratorContext<typeof C, () => void> & { name: "f"; private: false; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => void, c: ClassMethodDecoratorContext<typeof C, () => void> & { name: "f"; private: false; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => void
+>  : ^^^^^^^^^^
 >c : ClassMethodDecoratorContext<typeof C, () => void> & { name: "f"; private: false; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static f() {}
 >f : () => void
+>  : ^^^^^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => void, c: ClassMethodDecoratorContext<typeof C, () => void> & { name: "#f"; private: true; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => void, c: ClassMethodDecoratorContext<typeof C, () => void> & { name: "#f"; private: true; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => void
+>  : ^^^^^^^^^^
 >c : ClassMethodDecoratorContext<typeof C, () => void> & { name: "#f"; private: true; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static #f() {}
 >#f : () => void
+>   : ^^^^^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => number, c: ClassGetterDecoratorContext<typeof C, number> & { name: "x"; private: false; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => number, c: ClassGetterDecoratorContext<typeof C, number> & { name: "x"; private: false; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => number
+>  : ^^^^^^^^^^^^
 >c : ClassGetterDecoratorContext<typeof C, number> & { name: "x"; private: false; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static get x() { return 1; }
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: (value: number) => void, c: ClassSetterDecoratorContext<typeof C, number> & { name: "x"; private: false; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: (value: number) => void, c: ClassSetterDecoratorContext<typeof C, number> & { name: "x"; private: false; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : (value: number) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassSetterDecoratorContext<typeof C, number> & { name: "x"; private: false; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static set x(value) { }
 >x : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => number, c: ClassGetterDecoratorContext<typeof C, number> & { name: "#x"; private: true; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => number, c: ClassGetterDecoratorContext<typeof C, number> & { name: "#x"; private: true; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => number
+>  : ^^^^^^^^^^^^
 >c : ClassGetterDecoratorContext<typeof C, number> & { name: "#x"; private: true; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static get #x() { return 1; }
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: (value: number) => void, c: ClassSetterDecoratorContext<typeof C, number> & { name: "#x"; private: true; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: (value: number) => void, c: ClassSetterDecoratorContext<typeof C, number> & { name: "#x"; private: true; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : (value: number) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassSetterDecoratorContext<typeof C, number> & { name: "#x"; private: true; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static set #x(value) { }
 >#x : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: ClassAccessorDecoratorTarget<typeof C, number>, c: ClassAccessorDecoratorContext<typeof C, number> & { name: "y"; private: false; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: ClassAccessorDecoratorTarget<typeof C, number>, c: ClassAccessorDecoratorContext<typeof C, number> & { name: "y"; private: false; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : ClassAccessorDecoratorTarget<typeof C, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassAccessorDecoratorContext<typeof C, number> & { name: "y"; private: false; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static accessor y = 1;
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: ClassAccessorDecoratorTarget<typeof C, number>, c: ClassAccessorDecoratorContext<typeof C, number> & { name: "#y"; private: true; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: ClassAccessorDecoratorTarget<typeof C, number>, c: ClassAccessorDecoratorContext<typeof C, number> & { name: "#y"; private: true; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : ClassAccessorDecoratorTarget<typeof C, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassAccessorDecoratorContext<typeof C, number> & { name: "#y"; private: true; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static accessor #y = 1;
 >#y : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: undefined, c: ClassFieldDecoratorContext<typeof C, number> & { name: "z"; private: false; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: undefined, c: ClassFieldDecoratorContext<typeof C, number> & { name: "z"; private: false; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : undefined
+>  : ^^^^^^^^^
 >c : ClassFieldDecoratorContext<typeof C, number> & { name: "z"; private: false; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static z = 1;
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: undefined, c: ClassFieldDecoratorContext<typeof C, number> & { name: "#z"; private: true; static: true; }) => void
+>                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: undefined, c: ClassFieldDecoratorContext<typeof C, number> & { name: "#z"; private: true; static: true; }) => void
+>              : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : undefined
+>  : ^^^^^^^^^
 >c : ClassFieldDecoratorContext<typeof C, number> & { name: "#z"; private: true; static: true; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     static #z = 1;
 >#z : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => void, c: ClassMethodDecoratorContext<C, () => void> & { name: "g"; private: false; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => void, c: ClassMethodDecoratorContext<C, () => void> & { name: "g"; private: false; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => void
+>  : ^^^^^^^^^^
 >c : ClassMethodDecoratorContext<C, () => void> & { name: "g"; private: false; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     g() {}
 >g : () => void
+>  : ^^^^^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => void, c: ClassMethodDecoratorContext<C, () => void> & { name: "#g"; private: true; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => void, c: ClassMethodDecoratorContext<C, () => void> & { name: "#g"; private: true; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => void
+>  : ^^^^^^^^^^
 >c : ClassMethodDecoratorContext<C, () => void> & { name: "#g"; private: true; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     #g() {}
 >#g : () => void
+>   : ^^^^^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => number, c: ClassGetterDecoratorContext<C, number> & { name: "a"; private: false; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => number, c: ClassGetterDecoratorContext<C, number> & { name: "a"; private: false; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => number
+>  : ^^^^^^^^^^^^
 >c : ClassGetterDecoratorContext<C, number> & { name: "a"; private: false; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get a() { return 1; }
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: (value: number) => void, c: ClassSetterDecoratorContext<C, number> & { name: "a"; private: false; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: (value: number) => void, c: ClassSetterDecoratorContext<C, number> & { name: "a"; private: false; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : (value: number) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassSetterDecoratorContext<C, number> & { name: "a"; private: false; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     set a(value) { }
 >a : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: () => number, c: ClassGetterDecoratorContext<C, number> & { name: "#a"; private: true; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: () => number, c: ClassGetterDecoratorContext<C, number> & { name: "#a"; private: true; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : () => number
+>  : ^^^^^^^^^^^^
 >c : ClassGetterDecoratorContext<C, number> & { name: "#a"; private: true; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get #a() { return 1; }
 >#a : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: (value: number) => void, c: ClassSetterDecoratorContext<C, number> & { name: "#a"; private: true; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: (value: number) => void, c: ClassSetterDecoratorContext<C, number> & { name: "#a"; private: true; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : (value: number) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassSetterDecoratorContext<C, number> & { name: "#a"; private: true; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     set #a(value) { }
 >#a : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: ClassAccessorDecoratorTarget<C, number>, c: ClassAccessorDecoratorContext<C, number> & { name: "b"; private: false; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: ClassAccessorDecoratorTarget<C, number>, c: ClassAccessorDecoratorContext<C, number> & { name: "b"; private: false; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : ClassAccessorDecoratorTarget<C, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassAccessorDecoratorContext<C, number> & { name: "b"; private: false; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     accessor b = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: ClassAccessorDecoratorTarget<C, number>, c: ClassAccessorDecoratorContext<C, number> & { name: "#b"; private: true; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: ClassAccessorDecoratorTarget<C, number>, c: ClassAccessorDecoratorContext<C, number> & { name: "#b"; private: true; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : ClassAccessorDecoratorTarget<C, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : ClassAccessorDecoratorContext<C, number> & { name: "#b"; private: true; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     accessor #b = 1;
 >#b : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: undefined, c: ClassFieldDecoratorContext<C, number> & { name: "c"; private: false; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: undefined, c: ClassFieldDecoratorContext<C, number> & { name: "c"; private: false; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : undefined
+>  : ^^^^^^^^^
 >c : ClassFieldDecoratorContext<C, number> & { name: "c"; private: false; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     c = 1;
 >c : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @((t, c) => { })
 >((t, c) => { }) : (t: undefined, c: ClassFieldDecoratorContext<C, number> & { name: "#c"; private: true; static: false; }) => void
+>                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t, c) => { } : (t: undefined, c: ClassFieldDecoratorContext<C, number> & { name: "#c"; private: true; static: false; }) => void
+>              : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : undefined
+>  : ^^^^^^^^^
 >c : ClassFieldDecoratorContext<C, number> & { name: "#c"; private: true; static: false; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     #c = 1;
 >#c : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 }

@@ -1,37 +1,60 @@
-=== tests/cases/compiler/gettersAndSettersTypesAgree.ts ===
+//// [tests/cases/compiler/gettersAndSettersTypesAgree.ts] ////
+
+=== gettersAndSettersTypesAgree.ts ===
 class C {
 >C : C
+>  : ^
 
     public get Foo() { return "foo";} // ok
 >Foo : string
+>    : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     public set Foo(foo) {} // ok - type inferred from getter return statement
 >Foo : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
 
     public get Bar() { return "foo";} // ok
 >Bar : string
+>    : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     public set Bar(bar:string) {} // ok - type must be declared
 >Bar : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 }
 
 var o1 = {get Foo(){return 0;}, set Foo(val){}}; // ok - types agree (inference)
 >o1 : { Foo: number; }
+>   : ^^^^^^^^^^^^^^^^
 >{get Foo(){return 0;}, set Foo(val){}} : { Foo: number; }
+>                                       : ^^^^^^^^^^^^^^^^
 >Foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >Foo : number
+>    : ^^^^^^
 >val : number
+>    : ^^^^^^
 
 var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
 >o2 : { Foo: number; }
+>   : ^^^^^^^      ^^^
 >{get Foo(){return 0;}, set Foo(val:number){}} : { Foo: number; }
+>                                              : ^^^^^^^      ^^^
 >Foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >Foo : number
+>    : ^^^^^^
 >val : number
+>    : ^^^^^^
 

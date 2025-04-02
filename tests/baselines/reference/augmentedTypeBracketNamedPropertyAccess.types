@@ -1,41 +1,63 @@
-=== tests/cases/compiler/augmentedTypeBracketNamedPropertyAccess.ts ===
+//// [tests/cases/compiler/augmentedTypeBracketNamedPropertyAccess.ts] ////
+
+=== augmentedTypeBracketNamedPropertyAccess.ts ===
 interface Object {
     data: number;
 >data : number
+>     : ^^^^^^
 }
 interface Function {
     functionData: string;
 >functionData : string
+>             : ^^^^^^
 }
 var o = {};
 >o : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 var f = function () { };
 >f : () => void
+>  : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 var r1 = o['data']; // Should be number
 >r1 : number
+>   : ^^^^^^
 >o['data'] : number
+>          : ^^^^^^
 >o : {}
+>  : ^^
 >'data' : "data"
+>       : ^^^^^^
 
 var r2 = o['functionData']; // Should be any (no property found)
 >r2 : error
 >o['functionData'] : error
 >o : {}
+>  : ^^
 >'functionData' : "functionData"
+>               : ^^^^^^^^^^^^^^
 
 var r3 = f['functionData']; // Should be string
 >r3 : string
+>   : ^^^^^^
 >f['functionData'] : string
+>                  : ^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >'functionData' : "functionData"
+>               : ^^^^^^^^^^^^^^
 
 var r4 = f['data']; // Should be number
 >r4 : number
+>   : ^^^^^^
 >f['data'] : number
+>          : ^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >'data' : "data"
+>       : ^^^^^^
 

@@ -1,23 +1,32 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/typeOnlyMerge1.ts] ////
+
+=== a.ts ===
 interface A {}
 export type { A };
 >A : A
+>  : ^
 
-=== tests/cases/conformance/externalModules/b.ts ===
+=== b.ts ===
 import { A } from "./a";
 >A : 0
+>  : ^
 
 const A = 0;
 >A : 0
+>  : ^
 >0 : 0
+>  : ^
 
 export { A };
 >A : 0
+>  : ^
 
-=== tests/cases/conformance/externalModules/c.ts ===
+=== c.ts ===
 import { A } from "./b";
 >A : 0
+>  : ^
 
 A;
 >A : 0
+>  : ^
 

@@ -1,92 +1,140 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment23.ts] ////
+
+=== a.js ===
 class B {
 >B : B
+>  : ^
 
     constructor () {
         this.n = 1
 >this.n = 1 : 1
+>           : ^
 >this.n : any
 >this : this
+>     : ^^^^
 >n : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }
 
 class C extends B { }
 >C : C
+>  : ^
 >B : B
+>  : ^
 
 // this override should be fine (even if it's a little odd)
 C.prototype.foo = function() {
 >C.prototype.foo = function() {} : () => void
+>                                : ^^^^^^^^^^
 >C.prototype.foo : () => void
+>                : ^^^^^^^^^^
 >C.prototype : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C
+>          : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 }
 
 class D extends B { }
 >D : D
+>  : ^
 >B : B
+>  : ^
 
 D.prototype.foo = () =>  {
 >D.prototype.foo = () =>  {    this.n = 'not checked, so no error'} : () => void
+>                                                                   : ^^^^^^^^^^
 >D.prototype.foo : () => void
+>                : ^^^^^^^^^^
 >D.prototype : D
+>            : ^
 >D : typeof D
+>  : ^^^^^^^^
 >prototype : D
+>          : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 >() =>  {    this.n = 'not checked, so no error'} : () => void
+>                                                 : ^^^^^^^^^^
 
     this.n = 'not checked, so no error'
 >this.n = 'not checked, so no error' : "not checked, so no error"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.n : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >n : any
+>  : ^^^
 >'not checked, so no error' : "not checked, so no error"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // post-class prototype assignments are trying to show that these properties are abstract
 class Module {
 >Module : Module
+>       : ^^^^^^
 }
 Module.prototype.identifier = undefined
 >Module.prototype.identifier = undefined : undefined
+>                                        : ^^^^^^^^^
 >Module.prototype.identifier : any
 >Module.prototype : Module
+>                 : ^^^^^^
 >Module : typeof Module
+>       : ^^^^^^^^^^^^^
 >prototype : Module
+>          : ^^^^^^
 >identifier : any
+>           : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 Module.prototype.size = null
 >Module.prototype.size = null : null
+>                             : ^^^^
 >Module.prototype.size : any
 >Module.prototype : Module
+>                 : ^^^^^^
 >Module : typeof Module
+>       : ^^^^^^^^^^^^^
 >prototype : Module
+>          : ^^^^^^
 >size : any
+>     : ^^^
 
 class NormalModule extends Module {
 >NormalModule : NormalModule
+>             : ^^^^^^^^^^^^
 >Module : Module
+>       : ^^^^^^
 
     identifier() {
 >identifier : () => string
+>           : ^^^^^^^^^^^^
 
         return 'normal'
 >'normal' : "normal"
+>         : ^^^^^^^^
     }
     size() {
 >size : () => number
+>     : ^^^^^^^^^^^^
 
         return 0
 >0 : 0
+>  : ^
     }
 }
 

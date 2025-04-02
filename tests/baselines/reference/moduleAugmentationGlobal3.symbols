@@ -1,8 +1,10 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal3.ts] ////
+
+=== f1.ts ===
 export class A {};
 >A : Symbol(A, Decl(f1.ts, 0, 0))
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 // change the shape of Array<T>
 import {A} from "./f1";
 >A : Symbol(A, Decl(f2.ts, 1, 8))
@@ -19,7 +21,7 @@ declare global {
     }
 }
 
-=== tests/cases/compiler/f3.ts ===
+=== f3.ts ===
 import "./f2";
 
 let x = [1];

@@ -1,38 +1,63 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithOptionalProperties.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithOptionalProperties.ts] ////
+
+=== subtypingWithOptionalProperties.ts ===
 // subtyping is not transitive due to optional properties but the subtyping algorithm assumes it is for the 99% case
 
 // returns { s?: number; }
 function f<T>(a: T) {
 >f : <T>(a: T) => { s?: number; }
+>  : ^ ^^ ^^ ^^^^^^^^^^^      ^^^
 >a : T
+>  : ^
 
     var b: { s?: number } = a;
 >b : { s?: number; }
+>  : ^^^^^^      ^^^
 >s : number
+>  : ^^^^^^
 >a : T
+>  : ^
 
     return b;
 >b : { s?: number; }
+>  : ^^^^^^      ^^^
 }
 
 var r = f({ s: new Object() }); // ok
 >r : { s?: number; }
+>  : ^^^^^^      ^^^
 >f({ s: new Object() }) : { s?: number; }
+>                       : ^^^^^^      ^^^
 >f : <T>(a: T) => { s?: number; }
+>  : ^ ^^ ^^ ^^^^^^^^^^^      ^^^
 >{ s: new Object() } : { s: Object; }
+>                    : ^^^^^^^^^^^^^^
 >s : Object
+>  : ^^^^^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 r.s && r.s.toFixed(); // would blow up at runtime
 >r.s && r.s.toFixed() : string
+>                     : ^^^^^^
 >r.s : number
+>    : ^^^^^^
 >r : { s?: number; }
+>  : ^^^^^^      ^^^
 >s : number
+>  : ^^^^^^
 >r.s.toFixed() : string
+>              : ^^^^^^
 >r.s.toFixed : (fractionDigits?: number) => string
+>            : ^              ^^^      ^^^^^      
 >r.s : number
+>    : ^^^^^^
 >r : { s?: number; }
+>  : ^^^^^^      ^^^
 >s : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 

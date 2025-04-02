@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts] ////
+
+=== equalityWithEnumTypes.ts ===
 // Literal enum type
 enum E1 {
 >E1 : Symbol(E1, Decl(equalityWithEnumTypes.ts, 0, 0))

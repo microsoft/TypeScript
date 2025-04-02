@@ -1,11 +1,16 @@
-error TS5101: Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+nonPrimitiveIndexingWithForInSupressError.ts(4,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
 
 
-!!! error TS5101: Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInSupressError.ts (0 errors) ====
+!!! error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+==== nonPrimitiveIndexingWithForInSupressError.ts (1 errors) ====
     var a: object;
     
     for (var key in a) {
         var value = a[key];
+                    ~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type '{}'.
     }
     

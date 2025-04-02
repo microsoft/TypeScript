@@ -1,13 +1,13 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "nodenext"
 ////   }
 //// }
 
-// @Filename: /utils.ts
+// @Filename: /home/src/workspaces/project/utils.ts
 //// export class Element {
 ////     // ...
 //// }
@@ -16,7 +16,7 @@
 ////     abstract render(): Element;
 //// }
 
-// @Filename: /classes.ts
+// @Filename: /home/src/workspaces/project/classes.ts
 //// import { Component } from "./utils.js";
 //// 
 //// export class MyComponent extends Component {
@@ -35,7 +35,8 @@ verify.completions({
     includes: [
         {
             name: "render",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
+            filterText: "render",
             isSnippet: true,
             insertText: "render(): Element {\r\n    $0\r\n}",
             hasAction: true,
@@ -44,7 +45,7 @@ verify.completions({
     ]
 });
 
-goTo.file("/utils.ts");
+goTo.file("/home/src/workspaces/project/utils.ts");
 goTo.marker("");
 edit.backspace();
 
@@ -59,7 +60,8 @@ verify.completions({
     includes: [
         {
             name: "render",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
+            filterText: "render",
             isSnippet: true,
             insertText: "render(): Element {\r\n    $0\r\n}",
             hasAction: true,

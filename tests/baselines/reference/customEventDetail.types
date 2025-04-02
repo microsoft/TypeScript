@@ -1,27 +1,46 @@
-=== tests/cases/compiler/customEventDetail.ts ===
+//// [tests/cases/compiler/customEventDetail.ts] ////
+
+=== customEventDetail.ts ===
 var x: CustomEvent;
 >x : CustomEvent<any>
+>  : ^^^^^^^^^^^^^^^^
 
 // valid since detail is any
 x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });
 >x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' }) : void
+>                                                                  : ^^^^
 >x.initCustomEvent : (type: string, bubbles?: boolean, cancelable?: boolean, detail?: any) => void
+>                  : ^    ^^      ^^       ^^^       ^^          ^^^       ^^      ^^^^^^^^^^^    
 >x : CustomEvent<any>
+>  : ^^^^^^^^^^^^^^^^
 >initCustomEvent : (type: string, bubbles?: boolean, cancelable?: boolean, detail?: any) => void
+>                : ^    ^^      ^^       ^^^       ^^          ^^^       ^^      ^^^^^^^^^^^    
 >'hello' : "hello"
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >{ id: 12, name: 'hello' } : { id: number; name: string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >12 : 12
+>   : ^^
 >name : string
+>     : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 
 var y = x.detail.name;
 >y : any
 >x.detail.name : any
 >x.detail : any
+>         : ^^^
 >x : CustomEvent<any>
+>  : ^^^^^^^^^^^^^^^^
 >detail : any
+>       : ^^^
 >name : any
+>     : ^^^
 

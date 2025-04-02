@@ -1,9 +1,17 @@
-=== tests/cases/conformance/es6/templates/templateStringInArray.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInArray.ts] ////
+
+=== templateStringInArray.ts ===
 var x = [1, 2, `abc${ 123 }def`];
 >x : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >[1, 2, `abc${ 123 }def`] : (string | number)[]
+>                         : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
->`abc${ 123 }def` : string
+>  : ^
+>`abc${ 123 }def` : "abc123def"
+>                 : ^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 

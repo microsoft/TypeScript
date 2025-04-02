@@ -1,37 +1,52 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock2.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock2.ts] ////
+
+=== classStaticBlock2.ts ===
 const a = 1;
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 
 const b = 2;
 >b : 2
+>  : ^
 >2 : 2
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     static {
         const a = 11;
 >a : 11
+>  : ^^
 >11 : 11
+>   : ^^
 
         a;
 >a : 11
+>  : ^^
 
         b;
 >b : 2
+>  : ^
     }
 
     static {
         const a = 11;
 >a : 11
+>  : ^^
 >11 : 11
+>   : ^^
 
         a;
 >a : 11
+>  : ^^
 
         b;
 >b : 2
+>  : ^
     }
 }
 

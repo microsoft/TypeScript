@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals2ES6.ts ===
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals2ES6.ts] ////
+
+=== arrayLiterals2ES6.ts ===
 // ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
 //      Elisionopt   SpreadElement
@@ -10,49 +12,83 @@
 
 var a0 = [, , 2, 3, 4]
 >a0 : number[]
+>   : ^^^^^^^^
 >[, , 2, 3, 4] : number[]
+>              : ^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 var a1 = ["hello", "world"]
 >a1 : string[]
+>   : ^^^^^^^^
 >["hello", "world"] : string[]
+>                   : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 
 var a2 = [, , , ...a0, "hello"];
 >a2 : (string | number)[]
+>   : ^^^^^^^^^^^^^^^^^^^
 >[, , , ...a0, "hello"] : (string | number)[]
+>                       : ^^^^^^^^^^^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >...a0 : number
+>      : ^^^^^^
 >a0 : number[]
+>   : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 var a3 = [, , ...a0]
 >a3 : number[]
+>   : ^^^^^^^^
 >[, , ...a0] : number[]
+>            : ^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >...a0 : number
+>      : ^^^^^^
 >a0 : number[]
+>   : ^^^^^^^^
 
 var a4 = [() => 1, ];
 >a4 : (() => number)[]
+>   : ^^^^^^^^^^^^^^^^
 >[() => 1, ] : (() => number)[]
+>            : ^^^^^^^^^^^^^^^^
 >() => 1 : () => number
+>        : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 var a5 = [...a0, , ]
 >a5 : number[]
+>   : ^^^^^^^^
 >[...a0, , ] : number[]
+>            : ^^^^^^^^
 >...a0 : number
+>      : ^^^^^^
 >a0 : number[]
+>   : ^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
@@ -65,20 +101,33 @@ var a5 = [...a0, , ]
 
 var b0: [any, any, any] = [undefined, null, undefined];
 >b0 : [any, any, any]
+>   : ^^^^^^^^^^^^^^^
 >[undefined, null, undefined] : [undefined, null, undefined]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >b1 : [number[], string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^
 >[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
+>                                 : ^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >["hello", "string"] : string[]
+>                    : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // The resulting type an array literal expression is determined as follows:
 //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
@@ -86,115 +135,194 @@ var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 
 var [c0, c1] = [1, 2];        // tuple type [number, number]
 >c0 : number
+>   : ^^^^^^
 >c1 : number
+>   : ^^^^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 var [c2, c3] = [1, 2, true];  // tuple type [number, number, boolean]
 >c2 : number
+>   : ^^^^^^
 >c3 : number
+>   : ^^^^^^
 >[1, 2, true] : [number, number, boolean]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >true : true
+>     : ^^^^
 
 // The resulting type an array literal expression is determined as follows:
 //      - the resulting type is an array type with an element type that is the union of the types of the
 //        non - spread element expressions and the numeric index signature types of the spread element expressions
 var temp = ["s", "t", "r"];
 >temp : string[]
+>     : ^^^^^^^^
 >["s", "t", "r"] : string[]
+>                : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 >"t" : "t"
+>    : ^^^
 >"r" : "r"
+>    : ^^^
 
 var temp1 = [1, 2, 3];
 >temp1 : number[]
+>      : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >temp2 : [number[], string[]]
+>      : ^^^^^^^^^^^^^^^^^^^^
 >[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
+>                                 : ^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >["hello", "string"] : string[]
+>                    : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 interface myArray extends Array<Number> { }
 interface myArray2 extends Array<Number|String> { }
 var d0 = [1, true, ...temp, ];  // has type (string|number|boolean)[]
 >d0 : (string | number | boolean)[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, true, ...temp, ] : (string | number | boolean)[]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 >...temp : string
+>        : ^^^^^^
 >temp : string[]
+>     : ^^^^^^^^
 
 var d1 = [...temp];            // has type string[]
 >d1 : string[]
+>   : ^^^^^^^^
 >[...temp] : string[]
+>          : ^^^^^^^^
 >...temp : string
+>        : ^^^^^^
 >temp : string[]
+>     : ^^^^^^^^
 
 var d2: number[] = [...temp1];
 >d2 : number[]
+>   : ^^^^^^^^
 >[...temp1] : number[]
+>           : ^^^^^^^^
 >...temp1 : number
+>         : ^^^^^^
 >temp1 : number[]
+>      : ^^^^^^^^
 
 var d3: myArray = [...temp1];
 >d3 : myArray
+>   : ^^^^^^^
 >[...temp1] : number[]
+>           : ^^^^^^^^
 >...temp1 : number
+>         : ^^^^^^
 >temp1 : number[]
+>      : ^^^^^^^^
 
 var d4: myArray2 = [...temp, ...temp1];
 >d4 : myArray2
+>   : ^^^^^^^^
 >[...temp, ...temp1] : (string | number)[]
+>                    : ^^^^^^^^^^^^^^^^^^^
 >...temp : string
+>        : ^^^^^^
 >temp : string[]
+>     : ^^^^^^^^
 >...temp1 : number
+>         : ^^^^^^
 >temp1 : number[]
+>      : ^^^^^^^^
 
 var d5 = [...a2];
 >d5 : (string | number)[]
+>   : ^^^^^^^^^^^^^^^^^^^
 >[...a2] : (string | number)[]
+>        : ^^^^^^^^^^^^^^^^^^^
 >...a2 : string | number
+>      : ^^^^^^^^^^^^^^^
 >a2 : (string | number)[]
+>   : ^^^^^^^^^^^^^^^^^^^
 
 var d6 = [...a3];
 >d6 : number[]
+>   : ^^^^^^^^
 >[...a3] : number[]
+>        : ^^^^^^^^
 >...a3 : number
+>      : ^^^^^^
 >a3 : number[]
+>   : ^^^^^^^^
 
 var d7 = [...a4];
 >d7 : (() => number)[]
+>   : ^^^^^^^^^^^^^^^^
 >[...a4] : (() => number)[]
+>        : ^^^^^^^^^^^^^^^^
 >...a4 : () => number
+>      : ^^^^^^^^^^^^
 >a4 : (() => number)[]
+>   : ^^^^^^^^^^^^^^^^
 
 var d8: number[][] = [[...temp1]]
 >d8 : number[][]
+>   : ^^^^^^^^^^
 >[[...temp1]] : number[][]
+>             : ^^^^^^^^^^
 >[...temp1] : number[]
+>           : ^^^^^^^^
 >...temp1 : number
+>         : ^^^^^^
 >temp1 : number[]
+>      : ^^^^^^^^
 
 var d9 = [[...temp1], ...["hello"]];
 >d9 : (string | number[])[]
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >[[...temp1], ...["hello"]] : (string | number[])[]
+>                           : ^^^^^^^^^^^^^^^^^^^^^
 >[...temp1] : number[]
+>           : ^^^^^^^^
 >...temp1 : number
+>         : ^^^^^^
 >temp1 : number[]
+>      : ^^^^^^^^
 >...["hello"] : string
+>             : ^^^^^^
 >["hello"] : string[]
+>          : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

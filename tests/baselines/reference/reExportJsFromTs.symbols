@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/reExportJsFromTs.ts] ////
+
 === /lib/constants.js ===
 module.exports = {
 >module.exports : Symbol(module.exports, Decl(constants.js, 0, 0))

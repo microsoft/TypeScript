@@ -1,24 +1,39 @@
-=== tests/cases/compiler/isArray.ts ===
+//// [tests/cases/compiler/isArray.ts] ////
+
+=== isArray.ts ===
 var maybeArray: number | number[];
 >maybeArray : number | number[]
+>           : ^^^^^^^^^^^^^^^^^
 
 
 if (Array.isArray(maybeArray)) {
 >Array.isArray(maybeArray) : boolean
+>                          : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >maybeArray : number | number[]
+>           : ^^^^^^^^^^^^^^^^^
 
     maybeArray.length; // OK
 >maybeArray.length : number
+>                  : ^^^^^^
 >maybeArray : number[]
+>           : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 }
 else {
     maybeArray.toFixed(); // OK
 >maybeArray.toFixed() : string
+>                     : ^^^^^^
 >maybeArray.toFixed : (fractionDigits?: number) => string
+>                   : ^              ^^^      ^^^^^      
 >maybeArray : number
+>           : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 }

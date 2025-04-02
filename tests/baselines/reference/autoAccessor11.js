@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor11.ts] ////
+
 //// [autoAccessor11.ts]
 class C {
     accessor

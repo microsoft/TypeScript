@@ -1,156 +1,247 @@
-=== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts ===
+//// [tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts] ////
+
+=== modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts ===
 // All will be error from using ES6 features but only include ES5 library
 // Using Es6 array
 function f(x: number, y: number, z: number) {
 >f : (x: number, y: number, z: number) => any
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 
     return Array.from(arguments);
 >Array.from(arguments) : any
+>                      : ^^^
 >Array.from : any
+>           : ^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >from : any
+>     : ^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 f(1, 2, 3);  // no error
 >f(1, 2, 3) : any
+>           : ^^^
 >f : (x: number, y: number, z: number) => any
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 // Using ES6 collection
 var m = new Map<string, number>();
 >m : any
+>  : ^^^
 >new Map<string, number>() : any
+>                          : ^^^
 >Map : any
+>    : ^^^
 
 m.clear();
 >m.clear() : any
+>          : ^^^
 >m.clear : any
+>        : ^^^
 >m : any
+>  : ^^^
 >clear : any
+>      : ^^^
 
 // Using ES6 iterable
 m.keys();
 >m.keys() : any
+>         : ^^^
 >m.keys : any
+>       : ^^^
 >m : any
+>  : ^^^
 >keys : any
+>     : ^^^
 
 // Using ES6 function
 function Baz() { }
 >Baz : () => void
+>    : ^^^^^^^^^^
 
 Baz.name;
 >Baz.name : any
+>         : ^^^
 >Baz : () => void
+>    : ^^^^^^^^^^
 >name : any
+>     : ^^^
 
 // Using ES6 math
 Math.sign(1);
 >Math.sign(1) : any
+>             : ^^^
 >Math.sign : any
+>          : ^^^
 >Math : Math
+>     : ^^^^
 >sign : any
+>     : ^^^
 >1 : 1
+>  : ^
 
 // Using ES6 object
 var o = {
 >o : { [x: number]: (value: any) => boolean; a: number; }
+>  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; a: number; }
+>                                                                            : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: 2,
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
+>                     : ^     ^^   ^^^^^^^^^^^^
 >Symbol.hasInstance : any
+>                   : ^^^
 >Symbol : any
+>       : ^^^
 >hasInstance : any
+>            : ^^^
 >value : any
+>      : ^^^
 
         return false;
 >false : false
+>      : ^^^^^
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
+>                                     : ^^^^^^^
 >o.hasOwnProperty : (v: PropertyKey) => boolean
+>                 : ^ ^^           ^^^^^       
 >o : { [x: number]: (value: any) => boolean; a: number; }
+>  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
+>               : ^ ^^           ^^^^^       
 >Symbol.hasInstance : any
+>                   : ^^^
 >Symbol : any
+>       : ^^^
 >hasInstance : any
+>            : ^^^
 
 // Using Es6 proxy
 var t = {}
 >t : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 var p = new Proxy(t, {});
 >p : any
+>  : ^^^
 >new Proxy(t, {}) : any
+>                 : ^^^
 >Proxy : any
+>      : ^^^
 >t : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 // Using ES6 reflect
 Reflect.isExtensible({});
 >Reflect.isExtensible({}) : any
+>                         : ^^^
 >Reflect.isExtensible : any
+>                     : ^^^
 >Reflect : any
+>        : ^^^
 >isExtensible : any
+>             : ^^^
 >{} : {}
+>   : ^^
 
 // Using Es6 regexp
 var reg = new RegExp("/s");
 >reg : RegExp
+>    : ^^^^^^
 >new RegExp("/s") : RegExp
+>                 : ^^^^^^
 >RegExp : RegExpConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"/s" : "/s"
+>     : ^^^^
 
 reg.flags;
 >reg.flags : any
+>          : ^^^
 >reg : RegExp
+>    : ^^^^^^
 >flags : any
+>      : ^^^
 
 // Using ES6 string
 var str = "Hello world";
 >str : string
+>    : ^^^^^^
 >"Hello world" : "Hello world"
+>              : ^^^^^^^^^^^^^
 
 str.includes("hello", 0);
 >str.includes("hello", 0) : any
+>                         : ^^^
 >str.includes : any
+>             : ^^^
 >str : string
+>    : ^^^^^^
 >includes : any
+>         : ^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >0 : 0
+>  : ^
 
 // Using ES6 symbol
 var s = Symbol();
 >s : any
+>  : ^^^
 >Symbol() : any
+>         : ^^^
 >Symbol : any
+>       : ^^^
 
 // Using ES6 wellknown-symbol
 const o1 = {
 >o1 : { [x: number]: (value: any) => boolean; }
+>   : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^
 >{    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; }
+>                                                                   : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
+>                     : ^     ^^   ^^^^^^^^^^^^
 >Symbol.hasInstance : any
+>                   : ^^^
 >Symbol : any
+>       : ^^^
 >hasInstance : any
+>            : ^^^
 >value : any
+>      : ^^^
 
         return false;
 >false : false
+>      : ^^^^^
     }
 }

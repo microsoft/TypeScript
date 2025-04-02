@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts] ////
+
+=== weakTypesAndLiterals01.ts ===
 type WeakTypes =
 >WeakTypes : Symbol(WeakTypes, Decl(weakTypesAndLiterals01.ts, 0, 0))
 

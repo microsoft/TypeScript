@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceAssignmentCompat.ts ===
+//// [tests/cases/compiler/interfaceAssignmentCompat.ts] ////
+
+=== interfaceAssignmentCompat.ts ===
 module M {
 >M : Symbol(M, Decl(interfaceAssignmentCompat.ts, 0, 0))
 

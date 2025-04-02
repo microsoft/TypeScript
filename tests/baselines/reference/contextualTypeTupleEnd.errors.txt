@@ -1,12 +1,12 @@
-tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
+contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
   Source has 0 element(s) but target requires 1.
-tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts(13,7): error TS2322: Type '[]' is not assignable to type 'Funcs'.
+contextualTypeTupleEnd.ts(13,7): error TS2322: Type '[]' is not assignable to type 'Funcs'.
   Source has 0 element(s) but target requires 1.
-tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts(43,12): error TS2339: Property 'foo' does not exist on type 'number'.
-tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts(44,12): error TS2339: Property 'bar' does not exist on type 'number'.
+contextualTypeTupleEnd.ts(43,12): error TS2339: Property 'foo' does not exist on type 'number'.
+contextualTypeTupleEnd.ts(44,12): error TS2339: Property 'bar' does not exist on type 'number'.
 
 
-==== tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts (4 errors) ====
+==== contextualTypeTupleEnd.ts (4 errors) ====
     type Funcs = [...((arg: number) => void)[], (arg: string) => void];
     
     declare function num(x: number): void;

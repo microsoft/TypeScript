@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans7.ts] ////
+
+=== file2.ts ===
 /// <reference path="./file1" />
 
 declare module "someMod" {
@@ -37,7 +39,7 @@ declare module "someMod" {
 }
 export {};
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 declare module "someMod" {
 >"someMod" : Symbol("someMod", Decl(file1.ts, 0, 0), Decl(file2.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataOnInferredType.ts] ////
+
 //// [decoratorMetadataOnInferredType.ts]
 declare var console: {
     log(msg: string): void;
@@ -28,7 +30,7 @@ var A = /** @class */ (function () {
 }());
 function decorator(target, propertyKey) {
 }
-var B = exports.B = /** @class */ (function () {
+var B = /** @class */ (function () {
     function B() {
         this.x = new A();
     }
@@ -38,3 +40,4 @@ var B = exports.B = /** @class */ (function () {
     ], B.prototype, "x", void 0);
     return B;
 }());
+exports.B = B;

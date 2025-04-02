@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/methods/esDecorators-classDeclaration-methods-nonStatic.ts] ////
+
 //// [esDecorators-classDeclaration-methods-nonStatic.ts]
 declare let dec: any;
 
@@ -11,7 +13,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-methods-nonStatic.js]
-var _this = this;
 var method3 = "method3";
 var C = function () {
     var _a;
@@ -30,9 +31,11 @@ var C = function () {
             return C;
         }()),
         (function () {
-            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: function (obj) { return "method1" in obj; }, get: function (obj) { return obj.method1; } } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { has: function (obj) { return "method2" in obj; }, get: function (obj) { return obj["method2"]; } } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; } } }, null, _instanceExtraInitializers);
+            var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: function (obj) { return "method1" in obj; }, get: function (obj) { return obj.method1; } }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { has: function (obj) { return "method2" in obj; }, get: function (obj) { return obj["method2"]; } }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; } }, metadata: _metadata }, null, _instanceExtraInitializers);
+            if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         })(),
         _a;
 }();

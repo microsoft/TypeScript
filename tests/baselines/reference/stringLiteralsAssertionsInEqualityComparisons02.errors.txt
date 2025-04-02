@@ -1,9 +1,9 @@
-tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons02.ts(3,9): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"baz"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons02.ts(5,9): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons02.ts(5,19): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+stringLiteralsAssertionsInEqualityComparisons02.ts(3,9): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"baz"' have no overlap.
+stringLiteralsAssertionsInEqualityComparisons02.ts(5,9): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+stringLiteralsAssertionsInEqualityComparisons02.ts(5,19): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
-==== tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons02.ts (3 errors) ====
+==== stringLiteralsAssertionsInEqualityComparisons02.ts (3 errors) ====
     type EnhancedString = string & { enhancements: any };
     
     var a = "foo" === "bar" as "baz";

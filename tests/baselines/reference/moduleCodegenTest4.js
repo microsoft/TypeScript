@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleCodegenTest4.ts] ////
+
 //// [moduleCodegenTest4.ts]
 export module Baz { export var x = "hello"; }
 
@@ -11,6 +13,6 @@ exports.Baz = void 0;
 var Baz;
 (function (Baz) {
     Baz.x = "hello";
-})(Baz = exports.Baz || (exports.Baz = {}));
+})(Baz || (exports.Baz = Baz = {}));
 Baz.x = "goodbye";
 void 0;

@@ -1,7 +1,7 @@
-tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts(8,39): error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
+emitCapturingThisInTupleDestructuring2.ts(8,39): error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
 
 
-==== tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts (1 errors) ====
+==== emitCapturingThisInTupleDestructuring2.ts (1 errors) ====
     var array1: [number, number] = [1, 2];
     
     class B {

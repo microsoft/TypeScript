@@ -1,8 +1,12 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesOut.ts] ////
+
+=== file1.ts ===
 export var x;
 >x : any
+>  : ^^^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 var y;
 >y : any
+>  : ^^^
 

@@ -1,12 +1,21 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/commonFile1.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile1.ts]
 let x = 1
 
-//// [/a/b/commonFile2.ts]
+//// [/user/username/workspace/solution/projects/project/commonFile2.ts]
 let y = 1
 
-//// [/a/lib/lib.d.ts]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+                        "compilerOptions": {
+                            "module": "none",
+                            "allowAnything": true
+                        },
+                        "someOtherProperty": {}
+                    }
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -18,70 +27,80 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a/b/tsconfig.json]
-{
-                        "compilerOptions": {
-                            "module": "none",
-                            "allowAnything": true
-                        },
-                        "someOtherProperty": {}
-                    }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:17 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96ma/b/tsconfig.json[0m:[93m4[0m:[93m29[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'allowAnything'.
+[96mtsconfig.json[0m:[93m4[0m:[93m29[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'allowAnything'.
 
 [7m4[0m                             "allowAnything": true
 [7m [0m [91m                            ~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"module":0,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (used version)
-/a/b/commonfile2.ts (used version)
-
-FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
-/a/b/commonfile1.ts: *new*
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
+//// [/user/username/workspace/solution/projects/project/commonFile1.js]
 var x = 1;
 
 
-//// [/a/b/commonFile2.js]
+//// [/user/username/workspace/solution/projects/project/commonFile2.js]
 var y = 1;
 
 
+
+PolledWatches::
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/commonFile1.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/commonFile2.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/workspace/solution/projects/project: *new*
+  {}
+
+Program root files: [
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile2.ts"
+]
+Program options: {
+  "module": 0,
+  "watch": true,
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/workspace/solution/projects/project/commonfile1.ts (used version)
+/user/username/workspace/solution/projects/project/commonfile2.ts (used version)
+
+exitCode:: ExitStatus.undefined

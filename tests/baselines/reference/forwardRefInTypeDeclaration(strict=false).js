@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forwardRefInTypeDeclaration.ts] ////
+
 //// [forwardRefInTypeDeclaration.ts]
 // forward ref ignored in a typeof
 declare let s: typeof s1;

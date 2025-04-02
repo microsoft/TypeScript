@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/38572.js ===
+//// [tests/cases/conformance/jsdoc/paramTagTypeResolution2.ts] ////
+
+=== 38572.js ===
 /**
  * @template T
  * @param {T} a
@@ -6,21 +8,36 @@
  */
 function f(a, b) {
 >f : <T>(a: T, b: { [K in keyof T]: (value: T[K]) => void; }) => void
+>  : ^ ^^ ^^ ^^ ^^                                          ^^^^^^^^^
 >a : T
+>  : ^
 >b : { [K in keyof T]: (value: T[K]) => void; }
+>  : ^^^ ^^^^^^^^^^^^^^^     ^^    ^^^^^    ^^^
 }
 
 f({ x: 42 }, { x(param) { param.toFixed() } });
 >f({ x: 42 }, { x(param) { param.toFixed() } }) : void
+>                                               : ^^^^
 >f : <T>(a: T, b: { [K in keyof T]: (value: T[K]) => void; }) => void
+>  : ^ ^^ ^^ ^^ ^^                                          ^^^^^^^^^
 >{ x: 42 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >{ x(param) { param.toFixed() } } : { x(param: number): void; }
+>                                 : ^^^^     ^^^^^^^^^^^^^^^^^^
 >x : (param: number) => void
+>  : ^     ^^^^^^^^^^^^^^^^^
 >param : number
+>      : ^^^^^^
 >param.toFixed() : string
+>                : ^^^^^^
 >param.toFixed : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >param : number
+>      : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 

@@ -1,70 +1,104 @@
-=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals2.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInObjectLiterals2.ts] ////
+
+=== thisTypeInObjectLiterals2.ts ===
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.
 
 let obj1 = {
 >obj1 : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: 1,    f() {        return this.a;    },    b: "hello",    c: {        g() {            this.g();        }    },    get d() {        return this.a;    },    get e() {        return this.b;    },    set e(value) {        this.b = value;    }} : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
         return this.a;
 >this.a : number
+>       : ^^^^^^
 >this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     },
     b: "hello",
 >b : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     c: {
 >c : { g(): void; }
+>  : ^^^^^^^^^^^^^^
 >{        g() {            this.g();        }    } : { g(): void; }
+>                                                  : ^^^^^^^^^^^^^^
 
         g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
             this.g();
 >this.g() : void
+>         : ^^^^
 >this.g : () => void
+>       : ^^^^^^^^^^
 >this : { g(): void; }
+>     : ^^^^^^^^^^^^^^
 >g : () => void
+>  : ^^^^^^^^^^
         }
     },
     get d() {
 >d : number
+>  : ^^^^^^
 
         return this.a;
 >this.a : number
+>       : ^^^^^^
 >this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     },
     get e() {
 >e : string
+>  : ^^^^^^
 
         return this.b;
 >this.b : string
+>       : ^^^^^^
 >this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
     },
     set e(value) {
 >e : string
+>  : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         this.b = value;
 >this.b = value : string
+>               : ^^^^^^
 >this.b : string
+>       : ^^^^^^
 >this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 };
 
@@ -72,324 +106,518 @@ let obj1 = {
 // contextual type.
 
 type Point = {
->Point : { x: number; y: number; z?: number | undefined; moveBy(dx: number, dy: number, dz?: number): void; }
+>Point : Point
+>      : ^^^^^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     z?: number;
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     moveBy(dx: number, dy: number, dz?: number): void;
 >moveBy : (dx: number, dy: number, dz?: number) => void
+>       : ^  ^^      ^^  ^^      ^^  ^^^      ^^^^^    
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 }
 
 let p1: Point = {
 >p1 : Point
+>   : ^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     y: 20,
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
         this.x += dx;
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
         this.y += dy;
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         if (this.z && dz) {
 >this.z && dz : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >this.z : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
             this.z += dz;
 >this.z += dz : number
+>             : ^^^^^^
 >this.z : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number
+>  : ^^^^^^
 >dz : number
+>   : ^^^^^^
         }
     }
 };
 
 let p2: Point | null = {
 >p2 : Point | null
+>   : ^^^^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     y: 20,
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
         this.x += dx;
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
         this.y += dy;
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         if (this.z && dz) {
 >this.z && dz : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >this.z : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
             this.z += dz;
 >this.z += dz : number
+>             : ^^^^^^
 >this.z : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number
+>  : ^^^^^^
 >dz : number
+>   : ^^^^^^
         }
     }
 };
 
 let p3: Point | undefined = {
 >p3 : Point | undefined
+>   : ^^^^^^^^^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     y: 20,
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
         this.x += dx;
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
         this.y += dy;
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         if (this.z && dz) {
 >this.z && dz : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >this.z : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
             this.z += dz;
 >this.z += dz : number
+>             : ^^^^^^
 >this.z : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number
+>  : ^^^^^^
 >dz : number
+>   : ^^^^^^
         }
     }
 };
 
 let p4: Point | null | undefined = {
 >p4 : Point | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     y: 20,
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
         this.x += dx;
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
         this.y += dy;
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         if (this.z && dz) {
 >this.z && dz : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >this.z : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
             this.z += dz;
 >this.z += dz : number
+>             : ^^^^^^
 >this.z : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number
+>  : ^^^^^^
 >dz : number
+>   : ^^^^^^
         }
     }
 };
 
 declare function f1(p: Point): void;
 >f1 : (p: Point) => void
+>   : ^ ^^     ^^^^^    
 >p : Point
+>  : ^^^^^
 
 f1({
 >f1({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
+>                                                                                                                                                               : ^^^^
 >f1 : (p: Point) => void
+>   : ^ ^^     ^^^^^    
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     y: 20,
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
         this.x += dx;
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
         this.y += dy;
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         if (this.z && dz) {
 >this.z && dz : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >this.z : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
             this.z += dz;
 >this.z += dz : number
+>             : ^^^^^^
 >this.z : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number
+>  : ^^^^^^
 >dz : number
+>   : ^^^^^^
         }
     }
 });
 
 declare function f2(p: Point | null | undefined): void;
 >f2 : (p: Point | null | undefined) => void
+>   : ^ ^^                        ^^^^^    
 >p : Point | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 f2({
 >f2({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
+>                                                                                                                                                               : ^^^^
 >f2 : (p: Point | null | undefined) => void
+>   : ^ ^^                        ^^^^^    
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     y: 20,
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
         this.x += dx;
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
         this.y += dy;
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         if (this.z && dz) {
 >this.z && dz : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >this.z : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >dz : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
             this.z += dz;
 >this.z += dz : number
+>             : ^^^^^^
 >this.z : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >z : number
+>  : ^^^^^^
 >dz : number
+>   : ^^^^^^
         }
     }
 });
@@ -399,54 +627,84 @@ f2({
 
 type ObjectDescriptor<D, M> = {
 >ObjectDescriptor : ObjectDescriptor<D, M>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 
     data?: D;
 >data : D | undefined
+>     : ^^^^^^^^^^^^^
 
     methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
 >methods : (M & ThisType<D & M>) | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
+>           : ^ ^^ ^^    ^^                      ^^^^^     
 >desc : ObjectDescriptor<D, M>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
 let x1 = makeObject({
 >x1 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
+>           : ^ ^^ ^^    ^^                      ^^^^^     
 >{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
+>                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^^^^
 
     data: { x: 0, y: 0 },
 >data : { x: number; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     methods: {
 >methods : { moveBy(dx: number, dy: number): void; }
+>        : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
+>                                                                                                                                                          : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 
         moveBy(dx: number, dy: number) {
 >moveBy : (dx: number, dy: number) => void
+>       : ^  ^^      ^^  ^^      ^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
             this.x += dx;  // Strongly typed this
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
             this.y += dy;  // Strongly typed this
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
         }
     }
 });
@@ -456,54 +714,84 @@ let x1 = makeObject({
 
 type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 >ObjectDescriptor2 : ObjectDescriptor2<D, M>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     data?: D;
 >data : D | undefined
+>     : ^^^^^^^^^^^^^
 
     methods?: M;
 >methods : M | undefined
+>        : ^^^^^^^^^^^^^
 }
 
 declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
+>            : ^ ^^ ^^    ^^                      ^^^^^     
 >desc : ObjectDescriptor<D, M>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
 let x2 = makeObject2({
 >x2 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject2({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
+>            : ^ ^^ ^^    ^^                      ^^^^^     
 >{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
+>                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^^^^
 
     data: { x: 0, y: 0 },
 >data : { x: number; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     methods: {
 >methods : { moveBy(dx: number, dy: number): void; }
+>        : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
+>                                                                                                                                                          : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 
         moveBy(dx: number, dy: number) {
 >moveBy : (dx: number, dy: number) => void
+>       : ^  ^^      ^^  ^^      ^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
             this.x += dx;  // Strongly typed this
 >this.x += dx : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >dx : number
+>   : ^^^^^^
 
             this.y += dy;  // Strongly typed this
 >this.y += dy : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >dy : number
+>   : ^^^^^^
         }
     }
 });
@@ -512,254 +800,394 @@ let x2 = makeObject2({
 
 type PropDesc<T> = {
 >PropDesc : PropDesc<T>
+>         : ^^^^^^^^^^^
 
     value?: T;
 >value : T | undefined
+>      : ^^^^^^^^^^^^^
 
     get?(): T;
 >get : (() => T) | undefined
+>    : ^^^^^^^ ^^^^^^^^^^^^^
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
+>    : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
+>      : ^
 }
 
 type PropDescMap<T> = {
 >PropDescMap : PropDescMap<T>
+>            : ^^^^^^^^^^^^^^
 
     [K in keyof T]: PropDesc<T[K]>;
 }
 
 declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
+>           : ^ ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^                
 >obj : T
+>    : ^
 >name : K
+>     : ^
 >desc : PropDesc<U> & ThisType<T>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
+>            : ^ ^^ ^^   ^^ ^^     ^^                            ^^^^^     
 >obj : T
+>    : ^
 >descs : PropDescMap<U> & ThisType<T>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let p10 = defineProp(p1, "foo", { value: 42 });
 >p10 : Point & Record<"foo", number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp(p1, "foo", { value: 42 }) : Point & Record<"foo", number>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
+>           : ^ ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^                
 >p1 : Point
+>   : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ value: 42 } : { value: number; }
+>              : ^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >42 : 42
+>   : ^^
 
 p10.foo = p10.foo + 1;
 >p10.foo = p10.foo + 1 : number
+>                      : ^^^^^^
 >p10.foo : number
+>        : ^^^^^^
 >p10 : Point & Record<"foo", number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >p10.foo + 1 : number
+>            : ^^^^^^
 >p10.foo : number
+>        : ^^^^^^
 >p10 : Point & Record<"foo", number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 let p11 = defineProp(p1, "bar", {
 >p11 : Point & Record<"bar", number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp(p1, "bar", {    get() {        return this.x;    },    set(value: number) {        this.x = value;    }}) : Point & Record<"bar", number>
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
+>           : ^ ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^                
 >p1 : Point
+>   : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 >{    get() {        return this.x;    },    set(value: number) {        this.x = value;    }} : { get(): number; set(value: number): void; }
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 
     get() {
 >get : () => number
+>    : ^^^^^^^^^^^^
 
         return this.x;
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 
     },
     set(value: number) {
 >set : (value: number) => void
+>    : ^     ^^      ^^^^^^^^^
 >value : number
+>      : ^^^^^^
 
         this.x = value;
 >this.x = value : number
+>               : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
     }
 });
 p11.bar = p11.bar + 1;
 >p11.bar = p11.bar + 1 : number
+>                      : ^^^^^^
 >p11.bar : number
+>        : ^^^^^^
 >p11 : Point & Record<"bar", number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >p11.bar + 1 : number
+>            : ^^^^^^
 >p11.bar : number
+>        : ^^^^^^
 >p11 : Point & Record<"bar", number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 let p12 = defineProps(p1, {
 >p12 : Point & { foo: number; bar: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProps(p1, {    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }}) : Point & { foo: number; bar: number; }
+>                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
+>            : ^ ^^ ^^   ^^ ^^     ^^                            ^^^^^     
 >p1 : Point
+>   : ^^^^^
 >{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get(): number; set(value: number): void; }; }
+>                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^     ^^      ^^^^^^^^^^^^^
 
     foo: {
 >foo : { value: number; }
+>    : ^^^^^^^^^^^^^^^^^^
 >{        value: 42    } : { value: number; }
+>                        : ^^^^^^^^^^^^^^^^^^
 
         value: 42
 >value : number
+>      : ^^^^^^
 >42 : 42
+>   : ^^
 
     },
     bar: {
 >bar : { get(): number; set(value: number): void; }
+>    : ^^^^^^^^^      ^^^^^^     ^^      ^^^^^^^^^^
 >{        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    } : { get(): number; set(value: number): void; }
+>                                                                                                                                  : ^^^^^^^^^      ^^^^^^     ^^      ^^^^^^^^^^
 
         get(): number {
 >get : () => number
+>    : ^^^^^^      
 
             return this.x;
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 
         },
         set(value: number) {
 >set : (value: number) => void
+>    : ^     ^^      ^^^^^^^^^
 >value : number
+>      : ^^^^^^
 
             this.x = value;
 >this.x = value : number
+>               : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : Point
+>     : ^^^^^
 >x : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
         }
     }
 });
 p12.foo = p12.foo + 1;
 >p12.foo = p12.foo + 1 : number
+>                      : ^^^^^^
 >p12.foo : number
+>        : ^^^^^^
 >p12 : Point & { foo: number; bar: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >p12.foo + 1 : number
+>            : ^^^^^^
 >p12.foo : number
+>        : ^^^^^^
 >p12 : Point & { foo: number; bar: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 p12.bar = p12.bar + 1;
 >p12.bar = p12.bar + 1 : number
+>                      : ^^^^^^
 >p12.bar : number
+>        : ^^^^^^
 >p12 : Point & { foo: number; bar: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >p12.bar + 1 : number
+>            : ^^^^^^
 >p12.bar : number
+>        : ^^^^^^
 >p12 : Point & { foo: number; bar: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 // Proof of concept for typing of Vue.js
 
 type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
 >Accessors : Accessors<T>
+>          : ^^^^^^^^^^^^
 
 type Dictionary<T> = { [x: string]: T }
 >Dictionary : Dictionary<T>
+>           : ^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 type Computed<T> = {
 >Computed : Computed<T>
+>         : ^^^^^^^^^^^
 
     get?(): T;
 >get : (() => T) | undefined
+>    : ^^^^^^^ ^^^^^^^^^^^^^
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
+>    : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
+>      : ^
 }
 
 type VueOptions<D, M, P> = ThisType<D & M & P> & {
 >VueOptions : VueOptions<D, M, P>
+>           : ^^^^^^^^^^^^^^^^^^^
 
     data?: D | (() => D);
 >data : D | (() => D) | undefined
+>     : ^^^^^^^^^^^ ^^^^^^^^^^^^^
 
     methods?: M;
 >methods : M | undefined
+>        : ^^^^^^^^^^^^^
 
     computed?: Accessors<P>;
 >computed : Accessors<P> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
+>    : ^^^^^ ^^ ^^ ^^       ^^                   ^^^^^         
 >options : VueOptions<D, M, P>
+>        : ^^^^^^^^^^^^^^^^^^^
 
 let vue = new Vue({
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
+>    : ^^^^^ ^^ ^^ ^^       ^^                   ^^^^^         
 >{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f(x: string): number; }; computed: { test(): number; hello: { get(): string; set(value: string): void; }; }; }
+>                                                                                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^
 
     data: () => ({ x: 1, y: 2 }),
 >data : () => { x: number; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({ x: 1, y: 2 }) : () => { x: number; y: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ x: 1, y: 2 }) : { x: number; y: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     methods: {
 >methods : { f(x: string): number; }
+>        : ^^^^ ^^      ^^^^^^^^^^^^
 >{        f(x: string) {            return this.x;        }    } : { f(x: string): number; }
+>                                                                : ^^^^ ^^      ^^^^^^^^^^^^
 
         f(x: string) {
 >f : (x: string) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
             return this.x;
 >this.x : number
+>       : ^^^^^^
 >this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
         }
     },
     computed: {
 >computed : { test(): number; hello: { get(): string; set(value: string): void; }; }
+>         : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^
 >{        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    } : { test(): number; hello: { get(): string; set(value: string): void; }; }
+>                                                                                                                                                                                                      : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^
 
         test(): number {
 >test : () => number
+>     : ^^^^^^      
 
             return this.x;
 >this.x : number
+>       : ^^^^^^
 >this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         },
         hello: {
 >hello : { get(): string; set(value: string): void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 >{            get() {                return "hi";            },            set(value: string) {            }        } : { get(): string; set(value: string): void; }
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 
             get() {
 >get : () => string
+>    : ^^^^^^^^^^^^
 
                 return "hi";
 >"hi" : "hi"
+>     : ^^^^
 
             },
             set(value: string) {
 >set : (value: string) => void
+>    : ^     ^^      ^^^^^^^^^
 >value : string
+>      : ^^^^^^
             }
         }
     }
@@ -767,26 +1195,41 @@ let vue = new Vue({
 
 vue;
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 vue.x;
 >vue.x : number
+>      : ^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 vue.f("abc");
 >vue.f("abc") : number
+>             : ^^^^^^
 >vue.f : (x: string) => number
+>      : ^ ^^      ^^^^^^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: string) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 vue.test;
 >vue.test : number
+>         : ^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : number
+>     : ^^^^^^
 
 vue.hello;
 >vue.hello : string
+>          : ^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hello : string
+>      : ^^^^^^
 

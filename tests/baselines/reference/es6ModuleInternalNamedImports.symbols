@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ModuleInternalNamedImports.ts ===
+//// [tests/cases/compiler/es6ModuleInternalNamedImports.ts] ////
+
+=== es6ModuleInternalNamedImports.ts ===
 export module M {
 >M : Symbol(M, Decl(es6ModuleInternalNamedImports.ts, 0, 0))
 

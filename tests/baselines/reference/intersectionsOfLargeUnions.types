@@ -1,77 +1,124 @@
-=== tests/cases/compiler/intersectionsOfLargeUnions.ts ===
+//// [tests/cases/compiler/intersectionsOfLargeUnions.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 1,000
+Type Count: 2,500
+
+=== intersectionsOfLargeUnions.ts ===
 // Repro from #23977
 
 export function assertIsElement(node: Node | null): node is Element {
 >assertIsElement : (node: Node | null) => node is Element
+>                : ^    ^^           ^^^^^               
 >node : Node | null
+>     : ^^^^^^^^^^^
 
     let nodeType = node === null ? null : node.nodeType;
 >nodeType : number | null
+>         : ^^^^^^^^^^^^^
 >node === null ? null : node.nodeType : number | null
+>                                     : ^^^^^^^^^^^^^
 >node === null : boolean
+>              : ^^^^^^^
 >node : Node | null
+>     : ^^^^^^^^^^^
 >node.nodeType : number
+>              : ^^^^^^
 >node : Node
+>     : ^^^^
 >nodeType : number
+>         : ^^^^^^
 
     return nodeType === 1;
 >nodeType === 1 : boolean
+>               : ^^^^^^^
 >nodeType : number | null
+>         : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
   
 export function assertNodeTagName<
->assertNodeTagName : <T extends "symbol" | "animate" | "animateMotion" | "animateTransform" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feDropShadow" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "mpath" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "set" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view" | keyof HTMLElementTagNameMap, U extends ElementTagNameMap[T]>(node: Node | null, tagName: T) => node is U
+>assertNodeTagName : <T extends keyof ElementTagNameMap, U extends ElementTagNameMap[T]>(node: Node | null, tagName: T) => node is U
+>                  : ^ ^^^^^^^^^                       ^^ ^^^^^^^^^                    ^^    ^^           ^^       ^^ ^^^^^         
 
     T extends keyof ElementTagNameMap,
     U extends ElementTagNameMap[T]>(node: Node | null, tagName: T): node is U {
 >node : Node | null
+>     : ^^^^^^^^^^^
 >tagName : T
+>        : ^
 
     if (assertIsElement(node)) {
 >assertIsElement(node) : boolean
+>                      : ^^^^^^^
 >assertIsElement : (node: Node | null) => node is Element
+>                : ^    ^^           ^^^^^               
 >node : Node | null
+>     : ^^^^^^^^^^^
 
         const nodeTagName = node.tagName.toLowerCase();
 >nodeTagName : string
+>            : ^^^^^^
 >node.tagName.toLowerCase() : string
+>                           : ^^^^^^
 >node.tagName.toLowerCase : () => string
+>                         : ^^^^^^      
 >node.tagName : string
+>             : ^^^^^^
 >node : Element
+>     : ^^^^^^^
 >tagName : string
+>        : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
          return nodeTagName === tagName;
 >nodeTagName === tagName : boolean
+>                        : ^^^^^^^
 >nodeTagName : string
+>            : ^^^^^^
 >tagName : T
+>        : ^
     }
     return false;
 >false : false
+>      : ^^^^^
 }
   
 export function assertNodeProperty<
->assertNodeProperty : <T extends "symbol" | "animate" | "animateMotion" | "animateTransform" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feDropShadow" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "mpath" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "set" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view" | keyof HTMLElementTagNameMap, P extends keyof ElementTagNameMap[T], V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) => void
+>assertNodeProperty : <T extends keyof ElementTagNameMap, P extends keyof ElementTagNameMap[T], V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) => void
+>                   : ^ ^^^^^^^^^                       ^^ ^^^^^^^^^                          ^^ ^^^^^^^^^                           ^^    ^^           ^^       ^^ ^^    ^^ ^^     ^^ ^^^^^^^^^
 
     T extends keyof ElementTagNameMap,
     P extends keyof ElementTagNameMap[T],
     V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
 >node : Node | null
+>     : ^^^^^^^^^^^
 >tagName : T
+>        : ^
 >prop : P
+>     : ^
 >value : V
+>      : ^
 
     if (assertNodeTagName(node, tagName)) {
 >assertNodeTagName(node, tagName) : boolean
->assertNodeTagName : <T extends "symbol" | "animate" | "animateMotion" | "animateTransform" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feDropShadow" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "mpath" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "set" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view" | keyof HTMLElementTagNameMap, U extends ElementTagNameMap[T]>(node: Node | null, tagName: T) => node is U
+>                                 : ^^^^^^^
+>assertNodeTagName : <T_1 extends keyof ElementTagNameMap, U extends ElementTagNameMap[T_1]>(node: Node | null, tagName: T_1) => node is U
+>                  : ^^^^^^^^^^^^^                       ^^ ^^^^^^^^^                      ^^    ^^           ^^       ^^   ^^^^^         
 >node : Node | null
+>     : ^^^^^^^^^^^
 >tagName : T
+>        : ^
 
         node[prop];
 >node[prop] : ElementTagNameMap[T][P]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >node : ElementTagNameMap[T]
+>     : ^^^^^^^^^^^^^^^^^^^^
 >prop : P
+>     : ^
     }
 }
 

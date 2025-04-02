@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateLiteralIntersection4.ts ===
+//// [tests/cases/compiler/templateLiteralIntersection4.ts] ////
+
+=== templateLiteralIntersection4.ts ===
 type StateHook<S> = () => [S, unknown];
 >StateHook : Symbol(StateHook, Decl(templateLiteralIntersection4.ts, 0, 0))
 >S : Symbol(S, Decl(templateLiteralIntersection4.ts, 0, 15))

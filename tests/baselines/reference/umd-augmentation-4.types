@@ -1,104 +1,156 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd-augmentation-4.ts] ////
+
+=== a.ts ===
 /// <reference path="node_modules/math2d/index.d.ts" />
 /// <reference path="math2d-augment.d.ts" />
 let v = new Math2d.Vector(3, 2);
 >v : Math2d.Vector
+>  : ^^^^^^^^^^^^^
 >new Math2d.Vector(3, 2) : Math2d.Vector
+>                        : ^^^^^^^^^^^^^
 >Math2d.Vector : typeof Math2d.Vector
+>              : ^^^^^^^^^^^^^^^^^^^^
 >Math2d : typeof Math2d
+>       : ^^^^^^^^^^^^^
 >Vector : typeof Math2d.Vector
+>       : ^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >2 : 2
+>  : ^
 
 let magnitude = Math2d.getLength(v);
 >magnitude : number
+>          : ^^^^^^
 >Math2d.getLength(v) : number
+>                    : ^^^^^^
 >Math2d.getLength : (p: Math2d.Vector) => number
+>                 : ^ ^^^^^^^^^^^^^^^^^^^^      
 >Math2d : typeof Math2d
+>       : ^^^^^^^^^^^^^
 >getLength : (p: Math2d.Vector) => number
+>          : ^ ^^^^^^^^^^^^^^^^^^^^      
 >v : Math2d.Vector
+>  : ^^^^^^^^^^^^^
 
 let p: Math2d.Point = v.translate(5, 5);
 >p : Math2d.Point
+>  : ^^^^^^^^^^^^
 >Math2d : any
+>       : ^^^
 >v.translate(5, 5) : Math2d.Vector
+>                  : ^^^^^^^^^^^^^
 >v.translate : (dx: number, dy: number) => Math2d.Vector
+>            : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^
 >v : Math2d.Vector
+>  : ^^^^^^^^^^^^^
 >translate : (dx: number, dy: number) => Math2d.Vector
+>          : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >5 : 5
+>  : ^
 
 p = v.reverse();
 >p = v.reverse() : Math2d.Point
+>                : ^^^^^^^^^^^^
 >p : Math2d.Point
+>  : ^^^^^^^^^^^^
 >v.reverse() : Math2d.Point
+>            : ^^^^^^^^^^^^
 >v.reverse : () => Math2d.Point
+>          : ^^^^^^            
 >v : Math2d.Vector
+>  : ^^^^^^^^^^^^^
 >reverse : () => Math2d.Point
+>        : ^^^^^^            
 
 var t = p.x;
 >t : number
+>  : ^^^^^^
 >p.x : number
+>    : ^^^^^^
 >p : Math2d.Point
+>  : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
+=== node_modules/math2d/index.d.ts ===
 export as namespace Math2d;
->Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+>Math2d : typeof import("node_modules/math2d/index.d.ts")
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export = M2D;
->M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+>M2D : typeof import("node_modules/math2d/index.d.ts")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare namespace M2D {
->M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+>M2D : typeof import("node_modules/math2d/index.d.ts")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	interface Point {
 		x: number;
 >x : number
+>  : ^^^^^^
 
 		y: number;
 >y : number
+>  : ^^^^^^
 	}
 
 	class Vector implements Point {
 >Vector : Vector
+>       : ^^^^^^
 
 		x: number;
 >x : number
+>  : ^^^^^^
 
 		y: number;
 >y : number
+>  : ^^^^^^
 
 		constructor(x: number, y: number);
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 		translate(dx: number, dy: number): Vector;
 >translate : (dx: number, dy: number) => Vector
+>          : ^  ^^      ^^  ^^      ^^^^^      
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 	}
 
 	function getLength(p: Vector): number;
 >getLength : (p: Vector) => number
+>          : ^ ^^      ^^^^^      
 >p : Vector
+>  : ^^^^^^
 
 }
 
 
-=== tests/cases/conformance/externalModules/math2d-augment.d.ts ===
+=== math2d-augment.d.ts ===
 import * as Math2d from 'math2d';
 >Math2d : typeof Math2d
+>       : ^^^^^^^^^^^^^
 
 // Augment the module
 declare module 'math2d' {
 >'math2d' : typeof Math2d
+>         : ^^^^^^^^^^^^^
 
 	// Add a method to the class
 	interface Vector {
 		reverse(): Math2d.Point;
 >reverse : () => Math2d.Point
+>        : ^^^^^^            
 >Math2d : any
+>       : ^^^
 	}
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noIterationTypeErrorsInCFA.ts ===
+//// [tests/cases/compiler/noIterationTypeErrorsInCFA.ts] ////
+
+=== noIterationTypeErrorsInCFA.ts ===
 interface F {
 >F : Symbol(F, Decl(noIterationTypeErrorsInCFA.ts, 0, 0))
 

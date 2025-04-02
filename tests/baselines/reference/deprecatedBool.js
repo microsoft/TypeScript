@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deprecatedBool.ts] ////
+
 //// [deprecatedBool.ts]
 var b4: boolean;
 var bool: boolean;

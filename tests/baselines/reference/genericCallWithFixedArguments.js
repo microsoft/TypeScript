@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCallWithFixedArguments.ts] ////
+
 //// [genericCallWithFixedArguments.ts]
 class A { foo() { } }
 class B { bar() { }} 

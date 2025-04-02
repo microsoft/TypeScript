@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts] ////
+
+=== typeofThis.ts ===
 class Test {
 >Test : Symbol(Test, Decl(typeofThis.ts, 0, 0))
 

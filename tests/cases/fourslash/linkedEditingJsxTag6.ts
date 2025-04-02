@@ -16,16 +16,20 @@
 ////     <//*30*/foo  /*31*/ .// hi/*32*/
 ////     /*33*/bar>
 
+const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
+
 const startPos1 = test.markerByName("start").position;
 const endPos1 =  test.markerByName("end").position;
 const linkedCursors1 = {
     ranges: [{ start: startPos1, length: 19 }, { start: endPos1,  length: 19 }],
+    wordPattern,
 };
 
 const startPos2 = test.markerByName("26").position;
 const endPos2 =  test.markerByName("30").position;
 const linkedCursors2 = {
     ranges: [{ start: startPos2, length: 21 }, { start: endPos2,  length: 21 }],
+    wordPattern,
 };
 
 verify.linkedEditing( {

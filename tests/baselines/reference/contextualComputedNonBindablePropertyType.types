@@ -1,97 +1,148 @@
-=== tests/cases/compiler/contextualComputedNonBindablePropertyType.ts ===
+//// [tests/cases/compiler/contextualComputedNonBindablePropertyType.ts] ////
+
+=== contextualComputedNonBindablePropertyType.ts ===
 // repro #51906
 
 declare function testD(): "d";
 >testD : () => "d"
+>      : ^^^^^^   
 
 declare function forceMatch<T>(matched: {
 >forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
+>           : ^ ^^       ^^                          ^^^^^    
 >matched : { [key in keyof T]: key; }
+>        : ^^^   ^^^^^^^^^^^^^^^^^^^^
 
   [key in keyof T]: key;
 }): void;
 
 forceMatch({
 >forceMatch({  [testD()]: "d",}) : void
+>                                : ^^^^
 >forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
+>           : ^ ^^       ^^                          ^^^^^    
 >{  [testD()]: "d",} : { d: "d"; }
+>                    : ^^^^^^^^^^^
 
   [testD()]: "d",
 >[testD()] : "d"
+>          : ^^^
 >testD() : "d"
+>        : ^^^
 >testD : () => "d"
+>      : ^^^^^^   
 >"d" : "d"
+>    : ^^^
 
 });
 
 declare function forceMatch2<T>(matched: {
 >forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
+>            : ^ ^^       ^^                                                       ^^^^^    
 >matched : { [key in keyof T]: ({ key }: { key: key; }) => void; }
+>        : ^^^   ^^^^^^^^^^^^^^^       ^^             ^^^^^    ^^^
 
   [key in keyof T]: ({ key }: { key: key }) => void;
 >key : key
+>    : ^^^
 >key : key
+>    : ^^^
 
 }): void;
 
 forceMatch2({
 >forceMatch2({  [testD()]: ({ key }) => {},}) : void
+>                                             : ^^^^
 >forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
+>            : ^ ^^       ^^                                                       ^^^^^    
 >{  [testD()]: ({ key }) => {},} : { d: ({ key }: { key: "d"; }) => void; }
+>                                : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [testD()]: ({ key }) => {},
 >[testD()] : ({ key }: { key: "d"; }) => void
+>          : ^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >testD() : "d"
+>        : ^^^
 >testD : () => "d"
+>      : ^^^^^^   
 >({ key }) => {} : ({ key }: { key: "d"; }) => void
+>                : ^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >key : "d"
+>    : ^^^
 
 });
 
 // repro #52954
 
 type Original = { foo: 'expects a string literal', baz: boolean, bar: number }
->Original : { foo: 'expects a string literal'; baz: boolean; bar: number; }
+>Original : Original
+>         : ^^^^^^^^
 >foo : "expects a string literal"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >baz : boolean
+>    : ^^^^^^^
 >bar : number
+>    : ^^^^^^
 
 type Mapped = {
->Mapped : { foo: (arg: "expects a string literal") => "expects a string literal"; baz: (arg: boolean) => boolean; bar: (arg: number) => number; }
+>Mapped : Mapped
+>       : ^^^^^^
 
   [prop in keyof Original]: (arg: Original[prop]) => Original[prop]
 >arg : Original[prop]
+>    : ^^^^^^^^^^^^^^
 }
 
 const propSelector =  <propName extends string>(propName: propName): propName => propName;
 >propSelector : <propName extends string>(propName: propName) => propName
+>             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 ><propName extends string>(propName: propName): propName => propName : <propName extends string>(propName: propName) => propName
+>                                                                    : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 >propName : propName
+>         : ^^^^^^^^
 >propName : propName
+>         : ^^^^^^^^
 
 const unexpectedlyFailingExample: Mapped = {
 >unexpectedlyFailingExample : Mapped
+>                           : ^^^^^^
 >{  foo: (arg) => 'expects a string literal',  baz: (arg) => true,  [propSelector('bar')]: (arg) => 51345} : { foo: (arg: "expects a string literal") => "expects a string literal"; baz: (arg: boolean) => true; bar: (arg: number) => number; }
+>                                                                                                          : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
 
   foo: (arg) => 'expects a string literal',
 >foo : (arg: "expects a string literal") => "expects a string literal"
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg) => 'expects a string literal' : (arg: "expects a string literal") => "expects a string literal"
+>                                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : "expects a string literal"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'expects a string literal' : "expects a string literal"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   baz: (arg) => true,
 >baz : (arg: boolean) => true
+>    : ^   ^^^^^^^^^^^^^^^^^^
 >(arg) => true : (arg: boolean) => true
+>              : ^   ^^^^^^^^^^^^^^^^^^
 >arg : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 
   [propSelector('bar')]: (arg) => 51345
 >[propSelector('bar')] : (arg: number) => number
+>                      : ^   ^^^^^^^^^^^^^^^^^^^
 >propSelector('bar') : "bar"
+>                    : ^^^^^
 >propSelector : <propName extends string>(propName: propName) => propName
+>             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 >'bar' : "bar"
+>      : ^^^^^
 >(arg) => 51345 : (arg: number) => number
+>               : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >51345 : 51345
+>      : ^^^^^
 }
 

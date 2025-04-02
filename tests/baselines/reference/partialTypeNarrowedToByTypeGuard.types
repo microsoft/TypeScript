@@ -1,20 +1,27 @@
-=== tests/cases/compiler/partialTypeNarrowedToByTypeGuard.ts ===
+//// [tests/cases/compiler/partialTypeNarrowedToByTypeGuard.ts] ////
+
+=== partialTypeNarrowedToByTypeGuard.ts ===
 type Obj = {} | undefined;
->Obj : {} | undefined
+>Obj : Obj
+>    : ^^^
 
 type User = {
->User : { email: string; name: string; }
+>User : User
+>     : ^^^^
 
     email: string;
 >email : string
+>      : ^^^^^^
 
     name: string;
 >name : string
+>     : ^^^^^^
 
 };
 
 type PartialUser = Partial<User>;
 >PartialUser : Partial<User>
+>            : ^^^^^^^^^^^^^
 
 // type PartialUser = {
 //   email?: string;
@@ -22,28 +29,40 @@ type PartialUser = Partial<User>;
 // };
 
 function isUser(obj: Obj): obj is PartialUser {
->isUser : (obj: Obj) => obj is Partial<User>
+>isUser : (obj: Obj) => obj is PartialUser
+>       : ^   ^^   ^^^^^                  
 >obj : Obj
+>    : ^^^
 
     return true;
 >true : true
+>     : ^^^^
 }
 
 function getUserName(obj: Obj) {
 >getUserName : (obj: Obj) => string | undefined
+>            : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
+>    : ^^^
 
     if (isUser(obj)) {
 >isUser(obj) : boolean
->isUser : (obj: Obj) => obj is Partial<User>
+>            : ^^^^^^^
+>isUser : (obj: Obj) => obj is PartialUser
+>       : ^   ^^   ^^^^^                  
 >obj : Obj
+>    : ^^^
 
         return obj.name;
 >obj.name : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 >obj : Partial<User>
+>    : ^^^^^^^^^^^^^
 >name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
     }
 
     return '';
 >'' : ""
+>   : ^^
 }

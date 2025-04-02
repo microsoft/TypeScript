@@ -1,41 +1,58 @@
-import * as compiler from "./_namespaces/compiler";
-import * as fakes from "./_namespaces/fakes";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as compiler from "./_namespaces/compiler.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
 const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");
 
 // Define a custom "Symbol" constructor to attach missing built-in symbols without
 // modifying the global "Symbol" constructor
-const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
+export const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
 (FakeSymbol as any).prototype = Symbol.prototype;
 for (const key of Object.getOwnPropertyNames(Symbol)) {
     Object.defineProperty(FakeSymbol, key, Object.getOwnPropertyDescriptor(Symbol, key)!);
 }
 
-// Add "asyncIterator" if missing
-if (!ts.hasProperty(FakeSymbol, "asyncIterator")) Object.defineProperty(FakeSymbol, "asyncIterator", { value: Symbol.for("Symbol.asyncIterator"), configurable: true });
+// Add symbols if missing
+const symbolNames = [
+    "asyncIterator",
+    "dispose",
+    "asyncDispose",
+    "metadata",
+];
 
-export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFiles: string[], main: string }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+for (const symbolName of symbolNames) {
+    if (!ts.hasProperty(FakeSymbol, symbolName)) {
+        Object.defineProperty(FakeSymbol, symbolName, {
+            value: Symbol.for(`Symbol.${symbolName}`),
+            configurable: true,
+        });
+    }
+}
+
+export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>): any {
     if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
     const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { files: source.files });
     const compilerOptions: ts.CompilerOptions = {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
         lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
-        ...options
+        ...options,
     };
     const host = new fakes.CompilerHost(fs, compilerOptions);
     const result = compiler.compileFiles(host, source.rootFiles, compilerOptions);
     if (ts.some(result.diagnostics)) {
-        assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
-            getCanonicalFileName: file => file,
-            getCurrentDirectory: () => "",
-            getNewLine: () => "\n"
-        }));
+        assert.ok(
+            /*value*/ false,
+            "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
+                getCanonicalFileName: file => file,
+                getCurrentDirectory: () => "",
+                getNewLine: () => "\n",
+            }),
+        );
     }
 
     const output = result.getOutput(source.main, "js")!;
@@ -45,7 +62,7 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFi
     return loader.import(output.file);
 }
 
-export function evaluateJavaScript(sourceText: string, globals?: Record<string, any>, sourceFile = sourceFileJs) {
+export function evaluateJavaScript(sourceText: string, globals?: Record<string, any>, sourceFile: string = sourceFileJs): any {
     globals = { Symbol: FakeSymbol, ...globals };
     const fs = new vfs.FileSystem(/*ignoreCase*/ false, { files: { [sourceFile]: sourceText } });
     return new CommonJsLoader(fs, globals).import(sourceFile);
@@ -60,6 +77,7 @@ function getLoader(compilerOptions: ts.CompilerOptions, fs: vfs.FileSystem, glob
         case ts.ModuleKind.System:
             return new SystemLoader(fs, globals);
         case ts.ModuleKind.AMD:
+            return new AmdLoader(fs, globals);
         case ts.ModuleKind.None:
         default:
             throw new Error(`ModuleKind '${ts.ModuleKind[moduleKind]}' not supported by evaluator.`);
@@ -171,7 +189,7 @@ class CommonJsLoader extends Loader<CommonJSModule> {
         }
         const base = vpath.dirname(file);
         const localRequire = (id: string) => this.import(id, base);
-        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${text} })`;
+        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${text}\n})`;
         // eslint-disable-next-line no-eval
         const evaluateThunk = (void 0, eval)(evaluateText) as (module: any, exports: any, require: (id: string) => any, dirname: string, filename: string, ...globalArgs: any[]) => void;
         evaluateThunk.call(this.globals, module, module.exports, localRequire, vpath.dirname(file), file, ...globalArgs);
@@ -235,13 +253,13 @@ class SystemLoader extends Loader<SystemModule> {
     protected createModule(file: string): SystemModule {
         return {
             file,
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             exports: Object.create(/*o*/ null),
             dependencies: [],
             dependers: [],
             setters: [],
             hasExports: false,
-            state: SystemModuleState.Uninstantiated
+            state: SystemModuleState.Uninstantiated,
         };
     }
 
@@ -279,9 +297,9 @@ class SystemLoader extends Loader<SystemModule> {
             }
         }
         const localSystem: SystemGlobal = {
-            register: (dependencies, declare) => this.instantiateModule(module, dependencies, declare)
+            register: (dependencies, declare) => this.instantiateModule(module, dependencies, declare),
         };
-        const evaluateText = `(function (System, ${globalNames.join(", ")}) { ${text} })`;
+        const evaluateText = `(function (System, ${globalNames.join(", ")}) { ${text}\n})`;
         try {
             // eslint-disable-next-line no-eval
             const evaluateThunk = (void 0, eval)(evaluateText) as (System: any, ...globalArgs: any[]) => void;
@@ -315,10 +333,12 @@ class SystemLoader extends Loader<SystemModule> {
         }
 
         const context: SystemModuleContext = {
-            import: (_id) => { throw new Error("Dynamic import not implemented."); },
+            import: _id => {
+                throw new Error("Dynamic import not implemented.");
+            },
             meta: {
-                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`
-            }
+                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
+            },
         };
 
         module.requestedDependencies = dependencies;
@@ -453,6 +473,281 @@ class SystemLoader extends Loader<SystemModule> {
             }
             module.declaration?.execute?.();
             module.state = SystemModuleState.Ready;
+        }
+        catch (e) {
+            this.handleError(module, e);
+            throw e;
+        }
+    }
+}
+
+interface AmdModule {
+    file: string;
+    state: AmdModuleState;
+    dependencies: (AmdModule | "require" | "module" | "exports")[];
+    dependers: AmdModule[];
+    require: (id: string) => any;
+    requestedDependencies?: string[];
+    declaration?: AmdModuleDefineCallback;
+    hasError?: boolean;
+    module: { exports: any; };
+    error?: any;
+}
+
+type AmdModuleDefineCallback = (...args: any[]) => any;
+type AmdModuleDeclaration = AmdModuleDefineCallback | Record<string, any>;
+
+const enum AmdModuleState {
+    // Instantiation phases:
+    Uninstantiated,
+    Instantiated,
+
+    // Linker phases:
+    AddingDependencies,
+    AllDependenciesAdded,
+    AllDependenciesInstantiated,
+    Linked,
+
+    // Evaluation phases:
+    Evaluating,
+    Ready,
+}
+
+type AmdDefineArgsUnnamedModuleNoDependencies = [declare: AmdModuleDeclaration];
+type AmdDefineArgsUnnamedModule = [dependencies: string[], declare: AmdModuleDeclaration];
+type AmdDefineArgsNamedModuleNoDependencies = [id: string, declare: AmdModuleDeclaration];
+type AmdDefineArgsNamedModule = [id: string, dependencies: string[], declare: AmdModuleDeclaration];
+type AmdDefineArgs = AmdDefineArgsUnnamedModuleNoDependencies | AmdDefineArgsUnnamedModule | AmdDefineArgsNamedModuleNoDependencies | AmdDefineArgsNamedModule;
+
+function isAmdDefineArgsUnnamedModuleNoDependencies(args: AmdDefineArgs): args is AmdDefineArgsUnnamedModuleNoDependencies {
+    return args.length === 1;
+}
+
+function isAmdDefineArgsUnnamedModule(args: AmdDefineArgs): args is AmdDefineArgsUnnamedModule {
+    return args.length === 2 && Array.isArray(args[0]);
+}
+
+function isAmdDefineArgsNamedModuleNoDependencies(args: AmdDefineArgs): args is AmdDefineArgsNamedModuleNoDependencies {
+    return args.length === 2 && typeof args[0] === "string";
+}
+
+function isAmdDefineArgsNamedModule(args: AmdDefineArgs): args is AmdDefineArgsNamedModule {
+    return args.length === 3 && typeof args[0] === "string";
+}
+
+class AmdLoader extends Loader<AmdModule> {
+    protected createModule(file: string): AmdModule {
+        const base = vpath.dirname(file);
+        return {
+            file,
+            state: AmdModuleState.Uninstantiated,
+            dependencies: [],
+            dependers: [],
+            module: { exports: {} },
+            require: (id: string) => this.import(id, base),
+        };
+    }
+
+    protected getExports(module: AmdModule) {
+        if (module.state < AmdModuleState.Ready) {
+            this.resetDependers(module, []);
+            this.evaluateModule(module, []);
+            if (module.state < AmdModuleState.Ready) {
+                const error = new Error("Module graph could not be loaded");
+                this.handleError(module, error);
+                throw error;
+            }
+        }
+        if (module.hasError) {
+            throw module.error;
+        }
+        return module.module.exports;
+    }
+
+    private handleError(module: AmdModule, error: any) {
+        if (!module.hasError) {
+            module.hasError = true;
+            module.error = error;
+            module.state = AmdModuleState.Ready;
+        }
+    }
+
+    protected evaluate(text: string, _file: string, module: AmdModule): void {
+        const globalNames: string[] = [];
+        const globalArgs: any[] = [];
+        for (const name in this.globals) {
+            if (ts.hasProperty(this.globals, name)) {
+                globalNames.push(name);
+                globalArgs.push(this.globals[name]);
+            }
+        }
+        const localDefine = (...args: AmdDefineArgs) => {
+            if (isAmdDefineArgsUnnamedModuleNoDependencies(args)) {
+                const [declare] = args;
+                this.instantiateModule(module, [], declare);
+            }
+            else if (isAmdDefineArgsUnnamedModule(args)) {
+                const [dependencies, declare] = args;
+                this.instantiateModule(module, dependencies, declare);
+            }
+            else if (isAmdDefineArgsNamedModuleNoDependencies(args) || isAmdDefineArgsNamedModule(args)) {
+                throw new Error("Named modules not supported");
+            }
+            else {
+                throw new Error("Unsupported arguments");
+            }
+        };
+        localDefine.amd = true;
+        const evaluateText = `(function (define, ${globalNames.join(", ")}) { ${text}\n})`;
+        try {
+            // eslint-disable-next-line no-eval
+            const evaluateThunk = (void 0, eval)(evaluateText) as (define: any, ...globalArgs: any[]) => void;
+            evaluateThunk.call(this.globals, localDefine, ...globalArgs);
+        }
+        catch (e) {
+            this.handleError(module, e);
+            throw e;
+        }
+    }
+
+    private instantiateModule(module: AmdModule, dependencies: string[], callback?: AmdModuleDeclaration) {
+        try {
+            module.requestedDependencies = dependencies;
+            module.declaration = typeof callback === "function" ? callback as AmdModuleDefineCallback : () => callback;
+            module.state = AmdModuleState.Instantiated;
+
+            for (const depender of module.dependers) {
+                this.linkModule(depender);
+            }
+
+            this.linkModule(module);
+        }
+        catch (e) {
+            this.handleError(module, e);
+            throw e;
+        }
+    }
+
+    private linkModule(module: AmdModule) {
+        try {
+            for (;;) {
+                switch (module.state) {
+                    case AmdModuleState.Uninstantiated: {
+                        throw new Error("Module not yet instantiated");
+                    }
+                    case AmdModuleState.Instantiated: {
+                        // Module has been instantiated, start requesting dependencies.
+                        // Set state so that re-entry while adding dependencies does nothing.
+                        module.state = AmdModuleState.AddingDependencies;
+                        const base = vpath.dirname(module.file);
+                        const dependencies = module.requestedDependencies || [];
+
+                        for (const dependencyId of dependencies) {
+                            if (dependencyId === "require" || dependencyId === "exports" || dependencyId === "module") {
+                                module.dependencies.push(dependencyId);
+                            }
+                            else {
+                                const dependency = this.load(this.resolve(dependencyId, base));
+                                module.dependencies.push(dependency);
+                                dependency.dependers.push(module);
+                            }
+                        }
+
+                        // All dependencies have been added, switch state
+                        // to check whether all dependencies are instantiated
+                        module.state = AmdModuleState.AllDependenciesAdded;
+                        continue;
+                    }
+                    case AmdModuleState.AddingDependencies: {
+                        // in the middle of adding dependencies for this module, do nothing
+                        return;
+                    }
+                    case AmdModuleState.AllDependenciesAdded: {
+                        // all dependencies have been added, advance state if all dependencies are instantiated.
+                        for (const dependency of module.dependencies) {
+                            if (typeof dependency === "object" && dependency.state === AmdModuleState.Uninstantiated) {
+                                return;
+                            }
+                        }
+
+                        // indicate all dependencies are instantiated for this module.
+                        module.state = AmdModuleState.AllDependenciesInstantiated;
+
+                        // trigger links for dependers of this module.
+                        for (const depender of module.dependers) {
+                            this.linkModule(depender);
+                        }
+                        continue;
+                    }
+                    case AmdModuleState.AllDependenciesInstantiated: {
+                        module.state = AmdModuleState.Linked;
+
+                        // ensure graph is fully linked
+                        for (const depender of module.dependers) {
+                            this.linkModule(depender);
+                        }
+                        continue;
+                    }
+
+                    case AmdModuleState.Linked: // module has already been linked, nothing to do
+                    case AmdModuleState.Evaluating: // module is currently evaluating, nothing to do
+                    case AmdModuleState.Ready: // module is done evaluating, nothing to do
+                        return;
+                }
+            }
+        }
+        catch (e) {
+            this.handleError(module, e);
+            throw e;
+        }
+    }
+
+    private resetDependers(module: AmdModule, stack: AmdModule[]) {
+        if (stack.lastIndexOf(module) !== -1) {
+            return;
+        }
+
+        stack.push(module);
+        module.dependers.length = 0;
+        for (const dependency of module.dependencies) {
+            if (typeof dependency === "object") {
+                this.resetDependers(dependency, stack);
+            }
+        }
+        stack.pop();
+    }
+
+    private evaluateModule(module: AmdModule, stack: AmdModule[]) {
+        if (module.state < AmdModuleState.Linked) throw new Error("Invalid state for evaluation.");
+        if (module.state !== AmdModuleState.Linked) return;
+
+        if (stack.lastIndexOf(module) !== -1) {
+            // we are already evaluating this module
+            return;
+        }
+
+        stack.push(module);
+        module.state = AmdModuleState.Evaluating;
+        try {
+            const args: any[] = [];
+            for (const dependency of module.dependencies) {
+                if (dependency === "require") {
+                    args.push(module.require);
+                }
+                else if (dependency === "exports") {
+                    args.push(module.module.exports);
+                }
+                else if (dependency === "module") {
+                    args.push(module.module);
+                }
+                else {
+                    this.evaluateModule(dependency, stack);
+                    args.push(dependency.module.exports);
+                }
+            }
+
+            module.module.exports = module.declaration?.(...args) ?? module.module.exports;
+            module.state = AmdModuleState.Ready;
         }
         catch (e) {
             this.handleError(module, e);

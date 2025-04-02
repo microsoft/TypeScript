@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFromPropNameInUnionType.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFromPropNameInUnionType.ts] ////
+
+=== typeGuardOfFromPropNameInUnionType.ts ===
 class A { a: string; }
 >A : Symbol(A, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 0))
 >a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))

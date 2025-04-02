@@ -1,12 +1,17 @@
-=== tests/cases/conformance/jsdoc/declarations/bug38550.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsRestArgsWithThisTypeInJSDocFunction.ts] ////
+
+=== bug38550.js ===
 export class Clazz {
 >Clazz : Clazz
+>      : ^^^^^
 
   /**
    * @param {function(this:Object, ...*):*} functionDeclaration
    */
   method(functionDeclaration) {}
 >method : (functionDeclaration: (this: any, ...args: any[]) => any) => void
+>       : ^                   ^^     ^^^^^  ^^^    ^^             ^^^^^^^^^
 >functionDeclaration : (this: any, ...arg1: any[]) => any
+>                    : ^    ^^^^^^^^^^^^^^^^     ^^^^^   
 }
 

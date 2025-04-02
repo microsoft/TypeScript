@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getAndSetAsMemberNames.ts ===
+//// [tests/cases/compiler/getAndSetAsMemberNames.ts] ////
+
+=== getAndSetAsMemberNames.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(getAndSetAsMemberNames.ts, 0, 0))
 

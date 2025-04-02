@@ -1,54 +1,79 @@
-=== tests/cases/compiler/genericDefaultsErrors.ts ===
+//// [tests/cases/compiler/genericDefaultsErrors.ts] ////
+
+=== genericDefaultsErrors.ts ===
 declare const x: any;
 >x : any
+>  : ^^^
 
 declare function f03<T extends string = number>(): void; // error
 >f03 : <T extends string = number>() => void
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^    
 
 declare function f04<T extends string, U extends number = T>(): void; // error
 >f04 : <T extends string, U extends number = T>() => void
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^^^^^^^^^^    
 
 declare function f05<T, U extends number = T>(): void; // error
 >f05 : <T, U extends number = T>() => void
+>    : ^ ^^ ^^^^^^^^^      ^^^^^^^^^^^    
 
 declare function f06<T, U extends T = number>(): void; // error
 >f06 : <T, U extends T = number>() => void
+>    : ^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^    
 
 declare function f11<T, U, V = number>(): void;
 >f11 : <T, U, V = number>() => void
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^    
 
 f11(); // ok
 >f11() : void
+>      : ^^^^
 >f11 : <T, U, V = number>() => void
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^    
 
 f11<1>(); // error
 >f11<1>() : void
+>         : ^^^^
 >f11 : <T, U, V = number>() => void
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^    
 
 f11<1, 2>(); // ok
 >f11<1, 2>() : void
+>            : ^^^^
 >f11 : <T, U, V = number>() => void
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^    
 
 f11<1, 2, 3>(); // ok
 >f11<1, 2, 3>() : void
+>               : ^^^^
 >f11 : <T, U, V = number>() => void
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^    
 
 f11<1, 2, 3, 4>(); // error
 >f11<1, 2, 3, 4>() : void
+>                  : ^^^^
 >f11 : <T, U, V = number>() => void
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^    
 
 declare function f12<T, U = T>(a?: U): void;
 >f12 : <T, U = T>(a?: U) => void
+>    : ^ ^^ ^^^^^^ ^^^ ^^^^^    
 >a : U
+>  : ^
 
 f12<number>(); // ok
 >f12<number>() : void
+>              : ^^^^
 >f12 : <T, U = T>(a?: U) => void
+>    : ^ ^^ ^^^^^^ ^^^ ^^^^^    
 
 f12<number>("a"); // error
 >f12<number>("a") : void
+>                 : ^^^^
 >f12 : <T, U = T>(a?: U) => void
+>    : ^ ^^ ^^^^^^ ^^^ ^^^^^    
 >"a" : "a"
+>    : ^^^
 
 interface i00<T> { } // ok
 interface i00<U = number> { } // error
@@ -65,21 +90,27 @@ interface i08<T, U extends T = number> { } // error
 interface i09<T, U, V = number> { }
 type i09t00 = i09; // error
 >i09t00 : any
+>       : ^^^
 
 type i09t01 = i09<1>; // error
 >i09t01 : any
+>       : ^^^
 
 type i09t02 = i09<1, 2>; // ok
->i09t02 : i09<1, 2, number>
+>i09t02 : i09t02
+>       : ^^^^^^
 
 type i09t03 = i09<1, 2, 3>; // ok
->i09t03 : i09<1, 2, 3>
+>i09t03 : i09t03
+>       : ^^^^^^
 
 type i09t04 = i09<1, 2, 3, 4>; // error
 >i09t04 : any
+>       : ^^^
 
 interface i10 { x: T; } // error
 >x : T
+>  : ^
 
 interface i10<T = number> {}
 

@@ -1,93 +1,155 @@
-=== tests/cases/compiler/overloadOnConstNoStringImplementation2.ts ===
+//// [tests/cases/compiler/overloadOnConstNoStringImplementation2.ts] ////
+
+=== overloadOnConstNoStringImplementation2.ts ===
 interface I {
     x1(a: number, callback: (x: 'hi') => number);
->x1 : (a: number, callback: (x: 'hi') => number) => any
+>x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >a : number
->callback : (x: 'hi') => number
+>  : ^^^^^^
+>callback : (x: "hi") => number
+>         : ^ ^^    ^^^^^      
 >x : "hi"
+>  : ^^^^
 }
 
 class C implements I {
 >C : C
+>  : ^
 
     x1(a: number, callback: (x: 'hi') => number);
->x1 : (a: number, callback: (x: 'hi') => number) => any
+>x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >a : number
->callback : (x: 'hi') => number
+>  : ^^^^^^
+>callback : (x: "hi") => number
+>         : ^ ^^    ^^^^^      
 >x : "hi"
+>  : ^^^^
 
     x1(a: number, callback: (x: any) => number) {
 >x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >a : number
+>  : ^^^^^^
 >callback : (x: any) => number
+>         : ^ ^^   ^^^^^      
 >x : any
+>  : ^^^
 
         callback('hi');
 >callback('hi') : number
+>               : ^^^^^^
 >callback : (x: any) => number
+>         : ^ ^^   ^^^^^      
 >'hi' : "hi"
+>     : ^^^^
 
         callback('bye');
 >callback('bye') : number
+>                : ^^^^^^
 >callback : (x: any) => number
+>         : ^ ^^   ^^^^^      
 >'bye' : "bye"
+>      : ^^^^^
 
         var hm = "hm";
 >hm : string
+>   : ^^^^^^
 >"hm" : "hm"
+>     : ^^^^
 
         callback(hm);
 >callback(hm) : number
+>             : ^^^^^^
 >callback : (x: any) => number
+>         : ^ ^^   ^^^^^      
 >hm : string
+>   : ^^^^^^
 
         callback(1);
 >callback(1) : number
+>            : ^^^^^^
 >callback : (x: any) => number
+>         : ^ ^^   ^^^^^      
 >1 : 1
+>  : ^
     }
 }
 
 var c: C;
 >c : C
+>  : ^
 
 c.x1(1, (x: 'hi') => { return 1; } );
 >c.x1(1, (x: 'hi') => { return 1; } ) : any
+>                                     : ^^^
 >c.x1 : (a: number, callback: (x: "hi") => number) => any
+>     : ^ ^^      ^^        ^^                   ^^^^^^^^
 >c : C
+>  : ^
 >x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >1 : 1
->(x: 'hi') => { return 1; } : (x: 'hi') => number
+>  : ^
+>(x: 'hi') => { return 1; } : (x: "hi") => number
+>                           : ^ ^^    ^^^^^^^^^^^
 >x : "hi"
+>  : ^^^^
 >1 : 1
+>  : ^
 
 c.x1(1, (x: 'bye') => { return 1; } ); 
 >c.x1(1, (x: 'bye') => { return 1; } ) : any
+>                                      : ^^^
 >c.x1 : (a: number, callback: (x: "hi") => number) => any
+>     : ^ ^^      ^^        ^^                   ^^^^^^^^
 >c : C
+>  : ^
 >x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >1 : 1
->(x: 'bye') => { return 1; } : (x: 'bye') => number
+>  : ^
+>(x: 'bye') => { return 1; } : (x: "bye") => number
+>                            : ^ ^^     ^^^^^^^^^^^
 >x : "bye"
+>  : ^^^^^
 >1 : 1
+>  : ^
 
 c.x1(1, (x: string) => { return 1; } );
 >c.x1(1, (x: string) => { return 1; } ) : any
+>                                       : ^^^
 >c.x1 : (a: number, callback: (x: "hi") => number) => any
+>     : ^ ^^      ^^        ^^                   ^^^^^^^^
 >c : C
+>  : ^
 >x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >1 : 1
+>  : ^
 >(x: string) => { return 1; } : (x: string) => number
+>                             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 c.x1(1, (x: number) => { return 1; } );
 >c.x1(1, (x: number) => { return 1; } ) : any
+>                                       : ^^^
 >c.x1 : (a: number, callback: (x: "hi") => number) => any
+>     : ^ ^^      ^^        ^^                   ^^^^^^^^
 >c : C
+>  : ^
 >x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >1 : 1
+>  : ^
 >(x: number) => { return 1; } : (x: number) => number
+>                             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

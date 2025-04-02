@@ -1,101 +1,145 @@
-=== tests/cases/compiler/reducibleIndexedAccessTypes.ts ===
+//// [tests/cases/compiler/reducibleIndexedAccessTypes.ts] ////
+
+=== reducibleIndexedAccessTypes.ts ===
 // Repro from 53030
 
 enum Type { A, B, C }
 >Type : Type
+>     : ^^^^
 >A : Type.A
+>  : ^^^^^^
 >B : Type.B
+>  : ^^^^^^
 >C : Type.C
+>  : ^^^^^^
 
 interface PayloadStructure {
     dataType: Type;
 >dataType : Type
+>         : ^^^^
 
     data: unknown;
 >data : unknown
+>     : ^^^^^^^
 }
 
 interface PayloadA extends PayloadStructure {
     dataType: Type.A;
 >dataType : Type.A
+>         : ^^^^^^
 >Type : any
+>     : ^^^
 
     data: string;
 >data : string
+>     : ^^^^^^
 }
 
 interface PayloadB extends PayloadStructure {
     dataType: Type.B;
 >dataType : Type.B
+>         : ^^^^^^
 >Type : any
+>     : ^^^
 
     data: number;
 >data : number
+>     : ^^^^^^
 }
 
 interface PayloadC extends PayloadStructure {
     dataType: Type.C;
 >dataType : Type.C
+>         : ^^^^^^
 >Type : any
+>     : ^^^
 
     data: {
 >data : { x: number; y: number; }
+>     : ^^^^^      ^^^^^      ^^^
 
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
 
     };
 }
 
 type Payload = PayloadA | PayloadB | PayloadC
->Payload : PayloadA | PayloadB | PayloadC
+>Payload : Payload
+>        : ^^^^^^^
 
 type MappedPayload2 = {
->MappedPayload2 : { 0?: ((data: string) => void) | undefined; 1?: ((data: number) => void) | undefined; 2?: ((data: { x: number; y: number; }) => void) | undefined; }
+>MappedPayload2 : MappedPayload2
+>               : ^^^^^^^^^^^^^^
 
     [K in Type]?: (data: (Payload & { dataType: K })["data"]) => void
 >data : (Payload & { dataType: K; })["data"]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
 >dataType : K
+>         : ^
 }
 
 const payloads2: MappedPayload2 = {
 >payloads2 : MappedPayload2
+>          : ^^^^^^^^^^^^^^
 >{    [Type.A]: data => { console.log(data) }} : { 0: (data: string) => void; }
+>                                              : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 
     [Type.A]: data => { console.log(data) }
 >[Type.A] : (data: string) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
 >Type.A : Type.A
+>       : ^^^^^^
 >Type : typeof Type
+>     : ^^^^^^^^^^^
 >A : Type.A
+>  : ^^^^^^
 >data => { console.log(data) } : (data: string) => void
+>                              : ^    ^^^^^^^^^^^^^^^^^
 >data : string
+>     : ^^^^^^
 >console.log(data) : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >data : string
+>     : ^^^^^^
 }
 
 // Additional repro from 53030
 
 type GetPayload<P extends Payload, K extends keyof P> = P extends { dataType: K } ? P["data"] : never;
 >GetPayload : GetPayload<P, K>
+>           : ^^^^^^^^^^^^^^^^
 >dataType : K
+>         : ^
 
 // Repro from #51161
 
 type AnyOneof = { oneofKind: string; [k: string]: unknown } | { oneofKind: undefined };
->AnyOneof : { [k: string]: unknown; oneofKind: string; } | { oneofKind: undefined; }
+>AnyOneof : AnyOneof
+>         : ^^^^^^^^
 >oneofKind : string
+>          : ^^^^^^
 >k : string
+>  : ^^^^^^
 >oneofKind : undefined
+>          : ^^^^^^^^^
 
 type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
 >AnyOneofKind : AnyOneofKind<T>
+>             : ^^^^^^^^^^^^^^^
 >oneofKind : keyof T
+>          : ^^^^^^^
 
     ? T['oneofKind']
     : never;

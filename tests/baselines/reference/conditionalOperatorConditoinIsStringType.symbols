@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditoinIsStringType.ts ===
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditoinIsStringType.ts] ////
+
+=== conditionalOperatorConditoinIsStringType.ts ===
 //Cond ? Expr1 : Expr2,  Cond is of string type, Expr1 and Expr2 have the same type
 var condString: string;
 >condString : Symbol(condString, Decl(conditionalOperatorConditoinIsStringType.ts, 1, 3))

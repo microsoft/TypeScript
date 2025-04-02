@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts] ////
+
 //// [mergedInterfacesWithIndexers2.ts]
 // indexers should behave like other members when merging interface declarations
 

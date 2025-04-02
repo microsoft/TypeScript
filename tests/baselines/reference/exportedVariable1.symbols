@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportedVariable1.ts ===
+//// [tests/cases/compiler/exportedVariable1.ts] ////
+
+=== exportedVariable1.ts ===
 export var foo = {name: "Bill"};
 >foo : Symbol(foo, Decl(exportedVariable1.ts, 0, 10))
 >name : Symbol(name, Decl(exportedVariable1.ts, 0, 18))

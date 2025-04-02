@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingDestructuring.ts ===
+//// [tests/cases/compiler/narrowingDestructuring.ts] ////
+
+=== narrowingDestructuring.ts ===
 type X = { kind: "a", a: string } | { kind: "b", b: string }
 >X : Symbol(X, Decl(narrowingDestructuring.ts, 0, 0))
 >kind : Symbol(kind, Decl(narrowingDestructuring.ts, 0, 10))

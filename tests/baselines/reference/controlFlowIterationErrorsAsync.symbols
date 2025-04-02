@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts] ////
+
+=== controlFlowIterationErrorsAsync.ts ===
 let cond: boolean;
 >cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
 

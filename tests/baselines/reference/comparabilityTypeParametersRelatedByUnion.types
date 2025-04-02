@@ -1,32 +1,50 @@
-=== tests/cases/compiler/comparabilityTypeParametersRelatedByUnion.ts ===
+//// [tests/cases/compiler/comparabilityTypeParametersRelatedByUnion.ts] ////
+
+=== comparabilityTypeParametersRelatedByUnion.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
   constructor(readonly x: T) {}
 >x : T
+>  : ^
 
   good<U extends T>(y: U) {
 >good : <U extends T>(y: U) => void
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >y : U
+>  : ^
 
       if (y === this.x) {}
 >y === this.x : boolean
+>             : ^^^^^^^
 >y : U
+>  : ^
 >this.x : T
+>       : ^
 >this : this
+>     : ^^^^
 >x : T
+>  : ^
   }
 
   bad<U extends T | string>(y: U) {
->bad : <U extends string | T>(y: U) => void
+>bad : <U extends T | string>(y: U) => void
+>    : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >y : U
+>  : ^
 
       if (y === this.x) {}
 >y === this.x : boolean
+>             : ^^^^^^^
 >y : U
+>  : ^
 >this.x : T
+>       : ^
 >this : this
+>     : ^^^^
 >x : T
+>  : ^
   }
 }
 

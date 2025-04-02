@@ -1,28 +1,45 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts] ////
+
+=== parserUnterminatedGeneric2.ts ===
 declare module ng {
 >ng : typeof ng
+>   : ^^^^^^^^^
 
     interfaceICompiledExpression {
 >interfaceICompiledExpression : any
+>                             : ^^^
 
         (context: any, locals?: any): any;
 >(context: any, locals?: any): any : (context: any, locals?: any) => any
+>                                  : ^       ^^   ^^      ^^^   ^^^^^   
 >context : any
+>        : ^^^
 >locals : any
+>       : ^^^
 > : any
+> : ^^^
 
         assign(context: any, value: any): any;
 >assign(context: any, value: any) : any
+>                                 : ^^^
 >assign : any
+>       : ^^^
 >context : any
+>        : ^^^
 >any : any
+>    : ^^^
 >value : any
+>      : ^^^
 >any : any
+>    : ^^^
 >any : any
+>    : ^^^
     }
 
     interface IQService {
         all(promises: IPromise < any > []): IPromise<
 >all : (promises: IPromise<any>[]) => IPromise
+>    : ^        ^^               ^^^^^        
 >promises : IPromise<any>[]
+>         : ^^^^^^^^^^^^^^^
 

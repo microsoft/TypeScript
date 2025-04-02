@@ -1,15 +1,19 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/systemModule3.ts] ////
+
+=== file1.ts ===
 
 export default function() {}
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export default function f() {}
 >f : () => void
+>  : ^^^^^^^^^^
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 export default class C {}
 >C : C
+>  : ^
 
-=== tests/cases/compiler/file4.ts ===
+=== file4.ts ===
 
 export default class {}

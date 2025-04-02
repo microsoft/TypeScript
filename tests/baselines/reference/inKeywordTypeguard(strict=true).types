@@ -1,134 +1,211 @@
-=== tests/cases/compiler/inKeywordTypeguard.ts ===
+//// [tests/cases/compiler/inKeywordTypeguard.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== inKeywordTypeguard.ts ===
 class A { a: string; }
 >A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 class B { b: string; }
 >B : B
+>  : ^
 >b : string
+>  : ^^^^^^
 
 function negativeClassesTest(x: A | B) {
 >negativeClassesTest : (x: A | B) => void
+>                    : ^ ^^     ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : A | B
+>  : ^^^^^
 
         x.b = "1";
 >x.b = "1" : "1"
+>          : ^^^
 >x.b : any
+>    : ^^^
 >x : A
+>  : ^
 >b : any
+>  : ^^^
 >"1" : "1"
+>    : ^^^
 
     } else {
         x.a = "1";
 >x.a = "1" : "1"
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : B
+>  : ^
 >a : any
+>  : ^^^
 >"1" : "1"
+>    : ^^^
     }
 }
 
 function positiveClassesTest(x: A | B) {
 >positiveClassesTest : (x: A | B) => void
+>                    : ^ ^^     ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : A | B
+>  : ^^^^^
 
         x.b = "1";
 >x.b = "1" : "1"
+>          : ^^^
 >x.b : any
+>    : ^^^
 >x : A
+>  : ^
 >b : any
+>  : ^^^
 >"1" : "1"
+>    : ^^^
 
     } else {
         x.a = "1";
 >x.a = "1" : "1"
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : B
+>  : ^
 >a : any
+>  : ^^^
 >"1" : "1"
+>    : ^^^
     }
 }
 
 class AWithOptionalProp { a?: string; }
 >AWithOptionalProp : AWithOptionalProp
+>                  : ^^^^^^^^^^^^^^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 class BWithOptionalProp { b?: string; }
 >BWithOptionalProp : BWithOptionalProp
+>                  : ^^^^^^^^^^^^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
 >positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
+>                                          : ^ ^^                                     ^^^^^^^^^
 >x : AWithOptionalProp | BWithOptionalProp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : AWithOptionalProp | BWithOptionalProp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a = "1";
 >x.a = "1" : "1"
+>          : ^^^
 >x.a : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : AWithOptionalProp
+>  : ^^^^^^^^^^^^^^^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
     } else {
         x.b = "1";
 >x.b = "1" : "1"
+>          : ^^^
 >x.b : any
+>    : ^^^
 >x : AWithOptionalProp | BWithOptionalProp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >"1" : "1"
+>    : ^^^
     }
 }
 
 class AWithMethod {
 >AWithMethod : AWithMethod
+>            : ^^^^^^^^^^^
 
     a(): string { return ""; }
 >a : () => string
+>  : ^^^^^^      
 >"" : ""
+>   : ^^
 }
 
 class BWithMethod {
 >BWithMethod : BWithMethod
+>            : ^^^^^^^^^^^
 
     b(): string { return ""; }
 >b : () => string
+>  : ^^^^^^      
 >"" : ""
+>   : ^^
 }
 
 function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 >negativeTestClassesWithMembers : (x: AWithMethod | BWithMethod) => void
+>                               : ^ ^^                         ^^^^^^^^^
 >x : AWithMethod | BWithMethod
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : AWithMethod | BWithMethod
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a();
 >x.a() : string
+>      : ^^^^^^
 >x.a : () => string
+>    : ^^^^^^      
 >x : AWithMethod
+>  : ^^^^^^^^^^^
 >a : () => string
+>  : ^^^^^^      
 
         x.b();
 >x.b() : any
+>      : ^^^
 >x.b : any
+>    : ^^^
 >x : AWithMethod
+>  : ^^^^^^^^^^^
 >b : any
+>  : ^^^
 
     } else {
     }
@@ -136,905 +213,1417 @@ function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 
 function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWithMethod) {
 >negativeTestClassesWithMemberMissingInBothClasses : (x: AWithMethod | BWithMethod) => void
+>                                                  : ^ ^^                         ^^^^^^^^^
 >x : AWithMethod | BWithMethod
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if ("c" in x) {
 >"c" in x : boolean
+>         : ^^^^^^^
 >"c" : "c"
+>    : ^^^
 >x : AWithMethod | BWithMethod
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a();
 >x.a() : any
+>      : ^^^
 >x.a : any
+>    : ^^^
 >x : (AWithMethod | BWithMethod) & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
         x.b();
 >x.b() : any
+>      : ^^^
 >x.b : any
+>    : ^^^
 >x : (AWithMethod | BWithMethod) & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
 
     } else {
         x.a();
 >x.a() : any
+>      : ^^^
 >x.a : any
+>    : ^^^
 >x : AWithMethod | BWithMethod
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
         x.b();
 >x.b() : any
+>      : ^^^
 >x.b : any
+>    : ^^^
 >x : AWithMethod | BWithMethod
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : any
+>  : ^^^
     }
 }
 
 class C { a: string; }
 >C : C
+>  : ^
 >a : string
+>  : ^^^^^^
 
 class D { a: string; }
 >D : D
+>  : ^
 >a : string
+>  : ^^^^^^
 
 function negativeMultipleClassesTest(x: A | B | C | D) {
 >negativeMultipleClassesTest : (x: A | B | C | D) => void
+>                            : ^ ^^             ^^^^^^^^^
 >x : A | B | C | D
+>  : ^^^^^^^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : A | B | C | D
+>  : ^^^^^^^^^^^^^
 
         x.b = "1";
 >x.b = "1" : "1"
+>          : ^^^
 >x.b : any
+>    : ^^^
 >x : A | C | D
+>  : ^^^^^^^^^
 >b : any
+>  : ^^^
 >"1" : "1"
+>    : ^^^
 
     } else {
         x.a = "1";
 >x.a = "1" : "1"
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : B
+>  : ^
 >a : any
+>  : ^^^
 >"1" : "1"
+>    : ^^^
     }
 }
 
 class ClassWithUnionProp { prop: A | B }
 >ClassWithUnionProp : ClassWithUnionProp
+>                   : ^^^^^^^^^^^^^^^^^^
 >prop : A | B
+>     : ^^^^^
 
 function negativePropTest(x: ClassWithUnionProp) {
 >negativePropTest : (x: ClassWithUnionProp) => void
+>                 : ^ ^^                  ^^^^^^^^^
 >x : ClassWithUnionProp
+>  : ^^^^^^^^^^^^^^^^^^
 
     if ("a" in x.prop) {
 >"a" in x.prop : boolean
+>              : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x.prop : A | B
+>       : ^^^^^
 >x : ClassWithUnionProp
+>  : ^^^^^^^^^^^^^^^^^^
 >prop : A | B
+>     : ^^^^^
 
         let y: string = x.prop.b;
 >y : string
+>  : ^^^^^^
 >x.prop.b : any
+>         : ^^^
 >x.prop : A
+>       : ^
 >x : ClassWithUnionProp
+>  : ^^^^^^^^^^^^^^^^^^
 >prop : A
+>     : ^
 >b : any
+>  : ^^^
 
     } else {
         let z: string = x.prop.a;
 >z : string
+>  : ^^^^^^
 >x.prop.a : any
+>         : ^^^
 >x.prop : B
+>       : ^
 >x : ClassWithUnionProp
+>  : ^^^^^^^^^^^^^^^^^^
 >prop : B
+>     : ^
 >a : any
+>  : ^^^
     }
 }
 
 class NegativeClassTest {
 >NegativeClassTest : NegativeClassTest
+>                  : ^^^^^^^^^^^^^^^^^
 
     protected prop: A | B;
 >prop : A | B
+>     : ^^^^^
 
     inThis() {
 >inThis : () => void
+>       : ^^^^^^^^^^
 
         if ("a" in this.prop) {
 >"a" in this.prop : boolean
+>                 : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >this.prop : A | B
+>          : ^^^^^
 >this : this
+>     : ^^^^
 >prop : A | B
+>     : ^^^^^
 
             let z: number = this.prop.b;
 >z : number
+>  : ^^^^^^
 >this.prop.b : any
+>            : ^^^
 >this.prop : A
+>          : ^
 >this : this
+>     : ^^^^
 >prop : A
+>     : ^
 >b : any
+>  : ^^^
 
         } else {
             let y: string = this.prop.a;
 >y : string
+>  : ^^^^^^
 >this.prop.a : any
+>            : ^^^
 >this.prop : B
+>          : ^
 >this : this
+>     : ^^^^
 >prop : B
+>     : ^
 >a : any
+>  : ^^^
         }
     }
 }
 
 class UnreachableCodeDetection {
 >UnreachableCodeDetection : UnreachableCodeDetection
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: string;
 >a : string
+>  : ^^^^^^
 
     inThis() {
 >inThis : () => void
+>       : ^^^^^^^^^^
 
         if ("a" in this) {
 >"a" in this : boolean
+>            : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >this : this
+>     : ^^^^
 
         } else {
             let y = this.a;
 >y : any
+>  : ^^^
 >this.a : any
+>       : ^^^
 >this : never
+>     : ^^^^^
 >a : any
+>  : ^^^
         }
     }
 }
 
 function positiveIntersectionTest(x: { a: string } & { b: string }) {
->positiveIntersectionTest : (x: {    a: string;} & {    b: string;}) => void
+>positiveIntersectionTest : (x: { a: string; } & { b: string; }) => void
+>                         : ^ ^^                               ^^^^^^^^^
 >x : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         let s: string = x.a;
 >s : string
+>  : ^^^^^^
 >x.a : string
+>    : ^^^^^^
 >x : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
     } else {
         let n: never = x;
 >n : never
+>  : ^^^^^
 >x : never
+>  : ^^^^^
     }
 }
 
 // Repro from #38608
 declare const error: Error;
 >error : Error
+>      : ^^^^^
 
 if ('extra' in error) {
 >'extra' in error : boolean
+>                 : ^^^^^^^
 >'extra' : "extra"
+>        : ^^^^^^^
 >error : Error
+>      : ^^^^^
 
     error // Still Error
 >error : Error & Record<"extra", unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 } else {
     error // Error
 >error : Error
+>      : ^^^^^
 }
 
 function narrowsToNever(x: { l: number } | { r: number }) {
->narrowsToNever : (x: {    l: number;} | {    r: number;}) => number
+>narrowsToNever : (x: { l: number; } | { r: number; }) => number
+>               : ^ ^^                               ^^^^^^^^^^^
 >x : { l: number; } | { r: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >l : number
+>  : ^^^^^^
 >r : number
+>  : ^^^^^^
 
     let v: number;
 >v : number
+>  : ^^^^^^
 
     if ("l" in x) {
 >"l" in x : boolean
+>         : ^^^^^^^
 >"l" : "l"
+>    : ^^^
 >x : { l: number; } | { r: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         v = x.l;
 >v = x.l : number
+>        : ^^^^^^
 >v : number
+>  : ^^^^^^
 >x.l : number
+>    : ^^^^^^
 >x : { l: number; }
+>  : ^^^^^      ^^^
 >l : number
+>  : ^^^^^^
     }
     else if ("r" in x) {
 >"r" in x : boolean
+>         : ^^^^^^^
 >"r" : "r"
+>    : ^^^
 >x : { r: number; }
+>  : ^^^^^      ^^^
 
         v = x.r;
 >v = x.r : number
+>        : ^^^^^^
 >v : number
+>  : ^^^^^^
 >x.r : number
+>    : ^^^^^^
 >x : { r: number; }
+>  : ^^^^^      ^^^
 >r : number
+>  : ^^^^^^
     }
     else {
         v = x
 >v = x : never
+>      : ^^^^^
 >v : number
+>  : ^^^^^^
 >x : never
+>  : ^^^^^
     }
     return v;
 >v : number
+>  : ^^^^^^
 }
 
 type AOrB = { aProp: number } | { bProp: number };
->AOrB : { aProp: number; } | { bProp: number; }
+>AOrB : AOrB
+>     : ^^^^
 >aProp : number
+>      : ^^^^^^
 >bProp : number
+>      : ^^^^^^
 
 declare function isAOrB(x: unknown): x is AOrB;
 >isAOrB : (x: unknown) => x is AOrB
+>       : ^ ^^       ^^^^^         
 >x : unknown
+>  : ^^^^^^^
 
 declare var x: unknown;
 >x : unknown
+>  : ^^^^^^^
 
 if (isAOrB(x)) {
 >isAOrB(x) : boolean
+>          : ^^^^^^^
 >isAOrB : (x: unknown) => x is AOrB
+>       : ^ ^^       ^^^^^         
 >x : unknown
+>  : ^^^^^^^
 
     if ("aProp" in x) {
 >"aProp" in x : boolean
+>             : ^^^^^^^
 >"aProp" : "aProp"
+>        : ^^^^^^^
 >x : AOrB
+>  : ^^^^
 
         x.aProp;
 >x.aProp : number
+>        : ^^^^^^
 >x : { aProp: number; }
+>  : ^^^^^^^^^      ^^^
 >aProp : number
+>      : ^^^^^^
     }
     else if ("bProp" in x) {
 >"bProp" in x : boolean
+>             : ^^^^^^^
 >"bProp" : "bProp"
+>        : ^^^^^^^
 >x : { bProp: number; }
+>  : ^^^^^^^^^      ^^^
 
         x.bProp;
 >x.bProp : number
+>        : ^^^^^^
 >x : { bProp: number; }
+>  : ^^^^^^^^^      ^^^
 >bProp : number
+>      : ^^^^^^
     }
     // x is never because of the type predicate from unknown
     else if ("cProp" in x) {
 >"cProp" in x : boolean
+>             : ^^^^^^^
 >"cProp" : "cProp"
+>        : ^^^^^^^
 >x : never
+>  : ^^^^^
 
         const _never: never = x;
 >_never : never
+>       : ^^^^^
 >x : never
+>  : ^^^^^
     }
 }
 
 function negativeIntersectionTest() {
 >negativeIntersectionTest : () => void
+>                         : ^^^^^^^^^^
 
     if ("ontouchstart" in window) {
 >"ontouchstart" in window : boolean
+>                         : ^^^^^^^
 >"ontouchstart" : "ontouchstart"
+>               : ^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
+>             : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 
     } else {
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
+>             : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f1(x: unknown) {
 >f1 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : unknown
+>  : ^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
     }
     if (x && "a" in x) {
 >x && "a" in x : unknown
+>              : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : {}
+>  : ^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
     }
     if (x && typeof x === "object" && "a" in x) {
 >x && typeof x === "object" && "a" in x : unknown
+>                                       : ^^^^^^^
 >x && typeof x === "object" : unknown
+>                           : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 >"object" : "object"
+>         : ^^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : object
+>  : ^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
     }
     if (x && typeof x === "object" && "a" in x && "b" in x && "c" in x) {
 >x && typeof x === "object" && "a" in x && "b" in x && "c" in x : unknown
+>                                                               : ^^^^^^^
 >x && typeof x === "object" && "a" in x && "b" in x : unknown
+>                                                   : ^^^^^^^
 >x && typeof x === "object" && "a" in x : unknown
+>                                       : ^^^^^^^
 >x && typeof x === "object" : unknown
+>                           : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 >"object" : "object"
+>         : ^^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : object
+>  : ^^^^^^
 >"b" in x : boolean
+>         : ^^^^^^^
 >"b" : "b"
+>    : ^^^
 >x : object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"c" in x : boolean
+>         : ^^^^^^^
 >"c" : "c"
+>    : ^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
 
         x.b;
 >x.b : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : unknown
+>  : ^^^^^^^
 
         x.c;
 >x.c : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : unknown
+>  : ^^^^^^^
     }
 }
 
 function f2(x: object) {
 >f2 : (x: object) => void
+>   : ^ ^^      ^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : object
+>  : ^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
     }
     if ("a" in x && "b" in x && "c" in x) {
 >"a" in x && "b" in x && "c" in x : boolean
+>                                 : ^^^^^^^
 >"a" in x && "b" in x : boolean
+>                     : ^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : object
+>  : ^^^^^^
 >"b" in x : boolean
+>         : ^^^^^^^
 >"b" : "b"
+>    : ^^^
 >x : object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"c" in x : boolean
+>         : ^^^^^^^
 >"c" : "c"
+>    : ^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
 
         x.b;
 >x.b : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : unknown
+>  : ^^^^^^^
 
         x.c;
 >x.c : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : unknown
+>  : ^^^^^^^
     }
 }
 
 function f3<T>(x: T) {
 >f3 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : T
+>  : ^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : T & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
     }
     if (x && "a" in x) {
 >x && "a" in x : boolean
+>              : ^^^^^^^
 >x : T
+>  : ^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : T & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
     }
     if (x && typeof x === "object" && "a" in x) {
 >x && typeof x === "object" && "a" in x : boolean
+>                                       : ^^^^^^^
 >x && typeof x === "object" : boolean
+>                           : ^^^^^^^
 >x : T
+>  : ^
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : T & object
+>  : ^^^^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : T & object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
     }
     if (x && typeof x === "object" && "a" in x && "b" in x && "c" in x) {
 >x && typeof x === "object" && "a" in x && "b" in x && "c" in x : boolean
+>                                                               : ^^^^^^^
 >x && typeof x === "object" && "a" in x && "b" in x : boolean
+>                                                   : ^^^^^^^
 >x && typeof x === "object" && "a" in x : boolean
+>                                       : ^^^^^^^
 >x && typeof x === "object" : boolean
+>                           : ^^^^^^^
 >x : T
+>  : ^
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : T & object
+>  : ^^^^^^^^^^
 >"b" in x : boolean
+>         : ^^^^^^^
 >"b" : "b"
+>    : ^^^
 >x : T & object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"c" in x : boolean
+>         : ^^^^^^^
 >"c" : "c"
+>    : ^^^
 >x : T & object & Record<"a", unknown> & Record<"b", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : T & object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
 
         x.b;
 >x.b : unknown
+>    : ^^^^^^^
 >x : T & object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : unknown
+>  : ^^^^^^^
 
         x.c;
 >x.c : unknown
+>    : ^^^^^^^
 >x : T & object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : unknown
+>  : ^^^^^^^
     }
 }
 
 function f4(x: { a: string }) {
->f4 : (x: {    a: string;}) => void
+>f4 : (x: { a: string; }) => void
+>   : ^ ^^              ^^^^^^^^^
 >x : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string; }
+>  : ^^^^^      ^^^
 
         x.a;
 >x.a : string
+>    : ^^^^^^
 >x : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
     }
     if ("a" in x && "b" in x && "c" in x) {
 >"a" in x && "b" in x && "c" in x : boolean
+>                                 : ^^^^^^^
 >"a" in x && "b" in x : boolean
+>                     : ^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string; }
+>  : ^^^^^      ^^^
 >"b" in x : boolean
+>         : ^^^^^^^
 >"b" : "b"
+>    : ^^^
 >x : { a: string; }
+>  : ^^^^^      ^^^
 >"c" in x : boolean
+>         : ^^^^^^^
 >"c" : "c"
+>    : ^^^
 >x : { a: string; } & Record<"b", unknown>
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a;
 >x.a : string
+>    : ^^^^^^
 >x : { a: string; } & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
         x.b;
 >x.b : unknown
+>    : ^^^^^^^
 >x : { a: string; } & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : unknown
+>  : ^^^^^^^
 
         x.c;
 >x.c : unknown
+>    : ^^^^^^^
 >x : { a: string; } & Record<"b", unknown> & Record<"c", unknown>
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : unknown
+>  : ^^^^^^^
     }
 }
 
 function f5(x: { a: string } | { b: string }) {
->f5 : (x: {    a: string;} | {    b: string;}) => void
+>f5 : (x: { a: string; } | { b: string; }) => void
+>   : ^ ^^                               ^^^^^^^^^
 >x : { a: string; } | { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string; } | { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         x;  // { a: string }
 >x : { a: string; }
+>  : ^^^^^      ^^^
     }
     else if ("b" in x) {
 >"b" in x : boolean
+>         : ^^^^^^^
 >"b" : "b"
+>    : ^^^
 >x : { b: string; }
+>  : ^^^^^      ^^^
 
         x;  // { b: string }
 >x : { b: string; }
+>  : ^^^^^      ^^^
     }
     else {
         x;  // never
 >x : never
+>  : ^^^^^
     }
 }
 
 function f6(x: { a: string } | { b: string }) {
->f6 : (x: {    a: string;} | {    b: string;}) => void
+>f6 : (x: { a: string; } | { b: string; }) => void
+>   : ^ ^^                               ^^^^^^^^^
 >x : { a: string; } | { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string; } | { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         x;  // { a: string }
 >x : { a: string; }
+>  : ^^^^^      ^^^
     }
     else if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { b: string; }
+>  : ^^^^^      ^^^
 
         x;  // { b: string } & Record<"a", unknown>
 >x : { b: string; } & Record<"a", unknown>
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     else {
         x;  // { b: string }
 >x : { b: string; }
+>  : ^^^^^      ^^^
     }
 }
 
 // Object and corresponding intersection should narrow the same
 
 function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
->f7 : (x: {    a: string;    b: number;}, y: {    a: string;} & {    b: number;}) => void
+>f7 : (x: { a: string; b: number; }, y: { a: string; } & { b: number; }) => void
+>   : ^ ^^                         ^^ ^^                               ^^^^^^^^^
 >x : { a: string; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >y : { a: string; } & { b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
 
         x;
 >x : { a: string; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
     }
     else {
         x;  // never
 >x : never
+>  : ^^^^^
     }
     if ("a" in y) {
 >"a" in y : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >y : { a: string; } & { b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         y;
 >y : { a: string; } & { b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
     }
     else {
         y;  // never
 >y : never
+>  : ^^^^^
     }
 }
 
 const sym = Symbol();
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 function f8(x: object) {
 >f8 : (x: object) => void
+>   : ^ ^^      ^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
     if ("a" in x && 1 in x && sym in x) {
 >"a" in x && 1 in x && sym in x : boolean
+>                               : ^^^^^^^
 >"a" in x && 1 in x : boolean
+>                   : ^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : object
+>  : ^^^^^^
 >1 in x : boolean
+>       : ^^^^^^^
 >1 : 1
+>  : ^
 >x : object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sym in x : boolean
+>         : ^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >x : object & Record<"a", unknown> & Record<1, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
 
         x["a"];
 >x["a"] : unknown
+>       : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
         x[1];
 >x[1] : unknown
+>     : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         x["1"];
 >x["1"] : unknown
+>       : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
         x[sym];
 >x[sym] : unknown
+>       : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
     }
 }
 
 function f9(x: object) {
 >f9 : (x: object) => void
+>   : ^ ^^      ^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
     if ("a" in x && "1" in x && sym in x) {
 >"a" in x && "1" in x && sym in x : boolean
+>                                 : ^^^^^^^
 >"a" in x && "1" in x : boolean
+>                     : ^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : object
+>  : ^^^^^^
 >"1" in x : boolean
+>         : ^^^^^^^
 >"1" : "1"
+>    : ^^^
 >x : object & Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sym in x : boolean
+>         : ^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >x : object & Record<"a", unknown> & Record<"1", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a;
 >x.a : unknown
+>    : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
+>  : ^^^^^^^
 
         x["a"];
 >x["a"] : unknown
+>       : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
         x[1];
 >x[1] : unknown
+>     : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         x["1"];
 >x["1"] : unknown
+>       : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
         x[sym];
 >x[sym] : unknown
+>       : ^^^^^^^
 >x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
     }
 }
 
 function f10(x: { a: unknown }) {
->f10 : (x: {    a: unknown;}) => void
+>f10 : (x: { a: unknown; }) => void
+>    : ^ ^^               ^^^^^^^^^
 >x : { a: unknown; }
+>  : ^^^^^       ^^^
 >a : unknown
+>  : ^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: unknown; }
+>  : ^^^^^       ^^^
 
         x;
 >x : { a: unknown; }
+>  : ^^^^^       ^^^
     }
     else {
         x;
 >x : never
+>  : ^^^^^
     }
 }
 
 function f11(x: { a: any }) {
->f11 : (x: {    a: any;}) => void
+>f11 : (x: { a: any; }) => void
+>    : ^ ^^           ^^^^^^^^^
 >x : { a: any; }
+>  : ^^^^^   ^^^
 >a : any
+>  : ^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: any; }
+>  : ^^^^^   ^^^
 
         x;
 >x : { a: any; }
+>  : ^^^^^   ^^^
     }
     else {
         x;
 >x : never
+>  : ^^^^^
     }
 }
 
 function f12(x: { a: string }) {
->f12 : (x: {    a: string;}) => void
+>f12 : (x: { a: string; }) => void
+>    : ^ ^^              ^^^^^^^^^
 >x : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string; }
+>  : ^^^^^      ^^^
 
         x;
 >x : { a: string; }
+>  : ^^^^^      ^^^
     }
     else {
         x;
 >x : never
+>  : ^^^^^
     }
 }
 
 function f13(x: { a?: string }) {
->f13 : (x: {    a?: string;}) => void
->x : { a?: string | undefined; }
+>f13 : (x: { a?: string; }) => void
+>    : ^ ^^               ^^^^^^^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
->x : { a?: string | undefined; }
+>    : ^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 
         x;
->x : { a?: string | undefined; }
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
     }
     else {
         x;
->x : { a?: string | undefined; }
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
     }
 }
 
 function f14(x: { a: string | undefined }) {
->f14 : (x: {    a: string | undefined;}) => void
+>f14 : (x: { a: string | undefined; }) => void
+>    : ^ ^^                          ^^^^^^^^^
 >x : { a: string | undefined; }
+>  : ^^^^^                  ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a: string | undefined; }
+>  : ^^^^^                  ^^^
 
         x;
 >x : { a: string | undefined; }
+>  : ^^^^^                  ^^^
     }
     else {
         x;
 >x : never
+>  : ^^^^^
     }
 }
 
 function f15(x: { a?: string | undefined }) {
->f15 : (x: {    a?: string | undefined;}) => void
+>f15 : (x: { a?: string | undefined; }) => void
+>    : ^ ^^                           ^^^^^^^^^
 >x : { a?: string | undefined; }
+>  : ^^^^^^                  ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if ("a" in x) {
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : { a?: string | undefined; }
+>  : ^^^^^^                  ^^^
 
         x;
 >x : { a?: string | undefined; }
+>  : ^^^^^^                  ^^^
     }
     else {
         x;
 >x : { a?: string | undefined; }
+>  : ^^^^^^                  ^^^
     }
 }
 
 function f16(x: typeof globalThis, y: Window & typeof globalThis) {
 >f16 : (x: typeof globalThis, y: Window & typeof globalThis) => void
+>    : ^ ^^                 ^^ ^^                          ^^^^^^^^^
 >x : typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >y : Window & typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 
     x = y;
 >x = y : Window & typeof globalThis
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^
 >y : Window & typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #50639
 
 function foo<A>(value: A) {
 >foo : <A>(value: A) => void
+>    : ^ ^^     ^^ ^^^^^^^^^
 >value : A
+>      : ^
 
     if (typeof value === "object" && value !== null && "prop" in value) {
 >typeof value === "object" && value !== null && "prop" in value : boolean
+>                                                               : ^^^^^^^
 >typeof value === "object" && value !== null : boolean
+>                                            : ^^^^^^^
 >typeof value === "object" : boolean
+>                          : ^^^^^^^
 >typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : A
+>      : ^
 >"object" : "object"
+>         : ^^^^^^^^
 >value !== null : boolean
+>               : ^^^^^^^
 >value : (A & object) | (A & null)
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"prop" in value : boolean
+>                : ^^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 >value : A & object
+>      : ^^^^^^^^^^
 
         value;  // A & object & Record<"prop", unknown>
 >value : A & object & Record<"prop", unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -1042,46 +1631,72 @@ function foo<A>(value: A) {
 
 const checkIsTouchDevice = () =>
 >checkIsTouchDevice : () => boolean
+>                   : ^^^^^^^^^^^^^
 >() =>    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator : () => boolean
+>                                                                            : ^^^^^^^^^^^^^
 
     "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
 >"ontouchstart" in window || "msMaxTouchPoints" in window.navigator : boolean
+>                                                                   : ^^^^^^^
 >"ontouchstart" in window : boolean
+>                         : ^^^^^^^
 >"ontouchstart" : "ontouchstart"
+>               : ^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"msMaxTouchPoints" in window.navigator : boolean
+>                                       : ^^^^^^^
 >"msMaxTouchPoints" : "msMaxTouchPoints"
+>                   : ^^^^^^^^^^^^^^^^^^
 >window.navigator : Navigator
+>                 : ^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >navigator : Navigator
+>          : ^^^^^^^^^
 
 // Repro from #51501
 
 function isHTMLTable<T extends object | null>(table: T): boolean {
 >isHTMLTable : <T extends object | null>(table: T) => boolean
+>            : ^ ^^^^^^^^^             ^^     ^^ ^^^^^       
 >table : T
+>      : ^
 
     return !!table && 'html' in table;
 >!!table && 'html' in table : boolean
+>                           : ^^^^^^^
 >!!table : boolean
+>        : ^^^^^^^
 >!table : boolean
+>       : ^^^^^^^
 >table : T
+>      : ^
 >'html' in table : boolean
+>                : ^^^^^^^
 >'html' : "html"
+>       : ^^^^^^
 >table : NonNullable<T>
+>      : ^^^^^^^^^^^^^^
 }
 
 // Repro from #51549
 
 const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P & {}) => void
+>  : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
->a : P & {}
+>                                                   : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
+>a : P
+>  : ^
 
     "foo" in a;
 >"foo" in a : boolean
+>           : ^^^^^^^
 >"foo" : "foo"
->a : P & {}
+>      : ^^^^^
+>a : P
+>  : ^
 
 };
 
@@ -1089,63 +1704,92 @@ const f = <P extends object>(a: P & {}) => {
 
 function test1<T extends any[] | Record<string, any>>(obj: T) {
 >test1 : <T extends any[] | Record<string, any>>(obj: T) => void
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 
     if (Array.isArray(obj) || 'length' in obj) {
 >Array.isArray(obj) || 'length' in obj : boolean
+>                                      : ^^^^^^^
 >Array.isArray(obj) : boolean
+>                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >obj : any[] | Record<string, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' in obj : boolean
+>                : ^^^^^^^
 >'length' : "length"
+>         : ^^^^^^^^
 >obj : T
+>    : ^
 
       obj;  // T
 >obj : T
+>    : ^
     }
     else {
       obj;  // T
 >obj : T
+>    : ^
     }
 }
 
 function test2<T extends any[] | Record<string, any>>(obj: T) {
 >test2 : <T extends any[] | Record<string, any>>(obj: T) => void
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 
     if (Array.isArray(obj)) {
 >Array.isArray(obj) : boolean
+>                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >obj : any[] | Record<string, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       obj;  // T & any[]
 >obj : T & any[]
+>    : ^^^^^^^^^
     }
     else {
       obj;  // T
 >obj : T
+>    : ^
     }
 }
 
 function test3<T extends any[] | Record<string, any>>(obj: T) {
 >test3 : <T extends any[] | Record<string, any>>(obj: T) => void
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 
     if ('length' in obj) {
 >'length' in obj : boolean
+>                : ^^^^^^^
 >'length' : "length"
+>         : ^^^^^^^^
 >obj : T
+>    : ^
 
       obj;  // T
 >obj : T
+>    : ^
     }
     else {
       obj;  // T
 >obj : T
+>    : ^
     }
 }
 

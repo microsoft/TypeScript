@@ -1,35 +1,56 @@
-=== tests/cases/compiler/genericReversingTypeParameters2.ts ===
+//// [tests/cases/compiler/genericReversingTypeParameters2.ts] ////
+
+=== genericReversingTypeParameters2.ts ===
 class BiMap<K, V> {
 >BiMap : BiMap<K, V>
+>      : ^^^^^^^^^^^
 
     private inverseBiMap: BiMap<V, K>;
 >inverseBiMap : BiMap<V, K>
+>             : ^^^^^^^^^^^
 
     public get(key: K): V { return null; }
 >get : (key: K) => V
+>    : ^   ^^ ^^^^^ 
 >key : K
+>    : ^
 
     public inverse(): BiMap<V, K> { return null; }
 >inverse : () => BiMap<V, K>
+>        : ^^^^^^           
 }
 
 var b = new BiMap<string, number>();
 >b : BiMap<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >new BiMap<string, number>() : BiMap<string, number>
+>                            : ^^^^^^^^^^^^^^^^^^^^^
 >BiMap : typeof BiMap
+>      : ^^^^^^^^^^^^
 
 var i = b.inverse(); // used to get the type wrong here.
 >i : BiMap<number, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >b.inverse() : BiMap<number, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >b.inverse : () => BiMap<number, string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : BiMap<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >inverse : () => BiMap<number, string>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2b = i.get(1); 
 >r2b : string
+>    : ^^^^^^
 >i.get(1) : string
+>         : ^^^^^^
 >i.get : (key: number) => string
+>      : ^   ^^^^^^^^^^^^^^^^^^^
 >i : BiMap<number, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: number) => string
+>    : ^   ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 

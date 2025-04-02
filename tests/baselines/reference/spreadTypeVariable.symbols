@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadTypeVariable.ts ===
+//// [tests/cases/conformance/types/spread/spreadTypeVariable.ts] ////
+
+=== spreadTypeVariable.ts ===
 function f1<T extends number>(arg: T) {
 >f1 : Symbol(f1, Decl(spreadTypeVariable.ts, 0, 0))
 >T : Symbol(T, Decl(spreadTypeVariable.ts, 0, 12))

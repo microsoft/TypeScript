@@ -1,10 +1,8 @@
-tests/cases/conformance/node/allowJs/index.js(2,11): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
-tests/cases/conformance/node/allowJs/index.js(4,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
-tests/cases/conformance/node/allowJs/subfolder/index.js(2,11): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
-tests/cases/conformance/node/allowJs/subfolder/index.js(4,5): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
+subfolder/index.js(2,11): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
+subfolder/index.js(4,5): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
 
 
-==== tests/cases/conformance/node/allowJs/subfolder/index.js (2 errors) ====
+==== subfolder/index.js (2 errors) ====
     // cjs format file
     const x = await 1;
               ~~~~~
@@ -13,22 +11,18 @@ tests/cases/conformance/node/allowJs/subfolder/index.js(4,5): error TS1309: The 
     for await (const y of []) {}
         ~~~~~
 !!! error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
-==== tests/cases/conformance/node/allowJs/index.js (2 errors) ====
+==== index.js (0 errors) ====
     // esm format file
     const x = await 1;
-              ~~~~~
-!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
     export {x};
     for await (const y of []) {}
-        ~~~~~
-!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
-==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/allowJs/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }

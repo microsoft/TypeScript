@@ -1,146 +1,228 @@
-=== tests/cases/conformance/types/members/objectTypeWithNumericProperty.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithNumericProperty.ts] ////
+
+=== objectTypeWithNumericProperty.ts ===
 // no errors here
 
 class C {
 >C : C
+>  : ^
 
     1: number;
 >1 : number
+>  : ^^^^^^
 
     1.1: string;
 >1.1 : string
+>    : ^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var r1 = c[1];
 >r1 : number
+>   : ^^^^^^
 >c[1] : number
+>     : ^^^^^^
 >c : C
+>  : ^
 >1 : 1
+>  : ^
 
 var r2 = c[1.1];
 >r2 : string
+>   : ^^^^^^
 >c[1.1] : string
+>       : ^^^^^^
 >c : C
+>  : ^
 >1.1 : 1.1
+>    : ^^^
 
 var r3 = c['1'];
 >r3 : number
+>   : ^^^^^^
 >c['1'] : number
+>       : ^^^^^^
 >c : C
+>  : ^
 >'1' : "1"
+>    : ^^^
 
 var r4 = c['1.1'];
 >r4 : string
+>   : ^^^^^^
 >c['1.1'] : string
+>         : ^^^^^^
 >c : C
+>  : ^
 >'1.1' : "1.1"
+>      : ^^^^^
 
 interface I {
     1: number;
 >1 : number
+>  : ^^^^^^
 
     1.1: string;
 >1.1 : string
+>    : ^^^^^^
 }
 
 var i: I;
 >i : I
+>  : ^
 
 var r1 = i[1];
 >r1 : number
+>   : ^^^^^^
 >i[1] : number
+>     : ^^^^^^
 >i : I
+>  : ^
 >1 : 1
+>  : ^
 
 var r2 = i[1.1];
 >r2 : string
+>   : ^^^^^^
 >i[1.1] : string
+>       : ^^^^^^
 >i : I
+>  : ^
 >1.1 : 1.1
+>    : ^^^
 
 var r3 = i['1'];
 >r3 : number
+>   : ^^^^^^
 >i['1'] : number
+>       : ^^^^^^
 >i : I
+>  : ^
 >'1' : "1"
+>    : ^^^
 
 var r4 = i['1.1'];
 >r4 : string
+>   : ^^^^^^
 >i['1.1'] : string
+>         : ^^^^^^
 >i : I
+>  : ^
 >'1.1' : "1.1"
+>      : ^^^^^
 
 var a: {
 >a : { 1: number; 1.1: string; }
+>  : ^^^^^      ^^^^^^^      ^^^
 
     1: number;
 >1 : number
+>  : ^^^^^^
 
     1.1: string;
 >1.1 : string
+>    : ^^^^^^
 }
 
 var r1 = a[1];
 >r1 : number
+>   : ^^^^^^
 >a[1] : number
+>     : ^^^^^^
 >a : { 1: number; 1.1: string; }
+>  : ^^^^^      ^^^^^^^      ^^^
 >1 : 1
+>  : ^
 
 var r2 = a[1.1];
 >r2 : string
+>   : ^^^^^^
 >a[1.1] : string
+>       : ^^^^^^
 >a : { 1: number; 1.1: string; }
+>  : ^^^^^      ^^^^^^^      ^^^
 >1.1 : 1.1
+>    : ^^^
 
 var r3 = a['1'];
 >r3 : number
+>   : ^^^^^^
 >a['1'] : number
+>       : ^^^^^^
 >a : { 1: number; 1.1: string; }
+>  : ^^^^^      ^^^^^^^      ^^^
 >'1' : "1"
+>    : ^^^
 
 var r4 = a['1.1'];
 >r4 : string
+>   : ^^^^^^
 >a['1.1'] : string
+>         : ^^^^^^
 >a : { 1: number; 1.1: string; }
+>  : ^^^^^      ^^^^^^^      ^^^
 >'1.1' : "1.1"
+>      : ^^^^^
 
 var b = {
 >b : { 1: number; 1.1: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    1: 1,    1.1: ""} : { 1: number; 1.1: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     1: 1,
 >1 : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     1.1: ""
 >1.1 : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 }
 
 var r1 = b[1];
 >r1 : number
+>   : ^^^^^^
 >b[1] : number
+>     : ^^^^^^
 >b : { 1: number; 1.1: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 var r2 = b[1.1];
 >r2 : string
+>   : ^^^^^^
 >b[1.1] : string
+>       : ^^^^^^
 >b : { 1: number; 1.1: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1.1 : 1.1
+>    : ^^^
 
 var r3 = b['1'];
 >r3 : number
+>   : ^^^^^^
 >b['1'] : number
+>       : ^^^^^^
 >b : { 1: number; 1.1: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 
 var r4 = b['1.1'];
 >r4 : string
+>   : ^^^^^^
 >b['1.1'] : string
+>         : ^^^^^^
 >b : { 1: number; 1.1: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1.1' : "1.1"
+>      : ^^^^^
 

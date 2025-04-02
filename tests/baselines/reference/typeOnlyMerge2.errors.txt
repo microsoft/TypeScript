@@ -1,24 +1,24 @@
-tests/cases/conformance/externalModules/d.ts(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+d.ts(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 
 
-==== tests/cases/conformance/externalModules/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     const A = {}
     export { A };
     
-==== tests/cases/conformance/externalModules/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     import { A } from "./a";
     type A = any;
     export type { A };
     
-==== tests/cases/conformance/externalModules/c.ts (0 errors) ====
+==== c.ts (0 errors) ====
     import { A } from "./b";
     namespace A {}
     export { A };
     
-==== tests/cases/conformance/externalModules/d.ts (1 errors) ====
+==== d.ts (1 errors) ====
     import { A } from "./c";
     A;
     ~
 !!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 tests/cases/conformance/externalModules/b.ts:3:15: 'A' was exported here.
+!!! related TS1377 b.ts:3:15: 'A' was exported here.
     

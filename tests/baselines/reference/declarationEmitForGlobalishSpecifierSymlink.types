@@ -1,12 +1,17 @@
+//// [tests/cases/compiler/declarationEmitForGlobalishSpecifierSymlink.ts] ////
+
 === /p1/node_modules/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
 >getA : () => A
+>     : ^^^^^^ 
 
 export enum A {
 >A : A
+>  : ^
 
     Val
 >Val : A.Val
+>    : ^^^^^
 }
 === /p1/node_modules/typescript-fsa/index.d.ts ===
 
@@ -14,12 +19,15 @@ export * from "./src/impl";
 === /p2/node_modules/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
 >getA : () => A
+>     : ^^^^^^ 
 
 export enum A {
 >A : A
+>  : ^
 
     Val
 >Val : A.Val
+>    : ^^^^^
 }
 === /p2/node_modules/typescript-fsa/index.d.ts ===
 
@@ -27,17 +35,23 @@ export * from "./src/impl";
 === /p1/index.ts ===
 import * as _whatever from "p2";
 >_whatever : typeof _whatever
+>          : ^^^^^^^^^^^^^^^^
 
 import { getA } from "typescript-fsa";
 >getA : () => import("/p1/node_modules/typescript-fsa/index").A
+>     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
 
 export const a = getA();
 >a : import("/p1/node_modules/typescript-fsa/index").A
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getA() : import("/p1/node_modules/typescript-fsa/index").A
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getA : () => import("/p1/node_modules/typescript-fsa/index").A
+>     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
 
 === /p2/index.d.ts ===
 export const a: import("typescript-fsa").A;
 >a : import("/p2/node_modules/typescript-fsa/index").A
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 

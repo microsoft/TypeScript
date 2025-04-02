@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedTypeDeepDeclarationEmit.ts ===
+//// [tests/cases/compiler/reverseMappedTypeDeepDeclarationEmit.ts] ////
+
+=== reverseMappedTypeDeepDeclarationEmit.ts ===
 export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>
 >Validator : Symbol(Validator, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 0))
 >T : Symbol(T, Decl(reverseMappedTypeDeepDeclarationEmit.ts, 0, 22))

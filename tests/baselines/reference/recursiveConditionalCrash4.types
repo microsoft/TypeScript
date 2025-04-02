@@ -1,28 +1,36 @@
-=== tests/cases/compiler/recursiveConditionalCrash4.ts ===
+//// [tests/cases/compiler/recursiveConditionalCrash4.ts] ////
+
+=== recursiveConditionalCrash4.ts ===
 // Repros from #53783
 
 type LengthDown<
 >LengthDown : LengthDown<Str, Length, It>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   Str extends string,
   Length extends number | bigint,
   It
 > = It extends StrIter.Iterator
 >StrIter : any
+>        : ^^^
 
   ? StrIter.CutAt<Str, It> extends `${infer $Rest}`
 >StrIter : any
+>        : ^^^
 
     ? LengthDown<$Rest, Add<Length, StrIter.Value<It>>, It>
 >StrIter : any
+>        : ^^^
 
     : LengthDown<Str, Length, StrIter.Prev<It>>
 >StrIter : any
+>        : ^^^
 
   : Length;
 
 type Foo<T> = T extends unknown
 >Foo : Foo<T>
+>    : ^^^^^^
 
   ? unknown extends `${infer $Rest}`
     ? Foo<T>

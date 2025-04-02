@@ -1,7 +1,7 @@
-tests/cases/compiler/superCallInsideClassDeclaration.ts(8,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+superCallInsideClassDeclaration.ts(8,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 
 
-==== tests/cases/compiler/superCallInsideClassDeclaration.ts (1 errors) ====
+==== superCallInsideClassDeclaration.ts (1 errors) ====
     class A {
     }
     
@@ -10,20 +10,13 @@ tests/cases/compiler/superCallInsideClassDeclaration.ts(8,5): error TS2377: Cons
     
     class B extends A {
         constructor() {
-        ~~~~~~~~~~~~~~~
-    
+        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     
             class D extends C {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 constructor() {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     super();
-    ~~~~~~~~~~~~~~~~~~~~~~~~
                 }
-    ~~~~~~~~~~~~~
             }
-    ~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

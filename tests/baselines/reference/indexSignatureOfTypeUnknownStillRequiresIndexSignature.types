@@ -1,38 +1,63 @@
-=== tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts ===
+//// [tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts] ////
+
+=== indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts ===
 declare function f<T extends unknown = unknown>(x: { [x: string]: T }): T;
 >f : <T extends unknown = unknown>(x: { [x: string]: T; }) => T
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^^ ^^                   ^^^^^ 
 >x : { [x: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var stooges = [
 >stooges : { name: string; age: number; }[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[  { name: "moe", age: 40 },  { name: "larry", age: 50 },  { name: "curly", age: 60 }] : { name: string; age: number; }[]
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   { name: "moe", age: 40 },
 >{ name: "moe", age: 40 } : { name: string; age: number; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"moe" : "moe"
+>      : ^^^^^
 >age : number
+>    : ^^^^^^
 >40 : 40
+>   : ^^
 
   { name: "larry", age: 50 },
 >{ name: "larry", age: 50 } : { name: string; age: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"larry" : "larry"
+>        : ^^^^^^^
 >age : number
+>    : ^^^^^^
 >50 : 50
+>   : ^^
 
   { name: "curly", age: 60 }
 >{ name: "curly", age: 60 } : { name: string; age: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"curly" : "curly"
+>        : ^^^^^^^
 >age : number
+>    : ^^^^^^
 >60 : 60
+>   : ^^
 
 ];
 
 f(stooges); // Should throw
 >f(stooges) : unknown
+>           : ^^^^^^^
 >f : <T extends unknown = unknown>(x: { [x: string]: T; }) => T
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^^ ^^                   ^^^^^ 
 >stooges : { name: string; age: number; }[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -5,7 +5,7 @@ sourceRoot:
 sources: restParameterWithBindingPattern2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/restParameterWithBindingPattern2.js
+emittedFile:restParameterWithBindingPattern2.js
 sourceFile:restParameterWithBindingPattern2.ts
 -------------------------------------------------------------------
 >>>function a() {

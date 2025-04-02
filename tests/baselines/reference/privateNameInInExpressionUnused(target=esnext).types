@@ -1,22 +1,32 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts] ////
+
+=== privateNameInInExpressionUnused.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     #unused: undefined; // expect unused error
 >#unused : undefined
+>        : ^^^^^^^^^
 
     #brand: undefined; // expect no error
 >#brand : undefined
+>       : ^^^^^^^^^
 
     isFoo(v: any): v is Foo {
 >isFoo : (v: any) => v is Foo
+>      : ^ ^^   ^^^^^        
 >v : any
+>  : ^^^
 
         // This should count as using/reading '#brand'
         return #brand in v;
 >#brand in v : boolean
+>            : ^^^^^^^
 >#brand : any
+>       : ^^^
 >v : any
+>  : ^^^
     }
 }
 

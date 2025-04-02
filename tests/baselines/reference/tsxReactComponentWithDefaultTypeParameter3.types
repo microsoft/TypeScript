@@ -1,44 +1,67 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactComponentWithDefaultTypeParameter3.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface Prop {
     a: number,
 >a : number
+>  : ^^^^^^
 
     b: string
 >b : string
+>  : ^^^^^^
 }
 
 declare class MyComp<P extends Prop> extends React.Component<P, {}> {
 >MyComp : MyComp<P>
+>       : ^^^^^^^^^
 >React.Component : React.Component<P, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     internalProp: P;
 >internalProp : P
+>             : ^
 }
 
 // Error
 let x1 = <MyComp />
 >x1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MyComp /> : JSX.Element
+>           : ^^^^^^^^^^^
 >MyComp : typeof MyComp
+>       : ^^^^^^^^^^^^^
 
 // OK
 let x = <MyComp a={10} b="hi" />
 >x : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyComp a={10} b="hi" /> : JSX.Element
+>                         : ^^^^^^^^^^^
 >MyComp : typeof MyComp
+>       : ^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >b : string
+>  : ^^^^^^
 
 // Error
 let x2 = <MyComp a="hi"/>
 >x2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MyComp a="hi"/> : JSX.Element
+>                 : ^^^^^^^^^^^
 >MyComp : typeof MyComp
+>       : ^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 

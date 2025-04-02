@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts ===
+//// [tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts] ////
+
+=== unusedMultipleParameter2InFunctionExpression.ts ===
 var func = function(person: string, person2: string, person3: string) {
 >func : Symbol(func, Decl(unusedMultipleParameter2InFunctionExpression.ts, 0, 3))
 >person : Symbol(person, Decl(unusedMultipleParameter2InFunctionExpression.ts, 0, 20))

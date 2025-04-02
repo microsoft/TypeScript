@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxStatelessComponentDefaultProps.tsx] ////
+
 //// [tsxStatelessComponentDefaultProps.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

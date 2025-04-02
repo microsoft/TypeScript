@@ -1,36 +1,63 @@
-=== tests/cases/compiler/stringTrim.ts ===
+//// [tests/cases/compiler/stringTrim.ts] ////
+
+=== stringTrim.ts ===
 var trimmed: string;
 >trimmed : string
+>        : ^^^^^^
 
 trimmed = "abcde".trimEnd();
 >trimmed = "abcde".trimEnd() : string
+>                            : ^^^^^^
 >trimmed : string
+>        : ^^^^^^
 >"abcde".trimEnd() : string
+>                  : ^^^^^^
 >"abcde".trimEnd : () => string
+>                : ^^^^^^      
 >"abcde" : "abcde"
+>        : ^^^^^^^
 >trimEnd : () => string
+>        : ^^^^^^      
 
 trimmed = "abcde".trimStart();
 >trimmed = "abcde".trimStart() : string
+>                              : ^^^^^^
 >trimmed : string
+>        : ^^^^^^
 >"abcde".trimStart() : string
+>                    : ^^^^^^
 >"abcde".trimStart : () => string
+>                  : ^^^^^^      
 >"abcde" : "abcde"
+>        : ^^^^^^^
 >trimStart : () => string
+>          : ^^^^^^      
 
 trimmed = "abcde".trimLeft();
 >trimmed = "abcde".trimLeft() : string
+>                             : ^^^^^^
 >trimmed : string
+>        : ^^^^^^
 >"abcde".trimLeft() : string
+>                   : ^^^^^^
 >"abcde".trimLeft : () => string
+>                 : ^^^^^^      
 >"abcde" : "abcde"
+>        : ^^^^^^^
 >trimLeft : () => string
+>         : ^^^^^^      
 
 trimmed = "abcde".trimRight();
 >trimmed = "abcde".trimRight() : string
+>                              : ^^^^^^
 >trimmed : string
+>        : ^^^^^^
 >"abcde".trimRight() : string
+>                    : ^^^^^^
 >"abcde".trimRight : () => string
+>                  : ^^^^^^      
 >"abcde" : "abcde"
+>        : ^^^^^^^
 >trimRight : () => string
+>          : ^^^^^^      
 

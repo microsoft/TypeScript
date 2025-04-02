@@ -1,447 +1,747 @@
-=== tests/cases/conformance/expressions/functionCalls/newWithSpreadES5.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/newWithSpreadES5.ts] ////
+
+=== newWithSpreadES5.ts ===
 function f(x: number, y: number, ...z: string[]) {
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
 }
 
 function f2(...x: string[]) {}
 >f2 : (...x: string[]) => void
+>   : ^^^^ ^^        ^^^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 
 interface A {
     f: {
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 
         new (x: number, y: number, ...z: string[]);
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
     }
 }
 
 class B {
 >B : B
+>  : ^
 
     constructor(x: number, y: number, ...z: string[]) {}
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
 }
 
 interface C {
     "a-b": typeof B;
 >"a-b" : typeof B
+>      : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 }
 
 interface D {
     1: typeof B;
 >1 : typeof B
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 }
 
 var a: string[];
 >a : string[]
+>  : ^^^^^^^^
 
 var b: A;
 >b : A
+>  : ^
 
 var c: C;
 >c : C
+>  : ^
 
 var d: A[];
 >d : A[]
+>  : ^^^
 
 var e: { [key: string]: A };
 >e : { [key: string]: A; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 var g: C[];
 >g : C[]
+>  : ^^^
 
 var h: { [key: string]: C };
 >h : { [key: string]: C; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 var i: C[][];
 >i : C[][]
+>  : ^^^^^
 
 // Basic expression
 new f(1, 2, "string");
 >new f(1, 2, "string") : any
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new f(1, 2, ...a);
 >new f(1, 2, ...a) : any
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new f(1, 2, ...a, "string");
 >new f(1, 2, ...a, "string") : any
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Multiple spreads arguments
 new f2(...a, ...a);
 >new f2(...a, ...a) : any
 >f2 : (...x: string[]) => void
+>   : ^^^^ ^^        ^^^^^^^^^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new f(1 ,2, ...a, ...a);
 >new f(1 ,2, ...a, ...a) : any
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 // Call expression
 new f(1, 2, "string")();
 >new f(1, 2, "string")() : any
 >new f(1, 2, "string") : any
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new f(1, 2, ...a)();
 >new f(1, 2, ...a)() : any
 >new f(1, 2, ...a) : any
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new f(1, 2, ...a, "string")();
 >new f(1, 2, ...a, "string")() : any
 >new f(1, 2, ...a, "string") : any
 >f : (x: number, y: number, ...z: string[]) => void
+>  : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Property access expression
 new b.f(1, 2, "string");
 >new b.f(1, 2, "string") : any
 >b.f : new (x: number, y: number, ...z: string[]) => any
+>    : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b : A
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new b.f(1, 2, ...a);
 >new b.f(1, 2, ...a) : any
 >b.f : new (x: number, y: number, ...z: string[]) => any
+>    : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b : A
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new b.f(1, 2, ...a, "string"); 
 >new b.f(1, 2, ...a, "string") : any
 >b.f : new (x: number, y: number, ...z: string[]) => any
+>    : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b : A
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Parenthesised expression
 new (b.f)(1, 2, "string");
 >new (b.f)(1, 2, "string") : any
 >(b.f) : new (x: number, y: number, ...z: string[]) => any
+>      : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b.f : new (x: number, y: number, ...z: string[]) => any
+>    : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b : A
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new (b.f)(1, 2, ...a);
 >new (b.f)(1, 2, ...a) : any
 >(b.f) : new (x: number, y: number, ...z: string[]) => any
+>      : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b.f : new (x: number, y: number, ...z: string[]) => any
+>    : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b : A
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new (b.f)(1, 2, ...a, "string"); 
 >new (b.f)(1, 2, ...a, "string") : any
 >(b.f) : new (x: number, y: number, ...z: string[]) => any
+>      : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b.f : new (x: number, y: number, ...z: string[]) => any
+>    : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >b : A
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Element access expression
 new d[1].f(1, 2, "string");
 >new d[1].f(1, 2, "string") : any
 >d[1].f : new (x: number, y: number, ...z: string[]) => any
+>       : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >d[1] : A
+>     : ^
 >d : A[]
+>  : ^^^
 >1 : 1
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new d[1].f(1, 2, ...a);
 >new d[1].f(1, 2, ...a) : any
 >d[1].f : new (x: number, y: number, ...z: string[]) => any
+>       : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >d[1] : A
+>     : ^
 >d : A[]
+>  : ^^^
 >1 : 1
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new d[1].f(1, 2, ...a, "string");
 >new d[1].f(1, 2, ...a, "string") : any
 >d[1].f : new (x: number, y: number, ...z: string[]) => any
+>       : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >d[1] : A
+>     : ^
 >d : A[]
+>  : ^^^
 >1 : 1
+>  : ^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Element access expression with a punctuated key
 new e["a-b"].f(1, 2, "string");
 >new e["a-b"].f(1, 2, "string") : any
 >e["a-b"].f : new (x: number, y: number, ...z: string[]) => any
+>           : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >e["a-b"] : A
+>         : ^
 >e : { [key: string]: A; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new e["a-b"].f(1, 2, ...a);
 >new e["a-b"].f(1, 2, ...a) : any
 >e["a-b"].f : new (x: number, y: number, ...z: string[]) => any
+>           : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >e["a-b"] : A
+>         : ^
 >e : { [key: string]: A; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new e["a-b"].f(1, 2, ...a, "string");
 >new e["a-b"].f(1, 2, ...a, "string") : any
 >e["a-b"].f : new (x: number, y: number, ...z: string[]) => any
+>           : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >e["a-b"] : A
+>         : ^
 >e : { [key: string]: A; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >f : new (x: number, y: number, ...z: string[]) => any
+>  : ^^^^^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Basic expression
 new B(1, 2, "string");
 >new B(1, 2, "string") : B
+>                      : ^
 >B : typeof B
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new B(1, 2, ...a);
 >new B(1, 2, ...a) : B
+>                  : ^
 >B : typeof B
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new B(1, 2, ...a, "string");
 >new B(1, 2, ...a, "string") : B
+>                            : ^
 >B : typeof B
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Property access expression
 new c["a-b"](1, 2, "string");
 >new c["a-b"](1, 2, "string") : B
+>                             : ^
 >c["a-b"] : typeof B
+>         : ^^^^^^^^
 >c : C
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new c["a-b"](1, 2, ...a);
 >new c["a-b"](1, 2, ...a) : B
+>                         : ^
 >c["a-b"] : typeof B
+>         : ^^^^^^^^
 >c : C
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new c["a-b"](1, 2, ...a, "string");
 >new c["a-b"](1, 2, ...a, "string") : B
+>                                   : ^
 >c["a-b"] : typeof B
+>         : ^^^^^^^^
 >c : C
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Parenthesised expression
 new (c["a-b"])(1, 2, "string");
 >new (c["a-b"])(1, 2, "string") : B
+>                               : ^
 >(c["a-b"]) : typeof B
+>           : ^^^^^^^^
 >c["a-b"] : typeof B
+>         : ^^^^^^^^
 >c : C
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new (c["a-b"])(1, 2, ...a);
 >new (c["a-b"])(1, 2, ...a) : B
+>                           : ^
 >(c["a-b"]) : typeof B
+>           : ^^^^^^^^
 >c["a-b"] : typeof B
+>         : ^^^^^^^^
 >c : C
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new (c["a-b"])(1, 2, ...a, "string");
 >new (c["a-b"])(1, 2, ...a, "string") : B
+>                                     : ^
 >(c["a-b"]) : typeof B
+>           : ^^^^^^^^
 >c["a-b"] : typeof B
+>         : ^^^^^^^^
 >c : C
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Element access expression
 new g[1]["a-b"](1, 2, "string");
 >new g[1]["a-b"](1, 2, "string") : B
+>                                : ^
 >g[1]["a-b"] : typeof B
+>            : ^^^^^^^^
 >g[1] : C
+>     : ^
 >g : C[]
+>  : ^^^
 >1 : 1
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new g[1]["a-b"](1, 2, ...a);
 >new g[1]["a-b"](1, 2, ...a) : B
+>                            : ^
 >g[1]["a-b"] : typeof B
+>            : ^^^^^^^^
 >g[1] : C
+>     : ^
 >g : C[]
+>  : ^^^
 >1 : 1
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new g[1]["a-b"](1, 2, ...a, "string");
 >new g[1]["a-b"](1, 2, ...a, "string") : B
+>                                      : ^
 >g[1]["a-b"] : typeof B
+>            : ^^^^^^^^
 >g[1] : C
+>     : ^
 >g : C[]
+>  : ^^^
 >1 : 1
+>  : ^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Element access expression with a punctuated key
 new h["a-b"]["a-b"](1, 2, "string");
 >new h["a-b"]["a-b"](1, 2, "string") : B
+>                                    : ^
 >h["a-b"]["a-b"] : typeof B
+>                : ^^^^^^^^
 >h["a-b"] : C
+>         : ^
 >h : { [key: string]: C; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new h["a-b"]["a-b"](1, 2, ...a);
 >new h["a-b"]["a-b"](1, 2, ...a) : B
+>                                : ^
 >h["a-b"]["a-b"] : typeof B
+>                : ^^^^^^^^
 >h["a-b"] : C
+>         : ^
 >h : { [key: string]: C; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new h["a-b"]["a-b"](1, 2, ...a, "string");
 >new h["a-b"]["a-b"](1, 2, ...a, "string") : B
+>                                          : ^
 >h["a-b"]["a-b"] : typeof B
+>                : ^^^^^^^^
 >h["a-b"] : C
+>         : ^
 >h : { [key: string]: C; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // Element access expression with a number
 new i["a-b"][1](1, 2, "string");
@@ -449,34 +749,55 @@ new i["a-b"][1](1, 2, "string");
 >i["a-b"][1] : error
 >i["a-b"] : error
 >i : C[][]
+>  : ^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new i["a-b"][1](1, 2, ...a);
 >new i["a-b"][1](1, 2, ...a) : error
 >i["a-b"][1] : error
 >i["a-b"] : error
 >i : C[][]
+>  : ^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 new i["a-b"][1](1, 2, ...a, "string");
 >new i["a-b"][1](1, 2, ...a, "string") : error
 >i["a-b"][1] : error
 >i["a-b"] : error
 >i : C[][]
+>  : ^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 

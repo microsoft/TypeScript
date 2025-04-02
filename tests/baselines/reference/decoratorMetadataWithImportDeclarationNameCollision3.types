@@ -1,9 +1,13 @@
-=== tests/cases/compiler/service.ts ===
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision3.ts] ////
+
+=== service.ts ===
 import db = require('./db');
 >db : typeof db
+>   : ^^^^^^^^^
 
 function someDecorator(target) {
 >someDecorator : (target: any) => any
+>              : ^      ^^^^^^^^^^^^^
 >target : any
 
     return target;
@@ -11,43 +15,63 @@ function someDecorator(target) {
 }
 @someDecorator
 >someDecorator : (target: any) => any
+>              : ^      ^^^^^^^^^^^^^
 
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     db: db.db;
 >db : db.db
+>   : ^^^^^
 >db : any
+>   : ^^^
 
     constructor(db: db.db) { // collision with namespace of external module db
 >db : db.db
+>   : ^^^^^
 >db : any
+>   : ^^^
 
         this.db = db;
 >this.db = db : db.db
+>             : ^^^^^
 >this.db : db.db
+>        : ^^^^^
 >this : this
+>     : ^^^^
 >db : db.db
+>   : ^^^^^
 >db : db.db
+>   : ^^^^^
 
         this.db.doSomething();
 >this.db.doSomething() : void
+>                      : ^^^^
 >this.db.doSomething : () => void
+>                    : ^^^^^^^^^^
 >this.db : db.db
+>        : ^^^^^
 >this : this
+>     : ^^^^
 >db : db.db
+>   : ^^^^^
 >doSomething : () => void
+>            : ^^^^^^^^^^
     }
 }
 export {MyClass};
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/db.ts ===
+=== db.ts ===
 export class db {
 >db : db
+>   : ^^
 
     public doSomething() {
 >doSomething : () => void
+>            : ^^^^^^^^^^
     }
 }
 

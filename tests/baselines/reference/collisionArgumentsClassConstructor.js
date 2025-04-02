@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionArgumentsClassConstructor.ts] ////
+
 //// [collisionArgumentsClassConstructor.ts]
 // Constructors
 class c1 {

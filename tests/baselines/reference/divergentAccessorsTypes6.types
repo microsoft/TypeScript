@@ -1,89 +1,132 @@
-=== tests/cases/compiler/divergentAccessorsTypes6.ts ===
+//// [tests/cases/compiler/divergentAccessorsTypes6.ts] ////
+
+=== divergentAccessorsTypes6.ts ===
 export {};
 
 interface Element {
     get style(): CSSStyleDeclaration;
 >style : CSSStyleDeclaration
+>      : ^^^^^^^^^^^^^^^^^^^
 
     set style(cssText: string);
 >style : CSSStyleDeclaration
+>      : ^^^^^^^^^^^^^^^^^^^
 >cssText : string
+>        : ^^^^^^
 }
 
 declare const element: Element;
 >element : Element
+>        : ^^^^^^^
 
 element.style = "color: red";
 >element.style = "color: red" : "color: red"
+>                             : ^^^^^^^^^^^^
 >element.style : string
+>              : ^^^^^^
 >element : Element
+>        : ^^^^^^^
 >style : string
+>      : ^^^^^^
 >"color: red" : "color: red"
+>             : ^^^^^^^^^^^^
 
 element.style.animationTimingFunction;
 >element.style.animationTimingFunction : string
+>                                      : ^^^^^^
 >element.style : CSSStyleDeclaration
+>              : ^^^^^^^^^^^^^^^^^^^
 >element : Element
+>        : ^^^^^^^
 >style : CSSStyleDeclaration
+>      : ^^^^^^^^^^^^^^^^^^^
 >animationTimingFunction : string
+>                        : ^^^^^^
 
 element.style = element.style; // error
 >element.style = element.style : CSSStyleDeclaration
+>                              : ^^^^^^^^^^^^^^^^^^^
 >element.style : string
+>              : ^^^^^^
 >element : Element
+>        : ^^^^^^^
 >style : string
+>      : ^^^^^^
 >element.style : CSSStyleDeclaration
+>              : ^^^^^^^^^^^^^^^^^^^
 >element : Element
+>        : ^^^^^^^
 >style : CSSStyleDeclaration
+>      : ^^^^^^^^^^^^^^^^^^^
 
 // Now that we don't check for getter/setter assignability, we should
 // ensure the setter annotation is actually checked even if it's never observed.
 
 type Fail<T extends never> = T;
 >Fail : T
+>     : ^
 
 interface I1 {
     get x(): number;
 >x : number
+>  : ^^^^^^
 
     set x(value: Fail<string>);
 >x : number
+>  : ^^^^^^
 >value : string
+>      : ^^^^^^
 }
 const o1 = {
->o1 : { x: number; }
->{    get x(): number { return 0; },    set x(value: Fail<string>) {}} : { x: number; }
+>o1 : { get x(): number; set x(value: Fail<string>); }
+>   : ^^^^^^^^^^^      ^^^^^^^^     ^^            ^^^^
+>{    get x(): number { return 0; },    set x(value: Fail<string>) {}} : { get x(): number; set x(value: Fail<string>); }
+>                                                                      : ^^^^^^^^^^^      ^^^^^^^^     ^^            ^^^^
 
     get x(): number { return 0; },
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     set x(value: Fail<string>) {}
 >x : number
+>  : ^^^^^^
 >value : string
+>      : ^^^^^^
 }
 
 // A setter annotation still implies the getter return type.
 
 const o2 = {
->o2 : { p1: string; p2: number; }
->{    get p1() { return 0; }, // error - no annotation means type is implied from the setter annotation    set p1(value: string) {},    get p2(): number { return 0; }, // ok - explicit annotation    set p2(value: string) {},} : { p1: string; p2: number; }
+>o2 : { p1: string; get p2(): number; set p2(value: string); }
+>   : ^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^     ^^      ^^^^
+>{    get p1() { return 0; }, // error - no annotation means type is implied from the setter annotation    set p1(value: string) {},    get p2(): number { return 0; }, // ok - explicit annotation    set p2(value: string) {},} : { p1: string; get p2(): number; set p2(value: string); }
+>                                                                                                                                                                                                                                 : ^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^     ^^      ^^^^
 
     get p1() { return 0; }, // error - no annotation means type is implied from the setter annotation
 >p1 : string
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     set p1(value: string) {},
 >p1 : string
+>   : ^^^^^^
 >value : string
+>      : ^^^^^^
 
     get p2(): number { return 0; }, // ok - explicit annotation
 >p2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     set p2(value: string) {},
 >p2 : number
+>   : ^^^^^^
 >value : string
+>      : ^^^^^^
 
 };
 

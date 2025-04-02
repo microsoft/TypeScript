@@ -1,73 +1,111 @@
-=== tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts ===
+//// [tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts] ////
+
+=== trailingCommasInFunctionParametersAndArguments.ts ===
 function f1(x,) {}
 >f1 : (x: any) => void
+>   : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 f1(1,);
 >f1(1,) : void
+>       : ^^^^
 >f1 : (x: any) => void
+>   : ^ ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 function f2(...args,) {}
 >f2 : (...args: any[]) => void
+>   : ^^^^    ^^^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 // Allowed for ambient declarations
 declare function f25(...args,): void;
 >f25 : (...args: any[]) => void
+>    : ^^^^    ^^^^^^^^^^^^    
 >args : any[]
+>     : ^^^^^
 
 f2(...[],);
 >f2(...[],) : void
+>           : ^^^^
 >f2 : (...args: any[]) => void
+>   : ^^^^    ^^^^^^^^^^^^^^^^
 >...[] : never
->[] : readonly []
+>      : ^^^^^
+>[] : []
+>   : ^^
 
 // Not confused by overloads
 declare function f3(x, ): number;
 >f3 : { (x: any): number; (x: any, y: any): string; }
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >x : any
+>  : ^^^
 
 declare function f3(x, y,): string;
 >f3 : { (x: any): number; (x: any, y: any): string; }
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 <number>f3(1,);
 ><number>f3(1,) : number
+>               : ^^^^^^
 >f3(1,) : number
+>       : ^^^^^^
 >f3 : { (x: any): number; (x: any, y: any): string; }
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >1 : 1
+>  : ^
 
 <string>f3(1, 2,);
 ><string>f3(1, 2,) : string
+>                  : ^^^^^^
 >f3(1, 2,) : string
+>          : ^^^^^^
 >f3 : { (x: any): number; (x: any, y: any): string; }
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 // Works for constructors too
 class X {
 >X : X
+>  : ^
 
     constructor(a,) { }
 >a : any
+>  : ^^^
 
     // See trailingCommasInGetter.ts
     set x(value,) { }
 >x : any
+>  : ^^^
 >value : any
+>      : ^^^
 }
 interface Y {
     new(x,);
 >x : any
+>  : ^^^
 
     (x,);
 >x : any
+>  : ^^^
 }
 
 new X(1,);
 >new X(1,) : X
+>          : ^
 >X : typeof X
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentWithUnreasonableIndentationLevel01.ts] ////
+
 //// [commentWithUnreasonableIndentationLevel01.ts]
 // Repro from #41223
 

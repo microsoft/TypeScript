@@ -1,8 +1,12 @@
-=== tests/cases/conformance/es6/modules/multipleDefaultExports03.ts ===
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports03.ts] ////
+
+=== multipleDefaultExports03.ts ===
 export default class C {
 >C : C
+>  : ^
 }
 
 export default class C {
->C : import("tests/cases/conformance/es6/modules/multipleDefaultExports03").default
+>C : import("multipleDefaultExports03").default
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

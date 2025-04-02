@@ -1,6 +1,9 @@
+//// [tests/cases/compiler/moduleAugmentationInDependency2.ts] ////
+
 === /node_modules/A/index.ts ===
 declare module "ext" {
 >"ext" : any
+>      : ^^^
 }
 export {};
 

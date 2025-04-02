@@ -1,36 +1,52 @@
-=== tests/cases/compiler/dash.d.ts ===
+//// [tests/cases/compiler/jsFileImportPreservedWhenUsed.ts] ////
+
+=== dash.d.ts ===
 type ObjectIterator<TObject, TResult> = (value: TObject[keyof TObject], key: string, collection: TObject) => TResult;
 >ObjectIterator : ObjectIterator<TObject, TResult>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : TObject[keyof TObject]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >collection : TObject
+>           : ^^^^^^^
 
 interface LoDashStatic {
     mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
 >mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
+>          : ^ ^^^^^^^^^      ^^       ^^   ^^                    ^^        ^^                          ^^^^^                            
 >obj : T | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
 >callback : ObjectIterator<T, TResult>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare const _: LoDashStatic;
 >_ : LoDashStatic
+>  : ^^^^^^^^^^^^
 
 export = _;
 >_ : LoDashStatic
+>  : ^^^^^^^^^^^^
 
-=== tests/cases/compiler/Consts.ts ===
+=== Consts.ts ===
 export const INDEX_FIELD = '__INDEX';
 >INDEX_FIELD : "__INDEX"
+>            : ^^^^^^^^^
 >'__INDEX' : "__INDEX"
+>          : ^^^^^^^^^
 
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 import * as _ from './dash';
 >_ : LoDashStatic
+>  : ^^^^^^^^^^^^
 
 import { INDEX_FIELD } from './Consts';
 >INDEX_FIELD : "__INDEX"
+>            : ^^^^^^^^^
 
 export class Test {
 >Test : Test
+>     : ^^^^
 
     /**
      * @param {object} obj
@@ -38,36 +54,56 @@ export class Test {
      */
     test(obj, vm) {
 >test : (obj: object, vm: object) => void
+>     : ^   ^^      ^^  ^^      ^^^^^^^^^
 >obj : object
+>    : ^^^^^^
 >vm : object
+>   : ^^^^^^
 
         let index = 0;
 >index : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
         vm.objects = _.mapValues(
 >vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
+>                                                                                                                 : ^^^^^^
 >vm.objects : error
 >vm : object
+>   : ^^^^^^
 >objects : any
+>        : ^^^
 >_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
+>                                                                                                    : ^^^^^^
 >_.mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: (value: T[keyof T], key: string, collection: T) => TResult) => { [P in keyof T]: TResult; }
+>            : ^ ^^^^^^^^^      ^^       ^^   ^^                    ^^        ^^^     ^^^^^^^^^^^^^^   ^^      ^^          ^^^^^^^^^^^^^^^^^^^^                            
 >_ : LoDashStatic
+>  : ^^^^^^^^^^^^
 >mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: (value: T[keyof T], key: string, collection: T) => TResult) => { [P in keyof T]: TResult; }
+>          : ^ ^^^^^^^^^      ^^       ^^   ^^                    ^^        ^^^     ^^^^^^^^^^^^^^   ^^      ^^          ^^^^^^^^^^^^^^^^^^^^                            
 
             obj,
 >obj : object
+>    : ^^^^^^
 
             object => ({ ...object, [INDEX_FIELD]: index++ }),
 >object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: never) => any
+>                                                  : ^      ^^^^^^^^^^^^^^^
 >object : never
+>       : ^^^^^
 >({ ...object, [INDEX_FIELD]: index++ }) : error
 >{ ...object, [INDEX_FIELD]: index++ } : error
 >object : never
+>       : ^^^^^
 >[INDEX_FIELD] : number
+>              : ^^^^^^
 >INDEX_FIELD : "__INDEX"
+>            : ^^^^^^^^^
 >index++ : number
+>        : ^^^^^^
 >index : number
+>      : ^^^^^^
 
         );
     }

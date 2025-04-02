@@ -1,10 +1,10 @@
-tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(13,20): error TS2437: Module 'A' is hidden by a local declaration with the same name.
-tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(30,5): error TS2440: Import declaration conflicts with local declaration of 'Y'.
-tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(47,10): error TS2438: Import name cannot be 'any'.
-tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with local declaration of 'Q'.
+shadowedInternalModule.ts(13,20): error TS2437: Module 'A' is hidden by a local declaration with the same name.
+shadowedInternalModule.ts(30,5): error TS2440: Import declaration conflicts with local declaration of 'Y'.
+shadowedInternalModule.ts(47,10): error TS2438: Import name cannot be 'any'.
+shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with local declaration of 'Q'.
 
 
-==== tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts (4 errors) ====
+==== shadowedInternalModule.ts (4 errors) ====
     // all errors imported modules conflict with local variables
     
     module A {

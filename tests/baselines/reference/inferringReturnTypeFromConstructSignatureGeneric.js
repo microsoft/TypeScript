@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts] ////
+
 //// [inferringReturnTypeFromConstructSignatureGeneric.ts]
 class GenericObject<T extends {} = {}> {
   give(value: T) {

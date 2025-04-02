@@ -1,220 +1,374 @@
-=== tests/cases/conformance/jsdoc/validator.ts ===
+//// [tests/cases/conformance/jsdoc/checkExportsObjectAssignPrototypeProperty.ts] ////
+
+=== validator.ts ===
 import "./";
 
 import Person = require("./mod1");
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 
 const m1 = new Person("Name")
 >m1 : Person
+>   : ^^^^^^
 >new Person("Name") : Person
+>                   : ^^^^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >"Name" : "Name"
+>       : ^^^^^^
 
 m1.thing;
 >m1.thing : number
+>         : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >thing : number
+>      : ^^^^^^
 
 m1.readonlyProp;
 >m1.readonlyProp : string
+>                : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >readonlyProp : string
+>             : ^^^^^^
 
 m1.rwAccessors;
 >m1.rwAccessors : number
+>               : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >rwAccessors : number
+>            : ^^^^^^
 
 m1.readonlyAccessor;
 >m1.readonlyAccessor : number
+>                    : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >readonlyAccessor : number
+>                 : ^^^^^^
 
 m1.setonlyAccessor;
 >m1.setonlyAccessor : string
+>                   : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >setonlyAccessor : string
+>                : ^^^^^^
 
 // allowed assignments
 m1.thing = 10;
 >m1.thing = 10 : 10
+>              : ^^
 >m1.thing : number
+>         : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >thing : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
 m1.rwAccessors = 11;
 >m1.rwAccessors = 11 : 11
+>                    : ^^
 >m1.rwAccessors : number
+>               : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >rwAccessors : number
+>            : ^^^^^^
 >11 : 11
+>   : ^^
 
 m1.setonlyAccessor = "yes";
 >m1.setonlyAccessor = "yes" : "yes"
+>                           : ^^^^^
 >m1.setonlyAccessor : string
+>                   : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >setonlyAccessor : string
+>                : ^^^^^^
 >"yes" : "yes"
+>      : ^^^^^
 
 // disallowed assignments
 m1.readonlyProp = "name";
 >m1.readonlyProp = "name" : "name"
+>                         : ^^^^^^
 >m1.readonlyProp : any
+>                : ^^^
 >m1 : Person
+>   : ^^^^^^
 >readonlyProp : any
+>             : ^^^
 >"name" : "name"
+>       : ^^^^^^
 
 m1.readonlyAccessor = 12;
 >m1.readonlyAccessor = 12 : 12
+>                         : ^^
 >m1.readonlyAccessor : any
+>                    : ^^^
 >m1 : Person
+>   : ^^^^^^
 >readonlyAccessor : any
+>                 : ^^^
 >12 : 12
+>   : ^^
 
 m1.thing = "no";
 >m1.thing = "no" : "no"
+>                : ^^^^
 >m1.thing : number
+>         : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >thing : number
+>      : ^^^^^^
 >"no" : "no"
+>     : ^^^^
 
 m1.rwAccessors = "no";
 >m1.rwAccessors = "no" : "no"
+>                      : ^^^^
 >m1.rwAccessors : number
+>               : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >rwAccessors : number
+>            : ^^^^^^
 >"no" : "no"
+>     : ^^^^
 
 m1.setonlyAccessor = 0;
 >m1.setonlyAccessor = 0 : 0
+>                       : ^
 >m1.setonlyAccessor : string
+>                   : ^^^^^^
 >m1 : Person
+>   : ^^^^^^
 >setonlyAccessor : string
+>                : ^^^^^^
 >0 : 0
+>  : ^
 
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 /**
  * @constructor
  * @param {string} name
  */
 function Person(name) {
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 
     this.name = name;
 >this.name = name : string
+>                 : ^^^^^^
 >this.name : any
+>          : ^^^
 >this : this
+>     : ^^^^
 >name : any
+>     : ^^^
 >name : string
+>     : ^^^^^^
 }
 Person.prototype.describe = function () {
 >Person.prototype.describe = function () {    return "Person called " + this.name;} : () => string
+>                                                                                   : ^^^^^^^^^^^^
 >Person.prototype.describe : any
+>                          : ^^^
 >Person.prototype : any
+>                 : ^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >describe : any
+>         : ^^^
 >function () {    return "Person called " + this.name;} : () => string
+>                                                       : ^^^^^^^^^^^^
 
     return "Person called " + this.name;
 >"Person called " + this.name : string
+>                             : ^^^^^^
 >"Person called " : "Person called "
+>                 : ^^^^^^^^^^^^^^^^
 >this.name : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >name : string
+>     : ^^^^^^
 
 };
 Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true });
 >Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true }) : any
+>                                                                                : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Person.prototype : any
+>                 : ^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >"thing" : "thing"
+>        : ^^^^^^^
 >{ value: 42, writable: true } : { value: number; writable: true; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >42 : 42
+>   : ^^
 >writable : true
+>         : ^^^^
 >true : true
+>     : ^^^^
 
 Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writable: false });
 >Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writable: false }) : any
+>                                                                                             : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Person.prototype : any
+>                 : ^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >"readonlyProp" : "readonlyProp"
+>               : ^^^^^^^^^^^^^^
 >{ value: "Smith", writable: false } : { value: string; writable: false; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"Smith" : "Smith"
+>        : ^^^^^^^
 >writable : false
+>         : ^^^^^
 >false : false
+>      : ^^^^^
 
 Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
 >Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : any
+>                                                                                                          : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Person.prototype : any
+>                 : ^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >"rwAccessors" : "rwAccessors"
+>              : ^^^^^^^^^^^^^
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >get : () => number
+>    : ^^^^^^^^^^^^
 >98122 : 98122
+>      : ^^^^^
 >set : (_: any) => void
+>    : ^ ^^^^^^^^^^^^^^
 >_ : any
+>  : ^^^
 
 Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.75 } });
 >Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.75 } }) : any
+>                                                                                        : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Person.prototype : any
+>                 : ^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >"readonlyAccessor" : "readonlyAccessor"
+>                   : ^^^^^^^^^^^^^^^^^^
 >{ get() { return 21.75 } } : { get(): number; }
+>                           : ^^^^^^^^^^^^^^^^^^
 >get : () => number
+>    : ^^^^^^^^^^^^
 >21.75 : 21.75
+>      : ^^^^^
 
 Object.defineProperty(Person.prototype, "setonlyAccessor", {
 >Object.defineProperty(Person.prototype, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }}) : any
+>                                                                                                                                                      : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Person.prototype : any
+>                 : ^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >"setonlyAccessor" : "setonlyAccessor"
+>                  : ^^^^^^^^^^^^^^^^^
 >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }} : { set(str: string): void; }
+>                                                                                          : ^^^^^^   ^^      ^^^^^^^^^^
 
     /** @param {string} str */
     set(str) {
 >set : (str: string) => void
+>    : ^   ^^      ^^^^^^^^^
 >str : string
+>    : ^^^^^^
 
         this.rwAccessors = Number(str)
 >this.rwAccessors = Number(str) : number
+>                               : ^^^^^^
 >this.rwAccessors : number
+>                 : ^^^^^^
 >this : this
+>     : ^^^^
 >rwAccessors : number
+>            : ^^^^^^
 >Number(str) : number
+>            : ^^^^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
     }
 });
 module.exports = Person;
 >module.exports = Person : typeof Person
+>                        : ^^^^^^^^^^^^^
 >module.exports : typeof Person
+>               : ^^^^^^^^^^^^^
 >module : { exports: typeof Person; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof Person
+>        : ^^^^^^^^^^^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 

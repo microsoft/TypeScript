@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmitErrors1.ts] ////
+
 === /node_modules/pkg/import.d.ts ===
 export interface ImportInterface {}
 >ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericNamedPropertyDuplicates.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericNamedPropertyDuplicates.ts] ////
+
+=== numericNamedPropertyDuplicates.ts ===
 class C {
 >C : Symbol(C, Decl(numericNamedPropertyDuplicates.ts, 0, 0))
 

@@ -1,11 +1,15 @@
-=== tests/cases/compiler/bar.ts ===
+//// [tests/cases/compiler/nounusedTypeParameterConstraint.ts] ////
+
+=== bar.ts ===
 
 export interface IEventSourcedEntity { }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { IEventSourcedEntity } from "./bar";
 >IEventSourcedEntity : any
+>                    : ^^^
 
 export type DomainEntityConstructor<TEntity extends IEventSourcedEntity> = { new(): TEntity; };
 >DomainEntityConstructor : DomainEntityConstructor<TEntity>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

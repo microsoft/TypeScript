@@ -22,7 +22,7 @@ var m;
 (function (m) {
     function foo() { }
     m.foo = foo;
-})(m = exports.m || (exports.m = {}));
+})(m || (exports.m = m = {}));
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

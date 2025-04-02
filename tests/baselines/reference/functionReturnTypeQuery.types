@@ -1,19 +1,33 @@
-=== tests/cases/compiler/functionReturnTypeQuery.ts ===
+//// [tests/cases/compiler/functionReturnTypeQuery.ts] ////
+
+=== functionReturnTypeQuery.ts ===
 declare let foo: number;
 >foo : number
+>    : ^^^^^^
 
 declare function test1(foo: string, bar: typeof foo): typeof foo;
 >test1 : (foo: string, bar: typeof foo) => typeof foo
+>      : ^   ^^      ^^   ^^          ^^^^^          
 >foo : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
 
 declare function test2({foo}: {foo: string}, bar: typeof foo): typeof foo;
->test2 : ({ foo }: {    foo: string;}, bar: typeof foo) => typeof foo
+>test2 : ({ foo }: { foo: string; }, bar: typeof foo) => typeof foo
+>      : ^       ^^                ^^   ^^          ^^^^^          
 >foo : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
 

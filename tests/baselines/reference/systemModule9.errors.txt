@@ -1,12 +1,12 @@
-tests/cases/compiler/systemModule9.ts(1,21): error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/systemModule9.ts(2,25): error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/systemModule9.ts(3,15): error TS2792: Cannot find module 'file3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/systemModule9.ts(5,25): error TS2792: Cannot find module 'file5'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/systemModule9.ts(6,22): error TS2792: Cannot find module 'file6'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/systemModule9.ts(16,15): error TS2792: Cannot find module 'file7'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule9.ts(1,21): error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule9.ts(2,25): error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule9.ts(3,15): error TS2792: Cannot find module 'file3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule9.ts(5,25): error TS2792: Cannot find module 'file5'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule9.ts(6,22): error TS2792: Cannot find module 'file6'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule9.ts(16,15): error TS2792: Cannot find module 'file7'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/systemModule9.ts (6 errors) ====
+==== systemModule9.ts (6 errors) ====
     import * as ns from 'file1';
                         ~~~~~~~
 !!! error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?

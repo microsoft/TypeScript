@@ -55,7 +55,6 @@ import {
     transformECMAScriptModule,
     Transformer,
     TransformerFactory,
-    transformES5,
     transformES2015,
     transformES2016,
     transformES2017,
@@ -66,28 +65,36 @@ import {
     transformESDecorators,
     transformESNext,
     transformGenerators,
+    transformImpliedNodeFormatDependentModule,
     transformJsx,
     transformLegacyDecorators,
     transformModule,
-    transformNodeModule,
     transformSystemModule,
     transformTypeScript,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
+        case ModuleKind.Preserve:
+            // `transformECMAScriptModule` contains logic for preserving
+            // CJS input syntax in `--module preserve`
+            return transformECMAScriptModule;
         case ModuleKind.ESNext:
         case ModuleKind.ES2022:
         case ModuleKind.ES2020:
         case ModuleKind.ES2015:
-            return transformECMAScriptModule;
+        case ModuleKind.Node16:
+        case ModuleKind.Node18:
+        case ModuleKind.NodeNext:
+        case ModuleKind.CommonJS:
+            // Wraps `transformModule` and `transformECMAScriptModule` and
+            // selects between them based on the `impliedNodeFormat` of the
+            // source file.
+            return transformImpliedNodeFormatDependentModule;
         case ModuleKind.System:
             return transformSystemModule;
-        case ModuleKind.Node16:
-        case ModuleKind.NodeNext:
-            return transformNodeModule;
         default:
             return transformModule;
     }
@@ -97,7 +104,7 @@ const enum TransformationState {
     Uninitialized,
     Initialized,
     Completed,
-    Disposed
+    Disposed,
 }
 
 const enum SyntaxKindFeatureFlags {
@@ -131,11 +138,6 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     if (compilerOptions.experimentalDecorators) {
         transformers.push(transformLegacyDecorators);
     }
-    else if (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields) {
-        transformers.push(transformESDecorators);
-    }
-
-    transformers.push(transformClassFields);
 
     if (getJSXTransformEnabled(compilerOptions)) {
         transformers.push(transformJsx);
@@ -144,6 +146,12 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     if (languageVersion < ScriptTarget.ESNext) {
         transformers.push(transformESNext);
     }
+
+    if (!compilerOptions.experimentalDecorators && (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields)) {
+        transformers.push(transformESDecorators);
+    }
+
+    transformers.push(transformClassFields);
 
     if (languageVersion < ScriptTarget.ES2021) {
         transformers.push(transformES2021);
@@ -175,12 +183,6 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     }
 
     transformers.push(getModuleTransformer(moduleKind));
-
-    // The ES5 transformer is last so that it can substitute expressions like `exports.default`
-    // for ES3.
-    if (languageVersion < ScriptTarget.ES5) {
-        transformers.push(transformES5);
-    }
 
     addRange(transformers, customTransformers && map(customTransformers.after, wrapScriptTransformerFactory));
     return transformers;
@@ -221,12 +223,12 @@ function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundl
 }
 
 /** @internal */
-export function noEmitSubstitution(_hint: EmitHint, node: Node) {
+export function noEmitSubstitution(_hint: EmitHint, node: Node): Node {
     return node;
 }
 
 /** @internal */
-export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void) {
+export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void): void {
     callback(hint, node);
 }
 
@@ -289,13 +291,17 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         enableEmitNotification,
         isSubstitutionEnabled,
         isEmitNotificationEnabled,
-        get onSubstituteNode() { return onSubstituteNode; },
+        get onSubstituteNode() {
+            return onSubstituteNode;
+        },
         set onSubstituteNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
             onSubstituteNode = value;
         },
-        get onEmitNode() { return onEmitNode; },
+        get onEmitNode() {
+            return onEmitNode;
+        },
         set onEmitNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
@@ -303,7 +309,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         },
         addDiagnostic(diag) {
             diagnostics.push(diag);
-        }
+        },
     };
 
     // Ensure the parse tree is clean before applying transformations
@@ -345,7 +351,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         emitNodeWithNotification,
         isEmitNotificationEnabled,
         dispose,
-        diagnostics
+        diagnostics,
     };
 
     function transformRoot(node: T) {
@@ -516,9 +522,11 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
         let statements: Statement[] | undefined;
-        if (lexicalEnvironmentVariableDeclarations ||
+        if (
+            lexicalEnvironmentVariableDeclarations ||
             lexicalEnvironmentFunctionDeclarations ||
-            lexicalEnvironmentStatements) {
+            lexicalEnvironmentStatements
+        ) {
             if (lexicalEnvironmentFunctionDeclarations) {
                 statements = [...lexicalEnvironmentFunctionDeclarations];
             }
@@ -526,7 +534,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
             if (lexicalEnvironmentVariableDeclarations) {
                 const statement = factory.createVariableStatement(
                     /*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
+                    factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations),
                 );
 
                 setEmitFlags(statement, EmitFlags.CustomPrologue);
@@ -597,9 +605,9 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)),
-                        NodeFlags.Let
-                    )
-                )
+                        NodeFlags.Let,
+                    ),
+                ),
             ] : undefined;
         blockScopeStackOffset--;
         blockScopedVariableDeclarations = blockScopedVariableDeclarationsStack[blockScopeStackOffset];

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/addMoreCallSignaturesToBaseSignature2.ts ===
+//// [tests/cases/compiler/addMoreCallSignaturesToBaseSignature2.ts] ////
+
+=== addMoreCallSignaturesToBaseSignature2.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(addMoreCallSignaturesToBaseSignature2.ts, 0, 0))
 

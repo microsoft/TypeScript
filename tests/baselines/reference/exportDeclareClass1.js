@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDeclareClass1.ts] ////
+
 //// [exportDeclareClass1.ts]
     export declare class eaC {
         static tF() { };

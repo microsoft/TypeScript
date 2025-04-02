@@ -1,324 +1,490 @@
-=== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts] ////
+
+=== controlFlowGenericTypes.ts ===
 function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
->f1 : <T extends string | undefined>(x: T, y: {    a: T;}, z: [T]) => string
+>f1 : <T extends string | undefined>(x: T, y: { a: T; }, z: [T]) => string
+>   : ^ ^^^^^^^^^                  ^^ ^^ ^^ ^^         ^^ ^^   ^^^^^      
 >x : T
+>  : ^
 >y : { a: T; }
+>  : ^^^^^ ^^^
 >a : T
+>  : ^
 >z : [T]
+>  : ^^^
 
     if (x) {
 >x : T
+>  : ^
 
         x;
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
 
         x.length;
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         return x;
 >x : string
+>  : ^^^^^^
     }
     if (y.a) {
 >y.a : T
+>    : ^
 >y : { a: T; }
+>  : ^^^^^ ^^^
 >a : T
+>  : ^
 
         y.a.length;
 >y.a.length : number
+>           : ^^^^^^
 >y.a : string
+>    : ^^^^^^
 >y : { a: T; }
+>  : ^^^^^ ^^^
 >a : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         return y.a;
 >y.a : string
+>    : ^^^^^^
 >y : { a: T; }
+>  : ^^^^^ ^^^
 >a : string
+>  : ^^^^^^
     }
     if (z[0]) {
 >z[0] : T
+>     : ^
 >z : [T]
+>  : ^^^
 >0 : 0
+>  : ^
 
         z[0].length;
 >z[0].length : number
+>            : ^^^^^^
 >z[0] : string
+>     : ^^^^^^
 >z : [T]
+>  : ^^^
 >0 : 0
+>  : ^
 >length : number
+>       : ^^^^^^
 
         return z[0];
 >z[0] : string
+>     : ^^^^^^
 >z : [T]
+>  : ^^^
 >0 : 0
+>  : ^
     }
     return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 function f2<T>(x: Extract<T, string | undefined> | null): string {
 >f2 : <T>(x: Extract<T, string | undefined> | null) => string
+>   : ^ ^^ ^^                                     ^^^^^      
 >x : Extract<T, string | undefined> | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (x) {
 >x : Extract<T, string | undefined> | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x;
 >x : NonNullable<Extract<T, string | undefined>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.length;
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         return x;
 >x : string
+>  : ^^^^^^
     }
     return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 interface Box<T> {
     item: T;
 >item : T
+>     : ^
 }
 
 declare function isBox(x: any): x is Box<unknown>;
 >isBox : (x: any) => x is Box<unknown>
+>      : ^ ^^   ^^^^^                 
 >x : any
+>  : ^^^
 
 declare function isUndefined(x: unknown): x is undefined;
 >isUndefined : (x: unknown) => x is undefined
+>            : ^ ^^       ^^^^^              
 >x : unknown
+>  : ^^^^^^^
 
 declare function unbox<T>(x: Box<T>): T;
 >unbox : <T>(x: Box<T>) => T
+>      : ^ ^^ ^^      ^^^^^ 
 >x : Box<T>
+>  : ^^^^^^
 
 function g1<T extends Box<T> | undefined>(x: T) {
 >g1 : <T extends Box<T> | undefined>(x: T) => void
+>   : ^ ^^^^^^^^^                  ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (isBox(x)) {
 >isBox(x) : boolean
+>         : ^^^^^^^
 >isBox : (x: any) => x is Box<unknown>
+>      : ^ ^^   ^^^^^                 
 >x : Box<T> | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         unbox(x);
 >unbox(x) : T
->unbox : <T>(x: Box<T>) => T
+>         : ^
+>unbox : <T_1>(x: Box<T_1>) => T_1
+>      : ^^^^^^ ^^        ^^^^^   
 >x : Box<T>
+>  : ^^^^^^
     }
 }
 
 function g2<T extends Box<T> | undefined>(x: T) {
 >g2 : <T extends Box<T> | undefined>(x: T) => void
+>   : ^ ^^^^^^^^^                  ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (!isUndefined(x)) {
 >!isUndefined(x) : boolean
+>                : ^^^^^^^
 >isUndefined(x) : boolean
+>               : ^^^^^^^
 >isUndefined : (x: unknown) => x is undefined
+>            : ^ ^^       ^^^^^              
 >x : Box<T> | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         unbox(x);
 >unbox(x) : T
->unbox : <T>(x: Box<T>) => T
+>         : ^
+>unbox : <T_1>(x: Box<T_1>) => T_1
+>      : ^^^^^^ ^^        ^^^^^   
 >x : Box<T>
+>  : ^^^^^^
     }
 }
 
 function g3<T extends Box<T> | undefined>(x: T) {
 >g3 : <T extends Box<T> | undefined>(x: T) => void
+>   : ^ ^^^^^^^^^                  ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (!isBox(x)) {
 >!isBox(x) : boolean
+>          : ^^^^^^^
 >isBox(x) : boolean
+>         : ^^^^^^^
 >isBox : (x: any) => x is Box<unknown>
+>      : ^ ^^   ^^^^^                 
 >x : Box<T> | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         unbox(x);  // Error
 >unbox(x) : T
->unbox : <T>(x: Box<T>) => T
+>         : ^
+>unbox : <T_1>(x: Box<T_1>) => T_1
+>      : ^^^^^^ ^^        ^^^^^   
 >x : undefined
+>  : ^^^^^^^^^
     }
 }
 
 function g4<T extends Box<T> | undefined>(x: T) {
 >g4 : <T extends Box<T> | undefined>(x: T) => void
+>   : ^ ^^^^^^^^^                  ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (isUndefined(x)) {
 >isUndefined(x) : boolean
+>               : ^^^^^^^
 >isUndefined : (x: unknown) => x is undefined
+>            : ^ ^^       ^^^^^              
 >x : Box<T> | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         unbox(x);  // Error
 >unbox(x) : unknown
->unbox : <T>(x: Box<T>) => T
+>         : ^^^^^^^
+>unbox : <T_1>(x: Box<T_1>) => T_1
+>      : ^^^^^^ ^^        ^^^^^   
 >x : undefined
+>  : ^^^^^^^^^
     }
 }
 
 // Repro from #13995
 
 declare function takeA(val: 'A'): void;
->takeA : (val: 'A') => void
+>takeA : (val: "A") => void
+>      : ^   ^^   ^^^^^    
 >val : "A"
+>    : ^^^
 
 export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
 >bounceAndTakeIfA : <AB extends "A" | "B">(value: AB) => AB
+>                 : ^  ^^^^^^^^^         ^^     ^^  ^^^^^  
 >value : AB
+>      : ^^
 
     if (value === 'A') {
 >value === 'A' : boolean
+>              : ^^^^^^^
 >value : AB
+>      : ^^
 >'A' : "A"
+>    : ^^^
 
         takeA(value);
 >takeA(value) : void
+>             : ^^^^
 >takeA : (val: "A") => void
+>      : ^   ^^   ^^^^^    
 >value : "A"
+>      : ^^^
 
         return value;
 >value : AB
+>      : ^^
     }
     else {
         return value;
 >value : AB
+>      : ^^
     }
 }
 
 // Repro from #13995
 
 type Common = { id: number };
->Common : { id: number; }
+>Common : Common
+>       : ^^^^^^
 >id : number
+>   : ^^^^^^
 
 type AA = { tag: 'A', id: number };
->AA : { tag: 'A'; id: number; }
+>AA : AA
+>   : ^^
 >tag : "A"
+>    : ^^^
 >id : number
+>   : ^^^^^^
 
 type BB = { tag: 'B', id: number, foo: number };
->BB : { tag: 'B'; id: number; foo: number; }
+>BB : BB
+>   : ^^
 >tag : "B"
+>    : ^^^
 >id : number
+>   : ^^^^^^
 >foo : number
+>    : ^^^^^^
 
 type MyUnion = AA | BB;
->MyUnion : AA | BB
+>MyUnion : MyUnion
+>        : ^^^^^^^
 
 const fn = (value: MyUnion) => {
 >fn : (value: MyUnion) => void
+>   : ^     ^^       ^^^^^^^^^
 >(value: MyUnion) => {    value.foo;  // Error    if ('foo' in value) {        value.foo;    }    if (value.tag === 'B') {        value.foo;    }} : (value: MyUnion) => void
+>                                                                                                                                                  : ^     ^^       ^^^^^^^^^
 >value : MyUnion
+>      : ^^^^^^^
 
     value.foo;  // Error
 >value.foo : any
+>          : ^^^
 >value : MyUnion
+>      : ^^^^^^^
 >foo : any
+>    : ^^^
 
     if ('foo' in value) {
 >'foo' in value : boolean
+>               : ^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >value : MyUnion
+>      : ^^^^^^^
 
         value.foo;
 >value.foo : number
+>          : ^^^^^^
 >value : BB
+>      : ^^
 >foo : number
+>    : ^^^^^^
     }
     if (value.tag === 'B') {
 >value.tag === 'B' : boolean
+>                  : ^^^^^^^
 >value.tag : "A" | "B"
+>          : ^^^^^^^^^
 >value : MyUnion
+>      : ^^^^^^^
 >tag : "A" | "B"
+>    : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         value.foo;
 >value.foo : number
+>          : ^^^^^^
 >value : BB
+>      : ^^
 >foo : number
+>    : ^^^^^^
     }
 };
 
 const fn2 = <T extends MyUnion>(value: T): MyUnion => {
 >fn2 : <T extends MyUnion>(value: T) => MyUnion
+>    : ^ ^^^^^^^^^       ^^     ^^ ^^^^^       
 ><T extends MyUnion>(value: T): MyUnion => {    value.foo;  // Error    if ('foo' in value) {        value.foo;    }    if (value.tag === 'B') {        value.foo;    }} : <T extends MyUnion>(value: T) => MyUnion
+>                                                                                                                                                                        : ^ ^^^^^^^^^       ^^     ^^ ^^^^^       
 >value : T
+>      : ^
 
     value.foo;  // Error
 >value.foo : any
+>          : ^^^
 >value : MyUnion
+>      : ^^^^^^^
 >foo : any
+>    : ^^^
 
     if ('foo' in value) {
 >'foo' in value : boolean
+>               : ^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >value : T
+>      : ^
 
         value.foo;
 >value.foo : number
+>          : ^^^^^^
 >value : BB
+>      : ^^
 >foo : number
+>    : ^^^^^^
     }
     if (value.tag === 'B') {
 >value.tag === 'B' : boolean
+>                  : ^^^^^^^
 >value.tag : "A" | "B"
+>          : ^^^^^^^^^
 >value : MyUnion
+>      : ^^^^^^^
 >tag : "A" | "B"
+>    : ^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
         value.foo;
 >value.foo : number
+>          : ^^^^^^
 >value : BB
+>      : ^^
 >foo : number
+>    : ^^^^^^
     }
 };
 
 // Repro from #13995
 
 type A1 = {
->A1 : { testable: true; doTest: () => void; }
+>A1 : A1
+>   : ^^
 
     testable: true
 >testable : true
+>         : ^^^^
 >true : true
+>     : ^^^^
 
     doTest: () => void
 >doTest : () => void
+>       : ^^^^^^    
 }
 type B1 = {
->B1 : { testable: false; }
+>B1 : B1
+>   : ^^
 
     testable: false
 >testable : false
+>         : ^^^^^
 >false : false
+>      : ^^^^^
 
 };
 
 type Union = A1 | B1
->Union : A1 | B1
+>Union : Union
+>      : ^^^^^
 
 function notWorking<T extends Union>(object: T) {
 >notWorking : <T extends Union>(object: T) => void
+>           : ^ ^^^^^^^^^     ^^      ^^ ^^^^^^^^^
 >object : T
+>       : ^
 
     if (!object.testable) return;
 >!object.testable : boolean
+>                 : ^^^^^^^
 >object.testable : boolean
+>                : ^^^^^^^
 >object : Union
+>       : ^^^^^
 >testable : boolean
+>         : ^^^^^^^
 
     object.doTest();
 >object.doTest() : void
+>                : ^^^^
 >object.doTest : () => void
+>              : ^^^^^^    
 >object : A1
+>       : ^^
 >doTest : () => void
+>       : ^^^^^^    
 }
 
 // Repro from #42939
@@ -326,29 +492,41 @@ function notWorking<T extends Union>(object: T) {
 interface A {
     a: number | null;
 >a : number | null
+>  : ^^^^^^^^^^^^^
 
 };
 
 function get<K extends keyof A>(key: K, obj: A): number {
->get : <K extends "a">(key: K, obj: A) => number
+>get : <K extends keyof A>(key: K, obj: A) => number
+>    : ^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^      
 >key : K
+>    : ^
 >obj : A
+>    : ^
 
     const value = obj[key];
 >value : A[K]
+>      : ^^^^
 >obj[key] : A[K]
+>         : ^^^^
 >obj : A
+>    : ^
 >key : K
+>    : ^
 
     if (value !== null) {
 >value !== null : boolean
+>               : ^^^^^^^
 >value : A[K]
+>      : ^^^^
 
         return value;
 >value : number
+>      : ^^^^^^
     }
     return 0;
 >0 : 0
+>  : ^
 
 };
 
@@ -356,33 +534,53 @@ function get<K extends keyof A>(key: K, obj: A): number {
 
 class EventEmitter<ET> {
 >EventEmitter : EventEmitter<ET>
+>             : ^^^^^^^^^^^^^^^^
 
     off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
 >off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
+>    : ^ ^^^^^^^^^        ^^^^^    ^^                               ^^^^^    
 >args : [K, number] | [unknown, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
 >once : <ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET) => void
+>     : ^  ^^ ^^^^^^^^^                ^^              ^^ ^^         ^^        ^^^^^    
 >emittingObject : T
+>               : ^
 >eventName : keyof ET
+>          : ^^^^^^^^
 
     emittingObject.off(eventName, 0);
 >emittingObject.off(eventName, 0) : void
+>                                 : ^^^^
 >emittingObject.off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >emittingObject : T
+>               : ^
 >off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >eventName : keyof ET
+>          : ^^^^^^^^
 >0 : 0
+>  : ^
 
     emittingObject.off(eventName as typeof eventName, 0);
 >emittingObject.off(eventName as typeof eventName, 0) : void
+>                                                     : ^^^^
 >emittingObject.off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >emittingObject : T
+>               : ^
 >off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >eventName as typeof eventName : keyof ET
+>                              : ^^^^^^^^
 >eventName : keyof ET
+>          : ^^^^^^^^
 >eventName : keyof ET
+>          : ^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 // In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
@@ -391,109 +589,172 @@ function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyo
 
 function fx1<T, K extends keyof T>(obj: T, key: K) {
 >fx1 : <T, K extends keyof T>(obj: T, key: K) => void
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 
     const x1 = obj[key];
 >x1 : T[K]
+>   : ^^^^
 >obj[key] : T[K]
+>         : ^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 
     const x2 = obj && obj[key];
 >x2 : NonNullable<T>[K]
+>   : ^^^^^^^^^^^^^^^^^
 >obj && obj[key] : NonNullable<T>[K]
+>                : ^^^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 >obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
 >obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
 >key : K
+>    : ^
 }
 
 function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
 >fx2 : <T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) => void
+>    : ^ ^^^^^^^^^                       ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 
     const x1 = obj[key];
 >x1 : T[K]
+>   : ^^^^
 >obj[key] : T[K]
+>         : ^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 
     const x2 = obj && obj[key];
 >x2 : T[K]
+>   : ^^^^
 >obj && obj[key] : T[K]
+>                : ^^^^
 >obj : T
+>    : ^
 >obj[key] : T[K]
+>         : ^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 }
 
 function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
 >fx3 : <T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) => void
+>    : ^ ^^^^^^^^^                                   ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 
     const x1 = obj[key];  // Error
 >x1 : Record<keyof T, string>[K]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[key] : Record<keyof T, string>[K]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Record<keyof T, string> | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 
     const x2 = obj && obj[key];
 >x2 : Record<keyof T, string>[K]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj && obj[key] : Record<keyof T, string>[K]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 >obj[key] : Record<keyof T, string>[K]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Record<keyof T, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 }
 
 // Repro from #44166
 
 class TableBaseEnum<
 >TableBaseEnum : TableBaseEnum<PublicSpec, InternalSpec>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     PublicSpec extends Record<keyof InternalSpec, any>,
     InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         let iSpec = null! as InternalSpec;
 >iSpec : InternalSpec
+>      : ^^^^^^^^^^^^
 >null! as InternalSpec : InternalSpec
+>                      : ^^^^^^^^^^^^
 >null! : never
+>      : ^^^^^
 
         iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
 >iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iSpec : Record<keyof PublicSpec, any> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null! as keyof InternalSpec : keyof InternalSpec
+>                            : ^^^^^^^^^^^^^^^^^^
 >null! : never
+>      : ^^^^^
 
         iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
 >iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iSpec : Record<keyof PublicSpec, any> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null! as keyof PublicSpec : keyof PublicSpec
+>                          : ^^^^^^^^^^^^^^^^
 >null! : never
+>      : ^^^^^
 
         if (iSpec === undefined) {
 >iSpec === undefined : boolean
+>                    : ^^^^^^^
 >iSpec : InternalSpec
+>      : ^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             return;
         }
         iSpec[null! as keyof InternalSpec];
 >iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iSpec : Record<keyof PublicSpec, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null! as keyof InternalSpec : keyof InternalSpec
+>                            : ^^^^^^^^^^^^^^^^^^
 >null! : never
+>      : ^^^^^
 
         iSpec[null! as keyof PublicSpec];
 >iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iSpec : Record<keyof PublicSpec, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null! as keyof PublicSpec : keyof PublicSpec
+>                          : ^^^^^^^^^^^^^^^^
 >null! : never
+>      : ^^^^^
     }
 }
 
@@ -501,36 +762,54 @@ class TableBaseEnum<
 
 function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
 >f10 : <T extends { a: string; } | undefined>(x: T, y: Partial<T>) => void
+>    : ^ ^^^^^^^^^                          ^^ ^^ ^^ ^^          ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >x : T
+>  : ^
 >y : Partial<T>
+>  : ^^^^^^^^^^
 
     y = x;
 >y = x : T
+>      : ^
 >y : Partial<T>
+>  : ^^^^^^^^^^
 >x : T
+>  : ^
 }
 
 type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
 >SqlInsertSet : SqlInsertSet<T>
+>             : ^^^^^^^^^^^^^^^
 
 class SqlTable<T> {
 >SqlTable : SqlTable<T>
+>         : ^^^^^^^^^^^
 
     protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
 >validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>            : ^    ^^                        ^^^^^    
 >_row : Partial<SqlInsertSet<T>>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
     }
     public insertRow(row: SqlInsertSet<T>) {
 >insertRow : (row: SqlInsertSet<T>) => void
+>          : ^   ^^               ^^^^^^^^^
 >row : SqlInsertSet<T>
+>    : ^^^^^^^^^^^^^^^
 
         this.validateRow(row);
 >this.validateRow(row) : void
+>                      : ^^^^
 >this.validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>                 : ^    ^^                        ^^^^^    
 >this : this
+>     : ^^^^
 >validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>            : ^    ^^                        ^^^^^    
 >row : SqlInsertSet<T>
+>    : ^^^^^^^^^^^^^^^
     }
 }
 
@@ -539,39 +818,56 @@ class SqlTable<T> {
 interface Button {
     type: "button";
 >type : "button"
+>     : ^^^^^^^^
 
     text: string;
 >text : string
+>     : ^^^^^^
 }
 
 interface Checkbox {
     type: "checkbox";
 >type : "checkbox"
+>     : ^^^^^^^^^^
 
     isChecked: boolean;
 >isChecked : boolean
+>          : ^^^^^^^
 }
 
 type Control = Button | Checkbox;
->Control : Button | Checkbox
+>Control : Control
+>        : ^^^^^^^
 
 function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
 >update : <T extends Control, K extends keyof T>(control: T | undefined, key: K, value: T[K]) => void
+>       : ^ ^^^^^^^^^       ^^ ^^^^^^^^^       ^^       ^^             ^^   ^^ ^^     ^^    ^^^^^    
 >control : T | undefined
+>        : ^^^^^^^^^^^^^
 >key : K
+>    : ^
 >value : T[K]
+>      : ^^^^
 
     if (control !== undefined) {
 >control !== undefined : boolean
+>                      : ^^^^^^^
 >control : T | undefined
+>        : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         control[key] = value;
 >control[key] = value : T[K]
+>                     : ^^^^
 >control[key] : T[K]
+>             : ^^^^
 >control : T
+>        : ^
 >key : K
+>    : ^
 >value : T[K]
+>      : ^^^^
     }
 }
 
@@ -579,18 +875,28 @@ function update<T extends Control, K extends keyof T>(control : T | undefined, k
 
 type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
 >Column : Column<T>
+>       : ^^^^^^^^^
 >id : string | number | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : T
+>   : ^
 >title : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
 function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
->getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
+>                  : ^ ^^      ^^         ^^   ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^
 >column : Column<T>
->key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+>       : ^^^^^^^^^
+>key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^
 
   return column[key];
->column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^
 >column : Column<T>
->key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+>       : ^^^^^^^^^
+>key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^
 }
 

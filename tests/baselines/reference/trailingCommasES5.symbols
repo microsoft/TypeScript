@@ -1,4 +1,6 @@
-=== tests/cases/compiler/trailingCommasES5.ts ===
+//// [tests/cases/compiler/trailingCommasES5.ts] ////
+
+=== trailingCommasES5.ts ===
 var o1 = { a: 1, b: 2 };
 >o1 : Symbol(o1, Decl(trailingCommasES5.ts, 0, 3))
 >a : Symbol(a, Decl(trailingCommasES5.ts, 0, 10))

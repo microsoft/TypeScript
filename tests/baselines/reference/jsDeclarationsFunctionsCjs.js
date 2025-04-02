@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionsCjs.ts] ////
+
 //// [index.js]
 module.exports.a = function a() {}
 

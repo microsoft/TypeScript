@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(9,14): error TS2769: No overload matches this call.
+file.tsx(9,15): error TS2769: No overload matches this call.
   Overload 1 of 3, '(): Element', gave the following error.
     Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'a' does not exist on type 'IntrinsicAttributes'.
@@ -6,7 +6,7 @@ tests/cases/conformance/jsx/file.tsx(9,14): error TS2769: No overload matches th
     Type 'number' is not assignable to type 'string'.
   Overload 3 of 3, '(attr: { b: unknown; a: number; }): Element', gave the following error.
     Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
-tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches this call.
+file.tsx(10,15): error TS2769: No overload matches this call.
   Overload 1 of 3, '(): Element', gave the following error.
     Type 'T & { "ignore-prop": true; }' has no properties in common with type 'IntrinsicAttributes'.
   Overload 2 of 3, '(attr: { b: number; a: string; "ignore-prop": boolean; }): Element', gave the following error.
@@ -17,7 +17,7 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches t
       Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+==== file.tsx (2 errors) ====
     import React = require('react')
     
     declare function OverloadComponent<U>(): JSX.Element;
@@ -27,7 +27,7 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches t
     // Error
     function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
         let a0 = <OverloadComponent a={arg1.b}/>
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(): Element', gave the following error.
 !!! error TS2769:     Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.
@@ -36,8 +36,8 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches t
 !!! error TS2769:     Type 'number' is not assignable to type 'string'.
 !!! error TS2769:   Overload 3 of 3, '(attr: { b: unknown; a: number; }): Element', gave the following error.
 !!! error TS2769:     Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:52: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & { b: unknown; a: string; "ignore-prop": boolean; }'
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:49: 'b' is declared here.
+!!! related TS6500 file.tsx:4:52: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & { b: unknown; a: string; "ignore-prop": boolean; }'
+!!! related TS2728 file.tsx:5:49: 'b' is declared here.
         let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
                   ~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -49,6 +49,6 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches t
 !!! error TS2769:   Overload 3 of 3, '(attr: { b: unknown; a: unknown; }): Element', gave the following error.
 !!! error TS2769:     Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
 !!! error TS2769:       Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:4:52: 'a' is declared here.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:55: 'a' is declared here.
+!!! related TS2728 file.tsx:4:52: 'a' is declared here.
+!!! related TS2728 file.tsx:5:55: 'a' is declared here.
     }

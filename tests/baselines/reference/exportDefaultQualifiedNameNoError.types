@@ -1,19 +1,30 @@
-=== tests/cases/compiler/code.ts ===
+//// [tests/cases/compiler/exportDefaultQualifiedNameNoError.ts] ////
+
+=== code.ts ===
 class C { static x = 0; };
 >C : C
+>  : ^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 export default C.x;
 >C.x : number
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import def from "./code";
 >def : number
+>    : ^^^^^^
 
 void def;
 >void def : undefined
+>         : ^^^^^^^^^
 >def : number
+>    : ^^^^^^
 

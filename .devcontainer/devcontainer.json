@@ -1,22 +1,44 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
 {
     "name": "Node.js",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "args": {
-            "VARIANT": "14"
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    "features": {
+        "ghcr.io/devcontainers/features/go:1": {}
+    },
+
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": {
+        "Configure Build Tools": "sudo corepack enable npm; sudo npm install -g hereby; npm ci",
+        "Install pprof": "go install github.com/google/pprof@latest",
+        "Install Graphviz": "sudo apt install graphviz"
+    },
+
+    // Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash",
+                        "icon": "terminal-bash"
+                    }
+                }
+            },
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "dprint.dprint"
+            ]
         }
     },
-    "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "terminal.integrated.profiles.linux": {
-            "bash": {
-                "path": "/bin/bash",
-                "icon": "terminal-bash",
-            },
-        },
-    },
-    "extensions": [
-        "dbaeumer.vscode-eslint"
-    ],
+
+    // More info: https://aka.ms/dev-containers-non-root.
     "remoteUser": "node"
 }

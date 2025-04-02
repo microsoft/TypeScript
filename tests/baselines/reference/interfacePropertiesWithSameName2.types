@@ -1,19 +1,27 @@
-=== tests/cases/compiler/interfacePropertiesWithSameName2.ts ===
+//// [tests/cases/compiler/interfacePropertiesWithSameName2.ts] ////
+
+=== interfacePropertiesWithSameName2.ts ===
 interface Mover {
     move(): void;
 >move : () => void
+>     : ^^^^^^    
 
     getStatus(): { speed: number; };
->getStatus : () => {    speed: number;}
+>getStatus : () => { speed: number; }
+>          : ^^^^^^                  
 >speed : number
+>      : ^^^^^^
 }
 interface Shaker {
     shake(): void;
 >shake : () => void
+>      : ^^^^^^    
 
     getStatus(): { frequency: number; };
->getStatus : () => {    frequency: number;}
+>getStatus : () => { frequency: number; }
+>          : ^^^^^^                      
 >frequency : number
+>          : ^^^^^^
 }
 
 interface MoverShaker extends Mover, Shaker {
@@ -23,37 +31,52 @@ interface MoverShaker extends Mover, Shaker {
 // Inside a module
 declare module MoversAndShakers {
 >MoversAndShakers : typeof MoversAndShakers
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     export class Mover {
 >Mover : Mover
+>      : ^^^^^
 
         move(): void;
 >move : () => void
+>     : ^^^^^^    
 
         getStatus(): { speed: number; };
->getStatus : () => {    speed: number;}
+>getStatus : () => { speed: number; }
+>          : ^^^^^^                  
 >speed : number
+>      : ^^^^^^
     }
     export interface Shaker {
         shake(): void;
 >shake : () => void
+>      : ^^^^^^    
 
         getStatus(): { frequency: number; };
->getStatus : () => {    frequency: number;}
+>getStatus : () => { frequency: number; }
+>          : ^^^^^^                      
 >frequency : number
+>          : ^^^^^^
     }
 }
 
 interface MoverShaker2 extends MoversAndShakers.Mover, MoversAndShakers.Shaker { } // error
 >MoversAndShakers : typeof MoversAndShakers
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >MoversAndShakers : typeof MoversAndShakers
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
 interface MoverShaker3 extends MoversAndShakers.Mover, MoversAndShakers.Shaker {
 >MoversAndShakers : typeof MoversAndShakers
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >MoversAndShakers : typeof MoversAndShakers
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     getStatus(): { speed: number; frequency: number; }; // ok because this getStatus overrides the conflicting ones above
->getStatus : () => {    speed: number;    frequency: number;}
+>getStatus : () => { speed: number; frequency: number; }
+>          : ^^^^^^                                     
 >speed : number
+>      : ^^^^^^
 >frequency : number
+>          : ^^^^^^
 }

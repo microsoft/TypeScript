@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts] ////
+
 //// [callOfConditionalTypeWithConcreteBranches.ts]
 type Q<T> = number extends T ? (n: number) => void : never;
 function fn<T>(arg: Q<T>) {

@@ -1,107 +1,159 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts] ////
+
+=== equalityWithEnumTypes.ts ===
 // Literal enum type
 enum E1 {
 >E1 : E1
+>   : ^^
 
     a = 1,
 >a : E1.a
+>  : ^^^^
 >1 : 1
+>  : ^
 
     b = 2,
 >b : E1.b
+>  : ^^^^
 >2 : 2
+>  : ^
 }
 
 // Numeric enum type
 enum E2 {
 >E2 : E2
+>   : ^^
 
     a = 1 << 0,
 >a : E2.a
+>  : ^^^^
 >1 << 0 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 
     b = 1 << 1
 >b : E2.b
+>  : ^^^^
 >1 << 1 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 
 function f1(v: E1) {
 >f1 : (v: E1) => void
+>   : ^ ^^  ^^^^^^^^^
 >v : E1
+>  : ^^
 
     if (v !== 0) {  // Error
 >v !== 0 : boolean
+>        : ^^^^^^^
 >v : E1
+>  : ^^
 >0 : 0
+>  : ^
 
         v;
 >v : E1
+>  : ^^
     }
     if (v !== 1) {
 >v !== 1 : boolean
+>        : ^^^^^^^
 >v : E1
+>  : ^^
 >1 : 1
+>  : ^
 
         v;
 >v : E1.b
+>  : ^^^^
     }
     if (v !== 2) {
 >v !== 2 : boolean
+>        : ^^^^^^^
 >v : E1
+>  : ^^
 >2 : 2
+>  : ^
 
         v;
 >v : E1.a
+>  : ^^^^
     }
     if (v !== 3) {  // Error
 >v !== 3 : boolean
+>        : ^^^^^^^
 >v : E1
+>  : ^^
 >3 : 3
+>  : ^
 
         v;
 >v : E1
+>  : ^^
     }
 }
 
 function f2(v: E2) {
 >f2 : (v: E2) => void
+>   : ^ ^^  ^^^^^^^^^
 >v : E2
+>  : ^^
 
     if (v !== 0) {
 >v !== 0 : boolean
+>        : ^^^^^^^
 >v : E2
+>  : ^^
 >0 : 0
+>  : ^
 
         v;
 >v : E2
+>  : ^^
     }
     if (v !== 1) {
 >v !== 1 : boolean
+>        : ^^^^^^^
 >v : E2
+>  : ^^
 >1 : 1
+>  : ^
 
         v;
 >v : E2.b
+>  : ^^^^
     }
     if (v !== 2) {
 >v !== 2 : boolean
+>        : ^^^^^^^
 >v : E2
+>  : ^^
 >2 : 2
+>  : ^
 
         v;
 >v : E2.a
+>  : ^^^^
     }
     if (v !== 3) {
 >v !== 3 : boolean
+>        : ^^^^^^^
 >v : E2
+>  : ^^
 >3 : 3
+>  : ^
 
         v;
 >v : E2
+>  : ^^
     }
 }
 

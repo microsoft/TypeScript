@@ -1,51 +1,77 @@
-=== tests/cases/compiler/subtypingTransitivity.ts ===
+//// [tests/cases/compiler/subtypingTransitivity.ts] ////
+
+=== subtypingTransitivity.ts ===
 class B {
 >B : B
+>  : ^
 
     x: Object;
 >x : Object
+>  : ^^^^^^
 }
 
 class D extends B {
 >D : D
+>  : ^
 >B : B
+>  : ^
 
     public x: string;
 >x : string
+>  : ^^^^^^
 }
 class D2 extends B {
 >D2 : D2
+>   : ^^
 >B : B
+>  : ^
 
     public x: number;
 >x : number
+>  : ^^^^^^
 }
 
 var b: B;
 >b : B
+>  : ^
 
 var d: D;
 >d : D
+>  : ^
 
 var d2: D2;
 >d2 : D2
+>   : ^^
 
 d.x = '';
 >d.x = '' : ""
+>         : ^^
 >d.x : string
+>    : ^^^^^^
 >d : D
+>  : ^
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 b = d;
 >b = d : D
+>      : ^
 >b : B
+>  : ^
 >d : D
+>  : ^
 
 b.x = 1; // assigned number to string
 >b.x = 1 : 1
+>        : ^
 >b.x : Object
+>    : ^^^^^^
 >b : B
+>  : ^
 >x : Object
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

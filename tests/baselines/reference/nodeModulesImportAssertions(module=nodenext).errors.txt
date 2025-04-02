@@ -1,19 +1,17 @@
-error TS2468: Cannot find global value 'Promise'.
-tests/cases/conformance/node/otherc.cts(1,35): error TS2836: Import assertions are not allowed on statements that transpile to commonjs 'require' calls.
-tests/cases/conformance/node/otherc.cts(2,15): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+index.ts(1,35): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+otherc.cts(1,35): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
 
 
-!!! error TS2468: Cannot find global value 'Promise'.
-==== tests/cases/conformance/node/index.ts (0 errors) ====
+==== index.ts (1 errors) ====
     import json from "./package.json" assert { type: "json" };
-==== tests/cases/conformance/node/otherc.cts (2 errors) ====
+                                      ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+==== otherc.cts (1 errors) ====
     import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
-                                      ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2836: Import assertions are not allowed on statements that transpile to commonjs 'require' calls.
+                                      ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
     const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "pkg",
         "private": true,

@@ -1,80 +1,116 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationImportsAndExports3.ts] ////
+
+=== f1.ts ===
 export class A {}
 >A : A
+>  : ^
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 export class B {
 >B : B
+>  : ^
 
     n: number;
 >n : number
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/f3.ts ===
+=== f3.ts ===
 import {A} from "./f1";
 >A : typeof A
+>  : ^^^^^^^^
 
 A.prototype.foo = function () { return undefined; }
 >A.prototype.foo = function () { return undefined; } : () => any
+>                                                    : ^^^^^^^^^
 >A.prototype.foo : () => B
+>                : ^^^^^^^
 >A.prototype : A
+>            : ^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : A
+>          : ^
 >foo : () => B
+>    : ^^^^^^^
 >function () { return undefined; } : () => any
+>                                  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 namespace N {
     export interface Ifc { a }
 >a : any
+>  : ^^^
 
     export interface Cls { a }
 >a : any
+>  : ^^^
 }
 
 declare module "./f1" {
->"./f1" : typeof import("tests/cases/compiler/f1")
+>"./f1" : typeof import("f1")
+>       : ^^^^^^^^^^^^^^^^^^^
 
     import {B} from "./f2";
 >B : any
+>  : ^^^
 
     import I = N.Ifc;
 >I : any
+>  : ^^^
 >N : any
+>  : ^^^
 >Ifc : I
+>    : ^
 
     import C = N.Cls;
 >C : any
+>  : ^^^
 >N : any
+>  : ^^^
 >Cls : C
+>    : ^
 
     interface A {
         foo(): B;
 >foo : () => B
+>    : ^^^^^^ 
 
         bar(): I;
 >bar : () => I
+>    : ^^^^^^ 
 
         baz(): C;
 >baz : () => C
+>    : ^^^^^^ 
     }
 }
 
-=== tests/cases/compiler/f4.ts ===
+=== f4.ts ===
 import {A} from "./f1";
 >A : typeof A
+>  : ^^^^^^^^
 
 import "./f3";
 
 let a: A;
 >a : A
+>  : ^
 
 let b = a.foo().n;
 >b : any
+>  : ^^^
 >a.foo().n : any
+>          : ^^^
 >a.foo() : B
+>        : ^
 >a.foo : () => B
+>      : ^^^^^^^
 >a : A
+>  : ^
 >foo : () => B
+>    : ^^^^^^^
 >n : any
+>  : ^^^
 

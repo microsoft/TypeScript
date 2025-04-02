@@ -1,35 +1,54 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor5.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor5.ts] ////
+
+=== autoAccessor5.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     accessor ["w"]: any;
 >["w"] : any
+>      : ^^^
 >"w" : "w"
+>    : ^^^
 
     accessor ["x"] = 1;
 >["x"] : number
+>      : ^^^^^^
 >"x" : "x"
+>    : ^^^
 >1 : 1
+>  : ^
 
     static accessor ["y"]: any;
 >["y"] : any
+>      : ^^^
 >"y" : "y"
+>    : ^^^
 
     static accessor ["z"] = 2;
 >["z"] : number
+>      : ^^^^^^
 >"z" : "z"
+>    : ^^^
 >2 : 2
+>  : ^
 }
 
 declare var f: any;
 >f : any
+>  : ^^^
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     accessor [f()] = 1;
 >[f()] : number
+>      : ^^^^^^
 >f() : any
+>    : ^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 }

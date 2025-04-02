@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tupleTypeInference2.ts ===
+//// [tests/cases/compiler/tupleTypeInference2.ts] ////
+
+=== tupleTypeInference2.ts ===
 // Repro from #22564
 
 type A<R> = [R] | [R, string];

@@ -1,6 +1,8 @@
-=== tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignmentJs.js ===
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignmentJs.ts] ////
 
-=== tests/cases/conformance/classes/members/privateNames/a.js ===
+=== typeFromPrivatePropertyAssignmentJs.js ===
+
+=== a.js ===
 class C {
 >C : Symbol(C, Decl(a.js, 0, 0))
 

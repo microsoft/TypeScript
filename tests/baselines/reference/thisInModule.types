@@ -1,14 +1,23 @@
-=== tests/cases/compiler/thisInModule.ts ===
+//// [tests/cases/compiler/thisInModule.ts] ////
+
+=== thisInModule.ts ===
 module myMod {
 >myMod : typeof myMod
+>      : ^^^^^^^^^^^^
 
     var x;
 >x : any
+>  : ^^^
 
     this.x = 5;
 >this.x = 5 : 5
+>           : ^
 >this.x : any
+>       : ^^^
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >5 : 5
+>  : ^
 }

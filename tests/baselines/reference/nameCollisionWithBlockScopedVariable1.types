@@ -1,19 +1,28 @@
-=== tests/cases/compiler/nameCollisionWithBlockScopedVariable1.ts ===
+//// [tests/cases/compiler/nameCollisionWithBlockScopedVariable1.ts] ////
+
+=== nameCollisionWithBlockScopedVariable1.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class C { }
 >C : C
+>  : ^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
     {
         let M = 0;
 >M : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
         new C();
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
     }
 }

@@ -1,219 +1,329 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== unionAndIntersectionInference3.ts ===
 // Repro from #30720
 
 type Maybe<T> = T | undefined;
 >Maybe : Maybe<T>
+>      : ^^^^^^^^
 
 declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
 >concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
+>            : ^ ^^^^^    ^^                         ^^^^^   
 >args : (Maybe<T> | Maybe<T>[])[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 concatMaybe([1, 2, 3], 4);
 >concatMaybe([1, 2, 3], 4) : number[]
+>                          : ^^^^^^^^
 >concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
+>            : ^ ^^^^^    ^^                         ^^^^^   
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 // Repros from #32247
 
 const g: <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Promise<U> = async <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>): Promise<U> => {
 >g : <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Promise<U>
+>  : ^ ^^ ^^ ^^   ^^                                                ^^^^^          
 >com : () => Iterator<S, U, R> | AsyncIterator<S, U, R>
+>    : ^^^^^^                                          
 >async <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>): Promise<U> => {  throw com;} : <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Promise<U>
+>                                                                                                     : ^ ^^ ^^ ^^   ^^                                                ^^^^^          
 >com : () => Iterator<S, U, R> | AsyncIterator<S, U, R>
+>    : ^^^^^^                                          
 
   throw com;
 >com : () => Iterator<S, U, R> | AsyncIterator<S, U, R>
+>    : ^^^^^^                                          
 
 };
 
 interface Foo1<T> {
     test(value: T): void;
 >test : (value: T) => void
+>     : ^     ^^ ^^^^^    
 >value : T
+>      : ^
 }
 
 interface Bar1<T> {
     test(value: T | PromiseLike<T>): void;
 >test : (value: T | PromiseLike<T>) => void
+>     : ^     ^^                  ^^^^^    
 >value : T | PromiseLike<T>
+>      : ^^^^^^^^^^^^^^^^^^
 }
 
 declare let f1: <T>(x: Foo1<T> | Bar1<T>) => Promise<T>;
 >f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
+>   : ^ ^^ ^^                 ^^^^^          
 >x : Foo1<T> | Bar1<T>
+>  : ^^^^^^^^^^^^^^^^^
 
 declare let f2: <U>(x: Foo1<U> | Bar1<U>) => Promise<U>;
 >f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
+>   : ^ ^^ ^^                 ^^^^^          
 >x : Foo1<U> | Bar1<U>
+>  : ^^^^^^^^^^^^^^^^^
 
 f1 = f2;
 >f1 = f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
+>        : ^ ^^ ^^                 ^^^^^          
 >f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
+>   : ^ ^^ ^^                 ^^^^^          
 >f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
+>   : ^ ^^ ^^                 ^^^^^          
 
 f2 = f1;
 >f2 = f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
+>        : ^ ^^ ^^                 ^^^^^          
 >f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
+>   : ^ ^^ ^^                 ^^^^^          
 >f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
+>   : ^ ^^ ^^                 ^^^^^          
 
 type Foo2<T> = {
 >Foo2 : Foo2<T>
+>     : ^^^^^^^
 
     test(value: T): void;
 >test : (value: T) => void
+>     : ^     ^^ ^^^^^    
 >value : T
+>      : ^
 }
 
 type Bar2<T> = {
 >Bar2 : Bar2<T>
+>     : ^^^^^^^
 
     test(value: T | PromiseLike<T>): void;
 >test : (value: T | PromiseLike<T>) => void
+>     : ^     ^^                  ^^^^^    
 >value : T | PromiseLike<T>
+>      : ^^^^^^^^^^^^^^^^^^
 }
 
 declare let g1: <T>(x: Foo2<T> | Bar2<T>) => Promise<T>;
 >g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
+>   : ^ ^^ ^^                 ^^^^^          
 >x : Foo2<T> | Bar2<T>
+>  : ^^^^^^^^^^^^^^^^^
 
 declare let g2: <U>(x: Foo2<U> | Bar2<U>) => Promise<U>;
 >g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
+>   : ^ ^^ ^^                 ^^^^^          
 >x : Foo2<U> | Bar2<U>
+>  : ^^^^^^^^^^^^^^^^^
 
 g1 = g2;
 >g1 = g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
+>        : ^ ^^ ^^                 ^^^^^          
 >g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
+>   : ^ ^^ ^^                 ^^^^^          
 >g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
+>   : ^ ^^ ^^                 ^^^^^          
 
 g2 = g1;
 >g2 = g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
+>        : ^ ^^ ^^                 ^^^^^          
 >g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
+>   : ^ ^^ ^^                 ^^^^^          
 >g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
+>   : ^ ^^ ^^                 ^^^^^          
 
 // Repro from #32572
 
 declare function foo1<T>(obj: string[] & Iterable<T>): T;
 >foo1 : <T>(obj: string[] & Iterable<T>) => T
+>     : ^ ^^   ^^                      ^^^^^ 
 >obj : string[] & Iterable<T>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare function foo2<T>(obj: string[] & T): T;
 >foo2 : <T>(obj: string[] & T) => T
+>     : ^ ^^   ^^            ^^^^^ 
 >obj : string[] & T
+>    : ^^^^^^^^^^^^
 
 declare let sa: string[];
 >sa : string[]
+>   : ^^^^^^^^
 
 declare let sx: string[] & { extra: number };
 >sx : string[] & { extra: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^      ^^^
 >extra : number
+>      : ^^^^^^
 
 let x1 = foo1(sa);  // string
 >x1 : string
+>   : ^^^^^^
 >foo1(sa) : string
+>         : ^^^^^^
 >foo1 : <T>(obj: string[] & Iterable<T>) => T
+>     : ^ ^^   ^^                      ^^^^^ 
 >sa : string[]
+>   : ^^^^^^^^
 
 let y1 = foo1(sx);  // string
 >y1 : string
+>   : ^^^^^^
 >foo1(sx) : string
+>         : ^^^^^^
 >foo1 : <T>(obj: string[] & Iterable<T>) => T
+>     : ^ ^^   ^^                      ^^^^^ 
 >sx : string[] & { extra: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^      ^^^
 
 let x2 = foo2(sa);  // unknown
 >x2 : unknown
+>   : ^^^^^^^
 >foo2(sa) : unknown
+>         : ^^^^^^^
 >foo2 : <T>(obj: string[] & T) => T
+>     : ^ ^^   ^^            ^^^^^ 
 >sa : string[]
+>   : ^^^^^^^^
 
 let y2 = foo2(sx);  // { extra: number }
 >y2 : { extra: number; }
+>   : ^^^^^^^^^      ^^^
 >foo2(sx) : { extra: number; }
+>         : ^^^^^^^^^      ^^^
 >foo2 : <T>(obj: string[] & T) => T
+>     : ^ ^^   ^^            ^^^^^ 
 >sx : string[] & { extra: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^      ^^^
 
 // Repro from #33490
 
 declare class Component<P> { props: P }
 >Component : Component<P>
+>          : ^^^^^^^^^^^^
 >props : P
+>      : ^
 
 export type ComponentClass<P> = new (props: P) => Component<P>;
 >ComponentClass : ComponentClass<P>
+>               : ^^^^^^^^^^^^^^^^^
 >props : P
+>      : ^
 
 export type FunctionComponent<P> = (props: P) => null;
 >FunctionComponent : FunctionComponent<P>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >props : P
+>      : ^
 
 export type ComponentType<P> = FunctionComponent<P> | ComponentClass<P>;
 >ComponentType : ComponentType<P>
+>              : ^^^^^^^^^^^^^^^^
 
 export interface RouteComponentProps { route: string }
 >route : string
+>      : ^^^^^^
 
 declare function withRouter<
 >withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, keyof RouteComponentProps>>
+>           : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^                ^^         ^^                    ^^^^^                                                  
 
   P extends RouteComponentProps,
   C extends ComponentType<P>
 >(
   component: C & ComponentType<P>
 >component : C & ComponentType<P>
+>          : ^^^^^^^^^^^^^^^^^^^^
 
 ): ComponentClass<Omit<P, keyof RouteComponentProps>>;
 
 interface Props extends RouteComponentProps { username: string }
 >username : string
+>         : ^^^^^^
 
 declare const MyComponent: ComponentType<Props>;
 >MyComponent : ComponentType<Props>
+>            : ^^^^^^^^^^^^^^^^^^^^
 
 withRouter(MyComponent);
 >withRouter(MyComponent) : ComponentClass<Omit<Props, "route">>
->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, "route">>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, keyof RouteComponentProps>>
+>           : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^                ^^         ^^                    ^^^^^                                                  
 >MyComponent : ComponentType<Props>
+>            : ^^^^^^^^^^^^^^^^^^^^
 
 // Repro from #33490
 
 type AB<T> = { a: T } | { b: T };
 >AB : AB<T>
+>   : ^^^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
 // T & AB<U> normalizes to T & { a: U } | T & { b: U } below
 declare function foo<T, U>(obj: T & AB<U>): [T, U];
 >foo : <T, U>(obj: T & AB<U>) => [T, U]
+>    : ^ ^^ ^^   ^^         ^^^^^      
 >obj : T & AB<U>
+>    : ^^^^^^^^^
 
 declare let ab: AB<string>;
 >ab : AB<string>
+>   : ^^^^^^^^^^
 
 let z = foo(ab);  // [AB<string>, string]
 >z : [{ a: string; } | { b: string; }, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(ab) : [{ a: string; } | { b: string; }, string]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U>(obj: T & AB<U>) => [T, U]
+>    : ^ ^^ ^^   ^^         ^^^^^      
 >ab : AB<string>
+>   : ^^^^^^^^^^
 
 // Repro from #51399
 
 declare let a: <T>() => (T extends true ? true : false) & boolean;
 >a : <T>() => (T extends true ? true : false) & boolean
+>  : ^ ^^^^^^^                                         
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 declare let b: <T>() => (T extends true ? true : false) & boolean;
 >b : <T>() => (T extends true ? true : false) & boolean
+>  : ^ ^^^^^^^                                         
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 a = b;
 >a = b : <T>() => (T extends true ? true : false) & boolean
+>      : ^ ^^^^^^^                                         
 >a : <T>() => (T extends true ? true : false) & boolean
+>  : ^ ^^^^^^^                                         
 >b : <T>() => (T extends true ? true : false) & boolean
+>  : ^ ^^^^^^^                                         
 

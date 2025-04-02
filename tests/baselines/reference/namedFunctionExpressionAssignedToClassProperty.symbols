@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namedFunctionExpressionAssignedToClassProperty.ts ===
+//// [tests/cases/compiler/namedFunctionExpressionAssignedToClassProperty.ts] ////
+
+=== namedFunctionExpressionAssignedToClassProperty.ts ===
 class Foo{
 >Foo : Symbol(Foo, Decl(namedFunctionExpressionAssignedToClassProperty.ts, 0, 0))
 

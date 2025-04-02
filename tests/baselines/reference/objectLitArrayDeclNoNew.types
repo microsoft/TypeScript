@@ -1,12 +1,17 @@
-=== tests/cases/compiler/objectLitArrayDeclNoNew.ts ===
+//// [tests/cases/compiler/objectLitArrayDeclNoNew.ts] ////
+
+=== objectLitArrayDeclNoNew.ts ===
 declare var console;
 >console : any
+>        : ^^^
 
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 module Test {
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
     export interface IState {
     }
@@ -17,37 +22,51 @@ module Test {
     export interface ILineTokens {
         tokens: IToken[];
 >tokens : IToken[]
+>       : ^^^^^^^^
 
         endState: IState;
 >endState : IState
+>         : ^^^^^^
     }
 
     export class Gar {
 >Gar : Gar
+>    : ^^^
 
         public moo: number = 0;
 >moo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
     }
 
     export function bug(): ILineTokens {
 >bug : () => ILineTokens
+>    : ^^^^^^           
 
       var state:IState= null;
 >state : IState
+>      : ^^^^^^
 
       return {
 >{       tokens: Gar[],//IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]       endState: state      } : { tokens: any; endState: IState; }
+>                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
        tokens: Gar[],//IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]
 >tokens : any
+>       : ^^^
 >Gar[] : any
+>      : ^^^
 >Gar : typeof Gar
+>    : ^^^^^^^^^^
 > : any
+> : ^^^
 
        endState: state
 >endState : IState
+>         : ^^^^^^
 >state : IState
+>      : ^^^^^^
 
       };
      }

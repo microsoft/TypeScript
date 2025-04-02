@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyNameFulfillment.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyNameFulfillment.ts] ////
+
+=== typeSatisfaction_propertyNameFulfillment.ts ===
 type Keys = 'a' | 'b' | 'c' | 'd';
 >Keys : Symbol(Keys, Decl(typeSatisfaction_propertyNameFulfillment.ts, 0, 0))
 

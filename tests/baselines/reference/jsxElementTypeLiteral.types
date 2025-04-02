@@ -1,35 +1,55 @@
-=== tests/cases/compiler/jsxElementTypeLiteral.tsx ===
+//// [tests/cases/compiler/jsxElementTypeLiteral.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== jsxElementTypeLiteral.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 declare global {
 >global : any
+>       : ^^^
 
   namespace JSX {
     // This should only use keys of JSX.IntrinsicElements.
     // Diverging here to illustrate different error messages.
     type ElementType = "div";
 >ElementType : "div"
+>            : ^^^^^
   }
 }
 
 // should be fine - `ElementType` accepts `div`
 let a = <div />;
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 // should be an error - `ElementType` does not accept `span`
 let b = <span />;
 >b : JSX.Element
+>  : ^^^^^^^^^^^
 ><span /> : JSX.Element
+>         : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 
 // Should be an error.
 // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
 let c = <ruhroh />;
 >c : JSX.Element
+>  : ^^^^^^^^^^^
 ><ruhroh /> : JSX.Element
+>           : ^^^^^^^^^^^
 >ruhroh : any
+>       : ^^^
 

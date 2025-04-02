@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts] ////
+
 //// [emitClassExpressionInDeclarationFile2.ts]
 export var noPrivates = class {
     static getTags() { }
@@ -52,7 +54,8 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test = exports.WithTags = exports.FooItem = exports.noPrivates = void 0;
+exports.Test = exports.FooItem = exports.noPrivates = void 0;
+exports.WithTags = WithTags;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {
             this.p = 12;
@@ -84,7 +87,6 @@ function WithTags(Base) {
         return class_2;
     }(Base));
 }
-exports.WithTags = WithTags;
 var Test = /** @class */ (function (_super) {
     __extends(Test, _super);
     function Test() {

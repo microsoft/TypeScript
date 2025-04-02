@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionParsingGenericInObject.ts] ////
+
 //// [arrowFunctionParsingGenericInObject.ts]
 const fn1 = () => ({
     test: <T = undefined>(value: T): T => value,

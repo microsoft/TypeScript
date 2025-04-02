@@ -1,31 +1,47 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty9.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty9.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty9.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     private a = "a"; // ok
 >a : string
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 
     private b = "b"; // ok
 >b : string
+>  : ^^^^^^
 >"b" : "b"
+>    : ^^^
 
     private c = "c"; // error unused prop
 >c : string
+>  : ^^^^^^
 >"c" : "c"
+>    : ^^^
 
     private d = "d"; // error unused prop
 >d : string
+>  : ^^^^^^
 >"d" : "d"
+>    : ^^^
 
     getValue(key: "a" | "b") {
 >getValue : (key: "a" | "b") => string
+>         : ^   ^^         ^^^^^^^^^^^
 >key : "a" | "b"
+>    : ^^^^^^^^^
 
         return this[key];
 >this[key] : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >key : "a" | "b"
+>    : ^^^^^^^^^
     }
 }
 

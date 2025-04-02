@@ -1,288 +1,471 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty1.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty1.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty1.ts ===
 interface Square {
     ["dash-ok"]: "square";
 >["dash-ok"] : "square"
+>            : ^^^^^^^^
 >"dash-ok" : "dash-ok"
+>          : ^^^^^^^^^
 
     ["square-size"]: number;
 >["square-size"] : number
+>                : ^^^^^^
 >"square-size" : "square-size"
+>              : ^^^^^^^^^^^^^
 }
  interface Rectangle {
     ["dash-ok"]: "rectangle";
 >["dash-ok"] : "rectangle"
+>            : ^^^^^^^^^^^
 >"dash-ok" : "dash-ok"
+>          : ^^^^^^^^^
 
     width: number;
 >width : number
+>      : ^^^^^^
 
     height: number;
 >height : number
+>       : ^^^^^^
 }
  interface Circle {
     ["dash-ok"]: "circle";
 >["dash-ok"] : "circle"
+>            : ^^^^^^^^
 >"dash-ok" : "dash-ok"
+>          : ^^^^^^^^^
 
     radius: number;
 >radius : number
+>       : ^^^^^^
 }
  type Shape = Square | Rectangle | Circle;
->Shape : Square | Rectangle | Circle
+>Shape : Shape
+>      : ^^^^^
 
 interface Subshape {
     "0": {
->"0" : { sub: {    under: {        shape: Shape;    };}; }
+>"0" : { sub: { under: { shape: Shape; }; }; }
+>    : ^^^^^^^                             ^^^
 
         sub: {
->sub : { under: {    shape: Shape;}; }
+>sub : { under: { shape: Shape; }; }
+>    : ^^^^^^^^^                 ^^^
 
             under: {
 >under : { shape: Shape; }
+>      : ^^^^^^^^^     ^^^
 
                 shape: Shape;
 >shape : Shape
+>      : ^^^^^
             }
         }
     }
 }
 function area(s: Shape): number {
 >area : (s: Shape) => number
+>     : ^ ^^     ^^^^^      
 >s : Shape
+>  : ^^^^^
 
     switch(s['dash-ok']) {
 >s['dash-ok'] : "square" | "rectangle" | "circle"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >'dash-ok' : "dash-ok"
+>          : ^^^^^^^^^
 
         case "square": return s['square-size'] * s['square-size'];
 >"square" : "square"
+>         : ^^^^^^^^
 >s['square-size'] * s['square-size'] : number
+>                                    : ^^^^^^
 >s['square-size'] : number
+>                 : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >'square-size' : "square-size"
+>              : ^^^^^^^^^^^^^
 >s['square-size'] : number
+>                 : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >'square-size' : "square-size"
+>              : ^^^^^^^^^^^^^
 
         case "rectangle": return s.width * s['height'];
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 >s.width * s['height'] : number
+>                      : ^^^^^^
 >s.width : number
+>        : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >s['height'] : number
+>            : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >'height' : "height"
+>         : ^^^^^^^^
 
         case "circle": return Math.PI * s['radius'] * s.radius;
 >"circle" : "circle"
+>         : ^^^^^^^^
 >Math.PI * s['radius'] * s.radius : number
+>                                 : ^^^^^^
 >Math.PI * s['radius'] : number
+>                      : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s['radius'] : number
+>            : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >'radius' : "radius"
+>         : ^^^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
     }
 }
 function subarea(s: Subshape): number {
 >subarea : (s: Subshape) => number
+>        : ^ ^^        ^^^^^      
 >s : Subshape
+>  : ^^^^^^^^
 
     switch(s[0]["sub"].under["shape"]["dash-ok"]) {
 >s[0]["sub"].under["shape"]["dash-ok"] : "square" | "rectangle" | "circle"
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s[0]["sub"].under["shape"] : Shape
+>                           : ^^^^^
 >s[0]["sub"].under : { shape: Shape; }
+>                  : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
+>     : ^^^^^^^                             ^^^
 >s : Subshape
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >"sub" : "sub"
+>      : ^^^^^
 >under : { shape: Shape; }
+>      : ^^^^^^^^^     ^^^
 >"shape" : "shape"
+>        : ^^^^^^^
 >"dash-ok" : "dash-ok"
+>          : ^^^^^^^^^
 
         case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];
 >"square" : "square"
+>         : ^^^^^^^^
 >s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"] : number
+>                                                                          : ^^^^^^
 >s[0].sub.under.shape["square-size"] : number
+>                                    : ^^^^^^
 >s[0].sub.under.shape : Square
+>                     : ^^^^^^
 >s[0].sub.under : { shape: Shape; }
+>               : ^^^^^^^^^     ^^^
 >s[0].sub : { under: { shape: Shape; }; }
+>         : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
+>     : ^^^^^^^                             ^^^
 >s : Subshape
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >sub : { under: { shape: Shape; }; }
+>    : ^^^^^^^^^                 ^^^
 >under : { shape: Shape; }
+>      : ^^^^^^^^^     ^^^
 >shape : Square
+>      : ^^^^^^
 >"square-size" : "square-size"
+>              : ^^^^^^^^^^^^^
 >s[0].sub.under.shape["square-size"] : number
+>                                    : ^^^^^^
 >s[0].sub.under.shape : Square
+>                     : ^^^^^^
 >s[0].sub.under : { shape: Shape; }
+>               : ^^^^^^^^^     ^^^
 >s[0].sub : { under: { shape: Shape; }; }
+>         : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
+>     : ^^^^^^^                             ^^^
 >s : Subshape
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >sub : { under: { shape: Shape; }; }
+>    : ^^^^^^^^^                 ^^^
 >under : { shape: Shape; }
+>      : ^^^^^^^^^     ^^^
 >shape : Square
+>      : ^^^^^^
 >"square-size" : "square-size"
+>              : ^^^^^^^^^^^^^
 
         case "rectangle": return s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height;
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 >s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height : number
+>                                                                              : ^^^^^^
 >s[0]["sub"]["under"]["shape"]["width"] : number
+>                                       : ^^^^^^
 >s[0]["sub"]["under"]["shape"] : Rectangle
+>                              : ^^^^^^^^^
 >s[0]["sub"]["under"] : { shape: Shape; }
+>                     : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
+>     : ^^^^^^^                             ^^^
 >s : Subshape
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >"sub" : "sub"
+>      : ^^^^^
 >"under" : "under"
+>        : ^^^^^^^
 >"shape" : "shape"
+>        : ^^^^^^^
 >"width" : "width"
+>        : ^^^^^^^
 >s[0]["sub"]["under"]["shape"].height : number
+>                                     : ^^^^^^
 >s[0]["sub"]["under"]["shape"] : Rectangle
+>                              : ^^^^^^^^^
 >s[0]["sub"]["under"] : { shape: Shape; }
+>                     : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
+>     : ^^^^^^^                             ^^^
 >s : Subshape
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >"sub" : "sub"
+>      : ^^^^^
 >"under" : "under"
+>        : ^^^^^^^
 >"shape" : "shape"
+>        : ^^^^^^^
 >height : number
+>       : ^^^^^^
 
         case "circle": return Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"];
 >"circle" : "circle"
+>         : ^^^^^^^^
 >Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"] : number
+>                                                                             : ^^^^^^
 >Math.PI * s[0].sub.under["shape"].radius : number
+>                                         : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s[0].sub.under["shape"].radius : number
+>                               : ^^^^^^
 >s[0].sub.under["shape"] : Circle
+>                        : ^^^^^^
 >s[0].sub.under : { shape: Shape; }
+>               : ^^^^^^^^^     ^^^
 >s[0].sub : { under: { shape: Shape; }; }
+>         : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
+>     : ^^^^^^^                             ^^^
 >s : Subshape
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >sub : { under: { shape: Shape; }; }
+>    : ^^^^^^^^^                 ^^^
 >under : { shape: Shape; }
+>      : ^^^^^^^^^     ^^^
 >"shape" : "shape"
+>        : ^^^^^^^
 >radius : number
+>       : ^^^^^^
 >s[0]["sub"].under.shape["radius"] : number
+>                                  : ^^^^^^
 >s[0]["sub"].under.shape : Circle
+>                        : ^^^^^^
 >s[0]["sub"].under : { shape: Shape; }
+>                  : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
+>     : ^^^^^^^                             ^^^
 >s : Subshape
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >"sub" : "sub"
+>      : ^^^^^
 >under : { shape: Shape; }
+>      : ^^^^^^^^^     ^^^
 >shape : Circle
+>      : ^^^^^^
 >"radius" : "radius"
+>         : ^^^^^^^^
     }
 }
 
 interface X {
     0: "xx",
 >0 : "xx"
+>  : ^^^^
 
     1: number
 >1 : number
+>  : ^^^^^^
 }
 
 interface Y {
     0: "yy",
 >0 : "yy"
+>  : ^^^^
 
     1: string
 >1 : string
+>  : ^^^^^^
 }
 
 type A = ["aa", number];
->A : ["aa", number]
+>A : A
+>  : ^
 
 type B = ["bb", string];
->B : ["bb", string]
+>B : B
+>  : ^
 
 type Z = X | Y;
->Z : X | Y
+>Z : Z
+>  : ^
 
 type C = A | B;
->C : A | B
+>C : C
+>  : ^
 
 function check(z: Z, c: C) {
 >check : (z: Z, c: C) => void
+>      : ^ ^^ ^^ ^^ ^^^^^^^^^
 >z : Z
+>  : ^
 >c : C
+>  : ^
 
     z[0] // fine, typescript sees "xx" | "yy"
 >z[0] : "xx" | "yy"
+>     : ^^^^^^^^^^^
 >z : Z
+>  : ^
 >0 : 0
+>  : ^
 
     switch (z[0]) {
 >z[0] : "xx" | "yy"
+>     : ^^^^^^^^^^^
 >z : Z
+>  : ^
 >0 : 0
+>  : ^
 
         case "xx":
 >"xx" : "xx"
+>     : ^^^^
 
             var xx: number = z[1] // should be number
 >xx : number
+>   : ^^^^^^
 >z[1] : number
+>     : ^^^^^^
 >z : X
+>  : ^
 >1 : 1
+>  : ^
 
             break;
         case "yy":
 >"yy" : "yy"
+>     : ^^^^
 
             var yy: string = z[1] // should be string
 >yy : string
+>   : ^^^^^^
 >z[1] : string
+>     : ^^^^^^
 >z : Y
+>  : ^
 >1 : 1
+>  : ^
 
             break;
     }
     c[0] // fine, typescript sees "xx" | "yy"
 >c[0] : "aa" | "bb"
+>     : ^^^^^^^^^^^
 >c : C
+>  : ^
 >0 : 0
+>  : ^
 
     switch (c[0]) {
 >c[0] : "aa" | "bb"
+>     : ^^^^^^^^^^^
 >c : C
+>  : ^
 >0 : 0
+>  : ^
 
         case "aa":
 >"aa" : "aa"
+>     : ^^^^
 
             var aa: number = c[1] // should be number
 >aa : number
+>   : ^^^^^^
 >c[1] : number
+>     : ^^^^^^
 >c : A
+>  : ^
 >1 : 1
+>  : ^
 
             break;
         case "bb":
 >"bb" : "bb"
+>     : ^^^^
 
             var bb: string = c[1] // should be string
 >bb : string
+>   : ^^^^^^
 >c[1] : string
+>     : ^^^^^^
 >c : B
+>  : ^
 >1 : 1
+>  : ^
 
             break;
     }
@@ -290,16 +473,26 @@ function check(z: Z, c: C) {
 
 export function g(pair: [number, string?]): string {
 >g : (pair: [number, string?]) => string
+>  : ^    ^^                 ^^^^^      
 >pair : [number, (string | undefined)?]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return pair[1] ? pair[1] : 'nope';
 >pair[1] ? pair[1] : 'nope' : string
+>                           : ^^^^^^
 >pair[1] : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 >pair : [number, (string | undefined)?]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >pair[1] : string
+>        : ^^^^^^
 >pair : [number, (string | undefined)?]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'nope' : "nope"
+>       : ^^^^^^
 }
 

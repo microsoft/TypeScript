@@ -1,31 +1,45 @@
+//// [tests/cases/compiler/declarationEmitWithInvalidPackageJsonTypings.ts] ////
+
 === /p1/node_modules/csv-parse/lib/index.d.ts ===
 export function bar(): number;
 >bar : () => number
+>    : ^^^^^^      
 
 === /p1/index.ts ===
 export interface MutableRefObject<T> {
     current: T;
 >current : T
+>        : ^
 }
 export function useRef<T>(current: T): MutableRefObject<T> {
 >useRef : <T>(current: T) => MutableRefObject<T>
+>       : ^ ^^       ^^ ^^^^^                   
 >current : T
+>        : ^
 
     return { current };
 >{ current } : { current: T; }
+>            : ^^^^^^^^^^^^^^^
 >current : T
+>        : ^
 }
 export const useCsvParser = () => {
 >useCsvParser : () => MutableRefObject<typeof import("/p1/node_modules/csv-parse/lib/index")>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    const parserRef = useRef<typeof import("csv-parse")>(null);    return parserRef;} : () => MutableRefObject<typeof import("/p1/node_modules/csv-parse/lib/index")>
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const parserRef = useRef<typeof import("csv-parse")>(null);
 >parserRef : MutableRefObject<typeof import("/p1/node_modules/csv-parse/lib/index")>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useRef<typeof import("csv-parse")>(null) : MutableRefObject<typeof import("/p1/node_modules/csv-parse/lib/index")>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useRef : <T>(current: T) => MutableRefObject<T>
+>       : ^ ^^       ^^ ^^^^^                   
 
     return parserRef;
 >parserRef : MutableRefObject<typeof import("/p1/node_modules/csv-parse/lib/index")>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 

@@ -1,5 +1,9 @@
-=== tests/cases/compiler/optionsCompositeWithIncrementalFalse.ts ===
+//// [tests/cases/compiler/optionsCompositeWithIncrementalFalse.ts] ////
+
+=== optionsCompositeWithIncrementalFalse.ts ===
 const x = "Hello World";
 >x : "Hello World"
+>  : ^^^^^^^^^^^^^
 >"Hello World" : "Hello World"
+>              : ^^^^^^^^^^^^^
 

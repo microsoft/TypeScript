@@ -1,9 +1,9 @@
-tests/cases/compiler/namespacesDeclaration2.ts(12,13): error TS2694: Namespace 'N' has no exported member 'S'.
-tests/cases/compiler/namespacesDeclaration2.ts(13,12): error TS2694: Namespace 'M' has no exported member 'F'.
-tests/cases/compiler/namespacesDeclaration2.ts(14,11): error TS2694: Namespace 'ns' has no exported member 'A'.
+namespacesDeclaration2.ts(12,13): error TS2694: Namespace 'N' has no exported member 'S'.
+namespacesDeclaration2.ts(13,12): error TS2694: Namespace 'M' has no exported member 'F'.
+namespacesDeclaration2.ts(14,11): error TS2694: Namespace 'ns' has no exported member 'A'.
 
 
-==== tests/cases/compiler/namespacesDeclaration2.ts (3 errors) ====
+==== namespacesDeclaration2.ts (3 errors) ====
     namespace N {
         function S() {}
     }

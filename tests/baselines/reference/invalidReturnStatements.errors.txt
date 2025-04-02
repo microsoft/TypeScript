@@ -1,12 +1,12 @@
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(2,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(3,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(4,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(16,22): error TS2739: Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(18,22): error TS2741: Property 'name' is missing in type 'C' but required in type 'D'.
+invalidReturnStatements.ts(2,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+invalidReturnStatements.ts(3,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+invalidReturnStatements.ts(4,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+invalidReturnStatements.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+invalidReturnStatements.ts(16,22): error TS2739: Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
+invalidReturnStatements.ts(18,22): error TS2741: Property 'name' is missing in type 'C' but required in type 'D'.
 
 
-==== tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts (6 errors) ====
+==== invalidReturnStatements.ts (6 errors) ====
     // all the following should be error
     function fn1(): number {  }
                     ~~~~~~
@@ -37,6 +37,6 @@ tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(1
     function fn11(): D { return new C(); }
                          ~~~~~~
 !!! error TS2741: Property 'name' is missing in type 'C' but required in type 'D'.
-!!! related TS2728 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts:14:5: 'name' is declared here.
+!!! related TS2728 invalidReturnStatements.ts:14:5: 'name' is declared here.
     
     

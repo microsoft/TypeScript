@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyNameFulfillment.ts] ////
+
 //// [typeSatisfaction_propertyNameFulfillment.ts]
 type Keys = 'a' | 'b' | 'c' | 'd';
 

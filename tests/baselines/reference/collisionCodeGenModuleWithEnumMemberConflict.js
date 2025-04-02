@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithEnumMemberConflict.ts] ////
+
 //// [collisionCodeGenModuleWithEnumMemberConflict.ts]
 module m1 {
     enum e {

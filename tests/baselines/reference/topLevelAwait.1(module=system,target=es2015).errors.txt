@@ -1,13 +1,13 @@
-tests/cases/conformance/externalModules/index.ts(2,1): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
-tests/cases/conformance/externalModules/index.ts(46,3): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
-tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+index.ts(2,1): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+index.ts(46,3): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+other.ts(9,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 
 
-==== tests/cases/conformance/externalModules/index.ts (2 errors) ====
+==== index.ts (2 errors) ====
     export const x = 1;
     await x;
     ~~~~~
-!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
     
     // reparse element access as await
     await [x];
@@ -53,7 +53,7 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: Top-level '
     declare const dec: any;
     @(await dec)
       ~~~~~
-!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
     class C {
     }
     
@@ -73,7 +73,7 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: Top-level '
     await
         1;
     
-==== tests/cases/conformance/externalModules/other.ts (1 errors) ====
+==== other.ts (1 errors) ====
     const _await = 1;
     
     // await allowed in aliased export
@@ -84,7 +84,7 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: Top-level '
     
     for await (const item of arr) {
         ~~~~~
-!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
       item;
     }
     

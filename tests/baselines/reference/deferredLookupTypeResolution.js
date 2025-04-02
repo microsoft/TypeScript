@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deferredLookupTypeResolution.ts] ////
+
 //// [deferredLookupTypeResolution.ts]
 // Repro from #17456
 
@@ -60,3 +62,20 @@ declare function f3(x: 'a' | 'b'): {
     b: any;
     x: any;
 };
+
+
+!!!! File deferredLookupTypeResolution.d.ts differs from original emit in noCheck emit
+//// [deferredLookupTypeResolution.d.ts]
+===================================================================
+--- Expected	The full check baseline
++++ Actual	with noCheck set
+@@ -15,8 +15,8 @@
+     [P in A | B]: any;
+ };
+ declare function f2<A extends string>(a: A): { [P in A | "x"]: any; };
+ declare function f3(x: 'a' | 'b'): {
++    x: any;
+     a: any;
+     b: any;
+-    x: any;
+ };

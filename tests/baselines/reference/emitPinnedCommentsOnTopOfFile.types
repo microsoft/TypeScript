@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitPinnedCommentsOnTopOfFile.ts ===
+//// [tests/cases/compiler/emitPinnedCommentsOnTopOfFile.ts] ////
+
+=== emitPinnedCommentsOnTopOfFile.ts ===
 /*!
 
     multi line
@@ -7,5 +9,7 @@
 
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

@@ -1,22 +1,22 @@
-tests/cases/compiler/functionParameterArityMismatch.ts(3,1): error TS2554: Expected 1-3 arguments, but got 0.
-tests/cases/compiler/functionParameterArityMismatch.ts(4,1): error TS2575: No overload expects 2 arguments, but overloads do exist that expect either 1 or 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(5,13): error TS2554: Expected 1-3 arguments, but got 4.
-tests/cases/compiler/functionParameterArityMismatch.ts(11,1): error TS2575: No overload expects 1 arguments, but overloads do exist that expect either 0 or 2 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(12,1): error TS2575: No overload expects 3 arguments, but overloads do exist that expect either 2 or 4 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(13,1): error TS2575: No overload expects 5 arguments, but overloads do exist that expect either 4 or 6 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(14,22): error TS2554: Expected 0-6 arguments, but got 7.
-tests/cases/compiler/functionParameterArityMismatch.ts(15,19): error TS2554: Expected 0-6 arguments, but got 7.
+functionParameterArityMismatch.ts(3,1): error TS2554: Expected 1-3 arguments, but got 0.
+functionParameterArityMismatch.ts(4,1): error TS2575: No overload expects 2 arguments, but overloads do exist that expect either 1 or 3 arguments.
+functionParameterArityMismatch.ts(5,13): error TS2554: Expected 1-3 arguments, but got 4.
+functionParameterArityMismatch.ts(11,1): error TS2575: No overload expects 1 arguments, but overloads do exist that expect either 0 or 2 arguments.
+functionParameterArityMismatch.ts(12,1): error TS2575: No overload expects 3 arguments, but overloads do exist that expect either 2 or 4 arguments.
+functionParameterArityMismatch.ts(13,1): error TS2575: No overload expects 5 arguments, but overloads do exist that expect either 4 or 6 arguments.
+functionParameterArityMismatch.ts(14,22): error TS2554: Expected 0-6 arguments, but got 7.
+functionParameterArityMismatch.ts(15,19): error TS2554: Expected 0-6 arguments, but got 7.
 
 
-==== tests/cases/compiler/functionParameterArityMismatch.ts (8 errors) ====
+==== functionParameterArityMismatch.ts (8 errors) ====
     declare function f1(a: number);
     declare function f1(a: number, b: number, c: number);
     f1();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1-3 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/functionParameterArityMismatch.ts:1:21: An argument for 'a' was not provided.
+!!! related TS6210 functionParameterArityMismatch.ts:1:21: An argument for 'a' was not provided.
     f1(1, 2);
-    ~~~~~~~~
+    ~~
 !!! error TS2575: No overload expects 2 arguments, but overloads do exist that expect either 1 or 3 arguments.
     f1(1, 2, 3, 4);
                 ~
@@ -27,13 +27,13 @@ tests/cases/compiler/functionParameterArityMismatch.ts(15,19): error TS2554: Exp
     declare function f2(a: number, b: number, c: number, d: number);
     declare function f2(a: number, b: number, c: number, d: number, e: number, f: number);
     f2(1);
-    ~~~~~
+    ~~
 !!! error TS2575: No overload expects 1 arguments, but overloads do exist that expect either 0 or 2 arguments.
     f2(1, 2, 3);
-    ~~~~~~~~~~~
+    ~~
 !!! error TS2575: No overload expects 3 arguments, but overloads do exist that expect either 2 or 4 arguments.
     f2(1, 2, 3, 4, 5);
-    ~~~~~~~~~~~~~~~~~
+    ~~
 !!! error TS2575: No overload expects 5 arguments, but overloads do exist that expect either 4 or 6 arguments.
     f2(1, 2, 3, 4, 5, 6, 7);
                          ~

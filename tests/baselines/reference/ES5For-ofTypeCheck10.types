@@ -1,37 +1,54 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts] ////
+
+=== ES5For-ofTypeCheck10.ts ===
 // In ES3/5, you cannot for...of over an arbitrary iterable.
-class StringIterator {
->StringIterator : StringIterator
+class MyStringIterator {
+>MyStringIterator : MyStringIterator
+>                 : ^^^^^^^^^^^^^^^^
 
     next() {
 >next : () => { done: boolean; value: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            done: true,            value: ""        } : { done: boolean; value: string; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             done: true,
 >done : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
             value: ""
 >value : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
         };
     }
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : any
+>                : ^^^
 >Symbol : any
+>       : ^^^
 >iterator : any
+>         : ^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }
 >v : any
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>  : ^^^
+>new MyStringIterator : MyStringIterator
+>                     : ^^^^^^^^^^^^^^^^
+>MyStringIterator : typeof MyStringIterator
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 

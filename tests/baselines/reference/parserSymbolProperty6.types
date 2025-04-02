@@ -1,11 +1,19 @@
-=== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty6.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty6.ts] ////
+
+=== parserSymbolProperty6.ts ===
 class C {
 >C : C
+>  : ^
 
     [Symbol.toStringTag]: string = "";
 >[Symbol.toStringTag] : string
+>                     : ^^^^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 }

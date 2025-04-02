@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum3.ts] ////
+
 //// [parserEnum3.ts]
     export enum SignatureFlags {
     }
@@ -8,4 +10,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SignatureFlags = void 0;
 var SignatureFlags;
 (function (SignatureFlags) {
-})(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));
+})(SignatureFlags || (exports.SignatureFlags = SignatureFlags = {}));

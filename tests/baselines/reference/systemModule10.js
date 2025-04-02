@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule10.ts] ////
+
 //// [systemModule10.ts]
 import n, {x} from 'file1'
 import n2 = require('file2');

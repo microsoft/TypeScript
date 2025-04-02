@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts] ////
+
 //// [typesWithDuplicateTypeParameters.ts]
 class C<T, T> { }
 class C2<T, U, T> { }

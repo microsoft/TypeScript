@@ -1,136 +1,244 @@
-=== tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts] ////
+
+=== argumentExpressionContextualTyping.ts ===
 // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
 function foo({x: [a, b], y: {c, d, e}}) { }
 >foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>    : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >y : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 
 function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
 >bar : ({ x: [a, b], y: { c, d, e } }: { x: [any, number?]; y: { c: any; d: any; e?: { f: number; }; }; }) => void
+>    : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >y : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : { f: number; }
+>  : ^^^^^^^^^^^^^^
 >{ f:1 } : { f: number; }
+>        : ^^^^^^^^^^^^^^
 >f : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 function baz(x: [string, number, boolean]) { }
 >baz : (x: [string, number, boolean]) => void
+>    : ^ ^^                         ^^^^^^^^^
 >x : [string, number, boolean]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 >o : { x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: ["string", 1], y: { c: true, d: "world", e: 3 } } : { x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >["string", 1] : (string | number)[]
+>              : ^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >y : { c: boolean; d: string; e: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ c: true, d: "world", e: 3 } : { c: boolean; d: string; e: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >d : string
+>  : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 >e : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 var o1: { x: [string, number], y: { c: boolean, d: string, e: number } } = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
->o1 : { x: [string, number]; y: {    c: boolean;    d: string;    e: number;}; }
+>o1 : { x: [string, number]; y: { c: boolean; d: string; e: number; }; }
+>   : ^^^^^                ^^^^^                                     ^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 >y : { c: boolean; d: string; e: number; }
+>  : ^^^^^       ^^^^^      ^^^^^      ^^^
 >c : boolean
+>  : ^^^^^^^
 >d : string
+>  : ^^^^^^
 >e : number
+>  : ^^^^^^
 >{ x: ["string", 1], y: { c: true, d: "world", e: 3 } } : { x: [string, number]; y: { c: true; d: string; e: number; }; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 >["string", 1] : [string, number]
+>              : ^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >y : { c: true; d: string; e: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ c: true, d: "world", e: 3 } : { c: true; d: string; e: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >d : string
+>  : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 >e : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 foo(o1); // Not error since x has contextual type of tuple namely [string, number]
 >foo(o1) : void
+>        : ^^^^
 >foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>    : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { x: [string, number]; y: { c: boolean; d: string; e: number; }; }
+>   : ^^^^^                ^^^^^                                     ^^^
 
 foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }); // Not error
 >foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }) : void
+>                                                            : ^^^^
 >foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>    : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: ["string", 1], y: { c: true, d: "world", e: 3 } } : { x: [string, number]; y: { c: boolean; d: string; e: number; }; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 >["string", 1] : [string, number]
+>              : ^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >y : { c: boolean; d: string; e: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ c: true, d: "world", e: 3 } : { c: boolean; d: string; e: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >d : string
+>  : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 >e : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 var array = ["string", 1, true];
 >array : (string | number | boolean)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["string", 1, true] : (string | number | boolean)[]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 
 var tuple: [string, number, boolean] = ["string", 1, true];
 >tuple : [string, number, boolean]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >["string", 1, true] : [string, number, true]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 
 baz(tuple);
 >baz(tuple) : void
+>           : ^^^^
 >baz : (x: [string, number, boolean]) => void
+>    : ^ ^^                         ^^^^^^^^^
 >tuple : [string, number, boolean]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 baz(["string", 1, true]);
 >baz(["string", 1, true]) : void
+>                         : ^^^^
 >baz : (x: [string, number, boolean]) => void
+>    : ^ ^^                         ^^^^^^^^^
 >["string", 1, true] : [string, number, true]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 
 baz(array);                          // Error
 >baz(array) : void
+>           : ^^^^
 >baz : (x: [string, number, boolean]) => void
+>    : ^ ^^                         ^^^^^^^^^
 >array : (string | number | boolean)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 baz(["string", 1, true, ...array]);  // Error
 >baz(["string", 1, true, ...array]) : void
+>                                   : ^^^^
 >baz : (x: [string, number, boolean]) => void
+>    : ^ ^^                         ^^^^^^^^^
 >["string", 1, true, ...array] : [string, number, true, ...(string | number | boolean)[]]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 >...array : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >array : (string | number | boolean)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 foo(o);                              // Error because x has an array type namely (string|number)[]
 >foo(o) : void
+>       : ^^^^
 >foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>    : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithBooleanType.ts] ////
+
 //// [logicalNotOperatorWithBooleanType.ts]
 // ! operator on boolean type
 var BOOLEAN: boolean;

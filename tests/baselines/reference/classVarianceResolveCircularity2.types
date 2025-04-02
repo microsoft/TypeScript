@@ -1,60 +1,96 @@
-=== tests/cases/compiler/classVarianceResolveCircularity2.ts ===
+//// [tests/cases/compiler/classVarianceResolveCircularity2.ts] ////
+
+=== classVarianceResolveCircularity2.ts ===
 // Issue #52813
 
 export {};
 
 class Bar<T> {
 >Bar : Bar<T>
+>    : ^^^^^^
 
     num!: number;
 >num : number
+>    : ^^^^^^
 
     Value = callme(new Foo(this)).bar.num;
 >Value : number
+>      : ^^^^^^
 >callme(new Foo(this)).bar.num : number
+>                              : ^^^^^^
 >callme(new Foo(this)).bar : Bar<any>
+>                          : ^^^^^^^^
 >callme(new Foo(this)) : Foo<any>
+>                      : ^^^^^^^^
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >new Foo(this) : Foo<T>
+>              : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >bar : Bar<any>
+>    : ^^^^^^^^
 >num : number
+>    : ^^^^^^
 
     Field: number = callme(new Foo(this)).bar.num;
 >Field : number
+>      : ^^^^^^
 >callme(new Foo(this)).bar.num : number
+>                              : ^^^^^^
 >callme(new Foo(this)).bar : Bar<any>
+>                          : ^^^^^^^^
 >callme(new Foo(this)) : Foo<any>
+>                      : ^^^^^^^^
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >new Foo(this) : Foo<T>
+>              : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >bar : Bar<any>
+>    : ^^^^^^^^
 >num : number
+>    : ^^^^^^
 }
 declare function callme(x: Foo<any>): Foo<any>;
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : Foo<any>
+>  : ^^^^^^^^
 
 declare function callme(x: object): string;
 >callme : { (x: Foo<any>): Foo<any>; (x: object): string; }
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : object
+>  : ^^^^^^
 
 class Foo<T> {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     bar!: Bar<T>;
 >bar : Bar<T>
+>    : ^^^^^^
 
     constructor(bar: Bar<T>) {
 >bar : Bar<T>
+>    : ^^^^^^
 
         this.bar = bar;
 >this.bar = bar : Bar<T>
+>               : ^^^^^^
 >this.bar : Bar<T>
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >bar : Bar<T>
+>    : ^^^^^^
 >bar : Bar<T>
+>    : ^^^^^^
     }
 }

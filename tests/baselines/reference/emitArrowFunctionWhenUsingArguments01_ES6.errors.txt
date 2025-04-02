@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments01_ES6.ts(2,15): error TS2304: Cannot find name 'arguments'.
-tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments01_ES6.ts(19,15): error TS2304: Cannot find name 'arguments'.
+emitArrowFunctionWhenUsingArguments01_ES6.ts(2,15): error TS2304: Cannot find name 'arguments'.
+emitArrowFunctionWhenUsingArguments01_ES6.ts(19,15): error TS2304: Cannot find name 'arguments'.
 
 
-==== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments01_ES6.ts (2 errors) ====
+==== emitArrowFunctionWhenUsingArguments01_ES6.ts (2 errors) ====
     var a = () => {
         var arg = arguments[0];  // error
                   ~~~~~~~~~

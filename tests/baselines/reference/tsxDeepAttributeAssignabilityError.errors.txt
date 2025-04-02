@@ -1,7 +1,7 @@
-tests/cases/compiler/file1.tsx(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
+file1.tsx(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/my-component.tsx (0 errors) ====
+==== my-component.tsx (0 errors) ====
     import * as React from 'react'
     
     interface MyProps {
@@ -17,7 +17,7 @@ tests/cases/compiler/file1.tsx(5,5): error TS2322: Type 'number' is not assignab
         return <span>my component</span>;
     }
     
-==== tests/cases/compiler/file1.tsx (1 errors) ====
+==== file1.tsx (1 errors) ====
     import * as React from 'react'
     import { MyComponent } from './my-component'
     
@@ -25,6 +25,6 @@ tests/cases/compiler/file1.tsx(5,5): error TS2322: Type 'number' is not assignab
         value: 42
         ~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/compiler/my-component.tsx:9:5: The expected type comes from property 'value' which is declared here on type 'MyInnerProps'
+!!! related TS6500 my-component.tsx:9:5: The expected type comes from property 'value' which is declared here on type 'MyInnerProps'
     }} />;
     

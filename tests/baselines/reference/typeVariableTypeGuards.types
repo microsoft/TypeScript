@@ -1,33 +1,51 @@
-=== tests/cases/compiler/typeVariableTypeGuards.ts ===
+//// [tests/cases/compiler/typeVariableTypeGuards.ts] ////
+
+=== typeVariableTypeGuards.ts ===
 // Repro from #14091
 
 interface Foo {
     foo(): void
 >foo : () => void
+>    : ^^^^^^    
 }
 
 class A<P extends Partial<Foo>> {
 >A : A<P>
+>  : ^^^^
 
     constructor(public props: Readonly<P>) {}
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 
     doSomething() {
 >doSomething : () => void
+>            : ^^^^^^^^^^
 
         this.props.foo && this.props.foo()
 >this.props.foo && this.props.foo() : void | undefined
+>                                   : ^^^^^^^^^^^^^^^^
 >this.props.foo : P["foo"] | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^
 >this.props : Readonly<P>
+>           : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 >foo : P["foo"] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
 >this.props.foo() : void
+>                 : ^^^^
 >this.props.foo : () => void
+>               : ^^^^^^    
 >this.props : Readonly<P>
+>           : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^    
     }
 }
 
@@ -36,28 +54,40 @@ class A<P extends Partial<Foo>> {
 interface Banana {
     color: 'yellow';
 >color : "yellow"
+>      : ^^^^^^^^
 }
 
 class Monkey<T extends Banana | undefined> {
 >Monkey : Monkey<T>
+>       : ^^^^^^^^^
 
     constructor(public a: T) {}
 >a : T
+>  : ^
 
     render() {
 >render : () => void
+>       : ^^^^^^^^^^
 
         if (this.a) {
 >this.a : T
+>       : ^
 >this : this
+>     : ^^^^
 >a : T
+>  : ^
 
             this.a.color;
 >this.a.color : "yellow"
+>             : ^^^^^^^^
 >this.a : Banana
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : Banana
+>  : ^^^^^^
 >color : "yellow"
+>      : ^^^^^^^^
         }
     }
 }
@@ -67,22 +97,33 @@ interface BigBanana extends Banana {
 
 class BigMonkey extends Monkey<BigBanana> {
 >BigMonkey : BigMonkey
+>          : ^^^^^^^^^
 >Monkey : Monkey<BigBanana>
+>       : ^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => void
+>       : ^^^^^^^^^^
 
         if (this.a) {
 >this.a : BigBanana
+>       : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >a : BigBanana
+>  : ^^^^^^^^^
 
             this.a.color;
 >this.a.color : "yellow"
+>             : ^^^^^^^^
 >this.a : BigBanana
+>       : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >a : BigBanana
+>  : ^^^^^^^^^
 >color : "yellow"
+>      : ^^^^^^^^
         }
     }
 }
@@ -90,111 +131,188 @@ class BigMonkey extends Monkey<BigBanana> {
 // Another repro
 
 type Item = {
->Item : { (): string; x: string; }
+>Item : Item
+>     : ^^^^
 
     (): string;
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 function f1<T extends Item | undefined>(obj: T) {
 >f1 : <T extends Item | undefined>(obj: T) => void
+>   : ^ ^^^^^^^^^                ^^   ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 
     if (obj) {
 >obj : T
+>    : ^
 
         obj.x;
 >obj.x : string
+>      : ^^^^^^
 >obj : Item
+>    : ^^^^
 >x : string
+>  : ^^^^^^
 
         obj["x"];
 >obj["x"] : string
+>         : ^^^^^^
 >obj : Item
+>    : ^^^^
 >"x" : "x"
+>    : ^^^
 
         obj();
 >obj() : string
+>      : ^^^^^^
 >obj : Item
+>    : ^^^^
     }
 }
 
 function f2<T extends Item | undefined>(obj: T | undefined) {
 >f2 : <T extends Item | undefined>(obj: T | undefined) => void
+>   : ^ ^^^^^^^^^                ^^   ^^             ^^^^^^^^^
 >obj : T | undefined
+>    : ^^^^^^^^^^^^^
 
     if (obj) {
 >obj : T | undefined
+>    : ^^^^^^^^^^^^^
 
         obj.x;
 >obj.x : string
+>      : ^^^^^^
 >obj : Item
+>    : ^^^^
 >x : string
+>  : ^^^^^^
 
         obj["x"];
 >obj["x"] : string
+>         : ^^^^^^
 >obj : Item
+>    : ^^^^
 >"x" : "x"
+>    : ^^^
 
         obj();
 >obj() : string
+>      : ^^^^^^
 >obj : Item
+>    : ^^^^
     }
 }
 
 function f3<T extends Item | undefined>(obj: T | null) {
 >f3 : <T extends Item | undefined>(obj: T | null) => void
+>   : ^ ^^^^^^^^^                ^^   ^^        ^^^^^^^^^
 >obj : T | null
+>    : ^^^^^^^^
 
     if (obj) {
 >obj : T | null
+>    : ^^^^^^^^
 
         obj.x;
 >obj.x : string
+>      : ^^^^^^
 >obj : Item
+>    : ^^^^
 >x : string
+>  : ^^^^^^
 
         obj["x"];
 >obj["x"] : string
+>         : ^^^^^^
 >obj : Item
+>    : ^^^^
 >"x" : "x"
+>    : ^^^
 
         obj();
 >obj() : string
+>      : ^^^^^^
 >obj : Item
+>    : ^^^^
     }
 }
 
 function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
 >f4 : <T extends string[] | undefined>(obj: T | undefined, x: number) => void
+>   : ^ ^^^^^^^^^                    ^^   ^^             ^^ ^^      ^^^^^^^^^
 >obj : T | undefined
+>    : ^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     if (obj) {
 >obj : T | undefined
+>    : ^^^^^^^^^^^^^
 
         obj[x].length;
 >obj[x].length : number
+>              : ^^^^^^
 >obj[x] : string
+>       : ^^^^^^
 >obj : string[]
+>    : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 >f5 : <T, K extends keyof T>(obj: T | undefined, key: K) => void
+>   : ^ ^^ ^^^^^^^^^       ^^   ^^             ^^   ^^ ^^^^^^^^^
 >obj : T | undefined
+>    : ^^^^^^^^^^^^^
 >key : K
+>    : ^
 
     if (obj) {
 >obj : T | undefined
+>    : ^^^^^^^^^^^^^
 
         obj[key];
 >obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
 >obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
 >key : K
+>    : ^
     }
+}
+
+// https://github.com/microsoft/TypeScript/issues/57381
+
+function f6<T extends string | (new () => {})>(a: T) {
+>f6 : <T extends string | (new () => {})>(a: T) => void
+>   : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^^^^^
+>a : T
+>  : ^
+
+  if (typeof a !== "string") {
+>typeof a !== "string" : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : T
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
+
+    new a();
+>new a() : {}
+>        : ^^
+>a : new () => {}
+>  : ^^^^^^^^^^  
+  }
 }
 

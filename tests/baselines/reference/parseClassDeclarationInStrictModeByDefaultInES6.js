@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts] ////
+
 //// [parseClassDeclarationInStrictModeByDefaultInES6.ts]
 class C {
     interface = 10;

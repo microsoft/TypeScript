@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts] ////
+
 //// [declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts]
 module m {
     class private1 {
@@ -69,7 +71,7 @@ var m;
 
 
 //// [declFileTypeAnnotationVisibilityErrorVariableDeclaration.d.ts]
-declare module m {
+declare namespace m {
     class private1 {
     }
     export class public1 {
@@ -78,7 +80,7 @@ declare module m {
     export var l: private1;
     export var k2: public1;
     export var l2: public1;
-    module m2 {
+    namespace m2 {
         class public2 {
         }
     }

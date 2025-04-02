@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/omitTypeTestErrors01.ts] ////
+
 //// [omitTypeTestErrors01.ts]
 interface Foo {
     a: string;
@@ -21,15 +23,14 @@ export function getBazB(baz: Baz) {
 //// [omitTypeTestErrors01.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBazB = exports.getBarC = void 0;
+exports.getBarC = getBarC;
+exports.getBazB = getBazB;
 function getBarC(bar) {
     return bar.c;
 }
-exports.getBarC = getBarC;
 function getBazB(baz) {
     return baz.b;
 }
-exports.getBazB = getBazB;
 
 
 //// [omitTypeTestErrors01.d.ts]

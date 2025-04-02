@@ -1,126 +1,188 @@
-=== tests/cases/compiler/discriminantsAndPrimitives.ts ===
+//// [tests/cases/compiler/discriminantsAndPrimitives.ts] ////
+
+=== discriminantsAndPrimitives.ts ===
 // Repro from #10257 plus other tests
 
 interface Foo {
     kind: "foo";
 >kind : "foo"
+>     : ^^^^^
 
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 interface Bar {
     kind: "bar";
 >kind : "bar"
+>     : ^^^^^
 
     length: string;
 >length : string
+>       : ^^^^^^
 }
 
 function f1(x: Foo | Bar | string) {
 >f1 : (x: Foo | Bar | string) => void
+>   : ^ ^^                  ^^^^^^^^^
 >x : string | Foo | Bar
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (typeof x !== 'string') {
 >typeof x !== 'string' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | Foo | Bar
+>  : ^^^^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
         switch(x.kind) {
 >x.kind : "foo" | "bar"
+>       : ^^^^^^^^^^^^^
 >x : Foo | Bar
+>  : ^^^^^^^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 
             case 'foo':
 >'foo' : "foo"
+>      : ^^^^^
 
                 x.name;
 >x.name : string
+>       : ^^^^^^
 >x : Foo
+>  : ^^^
 >name : string
+>     : ^^^^^^
         }
     }
 }
 
 function f2(x: Foo | Bar | string | undefined) {
 >f2 : (x: Foo | Bar | string | undefined) => void
+>   : ^ ^^                              ^^^^^^^^^
 >x : string | Foo | Bar | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | Foo | Bar | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 
         switch(x.kind) {
 >x.kind : "foo" | "bar"
+>       : ^^^^^^^^^^^^^
 >x : Foo | Bar
+>  : ^^^^^^^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 
             case 'foo':
 >'foo' : "foo"
+>      : ^^^^^
 
                 x.name;
 >x.name : string
+>       : ^^^^^^
 >x : Foo
+>  : ^^^
 >name : string
+>     : ^^^^^^
         }
     }
 }
 
 function f3(x: Foo | Bar | string | null) {
 >f3 : (x: Foo | Bar | string | null) => void
+>   : ^ ^^                         ^^^^^^^^^
 >x : string | Foo | Bar | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (x && typeof x !== "string") {
 >x && typeof x !== "string" : boolean | "" | null
+>                           : ^^^^^^^^^^^^^^^^^^^
 >x : string | Foo | Bar | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof x !== "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | Foo | Bar
+>  : ^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         switch(x.kind) {
 >x.kind : "foo" | "bar"
+>       : ^^^^^^^^^^^^^
 >x : Foo | Bar
+>  : ^^^^^^^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 
             case 'foo':
 >'foo' : "foo"
+>      : ^^^^^
 
                 x.name;
 >x.name : string
+>       : ^^^^^^
 >x : Foo
+>  : ^^^
 >name : string
+>     : ^^^^^^
         }
     }
 }
 
 function f4(x: Foo | Bar | string | number | null) {
 >f4 : (x: Foo | Bar | string | number | null) => void
+>   : ^ ^^                                  ^^^^^^^^^
 >x : string | number | Foo | Bar | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (x && typeof x === "object") {
 >x && typeof x === "object" : boolean | "" | 0 | null
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | Foo | Bar | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | Foo | Bar
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 
         switch(x.kind) {
 >x.kind : "foo" | "bar"
+>       : ^^^^^^^^^^^^^
 >x : Foo | Bar
+>  : ^^^^^^^^^
 >kind : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 
             case 'foo':
 >'foo' : "foo"
+>      : ^^^^^
 
                 x.name;
 >x.name : string
+>       : ^^^^^^
 >x : Foo
+>  : ^^^
 >name : string
+>     : ^^^^^^
         }
     }
 }
@@ -129,67 +191,98 @@ function f4(x: Foo | Bar | string | number | null) {
 
 const enum EnumTypeNode {
 >EnumTypeNode : EnumTypeNode
+>             : ^^^^^^^^^^^^
 
     Pattern = "Pattern",
 >Pattern : EnumTypeNode.Pattern
+>        : ^^^^^^^^^^^^^^^^^^^^
 >"Pattern" : "Pattern"
+>          : ^^^^^^^^^
 
     Disjunction = "Disjunction",
 >Disjunction : EnumTypeNode.Disjunction
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"Disjunction" : "Disjunction"
+>              : ^^^^^^^^^^^^^
 }
 
 type NodeA = Disjunction | Pattern;
->NodeA : Disjunction | Pattern
+>NodeA : NodeA
+>      : ^^^^^
 
 interface NodeBase {
     type: NodeA["type"]
 >type : EnumTypeNode
+>     : ^^^^^^^^^^^^
 }
 
 interface Disjunction extends NodeBase {
     type: EnumTypeNode.Disjunction
 >type : EnumTypeNode.Disjunction
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >EnumTypeNode : any
+>             : ^^^
 
     alternatives: string[]
 >alternatives : string[]
+>             : ^^^^^^^^
 }
 
 interface Pattern extends NodeBase {
     type: EnumTypeNode.Pattern
 >type : EnumTypeNode.Pattern
+>     : ^^^^^^^^^^^^^^^^^^^^
 >EnumTypeNode : any
+>             : ^^^
 
     elements: string[]
 >elements : string[]
+>         : ^^^^^^^^
 }
 
 let n!: NodeA
 >n : NodeA
+>  : ^^^^^
 
 if (n.type === "Disjunction") {
 >n.type === "Disjunction" : boolean
+>                         : ^^^^^^^
 >n.type : EnumTypeNode
+>       : ^^^^^^^^^^^^
 >n : NodeA
+>  : ^^^^^
 >type : EnumTypeNode
+>     : ^^^^^^^^^^^^
 >"Disjunction" : "Disjunction"
+>              : ^^^^^^^^^^^^^
 
     n.alternatives.slice()
 >n.alternatives.slice() : string[]
->n.alternatives.slice : (start?: number | undefined, end?: number | undefined) => string[]
+>                       : ^^^^^^^^
+>n.alternatives.slice : (start?: number, end?: number) => string[]
+>                     : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >n.alternatives : string[]
+>               : ^^^^^^^^
 >n : Disjunction
+>  : ^^^^^^^^^^^
 >alternatives : string[]
->slice : (start?: number | undefined, end?: number | undefined) => string[]
+>             : ^^^^^^^^
+>slice : (start?: number, end?: number) => string[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 }
 else {
     n.elements.slice() // n should be narrowed to Pattern
 >n.elements.slice() : string[]
->n.elements.slice : (start?: number | undefined, end?: number | undefined) => string[]
+>                   : ^^^^^^^^
+>n.elements.slice : (start?: number, end?: number) => string[]
+>                 : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >n.elements : string[]
+>           : ^^^^^^^^
 >n : Pattern
+>  : ^^^^^^^
 >elements : string[]
->slice : (start?: number | undefined, end?: number | undefined) => string[]
+>         : ^^^^^^^^
+>slice : (start?: number, end?: number) => string[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 }
 

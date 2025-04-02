@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat5.ts] ////
+
 //// [enumAssignmentCompat5.ts]
 enum E {
     A, B, C

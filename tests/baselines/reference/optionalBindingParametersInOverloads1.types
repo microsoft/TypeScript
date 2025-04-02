@@ -1,29 +1,49 @@
-=== tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads1.ts ===
+//// [tests/cases/conformance/es6/destructuring/optionalBindingParametersInOverloads1.ts] ////
+
+=== optionalBindingParametersInOverloads1.ts ===
 function foo([x, y, z] ?: [string, number, boolean]);
 >foo : ([x, y, z]?: [string, number, boolean]) => any
+>    : ^         ^^^                         ^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
 
 function foo(...rest: any[]) {
 >foo : ([x, y, z]?: [string, number, boolean]) => any
+>    : ^         ^^^                         ^^^^^^^^
 >rest : any[]
+>     : ^^^^^
 
 }
 
 foo(["", 0, false]);
 >foo(["", 0, false]) : any
+>                    : ^^^
 >foo : ([x, y, z]?: [string, number, boolean]) => any
+>    : ^         ^^^                         ^^^^^^^^
 >["", 0, false] : [string, number, false]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 >false : false
+>      : ^^^^^
 
 foo([false, 0, ""]);
 >foo([false, 0, ""]) : any
+>                    : ^^^
 >foo : ([x, y, z]?: [string, number, boolean]) => any
+>    : ^         ^^^                         ^^^^^^^^
 >[false, 0, ""] : [boolean, number, string]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >0 : 0
+>  : ^
 >"" : ""
+>   : ^^
 

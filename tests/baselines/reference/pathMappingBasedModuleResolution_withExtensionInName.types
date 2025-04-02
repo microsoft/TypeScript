@@ -1,15 +1,21 @@
-=== /a.ts ===
-import { x } from "zone.js";
->x : number
-
-import { y } from "zone.tsx";
->y : number
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_withExtensionInName.ts] ////
 
 === /foo/zone.js/index.d.ts ===
 export const x: number;
 >x : number
+>  : ^^^^^^
 
 === /foo/zone.tsx/index.d.ts ===
 export const y: number;
 >y : number
+>  : ^^^^^^
+
+=== /a.ts ===
+import { x } from "zone.js";
+>x : number
+>  : ^^^^^^
+
+import { y } from "zone.tsx";
+>y : number
+>  : ^^^^^^
 

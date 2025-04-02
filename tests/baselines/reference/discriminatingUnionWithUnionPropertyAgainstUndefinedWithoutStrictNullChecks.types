@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts ===
+//// [tests/cases/compiler/discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts] ////
+
+=== discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts ===
 // strictNullChecks: false
 
 // repro #49643
@@ -8,66 +10,90 @@ interface B {}
 
 declare let opts:
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
+>     : ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^
 
    | { objectRef?: undefined; getObjectRef: () => any }
 >objectRef : undefined
+>          : ^^^^^^^^^
 >getObjectRef : () => any
+>             : ^^^^^^   
 
    | { objectRef: A | B; getObjectRef?: undefined };
 >objectRef : A | B
+>          : ^^^^^
 >getObjectRef : undefined
+>             : ^^^^^^^^^
 
 opts.objectRef || opts.getObjectRef();
 >opts.objectRef || opts.getObjectRef() : any
 >opts.objectRef : A | B
+>               : ^^^^^
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
+>     : ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^
 >objectRef : A | B
+>          : ^^^^^
 >opts.getObjectRef() : any
 >opts.getObjectRef : () => any
+>                  : ^^^^^^   
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
+>     : ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^
 >getObjectRef : () => any
+>             : ^^^^^^   
 
 // repro #49643 issuecomment-1174455723
 
 interface X {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 interface Y {
     baz: number;
 >baz : number
+>    : ^^^^^^
 }
 
 interface A2 {
     result: unknown;
 >result : unknown
+>       : ^^^^^^^
 
     error: undefined;
 >error : undefined
+>      : ^^^^^^^^^
 }
 
 interface B2 {
     error: X | Y;
 >error : X | Y
+>      : ^^^^^
 }
 
 const testMethod = (m: A2 | B2) => {
 >testMethod : (m: A2 | B2) => void
+>           : ^ ^^       ^^^^^^^^^
 >(m: A2 | B2) => {    if (m.error) {        m; // should be A2 | B2    } else {        m; // should be A2 | B2    }} : (m: A2 | B2) => void
+>                                                                                                                    : ^ ^^       ^^^^^^^^^
 >m : A2 | B2
+>  : ^^^^^^^
 
     if (m.error) {
 >m.error : X | Y
+>        : ^^^^^
 >m : A2 | B2
+>  : ^^^^^^^
 >error : X | Y
+>      : ^^^^^
 
         m; // should be A2 | B2
 >m : A2 | B2
+>  : ^^^^^^^
 
     } else {
         m; // should be A2 | B2
 >m : A2 | B2
+>  : ^^^^^^^
     }
 }
 

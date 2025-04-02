@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(31,8): error TS2339: Property 'x' does not exist on type 'Number'.
-tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(32,9): error TS2339: Property 'x' does not exist on type 'Number'.
-tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(33,9): error TS2537: Type 'Number' has no matching index signature for type 'string'.
-tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts(40,1): error TS18048: 'value' is possibly 'undefined'.
+destructuringControlFlow.ts(31,8): error TS2339: Property 'x' does not exist on type 'Number'.
+destructuringControlFlow.ts(32,9): error TS2339: Property 'x' does not exist on type 'Number'.
+destructuringControlFlow.ts(33,9): error TS2537: Type 'Number' has no matching index signature for type 'string'.
+destructuringControlFlow.ts(40,1): error TS18048: 'value' is possibly 'undefined'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts (4 errors) ====
+==== destructuringControlFlow.ts (4 errors) ====
     function f1(obj: { a?: string }) {
         if (obj.a) {
             obj = {};

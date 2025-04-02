@@ -1,7 +1,7 @@
-tests/cases/compiler/ClassDeclaration24.ts(1,7): error TS2414: Class name cannot be 'any'.
+ClassDeclaration24.ts(1,7): error TS2414: Class name cannot be 'any'.
 
 
-==== tests/cases/compiler/ClassDeclaration24.ts (1 errors) ====
+==== ClassDeclaration24.ts (1 errors) ====
     class any {
           ~~~
 !!! error TS2414: Class name cannot be 'any'.

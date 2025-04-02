@@ -1,47 +1,125 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts] ////
+
+=== classExtendingPrimitive.ts ===
 // classes cannot extend primitives
 
 class C extends number { }
 >C : C
+>  : ^
 >number : any
+>       : ^^^
 
 class C2 extends string { }
 >C2 : C2
+>   : ^^
 >string : any
+>       : ^^^
 
 class C3 extends boolean { }
 >C3 : C3
+>   : ^^
 >boolean : any
+>        : ^^^
 
 class C4 extends Void  { }
 >C4 : C4
+>   : ^^
 >Void : any
+>     : ^^^
 
 class C4a extends void {}
 >C4a : C4a
+>    : ^^^
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 class C5 extends Null { }
 >C5 : C5
+>   : ^^
 >Null : any
+>     : ^^^
 
 class C5a extends null { }
 >C5a : C5a
+>    : ^^^
 
 class C6 extends undefined { }
 >C6 : C6
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 class C7 extends Undefined { }
 >C7 : C7
+>   : ^^
 >Undefined : any
+>          : ^^^
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 class C8 extends E { }
 >C8 : C8
+>   : ^^
 >E : typeof E
+>  : ^^^^^^^^
+
+const C9 = class extends number { }
+>C9 : typeof C9
+>   : ^^^^^^^^^
+>class extends number { } : typeof C9
+>                         : ^^^^^^^^^
+>number : any
+>       : ^^^
+
+const C10 = class extends string { }
+>C10 : typeof C10
+>    : ^^^^^^^^^^
+>class extends string { } : typeof C10
+>                         : ^^^^^^^^^^
+>string : any
+>       : ^^^
+
+const C11 = class extends boolean { }
+>C11 : typeof C11
+>    : ^^^^^^^^^^
+>class extends boolean { } : typeof C11
+>                          : ^^^^^^^^^^
+>boolean : any
+>        : ^^^
+
+const C12 = class A extends number { }
+>C12 : typeof A
+>    : ^^^^^^^^
+>class A extends number { } : typeof A
+>                           : ^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+>number : any
+>       : ^^^
+
+const C13 = class B extends string { }
+>C13 : typeof B
+>    : ^^^^^^^^
+>class B extends string { } : typeof B
+>                           : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+>string : any
+>       : ^^^
+
+const C14 = class C extends boolean { }
+>C14 : typeof C
+>    : ^^^^^^^^
+>class C extends boolean { } : typeof C
+>                            : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+>boolean : any
+>        : ^^^
 

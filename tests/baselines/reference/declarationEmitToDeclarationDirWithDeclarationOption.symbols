@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitToDeclarationDirWithDeclarationOption.ts] ////
+
 === /foo/test.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(test.ts, 0, 0))

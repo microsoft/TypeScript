@@ -1,24 +1,36 @@
-=== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction2.ts] ////
+
+=== templateTagWithNestedTypeLiteral.js ===
 /**
  * @param {T} t
  * @template T
  */
 function Zet(t) {
 >Zet : typeof Zet
+>    : ^^^^^^^^^^
 >t : T
+>  : ^
 
     /** @type {T} */
     this.u
 >this.u : T
+>       : ^
 >this : this
+>     : ^^^^
 >u : T
+>  : ^
 
     this.t = t
 >this.t = t : T
+>           : ^
 >this.t : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >t : any
+>  : ^^^
 >t : T
+>  : ^
 }
 /**
  * @param {T} v
@@ -26,63 +38,107 @@ function Zet(t) {
  * @param {T} o.nested
  */
 Zet.prototype.add = function(v, o) {
->Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: { nested: T; }) => T
+>Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: {    nested: T;}) => T
+>                                                                                 : ^ ^^ ^^ ^^           ^^ ^ ^^^^^^
 >Zet.prototype.add : any
+>                  : ^^^
 >Zet.prototype : any
+>              : ^^^
 >Zet : typeof Zet
+>    : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >add : any
->function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: { nested: T; }) => T
+>    : ^^^
+>function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: {    nested: T;}) => T
+>                                                             : ^ ^^ ^^ ^^           ^^ ^ ^^^^^^
 >v : T
+>  : ^
 >o : { nested: T; }
+>  : ^^^^^^^^^^ ^^^
 
     this.u = v || o.nested
 >this.u = v || o.nested : T
+>                       : ^
 >this.u : T
+>       : ^
 >this : this
+>     : ^^^^
 >u : T
+>  : ^
 >v || o.nested : T
+>              : ^
 >v : T
+>  : ^
 >o.nested : T
+>         : ^
 >o : { nested: T; }
+>  : ^^^^^^^^^^ ^^^
 >nested : T
+>       : ^
 
     return this.u
 >this.u : T
+>       : ^
 >this : this
+>     : ^^^^
 >u : T
+>  : ^
 }
 var z = new Zet(1)
 >z : Zet<number>
+>  : ^^^^^^^^^^^
 >new Zet(1) : Zet<number>
+>           : ^^^^^^^^^^^
 >Zet : typeof Zet
+>    : ^^^^^^^^^^
 >1 : 1
+>  : ^
 
 z.t = 2
 >z.t = 2 : 2
+>        : ^
 >z.t : number
+>    : ^^^^^^
 >z : Zet<number>
+>  : ^^^^^^^^^^^
 >t : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 z.u = false
 >z.u = false : false
+>            : ^^^^^
 >z.u : number
+>    : ^^^^^^
 >z : Zet<number>
+>  : ^^^^^^^^^^^
 >u : number
+>  : ^^^^^^
 >false : false
+>      : ^^^^^
 
 /** @type {number} */
 let answer = z.add(3, { nested: 4 })
 >answer : number
+>       : ^^^^^^
 >z.add(3, { nested: 4 }) : number
+>                        : ^^^^^^
 >z.add : (v: number, o: { nested: number; }) => number
+>      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : Zet<number>
+>  : ^^^^^^^^^^^
 >add : (v: number, o: { nested: number; }) => number
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >{ nested: 4 } : { nested: number; }
+>              : ^^^^^^^^^^^^^^^^^^^
 >nested : number
+>       : ^^^^^^
 >4 : 4
+>  : ^
 
 // lookup in typedef should not crash the compiler, even when the type is unknown
 /**
@@ -92,6 +148,9 @@ let answer = z.add(3, { nested: 4 })
 /** @type {A} */
 const options = { value: null };
 >options : A
+>        : ^
 >{ value: null } : { value: null; }
+>                : ^^^^^^^^^^^^^^^^
 >value : null
+>      : ^^^^
 

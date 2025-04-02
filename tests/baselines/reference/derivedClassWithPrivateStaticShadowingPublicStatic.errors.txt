@@ -1,12 +1,12 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(13,7): error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
+derivedClassWithPrivateStaticShadowingPublicStatic.ts(13,7): error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(24,18): error TS2341: Property 'x' is private and only accessible within class 'Derived'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(27,18): error TS2341: Property 'fn' is private and only accessible within class 'Derived'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(32,18): error TS2341: Property 'a' is private and only accessible within class 'Derived'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts(33,9): error TS2341: Property 'a' is private and only accessible within class 'Derived'.
+derivedClassWithPrivateStaticShadowingPublicStatic.ts(24,18): error TS2341: Property 'x' is private and only accessible within class 'Derived'.
+derivedClassWithPrivateStaticShadowingPublicStatic.ts(27,18): error TS2341: Property 'fn' is private and only accessible within class 'Derived'.
+derivedClassWithPrivateStaticShadowingPublicStatic.ts(32,18): error TS2341: Property 'a' is private and only accessible within class 'Derived'.
+derivedClassWithPrivateStaticShadowingPublicStatic.ts(33,9): error TS2341: Property 'a' is private and only accessible within class 'Derived'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts (5 errors) ====
+==== derivedClassWithPrivateStaticShadowingPublicStatic.ts (5 errors) ====
     class Base {
         public static x: string;
         public static fn(): string {

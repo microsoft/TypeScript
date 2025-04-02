@@ -1,74 +1,108 @@
-=== tests/cases/compiler/script-namespaces.ts ===
+//// [tests/cases/compiler/isolatedModulesGlobalNamespacesAndEnums.ts] ////
+
+=== script-namespaces.ts ===
 namespace Instantiated {
 >Instantiated : typeof Instantiated
+>             : ^^^^^^^^^^^^^^^^^^^
 
     export const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 namespace Uninstantiated {
     export type T = number;
 >T : number
+>  : ^^^^^^
 }
 declare namespace Ambient {
 >Ambient : typeof Ambient
+>        : ^^^^^^^^^^^^^^
 
     export const x: number;
 >x : number
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/module-namespaces.ts ===
+=== module-namespaces.ts ===
 export namespace Instantiated {
 >Instantiated : typeof Instantiated
+>             : ^^^^^^^^^^^^^^^^^^^
 
     export const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 
-=== tests/cases/compiler/enum1.ts ===
+=== enum1.ts ===
 enum Enum { A, B, C }
 >Enum : Enum
+>     : ^^^^
 >A : Enum.A
+>  : ^^^^^^
 >B : Enum.B
+>  : ^^^^^^
 >C : Enum.C
+>  : ^^^^^^
 
 declare enum Enum { X = 1_000_000 }
 >Enum : Enum
+>     : ^^^^
 >X : Enum.X
+>  : ^^^^^^
 >1_000_000 : 1000000
+>          : ^^^^^^^
 
 const d = 'd';
 >d : "d"
+>  : ^^^
 >'d' : "d"
+>    : ^^^
 
-=== tests/cases/compiler/enum2.ts ===
+=== enum2.ts ===
 enum Enum {
 >Enum : Enum
+>     : ^^^^
 
     D = d,
 >D : Enum.D
+>  : ^^^^^^
 >d : "d"
+>  : ^^^
 
     E = A, // error
 >E : Enum.A
+>  : ^^^^^^
 >A : Enum.A
+>  : ^^^^^^
 
     Y = X, // error
 >Y : Enum.X
+>  : ^^^^^^
 >X : Enum.X
+>  : ^^^^^^
 
     Z = Enum.A
 >Z : Enum.A
+>  : ^^^^^^
 >Enum.A : Enum.A
+>       : ^^^^^^
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 >A : Enum.A
+>  : ^^^^^^
 }
 
 declare enum Enum {
 >Enum : Enum
+>     : ^^^^
 
     F = A
 >F : Enum.A
+>  : ^^^^^^
 >A : Enum.A
+>  : ^^^^^^
 }

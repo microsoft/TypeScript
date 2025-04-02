@@ -1,7 +1,7 @@
-tests/cases/compiler/indexWithoutParamType.ts(1,10): error TS1096: An index signature must have exactly one parameter.
+indexWithoutParamType.ts(1,10): error TS1096: An index signature must have exactly one parameter.
 
 
-==== tests/cases/compiler/indexWithoutParamType.ts (1 errors) ====
+==== indexWithoutParamType.ts (1 errors) ====
     var y: { []; } // Error
              ~~~
 !!! error TS1096: An index signature must have exactly one parameter.

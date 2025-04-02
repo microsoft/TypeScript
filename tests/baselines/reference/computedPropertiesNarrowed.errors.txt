@@ -1,0 +1,92 @@
+computedPropertiesNarrowed.ts(5,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(11,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(18,20): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(20,5): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(22,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(26,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(31,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(37,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(42,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(47,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+
+
+==== computedPropertiesNarrowed.ts (10 errors) ====
+    const x: 0 | 1 = Math.random()? 0: 1;
+    declare function assert(n: number): asserts n is 1;
+    assert(x);
+    export let o = {
+        [x]: 1 // error narrow type !== declared type
+        ~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:4:12: Add a type annotation to the variable o.
+    }
+    
+    
+    const y: 0 = 0
+    export let o2 = {
+        [y]: 1 // ok literal computed type 
+        ~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:10:12: Add a type annotation to the variable o2.
+    }
+    
+    // literals are ok
+    export let o3 = { [1]: 1 }
+    export let o31 = { [-1]: 1 }
+    
+    export let o32 = { [1-1]: 1 } // error number 
+                       ~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:18:12: Add a type annotation to the variable o32.
+    
+    let u = Symbol();
+        ~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:20:5: Add a type annotation to the variable u.
+    export let o4 = {
+        [u]: 1 // Should error, nut a unique symbol
+        ~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:21:12: Add a type annotation to the variable o4.
+    }
+    
+    export let o5  ={
+        [Symbol()]: 1 // Should error
+        ~~~~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:25:12: Add a type annotation to the variable o5.
+    }
+    
+    const uu: unique symbol = Symbol();
+    export let o6  = {
+        [uu]: 1 // Should be ok
+        ~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:30:12: Add a type annotation to the variable o6.
+    }
+    
+    
+    function foo (): 1 { return 1; }
+    export let o7 = {
+        [foo()]: 1 // Should error
+        ~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:36:12: Add a type annotation to the variable o7.
+    };
+    
+    let E = { A: 1 } as const
+    export const o8 = {
+        [E.A]: 1 // Fresh 
+        ~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:41:14: Add a type annotation to the variable o8.
+    }
+    
+    function ns() { return { v: 0 } as const }
+    export const o9 = {
+        [ns().v]: 1
+        ~~~~~~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:46:14: Add a type annotation to the variable o9.
+    }
+    

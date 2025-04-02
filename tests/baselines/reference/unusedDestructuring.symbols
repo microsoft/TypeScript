@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedDestructuring.ts ===
+//// [tests/cases/compiler/unusedDestructuring.ts] ////
+
+=== unusedDestructuring.ts ===
 export {};
 declare const o: any;
 >o : Symbol(o, Decl(unusedDestructuring.ts, 1, 13))

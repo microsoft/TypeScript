@@ -1,7 +1,7 @@
-tests/cases/compiler/genericCloduleInModule2.ts(14,8): error TS2314: Generic type 'B<T>' requires 1 type argument(s).
+genericCloduleInModule2.ts(14,8): error TS2314: Generic type 'B<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericCloduleInModule2.ts (1 errors) ====
+==== genericCloduleInModule2.ts (1 errors) ====
     module A {
         export class B<T> {
             foo() { }

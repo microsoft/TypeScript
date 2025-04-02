@@ -1,188 +1,285 @@
-=== tests/cases/compiler/incompatibleTypes.ts ===
+//// [tests/cases/compiler/incompatibleTypes.ts] ////
+
+=== incompatibleTypes.ts ===
 interface IFoo1 {
     p1(): number;
 >p1 : () => number
+>   : ^^^^^^      
 }
 
 class C1 implements IFoo1 { // incompatible on the return type
 >C1 : C1
+>   : ^^
 
     public p1() {
 >p1 : () => string
+>   : ^^^^^^^^^^^^
 
         return "s";
 >"s" : "s"
+>    : ^^^
     }
 }
 
 interface IFoo2 {
     p1(s:string): number;
 >p1 : (s: string) => number
+>   : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 }
 
 class C2 implements IFoo2 { // incompatible on the param type
 >C2 : C2
+>   : ^^
 
     public p1(n:number) {
 >p1 : (n: number) => number
+>   : ^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 
 interface IFoo3 {
     p1: string;
 >p1 : string
+>   : ^^^^^^
 }
 
 class C3 implements IFoo3 { // incompatible on the property type
 >C3 : C3
+>   : ^^
 
     public p1: number;
 >p1 : number
+>   : ^^^^^^
 }
 
 interface IFoo4 {
     p1: { a: { a: string; }; b: string; };
->p1 : { a: {    a: string;}; b: string; }
+>p1 : { a: { a: string; }; b: string; }
+>   : ^^^^^              ^^^^^      ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 }
 
 class C4 implements IFoo4 { // incompatible on the property type
 >C4 : C4
+>   : ^^
 
     public p1: { c: { b: string; }; d: string; };
->p1 : { c: {    b: string;}; d: string; }
+>p1 : { c: { b: string; }; d: string; }
+>   : ^^^^^              ^^^^^      ^^^
 >c : { b: string; }
+>  : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 }
 
 function if1(i: IFoo1): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >i : IFoo1
+>  : ^^^^^
 
 function if1(i: IFoo2): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >i : IFoo2
+>  : ^^^^^
 
 function if1(a: any) { }
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >a : any
+>  : ^^^
 
 var c1: C1;
 >c1 : C1
+>   : ^^
 
 var c2: C2;
 >c2 : C2
+>   : ^^
 
 if1(c1);
 >if1(c1) : void
+>        : ^^^^
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >c1 : C1
+>   : ^^
 
 
 function of1(n: { a: { a: string; }; b: string; }): number;
->of1 : { (n: {    a: {        a: string;    };    b: string;}): number; (s: { c: { b: string; }; d: string; }): string; }
->n : { a: {    a: string;}; b: string; }
+>of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
+>n : { a: { a: string; }; b: string; }
+>  : ^^^^^              ^^^^^      ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 function of1(s: { c: { b: string; }; d: string; }): string;
->of1 : { (n: { a: { a: string; }; b: string; }): number; (s: {    c: {        b: string;    };    d: string;}): string; }
->s : { c: {    b: string;}; d: string; }
+>of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
+>s : { c: { b: string; }; d: string; }
+>  : ^^^^^              ^^^^^      ^^^
 >c : { b: string; }
+>  : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 
 function of1(a: any) { return null; }
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
 >a : any
+>  : ^^^
 
 of1({ e: 0, f: 0 });
 >of1({ e: 0, f: 0 }) : never
+>                    : ^^^^^
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
 >{ e: 0, f: 0 } : { e: number; f: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >f : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 interface IMap {
  [key:string]:string;
 >key : string
+>    : ^^^^^^
 }
 
 function foo(fn:() => void) {
 >foo : (fn: () => void) => void
+>    : ^  ^^          ^^^^^^^^^
 >fn : () => void
+>   : ^^^^^^    
  
 }
 
 function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
  var map:IMap;
 >map : IMap
+>    : ^^^^
 
  foo(() => {
 >foo(() => {  map = {}; }) : void
+>                          : ^^^^
 >foo : (fn: () => void) => void
+>    : ^  ^^          ^^^^^^^^^
 >() => {  map = {}; } : () => void
+>                     : ^^^^^^^^^^
 
   map = {};
 >map = {} : {}
+>         : ^^
 >map : IMap
+>    : ^^^^
 >{} : {}
+>   : ^^
 
  });
 }
 
 var o1: { a: { a: string; }; b: string; } = { e: 0, f: 0 };
->o1 : { a: {    a: string;}; b: string; }
+>o1 : { a: { a: string; }; b: string; }
+>   : ^^^^^              ^^^^^      ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >{ e: 0, f: 0 } : { e: number; f: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >f : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
 >a1 : ({ e: number; f: number; g?: undefined; } | { e: number; g: number; f?: undefined; })[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }] : ({ e: number; f: number; } | { e: number; g: number; })[]
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ e: 0, f: 0 } : { e: number; f: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >f : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ e: 0, f: 0 } : { e: number; f: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >f : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >{ e: 0, g: 0 } : { e: number; g: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >g : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 
 
 var i1c1: { (): string; } = 5;
 >i1c1 : () => string
+>     : ^^^^^^      
 >5 : 5
+>  : ^
 
 var fp1: () =>any = a => 0;
 >fp1 : () => any
+>    : ^^^^^^   
 >a => 0 : (a: any) => number
+>       : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
+>  : ^
 

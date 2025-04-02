@@ -1,7 +1,4 @@
-import {
-    padLeft,
-    sys,
-} from "./_namespaces/ts";
+import { sys } from "./_namespaces/ts.js";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";
@@ -10,6 +7,7 @@ export type EventTypesRegistry = "event::typesRegistry";
 export type EventBeginInstallTypes = "event::beginInstallTypes";
 export type EventEndInstallTypes = "event::endInstallTypes";
 export type EventInitializationFailed = "event::initializationFailed";
+export type ActionWatchTypingLocations = "action::watchTypingLocations";
 /** @internal */
 export const ActionSet: ActionSet = "action::set";
 /** @internal */
@@ -24,6 +22,8 @@ export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInsta
 export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
 /** @internal */
 export const EventInitializationFailed: EventInitializationFailed = "event::initializationFailed";
+/** @internal */
+export const ActionWatchTypingLocations: ActionWatchTypingLocations = "action::watchTypingLocations";
 
 /** @internal */
 export namespace Arguments {
@@ -45,8 +45,8 @@ export namespace Arguments {
 }
 
 /** @internal */
-export function hasArgument(argumentName: string) {
-    return sys.args.indexOf(argumentName) >= 0;
+export function hasArgument(argumentName: string): boolean {
+    return sys.args.includes(argumentName);
 }
 
 /** @internal */
@@ -61,5 +61,21 @@ export function findArgument(argumentName: string): string | undefined {
 export function nowString() {
     // E.g. "12:34:56.789"
     const d = new Date();
-    return `${padLeft(d.getHours().toString(), 2, "0")}:${padLeft(d.getMinutes().toString(), 2, "0")}:${padLeft(d.getSeconds().toString(), 2, "0")}.${padLeft(d.getMilliseconds().toString(), 3, "0")}`;
+    return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}.${d.getMilliseconds().toString().padStart(3, "0")}`;
+}
+
+const indentStr = "\n    ";
+
+/** @internal */
+export function indent(str: string): string {
+    return indentStr + str.replace(/\n/g, indentStr);
+}
+
+/**
+ * Put stringified JSON on the next line, indented.
+ *
+ * @internal
+ */
+export function stringifyIndented(json: {}): string {
+    return indent(JSON.stringify(json, undefined, 2));
 }

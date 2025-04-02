@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts ===
+//// [tests/cases/compiler/typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts] ////
+
+=== typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts ===
 // tricky interface
 interface Settable<T, V> {
 >Settable : Symbol(Settable, Decl(typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts, 0, 0))

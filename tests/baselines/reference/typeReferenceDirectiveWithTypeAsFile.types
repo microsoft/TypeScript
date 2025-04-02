@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/typeReferenceDirectiveWithTypeAsFile.ts] ////
+
 === /a.ts ===
 a;
 >a : number
+>  : ^^^^^^
 
 === /node_modules/phaser/types/phaser.d.ts ===
 declare const a: number;
 >a : number
+>  : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getterSetterSubtypeAssignment.ts ===
+//// [tests/cases/compiler/getterSetterSubtypeAssignment.ts] ////
+
+=== getterSetterSubtypeAssignment.ts ===
 class NumberOrUndefined {
 >NumberOrUndefined : Symbol(NumberOrUndefined, Decl(getterSetterSubtypeAssignment.ts, 0, 0))
 

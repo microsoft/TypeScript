@@ -1,23 +1,39 @@
-=== tests/cases/compiler/signatureLengthMismatchInOverload.ts ===
+//// [tests/cases/compiler/signatureLengthMismatchInOverload.ts] ////
+
+=== signatureLengthMismatchInOverload.ts ===
 function f(callback: (arg: string, arg2: string) => void): void;
 >f : { (callback: (arg: string, arg2: string) => void): void; (callback: (arg: number) => void): void; }
+>  : ^^^        ^^                                   ^^^    ^^^        ^^                     ^^^    ^^^
 >callback : (arg: string, arg2: string) => void
+>         : ^   ^^      ^^    ^^      ^^^^^    
 >arg : string
+>    : ^^^^^^
 >arg2 : string
+>     : ^^^^^^
 
 function f(callback: (arg: number) => void): void;
 >f : { (callback: (arg: string, arg2: string) => void): void; (callback: (arg: number) => void): void; }
+>  : ^^^        ^^                                   ^^^    ^^^        ^^                     ^^^    ^^^
 >callback : (arg: number) => void
+>         : ^   ^^      ^^^^^    
 >arg : number
+>    : ^^^^^^
 
 function f(callback: unknown) { }
 >f : { (callback: (arg: string, arg2: string) => void): void; (callback: (arg: number) => void): void; }
+>  : ^^^        ^^                                   ^^^    ^^^        ^^                     ^^^    ^^^
 >callback : unknown
+>         : ^^^^^^^
 
 f((arg: number, arg2: number) => {});
 >f((arg: number, arg2: number) => {}) : void
+>                                     : ^^^^
 >f : { (callback: (arg: string, arg2: string) => void): void; (callback: (arg: number) => void): void; }
+>  : ^^^        ^^                                   ^^^    ^^^        ^^                     ^^^    ^^^
 >(arg: number, arg2: number) => {} : (arg: number, arg2: number) => void
+>                                  : ^   ^^      ^^    ^^      ^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 >arg2 : number
+>     : ^^^^^^
 

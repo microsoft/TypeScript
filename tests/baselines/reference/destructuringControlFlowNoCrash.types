@@ -1,39 +1,60 @@
-=== tests/cases/compiler/destructuringControlFlowNoCrash.ts ===
+//// [tests/cases/compiler/destructuringControlFlowNoCrash.ts] ////
+
+=== destructuringControlFlowNoCrash.ts ===
 // legal JS, if nonsensical, which also triggers the issue
 const {
   date,
 >date : any
+>     : ^^^
 
 } = (inspectedElement: any) => 0;
 >(inspectedElement: any) => 0 : (inspectedElement: any) => number
+>                             : ^                ^^   ^^^^^^^^^^^
 >inspectedElement : any
+>                 : ^^^
 >0 : 0
+>  : ^
 
 date.toISOString();
 >date.toISOString() : any
+>                   : ^^^
 >date.toISOString : any
+>                 : ^^^
 >date : any
+>     : ^^^
 >toISOString : any
+>            : ^^^
 
 // Working flow code
 const {
   date2,
 >date2 : any
+>      : ^^^
 
 } = (inspectedElement: any).props;
 >(inspectedElement: any) : (inspectedElement: any) => any
+>                        : ^                ^^   ^^^^^^^^
 >inspectedElement : any
+>                 : ^^^
 > : any
+> : ^^^
 >props : any
+>      : ^^^
 
 date2.toISOString();
 >date2.toISOString() : any
+>                    : ^^^
 >date2.toISOString : any
+>                  : ^^^
 >date2 : any
+>      : ^^^
 >toISOString : any
+>            : ^^^
 
 // It could also be an async function
 const { constructor } = async () => {};
 >constructor : Function
+>            : ^^^^^^^^
 >async () => {} : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 

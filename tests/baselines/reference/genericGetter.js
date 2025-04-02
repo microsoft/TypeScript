@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericGetter.ts] ////
+
 //// [genericGetter.ts]
 class C<T> {
     data: T;

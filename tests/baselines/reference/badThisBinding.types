@@ -1,29 +1,40 @@
-=== tests/cases/compiler/badThisBinding.ts ===
+//// [tests/cases/compiler/badThisBinding.ts] ////
+
+=== badThisBinding.ts ===
 declare function foo(a:any): any;
 >foo : (a: any) => any
+>    : ^ ^^   ^^^^^   
 >a : any
 
 declare function bar(a:any): any;
 >bar : (a: any) => any
+>    : ^ ^^   ^^^^^   
 >a : any
 
 class Greeter {
 >Greeter : Greeter
+>        : ^^^^^^^
 
     constructor() {
 		foo(() => {
 >foo(() => {            bar(() => {                var x = this;			});		}) : any
 >foo : (a: any) => any
+>    : ^ ^^   ^^^^^   
 >() => {            bar(() => {                var x = this;			});		} : () => void
+>                                                                     : ^^^^^^^^^^
 
             bar(() => {
 >bar(() => {                var x = this;			}) : any
 >bar : (a: any) => any
+>    : ^ ^^   ^^^^^   
 >() => {                var x = this;			} : () => void
+>                                         : ^^^^^^^^^^
 
                 var x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
 			});
 		});

@@ -1,15 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/file1.ts]
+//// [/user/username/workspace/solution/projects/project/file1.ts]
 let t = 10;
 
-//// [/a/b/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
                         "compilerOptions": {},
                         "include": ["app/*", "test/**/*", "something"]
                     }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -21,21 +21,47 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:15 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/a/b/tsconfig.json'. Specified 'include' paths were '["app/*","test/**/*","something"]' and 'exclude' paths were '[]'.
+[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/user/username/workspace/solution/projects/project/tsconfig.json'. Specified 'include' paths were '["app/*","test/**/*","something"]' and 'exclude' paths were '[]'.
 
-[[90m12:00:16 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+
+PolledWatches::
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/app: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/something: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/test: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
+  {}
 
 Program root files: []
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 
@@ -43,17 +69,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/b/app: *new*
-  {"pollingInterval":500}
-/a/b/test: *new*
-  {"pollingInterval":500}
-/a/b/something: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-

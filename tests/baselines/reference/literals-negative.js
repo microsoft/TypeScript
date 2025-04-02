@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/literals-negative.ts] ////
+
 //// [literals-negative.ts]
 // Type type of the null literal is the Null type.
 // Null can be converted to anything except Void

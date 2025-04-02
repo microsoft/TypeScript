@@ -1,44 +1,69 @@
-=== tests/cases/compiler/restUnion.ts ===
+//// [tests/cases/compiler/restUnion.ts] ////
+
+=== restUnion.ts ===
 var union: { a: number, c: boolean } | { a: string, b: string };
 >union : { a: number; c: boolean; } | { a: string; b: string; }
+>      : ^^^^^      ^^^^^       ^^^^^^^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var rest1: { c: boolean } | { b: string };
 >rest1 : { c: boolean; } | { b: string; }
+>      : ^^^^^       ^^^^^^^^^^^      ^^^
 >c : boolean
+>  : ^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var {a, ...rest1 } = union;
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >rest1 : { c: boolean; } | { b: string; }
+>      : ^^^^^       ^^^^^^^^^^^      ^^^
 >union : { a: number; c: boolean; } | { a: string; b: string; }
+>      : ^^^^^      ^^^^^       ^^^^^^^^^^^      ^^^^^      ^^^
 
 
 var undefinedUnion: { n: number } | undefined;
 >undefinedUnion : { n: number; }
+>               : ^^^^^      ^^^
 >n : number
+>  : ^^^^^^
 
 var rest2: {};
 >rest2 : {}
+>      : ^^
 
 var {n, ...rest2 } = undefinedUnion;
 >n : number
+>  : ^^^^^^
 >rest2 : {}
+>      : ^^
 >undefinedUnion : { n: number; }
+>               : ^^^^^      ^^^
 
 
 var nullUnion: { n: number } | null;
 >nullUnion : { n: number; }
+>          : ^^^^^      ^^^
 >n : number
+>  : ^^^^^^
 
 var rest3: {};
 >rest3 : {}
+>      : ^^
 
 var {n, ...rest3 } = nullUnion;
 >n : number
+>  : ^^^^^^
 >rest3 : {}
+>      : ^^
 >nullUnion : { n: number; }
+>          : ^^^^^      ^^^
 

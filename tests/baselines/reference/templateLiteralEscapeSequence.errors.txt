@@ -1,48 +1,48 @@
-tests/cases/compiler/templateLiteralEscapeSequence.ts(3,4): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(4,5): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(5,6): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(6,7): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(8,5): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(9,11): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(10,4): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(11,5): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(13,8): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(14,9): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(15,10): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(16,11): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(18,9): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(19,15): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(20,8): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(21,9): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(23,4): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(24,5): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(25,6): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(26,7): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(28,5): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(29,11): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(30,4): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(31,5): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(33,8): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(34,9): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(35,10): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(36,11): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(38,9): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(39,15): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(40,8): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(41,9): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(85,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(86,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(87,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(88,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(89,8): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(90,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(91,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(92,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(93,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+templateLiteralEscapeSequence.ts(3,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(4,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(5,6): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(6,7): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(8,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(9,5): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(10,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(11,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(13,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(14,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(15,10): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(16,11): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(18,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(19,9): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(20,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(21,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(23,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(24,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(25,6): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(26,7): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(28,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(29,5): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(30,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(31,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(33,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(34,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(35,10): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(36,11): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(38,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(39,9): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(40,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(41,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(85,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(86,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(87,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(88,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(89,8): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+templateLiteralEscapeSequence.ts(90,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(91,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(92,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(93,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
 
 
-==== tests/cases/compiler/templateLiteralEscapeSequence.ts (42 errors) ====
+==== templateLiteralEscapeSequence.ts (42 errors) ====
     declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
     
     `\u`;
@@ -62,7 +62,7 @@ tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal
         
 !!! error TS1125: Hexadecimal digit expected.
     `\u{ffffff}`;
-              
+        ~~~~~~
 !!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
     `\x`;
        
@@ -88,7 +88,7 @@ tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal
             
 !!! error TS1125: Hexadecimal digit expected.
     `${0}\u{ffffff}`;
-                  
+            ~~~~~~
 !!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
     `${0}\x`;
            
@@ -114,7 +114,7 @@ tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal
         
 !!! error TS1125: Hexadecimal digit expected.
     `\u{ffffff}${0}`;
-              
+        ~~~~~~
 !!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
     `\x${0}`;
        
@@ -140,7 +140,7 @@ tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal
             
 !!! error TS1125: Hexadecimal digit expected.
     `${0}\u{ffffff}${0}`;
-                  
+            ~~~~~~
 !!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
     `${0}\x${0}`;
            

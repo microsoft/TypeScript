@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileFunctionOverloads2.ts] ////
+
 //// [jsFileFunctionOverloads2.js]
 // Also works if all @overload tags are combined in one comment.
 /**
@@ -108,10 +110,90 @@ function flatMap(array, iterable) {
 
 
 //// [jsFileFunctionOverloads2.d.ts]
-declare function getTypeName(x: number): 'number';
-declare function getTypeName(x: string): 'string';
-declare function getTypeName(x: boolean): 'boolean';
+/**
+ * @overload
+ * @param {number} x
+ * @returns {'number'}
+ *
+ * @overload
+ * @param {string} x
+ * @returns {'string'}
+ *
+ * @overload
+ * @param {boolean} x
+ * @returns {'boolean'}
+ *
+ * @param {unknown} x
+ * @returns {string}
+ */
+declare function getTypeName(x: number): "number";
+/**
+ * @overload
+ * @param {number} x
+ * @returns {'number'}
+ *
+ * @overload
+ * @param {string} x
+ * @returns {'string'}
+ *
+ * @overload
+ * @param {boolean} x
+ * @returns {'boolean'}
+ *
+ * @param {unknown} x
+ * @returns {string}
+ */
+declare function getTypeName(x: string): "string";
+/**
+ * @overload
+ * @param {number} x
+ * @returns {'number'}
+ *
+ * @overload
+ * @param {string} x
+ * @returns {'string'}
+ *
+ * @overload
+ * @param {boolean} x
+ * @returns {'boolean'}
+ *
+ * @param {unknown} x
+ * @returns {string}
+ */
+declare function getTypeName(x: boolean): "boolean";
+/**
+ * @template T
+ * @template U
+ * @overload
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ *
+ * @overload
+ * @param {T[][]} array
+ * @returns {T[]}
+ *
+ * @param {unknown[]} array
+ * @param {(x: unknown) => unknown} iterable
+ * @returns {unknown[]}
+ */
 declare function flatMap<T, U>(array: T[], iterable: (x: T) => U[]): U[];
+/**
+ * @template T
+ * @template U
+ * @overload
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ *
+ * @overload
+ * @param {T[][]} array
+ * @returns {T[]}
+ *
+ * @param {unknown[]} array
+ * @param {(x: unknown) => unknown} iterable
+ * @returns {unknown[]}
+ */
 declare function flatMap<T, U>(array: T[][]): T[];
 /**
  * @template T

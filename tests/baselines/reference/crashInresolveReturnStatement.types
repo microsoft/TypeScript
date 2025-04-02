@@ -1,40 +1,57 @@
-=== tests/cases/compiler/crashInresolveReturnStatement.ts ===
+//// [tests/cases/compiler/crashInresolveReturnStatement.ts] ////
+
+=== crashInresolveReturnStatement.ts ===
 class WorkItemToolbar {
 >WorkItemToolbar : WorkItemToolbar
+>                : ^^^^^^^^^^^^^^^
 
     public onToolbarItemClick() {
 >onToolbarItemClick : () => void
+>                   : ^^^^^^^^^^
 
         WITDialogs.createCopyOfWorkItem();
 >WITDialogs.createCopyOfWorkItem() : void
+>                                  : ^^^^
 >WITDialogs.createCopyOfWorkItem : () => void
+>                                : ^^^^^^^^^^
 >WITDialogs : typeof WITDialogs
+>           : ^^^^^^^^^^^^^^^^^
 >createCopyOfWorkItem : () => void
+>                     : ^^^^^^^^^^
     }
 }
 class CreateCopyOfWorkItemDialog {
 >CreateCopyOfWorkItemDialog : CreateCopyOfWorkItemDialog
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     public getDialogResult() {
 >getDialogResult : () => any
+>                : ^^^^^^^^^
 
         return null;
     }
 }
 function createWorkItemDialog<P0>(dialogType: P0) {
 >createWorkItemDialog : <P0>(dialogType: P0) => void
+>                     : ^  ^^          ^^  ^^^^^^^^^
 >dialogType : P0
+>           : ^^
 }
 class WITDialogs {
 >WITDialogs : WITDialogs
+>           : ^^^^^^^^^^
 
     public static createCopyOfWorkItem() {
 >createCopyOfWorkItem : () => void
+>                     : ^^^^^^^^^^
 
         createWorkItemDialog(CreateCopyOfWorkItemDialog);
 >createWorkItemDialog(CreateCopyOfWorkItemDialog) : void
+>                                                 : ^^^^
 >createWorkItemDialog : <P0>(dialogType: P0) => void
+>                     : ^  ^^          ^^  ^^^^^^^^^
 >CreateCopyOfWorkItemDialog : typeof CreateCopyOfWorkItemDialog
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

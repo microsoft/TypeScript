@@ -1,4 +1,6 @@
-=== tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts ===
+//// [tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts] ////
+
+=== partialDiscriminatedUnionMemberHasGoodError.ts ===
 interface TypeA {
 >TypeA : Symbol(TypeA, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 0, 0))
 

@@ -1,6 +1,22 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/user/username/workspace/solution/projects/project/a.ts]
+import {} from './b.css'
+
+//// [/user/username/workspace/solution/projects/project/b.d.css.ts]
+declare const style: string;
+
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": true
+  },
+  "files": [
+    "a.ts"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,169 +28,239 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a.ts]
-import {} from './b.css'
-
-//// [/b.d.css.ts]
-declare const style: string;
-
-//// [/tsconfig.json]
-{"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w -p /user/username/workspace/solution/projects/project/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:15 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2306: [0mFile '/b.d.css.ts' is not a module.
+[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2306: [0mFile '/user/username/workspace/solution/projects/project/b.d.css.ts' is not a module.
 
 [7m1[0m import {} from './b.css'
 [7m [0m [91m               ~~~~~~~~~[0m
 
-[[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/b.d.css.ts
-/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/b.d.css.ts
-/a.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/b.d.css.ts (used version)
-/a.ts (used version)
-
-FsWatches::
-/tsconfig.json: *new*
-  {}
-/a.ts: *new*
-  {}
-/b.d.css.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
-//// [/a.js]
+//// [/user/username/workspace/solution/projects/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
+PolledWatches::
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/a.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/b.d.css.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
+  {}
+
+Program root files: [
+  "/user/username/workspace/solution/projects/project/a.ts"
+]
+Program options: {
+  "allowArbitraryExtensions": true,
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/b.d.css.ts
+/user/username/workspace/solution/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/b.d.css.ts
+/user/username/workspace/solution/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/workspace/solution/projects/project/b.d.css.ts (used version)
+/user/username/workspace/solution/projects/project/a.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Disable  allowArbitraryExtensions
 
 Input::
-//// [/tsconfig.json]
-{"compilerOptions":{"allowArbitraryExtensions":false},"files":["/a.ts"]}
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": false
+  },
+  "files": [
+    "a.ts"
+  ]
+}
 
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS6263: [0mModule './b.css' was resolved to '/b.d.css.ts', but '--allowArbitraryExtensions' is not set.
+[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS6263: [0mModule './b.css' was resolved to '/user/username/workspace/solution/projects/project/b.d.css.ts', but '--allowArbitraryExtensions' is not set.
 
 [7m1[0m import {} from './b.css'
 [7m [0m [91m               ~~~~~~~~~[0m
 
-[[90m12:00:25 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/a.ts
+//// [/user/username/workspace/solution/projects/project/a.js] file written with same contents
 
-Semantic diagnostics in builder refreshed for::
-/a.ts
-
-Shape signatures in builder refreshed for::
-/a.ts (computed .d.ts)
+PolledWatches::
+/user/username/workspace/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/a.ts:
+/user/username/workspace/solution/projects/project/a.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/workspace/solution/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
-/b.d.css.ts:
+/user/username/workspace/solution/projects/project/b.d.css.ts:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/a.js] file written with same contents
+Program root files: [
+  "/user/username/workspace/solution/projects/project/a.ts"
+]
+Program options: {
+  "allowArbitraryExtensions": false,
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/workspace/solution/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/user/username/workspace/solution/projects/project/a.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Enable  allowArbitraryExtensions
 
 Input::
-//// [/tsconfig.json]
-{"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": true
+  },
+  "files": [
+    "a.ts"
+  ]
+}
 
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2306: [0mFile '/b.d.css.ts' is not a module.
+[96ma.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2306: [0mFile '/user/username/workspace/solution/projects/project/b.d.css.ts' is not a module.
 
 [7m1[0m import {} from './b.css'
 [7m [0m [91m               ~~~~~~~~~[0m
 
-[[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/b.d.css.ts
-/a.ts
+//// [/user/username/workspace/solution/projects/project/a.js] file written with same contents
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/b.d.css.ts
-/a.ts
-
-Shape signatures in builder refreshed for::
-/b.d.css.ts (used version)
-/a.ts (computed .d.ts)
+PolledWatches::
+/user/username/workspace/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/a.ts:
+/user/username/workspace/solution/projects/project/a.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/workspace/solution/projects/project/b.d.css.ts: *new*
   {}
-/b.d.css.ts: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json:
   {}
+
+
+Program root files: [
+  "/user/username/workspace/solution/projects/project/a.ts"
+]
+Program options: {
+  "allowArbitraryExtensions": true,
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/b.d.css.ts
+/user/username/workspace/solution/projects/project/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/b.d.css.ts
+/user/username/workspace/solution/projects/project/a.ts
+
+Shape signatures in builder refreshed for::
+/user/username/workspace/solution/projects/project/b.d.css.ts (used version)
+/user/username/workspace/solution/projects/project/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a.js] file written with same contents

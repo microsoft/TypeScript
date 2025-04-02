@@ -1,10 +1,9 @@
-tests/cases/compiler/complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
-tests/cases/compiler/complicatedPrivacy.ts(35,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/complicatedPrivacy.ts(35,6): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/compiler/complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported member 'i6'.
+complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
+complicatedPrivacy.ts(35,6): error TS2693: 'number' only refers to a type, but is being used as a value here.
+complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported member 'i6'.
 
 
-==== tests/cases/compiler/complicatedPrivacy.ts (4 errors) ====
+==== complicatedPrivacy.ts (3 errors) ====
     module m1 {
         export module m2 {
     
@@ -42,8 +41,6 @@ tests/cases/compiler/complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo
         export function f4(arg1: 
         {
         [number]: C1; // Used to be indexer, now it is a computed property
-        ~~~~~~~~
-!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
          ~~~~~~
 !!! error TS2693: 'number' only refers to a type, but is being used as a value here.
         }) {

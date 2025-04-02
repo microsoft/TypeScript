@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumSyntheticNodesComments.ts] ////
+
 //// [constEnumSyntheticNodesComments.ts]
 const enum En { A, B, C, D }
 

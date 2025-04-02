@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseInvalidNames.ts ===
+//// [tests/cases/compiler/parseInvalidNames.ts] ////
+
+=== parseInvalidNames.ts ===
 
 namespace 100 {}
 interface 100 {}

@@ -1,13 +1,10 @@
-tests/cases/compiler/astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
-tests/cases/compiler/astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
-tests/cases/compiler/astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.
-tests/cases/compiler/astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
+astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
+astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
+astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.
+astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
 
 
-==== tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts (0 errors) ====
-    // Example from https://mathiasbynens.be/notes/javascript-identifiers-es6
-    // Astral characters should be accepted in ES2015
-    
+==== extendedEscapesForAstralsInVarsAndClasses.ts (0 errors) ====
     // U+102A7 CARIAN LETTER A2
     var 𐊧: string;
     var \u{102A7}: string;
@@ -33,7 +30,7 @@ tests/cases/compiler/astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./ex
     
     _\u{102A7} += "!";
     
-==== tests/cases/compiler/astralAsSurrogatePair.ts (4 errors) ====
+==== astralAsSurrogatePair.ts (4 errors) ====
     import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
                     
 !!! error TS1127: Invalid character.

@@ -1,3 +1,4 @@
+// === Completions ===
 === /foo.ts ===
 // export class Observable<T> {
 //     pipe(): Observable<T>;
@@ -16,6 +17,7 @@
 //     
 //     ^
 // | ----------------------------------------------------------------------
+// | (method) Observable<any>.pipe(): Observable<any> (+10 overloads)
 // | abstract
 // | accessor
 // | async
@@ -29,7 +31,6 @@
 // | readonly
 // | set
 // | static
-// | (method) Observable<any>.pipe(): Observable<any> (+10 overloads)
 // | ----------------------------------------------------------------------
 // }
 
@@ -46,6 +47,118 @@
       "isMemberCompletion": true,
       "isNewIdentifierLocation": true,
       "entries": [
+        {
+          "name": "pipe",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "pipe(): Observable<any>;\npipe<A>(): Observable<A>;\npipe<A, B>(): Observable<B>;\npipe<A, B, C>(): Observable<C>;\npipe<A, B, C, D>(): Observable<D>;\npipe<A, B, C, D, E>(): Observable<E>;\npipe<A, B, C, D, E, F>(): Observable<F>;\npipe<A, B, C, D, E, F, G>(): Observable<G>;\npipe<A, B, C, D, E, F, G, H>(): Observable<H>;\npipe<A, B, C, D, E, F, G, H, I>(): Observable<I>;\npipe<A, B, C, D, E, F, G, H, I>(): Observable<unknown>;\npipe(): Observable<any> | Observable<A> | Observable<B> | Observable<C> | Observable<D> | Observable<E> | Observable<F> | Observable<G> | Observable<H> | Observable<I> | Observable<unknown> {\n    $0\n}",
+          "filterText": "pipe",
+          "isSnippet": true,
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Observable",
+              "kind": "className"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "pipe",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Observable",
+              "kind": "className"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "+",
+              "kind": "operator"
+            },
+            {
+              "text": "10",
+              "kind": "numericLiteral"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "overloads",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "abstract",
           "kind": "keyword",
@@ -201,119 +314,9 @@
               "kind": "keyword"
             }
           ]
-        },
-        {
-          "name": "pipe",
-          "kind": "method",
-          "kindModifiers": "",
-          "sortText": "17",
-          "insertText": "pipe(): Observable<any>;\npipe<A>(): Observable<A>;\npipe<A, B>(): Observable<B>;\npipe<A, B, C>(): Observable<C>;\npipe<A, B, C, D>(): Observable<D>;\npipe<A, B, C, D, E>(): Observable<E>;\npipe<A, B, C, D, E, F>(): Observable<F>;\npipe<A, B, C, D, E, F, G>(): Observable<G>;\npipe<A, B, C, D, E, F, G, H>(): Observable<H>;\npipe<A, B, C, D, E, F, G, H, I>(): Observable<I>;\npipe<A, B, C, D, E, F, G, H, I>(): Observable<unknown>;\npipe(): Observable<any> | Observable<A> | Observable<B> | Observable<C> | Observable<D> | Observable<E> | Observable<F> | Observable<G> | Observable<H> | Observable<I> | Observable<unknown> {\n    $0\n}",
-          "isSnippet": true,
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Observable",
-              "kind": "className"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "pipe",
-              "kind": "methodName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Observable",
-              "kind": "className"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "+",
-              "kind": "operator"
-            },
-            {
-              "text": "10",
-              "kind": "numericLiteral"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "overloads",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            }
-          ],
-          "documentation": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

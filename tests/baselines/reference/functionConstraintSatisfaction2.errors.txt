@@ -1,31 +1,33 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Function'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(6,16): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(7,8): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(23,14): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Function'.
+functionConstraintSatisfaction2.ts(6,16): error TS2554: Expected 1 arguments, but got 2.
+functionConstraintSatisfaction2.ts(7,8): error TS2554: Expected 1 arguments, but got 2.
+functionConstraintSatisfaction2.ts(23,14): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
   Type 'Function' provides no match for the signature '(x: string): string'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(24,15): error TS2345: Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(24,15): error TS2345: Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'string[]'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(25,15): error TS2345: Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(25,15): error TS2345: Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
   Type 'typeof C' provides no match for the signature '(x: string): string'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(26,15): error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(26,15): error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
   Type 'new (x: string) => string' provides no match for the signature '(x: string): string'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(28,16): error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(28,16): error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(29,16): error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(29,16): error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
   Type 'typeof C2' provides no match for the signature '(x: string): string'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(30,16): error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(30,16): error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
   Type 'new <T>(x: T) => T' provides no match for the signature '(x: string): string'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(34,16): error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(34,16): error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
   Type 'F2' provides no match for the signature '(x: string): string'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(37,10): error TS2345: Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(37,10): error TS2345: Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
   Type '() => void' is not assignable to type '(x: string) => string'.
     Type 'void' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(38,10): error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
+functionConstraintSatisfaction2.ts(38,10): error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
   Type 'T' is not assignable to type '(x: string) => string'.
+    Type '() => void' is not assignable to type '(x: string) => string'.
+      Type 'void' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts (13 errors) ====
+==== functionConstraintSatisfaction2.ts (13 errors) ====
     // satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
     
     function foo<T extends Function>(x: T): T { return x; }
@@ -102,5 +104,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
              ~
 !!! error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type 'T' is not assignable to type '(x: string) => string'.
+!!! error TS2345:     Type '() => void' is not assignable to type '(x: string) => string'.
+!!! error TS2345:       Type 'void' is not assignable to type 'string'.
     }
     

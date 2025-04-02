@@ -1,172 +1,284 @@
-=== tests/cases/compiler/constantEnumAssert.ts ===
+//// [tests/cases/compiler/constantEnumAssert.ts] ////
+
+=== constantEnumAssert.ts ===
 enum E1 {
 >E1 : E1
+>   : ^^
 
     a,
 >a : E1.a
+>  : ^^^^
 
     b
 >b : E1.b
+>  : ^^^^
 }
 
 enum E2 {
 >E2 : E2
+>   : ^^
 
     a = 'a',
 >a : E2.a
+>  : ^^^^
 >'a' : "a"
+>    : ^^^
 
     b = 'b'
 >b : E2.b
+>  : ^^^^
 >'b' : "b"
+>    : ^^^
 }
 
 enum E3 {
 >E3 : E3
+>   : ^^
 
     a = 1,
 >a : E3.a
+>  : ^^^^
 >1 : 1
+>  : ^
 
     b = a << 1,
 >b : E3.b
+>  : ^^^^
 >a << 1 : number
+>       : ^^^^^^
 >a : E3.a
+>  : ^^^^
 >1 : 1
+>  : ^
 
     c = a << 2,
 >c : E3.c
+>  : ^^^^
 >a << 2 : number
+>       : ^^^^^^
 >a : E3.a
+>  : ^^^^
 >2 : 2
+>  : ^
 }
 
 const enum E4 {
 >E4 : E4
+>   : ^^
 
     a,
 >a : E4.a
+>  : ^^^^
 
     b
 >b : E4.b
+>  : ^^^^
 }
 
 const E5 = {
 >E5 : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: 'a',    b: 'b'} : { a: string; b: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: 'a',
 >a : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
     b: 'b'
 >b : string
+>  : ^^^^^^
 >'b' : "b"
+>    : ^^^
 }
 
 const foo1 = { a: E1.a }
 >foo1 : { a: E1; }
+>     : ^^^^^^^^^^
 >{ a: E1.a } : { a: E1; }
+>            : ^^^^^^^^^^
 >a : E1
+>  : ^^
 >E1.a : E1.a
+>     : ^^^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >a : E1.a
+>  : ^^^^
 
 const foo2 = { a: E2.a }
 >foo2 : { a: E2; }
+>     : ^^^^^^^^^^
 >{ a: E2.a } : { a: E2; }
+>            : ^^^^^^^^^^
 >a : E2
+>  : ^^
 >E2.a : E2.a
+>     : ^^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >a : E2.a
+>  : ^^^^
 
 const foo3 = { a: E1.a } as const
 >foo3 : { readonly a: E1.a; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E1.a } as const : { readonly a: E1.a; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E1.a } : { readonly a: E1.a; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >a : E1.a
+>  : ^^^^
 >E1.a : E1.a
+>     : ^^^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >a : E1.a
+>  : ^^^^
 
 const foo4 = { a: E2.a } as const
 >foo4 : { readonly a: E2.a; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E2.a } as const : { readonly a: E2.a; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E2.a } : { readonly a: E2.a; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >a : E2.a
+>  : ^^^^
 >E2.a : E2.a
+>     : ^^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >a : E2.a
+>  : ^^^^
 
 const foo5 = { a: E3.a } as const
 >foo5 : { readonly a: E3.a; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E3.a } as const : { readonly a: E3.a; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E3.a } : { readonly a: E3.a; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >a : E3.a
+>  : ^^^^
 >E3.a : E3.a
+>     : ^^^^
 >E3 : typeof E3
+>   : ^^^^^^^^^
 >a : E3.a
+>  : ^^^^
 
 const foo6 = { a: E4.a } as const
 >foo6 : { readonly a: E4.a; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E4.a } as const : { readonly a: E4.a; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >{ a: E4.a } : { readonly a: E4.a; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >a : E4.a
+>  : ^^^^
 >E4.a : E4.a
+>     : ^^^^
 >E4 : typeof E4
+>   : ^^^^^^^^^
 >a : E4.a
+>  : ^^^^
 
 const foo7 = { a: E5.a } as const
 >foo7 : { readonly a: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: E5.a } as const : { readonly a: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: E5.a } : { readonly a: string; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >E5.a : string
+>     : ^^^^^^
 >E5 : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 const foo8 = { a: E1.a as const }
 >foo8 : { a: E1.a; }
+>     : ^^^^^^^^^^^^
 >{ a: E1.a as const } : { a: E1.a; }
+>                     : ^^^^^^^^^^^^
 >a : E1.a
+>  : ^^^^
 >E1.a as const : E1.a
+>              : ^^^^
 >E1.a : E1.a
+>     : ^^^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >a : E1.a
+>  : ^^^^
 
 const foo9 = { a: E2.a as const }
 >foo9 : { a: E2.a; }
+>     : ^^^^^^^^^^^^
 >{ a: E2.a as const } : { a: E2.a; }
+>                     : ^^^^^^^^^^^^
 >a : E2.a
+>  : ^^^^
 >E2.a as const : E2.a
+>              : ^^^^
 >E2.a : E2.a
+>     : ^^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >a : E2.a
+>  : ^^^^
 
 const foo10 = { a: E3.a as const }
 >foo10 : { a: E3.a; }
+>      : ^^^^^^^^^^^^
 >{ a: E3.a as const } : { a: E3.a; }
+>                     : ^^^^^^^^^^^^
 >a : E3.a
+>  : ^^^^
 >E3.a as const : E3.a
+>              : ^^^^
 >E3.a : E3.a
+>     : ^^^^
 >E3 : typeof E3
+>   : ^^^^^^^^^
 >a : E3.a
+>  : ^^^^
 
 const foo11 = { a: E4.a as const }
 >foo11 : { a: E4.a; }
+>      : ^^^^^^^^^^^^
 >{ a: E4.a as const } : { a: E4.a; }
+>                     : ^^^^^^^^^^^^
 >a : E4.a
+>  : ^^^^
 >E4.a as const : E4.a
+>              : ^^^^
 >E4.a : E4.a
+>     : ^^^^
 >E4 : typeof E4
+>   : ^^^^^^^^^
 >a : E4.a
+>  : ^^^^
 
 const foo12 = { a: E5.a as const }
 >foo12 : { a: string; }
+>      : ^^^^^^^^^^^^^^
 >{ a: E5.a as const } : { a: string; }
+>                     : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >E5.a as const : string
+>              : ^^^^^^
 >E5.a : string
+>     : ^^^^^^
 >E5 : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 

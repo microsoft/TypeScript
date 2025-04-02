@@ -1,49 +1,81 @@
-=== tests/cases/compiler/typePredicateTopLevelTypeParameter.ts ===
+//// [tests/cases/compiler/typePredicateTopLevelTypeParameter.ts] ////
+
+=== typePredicateTopLevelTypeParameter.ts ===
 // Repro from #51980
 
 function getPermissions(user: string) {
 >getPermissions : (user: string) => "admin" | undefined
+>               : ^    ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >user : string
+>     : ^^^^^^
 
     if (user === 'Jack') return 'admin';
 >user === 'Jack' : boolean
+>                : ^^^^^^^
 >user : string
+>     : ^^^^^^
 >'Jack' : "Jack"
+>       : ^^^^^^
 >'admin' : "admin"
+>        : ^^^^^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 const admins = ['Mike', 'Joe'].map(e => getPermissions(e));
 >admins : ("admin" | undefined)[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >['Mike', 'Joe'].map(e => getPermissions(e)) : ("admin" | undefined)[]
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^
 >['Mike', 'Joe'].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>                    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >['Mike', 'Joe'] : string[]
+>                : ^^^^^^^^
 >'Mike' : "Mike"
+>       : ^^^^^^
 >'Joe' : "Joe"
+>      : ^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >e => getPermissions(e) : (e: string) => "admin" | undefined
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : string
+>  : ^^^^^^
 >getPermissions(e) : "admin" | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^
 >getPermissions : (user: string) => "admin" | undefined
+>               : ^    ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >e : string
+>  : ^^^^^^
 
 function isDefined<T>(a: T | undefined): a is T {
 >isDefined : <T>(a: T | undefined) => a is T
+>          : ^ ^^ ^^             ^^^^^      
 >a : T | undefined
+>  : ^^^^^^^^^^^^^
 
     return a !== undefined;
 >a !== undefined : boolean
+>                : ^^^^^^^
 >a : T | undefined
+>  : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 const foundAdmins = admins.filter(isDefined);  // "admin"[]
 >foundAdmins : "admin"[]
+>            : ^^^^^^^^^
 >admins.filter(isDefined) : "admin"[]
+>                         : ^^^^^^^^^
 >admins.filter : { <S extends "admin" | undefined>(predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => unknown, thisArg?: any): ("admin" | undefined)[]; }
+>              : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >admins : ("admin" | undefined)[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >filter : { <S extends "admin" | undefined>(predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => unknown, thisArg?: any): ("admin" | undefined)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isDefined : <T>(a: T | undefined) => a is T
+>          : ^ ^^ ^^             ^^^^^      
 

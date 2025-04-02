@@ -1,44 +1,62 @@
-=== tests/cases/compiler/extendingSetWithCheckJs.ts ===
+//// [tests/cases/compiler/extendingSetWithCheckJs.ts] ////
+
+=== extendingSetWithCheckJs.ts ===
 class MySet extends Set {
 >MySet : MySet
+>      : ^^^^^
 >Set : Set<any>
+>    : ^^^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : SetConstructor
+>      : ^^^^^^^^^^^^^^
     }
 }
 
 class MyWeakSet extends WeakSet {
 >MyWeakSet : MyWeakSet
+>          : ^^^^^^^^^
 >WeakSet : WeakSet<object>
+>        : ^^^^^^^^^^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : WeakSetConstructor
+>      : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 class MyMap extends Map {
 >MyMap : MyMap
+>      : ^^^^^
 >Map : Map<any, any>
+>    : ^^^^^^^^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : MapConstructor
+>      : ^^^^^^^^^^^^^^
     }
 }
 
 class MyWeakMap extends WeakMap {
 >MyWeakMap : MyWeakMap
+>          : ^^^^^^^^^
 >WeakMap : WeakMap<object, any>
+>        : ^^^^^^^^^^^^^^^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : WeakMapConstructor
+>      : ^^^^^^^^^^^^^^^^^^
     }
 }

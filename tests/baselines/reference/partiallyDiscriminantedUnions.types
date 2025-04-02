@@ -1,56 +1,81 @@
-=== tests/cases/compiler/partiallyDiscriminantedUnions.ts ===
+//// [tests/cases/compiler/partiallyDiscriminantedUnions.ts] ////
+
+=== partiallyDiscriminantedUnions.ts ===
 // Repro from #10586
 
 interface A1 {
     type: 'a';
 >type : "a"
+>     : ^^^
 
     subtype: 1;
 >subtype : 1
+>        : ^
 }
 
 interface A2 {
     type: 'a';
 >type : "a"
+>     : ^^^
 
     subtype: 2;
 >subtype : 2
+>        : ^
 
     foo: number;
 >foo : number
+>    : ^^^^^^
 }
 
 interface B {
     type: 'b';
 >type : "b"
+>     : ^^^
 }
 
 type AB = A1 | A2 | B;
->AB : A1 | A2 | B
+>AB : AB
+>   : ^^
 
 const ab: AB = <AB>{};
 >ab : AB
+>   : ^^
 ><AB>{} : AB
+>       : ^^
 >{} : {}
+>   : ^^
 
 if (ab.type === 'a') {
 >ab.type === 'a' : boolean
+>                : ^^^^^^^
 >ab.type : "a" | "b"
+>        : ^^^^^^^^^
 >ab : AB
+>   : ^^
 >type : "a" | "b"
+>     : ^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
     if (ab.subtype === 2) {
 >ab.subtype === 2 : boolean
+>                 : ^^^^^^^
 >ab.subtype : 1 | 2
+>           : ^^^^^
 >ab : A1 | A2
+>   : ^^^^^^^
 >subtype : 1 | 2
+>        : ^^^^^
 >2 : 2
+>  : ^
 
         ab.foo;
 >ab.foo : number
+>       : ^^^^^^
 >ab : A2
+>   : ^^
 >foo : number
+>    : ^^^^^^
     }
 }
 
@@ -58,50 +83,76 @@ if (ab.type === 'a') {
 
 class Square { kind: "square"; }
 >Square : Square
+>       : ^^^^^^
 >kind : "square"
+>     : ^^^^^^^^
 
 class Circle { kind: "circle"; }
 >Circle : Circle
+>       : ^^^^^^
 >kind : "circle"
+>     : ^^^^^^^^
 
 type Shape = Circle | Square;
->Shape : Square | Circle
+>Shape : Shape
+>      : ^^^^^
 
 type Shapes = Shape | Array<Shape>;
->Shapes : Shape | Shape[]
+>Shapes : Shapes
+>       : ^^^^^^
 
 function isShape(s : Shapes): s is Shape {
 >isShape : (s: Shapes) => s is Shape
+>        : ^ ^^      ^^^^^          
 >s : Shapes
+>  : ^^^^^^
 
     return !Array.isArray(s);
 >!Array.isArray(s) : boolean
+>                  : ^^^^^^^
 >Array.isArray(s) : boolean
+>                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >s : Shapes
+>  : ^^^^^^
 }
 
 function fail(s: Shapes) {
 >fail : (s: Shapes) => void
+>     : ^ ^^      ^^^^^^^^^
 >s : Shapes
+>  : ^^^^^^
 
     if (isShape(s)) {
 >isShape(s) : boolean
+>           : ^^^^^^^
 >isShape : (s: Shapes) => s is Shape
+>        : ^ ^^      ^^^^^          
 >s : Shapes
+>  : ^^^^^^
 
         if (s.kind === "circle") {
 >s.kind === "circle" : boolean
+>                    : ^^^^^^^
 >s.kind : "square" | "circle"
+>       : ^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >kind : "square" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^
 >"circle" : "circle"
+>         : ^^^^^^^^
 
             let c: Circle = s;
 >c : Circle
+>  : ^^^^^^
 >s : Circle
+>  : ^^^^^^
         }
     }
 }

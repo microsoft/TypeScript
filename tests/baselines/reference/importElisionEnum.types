@@ -1,32 +1,47 @@
-=== tests/cases/compiler/enum.ts ===
+//// [tests/cases/compiler/importElisionEnum.ts] ////
+
+=== enum.ts ===
 export enum MyEnum {
 >MyEnum : MyEnum
+>       : ^^^^^^
 
   a = 0,
 >a : MyEnum.a
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 
   b,
 >b : MyEnum.b
+>  : ^^^^^^^^
 
   c,
 >c : MyEnum.c
+>  : ^^^^^^^^
 
   d
 >d : MyEnum.d
+>  : ^^^^^^^^
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { MyEnum as MyEnumFromModule } from "./enum";
 >MyEnum : typeof MyEnumFromModule
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >MyEnumFromModule : typeof MyEnumFromModule
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
 enum MyEnum {
 >MyEnum : MyEnum
+>       : ^^^^^^
 
   a = MyEnumFromModule.a
 >a : MyEnum.a
+>  : ^^^^^^^^
 >MyEnumFromModule.a : MyEnumFromModule.a
+>                   : ^^^^^^^^^^^^^^^^^^
 >MyEnumFromModule : typeof MyEnumFromModule
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : MyEnumFromModule.a
+>  : ^^^^^^^^^^^^^^^^^^
 }

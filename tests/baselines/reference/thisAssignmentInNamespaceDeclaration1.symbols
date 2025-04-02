@@ -1,11 +1,13 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/thisAssignmentInNamespaceDeclaration1.ts] ////
+
+=== a.js ===
 module foo {
 >foo : Symbol(foo, Decl(a.js, 0, 0))
 
     this.bar = 4;
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 namespace blah {
 >blah : Symbol(blah, Decl(b.js, 0, 0))
 

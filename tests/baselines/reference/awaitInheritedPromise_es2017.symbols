@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es2017/awaitInheritedPromise_es2017.ts ===
+//// [tests/cases/conformance/async/es2017/awaitInheritedPromise_es2017.ts] ////
+
+=== awaitInheritedPromise_es2017.ts ===
 interface A extends Promise<string> {}
 >A : Symbol(A, Decl(awaitInheritedPromise_es2017.ts, 0, 0))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeLiteralCallback.ts] ////
+
 //// [typeLiteralCallback.ts]
 interface Foo<T> {
     reject(arg: T): void ;

@@ -1,57 +1,91 @@
-=== tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== checkJsxChildrenCanBeTupleType.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from 'react'
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface ResizablePanelProps {
   children: [React.ReactNode, React.ReactNode]
 >children : [React.ReactNode, React.ReactNode]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 >React : any
+>      : ^^^
 }
 
 class ResizablePanel extends React.Component<
 >ResizablePanel : ResizablePanel
+>               : ^^^^^^^^^^^^^^
 >React.Component : React.Component<ResizablePanelProps, any, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
   ResizablePanelProps, any> {}
 
 const test = <ResizablePanel>
 >test : JSX.Element
+>     : ^^^^^^^^^^^
 ><ResizablePanel>  <div />  <div /></ResizablePanel> : JSX.Element
+>                                                    : ^^^^^^^^^^^
 >ResizablePanel : typeof ResizablePanel
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
   <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
   <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 </ResizablePanel>
 >ResizablePanel : typeof ResizablePanel
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
 const testErr = <ResizablePanel>
 >testErr : JSX.Element
+>        : ^^^^^^^^^^^
 ><ResizablePanel>  <div />  <div />  <div /></ResizablePanel> : JSX.Element
+>                                                             : ^^^^^^^^^^^
 >ResizablePanel : typeof ResizablePanel
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
   <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
   <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
   <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 </ResizablePanel>
 >ResizablePanel : typeof ResizablePanel
+>               : ^^^^^^^^^^^^^^^^^^^^^
 

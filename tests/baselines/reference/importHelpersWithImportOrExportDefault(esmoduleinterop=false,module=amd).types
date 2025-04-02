@@ -1,28 +1,39 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importHelpersWithImportOrExportDefault.ts] ////
+
+=== a.ts ===
 
 export default class { }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export { default } from "./a";
 >default : typeof b
+>        : ^^^^^^^^
 
 export { default as a } from "./a";
 >default : typeof b
+>        : ^^^^^^^^
 >a : typeof b
+>  : ^^^^^^^^
 
 import { default as b } from "./a";
 >default : typeof b
+>        : ^^^^^^^^
 >b : typeof b
+>  : ^^^^^^^^
 
 void b;
 >void b : undefined
+>       : ^^^^^^^^^
 >b : typeof b
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 declare module "tslib" {
 >"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     function __importDefault(m: any): void;
 >__importDefault : (m: any) => void
+>                : ^ ^^   ^^^^^    
 >m : any
 }

@@ -1,127 +1,169 @@
-=== tests/cases/compiler/collisionExportsRequireAndAmbientEnum_externalmodule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientEnum.ts] ////
+
+=== collisionExportsRequireAndAmbientEnum_externalmodule.ts ===
 export declare enum require {
 >require : require
+>        : ^^^^^^^
 
     _thisVal1,
 >_thisVal1 : require._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
     _thisVal2,
 >_thisVal2 : require._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
 }
 export declare enum exports {
 >exports : exports
+>        : ^^^^^^^
 
     _thisVal1,
 >_thisVal1 : exports._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
     _thisVal2,
 >_thisVal2 : exports._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
 }
 declare module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     enum require {
 >require : require
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : require._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : require._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
     enum exports {
 >exports : exports
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : exports._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : exports._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
 }
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export declare enum require { 
 >require : require
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : require._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : require._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
     export declare enum exports {
 >exports : exports
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : exports._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : exports._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndAmbientEnum_globalFile.ts ===
+=== collisionExportsRequireAndAmbientEnum_globalFile.ts ===
 declare enum require {
 >require : require
+>        : ^^^^^^^
 
     _thisVal1,
 >_thisVal1 : require._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
     _thisVal2,
 >_thisVal2 : require._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
 }
 declare enum exports {
 >exports : exports
+>        : ^^^^^^^
 
     _thisVal1,
 >_thisVal1 : exports._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
     _thisVal2,
 >_thisVal2 : exports._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
 }
 declare module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
     enum require {
 >require : require
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : require._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : require._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
     enum exports {
 >exports : exports
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : exports._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : exports._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
 }
 module m4 {
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
     export declare enum require {
 >require : require
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : require._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : require._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
     export declare enum exports {
 >exports : exports
+>        : ^^^^^^^
 
         _thisVal1,
 >_thisVal1 : exports._thisVal1
+>          : ^^^^^^^^^^^^^^^^^
 
         _thisVal2,
 >_thisVal2 : exports._thisVal2
+>          : ^^^^^^^^^^^^^^^^^
     }
 }

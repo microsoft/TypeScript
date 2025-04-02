@@ -1,113 +1,169 @@
-=== tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts] ////
+
+=== controlFlowTypeofObject.ts ===
 declare function obj(x: object): void;
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object
+>  : ^^^^^^
 
 function f1(x: unknown) {
 >f1 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (!x) {
 >!x : boolean
+>   : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
         return;
     }
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 >'object' : "object"
+>         : ^^^^^^^^
 
         obj(x);
 >obj(x) : void
+>       : ^^^^
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object
+>  : ^^^^^^
     }
 }
 
 function f2(x: unknown) {
 >f2 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (x === null) {
 >x === null : boolean
+>           : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
         return;
     }
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {} | undefined
+>  : ^^^^^^^^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
         obj(x);
 >obj(x) : void
+>       : ^^^^
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object
+>  : ^^^^^^
     }
 }
 
 function f3(x: unknown) {
 >f3 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (x == null) {
 >x == null : boolean
+>          : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
         return;
     }
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 >'object' : "object"
+>         : ^^^^^^^^
 
         obj(x);
 >obj(x) : void
+>       : ^^^^
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object
+>  : ^^^^^^
     }
 }
 
 function f4(x: unknown) {
 >f4 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (x == undefined) {
 >x == undefined : boolean
+>               : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         return;
     }
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 >'object' : "object"
+>         : ^^^^^^^^
 
         obj(x);
 >obj(x) : void
+>       : ^^^^
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object
+>  : ^^^^^^
     }
 }
 
 function f5(x: unknown) {
 >f5 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
         if (!x) {
 >!x : boolean
+>   : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
             return;
         }
@@ -115,61 +171,90 @@ function f5(x: unknown) {
     else {
         if (x === null) {
 >x === null : boolean
+>           : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
             return;
         }
     }
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {} | undefined
+>  : ^^^^^^^^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
         obj(x);
 >obj(x) : void
+>       : ^^^^
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object
+>  : ^^^^^^
     }
 }
 
 function f6(x: unknown) {
 >f6 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (x === null) {
 >x === null : boolean
+>           : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
         x;
 >x : null
+>  : ^^^^
     }
     else {
         x;
 >x : {} | undefined
+>  : ^^^^^^^^^^^^^^
 
         if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {} | undefined
+>  : ^^^^^^^^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
             obj(x);
 >obj(x) : void
+>       : ^^^^
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object
+>  : ^^^^^^
         }
     }
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
         obj(x);  // Error
 >obj(x) : void
+>       : ^^^^
 >obj : (x: object) => void
+>    : ^ ^^      ^^^^^    
 >x : object | null
+>  : ^^^^^^^^^^^^^
     }
 }
 

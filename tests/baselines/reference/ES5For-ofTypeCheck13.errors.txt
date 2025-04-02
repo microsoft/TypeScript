@@ -1,7 +1,7 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts(4,19): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+ES5For-ofTypeCheck13.ts(4,19): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
 
 
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts (1 errors) ====
+==== ES5For-ofTypeCheck13.ts (1 errors) ====
     const strSet: Set<string> = new Set()
     strSet.add('Hello')
     strSet.add('World')

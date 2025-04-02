@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/tsxNamespacedAttributeName2.tsx] ////
+
+=== a.tsx ===
 declare var React: any;
 >React : any
 
@@ -8,9 +10,11 @@ const a = <svg:path a:b={1}></svg:path>;
 >svg : error
 >path : error
 >a:b : number
+>    : ^^^^^^
 >a : error
 >b : error
 >1 : 1
+>  : ^
 >svg : error
 >path : error
 
@@ -20,9 +24,11 @@ const b = <svg : path a:b={1}></svg : path>;
 >svg : error
 >path : error
 >a:b : number
+>    : ^^^^^^
 >a : error
 >b : error
 >1 : 1
+>  : ^
 >svg : error
 >path : error
 

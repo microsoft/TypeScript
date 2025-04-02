@@ -1,43 +1,60 @@
-=== tests/cases/compiler/redeclareParameterInCatchBlock.ts ===
+//// [tests/cases/compiler/redeclareParameterInCatchBlock.ts] ////
+
+=== redeclareParameterInCatchBlock.ts ===
 try {
 
 } catch(e) {
 >e : any
+>  : ^^^
 
     const e = null;
 >e : any
+>  : ^^^
 }
 
 try {
 
 } catch(e) {
 >e : any
+>  : ^^^
 
     let e;
 >e : any
+>  : ^^^
 }
 
 try {
 
 } catch ([a, b]) {
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     const [c, b] = [0, 1];
 >c : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >[0, 1] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 }
 
 try {
 
 } catch ({ a: x, b: x }) {
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 >b : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 }
 
@@ -45,12 +62,15 @@ try {
 
 } catch(e) {
 >e : any
+>  : ^^^
 
     function test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         let e;
 >e : any
+>  : ^^^
     }
 }
 

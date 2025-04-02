@@ -1,41 +1,59 @@
-=== tests/cases/compiler/parenthesisDoesNotBlockAliasSymbolCreation.ts ===
+//// [tests/cases/compiler/parenthesisDoesNotBlockAliasSymbolCreation.ts] ////
+
+=== parenthesisDoesNotBlockAliasSymbolCreation.ts ===
 export type InvalidKeys<K extends string|number|symbol> = { [P in K]? : never };
 >InvalidKeys : InvalidKeys<K>
+>            : ^^^^^^^^^^^^^^
 
 export type InvalidKeys2<K extends string|number|symbol> = (
 >InvalidKeys2 : InvalidKeys2<K>
+>             : ^^^^^^^^^^^^^^^
 
     { [P in K]? : never }
 );
 
 export type A<T> = (
 >A : A<T>
+>  : ^^^^
 
     T & InvalidKeys<"a">
 );
 export type A2<T> = (
 >A2 : A2<T>
+>   : ^^^^^
 
     T & InvalidKeys2<"a">
 );
 
 export const a = null as A<{ x : number }>;
 >a : A<{ x: number; }>
+>  : ^^^^^^^      ^^^^
 >null as A<{ x : number }> : A<{ x: number; }>
+>                          : ^^^^^^^      ^^^^
 >x : number
+>  : ^^^^^^
 
 export const a2 = null as A2<{ x : number }>;
 >a2 : A2<{ x: number; }>
+>   : ^^^^^^^^      ^^^^
 >null as A2<{ x : number }> : A2<{ x: number; }>
+>                           : ^^^^^^^^      ^^^^
 >x : number
+>  : ^^^^^^
 
 export const a3 = null as { x : number } & InvalidKeys<"a">;
 >a3 : { x: number; } & InvalidKeys<"a">
+>   : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >null as { x : number } & InvalidKeys<"a"> : { x: number; } & InvalidKeys<"a">
+>                                          : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 export const a4 = null as { x : number } & InvalidKeys2<"a">;
 >a4 : { x: number; } & InvalidKeys2<"a">
+>   : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >null as { x : number } & InvalidKeys2<"a"> : { x: number; } & InvalidKeys2<"a">
+>                                           : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

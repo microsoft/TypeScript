@@ -1,229 +1,364 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts] ////
+
+=== noUncheckedIndexedAccessDestructuring.ts ===
 declare const strArray: string[];
 >strArray : string[]
+>         : ^^^^^^^^
 
 declare const strStrTuple: [string, string];
 >strStrTuple : [string, string]
+>            : ^^^^^^^^^^^^^^^^
 
 // Declaration forms for array destructuring
 
 // Destructuring from a simple array -> include undefined
 const [s1] = strArray;
 >s1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >strArray : string[]
+>         : ^^^^^^^^
 
 s1.toString(); // Should error, s1 possibly undefined
 >s1.toString() : string
+>              : ^^^^^^
 >s1.toString : () => string
+>            : ^^^^^^      
 >s1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 // Destructuring a rest element -> do not include undefined
 const [...s2] = strArray;
 >s2 : string[]
+>   : ^^^^^^^^
 >strArray : string[]
+>         : ^^^^^^^^
 
 s2.push(undefined); // Should error, 'undefined' not part of s2's element type
 >s2.push(undefined) : number
+>                   : ^^^^^^
 >s2.push : (...items: string[]) => number
+>        : ^^^^     ^^^^^^^^^^^^^^^      
 >s2 : string[]
+>   : ^^^^^^^^
 >push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // Destructuring a rest element -> do not include undefined
 const [, , ...s3] = strArray;
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >s3 : string[]
+>   : ^^^^^^^^
 >strArray : string[]
+>         : ^^^^^^^^
 
 s3.push(undefined); // Should error, 'undefined' not part of s2's element type
 >s3.push(undefined) : number
+>                   : ^^^^^^
 >s3.push : (...items: string[]) => number
+>        : ^^^^     ^^^^^^^^^^^^^^^      
 >s3 : string[]
+>   : ^^^^^^^^
 >push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // Declaration forms for object destructuring
 
 declare const strMap: { [s: string]: string };
 >strMap : { [s: string]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 const { t1 } = strMap;
 >t1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 t1.toString(); // Should error, t1 possibly undefined
 >t1.toString() : string
+>              : ^^^^^^
 >t1.toString : () => string
+>            : ^^^^^^      
 >t1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 const { ...t2 } = strMap;
 >t2 : { [s: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 t2.z.toString(); // Should error
 >t2.z.toString() : string
+>                : ^^^^^^
 >t2.z.toString : () => string
+>              : ^^^^^^      
 >t2.z : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >t2 : { [s: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 // Test intersections with declared properties
 declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 {
     const { x, y, z } = numMapPoint;
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.toFixed(); // Should OK
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
     y.toFixed(); // Should OK
 >y.toFixed() : string
->y.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>y.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >y : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
     z.toFixed(); // Should error
 >z.toFixed() : string
->z.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>z.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >z : number | undefined
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 }
 
 {
     const { x, ...q } = numMapPoint;
 >x : number
+>  : ^^^^^^
 >q : { [s: string]: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.toFixed(); // Should OK
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
     q.y.toFixed(); // Should OK
 >q.y.toFixed() : string
->q.y.toFixed : (fractionDigits?: number | undefined) => string
+>              : ^^^^^^
+>q.y.toFixed : (fractionDigits?: number) => string
+>            : ^              ^^^      ^^^^^      
 >q.y : number
+>    : ^^^^^^
 >q : { [s: string]: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >y : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
     q.z.toFixed(); // Should error
 >q.z.toFixed() : string
->q.z.toFixed : (fractionDigits?: number | undefined) => string
+>              : ^^^^^^
+>q.z.toFixed : (fractionDigits?: number) => string
+>            : ^              ^^^      ^^^^^      
 >q.z : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >q : { [s: string]: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >z : number | undefined
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 }
 
 {
     const { x, ...q } = numMapPoint;
 >x : number
+>  : ^^^^^^
 >q : { [s: string]: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.
 >x.    toFixed() : string
->x.    toFixed : (fractionDigits?: number | undefined) => string
+>                : ^^^^^^
+>x.    toFixed : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
     toFixed(); // Should OK
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
     q.
 >q.    y.toFixed() : string
->q.    y.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>q.    y.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >q.    y : number
+>        : ^^^^^^
 >q : { [s: string]: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     y.toFixed(); // Should OK
 >y : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
     q.
 >q.    z.toFixed() : string
->q.    z.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>q.    z.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >q.    z : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 >q : { [s: string]: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     z.toFixed(); // Should error
 >z : number | undefined
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 }
 
 
 declare let target_string: string;
 >target_string : string
+>              : ^^^^^^
 
 declare let target_string_undef: string | undefined;
 >target_string_undef : string | undefined
+>                    : ^^^^^^^^^^^^^^^^^^
 
 declare let target_string_arr: string[];
 >target_string_arr : string[]
+>                  : ^^^^^^^^
 
 // Assignment forms
 [target_string] = strArray; // Should error
 >[target_string] = strArray : string[]
+>                           : ^^^^^^^^
 >[target_string] : [string]
+>                : ^^^^^^^^
 >target_string : string
+>              : ^^^^^^
 >strArray : string[]
+>         : ^^^^^^^^
 
 [target_string_undef] = strArray;  // Should OK
 >[target_string_undef] = strArray : string[]
+>                                 : ^^^^^^^^
 >[target_string_undef] : [string | undefined]
+>                      : ^^^^^^^^^^^^^^^^^^^^
 >target_string_undef : string | undefined
+>                    : ^^^^^^^^^^^^^^^^^^
 >strArray : string[]
+>         : ^^^^^^^^
 
 [,,, ...target_string_arr] = strArray; // Should OK
 >[,,, ...target_string_arr] = strArray : string[]
+>                                      : ^^^^^^^^
 >[,,, ...target_string_arr] : [undefined, undefined, undefined, ...string[]]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >...target_string_arr : string
+>                     : ^^^^^^
 >target_string_arr : string[]
+>                  : ^^^^^^^^
 >strArray : string[]
+>         : ^^^^^^^^
 
 {
     let x: number, y: number, z: number | undefined;
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     ({ x, y, z } = numMapPoint); // Should OK
 >({ x, y, z } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
+>                            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x, y, z } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>                          : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x, y, z } : { x: number; y: number; z: number | undefined; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let q: number;
 >q : number
+>  : ^^^^^^
 
     ({ q } = numMapPoint); // Should error
 >({ q } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
+>                      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ q } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>                    : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ q } : { q: number; }
+>      : ^^^^^^^^^^^^^^
 >q : number
+>  : ^^^^^^
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+>            : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericIndexExpressions.ts] ////
+
 //// [numericIndexExpressions.ts]
 interface Numbers1 {
     1: string;

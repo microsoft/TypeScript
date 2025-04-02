@@ -1,21 +1,21 @@
 error TS2468: Cannot find global value 'Promise'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(1,44): error TS2339: Property 'blah' does not exist on type 'ImportMeta'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(1,63): error TS2339: Property 'blue' does not exist on type 'ImportMeta'.
-tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(2,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/es2019/importMeta/example.ts(2,2): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-tests/cases/conformance/es2019/importMeta/example.ts(6,28): error TS2339: Property 'scriptElement' does not exist on type 'ImportMeta'.
-tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(2,23): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,23): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(2,22): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+assignmentTargets.ts(1,44): error TS2339: Property 'blah' does not exist on type 'ImportMeta'.
+assignmentTargets.ts(1,63): error TS2339: Property 'blue' does not exist on type 'ImportMeta'.
+assignmentTargets.ts(2,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+example.ts(2,2): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+example.ts(6,28): error TS2339: Property 'scriptElement' does not exist on type 'ImportMeta'.
+moduleLookingFile01.ts(2,23): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+moduleLookingFile01.ts(3,23): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+scriptLookingFile01.ts(2,22): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+scriptLookingFile01.ts(3,22): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
 
 
 !!! error TS2468: Cannot find global value 'Promise'.
-==== tests/cases/conformance/es2019/importMeta/example.ts (2 errors) ====
+==== example.ts (2 errors) ====
     // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
     (async () => {
      ~~~~~~~~~~~~~
-!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
       const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
       const blob = await response.blob();
     
@@ -30,7 +30,7 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
       document.body.appendChild(image);
     })();
     
-==== tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts (2 errors) ====
+==== moduleLookingFile01.ts (2 errors) ====
     export let x = import.meta;
     export let y = import.metal;
                           ~~~~~
@@ -39,7 +39,7 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
                           ~~~~~~
 !!! error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
     
-==== tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts (2 errors) ====
+==== scriptLookingFile01.ts (2 errors) ====
     let globalA = import.meta;
     let globalB = import.metal;
                          ~~~~~
@@ -48,7 +48,7 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
                          ~~~~~~
 !!! error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
     
-==== tests/cases/conformance/es2019/importMeta/assignmentTargets.ts (3 errors) ====
+==== assignmentTargets.ts (3 errors) ====
     export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
                                                ~~~~
 !!! error TS2339: Property 'blah' does not exist on type 'ImportMeta'.

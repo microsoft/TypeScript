@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultDeclarationEmitNamedCorrectly.ts] ////
+
 //// [defaultDeclarationEmitNamedCorrectly.ts]
 export interface Things<P, T> {
     p: P;
@@ -18,11 +20,10 @@ export default class MyComponent {
 //// [defaultDeclarationEmitNamedCorrectly.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.make = void 0;
+exports.make = make;
 function make(x) {
     return null;
 }
-exports.make = make;
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }

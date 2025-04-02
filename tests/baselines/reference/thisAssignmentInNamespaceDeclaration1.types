@@ -1,24 +1,38 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/thisAssignmentInNamespaceDeclaration1.ts] ////
+
+=== a.js ===
 module foo {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     this.bar = 4;
 >this.bar = 4 : 4
+>             : ^
 >this.bar : any
+>         : ^^^
 >this : any
+>     : ^^^
 >bar : any
+>    : ^^^
 >4 : 4
+>  : ^
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 namespace blah {
 >blah : typeof blah
+>     : ^^^^^^^^^^^
 
     this.prop = 42;
 >this.prop = 42 : 42
+>               : ^^
 >this.prop : any
+>          : ^^^
 >this : any
+>     : ^^^
 >prop : any
+>     : ^^^
 >42 : 42
+>   : ^^
 }
 

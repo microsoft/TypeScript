@@ -1,26 +1,28 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of16.ts ===
-class StringIterator {
->StringIterator : Symbol(StringIterator, Decl(for-of16.ts, 0, 0))
+//// [tests/cases/conformance/es6/for-ofStatements/for-of16.ts] ////
+
+=== for-of16.ts ===
+class MyStringIterator {
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of16.ts, 0, 0))
 
     [Symbol.iterator]() {
->[Symbol.iterator] : Symbol(StringIterator[Symbol.iterator], Decl(for-of16.ts, 0, 22))
+>[Symbol.iterator] : Symbol(MyStringIterator[Symbol.iterator], Decl(for-of16.ts, 0, 24))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
->this : Symbol(StringIterator, Decl(for-of16.ts, 0, 0))
+>this : Symbol(MyStringIterator, Decl(for-of16.ts, 0, 0))
     }
 }
 
 var v: string;
 >v : Symbol(v, Decl(for-of16.ts, 6, 3))
 
-for (v of new StringIterator) { } // Should fail
+for (v of new MyStringIterator) { } // Should fail
 >v : Symbol(v, Decl(for-of16.ts, 6, 3))
->StringIterator : Symbol(StringIterator, Decl(for-of16.ts, 0, 0))
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of16.ts, 0, 0))
 
-for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
+for (v of new MyStringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
 >v : Symbol(v, Decl(for-of16.ts, 6, 3))
->StringIterator : Symbol(StringIterator, Decl(for-of16.ts, 0, 0))
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of16.ts, 0, 0))
 

@@ -1,10 +1,10 @@
-tests/cases/compiler/moduleVisibilityTest4.ts(9,11): error TS2724: 'M' has no exported member named 'num'. Did you mean 'nums'?
-tests/cases/compiler/moduleVisibilityTest4.ts(11,11): error TS2694: Namespace 'M' has no exported member 'bar'.
-tests/cases/compiler/moduleVisibilityTest4.ts(13,11): error TS2724: 'N' has no exported member named 'num'. Did you mean 'nums'?
-tests/cases/compiler/moduleVisibilityTest4.ts(15,11): error TS2694: Namespace 'N' has no exported member 'bar'.
+moduleVisibilityTest4.ts(9,11): error TS2724: 'M' has no exported member named 'num'. Did you mean 'nums'?
+moduleVisibilityTest4.ts(11,11): error TS2694: Namespace 'M' has no exported member 'bar'.
+moduleVisibilityTest4.ts(13,11): error TS2724: 'N' has no exported member named 'num'. Did you mean 'nums'?
+moduleVisibilityTest4.ts(15,11): error TS2694: Namespace 'N' has no exported member 'bar'.
 
 
-==== tests/cases/compiler/moduleVisibilityTest4.ts (4 errors) ====
+==== moduleVisibilityTest4.ts (4 errors) ====
     module M {
         export type nums = number;
     }

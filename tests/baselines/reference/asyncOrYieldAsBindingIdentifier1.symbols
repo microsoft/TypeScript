@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts ===
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts] ////
+
+=== asyncOrYieldAsBindingIdentifier1.ts ===
 function f_let () {
 >f_let : Symbol(f_let, Decl(asyncOrYieldAsBindingIdentifier1.ts, 0, 0))
 

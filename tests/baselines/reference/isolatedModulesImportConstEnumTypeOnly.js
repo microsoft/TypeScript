@@ -15,7 +15,7 @@ exports.Foo = void 0;
 var Foo;
 (function (Foo) {
     Foo[Foo["Bar"] = 0] = "Bar";
-})(Foo = exports.Foo || (exports.Foo = {}));
+})(Foo || (exports.Foo = Foo = {}));
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

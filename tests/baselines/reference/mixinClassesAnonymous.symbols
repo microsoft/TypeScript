@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/mixinClassesAnonymous.ts ===
+//// [tests/cases/conformance/classes/mixinClassesAnonymous.ts] ////
+
+=== mixinClassesAnonymous.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Symbol(Constructor, Decl(mixinClassesAnonymous.ts, 0, 0))
 >T : Symbol(T, Decl(mixinClassesAnonymous.ts, 0, 17))

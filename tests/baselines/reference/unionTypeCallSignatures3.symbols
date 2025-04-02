@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeCallSignatures3.ts ===
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures3.ts] ////
+
+=== unionTypeCallSignatures3.ts ===
 function f1(s: string) { }
 >f1 : Symbol(f1, Decl(unionTypeCallSignatures3.ts, 0, 0))
 >s : Symbol(s, Decl(unionTypeCallSignatures3.ts, 0, 12))

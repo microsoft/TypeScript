@@ -1,18 +1,26 @@
-=== tests/cases/conformance/classes/classDeclarations/modifierOnClassDeclarationMemberInFunction.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/modifierOnClassDeclarationMemberInFunction.ts] ////
+
+=== modifierOnClassDeclarationMemberInFunction.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         public baz = 1;
 >baz : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
         static foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
         public bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
     }
 }

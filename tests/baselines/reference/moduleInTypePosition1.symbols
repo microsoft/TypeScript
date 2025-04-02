@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleInTypePosition1_1.ts ===
+//// [tests/cases/compiler/moduleInTypePosition1.ts] ////
+
+=== moduleInTypePosition1_1.ts ===
 ///<reference path='moduleInTypePosition1_0.ts'/>
 import WinJS = require('./moduleInTypePosition1_0');
 >WinJS : Symbol(WinJS, Decl(moduleInTypePosition1_1.ts, 0, 0))
@@ -8,7 +10,7 @@ var x = (w1: WinJS) => { };
 >w1 : Symbol(w1, Decl(moduleInTypePosition1_1.ts, 2, 9))
 >WinJS : Symbol(WinJS)
 
-=== tests/cases/compiler/moduleInTypePosition1_0.ts ===
+=== moduleInTypePosition1_0.ts ===
 export class Promise {
 >Promise : Symbol(Promise, Decl(moduleInTypePosition1_0.ts, 0, 0))
 

@@ -1,7 +1,6 @@
 import {
     __String,
     ArrayLiteralExpression,
-    arrayToMap,
     BindingOrAssignmentElement,
     Block,
     compareValues,
@@ -24,8 +23,10 @@ import {
     isCallExpression,
     isComputedPropertyName,
     isIdentifier,
+    JsxEmit,
     memoize,
     ObjectLiteralElementLike,
+    ParameterDeclaration,
     PrivateIdentifier,
     ScriptTarget,
     setEmitFlags,
@@ -35,13 +36,13 @@ import {
     TextRange,
     TransformationContext,
     UnscopedEmitHelper,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export const enum PrivateIdentifierKind {
     Field = "f",
     Method = "m",
-    Accessor = "a"
+    Accessor = "a",
 }
 
 /**
@@ -59,6 +60,8 @@ export interface ESDecorateClassContext {
      * The name of the decorated element.
      */
     name: Expression;
+
+    metadata: Expression;
 }
 
 /**
@@ -75,6 +78,7 @@ export interface ESDecorateClassElementContext {
     static: boolean;
     private: boolean;
     access: ESDecorateClassElementAccess;
+    metadata: Expression;
 }
 
 /** @internal */
@@ -85,15 +89,13 @@ export interface ESDecorateClassElementAccess {
 
 /** @internal */
 export type ESDecorateName =
-    | { computed: true, name: Expression }
-    | { computed: false, name: Identifier | PrivateIdentifier }
-    ;
+    | { computed: true; name: Expression; }
+    | { computed: false; name: Identifier | PrivateIdentifier; };
 
 /** @internal */
 export type ESDecorateContext =
     | ESDecorateClassContext
-    | ESDecorateClassElementContext
-    ;
+    | ESDecorateClassElementContext;
 
 /** @internal */
 export interface EmitHelperFactory {
@@ -114,7 +116,7 @@ export interface EmitHelperFactory {
     // ES2018 Destructuring Helpers
     createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression;
     // ES2017 Helpers
-    createAwaiterHelper(hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block): Expression;
+    createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[] | undefined, body: Block): Expression;
     // ES2015 Helpers
     createExtendsHelper(name: Identifier): Expression;
     createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
@@ -127,7 +129,6 @@ export interface EmitHelperFactory {
     // ES2015 Generator Helpers
     createGeneratorHelper(body: FunctionExpression): Expression;
     // ES Module Helpers
-    createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined): Expression;
     createImportStarHelper(expression: Expression): Expression;
     createImportStarCallbackHelper(): Expression;
     createImportDefaultHelper(expression: Expression): Expression;
@@ -136,6 +137,11 @@ export interface EmitHelperFactory {
     createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
     createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
     createClassPrivateFieldInHelper(state: Identifier, receiver: Expression): Expression;
+    // 'using' helpers
+    createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression;
+    createDisposeResourcesHelper(envBinding: Expression): Expression;
+    // --rewriteRelativeImportExtensions helpers
+    createRewriteRelativeImportExtensionsHelper(expression: Expression): Expression;
 }
 
 /** @internal */
@@ -175,7 +181,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // ES2015 Generator Helpers
         createGeneratorHelper,
         // ES Module Helpers
-        createCreateBindingHelper,
         createImportStarHelper,
         createImportStarCallbackHelper,
         createImportDefaultHelper,
@@ -183,7 +188,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // Class Fields Helpers
         createClassPrivateFieldGetHelper,
         createClassPrivateFieldSetHelper,
-        createClassPrivateFieldInHelper
+        createClassPrivateFieldInHelper,
+        // 'using' helpers
+        createAddDisposableResourceHelper,
+        createDisposeResourcesHelper,
+        // --rewriteRelativeImportExtensions helpers
+        createRewriteRelativeImportExtensionsHelper,
     };
 
     /**
@@ -211,7 +221,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__decorate"),
             /*typeArguments*/ undefined,
-            argumentsArray
+            argumentsArray,
         );
     }
 
@@ -222,8 +232,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeArguments*/ undefined,
             [
                 factory.createStringLiteral(metadataKey),
-                metadataValue
-            ]
+                metadataValue,
+            ],
         );
     }
 
@@ -235,22 +245,24 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 /*typeArguments*/ undefined,
                 [
                     factory.createNumericLiteral(parameterOffset + ""),
-                    expression
-                ]
+                    expression,
+                ],
             ),
-            location
+            location,
         );
     }
 
     // ES Decorators Helpers
 
     function createESDecorateClassContextObject(contextIn: ESDecorateClassContext) {
-        return factory.createObjectLiteralExpression([
+        const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral("class")),
-            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name)
-        ]);
-    }
+            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name),
+            factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
+        ];
 
+        return factory.createObjectLiteralExpression(properties);
+    }
 
     function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
         const accessor = elementName.computed ?
@@ -265,12 +277,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 [factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
+                    factory.createIdentifier("obj"),
                 )],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
-                accessor
-            )
+                accessor,
+            ),
         );
     }
 
@@ -284,33 +296,34 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(
-                    /*modifiers*/ undefined,
-                    /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
-                ),
-                factory.createParameterDeclaration(
-                    /*modifiers*/ undefined,
-                    /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("value")
-                )],
+                [
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        factory.createIdentifier("obj"),
+                    ),
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        factory.createIdentifier("value"),
+                    ),
+                ],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 factory.createBlock([
                     factory.createExpressionStatement(
                         factory.createAssignment(
                             accessor,
-                            factory.createIdentifier("value")
-                        )
-                    )
-                ])
-            )
+                            factory.createIdentifier("value"),
+                        ),
+                    ),
+                ]),
+            ),
         );
     }
 
     function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
-        const propertyName =
-            elementName.computed ? elementName.name :
+        const propertyName = elementName.computed ? elementName.name :
             isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
             elementName.name;
 
@@ -322,16 +335,16 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 [factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
+                    factory.createIdentifier("obj"),
                 )],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 factory.createBinaryExpression(
                     propertyName,
                     SyntaxKind.InKeyword,
-                    factory.createIdentifier("obj")
-                )
-            )
+                    factory.createIdentifier("obj"),
+                ),
+            ),
         );
     }
 
@@ -344,13 +357,15 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     function createESDecorateClassElementContextObject(contextIn: ESDecorateClassElementContext) {
-        return factory.createObjectLiteralExpression([
+        const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral(contextIn.kind)),
             factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name)),
             factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
-            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access))
-        ]);
+            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access)),
+            factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
+        ];
+        return factory.createObjectLiteralExpression(properties);
     }
 
     function createESDecorateContextObject(contextIn: ESDecorateContext) {
@@ -369,8 +384,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 decorators,
                 createESDecorateContextObject(contextIn),
                 initializers,
-                extraInitializers
-            ]);
+                extraInitializers,
+            ],
+        );
     }
 
     function createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression) {
@@ -378,23 +394,20 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__runInitializers"),
             /*typeArguments*/ undefined,
-            value ? [thisArg, initializers, value] : [thisArg, initializers]
+            value ? [thisArg, initializers, value] : [thisArg, initializers],
         );
     }
-
     // ES2018 Helpers
 
     function createAssignHelper(attributesSegments: Expression[]) {
         if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
-            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"),
-                              /*typeArguments*/ undefined,
-                              attributesSegments);
+            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
         }
         context.requestEmitHelper(assignHelper);
         return factory.createCallExpression(
             getUnscopedHelperName("__assign"),
             /*typeArguments*/ undefined,
-            attributesSegments
+            attributesSegments,
         );
     }
 
@@ -416,8 +429,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             [
                 hasLexicalThis ? factory.createThis() : factory.createVoidZero(),
                 factory.createIdentifier("arguments"),
-                generatorFunc
-            ]
+                generatorFunc,
+            ],
         );
     }
 
@@ -427,7 +440,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncDelegator"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -436,7 +449,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncValues"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -463,8 +476,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                             /*questionToken*/ undefined,
                             temp,
                             /*colonToken*/ undefined,
-                            factory.createAdd(temp, factory.createStringLiteral(""))
-                        )
+                            factory.createAdd(temp, factory.createStringLiteral("")),
+                        ),
                     );
                 }
                 else {
@@ -479,14 +492,15 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 value,
                 setTextRange(
                     factory.createArrayLiteralExpression(propertyNames),
-                    location
-                )]
+                    location,
+                ),
+            ],
         );
     }
 
     // ES2017 Helpers
 
-    function createAwaiterHelper(hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
+    function createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[], body: Block) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = factory.createFunctionExpression(
@@ -494,9 +508,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             factory.createToken(SyntaxKind.AsteriskToken),
             /*name*/ undefined,
             /*typeParameters*/ undefined,
-            /*parameters*/ [],
+            parameters ?? [],
             /*type*/ undefined,
-            body
+            body,
         );
 
         // Mark this node as originally an async function
@@ -507,10 +521,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeArguments*/ undefined,
             [
                 hasLexicalThis ? factory.createThis() : factory.createVoidZero(),
-                hasLexicalArguments ? factory.createIdentifier("arguments") : factory.createVoidZero(),
+                argumentsExpression ?? factory.createVoidZero(),
                 promiseConstructor ? createExpressionFromEntityName(factory, promiseConstructor) : factory.createVoidZero(),
-                generatorFunc
-            ]
+                generatorFunc,
+            ],
         );
     }
 
@@ -521,7 +535,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__extends"),
             /*typeArguments*/ undefined,
-            [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)]
+            [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)],
         );
     }
 
@@ -530,7 +544,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__makeTemplateObject"),
             /*typeArguments*/ undefined,
-            [cooked, raw]
+            [cooked, raw],
         );
     }
 
@@ -539,7 +553,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__spreadArray"),
             /*typeArguments*/ undefined,
-            [to, from, packFrom ? immutableTrue() : immutableFalse()]
+            [to, from, packFrom ? immutableTrue() : immutableFalse()],
         );
     }
 
@@ -548,7 +562,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__propKey"),
             /*typeArguments*/ undefined,
-            [expr]
+            [expr],
         );
     }
 
@@ -557,7 +571,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return context.factory.createCallExpression(
             getUnscopedHelperName("__setFunctionName"),
             /*typeArguments*/ undefined,
-            prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name]
+            prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name],
         );
     }
 
@@ -568,7 +582,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__values"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -579,7 +593,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeArguments*/ undefined,
             count !== undefined
                 ? [iteratorRecord, factory.createNumericLiteral(count + "")]
-                : [iteratorRecord]
+                : [iteratorRecord],
         );
     }
 
@@ -590,25 +604,18 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
-            [factory.createThis(), body]);
+            [factory.createThis(), body],
+        );
     }
 
     // ES Module Helpers
-
-    function createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined) {
-        context.requestEmitHelper(createBindingHelper);
-        return factory.createCallExpression(
-            getUnscopedHelperName("__createBinding"),
-            /*typeArguments*/ undefined,
-            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])]);
-    }
 
     function createImportStarHelper(expression: Expression) {
         context.requestEmitHelper(importStarHelper);
         return factory.createCallExpression(
             getUnscopedHelperName("__importStar"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -622,7 +629,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__importDefault"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -632,7 +639,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__exportStar"),
             /*typeArguments*/ undefined,
-            [moduleExpression, exportsExpression]
+            [moduleExpression, exportsExpression],
         );
     }
 
@@ -666,10 +673,35 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         context.requestEmitHelper(classPrivateFieldInHelper);
         return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /*typeArguments*/ undefined, [state, receiver]);
     }
+
+    function createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression {
+        context.requestEmitHelper(addDisposableResourceHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__addDisposableResource"),
+            /*typeArguments*/ undefined,
+            [envBinding, value, async ? factory.createTrue() : factory.createFalse()],
+        );
+    }
+
+    function createDisposeResourcesHelper(envBinding: Expression) {
+        context.requestEmitHelper(disposeResourcesHelper);
+        return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [envBinding]);
+    }
+
+    function createRewriteRelativeImportExtensionsHelper(expression: Expression) {
+        context.requestEmitHelper(rewriteRelativeImportExtensionsHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__rewriteRelativeImportExtension"),
+            /*typeArguments*/ undefined,
+            context.getCompilerOptions().jsx === JsxEmit.Preserve
+                ? [expression, factory.createTrue()]
+                : [expression],
+        );
+    }
 }
 
 /** @internal */
-export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
+export function compareEmitHelpers(x: EmitHelper, y: EmitHelper): Comparison {
     if (x === y) return Comparison.EqualTo;
     if (x.priority === y.priority) return Comparison.EqualTo;
     if (x.priority === undefined) return Comparison.GreaterThan;
@@ -680,10 +712,8 @@ export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
 /**
  * @param input Template string input strings
  * @param args Names which need to be made file-level unique
- *
- * @internal
  */
-export function helperString(input: TemplateStringsArray, ...args: string[]) {
+function helperString(input: TemplateStringsArray, ...args: string[]) {
     return (uniqueName: EmitHelperUniqueNameCallback) => {
         let result = "";
         for (let i = 0; i < args.length; i++) {
@@ -697,8 +727,7 @@ export function helperString(input: TemplateStringsArray, ...args: string[]) {
 
 // TypeScript Helpers
 
-/** @internal */
-export const decorateHelper: UnscopedEmitHelper = {
+const decorateHelper: UnscopedEmitHelper = {
     name: "typescript:decorate",
     importName: "__decorate",
     scoped: false,
@@ -709,11 +738,10 @@ export const decorateHelper: UnscopedEmitHelper = {
                 if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
                 else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
                 return c > 3 && r && Object.defineProperty(target, key, r), r;
-            };`
+            };`,
 };
 
-/** @internal */
-export const metadataHelper: UnscopedEmitHelper = {
+const metadataHelper: UnscopedEmitHelper = {
     name: "typescript:metadata",
     importName: "__metadata",
     scoped: false,
@@ -721,11 +749,10 @@ export const metadataHelper: UnscopedEmitHelper = {
     text: `
             var __metadata = (this && this.__metadata) || function (k, v) {
                 if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-            };`
+            };`,
 };
 
-/** @internal */
-export const paramHelper: UnscopedEmitHelper = {
+const paramHelper: UnscopedEmitHelper = {
     name: "typescript:param",
     importName: "__param",
     scoped: false,
@@ -733,12 +760,11 @@ export const paramHelper: UnscopedEmitHelper = {
     text: `
             var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return function (target, key) { decorator(target, key, paramIndex); }
-            };`
+            };`,
 };
 
 // ES Decorators Helpers
-/** @internal */
-export const esDecorateHelper: UnscopedEmitHelper = {
+const esDecorateHelper: UnscopedEmitHelper = {
     name: "typescript:esDecorate",
     importName: "__esDecorate",
     scoped: false,
@@ -761,20 +787,19 @@ export const esDecorateHelper: UnscopedEmitHelper = {
                     if (result === null || typeof result !== "object") throw new TypeError("Object expected");
                     if (_ = accept(result.get)) descriptor.get = _;
                     if (_ = accept(result.set)) descriptor.set = _;
-                    if (_ = accept(result.init)) initializers.push(_);
+                    if (_ = accept(result.init)) initializers.unshift(_);
                 }
                 else if (_ = accept(result)) {
-                    if (kind === "field") initializers.push(_);
+                    if (kind === "field") initializers.unshift(_);
                     else descriptor[key] = _;
                 }
             }
             if (target) Object.defineProperty(target, contextIn.name, descriptor);
             done = true;
-        };`
+        };`,
 };
 
-/** @internal */
-export const runInitializersHelper: UnscopedEmitHelper = {
+const runInitializersHelper: UnscopedEmitHelper = {
     name: "typescript:runInitializers",
     importName: "__runInitializers",
     scoped: false,
@@ -786,13 +811,12 @@ export const runInitializersHelper: UnscopedEmitHelper = {
                 value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
             }
             return useValue ? value : void 0;
-        };`
+        };`,
 };
 
 // ES2018 Helpers
 
-/** @internal */
-export const assignHelper: UnscopedEmitHelper = {
+const assignHelper: UnscopedEmitHelper = {
     name: "typescript:assign",
     importName: "__assign",
     scoped: false,
@@ -808,40 +832,38 @@ export const assignHelper: UnscopedEmitHelper = {
                     return t;
                 };
                 return __assign.apply(this, arguments);
-            };`
+            };`,
 };
 
-/** @internal */
-export const awaitHelper: UnscopedEmitHelper = {
+const awaitHelper: UnscopedEmitHelper = {
     name: "typescript:await",
     importName: "__await",
     scoped: false,
     text: `
-            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
+            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`,
 };
 
-/** @internal */
-export const asyncGeneratorHelper: UnscopedEmitHelper = {
+const asyncGeneratorHelper: UnscopedEmitHelper = {
     name: "typescript:asyncGenerator",
     importName: "__asyncGenerator",
     scoped: false,
     dependencies: [awaitHelper],
     text: `
-            var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
-                if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var g = generator.apply(thisArg, _arguments || []), i, q = [];
-                return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-                function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-                function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-                function fulfill(value) { resume("next", value); }
-                function reject(value) { resume("throw", value); }
-                function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-            };`
+        var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+            if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+            var g = generator.apply(thisArg, _arguments || []), i, q = [];
+            return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+            function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+            function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
+            function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+            function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+            function fulfill(value) { resume("next", value); }
+            function reject(value) { resume("throw", value); }
+            function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+        };`,
 };
 
-/** @internal */
-export const asyncDelegator: UnscopedEmitHelper = {
+const asyncDelegator: UnscopedEmitHelper = {
     name: "typescript:asyncDelegator",
     importName: "__asyncDelegator",
     scoped: false,
@@ -851,11 +873,10 @@ export const asyncDelegator: UnscopedEmitHelper = {
                 var i, p;
                 return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
                 function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v; } : f; }
-            };`
+            };`,
 };
 
-/** @internal */
-export const asyncValues: UnscopedEmitHelper = {
+const asyncValues: UnscopedEmitHelper = {
     name: "typescript:asyncValues",
     importName: "__asyncValues",
     scoped: false,
@@ -866,13 +887,12 @@ export const asyncValues: UnscopedEmitHelper = {
                 return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
                 function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
                 function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-            };`
+            };`,
 };
 
 // ES2018 Destructuring Helpers
 
-/** @internal */
-export const restHelper: UnscopedEmitHelper = {
+const restHelper: UnscopedEmitHelper = {
     name: "typescript:rest",
     importName: "__rest",
     scoped: false,
@@ -887,13 +907,12 @@ export const restHelper: UnscopedEmitHelper = {
                             t[p[i]] = s[p[i]];
                     }
                 return t;
-            };`
+            };`,
 };
 
 // ES2017 Helpers
 
-/** @internal */
-export const awaiterHelper: UnscopedEmitHelper = {
+const awaiterHelper: UnscopedEmitHelper = {
     name: "typescript:awaiter",
     importName: "__awaiter",
     scoped: false,
@@ -907,13 +926,12 @@ export const awaiterHelper: UnscopedEmitHelper = {
                     function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
                     step((generator = generator.apply(thisArg, _arguments || [])).next());
                 });
-            };`
+            };`,
 };
 
 // ES2015 Helpers
 
-/** @internal */
-export const extendsHelper: UnscopedEmitHelper = {
+const extendsHelper: UnscopedEmitHelper = {
     name: "typescript:extends",
     importName: "__extends",
     scoped: false,
@@ -934,11 +952,10 @@ export const extendsHelper: UnscopedEmitHelper = {
                     function __() { this.constructor = d; }
                     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
                 };
-            })();`
+            })();`,
 };
 
-/** @internal */
-export const templateObjectHelper: UnscopedEmitHelper = {
+const templateObjectHelper: UnscopedEmitHelper = {
     name: "typescript:makeTemplateObject",
     importName: "__makeTemplateObject",
     scoped: false,
@@ -947,11 +964,10 @@ export const templateObjectHelper: UnscopedEmitHelper = {
             var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
                 if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
                 return cooked;
-            };`
+            };`,
 };
 
-/** @internal */
-export const readHelper: UnscopedEmitHelper = {
+const readHelper: UnscopedEmitHelper = {
     name: "typescript:read",
     importName: "__read",
     scoped: false,
@@ -971,11 +987,10 @@ export const readHelper: UnscopedEmitHelper = {
                     finally { if (e) throw e.error; }
                 }
                 return ar;
-            };`
+            };`,
 };
 
-/** @internal */
-export const spreadArrayHelper: UnscopedEmitHelper = {
+const spreadArrayHelper: UnscopedEmitHelper = {
     name: "typescript:spreadArray",
     importName: "__spreadArray",
     scoped: false,
@@ -988,23 +1003,21 @@ export const spreadArrayHelper: UnscopedEmitHelper = {
                     }
                 }
                 return to.concat(ar || Array.prototype.slice.call(from));
-            };`
+            };`,
 };
 
-/** @internal */
-export const propKeyHelper: UnscopedEmitHelper = {
+const propKeyHelper: UnscopedEmitHelper = {
     name: "typescript:propKey",
     importName: "__propKey",
     scoped: false,
     text: `
         var __propKey = (this && this.__propKey) || function (x) {
             return typeof x === "symbol" ? x : "".concat(x);
-        };`
+        };`,
 };
 
 // https://tc39.es/ecma262/#sec-setfunctionname
-/** @internal */
-export const setFunctionNameHelper: UnscopedEmitHelper = {
+const setFunctionNameHelper: UnscopedEmitHelper = {
     name: "typescript:setFunctionName",
     importName: "__setFunctionName",
     scoped: false,
@@ -1012,13 +1025,12 @@ export const setFunctionNameHelper: UnscopedEmitHelper = {
         var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
             if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
             return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
-        };`
+        };`,
 };
 
 // ES2015 Destructuring Helpers
 
-/** @internal */
-export const valuesHelper: UnscopedEmitHelper = {
+const valuesHelper: UnscopedEmitHelper = {
     name: "typescript:values",
     importName: "__values",
     scoped: false,
@@ -1033,7 +1045,7 @@ export const valuesHelper: UnscopedEmitHelper = {
                     }
                 };
                 throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-            };`
+            };`,
 };
 
 // ES2015 Generator Helpers
@@ -1099,16 +1111,15 @@ export const valuesHelper: UnscopedEmitHelper = {
 //                        entering a finally block.
 //
 // For examples of how these are used, see the comments in ./transformers/generators.ts
-/** @internal */
-export const generatorHelper: UnscopedEmitHelper = {
+const generatorHelper: UnscopedEmitHelper = {
     name: "typescript:generator",
     importName: "__generator",
     scoped: false,
     priority: 6,
     text: `
             var __generator = (this && this.__generator) || function (thisArg, body) {
-                var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-                return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+                var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+                return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
                 function verb(n) { return function (v) { return step([n, v]); }; }
                 function step(op) {
                     if (f) throw new TypeError("Generator is already executing.");
@@ -1132,13 +1143,12 @@ export const generatorHelper: UnscopedEmitHelper = {
                     } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
                     if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
                 }
-            };`
+            };`,
 };
 
 // ES Module Helpers
 
-/** @internal */
-export const createBindingHelper: UnscopedEmitHelper = {
+const createBindingHelper: UnscopedEmitHelper = {
     name: "typescript:commonjscreatebinding",
     importName: "__createBinding",
     scoped: false,
@@ -1154,11 +1164,10 @@ export const createBindingHelper: UnscopedEmitHelper = {
             }) : (function(o, m, k, k2) {
                 if (k2 === undefined) k2 = k;
                 o[k2] = m[k];
-            }));`
+            }));`,
 };
 
-/** @internal */
-export const setModuleDefaultHelper: UnscopedEmitHelper = {
+const setModuleDefaultHelper: UnscopedEmitHelper = {
     name: "typescript:commonjscreatevalue",
     importName: "__setModuleDefault",
     scoped: false,
@@ -1168,41 +1177,48 @@ export const setModuleDefaultHelper: UnscopedEmitHelper = {
                 Object.defineProperty(o, "default", { enumerable: true, value: v });
             }) : function(o, v) {
                 o["default"] = v;
-            });`
+            });`,
 };
 
 // emit helper for `import * as Name from "foo"`
-/** @internal */
-export const importStarHelper: UnscopedEmitHelper = {
+const importStarHelper: UnscopedEmitHelper = {
     name: "typescript:commonjsimportstar",
     importName: "__importStar",
     scoped: false,
     dependencies: [createBindingHelper, setModuleDefaultHelper],
     priority: 2,
     text: `
-            var __importStar = (this && this.__importStar) || function (mod) {
-                if (mod && mod.__esModule) return mod;
-                var result = {};
-                if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-                __setModuleDefault(result, mod);
-                return result;
-            };`
+            var __importStar = (this && this.__importStar) || (function () {
+                var ownKeys = function(o) {
+                    ownKeys = Object.getOwnPropertyNames || function (o) {
+                        var ar = [];
+                        for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+                        return ar;
+                    };
+                    return ownKeys(o);
+                };
+                return function (mod) {
+                    if (mod && mod.__esModule) return mod;
+                    var result = {};
+                    if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+                    __setModuleDefault(result, mod);
+                    return result;
+                };
+            })();`,
 };
 
 // emit helper for `import Name from "foo"`
-/** @internal */
-export const importDefaultHelper: UnscopedEmitHelper = {
+const importDefaultHelper: UnscopedEmitHelper = {
     name: "typescript:commonjsimportdefault",
     importName: "__importDefault",
     scoped: false,
     text: `
             var __importDefault = (this && this.__importDefault) || function (mod) {
                 return (mod && mod.__esModule) ? mod : { "default": mod };
-            };`
+            };`,
 };
 
-/** @internal */
-export const exportStarHelper: UnscopedEmitHelper = {
+const exportStarHelper: UnscopedEmitHelper = {
     name: "typescript:export-star",
     importName: "__exportStar",
     scoped: false,
@@ -1211,7 +1227,7 @@ export const exportStarHelper: UnscopedEmitHelper = {
     text: `
             var __exportStar = (this && this.__exportStar) || function(m, exports) {
                 for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-            };`
+            };`,
 };
 
 /**
@@ -1261,10 +1277,8 @@ export const exportStarHelper: UnscopedEmitHelper = {
  *
  * Reading from a private static method (TS 4.3+):
  *      __classPrivateFieldGet(<any>, <constructor>, "m", <function>)
- *
- * @internal
  */
-export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
+const classPrivateFieldGetHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldGet",
     importName: "__classPrivateFieldGet",
     scoped: false,
@@ -1273,7 +1287,7 @@ export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
                 if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
                 if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
                 return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-            };`
+            };`,
 };
 
 /**
@@ -1326,10 +1340,8 @@ export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
  * Writing to a private static method (TS 4.3+):
  *      __classPrivateFieldSet(<any>, <constructor>, <any>, "m", <function>)
  *      NOTE: This always results in a runtime error.
- *
- * @internal
  */
-export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
+const classPrivateFieldSetHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldSet",
     importName: "__classPrivateFieldSet",
     scoped: false,
@@ -1339,7 +1351,7 @@ export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
                 if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
                 if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
                 return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
-            };`
+            };`,
 };
 
 /**
@@ -1353,10 +1365,8 @@ export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
  * Usage:
  * This helper is used to transform `#field in expression` to
  *      `__classPrivateFieldIn(<weakMap/weakSet/constructor>, expression)`
- *
- * @internal
  */
-export const classPrivateFieldInHelper: UnscopedEmitHelper = {
+const classPrivateFieldInHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldIn",
     importName: "__classPrivateFieldIn",
     scoped: false,
@@ -1364,51 +1374,101 @@ export const classPrivateFieldInHelper: UnscopedEmitHelper = {
             var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(state, receiver) {
                 if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
                 return typeof state === "function" ? receiver === state : state.has(receiver);
-            };`
+            };`,
 };
 
-let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
+const addDisposableResourceHelper: UnscopedEmitHelper = {
+    name: "typescript:addDisposableResource",
+    importName: "__addDisposableResource",
+    scoped: false,
+    text: `
+        var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
+            if (value !== null && value !== void 0) {
+                if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
+                var dispose, inner;
+                if (async) {
+                    if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+                    dispose = value[Symbol.asyncDispose];
+                }
+                if (dispose === void 0) {
+                    if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+                    dispose = value[Symbol.dispose];
+                    if (async) inner = dispose;
+                }
+                if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+                if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
+                env.stack.push({ value: value, dispose: dispose, async: async });
+            }
+            else if (async) {
+                env.stack.push({ async: true });
+            }
+            return value;
+        };`,
+};
 
-/** @internal */
-export function getAllUnscopedEmitHelpers() {
-    return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
-        decorateHelper,
-        metadataHelper,
-        paramHelper,
-        esDecorateHelper,
-        runInitializersHelper,
-        assignHelper,
-        awaitHelper,
-        asyncGeneratorHelper,
-        asyncDelegator,
-        asyncValues,
-        restHelper,
-        awaiterHelper,
-        extendsHelper,
-        templateObjectHelper,
-        spreadArrayHelper,
-        valuesHelper,
-        readHelper,
-        propKeyHelper,
-        setFunctionNameHelper,
-        generatorHelper,
-        importStarHelper,
-        importDefaultHelper,
-        exportStarHelper,
-        classPrivateFieldGetHelper,
-        classPrivateFieldSetHelper,
-        classPrivateFieldInHelper,
-        createBindingHelper,
-        setModuleDefaultHelper
-    ], helper => helper.name));
-}
+/**
+ * The `s` variable represents two boolean flags from the `DisposeResources` algorithm:
+ * - `needsAwait` (`1`) — Indicates that an `await using` for a `null` or `undefined` resource was encountered.
+ * - `hasAwaited` (`2`) — Indicates that the algorithm has performed an Await.
+ */
+const disposeResourcesHelper: UnscopedEmitHelper = {
+    name: "typescript:disposeResources",
+    importName: "__disposeResources",
+    scoped: false,
+    text: `
+        var __disposeResources = (this && this.__disposeResources) || (function (SuppressedError) {
+            return function (env) {
+                function fail(e) {
+                    env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+                    env.hasError = true;
+                }
+                var r, s = 0;
+                function next() {
+                    while (r = env.stack.pop()) {
+                        try {
+                            if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                            if (r.dispose) {
+                                var result = r.dispose.call(r.value);
+                                if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                            }
+                            else s |= 1;
+                        }
+                        catch (e) {
+                            fail(e);
+                        }
+                    }
+                    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
+                    if (env.hasError) throw env.error;
+                }
+                return next();
+            };
+        })(typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+            var e = new Error(message);
+            return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+        });`,
+};
+
+const rewriteRelativeImportExtensionsHelper: UnscopedEmitHelper = {
+    name: "typescript:rewriteRelativeImportExtensions",
+    importName: "__rewriteRelativeImportExtension",
+    scoped: false,
+    text: `
+        var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+            if (typeof path === "string" && /^\\.\\.?\\//.test(path)) {
+                return path.replace(/\\.(tsx)$|((?:\\.d)?)((?:\\.[^./]+?)?)\\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
+                    return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
+                });
+            }
+            return path;
+        };`,
+};
 
 /** @internal */
 export const asyncSuperHelper: EmitHelper = {
     name: "typescript:async-super",
     scoped: true,
     text: helperString`
-            const ${"_superIndex"} = name => super[name];`
+            const ${"_superIndex"} = name => super[name];`,
 };
 
 /** @internal */
@@ -1419,7 +1479,7 @@ export const advancedAsyncSuperHelper: EmitHelper = {
             const ${"_superIndex"} = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-            })(name => super[name], (name, value) => super[name] = value);`
+            })(name => super[name], (name, value) => super[name] = value);`,
 };
 
 /** @internal */

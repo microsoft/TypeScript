@@ -1,23 +1,38 @@
-=== tests/cases/conformance/salsa/bug28014.js ===
+//// [tests/cases/conformance/salsa/moduleExportAliasImported.ts] ////
+
+=== bug28014.js ===
 exports.version = 1
 >exports.version = 1 : 1
+>                    : ^
 >exports.version : 1
+>                : ^
 >exports : typeof alias
+>        : ^^^^^^^^^^^^
 >version : 1
+>        : ^
 >1 : 1
+>  : ^
 
 function alias() { }
 >alias : typeof alias
+>      : ^^^^^^^^^^^^
 
 module.exports = alias
 >module.exports = alias : typeof alias
+>                       : ^^^^^^^^^^^^
 >module.exports : typeof alias
+>               : ^^^^^^^^^^^^
 >module : { exports: typeof alias; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof alias
+>        : ^^^^^^^^^^^^
 >alias : typeof alias
+>      : ^^^^^^^^^^^^
 
-=== tests/cases/conformance/salsa/importer.js ===
+=== importer.js ===
 import('./bug28014')
 >import('./bug28014') : Promise<{ (): void; version: 1; }>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./bug28014' : "./bug28014"
+>             : ^^^^^^^^^^^^
 

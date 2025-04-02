@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts] ////
+
 //// [unionPropertyOfProtectedAndIntersectionProperty.ts]
 class Foo {
   protected foo = 0;

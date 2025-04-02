@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts] ////
+
 //// [functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts]
 function f10(): undefined {
     // Ok, return type allows implicit return of undefined

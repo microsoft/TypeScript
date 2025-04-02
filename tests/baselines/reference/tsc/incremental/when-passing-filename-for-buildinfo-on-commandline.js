@@ -1,6 +1,20 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/project/src/main.ts]
+export const x = 10;
+
+//// [/home/src/workspaces/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs"
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,97 +29,75 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/src/main.ts]
-export const x = 10;
 
-//// [/src/project/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-    },
-    "include": [
-        "src/**/*.ts"
-    ]
-}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
 Output::
-/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
-lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
-src/project/src/main.ts
-  Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
-exitCode:: ExitStatus.Success
+src/main.ts
+  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
 
-//// [/src/project/.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
-
-//// [/src/project/.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./src/main.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "./src/main.ts": {
-        "version": "-10726455937-export const x = 10;",
-        "signature": "-10726455937-export const x = 10;"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./src/main.ts"
-      ]
-    ],
-    "options": {
-      "module": 1,
-      "target": 1,
-      "tsBuildInfoFile": "./.tsbuildinfo"
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/main.ts"
-    ]
-  },
-  "version": "FakeTSVersion",
-  "size": 777
-}
-
-//// [/src/project/src/main.js]
+//// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
+//// [/home/src/workspaces/project/.tsbuildinfo]
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"version":"FakeTSVersion"}
+
+//// [/home/src/workspaces/project/.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../tslibs/ts/lib/lib.d.ts",
+    "./src/main.ts"
+  ],
+  "fileInfos": {
+    "../../tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./src/main.ts": {
+      "version": "-10726455937-export const x = 10;",
+      "signature": "-10726455937-export const x = 10;"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./src/main.ts"
+    ]
+  ],
+  "options": {
+    "module": 1,
+    "target": 1,
+    "tsBuildInfoFile": "./.tsbuildinfo"
+  },
+  "version": "FakeTSVersion",
+  "size": 697
+}
 
 
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
-lib/lib.d.ts
-  Default library for target 'es5'
-src/project/src/main.ts
-  Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
 exitCode:: ExitStatus.Success
 
+Change:: no-change-run
 
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
+Output::
+../../tslibs/TS/Lib/lib.d.ts
+  Default library for target 'es5'
+src/main.ts
+  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+
+
+
+exitCode:: ExitStatus.Success

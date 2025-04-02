@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitMemberAccessExpression_file3.ts ===
+//// [tests/cases/compiler/emitMemberAccessExpression.ts] ////
+
+=== emitMemberAccessExpression_file3.ts ===
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 declare var OData: any;
@@ -6,40 +8,55 @@ declare var OData: any;
 
 module Microsoft.PeopleAtWork.Model {
 >Microsoft : typeof Microsoft
+>          : ^^^^^^^^^^^^^^^^
 >PeopleAtWork : typeof PeopleAtWork
+>             : ^^^^^^^^^^^^^^^^^^^
 >Model : typeof Model
+>      : ^^^^^^^^^^^^
 
     export class KnockoutExtentions {
 >KnockoutExtentions : KnockoutExtentions
+>                   : ^^^^^^^^^^^^^^^^^^
     }
 }
-=== tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
+=== emitMemberAccessExpression_file1.ts ===
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
-=== tests/cases/compiler/emitMemberAccessExpression_file2.ts ===
+=== emitMemberAccessExpression_file2.ts ===
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 module Microsoft.PeopleAtWork.Model {
 >Microsoft : typeof Microsoft
+>          : ^^^^^^^^^^^^^^^^
 >PeopleAtWork : typeof PeopleAtWork
+>             : ^^^^^^^^^^^^^^^^^^^
 >Model : typeof Model
+>      : ^^^^^^^^^^^^
 
     export class _Person {
 >_Person : _Person
+>        : ^^^^^^^
 
         public populate(raw: any) {
 >populate : (raw: any) => void
+>         : ^   ^^   ^^^^^^^^^
 >raw : any
 
             var res = Model.KnockoutExtentions;
 >res : typeof KnockoutExtentions
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Model.KnockoutExtentions : typeof KnockoutExtentions
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Model : typeof Model
+>      : ^^^^^^^^^^^^
 >KnockoutExtentions : typeof KnockoutExtentions
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
         }
     }
 }

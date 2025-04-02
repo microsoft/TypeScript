@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithIndexAndTuple.ts] ////
+
 //// [unionTypeWithIndexAndTuple.ts]
 interface I {
     [index: number]: any;

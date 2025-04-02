@@ -1,21 +1,34 @@
-=== tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts ===
+//// [tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts] ////
+
+=== es5ExportDefaultFunctionDeclaration3.ts ===
 var before: typeof func = func();
 >before : () => typeof func
+>       : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 >func() : () => typeof func
+>       : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 
 export default function func(): typeof func {
 >func : () => typeof func
+>     : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 
     return func;
 >func : () => typeof func
+>     : ^^^^^^           
 }
 
 var after: typeof func = func();
 >after : () => typeof func
+>      : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 >func() : () => typeof func
+>       : ^^^^^^           
 >func : () => typeof func
+>     : ^^^^^^           
 

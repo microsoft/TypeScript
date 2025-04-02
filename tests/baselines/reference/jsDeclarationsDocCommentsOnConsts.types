@@ -1,14 +1,19 @@
-=== tests/cases/conformance/jsdoc/declarations/index1.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsDocCommentsOnConsts.ts] ////
+
+=== index1.js ===
 /**
  * const doc comment
  */
 const x = (a) => {
 >x : (a: any) => string
+>  : ^ ^^^^^^^^^^^^^^^^
 >(a) => {    return '';} : (a: any) => string
+>                        : ^ ^^^^^^^^^^^^^^^^
 >a : any
 
     return '';
 >'' : ""
+>   : ^^
 
 };
 
@@ -17,17 +22,26 @@ const x = (a) => {
  */
 function b() {
 >b : () => number
+>  : ^^^^^^^^^^^^
 
     return 0;
 >0 : 0
+>  : ^
 }
 
 module.exports = {x, b}
 >module.exports = {x, b} : typeof module.exports
+>                        : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{x, b} : { x: (a: any) => string; b: () => number; }
+>       : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : (a: any) => string
+>  : ^ ^^^^^^^^^^^^^^^^
 >b : () => number
+>  : ^^^^^^^^^^^^
 

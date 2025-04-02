@@ -1,59 +1,91 @@
-=== tests/cases/compiler/lambdaPropSelf.ts ===
+//// [tests/cases/compiler/lambdaPropSelf.ts] ////
+
+=== lambdaPropSelf.ts ===
 declare var ko: any;
 >ko : any
+>   : ^^^
 
 class Person {
 >Person : Person
+>       : ^^^^^^
 
     children: string[];
 >children : string[]
+>         : ^^^^^^^^
 
     constructor (public name: string, children: string[]) {
 >name : string
+>     : ^^^^^^
 >children : string[]
+>         : ^^^^^^^^
 
         this.children = ko.observableArray(children);
 >this.children = ko.observableArray(children) : any
+>                                             : ^^^
 >this.children : string[]
+>              : ^^^^^^^^
 >this : this
+>     : ^^^^
 >children : string[]
+>         : ^^^^^^^^
 >ko.observableArray(children) : any
+>                             : ^^^
 >ko.observableArray : any
+>                   : ^^^
 >ko : any
+>   : ^^^
 >observableArray : any
+>                : ^^^
 >children : string[]
+>         : ^^^^^^^^
     }
 
     addChild = () => this.children.push("New child");
 >addChild : () => number
+>         : ^^^^^^^^^^^^
 >() => this.children.push("New child") : () => number
+>                                      : ^^^^^^^^^^^^
 >this.children.push("New child") : number
+>                                : ^^^^^^
 >this.children.push : (...items: string[]) => number
+>                   : ^^^^     ^^^^^^^^^^^^^^^      
 >this.children : string[]
+>              : ^^^^^^^^
 >this : this
+>     : ^^^^
 >children : string[]
+>         : ^^^^^^^^
 >push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >"New child" : "New child"
+>            : ^^^^^^^^^^^
 }
 
 
 class T {
 >T : T
+>  : ^
 
      fo() {
 >fo : () => void
+>   : ^^^^^^^^^^
 
         var x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var x = this;
 >x : any
+>  : ^^^
 >this : any
+>     : ^^^
 }
 

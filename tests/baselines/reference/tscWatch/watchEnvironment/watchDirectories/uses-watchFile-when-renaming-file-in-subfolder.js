@@ -1,12 +1,16 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /a/username/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/username/project/src/file1.ts]
+//// [/a/username/projects/project/src/file1.ts] Inode:: 6
 
 
-//// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+//// [/a/username/projects/project/tsconfig.json] Inode:: 7
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -18,109 +22,159 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /a/username/project/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
-[[90m12:00:19 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/username/project/src/file1.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/username/project/src/file1.ts
+//// [/a/username/projects/project/src/file1.js] Inode:: 111
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/username/project/src/file1.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/username/project/src/file1.ts (used version)
 
 PolledWatches::
-/a/username/project/node_modules/@types: *new*
+/a/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/username/project: *new*
+/a/username/projects/project: *new*
   {"pollingInterval":500}
-/a/username/project/src: *new*
+/a/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/username/projects/project/src: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
-  {}
-/a/username/project/src/file1.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
+/a/username/projects/project/src/file1.ts: *new*
+  {"inode":6}
+/a/username/projects/project/tsconfig.json: *new*
+  {"inode":7}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":13}
+
+Program root files: [
+  "/a/username/projects/project/src/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/a/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/a/username/projects/project/src/file1.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/a/username/projects/project/src/file1.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/a/username/projects/project/src/file1.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/username/project/src/file1.js]
-
-
 
 Change:: Rename file1 to file2
 
 Input::
-//// [/a/username/project/src/file2.ts]
+//// [/a/username/projects/project/src/file2.ts] Inode:: 112
 
 
-//// [/a/username/project/src/file1.ts] deleted
+//// [/a/username/projects/project/src/file1.ts] deleted
 
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-After running Timeout callback:: count: 1
-4: timerToUpdateProgram
 Output::
->> Screen clear
-[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
+sysLog:: /a/username/projects/project/src/file1.ts:: Changing watcher to MissingFileSystemEntryWatcher
 
-[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/a/username/project/src/file2.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/username/project/src/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/username/project/src/file2.ts
-
-Shape signatures in builder refreshed for::
-/a/username/project/src/file2.ts (used version)
 
 PolledWatches::
-/a/username/project/node_modules/@types:
+/a/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/username/project:
+/a/username/projects/project:
   {"pollingInterval":500}
-/a/username/project/src:
+/a/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/a/username/projects/project/src:
+  {"pollingInterval":500}
+/a/username/projects/project/src/file1.ts: *new*
+  {"pollingInterval":250}
 
 FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/username/project/src/file2.ts: *new*
-  {}
+/a/username/projects/project/tsconfig.json:
+  {"inode":7}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":13}
 
 FsWatches *deleted*::
-/a/username/project/src/file1.ts:
-  {}
+/a/username/projects/project/src/file1.ts:
+  {"inode":6}
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 1
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/username/projects/project/src/file2.js] Inode:: 113
+
+
+
+PolledWatches::
+/a/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/a/username/projects/project:
+  {"pollingInterval":500}
+/a/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/a/username/projects/project/src:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/username/projects/project/src/file1.ts:
+  {"pollingInterval":250}
+
+FsWatches::
+/a/username/projects/project/src/file2.ts: *new*
+  {"inode":112}
+/a/username/projects/project/tsconfig.json:
+  {"inode":7}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":13}
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+
+Program root files: [
+  "/a/username/projects/project/src/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/a/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/a/username/projects/project/src/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/username/projects/project/src/file2.ts
+
+Shape signatures in builder refreshed for::
+/a/username/projects/project/src/file2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/username/project/src/file2.js]
-
-

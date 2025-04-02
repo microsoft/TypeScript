@@ -1,10 +1,19 @@
-=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression2.ts] ////
+
+=== parserRegularExpression2.ts ===
 href.match(/:\/\/(.[^/]+)/)[1];
 >href.match(/:\/\/(.[^/]+)/)[1] : any
+>                               : ^^^
 >href.match(/:\/\/(.[^/]+)/) : any
+>                            : ^^^
 >href.match : any
+>           : ^^^
 >href : any
+>     : ^^^
 >match : any
+>      : ^^^
 >/:\/\/(.[^/]+)/ : RegExp
+>                : ^^^^^^
 >1 : 1
+>  : ^
 

@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/excessPropertiesInOverloads.ts] ////
+
+=== excessPropertiesInOverloads.ts ===
+declare function fn(a: { x: string }): void;
+>fn : { (a: { x: string; }): void; (a: { y: string; }): void; }
+>   : ^^^ ^^              ^^^    ^^^ ^^              ^^^    ^^^
+>a : { x: string; }
+>  : ^^^^^      ^^^
+>x : string
+>  : ^^^^^^
+
+declare function fn(a: { y: string }): void;
+>fn : { (a: { x: string; }): void; (a: { y: string; }): void; }
+>   : ^^^ ^^              ^^^    ^^^ ^^              ^^^    ^^^
+>a : { y: string; }
+>  : ^^^^^      ^^^
+>y : string
+>  : ^^^^^^
+
+fn({ z: 3, a: 3 });
+>fn({ z: 3, a: 3 }) : void
+>                   : ^^^^
+>fn : { (a: { x: string; }): void; (a: { y: string; }): void; }
+>   : ^^^ ^^              ^^^    ^^^ ^^              ^^^    ^^^
+>{ z: 3, a: 3 } : { z: number; a: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+>a : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+

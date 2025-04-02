@@ -1,288 +1,477 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedStringType.ts] ////
+
+=== decrementOperatorWithUnsupportedStringType.ts ===
 // -- operator on string type
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var STRING1: string[] = ["", ""];
 >STRING1 : string[]
+>        : ^^^^^^^^
 >["", ""] : string[]
+>         : ^^^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 
 function foo(): string { return ""; }
 >foo : () => string
+>    : ^^^^^^      
 >"" : ""
+>   : ^^
 
 class A {
 >A : A
+>  : ^
 
     public a: string;
 >a : string
+>  : ^^^^^^
 
     static foo() { return ""; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var n: string;
 >n : string
+>  : ^^^^^^
 }
 
 var objA = new A();
 >objA : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 // string type var
 var ResultIsNumber1 = --STRING;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >--STRING : number
+>         : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsNumber2 = --STRING1;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >--STRING1 : number
+>          : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 var ResultIsNumber3 = STRING--;
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >STRING-- : number
+>         : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsNumber4 = STRING1--;
 >ResultIsNumber4 : number
+>                : ^^^^^^
 >STRING1-- : number
+>          : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 // string type literal
 var ResultIsNumber5 = --"";
 >ResultIsNumber5 : number
+>                : ^^^^^^
 >--"" : number
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsNumber6 = --{ x: "", y: "" };
 >ResultIsNumber6 : number
+>                : ^^^^^^
 >--{ x: "", y: "" } : number
+>                   : ^^^^^^
 >{ x: "", y: "" } : { x: string; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsNumber7 = --{ x: "", y: (s: string) => { return s; } };
 >ResultIsNumber7 : number
+>                : ^^^^^^
 >--{ x: "", y: (s: string) => { return s; } } : number
+>                                             : ^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : (s: string) => string
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 var ResultIsNumber8 = ""--;
 >ResultIsNumber8 : number
+>                : ^^^^^^
 >""-- : number
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsNumber9 = { x: "", y: "" }--;
 >ResultIsNumber9 : number
+>                : ^^^^^^
 >{ x: "", y: "" }-- : number
+>                   : ^^^^^^
 >{ x: "", y: "" } : { x: string; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsNumber10 = { x: "", y: (s: string) => { return s; } }--;
 >ResultIsNumber10 : number
+>                 : ^^^^^^
 >{ x: "", y: (s: string) => { return s; } }-- : number
+>                                             : ^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : (s: string) => string
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 // string type expressions
 var ResultIsNumber11 = --objA.a;
 >ResultIsNumber11 : number
+>                 : ^^^^^^
 >--objA.a : number
+>         : ^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 
 var ResultIsNumber12 = --M.n;
 >ResultIsNumber12 : number
+>                 : ^^^^^^
 >--M.n : number
+>      : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 var ResultIsNumber13 = --STRING1[0];
 >ResultIsNumber13 : number
+>                 : ^^^^^^
 >--STRING1[0] : number
+>             : ^^^^^^
 >STRING1[0] : string
+>           : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 var ResultIsNumber14 = --foo();
 >ResultIsNumber14 : number
+>                 : ^^^^^^
 >--foo() : number
+>        : ^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 var ResultIsNumber15 = --A.foo();
 >ResultIsNumber15 : number
+>                 : ^^^^^^
 >--A.foo() : number
+>          : ^^^^^^
 >A.foo() : string
+>        : ^^^^^^
 >A.foo : () => string
+>      : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
 var ResultIsNumber16 = --(STRING + STRING);
 >ResultIsNumber16 : number
+>                 : ^^^^^^
 >--(STRING + STRING) : number
+>                    : ^^^^^^
 >(STRING + STRING) : string
+>                  : ^^^^^^
 >STRING + STRING : string
+>                : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsNumber17 = objA.a--;
 >ResultIsNumber17 : number
+>                 : ^^^^^^
 >objA.a-- : number
+>         : ^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 
 var ResultIsNumber18 = M.n--;
 >ResultIsNumber18 : number
+>                 : ^^^^^^
 >M.n-- : number
+>      : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 var ResultIsNumber19 = STRING1[0]--;
 >ResultIsNumber19 : number
+>                 : ^^^^^^
 >STRING1[0]-- : number
+>             : ^^^^^^
 >STRING1[0] : string
+>           : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 var ResultIsNumber20 = foo()--;
 >ResultIsNumber20 : number
+>                 : ^^^^^^
 >foo()-- : number
+>        : ^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 var ResultIsNumber21 = A.foo()--;
 >ResultIsNumber21 : number
+>                 : ^^^^^^
 >A.foo()-- : number
+>          : ^^^^^^
 >A.foo() : string
+>        : ^^^^^^
 >A.foo : () => string
+>      : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
 var ResultIsNumber22 = (STRING + STRING)--;
 >ResultIsNumber22 : number
+>                 : ^^^^^^
 >(STRING + STRING)-- : number
+>                    : ^^^^^^
 >(STRING + STRING) : string
+>                  : ^^^^^^
 >STRING + STRING : string
+>                : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 // miss assignment operators
 --"";
 >--"" : number
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
 --STRING;
 >--STRING : number
+>         : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 --STRING1;
 >--STRING1 : number
+>          : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 --STRING1[0];
 >--STRING1[0] : number
+>             : ^^^^^^
 >STRING1[0] : string
+>           : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 --foo();
 >--foo() : number
+>        : ^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 --objA.a;
 >--objA.a : number
+>         : ^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 
 --M.n;
 >--M.n : number
+>      : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 --objA.a, M.n;
 >--objA.a, M.n : string
+>              : ^^^^^^
 >--objA.a : number
+>         : ^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 ""--;
 >""-- : number
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
 STRING--;
 >STRING-- : number
+>         : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 STRING1--;
 >STRING1-- : number
+>          : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 STRING1[0]--;
 >STRING1[0]-- : number
+>             : ^^^^^^
 >STRING1[0] : string
+>           : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 foo()--;
 >foo()-- : number
+>        : ^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 objA.a--;
 >objA.a-- : number
+>         : ^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 
 M.n--;
 >M.n-- : number
+>      : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 objA.a--, M.n--;
 >objA.a--, M.n-- : number
+>                : ^^^^^^
 >objA.a-- : number
+>         : ^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 >M.n-- : number
+>      : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 

@@ -1,88 +1,123 @@
-=== tests/cases/compiler/arrowFunctionErrorSpan.ts ===
+//// [tests/cases/compiler/arrowFunctionErrorSpan.ts] ////
+
+=== arrowFunctionErrorSpan.ts ===
 function f(a: () => number) { }
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 >a : () => number
+>  : ^^^^^^      
 
 // oneliner
 f(() => { });
 >f(() => { }) : void
+>             : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 // multiline, body
 f(() => {
 >f(() => {}) : void
+>            : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 
 });
 
 // multiline 2, body
 f(() => {
 >f(() => {}) : void
+>            : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 
 });
 
 // multiline 3, arrow on a new line
 f(()
 >f(()    => { }) : void
+>                : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 >()    => { } : () => void
+>             : ^^^^^^^^^^
 
     => { });
 
 // multiline 4, arguments
 f((a,
 >f((a,    b,    c,    d) => { }) : void
+>                                : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 >(a,    b,    c,    d) => { } : (a: any, b: any, c: any, d: any) => void
+>                             : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
     b,
 >b : any
+>  : ^^^
 
     c,
 >c : any
+>  : ^^^
 
     d) => { });
 >d : any
+>  : ^^^
 
 // single line with a comment
 f(/*
 >f(/*    */() => { }) : void
+>                     : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 
     */() => { });
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 // multi line with a comment
 f(/*
 >f(/*    */() => { }) : void
+>                     : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 
     */() => { });
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 // multi line with a comment 2
 f(/*
 >f(/*    */() => {     }) : void
+>                         : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 
     */() => { 
 >() => {     } : () => void
+>              : ^^^^^^^^^^
 
     });
 
 // multi line with a comment 3
 f(  // comment 1
 >f(  // comment 1    // comment 2    () =>    // comment 3    {        // comment 4    }    // comment 5) : void
+>                                                                                                         : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 
     // comment 2
     () =>
 >() =>    // comment 3    {        // comment 4    } : () => void
+>                                                    : ^^^^^^^^^^
 
     // comment 3
     {
@@ -94,12 +129,19 @@ f(  // comment 1
 // body is not a block
 f(_ => 1 +
 >f(_ => 1 +    2) : void
+>                 : ^^^^
 >f : (a: () => number) => void
+>  : ^ ^^            ^^^^^^^^^
 >_ => 1 +    2 : (_: any) => number
+>              : ^ ^^^^^^^^^^^^^^^^
 >_ : any
+>  : ^^^
 >1 +    2 : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
     2);
 >2 : 2
+>  : ^
 

@@ -1,15 +1,12 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-tests/cases/compiler/file1.ts(1,1): error TS2448: Block-scoped variable 'l' used before its declaration.
+file1.ts(1,1): error TS2448: Block-scoped variable 'l' used before its declaration.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/compiler/file1.ts (1 errors) ====
+==== file1.ts (1 errors) ====
     l;
     ~
 !!! error TS2448: Block-scoped variable 'l' used before its declaration.
-!!! related TS2728 tests/cases/compiler/file2.ts:1:7: 'l' is declared here.
+!!! related TS2728 file2.ts:1:7: 'l' is declared here.
     
-==== tests/cases/compiler/file2.ts (0 errors) ====
+==== file2.ts (0 errors) ====
     const l = 0;
+    

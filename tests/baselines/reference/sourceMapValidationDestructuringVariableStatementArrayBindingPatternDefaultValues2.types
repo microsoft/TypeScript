@@ -1,95 +1,167 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts] ////
+
+=== sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 
     log(msg: string): void;
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >msg : string
+>    : ^^^^^^
 }
 type MultiSkilledRobot = [string, string[]];
->MultiSkilledRobot : [string, string[]]
+>MultiSkilledRobot : MultiSkilledRobot
+>                  : ^^^^^^^^^^^^^^^^^
 
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >["mower", ["mowing", ""]] : [string, string[]]
+>                          : ^^^^^^^^^^^^^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >["mowing", ""] : string[]
+>               : ^^^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >"" : ""
+>   : ^^
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
+>                                    : ^^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : string[]
+>                       : ^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 
 let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
 > : undefined
+> : ^^^^^^^^^
 >skillA : string[]
+>       : ^^^^^^^^
 >["noSkill", "noSkill"] : string[]
+>                       : ^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 
 let [nameMB = "noName" ] = multiRobotB;
 >nameMB : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >multiRobotB : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 
 let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
 >nameMA : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >primarySkillA : string
+>              : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >secondarySkillA : string
+>                : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >["noSkill", "noSkill"] : [string, string]
+>                       : ^^^^^^^^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 
 let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
 >nameMC : string
+>       : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+>                                  : ^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : string[]
+>                      : ^^^^^^^^
 >"vacuum" : "vacuum"
+>         : ^^^^^^^^
 >"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
 >nameMC2 : string
+>        : ^^^^^^
 >"noName" : "noName"
+>         : ^^^^^^^^
 >primarySkillC : string
+>              : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >secondarySkillC : string
+>                : ^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >["noSkill", "noSkill"] : [string, string]
+>                       : ^^^^^^^^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >"noSkill" : "noSkill"
+>          : ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : [string, string]
+>                      : ^^^^^^^^^^^^^^^^
 >"vacuum" : "vacuum"
+>         : ^^^^^^^^
 >"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 if (nameMB == nameMA) {
 >nameMB == nameMA : boolean
+>                 : ^^^^^^^
 >nameMB : string
+>       : ^^^^^^
 >nameMA : string
+>       : ^^^^^^
 
     console.log(skillA[0] + skillA[1]);
 >console.log(skillA[0] + skillA[1]) : void
+>                                   : ^^^^
 >console.log : (msg: string) => void
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >skillA[0] + skillA[1] : string
+>                      : ^^^^^^
 >skillA[0] : string
+>          : ^^^^^^
 >skillA : string[]
+>       : ^^^^^^^^
 >0 : 0
+>  : ^
 >skillA[1] : string
+>          : ^^^^^^
 >skillA : string[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 }

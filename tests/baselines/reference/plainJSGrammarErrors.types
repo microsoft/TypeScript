@@ -1,45 +1,68 @@
-=== tests/cases/conformance/salsa/plainJSGrammarErrors.js ===
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors.ts] ////
+
+=== plainJSGrammarErrors.js ===
 class C {
 >C : C
+>  : ^
 
     // #private mistakes
     q = #unbound
 >q : any
+>  : ^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         #p
         if (#po in this) {
 >#po in this : boolean
+>            : ^^^^^^^
 >#po : any
+>    : ^^^
 >this : this
+>     : ^^^^
         }
     }
     #m() {
 >#m : () => void
+>   : ^^^^^^^^^^
 
          this.#m = () => {}
 >this.#m = () => {} : () => void
+>                   : ^^^^^^^^^^
 >this.#m : () => void
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
     }
     // await in static block
     static {
         for await (const x of [1,2,3]) {
 >x : number
+>  : ^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
             console.log(x)
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : number
+>  : ^^^^^^
         }
         return null
     }
@@ -48,549 +71,845 @@ class C {
     async constructor() { }
     const x = 1
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     const y() {
 >y : () => number
+>  : ^^^^^^^^^^^^
 
         return 12
 >12 : 12
+>   : ^^
     }
     async async extremelyAsync() {
 >extremelyAsync : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
     }
     async static oorder(){ }
 >oorder : () => Promise<void>
+>       : ^^^^^^^^^^^^^^^^^^^
 
     export cantExportProperty = 1
 >cantExportProperty : number
+>                   : ^^^^^^
 >1 : 1
+>  : ^
 
     export cantExportMethod() {
 >cantExportMethod : () => void
+>                 : ^^^^^^^^^^
     }
 
     // accessor mistakes
     get incorporeal();
 >incorporeal : any
+>            : ^^^
 
     get parametric(n) { return 1 }
 >parametric : number
+>           : ^^^^^^
 >n : any
+>  : ^^^
 >1 : 1
+>  : ^
 
     set invariant() { }
 >invariant : any
+>          : ^^^
 
     set binary(fst, snd) { }
 >binary : any
+>       : ^^^
 >fst : any
+>    : ^^^
 >snd : any
+>    : ^^^
 
     set variable(...n) { }
 >variable : any
+>         : ^^^
 >n : any[]
+>  : ^^^^^
 
     // other
     "constructor" = 16
 >"constructor" : number
+>              : ^^^^^^
 >16 : 16
+>   : ^^
 }
 class {
     missingName = true
 >missingName : boolean
+>            : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 class Doubler extends C extends C { }
 >Doubler : Doubler
+>        : ^^^^^^^
 >C : C
+>  : ^
 >C : C
+>  : ^
 
 class Trebler extends C,C,C { }
 >Trebler : Trebler
+>        : ^^^^^^^
 >C : C
+>  : ^
 >C : C
+>  : ^
 >C : C
+>  : ^
 
 // #private mistakes
 #unrelated
 junk.#m
 >junk.#m : any
+>        : ^^^
 >junk : any
+>     : ^^^
 
 new C().#m
 >new C().#m : any
+>           : ^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 // modifier mistakes
 export export var extremelyExported = 10
 >extremelyExported : number
+>                  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export static var staticExport = 1
 >staticExport : number
+>             : ^^^^^^
 >1 : 1
+>  : ^
 
 function staticParam(static x = 1) { return x }
 >staticParam : (x?: number) => number
+>            : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >x : number
+>  : ^^^^^^
 
 async export function oorder(x = 1) { return x }
 >oorder : (x?: number) => Promise<number>
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >x : number
+>  : ^^^^^^
 
 function cantExportParam(export x = 1) { return x }
 >cantExportParam : (x?: number) => number
+>                : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >x : number
+>  : ^^^^^^
 
 function cantAsyncParam(async x = 1) { return x }
 >cantAsyncParam : (x?: number) => number
+>               : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >x : number
+>  : ^^^^^^
 
 async async function extremelyAsync() {}
 >extremelyAsync : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
 async class CantAsyncClass {
 >CantAsyncClass : CantAsyncClass
+>               : ^^^^^^^^^^^^^^
 
     async cantAsyncPropert = 1
 >cantAsyncPropert : number
+>                 : ^^^^^^
 >1 : 1
+>  : ^
 }
 async const cantAsyncConst = 2
 >cantAsyncConst : 2
+>               : ^
 >2 : 2
+>  : ^
 
 async import 'assert'
 async export { CantAsyncClass }
 >CantAsyncClass : typeof CantAsyncClass
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
 export import 'fs'
 export export { C }
 >C : typeof C
+>  : ^^^^^^^^
 
 function nestedExports() {
 >nestedExports : () => void
+>              : ^^^^^^^^^^
 
     export { staticParam }
 >staticParam : any
+>            : ^^^
 
     import 'fs'
     export default 12
 }
 function outerStaticFunction() { 
 >outerStaticFunction : () => void
+>                    : ^^^^^^^^^^
 
     static function staticFunction() { }
 >staticFunction : () => void
+>               : ^^^^^^^^^^
 }
 const noStaticLiteralMethods = {
 >noStaticLiteralMethods : { m(): void; }
+>                       : ^^^^^^^^^^^^^^
 >{    static m() {    }} : { m(): void; }
+>                        : ^^^^^^^^^^^^^^
 
     static m() {
 >m : () => void
+>  : ^^^^^^^^^^
     }
 }
 
 // rest parameters
 function restMustBeLast(...x, y) {
 >restMustBeLast : (...x: any[], y: any) => void
+>               : ^^^^ ^^^^^^^^^ ^^^^^^^^^^^^^^
 >x : any[]
+>  : ^^^^^
 >y : any
+>  : ^^^
 }
 function restCantHaveInitialiser(...x = [1,2,3]) {
 >restCantHaveInitialiser : (...x?: number[]) => void
+>                        : ^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 }
 function restCantHaveTrailingComma (...x,) {
 >restCantHaveTrailingComma : (...x: any[]) => void
+>                          : ^^^^ ^^^^^^^^^^^^^^^^
 >x : any[]
+>  : ^^^^^
 }
 ;({ ...{} } = {})
 >({ ...{} } = {}) : {}
+>                 : ^^
 >{ ...{} } = {} : {}
+>               : ^^
 >{ ...{} } : {}
+>          : ^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 const doom = { e: 1, m: 1, name: "knee-deep" }
 >doom : { e: number; m: number; name: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ e: 1, m: 1, name: "knee-deep" } : { e: number; m: number; name: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >m : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >name : string
+>     : ^^^^^^
 >"knee-deep" : "knee-deep"
+>            : ^^^^^^^^^^^
 
 const { ...rest, e: episode, m: mission } = doom
 >rest : { name: string; }
+>     : ^^^^^^^^^^^^^^^^^
 >e : any
+>  : ^^^
 >episode : number
+>        : ^^^^^^
 >m : any
+>  : ^^^
 >mission : number
+>        : ^^^^^^
 >doom : { e: number; m: number; name: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { e: eep, m: em, ...rest: noRestAllowed } = doom
 >e : any
+>  : ^^^
 >eep : number
+>    : ^^^^^^
 >m : any
+>  : ^^^
 >em : number
+>   : ^^^^^^
 >rest : any
+>     : ^^^
 >noRestAllowed : { name: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >doom : { e: number; m: number; name: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { e: erp, m: erm, ...noInitialiser = true } = doom
 >e : any
+>  : ^^^
 >erp : number
+>    : ^^^^^^
 >m : any
+>  : ^^^
 >erm : number
+>    : ^^^^^^
 >noInitialiser : true | { name: string; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >doom : { e: number; m: number; name: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // left-over parsing
 var;
 var x = 1 || 2 ?? 3
 >x : number
+>  : ^^^^^^
 >1 || 2 ?? 3 : 1 | 2 | 3
+>            : ^^^^^^^^^
 >1 || 2 : 1 | 2
+>       : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var x = 2 ?? 3 || 4
 >x : number
+>  : ^^^^^^
 >2 ?? 3 || 4 : 2 | 3 | 4
+>            : ^^^^^^^^^
 >2 : 2
+>  : ^
 >3 || 4 : 3 | 4
+>       : ^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 const arr = x
 >arr : (x: any) => any
+>    : ^ ^^^^^^^^^^^^^
 >x  => x + 1 : (x: any) => any
+>            : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
   => x + 1
 >x + 1 : any
+>      : ^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 var a = [1,2]
 >a : number[]
+>  : ^^^^^^^^
 >[1,2] : number[]
+>      : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 a?.`length`;
 >a?.`length` : any
+>            : ^^^
 >a : number[]
+>  : ^^^^^^^^
 >`length` : "length"
+>         : ^^^^^^^^
 
 const o = {
 >o : { 2: string; cantExportProperties: number; cantHaveQuestionMark: number; m?(): number; definitely: any; definiteMethod(): number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [console.log('oh no'),2]: 'hi',    #noPrivate: 3,    export cantExportProperties: 4,    // TODO: See what the existing JS error is like for these    cantHaveQuestionMark?: 1,    m?() { return 12 },    definitely!,    definiteMethod!() { return 13 },} : { 2: string; cantExportProperties: number; cantHaveQuestionMark: number; m?(): number; definitely: any; definiteMethod(): number; }
+>                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [console.log('oh no'),2]: 'hi',
 >[console.log('oh no'),2] : string
+>                         : ^^^^^^
 >console.log('oh no'),2 : 2
+>                       : ^
 >console.log('oh no') : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'oh no' : "oh no"
+>        : ^^^^^^^
 >2 : 2
+>  : ^
 >'hi' : "hi"
+>     : ^^^^
 
     #noPrivate: 3,
 >#noPrivate : number
+>           : ^^^^^^
 >3 : 3
+>  : ^
 
     export cantExportProperties: 4,
 >cantExportProperties : number
+>                     : ^^^^^^
 >4 : 4
+>  : ^
 
     // TODO: See what the existing JS error is like for these
     cantHaveQuestionMark?: 1,
 >cantHaveQuestionMark : number
+>                     : ^^^^^^
 >1 : 1
+>  : ^
 
     m?() { return 12 },
 >m : () => number
+>  : ^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 
     definitely!,
 >definitely : any
+>           : ^^^
 
     definiteMethod!() { return 13 },
 >definiteMethod : () => number
+>               : ^^^^^^^^^^^^
 >13 : 13
+>   : ^^
 }
 const noAssignment = {
 >noAssignment : { assignment: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    assignment = 1,} : { assignment: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^
 
     assignment = 1,
 >assignment : any
+>           : ^^^
 >1 : 1
+>  : ^
 }
 var noTrailingComma = 1,;
 >noTrailingComma : number
+>                : ^^^^^^
 >1 : 1
+>  : ^
 
 class MissingExtends extends { }
 >MissingExtends : MissingExtends
+>               : ^^^^^^^^^^^^^^
 
 // let/const mistakes
 const { e: ee };
 >e : any
+>  : ^^^
 >ee : any
+>   : ^^^
 
 const noInit;
 >noInit : any
+>       : ^^^
 
 let let = 15;
 >let : number
+>    : ^^^^^^
 >15 : 15
+>   : ^^
 
 if (true)
 >true : true
+>     : ^^^^
 
     let onlyBlockLet = 17;
 >onlyBlockLet : number
+>             : ^^^^^^
 >17 : 17
+>   : ^^
 
 if (true)
 >true : true
+>     : ^^^^
 
     const onlyBlockConst = 18;
 >onlyBlockConst : 18
+>               : ^^
 >18 : 18
+>   : ^^
 
 // loop mistakes
 let async
 >async : any
+>      : ^^^
 
 export const l = [1,2,3]
 >l : number[]
+>  : ^^^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 for (async of l) {
 >async : any
+>      : ^^^
 >l : number[]
+>  : ^^^^^^^^
 
     console.log(x)
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : number
+>  : ^^^^^^
 }
 for (const cantHaveInit = 1 of [1,2,3]) {
 >cantHaveInit : number
+>             : ^^^^^^
 >1 : 1
+>  : ^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     console.log(cantHaveInit)
 >console.log(cantHaveInit) : void
+>                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >cantHaveInit : number
+>             : ^^^^^^
 }
 for (const cantHaveInit = 1 in [1,2,3]) {
 >cantHaveInit : string
+>             : ^^^^^^
 >1 : 1
+>  : ^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     console.log(cantHaveInit)
 >console.log(cantHaveInit) : void
+>                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >cantHaveInit : string
+>             : ^^^^^^
 }
 for (let y, x of [1,2,3]) {
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     console.log(x)
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : number
+>  : ^^^^^^
 }
 for (let y, x in [1,2,3]) {
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     console.log(x)
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : string
+>  : ^^^^^^
 }
 
 // duplication mistakes
 var b
 >b : any
+>  : ^^^
 
 switch (b) {
 >b : undefined
+>  : ^^^^^^^^^
 
     case false:
 >false : false
+>      : ^^^^^
 
         console.log('no')
 >console.log('no') : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'no' : "no"
+>     : ^^^^
 
     default:
         console.log('yes')
 >console.log('yes') : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'yes' : "yes"
+>      : ^^^^^
 
     default:
         console.log('wat')
 >console.log('wat') : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'wat' : "wat"
+>      : ^^^^^
 }
 try {
     throw 2
 >2 : 2
+>  : ^
 }
 catch (e) {
 >e : any
+>  : ^^^
 
     const e = 1
 >e : 1
+>  : ^
 >1 : 1
+>  : ^
 
     console.log(e)
 >console.log(e) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >e : 1
+>  : ^
 }
 try {
     throw 20
 >20 : 20
+>   : ^^
 }
 catch (e = 0) {
 >e : any
+>  : ^^^
 >0 : 0
+>  : ^
 }
 label: for (const x in [1,2,3]) {
 >label : any
+>      : ^^^
 >x : string
+>  : ^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     label: for (const y in [1,2,3]) {
 >label : any
+>      : ^^^
 >y : string
+>  : ^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
         break label;
 >label : any
+>      : ^^^
     }
 }
 
 // labels
 function crossFunctionBoundary() {
 >crossFunctionBoundary : () => void
+>                      : ^^^^^^^^^^
 
     outer: for(;;) {
 >outer : any
+>      : ^^^
 
         function test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
             break outer
 >outer : any
+>      : ^^^
         }
         test()
 >test() : void
+>       : ^^^^
 >test : () => void
+>     : ^^^^^^^^^^
     }
 }
 function continueIterationOnly(x) {
 >continueIterationOnly : (x: any) => void
+>                      : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     outer: switch (x) {
 >outer : any
+>      : ^^^
 >x : any
+>  : ^^^
 
         case 1:
 >1 : 1
+>  : ^
 
             continue outer
 >outer : any
+>      : ^^^
     }
 }
 function jumpToLabelOnly(x) {
 >jumpToLabelOnly : (x: any) => void
+>                : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     break jumpToLabelOnly
 >jumpToLabelOnly : any
+>                : ^^^
 }
 for (;;) {
     break toplevel
 >toplevel : any
+>         : ^^^
 
     continue toplevel
 >toplevel : any
+>         : ^^^
 }
 break
 continue
@@ -598,30 +917,47 @@ continue
 // other weirdness
 export let noMeta = import.metal
 >noMeta : any
+>       : ^^^
 >import.metal : any
+>             : ^^^
 >metal : any
+>      : ^^^
 
 function foo() { new.targe }
 >foo : () => void
+>    : ^^^^^^^^^^
 >new.targe : () => void
->targe : any
+>          : ^^^^^^^^^^
+>targe : () => void
+>      : ^^^^^^^^^^
 
 const nullaryDynamicImport = import()
 >nullaryDynamicImport : Promise<any>
+>                     : ^^^^^^^^^^^^
 >import() : Promise<any>
+>         : ^^^^^^^^^^^^
 
 const trinaryDynamicImport = import('1', '2', '3')
 >trinaryDynamicImport : Promise<any>
+>                     : ^^^^^^^^^^^^
 >import('1', '2', '3') : Promise<any>
+>                      : ^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 >'2' : "2"
+>    : ^^^
 >'3' : "3"
+>    : ^^^
 
 const spreadDynamicImport = import(...[])
 >spreadDynamicImport : Promise<any>
+>                    : ^^^^^^^^^^^^
 >import(...[]) : Promise<any>
+>              : ^^^^^^^^^^^^
 >...[] : never
->[] : readonly []
+>      : ^^^^^
+>[] : []
+>   : ^^
 
 return
 

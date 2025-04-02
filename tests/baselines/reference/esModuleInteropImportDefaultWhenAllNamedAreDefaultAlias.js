@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts] ////
+
 //// [esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts]
 import {default as a, default as b} from "m";
 void a;

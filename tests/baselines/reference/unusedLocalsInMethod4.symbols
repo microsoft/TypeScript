@@ -1,0 +1,410 @@
+//// [tests/cases/compiler/unusedLocalsInMethod4.ts] ////
+
+=== unusedLocalsInMethod4.ts ===
+function f<T, NonNull extends {}>() {
+>f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 0, 0))
+>T : Symbol(T, Decl(unusedLocalsInMethod4.ts, 0, 11))
+>NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 0, 13))
+
+    let x1: number[]; // should error
+>x1 : Symbol(x1, Decl(unusedLocalsInMethod4.ts, 1, 7))
+
+    let x2: number[] | null; // should error
+>x2 : Symbol(x2, Decl(unusedLocalsInMethod4.ts, 2, 7))
+
+    let x3: number[] | undefined; // should not error
+>x3 : Symbol(x3, Decl(unusedLocalsInMethod4.ts, 3, 7))
+
+    let x4: number[] | undefined | null; // should not error
+>x4 : Symbol(x4, Decl(unusedLocalsInMethod4.ts, 4, 7))
+
+    let x5!: number[]; // should not error
+>x5 : Symbol(x5, Decl(unusedLocalsInMethod4.ts, 5, 7))
+
+    let x6: any; // should not error
+>x6 : Symbol(x6, Decl(unusedLocalsInMethod4.ts, 6, 7))
+
+    let x7: unknown; // should not error
+>x7 : Symbol(x7, Decl(unusedLocalsInMethod4.ts, 7, 7))
+
+    let x8: T; // should error
+>x8 : Symbol(x8, Decl(unusedLocalsInMethod4.ts, 8, 7))
+>T : Symbol(T, Decl(unusedLocalsInMethod4.ts, 0, 11))
+
+    let x9: NonNull; // should error
+>x9 : Symbol(x9, Decl(unusedLocalsInMethod4.ts, 9, 7))
+>NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 0, 13))
+
+    var x10: NonNull; // should not error
+>x10 : Symbol(x10, Decl(unusedLocalsInMethod4.ts, 10, 7))
+>NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 0, 13))
+
+    let x11: NonNull; // should not error
+>x11 : Symbol(x11, Decl(unusedLocalsInMethod4.ts, 11, 7))
+>NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 0, 13))
+
+    function foo() {
+>foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 11, 21))
+
+        console.log(x1);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x1 : Symbol(x1, Decl(unusedLocalsInMethod4.ts, 1, 7))
+
+        console.log(x2);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x2 : Symbol(x2, Decl(unusedLocalsInMethod4.ts, 2, 7))
+
+        console.log(x3);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x3 : Symbol(x3, Decl(unusedLocalsInMethod4.ts, 3, 7))
+
+        console.log(x4);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x4 : Symbol(x4, Decl(unusedLocalsInMethod4.ts, 4, 7))
+
+        console.log(x5);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x5 : Symbol(x5, Decl(unusedLocalsInMethod4.ts, 5, 7))
+
+        console.log(x6);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x6 : Symbol(x6, Decl(unusedLocalsInMethod4.ts, 6, 7))
+
+        console.log(x7);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x7 : Symbol(x7, Decl(unusedLocalsInMethod4.ts, 7, 7))
+
+        console.log(x8);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x8 : Symbol(x8, Decl(unusedLocalsInMethod4.ts, 8, 7))
+
+        console.log(x9);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x9 : Symbol(x9, Decl(unusedLocalsInMethod4.ts, 9, 7))
+
+        console.log(x10);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x10 : Symbol(x10, Decl(unusedLocalsInMethod4.ts, 10, 7))
+
+        console.log(x11);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x11 : Symbol(x11, Decl(unusedLocalsInMethod4.ts, 11, 7))
+    }
+    function bar() {
+>bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 25, 5))
+
+        x11 = {} as any;
+>x11 : Symbol(x11, Decl(unusedLocalsInMethod4.ts, 11, 7))
+    }
+    foo();
+>foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 11, 21))
+}
+
+function f2<T, NonNull extends {}>() {
+>f2 : Symbol(f2, Decl(unusedLocalsInMethod4.ts, 30, 1))
+>T : Symbol(T, Decl(unusedLocalsInMethod4.ts, 32, 12))
+>NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 32, 14))
+
+    let x1: number[]; // should error
+>x1 : Symbol(x1, Decl(unusedLocalsInMethod4.ts, 33, 7))
+
+    let x2: number[] | null; // should error
+>x2 : Symbol(x2, Decl(unusedLocalsInMethod4.ts, 34, 7))
+
+    let x3: number[] | undefined; // should not error
+>x3 : Symbol(x3, Decl(unusedLocalsInMethod4.ts, 35, 7))
+
+    let x4: number[] | undefined | null; // should not error
+>x4 : Symbol(x4, Decl(unusedLocalsInMethod4.ts, 36, 7))
+
+    let x5!: number[]; // should not error
+>x5 : Symbol(x5, Decl(unusedLocalsInMethod4.ts, 37, 7))
+
+    let x6: any; // should not error
+>x6 : Symbol(x6, Decl(unusedLocalsInMethod4.ts, 38, 7))
+
+    let x7: unknown; // should not error
+>x7 : Symbol(x7, Decl(unusedLocalsInMethod4.ts, 39, 7))
+
+    let x8: T; // should error
+>x8 : Symbol(x8, Decl(unusedLocalsInMethod4.ts, 40, 7))
+>T : Symbol(T, Decl(unusedLocalsInMethod4.ts, 32, 12))
+
+    let x9: NonNull; // should error
+>x9 : Symbol(x9, Decl(unusedLocalsInMethod4.ts, 41, 7))
+>NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 32, 14))
+
+    console.log(x1);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x1 : Symbol(x1, Decl(unusedLocalsInMethod4.ts, 33, 7))
+
+    console.log(x2);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x2 : Symbol(x2, Decl(unusedLocalsInMethod4.ts, 34, 7))
+
+    console.log(x3);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x3 : Symbol(x3, Decl(unusedLocalsInMethod4.ts, 35, 7))
+
+    console.log(x4);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x4 : Symbol(x4, Decl(unusedLocalsInMethod4.ts, 36, 7))
+
+    console.log(x5);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x5 : Symbol(x5, Decl(unusedLocalsInMethod4.ts, 37, 7))
+
+    console.log(x6);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x6 : Symbol(x6, Decl(unusedLocalsInMethod4.ts, 38, 7))
+
+    console.log(x7);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x7 : Symbol(x7, Decl(unusedLocalsInMethod4.ts, 39, 7))
+
+    console.log(x8);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x8 : Symbol(x8, Decl(unusedLocalsInMethod4.ts, 40, 7))
+
+    console.log(x9);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x9 : Symbol(x9, Decl(unusedLocalsInMethod4.ts, 41, 7))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(unusedLocalsInMethod4.ts, 52, 1))
+
+    let x: number[];    // should error
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 55, 7))
+
+    function foo() {
+>foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 55, 20))
+
+        x.toString();
+>x.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 55, 7))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+    }
+    foo();
+>foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 55, 20))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(unusedLocalsInMethod4.ts, 60, 1))
+
+    let x: number;  // should error
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 63, 7))
+
+    return {
+        foo() {
+>foo : Symbol(foo, Decl(unusedLocalsInMethod4.ts, 64, 12))
+
+            return x.toString();
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 63, 7))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+        }
+    };
+}
+
+declare let x: number;  // should not error
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 71, 11))
+
+function f5() {
+>f5 : Symbol(f5, Decl(unusedLocalsInMethod4.ts, 71, 22))
+
+    x.toString();
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 71, 11))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+export default {};
+
+function f6() {
+>f6 : Symbol(f6, Decl(unusedLocalsInMethod4.ts, 75, 18))
+
+    let key: string;    // should not error
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+
+    for (key in {}) {
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+
+        console.log(key);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+    }
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(unusedLocalsInMethod4.ts, 82, 1))
+
+    let key: string;    // should not error
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 85, 7))
+
+    for (key of []) {
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 85, 7))
+
+        console.log(key);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 85, 7))
+    }
+}
+
+function f8() {
+>f8 : Symbol(f8, Decl(unusedLocalsInMethod4.ts, 89, 1))
+
+    function ff() {
+>ff : Symbol(ff, Decl(unusedLocalsInMethod4.ts, 91, 15))
+
+        let _;
+>_ : Symbol(_, Decl(unusedLocalsInMethod4.ts, 93, 11))
+
+        let rest: {}; // should not error
+>rest : Symbol(rest, Decl(unusedLocalsInMethod4.ts, 94, 11))
+
+        [_, ...rest] = bar();
+>_ : Symbol(_, Decl(unusedLocalsInMethod4.ts, 93, 11))
+>rest : Symbol(rest, Decl(unusedLocalsInMethod4.ts, 94, 11))
+>bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 98, 1))
+    }
+}
+declare function bar(): [number, ...string[]];
+>bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 98, 1))
+
+function f9() {  
+>f9 : Symbol(f9, Decl(unusedLocalsInMethod4.ts, 99, 46))
+
+    const x: number; // should have only one error
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 102, 9))
+
+    function bar() {  
+>bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 102, 20))
+
+        let y = x;  
+>y : Symbol(y, Decl(unusedLocalsInMethod4.ts, 104, 11))
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 102, 9))
+    }  
+}  
+
+
+function rw() {
+>rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 106, 1))
+
+    let i: number;  // should error
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 110, 7))
+
+    function inside() {
+>inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 110, 18))
+
+        i++;
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 110, 7))
+
+        console.log(i); // NaN
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 110, 7))
+    }
+    inside();
+>inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 110, 18))
+}
+rw();
+>rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 106, 1))
+
+function createBinder() {
+>createBinder : Symbol(createBinder, Decl(unusedLocalsInMethod4.ts, 117, 5))
+
+    var file: string;   // should not error
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 120, 7))
+
+    function bindSourceFile(f: string) {
+>bindSourceFile : Symbol(bindSourceFile, Decl(unusedLocalsInMethod4.ts, 120, 21))
+>f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 122, 28))
+
+        file = f;
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 120, 7))
+>f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 122, 28))
+
+        file.toString();
+>file.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 120, 7))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function transformClassFields() {
+>transformClassFields : Symbol(transformClassFields, Decl(unusedLocalsInMethod4.ts, 127, 1))
+
+    enum ClassPropertySubstitutionFlags {
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 129, 33))
+
+        ClassAliases = 1 << 0,
+>ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
+
+        ClassStaticThisOrSuperReference = 1 << 1,
+>ClassStaticThisOrSuperReference : Symbol(ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference, Decl(unusedLocalsInMethod4.ts, 131, 30))
+    }
+
+    let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 135, 7))
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 129, 33))
+
+    function enableSubstitutionForClassAliases() {
+>enableSubstitutionForClassAliases : Symbol(enableSubstitutionForClassAliases, Decl(unusedLocalsInMethod4.ts, 135, 61))
+
+        enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 135, 7))
+>ClassPropertySubstitutionFlags.ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 129, 33))
+>ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 130, 41))
+
+        enabledSubstitutions.toString();
+>enabledSubstitutions.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 135, 7))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+    }
+}

@@ -1,10 +1,10 @@
-tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts(8,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts(13,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts(18,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts(23,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty_computedName2.ts(8,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty_computedName2.ts(13,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty_computedName2.ts(18,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty_computedName2.ts(23,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts (4 errors) ====
+==== duplicateObjectLiteralProperty_computedName2.ts (4 errors) ====
     const n = 1;
     const s = "s";
     enum E1 { A = "ENUM_KEY" }

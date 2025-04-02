@@ -1,56 +1,94 @@
-=== tests/cases/compiler/moduleImport.ts ===
+//// [tests/cases/compiler/moduleImport.ts] ////
+
+=== moduleImport.ts ===
 module A.B.C {
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 	import XYZ = X.Y.Z;
 >XYZ : any
+>    : ^^^
 >X : typeof X
+>  : ^^^^^^^^
 >Y : any
+>  : ^^^
 >Z : any
+>  : ^^^
 
 	export function ping(x: number) {
 >ping : (x: number) => void
+>     : ^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 		if (x>0) XYZ.pong (x-1);
 >x>0 : boolean
+>    : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >XYZ.pong (x-1) : any
+>               : ^^^
 >XYZ.pong : any
+>         : ^^^
 >XYZ : any
+>    : ^^^
 >pong : any
+>     : ^^^
 >x-1 : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 	}
 }
 
 module X {
 >X : typeof X
+>  : ^^^^^^^^
 
 	import ABC = A.B.C;
 >ABC : typeof ABC
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >C : typeof ABC
+>  : ^^^^^^^^^^
 
 	export function pong(x: number) {
 >pong : (x: number) => void
+>     : ^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 		if (x > 0) ABC.ping(x-1);
 >x > 0 : boolean
+>      : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >ABC.ping(x-1) : void
+>              : ^^^^
 >ABC.ping : (x: number) => void
+>         : ^ ^^      ^^^^^^^^^
 >ABC : typeof ABC
+>    : ^^^^^^^^^^
 >ping : (x: number) => void
+>     : ^ ^^      ^^^^^^^^^
 >x-1 : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 	}
 }

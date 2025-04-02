@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts] ////
+
 //// [contextualTypingWithFixedTypeParameters1.ts]
 var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
 f10('', () => a => a.foo, ''); // a is ""

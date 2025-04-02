@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod5_Js.ts] ////
+
 //// [a.js]
 const bar = {
 	arguments: {}

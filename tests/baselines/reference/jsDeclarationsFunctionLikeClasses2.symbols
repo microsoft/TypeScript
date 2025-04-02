@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionLikeClasses2.ts] ////
+
+=== source.js ===
 /**
  * @param {number} len
  */
@@ -188,7 +190,7 @@ Point2D.prototype = {
     }
 };
 
-=== tests/cases/conformance/jsdoc/declarations/referencer.js ===
+=== referencer.js ===
 import {Point2D} from "./source";
 >Point2D : Symbol(Point2D, Decl(referencer.js, 0, 8))
 

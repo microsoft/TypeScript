@@ -1,22 +1,30 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/importHelpersInAmbientContext.ts] ////
+
+=== a.d.ts ===
 export { };
 
 // Extends
 declare class C { }
 >C : C
+>  : ^
 
 declare class D extends C { }
 >D : D
+>  : ^
 >C : C
+>  : ^
 
 // Destructuring
 interface I {
     ({descendants, read}?: {
 >descendants : boolean
+>            : ^^^^^^^
 >read : any
+>     : ^^^
 
         descendants?: boolean;
 >descendants : boolean
+>            : ^^^^^^^
 
         read?: any;
 >read : any
@@ -29,33 +37,44 @@ interface I {
 interface Foo {
     a: number; b: string;
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 }
 export var { a, ...x } : Foo;
 >a : number
+>  : ^^^^^^
 >x : { b: string; }
+>  : ^^^^^      ^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export {};
 declare namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
 	// Extends
 	class C { }
 >C : C
+>  : ^
 
 	class D extends C { }
 >D : D
+>  : ^
 >C : C
+>  : ^
 
 	// Destructuring
 	interface I {
 		({descendants, read}?: {
 >descendants : boolean
+>            : ^^^^^^^
 >read : any
+>     : ^^^
 
 			descendants?: boolean;
 >descendants : boolean
+>            : ^^^^^^^
 
 			read?: any;
 >read : any
@@ -68,60 +87,84 @@ declare namespace N {
 	interface Foo {
 		a: number; b: string;
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 	}
 	export var { a, ...x } : Foo;
 >a : number
+>  : ^^^^^^
 >x : { b: string; }
+>  : ^^^^^      ^^^
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
+>          : ^ ^^        ^^ ^^        ^^^^^    
 >d : Function
+>  : ^^^^^^^^
 >b : Function
+>  : ^^^^^^^^
 
 export declare function __assign(t: any, ...sources: any[]): any;
 >__assign : (t: any, ...sources: any[]) => any
+>         : ^ ^^   ^^^^^       ^^     ^^^^^   
 >t : any
 >sources : any[]
+>        : ^^^^^
 
 export declare function __rest(t: any, propertyNames: string[]): any;
 >__rest : (t: any, propertyNames: string[]) => any
+>       : ^ ^^   ^^             ^^        ^^^^^   
 >t : any
 >propertyNames : string[]
+>              : ^^^^^^^^
 
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
 >__decorate : (decorators: Function[], target: any, key?: string | symbol, desc?: any) => any
+>           : ^          ^^          ^^      ^^   ^^   ^^^               ^^    ^^^   ^^^^^   
 >decorators : Function[]
+>           : ^^^^^^^^^^
 >target : any
 >key : string | symbol
+>    : ^^^^^^^^^^^^^^^
 >desc : any
 
 export declare function __param(paramIndex: number, decorator: Function): Function;
 >__param : (paramIndex: number, decorator: Function) => Function
+>        : ^          ^^      ^^         ^^        ^^^^^        
 >paramIndex : number
+>           : ^^^^^^
 >decorator : Function
+>          : ^^^^^^^^
 
 export declare function __metadata(metadataKey: any, metadataValue: any): Function;
 >__metadata : (metadataKey: any, metadataValue: any) => Function
+>           : ^           ^^   ^^             ^^   ^^^^^        
 >metadataKey : any
 >metadataValue : any
 
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 >__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
+>          : ^       ^^   ^^          ^^   ^^ ^^        ^^         ^^        ^^^^^   
 >thisArg : any
 >_arguments : any
 >P : Function
+>  : ^^^^^^^^
 >generator : Function
+>          : ^^^^^^^^
 
 export declare function __generator(thisArg: any, body: Function): any;
 >__generator : (thisArg: any, body: Function) => any
+>            : ^       ^^   ^^    ^^        ^^^^^   
 >thisArg : any
 >body : Function
+>     : ^^^^^^^^
 
 export declare function __exportStar(m: any, exports: any): void;
 >__exportStar : (m: any, exports: any) => void
+>             : ^ ^^   ^^       ^^   ^^^^^    
 >m : any
 >exports : any
 

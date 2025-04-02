@@ -1,57 +1,86 @@
-=== tests/cases/compiler/promisesWithConstraints.ts ===
+//// [tests/cases/compiler/promisesWithConstraints.ts] ////
+
+=== promisesWithConstraints.ts ===
 interface Promise<T> {
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^ ^^  ^^                    ^^^          ^^^
 >cb : (x: T) => Promise<U>
+>   : ^ ^^ ^^^^^          
 >x : T
+>  : ^
 }
 
 interface CPromise<T extends { x: any; }> {
 >x : any
+>  : ^^^
 
     then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>
+>     : ^ ^^^^^^^^^           ^^  ^^                    ^^^^^          
 >x : any
+>  : ^^^
 >cb : (x: T) => Promise<U>
+>   : ^ ^^ ^^^^^          
 >x : T
+>  : ^
 }
 
 interface Foo { x; }
 >x : any
+>  : ^^^
 
 interface Bar { x; y; }
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 var a: Promise<Foo>;
 >a : Promise<Foo>
+>  : ^^^^^^^^^^^^
 
 var b: Promise<Bar>;
 >b : Promise<Bar>
+>  : ^^^^^^^^^^^^
 
 a = b; // ok
 >a = b : Promise<Bar>
+>      : ^^^^^^^^^^^^
 >a : Promise<Foo>
+>  : ^^^^^^^^^^^^
 >b : Promise<Bar>
+>  : ^^^^^^^^^^^^
 
 b = a; // ok
 >b = a : Promise<Foo>
+>      : ^^^^^^^^^^^^
 >b : Promise<Bar>
+>  : ^^^^^^^^^^^^
 >a : Promise<Foo>
+>  : ^^^^^^^^^^^^
 
 var a2: CPromise<Foo>;
 >a2 : CPromise<Foo>
+>   : ^^^^^^^^^^^^^
 
 var b2: CPromise<Bar>;
 >b2 : CPromise<Bar>
+>   : ^^^^^^^^^^^^^
 
 a2 = b2; // ok
 >a2 = b2 : CPromise<Bar>
+>        : ^^^^^^^^^^^^^
 >a2 : CPromise<Foo>
+>   : ^^^^^^^^^^^^^
 >b2 : CPromise<Bar>
+>   : ^^^^^^^^^^^^^
 
 b2 = a2; // was error
 >b2 = a2 : CPromise<Foo>
+>        : ^^^^^^^^^^^^^
 >b2 : CPromise<Bar>
+>   : ^^^^^^^^^^^^^
 >a2 : CPromise<Foo>
+>   : ^^^^^^^^^^^^^
 

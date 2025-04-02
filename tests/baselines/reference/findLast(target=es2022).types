@@ -1,325 +1,599 @@
-=== tests/cases/compiler/findLast.ts ===
+//// [tests/cases/compiler/findLast.ts] ////
+
+=== findLast.ts ===
 const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 >itemNumber : number
+>           : ^^^^^^
 >[0].findLast((item) => item === 0) : any
+>                                   : ^^^
 >[0].findLast : any
+>             : ^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const itemString: string | undefined = ["string"].findLast((item) => item === "string");
 >itemString : string
+>           : ^^^^^^
 >["string"].findLast((item) => item === "string") : any
+>                                                 : ^^^
 >["string"].findLast : any
+>                    : ^^^
 >["string"] : string[]
+>           : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === "string" : (item: any) => boolean
+>                            : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === "string" : boolean
+>                  : ^^^^^^^
 >item : any
+>     : ^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new Int8Array().findLast((item) => item === 0);
 >new Int8Array().findLast((item) => item === 0) : any
+>                                               : ^^^
 >new Int8Array().findLast : any
->new Int8Array() : Int8Array
+>                         : ^^^
+>new Int8Array() : Int8Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint8Array().findLast((item) => item === 0);
 >new Uint8Array().findLast((item) => item === 0) : any
+>                                                : ^^^
 >new Uint8Array().findLast : any
->new Uint8Array() : Uint8Array
+>                          : ^^^
+>new Uint8Array() : Uint8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint8ClampedArray().findLast((item) => item === 0);
 >new Uint8ClampedArray().findLast((item) => item === 0) : any
+>                                                       : ^^^
 >new Uint8ClampedArray().findLast : any
->new Uint8ClampedArray() : Uint8ClampedArray
+>                                 : ^^^
+>new Uint8ClampedArray() : Uint8ClampedArray<ArrayBuffer>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Int16Array().findLast((item) => item === 0);
 >new Int16Array().findLast((item) => item === 0) : any
+>                                                : ^^^
 >new Int16Array().findLast : any
->new Int16Array() : Int16Array
+>                          : ^^^
+>new Int16Array() : Int16Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint16Array().findLast((item) => item === 0);
 >new Uint16Array().findLast((item) => item === 0) : any
+>                                                 : ^^^
 >new Uint16Array().findLast : any
->new Uint16Array() : Uint16Array
+>                           : ^^^
+>new Uint16Array() : Uint16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Int32Array().findLast((item) => item === 0);
 >new Int32Array().findLast((item) => item === 0) : any
+>                                                : ^^^
 >new Int32Array().findLast : any
->new Int32Array() : Int32Array
+>                          : ^^^
+>new Int32Array() : Int32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint32Array().findLast((item) => item === 0);
 >new Uint32Array().findLast((item) => item === 0) : any
+>                                                 : ^^^
 >new Uint32Array().findLast : any
->new Uint32Array() : Uint32Array
+>                           : ^^^
+>new Uint32Array() : Uint32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Float32Array().findLast((item) => item === 0);
 >new Float32Array().findLast((item) => item === 0) : any
+>                                                  : ^^^
 >new Float32Array().findLast : any
->new Float32Array() : Float32Array
+>                            : ^^^
+>new Float32Array() : Float32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Float64Array().findLast((item) => item === 0);
 >new Float64Array().findLast((item) => item === 0) : any
+>                                                  : ^^^
 >new Float64Array().findLast : any
->new Float64Array() : Float64Array
+>                            : ^^^
+>new Float64Array() : Float64Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new BigInt64Array().findLast((item) => item === BigInt(0));
 >new BigInt64Array().findLast((item) => item === BigInt(0)) : any
+>                                                           : ^^^
 >new BigInt64Array().findLast : any
->new BigInt64Array() : BigInt64Array
+>                             : ^^^
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === BigInt(0) : boolean
+>                   : ^^^^^^^
 >item : any
+>     : ^^^
 >BigInt(0) : bigint
+>          : ^^^^^^
 >BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 new BigUint64Array().findLast((item) => item === BigInt(0));
 >new BigUint64Array().findLast((item) => item === BigInt(0)) : any
+>                                                            : ^^^
 >new BigUint64Array().findLast : any
->new BigUint64Array() : BigUint64Array
+>                              : ^^^
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
+>         : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === BigInt(0) : boolean
+>                   : ^^^^^^^
 >item : any
+>     : ^^^
 >BigInt(0) : bigint
+>          : ^^^^^^
 >BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 const indexNumber: number = [0].findLastIndex((item) => item === 0);
 >indexNumber : number
+>            : ^^^^^^
 >[0].findLastIndex((item) => item === 0) : any
+>                                        : ^^^
 >[0].findLastIndex : any
+>                  : ^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 const indexString: number = ["string"].findLastIndex((item) => item === "string");
 >indexString : number
+>            : ^^^^^^
 >["string"].findLastIndex((item) => item === "string") : any
+>                                                      : ^^^
 >["string"].findLastIndex : any
+>                         : ^^^
 >["string"] : string[]
+>           : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === "string" : (item: any) => boolean
+>                            : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === "string" : boolean
+>                  : ^^^^^^^
 >item : any
+>     : ^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 new Int8Array().findLastIndex((item) => item === 0);
 >new Int8Array().findLastIndex((item) => item === 0) : any
+>                                                    : ^^^
 >new Int8Array().findLastIndex : any
->new Int8Array() : Int8Array
+>                              : ^^^
+>new Int8Array() : Int8Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint8Array().findLastIndex((item) => item === 0);
 >new Uint8Array().findLastIndex((item) => item === 0) : any
+>                                                     : ^^^
 >new Uint8Array().findLastIndex : any
->new Uint8Array() : Uint8Array
+>                               : ^^^
+>new Uint8Array() : Uint8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint8ClampedArray().findLastIndex((item) => item === 0);
 >new Uint8ClampedArray().findLastIndex((item) => item === 0) : any
+>                                                            : ^^^
 >new Uint8ClampedArray().findLastIndex : any
->new Uint8ClampedArray() : Uint8ClampedArray
+>                                      : ^^^
+>new Uint8ClampedArray() : Uint8ClampedArray<ArrayBuffer>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Int16Array().findLastIndex((item) => item === 0);
 >new Int16Array().findLastIndex((item) => item === 0) : any
+>                                                     : ^^^
 >new Int16Array().findLastIndex : any
->new Int16Array() : Int16Array
+>                               : ^^^
+>new Int16Array() : Int16Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint16Array().findLastIndex((item) => item === 0);
 >new Uint16Array().findLastIndex((item) => item === 0) : any
+>                                                      : ^^^
 >new Uint16Array().findLastIndex : any
->new Uint16Array() : Uint16Array
+>                                : ^^^
+>new Uint16Array() : Uint16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Int32Array().findLastIndex((item) => item === 0);
 >new Int32Array().findLastIndex((item) => item === 0) : any
+>                                                     : ^^^
 >new Int32Array().findLastIndex : any
->new Int32Array() : Int32Array
+>                               : ^^^
+>new Int32Array() : Int32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Uint32Array().findLastIndex((item) => item === 0);
 >new Uint32Array().findLastIndex((item) => item === 0) : any
+>                                                      : ^^^
 >new Uint32Array().findLastIndex : any
->new Uint32Array() : Uint32Array
+>                                : ^^^
+>new Uint32Array() : Uint32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Float32Array().findLastIndex((item) => item === 0);
 >new Float32Array().findLastIndex((item) => item === 0) : any
+>                                                       : ^^^
 >new Float32Array().findLastIndex : any
->new Float32Array() : Float32Array
+>                                 : ^^^
+>new Float32Array() : Float32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new Float64Array().findLastIndex((item) => item === 0);
 >new Float64Array().findLastIndex((item) => item === 0) : any
+>                                                       : ^^^
 >new Float64Array().findLastIndex : any
->new Float64Array() : Float64Array
+>                                 : ^^^
+>new Float64Array() : Float64Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === 0 : (item: any) => boolean
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === 0 : boolean
+>           : ^^^^^^^
 >item : any
+>     : ^^^
 >0 : 0
+>  : ^
 
 new BigInt64Array().findLastIndex((item) => item === BigInt(0));
 >new BigInt64Array().findLastIndex((item) => item === BigInt(0)) : any
+>                                                                : ^^^
 >new BigInt64Array().findLastIndex : any
->new BigInt64Array() : BigInt64Array
+>                                  : ^^^
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === BigInt(0) : boolean
+>                   : ^^^^^^^
 >item : any
+>     : ^^^
 >BigInt(0) : bigint
+>          : ^^^^^^
 >BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 new BigUint64Array().findLastIndex((item) => item === BigInt(0));
 >new BigUint64Array().findLastIndex((item) => item === BigInt(0)) : any
+>                                                                 : ^^^
 >new BigUint64Array().findLastIndex : any
->new BigUint64Array() : BigUint64Array
+>                                   : ^^^
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
+>              : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
+>     : ^^^
 >item === BigInt(0) : boolean
+>                   : ^^^^^^^
 >item : any
+>     : ^^^
 >BigInt(0) : bigint
+>          : ^^^^^^
 >BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 

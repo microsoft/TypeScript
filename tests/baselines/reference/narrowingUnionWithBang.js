@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingUnionWithBang.ts] ////
+
 //// [narrowingUnionWithBang.ts]
 type WorkingType = {
     thing?:

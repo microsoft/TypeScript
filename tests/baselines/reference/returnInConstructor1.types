@@ -1,9 +1,13 @@
-=== tests/cases/compiler/returnInConstructor1.ts ===
+//// [tests/cases/compiler/returnInConstructor1.ts] ////
+
+=== returnInConstructor1.ts ===
 class A {
 >A : A
+>  : ^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     constructor() {
         return;
@@ -12,117 +16,157 @@ class A {
 
 class B {
 >B : B
+>  : ^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     constructor() {
         return 1; // error
 >1 : 1
+>  : ^
     }
 }
 
 class C {
 >C : C
+>  : ^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     constructor() {
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 class D {
 >D : D
+>  : ^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     constructor() {
         return "test"; // error
 >"test" : "test"
+>       : ^^^^^^
     }
 }
 
 class E {
 >E : E
+>  : ^
 
     public foo: number;
 >foo : number
+>    : ^^^^^^
 
     constructor() {
         return { foo: 1 };
 >{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 class F {
 >F : F
+>  : ^
 
     public foo: string;
 >foo : string
+>    : ^^^^^^
 
     constructor() {
         return { foo: 1 }; //error
 >{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 class G {
 >G : G
+>  : ^
 
     private test: number;
 >test : number
+>     : ^^^^^^
 
     public test1() { }
 >test1 : () => void
+>      : ^^^^^^^^^^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     constructor() {
         this.test = 2;
 >this.test = 2 : 2
+>              : ^
 >this.test : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >test : number
+>     : ^^^^^^
 >2 : 2
+>  : ^
     }
 }
 
 class H extends F {
 >H : H
+>  : ^
 >F : F
+>  : ^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof F
+>      : ^^^^^^^^
 
         return new G(); //error
 >new G() : G
+>        : ^
 >G : typeof G
+>  : ^^^^^^^^
     }
 }
 
 class I extends G {
 >I : I
+>  : ^
 >G : G
+>  : ^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof G
+>      : ^^^^^^^^
 
         return new G();
 >new G() : G
+>        : ^
 >G : typeof G
+>  : ^^^^^^^^
     }
 }
 

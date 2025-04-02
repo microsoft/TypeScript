@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgInference2WithError.ts] ////
+
 //// [typeArgInference2WithError.ts]
 interface Item {
     name: string;

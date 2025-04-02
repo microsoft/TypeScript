@@ -1,203 +1,292 @@
-=== tests/cases/compiler/parameterPropertyInConstructorWithPrologues.ts ===
+//// [tests/cases/compiler/parameterPropertyInConstructorWithPrologues.ts] ////
+
+=== parameterPropertyInConstructorWithPrologues.ts ===
 // https://github.com/microsoft/TypeScript/issues/48671
 
 class C {}
 >C : C
+>  : ^
 
 class Foo1 {
 >Foo1 : Foo1
+>     : ^^^^
 
   constructor(private A: string) {
 >A : string
+>  : ^^^^^^
 
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
   }
 }
 
 class Foo2 {
 >Foo2 : Foo2
+>     : ^^^^
 
   constructor(private A: string, private B: string) {
 >A : string
+>  : ^^^^^^
 >B : string
+>  : ^^^^^^
 
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     "ngInject2";
 >"ngInject2" : "ngInject2"
+>            : ^^^^^^^^^^^
   }
 }
 
 class Foo3 {
 >Foo3 : Foo3
+>     : ^^^^
 
   constructor(private A: string, private B: string, private C: string) {
 >A : string
+>  : ^^^^^^
 >B : string
+>  : ^^^^^^
 >C : string
+>  : ^^^^^^
 
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     "ngInject2";
 >"ngInject2" : "ngInject2"
+>            : ^^^^^^^^^^^
   }
 }
 
 class Foo4 {
 >Foo4 : Foo4
+>     : ^^^^
 
   constructor(private A: string) {
 >A : string
+>  : ^^^^^^
 
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     console.log("hi");
 >console.log("hi") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
   }
 }
 
 class Foo5 {
 >Foo5 : Foo5
+>     : ^^^^
 
   constructor(private A: string, private B: string) {
 >A : string
+>  : ^^^^^^
 >B : string
+>  : ^^^^^^
 
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     "ngInject2";
 >"ngInject2" : "ngInject2"
+>            : ^^^^^^^^^^^
 
     console.log("hi");
 >console.log("hi") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
   }
 }
 
 class Foo6 {
 >Foo6 : Foo6
+>     : ^^^^
 
   constructor(private A: string, private B: string, private C: string) {
 >A : string
+>  : ^^^^^^
 >B : string
+>  : ^^^^^^
 >C : string
+>  : ^^^^^^
 
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     "ngInject2";
 >"ngInject2" : "ngInject2"
+>            : ^^^^^^^^^^^
 
     console.log("hi");
 >console.log("hi") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
   }
 }
 
 class Foo7 extends C {
 >Foo7 : Foo7
+>     : ^^^^
 >C : C
+>  : ^
 
   constructor(
     private member: boolean,
 >member : boolean
+>       : ^^^^^^^
 
   ) {
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 
     console.log("hi");
 >console.log("hi") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
   }
 }
 
 class Foo8 extends C {
 >Foo8 : Foo8
+>     : ^^^^
 >C : C
+>  : ^
 
   constructor(
     private member: boolean,
 >member : boolean
+>       : ^^^^^^^
 
   ) {
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 
     this.m();
 >this.m() : void
+>         : ^^^^
 >this.m : () => void
+>       : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
     console.log("hi");
 >console.log("hi") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
   }
 
   m() {}
 >m : () => void
+>  : ^^^^^^^^^^
 }
 
 class Foo9 extends C {
 >Foo9 : Foo9
+>     : ^^^^
 >C : C
+>  : ^
 
   constructor() {
     "ngInject1";
 >"ngInject1" : "ngInject1"
+>            : ^^^^^^^^^^^
 
     "ngInject2";
 >"ngInject2" : "ngInject2"
+>            : ^^^^^^^^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 
     this.m();
 >this.m() : void
+>         : ^^^^
 >this.m : () => void
+>       : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
     console.log("hi");
 >console.log("hi") : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
   }
 
   m() {}
 >m : () => void
+>  : ^^^^^^^^^^
 }
 

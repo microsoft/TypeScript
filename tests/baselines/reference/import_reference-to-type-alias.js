@@ -36,7 +36,7 @@ define(["require", "exports"], function (require, exports) {
             }());
             Services.UserServices = UserServices;
         })(Services = App.Services || (App.Services = {}));
-    })(App = exports.App || (exports.App = {}));
+    })(App || (exports.App = App = {}));
 });
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {

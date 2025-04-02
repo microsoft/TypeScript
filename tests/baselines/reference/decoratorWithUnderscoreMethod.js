@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorWithUnderscoreMethod.ts] ////
+
 //// [decoratorWithUnderscoreMethod.ts]
 declare var console : { log(arg: string): void };
 function dec(): Function {

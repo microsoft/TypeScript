@@ -1,40 +1,67 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/jsxAttributeInitializer.ts] ////
+
+=== a.tsx ===
 declare var React: any;
 >React : any
+>      : ^^^
 
 <div>
 ><div>    <div attr=<div /> />    <div attr=<div>foo</div> />    <div attr=<><div>foo</div></> />    <div attr= /></div> : any
+>                                                                                                                        : ^^^
 >div : any
+>    : ^^^
 
     <div attr=<div /> />
 ><div attr=<div /> /> : any
+>                     : ^^^
 >div : any
+>    : ^^^
 >attr : any
+>     : ^^^
 ><div /> : any
+>        : ^^^
 >div : any
+>    : ^^^
 
     <div attr=<div>foo</div> />
 ><div attr=<div>foo</div> /> : any
+>                            : ^^^
 >div : any
+>    : ^^^
 >attr : any
+>     : ^^^
 ><div>foo</div> : any
+>               : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
     <div attr=<><div>foo</div></> />
 ><div attr=<><div>foo</div></> /> : any
+>                                 : ^^^
 >div : any
+>    : ^^^
 >attr : any
+>     : ^^^
 ><><div>foo</div></> : any
+>                    : ^^^
 ><div>foo</div> : any
+>               : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
     <div attr= />
 ><div attr= /> : any
+>              : ^^^
 >div : any
+>    : ^^^
 >attr : true
+>     : ^^^^
 
 </div>
 >div : any
+>    : ^^^
 

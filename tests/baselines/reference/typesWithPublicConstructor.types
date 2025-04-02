@@ -1,42 +1,63 @@
-=== tests/cases/conformance/types/members/typesWithPublicConstructor.ts ===
+//// [tests/cases/conformance/types/members/typesWithPublicConstructor.ts] ////
+
+=== typesWithPublicConstructor.ts ===
 // public is allowed on a constructor but is not meaningful
 
 class C {
 >C : C
+>  : ^
 
     public constructor() { }
 }
 
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r: () => void = c.constructor;
 >r : () => void
+>  : ^^^^^^    
 >c.constructor : Function
+>              : ^^^^^^^^
 >c : C
+>  : ^
 >constructor : Function
+>            : ^^^^^^^^
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     public constructor(x: number);
 >x : number
+>  : ^^^^^^
 
     public constructor(x: any) { }
 >x : any
+>  : ^^^
 }
 
 var c2 = new C2();
 >c2 : C2
+>   : ^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 var r2: (x: number) => void = c2.constructor;
 >r2 : (x: number) => void
+>   : ^ ^^      ^^^^^    
 >x : number
+>  : ^^^^^^
 >c2.constructor : Function
+>               : ^^^^^^^^
 >c2 : C2
+>   : ^^
 >constructor : Function
+>            : ^^^^^^^^
 

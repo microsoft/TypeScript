@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations-ambient.ts ===
+//// [tests/cases/compiler/constDeclarations-ambient.ts] ////
+
+=== constDeclarations-ambient.ts ===
 // No error
 declare const c1: boolean;
 >c1 : Symbol(c1, Decl(constDeclarations-ambient.ts, 1, 13))

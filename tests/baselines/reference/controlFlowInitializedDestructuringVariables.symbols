@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowInitializedDestructuringVariables.ts ===
+//// [tests/cases/compiler/controlFlowInitializedDestructuringVariables.ts] ////
+
+=== controlFlowInitializedDestructuringVariables.ts ===
 declare const obj: { a?: string, b?: number };
 >obj : Symbol(obj, Decl(controlFlowInitializedDestructuringVariables.ts, 0, 13))
 >a : Symbol(a, Decl(controlFlowInitializedDestructuringVariables.ts, 0, 20))

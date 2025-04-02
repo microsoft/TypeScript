@@ -1,24 +1,37 @@
-=== tests/cases/compiler/thisShadowingErrorSpans.ts ===
+//// [tests/cases/compiler/thisShadowingErrorSpans.ts] ////
+
+=== thisShadowingErrorSpans.ts ===
 class C {
 >C : C
+>  : ^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.m();
 >this.m() : void
+>         : ^^^^
 >this.m : () => void
+>       : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
         function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
             this.m();
 >this.m() : any
+>         : ^^^
 >this.m : any
+>       : ^^^
 >this : any
+>     : ^^^
 >m : any
+>  : ^^^
         }
     }
 }

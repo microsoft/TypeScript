@@ -1,473 +1,754 @@
-=== tests/cases/compiler/correlatedUnions.ts ===
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== correlatedUnions.ts ===
 // Various repros from #30581
 
 type RecordMap = { n: number, s: string, b: boolean };
->RecordMap : { n: number; s: string; b: boolean; }
+>RecordMap : RecordMap
+>          : ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: {
 >UnionRecord : UnionRecord<K>
+>            : ^^^^^^^^^^^^^^
 
     kind: P,
 >kind : P
+>     : ^
 
     v: RecordMap[P],
 >v : RecordMap[P]
+>  : ^^^^^^^^^^^^
 
     f: (v: RecordMap[P]) => void
 >f : (v: RecordMap[P]) => void
+>  : ^ ^^            ^^^^^    
 >v : RecordMap[P]
+>  : ^^^^^^^^^^^^
 
 }}[K];
 
 function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>) {
 >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
+>              : ^ ^^^^^^^^^               ^^   ^^              ^^^^^^^^^
 >rec : UnionRecord<K>
+>    : ^^^^^^^^^^^^^^
 
     rec.f(rec.v);
 >rec.f(rec.v) : void
+>             : ^^^^
 >rec.f : (v: RecordMap[K]) => void
+>      : ^ ^^^^^^^^^^^^^^^^^^^    
 >rec : UnionRecord<K>
+>    : ^^^^^^^^^^^^^^
 >f : (v: RecordMap[K]) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^    
 >rec.v : RecordMap[K]
+>      : ^^^^^^^^^^^^
 >rec : UnionRecord<K>
+>    : ^^^^^^^^^^^^^^
 >v : RecordMap[K]
+>  : ^^^^^^^^^^^^
 }
 
 declare const r1: UnionRecord<'n'>;  // { kind: 'n', v: number, f: (v: number) => void }
 >r1 : { kind: "n"; v: number; f: (v: number) => void; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^
 
 declare const r2: UnionRecord;  // { kind: 'n', ... } | { kind: 's', ... } | { kind: 'b', ... }
 >r2 : UnionRecord<keyof RecordMap>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 processRecord(r1);
 >processRecord(r1) : void
+>                  : ^^^^
 >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
+>              : ^ ^^^^^^^^^               ^^   ^^              ^^^^^^^^^
 >r1 : { kind: "n"; v: number; f: (v: number) => void; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^
 
 processRecord(r2);
 >processRecord(r2) : void
+>                  : ^^^^
 >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
+>              : ^ ^^^^^^^^^               ^^   ^^              ^^^^^^^^^
 >r2 : UnionRecord<keyof RecordMap>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 >processRecord({ kind: 'n', v: 42, f: v => v.toExponential() }) : void
+>                                                               : ^^^^
 >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
+>              : ^ ^^^^^^^^^               ^^   ^^              ^^^^^^^^^
 >{ kind: 'n', v: 42, f: v => v.toExponential() } : { kind: "n"; v: number; f: (v: number) => string; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >kind : "n"
+>     : ^^^
 >'n' : "n"
+>    : ^^^
 >v : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >f : (v: number) => string
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >v => v.toExponential() : (v: number) => string
+>                       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v.toExponential() : string
->v.toExponential : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>v.toExponential : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >v : number
->toExponential : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 
 // --------
 
 type TextFieldData = { value: string }
->TextFieldData : { value: string; }
+>TextFieldData : TextFieldData
+>              : ^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 
 type SelectFieldData = { options: string[], selectedValue: string }
->SelectFieldData : { options: string[]; selectedValue: string; }
+>SelectFieldData : SelectFieldData
+>                : ^^^^^^^^^^^^^^^
 >options : string[]
+>        : ^^^^^^^^
 >selectedValue : string
+>              : ^^^^^^
 
 type FieldMap = {
->FieldMap : { text: TextFieldData; select: SelectFieldData; }
+>FieldMap : FieldMap
+>         : ^^^^^^^^
 
     text: TextFieldData;
 >text : TextFieldData
+>     : ^^^^^^^^^^^^^
 
     select: SelectFieldData;
 >select : SelectFieldData
+>       : ^^^^^^^^^^^^^^^
 }
 
 type FormField<K extends keyof FieldMap> = { type: K, data: FieldMap[K] };
 >FormField : FormField<K>
+>          : ^^^^^^^^^^^^
 >type : K
+>     : ^
 >data : FieldMap[K]
+>     : ^^^^^^^^^^^
 
 type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
 >RenderFunc : RenderFunc<K>
+>           : ^^^^^^^^^^^^^
 >props : FieldMap[K]
+>      : ^^^^^^^^^^^
 
 type RenderFuncMap = { [K in keyof FieldMap]: RenderFunc<K> };
->RenderFuncMap : { text: RenderFunc<"text">; select: RenderFunc<"select">; }
+>RenderFuncMap : RenderFuncMap
+>              : ^^^^^^^^^^^^^
 
 function renderTextField(props: TextFieldData) {}
 >renderTextField : (props: TextFieldData) => void
+>                : ^     ^^             ^^^^^^^^^
 >props : TextFieldData
+>      : ^^^^^^^^^^^^^
 
 function renderSelectField(props: SelectFieldData) {}
 >renderSelectField : (props: SelectFieldData) => void
+>                  : ^     ^^               ^^^^^^^^^
 >props : SelectFieldData
+>      : ^^^^^^^^^^^^^^^
 
 const renderFuncs: RenderFuncMap = {
 >renderFuncs : RenderFuncMap
+>            : ^^^^^^^^^^^^^
 >{    text: renderTextField,    select: renderSelectField,} : { text: (props: TextFieldData) => void; select: (props: SelectFieldData) => void; }
+>                                                           : ^^^^^^^^^     ^^             ^^^^^^^^^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^
 
     text: renderTextField,
 >text : (props: TextFieldData) => void
+>     : ^     ^^             ^^^^^^^^^
 >renderTextField : (props: TextFieldData) => void
+>                : ^     ^^             ^^^^^^^^^
 
     select: renderSelectField,
 >select : (props: SelectFieldData) => void
+>       : ^     ^^               ^^^^^^^^^
 >renderSelectField : (props: SelectFieldData) => void
+>                  : ^     ^^               ^^^^^^^^^
 
 };
 
 function renderField<K extends keyof FieldMap>(field: FormField<K>) {
 >renderField : <K extends keyof FieldMap>(field: FormField<K>) => void
+>            : ^ ^^^^^^^^^              ^^     ^^            ^^^^^^^^^
 >field : FormField<K>
+>      : ^^^^^^^^^^^^
 
     const renderFn = renderFuncs[field.type];
 >renderFn : RenderFuncMap[K]
+>         : ^^^^^^^^^^^^^^^^
 >renderFuncs[field.type] : RenderFuncMap[K]
+>                        : ^^^^^^^^^^^^^^^^
 >renderFuncs : RenderFuncMap
+>            : ^^^^^^^^^^^^^
 >field.type : K
+>           : ^
 >field : FormField<K>
+>      : ^^^^^^^^^^^^
 >type : K
+>     : ^
 
     renderFn(field.data);
 >renderFn(field.data) : void
+>                     : ^^^^
 >renderFn : RenderFuncMap[K]
+>         : ^^^^^^^^^^^^^^^^
 >field.data : FieldMap[K]
+>           : ^^^^^^^^^^^
 >field : FormField<K>
+>      : ^^^^^^^^^^^^
 >data : FieldMap[K]
+>     : ^^^^^^^^^^^
 }
 
 // --------
 
 type TypeMap = {
->TypeMap : { foo: string; bar: number; }
+>TypeMap : TypeMap
+>        : ^^^^^^^
 
     foo: string,
 >foo : string
+>    : ^^^^^^
 
     bar: number
 >bar : number
+>    : ^^^^^^
 
 };
 
 type Keys = keyof TypeMap;
 >Keys : keyof TypeMap
+>     : ^^^^^^^^^^^^^
 
 type HandlerMap = { [P in Keys]: (x: TypeMap[P]) => void };
->HandlerMap : { foo: (x: string) => void; bar: (x: number) => void; }
+>HandlerMap : HandlerMap
+>           : ^^^^^^^^^^
 >x : TypeMap[P]
+>  : ^^^^^^^^^^
 
 const handlers: HandlerMap = {
 >handlers : HandlerMap
+>         : ^^^^^^^^^^
 >{    foo: s => s.length,    bar: n => n.toFixed(2)} : { foo: (s: string) => number; bar: (n: number) => string; }
+>                                                    : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     foo: s => s.length,
 >foo : (s: string) => number
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >s => s.length : (s: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s.length : number
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     bar: n => n.toFixed(2)
 >bar : (n: number) => string
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed(2) : (n: number) => string
+>                  : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n.toFixed(2) : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>             : ^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 >2 : 2
+>  : ^
 
 };
 
 type DataEntry<K extends Keys = Keys> = { [P in K]: {
 >DataEntry : DataEntry<K>
+>          : ^^^^^^^^^^^^
 
     type: P,
 >type : P
+>     : ^
 
     data: TypeMap[P]
 >data : TypeMap[P]
+>     : ^^^^^^^^^^
 
 }}[K];
 
 const data: DataEntry[] = [
 >data : DataEntry<keyof TypeMap>[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[    { type: 'foo', data: 'abc' },    { type: 'foo', data: 'def' },    { type: 'bar', data: 42 },] : ({ type: "foo"; data: string; } | { type: "bar"; data: number; })[]
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     { type: 'foo', data: 'abc' },
 >{ type: 'foo', data: 'abc' } : { type: "foo"; data: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "foo"
+>     : ^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >data : string
+>     : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
     { type: 'foo', data: 'def' },
 >{ type: 'foo', data: 'def' } : { type: "foo"; data: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "foo"
+>     : ^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >data : string
+>     : ^^^^^^
 >'def' : "def"
+>      : ^^^^^
 
     { type: 'bar', data: 42 },
 >{ type: 'bar', data: 42 } : { type: "bar"; data: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "bar"
+>     : ^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 >data : number
+>     : ^^^^^^
 >42 : 42
+>   : ^^
 
 ];
 
 function process<K extends Keys>(data: DataEntry<K>[]) {
->process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
+>process : <K extends Keys>(data: DataEntry<K>[]) => void
+>        : ^ ^^^^^^^^^    ^^    ^^              ^^^^^^^^^
 >data : DataEntry<K>[]
+>     : ^^^^^^^^^^^^^^
 
     data.forEach(block => {
 >data.forEach(block => {        if (block.type in handlers) {            handlers[block.type](block.data)        }    }) : void
+>                                                                                                                        : ^^^^
 >data.forEach : (callbackfn: (value: DataEntry<K>, index: number, array: DataEntry<K>[]) => void, thisArg?: any) => void
+>             : ^          ^^^     ^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >data : DataEntry<K>[]
+>     : ^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: DataEntry<K>, index: number, array: DataEntry<K>[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >block => {        if (block.type in handlers) {            handlers[block.type](block.data)        }    } : (block: DataEntry<K>) => void
+>                                                                                                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^
 >block : DataEntry<K>
+>      : ^^^^^^^^^^^^
 
         if (block.type in handlers) {
 >block.type in handlers : boolean
+>                       : ^^^^^^^
 >block.type : K
+>           : ^
 >block : DataEntry<K>
+>      : ^^^^^^^^^^^^
 >type : K
+>     : ^
 >handlers : HandlerMap
+>         : ^^^^^^^^^^
 
             handlers[block.type](block.data)
 >handlers[block.type](block.data) : void
+>                                 : ^^^^
 >handlers[block.type] : HandlerMap[K]
+>                     : ^^^^^^^^^^^^^
 >handlers : HandlerMap
+>         : ^^^^^^^^^^
 >block.type : K
+>           : ^
 >block : DataEntry<K>
+>      : ^^^^^^^^^^^^
 >type : K
+>     : ^
 >block.data : TypeMap[K]
+>           : ^^^^^^^^^^
 >block : DataEntry<K>
+>      : ^^^^^^^^^^^^
 >data : TypeMap[K]
+>     : ^^^^^^^^^^
         }
     });
 }
 
 process(data);
 >process(data) : void
->process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
+>              : ^^^^
+>process : <K extends Keys>(data: DataEntry<K>[]) => void
+>        : ^ ^^^^^^^^^    ^^    ^^              ^^^^^^^^^
 >data : DataEntry<keyof TypeMap>[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 process([{ type: 'foo', data: 'abc' }]);
 >process([{ type: 'foo', data: 'abc' }]) : void
->process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
+>                                        : ^^^^
+>process : <K extends Keys>(data: DataEntry<K>[]) => void
+>        : ^ ^^^^^^^^^    ^^    ^^              ^^^^^^^^^
 >[{ type: 'foo', data: 'abc' }] : { type: "foo"; data: string; }[]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ type: 'foo', data: 'abc' } : { type: "foo"; data: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "foo"
+>     : ^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >data : string
+>     : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
 // --------
 
 type LetterMap = { A: string, B: number }
->LetterMap : { A: string; B: number; }
+>LetterMap : LetterMap
+>          : ^^^^^^^^^
 >A : string
+>  : ^^^^^^
 >B : number
+>  : ^^^^^^
 
 type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: Record<P, LetterMap[P]>) => void } }[K];
 >LetterCaller : LetterCaller<K>
+>             : ^^^^^^^^^^^^^^^
 >letter : Record<P, LetterMap[P]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >caller : (x: Record<P, LetterMap[P]>) => void
+>       : ^ ^^                       ^^^^^    
 >x : Record<P, LetterMap[P]>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
 function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void {
 >call : <K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>) => void
+>     : ^ ^^^^^^^^^               ^^                  ^^               ^^^^^    
 >letter : Record<K, LetterMap[K]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >caller : (x: Record<K, LetterMap[K]>) => void
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 
   caller(letter);
 >caller(letter) : void
+>               : ^^^^
 >caller : (x: Record<K, LetterMap[K]>) => void
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >letter : Record<K, LetterMap[K]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type A = { A: string };
->A : { A: string; }
+>A : A
+>  : ^
 >A : string
+>  : ^^^^^^
 
 type B = { B: number };
->B : { B: number; }
+>B : B
+>  : ^
 >B : number
+>  : ^^^^^^
 
 type ACaller = (a: A) => void;
->ACaller : (a: A) => void
+>ACaller : ACaller
+>        : ^^^^^^^
 >a : A
+>  : ^
 
 type BCaller = (b: B) => void;
->BCaller : (b: B) => void
+>BCaller : BCaller
+>        : ^^^^^^^
 >b : B
+>  : ^
 
 declare const xx: { letter: A, caller: ACaller } | { letter: B, caller: BCaller };
 >xx : { letter: A; caller: ACaller; } | { letter: B; caller: BCaller; }
+>   : ^^^^^^^^^^ ^^^^^^^^^^       ^^^^^^^^^^^^^^^^ ^^^^^^^^^^       ^^^
 >letter : A
+>       : ^
 >caller : ACaller
+>       : ^^^^^^^
 >letter : B
+>       : ^
 >caller : BCaller
+>       : ^^^^^^^
 
 call(xx);
 >call(xx) : void
+>         : ^^^^
 >call : <K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>) => void
+>     : ^ ^^^^^^^^^               ^^                  ^^               ^^^^^    
 >xx : { letter: A; caller: ACaller; } | { letter: B; caller: BCaller; }
+>   : ^^^^^^^^^^ ^^^^^^^^^^       ^^^^^^^^^^^^^^^^ ^^^^^^^^^^       ^^^
 
 // --------
 
 type Ev<K extends keyof DocumentEventMap> = { [P in K]: {
 >Ev : Ev<K>
+>   : ^^^^^
 
     readonly name: P;
 >name : P
+>     : ^
 
     readonly once?: boolean;
 >once : boolean | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
 
     readonly callback: (ev: DocumentEventMap[P]) => void;
 >callback : (ev: DocumentEventMap[P]) => void
+>         : ^  ^^                   ^^^^^    
 >ev : DocumentEventMap[P]
+>   : ^^^^^^^^^^^^^^^^^^^
 
 }}[K];
 
 function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
+>              : ^ ^^^^^^^^^                      ^^      ^^       ^^^^^^^^^
 >events : Ev<K>[]
+>       : ^^^^^^^
 
     for (const event of events) {
 >event : Ev<K>
+>      : ^^^^^
 >events : Ev<K>[]
+>       : ^^^^^^^
 
         document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
->document.addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>                                                                                        : ^^^^
+>document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>                          : ^^^^^^^^^^^^^^^                      ^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^    ^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^    ^^^
 >document : Document
->addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>         : ^^^^^^^^
+>addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>                 : ^^^^^^^^^^^^^^^                      ^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^    ^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^    ^^^
 >event.name : K
+>           : ^
 >event : Ev<K>
+>      : ^^^^^
 >name : K
+>     : ^
 >(ev) => event.callback(ev) : (this: Document, ev: DocumentEventMap[K]) => void
+>                           : ^    ^^        ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ev : DocumentEventMap[K]
+>   : ^^^^^^^^^^^^^^^^^^^
 >event.callback(ev) : void
+>                   : ^^^^
 >event.callback : (ev: DocumentEventMap[K]) => void
+>               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >event : Ev<K>
+>      : ^^^^^
 >callback : (ev: DocumentEventMap[K]) => void
+>         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >ev : DocumentEventMap[K]
+>   : ^^^^^^^^^^^^^^^^^^^
 >{ once: event.once } : { once: boolean | undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >once : boolean | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
 >event.once : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 >event : Ev<K>
+>      : ^^^^^
 >once : boolean | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function createEventListener<K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>): Ev<K> {
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
+>                    : ^ ^^^^^^^^^                      ^^                        ^^     ^^^^^     
 >name : K
+>     : ^
 >once : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 >callback : (ev: DocumentEventMap[K]) => void
+>         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    
 
     return { name, once, callback };
 >{ name, once, callback } : { name: K; once: boolean; callback: (ev: DocumentEventMap[K]) => void; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >name : K
+>     : ^
 >once : boolean
+>     : ^^^^^^^
 >callback : (ev: DocumentEventMap[K]) => void
+>         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    
 }
 
 const clickEvent = createEventListener({
->clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
->createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
+>clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^    ^^^
+>createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^    ^^^
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
+>                    : ^ ^^^^^^^^^                      ^^                        ^^     ^^^^^     
 >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent) => void; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
 
     name: "click",
 >name : "click"
+>     : ^^^^^^^
 >"click" : "click"
+>        : ^^^^^^^
 
     callback: ev => console.log(ev),
 >callback : (ev: MouseEvent) => void
+>         : ^  ^^^^^^^^^^^^^^^^^^^^^
 >ev => console.log(ev) : (ev: MouseEvent) => void
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^
 >ev : MouseEvent
+>   : ^^^^^^^^^^
 >console.log(ev) : void
+>                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >ev : MouseEvent
+>   : ^^^^^^^^^^
 
 });
 
 const scrollEvent = createEventListener({
->scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
->createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
+>scrollEvent : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    ^^^
+>createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    ^^^
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
+>                    : ^ ^^^^^^^^^                      ^^                        ^^     ^^^^^     
 >{    name: "scroll",    callback: ev => console.log(ev),} : { name: "scroll"; callback: (ev: Event) => void; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
 
     name: "scroll",
 >name : "scroll"
+>     : ^^^^^^^^
 >"scroll" : "scroll"
+>         : ^^^^^^^^
 
     callback: ev => console.log(ev),
 >callback : (ev: Event) => void
+>         : ^  ^^^^^^^^^^^^^^^^
 >ev => console.log(ev) : (ev: Event) => void
+>                      : ^  ^^^^^^^^^^^^^^^^
 >ev : Event
+>   : ^^^^^
 >console.log(ev) : void
+>                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >ev : Event
+>   : ^^^^^
 
 });
 
 processEvents([clickEvent, scrollEvent]);
 >processEvents([clickEvent, scrollEvent]) : void
+>                                         : ^^^^
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
->[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; })[]
->clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
->scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
+>              : ^ ^^^^^^^^^                      ^^      ^^       ^^^^^^^^^
+>[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; })[]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    ^^^^^^
+>clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^    ^^^
+>scrollEvent : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^    ^^^
 
 processEvents([
 >processEvents([    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },]) : void
+>                                                                                                                                 : ^^^^
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
+>              : ^ ^^^^^^^^^                      ^^      ^^       ^^^^^^^^^
 >[    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },] : ({ name: "click"; callback: (ev: MouseEvent) => void; } | { name: "scroll"; callback: (ev: Event) => void; })[]
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
 
     { name: "click", callback: ev => console.log(ev) },
 >{ name: "click", callback: ev => console.log(ev) } : { name: "click"; callback: (ev: MouseEvent) => void; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >name : "click"
+>     : ^^^^^^^
 >"click" : "click"
+>        : ^^^^^^^
 >callback : (ev: MouseEvent) => void
+>         : ^  ^^^^^^^^^^^^^^^^^^^^^
 >ev => console.log(ev) : (ev: MouseEvent) => void
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^
 >ev : MouseEvent
+>   : ^^^^^^^^^^
 >console.log(ev) : void
+>                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >ev : MouseEvent
+>   : ^^^^^^^^^^
 
     { name: "scroll", callback: ev => console.log(ev) },
 >{ name: "scroll", callback: ev => console.log(ev) } : { name: "scroll"; callback: (ev: Event) => void; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
 >name : "scroll"
+>     : ^^^^^^^^
 >"scroll" : "scroll"
+>         : ^^^^^^^^
 >callback : (ev: Event) => void
+>         : ^  ^^^^^^^^^^^^^^^^
 >ev => console.log(ev) : (ev: Event) => void
+>                      : ^  ^^^^^^^^^^^^^^^^
 >ev : Event
+>   : ^^^^^
 >console.log(ev) : void
+>                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >ev : Event
+>   : ^^^^^
 
 ]);
 
@@ -475,153 +756,245 @@ processEvents([
 
 function ff1() {
 >ff1 : () => void
+>    : ^^^^^^^^^^
 
     type ArgMap = {
 >ArgMap : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }
+>       : ^^^^^^^                      ^^^^^^^^^^                                 ^^^
 
         sum: [a: number, b: number],
 >sum : [a: number, b: number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
         concat: [a: string, b: string, c: string]
 >concat : [a: string, b: string, c: string]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     type Keys = keyof ArgMap;
 >Keys : keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }
+>     : ^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^
 
     const funs: { [P in Keys]: (...args: ArgMap[P]) => void } = {
 >funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[P]
+>     : ^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^
 >{        sum: (a, b) => a + b,        concat: (a, b, c) => a + b + c    } : { sum: (a: number, b: number) => number; concat: (a: string, b: string, c: string) => string; }
+>                                                                          : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
         sum: (a, b) => a + b,
 >sum : (a: number, b: number) => number
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b) => a + b : (a: number, b: number) => number
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a + b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
         concat: (a, b, c) => a + b + c
 >concat : (a: string, b: string, c: string) => string
+>       : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b, c) => a + b + c : (a: string, b: string, c: string) => string
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 >a + b + c : string
+>          : ^^^^^^
 >a + b : string
+>      : ^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
     }
     function apply<K extends Keys>(funKey: K, ...args: ArgMap[K]) {
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >funKey : K
+>       : ^
 >args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]
+>     : ^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^
 
         const fn = funs[funKey];
 >fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
 >funs[funKey] : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
 >funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >funKey : K
+>       : ^
 
         fn(...args);
 >fn(...args) : void
+>            : ^^^^
 >fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^
 >...args : string | number
+>        : ^^^^^^^^^^^^^^^
 >args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]
+>     : ^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^
     }
     const x1 = apply('sum', 1, 2)
 >x1 : void
+>   : ^^^^
 >apply('sum', 1, 2) : void
+>                   : ^^^^
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >'sum' : "sum"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     const x2 = apply('concat', 'str1', 'str2', 'str3' )
 >x2 : void
+>   : ^^^^
 >apply('concat', 'str1', 'str2', 'str3' ) : void
+>                                         : ^^^^
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >'concat' : "concat"
+>         : ^^^^^^^^
 >'str1' : "str1"
+>       : ^^^^^^
 >'str2' : "str2"
+>       : ^^^^^^
 >'str3' : "str3"
+>       : ^^^^^^
 }
 
 // Repro from #47368
 
 type ArgMap = { a: number, b: string };
->ArgMap : { a: number; b: string; }
+>ArgMap : ArgMap
+>       : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
 >Func : Func<K>
+>     : ^^^^^^^
 >x : ArgMap[K]
+>  : ^^^^^^^^^
 
 type Funcs = { [K in keyof ArgMap]: Func<K> };
->Funcs : { a: Func<"a">; b: Func<"b">; }
+>Funcs : Funcs
+>      : ^^^^^
 
 function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >f1 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
+>   : ^ ^^^^^^^^^            ^^     ^^     ^^   ^^ ^^   ^^         ^^^^^^^^^
 >funcs : Funcs
+>      : ^^^^^
 >key : K
+>    : ^
 >arg : ArgMap[K]
+>    : ^^^^^^^^^
 
     funcs[key](arg);
 >funcs[key](arg) : void
+>                : ^^^^
 >funcs[key] : Funcs[K]
+>           : ^^^^^^^^
 >funcs : Funcs
+>      : ^^^^^
 >key : K
+>    : ^
 >arg : ArgMap[K]
+>    : ^^^^^^^^^
 }
 
 function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >f2 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
+>   : ^ ^^^^^^^^^            ^^     ^^     ^^   ^^ ^^   ^^         ^^^^^^^^^
 >funcs : Funcs
+>      : ^^^^^
 >key : K
+>    : ^
 >arg : ArgMap[K]
+>    : ^^^^^^^^^
 
     const func = funcs[key];  // Type Funcs[K]
 >func : Funcs[K]
+>     : ^^^^^^^^
 >funcs[key] : Funcs[K]
+>           : ^^^^^^^^
 >funcs : Funcs
+>      : ^^^^^
 >key : K
+>    : ^
 
     func(arg);
 >func(arg) : void
+>          : ^^^^
 >func : Funcs[K]
+>     : ^^^^^^^^
 >arg : ArgMap[K]
+>    : ^^^^^^^^^
 }
 
 function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >f3 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
+>   : ^ ^^^^^^^^^            ^^     ^^     ^^   ^^ ^^   ^^         ^^^^^^^^^
 >funcs : Funcs
+>      : ^^^^^
 >key : K
+>    : ^
 >arg : ArgMap[K]
+>    : ^^^^^^^^^
 
     const func: Func<K> = funcs[key];
 >func : Func<K>
+>     : ^^^^^^^
 >funcs[key] : Funcs[K]
+>           : ^^^^^^^^
 >funcs : Funcs
+>      : ^^^^^
 >key : K
+>    : ^
 
     func(arg);
 >func(arg) : void
+>          : ^^^^
 >func : Func<K>
+>     : ^^^^^^^
 >arg : ArgMap[K]
+>    : ^^^^^^^^^
 }
 
 function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 >f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
+>   : ^ ^^^^^^^^^            ^^ ^^                   ^^ ^^        ^^^^^^^^^
 >x : Func<"b"> | Func<"a">
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >y : Funcs[K]
+>  : ^^^^^^^^
 
     x = y;
 >x = y : Funcs[K]
+>      : ^^^^^^^^
 >x : Func<"b"> | Func<"a">
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >y : Funcs[K]
+>  : ^^^^^^^^
 }
 
 // Repro from #47890
@@ -629,70 +1002,103 @@ function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 interface MyObj {
     someKey: {
 >someKey : { name: string; }
+>        : ^^^^^^^^      ^^^
 
       name: string;
 >name : string
+>     : ^^^^^^
     }
     someOtherKey: {
 >someOtherKey : { name: number; }
+>             : ^^^^^^^^      ^^^
 
       name: number;
 >name : number
+>     : ^^^^^^
     }
 }
 
 const ref: MyObj = {
 >ref : MyObj
+>    : ^^^^^
 >{    someKey: { name: "" },    someOtherKey: { name: 42 }} : { someKey: { name: string; }; someOtherKey: { name: number; }; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     someKey: { name: "" },
 >someKey : { name: string; }
+>        : ^^^^^^^^^^^^^^^^^
 >{ name: "" } : { name: string; }
+>             : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
     someOtherKey: { name: 42 }
 >someOtherKey : { name: number; }
+>             : ^^^^^^^^^^^^^^^^^
 >{ name: 42 } : { name: number; }
+>             : ^^^^^^^^^^^^^^^^^
 >name : number
+>     : ^^^^^^
 >42 : 42
+>   : ^^
 
 };
 
 function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
->func : <K extends keyof MyObj>(k: K) => MyObj[K]['name'] | undefined
+>func : <K extends keyof MyObj>(k: K) => MyObj[K]["name"] | undefined
+>     : ^ ^^^^^^^^^           ^^ ^^ ^^^^^                            
 >k : K
+>  : ^
 
     const myObj: Partial<MyObj>[K] = ref[k];
 >myObj : Partial<MyObj>[K]
+>      : ^^^^^^^^^^^^^^^^^
 >ref[k] : MyObj[K]
+>       : ^^^^^^^^
 >ref : MyObj
+>    : ^^^^^
 >k : K
+>  : ^
 
     if (myObj) {
 >myObj : Partial<MyObj>[K]
+>      : ^^^^^^^^^^^^^^^^^
 
       return myObj.name;
 >myObj.name : string | number
+>           : ^^^^^^^^^^^^^^^
 >myObj : { name: string; } | { name: number; }
+>      : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >name : string | number
+>     : ^^^^^^^^^^^^^^^
     }
     const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
 >myObj2 : { name: string; } | { name: number; } | undefined
+>       : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >ref[k] : { name: string; } | { name: number; }
+>       : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >ref : MyObj
+>    : ^^^^^
 >k : K
+>  : ^
 
     if (myObj2) {
 >myObj2 : { name: string; } | { name: number; }
+>       : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 
       return myObj2.name;
 >myObj2.name : string | number
+>            : ^^^^^^^^^^^^^^^
 >myObj2 : { name: string; } | { name: number; }
+>       : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >name : string | number
+>     : ^^^^^^^^^^^^^^^
     }
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 // Repro from #48157
@@ -700,91 +1106,131 @@ function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
 interface Foo {
     bar?: string
 >bar : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
->foo : <T extends "bar">(prop: T, f: Required<Foo>) => void
+>foo : <T extends keyof Foo>(prop: T, f: Required<Foo>) => void
+>    : ^ ^^^^^^^^^         ^^    ^^ ^^ ^^             ^^^^^^^^^
 >prop : T
+>     : ^
 >f : Required<Foo>
+>  : ^^^^^^^^^^^^^
 
     bar(f[prop]);
 >bar(f[prop]) : void
+>             : ^^^^
 >bar : (t: string) => void
+>    : ^ ^^      ^^^^^    
 >f[prop] : Required<Foo>[T]
+>        : ^^^^^^^^^^^^^^^^
 >f : Required<Foo>
+>  : ^^^^^^^^^^^^^
 >prop : T
+>     : ^
 }
 
 declare function bar(t: string): void;
 >bar : (t: string) => void
+>    : ^ ^^      ^^^^^    
 >t : string
+>  : ^^^^^^
 
 // Repro from #48246
 
 declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
->makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>makeCompleteLookupMapping : <T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>                          : ^ ^^^^^^^^^                  ^^    ^^^^^^^^^               ^^   ^^ ^^    ^^    ^^^^^                                            
 
     ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
 >ops : T
+>    : ^
 >attr : Attr
+>     : ^^^^
 
 const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
 >ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ name: 'a'}, {name: 'b'}] as const : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ name: 'a'}, {name: 'b'}] : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: 'a'} : { readonly name: "a"; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >name : "a"
+>     : ^^^
 >'a' : "a"
+>    : ^^^
 >{name: 'b'} : { readonly name: "b"; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >name : "b"
+>     : ^^^
 >'b' : "b"
+>    : ^^^
 
 const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
 >BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
->makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>makeCompleteLookupMapping : <T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>                          : ^ ^^^^^^^^^                  ^^    ^^^^^^^^^               ^^   ^^ ^^    ^^    ^^^^^                                            
 >ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'name' : "name"
+>       : ^^^^^^
 
 type BarLookup = typeof BAR_LOOKUP;
 >BarLookup : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
->Baz : { a: "a"; b: "b"; }
+>Baz : Baz
+>    : ^^^
 
 // repro from #43982
 
 interface Original {
   prop1: {
 >prop1 : { subProp1: string; subProp2: string; }
+>      : ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 
     subProp1: string;
 >subProp1 : string
+>         : ^^^^^^
 
     subProp2: string;
 >subProp2 : string
+>         : ^^^^^^
 
   };
   prop2: {
 >prop2 : { subProp3: string; subProp4: string; }
+>      : ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 
     subProp3: string;
 >subProp3 : string
+>         : ^^^^^^
 
     subProp4: string;
 >subProp4 : string
+>         : ^^^^^^
 
   };
 }
 type KeyOfOriginal = keyof Original;
 >KeyOfOriginal : keyof Original
+>              : ^^^^^^^^^^^^^^
 
 type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
 >NestedKeyOfOriginalFor : keyof Original[T]
+>                       : ^^^^^^^^^^^^^^^^^
 
 type SameKeys<T> = {
 >SameKeys : SameKeys<T>
+>         : ^^^^^^^^^^^
 
   [K in keyof T]: {
     [K2 in keyof T[K]]: number;
@@ -793,39 +1239,57 @@ type SameKeys<T> = {
 
 type MappedFromOriginal = SameKeys<Original>;
 >MappedFromOriginal : SameKeys<Original>
+>                   : ^^^^^^^^^^^^^^^^^^
 
 const getStringAndNumberFromOriginalAndMapped = <
->getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
-><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+>getStringAndNumberFromOriginalAndMapped : <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
+>                                        : ^ ^^^^^^^^^             ^^ ^^^^^^^^^                         ^^        ^^        ^^                  ^^                  ^^   ^^ ^^         ^^ ^^^^^                                          
+><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
+>                                                                                                                                                                                                                                                                                   : ^ ^^^^^^^^^             ^^ ^^^^^^^^^                         ^^        ^^        ^^                  ^^                  ^^   ^^ ^^         ^^ ^^^^^                                          
 
   K extends KeyOfOriginal,
   N extends NestedKeyOfOriginalFor<K>
 >(
   original: Original,
 >original : Original
+>         : ^^^^^^^^
 
   mappedFromOriginal: MappedFromOriginal,
 >mappedFromOriginal : SameKeys<Original>
+>                   : ^^^^^^^^^^^^^^^^^^
 
   key: K,
 >key : K
+>    : ^
 
   nestedKey: N
 >nestedKey : N
+>          : ^
 
 ): [Original[K][N], MappedFromOriginal[K][N]] => {
   return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
 >[original[key][nestedKey], mappedFromOriginal[key][nestedKey]] : [Original[K][N], SameKeys<Original>[K][N]]
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >original[key][nestedKey] : Original[K][N]
+>                         : ^^^^^^^^^^^^^^
 >original[key] : Original[K]
+>              : ^^^^^^^^^^^
 >original : Original
+>         : ^^^^^^^^
 >key : K
+>    : ^
 >nestedKey : N
+>          : ^
 >mappedFromOriginal[key][nestedKey] : SameKeys<Original>[K][N]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >mappedFromOriginal[key] : SameKeys<Original>[K]
+>                        : ^^^^^^^^^^^^^^^^^^^^^
 >mappedFromOriginal : SameKeys<Original>
+>                   : ^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 >nestedKey : N
+>          : ^
 
 };
 
@@ -833,68 +1297,94 @@ const getStringAndNumberFromOriginalAndMapped = <
 interface Config {
   string: string;
 >string : string
+>       : ^^^^^^
 
   number: number;
 >number : number
+>       : ^^^^^^
 }
 
 function getConfigOrDefault<T extends keyof Config>(
 >getConfigOrDefault : <T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]) => Config[T]
+>                   : ^ ^^^^^^^^^            ^^          ^^               ^^   ^^ ^^            ^^         ^^^^^         
 
   userConfig: Partial<Config>,
 >userConfig : Partial<Config>
+>           : ^^^^^^^^^^^^^^^
 
   key: T,
 >key : T
+>    : ^
 
   defaultValue: Config[T]
 >defaultValue : Config[T]
+>             : ^^^^^^^^^
 
 ): Config[T] {
   const userValue = userConfig[key]; 
 >userValue : Partial<Config>[T]
+>          : ^^^^^^^^^^^^^^^^^^
 >userConfig[key] : Partial<Config>[T]
+>                : ^^^^^^^^^^^^^^^^^^
 >userConfig : Partial<Config>
+>           : ^^^^^^^^^^^^^^^
 >key : T
+>    : ^
 
   const assertedCheck = userValue ? userValue! : defaultValue;
 >assertedCheck : Config[T]
+>              : ^^^^^^^^^
 >userValue ? userValue! : defaultValue : Config[T]
+>                                      : ^^^^^^^^^
 >userValue : Partial<Config>[T]
+>          : ^^^^^^^^^^^^^^^^^^
 >userValue! : NonNullable<Partial<Config>[T]>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >userValue : NonNullable<Partial<Config>[T]>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultValue : Config[T]
+>             : ^^^^^^^^^
 
   return assertedCheck;
 >assertedCheck : Config[T]
+>              : ^^^^^^^^^
 }
 
 // repro from #47523
 
 type Foo1 = {
->Foo1 : { x: number; y: string; }
+>Foo1 : Foo1
+>     : ^^^^
 
   x: number;
 >x : number
+>  : ^^^^^^
 
   y: string;
 >y : string
+>  : ^^^^^^
 
 };
 
 function getValueConcrete<K extends keyof Foo1>(
 >getValueConcrete : <K extends keyof Foo1>(o: Partial<Foo1>, k: K) => Foo1[K] | undefined
+>                 : ^ ^^^^^^^^^          ^^ ^^             ^^ ^^ ^^^^^                   
 
   o: Partial<Foo1>,
 >o : Partial<Foo1>
+>  : ^^^^^^^^^^^^^
 
   k: K
 >k : K
+>  : ^
 
 ): Foo1[K] | undefined {
   return o[k];
 >o[k] : Partial<Foo1>[K]
+>     : ^^^^^^^^^^^^^^^^
 >o : Partial<Foo1>
+>  : ^^^^^^^^^^^^^
 >k : K
+>  : ^
 }
 

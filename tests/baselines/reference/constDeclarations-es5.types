@@ -1,16 +1,26 @@
-=== tests/cases/compiler/constDeclarations-es5.ts ===
+//// [tests/cases/compiler/constDeclarations-es5.ts] ////
+
+=== constDeclarations-es5.ts ===
 const z7 = false;
 >z7 : false
+>   : ^^^^^
 >false : false
+>      : ^^^^^
 
 const z8: number = 23;
 >z8 : number
+>   : ^^^^^^
 >23 : 23
+>   : ^^
 
 const z9 = 0, z10 :string = "", z11 = null;
 >z9 : 0
+>   : ^
 >0 : 0
+>  : ^
 >z10 : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 >z11 : any
 

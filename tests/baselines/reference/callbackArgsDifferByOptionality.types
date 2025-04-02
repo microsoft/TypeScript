@@ -1,20 +1,33 @@
-=== tests/cases/compiler/callbackArgsDifferByOptionality.ts ===
+//// [tests/cases/compiler/callbackArgsDifferByOptionality.ts] ////
+
+=== callbackArgsDifferByOptionality.ts ===
 function x3(callback: (x?: 'hi') => number);
->x3 : { (callback: (x?: 'hi') => number): any; (callback: (x: string) => number): any; }
->callback : (x?: 'hi') => number
+>x3 : { (callback: (x?: "hi") => number): any; (callback: (x: string) => number): any; }
+>   : ^^^        ^^                    ^^^^^^^^^        ^^                     ^^^^^^^^^
+>callback : (x?: "hi") => number
+>         : ^ ^^^    ^^^^^      
 >x : "hi"
+>  : ^^^^
 
 function x3(callback: (x: string) => number);
 >x3 : { (callback: (x?: "hi") => number): any; (callback: (x: string) => number): any; }
+>   : ^^^        ^^                    ^^^^^^^^^        ^^                     ^^^^^^^^^
 >callback : (x: string) => number
+>         : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
 function x3(callback: (x: any) => number) {
 >x3 : { (callback: (x?: "hi") => number): any; (callback: (x: string) => number): any; }
+>   : ^^^        ^^                    ^^^^^^^^^        ^^                     ^^^^^^^^^
 >callback : (x: any) => number
+>         : ^ ^^   ^^^^^      
 >x : any
+>  : ^^^
 
     cb();
 >cb() : any
+>     : ^^^
 >cb : any
+>   : ^^^
 }

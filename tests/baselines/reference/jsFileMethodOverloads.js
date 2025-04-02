@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileMethodOverloads.ts] ////
+
 //// [jsFileMethodOverloads.js]
 /**
  * @template T
@@ -105,8 +107,28 @@ declare class Example<T> {
      */
     constructor(value: T);
     value: T;
-    getTypeName(this: Example<number>): 'number';
-    getTypeName(this: Example<string>): 'string';
+    /**
+     * @overload
+     * @param {Example<number>} this
+     * @returns {'number'}
+     */
+    getTypeName(this: Example<number>): "number";
+    /**
+     * @overload
+     * @param {Example<string>} this
+     * @returns {'string'}
+     */
+    getTypeName(this: Example<string>): "string";
+    /**
+     * @template U
+     * @overload
+     * @param {(y: T) => U} fn
+     * @returns {U}
+     */
     transform<U>(fn: (y: T) => U): U;
+    /**
+     * @overload
+     * @returns {T}
+     */
     transform(): T;
 }

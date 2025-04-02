@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/controlFlow/controlFlowNoIntermediateErrors.ts] ////
+
+=== controlFlowNoIntermediateErrors.ts ===
+// Repros from #46475
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowNoIntermediateErrors.ts, 0, 0))
+
+    let code: 0 | 1 | 2 = 0;
+>code : Symbol(code, Decl(controlFlowNoIntermediateErrors.ts, 3, 7))
+
+    const otherCodes: (0 | 1 | 2)[] = [2, 0, 1, 0, 2, 2, 2, 0, 1, 0, 2, 1, 1, 0, 2, 1];
+>otherCodes : Symbol(otherCodes, Decl(controlFlowNoIntermediateErrors.ts, 4, 9))
+
+    for (const code2 of otherCodes) {
+>code2 : Symbol(code2, Decl(controlFlowNoIntermediateErrors.ts, 5, 14))
+>otherCodes : Symbol(otherCodes, Decl(controlFlowNoIntermediateErrors.ts, 4, 9))
+
+        if (code2 === 0) {        
+>code2 : Symbol(code2, Decl(controlFlowNoIntermediateErrors.ts, 5, 14))
+
+            code = code === 2 ? 1 : 0;
+>code : Symbol(code, Decl(controlFlowNoIntermediateErrors.ts, 3, 7))
+>code : Symbol(code, Decl(controlFlowNoIntermediateErrors.ts, 3, 7))
+        }
+        else {
+            code = 2;
+>code : Symbol(code, Decl(controlFlowNoIntermediateErrors.ts, 3, 7))
+        }
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowNoIntermediateErrors.ts, 13, 1))
+
+    let code: 0 | 1 = 0;
+>code : Symbol(code, Decl(controlFlowNoIntermediateErrors.ts, 16, 7))
+
+    while (true) {
+        code = code === 1 ? 0 : 1;
+>code : Symbol(code, Decl(controlFlowNoIntermediateErrors.ts, 16, 7))
+>code : Symbol(code, Decl(controlFlowNoIntermediateErrors.ts, 16, 7))
+    }
+}
+

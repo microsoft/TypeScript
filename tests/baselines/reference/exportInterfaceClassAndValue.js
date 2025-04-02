@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportInterfaceClassAndValue.ts] ////
+
 //// [exportInterfaceClassAndValue.ts]
 export const foo = 1
 export declare class foo {}

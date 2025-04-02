@@ -1,36 +1,63 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/tsxNamespacedTagName2.tsx] ////
+
+=== a.tsx ===
 declare var React: any;
 >React : any
+>      : ^^^
 
 const a = <svg:path></svg:path>;
 >a : any
+>  : ^^^
 ><svg:path></svg:path> : any
+>                      : ^^^
 >svg : any
+>    : ^^^
 >path : any
+>     : ^^^
 >svg : any
+>    : ^^^
 >path : any
+>     : ^^^
 
 const b = <svg : path></svg : path>;
 >b : any
+>  : ^^^
 ><svg : path></svg : path> : any
+>                          : ^^^
 >svg : any
+>    : ^^^
 >path : any
+>     : ^^^
 >svg : any
+>    : ^^^
 >path : any
+>     : ^^^
 
 const c = <A:foo></A:foo>;
 >c : any
+>  : ^^^
 ><A:foo></A:foo> : any
+>                : ^^^
 >A : any
+>  : ^^^
 >foo : any
+>    : ^^^
 >A : any
+>  : ^^^
 >foo : any
+>    : ^^^
 
 const d = <a:foo></a:foo>;
 >d : any
+>  : ^^^
 ><a:foo></a:foo> : any
+>                : ^^^
 >a : any
+>  : ^^^
 >foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 >foo : any
+>    : ^^^
 

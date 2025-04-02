@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts] ////
+
 //// [forInContinueStatements.ts]
 for(var x in {}) {
     continue;

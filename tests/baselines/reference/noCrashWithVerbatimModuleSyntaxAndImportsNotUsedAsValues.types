@@ -1,12 +1,18 @@
-=== tests/cases/compiler/file.ts ===
+//// [tests/cases/compiler/noCrashWithVerbatimModuleSyntaxAndImportsNotUsedAsValues.ts] ////
+
+=== file.ts ===
 export class A {}
 >A : A
+>  : ^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {A} from "./file";
 >A : typeof A
+>  : ^^^^^^^^
 
 const a: A = null as any;
 >a : A
+>  : ^
 >null as any : any
+>            : ^^^
 

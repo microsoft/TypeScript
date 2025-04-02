@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts] ////
+
 //// [logicalOrExpressionIsContextuallyTyped.ts]
 // The || operator permits the operands to be of any type.
 // If the || expression is contextually typed, the operands are contextually typed by the

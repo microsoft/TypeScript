@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts ===
+//// [tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts] ////
+
+=== functionsWithImplicitReturnTypeAssignableToUndefined.ts ===
 function f1(): unknown {
 >f1 : Symbol(f1, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 0, 0))
 

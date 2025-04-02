@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesSpecifiedModule.ts] ////
+
 //// [file1.ts]
 export var x;
 

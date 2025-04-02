@@ -1,16 +1,27 @@
-=== tests/cases/compiler/widenToAny2.ts ===
+//// [tests/cases/compiler/widenToAny2.ts] ////
+
+=== widenToAny2.ts ===
 function foo3<T>(x: T[]): T {
 >foo3 : <T>(x: T[]) => T
+>     : ^ ^^ ^^   ^^^^^ 
 >x : T[]
+>  : ^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
 >z3 : number
+>   : ^^^^^^
 >foo3([undefined, "def"]) : string
+>                         : ^^^^^^
 >foo3 : <T>(x: T[]) => T
+>     : ^ ^^ ^^   ^^^^^ 
 >[undefined, "def"] : string[]
+>                   : ^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >"def" : "def"
+>      : ^^^^^
 

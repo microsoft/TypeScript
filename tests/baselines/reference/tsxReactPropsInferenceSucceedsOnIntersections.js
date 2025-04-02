@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxReactPropsInferenceSucceedsOnIntersections.tsx] ////
+
 //// [tsxReactPropsInferenceSucceedsOnIntersections.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

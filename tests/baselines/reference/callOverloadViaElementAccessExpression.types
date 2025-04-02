@@ -1,18 +1,27 @@
-=== tests/cases/compiler/callOverloadViaElementAccessExpression.ts ===
+//// [tests/cases/compiler/callOverloadViaElementAccessExpression.ts] ////
+
+=== callOverloadViaElementAccessExpression.ts ===
 class C {
 >C : C
+>  : ^
 
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
+>  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: any): any {
 >foo : { (x: number): number; (x: string): string; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : any
+>  : ^^^
 
         return null;
     }
@@ -20,22 +29,37 @@ class C {
 
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r: string = c['foo'](1);
 >r : string
+>  : ^^^^^^
 >c['foo'](1) : number
+>            : ^^^^^^
 >c['foo'] : { (x: number): number; (x: string): string; }
+>         : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c : C
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 var r2: number = c['foo']('');
 >r2 : number
+>   : ^^^^^^
 >c['foo']('') : string
+>             : ^^^^^^
 >c['foo'] : { (x: number): number; (x: string): string; }
+>         : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c : C
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 >'' : ""
+>   : ^^
 

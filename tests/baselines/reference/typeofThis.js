@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts] ////
+
 //// [typeofThis.ts]
 class Test {
     data = {};

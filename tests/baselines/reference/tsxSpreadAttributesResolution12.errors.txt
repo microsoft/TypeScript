@@ -1,11 +1,11 @@
-tests/cases/conformance/jsx/file.tsx(27,33): error TS2322: Type 'true' is not assignable to type 'false'.
-tests/cases/conformance/jsx/file.tsx(28,50): error TS2322: Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(30,11): error TS2322: Type '{ y: true; x: 2; overwrite: string; }' is not assignable to type 'Prop'.
+file.tsx(27,33): error TS2322: Type 'true' is not assignable to type 'false'.
+file.tsx(28,50): error TS2322: Type '3' is not assignable to type '2'.
+file.tsx(30,11): error TS2322: Type '{ y: true; x: 2; overwrite: string; }' is not assignable to type 'Prop'.
   Types of property 'y' are incompatible.
     Type 'true' is not assignable to type 'false'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== file.tsx (3 errors) ====
     import React = require('react');
     
     const obj = {};
@@ -35,11 +35,11 @@ tests/cases/conformance/jsx/file.tsx(30,11): error TS2322: Type '{ y: true; x: 2
     let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
                                     ~
 !!! error TS2322: Type 'true' is not assignable to type 'false'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:14:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:14:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
     let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
                                                      ~
 !!! error TS2322: Type '3' is not assignable to type '2'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:13:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:13:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
     let x2 = <OverWriteAttr {...anyobj} x={3} />
     let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
               ~~~~~~~~~~~~~

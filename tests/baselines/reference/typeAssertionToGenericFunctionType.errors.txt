@@ -1,8 +1,8 @@
-tests/cases/compiler/typeAssertionToGenericFunctionType.ts(5,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/typeAssertionToGenericFunctionType.ts(6,3): error TS2554: Expected 1 arguments, but got 0.
+typeAssertionToGenericFunctionType.ts(5,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+typeAssertionToGenericFunctionType.ts(6,3): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/compiler/typeAssertionToGenericFunctionType.ts (2 errors) ====
+==== typeAssertionToGenericFunctionType.ts (2 errors) ====
     var x = {
         a: < <T>(x: T) => T > ((x: any) => 1),
         b: <T>(x: T) => { x }
@@ -11,6 +11,6 @@ tests/cases/compiler/typeAssertionToGenericFunctionType.ts(6,3): error TS2554: E
                 ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     x.b<string>(); // error
-      ~~~~~~~~~~~
+      ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/typeAssertionToGenericFunctionType.ts:3:12: An argument for 'x' was not provided.
+!!! related TS6210 typeAssertionToGenericFunctionType.ts:3:12: An argument for 'x' was not provided.

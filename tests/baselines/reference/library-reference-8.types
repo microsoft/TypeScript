@@ -1,28 +1,40 @@
+//// [tests/cases/conformance/references/library-reference-8.ts] ////
+
 === /test/foo.ts ===
 /// <reference types="alpha" />
 /// <reference types="beta" />
 var x: string = alpha.a + beta.b;
 >x : string
+>  : ^^^^^^
 >alpha.a + beta.b : string
+>                 : ^^^^^^
 >alpha.a : string
+>        : ^^^^^^
 >alpha : { a: string; }
+>      : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >beta.b : string
+>       : ^^^^^^
 >beta : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 
 
 === /test/types/alpha/index.d.ts ===
-// Don't crash in circular library reference situations
-
 /// <reference types="beta" />
 declare var alpha: { a: string };
 >alpha : { a: string; }
+>      : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 === /test/types/beta/index.d.ts ===
 /// <reference types="alpha" />
 declare var beta: { b: string };
 >beta : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 

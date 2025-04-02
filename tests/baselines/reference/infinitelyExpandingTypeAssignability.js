@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypeAssignability.ts] ////
+
 //// [infinitelyExpandingTypeAssignability.ts]
 interface A<T> {
    x : T

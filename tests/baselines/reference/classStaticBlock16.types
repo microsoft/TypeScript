@@ -1,72 +1,113 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts] ////
+
+=== classStaticBlock16.ts ===
 let getX: (c: C) => number;
 >getX : (c: C) => number
+>     : ^ ^^ ^^^^^      
 >c : C
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
   #x = 1
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
   constructor(x: number) {
 >x : number
+>  : ^^^^^^
 
     this.#x = x;
 >this.#x = x : number
+>            : ^^^^^^
 >this.#x : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
   }
 
   static {
     // getX has privileged access to #x
     getX = (obj: C) => obj.#x;
 >getX = (obj: C) => obj.#x : (obj: C) => number
+>                          : ^   ^^ ^^^^^^^^^^^
 >getX : (c: C) => number
+>     : ^ ^^ ^^^^^      
 >(obj: C) => obj.#x : (obj: C) => number
+>                   : ^   ^^ ^^^^^^^^^^^
 >obj : C
+>    : ^
 >obj.#x : number
+>       : ^^^^^^
 >obj : C
+>    : ^
 
     getY = (obj: D) => obj.#y;
 >getY = (obj: D) => obj.#y : (obj: D) => any
+>                          : ^   ^^ ^^^^^^^^
 >getY : (c: D) => number
+>     : ^ ^^ ^^^^^      
 >(obj: D) => obj.#y : (obj: D) => any
+>                   : ^   ^^ ^^^^^^^^
 >obj : D
+>    : ^
 >obj.#y : any
+>       : ^^^
 >obj : D
+>    : ^
   }
 }
 
 let getY: (c: D) => number;
 >getY : (c: D) => number
+>     : ^ ^^ ^^^^^      
 >c : D
+>  : ^
 
 class D {
 >D : D
+>  : ^
 
   #y = 1
 >#y : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
   static {
     // getY has privileged access to y
     getX = (obj: C) => obj.#x;
 >getX = (obj: C) => obj.#x : (obj: C) => any
+>                          : ^   ^^ ^^^^^^^^
 >getX : (c: C) => number
+>     : ^ ^^ ^^^^^      
 >(obj: C) => obj.#x : (obj: C) => any
+>                   : ^   ^^ ^^^^^^^^
 >obj : C
+>    : ^
 >obj.#x : any
+>       : ^^^
 >obj : C
+>    : ^
 
     getY = (obj: D) => obj.#y;
 >getY = (obj: D) => obj.#y : (obj: D) => number
+>                          : ^   ^^ ^^^^^^^^^^^
 >getY : (c: D) => number
+>     : ^ ^^ ^^^^^      
 >(obj: D) => obj.#y : (obj: D) => number
+>                   : ^   ^^ ^^^^^^^^^^^
 >obj : D
+>    : ^
 >obj.#y : number
+>       : ^^^^^^
 >obj : D
+>    : ^
   }
 }

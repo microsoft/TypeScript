@@ -1,12 +1,17 @@
+//// [tests/cases/compiler/typeReferenceDirectives5.ts] ////
+
 === /app.ts ===
 /// <reference types="lib"/>
 import {$} from "./ref";
 >$ : any
+>  : ^^^
 
 export interface A {
     x: typeof $;
 >x : { x: number; }
+>  : ^^^^^      ^^^
 >$ : { x: number; }
+>  : ^^^^^      ^^^
 }
 === /ref.d.ts ===
 export interface $ { x }
@@ -15,5 +20,7 @@ export interface $ { x }
 === /types/lib/index.d.ts ===
 declare let $: { x: number }
 >$ : { x: number; }
+>  : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectRestBindingContextualInference.ts ===
+//// [tests/cases/compiler/objectRestBindingContextualInference.ts] ////
+
+=== objectRestBindingContextualInference.ts ===
 // slimmed-down repro from #52629
 
 type ImageHolder<K extends string> = {

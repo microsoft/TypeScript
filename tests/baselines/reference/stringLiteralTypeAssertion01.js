@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts] ////
+
 //// [stringLiteralTypeAssertion01.ts]
 type S = "a" | "b";
 type T = S[] | S;

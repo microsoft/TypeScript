@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_ensureInterfaceImpl.ts] ////
+
 //// [typeSatisfaction_ensureInterfaceImpl.ts]
 type Movable = {
     move(distance: number): void;

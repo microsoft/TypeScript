@@ -1,13 +1,20 @@
-=== tests/cases/compiler/unusedLocalsInMethod2.ts ===
+//// [tests/cases/compiler/unusedLocalsInMethod2.ts] ////
+
+=== unusedLocalsInMethod2.ts ===
 class greeter {
 >greeter : greeter
+>        : ^^^^^^^
 
     public function1() {
 >function1 : () => void
+>          : ^^^^^^^^^^
 
         var x, y = 10;
 >x : any
+>  : ^^^
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }

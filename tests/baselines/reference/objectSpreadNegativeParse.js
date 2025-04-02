@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts] ////
+
 //// [objectSpreadNegativeParse.ts]
 let o7 = { ...o? };
 let o8 = { ...*o };

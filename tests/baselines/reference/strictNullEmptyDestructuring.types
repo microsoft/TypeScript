@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictNullEmptyDestructuring.ts ===
+//// [tests/cases/compiler/strictNullEmptyDestructuring.ts] ////
+
+=== strictNullEmptyDestructuring.ts ===
 // Repro from #20873
 
 let [] = null;
@@ -7,74 +9,129 @@ let { } = null;
 
 ({} = null);
 >({} = null) : any
+>            : ^^^
 >{} = null : any
+>          : ^^^
 >{} : {}
+>   : ^^
 
 let { } = undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 
 ({} = undefined);
 >({} = undefined) : any
+>                 : ^^^
 >{} = undefined : any
+>               : ^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let { } = Math.random() ? {} : null;
 >Math.random() ? {} : null : {} | null
+>                          : ^^^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >{} : {}
+>   : ^^
 
 ({} = Math.random() ? {} : null);
 >({} = Math.random() ? {} : null) : {}
+>                                 : ^^
 >{} = Math.random() ? {} : null : {}
+>                               : ^^
 >{} : {}
+>   : ^^
 >Math.random() ? {} : null : {} | null
+>                          : ^^^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >{} : {}
+>   : ^^
 
 let { } = Math.random() ? {} : undefined;
 >Math.random() ? {} : undefined : {} | undefined
+>                               : ^^^^^^^^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 ({} = Math.random() ? {} : undefined);
 >({} = Math.random() ? {} : undefined) : {}
+>                                      : ^^
 >{} = Math.random() ? {} : undefined : {}
+>                                    : ^^
 >{} : {}
+>   : ^^
 >Math.random() ? {} : undefined : {} | undefined
+>                               : ^^^^^^^^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let { } = Math.random() ? null : undefined;
 >Math.random() ? null : undefined : null | undefined
+>                                 : ^^^^^^^^^^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >undefined : undefined
+>          : ^^^^^^^^^
 
 ({} = Math.random() ? null : undefined);
 >({} = Math.random() ? null : undefined) : any
+>                                        : ^^^
 >{} = Math.random() ? null : undefined : any
+>                                      : ^^^
 >{} : {}
+>   : ^^
 >Math.random() ? null : undefined : null | undefined
+>                                 : ^^^^^^^^^^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >undefined : undefined
+>          : ^^^^^^^^^
 

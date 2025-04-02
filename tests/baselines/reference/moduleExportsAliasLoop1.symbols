@@ -1,6 +1,8 @@
-=== tests/cases/conformance/salsa/x.js ===
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop1.ts] ////
+
+=== x.js ===
 exports.fn1();
->exports : Symbol("tests/cases/conformance/salsa/x", Decl(x.js, 0, 0))
+>exports : Symbol("x", Decl(x.js, 0, 0))
 
 exports.fn2 = Math.min;
 >exports.fn2 : Symbol(fn2, Decl(x.js, 0, 14))

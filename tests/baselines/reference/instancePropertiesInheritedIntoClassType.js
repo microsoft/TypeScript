@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts] ////
+
 //// [instancePropertiesInheritedIntoClassType.ts]
 module NonGeneric {
     class C {

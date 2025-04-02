@@ -1,39 +1,58 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace5.ts] ////
+
 === /a.ts ===
 export class A {}
 >A : A
+>  : ^
 
 export class B {}
 >B : B
+>  : ^
 
 export class X {}
 >X : X
+>  : ^
 
 === /b.ts ===
 export type * from "./a";
 export { X } from "./a";
 >X : typeof import("/a").X
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 === /c.ts ===
 import { A, B as C, X } from "./b";
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof C
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 
 let _: A = new A();   // Error
 >_ : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 let __: C = new C();  // Error
 >__ : C
+>   : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 let ___: X = new X(); // Ok
 >___ : X
+>    : ^
 >new X() : X
+>        : ^
 >X : typeof X
+>  : ^^^^^^^^
 
 === /d.ts ===
 
@@ -43,21 +62,33 @@ export * from "./a";
 === /e.ts ===
 import { A, B, X } from "./d";
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 
 let _: A = new A();   // Ok
 >_ : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 let __: B = new B();  // Ok
 >__ : B
+>   : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 let ___: X = new X(); // Ok
 >___ : X
+>    : ^
 >new X() : X
+>        : ^
 >X : typeof X
+>  : ^^^^^^^^
 

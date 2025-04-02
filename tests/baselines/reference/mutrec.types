@@ -1,79 +1,110 @@
-=== tests/cases/compiler/mutrec.ts ===
+//// [tests/cases/compiler/mutrec.ts] ////
+
+=== mutrec.ts ===
 interface A {
     x:B[];
 >x : B[]
+>  : ^^^
 }
 
 interface B {
     x:A[];
 >x : A[]
+>  : ^^^
 }
 
 function f(p: A) { return p };
 >f : (p: A) => A
+>  : ^ ^^ ^^^^^^
 >p : A
+>  : ^
 >p : A
+>  : ^
 
 var b:B;
 >b : B
+>  : ^
 
 f(b);
 >f(b) : A
+>     : ^
 >f : (p: A) => A
+>  : ^ ^^ ^^^^^^
 >b : B
+>  : ^
 
 interface I1 {
     y:I2;
 >y : I2
+>  : ^^
 }
 
 interface I2 {
     y:I3;
 >y : I3
+>  : ^^
 }
 
 interface I3 {
     y:I1;
 >y : I1
+>  : ^^
 }
 
 function g(p: I1) { return p };
 >g : (p: I1) => I1
+>  : ^ ^^  ^^^^^^^
 >p : I1
+>  : ^^
 >p : I1
+>  : ^^
 
 var i2:I2;
 >i2 : I2
+>   : ^^
 
 g(i2);
 >g(i2) : I1
+>      : ^^
 >g : (p: I1) => I1
+>  : ^ ^^  ^^^^^^^
 >i2 : I2
+>   : ^^
 
 var i3:I3;
 >i3 : I3
+>   : ^^
 
 g(i3);
 >g(i3) : I1
+>      : ^^
 >g : (p: I1) => I1
+>  : ^ ^^  ^^^^^^^
 >i3 : I3
+>   : ^^
 
 interface I4 {
     y:I5;
 >y : I5
+>  : ^^
 }
 
 interface I5 {
     y:I4;
 >y : I4
+>  : ^^
 }
 
 var i4:I4;
 >i4 : I4
+>   : ^^
 
 g(i4);
 >g(i4) : I1
+>      : ^^
 >g : (p: I1) => I1
+>  : ^ ^^  ^^^^^^^
 >i4 : I4
+>   : ^^
 
 

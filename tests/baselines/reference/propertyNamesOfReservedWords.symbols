@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts] ////
+
+=== propertyNamesOfReservedWords.ts ===
 class C {
 >C : Symbol(C, Decl(propertyNamesOfReservedWords.ts, 0, 0))
 

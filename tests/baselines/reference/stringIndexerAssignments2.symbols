@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringIndexerAssignments2.ts ===
+//// [tests/cases/compiler/stringIndexerAssignments2.ts] ////
+
+=== stringIndexerAssignments2.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(stringIndexerAssignments2.ts, 0, 0))
 

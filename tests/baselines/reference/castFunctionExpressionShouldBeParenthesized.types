@@ -1,11 +1,17 @@
-=== tests/cases/compiler/castFunctionExpressionShouldBeParenthesized.ts ===
+//// [tests/cases/compiler/castFunctionExpressionShouldBeParenthesized.ts] ////
+
+=== castFunctionExpressionShouldBeParenthesized.ts ===
 (function a() { } as any)().foo()
 >(function a() { } as any)().foo() : any
 >(function a() { } as any)().foo : any
 >(function a() { } as any)() : any
+>                            : ^^^
 >(function a() { } as any) : any
 >function a() { } as any : any
 >function a() { } : () => void
+>                 : ^^^^^^^^^^
 >a : () => void
+>  : ^^^^^^^^^^
 >foo : any
+>    : ^^^
 

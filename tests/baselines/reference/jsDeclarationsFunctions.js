@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctions.ts] ////
+
 //// [index.js]
 export function a() {}
 
@@ -61,14 +63,22 @@ export function j() {}
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.j = exports.jj = exports.ii = exports.i = exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
-function a() { }
 exports.a = a;
-function b() { }
 exports.b = b;
+exports.c = c;
+exports.d = d;
+exports.e = e;
+exports.f = f;
+exports.g = g;
+exports.h = hh;
+exports.i = i;
+exports.ii = i;
+exports.j = j;
+exports.jj = j;
+function a() { }
+function b() { }
 b.cat = "cat";
 function c() { }
-exports.c = c;
 c.Cls = /** @class */ (function () {
     function Cls() {
     }
@@ -80,7 +90,6 @@ c.Cls = /** @class */ (function () {
  * @return {string}
  */
 function d(a, b) { return /** @type {*} */ (null); }
-exports.d = d;
 /**
  * @template T,U
  * @param {T} a
@@ -88,7 +97,6 @@ exports.d = d;
  * @return {T & U}
  */
 function e(a, b) { return /** @type {*} */ (null); }
-exports.e = e;
 /**
  * @template T
  * @param {T} a
@@ -96,7 +104,6 @@ exports.e = e;
 function f(a) {
     return a;
 }
-exports.f = f;
 f.self = f;
 /**
  * @param {{x: string}} a
@@ -105,7 +112,6 @@ f.self = f;
 function g(a, b) {
     return a.x && b.y();
 }
-exports.g = g;
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
@@ -113,13 +119,8 @@ exports.g = g;
 function hh(a, b) {
     return a.x && b.y();
 }
-exports.h = hh;
 function i() { }
-exports.i = i;
-exports.ii = i;
 function j() { }
-exports.j = j;
-exports.jj = j;
 
 
 //// [index.d.ts]
@@ -164,7 +165,7 @@ declare class Cls {
 export function g(a: {
     x: string;
 }, b: {
-    y: typeof b;
+    y: typeof import(".").b;
 }): void;
 /**
  * @param {{x: string}} a
@@ -173,6 +174,6 @@ export function g(a: {
 declare function hh(a: {
     x: string;
 }, b: {
-    y: typeof b;
+    y: typeof import(".").b;
 }): void;
 export { hh as h, i as ii, j as jj };

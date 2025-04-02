@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfIsOrderIndependent.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfIsOrderIndependent.ts] ////
+
+=== typeGuardOfFormTypeOfIsOrderIndependent.ts ===
 var strOrNum: string | number;
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfIsOrderIndependent.ts, 0, 3))
 

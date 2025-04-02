@@ -1,14 +1,14 @@
-tests/cases/compiler/widenedTypes.ts(1,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
-tests/cases/compiler/widenedTypes.ts(4,1): error TS18050: The value 'null' cannot be used here.
-tests/cases/compiler/widenedTypes.ts(5,7): error TS18050: The value 'null' cannot be used here.
-tests/cases/compiler/widenedTypes.ts(9,14): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/widenedTypes.ts(10,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/widenedTypes.ts(17,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/widenedTypes.ts(22,22): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/widenedTypes.ts(23,39): error TS2322: Type 'number' is not assignable to type 'string'.
+widenedTypes.ts(1,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+widenedTypes.ts(4,1): error TS18050: The value 'null' cannot be used here.
+widenedTypes.ts(5,7): error TS18050: The value 'null' cannot be used here.
+widenedTypes.ts(9,14): error TS2695: Left side of comma operator is unused and has no side effects.
+widenedTypes.ts(10,1): error TS2322: Type 'string' is not assignable to type 'number'.
+widenedTypes.ts(17,1): error TS2322: Type 'string' is not assignable to type 'number'.
+widenedTypes.ts(22,22): error TS2322: Type 'number' is not assignable to type 'string'.
+widenedTypes.ts(23,39): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/widenedTypes.ts (8 errors) ====
+==== widenedTypes.ts (8 errors) ====
     null instanceof (() => { });
     ~~~~
 !!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
@@ -48,4 +48,4 @@ tests/cases/compiler/widenedTypes.ts(23,39): error TS2322: Type 'number' is not 
     var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
                                           ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6501 tests/cases/compiler/widenedTypes.ts:23:12: The expected type comes from this index signature.
+!!! related TS6501 widenedTypes.ts:23:12: The expected type comes from this index signature.

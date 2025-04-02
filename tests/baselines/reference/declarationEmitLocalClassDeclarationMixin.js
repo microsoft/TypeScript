@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLocalClassDeclarationMixin.ts] ////
+
 //// [declarationEmitLocalClassDeclarationMixin.ts]
 interface Constructor<C> { new (...args: any[]): C; }
 

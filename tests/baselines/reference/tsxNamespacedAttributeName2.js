@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxNamespacedAttributeName2.tsx] ////
+
 //// [a.tsx]
 declare var React: any;
 

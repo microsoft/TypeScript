@@ -1,40 +1,61 @@
-=== tests/cases/compiler/genericTupleWithSimplifiableElements.ts ===
+//// [tests/cases/compiler/genericTupleWithSimplifiableElements.ts] ////
+
+=== genericTupleWithSimplifiableElements.ts ===
 // repro from #52354
 
 type SS1 = string;
 >SS1 : string
+>    : ^^^^^^
 
 let y: [t: "AAA", ...args: { [S in SS1]: [a: number]; }[SS1]] = ["AAA", 1];
 >y : [t: "AAA", a: number]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >["AAA", 1] : ["AAA", number]
+>           : ^^^^^^^^^^^^^^^
 >"AAA" : "AAA"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 type SS2 = "1" | "2" | "3";
->SS2 : "1" | "2" | "3"
+>SS2 : SS2
+>    : ^^^
 
 let z: [t: "AAA", ...args: { [S in SS2]: [a: number]; }[SS2]] = ["AAA", 1];
 >z : [t: "AAA", a: number]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >["AAA", 1] : ["AAA", number]
+>           : ^^^^^^^^^^^^^^^
 >"AAA" : "AAA"
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 class I<SS extends string>{
 >I : I<SS>
+>  : ^^^^^
 
     f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         let w: [...args: { [S in SS]: [a: number]; }[SS]] = [1];
 >w : [...args: { [S in SS]: [a: number]; }[SS]]
+>  : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1] : [1]
+>    : ^^^
 >1 : 1
+>  : ^
 
         let x: [t: "AAA", ...args: { [S in SS]: [a: number]; }[SS]] = ["AAA", 1];
 >x : [t: "AAA", ...args: { [S in SS]: [a: number]; }[SS]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["AAA", 1] : ["AAA", 1]
+>           : ^^^^^^^^^^
 >"AAA" : "AAA"
+>      : ^^^^^
 >1 : 1
+>  : ^
     }
 }
 

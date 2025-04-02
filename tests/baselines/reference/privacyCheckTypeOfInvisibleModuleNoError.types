@@ -1,16 +1,23 @@
-=== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleNoError.ts ===
+//// [tests/cases/compiler/privacyCheckTypeOfInvisibleModuleNoError.ts] ////
+
+=== privacyCheckTypeOfInvisibleModuleNoError.ts ===
 module Outer {
 >Outer : typeof Outer
+>      : ^^^^^^^^^^^^
 
     module Inner {
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
         export var m: number;
 >m : number
+>  : ^^^^^^
     }
 
     export var f: typeof Inner; // Since we dont unwind inner any more, it is error here
 >f : typeof Inner
+>  : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 }
 

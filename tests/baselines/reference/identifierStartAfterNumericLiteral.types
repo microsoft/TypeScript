@@ -1,101 +1,153 @@
-=== tests/cases/compiler/identifierStartAfterNumericLiteral.ts ===
+//// [tests/cases/compiler/identifierStartAfterNumericLiteral.ts] ////
+
+=== identifierStartAfterNumericLiteral.ts ===
 let valueIn = 3in[null];
 >valueIn : boolean
+>        : ^^^^^^^
 >3in[null] : boolean
+>          : ^^^^^^^
 >3 : 3
+>  : ^
 >[null] : null[]
+>       : ^^^^^^
 
 3a[null]
 >3 : 3
+>  : ^
 >a[null] : any
+>        : ^^^
 >a : any
+>  : ^^^
 
 123a[null]
 >123 : 123
+>    : ^^^
 >a[null] : any
+>        : ^^^
 >a : any
+>  : ^^^
 
 3e[null]
 >3e[null] : any
+>         : ^^^
 >3e : 3
+>   : ^
 
 123e[null]
 >123e[null] : any
+>           : ^^^
 >123e : 123
+>     : ^^^
 
 3in[null]
 >3in[null] : boolean
+>          : ^^^^^^^
 >3 : 3
+>  : ^
 >[null] : null[]
+>       : ^^^^^^
 
 123in[null]
 >123in[null] : boolean
+>            : ^^^^^^^
 >123 : 123
+>    : ^^^
 >[null] : null[]
+>       : ^^^^^^
 
 3en[null]
 >3en[null] : any
+>          : ^^^
 >3en : 3
+>    : ^
 
 123en[null]
 >123en[null] : any
+>            : ^^^
 >123en : 123
+>      : ^^^
 
 1a
 >1 : 1
+>  : ^
 >a : any
+>  : ^^^
 
 123a
 >123 : 123
+>    : ^^^
 >a : any
+>  : ^^^
 
 123abc
 >123 : 123
+>    : ^^^
 >abc : any
+>    : ^^^
 
 1e
 >1e : 1
+>   : ^
 
 123e
 >123e : 123
+>     : ^^^
 
 1e9
 >1e9 : 1000000000
+>    : ^^^^^^^^^^
 
 123e9
 >123e9 : 123000000000
+>      : ^^^^^^^^^^^^
 
 1ee
 >1e : 1
+>   : ^
 >e : any
+>  : ^^^
 
 123ee
 >123e : 123
+>     : ^^^
 >e : any
+>  : ^^^
 
 1n
 >1n : 1n
+>   : ^^
 
 123n
 >123n : 123n
+>     : ^^^^
 
 2n2
 >2n : 2n
+>   : ^^
 >2 : 2
+>  : ^
 
 123n2
 >123n : 123n
+>     : ^^^^
 >2 : 2
+>  : ^
 
 2na
 >2n : 2n
+>   : ^^
 >a : any
+>  : ^^^
 
 123na
 >123n : 123n
+>     : ^^^^
 >a : any
+>  : ^^^
 
 123nabc
 >123n : 123n
+>     : ^^^^
 >abc : any
+>    : ^^^
 

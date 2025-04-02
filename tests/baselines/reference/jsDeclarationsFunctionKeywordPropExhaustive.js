@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionKeywordPropExhaustive.ts] ////
+
 //// [source.js]
 function foo() {}
 // properties

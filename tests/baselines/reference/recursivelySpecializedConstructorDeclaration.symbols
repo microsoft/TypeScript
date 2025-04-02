@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts ===
+//// [tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts] ////
+
+=== recursivelySpecializedConstructorDeclaration.ts ===
 module MsPortal.Controls.Base.ItemList {
 >MsPortal : Symbol(MsPortal, Decl(recursivelySpecializedConstructorDeclaration.ts, 0, 0))
 >Controls : Symbol(Controls, Decl(recursivelySpecializedConstructorDeclaration.ts, 0, 16))

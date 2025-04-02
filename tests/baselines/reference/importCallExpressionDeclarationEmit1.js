@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionDeclarationEmit1.ts] ////
+
 //// [importCallExpressionDeclarationEmit1.ts]
 declare function getSpecifier(): string;
 declare var whatToLoad: boolean;

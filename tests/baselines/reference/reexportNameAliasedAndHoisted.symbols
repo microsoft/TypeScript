@@ -1,11 +1,13 @@
-=== tests/cases/compiler/gridview.ts ===
+//// [tests/cases/compiler/reexportNameAliasedAndHoisted.ts] ////
+
+=== gridview.ts ===
 export type Sizing = any;
 >Sizing : Symbol(Sizing, Decl(gridview.ts, 0, 0), Decl(gridview.ts, 1, 12))
 
 export const Sizing = null;
 >Sizing : Symbol(Sizing, Decl(gridview.ts, 0, 0), Decl(gridview.ts, 1, 12))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 // https://github.com/microsoft/TypeScript/issues/39195
 export { Sizing as GridViewSizing } from './gridview';
 >Sizing : Symbol(Sizing, Decl(gridview.ts, 0, 0), Decl(gridview.ts, 1, 12))

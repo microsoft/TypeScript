@@ -1,517 +1,921 @@
-=== tests/cases/conformance/types/spread/objectSpreadRepeatedNullCheckPerf.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadRepeatedNullCheckPerf.ts] ////
+
+=== objectSpreadRepeatedNullCheckPerf.ts ===
 interface Props {
     readonly a?: string
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly b?: string
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly c?: string
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly d?: string
 >d : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly e?: string
 >e : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly f?: string
 >f : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly g?: string
 >g : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly h?: string
 >h : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly i?: string
 >i : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly j?: string
 >j : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly k?: string
 >k : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly l?: string
 >l : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly m?: string
 >m : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly n?: string
 >n : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly o?: string
 >o : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly p?: string
 >p : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly q?: string
 >q : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly r?: string
 >r : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly s?: string
 >s : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly t?: string
 >t : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly u?: string
 >u : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly v?: string
 >v : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly w?: string
 >w : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly x?: string
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly y?: string
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     readonly z?: string
 >z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 function parseWithSpread(config: Record<string, number>): Props {
 >parseWithSpread : (config: Record<string, number>) => Props
+>                : ^      ^^                      ^^^^^     
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        ...config.a !== undefined && { a: config.a.toString() },        ...config.b !== undefined && { b: config.b.toString() },        ...config.c !== undefined && { c: config.c.toString() },        ...config.d !== undefined && { d: config.d.toString() },        ...config.e !== undefined && { e: config.e.toString() },        ...config.f !== undefined && { f: config.f.toString() },        ...config.g !== undefined && { g: config.g.toString() },        ...config.h !== undefined && { h: config.h.toString() },        ...config.i !== undefined && { i: config.i.toString() },        ...config.j !== undefined && { j: config.j.toString() },        ...config.k !== undefined && { k: config.k.toString() },        ...config.l !== undefined && { l: config.l.toString() },        ...config.m !== undefined && { m: config.m.toString() },        ...config.n !== undefined && { n: config.n.toString() },        ...config.o !== undefined && { o: config.o.toString() },        ...config.p !== undefined && { p: config.p.toString() },        ...config.q !== undefined && { q: config.q.toString() },        ...config.r !== undefined && { r: config.r.toString() },        ...config.s !== undefined && { s: config.s.toString() },        ...config.t !== undefined && { t: config.t.toString() },        ...config.u !== undefined && { u: config.u.toString() },        ...config.v !== undefined && { v: config.v.toString() },        ...config.w !== undefined && { w: config.w.toString() },        ...config.x !== undefined && { x: config.x.toString() },        ...config.y !== undefined && { y: config.y.toString() },        ...config.z !== undefined && { z: config.z.toString() }    } : { z?: string | undefined; y?: string | undefined; x?: string | undefined; w?: string | undefined; v?: string | undefined; u?: string | undefined; t?: string | undefined; s?: string | undefined; r?: string | undefined; q?: string | undefined; p?: string | undefined; o?: string | undefined; n?: string | undefined; m?: string | undefined; l?: string | undefined; k?: string | undefined; j?: string | undefined; i?: string | undefined; h?: string | undefined; g?: string | undefined; f?: string | undefined; e?: string | undefined; d?: string | undefined; c?: string | undefined; b?: string | undefined; a?: string | undefined; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ...config.a !== undefined && { a: config.a.toString() },
 >config.a !== undefined && { a: config.a.toString() } : false | { a: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.a !== undefined : boolean
+>                       : ^^^^^^^
 >config.a : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ a: config.a.toString() } : { a: string; }
+>                           : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >config.a.toString() : string
->config.a.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.a.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.a : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >a : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.b !== undefined && { b: config.b.toString() },
 >config.b !== undefined && { b: config.b.toString() } : false | { b: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.b !== undefined : boolean
+>                       : ^^^^^^^
 >config.b : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ b: config.b.toString() } : { b: string; }
+>                           : ^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >config.b.toString() : string
->config.b.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.b.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.b : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >b : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.c !== undefined && { c: config.c.toString() },
 >config.c !== undefined && { c: config.c.toString() } : false | { c: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.c !== undefined : boolean
+>                       : ^^^^^^^
 >config.c : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ c: config.c.toString() } : { c: string; }
+>                           : ^^^^^^^^^^^^^^
 >c : string
+>  : ^^^^^^
 >config.c.toString() : string
->config.c.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.c.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.c : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >c : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.d !== undefined && { d: config.d.toString() },
 >config.d !== undefined && { d: config.d.toString() } : false | { d: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.d !== undefined : boolean
+>                       : ^^^^^^^
 >config.d : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ d: config.d.toString() } : { d: string; }
+>                           : ^^^^^^^^^^^^^^
 >d : string
+>  : ^^^^^^
 >config.d.toString() : string
->config.d.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.d.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.d : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >d : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.e !== undefined && { e: config.e.toString() },
 >config.e !== undefined && { e: config.e.toString() } : false | { e: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.e !== undefined : boolean
+>                       : ^^^^^^^
 >config.e : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ e: config.e.toString() } : { e: string; }
+>                           : ^^^^^^^^^^^^^^
 >e : string
+>  : ^^^^^^
 >config.e.toString() : string
->config.e.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.e.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.e : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >e : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.f !== undefined && { f: config.f.toString() },
 >config.f !== undefined && { f: config.f.toString() } : false | { f: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.f !== undefined : boolean
+>                       : ^^^^^^^
 >config.f : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >f : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ f: config.f.toString() } : { f: string; }
+>                           : ^^^^^^^^^^^^^^
 >f : string
+>  : ^^^^^^
 >config.f.toString() : string
->config.f.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.f.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.f : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >f : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.g !== undefined && { g: config.g.toString() },
 >config.g !== undefined && { g: config.g.toString() } : false | { g: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.g !== undefined : boolean
+>                       : ^^^^^^^
 >config.g : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >g : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ g: config.g.toString() } : { g: string; }
+>                           : ^^^^^^^^^^^^^^
 >g : string
+>  : ^^^^^^
 >config.g.toString() : string
->config.g.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.g.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.g : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >g : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.h !== undefined && { h: config.h.toString() },
 >config.h !== undefined && { h: config.h.toString() } : false | { h: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.h !== undefined : boolean
+>                       : ^^^^^^^
 >config.h : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >h : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ h: config.h.toString() } : { h: string; }
+>                           : ^^^^^^^^^^^^^^
 >h : string
+>  : ^^^^^^
 >config.h.toString() : string
->config.h.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.h.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.h : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >h : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.i !== undefined && { i: config.i.toString() },
 >config.i !== undefined && { i: config.i.toString() } : false | { i: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.i !== undefined : boolean
+>                       : ^^^^^^^
 >config.i : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >i : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ i: config.i.toString() } : { i: string; }
+>                           : ^^^^^^^^^^^^^^
 >i : string
+>  : ^^^^^^
 >config.i.toString() : string
->config.i.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.i.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.i : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >i : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.j !== undefined && { j: config.j.toString() },
 >config.j !== undefined && { j: config.j.toString() } : false | { j: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.j !== undefined : boolean
+>                       : ^^^^^^^
 >config.j : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >j : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ j: config.j.toString() } : { j: string; }
+>                           : ^^^^^^^^^^^^^^
 >j : string
+>  : ^^^^^^
 >config.j.toString() : string
->config.j.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.j.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.j : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >j : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.k !== undefined && { k: config.k.toString() },
 >config.k !== undefined && { k: config.k.toString() } : false | { k: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.k !== undefined : boolean
+>                       : ^^^^^^^
 >config.k : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >k : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ k: config.k.toString() } : { k: string; }
+>                           : ^^^^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 >config.k.toString() : string
->config.k.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.k.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.k : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >k : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.l !== undefined && { l: config.l.toString() },
 >config.l !== undefined && { l: config.l.toString() } : false | { l: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.l !== undefined : boolean
+>                       : ^^^^^^^
 >config.l : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >l : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ l: config.l.toString() } : { l: string; }
+>                           : ^^^^^^^^^^^^^^
 >l : string
+>  : ^^^^^^
 >config.l.toString() : string
->config.l.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.l.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.l : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >l : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.m !== undefined && { m: config.m.toString() },
 >config.m !== undefined && { m: config.m.toString() } : false | { m: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.m !== undefined : boolean
+>                       : ^^^^^^^
 >config.m : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >m : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ m: config.m.toString() } : { m: string; }
+>                           : ^^^^^^^^^^^^^^
 >m : string
+>  : ^^^^^^
 >config.m.toString() : string
->config.m.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.m.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.m : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >m : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.n !== undefined && { n: config.n.toString() },
 >config.n !== undefined && { n: config.n.toString() } : false | { n: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.n !== undefined : boolean
+>                       : ^^^^^^^
 >config.n : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ n: config.n.toString() } : { n: string; }
+>                           : ^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >config.n.toString() : string
->config.n.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.n.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.n : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >n : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.o !== undefined && { o: config.o.toString() },
 >config.o !== undefined && { o: config.o.toString() } : false | { o: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.o !== undefined : boolean
+>                       : ^^^^^^^
 >config.o : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >o : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ o: config.o.toString() } : { o: string; }
+>                           : ^^^^^^^^^^^^^^
 >o : string
+>  : ^^^^^^
 >config.o.toString() : string
->config.o.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.o.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.o : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >o : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.p !== undefined && { p: config.p.toString() },
 >config.p !== undefined && { p: config.p.toString() } : false | { p: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.p !== undefined : boolean
+>                       : ^^^^^^^
 >config.p : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ p: config.p.toString() } : { p: string; }
+>                           : ^^^^^^^^^^^^^^
 >p : string
+>  : ^^^^^^
 >config.p.toString() : string
->config.p.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.p.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.p : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >p : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.q !== undefined && { q: config.q.toString() },
 >config.q !== undefined && { q: config.q.toString() } : false | { q: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.q !== undefined : boolean
+>                       : ^^^^^^^
 >config.q : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >q : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ q: config.q.toString() } : { q: string; }
+>                           : ^^^^^^^^^^^^^^
 >q : string
+>  : ^^^^^^
 >config.q.toString() : string
->config.q.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.q.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.q : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >q : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.r !== undefined && { r: config.r.toString() },
 >config.r !== undefined && { r: config.r.toString() } : false | { r: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.r !== undefined : boolean
+>                       : ^^^^^^^
 >config.r : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >r : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ r: config.r.toString() } : { r: string; }
+>                           : ^^^^^^^^^^^^^^
 >r : string
+>  : ^^^^^^
 >config.r.toString() : string
->config.r.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.r.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.r : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >r : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.s !== undefined && { s: config.s.toString() },
 >config.s !== undefined && { s: config.s.toString() } : false | { s: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.s !== undefined : boolean
+>                       : ^^^^^^^
 >config.s : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >s : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ s: config.s.toString() } : { s: string; }
+>                           : ^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >config.s.toString() : string
->config.s.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.s.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.s : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >s : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.t !== undefined && { t: config.t.toString() },
 >config.t !== undefined && { t: config.t.toString() } : false | { t: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.t !== undefined : boolean
+>                       : ^^^^^^^
 >config.t : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >t : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ t: config.t.toString() } : { t: string; }
+>                           : ^^^^^^^^^^^^^^
 >t : string
+>  : ^^^^^^
 >config.t.toString() : string
->config.t.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.t.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.t : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >t : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.u !== undefined && { u: config.u.toString() },
 >config.u !== undefined && { u: config.u.toString() } : false | { u: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.u !== undefined : boolean
+>                       : ^^^^^^^
 >config.u : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >u : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ u: config.u.toString() } : { u: string; }
+>                           : ^^^^^^^^^^^^^^
 >u : string
+>  : ^^^^^^
 >config.u.toString() : string
->config.u.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.u.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.u : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >u : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.v !== undefined && { v: config.v.toString() },
 >config.v !== undefined && { v: config.v.toString() } : false | { v: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.v !== undefined : boolean
+>                       : ^^^^^^^
 >config.v : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ v: config.v.toString() } : { v: string; }
+>                           : ^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >config.v.toString() : string
->config.v.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.v.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.v : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >v : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.w !== undefined && { w: config.w.toString() },
 >config.w !== undefined && { w: config.w.toString() } : false | { w: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.w !== undefined : boolean
+>                       : ^^^^^^^
 >config.w : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >w : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ w: config.w.toString() } : { w: string; }
+>                           : ^^^^^^^^^^^^^^
 >w : string
+>  : ^^^^^^
 >config.w.toString() : string
->config.w.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.w.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.w : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >w : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.x !== undefined && { x: config.x.toString() },
 >config.x !== undefined && { x: config.x.toString() } : false | { x: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.x !== undefined : boolean
+>                       : ^^^^^^^
 >config.x : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ x: config.x.toString() } : { x: string; }
+>                           : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >config.x.toString() : string
->config.x.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.x.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.x : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.y !== undefined && { y: config.y.toString() },
 >config.y !== undefined && { y: config.y.toString() } : false | { y: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.y !== undefined : boolean
+>                       : ^^^^^^^
 >config.y : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ y: config.y.toString() } : { y: string; }
+>                           : ^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >config.y.toString() : string
->config.y.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.y.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.y : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >y : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
         ...config.z !== undefined && { z: config.z.toString() }
 >config.z !== undefined && { z: config.z.toString() } : false | { z: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >config.z !== undefined : boolean
+>                       : ^^^^^^^
 >config.z : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >z : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{ z: config.z.toString() } : { z: string; }
+>                           : ^^^^^^^^^^^^^^
 >z : string
+>  : ^^^^^^
 >config.z.toString() : string
->config.z.toString : (radix?: number | undefined) => string
+>                    : ^^^^^^
+>config.z.toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >config.z : number
+>         : ^^^^^^
 >config : Record<string, number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >z : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
     }
 }
 
 parseWithSpread({ a: 1, b: 2, z: 26 })
 >parseWithSpread({ a: 1, b: 2, z: 26 }) : Props
+>                                       : ^^^^^
 >parseWithSpread : (config: Record<string, number>) => Props
+>                : ^      ^^                      ^^^^^     
 >{ a: 1, b: 2, z: 26 } : { a: number; b: number; z: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >z : number
+>  : ^^^^^^
 >26 : 26
+>   : ^^
 

@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,15): error TS2378: A 'get' accessor must return a value.
-tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,23): error TS1163: A 'yield' expression is only allowed in a generator body.
+YieldExpression17_es6.ts(1,15): error TS2378: A 'get' accessor must return a value.
+YieldExpression17_es6.ts(1,23): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts (2 errors) ====
+==== YieldExpression17_es6.ts (2 errors) ====
     var v = { get foo() { yield foo; } }
                   ~~~
 !!! error TS2378: A 'get' accessor must return a value.

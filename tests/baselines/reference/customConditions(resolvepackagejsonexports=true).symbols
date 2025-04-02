@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/customConditions.ts] ////
+
 === /node_modules/lodash/index.d.ts ===
 declare const _: "index";
 >_ : Symbol(_, Decl(index.d.ts, 0, 13))

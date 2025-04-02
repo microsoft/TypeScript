@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts ===
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates2.ts] ////
+
+=== interfaceExtendingClassWithPrivates2.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(interfaceExtendingClassWithPrivates2.ts, 0, 0))
 

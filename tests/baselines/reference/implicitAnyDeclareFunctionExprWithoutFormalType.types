@@ -1,57 +1,91 @@
-=== tests/cases/compiler/implicitAnyDeclareFunctionExprWithoutFormalType.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareFunctionExprWithoutFormalType.ts] ////
+
+=== implicitAnyDeclareFunctionExprWithoutFormalType.ts ===
 // these should be errors for implicit any parameter
 var lambda = (l1) => { };       // Error at "l1"
 >lambda : (l1: any) => void
+>       : ^  ^^^^^^^^^^^^^^
 >(l1) => { } : (l1: any) => void
+>            : ^  ^^^^^^^^^^^^^^
 >l1 : any
+>   : ^^^
 
 var lambd2 = (ll1, ll2: string) => { }  // Error at "ll1"
 >lambd2 : (ll1: any, ll2: string) => void
+>       : ^   ^^^^^^^   ^^      ^^^^^^^^^
 >(ll1, ll2: string) => { } : (ll1: any, ll2: string) => void
+>                          : ^   ^^^^^^^   ^^      ^^^^^^^^^
 >ll1 : any
+>    : ^^^
 >ll2 : string
+>    : ^^^^^^
 
 var lamda3 = function myLambda3(myParam) { }
 >lamda3 : (myParam: any) => void
+>       : ^       ^^^^^^^^^^^^^^
 >function myLambda3(myParam) { } : (myParam: any) => void
+>                                : ^       ^^^^^^^^^^^^^^
 >myLambda3 : (myParam: any) => void
+>          : ^       ^^^^^^^^^^^^^^
 >myParam : any
+>        : ^^^
 
 var lamda4 = () => { return null };
 >lamda4 : () => any
+>       : ^^^^^^^^^
 >() => { return null } : () => any
+>                      : ^^^^^^^^^
 
 // these should be error for implicit any return type
 var lambda5 = function temp() { return null; }
 >lambda5 : () => any
+>        : ^^^^^^^^^
 >function temp() { return null; } : () => any
+>                                 : ^^^^^^^^^
 >temp : () => any
+>     : ^^^^^^^^^
 
 var lambda6 = () => { return null; }
 >lambda6 : () => any
+>        : ^^^^^^^^^
 >() => { return null; } : () => any
+>                       : ^^^^^^^^^
 
 var lambda7 = function temp() { return undefined; }
 >lambda7 : () => any
+>        : ^^^^^^^^^
 >function temp() { return undefined; } : () => any
+>                                      : ^^^^^^^^^
 >temp : () => any
+>     : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var lambda8 = () => { return undefined; }
 >lambda8 : () => any
+>        : ^^^^^^^^^
 >() => { return undefined; } : () => any
+>                            : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // this shouldn't be an error
 var lambda9 = () => { return 5; }
 >lambda9 : () => number
+>        : ^^^^^^^^^^^^
 >() => { return 5; } : () => number
+>                    : ^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
 var lambda10 = function temp1() { return 5; }
 >lambda10 : () => number
+>         : ^^^^^^^^^^^^
 >function temp1() { return 5; } : () => number
+>                               : ^^^^^^^^^^^^
 >temp1 : () => number
+>      : ^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
 

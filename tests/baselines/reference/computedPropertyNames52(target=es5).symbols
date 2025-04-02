@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames52.js ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames52.ts] ////
+
+=== computedPropertyNames52.js ===
 const array = [];
 >array : Symbol(array, Decl(computedPropertyNames52.js, 0, 5))
 

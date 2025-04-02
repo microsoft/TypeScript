@@ -1,10 +1,16 @@
-=== tests/cases/conformance/generators/restParameterInDownlevelGenerator.ts ===
+//// [tests/cases/conformance/generators/restParameterInDownlevelGenerator.ts] ////
+
+=== restParameterInDownlevelGenerator.ts ===
 // https://github.com/Microsoft/TypeScript/issues/30653
 function * mergeStringLists(...strings: string[]) {
 >mergeStringLists : (...strings: string[]) => Generator<never, void, unknown>
+>                 : ^^^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strings : string[]
+>        : ^^^^^^^^
 
     for (var str of strings);
 >str : string
+>    : ^^^^^^
 >strings : string[]
+>        : ^^^^^^^^
 }

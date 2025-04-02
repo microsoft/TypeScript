@@ -1,22 +1,36 @@
-=== tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator02.ts ===
+//// [tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator02.ts] ////
+
+=== contextuallyTypeCommaOperator02.ts ===
 let x: (a: string) => string;
 >x : (a: string) => string
+>  : ^ ^^      ^^^^^      
 >a : string
+>  : ^^^^^^
 
 x = (100, a => {
 >x = (100, a => {    const b: number = a;    return b;}) : (a: string) => number
+>                                                        : ^ ^^^^^^^^^^^^^^^^^^^
 >x : (a: string) => string
+>  : ^ ^^      ^^^^^      
 >(100, a => {    const b: number = a;    return b;}) : (a: string) => number
+>                                                    : ^ ^^^^^^^^^^^^^^^^^^^
 >100, a => {    const b: number = a;    return b;} : (a: string) => number
+>                                                  : ^ ^^^^^^^^^^^^^^^^^^^
 >100 : 100
+>    : ^^^
 >a => {    const b: number = a;    return b;} : (a: string) => number
+>                                             : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
     const b: number = a;
 >b : number
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     return b;
 >b : number
+>  : ^^^^^^
 
 });

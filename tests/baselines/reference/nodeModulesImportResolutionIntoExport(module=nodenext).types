@@ -1,24 +1,32 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesImportResolutionIntoExport.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as type from "#type";
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 type;
 >type : typeof type
+>     : ^^^^^^^^^^^
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as type from "#type";
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 type;
 >type : typeof type
+>     : ^^^^^^^^^^^
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // esm format file
 import * as type from "#type";
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 type;
 >type : typeof type
+>     : ^^^^^^^^^^^
 

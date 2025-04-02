@@ -1,221 +1,304 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts] ////
+
+=== varianceAnnotations.ts ===
 type Covariant<out T> = {
 >Covariant : Covariant<T>
+>          : ^^^^^^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 }
 
 declare let super_covariant: Covariant<unknown>;
 >super_covariant : Covariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
 
 declare let sub_covariant: Covariant<string>;
 >sub_covariant : Covariant<string>
+>              : ^^^^^^^^^^^^^^^^^
 
 super_covariant = sub_covariant;
 >super_covariant = sub_covariant : Covariant<string>
+>                                : ^^^^^^^^^^^^^^^^^
 >super_covariant : Covariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
 >sub_covariant : Covariant<string>
+>              : ^^^^^^^^^^^^^^^^^
 
 sub_covariant = super_covariant;  // Error
 >sub_covariant = super_covariant : Covariant<unknown>
+>                                : ^^^^^^^^^^^^^^^^^^
 >sub_covariant : Covariant<string>
+>              : ^^^^^^^^^^^^^^^^^
 >super_covariant : Covariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
 
 type Contravariant<in T> = {
 >Contravariant : Contravariant<T>
+>              : ^^^^^^^^^^^^^^^^
 
     f: (x: T) => void;
 >f : (x: T) => void
+>  : ^ ^^ ^^^^^    
 >x : T
+>  : ^
 }
 
 declare let super_contravariant: Contravariant<unknown>;
 >super_contravariant : Contravariant<unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let sub_contravariant: Contravariant<string>;
 >sub_contravariant : Contravariant<string>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 
 super_contravariant = sub_contravariant;  // Error
 >super_contravariant = sub_contravariant : Contravariant<string>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^
 >super_contravariant : Contravariant<unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >sub_contravariant : Contravariant<string>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 
 sub_contravariant = super_contravariant;
 >sub_contravariant = super_contravariant : Contravariant<unknown>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^
 >sub_contravariant : Contravariant<string>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >super_contravariant : Contravariant<unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type Invariant<in out T> = {
 >Invariant : Invariant<T>
+>          : ^^^^^^^^^^^^
 
     f: (x: T) => T;
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 declare let super_invariant: Invariant<unknown>;
 >super_invariant : Invariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
 
 declare let sub_invariant: Invariant<string>;
 >sub_invariant : Invariant<string>
+>              : ^^^^^^^^^^^^^^^^^
 
 super_invariant = sub_invariant;  // Error
 >super_invariant = sub_invariant : Invariant<string>
+>                                : ^^^^^^^^^^^^^^^^^
 >super_invariant : Invariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
 >sub_invariant : Invariant<string>
+>              : ^^^^^^^^^^^^^^^^^
 
 sub_invariant = super_invariant;  // Error
 >sub_invariant = super_invariant : Invariant<unknown>
+>                                : ^^^^^^^^^^^^^^^^^^
 >sub_invariant : Invariant<string>
+>              : ^^^^^^^^^^^^^^^^^
 >super_invariant : Invariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
 
 // Variance of various type constructors
 
 type T10<out T> = T;
 >T10 : T
+>    : ^
 
 type T11<in T> = keyof T;
 >T11 : keyof T
+>    : ^^^^^^^
 
 type T12<out T, out K extends keyof T> = T[K];
 >T12 : T12<T, K>
+>    : ^^^^^^^^^
 
 type T13<in out T> = T[keyof T];
 >T13 : T13<T>
+>    : ^^^^^^
 
 // Variance annotation errors
 
 type Covariant1<in T> = {  // Error
 >Covariant1 : Covariant1<T>
+>           : ^^^^^^^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 }
 
 type Contravariant1<out T> = keyof T;  // Error
 >Contravariant1 : keyof T
+>               : ^^^^^^^
 
 type Contravariant2<out T> = {  // Error
 >Contravariant2 : Contravariant2<T>
+>               : ^^^^^^^^^^^^^^^^^
 
     f: (x: T) => void;
 >f : (x: T) => void
+>  : ^ ^^ ^^^^^    
 >x : T
+>  : ^
 }
 
 type Invariant1<in T> = {  // Error
 >Invariant1 : Invariant1<T>
+>           : ^^^^^^^^^^^^^
 
     f: (x: T) => T;
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 type Invariant2<out T> = {  // Error
 >Invariant2 : Invariant2<T>
+>           : ^^^^^^^^^^^^^
 
     f: (x: T) => T;
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 // Variance in circular types
 
 type Foo1<in T> = {  // Error
 >Foo1 : Foo1<T>
+>     : ^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     f: FooFn1<T>;
 >f : FooFn1<T>
+>  : ^^^^^^^^^
 }
 
 type FooFn1<T> = (foo: Bar1<T[]>) => void;
 >FooFn1 : FooFn1<T>
+>       : ^^^^^^^^^
 >foo : Bar1<T[]>
+>    : ^^^^^^^^^
 
 type Bar1<T> = {
 >Bar1 : Bar1<T>
+>     : ^^^^^^^
 
     value: Foo1<T[]>;
 >value : Foo1<T[]>
+>      : ^^^^^^^^^
 }
 
 type Foo2<out T> = {  // Error
 >Foo2 : Foo2<T>
+>     : ^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     f: FooFn2<T>;
 >f : FooFn2<T>
+>  : ^^^^^^^^^
 }
 
 type FooFn2<T> = (foo: Bar2<T[]>) => void;
 >FooFn2 : FooFn2<T>
+>       : ^^^^^^^^^
 >foo : Bar2<T[]>
+>    : ^^^^^^^^^
 
 type Bar2<T> = {
 >Bar2 : Bar2<T>
+>     : ^^^^^^^
 
     value: Foo2<T[]>;
 >value : Foo2<T[]>
+>      : ^^^^^^^^^
 }
 
 type Foo3<in out T> = {
 >Foo3 : Foo3<T>
+>     : ^^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     f: FooFn3<T>;
 >f : FooFn3<T>
+>  : ^^^^^^^^^
 }
 
 type FooFn3<T> = (foo: Bar3<T[]>) => void;
 >FooFn3 : FooFn3<T>
+>       : ^^^^^^^^^
 >foo : Bar3<T[]>
+>    : ^^^^^^^^^
 
 type Bar3<T> = {
 >Bar3 : Bar3<T>
+>     : ^^^^^^^
 
     value: Foo3<T[]>;
 >value : Foo3<T[]>
+>      : ^^^^^^^^^
 }
 
 // Wrong modifier usage
 
 type T20<public T> = T;  // Error
 >T20 : T
+>    : ^
 
 type T21<in out in T> = T;  // Error
 >T21 : T
+>    : ^
 
 type T22<in out out T> = T;  // Error
 >T22 : T
+>    : ^
 
 type T23<out in T> = T;  // Error
 >T23 : T
+>    : ^
 
 declare function f1<in T>(x: T): void;  // Error
 >f1 : <in T>(x: T) => void
+>   : ^^^^ ^^ ^^ ^^^^^    
 >x : T
+>  : ^
 
 declare function f2<out T>(): T;  // Error
 >f2 : <out T>() => T
+>   : ^^^^^ ^^^^^^^ 
 
 class C {
 >C : C
+>  : ^
 
     in a = 0;  // Error
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     out b = 0;  // Error
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 // Interface merging
@@ -225,147 +308,216 @@ interface Baz<in T> {}
 
 declare let baz1: Baz<unknown>;
 >baz1 : Baz<unknown>
+>     : ^^^^^^^^^^^^
 
 declare let baz2: Baz<string>;
 >baz2 : Baz<string>
+>     : ^^^^^^^^^^^
 
 baz1 = baz2;  // Error
 >baz1 = baz2 : Baz<string>
+>            : ^^^^^^^^^^^
 >baz1 : Baz<unknown>
+>     : ^^^^^^^^^^^^
 >baz2 : Baz<string>
+>     : ^^^^^^^^^^^
 
 baz2 = baz1;  // Error
 >baz2 = baz1 : Baz<unknown>
+>            : ^^^^^^^^^^^^
 >baz2 : Baz<string>
+>     : ^^^^^^^^^^^
 >baz1 : Baz<unknown>
+>     : ^^^^^^^^^^^^
 
 // Repro from #44572
 
 interface Parent<out A> {
     child: Child<A> | null;
 >child : Child<A, unknown> | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     parent: Parent<A> | null;
 >parent : Parent<A> | null
+>       : ^^^^^^^^^^^^^^^^
 }
 
 interface Child<A, B = unknown> extends Parent<A> {
     readonly a: A;
 >a : A
+>  : ^
 
     readonly b: B;
 >b : B
+>  : ^
 }
 
 function fn<A>(inp: Child<A>) {
 >fn : <A>(inp: Child<A>) => void
+>   : ^ ^^   ^^        ^^^^^^^^^
 >inp : Child<A, unknown>
+>    : ^^^^^^^^^^^^^^^^^
 
     const a: Child<unknown> = inp;
 >a : Child<unknown, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >inp : Child<A, unknown>
+>    : ^^^^^^^^^^^^^^^^^
 }
 
 const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
 >pu : Parent<unknown>
+>   : ^^^^^^^^^^^^^^^
 >{ child: { a: 0, b: 0, child: null, parent: null }, parent: null } : { child: { a: number; b: number; child: null; parent: null; }; parent: null; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >child : { a: number; b: number; child: null; parent: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 0, b: 0, child: null, parent: null } : { a: number; b: number; child: null; parent: null; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >child : null
+>      : ^^^^
 >parent : null
+>       : ^^^^
 >parent : null
+>       : ^^^^
 
 const notString: Parent<string> = pu;  // Error
 >notString : Parent<string>
+>          : ^^^^^^^^^^^^^^
 >pu : Parent<unknown>
+>   : ^^^^^^^^^^^^^^^
 
 // Repro from comment in #44572
 
 declare class StateNode<TContext, in out TEvent extends { type: string }> {
 >StateNode : StateNode<TContext, TEvent>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : string
+>     : ^^^^^^
 
     _storedEvent: TEvent;
 >_storedEvent : TEvent
+>             : ^^^^^^
 
     _action: ActionObject<TEvent>;
 >_action : ActionObject<TEvent>
+>        : ^^^^^^^^^^^^^^^^^^^^
 
     _state: StateNode<TContext, any>;
 >_state : StateNode<TContext, any>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface ActionObject<TEvent extends { type: string }> {
 >type : string
+>     : ^^^^^^
 
     exec: (meta: StateNode<any, TEvent>) => void;
 >exec : (meta: StateNode<any, TEvent>) => void
+>     : ^    ^^                      ^^^^^    
 >meta : StateNode<any, TEvent>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare function createMachine<TEvent extends { type: string }>(action: ActionObject<TEvent>): StateNode<any, any>;
 >createMachine : <TEvent extends { type: string; }>(action: ActionObject<TEvent>) => StateNode<any, any>
+>              : ^      ^^^^^^^^^                 ^^      ^^                    ^^^^^                   
 >type : string
+>     : ^^^^^^
 >action : ActionObject<TEvent>
+>       : ^^^^^^^^^^^^^^^^^^^^
 
 declare function interpret<TContext>(machine: StateNode<TContext, any>): void;
 >interpret : <TContext>(machine: StateNode<TContext, any>) => void
+>          : ^        ^^       ^^                        ^^^^^    
 >machine : StateNode<TContext, any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 const machine = createMachine({} as any);
 >machine : StateNode<any, any>
+>        : ^^^^^^^^^^^^^^^^^^^
 >createMachine({} as any) : StateNode<any, any>
+>                         : ^^^^^^^^^^^^^^^^^^^
 >createMachine : <TEvent extends { type: string; }>(action: ActionObject<TEvent>) => StateNode<any, any>
+>              : ^      ^^^^^^^^^                 ^^      ^^                    ^^^^^                   
 >{} as any : any
+>          : ^^^
 >{} : {}
+>   : ^^
 
 interpret(machine);
 >interpret(machine) : void
+>                   : ^^^^
 >interpret : <TContext>(machine: StateNode<TContext, any>) => void
+>          : ^        ^^       ^^                        ^^^^^    
 >machine : StateNode<any, any>
+>        : ^^^^^^^^^^^^^^^^^^^
 
 declare const qq: ActionObject<{ type: "PLAY"; value: number }>;
 >qq : ActionObject<{ type: "PLAY"; value: number; }>
+>   : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^
 >type : "PLAY"
+>     : ^^^^^^
 >value : number
+>      : ^^^^^^
 
 createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Error
 >createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq) : StateNode<any, any>
+>                                                                       : ^^^^^^^^^^^^^^^^^^^
 >createMachine : <TEvent extends { type: string; }>(action: ActionObject<TEvent>) => StateNode<any, any>
+>              : ^      ^^^^^^^^^                 ^^      ^^                    ^^^^^                   
 >type : "PLAY"
+>     : ^^^^^^
 >value : number
+>      : ^^^^^^
 >type : "RESET"
+>     : ^^^^^^^
 >qq : ActionObject<{ type: "PLAY"; value: number; }>
+>   : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^
 
 // Repros from #48618
 
 let Anon = class <out T> {
 >Anon : typeof Anon
+>     : ^^^^^^^^^^^
 >class <out T> {    foo(): InstanceType<(typeof Anon<T>)> {        return this;    }} : typeof Anon
+>                                                                                     : ^^^^^^^^^^^
 
     foo(): InstanceType<(typeof Anon<T>)> {
 >foo : () => InstanceType<(typeof Anon<T>)>
+>    : ^^^^^^                              
 >Anon : typeof Anon
+>     : ^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 let OuterC = class C<out T> {
 >OuterC : typeof C
+>       : ^^^^^^^^
 >class C<out T> {    foo(): C<T> {        return this;    }} : typeof C
+>                                                            : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     foo(): C<T> {
 >foo : () => C<T>
+>    : ^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 

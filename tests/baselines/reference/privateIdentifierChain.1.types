@@ -1,37 +1,56 @@
-=== tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts] ////
+
+=== privateIdentifierChain.1.ts ===
 class A {
 >A : A
+>  : ^
 
     a?: A
 >a : A | undefined
+>  : ^^^^^^^^^^^^^
 
     #b?: A;
 >#b : A | undefined
+>   : ^^^^^^^^^^^^^
 
     getA(): A {
 >getA : () => A
+>     : ^^^^^^ 
 
         return new A();
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
     }
     constructor() {
         this?.#b;           // Error
 >this?.#b : A | undefined
+>         : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         this?.a.#b;         // Error
 >this?.a.#b : A | undefined
+>           : ^^^^^^^^^^^^^
 >this?.a : A | undefined
+>        : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >a : A | undefined
+>  : ^^^^^^^^^^^^^
 
         this?.getA().#b;    // Error
 >this?.getA().#b : A | undefined
+>                : ^^^^^^^^^^^^^
 >this?.getA() : A
+>             : ^
 >this?.getA : () => A
+>           : ^^^^^^ 
 >this : this
+>     : ^^^^
 >getA : () => A
+>     : ^^^^^^ 
     }
 }
 

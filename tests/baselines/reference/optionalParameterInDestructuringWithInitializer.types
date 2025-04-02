@@ -1,197 +1,343 @@
-=== tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts ===
+//// [tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts] ////
+
+=== optionalParameterInDestructuringWithInitializer.ts ===
 // https://github.com/Microsoft/TypeScript/issues/17080
 
 declare function f(a:number,b:number): void;
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
->func1 : ({ a, b }?: {    a: number;    b?: number;}) => void
+>func1 : ({ a, b }?: { a: number; b?: number; }) => void
+>      : ^        ^^^                          ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{a: 1, b: 2} : { a: number; b: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
   f(a, b)
 >f(a, b) : void
+>        : ^^^^
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
   // error
 }
 
 function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
->func2 : ({ a, b }?: {    a: number;    b?: number;}) => void
+>func2 : ({ a, b }?: { a: number; b?: number; }) => void
+>      : ^        ^^^                          ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{a: 1,b: 2} : { a: number; b: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
   f(a, b)
 >f(a, b) : void
+>        : ^^^^
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
   // no error
 }
 
 function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
->func3 : ({ a, b }?: {    a: number;    b?: number;}) => void
+>func3 : ({ a, b }?: { a: number; b?: number; }) => void
+>      : ^        ^^^                          ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{a: 1} : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
   f(a,b)
 >f(a,b) : void
+>       : ^^^^
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
   // error
 }
 
 function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
->func4 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
+>func4 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d : number
->a : { b: number; c?: number | undefined; }
+>  : ^^^^^^
+>a : { b: number; c?: number; }
+>  : ^^^^^      ^^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >{a: {b: 1,c: 2},d: 3} : { a: { b: number; c: number; }; d: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: number; c: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{b: 1,c: 2} : { b: number; c: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >c : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >d : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
   f(b,c)
 >f(b,c) : void
+>       : ^^^^
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
   // error
 }
 
 function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
->func5 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
+>func5 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >d : number
->a : { b: number; c?: number | undefined; }
+>  : ^^^^^^
+>a : { b: number; c?: number; }
+>  : ^^^^^      ^^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >{a: {b: 1,c: 2},d: 3} : { a: { b: number; c: number; }; d: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: number; c: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{b: 1,c: 2} : { b: number; c: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >c : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >d : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
   f(b, c)
 >f(b, c) : void
+>        : ^^^^
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
   // no error
 }
 
 function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1,c: 2}, d: 3} ) {
->func6 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
+>func6 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{b: 4, c: 5} : { b: number; c: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >c : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >d : number
->a : { b: number; c?: number | undefined; }
+>  : ^^^^^^
+>a : { b: number; c?: number; }
+>  : ^^^^^      ^^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >{a: {b: 1,c: 2}, d: 3} : { a: { b: number; c: number; }; d: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: number; c: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{b: 1,c: 2} : { b: number; c: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >c : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >d : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
   f(b, c)
 >f(b, c) : void
+>        : ^^^^
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
   // error
 }
 
 function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1, c: 2}, d: 3} ) {
->func7 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
+>func7 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 >{b: 4, c: 5} : { b: number; c: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >c : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >d : number
->a : { b: number; c?: number | undefined; }
+>  : ^^^^^^
+>a : { b: number; c?: number; }
+>  : ^^^^^      ^^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >{a: {b: 1, c: 2}, d: 3} : { a: { b: number; c: number; }; d: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: number; c: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{b: 1, c: 2} : { b: number; c: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >c : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >d : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
   f(b, c)
 >f(b, c) : void
+>        : ^^^^
 >f : (a: number, b: number) => void
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
   // no error
 }
@@ -199,43 +345,64 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
 interface Foo {
   readonly bar?: number;
 >bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 function performFoo({ bar }: Foo = {}) {
 >performFoo : ({ bar }?: Foo) => void
+>           : ^       ^^^   ^^^^^^^^^
 >bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
   useBar(bar);
 >useBar(bar) : void
+>            : ^^^^
 >useBar : (bar: number) => void
+>       : ^   ^^      ^^^^^    
 >bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 declare function useBar(bar: number): void;
 >useBar : (bar: number) => void
+>       : ^   ^^      ^^^^^    
 >bar : number
+>    : ^^^^^^
 
 performFoo();
 >performFoo() : void
+>             : ^^^^
 >performFoo : ({ bar }?: Foo) => void
+>           : ^       ^^^   ^^^^^^^^^
 
 function performFoo2({ bar = null }: Foo = {}) {
 >performFoo2 : ({ bar }?: Foo) => void
+>            : ^       ^^^   ^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >{} : {}
+>   : ^^
 
   useBar2(bar);
 >useBar2(bar) : void
+>             : ^^^^
 >useBar2 : (bar: number | undefined) => void
+>        : ^   ^^                  ^^^^^    
 >bar : number
+>    : ^^^^^^
 }
 
 declare function useBar2(bar: number | undefined): void;
 >useBar2 : (bar: number | undefined) => void
+>        : ^   ^^                  ^^^^^    
 >bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
 performFoo2();
 >performFoo2() : void
+>              : ^^^^
 >performFoo2 : ({ bar }?: Foo) => void
+>            : ^       ^^^   ^^^^^^^^^
 

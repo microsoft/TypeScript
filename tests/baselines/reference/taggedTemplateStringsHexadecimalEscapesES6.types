@@ -1,12 +1,20 @@
-=== tests/cases/compiler/taggedTemplateStringsHexadecimalEscapesES6.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsHexadecimalEscapesES6.ts] ////
+
+=== taggedTemplateStringsHexadecimalEscapesES6.ts ===
 function f(...args: any[]) {
 >f : (...args: any[]) => void
+>  : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 }
 
 f `\x0D${ "Interrupted CRLF" }\x0A`;
 >f `\x0D${ "Interrupted CRLF" }\x0A` : void
+>                                    : ^^^^
 >f : (...args: any[]) => void
+>  : ^^^^    ^^     ^^^^^^^^^
 >`\x0D${ "Interrupted CRLF" }\x0A` : string
+>                                  : ^^^^^^
 >"Interrupted CRLF" : "Interrupted CRLF"
+>                   : ^^^^^^^^^^^^^^^^^^
 

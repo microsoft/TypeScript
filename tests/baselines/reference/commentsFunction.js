@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsFunction.ts] ////
+
 //// [commentsFunction.ts]
 /** This comment should appear for foo*/
 function foo() {
@@ -109,9 +111,9 @@ b: number): void;
 /** fooFunc
  * comment
  */
-declare var fooFunc: (b: string) => string;
-declare var lambdaFoo: (a: number, b: number) => number;
-declare var lambddaNoVarComment: (a: number, b: number) => number;
+declare var fooFunc: (/** fooFunctionValue param */ b: string) => string;
+declare var lambdaFoo: (/**param a*/ a: number, /**param b*/ b: number) => number;
+declare var lambddaNoVarComment: (/**param a*/ a: number, /**param b*/ b: number) => number;
 declare function blah(a: string): void;
 declare function blah2(a: string): void;
 declare function blah3(a: string): void;

@@ -1,8 +1,10 @@
-=== tests/cases/conformance/salsa/test.js ===
+//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias3.ts] ////
+
+=== test.js ===
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : Symbol(apply, Decl(test.js, 0, 7))
 >require : Symbol(require)
->'./moduleExportAliasDuplicateAlias' : Symbol("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+>'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 
 const result = apply.toFixed()
 >result : Symbol(result, Decl(test.js, 1, 5))
@@ -10,7 +12,7 @@ const result = apply.toFixed()
 >apply : Symbol(apply, Decl(test.js, 0, 7))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
-=== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
+=== moduleExportAliasDuplicateAlias.js ===
 exports.apply = undefined;
 >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 >exports : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
@@ -34,7 +36,7 @@ exports.apply = a;
 
 exports.apply()
 >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
->exports : Symbol("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 
 exports.apply = 'ok'
@@ -46,7 +48,7 @@ var OK = exports.apply.toUpperCase()
 >OK : Symbol(OK, Decl(moduleExportAliasDuplicateAlias.js, 6, 3))
 >exports.apply.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
->exports : Symbol("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 >toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 

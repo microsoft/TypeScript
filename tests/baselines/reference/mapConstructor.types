@@ -1,37 +1,65 @@
-=== tests/cases/compiler/mapConstructor.ts ===
+//// [tests/cases/compiler/mapConstructor.ts] ////
+
+=== mapConstructor.ts ===
 new Map();
 >new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 
 const potentiallyUndefinedIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined;
 >potentiallyUndefinedIterable : Iterable<[string, number]> | undefined
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined : Iterable<[string, number]> | undefined
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[['1', 1], ['2', 2]] : [string, number][]
+>                     : ^^^^^^^^^^^^^^^^^^
 >['1', 1] : [string, number]
+>         : ^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 >1 : 1
+>  : ^
 >['2', 2] : [string, number]
+>         : ^^^^^^^^^^^^^^^^
 >'2' : "2"
+>    : ^^^
 >2 : 2
+>  : ^
 
 new Map(potentiallyUndefinedIterable);
 >new Map(potentiallyUndefinedIterable) : Map<string, number>
+>                                      : ^^^^^^^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 >potentiallyUndefinedIterable : Iterable<[string, number]> | undefined
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const potentiallyNullIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | null;
 >potentiallyNullIterable : Iterable<[string, number]> | null
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[['1', 1], ['2', 2]] as Iterable<[string, number]> | null : Iterable<[string, number]> | null
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[['1', 1], ['2', 2]] : [string, number][]
+>                     : ^^^^^^^^^^^^^^^^^^
 >['1', 1] : [string, number]
+>         : ^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 >1 : 1
+>  : ^
 >['2', 2] : [string, number]
+>         : ^^^^^^^^^^^^^^^^
 >'2' : "2"
+>    : ^^^
 >2 : 2
+>  : ^
 
 new Map(potentiallyNullIterable);
 >new Map(potentiallyNullIterable) : Map<string, number>
+>                                 : ^^^^^^^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 >potentiallyNullIterable : Iterable<[string, number]> | null
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

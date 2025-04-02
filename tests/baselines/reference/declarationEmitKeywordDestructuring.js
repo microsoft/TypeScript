@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitKeywordDestructuring.ts] ////
+
 //// [declarationEmitKeywordDestructuring.ts]
 type P = {
     enum: boolean;
@@ -86,21 +88,21 @@ declare function f2({ function: _function, ...rest }: P): {
     await: boolean;
     one: boolean;
 };
-declare function f3({ abstract, ...rest }: P): {
+declare function f3({ abstract: _abstract, ...rest }: P): {
     enum: boolean;
     function: boolean;
     async: boolean;
     await: boolean;
     one: boolean;
 };
-declare function f4({ async, ...rest }: P): {
+declare function f4({ async: _async, ...rest }: P): {
     enum: boolean;
     function: boolean;
     abstract: boolean;
     await: boolean;
     one: boolean;
 };
-declare function f5({ await, ...rest }: P): {
+declare function f5({ await: _await, ...rest }: P): {
     enum: boolean;
     function: boolean;
     abstract: boolean;

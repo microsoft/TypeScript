@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ExportDefaultClassDeclaration.ts ===
+//// [tests/cases/compiler/es6ExportDefaultClassDeclaration.ts] ////
+
+=== es6ExportDefaultClassDeclaration.ts ===
 export default class C {
 >C : Symbol(C, Decl(es6ExportDefaultClassDeclaration.ts, 0, 0))
 

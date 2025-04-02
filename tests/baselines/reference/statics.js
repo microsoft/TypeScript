@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/statics.ts] ////
+
 //// [statics.ts]
 module M {
     export class C {

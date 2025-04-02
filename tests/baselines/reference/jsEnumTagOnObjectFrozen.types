@@ -1,18 +1,30 @@
-=== tests/cases/compiler/usage.js ===
+//// [tests/cases/compiler/jsEnumTagOnObjectFrozen.ts] ////
+
+=== usage.js ===
 const { Thing, useThing, cbThing } = require("./index");
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
->useThing : (x: string) => void
->cbThing : (x: (x: string) => void) => void
->require("./index") : typeof import("tests/cases/compiler/index")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useThing : (x: Thing) => void
+>         : ^ ^^     ^^^^^^^^^
+>cbThing : (x: (x: Thing) => void) => void
+>        : ^ ^^                  ^^^^^^^^^
+>require("./index") : typeof import("index")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./index" : "./index"
+>          : ^^^^^^^^^
 
 useThing(Thing.a);
 >useThing(Thing.a) : void
->useThing : (x: string) => void
+>                  : ^^^^
+>useThing : (x: Thing) => void
+>         : ^ ^^     ^^^^^^^^^
 >Thing.a : "thing"
+>        : ^^^^^^^
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : "thing"
+>  : ^^^^^^^
 
 /**
  * @typedef {Object} LogEntry
@@ -22,80 +34,121 @@ useThing(Thing.a);
 
 cbThing(type => {
 >cbThing(type => {    /** @type {LogEntry} */    const logEntry = {        time: Date.now(),        type,    };}) : void
->cbThing : (x: (x: string) => void) => void
+>                                                                                                                 : ^^^^
+>cbThing : (x: (x: Thing) => void) => void
+>        : ^ ^^                  ^^^^^^^^^
 >type => {    /** @type {LogEntry} */    const logEntry = {        time: Date.now(),        type,    };} : (type: string) => void
+>                                                                                                        : ^    ^^^^^^^^^^^^^^^^^
 >type : string
+>     : ^^^^^^
 
     /** @type {LogEntry} */
     const logEntry = {
 >logEntry : LogEntry
+>         : ^^^^^^^^
 >{        time: Date.now(),        type,    } : { time: number; type: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         time: Date.now(),
 >time : number
+>     : ^^^^^^
 >Date.now() : number
+>           : ^^^^^^
 >Date.now : () => number
+>         : ^^^^^^      
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >now : () => number
+>    : ^^^^^^      
 
         type,
 >type : string
+>     : ^^^^^^
 
     };
 });
 
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 /** @enum {string} */
 const Thing = Object.freeze({
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.freeze({    a: "thing",    b: "chill"}) : Readonly<{ a: "thing"; b: "chill"; }>
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>              : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>       : ^^^^^^^^^^^^^^^^^
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>       : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >{    a: "thing",    b: "chill"} : { a: "thing"; b: "chill"; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: "thing",
 >a : "thing"
+>  : ^^^^^^^
 >"thing" : "thing"
+>        : ^^^^^^^
 
     b: "chill"
 >b : "chill"
+>  : ^^^^^^^
 >"chill" : "chill"
+>        : ^^^^^^^
 
 });
 
 exports.Thing = Thing;
 >exports.Thing = Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports.Thing : Readonly<{ a: "thing"; b: "chill"; }>
->exports : typeof import("tests/cases/compiler/index")
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("index")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /**
  * @param {Thing} x
  */
 function useThing(x) {}
 >useThing : (x: Thing) => void
+>         : ^ ^^     ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 exports.useThing = useThing;
->exports.useThing = useThing : (x: string) => void
->exports.useThing : (x: string) => void
->exports : typeof import("tests/cases/compiler/index")
->useThing : (x: string) => void
->useThing : (x: string) => void
+>exports.useThing = useThing : (x: Thing) => void
+>                            : ^ ^^     ^^^^^^^^^
+>exports.useThing : (x: Thing) => void
+>                 : ^ ^^     ^^^^^^^^^
+>exports : typeof import("index")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useThing : (x: Thing) => void
+>         : ^ ^^     ^^^^^^^^^
+>useThing : (x: Thing) => void
+>         : ^ ^^     ^^^^^^^^^
 
 /**
  * @param {(x: Thing) => void} x
  */
 function cbThing(x) {}
 >cbThing : (x: (x: Thing) => void) => void
->x : (x: string) => void
+>        : ^ ^^                  ^^^^^^^^^
+>x : (x: Thing) => void
+>  : ^ ^^     ^^^^^    
 
 exports.cbThing = cbThing;
->exports.cbThing = cbThing : (x: (x: string) => void) => void
->exports.cbThing : (x: (x: string) => void) => void
->exports : typeof import("tests/cases/compiler/index")
->cbThing : (x: (x: string) => void) => void
->cbThing : (x: (x: string) => void) => void
+>exports.cbThing = cbThing : (x: (x: Thing) => void) => void
+>                          : ^ ^^                  ^^^^^^^^^
+>exports.cbThing : (x: (x: Thing) => void) => void
+>                : ^ ^^                  ^^^^^^^^^
+>exports : typeof import("index")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cbThing : (x: (x: Thing) => void) => void
+>        : ^ ^^                  ^^^^^^^^^
+>cbThing : (x: (x: Thing) => void) => void
+>        : ^ ^^                  ^^^^^^^^^
 

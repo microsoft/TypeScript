@@ -1,29 +1,45 @@
-=== tests/cases/compiler/decoratorReferences.ts ===
+//// [tests/cases/compiler/decoratorReferences.ts] ////
+
+=== decoratorReferences.ts ===
 declare function y(...args: any[]): any;
 >y : (...args: any[]) => any
+>  : ^^^^    ^^     ^^^^^   
 >args : any[]
+>     : ^^^^^
 
 type T = number;
 >T : number
+>  : ^^^^^^
 
-@y(1 as T, C) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
->y(1 as T, C) : any
+@y(1 as T, () => C) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
+>y(1 as T, () => C) : any
 >y : (...args: any[]) => any
+>  : ^^^^    ^^     ^^^^^   
 >1 as T : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
+>() => C : () => typeof C
+>        : ^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     @y(null as T) // <-- y should resolve to the function declaration, not the parameter; T should resolve to the type parameter of the class
 >y(null as T) : any
 >y : (...args: any[]) => any
+>  : ^^^^    ^^     ^^^^^   
 >null as T : T
+>          : ^
 
     method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
 >method : (x: any, y: any) => void
+>       : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >y : (...args: any[]) => any
+>  : ^^^^    ^^     ^^^^^   
 >x : any
 >y : any
 }

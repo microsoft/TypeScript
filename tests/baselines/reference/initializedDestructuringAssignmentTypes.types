@@ -1,19 +1,35 @@
-=== tests/cases/compiler/initializedDestructuringAssignmentTypes.ts ===
+//// [tests/cases/compiler/initializedDestructuringAssignmentTypes.ts] ////
+
+=== initializedDestructuringAssignmentTypes.ts ===
 const [, a = ''] = ''.match('') || [];
 > : undefined
+> : ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >''.match('') || [] : RegExpMatchArray | []
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >''.match('') : RegExpMatchArray
->''.match : (regexp: string | RegExp) => RegExpMatchArray
+>             : ^^^^^^^^^^^^^^^^
+>''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>         : ^      ^^               ^^^^^                       
 >'' : ""
->match : (regexp: string | RegExp) => RegExpMatchArray
+>   : ^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >'' : ""
+>   : ^^
 >[] : []
+>   : ^^
 
 a.toFixed()
 >a.toFixed() : any
+>            : ^^^
 >a.toFixed : any
+>          : ^^^
 >a : string
+>  : ^^^^^^
 >toFixed : any
+>        : ^^^
 

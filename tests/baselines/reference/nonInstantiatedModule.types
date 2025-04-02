@@ -1,106 +1,155 @@
-=== tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts ===
+//// [tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts] ////
+
+=== nonInstantiatedModule.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export interface Point { x: number; y: number }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     export var a = 1;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // primary expression
 var m : typeof M;
 >m : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var m = M;
 >m : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var a1: number;
 >a1 : number
+>   : ^^^^^^
 
 var a1 = M.a;
 >a1 : number
+>   : ^^^^^^
 >M.a : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var a2: number;
 >a2 : number
+>   : ^^^^^^
 
 var a2 = m.a;
 >a2 : number
+>   : ^^^^^^
 >m.a : number
+>    : ^^^^^^
 >m : typeof M
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export module Point {
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 
         export function Origin(): Point {
 >Origin : () => Point
+>       : ^^^^^^     
 
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
         }
     }
 
     export interface Point {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 }
 
 var p: { x: number; y: number; };
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p: M2.Point;
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >M2 : any
+>   : ^^^
 
 var p2: { Origin() : { x: number; y: number; } };
->p2 : { Origin(): {    x: number;    y: number;}; }
->Origin : () => {    x: number;    y: number;}
+>p2 : { Origin(): { x: number; y: number; }; }
+>   : ^^^^^^^^^^^^                         ^^^
+>Origin : () => { x: number; y: number; }
+>       : ^^^^^^                         
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p2: typeof M2.Point;
 >p2 : { Origin(): { x: number; y: number; }; }
+>   : ^^^^^^^^^^^^                         ^^^
 >M2.Point : typeof M2.Point
+>         : ^^^^^^^^^^^^^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 >Point : typeof M2.Point
+>      : ^^^^^^^^^^^^^^^
 
 module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
     export module Utils {
         export interface Point {
             x: number; y: number;
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
         }
     }
 
     export class Utils {
 >Utils : Utils
+>      : ^^^^^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 }

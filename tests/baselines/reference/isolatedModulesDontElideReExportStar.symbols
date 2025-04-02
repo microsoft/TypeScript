@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesDontElideReExportStar.ts] ////
+
 === /a.ts ===
 export type T = number;
 >T : Symbol(T, Decl(a.ts, 0, 0))

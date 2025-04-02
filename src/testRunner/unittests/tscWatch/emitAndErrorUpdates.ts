@@ -1,103 +1,89 @@
-import { libContent } from "../helpers/contents";
+import { jsonToReadableText } from "../helpers.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    getTsBuildProjectFile,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    FileOrFolderOrSymLinkMap,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
+describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: `{}`
+        content: `{}`,
     };
     interface VerifyEmitAndErrorUpdates {
-        subScenario: string
-        files: () => File[];
-        currentDirectory?: string;
+        subScenario: string;
+        files: () => FileOrFolderOrSymLinkMap | readonly File[];
         changes: TscWatchCompileChange[];
     }
     function verifyEmitAndErrorUpdates({
         subScenario,
         files,
-        currentDirectory,
         changes,
     }: VerifyEmitAndErrorUpdates) {
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario: `default/${subScenario}`,
             commandLineArgs: ["--w"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys,
             edits: changes,
-            baselineIncremental: true
+            baselineIncremental: true,
         });
 
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario: `defaultAndD/${subScenario}`,
             commandLineArgs: ["--w", "--d"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys,
             edits: changes,
-            baselineIncremental: true
+            baselineIncremental: true,
         });
 
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModules/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys,
             edits: changes,
-            baselineIncremental: true
+            baselineIncremental: true,
         });
 
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModulesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules", "--d"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys,
             edits: changes,
-            baselineIncremental: true
+            baselineIncremental: true,
         });
 
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependencies/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys,
             edits: changes,
-            baselineIncremental: true
+            baselineIncremental: true,
         });
 
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies", "--d"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys,
             edits: changes,
-            baselineIncremental: true
+            baselineIncremental: true,
         });
+
+        function sys() {
+            return TestServerHost.createWatchedSystem(
+                files(),
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
+        }
     }
 
     describe("deep import changes", () => {
@@ -106,13 +92,13 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             content: `import {B} from './b';
 declare var console: any;
 let b = new B();
-console.log(b.c.d);`
+console.log(b.c.d);`,
         };
 
         function verifyDeepImportChange(subScenario: string, bFile: File, cFile: File) {
             verifyEmitAndErrorUpdates({
                 subScenario: `deepImportChanges/${subScenario}`,
-                files: () => [aFile, bFile, cFile, config, libFile],
+                files: () => [aFile, bFile, cFile, config],
                 changes: [
                     {
                         caption: "Rename property d to d2 of class C to initialize signatures",
@@ -128,7 +114,7 @@ console.log(b.c.d);`
                         caption: "Rename property d to d2 of class C",
                         edit: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                    }
+                    },
                 ],
             });
         }
@@ -139,19 +125,19 @@ console.log(b.c.d);`
 export class B
 {
     c = new C();
-}`
+}`,
             };
             const cFile: File = {
                 path: `/user/username/projects/myproject/c.ts`,
                 content: `export class C
 {
     d = 1;
-}`
+}`,
             };
             verifyDeepImportChange(
                 "errors for .ts change",
                 bFile,
-                cFile
+                cFile,
             );
         });
         describe("updates errors when deep import through declaration file changes", () => {
@@ -161,19 +147,19 @@ export class B
 export class B
 {
     c: C;
-}`
+}`,
             };
             const cFile: File = {
                 path: `/user/username/projects/myproject/c.d.ts`,
                 content: `export class C
 {
     d: number;
-}`
+}`,
             };
             verifyDeepImportChange(
                 "errors for .d.ts change",
                 bFile,
-                cFile
+                cFile,
             );
         });
     });
@@ -188,13 +174,13 @@ export class B
 export interface Coords {
     x2: number;
     y: number;
-}`
+}`,
         };
         const bFile: File = {
             path: `/user/username/projects/myproject/b.ts`,
             content: `import { Point } from "./a";
 export interface PointWrapper extends Point {
-}`
+}`,
         };
         const cFile: File = {
             path: `/user/username/projects/myproject/c.ts`,
@@ -207,20 +193,20 @@ export function getPoint(): PointWrapper {
             y: 2
         }
     }
-};`
+};`,
         };
         const dFile: File = {
             path: `/user/username/projects/myproject/d.ts`,
             content: `import { getPoint } from "./c";
-getPoint().c.x;`
+getPoint().c.x;`,
         };
         const eFile: File = {
             path: `/user/username/projects/myproject/e.ts`,
-            content: `import "./d";`
+            content: `import "./d";`,
         };
         verifyEmitAndErrorUpdates({
             subScenario: "file not exporting a deep multilevel import that changes",
-            files: () => [aFile, bFile, cFile, dFile, eFile, config, libFile],
+            files: () => [aFile, bFile, cFile, dFile, eFile, config],
             changes: [
                 {
                     caption: "Rename property x2 to x of interface Coords to initialize signatures",
@@ -237,16 +223,16 @@ getPoint().c.x;`
                     edit: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
-            ]
+            ],
         });
     });
     describe("updates errors when file transitively exported file changes", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 files: ["app.ts"],
-                compilerOptions: { baseUrl: "." }
-            })
+                compilerOptions: { baseUrl: "." },
+            }),
         };
         const app: File = {
             path: `/user/username/projects/myproject/app.ts`,
@@ -255,11 +241,11 @@ export class App {
     public constructor() {
         new Data().test();
     }
-}`
+}`,
         };
         const lib2Public: File = {
             path: `/user/username/projects/myproject/lib2/public.ts`,
-            content: `export * from "./data";`
+            content: `export * from "./data";`,
         };
         const lib2Data: File = {
             path: `/user/username/projects/myproject/lib2/data.ts`,
@@ -271,27 +257,27 @@ export class Data {
         }
         return result;
     }
-}`
+}`,
         };
         const lib1Public: File = {
             path: `/user/username/projects/myproject/lib1/public.ts`,
-            content: `export * from "./tools/public";`
+            content: `export * from "./tools/public";`,
         };
         const lib1ToolsPublic: File = {
             path: `/user/username/projects/myproject/lib1/tools/public.ts`,
-            content: `export * from "./toolsinterface";`
+            content: `export * from "./toolsinterface";`,
         };
         const lib1ToolsInterface: File = {
             path: `/user/username/projects/myproject/lib1/tools/toolsinterface.ts`,
             content: `export interface ITest {
     title: string;
-}`
+}`,
         };
 
         function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
             verifyEmitAndErrorUpdates({
                 subScenario: `transitive exports/${subScenario}`,
-                files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config, libFile],
+                files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config],
                 changes: [
                     {
                         caption: "Rename property title to title2 of interface ITest to initialize signatures",
@@ -307,14 +293,14 @@ export class Data {
                         caption: "Rename property title to title2 of interface ITest",
                         edit: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                    }
-                ]
+                    },
+                ],
             });
         }
         describe("when there are no circular import and exports", () => {
             verifyTransitiveExports(
                 "no circular import/export",
-                [lib2Data]
+                [lib2Data],
             );
         });
         describe("when there are circular import and exports", () => {
@@ -328,55 +314,19 @@ export class Data {
         }
         return result;
     }
-}`
+}`,
             };
             const lib2Data2: File = {
                 path: `/user/username/projects/myproject/lib2/data2.ts`,
                 content: `import { Data } from "./data";
 export class Data2 {
     public dat?: Data;
-}`
+}`,
             };
             verifyTransitiveExports(
                 "yes circular import/exports",
-                [lib2Data, lib2Data2]
+                [lib2Data, lib2Data2],
             );
-        });
-    });
-
-    describe("with noEmitOnError", () => {
-        function change(caption: string, content: string): TscWatchCompileChange {
-            return {
-                caption,
-                edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
-                // build project
-                timeouts: sys => sys.runQueuedTimeoutCallbacks()
-            };
-        }
-        const noChange: TscWatchCompileChange = {
-            caption: "No change",
-            edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
-            // build project
-            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-        };
-        verifyEmitAndErrorUpdates({
-            subScenario: "with noEmitOnError",
-            currentDirectory: `/user/username/projects/noEmitOnError`,
-            files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts", "tsconfig.json"]
-                .map(f => getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
-            changes: [
-                noChange,
-                change("Fix Syntax error", `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`),
-                change("Semantic Error", `import { A } from "../shared/types/db";
-const a: string = 10;`),
-                noChange,
-                change("Fix Semantic Error", `import { A } from "../shared/types/db";
-const a: string = "hello";`),
-                noChange,
-            ],
         });
     });
 });

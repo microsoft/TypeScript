@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReusesExistingNodesMappingJSDocTypes.ts] ////
+
+=== index.js ===
 /** @type {?} */
 export const a = null;
 >a : any
@@ -10,24 +12,30 @@ export const b = null;
 /** @type {string?} */
 export const c = null;
 >c : string
+>  : ^^^^^^
 
 /** @type {string=} */
 export const d = null;
 >d : string
+>  : ^^^^^^
 
 /** @type {string!} */
 export const e = null;
 >e : string
+>  : ^^^^^^
 
 /** @type {function(string, number): object} */
 export const f = null;
->f : (arg0: string, arg1: number) => any
+>f : (arg0: string, arg1: number) => object
+>  : ^^^^^^^      ^^^^^^^^      ^^^^^      
 
 /** @type {function(new: object, string, number)} */
 export const g = null;
->g : new (arg1: string, arg2: number) => any
+>g : new (arg1: string, arg2: number) => object
+>  : ^^^^^^^^^^^      ^^^^^^^^      ^^^^^      
 
 /** @type {Object.<string, number>} */
 export const h = null;
 >h : { [x: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 

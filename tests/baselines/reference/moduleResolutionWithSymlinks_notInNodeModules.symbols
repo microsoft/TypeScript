@@ -1,9 +1,11 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_notInNodeModules.ts] ////
+
 === /src/app.ts ===
 import { x } from "./shared/abc";
 >x : Symbol(x, Decl(app.ts, 0, 8))
 
 import { x as x2 } from "./shared2/abc";
->x : Symbol(x2, Decl(abc.ts, 4, 12))
+>x : Symbol(x2, Decl(abc.ts, 0, 12))
 >x2 : Symbol(x2, Decl(app.ts, 1, 8))
 
 x + x2;

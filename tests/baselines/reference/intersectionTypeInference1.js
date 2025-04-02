@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionTypeInference1.ts] ////
+
 //// [intersectionTypeInference1.ts]
 // Repro from #8801
 

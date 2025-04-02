@@ -1,10 +1,10 @@
-tests/cases/compiler/modifiersInObjectLiterals.ts(2,2): error TS1042: 'public' modifier cannot be used here.
-tests/cases/compiler/modifiersInObjectLiterals.ts(3,2): error TS1042: 'private' modifier cannot be used here.
-tests/cases/compiler/modifiersInObjectLiterals.ts(4,2): error TS1042: 'protected' modifier cannot be used here.
-tests/cases/compiler/modifiersInObjectLiterals.ts(5,2): error TS1042: 'abstract' modifier cannot be used here.
+modifiersInObjectLiterals.ts(2,2): error TS1042: 'public' modifier cannot be used here.
+modifiersInObjectLiterals.ts(3,2): error TS1042: 'private' modifier cannot be used here.
+modifiersInObjectLiterals.ts(4,2): error TS1042: 'protected' modifier cannot be used here.
+modifiersInObjectLiterals.ts(5,2): error TS1042: 'abstract' modifier cannot be used here.
 
 
-==== tests/cases/compiler/modifiersInObjectLiterals.ts (4 errors) ====
+==== modifiersInObjectLiterals.ts (4 errors) ====
     let data = {
     	public foo: 'hey',
     	~~~~~~

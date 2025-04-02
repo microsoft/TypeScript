@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/nonIterableRestElement1.ts] ////
+
 //// [nonIterableRestElement1.ts]
 var c = {};
 [...c] = ["", 0];

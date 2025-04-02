@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringForOfObjectBindingPattern2.ts] ////
+
 //// [sourceMapValidationDestructuringForOfObjectBindingPattern2.ts]
 declare var console: {
     log(msg: any): void;

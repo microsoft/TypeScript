@@ -1,46 +1,71 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag6.ts] ////
+
+=== test.js ===
 /** @type {number} */
 function f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
     return 1
 >1 : 1
+>  : ^
 }
 
 /** @type {{ prop: string }} */
 var g = function (prop) {
 >g : { prop: string; }
+>  : ^^^^^^^^      ^^^
 >function (prop) {} : (prop: any) => void
+>                   : ^    ^^^^^^^^^^^^^^
 >prop : any
+>     : ^^^
 }
 
 /** @type {(a: number) => number} */
 function add1(a, b) { return a + b; }
 >add1 : (a: number) => number
+>     : ^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : any
+>  : ^^^
 >a + b : any
+>      : ^^^
 >a : number
+>  : ^^^^^^
 >b : any
+>  : ^^^
 
 /** @type {(a: number, b: number) => number} */
 function add2(a, b) { return a + b; }
 >add2 : (a: number, b: number) => number
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a + b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // TODO: Should be an error since signature doesn't match.
 /** @type {(a: number, b: number, c: number) => number} */
 function add3(a, b) { return a + b; }
 >add3 : (a: number, b: number, c: number) => number
+>     : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a + b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // Confirm initializers are compatible.
 // They can't have more parameters than the type/context.
@@ -48,28 +73,40 @@ function add3(a, b) { return a + b; }
 /** @type {() => void} */
 function funcWithMoreParameters(more) {} // error
 >funcWithMoreParameters : () => void
+>                       : ^^^^^^    
 >more : any
+>     : ^^^
 
 /** @type {() => void} */
 const variableWithMoreParameters = function (more) {}; // error
 >variableWithMoreParameters : () => void
+>                           : ^^^^^^    
 >function (more) {} : (more: any) => void
+>                   : ^    ^^^^^^^^^^    
 >more : any
+>     : ^^^
 
 /** @type {() => void} */
 const arrowWithMoreParameters = (more) => {}; // error
 >arrowWithMoreParameters : () => void
+>                        : ^^^^^^    
 >(more) => {} : (more: any) => void
+>             : ^    ^^^^^^^^^^    
 >more : any
+>     : ^^^
 
 ({
 >({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters(): void; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters(): void; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 
   /** @type {() => void} */
   methodWithMoreParameters(more) {}, // error
 >methodWithMoreParameters : (more: any) => void
+>                         : ^    ^^^^^^^^^^    
 >more : any
+>     : ^^^
 
 });
 

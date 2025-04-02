@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM.tsx] ////
+
 //// [reactTagNameComponentWithPropsNoOOM.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

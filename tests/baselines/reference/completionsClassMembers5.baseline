@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsClassMembers5.ts ===
 // export const SOME_CONSTANT = 'SOME_TEXT';
 // export class Base {
@@ -7,6 +8,7 @@
 //     
 //     ^
 // | ----------------------------------------------------------------------
+// | (property) Base[SOME_CONSTANT]: boolean
 // | abstract
 // | accessor
 // | async
@@ -20,7 +22,6 @@
 // | readonly
 // | set
 // | static
-// | (property) Base[SOME_CONSTANT]: boolean
 // | ----------------------------------------------------------------------
 // }
 
@@ -37,6 +38,62 @@
       "isMemberCompletion": true,
       "isNewIdentifierLocation": true,
       "entries": [
+        {
+          "name": "[SOME_CONSTANT]",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "[SOME_CONSTANT]: boolean;",
+          "filterText": "[SOME_CONSTANT]",
+          "isSnippet": true,
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base",
+              "kind": "className"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "SOME_CONSTANT",
+              "kind": "propertyName"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "boolean",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "abstract",
           "kind": "keyword",
@@ -192,63 +249,9 @@
               "kind": "keyword"
             }
           ]
-        },
-        {
-          "name": "[SOME_CONSTANT]",
-          "kind": "property",
-          "kindModifiers": "",
-          "sortText": "17",
-          "insertText": "[SOME_CONSTANT]: boolean;",
-          "isSnippet": true,
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Base",
-              "kind": "className"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "SOME_CONSTANT",
-              "kind": "propertyName"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "boolean",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

@@ -1,32 +1,50 @@
-=== tests/cases/compiler/existingModule.ts ===
+//// [tests/cases/compiler/shorthandPropertyAssignmentInES6Module.ts] ////
+
+=== existingModule.ts ===
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import {x} from './existingModule';
 >x : number
+>  : ^^^^^^
 
 import {foo} from './missingModule';
 >foo : any
+>    : ^^^
 
 declare function use(a: any): void;
 >use : (a: any) => void
+>    : ^ ^^   ^^^^^    
 >a : any
+>  : ^^^
 
 const test = { x, foo };
 >test : { x: number; foo: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x, foo } : { x: number; foo: any; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >foo : any
+>    : ^^^
 
 use(x);
 >use(x) : void
+>       : ^^^^
 >use : (a: any) => void
+>    : ^ ^^   ^^^^^    
 >x : number
+>  : ^^^^^^
 
 use(foo);
 >use(foo) : void
+>         : ^^^^
 >use : (a: any) => void
+>    : ^ ^^   ^^^^^    
 >foo : any
+>    : ^^^
 

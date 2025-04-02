@@ -1,18 +1,18 @@
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(8,1): error TS18048: 's1' is possibly 'undefined'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(12,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(16,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(23,1): error TS18048: 't1' is possibly 'undefined'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(26,1): error TS18048: 't2.z' is possibly 'undefined'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(34,5): error TS18048: 'z' is possibly 'undefined'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(41,5): error TS18048: 'q.z' is possibly 'undefined'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(52,5): error TS18048: 'q.z' is possibly 'undefined'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(62,2): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+noUncheckedIndexedAccessDestructuring.ts(8,1): error TS18048: 's1' is possibly 'undefined'.
+noUncheckedIndexedAccessDestructuring.ts(12,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+noUncheckedIndexedAccessDestructuring.ts(16,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+noUncheckedIndexedAccessDestructuring.ts(23,1): error TS18048: 't1' is possibly 'undefined'.
+noUncheckedIndexedAccessDestructuring.ts(26,1): error TS18048: 't2.z' is possibly 'undefined'.
+noUncheckedIndexedAccessDestructuring.ts(34,5): error TS18048: 'z' is possibly 'undefined'.
+noUncheckedIndexedAccessDestructuring.ts(41,5): error TS18048: 'q.z' is possibly 'undefined'.
+noUncheckedIndexedAccessDestructuring.ts(52,5): error TS18048: 'q.z' is possibly 'undefined'.
+noUncheckedIndexedAccessDestructuring.ts(62,2): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(71,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+noUncheckedIndexedAccessDestructuring.ts(71,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts (10 errors) ====
+==== noUncheckedIndexedAccessDestructuring.ts (10 errors) ====
     declare const strArray: string[];
     declare const strStrTuple: [string, string];
     

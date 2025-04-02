@@ -1,11 +1,11 @@
-tests/cases/conformance/generators/generatorExplicitReturnType.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
-tests/cases/conformance/generators/generatorExplicitReturnType.ts(3,11): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/generators/generatorExplicitReturnType.ts(4,11): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/generators/generatorExplicitReturnType.ts(5,5): error TS2322: Type 'number' is not assignable to type 'boolean'.
-tests/cases/conformance/generators/generatorExplicitReturnType.ts(16,11): error TS2322: Type 'symbol' is not assignable to type 'number'.
+generatorExplicitReturnType.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
+generatorExplicitReturnType.ts(3,11): error TS2322: Type 'string' is not assignable to type 'number'.
+generatorExplicitReturnType.ts(4,11): error TS2322: Type 'string' is not assignable to type 'number'.
+generatorExplicitReturnType.ts(5,5): error TS2322: Type 'number' is not assignable to type 'boolean'.
+generatorExplicitReturnType.ts(16,11): error TS2322: Type 'symbol' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/generators/generatorExplicitReturnType.ts (5 errors) ====
+==== generatorExplicitReturnType.ts (5 errors) ====
     function* g1(): Generator<number, boolean, string> {
         yield; // error
         ~~~~~

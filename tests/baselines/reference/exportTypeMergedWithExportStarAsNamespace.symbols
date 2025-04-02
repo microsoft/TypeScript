@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/usage.ts ===
+//// [tests/cases/conformance/externalModules/exportTypeMergedWithExportStarAsNamespace.ts] ////
+
+=== usage.ts ===
 import { Something } from "./prelude"
 >Something : Symbol(Something, Decl(usage.ts, 0, 8))
 
@@ -14,7 +16,7 @@ export type MyType = Something.SubType<string>
 >Something : Symbol(Something, Decl(usage.ts, 0, 8))
 >SubType : Symbol(SubType, Decl(Something.ts, 0, 39))
 
-=== tests/cases/conformance/externalModules/Something.ts ===
+=== Something.ts ===
 export type Something<A> = { value: A }
 >Something : Symbol(Something, Decl(Something.ts, 0, 0))
 >A : Symbol(A, Decl(Something.ts, 0, 22))
@@ -35,7 +37,7 @@ export declare function of<A>(value: A): Something<A>
 >Something : Symbol(Something, Decl(Something.ts, 0, 0))
 >A : Symbol(A, Decl(Something.ts, 2, 27))
 
-=== tests/cases/conformance/externalModules/prelude.ts ===
+=== prelude.ts ===
 import * as S from "./Something"
 >S : Symbol(S, Decl(prelude.ts, 0, 6))
 

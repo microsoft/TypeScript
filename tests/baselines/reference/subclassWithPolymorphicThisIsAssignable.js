@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/subclassWithPolymorphicThisIsAssignable.ts] ////
+
 //// [subclassWithPolymorphicThisIsAssignable.ts]
 /* taken from mongoose.Document */
 interface Document {

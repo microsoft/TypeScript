@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeEquivalence.ts ===
+//// [tests/cases/conformance/types/union/unionTypeEquivalence.ts] ////
+
+=== unionTypeEquivalence.ts ===
 // A | B is equivalent to A if B is a subtype of A
 class C { }
 >C : Symbol(C, Decl(unionTypeEquivalence.ts, 0, 0))

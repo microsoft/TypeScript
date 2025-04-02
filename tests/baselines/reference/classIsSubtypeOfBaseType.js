@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts] ////
+
 //// [classIsSubtypeOfBaseType.ts]
 class Base<T> {
     foo: T;

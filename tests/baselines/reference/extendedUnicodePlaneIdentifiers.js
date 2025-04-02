@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendedUnicodePlaneIdentifiers.ts] ////
+
 //// [extendedUnicodePlaneIdentifiers.ts]
 const 𝑚 = 4;
 const 𝑀 = 5;

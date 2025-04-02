@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transitiveTypeArgumentInference1.ts] ////
+
 //// [transitiveTypeArgumentInference1.ts]
 interface I1<T, U> {
 	m(value: T): U;

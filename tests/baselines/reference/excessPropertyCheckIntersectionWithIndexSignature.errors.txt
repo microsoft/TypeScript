@@ -1,10 +1,9 @@
-tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts(5,7): error TS2322: Type '{ a: 0; }' is not assignable to type '{ a: 0; } & { b: 0; }'.
+excessPropertyCheckIntersectionWithIndexSignature.ts(5,7): error TS2322: Type '{ a: 0; }' is not assignable to type '{ a: 0; } & { b: 0; }'.
   Property 'b' is missing in type '{ a: 0; }' but required in type '{ b: 0; }'.
-tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts(7,24): error TS2322: Type '{ a: 0; b: 0; c: number; }' is not assignable to type '{ a: 0; } & { b: 0; }'.
-  Object literal may only specify known properties, and 'c' does not exist in type '{ a: 0; } & { b: 0; }'.
+excessPropertyCheckIntersectionWithIndexSignature.ts(7,24): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ a: 0; } & { b: 0; }'.
 
 
-==== tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts (2 errors) ====
+==== excessPropertyCheckIntersectionWithIndexSignature.ts (2 errors) ====
     // Repro from #51875
     
     let x: { [x: string]: { a: 0 } } & { [x: string]: { b: 0 } };
@@ -13,12 +12,11 @@ tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts(7,24):
           ~
 !!! error TS2322: Type '{ a: 0; }' is not assignable to type '{ a: 0; } & { b: 0; }'.
 !!! error TS2322:   Property 'b' is missing in type '{ a: 0; }' but required in type '{ b: 0; }'.
-!!! related TS2728 tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts:3:53: 'b' is declared here.
+!!! related TS2728 excessPropertyCheckIntersectionWithIndexSignature.ts:3:53: 'b' is declared here.
     x = { y: { a: 0, b: 0 } };
     x = { y: { a: 0, b: 0, c: 0 } };  // Error
                            ~
-!!! error TS2322: Type '{ a: 0; b: 0; c: number; }' is not assignable to type '{ a: 0; } & { b: 0; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: 0; } & { b: 0; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ a: 0; } & { b: 0; }'.
     
     type A = { a: string };
     type B = { b: string };

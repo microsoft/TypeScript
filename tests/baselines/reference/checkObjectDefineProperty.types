@@ -1,175 +1,300 @@
-=== tests/cases/conformance/jsdoc/validate.ts ===
+//// [tests/cases/conformance/jsdoc/checkObjectDefineProperty.ts] ////
+
+=== validate.ts ===
 // Validate in TS as simple validations would usually be interpreted as more special assignments
 import x = require("./");
 >x : typeof x
+>  : ^^^^^^^^
 
 x.name;
 >x.name : string
+>       : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >name : string
+>     : ^^^^^^
 
 x.middleInit;
 >x.middleInit : string
+>             : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >middleInit : string
+>           : ^^^^^^
 
 x.lastName;
 >x.lastName : string
+>           : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >lastName : string
+>         : ^^^^^^
 
 x.zip;
 >x.zip : number
+>      : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >zip : number
+>    : ^^^^^^
 
 x.houseNumber;
 >x.houseNumber : number
+>              : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >houseNumber : number
+>            : ^^^^^^
 
 x.zipStr;
 >x.zipStr : string
+>         : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >zipStr : string
+>       : ^^^^^^
 
 x.name = "Another";
 >x.name = "Another" : "Another"
+>                   : ^^^^^^^^^
 >x.name : string
+>       : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"Another" : "Another"
+>          : ^^^^^^^^^
 
 x.zip = 98123;
 >x.zip = 98123 : 98123
+>              : ^^^^^
 >x.zip : number
+>      : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >zip : number
+>    : ^^^^^^
 >98123 : 98123
+>      : ^^^^^
 
 x.zipStr = "OK";
 >x.zipStr = "OK" : "OK"
+>                : ^^^^
 >x.zipStr : string
+>         : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >zipStr : string
+>       : ^^^^^^
 >"OK" : "OK"
+>     : ^^^^
 
 x.lastName = "should fail";
 >x.lastName = "should fail" : "should fail"
+>                           : ^^^^^^^^^^^^^
 >x.lastName : any
+>           : ^^^
 >x : typeof x
+>  : ^^^^^^^^
 >lastName : any
+>         : ^^^
 >"should fail" : "should fail"
+>              : ^^^^^^^^^^^^^
 
 x.houseNumber = 12; // should also fail
 >x.houseNumber = 12 : 12
+>                   : ^^
 >x.houseNumber : any
+>              : ^^^
 >x : typeof x
+>  : ^^^^^^^^
 >houseNumber : any
+>            : ^^^
 >12 : 12
+>   : ^^
 
 x.zipStr = 12; // should fail
 >x.zipStr = 12 : 12
+>              : ^^
 >x.zipStr : string
+>         : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >zipStr : string
+>       : ^^^^^^
 >12 : 12
+>   : ^^
 
 x.middleInit = "R"; // should also fail
 >x.middleInit = "R" : "R"
+>                   : ^^^
 >x.middleInit : any
+>             : ^^^
 >x : typeof x
+>  : ^^^^^^^^
 >middleInit : any
+>           : ^^^
 >"R" : "R"
+>    : ^^^
 
-=== tests/cases/conformance/jsdoc/index.js ===
+=== index.js ===
 const x = {};
 >x : typeof x
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 Object.defineProperty(x, "name", { value: "Charles", writable: true });
 >Object.defineProperty(x, "name", { value: "Charles", writable: true }) : typeof x
+>                                                                       : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >x : typeof x
+>  : ^^^^^^^^
 >"name" : "name"
+>       : ^^^^^^
 >{ value: "Charles", writable: true } : { value: string; writable: true; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"Charles" : "Charles"
+>          : ^^^^^^^^^
 >writable : true
+>         : ^^^^
 >true : true
+>     : ^^^^
 
 Object.defineProperty(x, "middleInit", { value: "H" });
 >Object.defineProperty(x, "middleInit", { value: "H" }) : typeof x
+>                                                       : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >x : typeof x
+>  : ^^^^^^^^
 >"middleInit" : "middleInit"
+>             : ^^^^^^^^^^^^
 >{ value: "H" } : { value: string; }
+>               : ^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"H" : "H"
+>    : ^^^
 
 Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 >Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : typeof x
+>                                                                          : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >x : typeof x
+>  : ^^^^^^^^
 >"lastName" : "lastName"
+>           : ^^^^^^^^^^
 >{ value: "Smith", writable: false } : { value: string; writable: false; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"Smith" : "Smith"
+>        : ^^^^^^^
 >writable : false
+>         : ^^^^^
 >false : false
+>      : ^^^^^
 
 Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
 >Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof x
+>                                                                                   : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >x : typeof x
+>  : ^^^^^^^^
 >"zip" : "zip"
+>      : ^^^^^
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >get : () => number
+>    : ^^^^^^^^^^^^
 >98122 : 98122
+>      : ^^^^^
 >set : (_: any) => void
+>    : ^ ^^^^^^^^^^^^^^
 >_ : any
+>  : ^^^
 
 Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
 >Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : typeof x
+>                                                                    : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >x : typeof x
+>  : ^^^^^^^^
 >"houseNumber" : "houseNumber"
+>              : ^^^^^^^^^^^^^
 >{ get() { return 21.75 } } : { get(): number; }
+>                           : ^^^^^^^^^^^^^^^^^^
 >get : () => number
+>    : ^^^^^^^^^^^^
 >21.75 : 21.75
+>      : ^^^^^
 
 Object.defineProperty(x, "zipStr", {
 >Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : typeof x
+>                                                                                                                       : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >x : typeof x
+>  : ^^^^^^^^
 >"zipStr" : "zipStr"
+>         : ^^^^^^^^
 >{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
+>                                                                                   : ^^^^^^   ^^      ^^^^^^^^^^
 
     /** @param {string} str */
     set(str) {
 >set : (str: string) => void
+>    : ^   ^^      ^^^^^^^^^
 >str : string
+>    : ^^^^^^
 
         this.zip = Number(str) 
 >this.zip = Number(str) : number
+>                       : ^^^^^^
 >this.zip : any
+>         : ^^^
 >this : any
+>     : ^^^
 >zip : any
+>    : ^^^
 >Number(str) : number
+>            : ^^^^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
     }
 });
 
@@ -177,52 +302,80 @@ Object.defineProperty(x, "zipStr", {
  * @param {{name: string}} named
  */
 function takeName(named) { return named.name; }
->takeName : (named: {    name: string;}) => string
+>takeName : (named: { name: string; }) => string
+>         : ^     ^^                 ^^^^^^^^^^^
 >named : { name: string; }
+>      : ^^^^^^^^      ^^^
 >named.name : string
+>           : ^^^^^^
 >named : { name: string; }
+>      : ^^^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 
 takeName(x);
 >takeName(x) : string
+>            : ^^^^^^
 >takeName : (named: { name: string; }) => string
+>         : ^     ^^                 ^^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 
 /**
  * @type {number}
  */
 var a = x.zip;
 >a : number
+>  : ^^^^^^
 >x.zip : number
+>      : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >zip : number
+>    : ^^^^^^
 
 /**
  * @type {number}
  */
 var b = x.houseNumber;
 >b : number
+>  : ^^^^^^
 >x.houseNumber : number
+>              : ^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >houseNumber : number
+>            : ^^^^^^
 
 const returnExemplar = () => x;
 >returnExemplar : () => typeof x
+>               : ^^^^^^^^^^^^^^
 >() => x : () => typeof x
+>        : ^^^^^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 
 const needsExemplar = (_ = x) => void 0;
 >needsExemplar : (_?: typeof x) => undefined
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(_ = x) => void 0 : (_?: typeof x) => undefined
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : typeof x
+>  : ^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 const expected = /** @type {{name: string, readonly middleInit: string, readonly lastName: string, zip: number, readonly houseNumber: number, zipStr: string}} */(/** @type {*} */(null));
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >(/** @type {*} */(null)) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>                         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >(null) : any
+>       : ^^^
 
 /**
  * 
@@ -231,24 +384,41 @@ const expected = /** @type {{name: string, readonly middleInit: string, readonly
  */
 function match(a, b) {}
 >match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
+>      : ^ ^^                     ^^ ^^                    ^^^^^^^^^
 >a : () => typeof x
+>  : ^^^^^^^^^^^^^^
 >b : (_?: typeof x) => undefined
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 match(() => expected, (x = expected) => void 0);
 >match(() => expected, (x = expected) => void 0) : void
->match : (a: () => typeof x, b: (_?: typeof x) => undefined) => void
+>                                                : ^^^^
+>match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
+>      : ^ ^^                     ^^ ^^                    ^^^^^^^^^
 >() => expected : () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>               : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >(x = expected) => void 0 : (x?: typeof x | undefined) => undefined
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : typeof x | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 module.exports = x;
 >module.exports = x : typeof x
+>                   : ^^^^^^^^
 >module.exports : typeof x
+>               : ^^^^^^^^
 >module : { exports: typeof x; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof x
+>        : ^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 

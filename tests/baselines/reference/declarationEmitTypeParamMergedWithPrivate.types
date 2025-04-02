@@ -1,16 +1,22 @@
-=== tests/cases/compiler/declarationEmitTypeParamMergedWithPrivate.ts ===
+//// [tests/cases/compiler/declarationEmitTypeParamMergedWithPrivate.ts] ////
+
+=== declarationEmitTypeParamMergedWithPrivate.ts ===
 export class Test<T> {
 >Test : Test<T>
+>     : ^^^^^^^
 
     private get T(): T {
 >T : T
+>  : ^
 
         throw "";
 >"" : ""
+>   : ^^
     }
 
     public test(): T {
 >test : () => T
+>     : ^^^^^^ 
 
         return null as any;
 >null as any : any

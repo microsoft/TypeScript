@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
+
 //// [jsxComplexSignatureHasApplicabilityError.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -623,7 +625,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createReactSingleSelect = void 0;
+exports.createReactSingleSelect = createReactSingleSelect;
 var React = require("react");
 function createReactSingleSelect(WrappedComponent) {
     return function (props) {
@@ -634,4 +636,3 @@ function createReactSingleSelect(WrappedComponent) {
             } })));
     };
 }
-exports.createReactSingleSelect = createReactSingleSelect;

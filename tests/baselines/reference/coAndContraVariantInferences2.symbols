@@ -1,4 +1,6 @@
-=== tests/cases/compiler/coAndContraVariantInferences2.ts ===
+//// [tests/cases/compiler/coAndContraVariantInferences2.ts] ////
+
+=== coAndContraVariantInferences2.ts ===
 interface A { a: string }
 >A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
 >a : Symbol(A.a, Decl(coAndContraVariantInferences2.ts, 0, 13))

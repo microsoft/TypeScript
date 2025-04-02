@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitParameterProperty.ts] ////
+
 //// [declarationEmitParameterProperty.ts]
 export class Foo {
   constructor(public bar?: string) {

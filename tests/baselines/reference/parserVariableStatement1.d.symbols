@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement1.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserVariableStatement1.d.ts] ////
+
+=== parserVariableStatement1.d.ts ===
 var v = 1;
 >v : Symbol(v, Decl(parserVariableStatement1.d.ts, 0, 3))
 

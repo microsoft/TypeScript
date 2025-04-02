@@ -1,15 +1,15 @@
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(5,7): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(5,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(9,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(10,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(11,7): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(11,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
-tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts(15,10): error TS2339: Property '#z' does not exist on type 'C'.
+privateNameBadDeclaration.ts(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadDeclaration.ts(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadDeclaration.ts(5,7): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadDeclaration.ts(5,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+privateNameBadDeclaration.ts(9,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadDeclaration.ts(10,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadDeclaration.ts(11,7): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadDeclaration.ts(11,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+privateNameBadDeclaration.ts(15,10): error TS2339: Property '#z' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts (9 errors) ====
+==== privateNameBadDeclaration.ts (9 errors) ====
     function A() { }
     A.prototype = {
       #x: 1,         // Error

@@ -1,145 +1,220 @@
-=== tests/cases/compiler/objectCreationOfElementAccessExpression.ts ===
+//// [tests/cases/compiler/objectCreationOfElementAccessExpression.ts] ////
+
+=== objectCreationOfElementAccessExpression.ts ===
 class Food {
 >Food : Food
+>     : ^^^^
 
     private amount: number;
 >amount : number
+>       : ^^^^^^
 
     constructor(public name: string) {
 >name : string
+>     : ^^^^^^
 
         this.amount = 100;
 >this.amount = 100 : 100
+>                  : ^^^
 >this.amount : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >amount : number
+>       : ^^^^^^
 >100 : 100
+>    : ^^^
     }
     public eat(amountToEat: number): boolean {
 >eat : (amountToEat: number) => boolean
+>    : ^           ^^      ^^^^^       
 >amountToEat : number
+>            : ^^^^^^
 
         this.amount -= amountToEat;
 >this.amount -= amountToEat : number
+>                           : ^^^^^^
 >this.amount : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >amount : number
+>       : ^^^^^^
 >amountToEat : number
+>            : ^^^^^^
 
         if (this.amount <= 0) {
 >this.amount <= 0 : boolean
+>                 : ^^^^^^^
 >this.amount : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >amount : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
             this.amount = 0;
 >this.amount = 0 : 0
+>                : ^
 >this.amount : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >amount : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
             return false;
 >false : false
+>      : ^^^^^
         }
         else {
             return true;
 >true : true
+>     : ^^^^
         }
     }
 }
 class MonsterFood extends Food {
 >MonsterFood : MonsterFood
+>            : ^^^^^^^^^^^
 >Food : Food
+>     : ^^^^
 
     constructor(name: string, public flavor: string) {
 >name : string
+>     : ^^^^^^
 >flavor : string
+>       : ^^^^^^
 
         super(name);
 >super(name) : void
+>            : ^^^^
 >super : typeof Food
+>      : ^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
     }
 }
 class IceCream extends MonsterFood {
 >IceCream : IceCream
+>         : ^^^^^^^^
 >MonsterFood : MonsterFood
+>            : ^^^^^^^^^^^
 
     private isDairyFree: boolean;
 >isDairyFree : boolean
+>            : ^^^^^^^
 
     constructor(public flavor: string) {
 >flavor : string
+>       : ^^^^^^
 
         super("Ice Cream", flavor);
 >super("Ice Cream", flavor) : void
+>                           : ^^^^
 >super : typeof MonsterFood
+>      : ^^^^^^^^^^^^^^^^^^
 >"Ice Cream" : "Ice Cream"
+>            : ^^^^^^^^^^^
 >flavor : string
+>       : ^^^^^^
     }
 }
 class Cookie extends MonsterFood {
 >Cookie : Cookie
+>       : ^^^^^^
 >MonsterFood : MonsterFood
+>            : ^^^^^^^^^^^
 
     constructor(public flavor: string, public isGlutenFree: boolean) {
 >flavor : string
+>       : ^^^^^^
 >isGlutenFree : boolean
+>             : ^^^^^^^
 
         super("Cookie", flavor);
 >super("Cookie", flavor) : void
+>                        : ^^^^
 >super : typeof MonsterFood
+>      : ^^^^^^^^^^^^^^^^^^
 >"Cookie" : "Cookie"
+>         : ^^^^^^^^
 >flavor : string
+>       : ^^^^^^
     }
 }
 class PetFood extends Food {
 >PetFood : PetFood
+>        : ^^^^^^^
 >Food : Food
+>     : ^^^^
 
     constructor(name: string, public whereToBuy: number) {
 >name : string
+>     : ^^^^^^
 >whereToBuy : number
+>           : ^^^^^^
 
         super(name);
 >super(name) : void
+>            : ^^^^
 >super : typeof Food
+>      : ^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
     }
 }
 class ExpensiveOrganicDogFood extends PetFood {
 >ExpensiveOrganicDogFood : ExpensiveOrganicDogFood
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >PetFood : PetFood
+>        : ^^^^^^^
 
     constructor(public whereToBuy: number) {
 >whereToBuy : number
+>           : ^^^^^^
 
         super("Origen", whereToBuy);
 >super("Origen", whereToBuy) : void
+>                            : ^^^^
 >super : typeof PetFood
+>      : ^^^^^^^^^^^^^^
 >"Origen" : "Origen"
+>         : ^^^^^^^^
 >whereToBuy : number
+>           : ^^^^^^
     }
 }
 class ExpensiveOrganicCatFood extends PetFood {
 >ExpensiveOrganicCatFood : ExpensiveOrganicCatFood
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >PetFood : PetFood
+>        : ^^^^^^^
 
     constructor(public whereToBuy: number, public containsFish: boolean) {
 >whereToBuy : number
+>           : ^^^^^^
 >containsFish : boolean
+>             : ^^^^^^^
 
         super("Nature's Logic", whereToBuy);
 >super("Nature's Logic", whereToBuy) : void
+>                                    : ^^^^
 >super : typeof PetFood
+>      : ^^^^^^^^^^^^^^
 >"Nature's Logic" : "Nature's Logic"
+>                 : ^^^^^^^^^^^^^^^^
 >whereToBuy : number
+>           : ^^^^^^
     }
 }
 class Slug {
 >Slug : Slug
+>     : ^^^^
 
     // This is NOT a food!!!
 }
@@ -147,39 +222,73 @@ class Slug {
 // ElementAccessExpressions can only contain one expression.  There should be a parse error here.
 var foods = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
 >foods : any
+>      : ^^^
 >new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
+>                                                                                                                       : ^^^
 >PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
+>                                                                                                                   : ^^^
 >PetFood : typeof PetFood
+>        : ^^^^^^^^^^^^^^
 >new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true) : Cookie
+>                                                                                                          : ^^^^^^
 >new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) : any
+>                                                                      : ^^^
 >new IceCream('Mint chocolate chip') : IceCream
+>                                    : ^^^^^^^^
 >IceCream : typeof IceCream
+>         : ^^^^^^^^^^^^^^^
 >'Mint chocolate chip' : "Mint chocolate chip"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >Cookie('Chocolate chip', false) : any
+>                                : ^^^
 >Cookie : typeof Cookie
+>       : ^^^^^^^^^^^^^
 >'Chocolate chip' : "Chocolate chip"
+>                 : ^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >new Cookie('Peanut butter', true) : Cookie
+>                                  : ^^^^^^
 >Cookie : typeof Cookie
+>       : ^^^^^^^^^^^^^
 >'Peanut butter' : "Peanut butter"
+>                : ^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
 >foods2 : MonsterFood[]
+>       : ^^^^^^^^^^^^^
 >new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
+>                                                                                                                       : ^^^
 >PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
+>                                                                                                                   : ^^^
 >PetFood : typeof PetFood
+>        : ^^^^^^^^^^^^^^
 >new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true) : Cookie
+>                                                                                                          : ^^^^^^
 >new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) : any
+>                                                                      : ^^^
 >new IceCream('Mint chocolate chip') : IceCream
+>                                    : ^^^^^^^^
 >IceCream : typeof IceCream
+>         : ^^^^^^^^^^^^^^^
 >'Mint chocolate chip' : "Mint chocolate chip"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >Cookie('Chocolate chip', false) : any
+>                                : ^^^
 >Cookie : typeof Cookie
+>       : ^^^^^^^^^^^^^
 >'Chocolate chip' : "Chocolate chip"
+>                 : ^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >new Cookie('Peanut butter', true) : Cookie
+>                                  : ^^^^^^
 >Cookie : typeof Cookie
+>       : ^^^^^^^^^^^^^
 >'Peanut butter' : "Peanut butter"
+>                : ^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 

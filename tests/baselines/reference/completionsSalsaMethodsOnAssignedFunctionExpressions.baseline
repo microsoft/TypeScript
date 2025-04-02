@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/something.js ===
 // var C = function () { }
 // /**
@@ -150,36 +151,46 @@
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "C",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "f",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "prototype",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "x",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

@@ -1,120 +1,184 @@
-=== tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts] ////
+
+=== topLevelAwaitErrors.1.ts ===
 export {};
 
 // reparse call as invalid await should error
 await (1,);
 >await (1,) : any
+>           : ^^^
 >(1,) : any
+>     : ^^^
 >1, : any
+>   : ^^^
 >1 : 1
+>  : ^
 > : any
+> : ^^^
 
 await <number, string>(1);
 >await <number, string>(1) : boolean
+>                          : ^^^^^^^
 >await <number : number
+>              : ^^^^^^
 ><number : number
+>        : ^^^^^^
 > : any
+> : ^^^
 >string>(1) : boolean
+>           : ^^^^^^^
 >string : any
+>       : ^^^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 
 // reparse tagged template as invalid await should error
 await <number, string> ``;
 >await <number, string> `` : boolean
+>                          : ^^^^^^^
 >await <number : number
+>              : ^^^^^^
 ><number : number
+>        : ^^^^^^
 > : any
+> : ^^^
 >string> `` : boolean
+>           : ^^^^^^^
 >string : any
+>       : ^^^
 >`` : ""
+>   : ^^
 
 // reparse class extends clause should fail
 class C extends await<string> {
 >C : C
+>  : ^
 >string : any
+>       : ^^^
 }
 
 // await in class decorators should fail
 @(await)
 >(await) : any
+>        : ^^^
 >await : any
+>      : ^^^
 > : any
+> : ^^^
 
 class C1 {}
 >C1 : C1
+>   : ^^
 
 @await(x)
 >await(x) : any
+>         : ^^^
 > : any
+> : ^^^
 >x : any
+>  : ^^^
 
 class C2 {}
 >C2 : C2
+>   : ^^
 
 @await
 > : any
+> : ^^^
 
 class C3 {}
 >C3 : C3
+>   : ^^
 
 // await in member decorators should fail
 class C4 {
 >C4 : C4
+>   : ^^
 
     @await
 > : any
+> : ^^^
 
     ["foo"]() {}
 >["foo"] : () => void
+>        : ^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 }
 class C5 {
 >C5 : C5
+>   : ^^
 
     @await(1)
 >await(1) : any
+>         : ^^^
 > : any
+> : ^^^
 >1 : 1
+>  : ^
 
     ["foo"]() {}
 >["foo"] : () => void
+>        : ^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 }
 class C6 {
 >C6 : C6
+>   : ^^
 
     @(await)
 >(await) : any
+>        : ^^^
 >await : any
+>      : ^^^
 > : any
+> : ^^^
 
     ["foo"]() {}
 >["foo"] : () => void
+>        : ^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 }
 
 // await in parameter decorators should fail
 class C7 {
 >C7 : C7
+>   : ^^
 
     method1(@await [x]) {}
 >method1 : ([x]: [any]) => void
+>        : ^   ^^^^^^^^^^^^^^^^
 > : any
+> : ^^^
 >x : any
+>  : ^^^
 
     method2(@await(1) [x]) {}
 >method2 : ([x]: [any]) => void
+>        : ^   ^^^^^^^^^^^^^^^^
 >await(1) : any
+>         : ^^^
 > : any
+> : ^^^
 >1 : 1
+>  : ^
 >x : any
+>  : ^^^
 
     method3(@(await) [x]) {}
 >method3 : ([x]: [any]) => void
+>        : ^   ^^^^^^^^^^^^^^^^
 >(await) : any
+>        : ^^^
 >await : any
+>      : ^^^
 > : any
+> : ^^^
 >x : any
+>  : ^^^
 }
 

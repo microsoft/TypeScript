@@ -1,14 +1,22 @@
-=== tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts ===
+//// [tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier.ts] ////
+
+=== externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts ===
 export import file1 = require('externalModuleReferenceOfImportDeclarationWithExportModifier_0');
 >file1 : typeof file1
+>      : ^^^^^^^^^^^^
 
 file1.foo();
 >file1.foo() : void
+>            : ^^^^
 >file1.foo : () => void
+>          : ^^^^^^^^^^
 >file1 : typeof file1
+>      : ^^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
-=== tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts ===
+=== externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts ===
 export function foo() { };
 >foo : () => void
+>    : ^^^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendingQualifiedName2.ts ===
+//// [tests/cases/compiler/classExtendingQualifiedName2.ts] ////
+
+=== classExtendingQualifiedName2.ts ===
 module M {
 >M : Symbol(M, Decl(classExtendingQualifiedName2.ts, 0, 0))
 

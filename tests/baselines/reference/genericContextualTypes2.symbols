@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes2.ts] ////
+
+=== genericContextualTypes2.ts ===
 type LowInfer<T> = T & {};
 >LowInfer : Symbol(LowInfer, Decl(genericContextualTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(genericContextualTypes2.ts, 0, 14))

@@ -1,61 +1,92 @@
-=== tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts ===
+//// [tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts] ////
+
+=== controlFlowDestructuringVariablesInTryCatch.ts ===
 declare function f1(): string;
 >f1 : () => string
+>   : ^^^^^^      
 
 declare function f2(): [b: string];
 >f2 : () => [b: string]
+>   : ^^^^^^           
 
 declare function f3(): { c: string };
 >f3 : () => { c: string; }
+>   : ^^^^^^              
 >c : string
+>  : ^^^^^^
 
 try {
     var a = f1();
 >a : string
+>  : ^^^^^^
 >f1() : string
+>     : ^^^^^^
 >f1 : () => string
+>   : ^^^^^^      
 
     var [b] = f2();
 >b : string
+>  : ^^^^^^
 >f2() : [b: string]
+>     : ^^^^^^^^^^^
 >f2 : () => [b: string]
+>   : ^^^^^^           
 
     var { c } = f3();
 >c : string
+>  : ^^^^^^
 >f3() : { c: string; }
+>     : ^^^^^      ^^^
 >f3 : () => { c: string; }
+>   : ^^^^^^              
 
     var [d = 1] = [];
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >[] : []
+>   : ^^
 
     var { e = 1 } = { };
 >e : number
+>  : ^^^^^^
 >1 : 1
->{ } : { e?: number | undefined; }
+>  : ^
+>{ } : {}
+>    : ^^
 
 } catch {
     console.error("error");
 >console.error("error") : void
+>                       : ^^^^
 >console.error : (...data: any[]) => void
+>              : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >error : (...data: any[]) => void
+>      : ^^^^    ^^     ^^^^^    
 >"error" : "error"
+>        : ^^^^^^^
 }
 
 a;
 >a : string
+>  : ^^^^^^
 
 b;
 >b : string
+>  : ^^^^^^
 
 c;
 >c : string
+>  : ^^^^^^
 
 d;
 >d : number
+>  : ^^^^^^
 
 e;
 >e : number
+>  : ^^^^^^
 

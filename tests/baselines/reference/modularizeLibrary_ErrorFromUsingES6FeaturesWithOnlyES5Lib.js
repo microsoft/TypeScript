@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts] ////
+
 //// [modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts]
 // All will be error from using ES6 features but only include ES5 library
 // Using Es6 array

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable1.ts] ////
+
 //// [parserErrorRecovery_IncompleteMemberVariable1.ts]
 // Interface
 interface IPoint {

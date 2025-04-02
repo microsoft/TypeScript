@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotWidenAtObjectLiteralPropertyAssignment.ts] ////
+
 //// [doNotWidenAtObjectLiteralPropertyAssignment.ts]
 interface ITestEventInterval {
     begin: number;

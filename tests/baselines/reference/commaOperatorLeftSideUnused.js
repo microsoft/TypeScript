@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commaOperatorLeftSideUnused.ts] ////
+
 //// [commaOperatorLeftSideUnused.ts]
 var xx: any;
 var yy: any;

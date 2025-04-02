@@ -1,10 +1,10 @@
-tests/cases/compiler/superPropertyAccess2.ts(13,15): error TS2339: Property 'x' does not exist on type 'typeof C'.
-tests/cases/compiler/superPropertyAccess2.ts(18,15): error TS2576: Property 'bar' does not exist on type 'C'. Did you mean to access the static member 'C.bar' instead?
-tests/cases/compiler/superPropertyAccess2.ts(19,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superPropertyAccess2.ts(24,15): error TS2339: Property 'x' does not exist on type 'typeof C'.
+superPropertyAccess2.ts(13,15): error TS2339: Property 'x' does not exist on type 'typeof C'.
+superPropertyAccess2.ts(18,15): error TS2576: Property 'bar' does not exist on type 'C'. Did you mean to access the static member 'C.bar' instead?
+superPropertyAccess2.ts(19,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess2.ts(24,15): error TS2339: Property 'x' does not exist on type 'typeof C'.
 
 
-==== tests/cases/compiler/superPropertyAccess2.ts (4 errors) ====
+==== superPropertyAccess2.ts (4 errors) ====
     class C {
         public static foo() { }
         public get x() {

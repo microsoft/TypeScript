@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingMutualSubtypes.ts ===
+//// [tests/cases/compiler/narrowingMutualSubtypes.ts] ////
+
+=== narrowingMutualSubtypes.ts ===
 // Check that `any` is a strict supertype of `unknown`
 
 declare const ru1: { [x: string]: unknown };

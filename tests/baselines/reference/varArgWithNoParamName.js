@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varArgWithNoParamName.ts] ////
+
 //// [varArgWithNoParamName.ts]
 function t1(...) {}
 

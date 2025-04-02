@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts] ////
+
 //// [conditionalEqualityOnLiteralObjects.ts]
 const a = { a: 1 }
 const b = [1]

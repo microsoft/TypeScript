@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallInNonStaticMethod.ts] ////
+
 //// [superCallInNonStaticMethod.ts]
 class Doing {
     public instanceMethod() {

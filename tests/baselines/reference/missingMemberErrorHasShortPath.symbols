@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingMemberErrorHasShortPath.ts] ////
+
 === C:/foo/bar/Baz/src/utils.ts ===
 export function exist() {}
 >exist : Symbol(exist, Decl(utils.ts, 0, 0))

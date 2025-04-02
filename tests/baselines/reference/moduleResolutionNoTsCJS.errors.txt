@@ -1,21 +1,19 @@
-tests/cases/compiler/user.ts(1,15): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
-tests/cases/compiler/user.ts(2,15): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
-tests/cases/compiler/user.ts(3,15): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './z' instead?
+user.ts(1,15): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+user.ts(2,15): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
+user.ts(3,15): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './z' instead?
 
 
-==== tests/cases/compiler/x.ts (0 errors) ====
-    // CommonJS output
-    
+==== x.ts (0 errors) ====
     export default 0;
     
-==== tests/cases/compiler/y.tsx (0 errors) ====
+==== y.tsx (0 errors) ====
     export default 0;
     
-==== tests/cases/compiler/z.d.ts (0 errors) ====
+==== z.d.ts (0 errors) ====
     declare const x: number;
     export default x;
     
-==== tests/cases/compiler/user.ts (3 errors) ====
+==== user.ts (3 errors) ====
     import x from "./x.ts";
                   ~~~~~~~~
 !!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.

@@ -1,18 +1,26 @@
-=== tests/cases/compiler/moduleReopenedTypeOtherBlock.ts ===
+//// [tests/cases/compiler/moduleReopenedTypeOtherBlock.ts] ////
+
+=== moduleReopenedTypeOtherBlock.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class C1 { }
 >C1 : C1
+>   : ^^
 
     export interface I { n: number; }
 >n : number
+>  : ^^^^^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class C2 { f(): I { return null; } }
 >C2 : C2
+>   : ^^
 >f : () => I
+>  : ^^^^^^ 
 }
 

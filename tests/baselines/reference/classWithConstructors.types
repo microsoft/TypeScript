@@ -1,148 +1,228 @@
-=== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts ===
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts] ////
+
+=== classWithConstructors.ts ===
 module NonGeneric {
 >NonGeneric : typeof NonGeneric
+>           : ^^^^^^^^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         constructor(x: string) { }
 >x : string
+>  : ^^^^^^
     }
 
     var c = new C(); // error
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
     var c2 = new C(''); // ok
 >c2 : C
+>   : ^
 >new C('') : C
+>          : ^
 >C : typeof C
+>  : ^^^^^^^^
 >'' : ""
+>   : ^^
 
     class C2 {
 >C2 : C2
+>   : ^^
 
         constructor(x: number);
 >x : number
+>  : ^^^^^^
 
         constructor(x: string);
 >x : string
+>  : ^^^^^^
 
         constructor(x: any) { }
 >x : any
+>  : ^^^
     }
 
     var c3 = new C2(); // error
 >c3 : C2
+>   : ^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
     var c4 = new C2(''); // ok
 >c4 : C2
+>   : ^^
 >new C2('') : C2
+>           : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
     var c5 = new C2(1); // ok
 >c5 : C2
+>   : ^^
 >new C2(1) : C2
+>          : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
     class D extends C2 { }
 >D : D
+>  : ^
 >C2 : C2
+>   : ^^
 
     var d = new D(); // error
 >d : D
+>  : ^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 
     var d2 = new D(1); // ok
 >d2 : D
+>   : ^
 >new D(1) : D
+>         : ^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
     var d3 = new D(''); // ok
 >d3 : D
+>   : ^
 >new D('') : D
+>          : ^
 >D : typeof D
+>  : ^^^^^^^^
 >'' : ""
+>   : ^^
 }
 
 module Generics {
 >Generics : typeof Generics
+>         : ^^^^^^^^^^^^^^^
 
     class C<T> {
 >C : C<T>
+>  : ^^^^
 
         constructor(x: T) { }
 >x : T
+>  : ^
     }
 
     var c = new C(); // error
 >c : C<unknown>
+>  : ^^^^^^^^^^
 >new C() : C<unknown>
+>        : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     var c2 = new C(''); // ok
 >c2 : C<string>
+>   : ^^^^^^^^^
 >new C('') : C<string>
+>          : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >'' : ""
+>   : ^^
 
     class C2<T,U> {
 >C2 : C2<T, U>
+>   : ^^^^^^^^
 
         constructor(x: T);
 >x : T
+>  : ^
 
         constructor(x: T, y: U);
 >x : T
+>  : ^
 >y : U
+>  : ^
 
         constructor(x: any) { }
 >x : any
+>  : ^^^
     }
 
     var c3 = new C2(); // error
 >c3 : C2<unknown, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >new C2() : C2<unknown, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
     var c4 = new C2(''); // ok
 >c4 : C2<string, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^
 >new C2('') : C2<string, unknown>
+>           : ^^^^^^^^^^^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
     var c5 = new C2(1, 2); // ok
 >c5 : C2<number, number>
+>   : ^^^^^^^^^^^^^^^^^^
 >new C2(1, 2) : C2<number, number>
+>             : ^^^^^^^^^^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     class D<T, U> extends C2<T, U> { }
 >D : D<T, U>
+>  : ^^^^^^^
 >C2 : C2<T, U>
+>   : ^^^^^^^^
 
     var d = new D(); // error
 >d : D<unknown, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^
 >new D() : D<unknown, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
     var d2 = new D(1); // ok
 >d2 : D<number, unknown>
+>   : ^^^^^^^^^^^^^^^^^^
 >new D(1) : D<number, unknown>
+>         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
     var d3 = new D(''); // ok
 >d3 : D<string, unknown>
+>   : ^^^^^^^^^^^^^^^^^^
 >new D('') : D<string, unknown>
+>          : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >'' : ""
+>   : ^^
 }

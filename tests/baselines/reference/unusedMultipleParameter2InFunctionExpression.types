@@ -1,17 +1,29 @@
-=== tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts ===
+//// [tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts] ////
+
+=== unusedMultipleParameter2InFunctionExpression.ts ===
 var func = function(person: string, person2: string, person3: string) {
 >func : (person: string, person2: string, person3: string) => void
+>     : ^      ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^
 >function(person: string, person2: string, person3: string) {    var unused = 20;    person2 = "Dummy value";} : (person: string, person2: string, person3: string) => void
+>                                                                                                              : ^      ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^
 >person : string
+>       : ^^^^^^
 >person2 : string
+>        : ^^^^^^
 >person3 : string
+>        : ^^^^^^
 
     var unused = 20;
 >unused : number
+>       : ^^^^^^
 >20 : 20
+>   : ^^
 
     person2 = "Dummy value";
 >person2 = "Dummy value" : "Dummy value"
+>                        : ^^^^^^^^^^^^^
 >person2 : string
+>        : ^^^^^^
 >"Dummy value" : "Dummy value"
+>              : ^^^^^^^^^^^^^
 }

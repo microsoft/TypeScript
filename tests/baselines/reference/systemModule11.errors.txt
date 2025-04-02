@@ -1,22 +1,19 @@
-tests/cases/compiler/file1.ts(6,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/file2.ts(6,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/file3.ts(1,25): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/file3.ts(3,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/file4.ts(8,27): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/file5.ts(2,15): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+file1.ts(3,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+file2.ts(6,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+file3.ts(1,25): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+file3.ts(3,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+file4.ts(8,27): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+file5.ts(2,15): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/file1.ts (1 errors) ====
-    // set of tests cases that checks generation of local storage for exported names
-    
-    
+==== file1.ts (1 errors) ====
     export var x;
     export function foo() {}
     export * from 'bar';
                   ~~~~~
 !!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
-==== tests/cases/compiler/file2.ts (1 errors) ====
+==== file2.ts (1 errors) ====
     var x;
     var y;
     export {x};
@@ -26,7 +23,7 @@ tests/cases/compiler/file5.ts(2,15): error TS2792: Cannot find module 'a'. Did y
                   ~~~~~
 !!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
-==== tests/cases/compiler/file3.ts (2 errors) ====
+==== file3.ts (2 errors) ====
     export {x, y as z} from 'a';
                             ~~~
 !!! error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
@@ -35,7 +32,7 @@ tests/cases/compiler/file5.ts(2,15): error TS2792: Cannot find module 'a'. Did y
                   ~~~~~
 !!! error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
-==== tests/cases/compiler/file4.ts (1 errors) ====
+==== file4.ts (1 errors) ====
     export var x;
     export function foo() {}
     export default function (){}
@@ -47,7 +44,7 @@ tests/cases/compiler/file5.ts(2,15): error TS2792: Cannot find module 'a'. Did y
                               ~~~
 !!! error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
-==== tests/cases/compiler/file5.ts (1 errors) ====
+==== file5.ts (1 errors) ====
     function foo() {}
     export * from 'a';
                   ~~~

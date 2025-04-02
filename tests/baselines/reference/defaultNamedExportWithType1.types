@@ -1,11 +1,17 @@
-=== tests/cases/compiler/defaultNamedExportWithType1.ts ===
+//// [tests/cases/compiler/defaultNamedExportWithType1.ts] ////
+
+=== defaultNamedExportWithType1.ts ===
 type Foo = number;
 >Foo : number
+>    : ^^^^^^
 
 export const Foo = 1;
 >Foo : 1
+>    : ^
 >1 : 1
+>  : ^
 
 export default Foo;
 >Foo : number
+>    : ^^^^^^
 

@@ -1,16 +1,16 @@
-tests/cases/compiler/qualify.ts(21,13): error TS2322: Type 'number' is not assignable to type 'I'.
-tests/cases/compiler/qualify.ts(30,13): error TS2322: Type 'number' is not assignable to type 'I2'.
-tests/cases/compiler/qualify.ts(45,13): error TS2741: Property 'zeep' is missing in type 'I4' but required in type 'I3'.
-tests/cases/compiler/qualify.ts(46,13): error TS2740: Type 'I4' is missing the following properties from type 'I3[]': length, pop, push, concat, and 16 more.
-tests/cases/compiler/qualify.ts(47,13): error TS2322: Type 'I4' is not assignable to type '() => I3'.
+qualify.ts(21,13): error TS2322: Type 'number' is not assignable to type 'I'.
+qualify.ts(30,13): error TS2322: Type 'number' is not assignable to type 'I2'.
+qualify.ts(45,13): error TS2741: Property 'zeep' is missing in type 'I4' but required in type 'I3'.
+qualify.ts(46,13): error TS2740: Type 'I4' is missing the following properties from type 'I3[]': length, pop, push, concat, and 16 more.
+qualify.ts(47,13): error TS2322: Type 'I4' is not assignable to type '() => I3'.
   Type 'I4' provides no match for the signature '(): I3'.
-tests/cases/compiler/qualify.ts(48,13): error TS2322: Type 'I4' is not assignable to type '(k: I3) => void'.
+qualify.ts(48,13): error TS2322: Type 'I4' is not assignable to type '(k: I3) => void'.
   Type 'I4' provides no match for the signature '(k: I3): void'.
-tests/cases/compiler/qualify.ts(49,13): error TS2741: Property 'k' is missing in type 'I4' but required in type '{ k: I3; }'.
-tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required in type 'T.I'.
+qualify.ts(49,13): error TS2741: Property 'k' is missing in type 'I4' but required in type '{ k: I3; }'.
+qualify.ts(58,5): error TS2741: Property 'p' is missing in type 'I' but required in type 'T.I'.
 
 
-==== tests/cases/compiler/qualify.ts (8 errors) ====
+==== qualify.ts (8 errors) ====
     module M {
         export var m=0;
         export module N {
@@ -62,7 +62,7 @@ tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in 
             var v2:K1.I3=v1;
                 ~~
 !!! error TS2741: Property 'zeep' is missing in type 'I4' but required in type 'I3'.
-!!! related TS2728 tests/cases/compiler/qualify.ts:37:13: 'zeep' is declared here.
+!!! related TS2728 qualify.ts:37:13: 'zeep' is declared here.
             var v3:K1.I3[]=v1;
                 ~~
 !!! error TS2740: Type 'I4' is missing the following properties from type 'I3[]': length, pop, push, concat, and 16 more.
@@ -77,7 +77,7 @@ tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in 
             var v6:{k:K1.I3;}=v1;
                 ~~
 !!! error TS2741: Property 'k' is missing in type 'I4' but required in type '{ k: I3; }'.
-!!! related TS2728 tests/cases/compiler/qualify.ts:49:17: 'k' is declared here.
+!!! related TS2728 qualify.ts:49:17: 'k' is declared here.
         }
     }
     
@@ -89,6 +89,6 @@ tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in 
     var x:T.I=y;
         ~
 !!! error TS2741: Property 'p' is missing in type 'I' but required in type 'T.I'.
-!!! related TS2728 tests/cases/compiler/qualify.ts:18:9: 'p' is declared here.
+!!! related TS2728 qualify.ts:18:9: 'p' is declared here.
     
     

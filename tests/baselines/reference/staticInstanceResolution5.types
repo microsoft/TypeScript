@@ -1,29 +1,43 @@
-=== tests/cases/compiler/staticInstanceResolution5_1.ts ===
+//// [tests/cases/compiler/staticInstanceResolution5.ts] ////
+
+=== staticInstanceResolution5_1.ts ===
 import WinJS = require('staticInstanceResolution5_0');
 >WinJS : typeof WinJS
+>      : ^^^^^^^^^^^^
 
 // these 3 should be errors
 var x = (w1: WinJS) => { };
 >x : (w1: WinJS) => void
+>  : ^  ^^     ^^^^^^^^^
 >(w1: WinJS) => { } : (w1: WinJS) => void
+>                   : ^  ^^     ^^^^^^^^^
 >w1 : WinJS
+>   : ^^^^^
 
 var y = function (w2: WinJS) { }
 >y : (w2: WinJS) => void
+>  : ^  ^^     ^^^^^^^^^
 >function (w2: WinJS) { } : (w2: WinJS) => void
+>                         : ^  ^^     ^^^^^^^^^
 >w2 : WinJS
+>   : ^^^^^
 
 function z(w3: WinJS) { }
 >z : (w3: WinJS) => void
+>  : ^  ^^     ^^^^^^^^^
 >w3 : WinJS
+>   : ^^^^^
 
-=== tests/cases/compiler/staticInstanceResolution5_0.ts ===
+=== staticInstanceResolution5_0.ts ===
 export class Promise {
 >Promise : Promise
+>        : ^^^^^^^
 
     static timeout(delay: number): Promise {
 >timeout : (delay: number) => Promise
+>        : ^     ^^      ^^^^^       
 >delay : number
+>      : ^^^^^^
 
         return null;
     }

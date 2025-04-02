@@ -1,8 +1,10 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/constDeclarations-useBeforeDefinition2.ts] ////
+
+=== file1.ts ===
 c;
 >c : Symbol(c, Decl(file2.ts, 0, 5))
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 const c = 0;
 >c : Symbol(c, Decl(file2.ts, 0, 5))
 

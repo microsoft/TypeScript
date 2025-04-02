@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intTypeCheck.ts ===
+//// [tests/cases/compiler/intTypeCheck.ts] ////
+
+=== intTypeCheck.ts ===
 interface i1 {
 >i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
 

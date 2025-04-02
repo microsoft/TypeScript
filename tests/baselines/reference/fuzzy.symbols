@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fuzzy.ts ===
+//// [tests/cases/compiler/fuzzy.ts] ////
+
+=== fuzzy.ts ===
 module M {
 >M : Symbol(M, Decl(fuzzy.ts, 0, 0))
 

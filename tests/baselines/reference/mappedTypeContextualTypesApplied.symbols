@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeContextualTypesApplied.ts ===
+//// [tests/cases/compiler/mappedTypeContextualTypesApplied.ts] ////
+
+=== mappedTypeContextualTypesApplied.ts ===
 type TakeString = (s: string) => any;
 >TakeString : Symbol(TakeString, Decl(mappedTypeContextualTypesApplied.ts, 0, 0))
 >s : Symbol(s, Decl(mappedTypeContextualTypesApplied.ts, 0, 19))

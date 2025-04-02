@@ -1,19 +1,31 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocParseDotDotDotInJSDocFunction.ts] ////
+
+=== a.js ===
 // from bcryptjs
 /** @param {function(...[*])} callback */
 function g(callback) {
 >g : (callback: (...args: [any][]) => any) => void
+>  : ^        ^^ ^^^    ^^            ^^^^^^^^^^^^
 >callback : (...arg0: [any][]) => any
+>         : ^^^^^^^^^^       ^^^^^^^^
 
     callback([1], [2], [3])
 >callback([1], [2], [3]) : any
+>                        : ^^^
 >callback : (...arg0: [any][]) => any
+>         : ^^^^^^^^^^       ^^^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >[2] : [number]
+>    : ^^^^^^^^
 >2 : 2
+>  : ^
 >[3] : [number]
+>    : ^^^^^^^^
 >3 : 3
+>  : ^
 }
 
 /**
@@ -22,7 +34,11 @@ function g(callback) {
  */
 var stringFromCharCode = String.fromCharCode;
 >stringFromCharCode : (...arg0: number[]) => string
+>                   : ^^^^^^^^^^        ^^^^^      
 >String.fromCharCode : (...codes: number[]) => string
+>                    : ^^^^     ^^        ^^^^^      
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >fromCharCode : (...codes: number[]) => string
+>             : ^^^^     ^^        ^^^^^      
 

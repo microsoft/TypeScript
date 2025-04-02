@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/namespaced.js ===
+//// [tests/cases/conformance/jsdoc/callbackTagNamespace.ts] ////
+
+=== namespaced.js ===
 /**
  * @callback NS.Nested.Inner
  * @param {Object} space - spaaaaaaaaace
@@ -7,15 +9,19 @@
  */
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 /** @type {NS.Nested.Inner} */
 function f(space, peace) {
 >f : (space: any, peace: any) => string | number
+>  : ^     ^^^^^^^     ^^^^^^^^^^               
 >space : any
 >peace : any
 
     return '1'
 >'1' : "1"
+>    : ^^^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndAlias_file2.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndAlias.ts] ////
+
+=== collisionExportsRequireAndAlias_file2.ts ===
 import require = require('collisionExportsRequireAndAlias_file1'); // Error
 >require : Symbol(require, Decl(collisionExportsRequireAndAlias_file2.ts, 0, 0))
 
@@ -21,12 +23,12 @@ export function foo2() {
 >exports : Symbol(exports, Decl(collisionExportsRequireAndAlias_file2.ts, 0, 66))
 >bar2 : Symbol(exports.bar2, Decl(collisionExportsRequireAndAlias_file3333.ts, 0, 0))
 }
-=== tests/cases/compiler/collisionExportsRequireAndAlias_file1.ts ===
+=== collisionExportsRequireAndAlias_file1.ts ===
 export function bar() {
 >bar : Symbol(bar, Decl(collisionExportsRequireAndAlias_file1.ts, 0, 0))
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndAlias_file3333.ts ===
+=== collisionExportsRequireAndAlias_file3333.ts ===
 export function bar2() {
 >bar2 : Symbol(bar2, Decl(collisionExportsRequireAndAlias_file3333.ts, 0, 0))
 }

@@ -1,4 +1,4 @@
-// @out: tests/cases/compiler/a.js
+// @outFile: a.js
 // @module: amd
 // @filename: a.ts
 export class c {

@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx] ////
+
+=== jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx ===
+// https://github.com/microsoft/TypeScript/issues/55240
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    [k: `foo${string}`]: { prop: string };
+>k : `foo${string}`
+>  : ^^^^^^^^^^^^^^
+>prop : string
+>     : ^^^^^^
+
+    [k: `foobar${string}`]: { prop: 'literal' };
+>k : `foobar${string}`
+>  : ^^^^^^^^^^^^^^^^^
+>prop : "literal"
+>     : ^^^^^^^^^
+  }
+}
+
+<foobaz prop="smth" />;
+><foobaz prop="smth" /> : any
+>                       : ^^^
+>foobaz : any
+>       : ^^^
+>prop : string
+>     : ^^^^^^
+
+<foobaz prop={10} />;
+><foobaz prop={10} /> : any
+>                     : ^^^
+>foobaz : any
+>       : ^^^
+>prop : number
+>     : ^^^^^^
+>10 : 10
+>   : ^^
+
+<foobarbaz prop="literal"/>;
+><foobarbaz prop="literal"/> : any
+>                            : ^^^
+>foobarbaz : any
+>          : ^^^
+>prop : "literal"
+>     : ^^^^^^^^^
+
+<foobarbaz prop="smth"/>;
+><foobarbaz prop="smth"/> : any
+>                         : ^^^
+>foobarbaz : any
+>          : ^^^
+>prop : "smth"
+>     : ^^^^^^
+

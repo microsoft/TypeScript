@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override7.ts] ////
+
 //// [override7.ts]
 class B {
     p1: number = 1;

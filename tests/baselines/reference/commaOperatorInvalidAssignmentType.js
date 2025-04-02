@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts] ////
+
 //// [commaOperatorInvalidAssignmentType.ts]
 var BOOLEAN: boolean;
 var NUMBER: number;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/typeGuardsAsAssertions.ts] ////
+
 //// [typeGuardsAsAssertions.ts]
 // Repro from #8513
 
@@ -130,13 +132,14 @@ function f7() {
 "use strict";
 // Repro from #8513
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn = exports.isSome = exports.none = void 0;
+exports.none = void 0;
+exports.isSome = isSome;
+exports.fn = fn;
 var cond;
 exports.none = { none: '' };
 function isSome(value) {
     return 'some' in value;
 }
-exports.isSome = isSome;
 function someFrom(some) {
     return { some: some };
 }
@@ -149,7 +152,6 @@ function fn(makeSome) {
         result; // Some<r>
     }
 }
-exports.fn = fn;
 function foo1() {
     var x = 0;
     x; // number

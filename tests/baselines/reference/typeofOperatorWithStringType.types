@@ -1,233 +1,381 @@
-=== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts] ////
+
+=== typeofOperatorWithStringType.ts ===
 // typeof  operator on string type
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var STRING1: string[] = ["", "abc"];
 >STRING1 : string[]
+>        : ^^^^^^^^
 >["", "abc"] : string[]
+>            : ^^^^^^^^
 >"" : ""
+>   : ^^
 >"abc" : "abc"
+>      : ^^^^^
 
 function foo(): string { return "abc"; }
 >foo : () => string
+>    : ^^^^^^      
 >"abc" : "abc"
+>      : ^^^^^
 
 class A {
 >A : A
+>  : ^
 
     public a: string;
 >a : string
+>  : ^^^^^^
 
     static foo() { return ""; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var n: string;
 >n : string
+>  : ^^^^^^
 }
 
 var objA = new A();
 >objA : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 // string type var
 var ResultIsString1 = typeof STRING;
 >ResultIsString1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof STRING : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsString2 = typeof STRING1;
 >ResultIsString2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof STRING1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 // string type literal
 var ResultIsString3 = typeof "";
 >ResultIsString3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof "" : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsString4 = typeof { x: "", y: "" };
 >ResultIsString4 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof { x: "", y: "" } : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: "", y: "" } : { x: string; y: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 var ResultIsString5 = typeof { x: "", y: (s: string) => { return s; } };
 >ResultIsString5 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof { x: "", y: (s: string) => { return s; } } : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : (s: string) => string
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 // string type expressions
 var ResultIsString6 = typeof objA.a;
 >ResultIsString6 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof objA.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 
 var ResultIsString7 = typeof M.n;
 >ResultIsString7 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof M.n : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 var ResultIsString8 = typeof STRING1[0];
 >ResultIsString8 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof STRING1[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING1[0] : string
+>           : ^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 var ResultIsString9 = typeof foo();
 >ResultIsString9 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof foo() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 var ResultIsString10 = typeof A.foo();
 >ResultIsString10 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof A.foo() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A.foo() : string
+>        : ^^^^^^
 >A.foo : () => string
+>      : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
 var ResultIsString11 = typeof (STRING + STRING);
 >ResultIsString11 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof (STRING + STRING) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(STRING + STRING) : string
+>                  : ^^^^^^
 >STRING + STRING : string
+>                : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsString12 = typeof STRING.charAt(0);
 >ResultIsString12 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof STRING.charAt(0) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING.charAt(0) : string
+>                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
+>              : ^   ^^      ^^^^^      
 >STRING : string
+>       : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 // multiple typeof  operators
 var ResultIsString13 = typeof typeof STRING;
 >ResultIsString13 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof typeof STRING : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof STRING : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var ResultIsString14 = typeof typeof typeof (STRING + STRING);
 >ResultIsString14 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof typeof typeof (STRING + STRING) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof typeof (STRING + STRING) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof (STRING + STRING) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(STRING + STRING) : string
+>                  : ^^^^^^
 >STRING + STRING : string
+>                : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 // miss assignment operators
 typeof "";
 >typeof "" : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 typeof STRING;
 >typeof STRING : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 typeof STRING1;
 >typeof STRING1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 typeof foo();
 >typeof foo() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo() : string
+>      : ^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 typeof objA.a, M.n;
 >typeof objA.a, M.n : string
+>                   : ^^^^^^
 >typeof objA.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 
 // use typeof in type query
 var z: string;
 >z : string
+>  : ^^^^^^
 
 var x: string[];
 >x : string[]
+>  : ^^^^^^^^
 
 var r: () => string;
 >r : () => string
+>  : ^^^^^^      
 
 z: typeof STRING;
 >z : any
+>  : ^^^
 >typeof STRING : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 x: typeof STRING1;
 >x : any
+>  : ^^^
 >typeof STRING1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >STRING1 : string[]
+>        : ^^^^^^^^
 
 r: typeof foo;
 >r : any
+>  : ^^^
 >typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => string
+>    : ^^^^^^      
 
 var y = { a: "", b: "" };
 >y : { a: string; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "", b: "" } : { a: string; b: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >b : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 z: typeof y.a;
 >z : any
+>  : ^^^
 >typeof y.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.a : string
+>    : ^^^^^^
 >y : { a: string; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 z: typeof objA.a;
 >z : any
+>  : ^^^
 >typeof objA.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >objA.a : string
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : string
+>  : ^^^^^^
 
 z: typeof A.foo;
 >z : any
+>  : ^^^
 >typeof A.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A.foo : () => string
+>      : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
 z: typeof M.n;
 >z : any
+>  : ^^^
 >typeof M.n : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >M.n : string
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : string
+>  : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/singletonLabeledTuple.ts] ////
+
 //// [singletonLabeledTuple.ts]
 type AliasOptional = [p?: number]
 

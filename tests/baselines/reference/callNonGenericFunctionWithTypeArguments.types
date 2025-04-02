@@ -1,123 +1,192 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts] ////
+
+=== callNonGenericFunctionWithTypeArguments.ts ===
 // it is always illegal to provide type arguments to a non-generic function
 // all invocations here are illegal
 
 function f(x: number) { return null; }
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 var r = f<string>(1);
 >r : any
+>  : ^^^
 >f<string>(1) : any
+>             : ^^^
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
+>  : ^
 
 var f2 = (x: number) => { return null; }
 >f2 : (x: number) => any
+>   : ^ ^^      ^^^^^^^^
 >(x: number) => { return null; } : (x: number) => any
+>                                : ^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 var r2 = f2<string>(1);
 >r2 : any
+>   : ^^^
 >f2<string>(1) : any
+>              : ^^^
 >f2 : (x: number) => any
+>   : ^ ^^      ^^^^^^^^
 >1 : 1
+>  : ^
 
 var f3: { (x: number): any; }
 >f3 : (x: number) => any
+>   : ^ ^^      ^^^^^   
 >x : number
+>  : ^^^^^^
 
 var r3 = f3<string>(1);
 >r3 : any
+>   : ^^^
 >f3<string>(1) : any
+>              : ^^^
 >f3 : (x: number) => any
+>   : ^ ^^      ^^^^^   
 >1 : 1
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     f(x: number) {
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         return null;
     }
 }
 var r4 = (new C()).f<string>(1);
 >r4 : any
+>   : ^^^
 >(new C()).f<string>(1) : any
+>                       : ^^^
 >(new C()).f : (x: number) => any
+>            : ^ ^^      ^^^^^^^^
 >(new C()) : C
+>          : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
+>  : ^
 
 interface I {
     f(x: number): any;
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^   
 >x : number
+>  : ^^^^^^
 }
 var i: I;
 >i : I
+>  : ^
 
 var r5 = i.f<string>(1);
 >r5 : any
+>   : ^^^
 >i.f<string>(1) : any
+>               : ^^^
 >i.f : (x: number) => any
+>    : ^ ^^      ^^^^^   
 >i : I
+>  : ^
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^   
 >1 : 1
+>  : ^
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     f(x: number) {
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         return null;
     }
 }
 var r6 = (new C2()).f<string>(1);
 >r6 : any
+>   : ^^^
 >(new C2()).f<string>(1) : any
+>                        : ^^^
 >(new C2()).f : (x: number) => any
+>             : ^ ^^      ^^^^^^^^
 >(new C2()) : C2
+>           : ^^
 >new C2() : C2
+>         : ^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
+>  : ^
 
 interface I2 {
     f(x: number);
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 var i2: I2;
 >i2 : I2
+>   : ^^
 
 var r7 = i2.f<string>(1);
 >r7 : any
+>   : ^^^
 >i2.f<string>(1) : any
+>                : ^^^
 >i2.f : (x: number) => any
+>     : ^ ^^      ^^^^^^^^
 >i2 : I2
+>   : ^^
 >f : (x: number) => any
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
+>  : ^
 
 var a;
 >a : any
+>  : ^^^
 
 var r8 = a<number>();
 >r8 : any
+>   : ^^^
 >a<number>() : any
+>            : ^^^
 >a : any
+>  : ^^^
 
 var a2: any;
 >a2 : any
+>   : ^^^
 
 var r8 = a2<number>();
 >r8 : any
+>   : ^^^
 >a2<number>() : any
+>             : ^^^
 >a2 : any
+>   : ^^^
 

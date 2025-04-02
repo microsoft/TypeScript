@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeModuleReexportFromDottedPath.ts] ////
+
 === /node_modules/.prisma/client/index.d.ts ===
 export interface PrismaClientOptions {
   rejectOnNotFound?: any;
@@ -6,6 +8,7 @@ export interface PrismaClientOptions {
 
 export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
 >PrismaClient : PrismaClient<T>
+>             : ^^^^^^^^^^^^^^^
 
   private fetcher;
 >fetcher : any
@@ -18,19 +21,29 @@ export * from ".prisma/client";
 === /index.ts ===
 import { PrismaClient } from "@prisma/client";
 >PrismaClient : typeof PrismaClient
+>             : ^^^^^^^^^^^^^^^^^^^
 
 declare const enhancePrisma: <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown };
 >enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown; }
+>              : ^                 ^^      ^^                 ^^^^^                                          
 >client : TPrismaClientCtor
+>       : ^^^^^^^^^^^^^^^^^
 >enhanced : unknown
+>         : ^^^^^^^
 
 const EnhancedPrisma = enhancePrisma(PrismaClient);
 >EnhancedPrisma : typeof PrismaClient & { enhanced: unknown; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >enhancePrisma(PrismaClient) : typeof PrismaClient & { enhanced: unknown; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown; }
+>              : ^                 ^^      ^^                 ^^^^^                                          
 >PrismaClient : typeof PrismaClient
+>             : ^^^^^^^^^^^^^^^^^^^
 
 export default new EnhancedPrisma();
 >new EnhancedPrisma() : PrismaClient<import("/node_modules/.prisma/client/index").PrismaClientOptions>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >EnhancedPrisma : typeof PrismaClient & { enhanced: unknown; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 

@@ -1,8 +1,8 @@
-tests/cases/compiler/binaryArithmatic4.ts(1,9): error TS18050: The value 'null' cannot be used here.
-tests/cases/compiler/binaryArithmatic4.ts(1,16): error TS18050: The value 'null' cannot be used here.
+binaryArithmatic4.ts(1,9): error TS18050: The value 'null' cannot be used here.
+binaryArithmatic4.ts(1,16): error TS18050: The value 'null' cannot be used here.
 
 
-==== tests/cases/compiler/binaryArithmatic4.ts (2 errors) ====
+==== binaryArithmatic4.ts (2 errors) ====
     var v = null | null;
             ~~~~
 !!! error TS18050: The value 'null' cannot be used here.

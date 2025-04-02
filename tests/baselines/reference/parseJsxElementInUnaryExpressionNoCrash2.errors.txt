@@ -1,7 +1,7 @@
-tests/cases/compiler/a.js(1,9): error TS1109: Expression expected.
+a.js(1,9): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/a.js (1 errors) ====
+==== a.js (1 errors) ====
     ~<></> <
             
 !!! error TS1109: Expression expected.

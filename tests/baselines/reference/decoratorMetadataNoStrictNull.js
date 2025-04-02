@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataNoStrictNull.ts] ////
+
 //// [decoratorMetadataNoStrictNull.ts]
 const dec = (obj: {}, prop: string) => undefined
 

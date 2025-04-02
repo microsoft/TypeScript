@@ -1,37 +1,58 @@
-=== tests/cases/compiler/genericInferenceDefaultTypeParameter.ts ===
+//// [tests/cases/compiler/genericInferenceDefaultTypeParameter.ts] ////
+
+=== genericInferenceDefaultTypeParameter.ts ===
 // Repro from #50858
 
 type Type = {
->Type : { a: (e: string) => void; b: (e: number) => void; }
+>Type : Type
+>     : ^^^^
 
     a: (e: string) => void;
 >a : (e: string) => void
+>  : ^ ^^      ^^^^^    
 >e : string
+>  : ^^^^^^
 
     b: (e: number) => void;
 >b : (e: number) => void
+>  : ^ ^^      ^^^^^    
 >e : number
+>  : ^^^^^^
 }
 
 declare function f1<T extends keyof Type = "a">(props: Type[T]): void;
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
+>   : ^ ^^^^^^^^^          ^^^^^^^^     ^^       ^^^^^    
 >props : Type[T]
+>      : ^^^^^^^
 
 f1(event => { });
 >f1(event => { }) : void
+>                 : ^^^^
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
+>   : ^ ^^^^^^^^^          ^^^^^^^^     ^^       ^^^^^    
 >event => { } : (event: string) => void
+>             : ^     ^^^^^^^^^^^^^^^^^
 >event : string
+>      : ^^^^^^
 
 f1<"a">(event => { });
 >f1<"a">(event => { }) : void
+>                      : ^^^^
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
+>   : ^ ^^^^^^^^^          ^^^^^^^^     ^^       ^^^^^    
 >event => { } : (event: string) => void
+>             : ^     ^^^^^^^^^^^^^^^^^
 >event : string
+>      : ^^^^^^
 
 f1<"b">(event => { });
 >f1<"b">(event => { }) : void
+>                      : ^^^^
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
+>   : ^ ^^^^^^^^^          ^^^^^^^^     ^^       ^^^^^    
 >event => { } : (event: number) => void
+>             : ^     ^^^^^^^^^^^^^^^^^
 >event : number
+>      : ^^^^^^
 

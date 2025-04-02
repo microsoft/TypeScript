@@ -10,7 +10,8 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     getLocaleSpecificMessage,
-    getTokenAtPosition,
+    getTouchingPropertyName,
+    InternalNodeBuilderFlags,
     isArrowFunction,
     isBlock,
     isInJSFile,
@@ -24,28 +25,27 @@ import {
     SyntaxKind,
     textChanges,
     Type,
-    TypeChecker,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
     RefactorErrorInfo,
     refactorKindBeginsWith,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Infer function return type";
-const refactorDescription = Diagnostics.Infer_function_return_type.message;
+const refactorDescription = getLocaleSpecificMessage(Diagnostics.Infer_function_return_type);
 
 const inferReturnTypeAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.rewrite.function.returnType"
+    kind: "refactor.rewrite.function.returnType",
 };
 registerRefactor(refactorName, {
     kinds: [inferReturnTypeAction.kind],
     getEditsForAction: getRefactorEditsToInferReturnType,
-    getAvailableActions: getRefactorActionsToInferReturnType
+    getAvailableActions: getRefactorActionsToInferReturnType,
 });
 
 function getRefactorEditsToInferReturnType(context: RefactorContext): RefactorEditInfo | undefined {
@@ -64,14 +64,14 @@ function getRefactorActionsToInferReturnType(context: RefactorContext): readonly
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: [inferReturnTypeAction]
+            actions: [inferReturnTypeAction],
         }];
     }
     if (context.preferences.provideRefactorNotApplicableReason) {
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }]
+            actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }],
         }];
     }
     return emptyArray;
@@ -104,7 +104,7 @@ function doChange(sourceFile: SourceFile, changes: textChanges.ChangeTracker, de
 function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | undefined {
     if (isInJSFile(context.file) || !refactorKindBeginsWith(inferReturnTypeAction.kind, context.kind)) return;
 
-    const token = getTokenAtPosition(context.file, context.startPosition);
+    const token = getTouchingPropertyName(context.file, context.startPosition);
     const declaration = findAncestor(token, n =>
         isBlock(n) || n.parent && isArrowFunction(n.parent) && (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ? "quit" :
             isConvertibleDeclaration(n)) as ConvertibleDeclaration | undefined;
@@ -113,12 +113,36 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
     }
 
     const typeChecker = context.program.getTypeChecker();
-    const returnType = tryGetReturnType(typeChecker, declaration);
+
+    let returnType: Type | undefined;
+
+    if (typeChecker.isImplementationOfOverload(declaration)) {
+        const signatures = typeChecker.getTypeAtLocation(declaration).getCallSignatures();
+        if (signatures.length > 1) {
+            returnType = typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
+        }
+    }
+    if (!returnType) {
+        const signature = typeChecker.getSignatureFromDeclaration(declaration);
+        if (signature) {
+            const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
+            if (typePredicate && typePredicate.type) {
+                const typePredicateTypeNode = typeChecker.typePredicateToTypePredicateNode(typePredicate, declaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
+                if (typePredicateTypeNode) {
+                    return { declaration, returnTypeNode: typePredicateTypeNode };
+                }
+            }
+            else {
+                returnType = typeChecker.getReturnTypeOfSignature(signature);
+            }
+        }
+    }
+
     if (!returnType) {
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type) };
     }
 
-    const returnTypeNode = typeChecker.typeToTypeNode(returnType, declaration, NodeBuilderFlags.NoTruncation);
+    const returnTypeNode = typeChecker.typeToTypeNode(returnType, declaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
     if (returnTypeNode) {
         return { declaration, returnTypeNode };
     }
@@ -133,18 +157,5 @@ function isConvertibleDeclaration(node: Node): node is ConvertibleDeclaration {
             return true;
         default:
             return false;
-    }
-}
-
-function tryGetReturnType(typeChecker: TypeChecker, node: ConvertibleDeclaration): Type | undefined {
-    if (typeChecker.isImplementationOfOverload(node)) {
-        const signatures = typeChecker.getTypeAtLocation(node).getCallSignatures();
-        if (signatures.length > 1) {
-            return typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
-        }
-    }
-    const signature = typeChecker.getSignatureFromDeclaration(node);
-    if (signature) {
-        return typeChecker.getReturnTypeOfSignature(signature);
     }
 }

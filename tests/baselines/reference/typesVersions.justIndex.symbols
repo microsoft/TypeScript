@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/typesVersions.justIndex.ts] ////
+
 === /a/ts3.1/index.d.ts ===
 export const a = 0;
 >a : Symbol(a, Decl(index.d.ts, 0, 12))

@@ -1,33 +1,48 @@
-=== tests/cases/compiler/moduleA/a.js ===
+//// [tests/cases/compiler/jsFileCompilationExternalPackageError.ts] ////
+
+=== moduleA/a.js ===
 import {a} from "b";
 >a : any
+>  : ^^^
 
 a++;
 >a++ : number
+>    : ^^^^^^
 >a : error
 
 import {c} from "c";
 >c : any
+>  : ^^^
 
 c++;
 >c++ : number
+>    : ^^^^^^
 >c : error
 
-=== tests/cases/compiler/node_modules/b.ts ===
+=== node_modules/b.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
-=== tests/cases/compiler/node_modules/c.js ===
+=== node_modules/c.js ===
 exports.a = 10;
 >exports.a = 10 : 10
+>               : ^^
 >exports.a : 10
->exports : typeof import("tests/cases/compiler/node_modules/c")
+>          : ^^
+>exports : typeof import("node_modules/c")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : 10
+>  : ^^
 >10 : 10
+>   : ^^
 
 c = 10;
 >c = 10 : 10
+>       : ^^
 >c : error
 >10 : 10
+>   : ^^
 

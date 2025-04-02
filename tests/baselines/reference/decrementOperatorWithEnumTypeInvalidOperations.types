@@ -1,75 +1,122 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts] ////
+
+=== decrementOperatorWithEnumTypeInvalidOperations.ts ===
 // -- operator on enum type
 
 enum ENUM { };
 >ENUM : ENUM
+>     : ^^^^
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
+>      : ^^^^^
 >A : ENUM1.A
+>  : ^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 >"" : (typeof ENUM1)[""]
+>   : ^^^^^^^^^^^^^^^^^^
 
 // enum type var
 var ResultIsNumber1 = --ENUM;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >--ENUM : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 var ResultIsNumber2 = --ENUM1;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >--ENUM1 : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 
 var ResultIsNumber3 = ENUM--;
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >ENUM-- : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 var ResultIsNumber4 = ENUM1--;
 >ResultIsNumber4 : number
+>                : ^^^^^^
 >ENUM1-- : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 
 // enum type expressions
 var ResultIsNumber5 = --(ENUM["A"] + ENUM.B);
 >ResultIsNumber5 : number
+>                : ^^^^^^
 >--(ENUM["A"] + ENUM.B) : number
+>                       : ^^^^^^
 >(ENUM["A"] + ENUM.B) : any
+>                     : ^^^
 >ENUM["A"] + ENUM.B : any
+>                   : ^^^
 >ENUM["A"] : any
+>          : ^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 >ENUM.B : any
+>       : ^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >B : any
+>  : ^^^
 
 var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
 >ResultIsNumber6 : number
+>                : ^^^^^^
 >(ENUM.A + ENUM["B"])-- : number
+>                       : ^^^^^^
 >(ENUM.A + ENUM["B"]) : any
+>                     : ^^^
 >ENUM.A + ENUM["B"] : any
+>                   : ^^^
 >ENUM.A : any
+>       : ^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >A : any
+>  : ^^^
 >ENUM["B"] : any
+>          : ^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 // miss assignment operator
 --ENUM;
 >--ENUM : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 --ENUM1;
 >--ENUM1 : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 
 ENUM--;
 >ENUM-- : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 ENUM1--;
 >ENUM1-- : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 

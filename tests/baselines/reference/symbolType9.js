@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType9.ts] ////
+
 //// [symbolType9.ts]
 var s = Symbol.for("equal");
 s == s;

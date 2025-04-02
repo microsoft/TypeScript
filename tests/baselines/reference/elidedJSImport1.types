@@ -1,40 +1,61 @@
-=== tests/cases/compiler/caller.js ===
+//// [tests/cases/compiler/elidedJSImport1.ts] ////
+
+=== caller.js ===
 import * as fs from 'fs';
 >fs : any
+>   : ^^^
 
 import TruffleContract from '@truffle/contract'; // Runtime err: this import is elided in transform
 >TruffleContract : any
+>                : ^^^
 
 console.log(fs);
 >console.log(fs) : void
+>                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >fs : any
+>   : ^^^
 
 console.log('TruffleContract is ', typeof TruffleContract, TruffleContract); // `TruffleContract` is considered 'unused'
 >console.log('TruffleContract is ', typeof TruffleContract, TruffleContract) : void
+>                                                                            : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'TruffleContract is ' : "TruffleContract is "
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >typeof TruffleContract : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TruffleContract : any
+>                : ^^^
 >TruffleContract : any
+>                : ^^^
 
 
-=== tests/cases/compiler/node_modules/@truffle/contract/index.d.ts ===
+=== node_modules/@truffle/contract/index.d.ts ===
 declare module "@truffle/contract" {
 >"@truffle/contract" : typeof import("@truffle/contract")
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface ContractObject {
         foo: number;
 >foo : number
+>    : ^^^^^^
     }
     namespace TruffleContract {
         export type Contract = ContractObject;
 >Contract : ContractObject
+>         : ^^^^^^^^^^^^^^
     }
     export default TruffleContract;
 >TruffleContract : any
+>                : ^^^
 }

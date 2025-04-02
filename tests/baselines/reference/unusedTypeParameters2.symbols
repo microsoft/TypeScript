@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameters2.ts ===
+//// [tests/cases/compiler/unusedTypeParameters2.ts] ////
+
+=== unusedTypeParameters2.ts ===
 class greeter<typeparameter1, typeparameter2> {
 >greeter : Symbol(greeter, Decl(unusedTypeParameters2.ts, 0, 0))
 >typeparameter1 : Symbol(typeparameter1, Decl(unusedTypeParameters2.ts, 0, 14))

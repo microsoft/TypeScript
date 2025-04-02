@@ -1,71 +1,103 @@
-=== tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts ===
+//// [tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts] ////
+
+=== everyTypeWithInitializer.ts ===
 interface I {
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class C implements I {
 >C : C
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class D<T>{
 >D : D<T>
+>  : ^^^^
 
     source: T;
 >source : T
+>       : ^
 
     recurse: D<T>;
 >recurse : D<T>
+>        : ^^^^
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
+>        : ^^^^^^^
 }
 
 function F(x: string): number { return 42; }
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class A {
 >A : A
+>  : ^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 }
 
 var aNumber = 9.9;
 >aNumber : number
+>        : ^^^^^^
 >9.9 : 9.9
+>    : ^^^
 
 var aString = 'this is a string';
 >aString : string
+>        : ^^^^^^
 >'this is a string' : "this is a string"
+>                   : ^^^^^^^^^^^^^^^^^^
 
 var aDate = new Date(12);
 >aDate : Date
+>      : ^^^^
 >new Date(12) : Date
+>             : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 
 var anObject = new Object();
 >anObject : Object
+>         : ^^^^^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var anAny = null;
 >anAny : any
@@ -74,55 +106,84 @@ var anOtherAny = <any> new C();
 >anOtherAny : any
 ><any> new C() : any
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var anUndefined = undefined;
 >anUndefined : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
 
 var aClass = new C();
 >aClass : C
+>       : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var aGenericClass = new D<string>();
 >aGenericClass : D<string>
+>              : ^^^^^^^^^
 >new D<string>() : D<string>
+>                : ^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var anObjectLiteral = { id: 12 };
 >anObjectLiteral : { id: number; }
+>                : ^^^^^^^^^^^^^^^
 >{ id: 12 } : { id: number; }
+>           : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >12 : 12
+>   : ^^
 
 var aFunction = F;
 >aFunction : (x: string) => number
+>          : ^ ^^      ^^^^^      
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 
 var aLambda = (x) => 2;
 >aLambda : (x: any) => number
+>        : ^ ^^^^^^^^^^^^^^^^
 >(x) => 2 : (x: any) => number
+>         : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >2 : 2
+>  : ^
 
 var aModule = M;
 >aModule : typeof M
+>        : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var aClassInModule = new M.A();
 >aClassInModule : M.A
+>               : ^^^
 >new M.A() : M.A
+>          : ^^^
 >M.A : typeof M.A
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >A : typeof M.A
+>  : ^^^^^^^^^^
 
 var aFunctionInModule = M.F2;
 >aFunctionInModule : (x: number) => string
+>                  : ^ ^^      ^^^^^      
 >M.F2 : (x: number) => string
+>     : ^ ^^      ^^^^^      
 >M : typeof M
+>  : ^^^^^^^^
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 
 // no initializer or annotation, so this is an 'any'
 var x;

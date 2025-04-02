@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope3.ts] ////
+
 //// [typeParametersAvailableInNestedScope3.ts]
 function foo<T>(v: T) {
     function a<T>(a: T) { return a; }
@@ -30,8 +32,8 @@ function foo(v) {
 declare function foo<T>(v: T): {
     a: <T_1>(a: T_1) => T_1;
     b: () => T;
-    c: <T_2>(v: T_2) => {
-        a: <T_3>(a: T_3) => T_3;
-        b: () => T_2;
+    c: <T_1>(v: T_1) => {
+        a: <T_2>(a: T_2) => T_2;
+        b: () => T_1;
     };
 };

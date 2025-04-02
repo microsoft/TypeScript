@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts] ////
+
 //// [comparisonOperatorWithIntersectionType.ts]
 declare let a: { a: 1 }
 a > 1;

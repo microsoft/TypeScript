@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts ===
+//// [tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts] ////
+
+=== genericObjectCreationWithoutTypeArgs.ts ===
 class SS<T>{
 >SS : Symbol(SS, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 0))
 >T : Symbol(T, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/autonumberingInEnums.ts ===
+//// [tests/cases/compiler/autonumberingInEnums.ts] ////
+
+=== autonumberingInEnums.ts ===
 enum Foo {
 >Foo : Symbol(Foo, Decl(autonumberingInEnums.ts, 0, 0), Decl(autonumberingInEnums.ts, 2, 1))
 

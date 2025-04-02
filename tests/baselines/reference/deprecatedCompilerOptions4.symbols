@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deprecatedCompilerOptions4.ts] ////
+
 === /foo/a.ts ===
 const a = 1;
 >a : Symbol(a, Decl(a.ts, 0, 5))

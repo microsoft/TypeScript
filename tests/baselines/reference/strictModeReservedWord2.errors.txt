@@ -1,12 +1,12 @@
-tests/cases/compiler/strictModeReservedWord2.ts(2,11): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord2.ts(3,11): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord2.ts(4,9): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord2.ts(4,18): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord2.ts(6,6): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord2.ts(13,12): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord2.ts(2,11): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWord2.ts(3,11): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+strictModeReservedWord2.ts(4,9): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord2.ts(4,18): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+strictModeReservedWord2.ts(6,6): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord2.ts(13,12): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 
 
-==== tests/cases/compiler/strictModeReservedWord2.ts (6 errors) ====
+==== strictModeReservedWord2.ts (6 errors) ====
     "use strict"
     interface public { }
               ~~~~~~

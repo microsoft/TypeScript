@@ -1,416 +1,723 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts] ////
+
+=== exponentiationOperatorSyntaxError2.ts ===
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 var temp: any;
 >temp : any
+>     : ^^^
 
 delete --temp ** 3;
 >delete --temp ** 3 : number
+>                   : ^^^^^^
 >delete --temp : boolean
+>              : ^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 delete ++temp ** 3;
 >delete ++temp ** 3 : number
+>                   : ^^^^^^
 >delete ++temp : boolean
+>              : ^^^^^^^
 >++temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 delete temp-- ** 3;
 >delete temp-- ** 3 : number
+>                   : ^^^^^^
 >delete temp-- : boolean
+>              : ^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 delete temp++ ** 3;
 >delete temp++ ** 3 : number
+>                   : ^^^^^^
 >delete temp++ : boolean
+>              : ^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 
 1 ** delete --temp ** 3;
 >1 ** delete --temp ** 3 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >delete --temp ** 3 : number
+>                   : ^^^^^^
 >delete --temp : boolean
+>              : ^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** delete ++temp ** 3;
 >1 ** delete ++temp ** 3 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >delete ++temp ** 3 : number
+>                   : ^^^^^^
 >delete ++temp : boolean
+>              : ^^^^^^^
 >++temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** delete temp-- ** 3;
 >1 ** delete temp-- ** 3 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >delete temp-- ** 3 : number
+>                   : ^^^^^^
 >delete temp-- : boolean
+>              : ^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** delete temp++ ** 3;
 >1 ** delete temp++ ** 3 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >delete temp++ ** 3 : number
+>                   : ^^^^^^
 >delete temp++ : boolean
+>              : ^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 typeof --temp ** 3;
 >typeof --temp ** 3 : number
+>                   : ^^^^^^
 >typeof --temp : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 typeof temp-- ** 3;
 >typeof temp-- ** 3 : number
+>                   : ^^^^^^
 >typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 typeof 3 ** 4;
 >typeof 3 ** 4 : number
+>              : ^^^^^^
 >typeof 3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 typeof temp++ ** 4;
 >typeof temp++ ** 4 : number
+>                   : ^^^^^^
 >typeof temp++ : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 typeof temp-- ** 4;
 >typeof temp-- ** 4 : number
+>                   : ^^^^^^
 >typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** typeof --temp ** 3;
 >1 ** typeof --temp ** 3 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >typeof --temp ** 3 : number
+>                   : ^^^^^^
 >typeof --temp : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** typeof temp-- ** 3;
 >1 ** typeof temp-- ** 3 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >typeof temp-- ** 3 : number
+>                   : ^^^^^^
 >typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** typeof 3 ** 4;
 >1 ** typeof 3 ** 4 : number
+>                   : ^^^^^^
 >1 : 1
+>  : ^
 >typeof 3 ** 4 : number
+>              : ^^^^^^
 >typeof 3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 1 ** typeof temp++ ** 4;
 >1 ** typeof temp++ ** 4 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >typeof temp++ ** 4 : number
+>                   : ^^^^^^
 >typeof temp++ : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** typeof temp-- ** 4;
 >1 ** typeof temp-- ** 4 : number
+>                        : ^^^^^^
 >1 : 1
+>  : ^
 >typeof temp-- ** 4 : number
+>                   : ^^^^^^
 >typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 void --temp ** 3;
 >void --temp ** 3 : number
+>                 : ^^^^^^
 >void --temp : undefined
+>            : ^^^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 void temp-- ** 3;
 >void temp-- ** 3 : number
+>                 : ^^^^^^
 >void temp-- : undefined
+>            : ^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 void 3 ** 4;
 >void 3 ** 4 : number
+>            : ^^^^^^
 >void 3 : undefined
+>       : ^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 void temp++ ** 4;
 >void temp++ ** 4 : number
+>                 : ^^^^^^
 >void temp++ : undefined
+>            : ^^^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 void temp-- ** 4;
 >void temp-- ** 4 : number
+>                 : ^^^^^^
 >void temp-- : undefined
+>            : ^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** void --temp ** 3;
 >1 ** void --temp ** 3 : number
+>                      : ^^^^^^
 >1 : 1
+>  : ^
 >void --temp ** 3 : number
+>                 : ^^^^^^
 >void --temp : undefined
+>            : ^^^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** void temp-- ** 3;
 >1 ** void temp-- ** 3 : number
+>                      : ^^^^^^
 >1 : 1
+>  : ^
 >void temp-- ** 3 : number
+>                 : ^^^^^^
 >void temp-- : undefined
+>            : ^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** void 3 ** 4;
 >1 ** void 3 ** 4 : number
+>                 : ^^^^^^
 >1 : 1
+>  : ^
 >void 3 ** 4 : number
+>            : ^^^^^^
 >void 3 : undefined
+>       : ^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 1 ** void temp++ ** 4;
 >1 ** void temp++ ** 4 : number
+>                      : ^^^^^^
 >1 : 1
+>  : ^
 >void temp++ ** 4 : number
+>                 : ^^^^^^
 >void temp++ : undefined
+>            : ^^^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** void temp-- ** 4 ;
 >1 ** void temp-- ** 4 : number
+>                      : ^^^^^^
 >1 : 1
+>  : ^
 >void temp-- ** 4 : number
+>                 : ^^^^^^
 >void temp-- : undefined
+>            : ^^^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 ~ --temp ** 3;
 >~ --temp ** 3 : number
+>              : ^^^^^^
 >~ --temp : number
+>         : ^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 ~temp-- ** 3;
 >~temp-- ** 3 : number
+>             : ^^^^^^
 >~temp-- : number
+>        : ^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 ~3 ** 4;
 >~3 ** 4 : number
+>        : ^^^^^^
 >~3 : number
+>   : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 ~temp++ ** 4;
 >~temp++ ** 4 : number
+>             : ^^^^^^
 >~temp++ : number
+>        : ^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 ~temp-- ** 4;
 >~temp-- ** 4 : number
+>             : ^^^^^^
 >~temp-- : number
+>        : ^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** ~ --temp ** 3;
 >1 ** ~ --temp ** 3 : number
+>                   : ^^^^^^
 >1 : 1
+>  : ^
 >~ --temp ** 3 : number
+>              : ^^^^^^
 >~ --temp : number
+>         : ^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** ~temp-- ** 3;
 >1 ** ~temp-- ** 3 : number
+>                  : ^^^^^^
 >1 : 1
+>  : ^
 >~temp-- ** 3 : number
+>             : ^^^^^^
 >~temp-- : number
+>        : ^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** ~3 ** 4;
 >1 ** ~3 ** 4 : number
+>             : ^^^^^^
 >1 : 1
+>  : ^
 >~3 ** 4 : number
+>        : ^^^^^^
 >~3 : number
+>   : ^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 1 ** ~temp++ ** 4;
 >1 ** ~temp++ ** 4 : number
+>                  : ^^^^^^
 >1 : 1
+>  : ^
 >~temp++ ** 4 : number
+>             : ^^^^^^
 >~temp++ : number
+>        : ^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** ~temp-- ** 4;
 >1 ** ~temp-- ** 4 : number
+>                  : ^^^^^^
 >1 : 1
+>  : ^
 >~temp-- ** 4 : number
+>             : ^^^^^^
 >~temp-- : number
+>        : ^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 ! --temp ** 3;
 >! --temp ** 3 : number
+>              : ^^^^^^
 >! --temp : boolean
+>         : ^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 !temp-- ** 3;
 >!temp-- ** 3 : number
+>             : ^^^^^^
 >!temp-- : boolean
+>        : ^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 !3 ** 4;
 >!3 ** 4 : number
+>        : ^^^^^^
 >!3 : boolean
+>   : ^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 !temp++ ** 4;
 >!temp++ ** 4 : number
+>             : ^^^^^^
 >!temp++ : boolean
+>        : ^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 !temp-- ** 4;
 >!temp-- ** 4 : number
+>             : ^^^^^^
 >!temp-- : boolean
+>        : ^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** ! --temp ** 3;
 >1 ** ! --temp ** 3 : number
+>                   : ^^^^^^
 >1 : 1
+>  : ^
 >! --temp ** 3 : number
+>              : ^^^^^^
 >! --temp : boolean
+>         : ^^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** !temp-- ** 3;
 >1 ** !temp-- ** 3 : number
+>                  : ^^^^^^
 >1 : 1
+>  : ^
 >!temp-- ** 3 : number
+>             : ^^^^^^
 >!temp-- : boolean
+>        : ^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 1 ** !3 ** 4;
 >1 ** !3 ** 4 : number
+>             : ^^^^^^
 >1 : 1
+>  : ^
 >!3 ** 4 : number
+>        : ^^^^^^
 >!3 : boolean
+>   : ^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 1 ** !temp++ ** 4;
 >1 ** !temp++ ** 4 : number
+>                  : ^^^^^^
 >1 : 1
+>  : ^
 >!temp++ ** 4 : number
+>             : ^^^^^^
 >!temp++ : boolean
+>        : ^^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 1 ** !temp-- ** 4;
 >1 ** !temp-- ** 4 : number
+>                  : ^^^^^^
 >1 : 1
+>  : ^
 >!temp-- ** 4 : number
+>             : ^^^^^^
 >!temp-- : boolean
+>        : ^^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >4 : 4
+>  : ^
 
 <number>temp ** 3;
 ><number>temp ** 3 : number
+>                  : ^^^^^^
 ><number>temp : number
+>             : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 <number>++temp ** 3;
 ><number>++temp ** 3 : number
+>                    : ^^^^^^
 ><number>++temp : number
+>               : ^^^^^^
 >++temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 <number>--temp ** 3;
 ><number>--temp ** 3 : number
+>                    : ^^^^^^
 ><number>--temp : number
+>               : ^^^^^^
 >--temp : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 <number>temp++ ** 3;
 ><number>temp++ ** 3 : number
+>                    : ^^^^^^
 ><number>temp++ : number
+>               : ^^^^^^
 >temp++ : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 
 <number>temp-- ** 3;
 ><number>temp-- ** 3 : number
+>                    : ^^^^^^
 ><number>temp-- : number
+>               : ^^^^^^
 >temp-- : number
+>       : ^^^^^^
 >temp : any
+>     : ^^^
 >3 : 3
+>  : ^
 

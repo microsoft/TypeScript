@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxCallbackWithDestructuring.tsx] ////
+
 //// [jsxCallbackWithDestructuring.tsx]
 // minimal component
 interface Component<P = {}, S = {}> { }

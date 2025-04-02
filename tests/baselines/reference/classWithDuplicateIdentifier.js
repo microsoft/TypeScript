@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classWithDuplicateIdentifier.ts] ////
+
 //// [classWithDuplicateIdentifier.ts]
 class C {
     a(): number { return 0; } // error: duplicate identifier

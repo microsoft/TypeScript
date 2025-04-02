@@ -1,235 +1,341 @@
-=== tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts] ////
+
+=== intersectionsAndEmptyObjects.ts ===
 // Empty object type literals are removed from intersections types
 // that contain other object types
 
 type A = { a: number };
->A : { a: number; }
+>A : A
+>  : ^
 >a : number
+>  : ^^^^^^
 
 type B = { b: string };
->B : { b: string; }
+>B : B
+>  : ^
 >b : string
+>  : ^^^^^^
 
 type C = {};
->C : {}
+>C : C
+>  : ^
 
 let x01: A & B;
 >x01 : A & B
+>    : ^^^^^
 
 let x02: A & C;
 >x02 : A
+>    : ^
 
 let x03: B & C;
 >x03 : B
+>    : ^
 
 let x04: A & B & C;
 >x04 : A & B
+>    : ^^^^^
 
 let x05: string & C;
 >x05 : string
+>    : ^^^^^^
 
 let x06: C & string;
 >x06 : string
+>    : ^^^^^^
 
 let x07: C;
 >x07 : C
+>    : ^
 
 let x08: C & {};
 >x08 : C
+>    : ^
 
 let x09: {} & A & {} & B & {} & C & {};
 >x09 : A & B
+>    : ^^^^^
 
 interface D {}
 interface E {}
 
 let x10: A & D;
 >x10 : A & D
+>    : ^^^^^
 
 let x11: C & D;
 >x11 : D
+>    : ^
 
 let x12: A & B & C & D;
 >x12 : A & B & D
+>    : ^^^^^^^^^
 
 let x13: D & E;
 >x13 : D & E
+>    : ^^^^^
 
 let x14: A & B & C & D & E;
 >x14 : A & B & D & E
+>    : ^^^^^^^^^^^^^
 
 // Repro from #20225
 
 type Dictionary = { [name: string]: string };
->Dictionary : { [name: string]: string; }
+>Dictionary : Dictionary
+>           : ^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 
 const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
 >intersectDictionaries : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
+>                      : ^  ^^^^^^^^^          ^^  ^^^^^^^^^          ^^  ^^  ^^  ^^  ^^^^^       
 ><F1 extends Dictionary, F2 extends Dictionary>(  d1: F1,  d2: F2,): F1 & F2 => Object.assign({}, d1, d2) : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
+>                                                                                                         : ^  ^^^^^^^^^          ^^  ^^^^^^^^^          ^^  ^^  ^^  ^^  ^^^^^       
 
   d1: F1,
 >d1 : F1
+>   : ^^
 
   d2: F2,
 >d2 : F2
+>   : ^^
 
 ): F1 & F2 => Object.assign({}, d1, d2);
 >Object.assign({}, d1, d2) : {} & F1 & F2
+>                          : ^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>              : ^^^ ^^^^^^^^^  ^^ ^^      ^^ ^^      ^^ ^^^     ^^^ ^^^^^^^^^  ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^^         ^^^ ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^       ^^ ^^^             ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>       : ^^^ ^^^^^^^^^  ^^ ^^      ^^ ^^      ^^ ^^^     ^^^ ^^^^^^^^^  ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^^         ^^^ ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^       ^^ ^^^             ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >{} : {}
+>   : ^^
 >d1 : F1
+>   : ^^
 >d2 : F2
+>   : ^^
 
 const testDictionary = <T extends Dictionary>(_value: T) => { };
 >testDictionary : <T extends Dictionary>(_value: T) => void
+>               : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 ><T extends Dictionary>(_value: T) => { } : <T extends Dictionary>(_value: T) => void
+>                                         : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 >_value : T
+>       : ^
 
 const d1 = {};
 >d1 : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 testDictionary(d1);
 >testDictionary(d1) : void
+>                   : ^^^^
 >testDictionary : <T extends Dictionary>(_value: T) => void
+>               : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 >d1 : {}
+>   : ^^
 
 const d2 = intersectDictionaries(d1, d1);
 >d2 : {}
+>   : ^^
 >intersectDictionaries(d1, d1) : {}
+>                              : ^^
 >intersectDictionaries : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
+>                      : ^  ^^^^^^^^^          ^^  ^^^^^^^^^          ^^  ^^  ^^  ^^  ^^^^^       
 >d1 : {}
+>   : ^^
 >d1 : {}
+>   : ^^
 
 testDictionary(d2);
 >testDictionary(d2) : void
+>                   : ^^^^
 >testDictionary : <T extends Dictionary>(_value: T) => void
+>               : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 >d2 : {}
+>   : ^^
 
 const d3 = {
 >d3 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 >{  s: '',} : { s: string; }
+>           : ^^^^^^^^^^^^^^
 
   s: '',
 >s : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 };
 testDictionary(d3);
 >testDictionary(d3) : void
+>                   : ^^^^
 >testDictionary : <T extends Dictionary>(_value: T) => void
+>               : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 >d3 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 
 const d4 = intersectDictionaries(d1, d3);
 >d4 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 >intersectDictionaries(d1, d3) : { s: string; }
+>                              : ^^^^^^^^^^^^^^
 >intersectDictionaries : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
+>                      : ^  ^^^^^^^^^          ^^  ^^^^^^^^^          ^^  ^^  ^^  ^^  ^^^^^       
 >d1 : {}
+>   : ^^
 >d3 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 
 testDictionary(d4);
 >testDictionary(d4) : void
+>                   : ^^^^
 >testDictionary : <T extends Dictionary>(_value: T) => void
+>               : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 >d4 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 
 const d5 = intersectDictionaries(d3, d1);
 >d5 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 >intersectDictionaries(d3, d1) : { s: string; }
+>                              : ^^^^^^^^^^^^^^
 >intersectDictionaries : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
+>                      : ^  ^^^^^^^^^          ^^  ^^^^^^^^^          ^^  ^^  ^^  ^^  ^^^^^       
 >d3 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 >d1 : {}
+>   : ^^
 
 testDictionary(d5);
 >testDictionary(d5) : void
+>                   : ^^^^
 >testDictionary : <T extends Dictionary>(_value: T) => void
+>               : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 >d5 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 
 const d6 = intersectDictionaries(d3, d3);
 >d6 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 >intersectDictionaries(d3, d3) : { s: string; }
+>                              : ^^^^^^^^^^^^^^
 >intersectDictionaries : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
+>                      : ^  ^^^^^^^^^          ^^  ^^^^^^^^^          ^^  ^^  ^^  ^^  ^^^^^       
 >d3 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 >d3 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 
 testDictionary(d6);
 >testDictionary(d6) : void
+>                   : ^^^^
 >testDictionary : <T extends Dictionary>(_value: T) => void
+>               : ^ ^^^^^^^^^          ^^      ^^ ^^^^^^^^^
 >d6 : { s: string; }
+>   : ^^^^^^^^^^^^^^
 
 // Repro from #27044
 
 type choices<IChoiceList extends {
 >choices : choices<IChoiceList>
+>        : ^^^^^^^^^^^^^^^^^^^^
 
     [key: string]: boolean;
 >key : string
+>    : ^^^^^^
 
 }> = IChoiceList & {
     shoes:boolean;
 >shoes : boolean
+>      : ^^^^^^^
 
     food:boolean;
 >food : boolean
+>     : ^^^^^^^
 
 };
 
 type IMyChoiceList = {
->IMyChoiceList : { car: true; }
+>IMyChoiceList : IMyChoiceList
+>              : ^^^^^^^^^^^^^
 
     car: true
 >car : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 
 };
 
 type IUnknownChoiceList = {};
->IUnknownChoiceList : {}
+>IUnknownChoiceList : IUnknownChoiceList
+>                   : ^^^^^^^^^^^^^^^^^^
 
 var defaultChoices: choices<{}>;
 >defaultChoices : { shoes: boolean; food: boolean; }
+>               : ^^^^^^^^^       ^^^^^^^^       ^^^
 
 var defaultChoicesAndEmpty: choices<{} & {}>;
 >defaultChoicesAndEmpty : { shoes: boolean; food: boolean; }
+>                       : ^^^^^^^^^       ^^^^^^^^       ^^^
 
 var myChoices: choices<IMyChoiceList>;
 >myChoices : choices<IMyChoiceList>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
 var myChoicesAndEmpty: choices<IMyChoiceList & {}>;
 >myChoicesAndEmpty : choices<IMyChoiceList>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 
 var unknownChoices: choices<IUnknownChoiceList>;
 >unknownChoices : { shoes: boolean; food: boolean; }
+>               : ^^^^^^^^^       ^^^^^^^^       ^^^
 
 var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 >unknownChoicesAndEmpty : { shoes: boolean; food: boolean; }
+>                       : ^^^^^^^^^       ^^^^^^^^       ^^^
 
 // Repro from #38672
 
 type Foo1 = { x: string } & { [x: number]: Foo1 };
->Foo1 : { x: string; } & { [x: number]: Foo1; }
+>Foo1 : Foo1
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 type Foo2 = { x: string } & { [K in number]: Foo2 };
->Foo2 : { x: string; } & { [x: number]: Foo2; }
+>Foo2 : Foo2
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 
 // Repro from #40239
 
 declare function mock<M>(_: Promise<M>): {} & M;
 >mock : <M>(_: Promise<M>) => {} & M
+>     : ^ ^^ ^^          ^^^^^      
 >_ : Promise<M>
+>  : ^^^^^^^^^^
 
 mock(import('./ex'))
 >mock(import('./ex')) : {}
+>                     : ^^
 >mock : <M>(_: Promise<M>) => {} & M
->import('./ex') : Promise<{ default: typeof import("tests/cases/conformance/types/intersection/ex"); }>
+>     : ^ ^^ ^^          ^^^^^      
+>import('./ex') : Promise<{ default: typeof import("ex"); }>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./ex' : "./ex"
+>       : ^^^^^^
 
-=== tests/cases/conformance/types/intersection/ex.d.ts ===
+=== ex.d.ts ===
 
 export {}
 

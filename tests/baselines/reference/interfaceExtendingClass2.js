@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts] ////
+
 //// [interfaceExtendingClass2.ts]
 class Foo {
     x: string;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationForIn.ts ===
+//// [tests/cases/compiler/sourceMapValidationForIn.ts] ////
+
+=== sourceMapValidationForIn.ts ===
 for (var x in String) {
 >x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

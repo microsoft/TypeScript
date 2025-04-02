@@ -1,10 +1,8 @@
-error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
-tests/cases/conformance/node/allowJs/index.cjs(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
-tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
+error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 
 
-!!! error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
-==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+!!! error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== index.js (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
@@ -12,7 +10,7 @@ tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1479: The current 
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/allowJs/index.mjs (0 errors) ====
+==== index.mjs (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
@@ -20,19 +18,15 @@ tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1479: The current 
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/allowJs/index.cjs (2 errors) ====
+==== index.cjs (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
-                         ~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
     import * as type from "#type";
-                          ~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,

@@ -1,14 +1,16 @@
-=== tests/cases/compiler/file.ts ===
+//// [tests/cases/compiler/moduleAugmentationEnumClassMergeOfReexportIsError.ts] ////
+
+=== file.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(file.ts, 0, 0))
 
     member: string;
 >member : Symbol(Foo.member, Decl(file.ts, 0, 18))
 }
-=== tests/cases/compiler/reexport.ts ===
+=== reexport.ts ===
 
 export * from "./file";
-=== tests/cases/compiler/augment.ts ===
+=== augment.ts ===
 import * as ns from "./reexport";
 >ns : Symbol(ns, Decl(augment.ts, 0, 6))
 

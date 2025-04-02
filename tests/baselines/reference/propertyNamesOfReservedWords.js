@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts] ////
+
 //// [propertyNamesOfReservedWords.ts]
 class C {
     abstract;

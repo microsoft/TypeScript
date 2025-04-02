@@ -3,7 +3,7 @@
 // @declaration: true
 // @module: commonjs
 // @outFile: c.js
-// @out: d.js
+// @outFile: d.js
 
 // --out and --outFile error
 

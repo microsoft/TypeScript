@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverride4.ts] ////
+
 === /index.ts ===
 /// <reference types="pkg" resolution-mode="import" />
 foo; // foo should resolve while bar should not, since even though index.js is cjs, the refernce is esm

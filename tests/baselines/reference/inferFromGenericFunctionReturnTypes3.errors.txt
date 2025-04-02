@@ -1,12 +1,12 @@
-tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(28,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bar"'.
-tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
+inferFromGenericFunctionReturnTypes3.ts(28,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bar"'.
+inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
   Type '{ state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
     Type '{ state: State.B; }' is not assignable to type '{ state: State.A; }'.
       Types of property 'state' are incompatible.
         Type 'State.B' is not assignable to type 'State.A'.
 
 
-==== tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts (2 errors) ====
+==== inferFromGenericFunctionReturnTypes3.ts (2 errors) ====
     // Repros from #5487
     
     function truePromise(): Promise<true> {
@@ -195,7 +195,7 @@ tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(180,26): error TS23
 !!! error TS2322:     Type '{ state: State.B; }' is not assignable to type '{ state: State.A; }'.
 !!! error TS2322:       Types of property 'state' are incompatible.
 !!! error TS2322:         Type 'State.B' is not assignable to type 'State.A'.
-!!! related TS6502 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:179:28: The expected type comes from the return type of this signature.
+!!! related TS6502 inferFromGenericFunctionReturnTypes3.ts:179:28: The expected type comes from the return type of this signature.
     
     // Repros from #31443
     

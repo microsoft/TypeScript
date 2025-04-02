@@ -1,13 +1,15 @@
-=== tests/cases/conformance/importAssertion/0.ts ===
+//// [tests/cases/conformance/importAssertion/importAssertion3.ts] ////
+
+=== 0.ts ===
 export interface I { }
 >I : Symbol(I, Decl(0.ts, 0, 0))
 
-=== tests/cases/conformance/importAssertion/1.ts ===
+=== 1.ts ===
 export type {} from './0' assert { type: "json" }
 export type { I } from './0' assert { type: "json" }
 >I : Symbol(I, Decl(1.ts, 1, 13))
 
-=== tests/cases/conformance/importAssertion/2.ts ===
+=== 2.ts ===
 import type { I } from './0'  assert { type: "json" }
 >I : Symbol(I, Decl(2.ts, 0, 13))
 

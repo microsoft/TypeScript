@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeReferenceDirectiveScopedPackageCustomTypeRoot.ts] ////
+
 === /a.ts ===
 typesCache;
 >typesCache : Symbol(typesCache, Decl(index.d.ts, 0, 13))

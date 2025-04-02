@@ -1,24 +1,34 @@
-=== tests/cases/compiler/internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts ===
+//// [tests/cases/compiler/internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts] ////
+
+=== internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts ===
 class A {
 >A : A
+>  : ^
 
     aProp: string;
 >aProp : string
+>      : ^^^^^^
 }
 module A {
     export interface X { s: string }
 >s : string
+>  : ^^^^^^
 }
 
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
     var A = 1;
 >A : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     import Y = A;
 >Y : typeof Y
+>  : ^^^^^^^^
 >A : Y
+>  : ^
 }
 

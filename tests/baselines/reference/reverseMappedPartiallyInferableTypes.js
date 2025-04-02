@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts] ////
+
 //// [reverseMappedPartiallyInferableTypes.ts]
 // Repro from #30505
 

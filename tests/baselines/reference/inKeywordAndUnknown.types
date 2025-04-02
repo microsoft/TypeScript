@@ -1,164 +1,264 @@
-=== tests/cases/compiler/inKeywordAndUnknown.ts ===
+//// [tests/cases/compiler/inKeywordAndUnknown.ts] ////
+
+=== inKeywordAndUnknown.ts ===
 // Repro from #50531
 
 function f(x: {}, y: unknown) {
 >f : (x: {}, y: unknown) => void
+>  : ^ ^^  ^^ ^^       ^^^^^^^^^
 >x : {}
+>  : ^^
 >y : unknown
+>  : ^^^^^^^
 
     if (!("a" in x)) {
 >!("a" in x) : boolean
+>            : ^^^^^^^
 >("a" in x) : boolean
+>           : ^^^^^^^
 >"a" in x : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >x : {}
+>  : ^^
 
         return;
     }
     x;  // {}
 >x : Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
     if (!y) {
 >!y : boolean
+>   : ^^^^^^^
 >y : unknown
+>  : ^^^^^^^
 
         return;
     }
     y;  // {}
 >y : {}
+>  : ^^
 
     if (!("a" in y)) {
 >!("a" in y) : boolean
+>            : ^^^^^^^
 >("a" in y) : boolean
+>           : ^^^^^^^
 >"a" in y : boolean
+>         : ^^^^^^^
 >"a" : "a"
+>    : ^^^
 >y : {}
+>  : ^^
 
         return;
     }
     y;  // {}
 >y : Record<"a", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #51007
 
 function isHTMLTable(table: unknown): boolean {
 >isHTMLTable : (table: unknown) => boolean
+>            : ^     ^^       ^^^^^       
 >table : unknown
+>      : ^^^^^^^
 
     return !!table && table instanceof Object && 'html' in table;
 >!!table && table instanceof Object && 'html' in table : boolean
+>                                                      : ^^^^^^^
 >!!table && table instanceof Object : boolean
+>                                   : ^^^^^^^
 >!!table : boolean
+>        : ^^^^^^^
 >!table : boolean
+>       : ^^^^^^^
 >table : unknown
+>      : ^^^^^^^
 >table instanceof Object : boolean
+>                        : ^^^^^^^
 >table : {}
+>      : ^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'html' in table : boolean
+>                : ^^^^^^^
 >'html' : "html"
+>       : ^^^^^^
 >table : Object
+>      : ^^^^^^
 }
 
 function f1(x: unknown) {
 >f1 : (x: unknown) => unknown
+>   : ^ ^^       ^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     return x && x instanceof Object && 'a' in x;
 >x && x instanceof Object && 'a' in x : unknown
+>                                     : ^^^^^^^
 >x && x instanceof Object : unknown
+>                         : ^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >x instanceof Object : boolean
+>                    : ^^^^^^^
 >x : {}
+>  : ^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a' in x : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >x : Object
+>  : ^^^^^^
 }
 
 function f2<T>(x: T) {
->f2 : <T>(x: T) => boolean
+>f2 : <T>(x: T) => x is T & Object & Record<"a", unknown>
+>   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     return x && x instanceof Object && 'a' in x;
 >x && x instanceof Object && 'a' in x : boolean
+>                                     : ^^^^^^^
 >x && x instanceof Object : boolean
+>                         : ^^^^^^^
 >x : T
+>  : ^
 >x instanceof Object : boolean
+>                    : ^^^^^^^
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a' in x : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >x : T & Object
+>  : ^^^^^^^^^^
 }
 
 function f3(x: {}) {
->f3 : (x: {}) => boolean
+>f3 : (x: {}) => x is Object & Record<"a", unknown>
+>   : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
+>                                : ^^^^^^^
 >x instanceof Object : boolean
+>                    : ^^^^^^^
 >x : {}
+>  : ^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a' in x : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >x : Object
+>  : ^^^^^^
 }
 
 function f4<T extends {}>(x: T) {
->f4 : <T extends {}>(x: T) => boolean
+>f4 : <T extends {}>(x: T) => x is T & Object & Record<"a", unknown>
+>   : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
+>                                : ^^^^^^^
 >x instanceof Object : boolean
+>                    : ^^^^^^^
 >x : T
+>  : ^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a' in x : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >x : T & Object
+>  : ^^^^^^^^^^
 }
 
 function f5<T>(x: T & {}) {
->f5 : <T>(x: T & {}) => boolean
+>f5 : <T>(x: T & {}) => x is T & Object & Record<"a", unknown>
+>   : ^ ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T & {}
+>  : ^^^^^^
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
+>                                : ^^^^^^^
 >x instanceof Object : boolean
+>                    : ^^^^^^^
 >x : T & {}
+>  : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a' in x : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >x : T & Object
+>  : ^^^^^^^^^^
 }
 
 function f6<T extends {}>(x: T & {}) {
->f6 : <T extends {}>(x: T & {}) => boolean
->x : T & {}
+>f6 : <T extends {}>(x: T & {}) => x is T & Object & Record<"a", unknown>
+>   : ^ ^^^^^^^^^  ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
+>                                : ^^^^^^^
 >x instanceof Object : boolean
->x : T & {}
+>                    : ^^^^^^^
+>x : T
+>  : ^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a' in x : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >x : T & Object
+>  : ^^^^^^^^^^
 }
 
 function f7<T extends object>(x: T & {}) {
->f7 : <T extends object>(x: T & {}) => boolean
->x : T & {}
+>f7 : <T extends object>(x: T & {}) => x is T & Record<"a", unknown>
+>   : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
+>                                : ^^^^^^^
 >x instanceof Object : boolean
->x : T & {}
+>                    : ^^^^^^^
+>x : T
+>  : ^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a' in x : boolean
+>         : ^^^^^^^
 >'a' : "a"
->x : T & {}
+>    : ^^^
+>x : T
+>  : ^
 }
 

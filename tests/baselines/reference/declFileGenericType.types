@@ -1,125 +1,204 @@
-=== tests/cases/compiler/declFileGenericType.ts ===
+//// [tests/cases/compiler/declFileGenericType.ts] ////
+
+=== declFileGenericType.ts ===
 export module C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export class A<T>{ }
 >A : A<T>
+>  : ^^^^
 
     export class B { }
 >B : B
+>  : ^
     
     export function F<T>(x: T): A<B> { return null; }
 >F : <T>(x: T) => A<B>
+>  : ^ ^^ ^^ ^^^^^    
 >x : T
+>  : ^
 
     export function F2<T>(x: T): C.A<C.B> { return null; }
 >F2 : <T>(x: T) => C.A<C.B>
+>   : ^ ^^ ^^ ^^^^^        
 >x : T
+>  : ^
 >C : any
+>  : ^^^
 >C : any
+>  : ^^^
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
 >F3 : <T>(x: T) => C.A<C.B>[]
+>   : ^ ^^ ^^ ^^^^^          
 >x : T
+>  : ^
 >C : any
+>  : ^^^
 >C : any
+>  : ^^^
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
 >F4 : <T extends A<B>>(x: T) => Array<C.A<C.B>>
+>   : ^ ^^^^^^^^^    ^^ ^^ ^^^^^               
 >x : T
+>  : ^
 >C : any
+>  : ^^^
 >C : any
+>  : ^^^
 
     export function F5<T>(): T { return null; }
 >F5 : <T>() => T
+>   : ^ ^^^^^^^ 
 
     export function F6<T extends A<B>>(x: T): T { return null; }
 >F6 : <T extends A<B>>(x: T) => T
+>   : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     export class D<T>{
 >D : D<T>
+>  : ^^^^
 
         constructor(public val: T) { }
 >val : T
+>    : ^
 
     }
 }
 
 export var a: C.A<C.B>;
 >a : C.A<C.B>
+>  : ^^^^^^^^
 >C : any
+>  : ^^^
 >C : any
+>  : ^^^
 
 export var b = C.F;
 >b : <T>(x: T) => C.A<C.B>
+>  : ^ ^^ ^^ ^^^^^^^^ ^^^ 
 >C.F : <T>(x: T) => C.A<C.B>
+>    : ^ ^^ ^^ ^^^^^^^^ ^^^ 
 >C : typeof C
+>  : ^^^^^^^^
 >F : <T>(x: T) => C.A<C.B>
+>  : ^ ^^ ^^ ^^^^^^^^ ^^^ 
 
 export var c = C.F2;
 >c : <T>(x: T) => C.A<C.B>
+>  : ^ ^^ ^^ ^^^^^        
 >C.F2 : <T>(x: T) => C.A<C.B>
+>     : ^ ^^ ^^ ^^^^^        
 >C : typeof C
+>  : ^^^^^^^^
 >F2 : <T>(x: T) => C.A<C.B>
+>   : ^ ^^ ^^ ^^^^^        
 
 export var d = C.F3;
 >d : <T>(x: T) => C.A<C.B>[]
+>  : ^ ^^ ^^ ^^^^^          
 >C.F3 : <T>(x: T) => C.A<C.B>[]
+>     : ^ ^^ ^^ ^^^^^          
 >C : typeof C
+>  : ^^^^^^^^
 >F3 : <T>(x: T) => C.A<C.B>[]
+>   : ^ ^^ ^^ ^^^^^          
 
 export var e = C.F4;
->e : <T extends C.A<C.B>>(x: T) => C.A<C.B>[]
->C.F4 : <T extends C.A<C.B>>(x: T) => C.A<C.B>[]
+>e : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
+>  : ^ ^^^^^^^^^^^^ ^^^ ^^ ^^ ^^^^^               
+>C.F4 : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
+>     : ^ ^^^^^^^^^^^^ ^^^ ^^ ^^ ^^^^^               
 >C : typeof C
->F4 : <T extends C.A<C.B>>(x: T) => C.A<C.B>[]
+>  : ^^^^^^^^
+>F4 : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
+>   : ^ ^^^^^^^^^^^^ ^^^ ^^ ^^ ^^^^^               
 
 export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
 >x : C.A<C.B>
+>  : ^^^^^^^^
 >(new C.D<C.A<C.B>>(new C.A<C.B>())).val : C.A<C.B>
+>                                        : ^^^^^^^^
 >(new C.D<C.A<C.B>>(new C.A<C.B>())) : C.D<C.A<C.B>>
+>                                    : ^^^^^^^^^^^^^
 >new C.D<C.A<C.B>>(new C.A<C.B>()) : C.D<C.A<C.B>>
+>                                  : ^^^^^^^^^^^^^
 >C.D : typeof C.D
+>    : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >D : typeof C.D
+>  : ^^^^^^^^^^
 >C : any
+>  : ^^^
 >C : any
+>  : ^^^
 >new C.A<C.B>() : C.A<C.B>
+>               : ^^^^^^^^
 >C.A : typeof C.A
+>    : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >A : typeof C.A
+>  : ^^^^^^^^^^
 >C : any
+>  : ^^^
 >val : C.A<C.B>
+>    : ^^^^^^^^
 
 export function f<T extends C.A<C.B>>() { }
 >f : <T extends C.A<C.B>>() => void
+>  : ^ ^^^^^^^^^        ^^^^^^^^^^^
 >C : any
+>  : ^^^
 >C : any
+>  : ^^^
 
 export var g = C.F5<C.A<C.B>>();
 >g : C.A<C.B>
+>  : ^^^^^^^^
 >C.F5<C.A<C.B>>() : C.A<C.B>
+>                 : ^^^^^^^^
 >C.F5 : <T>() => T
+>     : ^ ^^^^^^^ 
 >C : typeof C
+>  : ^^^^^^^^
 >F5 : <T>() => T
+>   : ^ ^^^^^^^ 
 >C : any
+>  : ^^^
 >C : any
+>  : ^^^
 
 export class h extends C.A<C.B>{ }
 >h : h
+>  : ^
 >C.A : C.A<C.B>
+>    : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >A : typeof C.A
+>  : ^^^^^^^^^^
 >C : any
+>  : ^^^
 
 export interface i extends C.A<C.B> { }
 >C : typeof C
+>  : ^^^^^^^^
 >C : any
+>  : ^^^
 
 export var j = C.F6;
 >j : <T extends C.A<C.B>>(x: T) => T
+>  : ^ ^^^^^^^^^^^^ ^^^ ^^ ^^ ^^^^^ 
 >C.F6 : <T extends C.A<C.B>>(x: T) => T
+>     : ^ ^^^^^^^^^^^^ ^^^ ^^ ^^ ^^^^^ 
 >C : typeof C
+>  : ^^^^^^^^
 >F6 : <T extends C.A<C.B>>(x: T) => T
+>   : ^ ^^^^^^^^^^^^ ^^^ ^^ ^^ ^^^^^ 
 

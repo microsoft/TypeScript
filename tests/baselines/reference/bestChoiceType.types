@@ -1,87 +1,142 @@
-=== tests/cases/compiler/bestChoiceType.ts ===
+//// [tests/cases/compiler/bestChoiceType.ts] ////
+
+=== bestChoiceType.ts ===
 // Repro from #10041
 
 (''.match(/ /) || []).map(s => s.toLowerCase());
 >(''.match(/ /) || []).map(s => s.toLowerCase()) : any[]
+>                                                : ^^^^^
 >(''.match(/ /) || []).map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>                          : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >(''.match(/ /) || []) : RegExpMatchArray | []
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >''.match(/ /) || [] : RegExpMatchArray | []
+>                    : ^^^^^^^^^^^^^^^^^^^^^
 >''.match(/ /) : RegExpMatchArray | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>         : ^      ^^               ^^^^^                       
 >'' : ""
+>   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/ / : RegExp
+>    : ^^^^^^
 >[] : []
+>   : ^^
 >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >s => s.toLowerCase() : (s: any) => any
+>                     : ^ ^^^^^^^^^^^^^
 >s : any
 >s.toLowerCase() : any
 >s.toLowerCase : any
 >s : any
+>  : ^^^
 >toLowerCase : any
+>            : ^^^
 
 // Similar cases
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x = ''.match(/ /);
 >x : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match(/ /) : RegExpMatchArray | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>         : ^      ^^               ^^^^^                       
 >'' : ""
+>   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/ / : RegExp
+>    : ^^^^^^
 
     let y = x || [];
 >y : RegExpMatchArray | []
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >x || [] : RegExpMatchArray | []
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >x : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
     let z = y.map(s => s.toLowerCase());
 >z : any[]
+>  : ^^^^^
 >y.map(s => s.toLowerCase()) : any[]
+>                            : ^^^^^
 >y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : RegExpMatchArray | []
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >s => s.toLowerCase() : (s: any) => any
+>                     : ^ ^^^^^^^^^^^^^
 >s : any
 >s.toLowerCase() : any
 >s.toLowerCase : any
 >s : any
+>  : ^^^
 >toLowerCase : any
+>            : ^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x = ''.match(/ /);
 >x : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match(/ /) : RegExpMatchArray | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>         : ^      ^^               ^^^^^                       
 >'' : ""
+>   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/ / : RegExp
+>    : ^^^^^^
 
     let y = x ? x : [];
 >y : RegExpMatchArray | never[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x ? x : [] : RegExpMatchArray | never[]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : RegExpMatchArray
+>  : ^^^^^^^^^^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
     let z = y.map(s => s.toLowerCase());
 >z : any[]
+>  : ^^^^^
 >y.map(s => s.toLowerCase()) : any[]
+>                            : ^^^^^
 >y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : RegExpMatchArray | never[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >s => s.toLowerCase() : (s: any) => any
+>                     : ^ ^^^^^^^^^^^^^
 >s : any
 >s.toLowerCase() : any
 >s.toLowerCase : any
 >s : any
+>  : ^^^
 >toLowerCase : any
+>            : ^^^
 }
 

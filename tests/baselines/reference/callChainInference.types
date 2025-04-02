@@ -1,37 +1,56 @@
-=== tests/cases/conformance/expressions/optionalChaining/callChain/callChainInference.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChainInference.ts] ////
+
+=== callChainInference.ts ===
 // Repro from #42404
 
 interface Y {
     foo<T>(this: T, arg: keyof T): void;
 >foo : <T>(this: T, arg: keyof T) => void
+>    : ^ ^^    ^^ ^^   ^^       ^^^^^    
 >this : T
+>     : ^
 >arg : keyof T
+>    : ^^^^^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: string;
 >b : string
+>  : ^^^^^^
 }
 
 declare const value: Y | undefined;
 >value : Y | undefined
+>      : ^^^^^^^^^^^^^
 
 if (value) {
 >value : Y | undefined
+>      : ^^^^^^^^^^^^^
 
     value?.foo("a");
 >value?.foo("a") : void
+>                : ^^^^
 >value?.foo : <T>(this: T, arg: keyof T) => void
+>           : ^ ^^    ^^ ^^   ^^       ^^^^^    
 >value : Y
+>      : ^
 >foo : <T>(this: T, arg: keyof T) => void
+>    : ^ ^^    ^^ ^^   ^^       ^^^^^    
 >"a" : "a"
+>    : ^^^
 }
 
 value?.foo("a");
 >value?.foo("a") : void | undefined
+>                : ^^^^^^^^^^^^^^^^
 >value?.foo : (<T>(this: T, arg: keyof T) => void) | undefined
+>           : ^^ ^^    ^^ ^^   ^^       ^^^^^    ^^^^^^^^^^^^^
 >value : Y | undefined
+>      : ^^^^^^^^^^^^^
 >foo : (<T>(this: T, arg: keyof T) => void) | undefined
+>    : ^^ ^^    ^^ ^^   ^^       ^^^^^    ^^^^^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 

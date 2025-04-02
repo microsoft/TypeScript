@@ -1,33 +1,38 @@
-tests/cases/compiler/jsxComponentTypeErrors.tsx(16,11): error TS2786: 'this' cannot be used as a JSX component.
+jsxComponentTypeErrors.tsx(16,11): error TS2786: 'this' cannot be used as a JSX component.
   Its return type '{ type: "foo" | undefined; }' is not a valid JSX element.
     Types of property 'type' are incompatible.
       Type '"foo" | undefined' is not assignable to type '"element"'.
         Type 'undefined' is not assignable to type '"element"'.
-tests/cases/compiler/jsxComponentTypeErrors.tsx(25,16): error TS2786: 'FunctionComponent' cannot be used as a JSX component.
+jsxComponentTypeErrors.tsx(25,16): error TS2786: 'FunctionComponent' cannot be used as a JSX component.
   Its return type '{ type: "abc" | undefined; }' is not a valid JSX element.
     Types of property 'type' are incompatible.
       Type '"abc" | undefined' is not assignable to type '"element"'.
         Type 'undefined' is not assignable to type '"element"'.
-tests/cases/compiler/jsxComponentTypeErrors.tsx(26,16): error TS2786: 'FunctionComponent' cannot be used as a JSX component.
+jsxComponentTypeErrors.tsx(26,16): error TS2786: 'FunctionComponent' cannot be used as a JSX component.
   Its return type '{ type: "abc" | undefined; }' is not a valid JSX element.
-tests/cases/compiler/jsxComponentTypeErrors.tsx(27,16): error TS2786: 'ClassComponent' cannot be used as a JSX component.
+    Types of property 'type' are incompatible.
+      Type '"abc" | undefined' is not assignable to type '"element"'.
+        Type 'undefined' is not assignable to type '"element"'.
+jsxComponentTypeErrors.tsx(27,16): error TS2786: 'ClassComponent' cannot be used as a JSX component.
   Its instance type 'ClassComponent' is not a valid JSX element.
     Types of property 'type' are incompatible.
       Type 'string' is not assignable to type '"element-class"'.
-tests/cases/compiler/jsxComponentTypeErrors.tsx(28,16): error TS2786: 'MixedComponent' cannot be used as a JSX component.
+jsxComponentTypeErrors.tsx(28,16): error TS2786: 'MixedComponent' cannot be used as a JSX component.
   Its element type 'ClassComponent | { type: string | undefined; }' is not a valid JSX element.
     Type 'ClassComponent' is not assignable to type 'Element | ElementClass | null'.
       Type 'ClassComponent' is not assignable to type 'Element | ElementClass'.
         Type 'ClassComponent' is not assignable to type 'ElementClass'.
-tests/cases/compiler/jsxComponentTypeErrors.tsx(37,16): error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
+          Types of property 'type' are incompatible.
+            Type 'string' is not assignable to type '"element-class"'.
+jsxComponentTypeErrors.tsx(37,16): error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
   Its return type '{}' is not a valid JSX element.
     Property 'type' is missing in type '{}' but required in type 'Element'.
-tests/cases/compiler/jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. MemberClassComponent' cannot be used as a JSX component.
+jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. MemberClassComponent' cannot be used as a JSX component.
   Its instance type 'MemberClassComponent' is not a valid JSX element.
     Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
 
 
-==== tests/cases/compiler/jsxComponentTypeErrors.tsx (7 errors) ====
+==== jsxComponentTypeErrors.tsx (7 errors) ====
     namespace JSX {
       export interface Element {
         type: 'element';
@@ -69,6 +74,9 @@ tests/cases/compiler/jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. Memb
                    ~~~~~~~~~~~~~~~~~
 !!! error TS2786: 'FunctionComponent' cannot be used as a JSX component.
 !!! error TS2786:   Its return type '{ type: "abc" | undefined; }' is not a valid JSX element.
+!!! error TS2786:     Types of property 'type' are incompatible.
+!!! error TS2786:       Type '"abc" | undefined' is not assignable to type '"element"'.
+!!! error TS2786:         Type 'undefined' is not assignable to type '"element"'.
     const elem3 = <ClassComponent />;
                    ~~~~~~~~~~~~~~
 !!! error TS2786: 'ClassComponent' cannot be used as a JSX component.
@@ -82,6 +90,8 @@ tests/cases/compiler/jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. Memb
 !!! error TS2786:     Type 'ClassComponent' is not assignable to type 'Element | ElementClass | null'.
 !!! error TS2786:       Type 'ClassComponent' is not assignable to type 'Element | ElementClass'.
 !!! error TS2786:         Type 'ClassComponent' is not assignable to type 'ElementClass'.
+!!! error TS2786:           Types of property 'type' are incompatible.
+!!! error TS2786:             Type 'string' is not assignable to type '"element-class"'.
     
     const obj = {
       MemberFunctionComponent() {
@@ -95,11 +105,11 @@ tests/cases/compiler/jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. Memb
 !!! error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
 !!! error TS2786:   Its return type '{}' is not a valid JSX element.
 !!! error TS2786:     Property 'type' is missing in type '{}' but required in type 'Element'.
-!!! related TS2728 tests/cases/compiler/jsxComponentTypeErrors.tsx:3:5: 'type' is declared here.
+!!! related TS2728 jsxComponentTypeErrors.tsx:3:5: 'type' is declared here.
     const elem6 = <obj. MemberClassComponent />;
                    ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2786: 'obj. MemberClassComponent' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type 'MemberClassComponent' is not a valid JSX element.
 !!! error TS2786:     Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
-!!! related TS2728 tests/cases/compiler/jsxComponentTypeErrors.tsx:6:5: 'type' is declared here.
+!!! related TS2728 jsxComponentTypeErrors.tsx:6:5: 'type' is declared here.
     

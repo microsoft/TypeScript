@@ -1,4 +1,6 @@
-=== tests/cases/compiler/underscoreMapFirst.ts ===
+//// [tests/cases/compiler/underscoreMapFirst.ts] ////
+
+=== underscoreMapFirst.ts ===
 declare module _ {
 >_ : Symbol(_, Decl(underscoreMapFirst.ts, 0, 0))
 

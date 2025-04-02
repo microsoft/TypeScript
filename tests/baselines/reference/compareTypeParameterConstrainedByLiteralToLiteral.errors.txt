@@ -1,7 +1,7 @@
-tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This comparison appears to be unintentional because the types 'T' and '"x"' have no overlap.
+compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This comparison appears to be unintentional because the types 'T' and '"x"' have no overlap.
 
 
-==== tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts (1 errors) ====
+==== compareTypeParameterConstrainedByLiteralToLiteral.ts (1 errors) ====
     // Test for #26758
     
     function foo<T extends "a" | "b">(t: T) {

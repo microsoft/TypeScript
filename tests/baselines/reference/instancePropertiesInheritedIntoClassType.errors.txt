@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(19,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+instancePropertiesInheritedIntoClassType.ts(19,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'Number' has no call signatures.
-tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'String' has no call signatures.
 
 
-==== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts (2 errors) ====
+==== instancePropertiesInheritedIntoClassType.ts (2 errors) ====
     module NonGeneric {
         class C {
             x: string;

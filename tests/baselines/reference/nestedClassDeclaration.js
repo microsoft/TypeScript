@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/nestedClassDeclaration.ts] ////
+
 //// [nestedClassDeclaration.ts]
 // nested classes are not allowed
 

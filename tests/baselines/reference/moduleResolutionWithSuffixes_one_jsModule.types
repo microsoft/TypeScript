@@ -1,46 +1,73 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_jsModule.ts] ////
+
 === /index.ts ===
 import { ios } from "./foo.js";
 >ios : () => void
+>    : ^^^^^^^^^^
 
 === /foo.ios.js ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 exports.__esModule = true;
 >exports.__esModule = true : true
+>                          : ^^^^
 >exports.__esModule : true
+>                   : ^^^^
 >exports : typeof import("/foo.ios")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >__esModule : true
+>           : ^^^^
 >true : true
+>     : ^^^^
 
 function ios() {}
 >ios : () => void
+>    : ^^^^^^^^^^
 
 exports.ios = ios;
 >exports.ios = ios : () => void
+>                  : ^^^^^^^^^^
 >exports.ios : () => void
+>            : ^^^^^^^^^^
 >exports : typeof import("/foo.ios")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ios : () => void
+>    : ^^^^^^^^^^
 >ios : () => void
+>    : ^^^^^^^^^^
 
 === /foo.js ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 exports.__esModule = true;
 >exports.__esModule = true : true
+>                          : ^^^^
 >exports.__esModule : true
+>                   : ^^^^
 >exports : typeof import("/foo")
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >__esModule : true
+>           : ^^^^
 >true : true
+>     : ^^^^
 
 function base() {}
 >base : () => void
+>     : ^^^^^^^^^^
 
 exports.base = base;
 >exports.base = base : () => void
+>                    : ^^^^^^^^^^
 >exports.base : () => void
+>             : ^^^^^^^^^^
 >exports : typeof import("/foo")
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >base : () => void
+>     : ^^^^^^^^^^
 >base : () => void
+>     : ^^^^^^^^^^
 

@@ -1,38 +1,56 @@
-=== tests/cases/compiler/classImplementsClass3.ts ===
+//// [tests/cases/compiler/classImplementsClass3.ts] ////
+
+=== classImplementsClass3.ts ===
 class A { foo(): number { return 1; } }
 >A : A
+>  : ^
 >foo : () => number
+>    : ^^^^^^      
 >1 : 1
+>  : ^
 
 class C implements A {
 >C : C
+>  : ^
 
     foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }
 
 class C2 extends A {}
 >C2 : C2
+>   : ^^
 >A : A
+>  : ^
 
 // no errors
 var c: C;
 >c : C
+>  : ^
 
 var c2: C2;
 >c2 : C2
+>   : ^^
 
 c = c2;
 >c = c2 : C2
+>       : ^^
 >c : C
+>  : ^
 >c2 : C2
+>   : ^^
 
 c2 = c;
 >c2 = c : C
+>       : ^
 >c2 : C2
+>   : ^^
 >c : C
+>  : ^
 

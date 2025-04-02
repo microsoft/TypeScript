@@ -68,19 +68,14 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f1() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, e_1, _b, _c;
         let y;
         try {
-            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), _a = y_1_1.done, !_a;) {
+            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
-                    const x = _c;
-                }
-                finally {
-                    _d = true;
-                }
+                const x = _c;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -110,19 +105,14 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f2() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, e_1, _b, _c;
         let x, y;
         try {
-            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), _a = y_1_1.done, !_a;) {
+            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
-                    x = _c;
-                }
-                finally {
-                    _d = true;
-                }
+                x = _c;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -146,8 +136,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -159,15 +150,10 @@ function f3() {
         var _a, e_1, _b, _c;
         let y;
         try {
-            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
-                    const x = _c;
-                }
-                finally {
-                    _d = true;
-                }
+                const x = _c;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -191,8 +177,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -204,15 +191,10 @@ function f4() {
         var _a, e_1, _b, _c;
         let x, y;
         try {
-            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
-                    x = _c;
-                }
-                finally {
-                    _d = true;
-                }
+                x = _c;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -243,20 +225,15 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 // https://github.com/Microsoft/TypeScript/issues/21363
 function f5() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, e_1, _b, _c;
         let y;
         try {
-            outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), _a = y_1_1.done, !_a;) {
+            outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
-                    const x = _c;
-                    continue outer;
-                }
-                finally {
-                    _d = true;
-                }
+                const x = _c;
+                continue outer;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -280,8 +257,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -294,16 +272,11 @@ function f6() {
         var _a, e_1, _b, _c;
         let y;
         try {
-            outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+            outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                try {
-                    const x = _c;
-                    continue outer;
-                }
-                finally {
-                    _d = true;
-                }
+                const x = _c;
+                continue outer;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -327,8 +300,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -342,15 +316,10 @@ function f7() {
         let y;
         for (;;) {
             try {
-                for (var _d = true, y_1 = (e_1 = void 0, __asyncValues(y)), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+                for (var _d = true, y_1 = (e_1 = void 0, __asyncValues(y)), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                     _c = y_1_1.value;
                     _d = false;
-                    try {
-                        const x = _c;
-                    }
-                    finally {
-                        _d = true;
-                    }
+                    const x = _c;
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }

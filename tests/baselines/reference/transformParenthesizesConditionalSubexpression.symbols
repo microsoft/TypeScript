@@ -1,4 +1,6 @@
-=== tests/cases/compiler/transformParenthesizesConditionalSubexpression.ts ===
+//// [tests/cases/compiler/transformParenthesizesConditionalSubexpression.ts] ////
+
+=== transformParenthesizesConditionalSubexpression.ts ===
 var K = 'k'
 >K : Symbol(K, Decl(transformParenthesizesConditionalSubexpression.ts, 0, 3))
 

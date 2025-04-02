@@ -1,19 +1,28 @@
-=== tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts ===
+//// [tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts] ////
+
+=== noImplicitAnyFunctionExpressionAssignment.ts ===
 var x: (a: any) => void = function <T>(x: T) {
 >x : (a: any) => void
+>  : ^ ^^   ^^^^^    
 >a : any
 >function <T>(x: T) {    return null;} : <T>(x: T) => any
+>                                      : ^ ^^ ^^ ^^^^^^^^
 >x : T
+>  : ^
 
     return null;
 };
 
 var x2: (a: any) => void = function f<T>(x: T) {
 >x2 : (a: any) => void
+>   : ^ ^^   ^^^^^    
 >a : any
 >function f<T>(x: T) {    return null;} : <T>(x: T) => any
+>                                       : ^ ^^ ^^ ^^^^^^^^
 >f : <T>(x: T) => any
+>  : ^ ^^ ^^ ^^^^^^^^
 >x : T
+>  : ^
 
     return null;
 };

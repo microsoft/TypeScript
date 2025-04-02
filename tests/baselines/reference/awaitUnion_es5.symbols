@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/awaitUnion_es5.ts ===
+//// [tests/cases/conformance/async/es5/awaitUnion_es5.ts] ////
+
+=== awaitUnion_es5.ts ===
 declare let a: number | string;
 >a : Symbol(a, Decl(awaitUnion_es5.ts, 0, 11))
 

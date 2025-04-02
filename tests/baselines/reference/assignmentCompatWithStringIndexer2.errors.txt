@@ -1,34 +1,34 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(15,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived; }'.
+assignmentCompatWithStringIndexer2.ts(15,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived; }'.
   'string' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(19,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived2; }'.
+assignmentCompatWithStringIndexer2.ts(19,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived2; }'.
   'string' index signatures are incompatible.
     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(33,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived; }'.
+assignmentCompatWithStringIndexer2.ts(33,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived; }'.
   'string' index signatures are incompatible.
-    Type 'Base' is not assignable to type 'Derived'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(41,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived2; }'.
+    Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+assignmentCompatWithStringIndexer2.ts(41,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived2; }'.
   'string' index signatures are incompatible.
-    Type 'Base' is not assignable to type 'Derived2'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(46,9): error TS2322: Type '{ [x: string]: Derived; }' is not assignable to type 'A<T>'.
+    Type 'Base' is missing the following properties from type 'Derived2': baz, bar
+assignmentCompatWithStringIndexer2.ts(46,9): error TS2322: Type '{ [x: string]: Derived; }' is not assignable to type 'A<T>'.
   'string' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(47,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived; }'.
+assignmentCompatWithStringIndexer2.ts(47,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived; }'.
   'string' index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived'.
-      Type 'Base' is not assignable to type 'Derived'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(50,9): error TS2322: Type '{ [x: string]: Derived2; }' is not assignable to type 'A<T>'.
+      Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+assignmentCompatWithStringIndexer2.ts(50,9): error TS2322: Type '{ [x: string]: Derived2; }' is not assignable to type 'A<T>'.
   'string' index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts(51,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived2; }'.
+assignmentCompatWithStringIndexer2.ts(51,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived2; }'.
   'string' index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived2'.
-      Type 'Base' is not assignable to type 'Derived2'.
+      Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts (8 errors) ====
+==== assignmentCompatWithStringIndexer2.ts (8 errors) ====
     // index signatures must be compatible in assignments
     
     interface Base { foo: string; }
@@ -48,7 +48,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
 !!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer2.ts:4:34: 'bar' is declared here.
+!!! related TS2728 assignmentCompatWithStringIndexer2.ts:4:34: 'bar' is declared here.
     
     var b2: { [x: string]: Derived2; }
     a = b2; // ok
@@ -74,7 +74,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         ~~
 !!! error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
-!!! error TS2322:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 assignmentCompatWithStringIndexer2.ts:4:34: 'bar' is declared here.
     
         interface B2 extends A<Base> {
             [x: string]: Derived2; // ok
@@ -86,7 +87,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         ~~
 !!! error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived2; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
-!!! error TS2322:     Type 'Base' is not assignable to type 'Derived2'.
+!!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     
         function foo<T extends Base>() {
             var b3: { [x: string]: Derived; };
@@ -102,7 +103,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived'.
-!!! error TS2322:       Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2322:       Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 assignmentCompatWithStringIndexer2.ts:4:34: 'bar' is declared here.
     
             var b4: { [x: string]: Derived2; };
             a3 = b4; // error
@@ -116,6 +118,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: Derived2; }'.
 !!! error TS2322:   'string' index signatures are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived2'.
-!!! error TS2322:       Type 'Base' is not assignable to type 'Derived2'.
+!!! error TS2322:       Type 'Base' is missing the following properties from type 'Derived2': baz, bar
         }
     }

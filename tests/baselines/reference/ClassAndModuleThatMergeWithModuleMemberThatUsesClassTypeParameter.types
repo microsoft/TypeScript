@@ -1,89 +1,119 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts] ////
+
+=== ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts ===
 // all expected to be errors
 
 class clodule1<T>{
 >clodule1 : clodule1<T>
+>         : ^^^^^^^^^^^
 
     id: string;
 >id : string
+>   : ^^^^^^
 
     value: T;
 >value : T
+>      : ^
 }
 
 module clodule1 {
 >clodule1 : typeof clodule1
+>         : ^^^^^^^^^^^^^^^
 
     function f(x: T) { }
 >f : (x: T) => void
+>  : ^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 }
 
 class clodule2<T>{
 >clodule2 : clodule2<T>
+>         : ^^^^^^^^^^^
 
     id: string;
 >id : string
+>   : ^^^^^^
 
     value: T;
 >value : T
+>      : ^
 }
 
 module clodule2 {
 >clodule2 : typeof clodule2
+>         : ^^^^^^^^^^^^^^^
 
     var x: T;
 >x : T
+>  : ^
 
     class D<U extends T>{
 >D : D<U>
+>  : ^^^^
 
         id: string;
 >id : string
+>   : ^^^^^^
 
         value: U;
 >value : U
+>      : ^
     }
 }
 
 class clodule3<T>{
 >clodule3 : clodule3<T>
+>         : ^^^^^^^^^^^
 
     id: string;
 >id : string
+>   : ^^^^^^
 
     value: T;
 >value : T
+>      : ^
 }
 
 module clodule3 {
 >clodule3 : typeof clodule3
+>         : ^^^^^^^^^^^^^^^
 
     export var y = { id: T };
 >y : { id: any; }
+>  : ^^^^^^^^^^^^
 >{ id: T } : { id: any; }
+>          : ^^^^^^^^^^^^
 >id : any
+>   : ^^^
 >T : any
+>  : ^^^
 }
 
 class clodule4<T>{
 >clodule4 : clodule4<T>
+>         : ^^^^^^^^^^^
 
     id: string;
 >id : string
+>   : ^^^^^^
 
     value: T;
 >value : T
+>      : ^
 }
 
 module clodule4 {
 >clodule4 : typeof clodule4
+>         : ^^^^^^^^^^^^^^^
 
     class D {
 >D : D
+>  : ^
 
         name: T;
 >name : T
+>     : ^
     }
 }
 

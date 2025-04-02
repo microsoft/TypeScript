@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor2.ts] ////
+
 //// [autoAccessor2.ts]
 class C1 {
     accessor #a: any;

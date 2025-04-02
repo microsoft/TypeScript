@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullableAndObjectIntersections.ts ===
+//// [tests/cases/compiler/nonNullableAndObjectIntersections.ts] ////
+
+=== nonNullableAndObjectIntersections.ts ===
 // These should all resolve to never
 
 type T0 = NonNullable<null>;

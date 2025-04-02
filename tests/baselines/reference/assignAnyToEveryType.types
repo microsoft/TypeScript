@@ -1,112 +1,166 @@
-=== tests/cases/conformance/types/any/assignAnyToEveryType.ts ===
+//// [tests/cases/conformance/types/any/assignAnyToEveryType.ts] ////
+
+=== assignAnyToEveryType.ts ===
 // all of these are valid
 
 var x: any;
 >x : any
+>  : ^^^
 
 var a: number = x;
 >a : number
+>  : ^^^^^^
 >x : any
+>  : ^^^
 
 var b: boolean = x;
 >b : boolean
+>  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var c: string = x;
 >c : string
+>  : ^^^^^^
 >x : any
+>  : ^^^
 
 var d: void = x;
 >d : void
+>  : ^^^^
 >x : any
+>  : ^^^
 
 var e = null;
 >e : any
+>  : ^^^
 
 e = x;
 >e = x : any
+>      : ^^^
 >e : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 var f = undefined;
 >f : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 f = x;
 >f = x : any
+>      : ^^^
 >f : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 enum E {
 >E : E
+>  : ^
 
     A
 >A : E.A
+>  : ^^^
 }
 
 var g: E = x;
 >g : E
+>  : ^
 >x : any
+>  : ^^^
 
 var g2 = E.A;
 >g2 : E
+>   : ^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 g2 = x;
 >g2 = x : any
+>       : ^^^
 >g2 : E
+>   : ^
 >x : any
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var h: C = x;
 >h : C
+>  : ^
 >x : any
+>  : ^^^
 
 interface I {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var i: I = x;
 >i : I
+>  : ^
 >x : any
+>  : ^^^
 
 var j: { (): string } = x;
 >j : () => string
+>  : ^^^^^^      
 >x : any
+>  : ^^^
 
 var j2: { <T>(x: T): string } = x;
 >j2 : <T>(x: T) => string
+>   : ^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >x : any
+>  : ^^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var foo = 1;
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 M = x;
 >M = x : any
+>      : ^^^
 >M : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 function k<T>(a: T) {
 >k : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
     a = x;
 >a = x : any
+>      : ^^^
 >a : T
+>  : ^
 >x : any
+>  : ^^^
 }

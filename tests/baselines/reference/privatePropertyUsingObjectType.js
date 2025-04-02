@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privatePropertyUsingObjectType.ts] ////
+
 //// [privatePropertyUsingObjectType.ts]
 export class FilterManager {
     private _filterProviders: { index: IFilterProvider; };

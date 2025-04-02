@@ -1,28 +1,28 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json
+// @Filename: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json
 //// { "name": "@types/react-router-dom", "version": "16.8.4", "types": "index.d.ts" }
 
-// @Filename: /Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts
+// @Filename: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts
 //// export class BrowserRouterFromDts {}
 
-// @Filename: /project/package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "react-router-dom": "*" } }
 
-// @Filename: /project/tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "compilerOptions": { "module": "commonjs", "allowJs": true, "checkJs": true, "maxNodeModuleJsDepth": 2 }, "typeAcquisition": { "enable": true } }
 
-// @Filename: /project/node_modules/react-router-dom/package.json
+// @Filename: /home/src/workspaces/project/node_modules/react-router-dom/package.json
 //// { "name": "react-router-dom", "version": "16.8.4", "main": "index.js" }
 
-// @Filename: /project/node_modules/react-router-dom/index.js
+// @Filename: /home/src/workspaces/project/node_modules/react-router-dom/index.js
 //// import "./BrowserRouter";
 //// export {};
 
-// @Filename: /project/node_modules/react-router-dom/BrowserRouter.js
+// @Filename: /home/src/workspaces/project/node_modules/react-router-dom/BrowserRouter.js
 //// export const BrowserRouterFromJs = () => null;
 
-// @Filename: /project/index.js
+// @Filename: /home/src/workspaces/project/index.js
 ////BrowserRouter/**/
 
 verify.completions({

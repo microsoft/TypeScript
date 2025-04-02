@@ -1,0 +1,13 @@
+arbitraryModuleNamespaceIdentifiers_exportEmpty.ts(6,7): error TS2322: Type '"empty"' is not assignable to type '"type error expected here"'.
+
+
+==== arbitraryModuleNamespaceIdentifiers_exportEmpty.ts (1 errors) ====
+    // This should result in a type error. In particular, the empty string is a now
+    // a valid module export name, and should be treated as such here.
+    const empty = "empty";
+    export { empty as "" };
+    import { "" as foo } from "./arbitraryModuleNamespaceIdentifiers_exportEmpty";
+    const bar: "type error expected here" = foo;
+          ~~~
+!!! error TS2322: Type '"empty"' is not assignable to type '"type error expected here"'.
+    

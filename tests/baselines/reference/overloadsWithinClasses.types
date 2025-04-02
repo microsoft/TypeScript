@@ -1,44 +1,63 @@
-=== tests/cases/compiler/overloadsWithinClasses.ts ===
+//// [tests/cases/compiler/overloadsWithinClasses.ts] ////
+
+=== overloadsWithinClasses.ts ===
 class foo {
 >foo : foo
+>    : ^^^
  
     static fnOverload( ) {}
 >fnOverload : () => void
+>           : ^^^^^^^^^^
  
     static fnOverload(foo: string){ } // error
 >fnOverload : () => void
+>           : ^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
  
 }
 
 class bar {
 >bar : bar
+>    : ^^^
  
     static fnOverload( );
 >fnOverload : () => any
+>           : ^^^^^^^^^
  
     static fnOverload(foo?: string){ } // no error
 >fnOverload : () => any
+>           : ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
  
 }
 
 class X {
 >X : X
+>  : ^
 
    public attr(name:string):string;
 >attr : { (name: string): string; (name: string, value: string): X; }
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^ ^^^
 >name : string
+>     : ^^^^^^
 
    public attr(name:string, value:string):X;
 >attr : { (name: string): string; (name: string, value: string): X; }
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^ ^^^
 >name : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
    public attr(first:any, second?:any):any {
 >attr : { (name: string): string; (name: string, value: string): X; }
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^ ^^^
 >first : any
+>      : ^^^
 >second : any
+>       : ^^^
    }
 }
 

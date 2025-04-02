@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts] ////
+
 //// [typeQueryOnClass.ts]
 class C<T> {
     constructor(x: number);

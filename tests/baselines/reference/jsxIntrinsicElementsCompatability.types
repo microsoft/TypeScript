@@ -1,28 +1,50 @@
-=== tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx ===
+//// [tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== jsxIntrinsicElementsCompatability.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
->SomeComponent : <T extends "a" | "button">(props: {    element?: T;} & JSX.IntrinsicElements[T]) => JSX.Element
->props : { element?: T | undefined; } & JSX.IntrinsicElements[T]
+>SomeComponent : <T extends "button" | "a">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
+>              : ^ ^^^^^^^^^              ^^     ^^                                           ^^^^^           
+>props : { element?: T; } & JSX.IntrinsicElements[T]
+>      : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >element : T | undefined
+>        : ^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 >JSX : any
+>    : ^^^
 
     // Just so the return value is RectElement, the rendered element doesnt matter
     return <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 }
 
 function Test<T extends 'button' | 'a'>(el: T) {
->Test : <T extends "a" | "button">(el: T) => JSX.Element
+>Test : <T extends "button" | "a">(el: T) => JSX.Element
+>     : ^ ^^^^^^^^^              ^^  ^^ ^^^^^^^^^^^^^^^^
 >el : T
+>   : ^
 
     return <SomeComponent element={el} />
 ><SomeComponent element={el} /> : JSX.Element
->SomeComponent : <T extends "a" | "button">(props: { element?: T | undefined; } & JSX.IntrinsicElements[T]) => JSX.Element
+>                               : ^^^^^^^^^^^
+>SomeComponent : <T_1 extends "button" | "a">(props: { element?: T_1; } & JSX.IntrinsicElements[T_1]) => JSX.Element
+>              : ^^^^^^^^^^^^^              ^^     ^^                                               ^^^^^           
 >element : T
+>        : ^
 >el : T
+>   : ^
 }

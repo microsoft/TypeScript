@@ -1,125 +1,188 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypes1.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypes1.ts] ////
+
+=== Performance Stats ===
+Type Count: 10,000
+Instantiation count: 2,500
+
+=== templateLiteralTypes1.ts ===
 // Template types example from #12754
 
 const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;
 >createScopedActionType : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
+>                       : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^                ^^       ^^^^^           
 ><S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
+>                                                                                                 : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^                ^^       ^^^^^           
 >scope : S
+>      : ^
 ><T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <T extends string>(type: T) => `${S}/${T}`
+>                                                                 : ^ ^^^^^^^^^      ^^    ^^ ^^^^^           
 >type : T
+>     : ^
 >`${scope}/${type}` as `${S}/${T}` : `${S}/${T}`
+>                                  : ^^^^^^^^^^^
 >`${scope}/${type}` : `${S}/${T}`
+>                   : ^^^^^^^^^^^
 >scope : S
+>      : ^
 >type : T
+>     : ^
 
 const createActionInMyScope = createScopedActionType("MyScope");  // <T extends string>(type: T) => `MyScope/${T}`
 >createActionInMyScope : <T extends string>(type: T) => `MyScope/${T}`
+>                      : ^ ^^^^^^^^^      ^^    ^^^^^^^^^^^^^^^^^^^^^^
 >createScopedActionType("MyScope") : <T extends string>(type: T) => `MyScope/${T}`
+>                                  : ^ ^^^^^^^^^      ^^    ^^^^^^^^^^^^^^^^^^^^^^
 >createScopedActionType : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
+>                       : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^                ^^       ^^^^^           
 >"MyScope" : "MyScope"
+>          : ^^^^^^^^^
 
 const MY_ACTION = createActionInMyScope("MY_ACTION");  // 'MyScope/MY_ACTION'
 >MY_ACTION : "MyScope/MY_ACTION"
+>          : ^^^^^^^^^^^^^^^^^^^
 >createActionInMyScope("MY_ACTION") : "MyScope/MY_ACTION"
+>                                   : ^^^^^^^^^^^^^^^^^^^
 >createActionInMyScope : <T extends string>(type: T) => `MyScope/${T}`
+>                      : ^ ^^^^^^^^^      ^^    ^^^^^^^^^^^^^^^^^^^^^^
 >"MY_ACTION" : "MY_ACTION"
+>            : ^^^^^^^^^^^
 
 // Union types are distributed over template types
 
 type EventName<S extends string> = `${S}Changed`;
 >EventName : `${S}Changed`
+>          : ^^^^^^^^^^^^^
 
 type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
 >EN1 : "FooChanged" | "BarChanged" | "BazChanged"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 >Loc : "top-left" | "top-center" | "top-right" | "middle-left" | "middle-center" | "middle-right" | "bottom-left" | "bottom-center" | "bottom-right"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Primitive literal types can be spread into templates
 
 type ToString<T extends string | number | boolean | bigint> = `${T}`;
 >ToString : `${T}`
+>         : ^^^^^^
 
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
 >TS1 : "abc" | "true" | "42" | "-1234"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >-1234n : -1234n
+>       : ^^^^^^
 >1234n : 1234n
+>      : ^^^^^
 
 // Nested template literal type normalization
 
 type TL1<T extends string> = `a${T}b${T}c`;
 >TL1 : `a${T}b${T}c`
+>    : ^^^^^^^^^^^^^
 
 type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
 >TL2 : `ax${U}ybx${U}yc`
+>    : ^^^^^^^^^^^^^^^^^
 
 type TL3 = TL2<'o'>;  // 'axoybxoyc'
 >TL3 : "axoybxoyc"
+>    : ^^^^^^^^^^^
 
 // Casing intrinsics
 
 type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 >Cases : `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
 >TCA1 : "BAR bar Bar bar"
+>     : ^^^^^^^^^^^^^^^^^
 
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 >TCA2 : "BAR bar BAR bAR"
+>     : ^^^^^^^^^^^^^^^^^
 
 // Assignability
 
 function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
->test : <T extends "bar" | "foo">(name: `get${Capitalize<T>}`) => void
+>test : <T extends "foo" | "bar">(name: `get${Capitalize<T>}`) => void
+>     : ^ ^^^^^^^^^             ^^    ^^                     ^^^^^^^^^
 >name : `get${Capitalize<T>}`
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
     let s1: string = name;
 >s1 : string
+>   : ^^^^^^
 >name : "getFoo" | "getBar"
+>     : ^^^^^^^^^^^^^^^^^^^
 
     let s2: 'getFoo' | 'getBar' = name;
 >s2 : "getFoo" | "getBar"
+>   : ^^^^^^^^^^^^^^^^^^^
 >name : "getFoo" | "getBar"
+>     : ^^^^^^^^^^^^^^^^^^^
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
 >fa1 : <T>(x: T, y: { [P in keyof T]: T[P]; }, z: { [P in keyof T & string as `p_${P}`]: T[P]; }) => void
+>    : ^ ^^ ^^ ^^ ^^                         ^^ ^^                                              ^^^^^^^^^
 >x : T
+>  : ^
 >y : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >z : { [P in keyof T & string as `p_${P}`]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     y = x;
 >y = x : T
+>      : ^
 >y : { [P in keyof T]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     z = x;  // Error
 >z = x : T
+>      : ^
 >z : { [P in keyof T & string as `p_${P}`]: T[P]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 }
 
 function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {
 >fa2 : <T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T; }, y: { [Q in A as `p_${Q}`]: U; }) => void
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^      ^^ ^^^^^^^^^ ^^ ^^                            ^^ ^^                            ^^^^^^^^^
 >x : { [P in B as `p_${P}`]: T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { [Q in A as `p_${Q}`]: U; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = y;
 >x = y : { [Q in A as `p_${Q}`]: U; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { [P in B as `p_${P}`]: T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { [Q in A as `p_${Q}`]: U; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 
     y = x;  // Error
 >y = x : { [P in B as `p_${P}`]: T; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { [Q in A as `p_${Q}`]: U; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { [P in B as `p_${P}`]: T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // String transformations using recursive conditional types
 
 type Join<T extends unknown[], D extends string> =
 >Join : Join<T, D>
+>     : ^^^^^^^^^^
 
     T extends [] ? '' :
     T extends [string | number | boolean | bigint] ? `${T[0]}` :
@@ -128,35 +191,45 @@ type Join<T extends unknown[], D extends string> =
 
 type TJ1 = Join<[1, 2, 3, 4], '.'>
 >TJ1 : "1.2.3.4"
+>    : ^^^^^^^^^
 
 type TJ2 = Join<['foo', 'bar', 'baz'], '-'>;
 >TJ2 : "foo-bar-baz"
+>    : ^^^^^^^^^^^^^
 
 type TJ3 = Join<[], '.'>
 >TJ3 : ""
+>    : ^^
 
 // Inference based on delimiters
 
 type MatchPair<S extends string> = S extends `[${infer A},${infer B}]` ? [A, B] : unknown;
 >MatchPair : MatchPair<S>
+>          : ^^^^^^^^^^^^
 
 type T20 = MatchPair<'[1,2]'>;  // ['1', '2']
 >T20 : ["1", "2"]
+>    : ^^^^^^^^^^
 
 type T21 = MatchPair<'[foo,bar]'>;  // ['foo', 'bar']
 >T21 : ["foo", "bar"]
+>    : ^^^^^^^^^^^^^^
 
 type T22 = MatchPair<' [1,2]'>;  // unknown
 >T22 : unknown
+>    : ^^^^^^^
 
 type T23 = MatchPair<'[123]'>;  // unknown
 >T23 : unknown
+>    : ^^^^^^^
 
 type T24 = MatchPair<'[1,2,3,4]'>;  // ['1', '2,3,4']
 >T24 : ["1", "2,3,4"]
+>    : ^^^^^^^^^^^^^^
 
 type SnakeToCamelCase<S extends string> =
 >SnakeToCamelCase : SnakeToCamelCase<S>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
     S extends `${infer T}` ? `${Lowercase<T>}` :
@@ -164,6 +237,7 @@ type SnakeToCamelCase<S extends string> =
 
 type SnakeToPascalCase<S extends string> =
 >SnakeToPascalCase : SnakeToPascalCase<S>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
     string extends S ? string :
     S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
@@ -172,35 +246,45 @@ type SnakeToPascalCase<S extends string> =
 
 type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
 >RR0 : "HelloWorldFoo"
+>    : ^^^^^^^^^^^^^^^
 
 type RR1 = SnakeToPascalCase<'FOO_BAR_BAZ'>;  // 'FooBarBaz'
 >RR1 : "FooBarBaz"
+>    : ^^^^^^^^^^^
 
 type RR2 = SnakeToCamelCase<'hello_world_foo'>;  // 'helloWorldFoo'
 >RR2 : "helloWorldFoo"
+>    : ^^^^^^^^^^^^^^^
 
 type RR3 = SnakeToCamelCase<'FOO_BAR_BAZ'>;  // 'fooBarBaz'
 >RR3 : "fooBarBaz"
+>    : ^^^^^^^^^^^
 
 // Single character inference
 
 type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer R}` ? [`${A}${B}`, R] : unknown;
 >FirstTwoAndRest : FirstTwoAndRest<S>
+>                : ^^^^^^^^^^^^^^^^^^
 
 type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
 >T25 : ["ab", "cde"]
+>    : ^^^^^^^^^^^^^
 
 type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
 >T26 : ["ab", ""]
+>    : ^^^^^^^^^^
 
 type T27 = FirstTwoAndRest<'a'>;  // unknown
 >T27 : unknown
+>    : ^^^^^^^
 
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
->HexDigit : "0" | "4" | "1" | "2" | "a" | "b" | "3" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "c" | "d" | "e" | "f"
+>HexDigit : HexDigit
+>         : ^^^^^^^^
 
 type HexColor<S extends string> =
 >HexColor : HexColor<S>
+>         : ^^^^^^^^^^^
 
     S extends `#${infer R1}${infer R2}${infer G1}${infer G2}${infer B1}${infer B2}` ?
         [R1, R2, G1, G2, B1, B2] extends [HexDigit, HexDigit, HexDigit, HexDigit, HexDigit, HexDigit] ?
@@ -210,20 +294,25 @@ type HexColor<S extends string> =
 
 type TH1 = HexColor<'#8080FF'>;  // '#8080FF'
 >TH1 : "#8080FF"
+>    : ^^^^^^^^^
 
 type TH2 = HexColor<'#80c0ff'>;  // '#80c0ff'
 >TH2 : "#80c0ff"
+>    : ^^^^^^^^^
 
 type TH3 = HexColor<'#8080F'>;  // never
 >TH3 : never
+>    : ^^^^^
 
 type TH4 = HexColor<'#8080FFF'>;  // never
 >TH4 : never
+>    : ^^^^^
 
 // Recursive inference
 
 type Trim<S extends string> =
 >Trim : Trim<S>
+>     : ^^^^^^^
 
     S extends ` ${infer T}` ? Trim<T> :
     S extends `${infer T} ` ? Trim<T> :
@@ -231,15 +320,19 @@ type Trim<S extends string> =
 
 type TR1 = Trim<'xx   '>;  // 'xx'
 >TR1 : "xx"
+>    : ^^^^
 
 type TR2 = Trim<'   xx'>;  // 'xx'
 >TR2 : "xx"
+>    : ^^^^
 
 type TR3 = Trim<'   xx   '>;  // 'xx'
 >TR3 : "xx"
+>    : ^^^^
 
 type Split<S extends string, D extends string> =
 >Split : Split<S, D>
+>      : ^^^^^^^^^^^
 
     string extends S ? string[] :
     S extends '' ? [] :
@@ -248,88 +341,147 @@ type Split<S extends string, D extends string> =
 
 type T40 = Split<'foo', '.'>;  // ['foo']
 >T40 : ["foo"]
+>    : ^^^^^^^
 
 type T41 = Split<'foo.bar.baz', '.'>;  // ['foo', 'bar', 'baz']
 >T41 : ["foo", "bar", "baz"]
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
 type T42 = Split<'foo.bar', ''>;  // ['f', 'o', 'o', '.', 'b', 'a', 'r']
 >T42 : ["f", "o", "o", ".", "b", "a", "r"]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T43 = Split<any, '.'>;  // string[]
 >T43 : string[]
+>    : ^^^^^^^^
 
 // Inference and property name paths
 
 declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2];
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^                        ^^   ^^   ^^    ^^                 ^^^               ^^^^^^^^^^^^^^^^^^^^^                  ^^   ^^   ^^    ^^    ^^^         ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : T
+>    : ^
 >path : `${P0}.${P1}.${P2}`
+>     : ^^^^^^^^^^^^^^^^^^^
 
 declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1];
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}.${P2}`): T_1[P0_1][P1_1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
+>        : ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^                        ^^  ^^^^^^^^^                              ^^   ^^   ^^    ^^                       ^^^                   ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^^^^^^^^^^^^^^^^^^^                  ^^   ^^   ^^    ^^    ^^^         ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : T
+>    : ^
 >path : `${P0}.${P1}`
+>     : ^^^^^^^^^^^^^
 
 declare function getProp<T, P0 extends keyof T & string>(obj: T, path: P0): T[P0];
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1] & string>(obj: T_1, path: `${P0_1}.${P1}.${P2}`): T_1[P0_1][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1}`): T_1[P0_1][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>        : ^^^^^^^^^^^^^^^^^^^^^                  ^^  ^^^^^^^^^                        ^^  ^^^^^^^^^                            ^^   ^^   ^^    ^^                     ^^^                 ^^^^^^^^^^^^^^^^^^^^^                  ^^  ^^^^^^^^^                        ^^   ^^   ^^    ^^               ^^^             ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : T
+>    : ^
 >path : P0
+>     : ^^
 
 declare function getProp(obj: object, path: string): unknown;
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : object
+>    : ^^^^^^
 >path : string
+>     : ^^^^^^
 
 let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 >p1 : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a') : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: {c: 42, d: 'hello' }} : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { readonly c: 42; readonly d: "hello"; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{c: 42, d: 'hello' } : { readonly c: 42; readonly d: "hello"; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : 42
+>  : ^^
 >42 : 42
+>   : ^^
 >d : "hello"
+>  : ^^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 
 let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >p2 : { readonly c: 42; readonly d: "hello"; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b') : { readonly c: 42; readonly d: "hello"; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: {c: 42, d: 'hello' }} : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { readonly c: 42; readonly d: "hello"; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{c: 42, d: 'hello' } : { readonly c: 42; readonly d: "hello"; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : 42
+>  : ^^
 >42 : 42
+>   : ^^
 >d : "hello"
+>  : ^^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >'a.b' : "a.b"
+>      : ^^^^^
 
 let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >p3 : "hello"
+>   : ^^^^^^^
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d') : "hello"
+>                                                            : ^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: {c: 42, d: 'hello' }} : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { readonly c: 42; readonly d: "hello"; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{c: 42, d: 'hello' } : { readonly c: 42; readonly d: "hello"; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : 42
+>  : ^^
 >42 : 42
+>   : ^^
 >d : "hello"
+>  : ^^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >'a.b.d' : "a.b.d"
+>        : ^^^^^^^
 
 type PropType<T, Path extends string> =
 >PropType : PropType<T, Path>
+>         : ^^^^^^^^^^^^^^^^^
 
     string extends Path ? unknown :
     Path extends keyof T ? T[Path] :
@@ -338,71 +490,109 @@ type PropType<T, Path extends string> =
 
 declare function getPropValue<T, P extends string>(obj: T, path: P): PropType<T, P>;
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : T
+>    : ^
 >path : P
+>     : ^
 
 declare const s: string;
 >s : string
+>  : ^^^^^^
 
 const obj = { a: { b: {c: 42, d: 'hello' }}};
 >obj : { a: { b: { c: number; d: string; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} : { a: { b: { c: number; d: string; }; }; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: number; d: string; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: {c: 42, d: 'hello' }} : { b: { c: number; d: string; }; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { c: number; d: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{c: 42, d: 'hello' } : { c: number; d: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >d : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 
 getPropValue(obj, 'a');  // { b: {c: number, d: string } }
 >getPropValue(obj, 'a') : { b: { c: number; d: string; }; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
 getPropValue(obj, 'a.b');  // {c: number, d: string }
 >getPropValue(obj, 'a.b') : { c: number; d: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a.b' : "a.b"
+>      : ^^^^^
 
 getPropValue(obj, 'a.b.d');  // string
 >getPropValue(obj, 'a.b.d') : string
+>                           : ^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a.b.d' : "a.b.d"
+>        : ^^^^^^^
 
 getPropValue(obj, 'a.b.x');  // unknown
 >getPropValue(obj, 'a.b.x') : unknown
+>                           : ^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a.b.x' : "a.b.x"
+>        : ^^^^^^^
 
 getPropValue(obj, s);  // unknown
 >getPropValue(obj, s) : unknown
+>                     : ^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 // Infer type variables in template literals have string constraint
 
 type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 >S1 : S1<T>
+>   : ^^^^^
 
 type S2<S extends string> = S;
 >S2 : S
+>   : ^
 
 // Check that infer T declarations are validated
 
 type TV1 = `${infer X}`;
 >TV1 : `${X}`
+>    : ^^^^^^
 
 // Batched single character inferences for lower recursion depth
 
 type Chars<S extends string> =
 >Chars : Chars<S>
+>      : ^^^^^^^^
 
     string extends S ? string[] :
     S extends `${infer C0}${infer C1}${infer C2}${infer C3}${infer C4}${infer C5}${infer C6}${infer C7}${infer C8}${infer C9}${infer R}` ? [C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, ...Chars<R>] :
@@ -412,134 +602,213 @@ type Chars<S extends string> =
 
 type L1 = Chars<'FooBarBazThisIsALongerString'>;  // ['F', 'o', 'o', 'B', 'a', 'r', ...]
 >L1 : ["F", "o", "o", "B", "a", "r", "B", "a", "z", "T", "h", "i", "s", "I", "s", "A", "L", "o", "n", "g", "e", "r", "S", "t", "r", "i", "n", "g"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Infer never when source isn't a literal type that matches the pattern
 
 type Foo<T> = T extends `*${infer S}*` ? S : never;
 >Foo : Foo<T>
+>    : ^^^^^^
 
 type TF1 = Foo<any>;      // never
 >TF1 : string
+>    : ^^^^^^
 
 type TF2 = Foo<string>;   // never
 >TF2 : never
+>    : ^^^^^
 
 type TF3 = Foo<'abc'>;    // never
 >TF3 : never
+>    : ^^^^^
 
 type TF4 = Foo<'*abc*'>;  // 'abc'
 >TF4 : "abc"
+>    : ^^^^^
 
 // Cross product unions limited to 100,000 constituents
 
 type A = any;
 >A : any
+>  : ^^^
 
 type U1 = {a1:A} | {b1:A} | {c1:A} | {d1:A} | {e1:A} | {f1:A} | {g1:A} | {h1:A} | {i1:A} | {j1:A};
->U1 : { a1: A; } | { b1: A; } | { c1: A; } | { d1: A; } | { e1: A; } | { f1: A; } | { g1: A; } | { h1: A; } | { i1: A; } | { j1: A; }
+>U1 : U1
+>   : ^^
 >a1 : any
+>   : ^^^
 >b1 : any
+>   : ^^^
 >c1 : any
+>   : ^^^
 >d1 : any
+>   : ^^^
 >e1 : any
+>   : ^^^
 >f1 : any
+>   : ^^^
 >g1 : any
+>   : ^^^
 >h1 : any
+>   : ^^^
 >i1 : any
+>   : ^^^
 >j1 : any
+>   : ^^^
 
 type U2 = {a2:A} | {b2:A} | {c2:A} | {d2:A} | {e2:A} | {f2:A} | {g2:A} | {h2:A} | {i2:A} | {j2:A};
->U2 : { a2: A; } | { b2: A; } | { c2: A; } | { d2: A; } | { e2: A; } | { f2: A; } | { g2: A; } | { h2: A; } | { i2: A; } | { j2: A; }
+>U2 : U2
+>   : ^^
 >a2 : any
+>   : ^^^
 >b2 : any
+>   : ^^^
 >c2 : any
+>   : ^^^
 >d2 : any
+>   : ^^^
 >e2 : any
+>   : ^^^
 >f2 : any
+>   : ^^^
 >g2 : any
+>   : ^^^
 >h2 : any
+>   : ^^^
 >i2 : any
+>   : ^^^
 >j2 : any
+>   : ^^^
 
 type U3 = {a3:A} | {b3:A} | {c3:A} | {d3:A} | {e3:A} | {f3:A} | {g3:A} | {h3:A} | {i3:A} | {j3:A};
->U3 : { a3: A; } | { b3: A; } | { c3: A; } | { d3: A; } | { e3: A; } | { f3: A; } | { g3: A; } | { h3: A; } | { i3: A; } | { j3: A; }
+>U3 : U3
+>   : ^^
 >a3 : any
+>   : ^^^
 >b3 : any
+>   : ^^^
 >c3 : any
+>   : ^^^
 >d3 : any
+>   : ^^^
 >e3 : any
+>   : ^^^
 >f3 : any
+>   : ^^^
 >g3 : any
+>   : ^^^
 >h3 : any
+>   : ^^^
 >i3 : any
+>   : ^^^
 >j3 : any
+>   : ^^^
 
 type U4 = {a4:A} | {b4:A} | {c4:A} | {d4:A} | {e4:A} | {f4:A} | {g4:A} | {h4:A} | {i4:A} | {j4:A};
->U4 : { a4: A; } | { b4: A; } | { c4: A; } | { d4: A; } | { e4: A; } | { f4: A; } | { g4: A; } | { h4: A; } | { i4: A; } | { j4: A; }
+>U4 : U4
+>   : ^^
 >a4 : any
+>   : ^^^
 >b4 : any
+>   : ^^^
 >c4 : any
+>   : ^^^
 >d4 : any
+>   : ^^^
 >e4 : any
+>   : ^^^
 >f4 : any
+>   : ^^^
 >g4 : any
+>   : ^^^
 >h4 : any
+>   : ^^^
 >i4 : any
+>   : ^^^
 >j4 : any
+>   : ^^^
 
 type U5 = {a5:A} | {b5:A} | {c5:A} | {d5:A} | {e5:A} | {f5:A} | {g5:A} | {h5:A} | {i5:A} | {j5:A};
->U5 : { a5: A; } | { b5: A; } | { c5: A; } | { d5: A; } | { e5: A; } | { f5: A; } | { g5: A; } | { h5: A; } | { i5: A; } | { j5: A; }
+>U5 : U5
+>   : ^^
 >a5 : any
+>   : ^^^
 >b5 : any
+>   : ^^^
 >c5 : any
+>   : ^^^
 >d5 : any
+>   : ^^^
 >e5 : any
+>   : ^^^
 >f5 : any
+>   : ^^^
 >g5 : any
+>   : ^^^
 >h5 : any
+>   : ^^^
 >i5 : any
+>   : ^^^
 >j5 : any
+>   : ^^^
 
 type U100000 = U1 & U2 & U3 & U4 & U5;  // Error
 >U100000 : any
+>        : ^^^
 
 type Digits = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
->Digits : 0 | 1 | 4 | 2 | 3 | 6 | 5 | 7 | 8 | 9
+>Digits : Digits
+>       : ^^^^^^
 
 type D100000 = `${Digits}${Digits}${Digits}${Digits}${Digits}`;  // Error
 >D100000 : any
+>        : ^^^
 
 type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
->TDigits : [4] | [0] | [1] | [2] | [3] | [5] | [6] | [7] | [8] | [9]
+>TDigits : TDigits
+>        : ^^^^^^^
 
 type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  // Error
 >T100000 : any
+>        : ^^^
 
 // Repro from #40863
 
 type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
 >IsNegative : IsNegative<T>
+>           : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type AA<T extends number, Q extends number> =
 >AA : AA<T, Q>
+>   : ^^^^^^^^
 
     [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
 type BB = AA<-2, -2>;
 >BB : "Every thing is ok!"
+>   : ^^^^^^^^^^^^^^^^^^^^
 >-2 : -2
+>   : ^^
 >2 : 2
+>  : ^
 >-2 : -2
+>   : ^^
 >2 : 2
+>  : ^
 
 // Repro from #40970
 
 type PathKeys<T> =
 >PathKeys : PathKeys<T>
+>         : ^^^^^^^^^^^
 
     unknown extends T ? never :
     T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
@@ -548,57 +817,86 @@ type PathKeys<T> =
 
 type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
 >SubKeys : SubKeys<T, K>
+>        : ^^^^^^^^^^^^^
 
 declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
 >getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
+>         : ^ ^^ ^^^^^^^^^           ^^   ^^ ^^    ^^ ^^^^^              
 >obj : T
+>    : ^
 >path : P
+>     : ^
 
 const obj2 = {
 >obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    name: 'John',    age: 42,    cars: [        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ]} as const : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    name: 'John',    age: 42,    cars: [        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ]} : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     name: 'John',
 >name : "John"
+>     : ^^^^^^
 >'John' : "John"
+>       : ^^^^^^
 
     age: 42,
 >age : 42
+>    : ^^
 >42 : 42
+>   : ^^
 
     cars: [
 >cars : readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ] : readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         { make: 'Ford', age: 10 },
 >{ make: 'Ford', age: 10 } : { readonly make: "Ford"; readonly age: 10; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >make : "Ford"
+>     : ^^^^^^
 >'Ford' : "Ford"
+>       : ^^^^^^
 >age : 10
+>    : ^^
 >10 : 10
+>   : ^^
 
         { make: 'Trabant', age: 35 }
 >{ make: 'Trabant', age: 35 } : { readonly make: "Trabant"; readonly age: 35; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >make : "Trabant"
+>     : ^^^^^^^^^
 >'Trabant' : "Trabant"
+>          : ^^^^^^^^^
 >age : 35
+>    : ^^
 >35 : 35
+>   : ^^
 
     ]
 } as const;
 
 let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 >make : "Trabant"
+>     : ^^^^^^^^^
 >getProp2(obj2, 'cars.1.make') : "Trabant"
+>                              : ^^^^^^^^^
 >getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
+>         : ^ ^^ ^^^^^^^^^           ^^   ^^ ^^    ^^ ^^^^^              
 >obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'cars.1.make' : "cars.1.make"
+>              : ^^^^^^^^^^^^^
 
 // Repro from #46480
 
 export type Spacing =
->Spacing : "0" | `${number}px` | `${number}rem` | "s1" | "s4" | "s2" | "s3" | "s6" | "s5" | "s7" | "s8" | "s18" | "s9" | "s10" | "s11" | "s12" | "s13" | "s14" | "s15" | "s16" | "s17" | "s19" | "s20"
+>Spacing : Spacing
+>        : ^^^^^^^
 
     | `0`
     | `${number}px`
@@ -607,10 +905,13 @@ export type Spacing =
 
 const spacing: Spacing = "s12"
 >spacing : Spacing
+>        : ^^^^^^^
 >"s12" : "s12"
+>      : ^^^^^
 
 export type SpacingShorthand =
 >SpacingShorthand : any
+>                 : ^^^
 
     | `${Spacing} ${Spacing}`
     | `${Spacing} ${Spacing} ${Spacing}`
@@ -618,5 +919,7 @@ export type SpacingShorthand =
 
 const test1: SpacingShorthand = "0 0 0";
 >test1 : any
+>      : ^^^
 >"0 0 0" : "0 0 0"
+>        : ^^^^^^^
 

@@ -1,58 +1,85 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importEquals1.ts] ////
+
 === /a.ts ===
 export class A {}
 >A : A
+>  : ^
 
 === /b.ts ===
 import type * as types from './a';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 export = types; // Error
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 === /c.ts ===
 import * as types from './a';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 export = types;
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 === /d.ts ===
 import types from './b';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 new types.A(); // Error
 >new types.A() : types.A
+>              : ^^^^^^^
 >types.A : typeof types.A
+>        : ^^^^^^^^^^^^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >A : typeof types.A
+>  : ^^^^^^^^^^^^^^
 
 === /e.ts ===
 import types = require('./b');
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 new types.A(); // Error
 >new types.A() : types.A
+>              : ^^^^^^^
 >types.A : typeof types.A
+>        : ^^^^^^^^^^^^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >A : typeof types.A
+>  : ^^^^^^^^^^^^^^
 
 === /f.ts ===
 import * as types from './b';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 new types.A(); // Error
 >new types.A() : types.A
+>              : ^^^^^^^
 >types.A : typeof types.A
+>        : ^^^^^^^^^^^^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >A : typeof types.A
+>  : ^^^^^^^^^^^^^^
 
 === /g.ts ===
 import type types from './c'
 >types : any
+>      : ^^^
 
 new types.A(); // Error
 >new types.A() : types.A
+>              : ^^^^^^^
 >types.A : typeof types.A
+>        : ^^^^^^^^^^^^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >A : typeof types.A
+>  : ^^^^^^^^^^^^^^
 

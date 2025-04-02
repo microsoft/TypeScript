@@ -1,66 +1,87 @@
-=== tests/cases/compiler/nonIdenticalTypeConstraints.ts ===
+//// [tests/cases/compiler/nonIdenticalTypeConstraints.ts] ////
+
+=== nonIdenticalTypeConstraints.ts ===
 class Different {
 >Different : Different
+>          : ^^^^^^^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: string;
 >b : string
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 }
 
 class Foo<T extends Function> {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     n: T;
 >n : T
+>  : ^
 }
 interface Foo<T extends Different> {
     y: T;
 >y : T
+>  : ^
 }
 interface Qux<T extends Different> {
     y: T;
 >y : T
+>  : ^
 }
 class Qux<T extends Function> {
 >Qux : Qux<T>
+>    : ^^^^^^
 
     n: T;
 >n : T
+>  : ^
 }
 
 class Bar<T extends Function> {
 >Bar : Bar<T>
+>    : ^^^^^^
 
     n: T;
 >n : T
+>  : ^
 }
 interface Bar<T extends Function> {
     y: T;
 >y : T
+>  : ^
 }
 interface Baz<T extends Function> {
     y: T;
 >y : T
+>  : ^
 }
 class Baz<T extends Function> {
 >Baz : Baz<T>
+>    : ^^^^^^
 
     n: T;
 >n : T
+>  : ^
 }
 
 class Quux<T> {
 >Quux : Quux<T, U>
+>     : ^^^^^^^^^^
 
     n: T;
 >n : T
+>  : ^
 }
 interface Quux<U> {
     m: U;
 >m : U
+>  : ^
 }

@@ -1,68 +1,96 @@
-=== tests/cases/conformance/types/namedTypes/classWithOnlyPublicMembersEquivalentToInterface.ts ===
+//// [tests/cases/conformance/types/namedTypes/classWithOnlyPublicMembersEquivalentToInterface.ts] ////
+
+=== classWithOnlyPublicMembersEquivalentToInterface.ts ===
 // no errors expected
 
 class C {
 >C : C
+>  : ^
 
     public x: string;
 >x : string
+>  : ^^^^^^
 
     public y(a: number): number { return null; }
 >y : (a: number) => number
+>  : ^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 
     public get z() { return 1; }
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     public set z(v) { }
 >z : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
     [x: number]: Object;
 >x : number
+>  : ^^^^^^
 
     0: number;
 >0 : number
+>  : ^^^^^^
 }
 
 interface I {
     x: string;
 >x : string
+>  : ^^^^^^
 
     y(b: number): number;
 >y : (b: number) => number
+>  : ^ ^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 
     z: number;
 >z : number
+>  : ^^^^^^
 
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
     [x: number]: Object;
 >x : number
+>  : ^^^^^^
 
     0: number;
 >0 : number
+>  : ^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var i: I;
 >i : I
+>  : ^
 
 c = i;
 >c = i : I
+>      : ^
 >c : C
+>  : ^
 >i : I
+>  : ^
 
 i = c;
 >i = c : C
+>      : ^
 >i : I
+>  : ^
 >c : C
+>  : ^
 

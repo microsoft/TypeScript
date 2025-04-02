@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionSuperAndPropertyNameAsConstuctorParameter.ts] ////
+
 //// [collisionSuperAndPropertyNameAsConstuctorParameter.ts]
 class a {
 }

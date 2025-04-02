@@ -1,29 +1,48 @@
-=== tests/cases/compiler/controlFlowCommaExpressionAssertionWithinTernary.ts ===
+//// [tests/cases/compiler/controlFlowCommaExpressionAssertionWithinTernary.ts] ////
+
+=== controlFlowCommaExpressionAssertionWithinTernary.ts ===
 declare function assert(value: any): asserts value;
 >assert : (value: any) => asserts value
+>       : ^     ^^   ^^^^^             
 >value : any
 
 function foo2(param: number | null | undefined): number | null {
 >foo2 : (param: number | null | undefined) => number | null
+>     : ^     ^^                         ^^^^^             
 >param : number | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const val = param !== undefined;
 >val : boolean
+>    : ^^^^^^^
 >param !== undefined : boolean
+>                    : ^^^^^^^
 >param : number | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     return val ? (assert(param !== undefined), param) : null;
 >val ? (assert(param !== undefined), param) : null : number | null
+>                                                  : ^^^^^^^^^^^^^
 >val : boolean
+>    : ^^^^^^^
 >(assert(param !== undefined), param) : number | null
+>                                     : ^^^^^^^^^^^^^
 >assert(param !== undefined), param : number | null
+>                                   : ^^^^^^^^^^^^^
 >assert(param !== undefined) : void
+>                            : ^^^^
 >assert : (value: any) => asserts value
+>       : ^     ^^   ^^^^^             
 >param !== undefined : boolean
+>                    : ^^^^^^^
 >param : number | null
+>      : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >param : number | null
+>      : ^^^^^^^^^^^^^
 
     // ^^^^^ Still typed as number | null | undefined
 }

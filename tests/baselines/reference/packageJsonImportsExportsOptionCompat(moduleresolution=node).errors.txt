@@ -4,5 +4,5 @@ error TS5098: Option 'resolvePackageJsonImports' can only be used when 'moduleRe
 
 !!! error TS5098: Option 'resolvePackageJsonExports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
 !!! error TS5098: Option 'resolvePackageJsonImports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
-==== tests/cases/conformance/moduleResolution/index.ts (0 errors) ====
+==== index.ts (0 errors) ====
     

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts] ////
+
 //// [implementingAnInterfaceExtendingClassWithPrivates2.ts]
 class Foo {
     private x: string;

@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor11.ts(2,5): error TS2300: Duplicate identifier 'accessor'.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor11.ts(9,5): error TS2300: Duplicate identifier 'accessor'.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor11.ts(12,14): error TS2300: Duplicate identifier 'accessor'.
+autoAccessor11.ts(2,5): error TS2300: Duplicate identifier 'accessor'.
+autoAccessor11.ts(9,5): error TS2300: Duplicate identifier 'accessor'.
+autoAccessor11.ts(12,14): error TS2300: Duplicate identifier 'accessor'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor11.ts (3 errors) ====
+==== autoAccessor11.ts (3 errors) ====
     class C {
         accessor
         ~~~~~~~~

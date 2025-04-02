@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specedNoStackBlown.ts] ////
+
 //// [specedNoStackBlown.ts]
 // Type definitions for spected 0.7
 // Project: https://github.com/25th-floor/spected

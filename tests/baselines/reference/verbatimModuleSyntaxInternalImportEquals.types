@@ -1,27 +1,41 @@
-=== tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts ===
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts] ////
+
+=== verbatimModuleSyntaxInternalImportEquals.ts ===
 export {};
 import f1 = NonExistent;
 >f1 : any
+>   : ^^^
 >NonExistent : any
+>            : ^^^
 
 namespace Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     export const foo = 1;
 >foo : 1
+>    : ^
 >1 : 1
+>  : ^
 
     export type T = any;
 >T : any
+>  : ^^^
 }
 
 import f2 = Foo.foo;
 >f2 : 1
+>   : ^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >foo : 1
+>    : ^
 
 import f3 = Foo.T;
 >f3 : any
+>   : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >T : any
+>  : ^^^
 

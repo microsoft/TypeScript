@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/import/importTypeAmbient.ts] ////
+
 //// [importTypeAmbient.ts]
 declare module "foo" {
     interface Point {

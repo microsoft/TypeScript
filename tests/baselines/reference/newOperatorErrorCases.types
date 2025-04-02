@@ -1,34 +1,45 @@
-=== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts ===
+//// [tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts] ////
+
+=== newOperatorErrorCases.ts ===
 class C0 {
 >C0 : C0
+>   : ^^
 
 }
 class C1 {
 >C1 : C1
+>   : ^^
 
     constructor(n: number, s: string) { }
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 }
 
 class T<T> {
 >T : globalThis.T<T>
+>  : ^^^^^^^^^^^^^^^
 
     constructor(n?: T) { }
 >n : T
+>  : ^
 }
 
 var anyCtor: {
 >anyCtor : new () => any
+>        : ^^^^^^^^^^   
 
     new (): any;
 };
 
 var anyCtor1: {
 >anyCtor1 : new (n: any) => any
+>         : ^^^^^ ^^^^^^^^^^   
 
     new (n): any;
 >n : any
+>  : ^^^
 
 };
 
@@ -37,38 +48,57 @@ interface nestedCtor {
 }
 var nestedCtor: nestedCtor;
 >nestedCtor : nestedCtor
+>           : ^^^^^^^^^^
 
 // Construct expression with no parentheses for construct signature with > 0 parameters
 var b = new C0 32, ''; // Parse error
 >b : C0
+>  : ^^
 >new C0 : C0
+>       : ^^
 >C0 : typeof C0
+>   : ^^^^^^^^^
 >32, '' : ""
+>       : ^^
 >32 : 32
+>   : ^^
 >'' : ""
+>   : ^^
 
 // Generic construct expression with no parentheses
 var c1 = new T;
 >c1 : T<unknown>
+>   : ^^^^^^^^^^
 >new T : T<unknown>
+>      : ^^^^^^^^^^
 >T : typeof T
+>  : ^^^^^^^^
 
 var c1: T<{}>;
 >c1 : T<unknown>
+>   : ^^^^^^^^^^
 
 var c2 = new T<string>;  // Ok
 >c2 : T<string>
+>   : ^^^^^^^^^
 >new T<string> : T<string>
+>              : ^^^^^^^^^
 >T : typeof T
+>  : ^^^^^^^^
 
 
 // Construct expression of non-void returning function
 function fnNumber(): number { return 32; }
 >fnNumber : () => number
+>         : ^^^^^^      
 >32 : 32
+>   : ^^
 
 var s = new fnNumber(); // Error
 >s : any
+>  : ^^^
 >new fnNumber() : any
+>               : ^^^
 >fnNumber : () => number
+>         : ^^^^^^      
 

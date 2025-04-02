@@ -1,14 +1,20 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts] ////
+
+=== typeParameterAsBaseType.ts ===
 // type parameters cannot be used as base types
 // these are all errors
 
 class C<T> extends T { }
 >C : C<T>
+>  : ^^^^
 >T : any
+>  : ^^^
 
 class C2<T, U> extends U { }
 >C2 : C2<T, U>
+>   : ^^^^^^^^
 >U : any
+>  : ^^^
 
 interface I<T> extends T { }
 interface I2<T, U> extends U { }

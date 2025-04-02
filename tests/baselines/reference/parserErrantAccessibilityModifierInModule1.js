@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantAccessibilityModifierInModule1.ts] ////
+
 //// [parserErrantAccessibilityModifierInModule1.ts]
 module M {
     var x=10;  // variable local to this module body

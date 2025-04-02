@@ -1,13 +1,19 @@
+//// [tests/cases/conformance/es6/destructuring/optionalBindingParameters4.ts] ////
+
 === /a.js ===
 /** 
 * @param {{ cause?: string }} [options] 
 */ 
 function foo({ cause } = {}) {
->foo : ({ cause }?: {    cause?: string;}) => string
+>foo : ({ cause }?: { cause?: string; }) => string
+>    : ^         ^^^                   ^^^^^^^^^^^
 >cause : string
+>      : ^^^^^^
 >{} : {}
+>   : ^^
 
     return cause;
 >cause : string
+>      : ^^^^^^
 }
 

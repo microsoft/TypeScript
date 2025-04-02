@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorTypeWithTypeParameters.ts] ////
+
 //// [constructorTypeWithTypeParameters.ts]
 declare var X: {
     new <T>(): number;

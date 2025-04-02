@@ -1,4 +1,6 @@
-=== tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts ===
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts] ////
+
+=== esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts ===
 declare var deco: any;
 >deco : Symbol(deco, Decl(esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts, 0, 11))
 

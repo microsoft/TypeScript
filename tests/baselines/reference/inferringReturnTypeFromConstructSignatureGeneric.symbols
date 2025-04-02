@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts ===
+//// [tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts] ////
+
+=== inferringReturnTypeFromConstructSignatureGeneric.ts ===
 class GenericObject<T extends {} = {}> {
 >GenericObject : Symbol(GenericObject, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 20))

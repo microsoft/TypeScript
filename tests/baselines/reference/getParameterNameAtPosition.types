@@ -1,30 +1,46 @@
-=== tests/cases/compiler/getParameterNameAtPosition.ts ===
+//// [tests/cases/compiler/getParameterNameAtPosition.ts] ////
+
+=== getParameterNameAtPosition.ts ===
 // Repro from #30171
 
 interface Mock<Y extends any[]> extends Function {
     (...args: Y): any;
 >args : Y
+>     : ^
 }
 type Tester = (opts: any, done: (...args: any[]) => any) => any;
->Tester : (opts: any, done: (...args: any[]) => any) => any
+>Tester : Tester
+>       : ^^^^^^
 >opts : any
 >done : (...args: any[]) => any
+>     : ^^^^    ^^     ^^^^^   
 >args : any[]
+>     : ^^^^^
 
 declare function cases(tester: Tester): void;
 >cases : (tester: Tester) => void
+>      : ^      ^^      ^^^^^    
 >tester : Tester
+>       : ^^^^^^
 
 declare function fn<Y extends any[]>(implementation?: (...args: Y) => any): Mock<Y>;
->fn : <Y extends any[]>(implementation?: ((...args: Y) => any) | undefined) => Mock<Y>
+>fn : <Y extends any[]>(implementation?: (...args: Y) => any) => Mock<Y>
+>   : ^ ^^^^^^^^^     ^^              ^^^                   ^^^^^       
 >implementation : ((...args: Y) => any) | undefined
+>               : ^^^^^    ^^ ^^^^^   ^^^^^^^^^^^^^
 >args : Y
+>     : ^
 
 cases(fn(opts => { }));
 >cases(fn(opts => { })) : void
+>                       : ^^^^
 >cases : (tester: Tester) => void
+>      : ^      ^^      ^^^^^    
 >fn(opts => { }) : Mock<[opts: any]>
->fn : <Y extends any[]>(implementation?: ((...args: Y) => any) | undefined) => Mock<Y>
+>                : ^^^^^^^^^^^^^^^^^
+>fn : <Y extends any[]>(implementation?: (...args: Y) => any) => Mock<Y>
+>   : ^ ^^^^^^^^^     ^^              ^^^                   ^^^^^       
 >opts => { } : (opts: any) => void
+>            : ^    ^^^^^^^^^^^^^^
 >opts : any
 

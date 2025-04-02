@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts] ////
+
 //// [declarationEmitThisPredicatesWithPrivateName02.ts]
 interface Foo {
     a: string;

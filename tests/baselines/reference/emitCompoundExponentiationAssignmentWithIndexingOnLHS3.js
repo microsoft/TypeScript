@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts] ////
+
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts]
 var object = {
     _0: 2,

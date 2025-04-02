@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/declarationEmitMultipleComputedNamesSameDomain.ts] ////
+
+=== declarationEmitMultipleComputedNamesSameDomain.ts ===
+declare const x: string;
+>x : string
+>  : ^^^^^^
+
+declare const y: "y";
+>y : "y"
+>  : ^^^
+
+export class Test {
+>Test : Test
+>     : ^^^^
+
+    [x] = 10;
+>[x] : number
+>    : ^^^^^^
+>x : string
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+    [y] = 10;
+>[y] : number
+>    : ^^^^^^
+>y : "y"
+>  : ^^^
+>10 : 10
+>   : ^^
+}

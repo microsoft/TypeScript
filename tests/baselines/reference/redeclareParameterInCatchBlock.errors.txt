@@ -1,11 +1,11 @@
-tests/cases/compiler/redeclareParameterInCatchBlock.ts(4,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
-tests/cases/compiler/redeclareParameterInCatchBlock.ts(10,9): error TS2492: Cannot redeclare identifier 'e' in catch clause.
-tests/cases/compiler/redeclareParameterInCatchBlock.ts(16,15): error TS2492: Cannot redeclare identifier 'b' in catch clause.
-tests/cases/compiler/redeclareParameterInCatchBlock.ts(21,15): error TS2451: Cannot redeclare block-scoped variable 'x'.
-tests/cases/compiler/redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-scoped variable 'x'.
+redeclareParameterInCatchBlock.ts(4,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
+redeclareParameterInCatchBlock.ts(10,9): error TS2492: Cannot redeclare identifier 'e' in catch clause.
+redeclareParameterInCatchBlock.ts(16,15): error TS2492: Cannot redeclare identifier 'b' in catch clause.
+redeclareParameterInCatchBlock.ts(21,15): error TS2451: Cannot redeclare block-scoped variable 'x'.
+redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-scoped variable 'x'.
 
 
-==== tests/cases/compiler/redeclareParameterInCatchBlock.ts (5 errors) ====
+==== redeclareParameterInCatchBlock.ts (5 errors) ====
     try {
     
     } catch(e) {

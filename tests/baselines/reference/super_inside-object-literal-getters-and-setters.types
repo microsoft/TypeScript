@@ -1,72 +1,108 @@
-=== tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts ===
+//// [tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts] ////
+
+=== super_inside-object-literal-getters-and-setters.ts ===
 module ObjectLiteral {
 >ObjectLiteral : typeof ObjectLiteral
+>              : ^^^^^^^^^^^^^^^^^^^^
 
     var ThisInObjectLiteral = {
 >ThisInObjectLiteral : { _foo: string; foo: string; test: () => any; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >{        _foo: '1',        get foo(): string {            return super._foo;        },        set foo(value: string) {            super._foo = value;        },        test: function () {            return super._foo;        }    } : { _foo: string; foo: string; test: () => any; }
+>                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 
         _foo: '1',
 >_foo : string
+>     : ^^^^^^
 >'1' : "1"
+>    : ^^^
 
         get foo(): string {
 >foo : string
+>    : ^^^^^^
 
             return super._foo;
 >super._foo : any
+>           : ^^^
 >super : any
+>      : ^^^
 >_foo : any
+>     : ^^^
 
         },
         set foo(value: string) {
 >foo : string
+>    : ^^^^^^
 >value : string
+>      : ^^^^^^
 
             super._foo = value;
 >super._foo = value : string
+>                   : ^^^^^^
 >super._foo : any
+>           : ^^^
 >super : any
+>      : ^^^
 >_foo : any
+>     : ^^^
 >value : string
+>      : ^^^^^^
 
         },
         test: function () {
 >test : () => any
+>     : ^^^^^^^^^
 >function () {            return super._foo;        } : () => any
+>                                                     : ^^^^^^^^^
 
             return super._foo;
 >super._foo : any
+>           : ^^^
 >super : any
+>      : ^^^
 >_foo : any
+>     : ^^^
         }
     }
 }
 
 class F { public test(): string { return ""; } }
 >F : F
+>  : ^
 >test : () => string
+>     : ^^^^^^      
 >"" : ""
+>   : ^^
 
 class SuperObjectTest extends F {
 >SuperObjectTest : SuperObjectTest
+>                : ^^^^^^^^^^^^^^^
 >F : F
+>  : ^
 
     public testing() {
 >testing : () => void
+>        : ^^^^^^^^^^
 
         var test = {
 >test : { readonly F: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^
 >{            get F() {                return super.test();            }        } : { readonly F: any; }
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^
 
             get F() {
 >F : any
+>  : ^^^
 
                 return super.test();
 >super.test() : any
+>             : ^^^
 >super.test : any
+>           : ^^^
 >super : any
+>      : ^^^
 >test : any
+>     : ^^^
             }
         };
     }

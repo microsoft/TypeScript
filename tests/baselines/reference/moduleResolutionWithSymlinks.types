@@ -1,25 +1,37 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks.ts] ////
+
 === /src/app.ts ===
 import { MyClass } from "./library-a";
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
 import { MyClass2 } from "./library-b";
 >MyClass2 : typeof MyClass
+>         : ^^^^^^^^^^^^^^
 
 let x: MyClass;
 >x : MyClass
+>  : ^^^^^^^
 
 let y: MyClass2;
 >y : MyClass
+>  : ^^^^^^^
 
 x = y;
 >x = y : MyClass
+>      : ^^^^^^^
 >x : MyClass
+>  : ^^^^^^^
 >y : MyClass
+>  : ^^^^^^^
 
 y = x;
 >y = x : MyClass
+>      : ^^^^^^^
 >y : MyClass
+>  : ^^^^^^^
 >x : MyClass
+>  : ^^^^^^^
 
 /*
 # To reproduce in a real project:
@@ -41,18 +53,20 @@ tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
 */
 
 === /src/library-a/index.ts ===
-// When symlinked files are in node_modules, they are resolved with realpath;
-// so a linked file does not create a duplicate SourceFile of the real one.
-
 export class MyClass { private x: number; }
 >MyClass : MyClass
+>        : ^^^^^^^
 >x : number
+>  : ^^^^^^
 
 === /src/library-b/index.ts ===
 import {MyClass} from "library-a";
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
 export { MyClass as MyClass2 }
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >MyClass2 : typeof MyClass
+>         : ^^^^^^^^^^^^^^
 

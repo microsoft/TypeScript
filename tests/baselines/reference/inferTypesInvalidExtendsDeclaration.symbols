@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/inferTypesInvalidExtendsDeclaration.ts ===
+//// [tests/cases/conformance/types/conditional/inferTypesInvalidExtendsDeclaration.ts] ////
+
+=== inferTypesInvalidExtendsDeclaration.ts ===
 type Test<T> = T extends infer A extends B ? number : string;
 >Test : Symbol(Test, Decl(inferTypesInvalidExtendsDeclaration.ts, 0, 0))
 >T : Symbol(T, Decl(inferTypesInvalidExtendsDeclaration.ts, 0, 10))

@@ -1,13 +1,21 @@
-=== tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts ===
+//// [tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts] ////
+
+=== expandoFunctionContextualTypesJSDocInTs.ts ===
 export function Foo() { }
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 // This comment should have no effect; this is a TS file.
 /** @type {never} */
 Foo.bar = () => { };
 >Foo.bar = () => { } : () => void
+>                    : ^^^^^^^^^^
 >Foo.bar : () => void
+>        : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 

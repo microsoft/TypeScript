@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator12.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator12.ts] ////
+
+=== nullishCoalescingOperator12.ts ===
 const obj: { arr: any[] } = { arr: [] };
 >obj : Symbol(obj, Decl(nullishCoalescingOperator12.ts, 0, 5))
 >arr : Symbol(arr, Decl(nullishCoalescingOperator12.ts, 0, 12))

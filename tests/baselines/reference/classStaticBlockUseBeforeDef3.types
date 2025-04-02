@@ -1,89 +1,129 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts] ////
+
+=== classStaticBlockUseBeforeDef3.ts ===
 class A {
 >A : A
+>  : ^
 
     static {
         A.doSomething(); // should not error
 >A.doSomething() : void
+>                : ^^^^
 >A.doSomething : () => void
+>              : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >doSomething : () => void
+>            : ^^^^^^^^^^
     }
 
     static doSomething() {
 >doSomething : () => void
+>            : ^^^^^^^^^^
 
        console.log("gotcha!");
 >console.log("gotcha!") : void
+>                       : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"gotcha!" : "gotcha!"
+>          : ^^^^^^^^^
     }
 }
 
 
 class Baz {
 >Baz : Baz
+>    : ^^^
 
     static {
         console.log(FOO);   // should error
 >console.log(FOO) : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >FOO : "FOO"
+>    : ^^^^^
     }
 }
 
 const FOO = "FOO";
 >FOO : "FOO"
+>    : ^^^^^
 >"FOO" : "FOO"
+>      : ^^^^^
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
     static {
         console.log(FOO); // should not error
 >console.log(FOO) : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >FOO : "FOO"
+>    : ^^^^^
     }
 }
 
 let u = "FOO" as "FOO" | "BAR";
 >u : "FOO" | "BAR"
+>  : ^^^^^^^^^^^^^
 >"FOO" as "FOO" | "BAR" : "FOO" | "BAR"
+>                       : ^^^^^^^^^^^^^
 >"FOO" : "FOO"
+>      : ^^^^^
 
 class CFA {
 >CFA : CFA
+>    : ^^^
 
     static {
         u = "BAR";
 >u = "BAR" : "BAR"
+>          : ^^^^^
 >u : "FOO" | "BAR"
+>  : ^^^^^^^^^^^^^
 >"BAR" : "BAR"
+>      : ^^^^^
 
         u;  // should be "BAR"
 >u : "BAR"
+>  : ^^^^^
     }
 
     static t = 1;
 >t : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     static doSomething() {}
 >doSomething : () => void
+>            : ^^^^^^^^^^
 
     static {
         u;  // should be "BAR"
 >u : "BAR"
+>  : ^^^^^
     }
 }
 
 u; // should be "BAR"
 >u : "BAR"
+>  : ^^^^^
 

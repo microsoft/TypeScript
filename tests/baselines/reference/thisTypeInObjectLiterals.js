@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts] ////
+
 //// [thisTypeInObjectLiterals.ts]
 let o = {
     d: "bar",

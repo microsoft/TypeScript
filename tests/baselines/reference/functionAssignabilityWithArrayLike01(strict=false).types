@@ -1,8 +1,13 @@
-=== tests/cases/compiler/functionAssignabilityWithArrayLike01.ts ===
+//// [tests/cases/compiler/functionAssignabilityWithArrayLike01.ts] ////
+
+=== functionAssignabilityWithArrayLike01.ts ===
 function func() {}
 >func : () => void
+>     : ^^^^^^^^^^
 
 const array: ArrayLike<any> = func;
 >array : ArrayLike<any>
+>      : ^^^^^^^^^^^^^^
 >func : () => void
+>     : ^^^^^^^^^^
 

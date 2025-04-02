@@ -1,44 +1,75 @@
-=== tests/cases/compiler/nonInferrableTypePropagation3.ts ===
+//// [tests/cases/compiler/nonInferrableTypePropagation3.ts] ////
+
+=== nonInferrableTypePropagation3.ts ===
 // Repro from #53748
 
 declare type Callback<Args extends any[], Out, R> = (...args: Args) => (data: Out) => R;
 >Callback : Callback<Args, Out, R>
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 >args : Args
+>     : ^^^^
 >data : Out
+>     : ^^^
 
 declare function factory<Out>(): <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R;
 >factory : <Out>() => <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R
+>        : ^   ^^^^^^^                                                                                 
 >callback : Callback<Args, Out, R>
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 >args : Args
+>     : ^^^^
 
 const make = factory<{id: string, age: number}[]>();
 >make : <Args extends any[], R>(callback: Callback<Args, { id: string; age: number; }[], R>) => (...args: Args) => R
+>     : ^    ^^^^^^^^^     ^^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
 >factory<{id: string, age: number}[]>() : <Args extends any[], R>(callback: Callback<Args, { id: string; age: number; }[], R>) => (...args: Args) => R
+>                                       : ^    ^^^^^^^^^     ^^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
 >factory : <Out>() => <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R
+>        : ^   ^^^^^^^                                                                                 
 >id : string
+>   : ^^^^^^
 >age : number
+>    : ^^^^^^
 
 const usersOverAge = make((age: number) => data => {
 >usersOverAge : (age: number) => { id: string; age: number; }[]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^
 >make((age: number) => data => {    return data.filter(user => user.age >= age);}) : (age: number) => { id: string; age: number; }[]
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^
 >make : <Args extends any[], R>(callback: Callback<Args, { id: string; age: number; }[], R>) => (...args: Args) => R
+>     : ^    ^^^^^^^^^     ^^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
 >(age: number) => data => {    return data.filter(user => user.age >= age);} : (age: number) => (data: { id: string; age: number; }[]) => { id: string; age: number; }[]
+>                                                                            : ^   ^^      ^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^
 >age : number
+>    : ^^^^^^
 >data => {    return data.filter(user => user.age >= age);} : (data: { id: string; age: number; }[]) => { id: string; age: number; }[]
+>                                                           : ^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^
 >data : { id: string; age: number; }[]
+>     : ^^^^^^      ^^^^^^^      ^^^^^
 
     return data.filter(user => user.age >= age);
 >data.filter(user => user.age >= age) : { id: string; age: number; }[]
+>                                     : ^^^^^^      ^^^^^^^      ^^^^^
 >data.filter : { <S extends { id: string; age: number; }>(predicate: (value: { id: string; age: number; }, index: number, array: { id: string; age: number; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { id: string; age: number; }, index: number, array: { id: string; age: number; }[]) => unknown, thisArg?: any): { id: string; age: number; }[]; }
+>            : ^^^ ^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^         ^^^     ^^^^^^^^      ^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^      ^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^^
 >data : { id: string; age: number; }[]
+>     : ^^^^^^      ^^^^^^^      ^^^^^
 >filter : { <S extends { id: string; age: number; }>(predicate: (value: { id: string; age: number; }, index: number, array: { id: string; age: number; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { id: string; age: number; }, index: number, array: { id: string; age: number; }[]) => unknown, thisArg?: any): { id: string; age: number; }[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^         ^^^     ^^^^^^^^      ^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^      ^^^^^^^      ^^^^^     ^^      ^^     ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^      ^^^^^^^      ^^^^^^^^
 >user => user.age >= age : (user: { id: string; age: number; }) => boolean
+>                        : ^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^
 >user : { id: string; age: number; }
+>     : ^^^^^^      ^^^^^^^      ^^^
 >user.age >= age : boolean
+>                : ^^^^^^^
 >user.age : number
+>         : ^^^^^^
 >user : { id: string; age: number; }
+>     : ^^^^^^      ^^^^^^^      ^^^
 >age : number
+>    : ^^^^^^
 >age : number
+>    : ^^^^^^
 
 });
 

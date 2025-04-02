@@ -1,17 +1,31 @@
-=== tests/cases/compiler/typeInferenceConflictingCandidates.ts ===
+//// [tests/cases/compiler/typeInferenceConflictingCandidates.ts] ////
+
+=== typeInferenceConflictingCandidates.ts ===
 declare function g<T>(a: T, b: T, c: (t: T) => T): T;
 >g : <T>(a: T, b: T, c: (t: T) => T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^           ^^^^^ 
 >a : T
+>  : ^
 >b : T
+>  : ^
 >c : (t: T) => T
+>  : ^ ^^ ^^^^^ 
 >t : T
+>  : ^
 
 g("", 3, a => a);
 >g("", 3, a => a) : ""
+>                 : ^^
 >g : <T>(a: T, b: T, c: (t: T) => T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^           ^^^^^ 
 >"" : ""
+>   : ^^
 >3 : 3
+>  : ^
 >a => a : (a: "") => ""
+>       : ^ ^^^^^^^^^^^
 >a : ""
+>  : ^^
 >a : ""
+>  : ^^
 

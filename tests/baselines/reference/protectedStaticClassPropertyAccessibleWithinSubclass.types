@@ -1,143 +1,218 @@
-=== tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass.ts] ////
+
+=== protectedStaticClassPropertyAccessibleWithinSubclass.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     protected static x: string;
 >x : string
+>  : ^^^^^^
 
     static staticMethod() {
 >staticMethod : () => void
+>             : ^^^^^^^^^^
 
         Base.x;         // OK, accessed within their declaring class
 >Base.x : string
+>       : ^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived1.x;     // OK, accessed within their declaring class
 >Derived1.x : string
+>           : ^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived2.x;     // OK, accessed within their declaring class
 >Derived2.x : string
+>           : ^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived3.x;     // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
 >Derived3.x : string
+>           : ^^^^^^
 >Derived3 : typeof Derived3
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 class Derived1 extends Base {
 >Derived1 : Derived1
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     static staticMethod1() {
 >staticMethod1 : () => void
+>              : ^^^^^^^^^^
 
         Base.x;         // OK, accessed within a class derived from their declaring class
 >Base.x : string
+>       : ^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived1.x;     // OK, accessed within a class derived from their declaring class
 >Derived1.x : string
+>           : ^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived2.x;     // OK, accessed within a class derived from their declaring class
 >Derived2.x : string
+>           : ^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived3.x;     // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
 >Derived3.x : string
+>           : ^^^^^^
 >Derived3 : typeof Derived3
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 class Derived2 extends Base {
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     static staticMethod2() {
 >staticMethod2 : () => void
+>              : ^^^^^^^^^^
 
         Base.x;         // OK, accessed within a class derived from their declaring class
 >Base.x : string
+>       : ^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived1.x;     // OK, accessed within a class derived from their declaring class
 >Derived1.x : string
+>           : ^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived2.x;     // OK, accessed within a class derived from their declaring class
 >Derived2.x : string
+>           : ^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived3.x;     // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
 >Derived3.x : string
+>           : ^^^^^^
 >Derived3 : typeof Derived3
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 class Derived3 extends Derived1 {
 >Derived3 : Derived3
+>         : ^^^^^^^^
 >Derived1 : Derived1
+>         : ^^^^^^^^
 
     protected static x: string;
 >x : string
+>  : ^^^^^^
 
     static staticMethod3() {
 >staticMethod3 : () => void
+>              : ^^^^^^^^^^
 
         Base.x;         // OK, accessed within a class derived from their declaring class
 >Base.x : string
+>       : ^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived1.x;     // OK, accessed within a class derived from their declaring class
 >Derived1.x : string
+>           : ^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived2.x;     // OK, accessed within a class derived from their declaring class
 >Derived2.x : string
+>           : ^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         Derived3.x;     // OK, accessed within their declaring class
 >Derived3.x : string
+>           : ^^^^^^
 >Derived3 : typeof Derived3
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 
 Base.x;         // Error, neither within their declaring class nor classes derived from their declaring class
 >Base.x : string
+>       : ^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 Derived1.x;     // Error, neither within their declaring class nor classes derived from their declaring class
 >Derived1.x : string
+>           : ^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 Derived2.x;     // Error, neither within their declaring class nor classes derived from their declaring class
 >Derived2.x : string
+>           : ^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 Derived3.x;     // Error, neither within their declaring class nor classes derived from their declaring class
 >Derived3.x : string
+>           : ^^^^^^
 >Derived3 : typeof Derived3
+>         : ^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 

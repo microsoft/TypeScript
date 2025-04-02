@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts] ////
+
 //// [inferTypeConstraintInstantiationCircularity.ts]
 type AMappedType<T> = { [KeyType in keyof T]: number };
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendingOptionalChain.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendingOptionalChain.ts] ////
+
+=== interfaceExtendingOptionalChain.ts ===
 namespace Foo {
 >Foo : Symbol(Foo, Decl(interfaceExtendingOptionalChain.ts, 0, 0))
 

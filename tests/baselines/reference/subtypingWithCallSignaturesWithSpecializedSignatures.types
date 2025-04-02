@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts] ////
+
+=== subtypingWithCallSignaturesWithSpecializedSignatures.ts ===
 // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
 
 module CallSignature {
@@ -6,10 +8,13 @@ module CallSignature {
         // M's
         (x: 'a'): void;
 >x : "a"
+>  : ^^^
 
         (x: string, y: number): void;
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
 
     // S's
@@ -17,22 +22,28 @@ module CallSignature {
         // N's
         (x: 'a'): number; // ok because base returns void
 >x : "a"
+>  : ^^^
 
         (x: string, y: number): number; // ok because base returns void
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
         <T>(x: T): string; // ok because base returns void
 >x : T
+>  : ^
     }
 
     interface Base2 { // T
         // M's
         (x: 'a'): number;
 >x : "a"
+>  : ^^^
 
         (x: string): number;
 >x : string
+>  : ^^^^^^
     }
 
     // S's
@@ -40,9 +51,11 @@ module CallSignature {
         // N's
         (x: 'a'): string;
 >x : "a"
+>  : ^^^
 
         (x: string): string; // error because base returns non-void;
 >x : string
+>  : ^^^^^^
     }
 
     // S's
@@ -50,6 +63,7 @@ module CallSignature {
         // N's
         <T>(x: T): string; // ok, adds a new call signature
 >x : T
+>  : ^
     }
 }
 
@@ -57,28 +71,38 @@ module MemberWithCallSignature {
     interface Base { // T
         // M's
         a: {
->a : { (x: 'a'): void; (x: string): void; }
+>a : { (x: "a"): void; (x: string): void; }
+>  : ^^^ ^^   ^^^    ^^^ ^^      ^^^    ^^^
 
             (x: 'a'): void;
 >x : "a"
+>  : ^^^
 
             (x: string): void;
 >x : string
+>  : ^^^^^^
         }
         a2: {
->a2 : { (x: 'a', y: number): void; (x: string, y: number): void; }
+>a2 : { (x: "a", y: number): void; (x: string, y: number): void; }
+>   : ^^^ ^^   ^^ ^^      ^^^    ^^^ ^^      ^^ ^^      ^^^    ^^^
 
             (x: 'a', y: number): void;
 >x : "a"
+>  : ^^^
 >y : number
+>  : ^^^^^^
 
             (x: string, y: number): void;
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
         }
         a3: <T>(x: T) => void;
 >a3 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^    
 >x : T
+>  : ^
     }
 
     // S's
@@ -86,32 +110,44 @@ module MemberWithCallSignature {
         // N's
         a: (x: string) => number; // ok because base returns void
 >a : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
         a2: (x: string, y: number) => boolean; // ok because base returns void
 >a2 : (x: string, y: number) => boolean
+>   : ^ ^^      ^^ ^^      ^^^^^       
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
         a3: <T>(x: T) => string; // ok because base returns void
 >a3 : <T>(x: T) => string
+>   : ^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
     }
 
     interface Base2 { // T
         // M's
         a: {
->a : { (x: 'a'): number; (x: string): number; }
+>a : { (x: "a"): number; (x: string): number; }
+>  : ^^^ ^^   ^^^      ^^^ ^^      ^^^      ^^^
 
             (x: 'a'): number;
 >x : "a"
+>  : ^^^
 
             (x: string): number;
 >x : string
+>  : ^^^^^^
         }
         a2: <T>(x: T) => T;
 >a2 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
     }
 
     // S's
@@ -119,7 +155,9 @@ module MemberWithCallSignature {
         // N's
         a: (x: string) => string; // error because base returns non-void;
 >a : (x: string) => string
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
     }
 
     // S's
@@ -127,6 +165,8 @@ module MemberWithCallSignature {
         // N's
         a2: <T>(x: T) => string; // error because base returns non-void;
 >a2 : <T>(x: T) => string
+>   : ^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
     }
 }

@@ -1,16 +1,19 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts(44,5): error TS2322: Type 'S' is not assignable to type 'T'.
-  Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 1; b: 2 | 4; }'.
-    Type 'S' is not assignable to type '{ a: 1; b: 2 | 4; }'.
-      Types of property 'a' are incompatible.
-        Type '0 | 2' is not assignable to type '1'.
-          Type '0' is not assignable to type '1'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts(58,5): error TS2322: Type 'S' is not assignable to type 'T'.
+assignmentCompatWithDiscriminatedUnion.ts(44,5): error TS2322: Type 'S' is not assignable to type 'T'.
+  Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; }'.
+    Types of property 'a' are incompatible.
+      Type '0 | 2' is not assignable to type '0'.
+        Type '2' is not assignable to type '0'.
+assignmentCompatWithDiscriminatedUnion.ts(58,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 2; b: 4 | 3; c: string; }'.
     Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not assignable to type 'T'.
+assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not assignable to type 'T'.
+  Type 'S' is not assignable to type '{ a: N; b: N; c: 2; }'.
+    Types of property 'c' are incompatible.
+      Type 'N' is not assignable to type '2'.
+        Type '0' is not assignable to type '2'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts (3 errors) ====
+==== assignmentCompatWithDiscriminatedUnion.ts (3 errors) ====
     // see 'typeRelatedToDiscriminatedType' in checker.ts:
     
     // IteratorResult
@@ -57,11 +60,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         t = s;
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
-!!! error TS2322:   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 1; b: 2 | 4; }'.
-!!! error TS2322:     Type 'S' is not assignable to type '{ a: 1; b: 2 | 4; }'.
-!!! error TS2322:       Types of property 'a' are incompatible.
-!!! error TS2322:         Type '0 | 2' is not assignable to type '1'.
-!!! error TS2322:           Type '0' is not assignable to type '1'.
+!!! error TS2322:   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; }'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type '0 | 2' is not assignable to type '0'.
+!!! error TS2322:         Type '2' is not assignable to type '0'.
     }
     
     // Unmatched non-discriminants
@@ -80,7 +82,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
 !!! error TS2322:   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 2; b: 4 | 3; c: string; }'.
 !!! error TS2322:     Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:36: 'c' is declared here.
+!!! related TS2728 assignmentCompatWithDiscriminatedUnion.ts:52:36: 'c' is declared here.
     }
     
     // Maximum discriminant combinations
@@ -107,6 +109,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         t = s;
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
+!!! error TS2322:   Type 'S' is not assignable to type '{ a: N; b: N; c: 2; }'.
+!!! error TS2322:     Types of property 'c' are incompatible.
+!!! error TS2322:       Type 'N' is not assignable to type '2'.
+!!! error TS2322:         Type '0' is not assignable to type '2'.
     }
     
     // https://github.com/Microsoft/TypeScript/issues/14865
@@ -225,5 +231,29 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         type B = "a" | "b" | "c";
         declare const b: B;
         const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/58603
+    namespace GH58603 {
+        enum MyEnum { A = 1, B = 2 }
+    
+        type TypeA = { kind: MyEnum.A, id?: number };
+        
+        type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
+        
+        type MyType = TypeA | TypeB;
+        
+        function something(a: MyType): void {}
+        
+        function indirect(kind: MyEnum, id?: number): void {
+            something({ kind, id });
+        }
+        
+        type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
+        
+        function test(obj: { kind: "a" | "b", value: number | undefined }) {
+            let x1: Foo = obj;
+            let x2: Foo = { kind: obj.kind, value: obj.value };
+        }
     }
     

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/script-namespaces.ts ===
+//// [tests/cases/compiler/isolatedModulesGlobalNamespacesAndEnums.ts] ////
+
+=== script-namespaces.ts ===
 namespace Instantiated {
 >Instantiated : Symbol(Instantiated, Decl(script-namespaces.ts, 0, 0))
 
@@ -18,7 +20,7 @@ declare namespace Ambient {
 >x : Symbol(x, Decl(script-namespaces.ts, 7, 16))
 }
 
-=== tests/cases/compiler/module-namespaces.ts ===
+=== module-namespaces.ts ===
 export namespace Instantiated {
 >Instantiated : Symbol(Instantiated, Decl(module-namespaces.ts, 0, 0))
 
@@ -26,7 +28,7 @@ export namespace Instantiated {
 >x : Symbol(x, Decl(module-namespaces.ts, 1, 16))
 }
 
-=== tests/cases/compiler/enum1.ts ===
+=== enum1.ts ===
 enum Enum { A, B, C }
 >Enum : Symbol(Enum, Decl(enum1.ts, 0, 0), Decl(enum1.ts, 0, 21), Decl(enum2.ts, 0, 0), Decl(enum2.ts, 5, 1))
 >A : Symbol(Enum.A, Decl(enum1.ts, 0, 11))
@@ -40,7 +42,7 @@ declare enum Enum { X = 1_000_000 }
 const d = 'd';
 >d : Symbol(d, Decl(enum1.ts, 2, 5))
 
-=== tests/cases/compiler/enum2.ts ===
+=== enum2.ts ===
 enum Enum {
 >Enum : Symbol(Enum, Decl(enum1.ts, 0, 0), Decl(enum1.ts, 0, 21), Decl(enum2.ts, 0, 0), Decl(enum2.ts, 5, 1))
 

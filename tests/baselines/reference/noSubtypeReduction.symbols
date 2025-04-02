@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noSubtypeReduction.ts ===
+//// [tests/cases/compiler/noSubtypeReduction.ts] ////
+
+=== noSubtypeReduction.ts ===
 // Repro from #53425
 
 export interface IA {

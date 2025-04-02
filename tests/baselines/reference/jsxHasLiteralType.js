@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxHasLiteralType.tsx] ////
+
 //// [jsxHasLiteralType.tsx]
 import * as React from "react";
 

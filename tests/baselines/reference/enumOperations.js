@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumOperations.ts] ////
+
 //// [enumOperations.ts]
 enum Enum { None = 0 }
 var enumType: Enum = Enum.None;

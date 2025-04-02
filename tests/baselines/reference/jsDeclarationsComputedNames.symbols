@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsComputedNames.ts] ////
+
+=== index.js ===
 const TopLevelSym = Symbol();
 >TopLevelSym : Symbol(TopLevelSym, Decl(index.js, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -35,7 +37,7 @@ module.exports = {
     }
 }
 
-=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+=== index2.js ===
 const TopLevelSym = Symbol();
 >TopLevelSym : Symbol(TopLevelSym, Decl(index2.js, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

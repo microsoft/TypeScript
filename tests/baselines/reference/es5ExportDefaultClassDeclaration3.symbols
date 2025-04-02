@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts ===
+//// [tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts] ////
+
+=== es5ExportDefaultClassDeclaration3.ts ===
 var before: C = new C();
 >before : Symbol(before, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 3))
 >C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 0, 24))

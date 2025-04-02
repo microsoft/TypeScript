@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisIndexOnExistingReadonlyFieldIsNotNever.ts] ////
+
 //// [thisIndexOnExistingReadonlyFieldIsNotNever.ts]
 declare class Component<P, S = {}> {
     readonly props: Readonly<{ children?: unknown }> & Readonly<P>;

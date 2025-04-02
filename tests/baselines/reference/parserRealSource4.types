@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts] ////
+
+=== parserRealSource4.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
@@ -6,392 +8,631 @@
 
 module TypeScript {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 
     export class BlockIntrinsics {
 >BlockIntrinsics : BlockIntrinsics
+>                : ^^^^^^^^^^^^^^^
 
         public prototype = undefined;
 >prototype : any
+>          : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         public toString = undefined;
 >toString : any
+>         : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         public toLocaleString = undefined;
 >toLocaleString : any
+>               : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         public valueOf = undefined;
 >valueOf : any
+>        : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         public hasOwnProperty = undefined;
 >hasOwnProperty : any
+>               : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         public propertyIsEnumerable = undefined;
 >propertyIsEnumerable : any
+>                     : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         public isPrototypeOf = undefined;
 >isPrototypeOf : any
+>              : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         constructor () {
             // initialize the 'constructor' field
             this["constructor"] = undefined;
 >this["constructor"] = undefined : undefined
+>                                : ^^^^^^^^^
 >this["constructor"] : Function
+>                    : ^^^^^^^^
 >this : this
+>     : ^^^^
 >"constructor" : "constructor"
+>              : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
         }
     }
 
     export interface IHashTable {
         getAllKeys(): string[];
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 
         add(key: string, data): boolean;
 >add : (key: string, data: any) => boolean
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
         addOrUpdate(key: string, data): boolean;
 >addOrUpdate : (key: string, data: any) => boolean
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
         map(fn: (k: string, v, c) => void , context): void;
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^    
 >fn : (k: string, v: any, c: any) => void
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
         every(fn: (k: string, v, c) => boolean, context): boolean;
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
         some(fn: (k: string, v, c) => boolean, context): boolean;
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
         count(): number;
 >count : () => number
+>      : ^^^^^^      
 
         lookup(key: string): any;
 >lookup : (key: string) => any
+>       : ^   ^^      ^^^^^   
 >key : string
+>    : ^^^^^^
     }
 
     export class StringHashTable implements IHashTable {
 >StringHashTable : StringHashTable
+>                : ^^^^^^^^^^^^^^^
 
         public itemCount = 0;
 >itemCount : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
         public table = <any>(<any> new BlockIntrinsics());
 >table : any
+>      : ^^^
 ><any>(<any> new BlockIntrinsics()) : any
+>                                   : ^^^
 >(<any> new BlockIntrinsics()) : any
+>                              : ^^^
 ><any> new BlockIntrinsics() : any
+>                            : ^^^
 >new BlockIntrinsics() : BlockIntrinsics
+>                      : ^^^^^^^^^^^^^^^
 >BlockIntrinsics : typeof BlockIntrinsics
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
         public getAllKeys(): string[]{
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 
             var result: string[] = [];
 >result : string[]
+>       : ^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
             for (var k in this.table) {
 >k : string
+>  : ^^^^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 
                 if (this.table[k] != undefined) {
 >this.table[k] != undefined : boolean
+>                           : ^^^^^^^
 >this.table[k] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >k : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                     result[result.length] = k;
 >result[result.length] = k : string
+>                          : ^^^^^^
 >result[result.length] : string
+>                      : ^^^^^^
 >result : string[]
+>       : ^^^^^^^^
 >result.length : number
+>              : ^^^^^^
 >result : string[]
+>       : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >k : string
+>  : ^^^^^^
                 }
             }
             return result;
 >result : string[]
+>       : ^^^^^^^^
         }
 
         public add(key: string, data): boolean {
 >add : (key: string, data: any) => boolean
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
             if (this.table[key] != undefined) {
 >this.table[key] != undefined : boolean
+>                             : ^^^^^^^
 >this.table[key] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >key : string
+>    : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                 return false;
 >false : false
+>      : ^^^^^
             }
             this.table[key] = data;
 >this.table[key] = data : any
+>                       : ^^^
 >this.table[key] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
             this.itemCount++;
 >this.itemCount++ : number
+>                 : ^^^^^^
 >this.itemCount : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >itemCount : number
+>          : ^^^^^^
 
             return true;
 >true : true
+>     : ^^^^
         }
 
         public addOrUpdate(key: string, data): boolean {
 >addOrUpdate : (key: string, data: any) => boolean
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
             if (this.table[key] != undefined) {
 >this.table[key] != undefined : boolean
+>                             : ^^^^^^^
 >this.table[key] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >key : string
+>    : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                 this.table[key] = data;
 >this.table[key] = data : any
+>                       : ^^^
 >this.table[key] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
                 return false;
 >false : false
+>      : ^^^^^
             }
             this.table[key] = data;
 >this.table[key] = data : any
+>                       : ^^^
 >this.table[key] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
             this.itemCount++;
 >this.itemCount++ : number
+>                 : ^^^^^^
 >this.itemCount : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >itemCount : number
+>          : ^^^^^^
 
             return true;
 >true : true
+>     : ^^^^
         }
 
         public map(fn: (k: string, v, c) => void , context) {
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => void
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
             for (var k in this.table) {
 >k : string
+>  : ^^^^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 
                 var data = this.table[k];
 >data : any
+>     : ^^^
 >this.table[k] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >k : string
+>  : ^^^^^^
 
                 if (data != undefined) {
 >data != undefined : boolean
+>                  : ^^^^^^^
 >data : any
+>     : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                     fn(k, this.table[k], context);
 >fn(k, this.table[k], context) : void
+>                              : ^^^^
 >fn : (k: string, v: any, c: any) => void
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >k : string
+>  : ^^^^^^
 >this.table[k] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >k : string
+>  : ^^^^^^
 >context : any
+>        : ^^^
                 }
             }
         }
 
         public every(fn: (k: string, v, c) => boolean, context) {
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
             for (var k in this.table) {
 >k : string
+>  : ^^^^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 
                 var data = this.table[k];
 >data : any
+>     : ^^^
 >this.table[k] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >k : string
+>  : ^^^^^^
 
                 if (data != undefined) {
 >data != undefined : boolean
+>                  : ^^^^^^^
 >data : any
+>     : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                     if (!fn(k, this.table[k], context)) {
 >!fn(k, this.table[k], context) : boolean
+>                               : ^^^^^^^
 >fn(k, this.table[k], context) : boolean
+>                              : ^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >this.table[k] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >k : string
+>  : ^^^^^^
 >context : any
+>        : ^^^
 
                         return false;
 >false : false
+>      : ^^^^^
                     }
                 }
             }
             return true;
 >true : true
+>     : ^^^^
         }
 
         public some(fn: (k: string, v, c) => boolean, context) {
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
             for (var k in this.table) {
 >k : string
+>  : ^^^^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 
                 var data = this.table[k];
 >data : any
+>     : ^^^
 >this.table[k] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >k : string
+>  : ^^^^^^
 
                 if (data != undefined) {
 >data != undefined : boolean
+>                  : ^^^^^^^
 >data : any
+>     : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                     if (fn(k, this.table[k], context)) {
 >fn(k, this.table[k], context) : boolean
+>                              : ^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >this.table[k] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >k : string
+>  : ^^^^^^
 >context : any
+>        : ^^^
 
                         return true;
 >true : true
+>     : ^^^^
                     }
                 }
             }
             return false;
 >false : false
+>      : ^^^^^
         }
 
         public count(): number { return this.itemCount; }
 >count : () => number
+>      : ^^^^^^      
 >this.itemCount : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >itemCount : number
+>          : ^^^^^^
 
         public lookup(key: string) {
 >lookup : (key: string) => any
+>       : ^   ^^      ^^^^^^^^
 >key : string
+>    : ^^^^^^
 
             var data = this.table[key];
 >data : any
+>     : ^^^
 >this.table[key] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >key : string
+>    : ^^^^^^
 
             if (data != undefined) {
 >data != undefined : boolean
+>                  : ^^^^^^^
 >data : any
+>     : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                 return data;
 >data : any
+>     : ^^^
             }
             else {
                 return (null);
 >(null) : null
+>       : ^^^^
             }
         }
     }
@@ -401,712 +642,1198 @@ module TypeScript {
     // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
     export class DualStringHashTable implements IHashTable {
 >DualStringHashTable : DualStringHashTable
+>                    : ^^^^^^^^^^^^^^^^^^^
 
         public insertPrimary = true;
 >insertPrimary : boolean
+>              : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor (public primaryTable: IHashTable,
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 
                                         public secondaryTable: IHashTable) { }
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 
         public getAllKeys(): string[]{
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 
             return this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys());
 >this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys()) : string[]
+>                                                                        : ^^^^^^^^
 >this.primaryTable.getAllKeys().concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
+>                                      : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.primaryTable.getAllKeys() : string[]
+>                               : ^^^^^^^^
 >this.primaryTable.getAllKeys : () => string[]
+>                             : ^^^^^^        
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >getAllKeys : () => string[]
+>           : ^^^^^^        
 >concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.secondaryTable.getAllKeys() : string[]
+>                                 : ^^^^^^^^
 >this.secondaryTable.getAllKeys : () => string[]
+>                               : ^^^^^^        
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >getAllKeys : () => string[]
+>           : ^^^^^^        
         }
 
         public add(key: string, data): boolean {
 >add : (key: string, data: any) => boolean
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
             if (this.insertPrimary) {
 >this.insertPrimary : boolean
+>                   : ^^^^^^^
 >this : this
+>     : ^^^^
 >insertPrimary : boolean
+>              : ^^^^^^^
 
                 return this.primaryTable.add(key, data);
 >this.primaryTable.add(key, data) : boolean
+>                                 : ^^^^^^^
 >this.primaryTable.add : (key: string, data: any) => boolean
+>                      : ^   ^^      ^^    ^^^^^^^^^^       
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >add : (key: string, data: any) => boolean
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
             }
             else {
                 return this.secondaryTable.add(key, data);
 >this.secondaryTable.add(key, data) : boolean
+>                                   : ^^^^^^^
 >this.secondaryTable.add : (key: string, data: any) => boolean
+>                        : ^   ^^      ^^    ^^^^^^^^^^       
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >add : (key: string, data: any) => boolean
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
             }
         }
 
         public addOrUpdate(key: string, data): boolean {
 >addOrUpdate : (key: string, data: any) => boolean
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
 
             if (this.insertPrimary) {
 >this.insertPrimary : boolean
+>                   : ^^^^^^^
 >this : this
+>     : ^^^^
 >insertPrimary : boolean
+>              : ^^^^^^^
 
                 return this.primaryTable.addOrUpdate(key, data);
 >this.primaryTable.addOrUpdate(key, data) : boolean
+>                                         : ^^^^^^^
 >this.primaryTable.addOrUpdate : (key: string, data: any) => boolean
+>                              : ^   ^^      ^^    ^^^^^^^^^^       
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >addOrUpdate : (key: string, data: any) => boolean
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
             }
             else {
                 return this.secondaryTable.addOrUpdate(key, data);
 >this.secondaryTable.addOrUpdate(key, data) : boolean
+>                                           : ^^^^^^^
 >this.secondaryTable.addOrUpdate : (key: string, data: any) => boolean
+>                                : ^   ^^      ^^    ^^^^^^^^^^       
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >addOrUpdate : (key: string, data: any) => boolean
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
+>    : ^^^^^^
 >data : any
+>     : ^^^
             }
         }
 
         public map(fn: (k: string, v, c) => void , context) {
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => void
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
             this.primaryTable.map(fn, context);
 >this.primaryTable.map(fn, context) : void
+>                                   : ^^^^
 >this.primaryTable.map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>                      : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^    
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^    
 >fn : (k: string, v: any, c: any) => void
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >context : any
+>        : ^^^
 
             this.secondaryTable.map(fn, context);
 >this.secondaryTable.map(fn, context) : void
+>                                     : ^^^^
 >this.secondaryTable.map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>                        : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^    
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^    
 >fn : (k: string, v: any, c: any) => void
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >context : any
+>        : ^^^
         }
 
         public every(fn: (k: string, v, c) => boolean, context) {
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
             return this.primaryTable.every(fn, context) && this.secondaryTable.every(fn, context);
 >this.primaryTable.every(fn, context) && this.secondaryTable.every(fn, context) : boolean
+>                                                                               : ^^^^^^^
 >this.primaryTable.every(fn, context) : boolean
+>                                     : ^^^^^^^
 >this.primaryTable.every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>                        : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >context : any
+>        : ^^^
 >this.secondaryTable.every(fn, context) : boolean
+>                                       : ^^^^^^^
 >this.secondaryTable.every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>                          : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >context : any
+>        : ^^^
         }
 
         public some(fn: (k: string, v, c) => boolean, context) {
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
+>  : ^^^^^^
 >v : any
+>  : ^^^
 >c : any
+>  : ^^^
 >context : any
+>        : ^^^
 
             return this.primaryTable.some(fn, context) || this.secondaryTable.some(fn, context);
 >this.primaryTable.some(fn, context) || this.secondaryTable.some(fn, context) : boolean
+>                                                                             : ^^^^^^^
 >this.primaryTable.some(fn, context) : boolean
+>                                    : ^^^^^^^
 >this.primaryTable.some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>                       : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >context : any
+>        : ^^^
 >this.secondaryTable.some(fn, context) : boolean
+>                                      : ^^^^^^^
 >this.secondaryTable.some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>                         : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >context : any
+>        : ^^^
         }
 
         public count() {
 >count : () => number
+>      : ^^^^^^^^^^^^
 
             return this.primaryTable.count() + this.secondaryTable.count();
 >this.primaryTable.count() + this.secondaryTable.count() : number
+>                                                        : ^^^^^^
 >this.primaryTable.count() : number
+>                          : ^^^^^^
 >this.primaryTable.count : () => number
+>                        : ^^^^^^      
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >count : () => number
+>      : ^^^^^^      
 >this.secondaryTable.count() : number
+>                            : ^^^^^^
 >this.secondaryTable.count : () => number
+>                          : ^^^^^^      
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >count : () => number
+>      : ^^^^^^      
         }
 
         public lookup(key: string) {
 >lookup : (key: string) => any
+>       : ^   ^^      ^^^^^^^^
 >key : string
+>    : ^^^^^^
 
             var data = this.primaryTable.lookup(key);
 >data : any
+>     : ^^^
 >this.primaryTable.lookup(key) : any
+>                              : ^^^
 >this.primaryTable.lookup : (key: string) => any
+>                         : ^   ^^      ^^^^^   
 >this.primaryTable : IHashTable
+>                  : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >primaryTable : IHashTable
+>             : ^^^^^^^^^^
 >lookup : (key: string) => any
+>       : ^   ^^      ^^^^^   
 >key : string
+>    : ^^^^^^
 
             if (data != undefined) {
 >data != undefined : boolean
+>                  : ^^^^^^^
 >data : any
+>     : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                 return data;
 >data : any
+>     : ^^^
             }
             else {
                 return this.secondaryTable.lookup(key);
 >this.secondaryTable.lookup(key) : any
+>                                : ^^^
 >this.secondaryTable.lookup : (key: string) => any
+>                           : ^   ^^      ^^^^^   
 >this.secondaryTable : IHashTable
+>                    : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >secondaryTable : IHashTable
+>               : ^^^^^^^^^^
 >lookup : (key: string) => any
+>       : ^   ^^      ^^^^^   
 >key : string
+>    : ^^^^^^
             }
         }
     }
 
     export function numberHashFn(key: number): number {
 >numberHashFn : (key: number) => number
+>             : ^   ^^      ^^^^^      
 >key : number
+>    : ^^^^^^
 
         var c2 = 0x27d4eb2d; // a prime or an odd constant
 >c2 : number
+>   : ^^^^^^
 >0x27d4eb2d : 668265261
+>           : ^^^^^^^^^
 
         key = (key ^ 61) ^ (key >>> 16);
 >key = (key ^ 61) ^ (key >>> 16) : number
+>                                : ^^^^^^
 >key : number
+>    : ^^^^^^
 >(key ^ 61) ^ (key >>> 16) : number
+>                          : ^^^^^^
 >(key ^ 61) : number
+>           : ^^^^^^
 >key ^ 61 : number
+>         : ^^^^^^
 >key : number
+>    : ^^^^^^
 >61 : 61
+>   : ^^
 >(key >>> 16) : number
+>             : ^^^^^^
 >key >>> 16 : number
+>           : ^^^^^^
 >key : number
+>    : ^^^^^^
 >16 : 16
+>   : ^^
 
         key = key + (key << 3);
 >key = key + (key << 3) : number
+>                       : ^^^^^^
 >key : number
+>    : ^^^^^^
 >key + (key << 3) : number
+>                 : ^^^^^^
 >key : number
+>    : ^^^^^^
 >(key << 3) : number
+>           : ^^^^^^
 >key << 3 : number
+>         : ^^^^^^
 >key : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 
         key = key ^ (key >>> 4);
 >key = key ^ (key >>> 4) : number
+>                        : ^^^^^^
 >key : number
+>    : ^^^^^^
 >key ^ (key >>> 4) : number
+>                  : ^^^^^^
 >key : number
+>    : ^^^^^^
 >(key >>> 4) : number
+>            : ^^^^^^
 >key >>> 4 : number
+>          : ^^^^^^
 >key : number
+>    : ^^^^^^
 >4 : 4
+>  : ^
 
         key = key * c2;
 >key = key * c2 : number
+>               : ^^^^^^
 >key : number
+>    : ^^^^^^
 >key * c2 : number
+>         : ^^^^^^
 >key : number
+>    : ^^^^^^
 >c2 : number
+>   : ^^^^^^
 
         key = key ^ (key >>> 15);
 >key = key ^ (key >>> 15) : number
+>                         : ^^^^^^
 >key : number
+>    : ^^^^^^
 >key ^ (key >>> 15) : number
+>                   : ^^^^^^
 >key : number
+>    : ^^^^^^
 >(key >>> 15) : number
+>             : ^^^^^^
 >key >>> 15 : number
+>           : ^^^^^^
 >key : number
+>    : ^^^^^^
 >15 : 15
+>   : ^^
 
         return key;
 >key : number
+>    : ^^^^^^
     }
 
     export function combineHashes(key1: number, key2: number) {
 >combineHashes : (key1: number, key2: number) => number
+>              : ^    ^^      ^^    ^^      ^^^^^^^^^^^
 >key1 : number
+>     : ^^^^^^
 >key2 : number
+>     : ^^^^^^
 
         return key2 ^ ((key1 >> 5) + key1);
 >key2 ^ ((key1 >> 5) + key1) : number
+>                            : ^^^^^^
 >key2 : number
+>     : ^^^^^^
 >((key1 >> 5) + key1) : number
+>                     : ^^^^^^
 >(key1 >> 5) + key1 : number
+>                   : ^^^^^^
 >(key1 >> 5) : number
+>            : ^^^^^^
 >key1 >> 5 : number
+>          : ^^^^^^
 >key1 : number
+>     : ^^^^^^
 >5 : 5
+>  : ^
 >key1 : number
+>     : ^^^^^^
     }
 
     export class HashEntry {
 >HashEntry : HashEntry
+>          : ^^^^^^^^^
 
         public next: HashEntry;
 >next : HashEntry
+>     : ^^^^^^^^^
 
         constructor (public key, public data) { }
 >key : any
+>    : ^^^
 >data : any
+>     : ^^^
     }
 
     export class HashTable {
 >HashTable : HashTable
+>          : ^^^^^^^^^
 
         public itemCount: number = 0;
 >itemCount : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
         public table = new HashEntry[];
 >table : any
+>      : ^^^
 >new HashEntry[] : any
+>                : ^^^
 >HashEntry[] : any
+>            : ^^^
 >HashEntry : typeof HashEntry
+>          : ^^^^^^^^^^^^^^^^
 > : any
+> : ^^^
 
         constructor (public size: number, public hashFn: (key) =>number,
 >size : number
+>     : ^^^^^^
 >hashFn : (key: any) => number
+>       : ^   ^^^^^^^^^^      
 >key : any
+>    : ^^^
 
                     public equalsFn: (key1, key2) =>boolean) {
 >equalsFn : (key1: any, key2: any) => boolean
+>         : ^    ^^^^^^^    ^^^^^^^^^^       
 >key1 : any
+>     : ^^^
 >key2 : any
+>     : ^^^
 
             for (var i: number = 0; i < this.size; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < this.size : boolean
+>              : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
                 this.table[i] = null;
 >this.table[i] = null : null
+>                     : ^^^^
 >this.table[i] : any
+>              : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >i : number
+>  : ^^^^^^
             }
         }
 
         public add(key, data): boolean {
 >add : (key: any, data: any) => boolean
+>    : ^   ^^^^^^^    ^^^^^^^^^^       
 >key : any
+>    : ^^^
 >data : any
+>     : ^^^
 
             var current: HashEntry;
 >current : HashEntry
+>        : ^^^^^^^^^
 
             var entry: HashEntry = new HashEntry(key, data);
 >entry : HashEntry
+>      : ^^^^^^^^^
 >new HashEntry(key, data) : HashEntry
+>                         : ^^^^^^^^^
 >HashEntry : typeof HashEntry
+>          : ^^^^^^^^^^^^^^^^
 >key : any
+>    : ^^^
 >data : any
+>     : ^^^
 
             var val: number = this.hashFn(key);
 >val : number
+>    : ^^^^^^
 >this.hashFn(key) : number
+>                 : ^^^^^^
 >this.hashFn : (key: any) => number
+>            : ^   ^^^^^^^^^^      
 >this : this
+>     : ^^^^
 >hashFn : (key: any) => number
+>       : ^   ^^^^^^^^^^      
 >key : any
+>    : ^^^
 
             val = val % this.size;
 >val = val % this.size : number
+>                      : ^^^^^^
 >val : number
+>    : ^^^^^^
 >val % this.size : number
+>                : ^^^^^^
 >val : number
+>    : ^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
 
             for (current = this.table[val]; current != null ; current = current.next) {
 >current = this.table[val] : any
+>                          : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >this.table[val] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >val : number
+>    : ^^^^^^
 >current != null : boolean
+>                : ^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >current = current.next : HashEntry
+>                       : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >current.next : HashEntry
+>             : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >next : HashEntry
+>     : ^^^^^^^^^
 
                 if (this.equalsFn(key, current.key)) {
 >this.equalsFn(key, current.key) : boolean
+>                                : ^^^^^^^
 >this.equalsFn : (key1: any, key2: any) => boolean
+>              : ^    ^^^^^^^    ^^^^^^^^^^       
 >this : this
+>     : ^^^^
 >equalsFn : (key1: any, key2: any) => boolean
+>         : ^    ^^^^^^^    ^^^^^^^^^^       
 >key : any
+>    : ^^^
 >current.key : any
+>            : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >key : any
+>    : ^^^
 
                     return false;
 >false : false
+>      : ^^^^^
                 }
             }
             entry.next = this.table[val];
 >entry.next = this.table[val] : any
+>                             : ^^^
 >entry.next : HashEntry
+>           : ^^^^^^^^^
 >entry : HashEntry
+>      : ^^^^^^^^^
 >next : HashEntry
+>     : ^^^^^^^^^
 >this.table[val] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >val : number
+>    : ^^^^^^
 
             this.table[val] = entry;
 >this.table[val] = entry : HashEntry
+>                        : ^^^^^^^^^
 >this.table[val] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >val : number
+>    : ^^^^^^
 >entry : HashEntry
+>      : ^^^^^^^^^
 
             this.itemCount++;
 >this.itemCount++ : number
+>                 : ^^^^^^
 >this.itemCount : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >itemCount : number
+>          : ^^^^^^
 
             return true;
 >true : true
+>     : ^^^^
         }
 
         public remove(key) {
 >remove : (key: any) => any
+>       : ^   ^^^^^^^^^^^^^
 >key : any
+>    : ^^^
 
             var current: HashEntry;
 >current : HashEntry
+>        : ^^^^^^^^^
 
             var val: number = this.hashFn(key);
 >val : number
+>    : ^^^^^^
 >this.hashFn(key) : number
+>                 : ^^^^^^
 >this.hashFn : (key: any) => number
+>            : ^   ^^^^^^^^^^      
 >this : this
+>     : ^^^^
 >hashFn : (key: any) => number
+>       : ^   ^^^^^^^^^^      
 >key : any
+>    : ^^^
 
             val = val % this.size;
 >val = val % this.size : number
+>                      : ^^^^^^
 >val : number
+>    : ^^^^^^
 >val % this.size : number
+>                : ^^^^^^
 >val : number
+>    : ^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
 
             var result = null;
 >result : any
+>       : ^^^
 
             var prevEntry: HashEntry = null;
 >prevEntry : HashEntry
+>          : ^^^^^^^^^
 
             for (current = this.table[val]; current != null ; current = current.next) {
 >current = this.table[val] : any
+>                          : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >this.table[val] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >val : number
+>    : ^^^^^^
 >current != null : boolean
+>                : ^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >current = current.next : HashEntry
+>                       : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >current.next : HashEntry
+>             : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >next : HashEntry
+>     : ^^^^^^^^^
 
                 if (this.equalsFn(key, current.key)) {
 >this.equalsFn(key, current.key) : boolean
+>                                : ^^^^^^^
 >this.equalsFn : (key1: any, key2: any) => boolean
+>              : ^    ^^^^^^^    ^^^^^^^^^^       
 >this : this
+>     : ^^^^
 >equalsFn : (key1: any, key2: any) => boolean
+>         : ^    ^^^^^^^    ^^^^^^^^^^       
 >key : any
+>    : ^^^
 >current.key : any
+>            : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >key : any
+>    : ^^^
 
                     result = current.data;
 >result = current.data : any
+>                      : ^^^
 >result : any
+>       : ^^^
 >current.data : any
+>             : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >data : any
+>     : ^^^
 
                     this.itemCount--;
 >this.itemCount-- : number
+>                 : ^^^^^^
 >this.itemCount : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >itemCount : number
+>          : ^^^^^^
 
                     if (prevEntry) {
 >prevEntry : HashEntry
+>          : ^^^^^^^^^
 
                         prevEntry.next = current.next;
 >prevEntry.next = current.next : HashEntry
+>                              : ^^^^^^^^^
 >prevEntry.next : HashEntry
+>               : ^^^^^^^^^
 >prevEntry : HashEntry
+>          : ^^^^^^^^^
 >next : HashEntry
+>     : ^^^^^^^^^
 >current.next : HashEntry
+>             : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >next : HashEntry
+>     : ^^^^^^^^^
                     }
                     else {
                         this.table[val] = current.next;
 >this.table[val] = current.next : HashEntry
+>                               : ^^^^^^^^^
 >this.table[val] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >val : number
+>    : ^^^^^^
 >current.next : HashEntry
+>             : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >next : HashEntry
+>     : ^^^^^^^^^
                     }
                     break;
                 }
                 prevEntry = current;
 >prevEntry = current : HashEntry
+>                    : ^^^^^^^^^
 >prevEntry : HashEntry
+>          : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
             }
             return result;
 >result : any
+>       : ^^^
         }
 
         public count(): number { return this.itemCount; }
 >count : () => number
+>      : ^^^^^^      
 >this.itemCount : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >itemCount : number
+>          : ^^^^^^
 
         public lookup(key) {
 >lookup : (key: any) => any
+>       : ^   ^^^^^^^^^^^^^
 >key : any
+>    : ^^^
 
             var current: HashEntry;
 >current : HashEntry
+>        : ^^^^^^^^^
 
             var val: number = this.hashFn(key);
 >val : number
+>    : ^^^^^^
 >this.hashFn(key) : number
+>                 : ^^^^^^
 >this.hashFn : (key: any) => number
+>            : ^   ^^^^^^^^^^      
 >this : this
+>     : ^^^^
 >hashFn : (key: any) => number
+>       : ^   ^^^^^^^^^^      
 >key : any
+>    : ^^^
 
             val = val % this.size;
 >val = val % this.size : number
+>                      : ^^^^^^
 >val : number
+>    : ^^^^^^
 >val % this.size : number
+>                : ^^^^^^
 >val : number
+>    : ^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
 
             for (current = this.table[val]; current != null ; current = current.next) {
 >current = this.table[val] : any
+>                          : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >this.table[val] : any
+>                : ^^^
 >this.table : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >table : any
+>      : ^^^
 >val : number
+>    : ^^^^^^
 >current != null : boolean
+>                : ^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >current = current.next : HashEntry
+>                       : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >current.next : HashEntry
+>             : ^^^^^^^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >next : HashEntry
+>     : ^^^^^^^^^
 
                 if (this.equalsFn(key, current.key)) {
 >this.equalsFn(key, current.key) : boolean
+>                                : ^^^^^^^
 >this.equalsFn : (key1: any, key2: any) => boolean
+>              : ^    ^^^^^^^    ^^^^^^^^^^       
 >this : this
+>     : ^^^^
 >equalsFn : (key1: any, key2: any) => boolean
+>         : ^    ^^^^^^^    ^^^^^^^^^^       
 >key : any
+>    : ^^^
 >current.key : any
+>            : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >key : any
+>    : ^^^
 
                     return (current.data);
 >(current.data) : any
+>               : ^^^
 >current.data : any
+>             : ^^^
 >current : HashEntry
+>        : ^^^^^^^^^
 >data : any
+>     : ^^^
                 }
             }
             return (null);
 >(null) : null
+>       : ^^^^
         }
     }
 
     // Simple Hash table with list of keys and values matching each other at the given index
     export class SimpleHashTable {
 >SimpleHashTable : SimpleHashTable
+>                : ^^^^^^^^^^^^^^^
 
         private keys = [];
 >keys : any[]
+>     : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         private values = [];
 >values : any[]
+>       : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         public lookup(key, findValue?: boolean) {
 >lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
+>       : ^   ^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : any
+>    : ^^^
 >findValue : boolean
+>          : ^^^^^^^
 
             var searchArray = this.keys;
 >searchArray : any[]
+>            : ^^^^^
 >this.keys : any[]
+>          : ^^^^^
 >this : this
+>     : ^^^^
 >keys : any[]
+>     : ^^^^^
 
             if (findValue) {
 >findValue : boolean
+>          : ^^^^^^^
 
                 searchArray = this.values;
 >searchArray = this.values : any[]
+>                          : ^^^^^
 >searchArray : any[]
+>            : ^^^^^
 >this.values : any[]
+>            : ^^^^^
 >this : this
+>     : ^^^^
 >values : any[]
+>       : ^^^^^
             }
 
             for (var i = 0; i < searchArray.length; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < searchArray.length : boolean
+>                       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >searchArray.length : number
+>                   : ^^^^^^
 >searchArray : any[]
+>            : ^^^^^
 >length : number
+>       : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
                 if (searchArray[i] == key) {
 >searchArray[i] == key : boolean
+>                      : ^^^^^^^
 >searchArray[i] : any
+>               : ^^^
 >searchArray : any[]
+>            : ^^^^^
 >i : number
+>  : ^^^^^^
 >key : any
+>    : ^^^
 
                     return {
 >{                        key: this.keys[i],                        data: this.values[i],                    } : { key: any; data: any; }
+>                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
                         key: this.keys[i],
 >key : any
+>    : ^^^
 >this.keys[i] : any
+>             : ^^^
 >this.keys : any[]
+>          : ^^^^^
 >this : this
+>     : ^^^^
 >keys : any[]
+>     : ^^^^^
 >i : number
+>  : ^^^^^^
 
                         data: this.values[i],
 >data : any
+>     : ^^^
 >this.values[i] : any
+>               : ^^^
 >this.values : any[]
+>            : ^^^^^
 >this : this
+>     : ^^^^
 >values : any[]
+>       : ^^^^^
 >i : number
+>  : ^^^^^^
 
                     };
                 }
@@ -1116,52 +1843,86 @@ module TypeScript {
 
         public add(key, data): boolean {
 >add : (key: any, data: any) => boolean
+>    : ^   ^^^^^^^    ^^^^^^^^^^       
 >key : any
+>    : ^^^
 >data : any
+>     : ^^^
 
             var lookupData = this.lookup(key);
 >lookupData : { key: any; data: any; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.lookup(key) : { key: any; data: any; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
+>            : ^   ^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
+>       : ^   ^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : any
+>    : ^^^
 
             if (lookupData) {
 >lookupData : { key: any; data: any; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
                 return false;
 >false : false
+>      : ^^^^^
             }
 
             this.keys[this.keys.length] = key;
 >this.keys[this.keys.length] = key : any
+>                                  : ^^^
 >this.keys[this.keys.length] : any
+>                            : ^^^
 >this.keys : any[]
+>          : ^^^^^
 >this : this
+>     : ^^^^
 >keys : any[]
+>     : ^^^^^
 >this.keys.length : number
+>                 : ^^^^^^
 >this.keys : any[]
+>          : ^^^^^
 >this : this
+>     : ^^^^
 >keys : any[]
+>     : ^^^^^
 >length : number
+>       : ^^^^^^
 >key : any
+>    : ^^^
 
             this.values[this.values.length] = data;
 >this.values[this.values.length] = data : any
+>                                       : ^^^
 >this.values[this.values.length] : any
+>                                : ^^^
 >this.values : any[]
+>            : ^^^^^
 >this : this
+>     : ^^^^
 >values : any[]
+>       : ^^^^^
 >this.values.length : number
+>                   : ^^^^^^
 >this.values : any[]
+>            : ^^^^^
 >this : this
+>     : ^^^^
 >values : any[]
+>       : ^^^^^
 >length : number
+>       : ^^^^^^
 >data : any
+>     : ^^^
 
             return true;
 >true : true
+>     : ^^^^
         }
     }
 

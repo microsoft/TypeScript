@@ -1,4 +1,7 @@
-=== tests/cases/compiler/unterminatedStringLiteralWithBackslash1.ts ===
+//// [tests/cases/compiler/unterminatedStringLiteralWithBackslash1.ts] ////
+
+=== unterminatedStringLiteralWithBackslash1.ts ===
 "\
 >"\ : ""
+>   : ^^
 

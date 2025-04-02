@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/jsxParsingError2.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
@@ -13,38 +15,38 @@ declare module JSX {
 	}
 }
 
-=== tests/cases/conformance/jsx/Error1.tsx ===
+=== Error1.tsx ===
 // Issue error about missing span closing tag, not missing div closing tag
 let x1 = <div><span></div>;
 >x1 : Symbol(x1, Decl(Error1.tsx, 1, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->span : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
-=== tests/cases/conformance/jsx/Error2.tsx ===
+=== Error2.tsx ===
 let x2 = <div></span>;
 >x2 : Symbol(x2, Decl(Error2.tsx, 0, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->span : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 
-=== tests/cases/conformance/jsx/Error3.tsx ===
+=== Error3.tsx ===
 let x3 = <div>;
 >x3 : Symbol(x3, Decl(Error3.tsx, 0, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 
-=== tests/cases/conformance/jsx/Error4.tsx ===
+=== Error4.tsx ===
 let x4 = <div><div></span>;
 >x4 : Symbol(x4, Decl(Error4.tsx, 0, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->span : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
-=== tests/cases/conformance/jsx/Error5.tsx ===
+=== Error5.tsx ===
 let x5 = <div><span>
 >x5 : Symbol(x5, Decl(Error5.tsx, 0, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->span : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>span : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 

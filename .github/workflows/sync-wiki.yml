@@ -5,20 +5,26 @@ on: [gollum]
 permissions:
   contents: read
 
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-    - name: Get repo name
-      run: R=${GITHUB_REPOSITORY%?wiki}; echo "BASENAME=${R##*/}" >> $GITHUB_ENV
-    - name: Checkout ${{ env.BASENAME }}-wiki
-      uses: actions/checkout@v3
-      with:
-        repository: "${{ GITHUB.repository_owner }}/${{ env.BASENAME }}-wiki"
-        token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-        fetch-depth: 0
-    - name: Run sync
-      run: ./.github/workflows/sync
-      env:
-        PUSHER: typescript-bot <bot@typescriptlang.org>
-        AUTH: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      - name: Get repo name
+        run: R=${GITHUB_REPOSITORY%?wiki}; echo "BASENAME=${R##*/}" >> $GITHUB_ENV
+      - name: Checkout ${{ env.BASENAME }}-wiki
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: '${{ GITHUB.repository_owner }}/${{ env.BASENAME }}-wiki'
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          fetch-depth: 0
+      - name: Run sync
+        run: ./.github/workflows/sync
+        env:
+          PUSHER: typescript-bot <bot@typescriptlang.org>
+          AUTH: ${{ secrets.TS_BOT_GITHUB_TOKEN }}

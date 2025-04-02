@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithIntersectionTypes01.ts] ////
+
+=== equalityWithIntersectionTypes01.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(equalityWithIntersectionTypes01.ts, 0, 0))
 

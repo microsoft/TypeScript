@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts ===
+//// [tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts] ////
+
+=== deepElaborationsIntoArrowExpressions.ts ===
 const a: {
 >a : Symbol(a, Decl(deepElaborationsIntoArrowExpressions.ts, 0, 5))
 

@@ -1,12 +1,21 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesAmbientConstEnum.ts] ////
+
+=== file1.ts ===
 declare const enum E { X = 1}
 >E : E
+>  : ^
 >X : E.X
+>  : ^^^
 >1 : 1
+>  : ^
 
 export var y = E.X;
 >y : E
+>  : ^
 >E.X : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >X : E
+>  : ^
 

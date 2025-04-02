@@ -1,10 +1,17 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts] ////
+
+=== parserES5SymbolProperty9.ts ===
 var x: {
->x : {}
+>x : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.toPrimitive]: string
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : any
+>                   : ^^^
 >Symbol : any
+>       : ^^^
 >toPrimitive : any
+>            : ^^^
 }

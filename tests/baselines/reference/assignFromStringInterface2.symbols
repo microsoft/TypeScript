@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts ===
+//// [tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts] ////
+
+=== assignFromStringInterface2.ts ===
 interface String {
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
 

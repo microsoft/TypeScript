@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/optionalTupleElements1.ts ===
+//// [tests/cases/conformance/types/tuple/optionalTupleElements1.ts] ////
+
+=== optionalTupleElements1.ts ===
 type T1 = [number, string, boolean];
 >T1 : Symbol(T1, Decl(optionalTupleElements1.ts, 0, 0))
 

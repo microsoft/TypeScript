@@ -1,57 +1,57 @@
-tests/cases/compiler/divergentAccessorsVisibility1.ts(11,19): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(12,9): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(20,17): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(21,9): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(23,17): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(24,19): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(66,14): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(69,14): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(72,14): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(80,19): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(81,19): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(82,19): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(86,14): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(89,14): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(92,14): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(99,10): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(100,10): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(102,10): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(103,10): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(105,10): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(106,10): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(111,15): error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(112,15): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(113,15): error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(114,15): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(115,15): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(116,15): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(119,10): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(120,10): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(122,10): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(123,10): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(125,10): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(126,10): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(129,11): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(130,11): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(132,11): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(133,11): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(135,11): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(136,11): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(141,16): error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(142,16): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(143,16): error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(144,16): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(145,16): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(146,16): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(149,11): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(150,11): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(152,11): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(153,11): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(155,11): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
-tests/cases/compiler/divergentAccessorsVisibility1.ts(156,11): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(11,19): error TS2808: A get accessor must be at least as accessible as the setter
+divergentAccessorsVisibility1.ts(12,9): error TS2808: A get accessor must be at least as accessible as the setter
+divergentAccessorsVisibility1.ts(20,17): error TS2808: A get accessor must be at least as accessible as the setter
+divergentAccessorsVisibility1.ts(21,9): error TS2808: A get accessor must be at least as accessible as the setter
+divergentAccessorsVisibility1.ts(23,17): error TS2808: A get accessor must be at least as accessible as the setter
+divergentAccessorsVisibility1.ts(24,19): error TS2808: A get accessor must be at least as accessible as the setter
+divergentAccessorsVisibility1.ts(66,14): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(69,14): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(72,14): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(80,19): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(81,19): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(82,19): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(86,14): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(89,14): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(92,14): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(99,10): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(100,10): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(102,10): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(103,10): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(105,10): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(106,10): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(111,15): error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(112,15): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(113,15): error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(114,15): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(115,15): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(116,15): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(119,10): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(120,10): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(122,10): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(123,10): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(125,10): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(126,10): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(129,11): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(130,11): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(132,11): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(133,11): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(135,11): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(136,11): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(141,16): error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(142,16): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(143,16): error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(144,16): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(145,16): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(146,16): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(149,11): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(150,11): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(152,11): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(153,11): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+divergentAccessorsVisibility1.ts(155,11): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+divergentAccessorsVisibility1.ts(156,11): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
 
 
-==== tests/cases/compiler/divergentAccessorsVisibility1.ts (51 errors) ====
+==== divergentAccessorsVisibility1.ts (51 errors) ====
     class Base {
         get PublicPublic() { return 0; }
         set PublicPublic(v) { return; }

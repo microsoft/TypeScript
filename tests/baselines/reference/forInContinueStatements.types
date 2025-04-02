@@ -1,92 +1,132 @@
-=== tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts ===
+//// [tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts] ////
+
+=== forInContinueStatements.ts ===
 for(var x in {}) {
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
     continue;
 }
 
 ONE:
 >ONE : any
+>    : ^^^
 
 for(var x in {}) {
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
     continue ONE;
 >ONE : any
+>    : ^^^
 }
 
 TWO:
 >TWO : any
+>    : ^^^
 
 THREE:
 >THREE : any
+>      : ^^^
 
 for(var x in {}) {
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
     continue THREE;
 >THREE : any
+>      : ^^^
 }
 
 FOUR:
 >FOUR : any
+>     : ^^^
 
 for(var x in {}) {
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
     FIVE:
 >FIVE : any
+>     : ^^^
 
     for(var x in {}) {
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
         continue FOUR;
 >FOUR : any
+>     : ^^^
     }
 }
 
 for(var x in {}) {
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
     SIX:
 >SIX : any
+>    : ^^^
 
     for(var x in {}) continue SIX;
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 >SIX : any
+>    : ^^^
 }
 
 SEVEN:
 >SEVEN : any
+>      : ^^^
 
 for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 >SEVEN : any
+>      : ^^^
 
 EIGHT:
 >EIGHT : any
+>      : ^^^
 
 for (var x in {}){
 >x : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
     var fn = function () { }
 >fn : () => void
+>   : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
     continue EIGHT;
 >EIGHT : any
+>      : ^^^
 }
 

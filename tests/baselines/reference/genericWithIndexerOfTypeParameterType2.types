@@ -1,28 +1,40 @@
-=== tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts ===
+//// [tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts] ////
+
+=== genericWithIndexerOfTypeParameterType2.ts ===
 export class Collection<TItem extends CollectionItem> {
 >Collection : Collection<TItem>
+>           : ^^^^^^^^^^^^^^^^^
 
     _itemsByKey: { [key: string]: TItem; };
 >_itemsByKey : { [key: string]: TItem; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 }
 
 export class List extends Collection<ListItem>{
 >List : List
+>     : ^^^^
 >Collection : Collection<ListItem>
+>           : ^^^^^^^^^^^^^^^^^^^^
 
     Bar() {}
 >Bar : () => void
+>    : ^^^^^^^^^^
 }
 
 export class CollectionItem {}
 >CollectionItem : CollectionItem
+>               : ^^^^^^^^^^^^^^
 
 export class ListItem extends CollectionItem {
 >ListItem : ListItem
+>         : ^^^^^^^^
 >CollectionItem : CollectionItem
+>               : ^^^^^^^^^^^^^^
 
     __isNew: boolean;
 >__isNew : boolean
+>        : ^^^^^^^
 }
 

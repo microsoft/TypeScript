@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionInExtends7.ts] ////
+
 //// [declarationEmitExpressionInExtends7.ts]
 export default class extends SomeUndefinedFunction {}
 
@@ -28,3 +30,8 @@ var default_1 = /** @class */ (function (_super) {
     return default_1;
 }(SomeUndefinedFunction));
 exports.default = default_1;
+
+
+//// [declarationEmitExpressionInExtends7.d.ts]
+export default class extends SomeUndefinedFunction {
+}

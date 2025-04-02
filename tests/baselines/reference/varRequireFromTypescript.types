@@ -1,23 +1,37 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/varRequireFromTypescript.ts] ////
+
+=== use.js ===
 var ex = require('./ex')
 >ex : typeof ex
+>   : ^^^^^^^^^
 >require('./ex') : typeof ex
+>                : ^^^^^^^^^
 >require : any
 >'./ex' : "./ex"
+>       : ^^^^^^
 
 // values work
 var crunch = new ex.Crunch(1);
 >crunch : ex.Crunch
+>       : ^^^^^^^^^
 >new ex.Crunch(1) : ex.Crunch
+>                 : ^^^^^^^^^
 >ex.Crunch : typeof ex.Crunch
+>          : ^^^^^^^^^^^^^^^^
 >ex : typeof ex
+>   : ^^^^^^^^^
 >Crunch : typeof ex.Crunch
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 crunch.n
 >crunch.n : number
+>         : ^^^^^^
 >crunch : ex.Crunch
+>       : ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 
 // types work
@@ -27,35 +41,50 @@ crunch.n
  */
 function f(greatest, wrap) {
 >f : (greatest: ex.Greatest, wrap: ex.Crunch) => void
+>  : ^        ^^           ^^    ^^         ^^^^^^^^^
 >greatest : ex.Greatest
+>         : ^^^^^^^^^^^
 >wrap : ex.Crunch
+>     : ^^^^^^^^^
 
     greatest.day
 >greatest.day : 1
+>             : ^
 >greatest : ex.Greatest
+>         : ^^^^^^^^^^^
 >day : 1
+>    : ^
 
     wrap.n
 >wrap.n : number
+>       : ^^^^^^
 >wrap : ex.Crunch
+>     : ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 }
 
-=== tests/cases/conformance/salsa/ex.d.ts ===
+=== ex.d.ts ===
 export type Greatest = { day: 1 }
->Greatest : { day: 1; }
+>Greatest : Greatest
+>         : ^^^^^^^^
 >day : 1
+>    : ^
 
 export class Crunch {
 >Crunch : Crunch
+>       : ^^^^^^
 
     n: number
 >n : number
+>  : ^^^^^^
 
     m(): number
 >m : () => number
+>  : ^^^^^^      
 
     constructor(n: number)
 >n : number
+>  : ^^^^^^
 }
 

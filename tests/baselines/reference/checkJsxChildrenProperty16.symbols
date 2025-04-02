@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/checkJsxChildrenProperty16.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty16.tsx] ////
+
+=== checkJsxChildrenProperty16.tsx ===
 /// <reference path="react16.d.ts" />
 
 // repro from #53493

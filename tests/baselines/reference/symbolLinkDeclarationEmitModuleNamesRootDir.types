@@ -1,47 +1,65 @@
-=== tests/cases/compiler/monorepo/context/src/value-promise.d.ts ===
-export type Constructor<T> = (...args: any[]) => T;
->Constructor : Constructor<T>
->args : any[]
+//// [tests/cases/compiler/symbolLinkDeclarationEmitModuleNamesRootDir.ts] ////
 
-=== tests/cases/compiler/monorepo/context/src/bindingkey.d.ts ===
-import { Constructor } from "./value-promise"
->Constructor : any
-
-export declare class BindingKey<T> {
->BindingKey : BindingKey<T>
-
-  readonly __type: T;
->__type : T
-
-  static create<T extends Constructor<any>>(ctor: T): BindingKey<T>;
->create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
->ctor : T
-}
-
-=== tests/cases/compiler/monorepo/context/index.d.ts ===
-
-export * from "./src/value-promise";
-export * from "./src/bindingkey";
-
-=== tests/cases/compiler/monorepo/core/src/application.ts ===
+=== /monorepo/core/src/application.ts ===
 import { Constructor } from "@loopback/context";
 >Constructor : any
+>            : ^^^
 
 export type ControllerClass = Constructor<any>;
->ControllerClass : (...args: any[]) => any
+>ControllerClass : ControllerClass
+>                : ^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/monorepo/core/src/usage.ts ===
+=== /monorepo/core/src/usage.ts ===
 import { ControllerClass } from './application';
 >ControllerClass : any
+>                : ^^^
 
 import { BindingKey } from '@loopback/context';
 >BindingKey : typeof BindingKey
+>           : ^^^^^^^^^^^^^^^^^
 
 export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
 >CONTROLLER_CLASS : BindingKey<ControllerClass>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BindingKey.create<ControllerClass>(null as any) : BindingKey<ControllerClass>
->BindingKey.create : <T extends import("tests/cases/compiler/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BindingKey.create : <T extends import("/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
+>                  : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^     ^^    ^^ ^^^^^             
 >BindingKey : typeof BindingKey
->create : <T extends import("tests/cases/compiler/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
+>           : ^^^^^^^^^^^^^^^^^
+>create : <T extends import("/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
+>       : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^     ^^    ^^ ^^^^^             
 >null as any : any
+
+=== /monorepo/context/src/value-promise.d.ts ===
+export type Constructor<T> = (...args: any[]) => T;
+>Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+
+=== /monorepo/context/src/bindingkey.d.ts ===
+import { Constructor } from "./value-promise"
+>Constructor : any
+>            : ^^^
+
+export declare class BindingKey<T> {
+>BindingKey : BindingKey<T>
+>           : ^^^^^^^^^^^^^
+
+  readonly __type: T;
+>__type : T
+>       : ^
+
+  static create<T extends Constructor<any>>(ctor: T): BindingKey<T>;
+>create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
+>       : ^ ^^^^^^^^^                ^^    ^^ ^^^^^             
+>ctor : T
+>     : ^
+}
+
+=== /monorepo/context/index.d.ts ===
+
+export * from "./src/value-promise";
+export * from "./src/bindingkey";
 

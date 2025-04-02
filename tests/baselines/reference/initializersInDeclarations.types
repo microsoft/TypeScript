@@ -1,41 +1,59 @@
-=== tests/cases/conformance/externalModules/file1.d.ts ===
+//// [tests/cases/conformance/externalModules/initializersInDeclarations.ts] ////
+
+=== file1.d.ts ===
 // Errors: Initializers & statements in declaration file
 
 declare class Foo {
 >Foo : Foo
+>    : ^^^
 
 	name = "test";
 >name : string
+>     : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
 	"some prop" = 42;
 >"some prop" : number
+>            : ^^^^^^
 >42 : 42
+>   : ^^
 
 	fn(): boolean {
 >fn : () => boolean
+>   : ^^^^^^       
 
 		return false;
 >false : false
+>      : ^^^^^
 	}
 }
 
 declare var x = [];
 >x : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 declare var y = {};
 >y : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 declare module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
 	while(true);
 >true : true
+>     : ^^^^
 
 	export var v1 = () => false;
 >v1 : () => boolean
+>   : ^^^^^^^^^^^^^
 >() => false : () => boolean
+>            : ^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 }

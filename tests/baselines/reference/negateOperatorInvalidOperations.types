@@ -1,39 +1,64 @@
-=== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts] ////
+
+=== negateOperatorInvalidOperations.ts ===
 // Unary operator -
 
 // operand before -
 var NUMBER1 = var NUMBER-;  //expect error
 >NUMBER1 : any
+>        : ^^^
 > : any
+> : ^^^
 >NUMBER : any
+>       : ^^^
 >- : number
+>  : ^^^^^^
 > : any
+> : ^^^
 
 // invalid expressions
 var NUMBER2 = -(null - undefined);
 >NUMBER2 : number
+>        : ^^^^^^
 >-(null - undefined) : number
+>                    : ^^^^^^
 >(null - undefined) : number
+>                   : ^^^^^^
 >null - undefined : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var NUMBER3 = -(null - null);
 >NUMBER3 : number
+>        : ^^^^^^
 >-(null - null) : number
+>               : ^^^^^^
 >(null - null) : number
+>              : ^^^^^^
 >null - null : number
+>            : ^^^^^^
 
 var NUMBER4 = -(undefined - undefined);
 >NUMBER4 : number
+>        : ^^^^^^
 >-(undefined - undefined) : number
+>                         : ^^^^^^
 >(undefined - undefined) : number
+>                        : ^^^^^^
 >undefined - undefined : number
+>                      : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // miss operand
 var NUMBER =-;
 >NUMBER : any
+>       : ^^^
 >- : number
+>  : ^^^^^^
 > : any
+> : ^^^
 

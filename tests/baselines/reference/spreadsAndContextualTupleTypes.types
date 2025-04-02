@@ -1,239 +1,423 @@
-=== tests/cases/compiler/spreadsAndContextualTupleTypes.ts ===
+//// [tests/cases/compiler/spreadsAndContextualTupleTypes.ts] ////
+
+=== spreadsAndContextualTupleTypes.ts ===
 declare function fx1<T extends [string, string, string, 'a' | 'b']>(x: T): T;
 >fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
+>    : ^ ^^^^^^^^^                                   ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 declare function fx2<T extends [...string[], 'a' | 'b']>(x: T): T;
 >fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
+>    : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 const t3 = ['x', 'y', 'z'] as const;
 >t3 : readonly ["x", "y", "z"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >['x', 'y', 'z'] as const : readonly ["x", "y", "z"]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >['x', 'y', 'z'] : readonly ["x", "y", "z"]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'x' : "x"
+>    : ^^^
 >'y' : "y"
+>    : ^^^
 >'z' : "z"
+>    : ^^^
 
 fx1(['x', 'y', 'z', 'a']);
 >fx1(['x', 'y', 'z', 'a']) : [string, string, string, "a"]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
+>    : ^ ^^^^^^^^^                                   ^^ ^^ ^^^^^ 
 >['x', 'y', 'z', 'a'] : [string, string, string, "a"]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'x' : "x"
+>    : ^^^
 >'y' : "y"
+>    : ^^^
 >'z' : "z"
+>    : ^^^
 >'a' : "a"
+>    : ^^^
 
 fx1([...t3, 'a']);
 >fx1([...t3, 'a']) : ["x", "y", "z", "a"]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
+>    : ^ ^^^^^^^^^                                   ^^ ^^ ^^^^^ 
 >[...t3, 'a'] : ["x", "y", "z", "a"]
+>             : ^^^^^^^^^^^^^^^^^^^^
 >...t3 : "x" | "y" | "z"
+>      : ^^^^^^^^^^^^^^^
 >t3 : readonly ["x", "y", "z"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
 fx2(['x', 'y', 'z', 'a']);
 >fx2(['x', 'y', 'z', 'a']) : [string, string, string, "a"]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
+>    : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >['x', 'y', 'z', 'a'] : [string, string, string, "a"]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'x' : "x"
+>    : ^^^
 >'y' : "y"
+>    : ^^^
 >'z' : "z"
+>    : ^^^
 >'a' : "a"
+>    : ^^^
 
 fx2([...t3, 'a']);
 >fx2([...t3, 'a']) : ["x", "y", "z", "a"]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
+>    : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >[...t3, 'a'] : ["x", "y", "z", "a"]
+>             : ^^^^^^^^^^^^^^^^^^^^
 >...t3 : "x" | "y" | "z"
+>      : ^^^^^^^^^^^^^^^
 >t3 : readonly ["x", "y", "z"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
 const x1: [...string[], '!'] = ['!'];
 >x1 : [...string[], "!"]
+>   : ^^^^^^^^^^^^^^^^^^
 >['!'] : ["!"]
+>      : ^^^^^
 >'!' : "!"
+>    : ^^^
 
 const x2: [...string[], '!'] = ['a', '!'];
 >x2 : [...string[], "!"]
+>   : ^^^^^^^^^^^^^^^^^^
 >['a', '!'] : [string, "!"]
+>           : ^^^^^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 >'!' : "!"
+>    : ^^^
 
 const x3: [...string[], '!'] = [...t3, '!'];
 >x3 : [...string[], "!"]
+>   : ^^^^^^^^^^^^^^^^^^
 >[...t3, '!'] : ["x", "y", "z", "!"]
+>             : ^^^^^^^^^^^^^^^^^^^^
 >...t3 : "x" | "y" | "z"
+>      : ^^^^^^^^^^^^^^^
 >t3 : readonly ["x", "y", "z"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'!' : "!"
+>    : ^^^
 
 // Repro from #52684
 
 const staticPath1Level = ["home"] as const;
 >staticPath1Level : readonly ["home"]
+>                 : ^^^^^^^^^^^^^^^^^
 >["home"] as const : readonly ["home"]
+>                  : ^^^^^^^^^^^^^^^^^
 >["home"] : readonly ["home"]
+>         : ^^^^^^^^^^^^^^^^^
 >"home" : "home"
+>       : ^^^^^^
 
 const staticPath2Level = ["home", "user"] as const;
 >staticPath2Level : readonly ["home", "user"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >["home", "user"] as const : readonly ["home", "user"]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >["home", "user"] : readonly ["home", "user"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"home" : "home"
+>       : ^^^^^^
 >"user" : "user"
+>       : ^^^^^^
 
 const staticPath3Level = ["home", "user", "downloads"] as const;
 >staticPath3Level : readonly ["home", "user", "downloads"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["home", "user", "downloads"] as const : readonly ["home", "user", "downloads"]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["home", "user", "downloads"] : readonly ["home", "user", "downloads"]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"home" : "home"
+>       : ^^^^^^
 >"user" : "user"
+>       : ^^^^^^
 >"downloads" : "downloads"
+>            : ^^^^^^^^^^^
 
 const randomID = 'id' as string;
 >randomID : string
+>         : ^^^^^^
 >'id' as string : string
+>               : ^^^^^^
 >'id' : "id"
+>     : ^^^^
 
 declare function foo<const T>(path: T): T;
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >path : T
+>     : ^
 
 const a1 = foo([...staticPath1Level, randomID, 'doc.pdf']);
 >a1 : readonly ["home", string, "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath1Level, randomID, 'doc.pdf']) : readonly ["home", string, "doc.pdf"]
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath1Level, randomID, 'doc.pdf'] : ["home", string, "doc.pdf"]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath1Level : "home"
+>                    : ^^^^^^
 >staticPath1Level : readonly ["home"]
+>                 : ^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const a2 = foo([...staticPath2Level, randomID, 'doc.pdf']);
 >a2 : readonly ["home", "user", string, "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath2Level, randomID, 'doc.pdf']) : readonly ["home", "user", string, "doc.pdf"]
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath2Level, randomID, 'doc.pdf'] : ["home", "user", string, "doc.pdf"]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath2Level : "home" | "user"
+>                    : ^^^^^^^^^^^^^^^
 >staticPath2Level : readonly ["home", "user"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const a3 = foo([...staticPath3Level, randomID, 'doc.pdf']);
 >a3 : readonly ["home", "user", "downloads", string, "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath3Level, randomID, 'doc.pdf']) : readonly ["home", "user", "downloads", string, "doc.pdf"]
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'doc.pdf'] : ["home", "user", "downloads", string, "doc.pdf"]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath3Level : "home" | "user" | "downloads"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const b1 = foo([...staticPath1Level, randomID, 'folder', 'doc.pdf']);
 >b1 : readonly ["home", string, "folder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath1Level, randomID, 'folder', 'doc.pdf']) : readonly ["home", string, "folder", "doc.pdf"]
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath1Level, randomID, 'folder', 'doc.pdf'] : ["home", string, "folder", "doc.pdf"]
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath1Level : "home"
+>                    : ^^^^^^
 >staticPath1Level : readonly ["home"]
+>                 : ^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const b2 = foo([...staticPath2Level, randomID, 'folder', 'doc.pdf']);
 >b2 : readonly ["home", "user", string, "folder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath2Level, randomID, 'folder', 'doc.pdf']) : readonly ["home", "user", string, "folder", "doc.pdf"]
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath2Level, randomID, 'folder', 'doc.pdf'] : ["home", "user", string, "folder", "doc.pdf"]
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath2Level : "home" | "user"
+>                    : ^^^^^^^^^^^^^^^
 >staticPath2Level : readonly ["home", "user"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const b3 = foo([...staticPath3Level, randomID, 'folder', 'doc.pdf']);
 >b3 : readonly ["home", "user", "downloads", string, "folder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath3Level, randomID, 'folder', 'doc.pdf']) : readonly ["home", "user", "downloads", string, "folder", "doc.pdf"]
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'folder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "doc.pdf"]
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath3Level : "home" | "user" | "downloads"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const c1 = foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'doc.pdf']);
 >c1 : readonly ["home", string, "folder", "subfolder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'doc.pdf']) : readonly ["home", string, "folder", "subfolder", "doc.pdf"]
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath1Level, randomID, 'folder', 'subfolder', 'doc.pdf'] : ["home", string, "folder", "subfolder", "doc.pdf"]
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath1Level : "home"
+>                    : ^^^^^^
 >staticPath1Level : readonly ["home"]
+>                 : ^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'subfolder' : "subfolder"
+>            : ^^^^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const c2 = foo([...staticPath2Level, randomID, 'folder', 'subfolder', 'doc.pdf']);
 >c2 : readonly ["home", "user", string, "folder", "subfolder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath2Level, randomID, 'folder', 'subfolder', 'doc.pdf']) : readonly ["home", "user", string, "folder", "subfolder", "doc.pdf"]
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath2Level, randomID, 'folder', 'subfolder', 'doc.pdf'] : ["home", "user", string, "folder", "subfolder", "doc.pdf"]
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath2Level : "home" | "user"
+>                    : ^^^^^^^^^^^^^^^
 >staticPath2Level : readonly ["home", "user"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'subfolder' : "subfolder"
+>            : ^^^^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const c3 = foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'doc.pdf']);
 >c3 : readonly ["home", "user", "downloads", string, "folder", "subfolder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'doc.pdf']) : readonly ["home", "user", "downloads", string, "folder", "subfolder", "doc.pdf"]
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'folder', 'subfolder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "subfolder", "doc.pdf"]
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath3Level : "home" | "user" | "downloads"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'subfolder' : "subfolder"
+>            : ^^^^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const d1 = foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);
 >d1 : readonly ["home", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath1Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']) : readonly ["home", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath1Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf'] : ["home", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath1Level : "home"
+>                    : ^^^^^^
 >staticPath1Level : readonly ["home"]
+>                 : ^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'subfolder' : "subfolder"
+>            : ^^^^^^^^^^^
 >'another-subfolder' : "another-subfolder"
+>                    : ^^^^^^^^^^^^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const d2 = foo([...staticPath2Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);
 >d2 : readonly ["home", "user", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath2Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']) : readonly ["home", "user", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath2Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf'] : ["home", "user", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath2Level : "home" | "user"
+>                    : ^^^^^^^^^^^^^^^
 >staticPath2Level : readonly ["home", "user"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'subfolder' : "subfolder"
+>            : ^^^^^^^^^^^
 >'another-subfolder' : "another-subfolder"
+>                    : ^^^^^^^^^^^^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 
 const d3 = foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);
 >d3 : readonly ["home", "user", "downloads", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo([...staticPath3Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']) : readonly ["home", "user", "downloads", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const T>(path: T) => T
+>    : ^^^^^^^ ^^    ^^ ^^^^^ 
 >[...staticPath3Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf'] : ["home", "user", "downloads", string, "folder", "subfolder", "another-subfolder", "doc.pdf"]
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...staticPath3Level : "home" | "user" | "downloads"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >staticPath3Level : readonly ["home", "user", "downloads"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >randomID : string
+>         : ^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 >'subfolder' : "subfolder"
+>            : ^^^^^^^^^^^
 >'another-subfolder' : "another-subfolder"
+>                    : ^^^^^^^^^^^^^^^^^^^
 >'doc.pdf' : "doc.pdf"
+>          : ^^^^^^^^^
 

@@ -1,9 +1,14 @@
-=== tests/cases/compiler/ParameterList6.ts ===
+//// [tests/cases/compiler/ParameterList6.ts] ////
+
+=== ParameterList6.ts ===
 class C {
 >C : C
+>  : ^
 
   constructor(C: (public A) => any) {
 >C : (A: any) => any
+>  : ^ ^^^^^^^^^^   
 >A : any
+>  : ^^^
   }
 }

@@ -1,36 +1,56 @@
-=== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess1.ts ===
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess1.ts] ////
+
+=== superSymbolIndexedAccess1.ts ===
 var symbol = Symbol.for('myThing');
 >symbol : symbol
+>       : ^^^^^^
 >Symbol.for('myThing') : symbol
+>                      : ^^^^^^
 >Symbol.for : (key: string) => symbol
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
+>    : ^   ^^      ^^^^^      
 >'myThing' : "myThing"
+>          : ^^^^^^^^^
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     [symbol]() {
 >[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : symbol
+>       : ^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 
 class Bar extends Foo {
 >Bar : Bar
+>    : ^^^
 >Foo : Foo
+>    : ^^^
 
     [symbol]() {
->[symbol] : () => any
+>[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : symbol
+>       : ^^^^^^
 
         return super[symbol]();
->super[symbol]() : error
->super[symbol] : error
+>super[symbol]() : number
+>                : ^^^^^^
+>super[symbol] : () => number
+>              : ^^^^^^^^^^^^
 >super : Foo
+>      : ^^^
 >symbol : symbol
+>       : ^^^^^^
     }
 }

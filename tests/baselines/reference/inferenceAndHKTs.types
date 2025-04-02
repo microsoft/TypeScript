@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/inferenceAndHKTs.ts] ////
+
+=== inferenceAndHKTs.ts ===
+// Repro from #53970
+
+export interface TypeLambda {
+    readonly A: unknown;
+>A : unknown
+>  : ^^^^^^^
+}
+
+export interface TypeClass<F extends TypeLambda> {
+    readonly _F: F;
+>_F : F
+>   : ^
+}
+
+export type Apply<F extends TypeLambda, A> = F extends { readonly type: unknown }
+>Apply : Apply<F, A>
+>      : ^^^^^^^^^^^
+>type : unknown
+>     : ^^^^^^^
+
+    ? (F & { readonly A: A })['type']
+>A : A
+>  : ^
+
+    : { readonly F: F, readonly A: A };
+>F : F
+>  : ^
+>A : A
+>  : ^
+
+export interface T<A> {
+    value: A;
+>value : A
+>      : ^
+}
+
+export interface TTypeLambda extends TypeLambda {
+    readonly type: T<this["A"]>;
+>type : T<this["A"]>
+>     : ^^^^^^^^^^^^
+}
+
+export declare const map: <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>;
+>map : <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>
+>    : ^ ^^^^^^^^^          ^^ ^^            ^^^^^                                                     
+>F : TypeClass<F>
+>  : ^^^^^^^^^^^^
+>a : Apply<F, A>
+>  : ^^^^^^^^^^^
+>f : (a: A) => B
+>  : ^ ^^ ^^^^^ 
+>a : A
+>  : ^
+
+declare const typeClass: TypeClass<TTypeLambda>;
+>typeClass : TypeClass<TTypeLambda>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+
+declare const a: T<number>;
+>a : T<number>
+>  : ^^^^^^^^^
+
+const x1 = map(typeClass);
+>x1 : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
+>   : ^ ^^ ^^ ^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^
+>map(typeClass) : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
+>               : ^ ^^ ^^ ^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^
+>map : <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>
+>    : ^ ^^^^^^^^^          ^^ ^^            ^^^^^                                                     
+>typeClass : TypeClass<TTypeLambda>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+
+const x2 = map(typeClass)(a, (_) => _);  // T<number>
+>x2 : T<number>
+>   : ^^^^^^^^^
+>map(typeClass)(a, (_) => _) : T<number>
+>                            : ^^^^^^^^^
+>map(typeClass) : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
+>               : ^ ^^ ^^ ^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^
+>map : <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>
+>    : ^ ^^^^^^^^^          ^^ ^^            ^^^^^                                                     
+>typeClass : TypeClass<TTypeLambda>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>a : T<number>
+>  : ^^^^^^^^^
+>(_) => _ : (_: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
+>_ : number
+>  : ^^^^^^
+>_ : number
+>  : ^^^^^^
+

@@ -1,11 +1,19 @@
-=== tests/cases/compiler/recursiveFunctionTypes1.ts ===
+//// [tests/cases/compiler/recursiveFunctionTypes1.ts] ////
+
+=== recursiveFunctionTypes1.ts ===
 class C {
 >C : C
+>  : ^
 
      static g(t: typeof C.g){ }
 >g : (t: typeof C.g) => void
+>  : ^ ^^          ^^^^^^^^^
 >t : (t: typeof C.g) => void
+>  : ^ ^^          ^^^^^^^^^
 >C.g : (t: typeof C.g) => void
+>    : ^ ^^          ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >g : (t: typeof C.g) => void
+>  : ^ ^^          ^^^^^^^^^
 }

@@ -1,25 +1,37 @@
-=== tests/cases/compiler/narrowedConstInMethod.ts ===
+//// [tests/cases/compiler/narrowedConstInMethod.ts] ////
+
+=== narrowedConstInMethod.ts ===
 // Fixes #10501, possibly null 'x'
 function f() {
 >f : () => { bar(): number; } | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x: string | null = <any>{};
 >x : string | null
+>  : ^^^^^^^^^^^^^
 ><any>{} : any
 >{} : {}
+>   : ^^
 
     if (x !== null) {
 >x !== null : boolean
+>           : ^^^^^^^
 >x : string | null
+>  : ^^^^^^^^^^^^^
 
         return {
 >{            bar() { return x.length; }  // ok        } : { bar(): number; }
+>                                                        : ^^^^^^^^^^^^^^^^^^
 
             bar() { return x.length; }  // ok
 >bar : () => number
+>    : ^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         };
     }
@@ -27,24 +39,34 @@ function f() {
 
 function f2() {
 >f2 : () => typeof (Anonymous class) | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x: string | null = <any>{};
 >x : string | null
+>  : ^^^^^^^^^^^^^
 ><any>{} : any
 >{} : {}
+>   : ^^
 
     if (x !== null) {
 >x !== null : boolean
+>           : ^^^^^^^
 >x : string | null
+>  : ^^^^^^^^^^^^^
 
         return class {
 >class {            bar() { return x.length; }  // ok        } : typeof (Anonymous class)
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
             bar() { return x.length; }  // ok
 >bar : () => number
+>    : ^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         };
     }

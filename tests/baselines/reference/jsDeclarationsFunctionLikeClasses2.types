@@ -1,131 +1,220 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionLikeClasses2.ts] ////
+
+=== source.js ===
 /**
  * @param {number} len
  */
 export function Vec(len) {
 >Vec : typeof Vec
+>    : ^^^^^^^^^^
 >len : number
+>    : ^^^^^^
 
     /**
      * @type {number[]}
      */
     this.storage = new Array(len);
 >this.storage = new Array(len) : any[]
+>                              : ^^^^^
 >this.storage : number[]
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >storage : number[]
+>        : ^^^^^^^^
 >new Array(len) : any[]
+>               : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >len : number
+>    : ^^^^^^
 }
 
 Vec.prototype = {
 >Vec.prototype = {    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot(other: Vec): number; magnitude(): number; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Vec.prototype : { dot(other: Vec): number; magnitude(): number; }
+>              : ^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Vec : typeof Vec
+>    : ^^^^^^^^^^
 >prototype : { dot(other: Vec): number; magnitude(): number; }
+>          : ^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot(other: Vec): number; magnitude(): number; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * @param {Vec} other
      */
     dot(other) {
 >dot : (other: Vec) => number
+>    : ^     ^^   ^^^^^^^^^^^
 >other : Vec
+>      : ^^^
 
         if (other.storage.length !== this.storage.length) {
 >other.storage.length !== this.storage.length : boolean
+>                                             : ^^^^^^^
 >other.storage.length : number
+>                     : ^^^^^^
 >other.storage : number[]
+>              : ^^^^^^^^
 >other : Vec
+>      : ^^^
 >storage : number[]
+>        : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >this.storage.length : number
+>                    : ^^^^^^
 >this.storage : number[]
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >storage : number[]
+>        : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 
             throw new Error(`Dot product only applicable for vectors of equal length`);
 >new Error(`Dot product only applicable for vectors of equal length`) : Error
+>                                                                     : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >`Dot product only applicable for vectors of equal length` : "Dot product only applicable for vectors of equal length"
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
         let sum = 0;
 >sum : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
         for (let i = 0; i < this.storage.length; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < this.storage.length : boolean
+>                        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >this.storage.length : number
+>                    : ^^^^^^
 >this.storage : number[]
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >storage : number[]
+>        : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
             sum += (this.storage[i] * other.storage[i]);
 >sum += (this.storage[i] * other.storage[i]) : number
+>                                            : ^^^^^^
 >sum : number
+>    : ^^^^^^
 >(this.storage[i] * other.storage[i]) : number
+>                                     : ^^^^^^
 >this.storage[i] * other.storage[i] : number
+>                                   : ^^^^^^
 >this.storage[i] : number
+>                : ^^^^^^
 >this.storage : number[]
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >storage : number[]
+>        : ^^^^^^^^
 >i : number
+>  : ^^^^^^
 >other.storage[i] : number
+>                 : ^^^^^^
 >other.storage : number[]
+>              : ^^^^^^^^
 >other : Vec
+>      : ^^^
 >storage : number[]
+>        : ^^^^^^^^
 >i : number
+>  : ^^^^^^
         }
         return sum;
 >sum : number
+>    : ^^^^^^
 
     },
     magnitude() {
 >magnitude : () => number
+>          : ^^^^^^^^^^^^
 
         let sum = 0;
 >sum : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
         for (let i = 0; i < this.storage.length; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < this.storage.length : boolean
+>                        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >this.storage.length : number
+>                    : ^^^^^^
 >this.storage : number[]
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >storage : number[]
+>        : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
             sum += (this.storage[i] ** 2);
 >sum += (this.storage[i] ** 2) : number
+>                              : ^^^^^^
 >sum : number
+>    : ^^^^^^
 >(this.storage[i] ** 2) : number
+>                       : ^^^^^^
 >this.storage[i] ** 2 : number
+>                     : ^^^^^^
 >this.storage[i] : number
+>                : ^^^^^^
 >this.storage : number[]
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >storage : number[]
+>        : ^^^^^^^^
 >i : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
         }
         return Math.sqrt(sum);
 >Math.sqrt(sum) : number
+>               : ^^^^^^
 >Math.sqrt : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >sqrt : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >sum : number
+>    : ^^^^^^
     }
 }
 
@@ -135,65 +224,103 @@ Vec.prototype = {
  */
 export function Point2D(x, y) {
 >Point2D : typeof Point2D
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     if (!(this instanceof Point2D)) {
 >!(this instanceof Point2D) : boolean
+>                           : ^^^^^^^
 >(this instanceof Point2D) : boolean
+>                          : ^^^^^^^
 >this instanceof Point2D : boolean
+>                        : ^^^^^^^
 >this : this
+>     : ^^^^
 >Point2D : typeof Point2D
+>        : ^^^^^^^^^^^^^^
 
         return new Point2D(x, y);
 >new Point2D(x, y) : Point2D
+>                  : ^^^^^^^
 >Point2D : typeof Point2D
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
     Vec.call(this, 2);
 >Vec.call(this, 2) : any
 >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>         : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >Vec : typeof Vec
+>    : ^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this : this
+>     : ^^^^
 >2 : 2
+>  : ^
 
     this.x = x;
 >this.x = x : number
+>           : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     this.y = y;
 >this.y = y : number
+>           : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 Point2D.prototype = {
 >Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; x: number; y: number; }
+>                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >Point2D.prototype : { __proto__: typeof Vec; x: number; y: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >Point2D : typeof Point2D
+>        : ^^^^^^^^^^^^^^
 >prototype : { __proto__: typeof Vec; x: number; y: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; x: number; y: number; }
+>                                                                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 
     __proto__: Vec,
 >__proto__ : typeof Vec
+>          : ^^^^^^^^^^
 >Vec : typeof Vec
+>    : ^^^^^^^^^^
 
     get x() {
 >x : number
+>  : ^^^^^^
 
         return this.storage[0];
 >this.storage[0] : any
 >this.storage : any
 >this : { __proto__: typeof Vec; x: number; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >storage : any
+>        : ^^^
 >0 : 0
+>  : ^
 
     },
     /**
@@ -201,27 +328,38 @@ Point2D.prototype = {
      */
     set x(x) {
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
         this.storage[0] = x;
 >this.storage[0] = x : number
+>                    : ^^^^^^
 >this.storage[0] : any
 >this.storage : any
 >this : { __proto__: typeof Vec; x: number; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >storage : any
+>        : ^^^
 >0 : 0
+>  : ^
 >x : number
+>  : ^^^^^^
 
     },
     get y() {
 >y : number
+>  : ^^^^^^
 
         return this.storage[1];
 >this.storage[1] : any
 >this.storage : any
 >this : { __proto__: typeof Vec; x: number; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >storage : any
+>        : ^^^
 >1 : 1
+>  : ^
 
     },
     /**
@@ -229,29 +367,42 @@ Point2D.prototype = {
      */
     set y(y) {
 >y : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
         this.storage[1] = y;
 >this.storage[1] = y : number
+>                    : ^^^^^^
 >this.storage[1] : any
 >this.storage : any
 >this : { __proto__: typeof Vec; x: number; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >storage : any
+>        : ^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
     }
 };
 
-=== tests/cases/conformance/jsdoc/declarations/referencer.js ===
+=== referencer.js ===
 import {Point2D} from "./source";
 >Point2D : typeof Point2D
+>        : ^^^^^^^^^^^^^^
 
 export const origin = new Point2D(0, 0);
 >origin : Point2D
+>       : ^^^^^^^
 >new Point2D(0, 0) : Point2D
+>                  : ^^^^^^^
 >Point2D : typeof Point2D
+>        : ^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 // export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
 

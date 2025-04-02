@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardConstructorPrimitiveTypes.ts ===
+//// [tests/cases/compiler/typeGuardConstructorPrimitiveTypes.ts] ////
+
+=== typeGuardConstructorPrimitiveTypes.ts ===
 // Narrow a union of primitive types
 let var1: string | number | boolean | any[] | symbol | bigint;
 >var1 : Symbol(var1, Decl(typeGuardConstructorPrimitiveTypes.ts, 1, 3))
@@ -7,7 +9,7 @@ if (var1.constructor === String) {
 >var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorPrimitiveTypes.ts, 1, 3))
 >constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
 
     var1; // string
 >var1 : Symbol(var1, Decl(typeGuardConstructorPrimitiveTypes.ts, 1, 3))
@@ -61,7 +63,7 @@ if (var1.constructor === BigInt) {
 // Narrow a union of primitive object types
 let var2: String | Number | Boolean | Symbol | BigInt;
 >var2 : Symbol(var2, Decl(typeGuardConstructorPrimitiveTypes.ts, 22, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
@@ -71,7 +73,7 @@ if (var2.constructor === String) {
 >var2.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardConstructorPrimitiveTypes.ts, 22, 3))
 >constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
 
     var2; // String
 >var2 : Symbol(var2, Decl(typeGuardConstructorPrimitiveTypes.ts, 22, 3))

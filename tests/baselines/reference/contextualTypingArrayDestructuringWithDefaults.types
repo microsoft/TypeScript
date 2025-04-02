@@ -1,44 +1,73 @@
-=== tests/cases/compiler/contextualTypingArrayDestructuringWithDefaults.ts ===
+//// [tests/cases/compiler/contextualTypingArrayDestructuringWithDefaults.ts] ////
+
+=== contextualTypingArrayDestructuringWithDefaults.ts ===
 type I = { a: "a" };
->I : { a: "a"; }
+>I : I
+>  : ^
 >a : "a"
+>  : ^^^
 
 let [ c0 = {a: "a"} ]: [I?] = [];
 >c0 : I
+>   : ^
 >{a: "a"} : { a: "a"; }
+>         : ^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 >"a" : "a"
+>    : ^^^
 >[] : []
+>   : ^^
 
 let [ x1, c1 = {a: "a"} ]: [number, I?] = [1];
 >x1 : number
+>   : ^^^^^^
 >c1 : I
+>   : ^
 >{a: "a"} : { a: "a"; }
+>         : ^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 >"a" : "a"
+>    : ^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 let [ c_ = {a: "a"} ]: I[] = [];
 >c_ : I
+>   : ^
 >{a: "a"} : { a: "a"; }
+>         : ^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 >"a" : "a"
+>    : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 // not a great example, expect an error
 function foo() {
 >foo : () => 1
+>    : ^^^^^^^
 
     let {length = {a: 1}}: [number] = [1];
 >length : 1
+>       : ^
 >{a: 1} : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
     return length;
 >length : 1
+>       : ^
 }
 

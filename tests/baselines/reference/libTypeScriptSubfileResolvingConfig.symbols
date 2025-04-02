@@ -1,10 +1,4 @@
-=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
-
-// NOOP
-=== /somepath/node_modules/@typescript/lib-dom/iterable.d.ts ===
-interface DOMIterable { abc: string }
->DOMIterable : Symbol(DOMIterable, Decl(iterable.d.ts, 0, 0))
->abc : Symbol(DOMIterable.abc, Decl(iterable.d.ts, 0, 23))
+//// [tests/cases/compiler/libTypeScriptSubfileResolvingConfig.ts] ////
 
 === /somepath/index.ts ===
 /// <reference lib="dom.iterable" />
@@ -16,3 +10,12 @@ const a: DOMIterable = { abc: "Hello" }
 // This should fail because libdom has been replaced
 // by the module above ^
 window.localStorage
+
+=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
+
+// NOOP
+=== /somepath/node_modules/@typescript/lib-dom/iterable.d.ts ===
+interface DOMIterable { abc: string }
+>DOMIterable : Symbol(DOMIterable, Decl(iterable.d.ts, 0, 0))
+>abc : Symbol(DOMIterable.abc, Decl(iterable.d.ts, 0, 23))
+

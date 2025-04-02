@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_preserve.ts] ////
+
 //// [blockScopedEnumVariablesUseBeforeDef_preserve.ts]
 function foo1() {
     return E.A

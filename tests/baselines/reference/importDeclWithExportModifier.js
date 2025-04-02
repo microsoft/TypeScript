@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclWithExportModifier.ts] ////
+
 //// [importDeclWithExportModifier.ts]
 module x {
     interface c {

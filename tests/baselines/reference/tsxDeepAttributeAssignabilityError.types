@@ -1,48 +1,69 @@
-=== tests/cases/compiler/my-component.tsx ===
+//// [tests/cases/compiler/tsxDeepAttributeAssignabilityError.tsx] ////
+
+=== my-component.tsx ===
 import * as React from 'react'
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface MyProps {
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: MyInnerProps;
 >y : MyInnerProps
+>  : ^^^^^^^^^^^^
 }
 
 interface MyInnerProps {
     value: string;
 >value : string
+>      : ^^^^^^
 }
 
 export function MyComponent(_props: MyProps) {
 >MyComponent : (_props: MyProps) => JSX.Element
+>            : ^      ^^       ^^^^^^^^^^^^^^^^
 >_props : MyProps
+>       : ^^^^^^^
 
     return <span>my component</span>;
 ><span>my component</span> : JSX.Element
+>                          : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 }
 
-=== tests/cases/compiler/file1.tsx ===
+=== file1.tsx ===
 import * as React from 'react'
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 import { MyComponent } from './my-component'
 >MyComponent : (_props: MyProps) => JSX.Element
+>            : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const result = <MyComponent x="yes" y={{
 >result : JSX.Element
+>       : ^^^^^^^^^^^
 ><MyComponent x="yes" y={{    value: 42}} /> : JSX.Element
+>                                            : ^^^^^^^^^^^
 >MyComponent : (_props: MyProps) => JSX.Element
+>            : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : { value: number; }
+>  : ^^^^^^^^^^^^^^^^^^
 >{    value: 42} : { value: number; }
+>                : ^^^^^^^^^^^^^^^^^^
 
     value: 42
 >value : number
+>      : ^^^^^^
 >42 : 42
+>   : ^^
 
 }} />;
 

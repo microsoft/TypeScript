@@ -26,20 +26,18 @@ exports.Foo = Foo;
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
+exports.foo = foo;
 function foo() {
     return null;
 }
-exports.foo = foo;
 //// [file3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
+exports.bar = bar;
 var file2_1 = require("./file2");
 function bar() {
     return (0, file2_1.foo)();
 }
-exports.bar = bar;
 
 
 //// [file1.d.ts]

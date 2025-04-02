@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/newTarget/newTarget.es6.ts] ////
+
 //// [newTarget.es6.ts]
 class A {
     constructor() {

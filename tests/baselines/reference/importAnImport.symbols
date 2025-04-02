@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importAnImport.ts ===
+//// [tests/cases/compiler/importAnImport.ts] ////
+
+=== importAnImport.ts ===
 module c.a.b {
 >c : Symbol(c, Decl(importAnImport.ts, 0, 0))
 >a : Symbol(a, Decl(importAnImport.ts, 0, 9))

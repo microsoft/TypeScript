@@ -1,9 +1,9 @@
-tests/cases/compiler/superInConstructorParam1.ts(8,3): error TS2377: Constructors for derived classes must contain a 'super' call.
-tests/cases/compiler/superInConstructorParam1.ts(8,19): error TS2336: 'super' cannot be referenced in constructor arguments.
-tests/cases/compiler/superInConstructorParam1.ts(8,19): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+superInConstructorParam1.ts(8,3): error TS2377: Constructors for derived classes must contain a 'super' call.
+superInConstructorParam1.ts(8,19): error TS2336: 'super' cannot be referenced in constructor arguments.
+superInConstructorParam1.ts(8,19): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/superInConstructorParam1.ts (3 errors) ====
+==== superInConstructorParam1.ts (3 errors) ====
     class B {
       public foo(): number {
         return 0;
@@ -12,12 +12,11 @@ tests/cases/compiler/superInConstructorParam1.ts(8,19): error TS17011: 'super' m
     
     class C extends B {
       constructor(a = super.foo()) {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
                       ~~~~~
 !!! error TS2336: 'super' cannot be referenced in constructor arguments.
                       ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
       }
-    ~~~
-!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

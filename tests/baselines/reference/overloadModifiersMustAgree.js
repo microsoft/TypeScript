@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadModifiersMustAgree.ts] ////
+
 //// [overloadModifiersMustAgree.ts]
 class baz {
     public foo();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeAsStringTemplate.ts] ////
+
 //// [mappedTypeAsStringTemplate.ts]
 // Repro from #44220
 

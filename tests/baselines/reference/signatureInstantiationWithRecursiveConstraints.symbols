@@ -1,4 +1,6 @@
-=== tests/cases/compiler/signatureInstantiationWithRecursiveConstraints.ts ===
+//// [tests/cases/compiler/signatureInstantiationWithRecursiveConstraints.ts] ////
+
+=== signatureInstantiationWithRecursiveConstraints.ts ===
 // Repro from #17148
 
 class Foo {

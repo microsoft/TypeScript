@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(1,54): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(1,56): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(1,56): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(1,105): error TS1005: ';' expected.
+parserErrorRecoveryArrayLiteralExpression3.ts(1,54): error TS1005: ',' expected.
+parserErrorRecoveryArrayLiteralExpression3.ts(1,56): error TS2695: Left side of comma operator is unused and has no side effects.
+parserErrorRecoveryArrayLiteralExpression3.ts(1,56): error TS2695: Left side of comma operator is unused and has no side effects.
+parserErrorRecoveryArrayLiteralExpression3.ts(1,105): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts (4 errors) ====
+==== parserErrorRecoveryArrayLiteralExpression3.ts (4 errors) ====
     var texCoords = [2, 2, 0.5000001192092895, 0.8749999 ; 403953552, 0.5000001192092895, 0.8749999403953552];
                                                          ~
 !!! error TS1005: ',' expected.

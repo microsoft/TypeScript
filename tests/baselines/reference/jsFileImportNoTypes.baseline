@@ -1,0 +1,270 @@
+// === Completions ===
+=== /a.js ===
+// import {  } from './declarations.ts'
+//          ^
+// | ----------------------------------------------------------------------
+// | class DeclaredClass
+// | const declaredVariable: number
+// | class TestClass
+// | class TestClassInterfaceMerged
+// | interface TestClassInterfaceMerged
+// | enum TestEnum
+// | function testFunction(): void
+// | namespace TestNamespaceWithValue
+// | const testValue: {}
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 9,
+      "name": ""
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "DeclaredClass",
+          "kind": "class",
+          "kindModifiers": "export,declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "DeclaredClass",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "declaredVariable",
+          "kind": "const",
+          "kindModifiers": "export,declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "declaredVariable",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "TestClass",
+          "kind": "class",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TestClass",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "TestClassInterfaceMerged",
+          "kind": "class",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TestClassInterfaceMerged",
+              "kind": "className"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TestClassInterfaceMerged",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "TestEnum",
+          "kind": "enum",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TestEnum",
+              "kind": "enumName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "testFunction",
+          "kind": "function",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "testFunction",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "TestNamespaceWithValue",
+          "kind": "module",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TestNamespaceWithValue",
+              "kind": "moduleName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "testValue",
+          "kind": "const",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "testValue",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

@@ -1,0 +1,193 @@
+//// [tests/cases/compiler/reverseMappedTupleContext.ts] ////
+
+=== reverseMappedTupleContext.ts ===
+// https://github.com/microsoft/TypeScript/issues/55382
+
+declare function test1<T>(arg: {
+>test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
+>      : ^ ^^   ^^                         ^^^^^ 
+>arg : { [K in keyof T]: T[K]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: T[K];
+}): T;
+const result1 = test1(["foo", 42]);
+>result1 : [string, number]
+>        : ^^^^^^^^^^^^^^^^
+>test1(["foo", 42]) : [string, number]
+>                   : ^^^^^^^^^^^^^^^^
+>test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
+>      : ^ ^^   ^^                         ^^^^^ 
+>["foo", 42] : [string, number]
+>            : ^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>42 : 42
+>   : ^^
+
+declare function test2<T extends readonly unknown[]>(arg: {
+>test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
+>      : ^ ^^^^^^^^^                  ^^   ^^                         ^^^^^ 
+>arg : { [K in keyof T]: T[K]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: T[K];
+}): T;
+const result2 = test2(["foo", 42]);
+>result2 : [string, number]
+>        : ^^^^^^^^^^^^^^^^
+>test2(["foo", 42]) : [string, number]
+>                   : ^^^^^^^^^^^^^^^^
+>test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
+>      : ^ ^^^^^^^^^                  ^^   ^^                         ^^^^^ 
+>["foo", 42] : [string, number]
+>            : ^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>42 : 42
+>   : ^^
+
+type Schema = Record<string, unknown> | readonly unknown[];
+>Schema : Schema
+>       : ^^^^^^
+
+type Definition<T> = {
+>Definition : Definition<T>
+>           : ^^^^^^^^^^^^^
+
+  [K in keyof T]: (() => T[K]) | Definition<T[K]>;
+};
+declare function create<T extends Schema>(definition: Definition<T>): T;
+>create : <T extends Schema>(definition: Definition<T>) => T
+>       : ^ ^^^^^^^^^      ^^          ^^             ^^^^^ 
+>definition : Definition<T>
+>           : ^^^^^^^^^^^^^
+
+const created1 = create([() => 1, [() => ""]]);
+>created1 : [number, [string]]
+>         : ^^^^^^^^^^^^^^^^^^
+>create([() => 1, [() => ""]]) : [number, [string]]
+>                              : ^^^^^^^^^^^^^^^^^^
+>create : <T extends Schema>(definition: Definition<T>) => T
+>       : ^ ^^^^^^^^^      ^^          ^^             ^^^^^ 
+>[() => 1, [() => ""]] : [() => number, [() => string]]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>[() => ""] : [() => string]
+>           : ^^^^^^^^^^^^^^
+>() => "" : () => string
+>         : ^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+const created2 = create({
+>created2 : { a: number; b: [string]; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create({  a: () => 1,  b: [() => ""],}) : { a: number; b: [string]; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create : <T extends Schema>(definition: Definition<T>) => T
+>       : ^ ^^^^^^^^^      ^^          ^^             ^^^^^ 
+>{  a: () => 1,  b: [() => ""],} : { a: () => number; b: [() => string]; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: () => 1,
+>a : () => number
+>  : ^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+  b: [() => ""],
+>b : [() => string]
+>  : ^^^^^^^^^^^^^^
+>[() => ""] : [() => string]
+>           : ^^^^^^^^^^^^^^
+>() => "" : () => string
+>         : ^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+});
+
+interface CompilerOptions {
+  allowUnreachableCode?: boolean;
+>allowUnreachableCode : boolean | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^
+
+  allowUnusedLabels?: boolean;
+>allowUnusedLabels : boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^
+
+  alwaysStrict?: boolean;
+>alwaysStrict : boolean | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+}
+type KeepLiteralStrings<T extends string[]> = {
+>KeepLiteralStrings : KeepLiteralStrings<T>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: T[K];
+};
+declare function test4<T extends Record<string, string[]>>(obj: {
+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
+>      : ^ ^^^^^^^^^                        ^^   ^^                                                                                        ^^^^^ 
+>obj : { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^
+
+  [K in keyof T & keyof CompilerOptions]: {
+    dependencies: KeepLiteralStrings<T[K]>;
+>dependencies : KeepLiteralStrings<T[K]>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  };
+}): T;
+const result4 = test4({
+>result4 : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test4({  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },}) : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
+>      : ^ ^^^^^^^^^                        ^^   ^^                                                                                        ^^^^^ 
+>{  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },} : { alwaysStrict: { dependencies: ["foo", "bar"]; }; allowUnusedLabels: { dependencies: ["baz", "qwe"]; }; }
+>                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  alwaysStrict: {
+>alwaysStrict : { dependencies: ["foo", "bar"]; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    dependencies: ["foo", "bar"],  } : { dependencies: ["foo", "bar"]; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    dependencies: ["foo", "bar"],
+>dependencies : ["foo", "bar"]
+>             : ^^^^^^^^^^^^^^
+>["foo", "bar"] : ["foo", "bar"]
+>               : ^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+  },
+  allowUnusedLabels: {
+>allowUnusedLabels : { dependencies: ["baz", "qwe"]; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    dependencies: ["baz", "qwe"],  } : { dependencies: ["baz", "qwe"]; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    dependencies: ["baz", "qwe"],
+>dependencies : ["baz", "qwe"]
+>             : ^^^^^^^^^^^^^^
+>["baz", "qwe"] : ["baz", "qwe"]
+>               : ^^^^^^^^^^^^^^
+>"baz" : "baz"
+>      : ^^^^^
+>"qwe" : "qwe"
+>      : ^^^^^
+
+  },
+});
+

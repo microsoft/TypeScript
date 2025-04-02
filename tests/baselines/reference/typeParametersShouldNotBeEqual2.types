@@ -1,51 +1,82 @@
-=== tests/cases/compiler/typeParametersShouldNotBeEqual2.ts ===
+//// [tests/cases/compiler/typeParametersShouldNotBeEqual2.ts] ////
+
+=== typeParametersShouldNotBeEqual2.ts ===
 function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
 >ff : <T extends Date, U extends Date, V>(x: T, y: U, z: V) => void
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 >z : V
+>  : ^
 
     var zz: Object;
 >zz : Object
+>   : ^^^^^^
 
     x = x;  // Ok
 >x = x : T
+>      : ^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
     x = y;  // Ok
 >x = y : U
+>      : ^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     x = z;  // Error
 >x = z : V
+>      : ^
 >x : T
+>  : ^
 >z : V
+>  : ^
 
     z = x;  // Error
 >z = x : T
+>      : ^
 >z : V
+>  : ^
 >x : T
+>  : ^
 
     y = z;  // Error
 >y = z : V
+>      : ^
 >y : U
+>  : ^
 >z : V
+>  : ^
 
     z = y;  // Error
 >z = y : U
+>      : ^
 >z : V
+>  : ^
 >y : U
+>  : ^
 
     x = zz;  // Error
 >x = zz : Object
+>       : ^^^^^^
 >x : T
+>  : ^
 >zz : Object
+>   : ^^^^^^
 
     zz = x;  // Ok
 >zz = x : T
+>       : ^
 >zz : Object
+>   : ^^^^^^
 >x : T
+>  : ^
 }
 

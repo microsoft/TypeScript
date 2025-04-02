@@ -1,360 +1,583 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts] ////
+
+=== instantiationExpressionErrors.ts ===
 declare let f: { <T>(): T, g<U>(): U };
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >g : <U>() => U
+>  : ^ ^^^^^^^ 
 
 // Type arguments in member expressions
 
 const a1 = f<number>;  // { (): number; g<U>(): U; }
 >a1 : { (): number; g<U>(): U; }
+>   : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<number> : { (): number; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
 const a2 = f.g<number>;  // () => number
 >a2 : () => number
+>   : ^^^^^^^^^^^^
 >f.g<number> : () => number
+>            : ^^^^^^^^^^^^
 >f.g : <U>() => U
+>    : ^ ^^^^^^^ 
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >g : <U>() => U
+>  : ^ ^^^^^^^ 
 
 const a3 = f<number>.g;  // <U>() => U
 >a3 : <U>() => U
+>   : ^ ^^^^^^^ 
 >f<number>.g : <U>() => U
+>            : ^ ^^^^^^^ 
 >f<number> : { (): number; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >g : <U>() => U
+>  : ^ ^^^^^^^ 
 
 const a4 = f<number>.g<number>;  // () => number
 >a4 : () => number
+>   : ^^^^^^^^^^^^
 >f<number>.g<number> : () => number
+>                    : ^^^^^^^^^^^^
 >f<number>.g : <U>() => U
+>            : ^ ^^^^^^^ 
 >f<number> : { (): number; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >g : <U>() => U
+>  : ^ ^^^^^^^ 
 
 const a5 = f['g']<number>;  // () => number
 >a5 : () => number
+>   : ^^^^^^^^^^^^
 >f['g']<number> : () => number
+>               : ^^^^^^^^^^^^
 >f['g'] : <U>() => U
+>       : ^ ^^^^^^^ 
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >'g' : "g"
+>    : ^^^
 
 // `[` is an expression starter and cannot immediately follow a type argument list
 
 const a6 = f<number>['g'];  // Error
 >a6 : boolean
+>   : ^^^^^^^
 >f<number>['g'] : boolean
+>               : ^^^^^^^
 >f<number : boolean
+>         : ^^^^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >number : any
+>       : ^^^
 >['g'] : string[]
+>      : ^^^^^^^^
 >'g' : "g"
+>    : ^^^
 
 const a7 = (f<number>)['g'];
 >a7 : <U>() => U
+>   : ^ ^^^^^^^ 
 >(f<number>)['g'] : <U>() => U
+>                 : ^ ^^^^^^^ 
 >(f<number>) : { (): number; g<U>(): U; }
+>            : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<number> : { (): number; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >'g' : "g"
+>    : ^^^
 
 // An `<` cannot immediately follow a type argument list
 
 const a8 = f<number><number>;  // Relational operator error
 >a8 : boolean
+>   : ^^^^^^^
 >f<number><number> : boolean
+>                  : ^^^^^^^
 >f<number : boolean
+>         : ^^^^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >number : any
+>       : ^^^
 ><number> : number
+>         : ^^^^^^
 > : any
+> : ^^^
 
 const a9 = (f<number>)<number>;  // Error, no applicable signatures
 >a9 : { g<U>(): U; }
+>   : ^^^^ ^^^^^ ^^^
 >(f<number>)<number> : { g<U>(): U; }
+>                    : ^^^^ ^^^^^ ^^^
 >(f<number>) : { (): number; g<U>(): U; }
+>            : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<number> : { (): number; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
 // Type arguments with `?.` token
 
 const b1 = f?.<number>;  // Error, `(` expected
 >b1 : number
+>   : ^^^^^^
 >f?.<number> : number
+>            : ^^^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
 const b2 = f?.<number>();
 >b2 : number
+>   : ^^^^^^
 >f?.<number>() : number
+>              : ^^^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
 const b3 = f<number>?.();
 >b3 : number
+>   : ^^^^^^
 >f<number>?.() : number
+>              : ^^^^^^
 >f<number> : { (): number; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
 const b4 = f<number>?.<number>();  // Error, expected no type arguments
 >b4 : number
+>   : ^^^^^^
 >f<number>?.<number>() : number
+>                      : ^^^^^^
 >f<number> : { (): number; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
 // Instantiation expression and binary operators
 
 declare let g: (<T>(x: T) => T) | undefined;
 >g : (<T>(x: T) => T) | undefined
+>  : ^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >x : T
+>  : ^
 
 const c1 = g<string> || ((x: string) => x);
 >c1 : (x: string) => string
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> || ((x: string) => x) : (x: string) => string
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
+>  : ^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
+>                   : ^ ^^      ^^^^^^^^^^^
 >(x: string) => x : (x: string) => string
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 const c2 = g<string> ?? ((x: string) => x);
 >c2 : (x: string) => string
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> ?? ((x: string) => x) : (x: string) => string
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
+>  : ^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
+>                   : ^ ^^      ^^^^^^^^^^^
 >(x: string) => x : (x: string) => string
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 const c3 = g<string> && ((x: string) => x);
 >c3 : ((x: string) => string) | undefined
+>   : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >g<string> && ((x: string) => x) : ((x: string) => string) | undefined
+>                                : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
+>  : ^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
+>                   : ^ ^^      ^^^^^^^^^^^
 >(x: string) => x : (x: string) => string
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 // Parsed as function call, even though this differs from JavaScript
 
 const x1 = f<true>
 >x1 : true
+>   : ^^^^
 >f<true>(true) : true
+>              : ^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 (true);
 >true : true
+>     : ^^^^
 
 // Parsed as relational expressions
 
 const r1 = f < true > true;
 >r1 : boolean
+>   : ^^^^^^^
 >f < true > true : boolean
+>                : ^^^^^^^
 >f < true : boolean
+>         : ^^^^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
 const r2 = f < true > +1;
 >r2 : boolean
+>   : ^^^^^^^
 >f < true > +1 : boolean
+>              : ^^^^^^^
 >f < true : boolean
+>         : ^^^^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 >+1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
 const r3 = f < true > -1;
 >r3 : boolean
+>   : ^^^^^^^
 >f < true > -1 : boolean
+>              : ^^^^^^^
 >f < true : boolean
+>         : ^^^^^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 // All of the following are parsed as instantiation expressions
 
 const x2 = f<true>
 >x2 : { (): true; g<U>(): U; }
+>   : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 true;
 >true : true
+>     : ^^^^
 
 const x3 = f<true>;
 >x3 : { (): true; g<U>(): U; }
+>   : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 true;
 >true : true
+>     : ^^^^
 
 const x4 = f<true>
 >x4 : { (): true; g<U>(): U; }
+>   : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 if (true) {}
 >true : true
+>     : ^^^^
 
 const x5 = f<true>
 >x5 : { (): true; g<U>(): U; }
+>   : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 let yy = 0;
 >yy : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 const x6 = f<true>
 >x6 : { (): true; g<U>(): U; }
+>   : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 interface I {}
 
 let x10 = f<true>
 >x10 : { (): true; g<U>(): U; }
+>    : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 this.bar()
 >this.bar() : void
+>           : ^^^^
 >this.bar : () => void
+>         : ^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 let x11 = f<true>
 >x11 : { (): true; g<U>(): U; }
+>    : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 function bar() {}
 >bar : () => void
+>    : ^^^^^^^^^^
 
 let x12 = f<true>
 >x12 : { (): true; g<U>(): U; }
+>    : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 class C {}
 >C : C
+>  : ^
 
 let x13 = f<true>
 >x13 : { (): true; g<U>(): U; }
+>    : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 bar()
 >bar() : void
+>      : ^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 let x14 = f<true>
 >x14 : { (): true; g<U>(): U; }
+>    : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<true> : { (): true; g<U>(): U; }
+>        : ^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >true : true
+>     : ^^^^
 
 void bar()
 >void bar() : undefined
+>           : ^^^^^^^^^
 >bar() : void
+>      : ^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     static specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
+>           : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
     static bar = 123
 >bar : number
+>    : ^^^^^^
 >123 : 123
+>    : ^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     public specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
+>           : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
     public bar = 123
 >bar : number
+>    : ^^^^^^
 >123 : 123
+>    : ^^^
 }
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     private specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
+>           : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
     private bar = 123
 >bar : number
+>    : ^^^^^^
 >123 : 123
+>    : ^^^
 }
 
 class C4 {
 >C4 : C4
+>   : ^^
 
     protected specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
+>           : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
+>          : ^^^^^^^^^^^^^^^^ ^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 
     protected bar = 123
 >bar : number
+>    : ^^^^^^
 >123 : 123
+>    : ^^^
 }
 
 // Repro from #49551
 
 const enum MyVer { v1 = 1, v2 = 2 }
 >MyVer : MyVer
+>      : ^^^^^
 >v1 : MyVer.v1
+>   : ^^^^^^^^
 >1 : 1
+>  : ^
 >v2 : MyVer.v2
+>   : ^^^^^^^^
 >2 : 2
+>  : ^
 
 let ver = 21
 >ver : number
+>    : ^^^^^^
 >21 : 21
+>   : ^^
 
 const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
 >a : boolean
+>  : ^^^^^^^
 >ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2) : boolean
+>                                                   : ^^^^^^^
 >ver : number
+>    : ^^^^^^
 >(MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2) : MyVer
+>                                             : ^^^^^
 >MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2 : MyVer
+>                                           : ^^^^^
 >MyVer.v1 >= MyVer.v2 : boolean
+>                     : ^^^^^^^
 >MyVer.v1 : MyVer.v1
+>         : ^^^^^^^^
 >MyVer : typeof MyVer
+>      : ^^^^^^^^^^^^
 >v1 : MyVer.v1
+>   : ^^^^^^^^
 >MyVer.v2 : MyVer.v2
+>         : ^^^^^^^^
 >MyVer : typeof MyVer
+>      : ^^^^^^^^^^^^
 >v2 : MyVer.v2
+>   : ^^^^^^^^
 >MyVer.v1 : MyVer.v1
+>         : ^^^^^^^^
 >MyVer : typeof MyVer
+>      : ^^^^^^^^^^^^
 >v1 : MyVer.v1
+>   : ^^^^^^^^
 >MyVer.v2 : MyVer.v2
+>         : ^^^^^^^^
 >MyVer : typeof MyVer
+>      : ^^^^^^^^^^^^
 >v2 : MyVer.v2
+>   : ^^^^^^^^
 

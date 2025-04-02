@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts] ////
+
 //// [internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts]
 export module a {
     export function foo(x: number) {
@@ -22,11 +24,11 @@ var a;
         return x;
     }
     a.foo = foo;
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var c;
 (function (c) {
     var b = a.foo;
     var bVal = b(10);
     c.bVal2 = b;
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 var d = c.b(11);

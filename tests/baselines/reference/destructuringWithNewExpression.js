@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringWithNewExpression.ts] ////
+
 //// [destructuringWithNewExpression.ts]
 class C {
     x = 0;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingCloseParenStatements.ts] ////
+
 //// [missingCloseParenStatements.ts]
 var a1, a2, a3 = 0;
 if ( a1 && (a2 + a3 > 0) {

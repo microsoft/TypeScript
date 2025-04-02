@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts] ////
+
 //// [switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts]
 export const narrowToLiterals = (str: string) => {
     switch (str) {

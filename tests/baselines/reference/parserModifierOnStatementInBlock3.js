@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts] ////
+
 //// [parserModifierOnStatementInBlock3.ts]
 export function foo() {
    export function bar() {
@@ -8,9 +10,8 @@ export function foo() {
 //// [parserModifierOnStatementInBlock3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
+exports.foo = foo;
 function foo() {
     export function bar() {
     }
 }
-exports.foo = foo;

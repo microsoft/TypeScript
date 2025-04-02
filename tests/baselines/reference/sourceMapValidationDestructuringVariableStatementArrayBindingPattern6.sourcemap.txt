@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js
 sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts
 -------------------------------------------------------------------
 >>>var _a = [1, 2][0], x = _a === void 0 ? 20 : _a;

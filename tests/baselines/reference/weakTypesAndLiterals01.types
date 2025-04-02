@@ -1,20 +1,29 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts] ////
+
+=== weakTypesAndLiterals01.ts ===
 type WeakTypes =
->WeakTypes : { optional?: true | undefined; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
+>WeakTypes : WeakTypes
+>          : ^^^^^^^^^
 
     | { optional?: true; }
 >optional : true | undefined
+>         : ^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     | { toLowerCase?(): string }
 >toLowerCase : (() => string) | undefined
+>            : ^^^^^^^      ^^^^^^^^^^^^^
 
     | { toUpperCase?(): string, otherOptionalProp?: number };
 >toUpperCase : (() => string) | undefined
+>            : ^^^^^^^      ^^^^^^^^^^^^^
 >otherOptionalProp : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
 
 type LiteralsOrWeakTypes =
->LiteralsOrWeakTypes : WeakTypes | "A" | "B"
+>LiteralsOrWeakTypes : LiteralsOrWeakTypes
+>                    : ^^^^^^^^^^^^^^^^^^^
 
     | "A"
     | "B"
@@ -22,80 +31,113 @@ type LiteralsOrWeakTypes =
 
 declare let aOrB: "A" | "B";
 >aOrB : "A" | "B"
+>     : ^^^^^^^^^
 
 const f = (arg: LiteralsOrWeakTypes) => {
 >f : (arg: LiteralsOrWeakTypes) => WeakTypes | "A" | "B"
+>  : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg: LiteralsOrWeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => WeakTypes | "A" | "B"
+>                                                                                                                 : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : LiteralsOrWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^
 
     if (arg === "A") {
 >arg === "A" : boolean
+>            : ^^^^^^^
 >arg : LiteralsOrWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
         return arg;
->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; } | "A"
+>arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "A"
+>    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
     }
     else {
         return arg;
 >arg : WeakTypes | "B"
+>    : ^^^^^^^^^^^^^^^
     }
 }
 
 const g = (arg: WeakTypes) => {
 >g : (arg: WeakTypes) => WeakTypes
+>  : ^   ^^         ^^^^^^^^^^^^^^
 >(arg: WeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: WeakTypes) => WeakTypes
+>                                                                                                       : ^   ^^         ^^^^^^^^^^^^^^
 >arg : WeakTypes
+>    : ^^^^^^^^^
 
     if (arg === "A") {
 >arg === "A" : boolean
+>            : ^^^^^^^
 >arg : WeakTypes
+>    : ^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
         return arg;
->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
+>arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^
     }
     else {
         return arg;
 >arg : WeakTypes
+>    : ^^^^^^^^^
     }
 }
 
 const h = (arg: LiteralsOrWeakTypes) => {
 >h : (arg: LiteralsOrWeakTypes) => LiteralsOrWeakTypes
+>  : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg: LiteralsOrWeakTypes) => {    if (arg === aOrB) {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => LiteralsOrWeakTypes
+>                                                                                                                  : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : LiteralsOrWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^
 
     if (arg === aOrB) {
 >arg === aOrB : boolean
+>             : ^^^^^^^
 >arg : LiteralsOrWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^
 >aOrB : "A" | "B"
+>     : ^^^^^^^^^
 
         return arg;
->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; } | "A" | "B"
+>arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "A" | "B"
+>    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
     }
     else {
         return arg;
 >arg : LiteralsOrWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^
     }
 }
 
 const i = (arg: WeakTypes) => {
 >i : (arg: WeakTypes) => WeakTypes
+>  : ^   ^^         ^^^^^^^^^^^^^^
 >(arg: WeakTypes) => {    if (arg === aOrB) {        return arg;    }    else {        return arg;    }} : (arg: WeakTypes) => WeakTypes
+>                                                                                                        : ^   ^^         ^^^^^^^^^^^^^^
 >arg : WeakTypes
+>    : ^^^^^^^^^
 
     if (arg === aOrB) {
 >arg === aOrB : boolean
+>             : ^^^^^^^
 >arg : WeakTypes
+>    : ^^^^^^^^^
 >aOrB : "A" | "B"
+>     : ^^^^^^^^^
 
         return arg;
->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
+>arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^
     }
     else {
         return arg;
 >arg : WeakTypes
+>    : ^^^^^^^^^
     }
 }
 

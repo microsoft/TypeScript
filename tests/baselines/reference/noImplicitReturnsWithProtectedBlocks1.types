@@ -1,23 +1,34 @@
-=== tests/cases/compiler/noImplicitReturnsWithProtectedBlocks1.ts ===
+//// [tests/cases/compiler/noImplicitReturnsWithProtectedBlocks1.ts] ////
+
+=== noImplicitReturnsWithProtectedBlocks1.ts ===
 declare function log(s: string): void;
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 
 declare function get(): number;
 >get : () => number
+>    : ^^^^^^      
 
 function main1() : number {
 >main1 : () => number
+>      : ^^^^^^      
 
     try {
         return get();
 >get() : number
+>      : ^^^^^^
 >get : () => number
+>    : ^^^^^^      
     }
     finally {
         log("in finally");
 >log("in finally") : void
+>                  : ^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >"in finally" : "in finally"
+>             : ^^^^^^^^^^^^
     }
 }

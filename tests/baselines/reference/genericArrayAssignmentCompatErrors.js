@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericArrayAssignmentCompatErrors.ts] ////
+
 //// [genericArrayAssignmentCompatErrors.ts]
 var myCars=new Array(); 
 var myCars2 = new [];

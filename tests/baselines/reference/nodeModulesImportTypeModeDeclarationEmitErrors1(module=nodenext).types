@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmitErrors1.ts] ////
+
 === /node_modules/pkg/import.d.ts ===
 
 export interface ImportInterface {}
@@ -6,178 +8,284 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 === /index.ts ===
 export type LocalInterface =
->LocalInterface : import("/node_modules/pkg/require").RequireInterface & import("/node_modules/pkg/import").ImportInterface
+>LocalInterface : LocalInterface
+>               : ^^^^^^^^^^^^^^
 
     & import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface
     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
 
 export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
 >a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
 export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
 >b : import("/node_modules/pkg/import").ImportInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
 === /other.ts ===
 // missing assert:
 export type LocalInterface =
 >LocalInterface : any
+>               : ^^^
 
     & import("pkg", {"resolution-mode": "require"}).RequireInterface
 >"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 >RequireInterface    & import("pkg", {"resolution-mode": "import"}).ImportInterface : number
+>                                                                                   : ^^^^^^
 >RequireInterface : any
+>                 : ^^^
 
     & import("pkg", {"resolution-mode": "import"}).ImportInterface;
 >import("pkg", {"resolution-mode": "import"}).ImportInterface : any
+>                                                             : ^^^
 >import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"pkg" : "pkg"
+>      : ^^^^^
 >{"resolution-mode": "import"} : { "resolution-mode": string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"resolution-mode" : string
+>                  : ^^^^^^
 >"import" : "import"
+>         : ^^^^^^^^
 >ImportInterface : any
+>                : ^^^
 
 export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
 >a : any
+>  : ^^^
 >(null as any as import("pkg", { : any
+>                                : ^^^
 >null as any as import("pkg", { : any
+>                               : ^^^
 >null as any : any
+>            : ^^^
 >"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
 >"require" : "require"
+>          : ^^^^^^^^^
 >RequireInterface : any
+>                 : ^^^
 
 export const b = (null as any as import("pkg", {"resolution-mode": "import"}).ImportInterface);
 >b : any
+>  : ^^^
 >(null as any as import("pkg", { : any
+>                                : ^^^
 >null as any as import("pkg", { : any
+>                               : ^^^
 >null as any : any
+>            : ^^^
 >"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
 >"import" : "import"
+>         : ^^^^^^^^
 >ImportInterface : any
+>                : ^^^
 
 === /other2.ts ===
 // wrong assertion key
 export type LocalInterface =
 >LocalInterface : any
+>               : ^^^
 
     & import("pkg", { assert: {"bad": "require"} }).RequireInterface
     & import("pkg", { assert: {"bad": "import"} }).ImportInterface;
 
 export const a = (null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface);
 >a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
 export const b = (null as any as import("pkg", { assert: {"bad": "import"} }).ImportInterface);
 >b : any
+>  : ^^^
 >(null as any as import("pkg", { assert: {"bad": "import"} }).ImportInterface) : any
+>                                                                              : ^^^
 >null as any as import("pkg", { assert: {"bad": "import"} }).ImportInterface : any
+>                                                                            : ^^^
 >null as any : any
+>            : ^^^
 
 === /other3.ts ===
 // Array instead of object-y thing
 export type LocalInterface =
 >LocalInterface : any
+>               : ^^^
 
     & import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface
 >"resolution-mode" : "require"
+>                  : ^^^^^^^^^
 >RequireInterface    & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : number
+>                                                                                       : ^^^^^^
 >RequireInterface : any
+>                 : ^^^
 
     & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
 >import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
+>                                                                 : ^^^
 >import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"pkg" : "pkg"
+>      : ^^^^^
 >[ {"resolution-mode": "import"} ] : { "resolution-mode": string; }[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{"resolution-mode": "import"} : { "resolution-mode": string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"resolution-mode" : string
+>                  : ^^^^^^
 >"import" : "import"
+>         : ^^^^^^^^
 >ImportInterface : any
+>                : ^^^
 
 export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
 >a : any
+>  : ^^^
 >(null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface : any
+>                                                                                   : ^^^
 >(null as any as import("pkg", [ {"resolution-mode": "require"} ]) : any
+>                                                                  : ^^^
 >null as any as import("pkg", [ {"resolution-mode": "require"} ] : any
+>                                                                : ^^^
 >null as any : any
+>            : ^^^
 >"resolution-mode" : "require"
+>                  : ^^^^^^^^^
 >RequireInterface : any
+>                 : ^^^
 
 export const b = (null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface);
 >b : any
+>  : ^^^
 >(null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
+>                                                                                 : ^^^
 >(null as any as import("pkg", [ {"resolution-mode": "import"} ]) : any
+>                                                                 : ^^^
 >null as any as import("pkg", [ {"resolution-mode": "import"} ] : any
+>                                                               : ^^^
 >null as any : any
+>            : ^^^
 >"resolution-mode" : "import"
+>                  : ^^^^^^^^
 >ImportInterface : any
+>                : ^^^
 
 === /other4.ts ===
 // Indirected assertion objecty-thing - not allowed
 type Asserts1 = { assert: {"resolution-mode": "require"} };
->Asserts1 : { assert: {    "resolution-mode": "require";}; }
+>Asserts1 : Asserts1
+>         : ^^^^^^^^
 >assert : { "resolution-mode": "require"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^         ^^^
 >"resolution-mode" : "require"
+>                  : ^^^^^^^^^
 
 type Asserts2 = { assert: {"resolution-mode": "import"} };
->Asserts2 : { assert: {    "resolution-mode": "import";}; }
+>Asserts2 : Asserts2
+>         : ^^^^^^^^
 >assert : { "resolution-mode": "import"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^        ^^^
 >"resolution-mode" : "import"
+>                  : ^^^^^^^^
 
 export type LocalInterface =
 >LocalInterface : any
+>               : ^^^
 
     & import("pkg", Asserts1).RequireInterface
 >Asserts1 : any
+>         : ^^^
 >RequireInterface    & import("pkg", Asserts2).ImportInterface : number
+>                                                              : ^^^^^^
 >RequireInterface : any
+>                 : ^^^
 
     & import("pkg", Asserts2).ImportInterface;
 >import("pkg", Asserts2).ImportInterface : any
+>                                        : ^^^
 >import("pkg", Asserts2) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"pkg" : "pkg"
+>      : ^^^^^
 >Asserts2 : any
+>         : ^^^
 >ImportInterface : any
+>                : ^^^
 
 export const a = (null as any as import("pkg", Asserts1).RequireInterface);
 >a : any
+>  : ^^^
 >(null as any as import("pkg", : any
+>                              : ^^^
 >null as any as import("pkg", : any
+>                             : ^^^
 >null as any : any
+>            : ^^^
 >Asserts1 : any
+>         : ^^^
 >RequireInterface : any
+>                 : ^^^
 
 export const b = (null as any as import("pkg", Asserts2).ImportInterface);
 >b : any
+>  : ^^^
 >(null as any as import("pkg", : any
+>                              : ^^^
 >null as any as import("pkg", : any
+>                             : ^^^
 >null as any : any
+>            : ^^^
 >Asserts2 : any
+>         : ^^^
 >ImportInterface : any
+>                : ^^^
 
 === /other5.ts ===
 export type LocalInterface =
 >LocalInterface : any
+>               : ^^^
 
     & import("pkg", { assert: {} }).RequireInterface
     & import("pkg", { assert: {} }).ImportInterface;
 
 export const a = (null as any as import("pkg", { assert: {} }).RequireInterface);
 >a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(null as any as import("pkg", { assert: {} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any as import("pkg", { assert: {} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
 export const b = (null as any as import("pkg", { assert: {} }).ImportInterface);
 >b : any
+>  : ^^^
 >(null as any as import("pkg", { assert: {} }).ImportInterface) : any
+>                                                               : ^^^
 >null as any as import("pkg", { assert: {} }).ImportInterface : any
+>                                                             : ^^^
 >null as any : any
+>            : ^^^
 

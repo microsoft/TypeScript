@@ -1,35 +1,53 @@
-=== tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignmentJs.js ===
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignmentJs.ts] ////
 
-=== tests/cases/conformance/classes/members/privateNames/a.js ===
+=== typeFromPrivatePropertyAssignmentJs.js ===
+
+=== a.js ===
 class C {
 >C : C
+>  : ^
 
     /** @type {{ foo?: string } | undefined } */
     #a;
 >#a : { foo?: string; }
+>   : ^^^^^^^^      ^^^
 
     /** @type {{ foo?: string } | undefined } */
     #b;
 >#b : { foo?: string; }
+>   : ^^^^^^^^      ^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         const a = this.#a || {};
 >a : { foo?: string; }
+>  : ^^^^^^^^      ^^^
 >this.#a || {} : { foo?: string; }
+>              : ^^^^^^^^      ^^^
 >this.#a : { foo?: string; }
+>        : ^^^^^^^^      ^^^
 >this : this
+>     : ^^^^
 >{} : {}
+>   : ^^
 
         this.#b = this.#b || {};
 >this.#b = this.#b || {} : { foo?: string; }
+>                        : ^^^^^^^^      ^^^
 >this.#b : { foo?: string; }
+>        : ^^^^^^^^      ^^^
 >this : this
+>     : ^^^^
 >this.#b || {} : { foo?: string; }
+>              : ^^^^^^^^      ^^^
 >this.#b : { foo?: string; }
+>        : ^^^^^^^^      ^^^
 >this : this
+>     : ^^^^
 >{} : {}
+>   : ^^
     }
 }
 

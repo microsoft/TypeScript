@@ -1,444 +1,693 @@
-=== tests/cases/conformance/types/union/discriminatedUnionTypes1.ts ===
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes1.ts] ////
+
+=== discriminatedUnionTypes1.ts ===
 interface Square {
     kind: "square";
 >kind : "square"
+>     : ^^^^^^^^
 
     size: number;
 >size : number
+>     : ^^^^^^
 }
 
 interface Rectangle {
     kind: "rectangle";
 >kind : "rectangle"
+>     : ^^^^^^^^^^^
 
     width: number;
 >width : number
+>      : ^^^^^^
 
     height: number;
 >height : number
+>       : ^^^^^^
 }
 
 interface Circle {
     kind: "circle";
 >kind : "circle"
+>     : ^^^^^^^^
 
     radius: number;
 >radius : number
+>       : ^^^^^^
 }
 
 type Shape = Square | Rectangle | Circle;
->Shape : Square | Rectangle | Circle
+>Shape : Shape
+>      : ^^^^^
 
 function area1(s: Shape) {
 >area1 : (s: Shape) => number
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 
     if (s.kind === "square") {
 >s.kind === "square" : boolean
+>                    : ^^^^^^^
 >s.kind : "square" | "rectangle" | "circle"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >kind : "square" | "rectangle" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"square" : "square"
+>         : ^^^^^^^^
 
         return s.size * s.size;
 >s.size * s.size : number
+>                : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
     }
     else if (s.kind === "circle") {
 >s.kind === "circle" : boolean
+>                    : ^^^^^^^
 >s.kind : "rectangle" | "circle"
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >s : Rectangle | Circle
+>  : ^^^^^^^^^^^^^^^^^^
 >kind : "rectangle" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >"circle" : "circle"
+>         : ^^^^^^^^
 
         return Math.PI * s.radius * s.radius;
 >Math.PI * s.radius * s.radius : number
+>                              : ^^^^^^
 >Math.PI * s.radius : number
+>                   : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
     }
     else if (s.kind === "rectangle") {
 >s.kind === "rectangle" : boolean
+>                       : ^^^^^^^
 >s.kind : "rectangle"
+>       : ^^^^^^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >kind : "rectangle"
+>     : ^^^^^^^^^^^
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 
         return s.width * s.height;
 >s.width * s.height : number
+>                   : ^^^^^^
 >s.width : number
+>        : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >s.height : number
+>         : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >height : number
+>       : ^^^^^^
     }
     else {
         return 0;
 >0 : 0
+>  : ^
     }
 }
 
 function area2(s: Shape) {
 >area2 : (s: Shape) => number
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 
     switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >kind : "square" | "rectangle" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case "square": return s.size * s.size;
 >"square" : "square"
+>         : ^^^^^^^^
 >s.size * s.size : number
+>                : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 
         case "rectangle": return s.width * s.height;
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 >s.width * s.height : number
+>                   : ^^^^^^
 >s.width : number
+>        : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >s.height : number
+>         : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >height : number
+>       : ^^^^^^
 
         case "circle": return Math.PI * s.radius * s.radius;
 >"circle" : "circle"
+>         : ^^^^^^^^
 >Math.PI * s.radius * s.radius : number
+>                              : ^^^^^^
 >Math.PI * s.radius : number
+>                   : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
     }
 }
 
 function assertNever(x: never): never {
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >x : never
+>  : ^^^^^
 
     throw new Error("Unexpected object: " + x);
 >new Error("Unexpected object: " + x) : Error
+>                                     : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"Unexpected object: " + x : string
+>                          : ^^^^^^
 >"Unexpected object: " : "Unexpected object: "
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >x : never
+>  : ^^^^^
 }
 
 function area3(s: Shape) {
 >area3 : (s: Shape) => number
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 
     switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >kind : "square" | "rectangle" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case "square": return s.size * s.size;
 >"square" : "square"
+>         : ^^^^^^^^
 >s.size * s.size : number
+>                : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 
         case "rectangle": return s.width * s.height;
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 >s.width * s.height : number
+>                   : ^^^^^^
 >s.width : number
+>        : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >s.height : number
+>         : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >height : number
+>       : ^^^^^^
 
         case "circle": return Math.PI * s.radius * s.radius;
 >"circle" : "circle"
+>         : ^^^^^^^^
 >Math.PI * s.radius * s.radius : number
+>                              : ^^^^^^
 >Math.PI * s.radius : number
+>                   : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 
         default: return assertNever(s);
 >assertNever(s) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >s : never
+>  : ^^^^^
     }
 }
 
 function area4(s: Shape) {
 >area4 : (s: Shape) => number
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 
     switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >kind : "square" | "rectangle" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case "square": return s.size * s.size;
 >"square" : "square"
+>         : ^^^^^^^^
 >s.size * s.size : number
+>                : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 
         case "rectangle": return s.width * s.height;
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 >s.width * s.height : number
+>                   : ^^^^^^
 >s.width : number
+>        : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >s.height : number
+>         : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >height : number
+>       : ^^^^^^
 
         case "circle": return Math.PI * s.radius * s.radius;
 >"circle" : "circle"
+>         : ^^^^^^^^
 >Math.PI * s.radius * s.radius : number
+>                              : ^^^^^^
 >Math.PI * s.radius : number
+>                   : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
     }
     return assertNever(s);
 >assertNever(s) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >s : never
+>  : ^^^^^
 }
 
 type Message =
->Message : { kind: "A"; x: string; } | { kind: "B" | "C"; y: number; } | { kind: "D"; }
+>Message : Message
+>        : ^^^^^^^
 
     { kind: "A", x: string } |
 >kind : "A"
+>     : ^^^
 >x : string
+>  : ^^^^^^
 
     { kind: "B" | "C", y: number } |
 >kind : "B" | "C"
+>     : ^^^^^^^^^
 >y : number
+>  : ^^^^^^
 
     { kind: "D" };
 >kind : "D"
+>     : ^^^
 
 function f1(m: Message) {
 >f1 : (m: Message) => void
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 
     if (m.kind === "A") {
 >m.kind === "A" : boolean
+>               : ^^^^^^^
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
         m;  // { kind: "A", x: string }
 >m : { kind: "A"; x: string; }
+>  : ^^^^^^^^   ^^^^^      ^^^
     }
     else if (m.kind === "D") {
 >m.kind === "D" : boolean
+>               : ^^^^^^^
 >m.kind : "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^
 >m : { kind: "B" | "C"; y: number; } | { kind: "D"; }
+>  : ^^^^^^^^         ^^^^^      ^^^^^^^^^^^^^^   ^^^
 >kind : "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^
 >"D" : "D"
+>    : ^^^
 
         m;  // { kind: "D" }
 >m : { kind: "D"; }
+>  : ^^^^^^^^   ^^^
     }
     else {
         m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
+>  : ^^^^^^^^         ^^^^^      ^^^
     }
 }
 
 function f2(m: Message) {
 >f2 : (m: Message) => void
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 
     if (m.kind === "A") {
 >m.kind === "A" : boolean
+>               : ^^^^^^^
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
         return;
     }
     m;  // { kind: "B" | "C", y: number } | { kind: "D" }
 >m : { kind: "B" | "C"; y: number; } | { kind: "D"; }
+>  : ^^^^^^^^         ^^^^^      ^^^^^^^^^^^^^^   ^^^
 }
 
 function f3(m: Message) {
 >f3 : (m: Message) => void
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 
     if (m.kind === "X") {
 >m.kind === "X" : boolean
+>               : ^^^^^^^
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >"X" : "X"
+>    : ^^^
 
         m;  // never
 >m : never
+>  : ^^^^^
     }
 }
 
 function f4(m: Message, x: "A" | "D") {
 >f4 : (m: Message, x: "A" | "D") => void
+>   : ^ ^^       ^^ ^^         ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >x : "A" | "D"
+>  : ^^^^^^^^^
 
     if (m.kind == x) {
 >m.kind == x : boolean
+>            : ^^^^^^^
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >x : "A" | "D"
+>  : ^^^^^^^^^
 
         m;  // { kind: "A", x: string } | { kind: "D" }
 >m : { kind: "A"; x: string; } | { kind: "D"; }
+>  : ^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^
     }
 }
 
 function f5(m: Message) {
 >f5 : (m: Message) => void
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
         case "A":
 >"A" : "A"
+>    : ^^^
 
             m;  // { kind: "A", x: string }
 >m : { kind: "A"; x: string; }
+>  : ^^^^^^^^   ^^^^^      ^^^
 
             break;
         case "D":
 >"D" : "D"
+>    : ^^^
 
             m;  // { kind: "D" }
 >m : { kind: "D"; }
+>  : ^^^^^^^^   ^^^
 
             break;
         default:
             m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
+>  : ^^^^^^^^         ^^^^^      ^^^
     }
 }
 
 function f6(m: Message) {
 >f6 : (m: Message) => void
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
         case "A":
 >"A" : "A"
+>    : ^^^
 
             m;  // { kind: "A", x: string }
 >m : { kind: "A"; x: string; }
+>  : ^^^^^^^^   ^^^^^      ^^^
 
         case "D":
 >"D" : "D"
+>    : ^^^
 
             m;  // { kind: "A", x: string } | { kind: "D" }
 >m : { kind: "A"; x: string; } | { kind: "D"; }
+>  : ^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^
 
             break;
         default:
             m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
+>  : ^^^^^^^^         ^^^^^      ^^^
     }
 }
 
 function f7(m: Message) {
 >f7 : (m: Message) => void
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
         case "A":
 >"A" : "A"
+>    : ^^^
 
         case "B":
 >"B" : "B"
+>    : ^^^
 
             return;
     }
     m;  // { kind: "B" | "C", y: number } | { kind: "D" }
 >m : { kind: "B" | "C"; y: number; } | { kind: "D"; }
+>  : ^^^^^^^^         ^^^^^      ^^^^^^^^^^^^^^   ^^^
 }
 
 function f8(m: Message) {
 >f8 : (m: Message) => void
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >m : Message
+>  : ^^^^^^^
 >kind : "A" | "B" | "C" | "D"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
         case "A":
 >"A" : "A"
+>    : ^^^
 
             return;
         case "D":
 >"D" : "D"
+>    : ^^^
 
             throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
     }
     m;  // { kind: "B" | "C", y: number }
 >m : { kind: "B" | "C"; y: number; }
+>  : ^^^^^^^^         ^^^^^      ^^^
 }

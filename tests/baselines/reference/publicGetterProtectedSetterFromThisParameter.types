@@ -1,141 +1,229 @@
-=== tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts ===
+//// [tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts] ////
+
+=== publicGetterProtectedSetterFromThisParameter.ts ===
 class A {
 >A : A
+>  : ^
 
   get x() { return 0; }
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
   protected set x(v: number) { }
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
   public get y() { return 0; }
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
   protected set y(v: number) { }
 >y : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 }
 
 class B {
 >B : B
+>  : ^
 
   get q() { return 0; }
 >q : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
   protected set q(v: number) { }
 >q : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
   protected get u() { return 0; }
 >u : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
   protected set u(v: number) { }
 >u : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
   foo(this: A, a: A, b: B) {
 >foo : (this: A, a: A, b: B) => void
+>    : ^    ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >this : A
+>     : ^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
     // Should have no errors in this block
     this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     this.y = 0;
 >this.y = 0 : 0
+>           : ^
 >this.y : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     a.x = 0;
 >a.x = 0 : 0
+>        : ^
 >a.x : number
+>    : ^^^^^^
 >a : A
+>  : ^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     a.y = 0;
 >a.y = 0 : 0
+>        : ^
 >a.y : number
+>    : ^^^^^^
 >a : A
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     b.q = 0;
 >b.q = 0 : 0
+>        : ^
 >b.q : number
+>    : ^^^^^^
 >b : B
+>  : ^
 >q : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     b.u = 0;
 >b.u = 0 : 0
+>        : ^
 >b.u : number
+>    : ^^^^^^
 >b : B
+>  : ^
 >u : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
   }
 }
 
 function bar(this: A, a: A, b: B) {
 >bar : (this: A, a: A, b: B) => void
+>    : ^    ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >this : A
+>     : ^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
     this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     this.y = 0;
 >this.y = 0 : 0
+>           : ^
 >this.y : number
+>       : ^^^^^^
 >this : A
+>     : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     a.x = 0;
 >a.x = 0 : 0
+>        : ^
 >a.x : number
+>    : ^^^^^^
 >a : A
+>  : ^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     a.y = 0;
 >a.y = 0 : 0
+>        : ^
 >a.y : number
+>    : ^^^^^^
 >a : A
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     // These should error
     b.q = 0;
 >b.q = 0 : 0
+>        : ^
 >b.q : number
+>    : ^^^^^^
 >b : B
+>  : ^
 >q : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     b.u = 0;
 >b.u = 0 : 0
+>        : ^
 >b.u : number
+>    : ^^^^^^
 >b : B
+>  : ^
 >u : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 

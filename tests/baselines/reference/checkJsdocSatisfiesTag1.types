@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag1.ts] ////
+
 === /a.js ===
 /**
  * @typedef {Object} T1
@@ -20,65 +22,111 @@
 
 const t1 = /** @satisfies {T1} */ ({ a: 1 });
 >t1 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >({ a: 1 }) : { a: number; }
+>           : ^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const t2 = /** @satisfies {T1} */ ({ a: 1, b: 1 });
 >t2 : { a: number; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a: 1, b: 1 }) : { a: number; b: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 1 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const t3 = /** @satisfies {T1} */ ({});
 >t3 : {}
+>   : ^^
 >({}) : {}
+>     : ^^
 >{} : {}
+>   : ^^
 
 /** @type {T2} */
 const t4 = /** @satisfies {T2} */ ({ a: "a" });
 >t4 : T2
+>   : ^^
 >({ a: "a" }) : T2
+>             : ^^
 >{ a: "a" } : { a: "a"; }
+>           : ^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 >"a" : "a"
+>    : ^^^
 
 /** @type {(m: string) => string} */
 const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >t5 : (m: string) => string
+>   : ^ ^^      ^^^^^      
 >((m) => m.substring(0)) : (m: string) => string
+>                        : ^ ^^      ^^^^^      
 >(m) => m.substring(0) : (m: string) => string
+>                      : ^ ^^^^^^^^^^^^^^^^^^^
 >m : string
+>  : ^^^^^^
 >m.substring(0) : string
+>               : ^^^^^^
 >m.substring : (start: number, end?: number) => string
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >m : string
+>  : ^^^^^^
 >substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
 >t6 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 >([1, 2]) : [number, number]
+>         : ^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 const t7 = /** @satisfies {T4} */ ({ a: 'test' });
 >t7 : { a: string; }
+>   : ^^^^^^^^^^^^^^
 >({ a: 'test' }) : { a: string; }
+>                : ^^^^^^^^^^^^^^
 >{ a: 'test' } : { a: string; }
+>              : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
 const t8 = /** @satisfies {T4} */ ({ a: 'test', b: 'test' });
 >t8 : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a: 'test', b: 'test' }) : { a: string; b: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 'test', b: 'test' } : { a: string; b: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 >b : string
+>  : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 

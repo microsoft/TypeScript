@@ -1,11 +1,11 @@
-tests/cases/compiler/optionalPropertiesTest.ts(14,1): error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type 'IFoo'.
-tests/cases/compiler/optionalPropertiesTest.ts(25,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i1'.
-tests/cases/compiler/optionalPropertiesTest.ts(26,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i3'.
-tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is not assignable to type 'i1'.
+optionalPropertiesTest.ts(14,1): error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type 'IFoo'.
+optionalPropertiesTest.ts(25,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i1'.
+optionalPropertiesTest.ts(26,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i3'.
+optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is not assignable to type 'i1'.
   Property 'M' is optional in type 'i2' but required in type 'i1'.
 
 
-==== tests/cases/compiler/optionalPropertiesTest.ts (4 errors) ====
+==== optionalPropertiesTest.ts (4 errors) ====
     var x: {p1:number; p2?:string; p3?:{():number;};};
     
     interface IFoo
@@ -22,7 +22,7 @@ tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is
     foo = { name: "test" };            // Error, id missing
     ~~~
 !!! error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type 'IFoo'.
-!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:5:5: 'id' is declared here.
+!!! related TS2728 optionalPropertiesTest.ts:5:5: 'id' is declared here.
     foo = {id: 1234, print:()=>{}}	   // Ok
     
     var s = foo.name || "default";
@@ -36,11 +36,11 @@ tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is
     var test1: i1 = {};
         ~~~~~
 !!! error TS2741: Property 'M' is missing in type '{}' but required in type 'i1'.
-!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:20:16: 'M' is declared here.
+!!! related TS2728 optionalPropertiesTest.ts:20:16: 'M' is declared here.
     var test2: i3 = {};
         ~~~~~
 !!! error TS2741: Property 'M' is missing in type '{}' but required in type 'i3'.
-!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:22:16: 'M' is declared here.
+!!! related TS2728 optionalPropertiesTest.ts:22:16: 'M' is declared here.
     var test3: i2 = {};
     var test4: i4 = {};
     var test5: i1 = { M: function () { } };

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     append,
     BigIntLiteralType,
     CodeFixAction,
@@ -27,12 +32,7 @@ import {
     TypeChecker,
     TypeFlags,
     TypeNode,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixName = "strictClassInitialization";
 const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
@@ -108,7 +108,7 @@ function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker
         propertyDeclaration.name,
         factory.createToken(SyntaxKind.ExclamationToken),
         propertyDeclaration.type,
-        propertyDeclaration.initializer
+        propertyDeclaration.initializer,
     );
     changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
 }
@@ -149,7 +149,7 @@ function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclar
         propertyDeclaration.name,
         propertyDeclaration.questionToken,
         propertyDeclaration.type,
-        initializer
+        initializer,
     );
     changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
 }

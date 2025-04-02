@@ -1,36 +1,54 @@
-=== tests/cases/compiler/intrinsics.ts ===
+//// [tests/cases/compiler/intrinsics.ts] ////
+
+=== intrinsics.ts ===
 var hasOwnProperty: hasOwnProperty; // Error
 >hasOwnProperty : hasOwnProperty
+>               : ^^^^^^^^^^^^^^
 
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export var __proto__;
 >__proto__ : any
+>          : ^^^
 
     interface __proto__ {}
 
     class C<T extends { __proto__: __proto__ }> { }
 >C : C<T>
+>  : ^^^^
 >__proto__ : __proto__
+>          : ^^^^^^^^^
 }
 
 __proto__ = 0; // Error, __proto__ not defined
 >__proto__ = 0 : 0
+>              : ^
 >__proto__ : any
+>          : ^^^
 >0 : 0
+>  : ^
 
 m1.__proto__ = 0;
 >m1.__proto__ = 0 : 0
+>                 : ^
 >m1.__proto__ : any
+>             : ^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >__proto__ : any
+>          : ^^^
 >0 : 0
+>  : ^
 
 class Foo<__proto__> { }
 >Foo : Foo<__proto__>
+>    : ^^^^^^^^^^^^^^
 
 var foo: (__proto__: number) => void;
 >foo : (__proto__: number) => void
+>    : ^         ^^      ^^^^^    
 >__proto__ : number
+>          : ^^^^^^
 

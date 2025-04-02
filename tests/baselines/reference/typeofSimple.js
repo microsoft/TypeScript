@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofSimple.ts] ////
+
 //// [typeofSimple.ts]
 var v = 3;
 var v2: typeof v;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/giant.ts ===
+//// [tests/cases/compiler/giant.ts] ////
+
+=== giant.ts ===
 /*
     Prefixes
     p -> public
@@ -12,75 +14,108 @@
 
     MAX DEPTH 3 LEVELS
 */
+const p = "propName";
+>p : "propName"
+>  : ^^^^^^^^^^
+>"propName" : "propName"
+>           : ^^^^^^^^^^
+
 var V;
 >V : any
+>  : ^^^
 
 function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     constructor () { }
     public pV;
 >pV : any
+>   : ^^^
 
     private rV;
 >rV : any
+>   : ^^^
 
     public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
     private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
     public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
     public get pgF()
 >pgF : any
+>    : ^^^
 
     public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
     private get rgF()
 >rgF : any
+>    : ^^^
 
     private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     static tV;
 >tV : any
+>   : ^^^
 
     static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
     static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
     static get tgF()
 >tgF : any
+>    : ^^^
 }
 interface I {
     //Call Signature
@@ -88,23 +123,31 @@ interface I {
     (): number;
     (p);
 >p : any
+>  : ^^^
 
     (p1: string);
 >p1 : string
+>   : ^^^^^^
 
     (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
     //(p8?: string, ...p9: any[]);
     //(p10:string, p8?: string, ...p9: any[]);
@@ -114,139 +157,193 @@ interface I {
     new (): number;
     new (p: string);
 >p : string
+>  : ^^^^^^
 
     new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
     //Index Signature
     [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
     [p1: string];
 >p1 : string
+>   : ^^^^^^
 
     [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
     //Property Signature
     p;
 >p : any
+>  : ^^^
 
     p1?;
 >p1 : any
+>   : ^^^
 
     p2?: string;
 >p2 : string
+>   : ^^^^^^
     
     //Function Signature
     p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
     p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
     p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
     p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
     p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
     p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var V;
 >V : any
+>  : ^^^
 
     function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
         public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
         public get pgF()
 >pgF : any
+>    : ^^^
 
         public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
         private get rgF()
 >rgF : any
+>    : ^^^
 
         private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tV;
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
         static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
         static get tgF()
 >tgF : any
+>    : ^^^
     }
     interface I {
         //Call Signature
@@ -254,23 +351,31 @@ module M {
         (): number;
         (p);
 >p : any
+>  : ^^^
 
         (p1: string);
 >p1 : string
+>   : ^^^^^^
 
         (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //(p8?: string, ...p9: any[]);
         //(p10:string, p8?: string, ...p9: any[]);
@@ -280,172 +385,235 @@ module M {
         new (): number;
         new (p: string);
 >p : string
+>  : ^^^^^^
 
         new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //Index Signature
         [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
         //Property Signature
         p;
 >p : any
+>  : ^^^
 
         p1?;
 >p1 : any
+>   : ^^^
 
         p2?: string;
 >p2 : string
+>   : ^^^^^^
     
         //Function Signature
         p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
         p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
         p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
         p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
     }
     module M {
 >M : typeof M
+>  : ^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { };
 >C : C
+>  : ^
 
         interface I { };
         module M { };
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { };
 >eC : eC
+>   : ^^
 
         export interface eI { };
         export module eM { };
         export declare var eaV;
 >eaV : any
+>    : ^^^
 
         export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
         export declare class eaC { };
 >eaC : eaC
+>    : ^^^
 
         export declare module eaM { };
     }
     export var eV;
 >eV : any
+>   : ^^^
 
     export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
     export class eC {
 >eC : eC
+>   : ^^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
         public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
         public get pgF()
 >pgF : any
+>    : ^^^
 
         public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
         private get rgF()
 >rgF : any
+>    : ^^^
 
         private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tV;
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
         static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
         static get tgF()
 >tgF : any
+>    : ^^^
     }
     export interface eI {
         //Call Signature
@@ -453,23 +621,31 @@ module M {
         (): number;
         (p);
 >p : any
+>  : ^^^
 
         (p1: string);
 >p1 : string
+>   : ^^^^^^
 
         (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //(p8?: string, ...p9: any[]);
         //(p10:string, p8?: string, ...p9: any[]);
@@ -479,195 +655,265 @@ module M {
         new (): number;
         new (p: string);
 >p : string
+>  : ^^^^^^
 
         new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //Index Signature
         [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
         //Property Signature
         p;
 >p : any
+>  : ^^^
 
         p1?;
 >p1 : any
+>   : ^^^
 
         p2?: string;
 >p2 : string
+>   : ^^^^^^
     
         //Function Signature
         p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
         p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
         p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
         p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
     }
     export module eM {
 >eM : typeof eM
+>   : ^^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { };
 >C : C
+>  : ^
 
         interface I { };
         module M { };
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { };
 >eC : eC
+>   : ^^
 
         export interface eI { };
         export module eM { };
         export declare var eaV;
 >eaV : any
+>    : ^^^
 
         export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
         export declare class eaC { };
 >eaC : eaC
+>    : ^^^
 
         export declare module eaM { };
     }
     export declare var eaV;
 >eaV : any
+>    : ^^^
 
     export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
     export declare class eaC {
 >eaC : eaC
+>    : ^^^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
         public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
         public get pgF()
 >pgF : any
+>    : ^^^
 
         public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
         private get rgF()
 >rgF : any
+>    : ^^^
 
         private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tV;
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
         static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
         static get tgF()
 >tgF : any
+>    : ^^^
     }
     export declare module eaM {
 >eaM : typeof eaM
+>    : ^^^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { }
 >C : C
+>  : ^
 
         interface I { }
         module M { }
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { }
 >eC : eC
+>   : ^^
 
         export interface eI { }
         export module eM { }
@@ -675,73 +921,100 @@ module M {
 }
 export var eV;
 >eV : any
+>   : ^^^
 
 export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
 export class eC {
 >eC : eC
+>   : ^^
 
     constructor () { }
     public pV;
 >pV : any
+>   : ^^^
 
     private rV;
 >rV : any
+>   : ^^^
 
     public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
     private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
     public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
     public get pgF()
 >pgF : any
+>    : ^^^
 
     public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
     private get rgF()
 >rgF : any
+>    : ^^^
 
     private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     static tV;
 >tV : any
+>   : ^^^
 
     static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
     static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
     static get tgF()
 >tgF : any
+>    : ^^^
 }
 export interface eI {
     //Call Signature
@@ -749,23 +1022,31 @@ export interface eI {
     (): number;
     (p);
 >p : any
+>  : ^^^
 
     (p1: string);
 >p1 : string
+>   : ^^^^^^
 
     (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
     //(p8?: string, ...p9: any[]);
     //(p10:string, p8?: string, ...p9: any[]);
@@ -775,139 +1056,193 @@ export interface eI {
     new (): number;
     new (p: string);
 >p : string
+>  : ^^^^^^
 
     new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
     new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
     new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
     new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
     //Index Signature
     [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
     [p1: string];
 >p1 : string
+>   : ^^^^^^
 
     [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
     //Property Signature
     p;
 >p : any
+>  : ^^^
 
     p1?;
 >p1 : any
+>   : ^^^
 
     p2?: string;
 >p2 : string
+>   : ^^^^^^
     
     //Function Signature
     p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
     p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
     p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
     p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
     p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
     p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 }
 export module eM {
->eM : typeof import("tests/cases/compiler/giant").eM
+>eM : typeof import("giant").eM
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var V;
 >V : any
+>  : ^^^
 
     function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
         public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
         public get pgF()
 >pgF : any
+>    : ^^^
 
         public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
         private get rgF()
 >rgF : any
+>    : ^^^
 
         private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tV;
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
         static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
         static get tgF()
 >tgF : any
+>    : ^^^
     }
     interface I {
         //Call Signature
@@ -915,23 +1250,31 @@ export module eM {
         (): number;
         (p);
 >p : any
+>  : ^^^
 
         (p1: string);
 >p1 : string
+>   : ^^^^^^
 
         (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //(p8?: string, ...p9: any[]);
         //(p10:string, p8?: string, ...p9: any[]);
@@ -941,172 +1284,235 @@ export module eM {
         new (): number;
         new (p: string);
 >p : string
+>  : ^^^^^^
 
         new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //Index Signature
         [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
         //Property Signature
         p;
 >p : any
+>  : ^^^
 
         p1?;
 >p1 : any
+>   : ^^^
 
         p2?: string;
 >p2 : string
+>   : ^^^^^^
     
         //Function Signature
         p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
         p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
         p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
         p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
     }
     module M {
 >M : typeof M
+>  : ^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { };
 >C : C
+>  : ^
 
         interface I { };
         module M { };
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { };
 >eC : eC
+>   : ^^
 
         export interface eI { };
         export module eM { };
         export declare var eaV;
 >eaV : any
+>    : ^^^
 
         export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
         export declare class eaC { };
 >eaC : eaC
+>    : ^^^
 
         export declare module eaM { };
     }
     export var eV;
 >eV : any
+>   : ^^^
 
     export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
     export class eC {
 >eC : eC
+>   : ^^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
         public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
         public get pgF()
 >pgF : any
+>    : ^^^
 
         public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
         private get rgF()
 >rgF : any
+>    : ^^^
 
         private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tV;
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
         static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
         static get tgF()
 >tgF : any
+>    : ^^^
     }
     export interface eI {
         //Call Signature
@@ -1114,23 +1520,31 @@ export module eM {
         (): number;
         (p);
 >p : any
+>  : ^^^
 
         (p1: string);
 >p1 : string
+>   : ^^^^^^
 
         (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //(p8?: string, ...p9: any[]);
         //(p10:string, p8?: string, ...p9: any[]);
@@ -1140,195 +1554,265 @@ export module eM {
         new (): number;
         new (p: string);
 >p : string
+>  : ^^^^^^
 
         new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //Index Signature
         [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
         //Property Signature
         p;
 >p : any
+>  : ^^^
 
         p1?;
 >p1 : any
+>   : ^^^
 
         p2?: string;
 >p2 : string
+>   : ^^^^^^
     
         //Function Signature
         p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
         p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
         p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
         p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
     }
     export module eM {
 >eM : typeof eM
+>   : ^^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { };
 >C : C
+>  : ^
 
         interface I { };
         module M { };
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { };
 >eC : eC
+>   : ^^
 
         export interface eI { };
         export module eM { };
         export declare var eaV;
 >eaV : any
+>    : ^^^
 
         export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
         export declare class eaC { };
 >eaC : eaC
+>    : ^^^
 
         export declare module eaM { };
     }
     export declare var eaV;
 >eaV : any
+>    : ^^^
 
     export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
     export declare class eaC {
 >eaC : eaC
+>    : ^^^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
         public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
         public get pgF()
 >pgF : any
+>    : ^^^
 
         public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
         private get rgF()
 >rgF : any
+>    : ^^^
 
         private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tV;
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
         static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
         static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
         static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
         static get tgF()
 >tgF : any
+>    : ^^^
     }
     export declare module eaM {
 >eaM : typeof eaM
+>    : ^^^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { }
 >C : C
+>  : ^
 
         interface I { }
         module M { }
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { }
 >eC : eC
+>   : ^^
 
         export interface eI { }
         export module eM { }
@@ -1336,101 +1820,137 @@ export module eM {
 }
 export declare var eaV;
 >eaV : any
+>    : ^^^
 
 export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
 export declare class eaC {
 >eaC : eaC
+>    : ^^^
 
     constructor () { }
     public pV;
 >pV : any
+>   : ^^^
 
     private rV;
 >rV : any
+>   : ^^^
 
     public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
     private rF() { }
 >rF : () => void
+>   : ^^^^^^^^^^
 
     public pgF() { }
 >pgF : () => void
+>    : ^^^^^^^^^^
 
     public get pgF()
 >pgF : any
+>    : ^^^
 
     public psF(param:any) { }
 >psF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     public set psF(param:any)
 >psF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     private rgF() { }
 >rgF : () => void
+>    : ^^^^^^^^^^
 
     private get rgF()
 >rgF : any
+>    : ^^^
 
     private rsF(param:any) { }
 >rsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     private set rsF(param:any)
 >rsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     static tV;
 >tV : any
+>   : ^^^
 
     static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
 
     static tsF(param:any) { }
 >tsF : (param: any) => void
+>    : ^     ^^   ^^^^^^^^^
 >param : any
+>      : ^^^
 
     static set tsF(param:any)
 >tsF : any
+>    : ^^^
 >param : any
+>      : ^^^
 
     static tgF() { }
 >tgF : () => void
+>    : ^^^^^^^^^^
 
     static get tgF()
 >tgF : any
+>    : ^^^
 }
 export declare module eaM {
 >eaM : typeof eaM
+>    : ^^^^^^^^^^
 
     var V;
 >V : any
+>  : ^^^
 
     function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         static tV;
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
     }
     interface I {
         //Call Signature
@@ -1438,20 +1958,27 @@ export declare module eaM {
         (): number;
         (p: string);
 >p : string
+>  : ^^^^^^
 
         (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //(p8?: string, ...p9: any[]);
         //(p10:string, p8?: string, ...p9: any[]);
@@ -1461,127 +1988,171 @@ export declare module eaM {
         new (): number;
         new (p: string);
 >p : string
+>  : ^^^^^^
 
         new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //Index Signature
         [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
         //Property Signature
         p;
 >p : any
+>  : ^^^
 
         p1?;
 >p1 : any
+>   : ^^^
 
         p2?: string;
 >p2 : string
+>   : ^^^^^^
     
         //Function Signature
         p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
         p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
         p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
         p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
     }
     module M {
 >M : typeof M
+>  : ^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { }
 >C : C
+>  : ^
 
         interface I { }
         module M { }
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { }
 >eC : eC
+>   : ^^
 
         export interface eI { }
         export module eM { }
         export declare var eaV
 >eaV : any
+>    : ^^^
 
         export declare function eaF() { };
 >eaF : () => void
+>    : ^^^^^^^^^^
 
         export declare class eaC { }
 >eaC : eaC
+>    : ^^^
 
         export declare module eaM { }
     }
     export var eV;
 >eV : any
+>   : ^^^
 
     export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
     export class eC {
 >eC : eC
+>   : ^^
 
         constructor () { }
         public pV;
 >pV : any
+>   : ^^^
 
         private rV;
 >rV : any
+>   : ^^^
 
         public pF() { }
 >pF : () => void
+>   : ^^^^^^^^^^
 
         static tV
 >tV : any
+>   : ^^^
 
         static tF() { }
 >tF : () => void
+>   : ^^^^^^^^^^
     }
     export interface eI {
         //Call Signature
@@ -1589,23 +2160,31 @@ export declare module eaM {
         (): number;
         (p);
 >p : any
+>  : ^^^
 
         (p1: string);
 >p1 : string
+>   : ^^^^^^
 
         (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //(p8?: string, ...p9: any[]);
         //(p10:string, p8?: string, ...p9: any[]);
@@ -1615,88 +2194,121 @@ export declare module eaM {
         new (): number;
         new (p: string);
 >p : string
+>  : ^^^^^^
 
         new (p2?: string);
 >p2 : string
+>   : ^^^^^^
 
         new (...p3: any[]);
 >p3 : any[]
+>   : ^^^^^
 
         new (p4: string, p5?: string);
 >p4 : string
+>   : ^^^^^^
 >p5 : string
+>   : ^^^^^^
 
         new (p6: string, ...p7: any[]);
 >p6 : string
+>   : ^^^^^^
 >p7 : any[]
+>   : ^^^^^
 
         //Index Signature
         [p];
 >[p] : any
->p : any
+>    : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 
         //Property Signature
         p;
 >p : any
+>  : ^^^
 
         p1?;
 >p1 : any
+>   : ^^^
 
         p2?: string;
 >p2 : string
+>   : ^^^^^^
     
         //Function Signature
         p3();
 >p3 : () => any
+>   : ^^^^^^^^^
 
         p4? ();
 >p4 : () => any
+>   : ^^^^^^^^^
 
         p5? (): void;
 >p5 : () => void
+>   : ^^^^^^    
 
         p6(pa1): void;
 >p6 : (pa1: any) => void
+>   : ^   ^^^^^^^^^^    
 >pa1 : any
+>    : ^^^
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
+>    : ^^^
 >pa2 : any
+>    : ^^^
     }
     export module eM {
 >eM : typeof eM
+>   : ^^^^^^^^^
 
         var V;
 >V : any
+>  : ^^^
 
         function F() { };
 >F : () => void
+>  : ^^^^^^^^^^
 
         class C { }
 >C : C
+>  : ^
 
         module M { }
         export var eV;
 >eV : any
+>   : ^^^
 
         export function eF() { };
 >eF : () => void
+>   : ^^^^^^^^^^
 
         export class eC { }
 >eC : eC
+>   : ^^
 
         export interface eI { }
         export module eM { }

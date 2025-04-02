@@ -1,17 +1,25 @@
-=== tests/cases/compiler/constDeclarationShadowedByVarDeclaration2.ts ===
+//// [tests/cases/compiler/constDeclarationShadowedByVarDeclaration2.ts] ////
+
+=== constDeclarationShadowedByVarDeclaration2.ts ===
 // No errors, const declaration is not shadowed
 function outer() {
 >outer : () => void
+>      : ^^^^^^^^^^
 
     const x = 0;
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
     function inner() {
 >inner : () => void
+>      : ^^^^^^^^^^
 
         var x = "inner";
 >x : string
+>  : ^^^^^^
 >"inner" : "inner"
+>        : ^^^^^^^
     }
 }

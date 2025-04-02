@@ -1,7 +1,7 @@
-tests/cases/compiler/omitTypeHelperModifiers01.ts(16,7): error TS2540: Cannot assign to 'c' because it is a read-only property.
+omitTypeHelperModifiers01.ts(16,7): error TS2540: Cannot assign to 'c' because it is a read-only property.
 
 
-==== tests/cases/compiler/omitTypeHelperModifiers01.ts (1 errors) ====
+==== omitTypeHelperModifiers01.ts (1 errors) ====
     type A = {
         a: number;
         b?: string;

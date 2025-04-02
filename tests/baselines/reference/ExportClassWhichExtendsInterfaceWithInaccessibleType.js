@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWhichExtendsInterfaceWithInaccessibleType.ts] ////
+
 //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.ts]
 module A {
 

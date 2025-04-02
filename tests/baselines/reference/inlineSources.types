@@ -1,24 +1,40 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/inlineSources.ts] ////
+
+=== a.ts ===
 var a = 0;
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 console.log(a);
 >console.log(a) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >a : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 var b = 0;
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 console.log(b);
 >console.log(b) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >b : number
+>  : ^^^^^^
 

@@ -1,74 +1,129 @@
-=== tests/cases/compiler/genericTypeArgumentInference1.ts ===
+//// [tests/cases/compiler/genericTypeArgumentInference1.ts] ////
+
+=== genericTypeArgumentInference1.ts ===
 module Underscore {
     export interface Iterator<T, U> {
         (value: T, index: any, list: any): U;
 >value : T
+>      : ^
 >index : any
+>      : ^^^
 >list : any
+>     : ^^^
     }
     export interface Static {
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): T;
 >all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => T
+>    : ^ ^^    ^^   ^^        ^^^                    ^^       ^^^   ^^^^^ 
 >list : T[]
+>     : ^^^
 >iterator : Iterator<T, boolean>
+>         : ^^^^^^^^^^^^^^^^^^^^
 >context : any
+>        : ^^^
 
         identity<T>(value: T): T;
 >identity : <T>(value: T) => T
+>         : ^ ^^     ^^ ^^^^^ 
 >value : T
+>      : ^
     }
 }
 declare var _: Underscore.Static;
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >Underscore : any
+>           : ^^^
 
 var r = _.all([true, 1, null, 'yes'], _.identity);
 >r : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >[true, 1, null, 'yes'] : (string | number | true)[]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 >'yes' : "yes"
+>      : ^^^^^
 >_.identity : <T>(value: T) => T
+>           : ^ ^^     ^^ ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >identity : <T>(value: T) => T
+>         : ^ ^^     ^^ ^^^^^ 
 
 var r2 = _.all([true], _.identity);
 >r2 : boolean
+>   : ^^^^^^^
 >_.all([true], _.identity) : boolean
+>                          : ^^^^^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >[true] : true[]
+>       : ^^^^^^
 >true : true
+>     : ^^^^
 >_.identity : <T>(value: T) => T
+>           : ^ ^^     ^^ ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >identity : <T>(value: T) => T
+>         : ^ ^^     ^^ ^^^^^ 
 
 var r3 = _.all([], _.identity);
 >r3 : any
+>   : ^^^
 >_.all([], _.identity) : any
+>                      : ^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >_.identity : <T>(value: T) => T
+>           : ^ ^^     ^^ ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >identity : <T>(value: T) => T
+>         : ^ ^^     ^^ ^^^^^ 
 
 var r4 = _.all([<any>true], _.identity);
 >r4 : any
+>   : ^^^
 >_.all([<any>true], _.identity) : any
+>                               : ^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >[<any>true] : any[]
+>            : ^^^^^
 ><any>true : any
+>          : ^^^
 >true : true
+>     : ^^^^
 >_.identity : <T>(value: T) => T
+>           : ^ ^^     ^^ ^^^^^ 
 >_ : Underscore.Static
+>  : ^^^^^^^^^^^^^^^^^
 >identity : <T>(value: T) => T
+>         : ^ ^^     ^^ ^^^^^ 
 

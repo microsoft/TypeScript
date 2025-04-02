@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadMethods.ts ===
+//// [tests/cases/conformance/types/spread/spreadMethods.ts] ////
+
+=== spreadMethods.ts ===
 class K {
 >K : Symbol(K, Decl(spreadMethods.ts, 0, 0))
 

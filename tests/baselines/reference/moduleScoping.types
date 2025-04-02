@@ -1,58 +1,91 @@
-=== tests/cases/conformance/externalModules/file1.ts ===
+//// [tests/cases/conformance/externalModules/moduleScoping.ts] ////
+
+=== file1.ts ===
 var v1 = "sausages"; // Global scope
 >v1 : string
+>   : ^^^^^^
 >"sausages" : "sausages"
+>           : ^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/file2.ts ===
+=== file2.ts ===
 var v2 = 42; // Global scope
 >v2 : number
+>   : ^^^^^^
 >42 : 42
+>   : ^^
 
 var v4 = () => 5;
 >v4 : () => number
+>   : ^^^^^^^^^^^^
 >() => 5 : () => number
+>        : ^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
-=== tests/cases/conformance/externalModules/file3.ts ===
+=== file3.ts ===
 export var v3 = true;
 >v3 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var v2 = [1,2,3]; // Module scope. Should not appear in global scope
 >v2 : number[]
+>   : ^^^^^^^^
 >[1,2,3] : number[]
+>        : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
-=== tests/cases/conformance/externalModules/file4.ts ===
+=== file4.ts ===
 import file3 = require('./file3');
 >file3 : typeof file3
+>      : ^^^^^^^^^^^^
 
 var t1 = v1;
 >t1 : string
+>   : ^^^^^^
 >v1 : string
+>   : ^^^^^^
 
 var t2 = v2;
 >t2 : number
+>   : ^^^^^^
 >v2 : number
+>   : ^^^^^^
 
 var t3 = file3.v3;
 >t3 : boolean
+>   : ^^^^^^^
 >file3.v3 : boolean
+>         : ^^^^^^^
 >file3 : typeof file3
+>      : ^^^^^^^^^^^^
 >v3 : boolean
+>   : ^^^^^^^
 
 var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
 >v4 : { a: boolean; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{a: true, b: NaN} : { a: boolean; b: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >b : number
+>  : ^^^^^^
 >NaN : number
+>    : ^^^^^^
 
-=== tests/cases/conformance/externalModules/file5.ts ===
+=== file5.ts ===
 var x = v2; // Should be global v2 of type number again
 >x : number
+>  : ^^^^^^
 >v2 : number
+>   : ^^^^^^
 

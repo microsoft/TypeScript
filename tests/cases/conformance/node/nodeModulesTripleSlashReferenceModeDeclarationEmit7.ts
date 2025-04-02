@@ -1,5 +1,5 @@
 // @noImplicitReferences: true
-// @module: node16,nodenext
+// @module: node16,node18,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: /node_modules/pkg/package.json
@@ -24,7 +24,7 @@ declare global {
     function getInterR(): RequireInterface;
 }
 // @filename: /sub1/uses.ts
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterI();
 // @filename: /sub1/package.json
 {
@@ -32,7 +32,7 @@ export default getInterI();
     "type": "module"
 }
 // @filename: /sub2/uses.ts
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 // @filename: /sub2/package.json
 {

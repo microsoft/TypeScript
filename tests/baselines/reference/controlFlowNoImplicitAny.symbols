@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowNoImplicitAny.ts ===
+//// [tests/cases/compiler/controlFlowNoImplicitAny.ts] ////
+
+=== controlFlowNoImplicitAny.ts ===
 declare let cond: boolean;
 >cond : Symbol(cond, Decl(controlFlowNoImplicitAny.ts, 0, 11))
 

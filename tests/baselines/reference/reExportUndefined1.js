@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reExportUndefined1.ts] ////
+
 //// [a.ts]
 export { undefined };
 

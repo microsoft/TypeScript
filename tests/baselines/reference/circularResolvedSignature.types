@@ -1,56 +1,89 @@
-=== tests/cases/compiler/circularResolvedSignature.ts ===
+//// [tests/cases/compiler/circularResolvedSignature.ts] ////
+
+=== circularResolvedSignature.ts ===
 declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
 >useState : <S>(initialState: (() => S)) => [S, (s: S) => void]
+>         : ^ ^^            ^^         ^^^^^                   
 >initialState : () => S
+>             : ^^^^^^ 
 >s : S
+>  : ^
 
 type Data = Readonly<{
 >Data : Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>
+>     : ^^^^^^^^^^^^^^^^^^      ^^^^^^^                  ^^^^^^^                  ^^^^
 
     value: number;
 >value : number
+>      : ^^^^^^
 
     foo: (arg: any) => void;
 >foo : (arg: any) => void
+>    : ^   ^^   ^^^^^    
 >arg : any
+>    : ^^^
 
     bar: (arg: any) => void;
 >bar : (arg: any) => void
+>    : ^   ^^   ^^^^^    
 >arg : any
+>    : ^^^
 
 }>;
 
 export function Component() {
 >Component : () => void
+>          : ^^^^^^^^^^
 
     const [state, setState] = useState<Data>(() => ({
 >state : Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>
+>      : ^^^^^^^^^^^^^^^^^^      ^^^^^^^                  ^^^^^^^                  ^^^^
 >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^                  ^^^^^^^                  ^^^^^^^^^    
 >useState<Data>(() => ({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    })) : [Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>, (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void]
->useState : <S>(initialState: () => S) => [S, (s: S) => void]
+>                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^                  ^^^^^^^                  ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^                  ^^^^^^^                  ^^^^^^^^^    ^
+>useState : <S>(initialState: (() => S)) => [S, (s: S) => void]
+>         : ^ ^^            ^^         ^^^^^                   
 >() => ({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    }) : () => { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
 >({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    }) : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+>                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
 >{        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    } : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+>                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
 
         value: "string", // this should be a number
 >value : string
+>      : ^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         foo: (arg) => setState(arg),
 >foo : (arg: any) => void
+>    : ^   ^^^^^^^^^^^^^^
 >(arg) => setState(arg) : (arg: any) => void
+>                       : ^   ^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >setState(arg) : void
+>              : ^^^^
 >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^                  ^^^^^^^                  ^^^^^^^^^    
 >arg : any
+>    : ^^^
 
         bar: (arg) => setState(arg),
 >bar : (arg: any) => void
+>    : ^   ^^^^^^^^^^^^^^
 >(arg) => setState(arg) : (arg: any) => void
+>                       : ^   ^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >setState(arg) : void
+>              : ^^^^
 >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^                  ^^^^^^^                  ^^^^^^^^^    
 >arg : any
+>    : ^^^
 
     }));
 }

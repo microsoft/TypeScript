@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserExportAsFunctionIdentifier.ts] ////
+
 //// [parserExportAsFunctionIdentifier.ts]
 interface Foo {
        export(): string;

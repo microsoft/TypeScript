@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts] ////
+
 //// [readonlyArraysAndTuples.ts]
 type T10 = string[];
 type T11 = Array<string>;

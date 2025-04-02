@@ -1,52 +1,78 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/moduleExportAssignment7.ts] ////
+
+=== mod.js ===
 class Thing  { x = 1 }
 >Thing : Thing
+>      : ^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 class AnotherThing { y = 2  }
 >AnotherThing : AnotherThing
+>             : ^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 function foo() { return 3 }
 >foo : () => number
+>    : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 function bar() { return 4 }
 >bar : () => number
+>    : ^^^^^^^^^^^^
 >4 : 4
+>  : ^
 
 /** @typedef {() => number} buz */
 module.exports = {
 >module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Thing,
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 
     AnotherThing,
 >AnotherThing : typeof AnotherThing
+>             : ^^^^^^^^^^^^^^^^^^^
 
     foo,
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
     qux: bar,
 >qux : () => number
+>    : ^^^^^^^^^^^^
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
     baz() { return 5 },
 >baz : () => number
+>    : ^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
     literal: "",
 >literal : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 }
-=== tests/cases/conformance/salsa/main.js ===
+=== main.js ===
 /**
  * @param {import("./mod").Thing} a
  * @param {import("./mod").AnotherThing} b
@@ -58,38 +84,69 @@ module.exports = {
  */
 function jstypes(a, b, c, d, e, f, g) {
 >jstypes : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz, g: string) => number
+>        : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^                   ^^ ^^^^^^^^^^^^^^^^^^^
 >a : Thing
+>  : ^^^^^
 >b : AnotherThing
+>  : ^^^^^^^^^^^^
 >c : () => number
+>  : ^^^^^^^^^^^^
 >d : () => number
+>  : ^^^^^^^^^^^^
 >e : () => number
->f : import("tests/cases/conformance/salsa/mod").buz
+>  : ^^^^^^^^^^^^
+>f : import("mod").buz
+>  : ^^^^^^^^^^^^^^^^^
 >g : string
+>  : ^^^^^^
 
     return a.x + b.y + c() + d() + e() + f() + g.length
 >a.x + b.y + c() + d() + e() + f() + g.length : number
+>                                             : ^^^^^^
 >a.x + b.y + c() + d() + e() + f() : number
+>                                  : ^^^^^^
 >a.x + b.y + c() + d() + e() : number
+>                            : ^^^^^^
 >a.x + b.y + c() + d() : number
+>                      : ^^^^^^
 >a.x + b.y + c() : number
+>                : ^^^^^^
 >a.x + b.y : number
+>          : ^^^^^^
 >a.x : number
+>    : ^^^^^^
 >a : Thing
+>  : ^^^^^
 >x : number
+>  : ^^^^^^
 >b.y : number
+>    : ^^^^^^
 >b : AnotherThing
+>  : ^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >c() : number
+>    : ^^^^^^
 >c : () => number
+>  : ^^^^^^^^^^^^
 >d() : number
+>    : ^^^^^^
 >d : () => number
+>  : ^^^^^^^^^^^^
 >e() : number
+>    : ^^^^^^
 >e : () => number
+>  : ^^^^^^^^^^^^
 >f() : number
->f : import("tests/cases/conformance/salsa/mod").buz
+>    : ^^^^^^
+>f : import("mod").buz
+>  : ^^^^^^^^^^^^^^^^^
 >g.length : number
+>         : ^^^^^^
 >g : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 /**
@@ -102,148 +159,248 @@ function jstypes(a, b, c, d, e, f, g) {
  * @param {typeof import("./mod").literal} g
  */
 function jsvalues(a, b, c, d, e, f, g) {
->jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: any, g: typeof import("./mod").literal) => any
+>jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
+>         : ^ ^^                            ^^ ^^                                   ^^ ^^                          ^^ ^^                          ^^ ^^                          ^^ ^^                          ^^ ^^                              ^^^^^^^^
 >a : typeof Thing
+>  : ^^^^^^^^^^^^
 >b : typeof AnotherThing
+>  : ^^^^^^^^^^^^^^^^^^^
 >c : () => number
+>  : ^^^^^^^^^^^^
 >d : () => number
+>  : ^^^^^^^^^^^^
 >e : () => number
+>  : ^^^^^^^^^^^^
 >f : any
+>  : ^^^
 >g : string
+>  : ^^^^^^
 
     return a.length + b.length + c() + d() + e() + f() + g.length
 >a.length + b.length + c() + d() + e() + f() + g.length : any
+>                                                       : ^^^
 >a.length + b.length + c() + d() + e() + f() : any
+>                                            : ^^^
 >a.length + b.length + c() + d() + e() : number
+>                                      : ^^^^^^
 >a.length + b.length + c() + d() : number
+>                                : ^^^^^^
 >a.length + b.length + c() : number
+>                          : ^^^^^^
 >a.length + b.length : number
+>                    : ^^^^^^
 >a.length : number
+>         : ^^^^^^
 >a : typeof Thing
+>  : ^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >b.length : number
+>         : ^^^^^^
 >b : typeof AnotherThing
+>  : ^^^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >c() : number
+>    : ^^^^^^
 >c : () => number
+>  : ^^^^^^^^^^^^
 >d() : number
+>    : ^^^^^^
 >d : () => number
+>  : ^^^^^^^^^^^^
 >e() : number
+>    : ^^^^^^
 >e : () => number
+>  : ^^^^^^^^^^^^
 >f() : any
+>    : ^^^
 >f : any
+>  : ^^^
 >g.length : number
+>         : ^^^^^^
 >g : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
-=== tests/cases/conformance/salsa/index.ts ===
+=== index.ts ===
 function types(
->types : (a: any, b: any, c: any, d: any, e: any, f: import('./mod').buz, g: any) => any
+>types : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: import("./mod").foo, d: import("./mod").qux, e: import("./mod").baz, f: import("./mod").buz, g: import("./mod").literal) => any
+>      : ^ ^^                     ^^ ^^                            ^^ ^^                   ^^ ^^                   ^^ ^^                   ^^ ^^                   ^^ ^^                       ^^^^^^^^
 
     a: import('./mod').Thing,
 >a : any
+>  : ^^^
 
     b: import('./mod').AnotherThing,
 >b : any
+>  : ^^^
 
     c: import('./mod').foo,
 >c : any
+>  : ^^^
 
     d: import('./mod').qux,
 >d : any
+>  : ^^^
 
     e: import('./mod').baz,
 >e : any
+>  : ^^^
 
     f: import('./mod').buz,
->f : import("tests/cases/conformance/salsa/mod").buz
+>f : import("mod").buz
+>  : ^^^^^^^^^^^^^^^^^
 
     g: import('./mod').literal,
 >g : any
+>  : ^^^
 
 ) {
     return a.x + b.y + c() + d() + e() + f() + g.length
 >a.x + b.y + c() + d() + e() + f() + g.length : any
+>                                             : ^^^
 >a.x + b.y + c() + d() + e() + f() : any
+>                                  : ^^^
 >a.x + b.y + c() + d() + e() : any
+>                            : ^^^
 >a.x + b.y + c() + d() : any
+>                      : ^^^
 >a.x + b.y + c() : any
+>                : ^^^
 >a.x + b.y : any
+>          : ^^^
 >a.x : any
+>    : ^^^
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 >b.y : any
+>    : ^^^
 >b : any
+>  : ^^^
 >y : any
+>  : ^^^
 >c() : any
+>    : ^^^
 >c : any
+>  : ^^^
 >d() : any
+>    : ^^^
 >d : any
+>  : ^^^
 >e() : any
+>    : ^^^
 >e : any
+>  : ^^^
 >f() : number
->f : import("tests/cases/conformance/salsa/mod").buz
+>    : ^^^^^^
+>f : import("mod").buz
+>  : ^^^^^^^^^^^^^^^^^
 >g.length : any
+>         : ^^^
 >g : any
+>  : ^^^
 >length : any
+>       : ^^^
 }
 
 function values(
->values : (a: typeof import('./mod').Thing, b: typeof import('./mod').AnotherThing, c: typeof import('./mod').foo, d: typeof import('./mod').qux, e: typeof import('./mod').baz, f: any, g: typeof import('./mod').literal) => any
+>values : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
+>       : ^ ^^                            ^^ ^^                                   ^^ ^^                          ^^ ^^                          ^^ ^^                          ^^ ^^                          ^^ ^^                              ^^^^^^^^
 
     a: typeof import('./mod').Thing,
 >a : typeof Thing
+>  : ^^^^^^^^^^^^
 >Thing : any
+>      : ^^^
 
     b: typeof import('./mod').AnotherThing,
 >b : typeof AnotherThing
+>  : ^^^^^^^^^^^^^^^^^^^
 >AnotherThing : any
+>             : ^^^
 
     c: typeof import('./mod').foo,
 >c : () => number
+>  : ^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 
     d: typeof import('./mod').qux,
 >d : () => number
+>  : ^^^^^^^^^^^^
 >qux : any
+>    : ^^^
 
     e: typeof import('./mod').baz,
 >e : () => number
+>  : ^^^^^^^^^^^^
 >baz : any
+>    : ^^^
 
     f: typeof import('./mod').buz,
 >f : any
+>  : ^^^
 >buz : any
+>    : ^^^
 
     g: typeof import('./mod').literal,
 >g : string
+>  : ^^^^^^
 >literal : any
+>        : ^^^
 
 ) {
     return a.length + b.length + c() + d() + e() + f() + g.length
 >a.length + b.length + c() + d() + e() + f() + g.length : any
+>                                                       : ^^^
 >a.length + b.length + c() + d() + e() + f() : any
+>                                            : ^^^
 >a.length + b.length + c() + d() + e() : number
+>                                      : ^^^^^^
 >a.length + b.length + c() + d() : number
+>                                : ^^^^^^
 >a.length + b.length + c() : number
+>                          : ^^^^^^
 >a.length + b.length : number
+>                    : ^^^^^^
 >a.length : number
+>         : ^^^^^^
 >a : typeof Thing
+>  : ^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >b.length : number
+>         : ^^^^^^
 >b : typeof AnotherThing
+>  : ^^^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >c() : number
+>    : ^^^^^^
 >c : () => number
+>  : ^^^^^^^^^^^^
 >d() : number
+>    : ^^^^^^
 >d : () => number
+>  : ^^^^^^^^^^^^
 >e() : number
+>    : ^^^^^^
 >e : () => number
+>  : ^^^^^^^^^^^^
 >f() : any
+>    : ^^^
 >f : any
+>  : ^^^
 >g.length : number
+>         : ^^^^^^
 >g : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/thisTypeOfConstructorFunctions.js ===
+//// [tests/cases/conformance/salsa/thisTypeOfConstructorFunctions.ts] ////
+
+=== thisTypeOfConstructorFunctions.js ===
 /**
  * @class
  * @template T
@@ -6,53 +8,83 @@
  */
 function Cp(t) {
 >Cp : typeof Cp
+>   : ^^^^^^^^^
 >t : T
+>  : ^
 
     /** @type {this} */
     this.dit = this
 >this.dit = this : this
+>                : ^^^^
 >this.dit : this
+>         : ^^^^
 >this : this
+>     : ^^^^
 >dit : this
+>    : ^^^^
 >this : this
+>     : ^^^^
 
     this.y = t
 >this.y = t : T
+>           : ^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >t : T
+>  : ^
 
     /** @return {this} */
     this.m3 = () => this
 >this.m3 = () => this : () => this
+>                     : ^^^^^^    
 >this.m3 : any
 >this : this
+>     : ^^^^
 >m3 : any
+>   : ^^^
 >() => this : () => this
+>           : ^^^^^^    
 >this : this
+>     : ^^^^
 }
 
 Cp.prototype = {
 >Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
+>                                                                                              : ^^^^^^^^    ^^^
 >Cp.prototype : { m4(): this; }
+>             : ^^^^^^^^    ^^^
 >Cp : typeof Cp
+>   : ^^^^^^^^^
 >prototype : { m4(): this; }
+>          : ^^^^^^^^    ^^^
 >{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
+>                                                                               : ^^^^^^^^    ^^^
 
     /** @return {this} */
     m4() {
 >m4 : () => this
+>   : ^^^^^^    
 
         this.z = this.y; return this
 >this.z = this.y : T
+>                : ^
 >this.z : T
+>       : ^
 >this : this
+>     : ^^^^
 >z : T
+>  : ^
 >this.y : T
+>       : ^
 >this : this
+>     : ^^^^
 >y : T
+>  : ^
 >this : this
+>     : ^^^^
     }
 }
 
@@ -63,75 +95,121 @@ Cp.prototype = {
  */
 function Cpp(t) {
 >Cpp : typeof Cpp
+>    : ^^^^^^^^^^
 >t : T
+>  : ^
 
     this.y = t
 >this.y = t : T
+>           : ^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >t : T
+>  : ^
 }
 /** @return {this} */
 Cpp.prototype.m2 = function () {
 >Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => this
+>                                                                  : ^^^^^^    
 >Cpp.prototype.m2 : any
 >Cpp.prototype : any
+>              : ^^^
 >Cpp : typeof Cpp
+>    : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >m2 : any
+>   : ^^^
 >function () {    this.z = this.y; return this} : () => this
+>                                               : ^^^^^^    
 
     this.z = this.y; return this
 >this.z = this.y : T
+>                : ^
 >this.z : T
+>       : ^
 >this : this
+>     : ^^^^
 >z : T
+>  : ^
 >this.y : T
+>       : ^
 >this : this
+>     : ^^^^
 >y : T
+>  : ^
 >this : this
+>     : ^^^^
 }
 
 var cp = new Cp(1)
 >cp : Cp<number>
+>   : ^^^^^^^^^^
 >new Cp(1) : Cp<number>
+>          : ^^^^^^^^^^
 >Cp : typeof Cp
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
 var cpp = new Cpp(2)
 >cpp : Cpp<number>
+>    : ^^^^^^^^^^^
 >new Cpp(2) : Cpp<number>
+>           : ^^^^^^^^^^^
 >Cpp : typeof Cpp
+>    : ^^^^^^^^^^
 >2 : 2
+>  : ^
 
 cp.dit
 >cp.dit : Cp<number>
+>       : ^^^^^^^^^^
 >cp : Cp<number>
+>   : ^^^^^^^^^^
 >dit : Cp<number>
+>    : ^^^^^^^^^^
 
 /** @type {Cpp<number>} */
 var cppn = cpp.m2()
 >cppn : Cpp<number>
+>     : ^^^^^^^^^^^
 >cpp.m2() : Cpp<number>
+>         : ^^^^^^^^^^^
 >cpp.m2 : () => Cpp<number>
+>       : ^^^^^^^^^^^^^^^^^
 >cpp : Cpp<number>
+>    : ^^^^^^^^^^^
 >m2 : () => Cpp<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 /** @type {Cp<number>} */
 var cpn = cp.m3()
 >cpn : Cp<number>
+>    : ^^^^^^^^^^
 >cp.m3() : Cp<number>
+>        : ^^^^^^^^^^
 >cp.m3 : () => Cp<number>
+>      : ^^^^^^^^^^^^^^^^
 >cp : Cp<number>
+>   : ^^^^^^^^^^
 >m3 : () => Cp<number>
+>   : ^^^^^^^^^^^^^^^^
 
 /** @type {Cp<number>} */
 var cpn = cp.m4()
 >cpn : Cp<number>
+>    : ^^^^^^^^^^
 >cp.m4() : Cp<number>
+>        : ^^^^^^^^^^
 >cp.m4 : () => Cp<number>
+>      : ^^^^^^^^^^^^^^^^
 >cp : Cp<number>
+>   : ^^^^^^^^^^
 >m4 : () => Cp<number>
+>   : ^^^^^^^^^^^^^^^^
 
 

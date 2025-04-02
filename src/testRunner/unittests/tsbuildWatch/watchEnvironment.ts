@@ -1,15 +1,14 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { createBaseline } from "../helpers/baseline.js";
 import {
-    createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
     it("watchFile on same file multiple times because file is part of multiple projects", () => {
@@ -18,13 +17,13 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         const configPath = `${project}/tsconfig.json`;
         const typing: File = {
             path: `${project}/typings/xterm.d.ts`,
-            content: "export const typing = 10;"
+            content: "export const typing = 10;",
         };
 
         const allPkgFiles = pkgs(pkgFiles);
-        const system = createWatchedSystem([libFile, typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
+        const system = TestServerHost.createWatchedSystem([typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
         writePkgReferences(system);
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(system);
+        const { sys, baseline, cb, getPrograms } = createBaseline(system);
         const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
         solutionBuilder.build();
@@ -34,7 +33,6 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             commandLineArgs: ["--b", "--w"],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [
                 {
@@ -43,7 +41,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     // Make change
@@ -60,7 +58,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     // Make change to remove all watches
@@ -74,13 +72,13 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 {
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
-                    timeouts: sys => sys.logTimeoutQueueLength(),
+                    timeouts: ts.noop,
                 },
             ],
-            watchOrSolution: solutionBuilder
+            watchOrSolution: solutionBuilder,
         });
 
-        function flatArray<T>(arr: T[][]): readonly T[] {
+        function flatArray<T extends {}>(arr: T[][]): readonly T[] {
             return ts.flatMap(arr, ts.identity);
         }
         function pkgs<T>(cb: (index: number) => T): T[] {
@@ -97,26 +95,29 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             return [
                 {
                     path: `${project}/pkg${index}/index.ts`,
-                    content: `export const pkg${index} = ${index};`
+                    content: `export const pkg${index} = ${index};`,
                 },
                 {
                     path: `${project}/pkg${index}/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         complerOptions: { composite: true },
                         include: [
                             "**/*.ts",
-                            "../typings/xterm.d.ts"
-                        ]
-                    })
-                }
+                            "../typings/xterm.d.ts",
+                        ],
+                    }),
+                },
             ];
         }
         function writePkgReferences(system: TestServerHost) {
-            system.writeFile(configPath, JSON.stringify({
-                files: [],
-                include: [],
-                references: pkgs(createPkgReference)
-            }));
+            system.writeFile(
+                configPath,
+                jsonToReadableText({
+                    files: [],
+                    include: [],
+                    references: pkgs(createPkgReference),
+                }),
+            );
         }
     });
 });

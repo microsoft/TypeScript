@@ -1,114 +1,172 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts] ////
+
+=== derivedClassSuperStatementPosition.ts ===
 class DerivedBasic extends Object {
 >DerivedBasic : DerivedBasic
+>             : ^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     prop = 1;
 >prop : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
     }
 }
 
 class DerivedAfterParameterDefault extends Object {
 >DerivedAfterParameterDefault : DerivedAfterParameterDefault
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     x1: boolean;
 >x1 : boolean
+>   : ^^^^^^^
 
     x2: boolean;
 >x2 : boolean
+>   : ^^^^^^^
 
     constructor(x = false) {
 >x : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         this.x1 = x;
 >this.x1 = x : boolean
+>            : ^^^^^^^
 >this.x1 : boolean
+>        : ^^^^^^^
 >this : this
+>     : ^^^^
 >x1 : boolean
+>   : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         this.x2 = x;
 >this.x2 = x : boolean
+>            : ^^^^^^^
 >this.x2 : boolean
+>        : ^^^^^^^
 >this : this
+>     : ^^^^
 >x2 : boolean
+>   : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
     }
 }
 
 class DerivedAfterRestParameter extends Object {
 >DerivedAfterRestParameter : DerivedAfterRestParameter
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     x1: boolean[];
 >x1 : boolean[]
+>   : ^^^^^^^^^
 
     x2: boolean[];
 >x2 : boolean[]
+>   : ^^^^^^^^^
 
     constructor(...x: boolean[]) {
 >x : boolean[]
+>  : ^^^^^^^^^
 
         this.x1 = x;
 >this.x1 = x : boolean[]
+>            : ^^^^^^^^^
 >this.x1 : boolean[]
+>        : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >x1 : boolean[]
+>   : ^^^^^^^^^
 >x : boolean[]
+>  : ^^^^^^^^^
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >x : boolean[]
+>  : ^^^^^^^^^
 
         this.x2 = x;
 >this.x2 = x : boolean[]
+>            : ^^^^^^^^^
 >this.x2 : boolean[]
+>        : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >x2 : boolean[]
+>   : ^^^^^^^^^
 >x : boolean[]
+>  : ^^^^^^^^^
     }
 }
 
 class DerivedComments extends Object {
 >DerivedComments : DerivedComments
+>                : ^^^^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     x: any;
 >x : any
+>  : ^^^
 
     constructor() {
         // c1
         console.log(); // c2
 >console.log() : void
+>              : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 
         // c3
         super(); // c4
 >super() : void
+>        : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 
         // c5
         this.x = null; // c6
 >this.x = null : null
+>              : ^^^^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 
         // c7
     }
@@ -116,34 +174,48 @@ class DerivedComments extends Object {
 
 class DerivedCommentsInvalidThis extends Object {
 >DerivedCommentsInvalidThis : DerivedCommentsInvalidThis
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     x: any;
 >x : any
+>  : ^^^
 
     constructor() {
         // c0
         this;
 >this : this
+>     : ^^^^
 
         // c1
         console.log(); // c2
 >console.log() : void
+>              : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 
         // c3
         super(); // c4
 >super() : void
+>        : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 
         // c5
         this.x = null; // c6
 >this.x = null : null
+>              : ^^^^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 
         // c7
     }
@@ -151,108 +223,161 @@ class DerivedCommentsInvalidThis extends Object {
 
 class DerivedInConditional extends Object {
 >DerivedInConditional : DerivedInConditional
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     prop = 1;
 >prop : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
     constructor() {
         Math.random()
 >Math.random()            ? super(1)            : super(0) : void
+>                                                          : ^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             ? super(1)
 >super(1) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
             : super(0);
 >super(0) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
     }
 }
 
 class DerivedInIf extends Object {
 >DerivedInIf : DerivedInIf
+>            : ^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     prop = 1;
 >prop : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
     constructor() {
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             super(1);
 >super(1) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
         }
         else {
             super(0);
 >super(0) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
     }
 }
 
 class DerivedInBlockWithProperties extends Object {
 >DerivedInBlockWithProperties : DerivedInBlockWithProperties
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     prop = 1;
 >prop : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
     constructor(private paramProp = 2) {
 >paramProp : number
+>          : ^^^^^^
 >2 : 2
+>  : ^
         {
             super();
 >super() : void
+>        : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
         }
     }
 }
 
 class DerivedInConditionalWithProperties extends Object {
 >DerivedInConditionalWithProperties : DerivedInConditionalWithProperties
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : Object
+>       : ^^^^^^
 
     prop = 1;
 >prop : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
     constructor(private paramProp = 2) {
 >paramProp : number
+>          : ^^^^^^
 >2 : 2
+>  : ^
 
         if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
             super(1);
 >super(1) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         } else {
             super(0);
 >super(0) : void
+>         : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
         }
     }
 }

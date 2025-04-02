@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModule1.ts] ////
+
 //// [parserModule1.ts]
     export module CompilerDiagnostics {
         export var debug = false;
@@ -60,4 +62,4 @@ var CompilerDiagnostics;
         }
     }
     CompilerDiagnostics.assert = assert;
-})(CompilerDiagnostics = exports.CompilerDiagnostics || (exports.CompilerDiagnostics = {}));
+})(CompilerDiagnostics || (exports.CompilerDiagnostics = CompilerDiagnostics = {}));

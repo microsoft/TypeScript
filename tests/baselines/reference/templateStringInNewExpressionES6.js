@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringInNewExpressionES6.ts] ////
+
 //// [templateStringInNewExpressionES6.ts]
 new `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
 

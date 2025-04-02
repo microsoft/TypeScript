@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInTupleTypeParameterConstraints.ts ===
+//// [tests/cases/compiler/thisInTupleTypeParameterConstraints.ts] ////
+
+=== thisInTupleTypeParameterConstraints.ts ===
 /// <reference no-default-lib="true"/>
 
 interface Boolean {}
@@ -14,32 +16,48 @@ interface Array<T> {
     // correctly for tuple types that are type parameter constraints
     map<U>(arg: this): void;
 >map : <U>(arg: this) => void
+>    : ^ ^^   ^^    ^^^^^    
 >arg : this
+>    : ^^^^
 
     reduceRight<U>(arg: this): void;
 >reduceRight : <U>(arg: this) => void
+>            : ^ ^^   ^^    ^^^^^    
 >arg : this
+>    : ^^^^
 
     reduce<U>(arg: this): void;
 >reduce : <U>(arg: this) => void
+>       : ^ ^^   ^^    ^^^^^    
 >arg : this
+>    : ^^^^
 
     reduce2<U>(arg: this): void;
 >reduce2 : <U>(arg: this) => void
+>        : ^ ^^   ^^    ^^^^^    
 >arg : this
+>    : ^^^^
 }
 
 declare function f<T extends [(x: number) => number]>(a: T): void;
 >f : <T extends [(x: number) => number]>(a: T) => void
+>  : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^    
 >x : number
+>  : ^^^^^^
 >a : T
+>  : ^
 
 let x: [(x: number) => number];
 >x : [(x: number) => number]
+>  : ^^ ^^      ^^^^^      ^
 >x : number
+>  : ^^^^^^
 
 f(x);
 >f(x) : void
+>     : ^^^^
 >f : <T extends [(x: number) => number]>(a: T) => void
+>  : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^    
 >x : [(x: number) => number]
+>  : ^^ ^^      ^^^^^      ^
 

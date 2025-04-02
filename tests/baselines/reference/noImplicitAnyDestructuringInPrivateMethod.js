@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts] ////
+
 //// [noImplicitAnyDestructuringInPrivateMethod.ts]
 type Arg = {
     a: number;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInConstructor5_Js.ts] ////
+
 //// [a.js]
 const bar = {
 	arguments: {}

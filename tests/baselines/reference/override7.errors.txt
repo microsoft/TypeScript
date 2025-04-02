@@ -1,19 +1,19 @@
-tests/cases/conformance/override/override7.ts(11,14): error TS1040: 'override' modifier cannot be used in an ambient context.
-tests/cases/conformance/override/override7.ts(13,14): error TS1029: 'override' modifier must precede 'readonly' modifier.
-tests/cases/conformance/override/override7.ts(17,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/override7.ts(19,14): error TS1030: 'override' modifier already seen.
-tests/cases/conformance/override/override7.ts(19,23): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/override7.ts(21,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/override7.ts(22,14): error TS1029: 'public' modifier must precede 'override' modifier.
-tests/cases/conformance/override/override7.ts(22,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/override7.ts(24,5): error TS1089: 'override' modifier cannot appear on a constructor declaration.
-tests/cases/conformance/override/override7.ts(36,14): error TS1029: 'abstract' modifier must precede 'override' modifier.
-tests/cases/conformance/override/override7.ts(41,14): error TS1029: 'abstract' modifier must precede 'override' modifier.
-tests/cases/conformance/override/override7.ts(41,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
-tests/cases/conformance/override/override7.ts(42,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+override7.ts(11,14): error TS1040: 'override' modifier cannot be used in an ambient context.
+override7.ts(13,14): error TS1029: 'override' modifier must precede 'readonly' modifier.
+override7.ts(17,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+override7.ts(19,14): error TS1030: 'override' modifier already seen.
+override7.ts(19,23): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+override7.ts(21,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+override7.ts(22,14): error TS1029: 'public' modifier must precede 'override' modifier.
+override7.ts(22,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+override7.ts(24,5): error TS1089: 'override' modifier cannot appear on a constructor declaration.
+override7.ts(36,14): error TS1029: 'abstract' modifier must precede 'override' modifier.
+override7.ts(41,14): error TS1029: 'abstract' modifier must precede 'override' modifier.
+override7.ts(41,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+override7.ts(42,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
 
 
-==== tests/cases/conformance/override/override7.ts (13 errors) ====
+==== override7.ts (13 errors) ====
     class B {
         p1: number = 1;
         p2: number = 2;

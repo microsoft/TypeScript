@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts ===
+//// [tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts] ////
+
+=== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts ===
 function f10(): undefined {
 >f10 : Symbol(f10, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxDiscriminantPropertyInference.tsx] ////
+
 //// [tsxDiscriminantPropertyInference.tsx]
 // Repro from #41759
 namespace JSX {

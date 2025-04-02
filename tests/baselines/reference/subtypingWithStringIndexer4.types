@@ -1,53 +1,72 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts] ////
+
+=== subtypingWithStringIndexer4.ts ===
 // Derived type indexer must be subtype of base type indexer
 
 interface Base { foo: string; }
 >foo : string
+>    : ^^^^^^
 
 interface Derived extends Base { bar: string; }
 >bar : string
+>    : ^^^^^^
 
 interface Derived2 extends Derived { baz: string; }
 >baz : string
+>    : ^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     [x: string]: Derived;
 >x : string
+>  : ^^^^^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     [x: string]: string; // error
 >x : string
+>  : ^^^^^^
 }
 
 module Generics {
 >Generics : typeof Generics
+>         : ^^^^^^^^^^^^^^^
 
     class A<T extends Derived> {
 >A : A<T>
+>  : ^^^^
 
         [x: string]: T;
 >x : string
+>  : ^^^^^^
     }
 
     class B extends A<Base> {
 >B : B
+>  : ^
 >A : A<Base>
+>  : ^^^^^^^
 
         [x: string]: string; // error
 >x : string
+>  : ^^^^^^
     }
 
     class B3<T extends Derived> extends A<T> {
 >B3 : B3<T>
+>   : ^^^^^
 >A : A<T>
+>  : ^^^^
 
         [x: string]: string; // error
 >x : string
+>  : ^^^^^^
     }
 }

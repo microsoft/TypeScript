@@ -1,4 +1,6 @@
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_fs.ts ===
+//// [tests/cases/compiler/visibilityOfCrossModuleTypeUsage.ts] ////
+
+=== visibilityOfCrossModuleTypeUsage_fs.ts ===
 import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 >commands : Symbol(commands, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 0, 0))
 
@@ -6,43 +8,41 @@ function run(configuration: commands.IConfiguration) {
 >run : Symbol(run, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 0, 73))
 >configuration : Symbol(configuration, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 1, 13))
 >commands : Symbol(commands, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 0, 0))
->IConfiguration : Symbol(commands.IConfiguration, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 69))
+>IConfiguration : Symbol(commands.IConfiguration, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 1, 69))
 
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 >absoluteWorkspacePath : Symbol(absoluteWorkspacePath, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 2, 7))
 >configuration.workspace.toAbsolutePath : Symbol(IWorkspace.toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
->configuration.workspace : Symbol(commands.IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 5, 33))
+>configuration.workspace : Symbol(commands.IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
 >configuration : Symbol(configuration, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 1, 13))
->workspace : Symbol(commands.IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 5, 33))
+>workspace : Symbol(commands.IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
 >toAbsolutePath : Symbol(IWorkspace.toAbsolutePath, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 3, 29))
->configuration.server : Symbol(commands.IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 6, 33))
+>configuration.server : Symbol(commands.IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
 >configuration : Symbol(configuration, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 1, 13))
->server : Symbol(commands.IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 6, 33))
+>server : Symbol(commands.IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
 }
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands.ts ===
-//visibilityOfCrossModuleTypeUsage
-
+=== visibilityOfCrossModuleTypeUsage_commands.ts ===
 import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
 >fs : Symbol(fs, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 0, 0))
 
 import server = require('./visibilityOfCrossModuleTypeUsage_server');
->server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 2, 61))
+>server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 0, 61))
 
 export interface IConfiguration {
->IConfiguration : Symbol(IConfiguration, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 69))
+>IConfiguration : Symbol(IConfiguration, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 1, 69))
 
     workspace: server.IWorkspace;
->workspace : Symbol(IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 5, 33))
->server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 2, 61))
+>workspace : Symbol(IConfiguration.workspace, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 3, 33))
+>server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 0, 61))
 >IWorkspace : Symbol(server.IWorkspace, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 1, 1))
 
     server?: server.IServer;
->server : Symbol(IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 6, 33))
->server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 2, 61))
+>server : Symbol(IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 4, 33))
+>server : Symbol(server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 0, 61))
 >IServer : Symbol(server.IServer, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 0, 0))
 }
 
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server.ts ===
+=== visibilityOfCrossModuleTypeUsage_server.ts ===
 export interface IServer {
 >IServer : Symbol(IServer, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 0, 0))
 }

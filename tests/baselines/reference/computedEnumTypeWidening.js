@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/computedEnumTypeWidening.ts] ////
+
 //// [computedEnumTypeWidening.ts]
 declare function computed(x: number): number;
 

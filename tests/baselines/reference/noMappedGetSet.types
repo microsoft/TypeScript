@@ -1,12 +1,19 @@
-=== tests/cases/compiler/noMappedGetSet.ts ===
+//// [tests/cases/compiler/noMappedGetSet.ts] ////
+
+=== noMappedGetSet.ts ===
 type OH_NO = {
->OH_NO : {}
+>OH_NO : OH_NO
+>      : ^^^^^
 
     get [K in WAT](): string
 >[K in WAT] : string
+>           : ^^^^^^
 >K in WAT : boolean
+>         : ^^^^^^^
 >K : any
+>  : ^^^
 >WAT : any
+>    : ^^^
 
 };
 

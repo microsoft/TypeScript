@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigintWithLib.ts] ////
+
 //// [bigintWithLib.ts]
 // Test BigInt functions
 let bigintVal: bigint = BigInt(123);
@@ -126,7 +128,7 @@ declare let bigIntArray: BigInt64Array;
 declare let len: number;
 declare let arrayBufferLike: ArrayBufferView;
 declare let bigUintArray: BigUint64Array;
-declare const dataView: DataView;
+declare const dataView: DataView<ArrayBuffer>;
 declare const w = 12n;
 declare const x = -12n;
 declare const y: 12n;

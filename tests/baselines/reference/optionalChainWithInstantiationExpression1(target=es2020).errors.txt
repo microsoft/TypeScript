@@ -1,7 +1,7 @@
-tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,5): error TS1477: An instantiation expression cannot be followed by a property access.
+optionalChainWithInstantiationExpression1.ts(12,5): error TS1477: An instantiation expression cannot be followed by a property access.
 
 
-==== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts (1 errors) ====
+==== optionalChainWithInstantiationExpression1.ts (1 errors) ====
     declare namespace A {
         export class b<T> {
             static d: number;

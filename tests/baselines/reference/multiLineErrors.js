@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiLineErrors.ts] ////
+
 //// [multiLineErrors.ts]
 var t = 32;
 

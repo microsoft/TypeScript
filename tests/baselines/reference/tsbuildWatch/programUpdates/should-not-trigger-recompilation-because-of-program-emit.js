@@ -1,6 +1,85 @@
-currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/user/username/projects/sample1/core/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
+  }
+}
+
+//// [/user/username/projects/sample1/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+
+//// [/user/username/projects/sample1/core/some_decl.d.ts]
+declare const dts: any;
+
+//// [/user/username/projects/sample1/core/anotherModule.ts]
+export const World = "hello";
+
+//// [/user/username/projects/sample1/logic/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
+
+//// [/user/username/projects/sample1/logic/index.ts]
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+//// [/user/username/projects/sample1/tests/tsconfig.json]
+{
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../logic"
+    }
+  ],
+  "files": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  }
+}
+
+//// [/user/username/projects/sample1/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,75 +91,25 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/sample1/core/tsconfig.json]
-{
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "declarationMap": true,
-        "skipDefaultLibCheck": true
-    }
-}
-
-//// [/user/username/projects/sample1/core/index.ts]
-export const someString: string = "HELLO WORLD";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-//// [/user/username/projects/sample1/core/anotherModule.ts]
-export const World = "hello";
-
-
-
-/a/lib/tsc.js -b -w sample1/core -verbose
+/home/src/tslibs/TS/Lib/tsc.js -b -w core -verbose
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:28 AM[0m] Projects in this build: 
-    * sample1/core/tsconfig.json
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * core/tsconfig.json
 
-[[90m12:00:29 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:30 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/sample1/core/anothermodule.ts (computed .d.ts during emit)
-/user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/core/anothermodule.ts: *new*
-  {}
-/user/username/projects/sample1/core/index.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
@@ -99,12 +128,12 @@ export declare const World = "hello";
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.multiply = exports.leftPad = exports.someString = void 0;
+exports.someString = void 0;
+exports.leftPad = leftPad;
+exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
-exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
-exports.multiply = multiply;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]
@@ -117,83 +146,132 @@ export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"}],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./anothermodule.ts",
-      "./index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+  "fileNames": [
+    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "./anothermodule.ts",
+    "./index.ts",
+    "./some_decl.d.ts"
+  ],
+  "fileInfos": {
+    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./anothermodule.ts": {
-        "original": {
-          "version": "-2676574883-export const World = \"hello\";\r\n",
-          "signature": "-9234818176-export declare const World = \"hello\";\n"
-        },
-        "version": "-2676574883-export const World = \"hello\";\r\n",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./anothermodule.ts": {
+      "original": {
+        "version": "-3090574810-export const World = \"hello\";",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
-      "./index.ts": {
-        "original": {
-          "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-          "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
-        },
-        "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
-      }
+      "version": "-3090574810-export const World = \"hello\";",
+      "signature": "-9234818176-export declare const World = \"hello\";\n"
     },
-    "root": [
+    "./index.ts": {
+      "original": {
+        "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+      },
+      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
+      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+    },
+    "./some_decl.d.ts": {
+      "original": {
+        "version": "-7959511260-declare const dts: any;",
+        "affectsGlobalScope": true
+      },
+      "version": "-7959511260-declare const dts: any;",
+      "signature": "-7959511260-declare const dts: any;",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
       [
         2,
-        "./anothermodule.ts"
+        4
       ],
       [
-        3,
-        "./index.ts"
+        "./anothermodule.ts",
+        "./index.ts",
+        "./some_decl.d.ts"
       ]
-    ],
-    "options": {
-      "composite": true,
-      "declaration": true,
-      "declarationMap": true,
-      "skipDefaultLibCheck": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./anothermodule.ts",
-      "./index.ts"
-    ],
-    "latestChangedDtsFile": "./index.d.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
   },
+  "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1305
+  "size": 1397
 }
 
+
+FsWatches::
+/user/username/projects/sample1/core/anotherModule.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.ts: *new*
+  {}
+/user/username/projects/sample1/core/some_decl.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/sample1/core/anotherModule.ts",
+  "/user/username/projects/sample1/core/index.ts",
+  "/user/username/projects/sample1/core/some_decl.d.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "declarationMap": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/some_decl.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/some_decl.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.ts (computed .d.ts during emit)
+/user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
+/user/username/projects/sample1/core/some_decl.d.ts (used version)
+
+exitCode:: ExitStatus.undefined
 
 Change:: No change
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Add new file
 
@@ -202,130 +280,105 @@ Input::
 export const y = 10;
 
 
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
+
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:52 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output 'sample1/core/tsconfig.tsbuildinfo' is older than input 'sample1/core/file3.ts'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/file3.ts'
 
-[[90m12:00:53 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:07 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/file3.ts","/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/file3.ts
-/user/username/projects/sample1/core/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/core/file3.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/sample1/core/file3.ts (computed .d.ts)
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/core/file3.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./file3.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./file3.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./anothermodule.ts",
-      "./file3.ts",
-      "./index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+  "fileNames": [
+    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "./anothermodule.ts",
+    "./file3.ts",
+    "./index.ts",
+    "./some_decl.d.ts"
+  ],
+  "fileInfos": {
+    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./anothermodule.ts": {
-        "original": {
-          "version": "-2676574883-export const World = \"hello\";\r\n",
-          "signature": "-9234818176-export declare const World = \"hello\";\n"
-        },
-        "version": "-2676574883-export const World = \"hello\";\r\n",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./anothermodule.ts": {
+      "original": {
+        "version": "-3090574810-export const World = \"hello\";",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
-      "./file3.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "signature": "-7152472870-export declare const y = 10;\n"
-        },
+      "version": "-3090574810-export const World = \"hello\";",
+      "signature": "-9234818176-export declare const World = \"hello\";\n"
+    },
+    "./file3.ts": {
+      "original": {
         "version": "-13729955264-export const y = 10;",
         "signature": "-7152472870-export declare const y = 10;\n"
       },
-      "./index.ts": {
-        "original": {
-          "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-          "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
-        },
-        "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
+      "version": "-13729955264-export const y = 10;",
+      "signature": "-7152472870-export declare const y = 10;\n"
+    },
+    "./index.ts": {
+      "original": {
+        "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
-      }
+      },
+      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
+      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
     },
-    "root": [
-      [
-        [
-          2,
-          4
-        ],
-        [
-          "./anothermodule.ts",
-          "./file3.ts",
-          "./index.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declaration": true,
-      "declarationMap": true,
-      "skipDefaultLibCheck": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./anothermodule.ts",
-      "./file3.ts",
-      "./index.ts"
-    ],
-    "latestChangedDtsFile": "./file3.d.ts"
+    "./some_decl.d.ts": {
+      "original": {
+        "version": "-7959511260-declare const dts: any;",
+        "affectsGlobalScope": true
+      },
+      "version": "-7959511260-declare const dts: any;",
+      "signature": "-7959511260-declare const dts: any;",
+      "affectsGlobalScope": true
+    }
   },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./anothermodule.ts",
+        "./file3.ts",
+        "./index.ts",
+        "./some_decl.d.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
+  },
+  "latestChangedDtsFile": "./file3.d.ts",
   "version": "FakeTSVersion",
-  "size": 1427
+  "size": 1515
 }
 
 //// [/user/username/projects/sample1/core/file3.js]
@@ -343,13 +396,57 @@ export declare const y = 10;
 //# sourceMappingURL=file3.d.ts.map
 
 
+FsWatches::
+/user/username/projects/sample1/core/anotherModule.ts:
+  {}
+/user/username/projects/sample1/core/file3.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/core/some_decl.d.ts:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/sample1/core/anotherModule.ts",
+  "/user/username/projects/sample1/core/file3.ts",
+  "/user/username/projects/sample1/core/index.ts",
+  "/user/username/projects/sample1/core/some_decl.d.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "declarationMap": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/file3.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/some_decl.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/sample1/core/file3.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/core/file3.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: No change
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

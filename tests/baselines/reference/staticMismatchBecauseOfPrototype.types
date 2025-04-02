@@ -1,22 +1,31 @@
-=== tests/cases/compiler/staticMismatchBecauseOfPrototype.ts ===
+//// [tests/cases/compiler/staticMismatchBecauseOfPrototype.ts] ////
+
+=== staticMismatchBecauseOfPrototype.ts ===
 interface A {
     n: number;
 >n : number
+>  : ^^^^^^
 }
 declare var A: {
 >A : { new (): A; prototype: A; }
+>  : ^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^
 
     prototype: A;
 >prototype : A
+>          : ^
 
     new(): A;
 };
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     n = "";
 >n : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 }

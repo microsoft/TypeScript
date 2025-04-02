@@ -1,207 +1,322 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator1.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator1.ts] ////
+
+=== nullishCoalescingOperator1.ts ===
 declare const a1: string | undefined | null
 >a1 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const a2: string | undefined | null
 >a2 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const a3: string | undefined | null
 >a3 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const a4: string | undefined | null
 >a4 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const b1: number | undefined | null
 >b1 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const b2: number | undefined | null
 >b2 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const b3: number | undefined | null
 >b3 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const b4: number | undefined | null
 >b4 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const c1: boolean | undefined | null
 >c1 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const c2: boolean | undefined | null
 >c2 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const c3: boolean | undefined | null
 >c3 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const c4: boolean | undefined | null
 >c4 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 interface I { a: string }
 >a : string
+>  : ^^^^^^
 
 declare const d1: I | undefined | null
 >d1 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 declare const d2: I | undefined | null
 >d2 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 declare const d3: I | undefined | null
 >d3 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 declare const d4: I | undefined | null
 >d4 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 const aa1 = a1 ?? 'whatever';
 >aa1 : string
+>    : ^^^^^^
 >a1 ?? 'whatever' : string
+>                 : ^^^^^^
 >a1 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa2 = a2 ?? 'whatever';
 >aa2 : string
+>    : ^^^^^^
 >a2 ?? 'whatever' : string
+>                 : ^^^^^^
 >a2 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa3 = a3 ?? 'whatever';
 >aa3 : string
+>    : ^^^^^^
 >a3 ?? 'whatever' : string
+>                 : ^^^^^^
 >a3 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa4 = a4 ?? 'whatever';
 >aa4 : string
+>    : ^^^^^^
 >a4 ?? 'whatever' : string
+>                 : ^^^^^^
 >a4 : string | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const bb1 = b1 ?? 1;
 >bb1 : number
+>    : ^^^^^^
 >b1 ?? 1 : number
+>        : ^^^^^^
 >b1 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const bb2 = b2 ?? 1;
 >bb2 : number
+>    : ^^^^^^
 >b2 ?? 1 : number
+>        : ^^^^^^
 >b2 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const bb3 = b3 ?? 1;
 >bb3 : number
+>    : ^^^^^^
 >b3 ?? 1 : number
+>        : ^^^^^^
 >b3 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const bb4 = b4 ?? 1;
 >bb4 : number
+>    : ^^^^^^
 >b4 ?? 1 : number
+>        : ^^^^^^
 >b4 : number | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const cc1 = c1 ?? true;
 >cc1 : boolean
+>    : ^^^^^^^
 >c1 ?? true : boolean
+>           : ^^^^^^^
 >c1 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 const cc2 = c2 ?? true;
 >cc2 : boolean
+>    : ^^^^^^^
 >c2 ?? true : boolean
+>           : ^^^^^^^
 >c2 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 const cc3 = c3 ?? true;
 >cc3 : boolean
+>    : ^^^^^^^
 >c3 ?? true : boolean
+>           : ^^^^^^^
 >c3 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 const cc4 = c4 ?? true;
 >cc4 : boolean
+>    : ^^^^^^^
 >c4 ?? true : boolean
+>           : ^^^^^^^
 >c4 : boolean | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 const dd1 = d1 ?? {b: 1};
 >dd1 : I | { b: number; }
+>    : ^^^^^^^^^^^^^^^^^^
 >d1 ?? {b: 1} : I | { b: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >d1 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{b: 1} : { b: number; }
+>       : ^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const dd2 = d2 ?? {b: 1};
 >dd2 : I | { b: number; }
+>    : ^^^^^^^^^^^^^^^^^^
 >d2 ?? {b: 1} : I | { b: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >d2 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{b: 1} : { b: number; }
+>       : ^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const dd3 = d3 ?? {b: 1};
 >dd3 : I | { b: number; }
+>    : ^^^^^^^^^^^^^^^^^^
 >d3 ?? {b: 1} : I | { b: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >d3 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{b: 1} : { b: number; }
+>       : ^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const dd4 = d4 ?? {b: 1};
 >dd4 : I | { b: number; }
+>    : ^^^^^^^^^^^^^^^^^^
 >d4 ?? {b: 1} : I | { b: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >d4 : I | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{b: 1} : { b: number; }
+>       : ^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 // Repro from #34635
 
 declare function foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 
 const maybeBool = false;
 >maybeBool : false
+>          : ^^^^^
 >false : false
+>      : ^^^^^
 
 if (!(maybeBool ?? true)) {
 >!(maybeBool ?? true) : true
+>                     : ^^^^
 >(maybeBool ?? true) : false
+>                    : ^^^^^
 >maybeBool ?? true : false
+>                  : ^^^^^
 >maybeBool : false
+>          : ^^^^^
 >true : true
+>     : ^^^^
 
     foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^    
 }
 
 if (maybeBool ?? true) {
 >maybeBool ?? true : false
+>                  : ^^^^^
 >maybeBool : false
+>          : ^^^^^
 >true : true
+>     : ^^^^
 
     foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^    
 }
 else {
     foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^    
 }
 
 if (false ?? true) {
 >false ?? true : false
+>              : ^^^^^
 >false : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
     foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^    
 }
 else {
     foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^    
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassLikeHeuristic.ts] ////
+
 //// [index.js]
 // https://github.com/microsoft/TypeScript/issues/35801
 let A;

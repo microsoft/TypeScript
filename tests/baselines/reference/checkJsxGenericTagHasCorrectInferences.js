@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxGenericTagHasCorrectInferences.tsx] ////
+
 //// [file.tsx]
 import * as React from "react";
 interface BaseProps<T> {

@@ -1,32 +1,48 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts] ////
+
+=== privateNamesInterfaceExtendingClass.ts ===
 class C {
 >C : C
+>  : ^
 
     #prop;
 >#prop : any
+>      : ^^^
 
     func(x: I) {
 >func : (x: I) => void
+>     : ^ ^^ ^^^^^^^^^
 >x : I
+>  : ^
 
         x.#prop = 123;
 >x.#prop = 123 : 123
+>              : ^^^
 >x.#prop : any
+>        : ^^^
 >x : I
+>  : ^
 >123 : 123
+>    : ^^^
     }
 }
 interface I extends C {}
 
 function func(x: I) {
 >func : (x: I) => void
+>     : ^ ^^ ^^^^^^^^^
 >x : I
+>  : ^
 
     x.#prop = 123;
 >x.#prop = 123 : 123
+>              : ^^^
 >x.#prop : any
+>        : ^^^
 >x : I
+>  : ^
 >123 : 123
+>    : ^^^
 }
 
 

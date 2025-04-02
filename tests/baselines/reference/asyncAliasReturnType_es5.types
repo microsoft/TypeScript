@@ -1,7 +1,11 @@
-=== tests/cases/conformance/async/es5/asyncAliasReturnType_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncAliasReturnType_es5.ts] ////
+
+=== asyncAliasReturnType_es5.ts ===
 type PromiseAlias<T> = Promise<T>;
 >PromiseAlias : PromiseAlias<T>
+>             : ^^^^^^^^^^^^^^^
 
 async function f(): PromiseAlias<void> {
 >f : () => PromiseAlias<void>
+>  : ^^^^^^                  
 }

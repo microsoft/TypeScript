@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementPublicPropertyAsPrivate.ts] ////
+
 //// [implementPublicPropertyAsPrivate.ts]
 interface I {
     x: number;

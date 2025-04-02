@@ -1,203 +1,341 @@
-=== tests/cases/conformance/types/thisType/typeRelationships.ts ===
+//// [tests/cases/conformance/types/thisType/typeRelationships.ts] ////
+
+=== typeRelationships.ts ===
 class C {
 >C : C
+>  : ^
 
     self = this;
 >self : this
+>     : ^^^^
 >this : this
+>     : ^^^^
 
     c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
     foo() {
 >foo : () => this
+>    : ^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
     f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
         this.c = this.self;
 >this.c = this.self : this
+>                   : ^^^^
 >this.c : C
+>       : ^
 >this : this
+>     : ^^^^
 >c : C
+>  : ^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 
         this.self = this.c;  // Error
 >this.self = this.c : C
+>                   : ^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 >this.c : C
+>       : ^
 >this : this
+>     : ^^^^
 >c : C
+>  : ^
     }
     f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
         var a: C[];
 >a : C[]
+>  : ^^^
 
         var a = [this, this.c];  // C[] since this is subtype of C
 >a : C[]
+>  : ^^^
 >[this, this.c] : C[]
+>               : ^^^
 >this : this
+>     : ^^^^
 >this.c : C
+>       : ^
 >this : this
+>     : ^^^^
 >c : C
+>  : ^
 
         var b: this[];
 >b : this[]
+>  : ^^^^^^
 
         var b = [this, this.self, null, undefined];
 >b : this[]
+>  : ^^^^^^
 >[this, this.self, null, undefined] : this[]
+>                                   : ^^^^^^
 >this : this
+>     : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     f3(b: boolean) {
 >f3 : (b: boolean) => C
+>   : ^ ^^       ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
         return b ? this.c : this.self;  // Should be C
 >b ? this.c : this.self : C
+>                       : ^
 >b : boolean
+>  : ^^^^^^^
 >this.c : C
+>       : ^
 >this : this
+>     : ^^^^
 >c : C
+>  : ^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
     }
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     self1 = this;
 >self1 : this
+>      : ^^^^
 >this : this
+>     : ^^^^
 
     self2 = this.self;
 >self2 : this
+>      : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 
     self3 = this.foo();
 >self3 : this
+>      : ^^^^
 >this.foo() : this
+>           : ^^^^
 >this.foo : () => this
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >foo : () => this
+>    : ^^^^^^^^^^
 
     d = new D();
 >d : D
+>  : ^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 
     bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         this.self = this.self1;
 >this.self = this.self1 : this
+>                       : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 >this.self1 : this
+>           : ^^^^
 >this : this
+>     : ^^^^
 >self1 : this
+>      : ^^^^
 
         this.self = this.self2;
 >this.self = this.self2 : this
+>                       : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 >this.self2 : this
+>           : ^^^^
 >this : this
+>     : ^^^^
 >self2 : this
+>      : ^^^^
 
         this.self = this.self3;
 >this.self = this.self3 : this
+>                       : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 >this.self3 : this
+>           : ^^^^
 >this : this
+>     : ^^^^
 >self3 : this
+>      : ^^^^
 
         this.self1 = this.self;
 >this.self1 = this.self : this
+>                       : ^^^^
 >this.self1 : this
+>           : ^^^^
 >this : this
+>     : ^^^^
 >self1 : this
+>      : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 
         this.self2 = this.self;
 >this.self2 = this.self : this
+>                       : ^^^^
 >this.self2 : this
+>           : ^^^^
 >this : this
+>     : ^^^^
 >self2 : this
+>      : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 
         this.self3 = this.self;
 >this.self3 = this.self : this
+>                       : ^^^^
 >this.self3 : this
+>           : ^^^^
 >this : this
+>     : ^^^^
 >self3 : this
+>      : ^^^^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 
         this.d = this.self;
 >this.d = this.self : this
+>                   : ^^^^
 >this.d : D
+>       : ^
 >this : this
+>     : ^^^^
 >d : D
+>  : ^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 
         this.d = this.c;  // Error
 >this.d = this.c : C
+>                : ^
 >this.d : D
+>       : ^
 >this : this
+>     : ^^^^
 >d : D
+>  : ^
 >this.c : C
+>       : ^
 >this : this
+>     : ^^^^
 >c : C
+>  : ^
 
         this.self = this.d;  // Error
 >this.self = this.d : D
+>                   : ^
 >this.self : this
+>          : ^^^^
 >this : this
+>     : ^^^^
 >self : this
+>     : ^^^^
 >this.d : D
+>       : ^
 >this : this
+>     : ^^^^
 >d : D
+>  : ^
 
         this.c = this.d;
 >this.c = this.d : D
+>                : ^
 >this.c : C
+>       : ^
 >this : this
+>     : ^^^^
 >c : C
+>  : ^
 >this.d : D
+>       : ^
 >this : this
+>     : ^^^^
 >d : D
+>  : ^
     }
 }
 

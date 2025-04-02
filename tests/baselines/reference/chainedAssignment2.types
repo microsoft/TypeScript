@@ -1,29 +1,46 @@
-=== tests/cases/compiler/chainedAssignment2.ts ===
+//// [tests/cases/compiler/chainedAssignment2.ts] ////
+
+=== chainedAssignment2.ts ===
 var a: string;
 >a : string
+>  : ^^^^^^
 
 var b: number;
 >b : number
+>  : ^^^^^^
 
 var c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
 var d: Date;
 >d : Date
+>  : ^^^^
 
 var e: RegExp;
 >e : RegExp
+>  : ^^^^^^
 
 a = b = c = d = e = null;
 >a = b = c = d = e = null : null
+>                         : ^^^^
 >a : string
+>  : ^^^^^^
 >b = c = d = e = null : null
+>                     : ^^^^
 >b : number
+>  : ^^^^^^
 >c = d = e = null : null
+>                 : ^^^^
 >c : boolean
+>  : ^^^^^^^
 >d = e = null : null
+>             : ^^^^
 >d : Date
+>  : ^^^^
 >e = null : null
+>         : ^^^^
 >e : RegExp
+>  : ^^^^^^
 
 

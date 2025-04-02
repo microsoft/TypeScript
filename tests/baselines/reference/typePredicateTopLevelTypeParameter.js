@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateTopLevelTypeParameter.ts] ////
+
 //// [typePredicateTopLevelTypeParameter.ts]
 // Repro from #51980
 

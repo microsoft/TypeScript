@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringUnspreadableIntoRest.ts ===
+//// [tests/cases/compiler/destructuringUnspreadableIntoRest.ts] ////
+
+=== destructuringUnspreadableIntoRest.ts ===
 class A {
 >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 

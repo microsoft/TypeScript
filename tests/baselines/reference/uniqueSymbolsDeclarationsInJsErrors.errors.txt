@@ -1,12 +1,8 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js(5,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js(14,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+uniqueSymbolsDeclarationsInJsErrors.js(5,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+uniqueSymbolsDeclarationsInJsErrors.js(14,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js (2 errors) ====
+==== uniqueSymbolsDeclarationsInJsErrors.js (2 errors) ====
     class C {
         /**
          * @type {unique symbol}
@@ -26,3 +22,4 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.j
                ~~~~~~~~~~~~~
 !!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
     }
+    

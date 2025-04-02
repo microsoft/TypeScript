@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments12.ts] ////
+
 //// [emitArrowFunctionWhenUsingArguments12.ts]
 class C {
     f(arguments) {

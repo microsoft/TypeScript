@@ -1,17 +1,24 @@
-=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts ===
+//// [tests/cases/compiler/exportSpecifierReferencingOuterDeclaration4.ts] ////
+
+=== exportSpecifierReferencingOuterDeclaration2_A.ts ===
 
 declare module X { export interface bar { } }
 
-=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts ===
+=== exportSpecifierReferencingOuterDeclaration2_B.ts ===
 declare module X { export interface foo { } }
 export { X };
 >X : any
+>  : ^^^
 
 export declare function foo(): X.foo;
 >foo : () => X.foo
+>    : ^^^^^^     
 >X : any
+>  : ^^^
 
 export declare function bar(): X.bar; // error
 >bar : () => X.bar
+>    : ^^^^^^     
 >X : any
+>  : ^^^
 

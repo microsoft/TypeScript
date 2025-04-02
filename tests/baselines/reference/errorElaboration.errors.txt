@@ -1,15 +1,15 @@
-tests/cases/compiler/errorElaboration.ts(10,18): error TS2300: Duplicate identifier 'foo'.
-tests/cases/compiler/errorElaboration.ts(12,5): error TS2345: Argument of type '() => Container<Ref<string>>' is not assignable to parameter of type '() => Container<Ref<number>>'.
+errorElaboration.ts(10,18): error TS2300: Duplicate identifier 'foo'.
+errorElaboration.ts(12,5): error TS2345: Argument of type '() => Container<Ref<string>>' is not assignable to parameter of type '() => Container<Ref<number>>'.
   Type 'Container<Ref<string>>' is not assignable to type 'Container<Ref<number>>'.
     Type 'Ref<string>' is not assignable to type 'Ref<number>'.
       Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/errorElaboration.ts(17,11): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-tests/cases/compiler/errorElaboration.ts(22,7): error TS2300: Duplicate identifier 'foo'.
-tests/cases/compiler/errorElaboration.ts(23,15): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/errorElaboration.ts(23,19): error TS2339: Property 'bar' does not exist on type '(x: () => Container<Ref<number>>) => void'.
+errorElaboration.ts(17,11): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+errorElaboration.ts(22,7): error TS2300: Duplicate identifier 'foo'.
+errorElaboration.ts(23,15): error TS2538: Type 'any' cannot be used as an index type.
+errorElaboration.ts(23,19): error TS2339: Property 'bar' does not exist on type '(x: () => Container<Ref<number>>) => void'.
 
 
-==== tests/cases/compiler/errorElaboration.ts (6 errors) ====
+==== errorElaboration.ts (6 errors) ====
     // Repro for #5712
     
     interface Ref<T> {
@@ -36,7 +36,7 @@ tests/cases/compiler/errorElaboration.ts(23,19): error TS2339: Property 'bar' do
       return {foo: "bar"};
               ~~~
 !!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-!!! related TS6500 tests/cases/compiler/errorElaboration.ts:16:18: The expected type comes from property 'foo' which is declared here on type '{ foo: "foo"; }'
+!!! related TS6500 errorElaboration.ts:16:18: The expected type comes from property 'foo' which is declared here on type '{ foo: "foo"; }'
     }
     
     // Repro for #32358

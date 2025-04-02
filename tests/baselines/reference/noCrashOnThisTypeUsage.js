@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashOnThisTypeUsage.ts] ////
+
 //// [noCrashOnThisTypeUsage.ts]
 interface IListenable {
     changeListeners: Function[] | null

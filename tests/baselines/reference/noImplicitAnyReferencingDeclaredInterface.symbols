@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyReferencingDeclaredInterface.ts ===
+//// [tests/cases/compiler/noImplicitAnyReferencingDeclaredInterface.ts] ////
+
+=== noImplicitAnyReferencingDeclaredInterface.ts ===
 interface Entry {
 >Entry : Symbol(Entry, Decl(noImplicitAnyReferencingDeclaredInterface.ts, 0, 0))
 

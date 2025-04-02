@@ -1,57 +1,85 @@
-=== tests/cases/compiler/parseInvalidNonNullableTypes.ts ===
+//// [tests/cases/compiler/parseInvalidNonNullableTypes.ts] ////
+
+=== parseInvalidNonNullableTypes.ts ===
 function f1(a: string): a is string! {
 >f1 : (a: string) => a is string
+>   : ^ ^^      ^^^^^           
 >a : string
+>  : ^^^^^^
 
     return true;
 >true : true
+>     : ^^^^
 }
 
 function f2(a: string): a is !string {
 >f2 : (a: string) => a is string
+>   : ^ ^^      ^^^^^           
 >a : string
+>  : ^^^^^^
 
     return true;
 >true : true
+>     : ^^^^
 }
 
 function f3(a: string!) {}
 >f3 : (a: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 function f4(a: number!) {}
 >f4 : (a: number) => void
+>   : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 function f5(a: !string) {}
 >f5 : (a: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 function f6(a: !number) {}
 >f6 : (a: number) => void
+>   : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 function f7(): string! {}
 >f7 : () => string
+>   : ^^^^^^      
 
 function f8(): !string {}
 >f8 : () => string
+>   : ^^^^^^      
 
 const a = 1 as any!;
 >a : any
+>  : ^^^
 >1 as any! : any
+>          : ^^^
 >1 : 1
+>  : ^
 
 const b: number! = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const c = 1 as !any;
 >c : any
+>  : ^^^
 >1 as !any : any
+>          : ^^^
 >1 : 1
+>  : ^
 
 const d: !number = 1;
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

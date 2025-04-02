@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritSameNamePropertiesWithDifferentVisibility.ts ===
+//// [tests/cases/compiler/inheritSameNamePropertiesWithDifferentVisibility.ts] ////
+
+=== inheritSameNamePropertiesWithDifferentVisibility.ts ===
 class C {
 >C : Symbol(C, Decl(inheritSameNamePropertiesWithDifferentVisibility.ts, 0, 0))
 

@@ -1,22 +1,14 @@
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(30,5): error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
-  Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-  Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(50,5): error TS2322: Type '{ p1: "left"; p2: true; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-  Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-  Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(83,5): error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithOverlappingOptionals'.
-  Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
-  Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(131,5): error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute'.
-  Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute2'.
-  Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
+excessPropertyCheckWithMultipleDiscriminants.ts(30,5): error TS2353: Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
+excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+excessPropertyCheckWithMultipleDiscriminants.ts(50,5): error TS2353: Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
+excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+excessPropertyCheckWithMultipleDiscriminants.ts(83,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
+excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
+excessPropertyCheckWithMultipleDiscriminants.ts(131,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
+excessPropertyCheckWithMultipleDiscriminants.ts(137,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (8 errors) ====
+==== excessPropertyCheckWithMultipleDiscriminants.ts (8 errors) ====
     // Repro from #32657
     
     interface Base<T> {
@@ -48,8 +40,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         value: 10,
         multipleOf: 5, // excess property
         ~~~~~~~~~~
-!!! error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
-!!! error TS2322:   Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
+!!! error TS2353: Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
         format: "what?"
     }
     
@@ -62,8 +53,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         p2: false,
         p3: 42,
         ~~
-!!! error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-!!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
         p4: "hello"
     };
     
@@ -74,8 +64,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         p3: 42,
         p4: "hello"
         ~~
-!!! error TS2322: Type '{ p1: "left"; p2: true; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-!!! error TS2322:   Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
     };
     
     // This has excess error because variant two is the only applicable case
@@ -84,8 +73,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         p2: false,
         p3: 42,
         ~~
-!!! error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-!!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
         p4: "hello"
     };
     
@@ -113,8 +101,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         a: 1,
         b: 1  // excess property
         ~
-!!! error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithOverlappingOptionals'.
-!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
     }
     
     type CommonWithDisjointOverlappingOptionals = Common | A | B;
@@ -126,8 +113,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         a: 1,
         b: 1  // excess property
         ~
-!!! error TS2322: Type '{ type: "A"; n: number; a: number; b: number; }' is not assignable to type 'CommonWithDisjointOverlappingOptionals'.
-!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
     }
     
     // Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
@@ -167,8 +153,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         type: 'string',
         autoIncrement: true,
         ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute'.
-!!! error TS2322:   Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
+!!! error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
         required: true,
     };
     
@@ -176,8 +161,7 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(137,5): err
         type: 'string',
         autoIncrement: true,
         ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ type: "string"; autoIncrement: boolean; required: true; }' is not assignable to type 'Attribute2'.
-!!! error TS2322:   Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
+!!! error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
         required: true,
     };
     

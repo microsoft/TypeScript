@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/varianceCantBeStrictWhileStructureIsnt.ts] ////
+
+=== varianceCantBeStrictWhileStructureIsnt.ts ===
+// under non-strict-function-types, all the below should work
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 0, 0))
+>T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 1, 14))
+
+    member: (cb: T) => void;
+>member : Symbol(Foo.member, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 1, 18))
+>cb : Symbol(cb, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 2, 13))
+>T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 1, 14))
+}
+
+interface Bar<T> {
+>Bar : Symbol(Bar, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 3, 1))
+>T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 5, 14))
+
+    member: (cb: T) => void;
+>member : Symbol(Bar.member, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 5, 18))
+>cb : Symbol(cb, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 6, 13))
+>T : Symbol(T, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 5, 14))
+}
+
+declare var a: Foo<string>;
+>a : Symbol(a, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 9, 11))
+>Foo : Symbol(Foo, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 0, 0))
+
+declare var b: Foo<"">;
+>b : Symbol(b, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 10, 11))
+>Foo : Symbol(Foo, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 0, 0))
+
+declare var a2: Bar<string>;
+>a2 : Symbol(a2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 12, 11))
+>Bar : Symbol(Bar, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 3, 1))
+
+declare var b2: Bar<"">;
+>b2 : Symbol(b2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 13, 11))
+>Bar : Symbol(Bar, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 3, 1))
+
+a = b;
+>a : Symbol(a, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 9, 11))
+>b : Symbol(b, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 10, 11))
+
+b = a;
+>b : Symbol(b, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 10, 11))
+>a : Symbol(a, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 9, 11))
+
+a2 = b2;
+>a2 : Symbol(a2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 12, 11))
+>b2 : Symbol(b2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 13, 11))
+
+b2 = a2;
+>b2 : Symbol(b2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 13, 11))
+>a2 : Symbol(a2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 12, 11))
+
+a = b2;
+>a : Symbol(a, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 9, 11))
+>b2 : Symbol(b2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 13, 11))
+
+b = a2;
+>b : Symbol(b, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 10, 11))
+>a2 : Symbol(a2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 12, 11))
+
+a2 = b;
+>a2 : Symbol(a2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 12, 11))
+>b : Symbol(b, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 10, 11))
+
+b2 = a;
+>b2 : Symbol(b2, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 13, 11))
+>a : Symbol(a, Decl(varianceCantBeStrictWhileStructureIsnt.ts, 9, 11))
+

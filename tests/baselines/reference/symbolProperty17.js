@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty17.ts] ////
+
 //// [symbolProperty17.ts]
 interface I {
     [Symbol.iterator]: number;

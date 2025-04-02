@@ -1,31 +1,53 @@
-=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit11.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit11.ts] ////
+
+=== symbolDeclarationEmit11.ts ===
 class C {
 >C : C
+>  : ^
 
     static [Symbol.iterator] = 0;
 >[Symbol.iterator] : number
+>                  : ^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     static [Symbol.isConcatSpreadable]() { }
 >[Symbol.isConcatSpreadable] : () => void
+>                            : ^^^^^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 
     static get [Symbol.toPrimitive]() { return ""; }
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     static set [Symbol.toPrimitive](x) { }
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 }

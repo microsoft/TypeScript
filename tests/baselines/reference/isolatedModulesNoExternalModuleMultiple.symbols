@@ -1,12 +1,14 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesNoExternalModuleMultiple.ts] ////
+
+=== file1.ts ===
 var x;
 >x : Symbol(x, Decl(file1.ts, 0, 3))
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 var y;
 >y : Symbol(y, Decl(file2.ts, 0, 3))
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 var z;
 >z : Symbol(z, Decl(file3.ts, 0, 3))
 

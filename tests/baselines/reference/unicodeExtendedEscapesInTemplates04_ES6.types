@@ -1,5 +1,0 @@
-=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates04_ES6.ts ===
-var x = `\u{00000000}`;
->x : string
->`\u{00000000}` : "\0"
-

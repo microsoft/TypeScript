@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
 //// [jsxElementType.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
@@ -139,8 +141,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -202,12 +204,12 @@ React.createElement(RenderArray, null);
 React.createElement(RenderArray, { title: "react" });
 React.createElement(RenderArray, { excessProp: true });
 // React Server Component
-var RenderPromise = function (_a) {
-    var title = _a.title;
-    return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {
+var RenderPromise = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
+    var title = _b.title;
+    return __generator(this, function (_c) {
         return [2 /*return*/, "react"];
-    }); });
-};
+    });
+}); };
 Component = RenderPromise;
 React.createElement(RenderPromise, null);
 React.createElement(RenderPromise, { title: "react" });

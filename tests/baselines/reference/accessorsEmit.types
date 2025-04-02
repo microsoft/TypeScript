@@ -1,16 +1,23 @@
-=== tests/cases/compiler/accessorsEmit.ts ===
+//// [tests/cases/compiler/accessorsEmit.ts] ////
+
+=== accessorsEmit.ts ===
 class Result { }
 >Result : Result
+>       : ^^^^^^
 
 class Test {
 >Test : Test
+>     : ^^^^
 
     get Property(): Result {
 >Property : Result
+>         : ^^^^^^
 
         var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         return null;
     }
@@ -18,13 +25,16 @@ class Test {
 
 class Test2 {
 >Test2 : Test2
+>      : ^^^^^
 
     get Property() {
 >Property : any
 
         var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         return null;
     }

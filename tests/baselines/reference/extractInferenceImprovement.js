@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extractInferenceImprovement.ts] ////
+
 //// [extractInferenceImprovement.ts]
 // repro mostly from https://github.com/Microsoft/TypeScript/issues/25065
 function getProperty2<T, K extends keyof T>(obj: T, key: Extract<K, string>): T[K] {

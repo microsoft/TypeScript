@@ -1,5 +1,5 @@
-import { TestRunnerKind } from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import { TestRunnerKind } from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 
 export interface RunnerTask {
     runner: TestRunnerKind;
@@ -55,7 +55,7 @@ export type ParallelHostMessage = ParallelTestMessage | ParallelCloseMessage | P
 
 export interface ParallelErrorMessage {
     type: "error";
-    payload: { error: string, stack: string, name?: string[] };
+    payload: { error: string; stack: string; name?: string[]; };
 }
 
 export interface ParallelResultMessage {
@@ -75,15 +75,15 @@ export interface ParallelTimeoutChangeMessage {
 
 export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage | ParallelTimeoutChangeMessage;
 
-export function shimNoopTestInterface(global: Mocha.MochaGlobals) {
+export function shimNoopTestInterface(global: Mocha.MochaGlobals): void {
     global.before = ts.noop;
     global.after = ts.noop;
     global.beforeEach = ts.noop;
     global.afterEach = ts.noop;
-    global.describe = global.context = ((_: any, __: any) => { /*empty*/ }) as Mocha.SuiteFunction;
+    global.describe = global.context = ((_: any, __: any) => {/*empty*/}) as Mocha.SuiteFunction;
     global.describe.skip = global.xdescribe = global.xcontext = ts.noop as Mocha.PendingSuiteFunction;
     global.describe.only = ts.noop as Mocha.ExclusiveSuiteFunction;
-    global.it = global.specify = ((_: any, __: any) => { /*empty*/ }) as Mocha.TestFunction;
+    global.it = global.specify = ((_: any, __: any) => {/*empty*/}) as Mocha.TestFunction;
     global.it.skip = global.xit = global.xspecify = ts.noop as Mocha.PendingTestFunction;
     global.it.only = ts.noop as Mocha.ExclusiveTestFunction;
 }

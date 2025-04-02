@@ -34,35 +34,32 @@ declare module "fs";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
-var fs = require("fs");
+const fs = require("fs");
 fs.readFile;
 exports.fs2 = require("fs");
 //// [index.js]
 import { createRequire as _createRequire } from "module";
-var __require = _createRequire(import.meta.url);
+const __require = _createRequire(import.meta.url);
 // esm format file
-var fs = __require("fs");
+const fs = __require("fs");
 fs.readFile;
-var fs2 = __require("fs");
+const fs2 = __require("fs");
 export { fs2 };
 //// [file.js]
 import { createRequire as _createRequire_1 } from "module";
-var __require_1 = _createRequire_1(import.meta.url);
+const __require_1 = _createRequire_1(import.meta.url);
 // esm format file
-var __require = null;
-var _createRequire = null;
-var fs = __require_1("fs");
+const __require = null;
+const _createRequire = null;
+const fs = __require_1("fs");
 fs.readFile;
-var fs2 = __require_1("fs");
+const fs2 = __require_1("fs");
 export { fs2 };
 
 
 //// [index.d.ts]
-/// <reference path="../../tests/cases/conformance/node/allowJs/types.d.ts" />
 import fs2 = require("fs");
 //// [index.d.ts]
-/// <reference path="../tests/cases/conformance/node/allowJs/types.d.ts" />
 import fs2 = require("fs");
 //// [file.d.ts]
-/// <reference path="../tests/cases/conformance/node/allowJs/types.d.ts" />
 import fs2 = require("fs");

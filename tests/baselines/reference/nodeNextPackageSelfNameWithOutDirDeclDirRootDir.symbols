@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeNextPackageSelfNameWithOutDirDeclDirRootDir.ts] ////
+
 === /pkg/src/index.ts ===
 import * as me from "@this/package";
 >me : Symbol(me, Decl(index.ts, 0, 6))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts] ////
+
 //// [objectLiteralComputedNameNoDeclarationError.ts]
 const Foo = {
     BANANA: 'banana' as 'banana',

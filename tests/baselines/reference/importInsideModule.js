@@ -16,4 +16,4 @@ exports.myModule = void 0;
 var myModule;
 (function (myModule) {
     var a = foo.x;
-})(myModule = exports.myModule || (exports.myModule = {}));
+})(myModule || (exports.myModule = myModule = {}));

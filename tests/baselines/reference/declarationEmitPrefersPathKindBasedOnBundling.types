@@ -1,31 +1,42 @@
-=== tests/cases/compiler/src/lib/operators/scalar.ts ===
+//// [tests/cases/compiler/declarationEmitPrefersPathKindBasedOnBundling.ts] ////
+
+=== src/lib/operators/scalar.ts ===
 export interface Scalar {
 	(): string;
 	value: number;
 >value : number
+>      : ^^^^^^
 }
 
 export function scalar(value: string): Scalar {
 >scalar : (value: string) => Scalar
+>       : ^     ^^      ^^^^^      
 >value : string
+>      : ^^^^^^
 
 	return null as any;
 >null as any : any
 }
-=== tests/cases/compiler/src/settings/spacing.ts ===
+=== src/settings/spacing.ts ===
 import { scalar } from '../lib/operators/scalar';
->scalar : (value: string) => import("tests/cases/compiler/src/lib/operators/scalar").Scalar
+>scalar : (value: string) => import("src/lib/operators/scalar").Scalar
+>       : ^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
 
 export default {
->{	get xs() {		return scalar("14px");	}} : { readonly xs: import("tests/cases/compiler/src/lib/operators/scalar").Scalar; }
+>{	get xs() {		return scalar("14px");	}} : { readonly xs: import("src/lib/operators/scalar").Scalar; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	get xs() {
->xs : import("tests/cases/compiler/src/lib/operators/scalar").Scalar
+>xs : import("src/lib/operators/scalar").Scalar
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 		return scalar("14px");
->scalar("14px") : import("tests/cases/compiler/src/lib/operators/scalar").Scalar
->scalar : (value: string) => import("tests/cases/compiler/src/lib/operators/scalar").Scalar
+>scalar("14px") : import("src/lib/operators/scalar").Scalar
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scalar : (value: string) => import("src/lib/operators/scalar").Scalar
+>       : ^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
 >"14px" : "14px"
+>       : ^^^^^^
 	}
 };
 

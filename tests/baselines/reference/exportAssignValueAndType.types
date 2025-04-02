@@ -1,27 +1,38 @@
-=== tests/cases/compiler/exportAssignValueAndType.ts ===
+//// [tests/cases/compiler/exportAssignValueAndType.ts] ////
+
+=== exportAssignValueAndType.ts ===
 declare module http {
 	export interface Server { openPort: number; }
 >openPort : number
+>         : ^^^^^^
 }
 
 interface server {
     (): http.Server;
 >http : any
+>     : ^^^
 
     startTime: Date;
 >startTime : Date
+>          : ^^^^
 }
  
 var x = 5;
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 var server = new Date();
 >server : Date
+>       : ^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
 export = server;
 >server : server
+>       : ^^^^^^
  
 

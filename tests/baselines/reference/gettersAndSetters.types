@@ -1,183 +1,302 @@
-=== tests/cases/compiler/gettersAndSetters.ts ===
+//// [tests/cases/compiler/gettersAndSetters.ts] ////
+
+=== gettersAndSetters.ts ===
 // classes
 class C {
 >C : C
+>  : ^
 
     public fooBack = "";
 >fooBack : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 
     static barBack:string = "";
 >barBack : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 
     public bazBack = "";
 >bazBack : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
     
     public get Foo() { return this.fooBack;} // ok
 >Foo : string
+>    : ^^^^^^
 >this.fooBack : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >fooBack : string
+>        : ^^^^^^
 
     public set Foo(foo:string) {this.fooBack = foo;} // ok
 >Foo : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
 >this.fooBack = foo : string
+>                   : ^^^^^^
 >this.fooBack : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >fooBack : string
+>        : ^^^^^^
 >foo : string
+>    : ^^^^^^
 
     static get Bar() {return C.barBack;} // ok
 >Bar : string
+>    : ^^^^^^
 >C.barBack : string
+>          : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >barBack : string
+>        : ^^^^^^
 
     static set Bar(bar:string) {C.barBack = bar;} // ok
 >Bar : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 >C.barBack = bar : string
+>                : ^^^^^^
 >C.barBack : string
+>          : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >barBack : string
+>        : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
     public get = function() {} // ok
 >get : () => void
+>    : ^^^^^^^^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 
     public set = function() {} // ok
 >set : () => void
+>    : ^^^^^^^^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 }
 
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var foo = c.Foo;
 >foo : string
+>    : ^^^^^^
 >c.Foo : string
+>      : ^^^^^^
 >c : C
+>  : ^
 >Foo : string
+>    : ^^^^^^
 
 c.Foo = "foov";
 >c.Foo = "foov" : "foov"
+>               : ^^^^^^
 >c.Foo : string
+>      : ^^^^^^
 >c : C
+>  : ^
 >Foo : string
+>    : ^^^^^^
 >"foov" : "foov"
+>       : ^^^^^^
 
 var bar = C.Bar;
 >bar : string
+>    : ^^^^^^
 >C.Bar : string
+>      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >Bar : string
+>    : ^^^^^^
 
 C.Bar = "barv";
 >C.Bar = "barv" : "barv"
+>               : ^^^^^^
 >C.Bar : string
+>      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >Bar : string
+>    : ^^^^^^
 >"barv" : "barv"
+>       : ^^^^^^
 
 var baz = c.Baz;
 >baz : any
+>    : ^^^
 >c.Baz : any
+>      : ^^^
 >c : C
+>  : ^
 >Baz : any
+>    : ^^^
 
 c.Baz = "bazv";
 >c.Baz = "bazv" : "bazv"
+>               : ^^^^^^
 >c.Baz : any
+>      : ^^^
 >c : C
+>  : ^
 >Baz : any
+>    : ^^^
 >"bazv" : "bazv"
+>       : ^^^^^^
 
 // The Foo accessors' return and param types should be contextually typed to the Foo field
 var o : {Foo:number;} = {get Foo() {return 0;}, set Foo(val:number){val}}; // o
 >o : { Foo: number; }
+>  : ^^^^^^^      ^^^
 >Foo : number
+>    : ^^^^^^
 >{get Foo() {return 0;}, set Foo(val:number){val}} : { Foo: number; }
+>                                                  : ^^^^^^^      ^^^
 >Foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >Foo : number
+>    : ^^^^^^
 >val : number
+>    : ^^^^^^
 >val : number
+>    : ^^^^^^
 
 var ofg = o.Foo;
 >ofg : number
+>    : ^^^^^^
 >o.Foo : number
+>      : ^^^^^^
 >o : { Foo: number; }
+>  : ^^^^^^^      ^^^
 >Foo : number
+>    : ^^^^^^
 
 o.Foo = 0;
 >o.Foo = 0 : 0
+>          : ^
 >o.Foo : number
+>      : ^^^^^^
 >o : { Foo: number; }
+>  : ^^^^^^^      ^^^
 >Foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 
 interface I1 {
     (n:number):number;
 >n : number
+>  : ^^^^^^
 }
 
 var i:I1 = function (n) {return n;}
 >i : I1
+>  : ^^
 >function (n) {return n;} : (n: number) => number
+>                         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
 // Repro from #45006
 const x: string | number = Math.random() < 0.5 ? "str" : 123;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 ? "str" : 123 : "str" | 123
+>                                  : ^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
+>    : ^^^
 >"str" : "str"
+>      : ^^^^^
 >123 : 123
+>    : ^^^
 
 if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
   let obj = {
 >obj : { prop: any; method(): string; }
+>    : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >{    set prop(_: any) { x.toUpperCase(); },    get prop() { return x.toUpperCase() },    method() { return x.toUpperCase() }  } : { prop: any; method(): string; }
+>                                                                                                                                : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 
     set prop(_: any) { x.toUpperCase(); },
 >prop : any
+>     : ^^^
 >_ : any
+>  : ^^^
 >x.toUpperCase() : string
+>                : ^^^^^^
 >x.toUpperCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
 
     get prop() { return x.toUpperCase() },
 >prop : any
+>     : ^^^
 >x.toUpperCase() : string
+>                : ^^^^^^
 >x.toUpperCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
 
     method() { return x.toUpperCase() }
 >method : () => string
+>       : ^^^^^^^^^^^^
 >x.toUpperCase() : string
+>                : ^^^^^^
 >x.toUpperCase : () => string
+>              : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
   }
 }
 

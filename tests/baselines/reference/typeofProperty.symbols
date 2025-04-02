@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofProperty.ts ===
+//// [tests/cases/compiler/typeofProperty.ts] ////
+
+=== typeofProperty.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(typeofProperty.ts, 0, 0))
 

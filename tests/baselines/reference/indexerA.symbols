@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerA.ts ===
+//// [tests/cases/compiler/indexerA.ts] ////
+
+=== indexerA.ts ===
 class JQueryElement {
 >JQueryElement : Symbol(JQueryElement, Decl(indexerA.ts, 0, 0))
 

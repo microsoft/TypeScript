@@ -1,45 +1,69 @@
-=== tests/cases/compiler/infiniteConstraints.ts ===
+//// [tests/cases/compiler/infiniteConstraints.ts] ////
+
+=== Performance Stats ===
+Instantiation count: 2,500
+
+=== infiniteConstraints.ts ===
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
 
 type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
 >T1 : B
+>   : ^
 >val : string
+>    : ^^^^^^
 
 type T2<B extends { [K in keyof B]: B[Exclude<keyof B, K>]["val"] }> = B;
 >T2 : B
+>   : ^
 
 // Repros from #22950
 
 type AProp<T extends { a: string }> = T
 >AProp : T
+>      : ^
 >a : string
+>  : ^^^^^^
 
 declare function myBug<
->myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
+>myBug : <T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never; }>(arg: T) => T
+>      : ^ ^^^^^^^^^                                                            ^^   ^^ ^^^^^ 
 
   T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
 >(arg: T): T
 >arg : T
+>    : ^
 
 const out = myBug({obj1: {a: "test"}})
 >out : { obj1: { a: string; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
->myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>myBug : <T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never; }>(arg: T) => T
+>      : ^ ^^^^^^^^^                                                            ^^   ^^ ^^^^^ 
 >{obj1: {a: "test"}} : { obj1: { a: string; }; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1 : { a: string; }
+>     : ^^^^^^^^^^^^^^
 >{a: "test"} : { a: string; }
+>            : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
 type Value<V extends string = string> = Record<"val", V>;
 >Value : Value<V>
+>      : ^^^^^^^^
 
 declare function value<V extends string>(val: V): Value<V>;
 >value : <V extends string>(val: V) => Value<V>
+>      : ^ ^^^^^^^^^      ^^   ^^ ^^^^^        
 >val : V
+>    : ^
 
 declare function ensureNoDuplicates<
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"] ? never : any; }>(vals: T) => void
+>                   : ^ ^^^^^^^^^                                                                                                                    ^^    ^^ ^^^^^    
 
   T extends {
     [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
@@ -48,73 +72,116 @@ declare function ensureNoDuplicates<
   }
 >(vals: T): void;
 >vals : T
+>     : ^
 
 const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2")});
 >noError : void
+>        : ^^^^
 >ensureNoDuplicates({main: value("test"), alternate: value("test2")}) : void
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
+>                                                                     : ^^^^
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"] ? never : any; }>(vals: T) => void
+>                   : ^ ^^^^^^^^^                                                                                                                    ^^    ^^ ^^^^^    
 >{main: value("test"), alternate: value("test2")} : { main: Value<"test">; alternate: Value<"test2">; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >main : Value<"test">
+>     : ^^^^^^^^^^^^^
 >value("test") : Value<"test">
+>              : ^^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
+>      : ^ ^^^^^^^^^      ^^   ^^ ^^^^^        
 >"test" : "test"
+>       : ^^^^^^
 >alternate : Value<"test2">
+>          : ^^^^^^^^^^^^^^
 >value("test2") : Value<"test2">
+>               : ^^^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
+>      : ^ ^^^^^^^^^      ^^   ^^ ^^^^^        
 >"test2" : "test2"
+>        : ^^^^^^^
 
 const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 >shouldBeNoError : void
+>                : ^^^^
 >ensureNoDuplicates({main: value("test")}) : void
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
+>                                          : ^^^^
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"] ? never : any; }>(vals: T) => void
+>                   : ^ ^^^^^^^^^                                                                                                                    ^^    ^^ ^^^^^    
 >{main: value("test")} : { main: Value<"test">; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >main : Value<"test">
+>     : ^^^^^^^^^^^^^
 >value("test") : Value<"test">
+>              : ^^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
+>      : ^ ^^^^^^^^^      ^^   ^^ ^^^^^        
 >"test" : "test"
+>       : ^^^^^^
 
 const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
 >shouldBeError : void
+>              : ^^^^
 >ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : void
->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
+>                                                                  : ^^^^
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"] ? never : any; }>(vals: T) => void
+>                   : ^ ^^^^^^^^^                                                                                                                    ^^    ^^ ^^^^^    
 >{main: value("dup"), alternate: value("dup")} : { main: Value<"dup">; alternate: Value<"dup">; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >main : Value<"dup">
+>     : ^^^^^^^^^^^^
 >value("dup") : Value<"dup">
+>             : ^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
+>      : ^ ^^^^^^^^^      ^^   ^^ ^^^^^        
 >"dup" : "dup"
+>      : ^^^^^
 >alternate : Value<"dup">
+>          : ^^^^^^^^^^^^
 >value("dup") : Value<"dup">
+>             : ^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
+>      : ^ ^^^^^^^^^      ^^   ^^ ^^^^^        
 >"dup" : "dup"
+>      : ^^^^^
 
 // Repro from #26448
 
 type Cond<T> = T extends number ? number : never;
 >Cond : Cond<T>
+>     : ^^^^^^^
 
 declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
 >function1 : <T extends { [K in keyof T]: Cond<T[K]>; }>() => T[keyof T]["foo"]
+>          : ^ ^^^^^^^^^                               ^^^^^^^                 
 
 // Repro from #31823
 
 export type Prepend<Elm, T extends unknown[]> =
 >Prepend : Prepend<Elm, T>
+>        : ^^^^^^^^^^^^^^^
 
   T extends unknown ?
   ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
 >arg : Elm
+>    : ^^^
 >rest : T
+>     : ^
 >args : T2
+>     : ^^
 
   never :
   never;
 export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
 >ExactExtract : ExactExtract<T, U>
+>             : ^^^^^^^^^^^^^^^^^^
 
 type Conv<T, U = T> =
 >Conv : Conv<T, U>
+>     : ^^^^^^^^^^
 
   { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
 >0 : [T]
+>  : ^^^
 >1 : Prepend<T, Conv<ExactExtract<U, T>, ExactExtract<U, T>>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

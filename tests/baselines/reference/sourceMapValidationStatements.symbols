@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationStatements.ts ===
+//// [tests/cases/compiler/sourceMapValidationStatements.ts] ////
+
+=== sourceMapValidationStatements.ts ===
 function f() {
 >f : Symbol(f, Decl(sourceMapValidationStatements.ts, 0, 0))
 

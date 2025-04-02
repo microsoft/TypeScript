@@ -1,52 +1,52 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(11,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(12,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(19,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(20,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(20,32): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(27,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(28,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(29,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(35,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(36,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(36,32): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(37,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(52,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(68,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(91,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(92,19): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(101,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(103,23): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(115,23): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(162,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(163,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(195,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(196,34): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(230,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(231,35): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(281,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(284,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(287,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(313,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(315,19): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(323,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(325,14): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(349,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(355,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(355,20): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(361,23): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(367,21): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(373,29): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(373,29): error TS2495: Type 'void' is not an array type or a string type.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(379,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(379,20): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(385,26): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(385,26): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(391,17): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(391,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(11,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(12,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+derivedClassSuperProperties.ts(19,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(20,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+derivedClassSuperProperties.ts(20,32): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(27,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(28,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+derivedClassSuperProperties.ts(29,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(35,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(36,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+derivedClassSuperProperties.ts(36,32): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(37,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(52,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(68,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(91,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(92,19): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(101,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(103,23): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(115,23): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(162,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(163,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(195,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(196,34): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(230,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(231,35): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(281,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(284,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(287,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(313,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(315,19): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(323,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(325,14): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperProperties.ts(349,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(355,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+derivedClassSuperProperties.ts(355,20): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(361,23): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(367,21): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(373,29): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(373,29): error TS2495: Type 'void' is not an array type or a string type.
+derivedClassSuperProperties.ts(379,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+derivedClassSuperProperties.ts(379,20): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(385,26): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+derivedClassSuperProperties.ts(385,26): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(391,17): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+derivedClassSuperProperties.ts(391,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts (46 errors) ====
+==== derivedClassSuperProperties.ts (46 errors) ====
     declare const decorate: any;
     
     class Base {
@@ -58,69 +58,57 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class Derived1 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything();
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived2 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything(this);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
                                    ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived3 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything();
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
             super(this);
-    ~~~~~~~~~~~~~~~~~~~~
                   ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived4 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything(this);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
                                    ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super(this);
-    ~~~~~~~~~~~~~~~~~~~~
                   ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class Derived5 extends Base {
@@ -178,43 +166,31 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class DerivedWithDecoratorOnClass extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             @decorate(this)
-    ~~~~~~~~~~~~~~~~~~~~~~~
                       ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             class InnerClass { }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
     
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithDecoratorOnClassMethod extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             class InnerClass {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
                 @decorate(this)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                           ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                 innerMethod() { }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
-    ~~~~~~~~~
-    
     
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithDecoratorOnClassProperty extends Base {
@@ -271,16 +247,13 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class DerivedWithParenthesisAfterStatement extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             this.prop;
-    ~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             (super());
-    ~~~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithParenthesisBeforeStatement extends Base {
@@ -311,36 +284,23 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class DerivedWithClassDeclarationExtendingMember extends Base {
         memberClass = class { };
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             class InnerClass extends this.memberClass {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                      ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                 private method() {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     return this;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 }
-    ~~~~~~~~~~~~~
                 private property = 7;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 constructor() {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     super();
-    ~~~~~~~~~~~~~~~~~~~~~~~~
                     this.property;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     this.method();
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 }
-    ~~~~~~~~~~~~~
             }
-    ~~~~~~~~~
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithClassExpression extends Base {
@@ -363,16 +323,13 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class DerivedWithClassExpressionExtendingMember extends Base {
         memberClass = class { };
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             console.log(class extends this.memberClass { });
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                       ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithDerivedClassExpression extends Base {
@@ -421,34 +378,23 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class DerivedWithObjectAccessorsUsingThisInKeys extends Base {
         propName = "prop";
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             const obj = {
-    ~~~~~~~~~~~~~~~~~~~~~
                 _prop: "prop",
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
                 get [this.propName]() {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                      ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                     return true;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 },
-    ~~~~~~~~~~~~~~
                 set [this.propName](param) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                      ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                     this._prop = param;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 }
-    ~~~~~~~~~~~~~
             };
-    ~~~~~~~~~~
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithObjectAccessorsUsingThisInBodies extends Base {
@@ -470,39 +416,29 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class DerivedWithObjectComputedPropertyBody extends Base {
         propName = "prop";
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             const obj = {
-    ~~~~~~~~~~~~~~~~~~~~~
                 prop: this.propName,
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                       ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             };
-    ~~~~~~~~~~
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithObjectComputedPropertyName extends Base {
         propName = "prop";
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             const obj = {
-    ~~~~~~~~~~~~~~~~~~~~~
                 [this.propName]: true,
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                  ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             };
-    ~~~~~~~~~~
             super();
-    ~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }
     
     class DerivedWithObjectMethod extends Base {

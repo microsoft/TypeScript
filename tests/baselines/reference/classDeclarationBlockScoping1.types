@@ -1,10 +1,14 @@
-=== tests/cases/compiler/classDeclarationBlockScoping1.ts ===
+//// [tests/cases/compiler/classDeclarationBlockScoping1.ts] ////
+
+=== classDeclarationBlockScoping1.ts ===
 class C {
 >C : C
+>  : ^
 }
 
 {
     class C {
 >C : C
+>  : ^
     }
 }

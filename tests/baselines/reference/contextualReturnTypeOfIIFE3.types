@@ -1,16 +1,23 @@
-=== tests/cases/compiler/contextualReturnTypeOfIIFE3.ts ===
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE3.ts] ////
+
+=== contextualReturnTypeOfIIFE3.ts ===
 declare namespace app {
 >app : typeof app
+>    : ^^^^^^^^^^
 
   var foo: {
 >foo : { bar: { someFun: (arg: number) => void; }; }
+>    : ^^^^^^^                                   ^^^
 
     bar: {
 >bar : { someFun: (arg: number) => void; }
+>    : ^^^^^^^^^^^                     ^^^
 
       someFun: (arg: number) => void;
 >someFun : (arg: number) => void
+>        : ^   ^^      ^^^^^    
 >arg : number
+>    : ^^^^^^
 
     };
   };
@@ -18,30 +25,51 @@ declare namespace app {
 
 app.foo.bar = (function () {
 >app.foo.bar = (function () {  return { someFun(arg) {} };})() : { someFun(arg: number): void; }
+>                                                              : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >app.foo.bar : { someFun: (arg: number) => void; }
+>            : ^^^^^^^^^^^                     ^^^
 >app.foo : { bar: { someFun: (arg: number) => void; }; }
+>        : ^^^^^^^                                   ^^^
 >app : typeof app
+>    : ^^^^^^^^^^
 >foo : { bar: { someFun: (arg: number) => void; }; }
+>    : ^^^^^^^                                   ^^^
 >bar : { someFun: (arg: number) => void; }
+>    : ^^^^^^^^^^^                     ^^^
 >(function () {  return { someFun(arg) {} };})() : { someFun(arg: number): void; }
+>                                                : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >(function () {  return { someFun(arg) {} };}) : () => { someFun(arg: number): void; }
+>                                              : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >function () {  return { someFun(arg) {} };} : () => { someFun(arg: number): void; }
+>                                            : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 
   return { someFun(arg) {} };
 >{ someFun(arg) {} } : { someFun(arg: number): void; }
+>                    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >someFun : (arg: number) => void
+>        : ^   ^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 
 })();
 
 app.foo.bar.someFun(1);
 >app.foo.bar.someFun(1) : void
+>                       : ^^^^
 >app.foo.bar.someFun : (arg: number) => void
+>                    : ^   ^^      ^^^^^    
 >app.foo.bar : { someFun: (arg: number) => void; }
+>            : ^^^^^^^^^^^                     ^^^
 >app.foo : { bar: { someFun: (arg: number) => void; }; }
+>        : ^^^^^^^                                   ^^^
 >app : typeof app
+>    : ^^^^^^^^^^
 >foo : { bar: { someFun: (arg: number) => void; }; }
+>    : ^^^^^^^                                   ^^^
 >bar : { someFun: (arg: number) => void; }
+>    : ^^^^^^^^^^^                     ^^^
 >someFun : (arg: number) => void
+>        : ^   ^^      ^^^^^    
 >1 : 1
+>  : ^
 

@@ -1,251 +1,395 @@
-=== tests/cases/conformance/types/tuple/restTupleElements1.ts ===
+//// [tests/cases/conformance/types/tuple/restTupleElements1.ts] ////
+
+=== restTupleElements1.ts ===
 type T00 = [string?];
->T00 : [(string | undefined)?]
+>T00 : T00
+>    : ^^^
 
 type T01 = [string, string?];
->T01 : [string, (string | undefined)?]
+>T01 : T01
+>    : ^^^
 
 type T02 = [string?, string];  // Error
->T02 : [(string | undefined)?, string]
+>T02 : T02
+>    : ^^^
 
 type T03 = [...string[]];
->T03 : string[]
+>T03 : T03
+>    : ^^^
 
 type T04 = [...[...string[]]];
->T04 : string[]
+>T04 : T04
+>    : ^^^
 
 type T05 = [...[...[...string[]]]];
->T05 : string[]
+>T05 : T05
+>    : ^^^
 
 type T06 = [string, ...string[]];
->T06 : [string, ...string[]]
+>T06 : T06
+>    : ^^^
 
 type T07 = [...string[], string];  // Error
->T07 : [...string[], string]
+>T07 : T07
+>    : ^^^
 
 type T08 = [...string];  // Error
 >T08 : any[]
+>    : ^^^^^
 
 type T09 = [...string?];  // Error
 >T09 : any[]
+>    : ^^^^^
 
 type T10 = [string, ...[...string[]]];
->T10 : [string, ...string[]]
+>T10 : T10
+>    : ^^^
 
 type T11 = [string, ...[...[...string[]]]];
->T11 : [string, ...string[]]
+>T11 : T11
+>    : ^^^
 
 type T15 = [boolean, number, ...string[]];
->T15 : [boolean, number, ...string[]]
+>T15 : T15
+>    : ^^^
 
 type L15 = T15["length"];  // number
 >L15 : number
+>    : ^^^^^^
 
 declare function assign<T, S extends T>(): void;
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<number[], [...number[]]>();
 >assign<number[], [...number[]]>() : void
+>                                  : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<number[], [number, ...number[]]>();
 >assign<number[], [number, ...number[]]>() : void
+>                                          : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[...number[]], number[]>();
 >assign<[...number[]], number[]>() : void
+>                                  : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], number[]>();  // Error
 >assign<[number, ...number[]], number[]>() : void
+>                                          : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], []>();  // Error
 >assign<[number, ...number[]], []>() : void
+>                                    : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number]>();
 >assign<[number, ...number[]], [number]>() : void
+>                                          : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number]>();
 >assign<[number, ...number[]], [number, number]>() : void
+>                                                  : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number, ...number[]]>();
 >assign<[number, ...number[]], [number, number, ...number[]]>() : void
+>                                                               : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number], [...number[]]>();  // Error
 >assign<[number], [...number[]]>() : void
+>                                  : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number], [number, ...number[]]>();  // Error
 >assign<[number], [number, ...number[]]>() : void
+>                                          : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, ...string[]]>();  // Error
 >assign<[number, ...number[]], [number, ...string[]]>() : void
+>                                                       : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [string, ...number[]]>();  // Error
 >assign<[number, ...number[]], [string, ...number[]]>() : void
+>                                                       : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number, string]>();  // Error
 >assign<[number, ...number[]], [number, number, string]>() : void
+>                                                          : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number, number, string]>();  // Error
 >assign<[number, ...number[]], [number, number, number, string]>() : void
+>                                                                  : ^^^^
 >assign : <T, S extends T>() => void
+>       : ^ ^^ ^^^^^^^^^ ^^^^^^^    
 
 type T20 = [number, string, ...boolean[]];
->T20 : [number, string, ...boolean[]]
+>T20 : T20
+>    : ^^^
 
 type T21 = T20[0];
 >T21 : number
+>    : ^^^^^^
 
 type T22 = T20[0 | 1];
->T22 : string | number
+>T22 : T22
+>    : ^^^
 
 type T23 = T20[0 | 1 | 2];
->T23 : string | number | boolean
+>T23 : T23
+>    : ^^^
 
 type T24 = T20[0 | 1 | 2 | 3];
->T24 : string | number | boolean
+>T24 : T24
+>    : ^^^
 
 type T25 = T20[1 | 2 | 3];
->T25 : string | boolean
+>T25 : T25
+>    : ^^^
 
 type T26 = T20[2 | 3];
->T26 : boolean
+>T26 : T26
+>    : ^^^
 
 type T27 = T20[3];
 >T27 : boolean
+>    : ^^^^^^^
 
 type T28 = T20[number];
 >T28 : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const t: T20;
 >t : T20
+>  : ^^^
 
 declare const x: number;
 >x : number
+>  : ^^^^^^
 
 let e0 = t[0];  // number
 >e0 : number
+>   : ^^^^^^
 >t[0] : number
+>     : ^^^^^^
 >t : T20
+>  : ^^^
 >0 : 0
+>  : ^
 
 let e1 = t[1];  // string
 >e1 : string
+>   : ^^^^^^
 >t[1] : string
+>     : ^^^^^^
 >t : T20
+>  : ^^^
 >1 : 1
+>  : ^
 
 let e2 = t[2];  // boolean
 >e2 : boolean
+>   : ^^^^^^^
 >t[2] : boolean
+>     : ^^^^^^^
 >t : T20
+>  : ^^^
 >2 : 2
+>  : ^
 
 let e3 = t[3];  // boolean
 >e3 : boolean
+>   : ^^^^^^^
 >t[3] : boolean
+>     : ^^^^^^^
 >t : T20
+>  : ^^^
 >3 : 3
+>  : ^
 
 let ex = t[x];  // number | string | boolean
 >ex : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t[x] : string | number | boolean
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T20
+>  : ^^^
 >x : number
+>  : ^^^^^^
 
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >x : [T, ...U[]]
+>  : ^^^^^^^^^^^
 
 f0([]);  // Error
 >f0([]) : [unknown, unknown]
+>       : ^^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[] : []
+>   : ^^
 
 f0([1]);
 >f0([1]) : [number, unknown]
+>        : ^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 f0([1, 2, 3]);
 >f0([1, 2, 3]) : [number, number]
+>              : ^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[1, 2, 3] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 f0([1, "hello", true]);
 >f0([1, "hello", true]) : [number, string | boolean]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[1, "hello", true] : [number, string, true]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 
 declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
 >f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
+>   : ^ ^^                                                     ^^^^^    
 >a : [(x: number) => number, ...((x: string) => number)[]]
+>  : ^^ ^^      ^^^^^      ^^^^^^^ ^^      ^^^^^      ^^^^
 >x : number
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;
->f2 : (a_0: (x: number) => number, ...a_1: ((x: string) => number)[]) => void
+>f2 : (a_0: (x: number) => number, ...a: ((x: string) => number)[]) => void
+>   : ^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^    
 >a : [(x: number) => number, ...((x: string) => number)[]]
+>  : ^^ ^^      ^^^^^      ^^^^^^^ ^^      ^^^^^      ^^^^
 >x : number
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]) : void
+>                                                      : ^^^^
 >f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
+>   : ^ ^^                                                     ^^^^^    
 >[x => x * 2, x => x.length, x => x.charCodeAt(0)] : [(x: number) => number, (x: string) => number, (x: string) => number]
+>                                                  : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x => x * 2 : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x * 2 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >x => x.length : (x: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >x => x.charCodeAt(0) : (x: string) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.charCodeAt(0) : number
+>                : ^^^^^^
 >x.charCodeAt : (index: number) => number
+>             : ^     ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >charCodeAt : (index: number) => number
+>           : ^     ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >f2(x => x * 2, x => x.length, x => x.charCodeAt(0)) : void
->f2 : (a_0: (x: number) => number, ...a_1: ((x: string) => number)[]) => void
+>                                                    : ^^^^
+>f2 : (a_0: (x: number) => number, ...a: ((x: string) => number)[]) => void
+>   : ^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^    
 >x => x * 2 : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x * 2 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >x => x.length : (x: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >x => x.charCodeAt(0) : (x: string) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.charCodeAt(0) : number
+>                : ^^^^^^
 >x.charCodeAt : (index: number) => number
+>             : ^     ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >charCodeAt : (index: number) => number
+>           : ^     ^^      ^^^^^      
 >0 : 0
+>  : ^
 

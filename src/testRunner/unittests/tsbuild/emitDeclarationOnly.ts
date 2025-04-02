@@ -1,33 +1,69 @@
-import * as vfs from "../../_namespaces/vfs";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
-import {
-    loadProjectFromDisk,
-    replaceText
-} from "../helpers/vfs";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
-    let projFs: vfs.FileSystem;
-    before(() => {
-        projFs = loadProjectFromDisk("tests/projects/emitDeclarationOnly");
-    });
-    after(() => {
-        projFs = undefined!;
-    });
+describe("unittests:: tsbuild:: on project with emitDeclarationOnly:: set to true", () => {
+    function getEmitDeclarationOnlySys() {
+        return TestServerHost.createWatchedSystem({
+            "/home/src/workspaces/project/src/a.ts": dedent`
+                import { B } from "./b";
+
+                export interface A {
+                    b: B;
+                }
+            `,
+            "/home/src/workspaces/project/src/b.ts": dedent`
+                import { C } from "./c";
+
+                export interface B {
+                    b: C;
+                }
+            `,
+            "/home/src/workspaces/project/src/c.ts": dedent`
+                import { A } from "./a";
+
+                export interface C {
+                    a: A;
+                }
+            `,
+            "/home/src/workspaces/project/src/index.ts": dedent`
+                export { A } from "./a";
+                export { B } from "./b";
+                export { C } from "./c";
+            `,
+            "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    incremental: true,
+                    target: "es5",
+                    module: "commonjs",
+                    declaration: true,
+                    declarationMap: true,
+                    sourceMap: true,
+                    outDir: "./lib",
+                    composite: true,
+                    strict: true,
+                    esModuleInterop: true,
+                    alwaysStrict: true,
+                    rootDir: "src",
+                    emitDeclarationOnly: true,
+                },
+            }),
+        });
+    }
 
     function verifyEmitDeclarationOnly(disableMap?: true) {
         verifyTsc({
             subScenario: `only dts output in circular import project with emitDeclarationOnly${disableMap ? "" : " and declarationMap"}`,
-            fs: () => projFs,
+            sys: getEmitDeclarationOnlySys,
             scenario: "emitDeclarationOnly",
-            commandLineArgs: ["--b", "/src", "--verbose"],
-            modifyFs: disableMap ?
-                (fs => replaceText(fs, "/src/tsconfig.json", `"declarationMap": true,`, "")) :
+            commandLineArgs: ["--b", "--verbose"],
+            modifySystem: disableMap ?
+                (sys => sys.replaceFileText("/home/src/workspaces/project/tsconfig.json", `"declarationMap": true,`, "")) :
                 undefined,
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/src/a.ts", "b: B;", "b: B; foo: any;"),
             }],
         });
     }
@@ -36,23 +72,27 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
 
     verifyTsc({
         subScenario: `only dts output in non circular imports project with emitDeclarationOnly`,
-        fs: () => projFs,
+        sys: getEmitDeclarationOnlySys,
         scenario: "emitDeclarationOnly",
-        commandLineArgs: ["--b", "/src", "--verbose"],
-        modifyFs: fs => {
-            fs.rimrafSync("/src/src/index.ts");
-            replaceText(fs, "/src/src/a.ts", `import { B } from "./b";`, `export class B { prop = "hello"; }`);
+        commandLineArgs: ["--b", "--verbose"],
+        modifySystem: sys => {
+            sys.rimrafSync("/home/src/workspaces/project/src/index.ts");
+            sys.replaceFileText("/home/src/workspaces/project/src/a.ts", `import { B } from "./b";`, `export class B { prop = "hello"; }`);
         },
         edits: [
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => replaceText(fs, "/src/src/a.ts", "export interface A {", `class C { }
-export interface A {`),
-
+                edit: sys =>
+                    sys.replaceFileText(
+                        "/home/src/workspaces/project/src/a.ts",
+                        "export interface A {",
+                        `class C { }
+export interface A {`,
+                    ),
             },
             {
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/src/a.ts", "b: B;", "b: B; foo: any;"),
             },
         ],
     });

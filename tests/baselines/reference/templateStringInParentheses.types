@@ -1,7 +1,13 @@
-=== tests/cases/conformance/es6/templates/templateStringInParentheses.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInParentheses.ts] ////
+
+=== templateStringInParentheses.ts ===
 var x = (`abc${0}abc`);
 >x : string
->(`abc${0}abc`) : string
->`abc${0}abc` : string
+>  : ^^^^^^
+>(`abc${0}abc`) : "abc0abc"
+>               : ^^^^^^^^^
+>`abc${0}abc` : "abc0abc"
+>             : ^^^^^^^^^
 >0 : 0
+>  : ^
 

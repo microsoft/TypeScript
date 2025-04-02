@@ -1,15 +1,25 @@
-=== tests/cases/compiler/typeParameterAndArgumentOfSameName1.ts ===
+//// [tests/cases/compiler/typeParameterAndArgumentOfSameName1.ts] ////
+
+=== typeParameterAndArgumentOfSameName1.ts ===
 function f<A extends Number>(A: A): A {
 >f : <A extends Number>(A: A) => A
+>  : ^ ^^^^^^^^^      ^^ ^^ ^^^^^ 
 >A : A
+>  : ^
 
     var r = A.toExponential(123);
 >r : string
+>  : ^^^^^^
 >A.toExponential(123) : string
+>                     : ^^^^^^
 >A.toExponential : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >A : A
+>  : ^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >123 : 123
+>    : ^^^
 
     return null;
 }

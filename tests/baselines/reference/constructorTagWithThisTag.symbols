@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/classthisboth.js ===
+//// [tests/cases/conformance/jsdoc/constructorTagWithThisTag.ts] ////
+
+=== classthisboth.js ===
 /**
  * @class
  * @this {{ e: number, m: number }}

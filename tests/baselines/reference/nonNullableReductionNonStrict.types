@@ -1,48 +1,74 @@
-=== tests/cases/compiler/nonNullableReductionNonStrict.ts ===
+//// [tests/cases/compiler/nonNullableReductionNonStrict.ts] ////
+
+=== nonNullableReductionNonStrict.ts ===
 // Repros from #43425
 
 type Transform1<T> = ((value: string) => T) | (string extends T ? undefined : never);
 >Transform1 : Transform1<T>
+>           : ^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 
 type Transform2<T> = string extends T ? ((value: string) => T) | undefined : (value: string) => T;
 >Transform2 : Transform2<T>
+>           : ^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >value : string
+>      : ^^^^^^
 
 function test<T>(f1: Transform1<T>, f2: Transform2<T>) {
 >test : <T>(f1: Transform1<T>, f2: Transform2<T>) => void
+>     : ^ ^^  ^^             ^^  ^^             ^^^^^^^^^
 >f1 : Transform1<T>
+>   : ^^^^^^^^^^^^^
 >f2 : Transform2<T>
+>   : ^^^^^^^^^^^^^
 
     f1?.("hello");
 >f1?.("hello") : T
+>              : ^
 >f1 : (value: string) => T
+>   : ^     ^^      ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     f2?.("hello");
 >f2?.("hello") : T
+>              : ^
 >f2 : ((value: string) => T) | ((value: string) => T)
+>   : ^^     ^^      ^^^^^^^^^^^^     ^^      ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 function f1<T>(x: T | (string extends T ? null | undefined : never)) {
 >f1 : <T>(x: T | (string extends T ? null | undefined : never)) => void
+>   : ^ ^^ ^^                                                 ^^^^^^^^^
 >x : T | (string extends T ? null : never)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let z = x!;  // NonNullable<T>
 >z : T | (string extends T ? null : never)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : T | (string extends T ? null : never)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T | (string extends T ? null : never)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f2<T, U extends null | undefined>(x: T | U) {
->f2 : <T, U extends null>(x: T | U) => void
+>f2 : <T, U extends null | undefined>(x: T | U) => void
+>   : ^ ^^ ^^^^^^^^^                ^^ ^^     ^^^^^^^^^
 >x : T | U
+>  : ^^^^^
 
     let z = x!;  // NonNullable<T>
 >z : T | U
+>  : ^^^^^
 >x! : T | U
+>   : ^^^^^
 >x : T | U
+>  : ^^^^^
 }
 

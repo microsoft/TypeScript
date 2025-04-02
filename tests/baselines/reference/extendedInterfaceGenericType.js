@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendedInterfaceGenericType.ts] ////
+
 //// [extendedInterfaceGenericType.ts]
 interface Alpha<T> {
     takesArgOfT(arg: T): Alpha<T>;

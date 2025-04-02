@@ -1,20 +1,14 @@
-error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
-error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
-error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
-error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
 
 
-!!! error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
-!!! error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'verbatimModuleSyntax' instead.
-!!! error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'verbatimModuleSyntax' instead.
-!!! error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-!!! error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
 !!! error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
-==== tests/cases/conformance/externalModules/verbatimModuleSyntaxCompat.ts (0 errors) ====
+==== verbatimModuleSyntaxCompat.ts (0 errors) ====
     export {};

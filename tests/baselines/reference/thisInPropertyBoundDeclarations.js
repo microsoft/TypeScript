@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInPropertyBoundDeclarations.ts] ////
+
 //// [thisInPropertyBoundDeclarations.ts]
 class Bug {
     private name: string;

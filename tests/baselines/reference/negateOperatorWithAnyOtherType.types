@@ -1,194 +1,306 @@
-=== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts] ////
+
+=== negateOperatorWithAnyOtherType.ts ===
 // - operator on any type
 
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var ANY1: any;
 >ANY1 : any
+>     : ^^^
 
 var ANY2: any[] = ["", ""];
 >ANY2 : any[]
+>     : ^^^^^
 >["", ""] : string[]
+>         : ^^^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 
 var obj: () => {}
 >obj : () => {}
+>    : ^^^^^^  
 
 var obj1 = { x: "", y: () => { }};
 >obj1 : { x: string; y: () => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: "", y: () => { }} : { x: string; y: () => void; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : () => void
+>  : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 function foo(): any {
 >foo : () => any
+>    : ^^^^^^   
 
     var a;
 >a : any
+>  : ^^^
 
     return a;
 >a : any
+>  : ^^^
 }
 class A {
 >A : A
+>  : ^
 
     public a: any;
 >a : any
+>  : ^^^
 
     static foo(): any {
 >foo : () => any
+>    : ^^^^^^   
 
         var a;
 >a : any
+>  : ^^^
 
         return a;
 >a : any
+>  : ^^^
     }
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var n: any;
 >n : any
+>  : ^^^
 }
 var objA = new A();
 >objA : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 // any type var
 var ResultIsNumber1 = -ANY1;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >-ANY1 : number
+>      : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 var ResultIsNumber2 = -ANY2;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >-ANY2 : number
+>      : ^^^^^^
 >ANY2 : any[]
+>     : ^^^^^
 
 var ResultIsNumber3 = -A;
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >-A : number
+>   : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 var ResultIsNumber4 = -M;
 >ResultIsNumber4 : number
+>                : ^^^^^^
 >-M : number
+>   : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var ResultIsNumber5 = -obj;
 >ResultIsNumber5 : number
+>                : ^^^^^^
 >-obj : number
+>     : ^^^^^^
 >obj : () => {}
+>    : ^^^^^^  
 
 var ResultIsNumber6 = -obj1;
 >ResultIsNumber6 : number
+>                : ^^^^^^
 >-obj1 : number
+>      : ^^^^^^
 >obj1 : { x: string; y: () => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // any type literal
 var ResultIsNumber7 = -undefined;
 >ResultIsNumber7 : number
+>                : ^^^^^^
 >-undefined : number
+>           : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var ResultIsNumber = -null;
 >ResultIsNumber : number
+>               : ^^^^^^
 >-null : number
+>      : ^^^^^^
 
 // any type expressions
 var ResultIsNumber8 = -ANY2[0];
 >ResultIsNumber8 : number
+>                : ^^^^^^
 >-ANY2[0] : number
+>         : ^^^^^^
 >ANY2[0] : any
+>        : ^^^
 >ANY2 : any[]
+>     : ^^^^^
 >0 : 0
+>  : ^
 
 var ResultIsNumber9 = -obj1.x;
 >ResultIsNumber9 : number
+>                : ^^^^^^
 >-obj1.x : number
+>        : ^^^^^^
 >obj1.x : string
+>       : ^^^^^^
 >obj1 : { x: string; y: () => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var ResultIsNumber10 = -obj1.y;
 >ResultIsNumber10 : number
+>                 : ^^^^^^
 >-obj1.y : number
+>        : ^^^^^^
 >obj1.y : () => void
+>       : ^^^^^^^^^^
 >obj1 : { x: string; y: () => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : () => void
+>  : ^^^^^^^^^^
 
 var ResultIsNumber11 = -objA.a;
 >ResultIsNumber11 : number
+>                 : ^^^^^^
 >-objA.a : number
+>        : ^^^^^^
 >objA.a : any
+>       : ^^^
 >objA : A
+>     : ^
 >a : any
+>  : ^^^
 
 var ResultIsNumber12 = -M.n;
 >ResultIsNumber12 : number
+>                 : ^^^^^^
 >-M.n : number
+>     : ^^^^^^
 >M.n : any
+>    : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : any
+>  : ^^^
 
 var ResultIsNumber13 = -foo();
 >ResultIsNumber13 : number
+>                 : ^^^^^^
 >-foo() : number
+>       : ^^^^^^
 >foo() : any
+>      : ^^^
 >foo : () => any
+>    : ^^^^^^   
 
 var ResultIsNumber14 = -A.foo();
 >ResultIsNumber14 : number
+>                 : ^^^^^^
 >-A.foo() : number
+>         : ^^^^^^
 >A.foo() : any
+>        : ^^^
 >A.foo : () => any
+>      : ^^^^^^   
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => any
+>    : ^^^^^^   
 
 var ResultIsNumber15 = -(ANY - ANY1);
 >ResultIsNumber15 : number
+>                 : ^^^^^^
 >-(ANY - ANY1) : number
+>              : ^^^^^^
 >(ANY - ANY1) : number
+>             : ^^^^^^
 >ANY - ANY1 : number
+>           : ^^^^^^
 >ANY : any
+>    : ^^^
 >ANY1 : any
+>     : ^^^
 
 // miss assignment operators
 -ANY;
 >-ANY : number
+>     : ^^^^^^
 >ANY : any
+>    : ^^^
 
 -ANY1;
 >-ANY1 : number
+>      : ^^^^^^
 >ANY1 : any
+>     : ^^^
 
 -ANY2[0];
 >-ANY2[0] : number
+>         : ^^^^^^
 >ANY2[0] : any
+>        : ^^^
 >ANY2 : any[]
+>     : ^^^^^
 >0 : 0
+>  : ^
 
 -ANY, ANY1;
 >-ANY, ANY1 : any
+>           : ^^^
 >-ANY : number
+>     : ^^^^^^
 >ANY : any
+>    : ^^^
 >ANY1 : any
+>     : ^^^
 
 -objA.a;
 >-objA.a : number
+>        : ^^^^^^
 >objA.a : any
+>       : ^^^
 >objA : A
+>     : ^
 >a : any
+>  : ^^^
 
 -M.n;
 >-M.n : number
+>     : ^^^^^^
 >M.n : any
+>    : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : any
+>  : ^^^
 

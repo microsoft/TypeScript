@@ -132,6 +132,11 @@ declare module ts {
     }
 
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
+
+    interface TextRange {
+        pos: number;
+        end: number;
+    }
 }
 
 declare namespace FourSlashInterface {
@@ -198,6 +203,9 @@ declare namespace FourSlashInterface {
         readonly semicolons?: ts.SemicolonPreference;
         readonly indentSwitchCase?: boolean;
     }
+    interface InteractiveRefactorArguments {
+        targetFile: string;
+    }
     interface Range {
         fileName: string;
         pos: number;
@@ -207,6 +215,10 @@ declare namespace FourSlashInterface {
     type MarkerOrNameOrRange = string | Marker | Range;
     interface TextSpan {
         start: number;
+        end: number;
+    }
+    interface TextRange {
+        pos: number;
         end: number;
     }
     class test_ {
@@ -221,6 +233,7 @@ declare namespace FourSlashInterface {
         markerByName(s: string): Marker;
         symbolsInScope(range: Range): any[];
         setTypesRegistry(map: { [key: string]: void }): void;
+        getSemanticDiagnostics(): Diagnostic[];
     }
     class config {
         configurePlugin(pluginName: string, configuration: any): void;
@@ -260,6 +273,7 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         linkedEditing(map: { [markerName: string]: LinkedEditingInfo | undefined }): void;
+        baselineLinkedEditing(): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
@@ -277,8 +291,8 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string, actionDescription?: string): void;
-        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
+        refactorAvailable(name: string, actionName?: string, actionDescription?: string, kind?: string, preferences?: {}, includeInteractiveActions?: boolean): void;
+        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string, actionDescription?: string, kind?: string, preferences?: {}, includeInteractiveActions?: boolean): void;
         refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
     class verify extends verifyNegatable {
@@ -314,7 +328,6 @@ declare namespace FourSlashInterface {
         formatDocumentChangesNothing(): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        baselineCommands(...commands: BaselineCommand[]): void;
         baselineFindAllReferences(...markerOrRange: MarkerOrNameOrRange[]): void;
         baselineFindAllReferencesAtRangesWithText(...rangeText: string[]): void;
         baselineGetFileReferences(...fileName: string[]): void;
@@ -360,7 +373,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string, options?: VerifyDocCommentTemplateOptions): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
-        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[] }): void;
+        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[], preferences?: UserPreferences }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
@@ -411,12 +424,13 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
-        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
-            start: number;
-            length: number;
-        }, preference?: InlayHintsOptions);
+        baselineInlayHints(span?: { start: number; length: number; }, preferences?: InlayHintsOptions): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
+        getRegionSemanticDiagnostics(
+            ranges: ts.TextRange[],
+            expectedDiagnostics: ReadonlyArray<Diagnostic> | undefined,
+            expectedRanges?: ReadonlyArray<TextRange>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         getEditsForFileRename(options: {
@@ -431,7 +445,11 @@ declare namespace FourSlashInterface {
             readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
-
+        moveToFile(options: {
+            readonly newFileContents: { readonly [fileName: string]: string };
+            readonly interactiveRefactorArguments: InteractiveRefactorArguments;
+            readonly preferences?: UserPreferences;
+        }): void;
         generateTypes(...options: GenerateTypesOptions[]): void;
 
         organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: UserPreferences): void;
@@ -440,6 +458,20 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
+        preparePasteEdits(options: {
+            copiedFromFile: string,
+            copiedTextRange: { pos: number, end: number }[],
+            providePasteEdits: boolean
+        }): void;
+        pasteEdits(options: {
+            newFileContents: { readonly [fileName: string]: string };
+            args: {
+                pastedText: string[];
+                pasteLocations: { pos: number, end: number }[];
+                copiedFrom?: { file: string, range: { pos: number, end: number }[] };
+            }
+        }): void;
+        baselineMapCode(ranges: Range[][], changes: string[]): void;
     }
     class edit {
         caretPosition(): Marker;
@@ -659,12 +691,15 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: readonly string[];
+        readonly autoImportSpecifierExcludeRegexes?: readonly string[];
+        readonly preferTypeOnlyAutoImports?: boolean;
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
         readonly organizeImportsCollation?: "unicode" | "ordinal";
         readonly organizeImportsLocale?: string;
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
@@ -675,6 +710,7 @@ declare namespace FourSlashInterface {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly interactiveInlayHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
@@ -689,12 +725,14 @@ declare namespace FourSlashInterface {
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;
         readonly triggerCharacter?: string;
+        readonly defaultCommitCharacters?: string[];
     }
     type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
     interface ExpectedCompletionEntryObject {
         readonly name: string;
         readonly source?: string;
         readonly insertText?: string;
+        readonly filterText?: string;
         readonly replacementSpan?: Range;
         readonly hasAction?: boolean;
         readonly isRecommended?: boolean;
@@ -704,6 +742,7 @@ declare namespace FourSlashInterface {
         readonly sortText?: completion.SortText;
         readonly isPackageJsonImport?: boolean;
         readonly isSnippet?: boolean;
+        readonly commitCharacters?: string[];
 
         // details
         readonly text?: string;
@@ -804,6 +843,7 @@ declare namespace FourSlashInterface {
         readonly pattern: string;
         readonly fileName?: string;
         readonly expected: ReadonlyArray<ExpectedNavigateToItem>;
+        readonly excludeLibFiles?: boolean;
     }
     interface ExpectedNavigateToItem {
         readonly name: string;
@@ -839,30 +879,9 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
 
-    type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean };
+    type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean, readonly quotePreference?: "auto" | "double" | "single" };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
     type DiagnosticIgnoredInterpolations = { template: string }
-    type BaselineCommand = {
-        type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-    } | {
-        type: "getFileReferences";
-        fileName: ArrayOrSingle<string>;
-    } | {
-        type: "findRenameLocations";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: RenameOptions;
-    } | {
-        type: "documentHighlights";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: VerifyDocumentHighlightsOptions;
-    } | {
-        type: "customWork";
-        work: () => string | undefined;
-    };
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
@@ -905,6 +924,7 @@ declare namespace completion {
         TypeOnlyAlias = "TypeOnlyAlias/",
         ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
         SwitchCases = "SwitchCases/",
+        ObjectLiteralMemberWithComma = "ObjectLiteralMemberWithComma/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

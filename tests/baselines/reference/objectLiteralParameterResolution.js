@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralParameterResolution.ts] ////
+
 //// [objectLiteralParameterResolution.ts]
 interface Foo{
     extend<T>(target: T, ...objs: any[]): T;

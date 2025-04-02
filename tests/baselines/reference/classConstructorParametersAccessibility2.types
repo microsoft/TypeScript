@@ -1,64 +1,93 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts] ////
+
+=== classConstructorParametersAccessibility2.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     constructor(public x?: number) { }
 >x : number
+>  : ^^^^^^
 }
 var c1: C1;
 >c1 : C1
+>   : ^^
 
 c1.x // OK
 >c1.x : number
+>     : ^^^^^^
 >c1 : C1
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     constructor(private p?: number) { }
 >p : number
+>  : ^^^^^^
 }
 var c2: C2;
 >c2 : C2
+>   : ^^
 
 c2.p // private, error
 >c2.p : number
+>     : ^^^^^^
 >c2 : C2
+>   : ^^
 >p : number
+>  : ^^^^^^
 
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     constructor(protected p?: number) { }
 >p : number
+>  : ^^^^^^
 }
 var c3: C3;
 >c3 : C3
+>   : ^^
 
 c3.p // protected, error
 >c3.p : number
+>     : ^^^^^^
 >c3 : C3
+>   : ^^
 >p : number
+>  : ^^^^^^
 
 class Derived extends C3 {
 >Derived : Derived
+>        : ^^^^^^^
 >C3 : C3
+>   : ^^
 
     constructor(p: number) {
 >p : number
+>  : ^^^^^^
 
         super(p);
 >super(p) : void
+>         : ^^^^
 >super : typeof C3
+>      : ^^^^^^^^^
 >p : number
+>  : ^^^^^^
 
         this.p; // OK
 >this.p : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >p : number
+>  : ^^^^^^
     }
 }
 

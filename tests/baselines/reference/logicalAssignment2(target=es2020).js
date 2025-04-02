@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment2.ts] ////
+
 //// [logicalAssignment2.ts]
 interface A {
     foo: {

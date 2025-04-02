@@ -1,16 +1,25 @@
-=== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorInvalidOperations.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorInvalidOperations.ts] ////
+
+=== typeofOperatorInvalidOperations.ts ===
 // Unary operator typeof
 
 // opreand before typeof
 var ANY = ANY typeof ;    //expect error
 >ANY : any
+>    : ^^^
 >ANY : any
+>    : ^^^
 >typeof : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : any
+> : ^^^
 
 // miss an operand
 var ANY1 = typeof ;
 >ANY1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : any
+> : ^^^
 

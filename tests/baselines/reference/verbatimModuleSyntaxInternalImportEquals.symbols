@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts ===
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts] ////
+
+=== verbatimModuleSyntaxInternalImportEquals.ts ===
 export {};
 import f1 = NonExistent;
 >f1 : Symbol(f1, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 0, 10))

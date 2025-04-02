@@ -1,86 +1,130 @@
-=== tests/cases/compiler/thisInTypeQuery.ts ===
+//// [tests/cases/compiler/thisInTypeQuery.ts] ////
+
+=== thisInTypeQuery.ts ===
 // Repros from #52672
 
 function assert(condition: unknown): asserts condition {
 >assert : (condition: unknown) => asserts condition
+>       : ^         ^^       ^^^^^                 
 >condition : unknown
+>          : ^^^^^^^
 
     if (!condition) {
 >!condition : boolean
+>           : ^^^^^^^
 >condition : unknown
+>          : ^^^^^^^
 
         throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
     }
 }
 
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     private map = {
 >map : { my_key: string; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >{        my_key: 'example_value'    } : { my_key: string; }
+>                                      : ^^^^^^^^^^^^^^^^^^^
 
         my_key: 'example_value'
 >my_key : string
+>       : ^^^^^^
 >'example_value' : "example_value"
+>                : ^^^^^^^^^^^^^^^
 
     };
 
     runTypeFails() {
 >runTypeFails : () => void
+>             : ^^^^^^^^^^
 
         const params = null as any as { a: { key: string } } | null;
->params : { a: {    key: string;}; } | null
->null as any as { a: { key: string } } | null : { a: {    key: string;}; } | null
+>params : { a: { key: string; }; } | null
+>       : ^^^^^                ^^^^^^^^^^
+>null as any as { a: { key: string } } | null : { a: { key: string; }; } | null
+>                                             : ^^^^^                ^^^^^^^^^^
 >null as any : any
 >a : { key: string; }
+>  : ^^^^^^^      ^^^
 >key : string
+>    : ^^^^^^
 
         assert(params);
 >assert(params) : void
+>               : ^^^^
 >assert : (condition: unknown) => asserts condition
+>       : ^         ^^       ^^^^^                 
 >params : { a: { key: string; }; } | null
+>       : ^^^^^                ^^^^^^^^^^
 
         type Key = keyof typeof this.map;
 >Key : "my_key"
+>    : ^^^^^^^^
 >this.map : { my_key: string; }
+>         : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >map : { my_key: string; }
+>    : ^^^^^^^^^^^^^^^^^^^
 
         this.map[params.a.key as Key];
 >this.map[params.a.key as Key] : string
+>                              : ^^^^^^
 >this.map : { my_key: string; }
+>         : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >map : { my_key: string; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >params.a.key as Key : "my_key"
+>                    : ^^^^^^^^
 >params.a.key : string
+>             : ^^^^^^
 >params.a : { key: string; }
+>         : ^^^^^^^      ^^^
 >params : { a: { key: string; }; }
+>       : ^^^^^                ^^^
 >a : { key: string; }
+>  : ^^^^^^^      ^^^
 >key : string
+>    : ^^^^^^
     }
 }
 
 class C {
 >C : C
+>  : ^
 
   foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     const x = !!true;
 >x : true
+>  : ^^^^
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
     if (x) {
 >x : true
+>  : ^^^^
 
       type T0 = typeof this;
 >T0 : this
+>   : ^^^^
 >this : this
+>     : ^^^^
     }
   }
 }

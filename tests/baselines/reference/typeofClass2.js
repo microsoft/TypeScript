@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClass2.ts] ////
+
 //// [typeofClass2.ts]
 class C {
     constructor(x: number);

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithIndexAndMethodSignature.ts] ////
+
 //// [unionTypeWithIndexAndMethodSignature.ts]
 interface Options {
     m(x: number): void;

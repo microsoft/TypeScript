@@ -1,16 +1,16 @@
-tests/cases/compiler/client.ts(3,27): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
-tests/cases/compiler/client.ts(5,27): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
-tests/cases/compiler/client.ts(7,27): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
-tests/cases/compiler/client.ts(7,30): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
-tests/cases/compiler/client.ts(9,27): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
-tests/cases/compiler/client.ts(11,27): error TS2614: Module '"./server"' has no exported member 'm'. Did you mean to use 'import m from "./server"' instead?
+client.ts(3,27): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
+client.ts(5,27): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
+client.ts(7,27): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
+client.ts(7,30): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
+client.ts(9,27): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
+client.ts(11,27): error TS2614: Module '"./server"' has no exported member 'm'. Did you mean to use 'import m from "./server"' instead?
 
 
-==== tests/cases/compiler/server.ts (0 errors) ====
+==== server.ts (0 errors) ====
     class a { }
     export default a;
     
-==== tests/cases/compiler/client.ts (6 errors) ====
+==== client.ts (6 errors) ====
     import defaultBinding1, { } from "./server";
     export var x1 = new defaultBinding1();
     import defaultBinding2, { a } from "./server";

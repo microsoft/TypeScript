@@ -1,7 +1,7 @@
-tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts(2,15): error TS1109: Expression expected.
+arrowFunctionMissingCurlyWithSemicolon.ts(2,15): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts (1 errors) ====
+==== arrowFunctionMissingCurlyWithSemicolon.ts (1 errors) ====
     // Should error at semicolon.
     var f = () => ;
                   ~

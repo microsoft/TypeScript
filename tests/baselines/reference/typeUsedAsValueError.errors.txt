@@ -1,14 +1,14 @@
-tests/cases/compiler/typeUsedAsValueError.ts(16,11): error TS2693: 'Interface' only refers to a type, but is being used as a value here.
-tests/cases/compiler/typeUsedAsValueError.ts(17,11): error TS2304: Cannot find name 'InterfaceNotFound'.
-tests/cases/compiler/typeUsedAsValueError.ts(18,13): error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
-tests/cases/compiler/typeUsedAsValueError.ts(19,16): error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
-tests/cases/compiler/typeUsedAsValueError.ts(20,16): error TS2304: Cannot find name 'TypeAliasForSomeClassNotFound'.
-tests/cases/compiler/typeUsedAsValueError.ts(21,11): error TS2693: 'someType' only refers to a type, but is being used as a value here.
-tests/cases/compiler/typeUsedAsValueError.ts(22,17): error TS2693: 'someType' only refers to a type, but is being used as a value here.
-tests/cases/compiler/typeUsedAsValueError.ts(23,17): error TS2304: Cannot find name 'someTypeNotFound'.
+typeUsedAsValueError.ts(16,11): error TS2693: 'Interface' only refers to a type, but is being used as a value here.
+typeUsedAsValueError.ts(17,11): error TS2304: Cannot find name 'InterfaceNotFound'.
+typeUsedAsValueError.ts(18,13): error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
+typeUsedAsValueError.ts(19,16): error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
+typeUsedAsValueError.ts(20,16): error TS2304: Cannot find name 'TypeAliasForSomeClassNotFound'.
+typeUsedAsValueError.ts(21,11): error TS2693: 'someType' only refers to a type, but is being used as a value here.
+typeUsedAsValueError.ts(22,17): error TS2693: 'someType' only refers to a type, but is being used as a value here.
+typeUsedAsValueError.ts(23,17): error TS2304: Cannot find name 'someTypeNotFound'.
 
 
-==== tests/cases/compiler/typeUsedAsValueError.ts (8 errors) ====
+==== typeUsedAsValueError.ts (8 errors) ====
     interface Interface {
     
     }

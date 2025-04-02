@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorWithSuperAndPrologue.es5.ts] ////
+
 //// [constructorWithSuperAndPrologue.es5.ts]
 // https://github.com/microsoft/TypeScript/issues/48761
 "use strict";

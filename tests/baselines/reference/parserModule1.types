@@ -1,70 +1,103 @@
-=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModule1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModule1.ts] ////
+
+=== parserModule1.ts ===
     export module CompilerDiagnostics {
 >CompilerDiagnostics : typeof CompilerDiagnostics
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         export var debug = false;
 >debug : boolean
+>      : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         export interface IDiagnosticWriter {
             Alert(output: string): void;
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^    
 >output : string
+>       : ^^^^^^
         }
 
         export var diagnosticWriter: IDiagnosticWriter = null;
 >diagnosticWriter : IDiagnosticWriter
+>                 : ^^^^^^^^^^^^^^^^^
 
         export var analysisPass: number = 0;
 >analysisPass : number
+>             : ^^^^^^
 >0 : 0
+>  : ^
 
         export function Alert(output: string) {
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^^^^^
 >output : string
+>       : ^^^^^^
 
             if (diagnosticWriter) {
 >diagnosticWriter : IDiagnosticWriter
+>                 : ^^^^^^^^^^^^^^^^^
 
                 diagnosticWriter.Alert(output);
 >diagnosticWriter.Alert(output) : void
+>                               : ^^^^
 >diagnosticWriter.Alert : (output: string) => void
+>                       : ^      ^^      ^^^^^    
 >diagnosticWriter : IDiagnosticWriter
+>                 : ^^^^^^^^^^^^^^^^^
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^    
 >output : string
+>       : ^^^^^^
             }
         }
 
         export function debugPrint(s: string) {
 >debugPrint : (s: string) => void
+>           : ^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
             if (debug) {
 >debug : boolean
+>      : ^^^^^^^
 
                 Alert(s);
 >Alert(s) : void
+>         : ^^^^
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
             }
         }
 
         export function assert(condition: boolean, s: string) {
 >assert : (condition: boolean, s: string) => void
+>       : ^         ^^       ^^ ^^      ^^^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 >s : string
+>  : ^^^^^^
 
             if (debug) {
 >debug : boolean
+>      : ^^^^^^^
 
                 if (!condition) {
 >!condition : boolean
+>           : ^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 
                     Alert(s);
 >Alert(s) : void
+>         : ^^^^
 >Alert : (output: string) => void
+>      : ^      ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
                 }
             }
         }

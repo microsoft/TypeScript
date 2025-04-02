@@ -1,4 +1,6 @@
-=== tests/cases/compiler/satisfiesEmit.ts ===
+//// [tests/cases/compiler/satisfiesEmit.ts] ////
+
+=== satisfiesEmit.ts ===
 // This import should not be elided in the emitted JS
 import a = require("foo");
 >a : Symbol(a, Decl(satisfiesEmit.ts, 0, 0))

@@ -1,222 +1,308 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts] ////
+
+=== uniqueSymbolsErrors.ts ===
 // declarations
 declare const invalidUniqueType: unique number;
 >invalidUniqueType : any
+>                  : ^^^
 
 declare const {}: unique symbol;
 declare let invalidLetType: unique symbol;
 >invalidLetType : symbol
+>               : ^^^^^^
 
 declare var invalidVarType: unique symbol;
 >invalidVarType : symbol
+>               : ^^^^^^
 
 // function arguments and return types
 declare function invalidArgType(arg: unique symbol): void;
 >invalidArgType : (arg: unique symbol) => void
+>               : ^   ^^             ^^^^^    
 >arg : symbol
+>    : ^^^^^^
 
 declare function invalidRestArgType(...arg: (unique symbol)[]): void;
 >invalidRestArgType : (...arg: (unique symbol)[]) => void
+>                   : ^^^^   ^^                 ^^^^^    
 >arg : symbol[]
+>    : ^^^^^^^^
 
 declare function invalidReturnType(): unique symbol;
 >invalidReturnType : () => unique symbol
+>                  : ^^^^^^             
 
 declare function invalidThisType(this: unique symbol): void;
 >invalidThisType : (this: unique symbol) => void
+>                : ^    ^^             ^^^^^    
 >this : symbol
+>     : ^^^^^^
 
 declare function invalidTypePredicate(n: any): n is unique symbol;
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^ ^^   ^^^^^                  
 >n : any
+>  : ^^^
 
 declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
->invalidTypeParameterConstraint : <T extends symbol>() => void
+>invalidTypeParameterConstraint : <T extends unique symbol>() => void
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
 declare function invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
+>                            : ^ ^^^^^^^^^^^^^^^^    
 
 // classes
 class InvalidClass {
 >InvalidClass : InvalidClass
+>             : ^^^^^^^^^^^^
 
     constructor(invalidConstructorArgType: unique symbol) {}
 >invalidConstructorArgType : symbol
+>                          : ^^^^^^
 
     readonly invalidReadonlyPropertyType: unique symbol;
 >invalidReadonlyPropertyType : symbol
+>                            : ^^^^^^
 
     invalidPropertyType: unique symbol;
 >invalidPropertyType : symbol
+>                    : ^^^^^^
 
     invalidArgType(arg: unique symbol): void { return; }
 >invalidArgType : (arg: unique symbol) => void
+>               : ^   ^^             ^^^^^    
 >arg : symbol
+>    : ^^^^^^
 
     invalidRestArgType(...args: (unique symbol)[]): void { return; }
 >invalidRestArgType : (...args: (unique symbol)[]) => void
+>                   : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
+>     : ^^^^^^^^
 
     invalidReturnType(): unique symbol { return; }
 >invalidReturnType : () => unique symbol
+>                  : ^^^^^^             
 
     invalidThisType(this: unique symbol): void { return; }
 >invalidThisType : (this: unique symbol) => void
+>                : ^    ^^             ^^^^^    
 >this : symbol
+>     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol { return; }
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^ ^^   ^^^^^                  
 >n : any
+>  : ^^^
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
->invalidTypeParameterConstraint : <T extends symbol>() => void
+>invalidTypeParameterConstraint : <T extends unique symbol>() => void
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
     invalidTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidTypeParameterDefault : <T = symbol>() => void
+>                            : ^ ^^^^^^^^^^^^^^^^    
 
     get invalidGetter(): unique symbol { return; }
 >invalidGetter : symbol
+>              : ^^^^^^
 
     set invalidSetter(arg: unique symbol) { return; }
 >invalidSetter : symbol
+>              : ^^^^^^
 >arg : symbol
+>    : ^^^^^^
 
     static invalidStaticPropertyType: unique symbol;
 >invalidStaticPropertyType : symbol
+>                          : ^^^^^^
 
     static invalidStaticArgType(arg: unique symbol): void { return; }
 >invalidStaticArgType : (arg: unique symbol) => void
+>                     : ^   ^^             ^^^^^    
 >arg : symbol
+>    : ^^^^^^
 
     static invalidStaticRestArgType(...args: (unique symbol)[]): void { return; }
 >invalidStaticRestArgType : (...args: (unique symbol)[]) => void
+>                         : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
+>     : ^^^^^^^^
 
     static invalidStaticReturnType(): unique symbol { return; }
 >invalidStaticReturnType : () => unique symbol
+>                        : ^^^^^^             
 
     static invalidStaticThisType(this: unique symbol): void { return; }
 >invalidStaticThisType : (this: unique symbol) => void
+>                      : ^    ^^             ^^^^^    
 >this : symbol
+>     : ^^^^^^
 
     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
->invalidStaticTypePredicate : (n: any) => n is symbol
+>invalidStaticTypePredicate : (n: any) => n is unique symbol
+>                           : ^ ^^   ^^^^^                  
 >n : any
+>  : ^^^
 
     static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
->invalidStaticTypeParameterConstraint : <T extends symbol>() => void
+>invalidStaticTypeParameterConstraint : <T extends unique symbol>() => void
+>                                     : ^ ^^^^^^^^^             ^^^^^^^    
 
     static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidStaticTypeParameterDefault : <T = symbol>() => void
+>                                  : ^ ^^^^^^^^^^^^^^^^    
 
     static get invalidStaticGetter(): unique symbol { return; }
 >invalidStaticGetter : symbol
+>                    : ^^^^^^
 
     static set invalidStaticSetter(arg: unique symbol) { return; }
 >invalidStaticSetter : symbol
+>                    : ^^^^^^
 >arg : symbol
+>    : ^^^^^^
 }
 
 // interfaces
 interface InvalidInterface {
     invalidPropertyType: unique symbol;
 >invalidPropertyType : symbol
+>                    : ^^^^^^
 
     invalidArgType(arg: unique symbol): void;
 >invalidArgType : (arg: unique symbol) => void
+>               : ^   ^^             ^^^^^    
 >arg : symbol
+>    : ^^^^^^
 
     invalidRestArgType(...args: (unique symbol)[]): void;
 >invalidRestArgType : (...args: (unique symbol)[]) => void
+>                   : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
+>     : ^^^^^^^^
 
     invalidReturnType(): unique symbol;
 >invalidReturnType : () => unique symbol
+>                  : ^^^^^^             
 
     invalidThisType(this: unique symbol);
 >invalidThisType : (this: unique symbol) => any
+>                : ^    ^^             ^^^^^^^^
 >this : symbol
+>     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^ ^^   ^^^^^                  
 >n : any
+>  : ^^^
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
->invalidTypeParameterConstraint : <T extends symbol>() => void
+>invalidTypeParameterConstraint : <T extends unique symbol>() => void
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
+>                            : ^ ^^^^^^^^^^^^^^^^    
 }
 
 // type literals
 type InvalidTypeLiteral = {
->InvalidTypeLiteral : { invalidPropertyType: unique symbol; invalidArgType(arg: unique symbol): void; invalidRestArgType(...args: (unique symbol)[]): void; invalidReturnType(): unique symbol; invalidThisType(this: unique symbol): any; invalidTypePredicate(n: any): n is symbol; invalidTypeParameterConstraint<T extends symbol>(): void; invalidTypeParameterDefault<T = symbol>(): void; }
+>InvalidTypeLiteral : InvalidTypeLiteral
+>                   : ^^^^^^^^^^^^^^^^^^
 
     invalidPropertyType: unique symbol;
 >invalidPropertyType : symbol
+>                    : ^^^^^^
 
     invalidArgType(arg: unique symbol): void;
 >invalidArgType : (arg: unique symbol) => void
+>               : ^   ^^             ^^^^^    
 >arg : symbol
+>    : ^^^^^^
 
     invalidRestArgType(...args: (unique symbol)[]): void;
 >invalidRestArgType : (...args: (unique symbol)[]) => void
+>                   : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
+>     : ^^^^^^^^
 
     invalidReturnType(): unique symbol;
 >invalidReturnType : () => unique symbol
+>                  : ^^^^^^             
 
     invalidThisType(this: unique symbol);
 >invalidThisType : (this: unique symbol) => any
+>                : ^    ^^             ^^^^^^^^
 >this : symbol
+>     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^ ^^   ^^^^^                  
 >n : any
+>  : ^^^
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
->invalidTypeParameterConstraint : <T extends symbol>() => void
+>invalidTypeParameterConstraint : <T extends unique symbol>() => void
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
+>                            : ^ ^^^^^^^^^^^^^^^^    
 
 };
 
 // type alias
 type InvalidAlias = unique symbol;
 >InvalidAlias : symbol
+>             : ^^^^^^
 
 type InvalidAliasTypeParameterConstraint<T extends unique symbol> = never;
 >InvalidAliasTypeParameterConstraint : never
+>                                    : ^^^^^
 
 type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
 >InvalidAliasTypeParameterDefault : never
+>                                 : ^^^^^
 
 // type references
 declare const invalidTypeArgument: Promise<unique symbol>;
 >invalidTypeArgument : Promise<symbol>
+>                    : ^^^^^^^^^^^^^^^
 
 declare const invalidArrayType: (unique symbol)[];
 >invalidArrayType : symbol[]
+>                 : ^^^^^^^^
 
 declare const invalidTupleType: [unique symbol];
 >invalidTupleType : [symbol]
+>                 : ^^^^^^^^
 
 // mapped types
 declare const invalidMappedType: { [P in string]: unique symbol };
 >invalidMappedType : { [x: string]: symbol; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 // unions/intersection
 declare const invalidUnion: unique symbol | unique symbol;
 >invalidUnion : symbol
+>             : ^^^^^^
 
 declare const invalidIntersection: unique symbol | unique symbol;
 >invalidIntersection : symbol
+>                    : ^^^^^^
 
 // initializer assignability
 // https://github.com/Microsoft/TypeScript/issues/21584
 const shouldNotBeAssignable: string = Symbol();
 >shouldNotBeAssignable : string
+>                      : ^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 

@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/contravariantOnlyInferenceFromAnnotatedFunctionJs.ts] ////
+
+=== index.js ===
+/**
+ * @typedef {{ [K in keyof B]: { fn: (a: A, b: B) => void; thing: B[K]; } }} Funcs
+ * @template A
+ * @template {Record<string, unknown>} B
+ */
+
+/**
+ * @template A
+ * @template {Record<string, unknown>} B
+ * @param {Funcs<A, B>} fns
+ * @returns {[A, B]}
+ */
+function foo(fns) {
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+>fns : Symbol(fns, Decl(index.js, 12, 13))
+
+  return /** @type {any} */ (null);
+}
+
+const result = foo({
+>result : Symbol(result, Decl(index.js, 16, 5))
+>foo : Symbol(foo, Decl(index.js, 0, 0))
+
+  bar: {
+>bar : Symbol(bar, Decl(index.js, 16, 20))
+
+    fn:
+>fn : Symbol(fn, Decl(index.js, 17, 8))
+
+      /** @param {string} a */
+      (a) => {},
+>a : Symbol(a, Decl(index.js, 20, 7))
+
+    thing: "asd",
+>thing : Symbol(thing, Decl(index.js, 20, 16))
+
+  },
+});

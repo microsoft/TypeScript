@@ -1,29 +1,47 @@
-=== tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping1.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping1.ts] ////
+
+=== taggedTemplateContextualTyping1.ts ===
 type FuncType = (x: <T>(p: T) => T) => typeof x;
->FuncType : (x: <T>(p: T) => T) => typeof x
+>FuncType : FuncType
+>         : ^^^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >p : T
+>  : ^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T_1>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T_1): T_1; }
+>         : ^^^ ^^            ^^                    ^^ ^^        ^^ ^^ ^^^ ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^   ^^^   ^^^
 >templateStrs : TemplateStringsArray
+>             : ^^^^^^^^^^^^^^^^^^^^
 >f : FuncType
+>  : ^^^^^^^^
 >x : T
+>  : ^
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>         : ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^   ^^^   ^^^ ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
 >templateStrs : TemplateStringsArray
+>             : ^^^^^^^^^^^^^^^^^^^^
 >f : FuncType
+>  : ^^^^^^^^
 >h : FuncType
+>  : ^^^^^^^^
 >x : T
+>  : ^
 
 function tempTag1<T>(...rest: any[]): T {
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T_1>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T_1): T_1; }
+>         : ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^   ^^^   ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^   ^^^   ^^^
 >rest : any[]
+>     : ^^^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 // If contextual typing takes place, these functions should work.
@@ -32,69 +50,127 @@ function tempTag1<T>(...rest: any[]): T {
 // so this test will error.
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }` : 10
+>                                                                                  : ^^
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>         : ^^^ ^^            ^^                    ^^ ^^        ^^ ^^ ^^^ ^^^ ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
 >`${ x => { x<number>(undefined); return x; }                   }${ 10 }` : string
+>                                                                         : ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
+>                                         : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x<number>(undefined) : number
+>                     : ^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >10 : 10
+>   : ^^
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : 10
+>                                                                                                                                                : ^^
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>         : ^^^ ^^            ^^                    ^^ ^^        ^^ ^^ ^^^ ^^^ ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
 >`${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : string
+>                                                                                                                                       : ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
+>                                         : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x<number>(undefined) : number
+>                     : ^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >y => { y<number>(undefined); return y; } : (y: <T>(p: T) => T) => <T>(p: T) => T
+>                                         : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >y<number>(undefined) : number
+>                     : ^^^^^^
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >10 : 10
+>   : ^^
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }` : any
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>         : ^^^ ^^            ^^                    ^^ ^^        ^^ ^^ ^^^ ^^^ ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
 >`${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }` : string
+>                                                                                                                                              : ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
+>                                         : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x<number>(undefined) : number
+>                     : ^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >(y: <T>(p: T) => T) => { y<number>(undefined); return y } : (y: <T>(p: T) => T) => <T>(p: T) => T
+>                                                          : ^ ^^              ^^^^^^ ^^ ^^ ^^^^^ 
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >p : T
+>  : ^
 >y<number>(undefined) : number
+>                     : ^^^^^^
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 
 tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }`;
 >tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }` : any
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>         : ^^^ ^^            ^^                    ^^ ^^        ^^ ^^ ^^^ ^^^ ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
 >`${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }` : string
+>                                                                                                                                              : ^^^^^^
 >(x: <T>(p: T) => T) => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
+>                                                           : ^ ^^              ^^^^^^ ^^ ^^ ^^^^^ 
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >p : T
+>  : ^
 >x<number>(undefined) : number
+>                     : ^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >y => { y<number>(undefined); return y; } : (y: <T>(p: T) => T) => <T>(p: T) => T
+>                                         : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >y<number>(undefined) : number
+>                     : ^^^^^^
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 >y : <T>(p: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
+>          : ^^^^^^^^^
 

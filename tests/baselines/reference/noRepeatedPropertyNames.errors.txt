@@ -1,8 +1,8 @@
-tests/cases/compiler/noRepeatedPropertyNames.ts(2,23): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/noRepeatedPropertyNames.ts(5,32): error TS1117: An object literal cannot have multiple properties with the same name.
+noRepeatedPropertyNames.ts(2,23): error TS1117: An object literal cannot have multiple properties with the same name.
+noRepeatedPropertyNames.ts(5,32): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/compiler/noRepeatedPropertyNames.ts (2 errors) ====
+==== noRepeatedPropertyNames.ts (2 errors) ====
     // https://github.com/microsoft/TypeScript/issues/46815
     const first = { a: 1, a: 2 };
                           ~

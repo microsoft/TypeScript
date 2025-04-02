@@ -1,48 +1,79 @@
-=== tests/cases/compiler/declarationEmitExpandoWithGenericConstraint.ts ===
+//// [tests/cases/compiler/declarationEmitExpandoWithGenericConstraint.ts] ////
+
+=== declarationEmitExpandoWithGenericConstraint.ts ===
 export interface Point {
     readonly x: number;
 >x : number
+>  : ^^^^^^
 
     readonly y: number;
 >y : number
+>  : ^^^^^^
 }
 
 export interface Rect<p extends Point> {
     readonly a: p;
 >a : p
+>  : ^
 
     readonly b: p;
 >b : p
+>  : ^
 }
 
 export const Point = (x: number, y: number): Point => ({ x, y });
 >Point : { (x: number, y: number): Point; zero(): Point; }
+>      : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >(x: number, y: number): Point => ({ x, y }) : { (x: number, y: number): Point; zero(): Point; }
+>                                            : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >({ x, y }) : { x: number; y: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x, y } : { x: number; y: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 export const Rect = <p extends Point>(a: p, b: p): Rect<p> => ({ a, b });
 >Rect : <p extends Point>(a: p, b: p) => Rect<p>
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^ ^^^^^       
 ><p extends Point>(a: p, b: p): Rect<p> => ({ a, b }) : <p extends Point>(a: p, b: p) => Rect<p>
+>                                                     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^ ^^^^^       
 >a : p
+>  : ^
 >b : p
+>  : ^
 >({ a, b }) : { a: p; b: p; }
+>           : ^^^^^^^^^^^^^^^
 >{ a, b } : { a: p; b: p; }
+>         : ^^^^^^^^^^^^^^^
 >a : p
+>  : ^
 >b : p
+>  : ^
 
 Point.zero = (): Point => Point(0, 0);
 >Point.zero = (): Point => Point(0, 0) : () => Point
+>                                      : ^^^^^^     
 >Point.zero : () => Point
+>           : ^^^^^^     
 >Point : { (x: number, y: number): Point; zero(): Point; }
+>      : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >zero : () => Point
+>     : ^^^^^^     
 >(): Point => Point(0, 0) : () => Point
+>                         : ^^^^^^     
 >Point(0, 0) : Point
+>            : ^^^^^
 >Point : { (x: number, y: number): Point; zero(): Point; }
+>      : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 

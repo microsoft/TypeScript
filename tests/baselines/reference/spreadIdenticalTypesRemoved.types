@@ -1,74 +1,110 @@
-=== tests/cases/compiler/spreadIdenticalTypesRemoved.ts ===
+//// [tests/cases/compiler/spreadIdenticalTypesRemoved.ts] ////
+
+=== spreadIdenticalTypesRemoved.ts ===
 interface Animal {
     name: string;
 >name : string
+>     : ^^^^^^
 
     kind: string;
 >kind : string
+>     : ^^^^^^
 
     age: number;
 >age : number
+>    : ^^^^^^
 
     location: string;
 >location : string
+>         : ^^^^^^
 
     owner: object;
 >owner : object
+>      : ^^^^^^
 }
 
 function clonePet(pet: Animal, fullCopy?: boolean) {
 >clonePet : (pet: Animal, fullCopy?: boolean) => { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
+>         : ^   ^^      ^^        ^^^       ^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pet : Animal
+>    : ^^^^^^
 >fullCopy : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        name: pet.name,        kind: pet.kind,        ...(fullCopy && pet),    } : { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
+>                                                                                  : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         name: pet.name,
 >name : string
+>     : ^^^^^^
 >pet.name : string
+>         : ^^^^^^
 >pet : Animal
+>    : ^^^^^^
 >name : string
+>     : ^^^^^^
 
         kind: pet.kind,
 >kind : string
+>     : ^^^^^^
 >pet.kind : string
+>         : ^^^^^^
 >pet : Animal
+>    : ^^^^^^
 >kind : string
+>     : ^^^^^^
 
         ...(fullCopy && pet),
 >(fullCopy && pet) : false | Animal | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fullCopy && pet : false | Animal | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fullCopy : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 >pet : Animal
+>    : ^^^^^^
     }
 }
 
 interface Animal2 {
     name: string;
 >name : string
+>     : ^^^^^^
 
     owner?: string;
 >owner : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 }
 function billOwner(pet: Animal2) {
->billOwner : (pet: Animal2) => { paid: boolean; name?: string | undefined; owner?: string | undefined; }
+>billOwner : (pet: Animal2) => { paid: boolean; name?: string | undefined; owner?: string; }
+>          : ^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >pet : Animal2
+>    : ^^^^^^^
 
     return {
->{        ...(pet.owner && pet),        paid: false    } : { paid: boolean; name?: string | undefined; owner?: string | undefined; }
+>{        ...(pet.owner && pet),        paid: false    } : { paid: boolean; name?: string | undefined; owner?: string; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
         ...(pet.owner && pet),
 >(pet.owner && pet) : "" | Animal2 | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >pet.owner && pet : "" | Animal2 | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >pet.owner : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >pet : Animal2
+>    : ^^^^^^^
 >owner : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >pet : Animal2
+>    : ^^^^^^^
 
         paid: false
 >paid : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
     }
 }
 

@@ -1,272 +1,407 @@
-=== tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts] ////
+
+=== controlFlowIterationErrorsAsync.ts ===
 let cond: boolean;
 >cond : boolean
+>     : ^^^^^^^
 
 async function len(s: string) {
 >len : (s: string) => Promise<number>
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     return s.length;
 >s.length : number
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 async function f1() {
 >f1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = await len(x);
 >x = await len(x) : number
+>                 : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >await len(x) : number
+>             : ^^^^^^
 >len(x) : Promise<number>
+>       : ^^^^^^^^^^^^^^^
 >len : (s: string) => Promise<number>
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         x;
 >x : number
+>  : ^^^^^^
     }
     x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 async function f2() {
 >f2 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         x = await len(x);
 >x = await len(x) : number
+>                 : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >await len(x) : number
+>             : ^^^^^^
 >len(x) : Promise<number>
+>       : ^^^^^^^^^^^^^^^
 >len : (s: string) => Promise<number>
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 declare function foo(x: string): Promise<number>;
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : string
+>  : ^^^^^^
 
 declare function foo(x: number): Promise<string>;
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : number
+>  : ^^^^^^
 
 async function g1() {
 >g1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = await foo(x);
 >x = await foo(x) : never
+>                 : ^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >await foo(x) : never
+>             : ^^^^^
 >foo(x) : Promise<number> & Promise<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         x;
 >x : never
+>  : ^^^^^
     }
     x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 async function g2() {
 >g2 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         x = await foo(x);
 >x = await foo(x) : never
+>                 : ^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >await foo(x) : never
+>             : ^^^^^
 >foo(x) : Promise<number> & Promise<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
+>    : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 async function asNumber(x: string | number): Promise<number> {
 >asNumber : (x: string | number) => Promise<number>
+>         : ^ ^^               ^^^^^               
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     return +x;
 >+x : number
+>   : ^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 async function h1() {
 >h1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "0";
 >x = "0" : "0"
+>        : ^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"0" : "0"
+>    : ^^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = +x + 1;
 >x = +x + 1 : number
+>           : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >+x + 1 : number
+>       : ^^^^^^
 >+x : number
+>   : ^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         x;
 >x : number
+>  : ^^^^^^
     }
 }
 
 async function h2() {
 >h2 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "0";
 >x = "0" : "0"
+>        : ^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"0" : "0"
+>    : ^^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x = await asNumber(x) + 1;
 >x = await asNumber(x) + 1 : number
+>                          : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >await asNumber(x) + 1 : number
+>                      : ^^^^^^
 >await asNumber(x) : number
+>                  : ^^^^^^
 >asNumber(x) : Promise<number>
+>            : ^^^^^^^^^^^^^^^
 >asNumber : (x: string | number) => Promise<number>
+>         : ^ ^^               ^^^^^               
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         x;
 >x : number
+>  : ^^^^^^
     }
 }
 
 async function h3() {
 >h3 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "0";
 >x = "0" : "0"
+>        : ^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"0" : "0"
+>    : ^^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         let y = await asNumber(x);
 >y : number
+>  : ^^^^^^
 >await asNumber(x) : number
+>                  : ^^^^^^
 >asNumber(x) : Promise<number>
+>            : ^^^^^^^^^^^^^^^
 >asNumber : (x: string | number) => Promise<number>
+>         : ^ ^^               ^^^^^               
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         x = y + 1;
 >x = y + 1 : number
+>          : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >y + 1 : number
+>      : ^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         x;
 >x : number
+>  : ^^^^^^
     }
 }
 
 async function h4() {
 >h4 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: string | number | boolean;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "0";
 >x = "0" : "0"
+>        : ^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"0" : "0"
+>    : ^^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         let y = await asNumber(x);
 >y : number
+>  : ^^^^^^
 >await asNumber(x) : number
+>                  : ^^^^^^
 >asNumber(x) : Promise<number>
+>            : ^^^^^^^^^^^^^^^
 >asNumber : (x: string | number) => Promise<number>
+>         : ^ ^^               ^^^^^               
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         x = y + 1;
 >x = y + 1 : number
+>          : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >y + 1 : number
+>      : ^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         x;
 >x : number
+>  : ^^^^^^
     }
 }
 
@@ -274,42 +409,66 @@ async function h4() {
 
 async function get_things(_: number | undefined) {
 >get_things : (_: number | undefined) => Promise<number[]>
+>           : ^ ^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >_ : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     return [0];
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 async function foobar() {
 >foobar : () => Promise<void>
+>       : ^^^^^^^^^^^^^^^^^^^
 
     let before: number | undefined = undefined;
 >before : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     for (let i = 0; i < 2; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 2 : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
         const results = await get_things(before);
 >results : number[]
+>        : ^^^^^^^^
 >await get_things(before) : number[]
+>                         : ^^^^^^^^
 >get_things(before) : Promise<number[]>
+>                   : ^^^^^^^^^^^^^^^^^
 >get_things : (_: number | undefined) => Promise<number[]>
+>           : ^ ^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >before : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 
         before = results[0];
 >before = results[0] : number
+>                    : ^^^^^^
 >before : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >results[0] : number
+>           : ^^^^^^
 >results : number[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
     }
 }
 
@@ -317,72 +476,109 @@ async function foobar() {
 
 declare function foox(x: string | undefined): Promise<string>
 >foox : (x: string | undefined) => Promise<string>
+>     : ^ ^^                  ^^^^^               
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 async () => {
 >async () => {  let bar: string | undefined = undefined;  do {    const baz = await foox(bar);    bar = baz  } while (bar)} : () => Promise<void>
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^
 
   let bar: string | undefined = undefined;
 >bar : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   do {
     const baz = await foox(bar);
 >baz : string
+>    : ^^^^^^
 >await foox(bar) : string
+>                : ^^^^^^
 >foox(bar) : Promise<string>
+>          : ^^^^^^^^^^^^^^^
 >foox : (x: string | undefined) => Promise<string>
+>     : ^ ^^                  ^^^^^               
 >bar : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     bar = baz
 >bar = baz : string
+>          : ^^^^^^
 >bar : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >baz : string
+>    : ^^^^^^
 
   } while (bar)
 >bar : string
+>    : ^^^^^^
 }
 
 // repro #43047#issuecomment-874221939
 
 declare function myQuery(input: { lastId: number | undefined }): Promise<{ entities: number[] }>;
->myQuery : (input: {    lastId: number | undefined;}) => Promise<{    entities: number[];}>
+>myQuery : (input: { lastId: number | undefined; }) => Promise<{ entities: number[]; }>
+>        : ^     ^^                               ^^^^^                                
 >input : { lastId: number | undefined; }
+>      : ^^^^^^^^^^                  ^^^
 >lastId : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >entities : number[]
+>         : ^^^^^^^^
 
 async function myFunc(): Promise<void> {
 >myFunc : () => Promise<void>
+>       : ^^^^^^             
 
   let lastId: number | undefined = undefined;
 >lastId : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   while (true) {
 >true : true
+>     : ^^^^
 
     const { entities } = await myQuery({
 >entities : number[]
+>         : ^^^^^^^^
 >await myQuery({        lastId,    }) : { entities: number[]; }
+>                                     : ^^^^^^^^^^^^        ^^^
 >myQuery({        lastId,    }) : Promise<{ entities: number[]; }>
+>                               : ^^^^^^^^^^^^^^^^^^^^        ^^^^
 >myQuery : (input: { lastId: number | undefined; }) => Promise<{ entities: number[]; }>
+>        : ^     ^^                               ^^^^^                                
 >{        lastId,    } : { lastId: number | undefined; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         lastId,
 >lastId : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 
     });
 
     lastId = entities[entities.length - 1];
 >lastId = entities[entities.length - 1] : number
+>                                       : ^^^^^^
 >lastId : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >entities[entities.length - 1] : number
+>                              : ^^^^^^
 >entities : number[]
+>         : ^^^^^^^^
 >entities.length - 1 : number
+>                    : ^^^^^^
 >entities.length : number
+>                : ^^^^^^
 >entities : number[]
+>         : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
   } 
 }
 

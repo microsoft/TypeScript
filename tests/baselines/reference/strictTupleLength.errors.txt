@@ -1,10 +1,10 @@
-tests/cases/conformance/types/tuple/strictTupleLength.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't1' must be of type '[number]', but here has type '[number, number]'.
-tests/cases/conformance/types/tuple/strictTupleLength.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type '[number, number]', but here has type '[number]'.
-tests/cases/conformance/types/tuple/strictTupleLength.ts(18,1): error TS2322: Type 'number[]' is not assignable to type '[number]'.
+strictTupleLength.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't1' must be of type '[number]', but here has type '[number, number]'.
+strictTupleLength.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type '[number, number]', but here has type '[number]'.
+strictTupleLength.ts(18,1): error TS2322: Type 'number[]' is not assignable to type '[number]'.
   Target requires 1 element(s) but source may have fewer.
 
 
-==== tests/cases/conformance/types/tuple/strictTupleLength.ts (3 errors) ====
+==== strictTupleLength.ts (3 errors) ====
     var t0: [];
     var t1: [number];
     var t2: [number, number];
@@ -18,11 +18,11 @@ tests/cases/conformance/types/tuple/strictTupleLength.ts(18,1): error TS2322: Ty
     var t1 = t2; // error
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't1' must be of type '[number]', but here has type '[number, number]'.
-!!! related TS6203 tests/cases/conformance/types/tuple/strictTupleLength.ts:2:5: 't1' was also declared here.
+!!! related TS6203 strictTupleLength.ts:2:5: 't1' was also declared here.
     var t2 = t1; // error
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type '[number, number]', but here has type '[number]'.
-!!! related TS6203 tests/cases/conformance/types/tuple/strictTupleLength.ts:3:5: 't2' was also declared here.
+!!! related TS6203 strictTupleLength.ts:3:5: 't2' was also declared here.
     
     type A<T extends any[]> = T['length'];
     var b: A<[boolean]>;

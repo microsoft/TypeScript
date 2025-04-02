@@ -1,401 +1,580 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts] ////
+
+=== assignmentCompatWithDiscriminatedUnion.ts ===
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 
 // IteratorResult
 namespace Example1 {
 >Example1 : typeof Example1
+>         : ^^^^^^^^^^^^^^^
 
     type S = { done: boolean, value: number };
->S : { done: boolean; value: number; }
+>S : S
+>  : ^
 >done : boolean
+>     : ^^^^^^^
 >value : number
+>      : ^^^^^^
 
     type T =
->T : { done: true; value: number; } | { done: false; value: number; }
+>T : T
+>  : ^
 
         | { done: true, value: number }     // T0
 >done : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >value : number
+>      : ^^^^^^
 
         | { done: false, value: number };   // T1
 >done : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 >value : number
+>      : ^^^^^^
 
     declare let s: S;
 >s : S
+>  : ^
 
     declare let t: T;
 >t : T
+>  : ^
 
     // S is assignable to T0 when S["done"] is true
     // S is assignable to T1 when S["done"] is false
     t = s;
 >t = s : S
+>      : ^
 >t : T
+>  : ^
 >s : S
+>  : ^
 }
 
 // Dropping constituents of T
 namespace Example2 {
 >Example2 : typeof Example2
+>         : ^^^^^^^^^^^^^^^
 
     type S = { a: 0 | 2, b: 4 };
->S : { a: 0 | 2; b: 4; }
+>S : S
+>  : ^
 >a : 0 | 2
+>  : ^^^^^
 >b : 4
+>  : ^
 
     type T = { a: 0,     b: 1 | 4 }     // T0
->T : { a: 0; b: 1 | 4; } | { a: 1; b: 2; } | { a: 2; b: 3 | 4; }
+>T : T
+>  : ^
 >a : 0
+>  : ^
 >b : 4 | 1
+>  : ^^^^^
 
            | { a: 1,     b: 2 }         // T1
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 
            | { a: 2,     b: 3 | 4 };    // T2
 >a : 2
+>  : ^
 >b : 4 | 3
+>  : ^^^^^
 
     declare let s: S;
 >s : S
+>  : ^
 
     declare let t: T;
 >t : T
+>  : ^
 
     // S is assignable to T0 when S["a"] is 0
     // S is assignable to T2 when S["a"] is 2
     t = s;
 >t = s : S
+>      : ^
 >t : T
+>  : ^
 >s : S
+>  : ^
 }
 
 // Unmatched discriminants
 namespace Example3 {
 >Example3 : typeof Example3
+>         : ^^^^^^^^^^^^^^^
 
     type S = { a: 0 | 2, b: 4 };
->S : { a: 0 | 2; b: 4; }
+>S : S
+>  : ^
 >a : 0 | 2
+>  : ^^^^^
 >b : 4
+>  : ^
 
     type T = { a: 0,     b: 1 | 4 }     // T0
->T : { a: 0; b: 1 | 4; } | { a: 1; b: 2 | 4; } | { a: 2; b: 3; }
+>T : T
+>  : ^
 >a : 0
+>  : ^
 >b : 4 | 1
+>  : ^^^^^
 
            | { a: 1,     b: 2 | 4 }     // T1
 >a : 1
+>  : ^
 >b : 2 | 4
+>  : ^^^^^
 
            | { a: 2,     b: 3 };        // T2
 >a : 2
+>  : ^
 >b : 3
+>  : ^
 
     declare let s: S;
 >s : S
+>  : ^
 
     declare let t: T;
 >t : T
+>  : ^
 
     // S is assignable to T0 when S["a"] is 0
     // S is *not* assignable to T1 when S["b"] is 4
     // S is *not* assignable to T2 when S["a"] is 2
     t = s;
 >t = s : S
+>      : ^
 >t : T
+>  : ^
 >s : S
+>  : ^
 }
 
 // Unmatched non-discriminants
 namespace Example4 {
 >Example4 : typeof Example4
+>         : ^^^^^^^^^^^^^^^
 
     type S = { a: 0 | 2, b: 4 };
->S : { a: 0 | 2; b: 4; }
+>S : S
+>  : ^
 >a : 0 | 2
+>  : ^^^^^
 >b : 4
+>  : ^
 
     type T = { a: 0,     b: 1 | 4 }             // T0
->T : { a: 0; b: 1 | 4; } | { a: 1; b: 2; } | { a: 2; b: 3 | 4; c: string; }
+>T : T
+>  : ^
 >a : 0
+>  : ^
 >b : 4 | 1
+>  : ^^^^^
 
            | { a: 1,     b: 2 }                 // T1
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 
            | { a: 2,     b: 3 | 4, c: string }; // T2
 >a : 2
+>  : ^
 >b : 4 | 3
+>  : ^^^^^
 >c : string
+>  : ^^^^^^
 
     declare let s: S;
 >s : S
+>  : ^
 
     declare let t: T;
 >t : T
+>  : ^
 
     // S is assignable to T0 when S["a"] is 0
     // S is *not* assignable to T2 when S["a"] is 2 as S is missing "c"
     t = s;
 >t = s : S
+>      : ^
 >t : T
+>  : ^
 >s : S
+>  : ^
 }
 
 // Maximum discriminant combinations
 namespace Example5 {
 >Example5 : typeof Example5
+>         : ^^^^^^^^^^^^^^^
 
     // NOTE: The maximum number of discriminant type combinations is currently 25.
     //       3 discriminant properties with 3 types a piece
     //       is 27 possible combinations.
     type N = 0 | 1 | 2;
->N : 0 | 2 | 1
+>N : N
+>  : ^
 
     type S = { a: N, b: N, c: N };
->S : { a: N; b: N; c: N; }
+>S : S
+>  : ^
 >a : N
+>  : ^
 >b : N
+>  : ^
 >c : N
+>  : ^
 
     type T = { a: 0, b: N, c: N }
->T : { a: 0; b: N; c: N; } | { a: 1; b: N; c: N; } | { a: 2; b: N; c: N; } | { a: N; b: 0; c: N; } | { a: N; b: 1; c: N; } | { a: N; b: 2; c: N; } | { a: N; b: N; c: 0; } | { a: N; b: N; c: 1; } | { a: N; b: N; c: 2; }
+>T : T
+>  : ^
 >a : 0
+>  : ^
 >b : N
+>  : ^
 >c : N
+>  : ^
 
            | { a: 1, b: N, c: N }
 >a : 1
+>  : ^
 >b : N
+>  : ^
 >c : N
+>  : ^
 
            | { a: 2, b: N, c: N }
 >a : 2
+>  : ^
 >b : N
+>  : ^
 >c : N
+>  : ^
 
            | { a: N, b: 0, c: N }
 >a : N
+>  : ^
 >b : 0
+>  : ^
 >c : N
+>  : ^
 
            | { a: N, b: 1, c: N }
 >a : N
+>  : ^
 >b : 1
+>  : ^
 >c : N
+>  : ^
 
            | { a: N, b: 2, c: N }
 >a : N
+>  : ^
 >b : 2
+>  : ^
 >c : N
+>  : ^
 
            | { a: N, b: N, c: 0 }
 >a : N
+>  : ^
 >b : N
+>  : ^
 >c : 0
+>  : ^
 
            | { a: N, b: N, c: 1 }
 >a : N
+>  : ^
 >b : N
+>  : ^
 >c : 1
+>  : ^
 
            | { a: N, b: N, c: 2 };
 >a : N
+>  : ^
 >b : N
+>  : ^
 >c : 2
+>  : ^
 
     declare let s: S;
 >s : S
+>  : ^
 
     declare let t: T;
 >t : T
+>  : ^
 
     // S *should* be assignable but the number of
     // combinations is too complex.
     t = s;
 >t = s : S
+>      : ^
 >t : T
+>  : ^
 >s : S
+>  : ^
 }
 
 // https://github.com/Microsoft/TypeScript/issues/14865
 namespace GH14865 {
 >GH14865 : typeof GH14865
+>        : ^^^^^^^^^^^^^^
 
     type Style1 = {
->Style1 : { type: "A"; data: string; } | { type: "B"; data: string; }
+>Style1 : Style1
+>       : ^^^^^^
 
         type: "A";
 >type : "A"
+>     : ^^^
 
         data: string;
 >data : string
+>     : ^^^^^^
 
     } | {
         type: "B";
 >type : "B"
+>     : ^^^
 
         data: string;
 >data : string
+>     : ^^^^^^
 
     };
 
     type Style2 = {
->Style2 : { type: "A" | "B"; data: string; }
+>Style2 : Style2
+>       : ^^^^^^
 
         type: "A" | "B";
 >type : "A" | "B"
+>     : ^^^^^^^^^
 
         data: string;
 >data : string
+>     : ^^^^^^
     }
 
     const a: Style2 = { type: "A", data: "whatevs" };
 >a : Style2
+>  : ^^^^^^
 >{ type: "A", data: "whatevs" } : { type: "A"; data: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "A"
+>     : ^^^
 >"A" : "A"
+>    : ^^^
 >data : string
+>     : ^^^^^^
 >"whatevs" : "whatevs"
+>          : ^^^^^^^^^
 
     let b: Style1;
 >b : Style1
+>  : ^^^^^^
 
     a.type; // "A" | "B"
 >a.type : "A" | "B"
+>       : ^^^^^^^^^
 >a : Style2
+>  : ^^^^^^
 >type : "A" | "B"
+>     : ^^^^^^^^^
 
     b.type; // "A" | "B"
 >b.type : "A" | "B"
+>       : ^^^^^^^^^
 >b : Style1
+>  : ^^^^^^
 >type : "A" | "B"
+>     : ^^^^^^^^^
 
     b = a; // should be assignable
 >b = a : Style2
+>      : ^^^^^^
 >b : Style1
+>  : ^^^^^^
 >a : Style2
+>  : ^^^^^^
 }
 
 // https://github.com/Microsoft/TypeScript/issues/30170
 namespace GH30170 {
 >GH30170 : typeof GH30170
+>        : ^^^^^^^^^^^^^^
 
     interface Blue {
         color: 'blue'
 >color : "blue"
+>      : ^^^^^^
     }
     interface Yellow {
         color?: 'yellow',
 >color : "yellow"
+>      : ^^^^^^^^
     }
     function draw(val: Blue | Yellow) { }
 >draw : (val: Blue | Yellow) => void
+>     : ^   ^^             ^^^^^^^^^
 >val : Blue | Yellow
+>    : ^^^^^^^^^^^^^
 
     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
->drawWithColor : (currentColor: 'blue' | 'yellow' | undefined) => void
+>drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
+>              : ^            ^^                             ^^^^^^^^^
 >currentColor : "blue" | "yellow"
+>             : ^^^^^^^^^^^^^^^^^
 
         return draw({ color: currentColor });
 >draw({ color: currentColor }) : void
+>                              : ^^^^
 >draw : (val: Blue | Yellow) => void
+>     : ^   ^^             ^^^^^^^^^
 >{ color: currentColor } : { color: "blue" | "yellow"; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >color : "blue" | "yellow"
+>      : ^^^^^^^^^^^^^^^^^
 >currentColor : "blue" | "yellow"
+>             : ^^^^^^^^^^^^^^^^^
     }
 }
 
 // https://github.com/Microsoft/TypeScript/issues/12052
 namespace GH12052 {
 >GH12052 : typeof GH12052
+>        : ^^^^^^^^^^^^^^
 
     interface ILinearAxis { type: "linear"; }
 >type : "linear"
+>     : ^^^^^^^^
 
     interface ICategoricalAxis { type: "categorical"; }
 >type : "categorical"
+>     : ^^^^^^^^^^^^^
 
     type IAxis = ILinearAxis | ICategoricalAxis;
->IAxis : ILinearAxis | ICategoricalAxis
+>IAxis : IAxis
+>      : ^^^^^
 
     type IAxisType = "linear" | "categorical";
->IAxisType : "linear" | "categorical"
+>IAxisType : IAxisType
+>          : ^^^^^^^^^
 
     function getAxisType(): IAxisType {
 >getAxisType : () => IAxisType
+>            : ^^^^^^         
 
         if (1 == 1) {
 >1 == 1 : boolean
+>       : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
             return "categorical";
 >"categorical" : "categorical"
+>              : ^^^^^^^^^^^^^
 
         } else {
             return "linear";
 >"linear" : "linear"
+>         : ^^^^^^^^
         }
     }
 
     const bad: IAxis = { type: getAxisType() };
 >bad : IAxis
+>    : ^^^^^
 >{ type: getAxisType() } : { type: IAxisType; }
+>                        : ^^^^^^^^^^^^^^^^^^^^
 >type : IAxisType
+>     : ^^^^^^^^^
 >getAxisType() : IAxisType
+>              : ^^^^^^^^^
 >getAxisType : () => IAxisType
+>            : ^^^^^^         
 
     const good: IAxis = { type: undefined };
 >good : IAxis
+>     : ^^^^^
 >{ type: undefined } : { type: undefined; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >type : undefined
+>     : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     good.type = getAxisType();
 >good.type = getAxisType() : IAxisType
+>                          : ^^^^^^^^^
 >good.type : "linear" | "categorical"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >good : IAxis
+>     : ^^^^^
 >type : "linear" | "categorical"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >getAxisType() : IAxisType
+>              : ^^^^^^^^^
 >getAxisType : () => IAxisType
+>            : ^^^^^^         
 }
 
 // https://github.com/Microsoft/TypeScript/issues/18421
 namespace GH18421 {
 >GH18421 : typeof GH18421
+>        : ^^^^^^^^^^^^^^
 
     interface ThingTypeOne {
         type: 'one';
 >type : "one"
+>     : ^^^^^
     }
 
     interface ThingTypeTwo {
         type: 'two';
 >type : "two"
+>     : ^^^^^
     }
 
     type ThingType = 'one' | 'two';
->ThingType : "one" | "two"
+>ThingType : ThingType
+>          : ^^^^^^^^^
 
     type Thing = ThingTypeOne | ThingTypeTwo;
->Thing : ThingTypeOne | ThingTypeTwo
+>Thing : Thing
+>      : ^^^^^
 
     function makeNewThing(thingType: ThingType): Thing {
 >makeNewThing : (thingType: ThingType) => Thing
+>             : ^         ^^         ^^^^^     
 >thingType : ThingType
+>          : ^^^^^^^^^
 
         return {
 >{            type: thingType        } : { type: ThingType; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^
 
             type: thingType
 >type : ThingType
+>     : ^^^^^^^^^
 >thingType : ThingType
+>          : ^^^^^^^^^
 
         };
     }
@@ -404,62 +583,91 @@ namespace GH18421 {
 // https://github.com/Microsoft/TypeScript/issues/15907
 namespace GH15907 {
 >GH15907 : typeof GH15907
+>        : ^^^^^^^^^^^^^^
 
     type Action = { type: 'activate' } | { type: 'disactivate' };
->Action : { type: 'activate'; } | { type: 'disactivate'; }
+>Action : Action
+>       : ^^^^^^
 >type : "activate"
+>     : ^^^^^^^^^^
 >type : "disactivate"
+>     : ^^^^^^^^^^^^^
 
     function dispatchAction(action: Action): void {
 >dispatchAction : (action: Action) => void
+>               : ^      ^^      ^^^^^    
 >action : Action
+>       : ^^^^^^
 
     }
 
     const active = true;
 >active : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
     dispatchAction({ type : (active? 'disactivate' : 'activate') });
 >dispatchAction({ type : (active? 'disactivate' : 'activate') }) : void
+>                                                                : ^^^^
 >dispatchAction : (action: Action) => void
+>               : ^      ^^      ^^^^^    
 >{ type : (active? 'disactivate' : 'activate') } : { type: "activate" | "disactivate"; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "activate" | "disactivate"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(active? 'disactivate' : 'activate') : "activate" | "disactivate"
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >active? 'disactivate' : 'activate' : "activate" | "disactivate"
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >active : true
+>       : ^^^^
 >'disactivate' : "disactivate"
+>              : ^^^^^^^^^^^^^
 >'activate' : "activate"
+>           : ^^^^^^^^^^
 }
 
 // https://github.com/Microsoft/TypeScript/issues/20889
 namespace GH20889 {
 >GH20889 : typeof GH20889
+>        : ^^^^^^^^^^^^^^
 
     interface A1 {
         type: "A1";
 >type : "A1"
+>     : ^^^^
     }
     interface A2 {
         type: "A2";
 >type : "A2"
+>     : ^^^^
     }
     type AU = A1 | A2;
->AU : A1 | A2
+>AU : AU
+>   : ^^
 
     function foo(obj1: AU) {
 >foo : (obj1: AU) => void
+>    : ^    ^^  ^^^^^^^^^
 >obj1 : AU
+>     : ^^
 
         const obj2: AU = {
 >obj2 : AU
+>     : ^^
 >{            type: obj1.type        } : { type: "A1" | "A2"; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^
 
             type: obj1.type
 >type : "A1" | "A2"
+>     : ^^^^^^^^^^^
 >obj1.type : "A1" | "A2"
+>          : ^^^^^^^^^^^
 >obj1 : AU
+>     : ^^
 >type : "A1" | "A2"
+>     : ^^^^^^^^^^^
 
         };
     }
@@ -468,31 +676,176 @@ namespace GH20889 {
 // https://github.com/microsoft/TypeScript/issues/39357
 namespace GH39357 {
 >GH39357 : typeof GH39357
+>        : ^^^^^^^^^^^^^^
 
     type A = ["a", number] | ["b", number] | ["c", string];
->A : ["a", number] | ["b", number] | ["c", string]
+>A : A
+>  : ^
 
     type B = "a" | "b" | "c";
->B : "a" | "b" | "c"
+>B : B
+>  : ^
 
     declare const b: B;
 >b : B
+>  : ^
 
     const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
 >a : A
+>  : ^
 >b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["a" | "b", number] | ["c", string]
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b === "a" || b === "b" : boolean
+>                       : ^^^^^^^
 >b === "a" : boolean
+>          : ^^^^^^^
 >b : B
+>  : ^
 >"a" : "a"
+>    : ^^^
 >b === "b" : boolean
+>          : ^^^^^^^
 >b : "b" | "c"
+>  : ^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 >[b, 1] : ["a" | "b", number]
+>       : ^^^^^^^^^^^^^^^^^^^
 >b : "a" | "b"
+>  : ^^^^^^^^^
 >1 : 1
+>  : ^
 >["c", ""] : ["c", string]
+>          : ^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 >"" : ""
+>   : ^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/58603
+namespace GH58603 {
+>GH58603 : typeof GH58603
+>        : ^^^^^^^^^^^^^^
+
+    enum MyEnum { A = 1, B = 2 }
+>MyEnum : MyEnum
+>       : ^^^^^^
+>A : MyEnum.A
+>  : ^^^^^^^^
+>1 : 1
+>  : ^
+>B : MyEnum.B
+>  : ^^^^^^^^
+>2 : 2
+>  : ^
+
+    type TypeA = { kind: MyEnum.A, id?: number };
+>TypeA : TypeA
+>      : ^^^^^
+>kind : MyEnum.A
+>     : ^^^^^^^^
+>MyEnum : any
+>       : ^^^
+>id : number
+>   : ^^^^^^
+    
+    type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
+>TypeB : TypeB
+>      : ^^^^^
+>kind : MyEnum.B
+>     : ^^^^^^^^
+>MyEnum : any
+>       : ^^^
+>id : undefined
+>   : ^^^^^^^^^
+>id : number
+>   : ^^^^^^
+    
+    type MyType = TypeA | TypeB;
+>MyType : MyType
+>       : ^^^^^^
+    
+    function something(a: MyType): void {}
+>something : (a: MyType) => void
+>          : ^ ^^      ^^^^^    
+>a : MyType
+>  : ^^^^^^
+    
+    function indirect(kind: MyEnum, id?: number): void {
+>indirect : (kind: MyEnum, id?: number) => void
+>         : ^    ^^      ^^  ^^^      ^^^^^    
+>kind : MyEnum
+>     : ^^^^^^
+>id : number
+>   : ^^^^^^
+
+        something({ kind, id });
+>something({ kind, id }) : void
+>                        : ^^^^
+>something : (a: MyType) => void
+>          : ^ ^^      ^^^^^    
+>{ kind, id } : { kind: MyEnum; id: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : MyEnum
+>     : ^^^^^^
+>id : number
+>   : ^^^^^^
+    }
+    
+    type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
+>Foo : Foo
+>    : ^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>kind : "a"
+>     : ^^^
+>value : undefined
+>      : ^^^^^^^^^
+>kind : "b"
+>     : ^^^
+>value : undefined
+>      : ^^^^^^^^^
+    
+    function test(obj: { kind: "a" | "b", value: number | undefined }) {
+>test : (obj: { kind: "a" | "b"; value: number | undefined; }) => void
+>     : ^   ^^                                               ^^^^^^^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+        let x1: Foo = obj;
+>x1 : Foo
+>   : ^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+
+        let x2: Foo = { kind: obj.kind, value: obj.value };
+>x2 : Foo
+>   : ^^^
+>{ kind: obj.kind, value: obj.value } : { kind: "a" | "b"; value: number; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>obj.kind : "a" | "b"
+>         : ^^^^^^^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>obj.value : number
+>          : ^^^^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+>value : number
+>      : ^^^^^^
+    }
 }
 

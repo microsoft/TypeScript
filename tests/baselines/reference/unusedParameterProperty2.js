@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParameterProperty2.ts] ////
+
 //// [unusedParameterProperty2.ts]
 class A {
     constructor(private used) {

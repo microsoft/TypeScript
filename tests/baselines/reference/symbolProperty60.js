@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty60.ts] ////
+
 //// [symbolProperty60.ts]
 // https://github.com/Microsoft/TypeScript/issues/20146
 interface I1 {

@@ -1,8 +1,8 @@
-tests/cases/compiler/promiseEmptyTupleNoException.ts(3,3): error TS2322: Type 'any[]' is not assignable to type '[]'.
+promiseEmptyTupleNoException.ts(3,3): error TS2322: Type 'any[]' is not assignable to type '[]'.
   Target allows only 0 element(s) but source may have more.
 
 
-==== tests/cases/compiler/promiseEmptyTupleNoException.ts (1 errors) ====
+==== promiseEmptyTupleNoException.ts (1 errors) ====
     export async function get(): Promise<[]> {
       let emails = [];
       return emails;

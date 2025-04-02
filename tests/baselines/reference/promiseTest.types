@@ -1,40 +1,62 @@
-=== tests/cases/compiler/promiseTest.ts ===
+//// [tests/cases/compiler/promiseTest.ts] ////
+
+=== promiseTest.ts ===
 interface Promise<T> {
     then<A>(success?: (value: T) => Promise<A>): Promise<A>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^ ^^       ^^^                        ^^^          ^^^ ^^       ^^^               ^^^          ^^^
 >success : (value: T) => Promise<A>
+>        : ^     ^^ ^^^^^          
 >value : T
+>      : ^
 
     then<B>(success?: (value: T) => B): Promise<B>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^ ^^       ^^^                        ^^^          ^^^ ^^       ^^^               ^^^          ^^^
 >success : (value: T) => B
+>        : ^     ^^ ^^^^^ 
 >value : T
+>      : ^
 
     data: T;
 >data : T
+>     : ^
 }
 
 var p: Promise<number> = null;
 >p : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
 var p2 = p.then(function (x) {
 >p2 : Promise<number>
+>   : ^^^^^^^^^^^^^^^
 >p.then(function (x) {    return p;} ) : Promise<number>
+>                                      : ^^^^^^^^^^^^^^^
 >p.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
+>       : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
+>     : ^^^        ^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (x) {    return p;} : (x: number) => Promise<number>
+>                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     return p;
 >p : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
 } );
 
 var x = p2.data; // number
 >x : number
+>  : ^^^^^^
 >p2.data : number
+>        : ^^^^^^
 >p2 : Promise<number>
+>   : ^^^^^^^^^^^^^^^
 >data : number
+>     : ^^^^^^
 
 

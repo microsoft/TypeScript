@@ -1,52 +1,83 @@
-=== tests/cases/compiler/parseTypes.ts ===
+//// [tests/cases/compiler/parseTypes.ts] ////
+
+=== parseTypes.ts ===
 var x = <() => number>null;
 >x : () => number
+>  : ^^^^^^      
 ><() => number>null : () => number
+>                   : ^^^^^^      
 
 var y = <{(): number; }>null;
 >y : () => number
+>  : ^^^^^^      
 ><{(): number; }>null : () => number
+>                     : ^^^^^^      
 
 var z = <{new(): number; }>null
 >z : new () => number
+>  : ^^^^^^^^^^      
 ><{new(): number; }>null : new () => number
+>                        : ^^^^^^^^^^      
 
 var w = <{[x:number]: number; }>null
 >w : { [x: number]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 ><{[x:number]: number; }>null : { [x: number]: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function f() { return 3 };
 >f : () => number
+>  : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 function g(s: string) { true };
 >g : (s: string) => void
+>  : ^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >true : true
+>     : ^^^^
 
 y=f;
 >y=f : () => number
+>    : ^^^^^^^^^^^^
 >y : () => number
+>  : ^^^^^^      
 >f : () => number
+>  : ^^^^^^^^^^^^
 
 y=g;
 >y=g : (s: string) => void
+>    : ^ ^^      ^^^^^^^^^
 >y : () => number
+>  : ^^^^^^      
 >g : (s: string) => void
+>  : ^ ^^      ^^^^^^^^^
 
 x=g;
 >x=g : (s: string) => void
+>    : ^ ^^      ^^^^^^^^^
 >x : () => number
+>  : ^^^^^^      
 >g : (s: string) => void
+>  : ^ ^^      ^^^^^^^^^
 
 w=g;
 >w=g : (s: string) => void
+>    : ^ ^^      ^^^^^^^^^
 >w : { [x: number]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (s: string) => void
+>  : ^ ^^      ^^^^^^^^^
 
 z=g;
 >z=g : (s: string) => void
+>    : ^ ^^      ^^^^^^^^^
 >z : new () => number
+>  : ^^^^^^^^^^      
 >g : (s: string) => void
+>  : ^ ^^      ^^^^^^^^^
 

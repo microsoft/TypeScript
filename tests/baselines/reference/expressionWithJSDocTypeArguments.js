@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expressionWithJSDocTypeArguments.ts] ////
+
 //// [expressionWithJSDocTypeArguments.ts]
 // Repro from #51802
 

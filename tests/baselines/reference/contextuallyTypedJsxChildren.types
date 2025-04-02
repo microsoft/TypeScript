@@ -1,0 +1,161 @@
+//// [tests/cases/compiler/contextuallyTypedJsxChildren.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== contextuallyTypedJsxChildren.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : typeof React
+>      : ^^^^^^^^^^^^
+
+// repro from https://github.com/microsoft/TypeScript/issues/53941
+declare namespace DropdownMenu {
+  interface BaseProps {
+    icon: string;
+>icon : string
+>     : ^^^^^^
+
+    label: string;
+>label : string
+>      : ^^^^^^
+  }
+  interface PropsWithChildren extends BaseProps {
+    children(props: { onClose: () => void }): JSX.Element;
+>children : (props: { onClose: () => void; }) => JSX.Element
+>         : ^     ^^                        ^^^^^           
+>props : { onClose: () => void; }
+>      : ^^^^^^^^^^^          ^^^
+>onClose : () => void
+>        : ^^^^^^    
+>JSX : any
+>    : ^^^
+
+    controls?: never | undefined;
+>controls : undefined
+>         : ^^^^^^^^^
+  }
+  interface PropsWithControls extends BaseProps {
+    controls: Control[];
+>controls : Control[]
+>         : ^^^^^^^^^
+
+    children?: never | undefined;
+>children : undefined
+>         : ^^^^^^^^^
+  }
+  interface Control {
+    title: string;
+>title : string
+>      : ^^^^^^
+  }
+  type Props = PropsWithChildren | PropsWithControls;
+>Props : Props
+>      : ^^^^^
+}
+declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
+>DropdownMenu : React.ComponentType<DropdownMenu.Props>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : any
+>      : ^^^
+>DropdownMenu : any
+>             : ^^^
+
+<DropdownMenu icon="move" label="Select a direction">
+><DropdownMenu icon="move" label="Select a direction">  {({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}</DropdownMenu> : JSX.Element
+>                                                                                                                                                                  : ^^^^^^^^^^^
+>DropdownMenu : React.ComponentType<DropdownMenu.Props>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>icon : string
+>     : ^^^^^^
+>label : string
+>      : ^^^^^^
+
+  {({ onClose }) => (
+>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
+>                                                                                          : ^           ^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^
+>onClose : () => void
+>        : ^^^^^^    
+>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
+>                                                                         : ^^^^^^^^^^^
+
+    <div>
+><div>      <button onClick={onClose}>Click me</button>    </div> : JSX.Element
+>                                                                 : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+
+      <button onClick={onClose}>Click me</button>
+><button onClick={onClose}>Click me</button> : JSX.Element
+>                                            : ^^^^^^^^^^^
+>button : any
+>       : ^^^
+>onClick : () => void
+>        : ^^^^^^    
+>onClose : () => void
+>        : ^^^^^^    
+>button : any
+>       : ^^^
+
+    </div>
+>div : any
+>    : ^^^
+
+  )}
+</DropdownMenu>;
+>DropdownMenu : React.ComponentType<DropdownMenu.Props>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+<DropdownMenu
+><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : JSX.Element
+>                                                                                                                                                               : ^^^^^^^^^^^
+>DropdownMenu : React.ComponentType<DropdownMenu.Props>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  icon="move"
+>icon : string
+>     : ^^^^^^
+
+  label="Select a direction"
+>label : string
+>      : ^^^^^^
+
+  children={({ onClose }) => (
+>children : ({ onClose }: { onClose: () => void; }) => JSX.Element
+>         : ^           ^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^
+>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
+>                                                                                          : ^           ^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^
+>onClose : () => void
+>        : ^^^^^^    
+>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
+>                                                                         : ^^^^^^^^^^^
+
+    <div>
+><div>      <button onClick={onClose}>Click me</button>    </div> : JSX.Element
+>                                                                 : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+
+      <button onClick={onClose}>Click me</button>
+><button onClick={onClose}>Click me</button> : JSX.Element
+>                                            : ^^^^^^^^^^^
+>button : any
+>       : ^^^
+>onClick : () => void
+>        : ^^^^^^    
+>onClose : () => void
+>        : ^^^^^^    
+>button : any
+>       : ^^^
+
+    </div>
+>div : any
+>    : ^^^
+
+  )}
+/>;
+

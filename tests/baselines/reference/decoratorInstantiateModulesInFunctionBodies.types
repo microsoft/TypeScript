@@ -1,21 +1,29 @@
-=== tests/cases/conformance/decorators/class/a.ts ===
+//// [tests/cases/conformance/decorators/class/decoratorInstantiateModulesInFunctionBodies.ts] ////
+
+=== a.ts ===
 // from #3108
 export var test = 'abc';
 >test : string
+>     : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
-=== tests/cases/conformance/decorators/class/b.ts ===
+=== b.ts ===
 import { test } from './a';
 >test : string
+>     : ^^^^^^
 
 function filter(handler: any) {
 >filter : (handler: any) => (target: any, propertyKey: string) => void
+>       : ^       ^^   ^^^^^^           ^^                   ^^^^^^^^^
 >handler : any
 
     return function (target: any, propertyKey: string) {
 >function (target: any, propertyKey: string) {        // ...    } : (target: any, propertyKey: string) => void
+>                                                                 : ^      ^^   ^^           ^^      ^^^^^^^^^
 >target : any
 >propertyKey : string
+>            : ^^^^^^
 
         // ...
     };
@@ -23,17 +31,25 @@ function filter(handler: any) {
 
 class Wat {
 >Wat : Wat
+>    : ^^^
 
     @filter(() => test == 'abc')
 >filter(() => test == 'abc') : (target: any, propertyKey: string) => void
+>                            : ^      ^^   ^^           ^^      ^^^^^^^^^
 >filter : (handler: any) => (target: any, propertyKey: string) => void
+>       : ^       ^^   ^^^^^^           ^^                   ^^^^^^^^^
 >() => test == 'abc' : () => boolean
+>                    : ^^^^^^^^^^^^^
 >test == 'abc' : boolean
+>              : ^^^^^^^
 >test : string
+>     : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
     static whatever() {
 >whatever : () => void
+>         : ^^^^^^^^^^
 
         // ...
     }

@@ -1,12 +1,12 @@
-tests/cases/conformance/generators/generatorReturnContextualType.ts(29,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+generatorReturnContextualType.ts(29,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"x"'.
-tests/cases/conformance/generators/generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"x"'.
 
 
-==== tests/cases/conformance/generators/generatorReturnContextualType.ts (2 errors) ====
+==== generatorReturnContextualType.ts (2 errors) ====
     // #35995
     
     function* f1(): Generator<any, { x: 'x' }, any> {

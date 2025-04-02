@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeOnYield1.ts] ////
+
 //// [contextualTypeOnYield1.ts]
 type FuncOrGeneratorFunc = () => (number | Generator<(arg: number) => void, any, void>)
 

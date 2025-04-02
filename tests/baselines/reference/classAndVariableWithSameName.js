@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts] ////
+
 //// [classAndVariableWithSameName.ts]
 class C { foo: string; } // error
 var C = ''; // error

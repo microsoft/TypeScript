@@ -1,34 +1,52 @@
-=== tests/cases/compiler/narrowingTypeofObject.ts ===
+//// [tests/cases/compiler/narrowingTypeofObject.ts] ////
+
+=== narrowingTypeofObject.ts ===
 interface F { (): string }
 
 function test(x: number & { _foo: string }) {
->test : (x: number & {    _foo: string;}) => void
+>test : (x: number & { _foo: string; }) => void
+>     : ^ ^^                          ^^^^^^^^^
 >x : number & { _foo: string; }
+>  : ^^^^^^^^^^^^^^^^^      ^^^
 >_foo : string
+>     : ^^^^^^
 
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number & { _foo: string; }
+>  : ^^^^^^^^^^^^^^^^^      ^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
         x; 
 >x : never
+>  : ^^^^^
     }
 }
 
 function f1(x: F & { foo: number }) {
->f1 : (x: F & {    foo: number;}) => void
+>f1 : (x: F & { foo: number; }) => void
+>   : ^ ^^                    ^^^^^^^^^
 >x : F & { foo: number; }
+>  : ^^^^^^^^^^^      ^^^
 >foo : number
+>    : ^^^^^^
 
     if (typeof x !== "object") {
 >typeof x !== "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : F & { foo: number; }
+>  : ^^^^^^^^^^^      ^^^
 >"object" : "object"
+>         : ^^^^^^^^
 
         x;
 >x : F & { foo: number; }
+>  : ^^^^^^^^^^^      ^^^
     }
 }

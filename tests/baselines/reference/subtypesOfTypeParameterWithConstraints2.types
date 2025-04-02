@@ -1,600 +1,972 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts] ////
+
+=== subtypesOfTypeParameterWithConstraints2.ts ===
 // checking whether other types are subtypes of type parameters with constraints
 
 function f1<T extends U, U>(x: T, y: U) {
 >f1 : <T extends U, U>(x: T, y: U) => void
+>   : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     var r = true ? x : y;
 >r : U
+>  : ^
 >true ? x : y : U
+>             : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     var r = true ? y : x;
 >r : U
+>  : ^
 >true ? y : x : U
+>             : ^
 >true : true
+>     : ^^^^
 >y : U
+>  : ^
 >x : T
+>  : ^
 }
 
 // V > U > T
 function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
 >f2 : <T extends U, U extends V, V>(x: T, y: U, z: V) => void
+>   : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 >z : V
+>  : ^
 
     var r = true ? x : y;
 >r : U
+>  : ^
 >true ? x : y : U
+>             : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     var r = true ? y : x;
 >r : U
+>  : ^
 >true ? y : x : U
+>             : ^
 >true : true
+>     : ^^^^
 >y : U
+>  : ^
 >x : T
+>  : ^
 
     // ok
     var r2 = true ? z : y;
 >r2 : V
+>   : ^
 >true ? z : y : V
+>             : ^
 >true : true
+>     : ^^^^
 >z : V
+>  : ^
 >y : U
+>  : ^
 
     var r2 = true ? y : z;
 >r2 : V
+>   : ^
 >true ? y : z : V
+>             : ^
 >true : true
+>     : ^^^^
 >y : U
+>  : ^
 >z : V
+>  : ^
 
     // ok
     var r2a = true ? z : x;
 >r2a : V
+>    : ^
 >true ? z : x : V
+>             : ^
 >true : true
+>     : ^^^^
 >z : V
+>  : ^
 >x : T
+>  : ^
 
     var r2b = true ? x : z;
 >r2b : V
+>    : ^
 >true ? x : z : V
+>             : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >z : V
+>  : ^
 }
 
 // Date > U > T
 function f3<T extends U, U extends Date>(x: T, y: U) {
 >f3 : <T extends U, U extends Date>(x: T, y: U) => void
+>   : ^ ^^^^^^^^^ ^^ ^^^^^^^^^    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     var r = true ? x : y;
 >r : U
+>  : ^
 >true ? x : y : U
+>             : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     var r = true ? y : x;
 >r : U
+>  : ^
 >true ? y : x : U
+>             : ^
 >true : true
+>     : ^^^^
 >y : U
+>  : ^
 >x : T
+>  : ^
 
     // ok
     var r2 = true ? x : new Date(); 
 >r2 : Date
+>   : ^^^^
 >true ? x : new Date() : Date
+>                      : ^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     var r2 = true ? new Date() : x;
 >r2 : Date
+>   : ^^^^
 >true ? new Date() : x : Date
+>                      : ^^^^
 >true : true
+>     : ^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     // ok
     var r3 = true ? y : new Date(); 
 >r3 : Date
+>   : ^^^^
 >true ? y : new Date() : Date
+>                      : ^^^^
 >true : true
+>     : ^^^^
 >y : U
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     var r3 = true ? new Date() : y;
 >r3 : Date
+>   : ^^^^
 >true ? new Date() : y : Date
+>                      : ^^^^
 >true : true
+>     : ^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >y : U
+>  : ^
 }
 
 
 interface I1 { foo: number; }
 >foo : number
+>    : ^^^^^^
 
 class C1 { foo: number; }
 >C1 : C1
+>   : ^^
 >foo : number
+>    : ^^^^^^
 
 class C2<T> { foo: T; }
 >C2 : C2<T>
+>   : ^^^^^
 >foo : T
+>    : ^
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 function f() { }
 >f : typeof f
+>  : ^^^^^^^^
 
 module f {
 >f : typeof f
+>  : ^^^^^^^^
 
     export var bar = 1;
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 class c { baz: string }
 >c : c
+>  : ^
 >baz : string
+>    : ^^^^^^
 
 module c {
 >c : typeof c
+>  : ^^^^^^^^
 
     export var bar = 1;
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 function f4<T extends Number>(x: T) {
 >f4 : <T extends Number>(x: T) => void
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r0 = true ? x : null; // ok
 >r0 : T
+>   : ^
 >true ? x : null : T
+>                : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 
     var r0 = true ? null : x; // ok
 >r0 : T
+>   : ^
 >true ? null : x : T
+>                : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 
     var u: typeof undefined;
 >u : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
     var r0b = true ? u : x; // ok
 >r0b : any
 >true ? u : x : any
 >true : true
+>     : ^^^^
 >u : any
 >x : T
+>  : ^
 
     var r0b = true ? x : u; // ok
 >r0b : any
 >true ? x : u : any
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >u : any
 }
 
 function f5<T extends Number>(x: T) {
 >f5 : <T extends Number>(x: T) => void
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r1 = true ? 1 : x; // ok
 >r1 : number | T
+>   : ^^^^^^^^^^
 >true ? 1 : x : 1 | T
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 >x : T
+>  : ^
 
     var r1 = true ? x : 1; // ok
 >r1 : number | T
+>   : ^^^^^^^^^^
 >true ? x : 1 : 1 | T
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >1 : 1
+>  : ^
 }
 
 function f6<T extends String>(x: T) {
 >f6 : <T extends String>(x: T) => void
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r2 = true ? '' : x; // ok
 >r2 : string | T
+>   : ^^^^^^^^^^
 >true ? '' : x : "" | T
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >'' : ""
+>   : ^^
 >x : T
+>  : ^
 
     var r2 = true ? x : ''; // ok
 >r2 : string | T
+>   : ^^^^^^^^^^
 >true ? x : '' : "" | T
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >'' : ""
+>   : ^^
 }
 
 function f7<T extends Boolean>(x: T) {
 >f7 : <T extends Boolean>(x: T) => void
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r3 = true ? true : x; // ok
 >r3 : boolean | T
+>   : ^^^^^^^^^^^
 >true ? true : x : true | T
+>                : ^^^^^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 
     var r3 = true ? x : true; // ok
 >r3 : boolean | T
+>   : ^^^^^^^^^^^
 >true ? x : true : true | T
+>                : ^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >true : true
+>     : ^^^^
 }
 
 function f8<T extends Date>(x: T) {
 >f8 : <T extends Date>(x: T) => void
+>   : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r4 = true ? new Date() : x; // ok
 >r4 : Date
+>   : ^^^^
 >true ? new Date() : x : Date
+>                      : ^^^^
 >true : true
+>     : ^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     var r4 = true ? x : new Date(); // ok
 >r4 : Date
+>   : ^^^^
 >true ? x : new Date() : Date
+>                      : ^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 }
 
 function f9<T extends RegExp>(x: T) {
 >f9 : <T extends RegExp>(x: T) => void
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r5 = true ? /1/ : x; // ok
 >r5 : RegExp
+>   : ^^^^^^
 >true ? /1/ : x : RegExp
+>               : ^^^^^^
 >true : true
+>     : ^^^^
 >/1/ : RegExp
+>    : ^^^^^^
 >x : T
+>  : ^
 
     var r5 = true ? x : /1/; // ok
 >r5 : RegExp
+>   : ^^^^^^
 >true ? x : /1/ : RegExp
+>               : ^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >/1/ : RegExp
+>    : ^^^^^^
 }
 
 function f10<T extends { foo: number }>(x: T) {
 >f10 : <T extends { foo: number; }>(x: T) => void
+>    : ^ ^^^^^^^^^                ^^ ^^ ^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >x : T
+>  : ^
 
     var r6 = true ? { foo: 1 } : x; // ok
 >r6 : { foo: number; }
+>   : ^^^^^^^^^^^^^^^^
 >true ? { foo: 1 } : x : { foo: number; }
+>                      : ^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >x : T
+>  : ^
 
     var r6 = true ? x : { foo: 1 }; // ok
 >r6 : { foo: number; }
+>   : ^^^^^^^^^^^^^^^^
 >true ? x : { foo: 1 } : { foo: number; }
+>                      : ^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >{ foo: 1 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 function f11<T extends () => void>(x: T) {
 >f11 : <T extends () => void>(x: T) => void
+>    : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r7 = true ? () => { } : x; // ok
 >r7 : () => void
+>   : ^^^^^^^^^^
 >true ? () => { } : x : () => void
+>                     : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 >x : T
+>  : ^
 
     var r7 = true ? x : () => { }; // ok
 >r7 : () => void
+>   : ^^^^^^^^^^
 >true ? x : () => { } : () => void
+>                     : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 }
 
 function f12<T extends <U>(x: U) => U>(x: T) {
 >f12 : <T extends <U>(x: U) => U>(x: T) => void
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >x : U
+>  : ^
 >x : T
+>  : ^
 
     var r8 = true ? <T>(x: T) => { return x } : x; // ok
->r8 : <T>(x: T) => T
->true ? <T>(x: T) => { return x } : x : <T>(x: T) => T
+>r8 : <T_1>(x: T_1) => T_1
+>   : ^^^^^^ ^^   ^^^^^^^^
+>true ? <T>(x: T) => { return x } : x : <T_1>(x: T_1) => T_1
+>                                     : ^^^^^^ ^^   ^^^^^^^^
 >true : true
-><T>(x: T) => { return x } : <T>(x: T) => T
+>     : ^^^^
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
+>                          : ^^^^^^ ^^   ^^^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
     var r8b = true ? x : <T>(x: T) => { return x }; // ok, type parameters not identical across declarations
->r8b : <T>(x: T) => T
->true ? x : <T>(x: T) => { return x } : <T>(x: T) => T
+>r8b : <T_1>(x: T_1) => T_1
+>    : ^^^^^^ ^^   ^^^^^^^^
+>true ? x : <T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
+>                                     : ^^^^^^ ^^   ^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
-><T>(x: T) => { return x } : <T>(x: T) => T
+>  : ^
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
+>                          : ^^^^^^ ^^   ^^^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 }
 
 function f13<T extends I1>(x: T) {
 >f13 : <T extends I1>(x: T) => void
+>    : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var i1: I1;
 >i1 : I1
+>   : ^^
 
     var r9 = true ? i1 : x; // ok
 >r9 : I1
+>   : ^^
 >true ? i1 : x : I1
+>              : ^^
 >true : true
+>     : ^^^^
 >i1 : I1
+>   : ^^
 >x : T
+>  : ^
 
     var r9 = true ? x : i1; // ok
 >r9 : I1
+>   : ^^
 >true ? x : i1 : I1
+>              : ^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >i1 : I1
+>   : ^^
 }
 
 function f14<T extends C1>(x: T) {
 >f14 : <T extends C1>(x: T) => void
+>    : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var c1: C1;
 >c1 : C1
+>   : ^^
 
     var r10 = true ? c1 : x; // ok
 >r10 : C1
+>    : ^^
 >true ? c1 : x : C1
+>              : ^^
 >true : true
+>     : ^^^^
 >c1 : C1
+>   : ^^
 >x : T
+>  : ^
 
     var r10 = true ? x : c1; // ok
 >r10 : C1
+>    : ^^
 >true ? x : c1 : C1
+>              : ^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >c1 : C1
+>   : ^^
 }
 
 function f15<T extends C2<number>>(x: T) {
 >f15 : <T extends C2<number>>(x: T) => void
+>    : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var c2: C2<number>;
 >c2 : C2<number>
+>   : ^^^^^^^^^^
 
     var r12 = true ? c2 : x; // ok
 >r12 : C2<number>
+>    : ^^^^^^^^^^
 >true ? c2 : x : C2<number>
+>              : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 >c2 : C2<number>
+>   : ^^^^^^^^^^
 >x : T
+>  : ^
 
     var r12 = true ? x : c2; // ok
 >r12 : C2<number>
+>    : ^^^^^^^^^^
 >true ? x : c2 : C2<number>
+>              : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >c2 : C2<number>
+>   : ^^^^^^^^^^
 }
 
 function f16<T extends E>(x: T) {
 >f16 : <T extends E>(x: T) => void
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r13 = true ? E : x; // ok
 >r13 : T | typeof E
+>    : ^^^^^^^^^^^^
 >true ? E : x : T | typeof E
+>             : ^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >E : typeof E
+>  : ^^^^^^^^
 >x : T
+>  : ^
 
     var r13 = true ? x : E; // ok
 >r13 : T | typeof E
+>    : ^^^^^^^^^^^^
 >true ? x : E : T | typeof E
+>             : ^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >E : typeof E
+>  : ^^^^^^^^
 
     var r14 = true ? E.A : x; // ok
 >r14 : E
+>    : ^
 >true ? E.A : x : E
+>               : ^
 >true : true
+>     : ^^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 >x : T
+>  : ^
 
     var r14 = true ? x : E.A; // ok
 >r14 : E
+>    : ^
 >true ? x : E.A : E
+>               : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 }
 
 function f17<T extends typeof f>(x: T) {
 >f17 : <T extends typeof f>(x: T) => void
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 >x : T
+>  : ^
 
     var af: typeof f;
 >af : typeof f
+>   : ^^^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 
     var r15 = true ? af : x; // ok
 >r15 : typeof f
+>    : ^^^^^^^^
 >true ? af : x : typeof f
+>              : ^^^^^^^^
 >true : true
+>     : ^^^^
 >af : typeof f
+>   : ^^^^^^^^
 >x : T
+>  : ^
 
     var r15 = true ? x : af; // ok
 >r15 : typeof f
+>    : ^^^^^^^^
 >true ? x : af : typeof f
+>              : ^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >af : typeof f
+>   : ^^^^^^^^
 }
 
 function f18<T extends typeof c>(x: T) {
 >f18 : <T extends typeof c>(x: T) => void
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^^^^
 >c : typeof c
+>  : ^^^^^^^^
 >x : T
+>  : ^
 
     var ac: typeof c;
 >ac : typeof c
+>   : ^^^^^^^^
 >c : typeof c
+>  : ^^^^^^^^
 
     var r16 = true ? ac : x; // ok
 >r16 : typeof c
+>    : ^^^^^^^^
 >true ? ac : x : typeof c
+>              : ^^^^^^^^
 >true : true
+>     : ^^^^
 >ac : typeof c
+>   : ^^^^^^^^
 >x : T
+>  : ^
 
     var r16 = true ? x : ac; // ok
 >r16 : typeof c
+>    : ^^^^^^^^
 >true ? x : ac : typeof c
+>              : ^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >ac : typeof c
+>   : ^^^^^^^^
 }
 
 function f19<T>(x: T) {
 >f19 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     function f17<U extends T>(a: U) {
 >f17 : <U extends T>(a: U) => void
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : U
+>  : ^
 
         var r17 = true ? x : a; // ok
 >r17 : T
+>    : ^
 >true ? x : a : T
+>             : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >a : U
+>  : ^
 
         var r17 = true ? a : x; // ok
 >r17 : T
+>    : ^
 >true ? a : x : T
+>             : ^
 >true : true
+>     : ^^^^
 >a : U
+>  : ^
 >x : T
+>  : ^
     }
 
     function f18<V extends U, U extends T>(a: V) {
 >f18 : <V extends U, U extends T>(a: V) => void
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : V
+>  : ^
 
         var r18 = true ? x : a; // ok
 >r18 : T
+>    : ^
 >true ? x : a : T
+>             : ^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >a : V
+>  : ^
 
         var r18 = true ? a : x; // ok
 >r18 : T
+>    : ^
 >true ? a : x : T
+>             : ^
 >true : true
+>     : ^^^^
 >a : V
+>  : ^
 >x : T
+>  : ^
     }
 }
 
 function f20<T extends Number>(x: T) {
 >f20 : <T extends Number>(x: T) => void
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r19 = true ? new Object() : x; // ok
 >r19 : Object | T
+>    : ^^^^^^^^^^
 >true ? new Object() : x : Object | T
+>                        : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     var r19 = true ? x : new Object(); // ok
 >r19 : Object | T
+>    : ^^^^^^^^^^
 >true ? x : new Object() : Object | T
+>                        : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 }
 
 function f21<T extends Number>(x: T) {
 >f21 : <T extends Number>(x: T) => void
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     var r20 = true ? {} : x; // ok
 >r20 : {}
+>    : ^^
 >true ? {} : x : T | {}
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >{} : {}
+>   : ^^
 >x : T
+>  : ^
 
     var r20 = true ? x : {}; // ok
 >r20 : {}
+>    : ^^
 >true ? x : {} : T | {}
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 >x : T
+>  : ^
 >{} : {}
+>   : ^^
 }

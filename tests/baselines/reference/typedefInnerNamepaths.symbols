@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/bug25104.js ===
+//// [tests/cases/conformance/jsdoc/typedefInnerNamepaths.ts] ////
+
+=== bug25104.js ===
 class C {
 >C : Symbol(C, Decl(bug25104.js, 0, 0))
 

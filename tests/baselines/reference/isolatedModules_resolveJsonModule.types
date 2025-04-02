@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/isolatedModules_resolveJsonModule.ts] ////
+
 === /a.ts ===
 import j = require("./j.json");
 >j : {}
+>  : ^^
 
 === /j.json ===
 {}
 >{} : {}
+>   : ^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts ===
+//// [tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts] ////
+
+=== thisInInvalidContextsExternalModule.ts ===
 class BaseErrClass {
 >BaseErrClass : Symbol(BaseErrClass, Decl(thisInInvalidContextsExternalModule.ts, 0, 0))
 

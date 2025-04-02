@@ -1,167 +1,266 @@
-=== tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts ===
+//// [tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts] ////
+
+=== declarationEmitClassMemberWithComputedPropertyName.ts ===
 const k1 = Symbol();
 >k1 : unique symbol
+>   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const k2 = 'foo' as const;
 >k2 : "foo"
+>   : ^^^^^
 >'foo' as const : "foo"
+>               : ^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 const k3 = Symbol();
 >k3 : unique symbol
+>   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const k4 = 'prop' as const;
 >k4 : "prop"
+>   : ^^^^^^
 >'prop' as const : "prop"
+>                : ^^^^^^
 >'prop' : "prop"
+>       : ^^^^^^
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     static [k1](): number {
 >[k1] : () => number
+>     : ^^^^^^      
 >k1 : unique symbol
+>   : ^^^^^^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     [k1](): string {
 >[k1] : () => string
+>     : ^^^^^^      
 >k1 : unique symbol
+>   : ^^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
 
     static [k2]() {
 >[k2] : () => number
+>     : ^^^^^^^^^^^^
 >k2 : "foo"
+>   : ^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     [k2]() {
 >[k2] : () => string
+>     : ^^^^^^^^^^^^
 >k2 : "foo"
+>   : ^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
 
     static m1() {}
 >m1 : () => void
+>   : ^^^^^^^^^^
 
     m1() {}
 >m1 : () => void
+>   : ^^^^^^^^^^
 
     static [k3] = 1;
 >[k3] : number
+>     : ^^^^^^
 >k3 : unique symbol
+>   : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     [k3] = 1;
 >[k3] : number
+>     : ^^^^^^
 >k3 : unique symbol
+>   : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     static [k4] = 1;
 >[k4] : number
+>     : ^^^^^^
 >k4 : "prop"
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     [k4] = 2;
 >[k4] : number
+>     : ^^^^^^
 >k4 : "prop"
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
     static p1 = 3;
 >p1 : number
+>   : ^^^^^^
 >3 : 3
+>  : ^
 
     p1 = 4;
 >p1 : number
+>   : ^^^^^^
 >4 : 4
+>  : ^
 }
 
 export const t1 = Foo[k1];
 >t1 : () => number
+>   : ^^^^^^      
 >Foo[k1] : () => number
+>        : ^^^^^^      
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k1 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 export const t2 = new Foo()[k1];
 >t2 : () => string
+>   : ^^^^^^      
 >new Foo()[k1] : () => string
+>              : ^^^^^^      
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k1 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 export const t3 = Foo[k2];
 >t3 : () => number
+>   : ^^^^^^^^^^^^
 >Foo[k2] : () => number
+>        : ^^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k2 : "foo"
+>   : ^^^^^
 
 export const t4 = new Foo()[k2];
 >t4 : () => string
+>   : ^^^^^^^^^^^^
 >new Foo()[k2] : () => string
+>              : ^^^^^^^^^^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k2 : "foo"
+>   : ^^^^^
 
 export const t5 = Foo.m1;
 >t5 : () => void
+>   : ^^^^^^^^^^
 >Foo.m1 : () => void
+>       : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >m1 : () => void
+>   : ^^^^^^^^^^
 
 export const t6 = new Foo().m1;
 >t6 : () => void
+>   : ^^^^^^^^^^
 >new Foo().m1 : () => void
+>             : ^^^^^^^^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >m1 : () => void
+>   : ^^^^^^^^^^
 
 export const t7 = Foo[k3];
 >t7 : number
+>   : ^^^^^^
 >Foo[k3] : number
+>        : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k3 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 export const t8 = new Foo()[k3];
 >t8 : number
+>   : ^^^^^^
 >new Foo()[k3] : number
+>              : ^^^^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k3 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 export const t9 = Foo[k4];
 >t9 : number
+>   : ^^^^^^
 >Foo[k4] : number
+>        : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k4 : "prop"
+>   : ^^^^^^
 
 export const t10 = new Foo()[k4];
 >t10 : number
+>    : ^^^^^^
 >new Foo()[k4] : number
+>              : ^^^^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >k4 : "prop"
+>   : ^^^^^^
 
 export const t11 = Foo.p1;
 >t11 : number
+>    : ^^^^^^
 >Foo.p1 : number
+>       : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
 
 export const t12 = new Foo().p1;
 >t12 : number
+>    : ^^^^^^
 >new Foo().p1 : number
+>             : ^^^^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
 

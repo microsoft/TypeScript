@@ -1,13 +1,20 @@
-=== tests/cases/compiler/enum.ts ===
+//// [tests/cases/compiler/isolatedModulesImportConstEnumTypeOnly.ts] ////
+
+=== enum.ts ===
 export const enum Foo { Bar }
 >Foo : Foo
+>    : ^^^
 >Bar : Foo.Bar
+>    : ^^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { Foo } from "./enum";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 function f(foo: Foo) { return; }
 >f : (foo: Foo) => void
+>  : ^   ^^   ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 

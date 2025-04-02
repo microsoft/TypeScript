@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty2.ts] ////
+
 //// [ES5SymbolProperty2.ts]
 module M {
     var Symbol: any;

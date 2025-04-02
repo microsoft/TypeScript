@@ -1,100 +1,155 @@
-=== tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts ===
+//// [tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts] ////
+
+=== inferringReturnTypeFromConstructSignatureGeneric.ts ===
 class GenericObject<T extends {} = {}> {
 >GenericObject : GenericObject<T>
+>              : ^^^^^^^^^^^^^^^^
 
   give(value: T) {
 >give : (value: T) => T
+>     : ^     ^^ ^^^^^^
 >value : T
+>      : ^
 
     return value;
 >value : T
+>      : ^
   }
 }
 class GenericNumber<T extends number> {
 >GenericNumber : GenericNumber<T>
+>              : ^^^^^^^^^^^^^^^^
 
   give(value: T) {
 >give : (value: T) => T
+>     : ^     ^^ ^^^^^^
 >value : T
+>      : ^
 
     return value;
 >value : T
+>      : ^
   }
 }
 class GenericNumberOrString<T extends number | string> {
 >GenericNumberOrString : GenericNumberOrString<T>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   give(value: T) {
 >give : (value: T) => T
+>     : ^     ^^ ^^^^^^
 >value : T
+>      : ^
 
     return value;
 >value : T
+>      : ^
   }
 }
 
 function g<T>(type: new () => T): T {
 >g : <T>(type: new () => T) => T
+>  : ^ ^^    ^^           ^^^^^ 
 >type : new () => T
+>     : ^^^^^^^^^^ 
 
     return new type();
 >new type() : T
+>           : ^
 >type : new () => T
+>     : ^^^^^^^^^^ 
 }
 
 const g1 = g(GenericObject);
 >g1 : GenericObject<{}>
+>   : ^^^^^^^^^^^^^^^^^
 >g(GenericObject) : GenericObject<{}>
+>                 : ^^^^^^^^^^^^^^^^^
 >g : <T>(type: new () => T) => T
+>  : ^ ^^    ^^           ^^^^^ 
 >GenericObject : typeof GenericObject
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 g1.give({});
 >g1.give({}) : {}
+>            : ^^
 >g1.give : (value: {}) => {}
+>        : ^     ^^^^^^^^^^^
 >g1 : GenericObject<{}>
+>   : ^^^^^^^^^^^^^^^^^
 >give : (value: {}) => {}
+>     : ^     ^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 const g2 = g(GenericNumber);
 >g2 : GenericNumber<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >g(GenericNumber) : GenericNumber<number>
+>                 : ^^^^^^^^^^^^^^^^^^^^^
 >g : <T>(type: new () => T) => T
+>  : ^ ^^    ^^           ^^^^^ 
 >GenericNumber : typeof GenericNumber
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 g2.give(1);
 >g2.give(1) : number
+>           : ^^^^^^
 >g2.give : (value: number) => number
+>        : ^     ^^^^^^^^^^^^^^^^^^^
 >g2 : GenericNumber<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >give : (value: number) => number
+>     : ^     ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const g3 = g(GenericNumberOrString);
 >g3 : GenericNumberOrString<string | number>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g(GenericNumberOrString) : GenericNumberOrString<string | number>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : <T>(type: new () => T) => T
+>  : ^ ^^    ^^           ^^^^^ 
 >GenericNumberOrString : typeof GenericNumberOrString
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 g3.give(1);
 >g3.give(1) : string | number
+>           : ^^^^^^^^^^^^^^^
 >g3.give : (value: string | number) => string | number
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g3 : GenericNumberOrString<string | number>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >give : (value: string | number) => string | number
+>     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 g3.give('1');
 >g3.give('1') : string | number
+>             : ^^^^^^^^^^^^^^^
 >g3.give : (value: string | number) => string | number
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g3 : GenericNumberOrString<string | number>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >give : (value: string | number) => string | number
+>     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 
 // repro from #35636
 class C<T> {}
 >C : C<T>
+>  : ^^^^
 
 const g4 = g(C);
 >g4 : C<unknown>
+>   : ^^^^^^^^^^
 >g(C) : C<unknown>
+>     : ^^^^^^^^^^
 >g : <T>(type: new () => T) => T
+>  : ^ ^^    ^^           ^^^^^ 
 >C : typeof C
+>  : ^^^^^^^^
 

@@ -1,45 +1,66 @@
-=== tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts ===
+//// [tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts] ////
+
+=== newLexicalEnvironmentForConvertedLoop.ts ===
 function baz(x: any) {
 >baz : (x: any) => any[][]
+>    : ^ ^^   ^^^^^^^^^^^^
 >x : any
 
   return [[x, x]];
 >[[x, x]] : any[][]
+>         : ^^^^^^^
 >[x, x] : any[]
+>       : ^^^^^
 >x : any
 >x : any
 }
 
 function foo(set: any) {
 >foo : (set: any) => void
+>    : ^   ^^   ^^^^^^^^^
 >set : any
 
   for (const [value, i] of baz(set.values)) {
 >value : any
+>      : ^^^
 >i : any
+>  : ^^^
 >baz(set.values) : any[][]
+>                : ^^^^^^^
 >baz : (x: any) => any[][]
+>    : ^ ^^   ^^^^^^^^^^^^
 >set.values : any
 >set : any
+>    : ^^^
 >values : any
+>       : ^^^
 
     const bar: any = [];
 >bar : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     (() => bar);
 >(() => bar) : () => any
+>            : ^^^^^^^^^
 >() => bar : () => any
+>          : ^^^^^^^^^
 >bar : any
 
     set.values.push(...[]);
 >set.values.push(...[]) : any
 >set.values.push : any
 >set.values : any
+>           : ^^^
 >set : any
+>    : ^^^
 >values : any
+>       : ^^^
 >push : any
+>     : ^^^
 >...[] : never
->[] : readonly []
+>      : ^^^^^
+>[] : []
+>   : ^^
   }
 };

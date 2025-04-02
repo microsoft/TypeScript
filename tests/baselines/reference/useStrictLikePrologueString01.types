@@ -1,10 +1,15 @@
-=== tests/cases/compiler/useStrictLikePrologueString01.ts ===
+//// [tests/cases/compiler/useStrictLikePrologueString01.ts] ////
+
+=== useStrictLikePrologueString01.ts ===
 "hey!"
 >"hey!" : "hey!"
+>       : ^^^^^^
 
 " use strict "
 >" use strict " : " use strict "
+>               : ^^^^^^^^^^^^^^
 
 export function f() {   
 >f : () => void
+>  : ^^^^^^^^^^
 }

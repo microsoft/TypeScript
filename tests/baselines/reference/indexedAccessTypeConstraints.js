@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessTypeConstraints.ts] ////
+
 //// [indexedAccessTypeConstraints.ts]
 // Repro from #14557
 

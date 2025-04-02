@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisWhenTypeCheckFails.ts] ////
+
 //// [thisWhenTypeCheckFails.ts]
 class c {
     public n() {

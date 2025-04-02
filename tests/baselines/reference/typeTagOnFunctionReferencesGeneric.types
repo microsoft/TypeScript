@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/typeTagOnFunctionReferencesGeneric.js ===
+//// [tests/cases/conformance/salsa/typeTagOnFunctionReferencesGeneric.ts] ////
+
+=== typeTagOnFunctionReferencesGeneric.js ===
 /**
  * @typedef {<T>(m : T) => T} IFn
  */
@@ -6,27 +8,40 @@
 /**@type {IFn}*/
 export function inJs(l) {
 >inJs : <T>(m: T) => T
+>     : ^ ^^ ^^ ^^^^^ 
 >l : T
+>  : ^
 
     return l;
 >l : T
+>  : ^
 }
 inJs(1); // lints error. Why?
 >inJs(1) : 1
+>        : ^
 >inJs : <T>(m: T) => T
+>     : ^ ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 
 /**@type {IFn}*/
 const inJsArrow = (j) => {
 >inJsArrow : IFn
+>          : ^^^
 >(j) => {    return j;} : <T>(j: T) => T
+>                       : ^ ^^ ^^^^^^^^^
 >j : T
+>  : ^
 
     return j;
 >j : T
+>  : ^
 }
 inJsArrow(2); // no error gets linted as expected
 >inJsArrow(2) : 2
+>             : ^
 >inJsArrow : IFn
+>          : ^^^
 >2 : 2
+>  : ^
 

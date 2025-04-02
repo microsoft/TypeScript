@@ -6,6 +6,12 @@
         "extends": "foo/strict.json"
     }
     
+==== /index.ts (1 errors) ====
+    let x: string;
+    x.toLowerCase();
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
 ==== /node_modules/foo/package.json (0 errors) ====
     {
         "name": "foo",
@@ -21,10 +27,4 @@
             "strict": true
         }
     }
-    
-==== /index.ts (1 errors) ====
-    let x: string;
-    x.toLowerCase();
-    ~
-!!! error TS2454: Variable 'x' is used before being assigned.
     

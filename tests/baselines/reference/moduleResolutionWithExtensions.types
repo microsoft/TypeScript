@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/moduleResolutionWithExtensions.ts] ////
+
 === /src/a.ts ===
 
 export default 0;
@@ -6,26 +8,32 @@ export default 0;
 === /src/b.ts ===
 import a from './a';
 >a : 0
+>  : ^
 
 // '.js' extension: stripped and replaced with '.ts'
 === /src/d.ts ===
 import a from './a.js';
 >a : 0
+>  : ^
 
 === /src/jquery.d.ts ===
 declare var x: number;
 >x : number
+>  : ^^^^^^
 
 export default x;
 >x : number
+>  : ^^^^^^
 
 // No extension: '.d.ts' added
 === /src/jquery_user_1.ts ===
 import j from "./jquery";
 >j : number
+>  : ^^^^^^
 
 // '.js' extension: stripped and replaced with '.d.ts'
 === /src/jquery_user_1.ts ===
 import j from "./jquery.js"
 >j : number
+>  : ^^^^^^
 

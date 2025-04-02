@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallArgsMustMatch.ts ===
+//// [tests/cases/compiler/superCallArgsMustMatch.ts] ////
+
+=== superCallArgsMustMatch.ts ===
 class T5<T>{
 >T5 : Symbol(T5, Decl(superCallArgsMustMatch.ts, 0, 0))
 >T : Symbol(T, Decl(superCallArgsMustMatch.ts, 0, 9))

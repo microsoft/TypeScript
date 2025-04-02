@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitBindingPatterns.ts ===
+//// [tests/cases/compiler/declarationEmitBindingPatterns.ts] ////
+
+=== declarationEmitBindingPatterns.ts ===
 const k = ({x: z = 'y'}) => { }
 >k : Symbol(k, Decl(declarationEmitBindingPatterns.ts, 0, 5))
 >x : Symbol(x)

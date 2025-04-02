@@ -1,61 +1,102 @@
-=== tests/cases/conformance/es2022/es2022IntlAPIs.ts ===
+//// [tests/cases/conformance/es2022/es2022IntlAPIs.ts] ////
+
+=== es2022IntlAPIs.ts ===
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#using_timezonename
 const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const;
 >timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'short' : "short"
+>        : ^^^^^^^
 >'long' : "long"
+>       : ^^^^^^
 >'shortOffset' : "shortOffset"
+>              : ^^^^^^^^^^^^^
 >'longOffset' : "longOffset"
+>             : ^^^^^^^^^^^^
 >'shortGeneric' : "shortGeneric"
+>               : ^^^^^^^^^^^^^^
 >'longGeneric' : "longGeneric"
+>              : ^^^^^^^^^^^^^
 
 for (const zoneName of timezoneNames) {
 >zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   var formatter = new Intl.DateTimeFormat('en-US', {
 >formatter : Intl.DateTimeFormat
+>          : ^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : Intl.DateTimeFormat
->Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
->DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en-US' : "en-US"
+>        : ^^^^^^^
 >{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     timeZone: 'America/Los_Angeles',
 >timeZone : string
+>         : ^^^^^^
 >'America/Los_Angeles' : "America/Los_Angeles"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
     timeZoneName: zoneName,
 >timeZoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   });
 }
 
 const enumerationKeys = ['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const;
 >enumerationKeys : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'calendar' : "calendar"
+>           : ^^^^^^^^^^
 >'collation' : "collation"
+>            : ^^^^^^^^^^^
 >'currency' : "currency"
+>           : ^^^^^^^^^^
 >'numberingSystem' : "numberingSystem"
+>                  : ^^^^^^^^^^^^^^^^^
 >'timeZone' : "timeZone"
+>           : ^^^^^^^^^^
 >'unit' : "unit"
+>       : ^^^^^^
 
 for (const key of enumerationKeys) {
 >key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enumerationKeys : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   var supported = Intl.supportedValuesOf(key);
 >supported : string[]
+>          : ^^^^^^^^
 >Intl.supportedValuesOf(key) : string[]
+>                            : ^^^^^^^^
 >Intl.supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
+>                       : ^   ^^                                                                               ^^^^^        
 >Intl : typeof Intl
+>     : ^^^^^^^^^^^
 >supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
+>                  : ^   ^^                                                                               ^^^^^        
 >key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

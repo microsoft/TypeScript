@@ -1,14 +1,19 @@
-=== tests/cases/compiler/topLevel.ts ===
+//// [tests/cases/compiler/topLevel.ts] ////
+
+=== topLevel.ts ===
 interface IPoint {
     x:number;
 >x : number
+>  : ^^^^^^
 
     y:number;
 >y : number
+>  : ^^^^^^
 }
 
 class Point implements IPoint {
 >Point : Point
+>      : ^^^^^
 
     constructor(public x,public y){}
 >x : any
@@ -16,87 +21,141 @@ class Point implements IPoint {
 
     public move(xo:number,yo:number) {
 >move : (xo: number, yo: number) => this
+>     : ^  ^^      ^^  ^^      ^^^^^^^^^
 >xo : number
+>   : ^^^^^^
 >yo : number
+>   : ^^^^^^
 
 	this.x+=xo;
 >this.x+=xo : any
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >xo : number
+>   : ^^^^^^
 
 	this.y+=yo;
 >this.y+=yo : any
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >yo : number
+>   : ^^^^^^
 
 	return this;
 >this : this
+>     : ^^^^
     }
     public toString() {
 >toString : () => string
+>         : ^^^^^^^^^^^^
 
 	return ("("+this.x+","+this.y+")");
 >("("+this.x+","+this.y+")") : string
+>                            : ^^^^^^
 >"("+this.x+","+this.y+")" : string
+>                          : ^^^^^^
 >"("+this.x+","+this.y : string
+>                      : ^^^^^^
 >"("+this.x+"," : string
+>               : ^^^^^^
 >"("+this.x : string
+>           : ^^^^^^
 >"(" : "("
+>    : ^^^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >"," : ","
+>    : ^^^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >")" : ")"
+>    : ^^^
     }
 }
 
 var result="";
 >result : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 
 result+=(new Point(3,4).move(2,2));
 >result+=(new Point(3,4).move(2,2)) : string
+>                                   : ^^^^^^
 >result : string
+>       : ^^^^^^
 >(new Point(3,4).move(2,2)) : Point
+>                           : ^^^^^
 >new Point(3,4).move(2,2) : Point
+>                         : ^^^^^
 >new Point(3,4).move : (xo: number, yo: number) => Point
+>                    : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >new Point(3,4) : Point
+>               : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >move : (xo: number, yo: number) => Point
+>     : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >2 : 2
+>  : ^
 >2 : 2
+>  : ^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var origin=new Point(0,0);
 >origin : Point
+>       : ^^^^^
 >new Point(0,0) : Point
+>               : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 }
 
 result+=(M.origin.move(1,1));
 >result+=(M.origin.move(1,1)) : string
+>                             : ^^^^^^
 >result : string
+>       : ^^^^^^
 >(M.origin.move(1,1)) : Point
+>                     : ^^^^^
 >M.origin.move(1,1) : Point
+>                   : ^^^^^
 >M.origin.move : (xo: number, yo: number) => Point
+>              : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >M.origin : Point
+>         : ^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >origin : Point
+>       : ^^^^^
 >move : (xo: number, yo: number) => Point
+>     : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
 

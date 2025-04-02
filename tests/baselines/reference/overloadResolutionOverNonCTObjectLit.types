@@ -1,16 +1,22 @@
-=== tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts ===
+//// [tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts] ////
+
+=== overloadResolutionOverNonCTObjectLit.ts ===
 module Bugs {
 >Bugs : typeof Bugs
+>     : ^^^^^^^^^^^
 
                 export interface IToken {
                                 startIndex:number;
 >startIndex : number
+>           : ^^^^^^
 
                                 type:string;
 >type : string
+>     : ^^^^^^
 
                                 bracket:number;
 >bracket : number
+>        : ^^^^^^
                 }
                 
                 export interface IState {
@@ -19,47 +25,79 @@ module Bugs {
                 export interface IStateToken extends IToken {
                                 state: IState;
 >state : IState
+>      : ^^^^^^
 
                                 length: number;
 >length : number
+>       : ^^^^^^
                 }
                 
                 function bug3() {
 >bug3 : () => void
+>     : ^^^^^^^^^^
 
                                 var tokens:IToken[]= [];
 >tokens : IToken[]
+>       : ^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
                                 tokens.push({ startIndex: 1, type: '', bracket: 3 });
 >tokens.push({ startIndex: 1, type: '', bracket: 3 }) : number
+>                                                     : ^^^^^^
 >tokens.push : (...items: IToken[]) => number
+>            : ^^^^     ^^^^^^^^^^^^^^^      
 >tokens : IToken[]
+>       : ^^^^^^^^
 >push : (...items: IToken[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >{ startIndex: 1, type: '', bracket: 3 } : { startIndex: number; type: string; bracket: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >startIndex : number
+>           : ^^^^^^
 >1 : 1
+>  : ^
 >type : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
 >bracket : number
+>        : ^^^^^^
 >3 : 3
+>  : ^
 
                                 tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }));
 >tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 })) : number
+>                                                                                        : ^^^^^^
 >tokens.push : (...items: IToken[]) => number
+>            : ^^^^     ^^^^^^^^^^^^^^^      
 >tokens : IToken[]
+>       : ^^^^^^^^
 >push : (...items: IToken[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 ><IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }) : IToken
+>                                                                           : ^^^^^^
 >({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }) : { startIndex: number; type: string; bracket: number; state: null; length: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ startIndex: 1, type: '', bracket: 3, state: null, length: 10 } : { startIndex: number; type: string; bracket: number; state: null; length: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >startIndex : number
+>           : ^^^^^^
 >1 : 1
+>  : ^
 >type : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
 >bracket : number
+>        : ^^^^^^
 >3 : 3
+>  : ^
 >state : null
+>      : ^^^^
 >length : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
                 }
 }

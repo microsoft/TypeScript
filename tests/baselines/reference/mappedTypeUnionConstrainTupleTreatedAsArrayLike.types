@@ -1,34 +1,53 @@
-=== tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts ===
+//// [tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts] ////
+
+=== mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts ===
 type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
 >HomomorphicMappedType : HomomorphicMappedType<T>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 function test1<T extends [number] | [string]>(args: T) {
 >test1 : <T extends [number] | [string]>(args: T) => void
+>      : ^ ^^^^^^^^^                   ^^    ^^ ^^^^^^^^^
 >args : T
+>     : ^
 
   const arr: any[] = [] as HomomorphicMappedType<T>
 >arr : any[]
+>    : ^^^^^
 >[] as HomomorphicMappedType<T> : HomomorphicMappedType<T>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
   const arr2: readonly any[] = [] as HomomorphicMappedType<T>
 >arr2 : readonly any[]
+>     : ^^^^^^^^^^^^^^
 >[] as HomomorphicMappedType<T> : HomomorphicMappedType<T>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 }
 
 function test2<T extends [number] | readonly [string]>(args: T) {
 >test2 : <T extends [number] | readonly [string]>(args: T) => void
+>      : ^ ^^^^^^^^^                            ^^    ^^ ^^^^^^^^^
 >args : T
+>     : ^
 
   const arr: any[] = [] as HomomorphicMappedType<T> // error
 >arr : any[]
+>    : ^^^^^
 >[] as HomomorphicMappedType<T> : HomomorphicMappedType<T>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
   const arr2: readonly any[] = [] as HomomorphicMappedType<T>
 >arr2 : readonly any[]
+>     : ^^^^^^^^^^^^^^
 >[] as HomomorphicMappedType<T> : HomomorphicMappedType<T>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 }
 

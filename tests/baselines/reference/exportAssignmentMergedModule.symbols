@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentMergedModule.ts] ////
+
+=== foo_1.ts ===
 import foo = require("./foo_0");
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 
@@ -23,7 +25,7 @@ if(!!foo.b){
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 >c : Symbol(foo.c, Decl(foo_0.ts, 6, 12))
 }
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 module Foo {
 >Foo : Symbol(Foo, Decl(foo_0.ts, 0, 0), Decl(foo_0.ts, 5, 1))
 

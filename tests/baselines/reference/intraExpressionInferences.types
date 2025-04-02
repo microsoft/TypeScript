@@ -1,157 +1,254 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferences.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferences.ts] ////
+
+=== intraExpressionInferences.ts ===
 // Repros from #47599
 
 declare function callIt<T>(obj: {
 >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>       : ^ ^^   ^^                                                       ^^^^^    
 >obj : { produce: (n: number) => T; consume: (x: T) => void; }
+>    : ^^^^^^^^^^^                ^^^^^^^^^^^              ^^^
 
     produce: (n: number) => T,
 >produce : (n: number) => T
+>        : ^ ^^      ^^^^^ 
 >n : number
+>  : ^^^^^^
 
     consume: (x: T) => void
 >consume : (x: T) => void
+>        : ^ ^^ ^^^^^    
 >x : T
+>  : ^
 
 }): void;
 
 callIt({
 >callIt({    produce: () => 0,    consume: n => n.toFixed()}) : void
+>                                                             : ^^^^
 >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>       : ^ ^^   ^^                                                       ^^^^^    
 >{    produce: () => 0,    consume: n => n.toFixed()} : { produce: () => number; consume: (n: number) => string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     produce: () => 0,
 >produce : () => number
+>        : ^^^^^^^^^^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     consume: n => n.toFixed()
 >consume : (n: number) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 });
 
 callIt({
 >callIt({    produce: _a => 0,    consume: n => n.toFixed(),}) : void
+>                                                              : ^^^^
 >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>       : ^ ^^   ^^                                                       ^^^^^    
 >{    produce: _a => 0,    consume: n => n.toFixed(),} : { produce: (_a: number) => number; consume: (n: number) => string; }
+>                                                      : ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     produce: _a => 0,
 >produce : (_a: number) => number
+>        : ^  ^^^^^^^^^^^^^^^^^^^
 >_a => 0 : (_a: number) => number
+>        : ^  ^^^^^^^^^^^^^^^^^^^
 >_a : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     consume: n => n.toFixed(),
 >consume : (n: number) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 });
 
 callIt({
 >callIt({    produce() {        return 0;    },    consume: n => n.toFixed()}) : void
+>                                                                              : ^^^^
 >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>       : ^ ^^   ^^                                                       ^^^^^    
 >{    produce() {        return 0;    },    consume: n => n.toFixed()} : { produce(): number; consume: (n: number) => string; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     produce() {
 >produce : () => number
+>        : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
 
     },
     consume: n => n.toFixed()
 >consume : (n: number) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 });
 
 declare function callItT<T>(obj: [(n: number) => T, (x: T) => void]): void;
 >callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
+>        : ^ ^^   ^^                                  ^^^^^    
 >obj : [(n: number) => T, (x: T) => void]
+>    : ^^ ^^      ^^^^^ ^^^ ^^ ^^^^^    ^
 >n : number
+>  : ^^^^^^
 >x : T
+>  : ^
 
 callItT([() => 0, n => n.toFixed()]);
 >callItT([() => 0, n => n.toFixed()]) : void
+>                                     : ^^^^
 >callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
+>        : ^ ^^   ^^                                  ^^^^^    
 >[() => 0, n => n.toFixed()] : [() => number, (n: number) => string]
+>                            : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >n => n.toFixed() : (n: number) => string
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 callItT([_a => 0, n => n.toFixed()]);
 >callItT([_a => 0, n => n.toFixed()]) : void
+>                                     : ^^^^
 >callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
+>        : ^ ^^   ^^                                  ^^^^^    
 >[_a => 0, n => n.toFixed()] : [(_a: number) => number, (n: number) => string]
+>                            : ^^  ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >_a => 0 : (_a: number) => number
+>        : ^  ^^^^^^^^^^^^^^^^^^^
 >_a : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >n => n.toFixed() : (n: number) => string
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>            : ^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 // Repro from #25092
 
 interface MyInterface<T> {
     retrieveGeneric: (parameter: string) => T,
 >retrieveGeneric : (parameter: string) => T
+>                : ^         ^^      ^^^^^ 
 >parameter : string
+>          : ^^^^^^
 
     operateWithGeneric: (generic: T) => string
 >operateWithGeneric : (generic: T) => string
+>                   : ^       ^^ ^^^^^      
 >generic : T
+>        : ^
 }
 
 const inferTypeFn = <T>(generic: MyInterface<T>) => generic;
 >inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
+>            : ^ ^^       ^^              ^^^^^^^^^^^^^^^^^^^
 ><T>(generic: MyInterface<T>) => generic : <T>(generic: MyInterface<T>) => MyInterface<T>
+>                                        : ^ ^^       ^^              ^^^^^^^^^^^^^^^^^^^
 >generic : MyInterface<T>
+>        : ^^^^^^^^^^^^^^
 >generic : MyInterface<T>
+>        : ^^^^^^^^^^^^^^
 
 const myGeneric = inferTypeFn({
 >myGeneric : MyInterface<number>
+>          : ^^^^^^^^^^^^^^^^^^^
 >inferTypeFn({    retrieveGeneric: parameter => 5,    operateWithGeneric: generic => generic.toFixed()}) : MyInterface<number>
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^
 >inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
+>            : ^ ^^       ^^              ^^^^^^^^^^^^^^^^^^^
 >{    retrieveGeneric: parameter => 5,    operateWithGeneric: generic => generic.toFixed()} : { retrieveGeneric: (parameter: string) => number; operateWithGeneric: (generic: number) => string; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
 
     retrieveGeneric: parameter => 5,
 >retrieveGeneric : (parameter: string) => number
+>                : ^         ^^^^^^^^^^^^^^^^^^^
 >parameter => 5 : (parameter: string) => number
+>               : ^         ^^^^^^^^^^^^^^^^^^^
 >parameter : string
+>          : ^^^^^^
 >5 : 5
+>  : ^
 
     operateWithGeneric: generic => generic.toFixed()
 >operateWithGeneric : (generic: number) => string
+>                   : ^       ^^^^^^^^^^^^^^^^^^^
 >generic => generic.toFixed() : (generic: number) => string
+>                             : ^       ^^^^^^^^^^^^^^^^^^^
 >generic : number
+>        : ^^^^^^
 >generic.toFixed() : string
->generic.toFixed : (fractionDigits?: number | undefined) => string
+>                  : ^^^^^^
+>generic.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >generic : number
->toFixed : (fractionDigits?: number | undefined) => string
+>        : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 });
 
@@ -159,32 +256,50 @@ const myGeneric = inferTypeFn({
 
 function make<M>(o: { mutations: M,  action: (m: M) => void }) { }
 >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
+>     : ^ ^^ ^^                                         ^^^^^^^^^
 >o : { mutations: M; action: (m: M) => void; }
+>  : ^^^^^^^^^^^^^ ^^^^^^^^^^              ^^^
 >mutations : M
+>          : ^
 >action : (m: M) => void
+>       : ^ ^^ ^^^^^    
 >m : M
+>  : ^
 
 make({
 >make({   mutations: {       foo() { }   },   action: (a) => { a.foo() }}) : void
+>                                                                          : ^^^^
 >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
+>     : ^ ^^ ^^                                         ^^^^^^^^^
 >{   mutations: {       foo() { }   },   action: (a) => { a.foo() }} : { mutations: { foo(): void; }; action: (a: { foo(): void; }) => void; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    mutations: {
 >mutations : { foo(): void; }
+>          : ^^^^^^^^^^^^^^^^
 >{       foo() { }   } : { foo(): void; }
+>                      : ^^^^^^^^^^^^^^^^
 
        foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
    },
    action: (a) => { a.foo() }
 >action : (a: { foo(): void; }) => void
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a) => { a.foo() } : (a: { foo(): void; }) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
 >a.foo() : void
+>        : ^^^^
 >a.foo : () => void
+>      : ^^^^^^^^^^
 >a : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 });
 
@@ -192,55 +307,83 @@ make({
 
 declare function foo<A>(options: { a: A, b: (a: A) => void }): void;
 >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>    : ^ ^^       ^^                            ^^^^^    
 >options : { a: A; b: (a: A) => void; }
+>        : ^^^^^ ^^^^^              ^^^
 >a : A
+>  : ^
 >b : (a: A) => void
+>  : ^ ^^ ^^^^^    
 >a : A
+>  : ^
 
 foo({
 >foo({    a: () => { return 42 },    b(a) {},}) : void
+>                                               : ^^^^
 >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>    : ^ ^^       ^^                            ^^^^^    
 >{    a: () => { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
+>                                          : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     a: () => { return 42 },
 >a : () => 42
+>  : ^^^^^^^^
 >() => { return 42 } : () => 42
+>                    : ^^^^^^^^
 >42 : 42
+>   : ^^
 
     b(a) {},
 >b : (a: () => 42) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a : () => 42
+>  : ^^^^^^^^
 
 });
 
 foo({
 >foo({    a: function () { return 42 },    b(a) {},}) : void
+>                                                     : ^^^^
 >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>    : ^ ^^       ^^                            ^^^^^    
 >{    a: function () { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
+>                                                : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     a: function () { return 42 },
 >a : () => 42
+>  : ^^^^^^^^
 >function () { return 42 } : () => 42
+>                          : ^^^^^^^^
 >42 : 42
+>   : ^^
 
     b(a) {},
 >b : (a: () => 42) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a : () => 42
+>  : ^^^^^^^^
 
 });
 
 foo({
 >foo({    a() { return 42 },    b(a) {},}) : void
+>                                          : ^^^^
 >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>    : ^ ^^       ^^                            ^^^^^    
 >{    a() { return 42 },    b(a) {},} : { a(): 42; b(a: () => 42): void; }
+>                                     : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     a() { return 42 },
 >a : () => 42
+>  : ^^^^^^^^
 >42 : 42
+>   : ^^
 
     b(a) {},
 >b : (a: () => 42) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a : () => 42
+>  : ^^^^^^^^
 
 });
 
@@ -248,75 +391,113 @@ foo({
 
 type Chain<R1, R2> = {
 >Chain : Chain<R1, R2>
+>      : ^^^^^^^^^^^^^
 
     a(): R1,
 >a : () => R1
+>  : ^^^^^^  
 
     b(a: R1): R2;
 >b : (a: R1) => R2
+>  : ^ ^^  ^^^^^  
 >a : R1
+>  : ^^
 
     c(b: R2): void;
 >c : (b: R2) => void
+>  : ^ ^^  ^^^^^    
 >b : R2
+>  : ^^
 
 };
 
 function test<R1, R2>(foo: Chain<R1, R2>) {}
 >test : <R1, R2>(foo: Chain<R1, R2>) => void
+>     : ^  ^^  ^^   ^^             ^^^^^^^^^
 >foo : Chain<R1, R2>
+>    : ^^^^^^^^^^^^^
 
 test({
 >test({    a: () => 0,    b: (a) => 'a',    c: (b) => {        const x: string = b;    }}) : void
+>                                                                                          : ^^^^
 >test : <R1, R2>(foo: Chain<R1, R2>) => void
+>     : ^  ^^  ^^   ^^             ^^^^^^^^^
 >{    a: () => 0,    b: (a) => 'a',    c: (b) => {        const x: string = b;    }} : { a: () => number; b: (a: number) => string; c: (b: string) => void; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     a: () => 0,
 >a : () => number
+>  : ^^^^^^^^^^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     b: (a) => 'a',
 >b : (a: number) => string
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(a) => 'a' : (a: number) => string
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
     c: (b) => {
 >c : (b: string) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >(b) => {        const x: string = b;    } : (b: string) => void
+>                                          : ^ ^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
         const x: string = b;
 >x : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
     }
 });
 
 test({
 >test({    a: () => 0,    b: (a) => a,    c: (b) => {        const x: number = b;    }}) : void
+>                                                                                        : ^^^^
 >test : <R1, R2>(foo: Chain<R1, R2>) => void
+>     : ^  ^^  ^^   ^^             ^^^^^^^^^
 >{    a: () => 0,    b: (a) => a,    c: (b) => {        const x: number = b;    }} : { a: () => number; b: (a: number) => number; c: (b: number) => void; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     a: () => 0,
 >a : () => number
+>  : ^^^^^^^^^^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     b: (a) => a,
 >b : (a: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(a) => a : (a: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
     c: (b) => {
 >c : (b: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >(b) => {        const x: number = b;    } : (b: number) => void
+>                                          : ^ ^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
         const x: number = b;
 >x : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
     }
 });
 
@@ -324,98 +505,142 @@ test({
 
 class Wrapper<T = any> {
 >Wrapper : Wrapper<T>
+>        : ^^^^^^^^^^
 
     public value?: T;
 >value : T | undefined
+>      : ^^^^^^^^^^^^^
 }
 
 type WrappedMap = Record<string, Wrapper>;
->WrappedMap : { [x: string]: Wrapper<any>; }
+>WrappedMap : WrappedMap
+>           : ^^^^^^^^^^
 
 type Unwrap<D extends WrappedMap> = {
 >Unwrap : Unwrap<D>
+>       : ^^^^^^^^^
 
     [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
 };
 
 type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
 >MappingComponent : MappingComponent<I, O>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 
     setup(): { inputs: I; outputs: O };
->setup : () => {    inputs: I;    outputs: O;}
+>setup : () => { inputs: I; outputs: O; }
+>      : ^^^^^^                          
 >inputs : I
+>       : ^
 >outputs : O
+>        : ^
 
     map?: (inputs: Unwrap<I>) => Unwrap<O>;
 >map : ((inputs: Unwrap<I>) => Unwrap<O>) | undefined
+>    : ^^      ^^         ^^^^^         ^^^^^^^^^^^^^
 >inputs : Unwrap<I>
+>       : ^^^^^^^^^
 
 };
 
 declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
 >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
+>                       : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^   ^^                      ^^^^^    
 >def : MappingComponent<I, O>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 createMappingComponent({
 >createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^
 >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
+>                       : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^   ^^                      ^^^^^    
 >{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup(): { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>): { bool: any; str: number; }; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     setup() {
 >setup : () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        } : { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
+>                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             inputs: {
 >inputs : { num: Wrapper<number>; str: Wrapper<string>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                num: new Wrapper<number>(),                str: new Wrapper<string>()            } : { num: Wrapper<number>; str: Wrapper<string>; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 num: new Wrapper<number>(),
 >num : Wrapper<number>
+>    : ^^^^^^^^^^^^^^^
 >new Wrapper<number>() : Wrapper<number>
+>                      : ^^^^^^^^^^^^^^^
 >Wrapper : typeof Wrapper
+>        : ^^^^^^^^^^^^^^
 
                 str: new Wrapper<string>()
 >str : Wrapper<string>
+>    : ^^^^^^^^^^^^^^^
 >new Wrapper<string>() : Wrapper<string>
+>                      : ^^^^^^^^^^^^^^^
 >Wrapper : typeof Wrapper
+>        : ^^^^^^^^^^^^^^
 
             },
             outputs: {
 >outputs : { bool: Wrapper<boolean>; str: Wrapper<string>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            } : { bool: Wrapper<boolean>; str: Wrapper<string>; }
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 bool: new Wrapper<boolean>(),
 >bool : Wrapper<boolean>
+>     : ^^^^^^^^^^^^^^^^
 >new Wrapper<boolean>() : Wrapper<boolean>
+>                       : ^^^^^^^^^^^^^^^^
 >Wrapper : typeof Wrapper
+>        : ^^^^^^^^^^^^^^
 
                 str: new Wrapper<string>()
 >str : Wrapper<string>
+>    : ^^^^^^^^^^^^^^^
 >new Wrapper<string>() : Wrapper<string>
+>                      : ^^^^^^^^^^^^^^^
 >Wrapper : typeof Wrapper
+>        : ^^^^^^^^^^^^^^
             }
         };
     },
     map(inputs) {
 >map : (inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }
+>    : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        } : { bool: any; str: number; }
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             bool: inputs.nonexistent,
 >bool : any
+>     : ^^^
 >inputs.nonexistent : any
+>                   : ^^^
 >inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nonexistent : any
+>            : ^^^
 
             str: inputs.num,  // Causes error
 >str : number
+>    : ^^^^^^
 >inputs.num : number
+>           : ^^^^^^
 >inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
         }
     }
 });
@@ -424,194 +649,327 @@ createMappingComponent({
 
 function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {}
 >simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
+>           : ^ ^^     ^^                                                ^^^^^^^^^
 >props : { generator: () => T; receiver: (t: T) => any; }
+>      : ^^^^^^^^^^^^^       ^^^^^^^^^^^^             ^^^
 >generator : () => T
+>          : ^^^^^^ 
 >receiver : (t: T) => any
+>         : ^ ^^ ^^^^^   
 >t : T
+>  : ^
 
 function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => any }) {}
 >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
+>          : ^ ^^     ^^                                                        ^^^^^^^^^
 >props : { generator: (bob: any) => T; receiver: (t: T) => any; }
+>      : ^^^^^^^^^^^^^               ^^^^^^^^^^^^             ^^^
 >generator : (bob: any) => T
+>          : ^   ^^   ^^^^^ 
 >bob : any
+>    : ^^^
 >receiver : (t: T) => any
+>         : ^ ^^ ^^^^^   
 >t : T
+>  : ^
 
 function nonObject<T>(generator: (bob: any) => T, receiver: (t: T) => any) {}
 >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
+>          : ^ ^^         ^^               ^^        ^^             ^^^^^^^^^
 >generator : (bob: any) => T
+>          : ^   ^^   ^^^^^ 
 >bob : any
+>    : ^^^
 >receiver : (t: T) => any
+>         : ^ ^^ ^^^^^   
 >t : T
+>  : ^
 
 simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) })
 >simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) }) : void
+>                                                                          : ^^^^
 >simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
+>           : ^ ^^     ^^                                                ^^^^^^^^^
 >{ generator: () => 123, receiver: (t) => console.log(t + 2) } : { generator: () => number; receiver: (t: number) => void; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >generator : () => number
+>          : ^^^^^^^^^^^^
 >() => 123 : () => number
+>          : ^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 >receiver : (t: number) => void
+>         : ^ ^^^^^^^^^^^^^^^^^
 >(t) => console.log(t + 2) : (t: number) => void
+>                          : ^ ^^^^^^^^^^^^^^^^^
 >t : number
+>  : ^^^^^^
 >console.log(t + 2) : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >t + 2 : number
+>      : ^^^^^^
 >t : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) })
 >whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) }) : void
+>                                                                                    : ^^^^
 >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
+>          : ^ ^^     ^^                                                        ^^^^^^^^^
 >{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 2 | 1; receiver: (t: 2 | 1) => void; }
+>                                                                         : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >generator : (bob: any) => 2 | 1
+>          : ^   ^^^^^^^^^^^^^^^
 >(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
+>                     : ^   ^^^^^^^^^^^^^^^
 >bob : any
+>    : ^^^
 >bob ? 1 : 2 : 2 | 1
+>            : ^^^^^
 >bob : any
+>    : ^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >receiver : (t: 2 | 1) => void
+>         : ^ ^^^^^^^^^^^^^^^^
 >(t) => console.log(t + 2) : (t: 2 | 1) => void
+>                          : ^ ^^^^^^^^^^^^^^^^
 >t : 2 | 1
+>  : ^^^^^
 >console.log(t + 2) : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >t + 2 : number
+>      : ^^^^^^
 >t : 2 | 1
+>  : ^^^^^
 >2 : 2
+>  : ^
 
 nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
 >nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2)) : void
+>                                                           : ^^^^
 >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
+>          : ^ ^^         ^^               ^^        ^^             ^^^^^^^^^
 >(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
+>                     : ^   ^^^^^^^^^^^^^^^
 >bob : any
+>    : ^^^
 >bob ? 1 : 2 : 2 | 1
+>            : ^^^^^
 >bob : any
+>    : ^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >(t) => console.log(t + 2) : (t: 2 | 1) => void
+>                          : ^ ^^^^^^^^^^^^^^^^
 >t : 2 | 1
+>  : ^^^^^
 >console.log(t + 2) : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >t + 2 : number
+>      : ^^^^^^
 >t : 2 | 1
+>  : ^^^^^
 >2 : 2
+>  : ^
 
 // Repro from #48466
 
 interface Opts<TParams, TDone, TMapped> {
     fetch: (params: TParams, foo: number) => TDone,
 >fetch : (params: TParams, foo: number) => TDone
+>      : ^      ^^       ^^   ^^      ^^^^^     
 >params : TParams
+>       : ^^^^^^^
 >foo : number
+>    : ^^^^^^
 
     map: (data: TDone) => TMapped
 >map : (data: TDone) => TMapped
+>    : ^    ^^     ^^^^^       
 >data : TDone
+>     : ^^^^^
 }
 
 function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) {
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >options : Opts<TParams, TDone, TMapped>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return (params: TParams) => {
 >(params: TParams) => {        const data = options.fetch(params, 123)        return options.map(data)    } : (params: TParams) => TMapped
+>                                                                                                           : ^      ^^       ^^^^^^^^^^^^
 >params : TParams
+>       : ^^^^^^^
 
         const data = options.fetch(params, 123)
 >data : TDone
+>     : ^^^^^
 >options.fetch(params, 123) : TDone
+>                           : ^^^^^
 >options.fetch : (params: TParams, foo: number) => TDone
+>              : ^      ^^^^^^^^^^^   ^^      ^^^^^^^^^^
 >options : Opts<TParams, TDone, TMapped>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fetch : (params: TParams, foo: number) => TDone
+>      : ^      ^^^^^^^^^^^   ^^      ^^^^^^^^^^
 >params : TParams
+>       : ^^^^^^^
 >123 : 123
+>    : ^^^
 
         return options.map(data)
 >options.map(data) : TMapped
+>                  : ^^^^^^^
 >options.map : (data: TDone) => TMapped
+>            : ^    ^^^^^^^^^^^^^^^^^^^
 >options : Opts<TParams, TDone, TMapped>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : (data: TDone) => TMapped
+>    : ^    ^^^^^^^^^^^^^^^^^^^
 >data : TDone
+>     : ^^^^^
     }
 }
 
 interface Params {
     one: number
 >one : number
+>    : ^^^^^^
 
     two: string
 >two : string
+>    : ^^^^^^
 }
 
 example({
 >example({    fetch: (params: Params) => 123,    map: (number) => String(number)}) : (params: Params) => string
+>                                                                                  : ^      ^^^^^^^^^^^^^^^^^^^
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >{    fetch: (params: Params) => 123,    map: (number) => String(number)} : { fetch: (params: Params) => number; map: (number: number) => string; }
+>                                                                         : ^^^^^^^^^^      ^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
     fetch: (params: Params) => 123,
 >fetch : (params: Params) => number
+>      : ^      ^^      ^^^^^^^^^^^
 >(params: Params) => 123 : (params: Params) => number
+>                        : ^      ^^      ^^^^^^^^^^^
 >params : Params
+>       : ^^^^^^
 >123 : 123
+>    : ^^^
 
     map: (number) => String(number)
 >map : (number: number) => string
+>    : ^      ^^^^^^^^^^^^^^^^^^^
 >(number) => String(number) : (number: number) => string
+>                           : ^      ^^^^^^^^^^^^^^^^^^^
 >number : number
+>       : ^^^^^^
 >String(number) : string
+>               : ^^^^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >number : number
+>       : ^^^^^^
 
 });
 
 example({
 >example({    fetch: (params: Params, foo: number) => 123,    map: (number) => String(number)}) : (params: Params) => string
+>                                                                                               : ^      ^^^^^^^^^^^^^^^^^^^
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >{    fetch: (params: Params, foo: number) => 123,    map: (number) => String(number)} : { fetch: (params: Params, foo: number) => number; map: (number: number) => string; }
+>                                                                                      : ^^^^^^^^^^      ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
     fetch: (params: Params, foo: number) => 123,
 >fetch : (params: Params, foo: number) => number
+>      : ^      ^^      ^^   ^^      ^^^^^^^^^^^
 >(params: Params, foo: number) => 123 : (params: Params, foo: number) => number
+>                                     : ^      ^^      ^^   ^^      ^^^^^^^^^^^
 >params : Params
+>       : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >123 : 123
+>    : ^^^
 
     map: (number) => String(number)
 >map : (number: number) => string
+>    : ^      ^^^^^^^^^^^^^^^^^^^
 >(number) => String(number) : (number: number) => string
+>                           : ^      ^^^^^^^^^^^^^^^^^^^
 >number : number
+>       : ^^^^^^
 >String(number) : string
+>               : ^^^^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >number : number
+>       : ^^^^^^
 
 });
 
 example({
 >example({    fetch: (params: Params, foo) => 123,    map: (number) => String(number)}) : (params: Params) => string
+>                                                                                       : ^      ^^^^^^^^^^^^^^^^^^^
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >{    fetch: (params: Params, foo) => 123,    map: (number) => String(number)} : { fetch: (params: Params, foo: number) => number; map: (number: number) => string; }
+>                                                                              : ^^^^^^^^^^      ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
     fetch: (params: Params, foo) => 123,
 >fetch : (params: Params, foo: number) => number
+>      : ^      ^^      ^^   ^^^^^^^^^^^^^^^^^^^
 >(params: Params, foo) => 123 : (params: Params, foo: number) => number
+>                             : ^      ^^      ^^   ^^^^^^^^^^^^^^^^^^^
 >params : Params
+>       : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >123 : 123
+>    : ^^^
 
     map: (number) => String(number)
 >map : (number: number) => string
+>    : ^      ^^^^^^^^^^^^^^^^^^^
 >(number) => String(number) : (number: number) => string
+>                           : ^      ^^^^^^^^^^^^^^^^^^^
 >number : number
+>       : ^^^^^^
 >String(number) : string
+>               : ^^^^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >number : number
+>       : ^^^^^^
 
 });
 
@@ -619,43 +977,769 @@ example({
 
 declare const branch:
 >branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^                                                        ^^^^^    
 
   <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
 >_ : { test: T; if: (t: T) => t is U; then: (u: U) => void; }
+>  : ^^^^^^^^ ^^^^^^                ^^^^^^^^              ^^^
 >test : T
+>     : ^
 >if : (t: T) => t is U
+>   : ^ ^^ ^^^^^      
 >t : T
+>  : ^
 >then : (u: U) => void
+>     : ^ ^^ ^^^^^    
 >u : U
+>  : ^
 
 declare const x: "a" | "b"
 >x : "a" | "b"
+>  : ^^^^^^^^^
 
 branch({
 >branch({  test: x,  if: (t): t is "a" => t === "a",  then: u => {    let test1: "a" = u  }}) : void
+>                                                                                             : ^^^^
 >branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^                                                        ^^^^^    
 >{  test: x,  if: (t): t is "a" => t === "a",  then: u => {    let test1: "a" = u  }} : { test: "a" | "b"; if: (t: "a" | "b") => t is "a"; then: (u: "a") => void; }
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^        ^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 
   test: x,
 >test : "a" | "b"
+>     : ^^^^^^^^^
 >x : "a" | "b"
+>  : ^^^^^^^^^
 
   if: (t): t is "a" => t === "a",
 >if : (t: "a" | "b") => t is "a"
+>   : ^ ^^^^^^^^^^^^^^^^        
 >(t): t is "a" => t === "a" : (t: "a" | "b") => t is "a"
+>                           : ^ ^^^^^^^^^^^^^^^^        
 >t : "a" | "b"
+>  : ^^^^^^^^^
 >t === "a" : boolean
+>          : ^^^^^^^
 >t : "a" | "b"
+>  : ^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
   then: u => {
 >then : (u: "a") => void
+>     : ^ ^^^^^^^^^^^^^^
 >u => {    let test1: "a" = u  } : (u: "a") => void
+>                                : ^ ^^^^^^^^^^^^^^
 >u : "a"
+>  : ^^^
 
     let test1: "a" = u
 >test1 : "a"
+>      : ^^^
 >u : "a"
+>  : ^^^
   }
 })
+
+interface Props<T> {
+  a: (x: string) => T;
+>a : (x: string) => T
+>  : ^ ^^      ^^^^^ 
+>x : string
+>  : ^^^^^^
+
+  b: (arg: T) => void;
+>b : (arg: T) => void
+>  : ^   ^^ ^^^^^    
+>arg : T
+>    : ^
+}
+
+declare function Foo<T>(props: Props<T>): null;
+>Foo : <T>(props: Props<T>) => null
+>    : ^ ^^     ^^        ^^^^^    
+>props : Props<T>
+>      : ^^^^^^^^
+
+Foo({
+>Foo({  ...{    a: (x) => 10,    b: (arg) => {      arg.toString();    },  },}) : null
+>                                                                               : ^^^^
+>Foo : <T>(props: Props<T>) => null
+>    : ^ ^^     ^^        ^^^^^    
+>{  ...{    a: (x) => 10,    b: (arg) => {      arg.toString();    },  },} : { a: (x: string) => number; b: (arg: number) => void; }
+>                                                                          : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+
+  ...{
+>{    a: (x) => 10,    b: (arg) => {      arg.toString();    },  } : { a: (x: string) => number; b: (arg: number) => void; }
+>                                                                  : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+
+    a: (x) => 10,
+>a : (x: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
+>(x) => 10 : (x: string) => number
+>          : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+    b: (arg) => {
+>b : (arg: number) => void
+>  : ^   ^^^^^^^^^^^^^^^^^
+>(arg) => {      arg.toString();    } : (arg: number) => void
+>                                     : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+
+      arg.toString();
+>arg.toString() : string
+>               : ^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>arg : number
+>    : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+    },
+  },
+});
+
+declare function nested<T>(arg: {
+>nested : <T>(arg: { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }) => T
+>       : ^ ^^   ^^                                                                        ^^^^^ 
+>arg : { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }
+>    : ^^^^^^^^                                                             ^^^
+
+  prop: {
+>prop : { produce: (arg1: number) => T; consume: (arg2: T) => void; }
+>     : ^^^^^^^^^^^                   ^^^^^^^^^^^                 ^^^
+
+    produce: (arg1: number) => T;
+>produce : (arg1: number) => T
+>        : ^    ^^      ^^^^^ 
+>arg1 : number
+>     : ^^^^^^
+
+    consume: (arg2: T) => void;
+>consume : (arg2: T) => void
+>        : ^    ^^ ^^^^^    
+>arg2 : T
+>     : ^
+
+  };
+}): T;
+
+const resNested = nested({
+>resNested : number[]
+>          : ^^^^^^^^
+>nested({  prop: {    produce: (a) => [a],    consume: (arg) => arg.join(","),  },}) : number[]
+>                                                                                    : ^^^^^^^^
+>nested : <T>(arg: { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }) => T
+>       : ^ ^^   ^^                                                                        ^^^^^ 
+>{  prop: {    produce: (a) => [a],    consume: (arg) => arg.join(","),  },} : { prop: { produce: (a: number) => number[]; consume: (arg: number[]) => string; }; }
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  prop: {
+>prop : { produce: (a: number) => number[]; consume: (arg: number[]) => string; }
+>     : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>{    produce: (a) => [a],    consume: (arg) => arg.join(","),  } : { produce: (a: number) => number[]; consume: (arg: number[]) => string; }
+>                                                                 : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    produce: (a) => [a],
+>produce : (a: number) => number[]
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^
+>(a) => [a] : (a: number) => number[]
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>[a] : number[]
+>    : ^^^^^^^^
+>a : number
+>  : ^^^^^^
+
+    consume: (arg) => arg.join(","),
+>consume : (arg: number[]) => string
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => arg.join(",") : (arg: number[]) => string
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : number[]
+>    : ^^^^^^^^
+>arg.join(",") : string
+>              : ^^^^^^
+>arg.join : (separator?: string) => string
+>         : ^         ^^^      ^^^^^      
+>arg : number[]
+>    : ^^^^^^^^
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"," : ","
+>    : ^^^
+
+  },
+});
+
+declare function twoConsumers<T>(arg: {
+>twoConsumers : <T>(arg: { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }) => T
+>             : ^ ^^   ^^                                                                                    ^^^^^ 
+>arg : { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }
+>    : ^^^^^                  ^^^^^^^^^^^^                 ^^^^^^^^^^^^                 ^^^
+
+  a: (arg: string) => T;
+>a : (arg: string) => T
+>  : ^   ^^      ^^^^^ 
+>arg : string
+>    : ^^^^^^
+
+  consume1: (arg1: T) => void;
+>consume1 : (arg1: T) => void
+>         : ^    ^^ ^^^^^    
+>arg1 : T
+>     : ^
+
+  consume2: (arg2: T) => void;
+>consume2 : (arg2: T) => void
+>         : ^    ^^ ^^^^^    
+>arg2 : T
+>     : ^
+
+}): T;
+
+const resTwoConsumers = twoConsumers({
+>resTwoConsumers : string[]
+>                : ^^^^^^^^
+>twoConsumers({  a: (arg) => [arg],  consume1: (arg1) => {},  consume2: (arg2) => {},}) : string[]
+>                                                                                       : ^^^^^^^^
+>twoConsumers : <T>(arg: { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }) => T
+>             : ^ ^^   ^^                                                                                    ^^^^^ 
+>{  a: (arg) => [arg],  consume1: (arg1) => {},  consume2: (arg2) => {},} : { a: (arg: string) => string[]; consume1: (arg1: string[]) => void; consume2: (arg2: string[]) => void; }
+>                                                                         : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+
+  a: (arg) => [arg],
+>a : (arg: string) => string[]
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg] : (arg: string) => string[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  consume1: (arg1) => {},
+>consume1 : (arg1: string[]) => void
+>         : ^    ^^^^^^^^^^^^^^^^^^^
+>(arg1) => {} : (arg1: string[]) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^
+>arg1 : string[]
+>     : ^^^^^^^^
+
+  consume2: (arg2) => {},
+>consume2 : (arg2: string[]) => void
+>         : ^    ^^^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: string[]) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^
+>arg2 : string[]
+>     : ^^^^^^^^
+
+});
+
+declare function multipleProducersBeforeConsumers<T, T2>(arg: {
+>multipleProducersBeforeConsumers : <T, T2>(arg: { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }) => [T, T2]
+>                                 : ^ ^^  ^^   ^^                                                                                                             ^^^^^       
+>arg : { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }
+>    : ^^^^^                  ^^^^^                   ^^^^^^^^^^^^                 ^^^^^^^^^^^^                  ^^^
+
+  a: (arg: string) => T;
+>a : (arg: string) => T
+>  : ^   ^^      ^^^^^ 
+>arg : string
+>    : ^^^^^^
+
+  b: (arg: string) => T2;
+>b : (arg: string) => T2
+>  : ^   ^^      ^^^^^  
+>arg : string
+>    : ^^^^^^
+
+  consume1: (arg1: T) => void;
+>consume1 : (arg1: T) => void
+>         : ^    ^^ ^^^^^    
+>arg1 : T
+>     : ^
+
+  consume2: (arg2: T2) => void;
+>consume2 : (arg2: T2) => void
+>         : ^    ^^  ^^^^^    
+>arg2 : T2
+>     : ^^
+
+}): [T, T2];
+
+const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
+>resMultipleProducersBeforeConsumers : [string[], number]
+>                                    : ^^^^^^^^^^^^^^^^^^
+>multipleProducersBeforeConsumers({  a: (arg) => [arg],  b: (arg) => Number(arg),  consume1: (arg1) => {},  consume2: (arg2) => {},}) : [string[], number]
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^^^
+>multipleProducersBeforeConsumers : <T, T2>(arg: { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }) => [T, T2]
+>                                 : ^ ^^  ^^   ^^                                                                                                             ^^^^^       
+>{  a: (arg) => [arg],  b: (arg) => Number(arg),  consume1: (arg1) => {},  consume2: (arg2) => {},} : { a: (arg: string) => string[]; b: (arg: string) => number; consume1: (arg1: string[]) => void; consume2: (arg2: number) => void; }
+>                                                                                                   : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+  a: (arg) => [arg],
+>a : (arg: string) => string[]
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg] : (arg: string) => string[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  b: (arg) => Number(arg),
+>b : (arg: string) => number
+>  : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => Number(arg) : (arg: string) => number
+>                     : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>Number(arg) : number
+>            : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  consume1: (arg1) => {},
+>consume1 : (arg1: string[]) => void
+>         : ^    ^^^^^^^^^^^^^^^^^^^
+>(arg1) => {} : (arg1: string[]) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^
+>arg1 : string[]
+>     : ^^^^^^^^
+
+  consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+});
+
+declare function withConditionalExpression<T, T2, T3>(arg: {
+>withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
+>                          : ^ ^^  ^^  ^^   ^^                                                                    ^^^^^           
+>arg : { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }
+>    : ^^^^^                   ^^^^^               ^^^^^                ^^^
+
+  a: (arg1: string) => T;
+>a : (arg1: string) => T
+>  : ^    ^^      ^^^^^ 
+>arg1 : string
+>     : ^^^^^^
+
+  b: (arg2: T) => T2;
+>b : (arg2: T) => T2
+>  : ^    ^^ ^^^^^  
+>arg2 : T
+>     : ^
+
+  c: (arg2: T2) => T3;
+>c : (arg2: T2) => T3
+>  : ^    ^^  ^^^^^  
+>arg2 : T2
+>     : ^^
+
+}): [T, T2, T3];
+
+const resWithConditionalExpression = withConditionalExpression({
+>resWithConditionalExpression : [string[], "first" | "two", boolean]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withConditionalExpression({  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),}) : [string[], "first" | "two", boolean]
+>                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
+>                          : ^ ^^  ^^  ^^   ^^                                                                    ^^^^^           
+>{  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),} : { a: (arg: string) => string[]; b: ((arg: string[]) => "first") | ((arg: string[]) => "two"); c: (arg: "first" | "two") => boolean; }
+>                                                                                                                           : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: (arg) => [arg],
+>a : (arg: string) => string[]
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg] : (arg: string) => string[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,
+>b : ((arg: string[]) => "first") | ((arg: string[]) => "two")
+>  : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
+>Math.random() ? (arg) => "first" as const : (arg) => "two" as const : ((arg: string[]) => "first") | ((arg: string[]) => "two")
+>                                                                    : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>(arg) => "first" as const : (arg: string[]) => "first"
+>                          : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>arg : string[]
+>    : ^^^^^^^^
+>"first" as const : "first"
+>                 : ^^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+>(arg) => "two" as const : (arg: string[]) => "two"
+>                        : ^   ^^^^^^^^^^^^^^^^^^^^
+>arg : string[]
+>    : ^^^^^^^^
+>"two" as const : "two"
+>               : ^^^^^
+>"two" : "two"
+>      : ^^^^^
+
+  c: (arg) => Boolean(arg),
+>c : (arg: "first" | "two") => boolean
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => Boolean(arg) : (arg: "first" | "two") => boolean
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : "first" | "two"
+>    : ^^^^^^^^^^^^^^^
+>Boolean(arg) : boolean
+>             : ^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>arg : "first" | "two"
+>    : ^^^^^^^^^^^^^^^
+
+});
+
+declare function onion<T, T2, T3>(arg: {
+>onion : <T, T2, T3>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }) => [T, T2, T3]
+>      : ^ ^^  ^^  ^^   ^^                                                                                               ^^^^^           
+>arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }
+>    : ^^^^^                   ^^^^^^^^^^                                                          ^^^
+
+  a: (arg1: string) => T;
+>a : (arg1: string) => T
+>  : ^    ^^      ^^^^^ 
+>arg1 : string
+>     : ^^^^^^
+
+  nested: {
+>nested : { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }
+>       : ^^^^^               ^^^^^^^^^^^                        ^^^
+
+    b: (arg2: T) => T2;
+>b : (arg2: T) => T2
+>  : ^    ^^ ^^^^^  
+>arg2 : T
+>     : ^
+
+    nested2: {
+>nested2 : { c: (arg2: T2) => T3; }
+>        : ^^^^^                ^^^
+
+      c: (arg2: T2) => T3;
+>c : (arg2: T2) => T3
+>  : ^    ^^  ^^^^^  
+>arg2 : T2
+>     : ^^
+
+    };
+  };
+}): [T, T2, T3];
+
+const resOnion = onion({
+>resOnion : [string[], string, boolean]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>onion({  a: (arg) => [arg],  nested: {    b: (arg) => arg.join(","),    nested2: {      c: (arg) => Boolean(arg),    },  },}) : [string[], string, boolean]
+>                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>onion : <T, T2, T3>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }) => [T, T2, T3]
+>      : ^ ^^  ^^  ^^   ^^                                                                                               ^^^^^           
+>{  a: (arg) => [arg],  nested: {    b: (arg) => arg.join(","),    nested2: {      c: (arg) => Boolean(arg),    },  },} : { a: (arg: string) => string[]; nested: { b: (arg: string[]) => string; nested2: { c: (arg: string) => boolean; }; }; }
+>                                                                                                                       : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: (arg) => [arg],
+>a : (arg: string) => string[]
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg] : (arg: string) => string[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  nested: {
+>nested : { b: (arg: string[]) => string; nested2: { c: (arg: string) => boolean; }; }
+>       : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    b: (arg) => arg.join(","),    nested2: {      c: (arg) => Boolean(arg),    },  } : { b: (arg: string[]) => string; nested2: { c: (arg: string) => boolean; }; }
+>                                                                                      : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    b: (arg) => arg.join(","),
+>b : (arg: string[]) => string
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => arg.join(",") : (arg: string[]) => string
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string[]
+>    : ^^^^^^^^
+>arg.join(",") : string
+>              : ^^^^^^
+>arg.join : (separator?: string) => string
+>         : ^         ^^^      ^^^^^      
+>arg : string[]
+>    : ^^^^^^^^
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"," : ","
+>    : ^^^
+
+    nested2: {
+>nested2 : { c: (arg: string) => boolean; }
+>        : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>{      c: (arg) => Boolean(arg),    } : { c: (arg: string) => boolean; }
+>                                      : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+
+      c: (arg) => Boolean(arg),
+>c : (arg: string) => boolean
+>  : ^   ^^^^^^^^^^^^^^^^^^^^
+>(arg) => Boolean(arg) : (arg: string) => boolean
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>Boolean(arg) : boolean
+>             : ^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+    },
+  },
+});
+
+declare function onion2<T, T2, T3, T4>(arg: {
+>onion2 : <T, T2, T3, T4>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }) => [T, T2, T3, T4]
+>       : ^ ^^  ^^  ^^  ^^   ^^                                                                                                                   ^^^^^               
+>arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }
+>    : ^^^^^                   ^^^^^^^^^^                                                                              ^^^
+
+  a: (arg1: string) => T;
+>a : (arg1: string) => T
+>  : ^    ^^      ^^^^^ 
+>arg1 : string
+>     : ^^^^^^
+
+  nested: {
+>nested : { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }
+>       : ^^^^^               ^^^^^               ^^^^^^^^^^^                        ^^^
+
+    b: (arg2: T) => T2;
+>b : (arg2: T) => T2
+>  : ^    ^^ ^^^^^  
+>arg2 : T
+>     : ^
+
+    c: (arg3: T) => T3;
+>c : (arg3: T) => T3
+>  : ^    ^^ ^^^^^  
+>arg3 : T
+>     : ^
+
+    nested2: {
+>nested2 : { d: (arg4: T3) => T4; }
+>        : ^^^^^                ^^^
+
+      d: (arg4: T3) => T4;
+>d : (arg4: T3) => T4
+>  : ^    ^^  ^^^^^  
+>arg4 : T3
+>     : ^^
+
+    };
+  };
+}): [T, T2, T3, T4];
+
+const resOnion2 = onion2({
+>resOnion2 : [string[], string, number, boolean]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>onion2({  a: (arg) => [arg],  nested: {    b: (arg) => arg.join(","),    c: (arg) => Number(arg),    nested2: {      d: (arg) => Boolean(arg),    },  },}) : [string[], string, number, boolean]
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>onion2 : <T, T2, T3, T4>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }) => [T, T2, T3, T4]
+>       : ^ ^^  ^^  ^^  ^^   ^^                                                                                                                   ^^^^^               
+>{  a: (arg) => [arg],  nested: {    b: (arg) => arg.join(","),    c: (arg) => Number(arg),    nested2: {      d: (arg) => Boolean(arg),    },  },} : { a: (arg: string) => string[]; nested: { b: (arg: string[]) => string; c: (arg: string[]) => number; nested2: { d: (arg: number) => boolean; }; }; }
+>                                                                                                                                                   : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: (arg) => [arg],
+>a : (arg: string) => string[]
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg] : (arg: string) => string[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>[arg] : string[]
+>      : ^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+  nested: {
+>nested : { b: (arg: string[]) => string; c: (arg: string[]) => number; nested2: { d: (arg: number) => boolean; }; }
+>       : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    b: (arg) => arg.join(","),    c: (arg) => Number(arg),    nested2: {      d: (arg) => Boolean(arg),    },  } : { b: (arg: string[]) => string; c: (arg: string[]) => number; nested2: { d: (arg: number) => boolean; }; }
+>                                                                                                                  : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    b: (arg) => arg.join(","),
+>b : (arg: string[]) => string
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => arg.join(",") : (arg: string[]) => string
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string[]
+>    : ^^^^^^^^
+>arg.join(",") : string
+>              : ^^^^^^
+>arg.join : (separator?: string) => string
+>         : ^         ^^^      ^^^^^      
+>arg : string[]
+>    : ^^^^^^^^
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"," : ","
+>    : ^^^
+
+    c: (arg) => Number(arg),
+>c : (arg: string[]) => number
+>  : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => Number(arg) : (arg: string[]) => number
+>                     : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : string[]
+>    : ^^^^^^^^
+>Number(arg) : number
+>            : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>arg : string[]
+>    : ^^^^^^^^
+
+    nested2: {
+>nested2 : { d: (arg: number) => boolean; }
+>        : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>{      d: (arg) => Boolean(arg),    } : { d: (arg: number) => boolean; }
+>                                      : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+
+      d: (arg) => Boolean(arg),
+>d : (arg: number) => boolean
+>  : ^   ^^^^^^^^^^^^^^^^^^^^
+>(arg) => Boolean(arg) : (arg: number) => boolean
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>Boolean(arg) : boolean
+>             : ^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+
+    },
+  },
+});
+
+declare function distant<T>(args: {
+>distant : <T>(args: { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }) => T
+>        : ^ ^^    ^^                                                                                              ^^^^^ 
+>args : { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }
+>     : ^^^^^^^                                                     ^^^^^^^^^^^^                   ^^^
+
+  foo: {
+>foo : { bar: { baz: { producer: (arg: string) => T; }; }; }
+>    : ^^^^^^^                                           ^^^
+
+    bar: {
+>bar : { baz: { producer: (arg: string) => T; }; }
+>    : ^^^^^^^                                 ^^^
+
+      baz: {
+>baz : { producer: (arg: string) => T; }
+>    : ^^^^^^^^^^^^                  ^^^
+
+        producer: (arg: string) => T;
+>producer : (arg: string) => T
+>         : ^   ^^      ^^^^^ 
+>arg : string
+>    : ^^^^^^
+
+      };
+    };
+  };
+  consumer: (val: T) => unknown;
+>consumer : (val: T) => unknown
+>         : ^   ^^ ^^^^^       
+>val : T
+>    : ^
+
+}): T;
+
+const distantRes = distant({
+>distantRes : number
+>           : ^^^^^^
+>distant({  foo: {    bar: {      baz: {        producer: (arg) => 1,      },    },  },  consumer: (val) => {},}) : number
+>                                                                                                                 : ^^^^^^
+>distant : <T>(args: { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }) => T
+>        : ^ ^^    ^^                                                                                              ^^^^^ 
+>{  foo: {    bar: {      baz: {        producer: (arg) => 1,      },    },  },  consumer: (val) => {},} : { foo: { bar: { baz: { producer: (arg: string) => number; }; }; }; consumer: (val: number) => void; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+
+  foo: {
+>foo : { bar: { baz: { producer: (arg: string) => number; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    bar: {      baz: {        producer: (arg) => 1,      },    },  } : { bar: { baz: { producer: (arg: string) => number; }; }; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    bar: {
+>bar : { baz: { producer: (arg: string) => number; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      baz: {        producer: (arg) => 1,      },    } : { baz: { producer: (arg: string) => number; }; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      baz: {
+>baz : { producer: (arg: string) => number; }
+>    : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+>{        producer: (arg) => 1,      } : { producer: (arg: string) => number; }
+>                                      : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+
+        producer: (arg) => 1,
+>producer : (arg: string) => number
+>         : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => 1 : (arg: string) => number
+>           : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+      },
+    },
+  },
+  consumer: (val) => {},
+>consumer : (val: number) => void
+>         : ^   ^^^^^^^^^^^^^^^^^
+>(val) => {} : (val: number) => void
+>            : ^   ^^^^^^^^^^^^^^^^^
+>val : number
+>    : ^^^^^^
+
+});
 

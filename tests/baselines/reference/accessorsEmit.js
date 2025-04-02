@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorsEmit.ts] ////
+
 //// [accessorsEmit.ts]
 class Result { }
 

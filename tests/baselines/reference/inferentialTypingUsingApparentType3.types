@@ -1,64 +1,94 @@
-=== tests/cases/compiler/inferentialTypingUsingApparentType3.ts ===
+//// [tests/cases/compiler/inferentialTypingUsingApparentType3.ts] ////
+
+=== inferentialTypingUsingApparentType3.ts ===
 interface Field<T> {
     clean(input: T): T
 >clean : (input: T) => T
+>      : ^     ^^ ^^^^^ 
 >input : T
+>      : ^
 }
 
 class CharField implements Field<string> {
 >CharField : CharField
+>          : ^^^^^^^^^
 
     clean(input: string) {
 >clean : (input: string) => string
+>      : ^     ^^      ^^^^^^^^^^^
 >input : string
+>      : ^^^^^^
 
         return "Yup";
 >"Yup" : "Yup"
+>      : ^^^^^
     }
 }
 
 class NumberField implements Field<number> {
 >NumberField : NumberField
+>            : ^^^^^^^^^^^
 
     clean(input: number) {
 >clean : (input: number) => number
+>      : ^     ^^      ^^^^^^^^^^^
 >input : number
+>      : ^^^^^^
 
         return 123;
 >123 : 123
+>    : ^^^
     }
 }
 
 class ObjectField<A, T extends { [name: string]: Field<any> }> {
 >ObjectField : ObjectField<A, T>
+>            : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 
     constructor(public fields: T) { }
 >fields : T
+>       : ^
 }
 
 var person = new ObjectField({
 >person : ObjectField<unknown, { id: NumberField; name: CharField; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new ObjectField({    id: new NumberField(),    name: new CharField()}) : ObjectField<unknown, { id: NumberField; name: CharField; }>
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ObjectField : typeof ObjectField
+>            : ^^^^^^^^^^^^^^^^^^
 >{    id: new NumberField(),    name: new CharField()} : { id: NumberField; name: CharField; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     id: new NumberField(),
 >id : NumberField
+>   : ^^^^^^^^^^^
 >new NumberField() : NumberField
+>                  : ^^^^^^^^^^^
 >NumberField : typeof NumberField
+>            : ^^^^^^^^^^^^^^^^^^
 
     name: new CharField()
 >name : CharField
+>     : ^^^^^^^^^
 >new CharField() : CharField
+>                : ^^^^^^^^^
 >CharField : typeof CharField
+>          : ^^^^^^^^^^^^^^^^
 
 });
 
 person.fields.id;
 >person.fields.id : NumberField
+>                 : ^^^^^^^^^^^
 >person.fields : { id: NumberField; name: CharField; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >person : ObjectField<unknown, { id: NumberField; name: CharField; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fields : { id: NumberField; name: CharField; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : NumberField
+>   : ^^^^^^^^^^^
 

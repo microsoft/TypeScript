@@ -1,6 +1,9 @@
-=== tests/cases/compiler/declFileConstructors_0.ts ===
+//// [tests/cases/compiler/declFileConstructors.ts] ////
+
+=== declFileConstructors_0.ts ===
 export class SimpleConstructor {
 >SimpleConstructor : SimpleConstructor
+>                  : ^^^^^^^^^^^^^^^^^
 
     /** This comment should appear for foo*/
     constructor() {
@@ -8,47 +11,65 @@ export class SimpleConstructor {
 }
 export class ConstructorWithParameters {
 >ConstructorWithParameters : ConstructorWithParameters
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /** This is comment for function signature*/
     constructor(/** this is comment about a*/a: string,
 >a : string
+>  : ^^^^^^
 
         /** this is comment for b*/
         b: number) {
 >b : number
+>  : ^^^^^^
 
         var d = a;
 >d : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
     }
 }
 
 export class ConstructorWithRestParamters {
 >ConstructorWithRestParamters : ConstructorWithRestParamters
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(a: string, ...rests: string[]) {
 >a : string
+>  : ^^^^^^
 >rests : string[]
+>      : ^^^^^^^^
 
         return a + rests.join("");
 >a + rests.join("") : string
+>                   : ^^^^^^
 >a : string
+>  : ^^^^^^
 >rests.join("") : string
+>               : ^^^^^^
 >rests.join : (separator?: string) => string
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
+>      : ^^^^^^^^
 >join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
 >"" : ""
+>   : ^^
     }
 }
 
 export class ConstructorWithOverloads {
 >ConstructorWithOverloads : ConstructorWithOverloads
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(a: string);
 >a : string
+>  : ^^^^^^
 
     constructor(a: number);
 >a : number
+>  : ^^^^^^
 
     constructor(a: any) {
 >a : any
@@ -57,40 +78,50 @@ export class ConstructorWithOverloads {
 
 export class ConstructorWithPublicParameterProperty {
 >ConstructorWithPublicParameterProperty : ConstructorWithPublicParameterProperty
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x: string) {
 >x : string
+>  : ^^^^^^
     }
 }
 
 export class ConstructorWithPrivateParameterProperty {
 >ConstructorWithPrivateParameterProperty : ConstructorWithPrivateParameterProperty
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(private x: string) {
 >x : string
+>  : ^^^^^^
     }
 }
 
 export class ConstructorWithOptionalParameterProperty {
 >ConstructorWithOptionalParameterProperty : ConstructorWithOptionalParameterProperty
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x?: string) {
 >x : string
+>  : ^^^^^^
     }
 }
 
 export class ConstructorWithParameterInitializer {
 >ConstructorWithParameterInitializer : ConstructorWithParameterInitializer
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x = "hello") {
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
     }
 }
 
-=== tests/cases/compiler/declFileConstructors_1.ts ===
+=== declFileConstructors_1.ts ===
 class GlobalSimpleConstructor {
 >GlobalSimpleConstructor : GlobalSimpleConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
     /** This comment should appear for foo*/
     constructor() {
@@ -98,47 +129,65 @@ class GlobalSimpleConstructor {
 }
 class GlobalConstructorWithParameters {
 >GlobalConstructorWithParameters : GlobalConstructorWithParameters
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /** This is comment for function signature*/
     constructor(/** this is comment about a*/a: string,
 >a : string
+>  : ^^^^^^
 
         /** this is comment for b*/
         b: number) {
 >b : number
+>  : ^^^^^^
 
         var d = a;
 >d : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
     }
 }
 
 class GlobalConstructorWithRestParamters {
 >GlobalConstructorWithRestParamters : GlobalConstructorWithRestParamters
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(a: string, ...rests: string[]) {
 >a : string
+>  : ^^^^^^
 >rests : string[]
+>      : ^^^^^^^^
 
         return a + rests.join("");
 >a + rests.join("") : string
+>                   : ^^^^^^
 >a : string
+>  : ^^^^^^
 >rests.join("") : string
+>               : ^^^^^^
 >rests.join : (separator?: string) => string
+>           : ^         ^^^      ^^^^^      
 >rests : string[]
+>      : ^^^^^^^^
 >join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
 >"" : ""
+>   : ^^
     }
 }
 
 class GlobalConstructorWithOverloads {
 >GlobalConstructorWithOverloads : GlobalConstructorWithOverloads
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(a: string);
 >a : string
+>  : ^^^^^^
 
     constructor(a: number);
 >a : number
+>  : ^^^^^^
 
     constructor(a: any) {
 >a : any
@@ -147,33 +196,42 @@ class GlobalConstructorWithOverloads {
 
 class GlobalConstructorWithPublicParameterProperty {
 >GlobalConstructorWithPublicParameterProperty : GlobalConstructorWithPublicParameterProperty
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x: string) {
 >x : string
+>  : ^^^^^^
     }
 }
 
 class GlobalConstructorWithPrivateParameterProperty {
 >GlobalConstructorWithPrivateParameterProperty : GlobalConstructorWithPrivateParameterProperty
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(private x: string) {
 >x : string
+>  : ^^^^^^
     }
 }
 
 class GlobalConstructorWithOptionalParameterProperty {
 >GlobalConstructorWithOptionalParameterProperty : GlobalConstructorWithOptionalParameterProperty
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x?: string) {
 >x : string
+>  : ^^^^^^
     }
 }
 
 class GlobalConstructorWithParameterInitializer {
 >GlobalConstructorWithParameterInitializer : GlobalConstructorWithParameterInitializer
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x = "hello") {
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
     }
 }

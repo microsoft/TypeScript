@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeResolution.ts] ////
+
 //// [typeResolution.ts]
 export module TopLevelModule1 {
     export module SubModule1 {
@@ -262,7 +264,7 @@ define(["require", "exports"], function (require, exports) {
             }());
             NotExportedModule.ClassA = ClassA;
         })(NotExportedModule || (NotExportedModule = {}));
-    })(TopLevelModule1 = exports.TopLevelModule1 || (exports.TopLevelModule1 = {}));
+    })(TopLevelModule1 || (exports.TopLevelModule1 = TopLevelModule1 = {}));
     var TopLevelModule2;
     (function (TopLevelModule2) {
         var SubModule3;

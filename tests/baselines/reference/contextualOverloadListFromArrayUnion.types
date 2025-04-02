@@ -1,205 +1,324 @@
-=== tests/cases/compiler/one.ts ===
+//// [tests/cases/compiler/contextualOverloadListFromArrayUnion.ts] ////
+
+=== one.ts ===
 declare const y: never[] | string[];
 >y : never[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^
 
 export const yThen = y.map(item => item.length);
 >yThen : number[]
+>      : ^^^^^^^^
 >y.map(item => item.length) : number[]
+>                           : ^^^^^^^^
 >y.map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>      : ^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : never[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^
 >map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >item => item.length : (item: string) => number
+>                    : ^    ^^^^^^^^^^^^^^^^^^^
 >item : string
+>     : ^^^^^^
 >item.length : number
+>            : ^^^^^^
 >item : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
 
-=== tests/cases/compiler/two.ts ===
+=== two.ts ===
 declare const y: number[][] | string[];
 >y : string[] | number[][]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 export const yThen = y.map(item => item.length);
 >yThen : number[]
+>      : ^^^^^^^^
 >y.map(item => item.length) : number[]
+>                           : ^^^^^^^^
 >y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[])
+>      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : string[] | number[][]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >item => item.length : (item: string | number[]) => number
+>                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : string | number[]
+>     : ^^^^^^^^^^^^^^^^^
 >item.length : number
+>            : ^^^^^^
 >item : string | number[]
+>     : ^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 
-=== tests/cases/compiler/three.ts ===
+=== three.ts ===
 // #42504
 interface ResizeObserverCallback {
     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
 >entries : ResizeObserverEntry[]
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >observer : ResizeObserver
+>         : ^^^^^^^^^^^^^^
 }
 interface ResizeObserverCallback { // duplicate for effect
     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
 >entries : ResizeObserverEntry[]
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >observer : ResizeObserver
+>         : ^^^^^^^^^^^^^^
 }
 
 const resizeObserver = new ResizeObserver(([entry]) => {
 >resizeObserver : ResizeObserver
+>               : ^^^^^^^^^^^^^^
 >new ResizeObserver(([entry]) => {    entry}) : ResizeObserver
+>                                             : ^^^^^^^^^^^^^^
 >ResizeObserver : { new (callback: globalThis.ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
+>               : ^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^              ^^^
 >([entry]) => {    entry} : ([entry]: ResizeObserverEntry[]) => void
+>                         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >entry : ResizeObserverEntry
+>      : ^^^^^^^^^^^^^^^^^^^
 
     entry
 >entry : ResizeObserverEntry
+>      : ^^^^^^^^^^^^^^^^^^^
 
 });
 // comment in #35501
 interface Callback<T> {
     (error: null, result: T): unknown
 >error : null
+>      : ^^^^
 >result : T
+>       : ^
 
     (error: Error, result: null): unknown
 >error : Error
+>      : ^^^^^
 >result : null
+>       : ^^^^
 }
 
 interface Task<T> {
     (callback: Callback<T>): unknown
 >callback : Callback<T>
+>         : ^^^^^^^^^^^
 }
 
 export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
 >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
+>       : ^ ^^     ^^         ^^        ^^             ^^^^^    
 >tasks : Task<T>[]
+>      : ^^^^^^^^^
 >callback : Callback<T[]>
+>         : ^^^^^^^^^^^^^
 
     let index = 0
 >index : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     let results: T[] = []
 >results : T[]
+>        : ^^^
 >[] : never[]
+>   : ^^^^^^^
 
     function next() {
 >next : () => void
+>     : ^^^^^^^^^^
 
         let task = tasks[index]
 >task : Task<T>
+>     : ^^^^^^^
 >tasks[index] : Task<T>
+>             : ^^^^^^^
 >tasks : Task<T>[]
+>      : ^^^^^^^^^
 >index : number
+>      : ^^^^^^
 
         if (!task) {
 >!task : false
+>      : ^^^^^
 >task : Task<T>
+>     : ^^^^^^^
 
             callback(null, results)
 >callback(null, results) : unknown
+>                        : ^^^^^^^
 >callback : Callback<T[]>
+>         : ^^^^^^^^^^^^^
 >results : T[]
+>        : ^^^
 
         } else {
             task((error, result) => {
 >task((error, result) => {                if (error) {                    callback(error, null)                } else {                    // must use postfix-!, since `error` and `result` don't have a                    // causal relationship when the overloads are combined                    results.push(result!)                    next()                }            }) : unknown
+>                                                                                                                                                                                                                                                                                                                                                                                     : ^^^^^^^
 >task : Task<T>
+>     : ^^^^^^^
 >(error, result) => {                if (error) {                    callback(error, null)                } else {                    // must use postfix-!, since `error` and `result` don't have a                    // causal relationship when the overloads are combined                    results.push(result!)                    next()                }            } : (error: Error | null, result: T | null) => void
+>                                                                                                                                                                                                                                                                                                                                                                               : ^     ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 >error : Error | null
+>      : ^^^^^^^^^^^^
 >result : T | null
+>       : ^^^^^^^^
 
                 if (error) {
 >error : Error | null
+>      : ^^^^^^^^^^^^
 
                     callback(error, null)
 >callback(error, null) : unknown
+>                      : ^^^^^^^
 >callback : Callback<T[]>
+>         : ^^^^^^^^^^^^^
 >error : Error
+>      : ^^^^^
 
                 } else {
                     // must use postfix-!, since `error` and `result` don't have a
                     // causal relationship when the overloads are combined
                     results.push(result!)
 >results.push(result!) : number
+>                      : ^^^^^^
 >results.push : (...items: T[]) => number
+>             : ^^^^     ^^^^^^^^^^      
 >results : T[]
+>        : ^^^
 >push : (...items: T[]) => number
+>     : ^^^^     ^^^^^^^^^^      
 >result! : NonNullable<T>
+>        : ^^^^^^^^^^^^^^
 >result : T | null
+>       : ^^^^^^^^
 
                     next()
 >next() : void
+>       : ^^^^
 >next : () => void
+>     : ^^^^^^^^^^
                 }
             })
         }
     }
     next()
 >next() : void
+>       : ^^^^
 >next : () => void
+>     : ^^^^^^^^^^
 }
 
 series([
 >series([    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),], (error, results) => {    if (error) {        console.error(error)    } else {        console.log(results)    }}) : void
+>                                                                                                                                                                                                                                                                   : ^^^^
 >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
+>       : ^ ^^     ^^         ^^        ^^             ^^^^^    
 >[    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),] : ((cb: Callback<unknown>) => number)[]
+>                                                                                                                                          : ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     cb => setTimeout(() => cb(null, 1), 300),
 >cb => setTimeout(() => cb(null, 1), 300) : (cb: Callback<unknown>) => number
+>                                         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : Callback<unknown>
+>   : ^^^^^^^^^^^^^^^^^
 >setTimeout(() => cb(null, 1), 300) : number
->setTimeout : (handler: TimerHandler, timeout?: number | undefined, ...arguments: any[]) => number
+>                                   : ^^^^^^
+>setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>           : ^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      
 >() => cb(null, 1) : () => unknown
+>                  : ^^^^^^^^^^^^^
 >cb(null, 1) : unknown
+>            : ^^^^^^^
 >cb : Callback<unknown>
+>   : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >300 : 300
+>    : ^^^
 
     cb => setTimeout(() => cb(null, 2), 200),
 >cb => setTimeout(() => cb(null, 2), 200) : (cb: Callback<unknown>) => number
+>                                         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : Callback<unknown>
+>   : ^^^^^^^^^^^^^^^^^
 >setTimeout(() => cb(null, 2), 200) : number
->setTimeout : (handler: TimerHandler, timeout?: number | undefined, ...arguments: any[]) => number
+>                                   : ^^^^^^
+>setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>           : ^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      
 >() => cb(null, 2) : () => unknown
+>                  : ^^^^^^^^^^^^^
 >cb(null, 2) : unknown
+>            : ^^^^^^^
 >cb : Callback<unknown>
+>   : ^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >200 : 200
+>    : ^^^
 
     cb => setTimeout(() => cb(null, 3), 100),
 >cb => setTimeout(() => cb(null, 3), 100) : (cb: Callback<unknown>) => number
+>                                         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : Callback<unknown>
+>   : ^^^^^^^^^^^^^^^^^
 >setTimeout(() => cb(null, 3), 100) : number
->setTimeout : (handler: TimerHandler, timeout?: number | undefined, ...arguments: any[]) => number
+>                                   : ^^^^^^
+>setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>           : ^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      
 >() => cb(null, 3) : () => unknown
+>                  : ^^^^^^^^^^^^^
 >cb(null, 3) : unknown
+>            : ^^^^^^^
 >cb : Callback<unknown>
+>   : ^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >100 : 100
+>    : ^^^
 
 ], (error, results) => {
 >(error, results) => {    if (error) {        console.error(error)    } else {        console.log(results)    }} : (error: Error | null, results: unknown[] | null) => void
+>                                                                                                                : ^     ^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >error : Error | null
+>      : ^^^^^^^^^^^^
 >results : unknown[] | null
+>        : ^^^^^^^^^^^^^^^^
 
     if (error) {
 >error : Error | null
+>      : ^^^^^^^^^^^^
 
         console.error(error)
 >console.error(error) : void
+>                     : ^^^^
 >console.error : (...data: any[]) => void
+>              : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >error : (...data: any[]) => void
+>      : ^^^^    ^^     ^^^^^    
 >error : Error
+>      : ^^^^^
 
     } else {
         console.log(results)
 >console.log(results) : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >results : unknown[] | null
+>        : ^^^^^^^^^^^^^^^^
     }
 })
 

@@ -1,153 +1,248 @@
-=== tests/cases/compiler/assignmentCompatBug2.ts ===
+//// [tests/cases/compiler/assignmentCompatBug2.ts] ////
+
+=== assignmentCompatBug2.ts ===
 var b2: { b: number;} = { a: 0 }; // error
 >b2 : { b: number; }
+>   : ^^^^^      ^^^
 >b : number
+>  : ^^^^^^
 >{ a: 0 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 b2 = { a: 0 }; // error
 >b2 = { a: 0 } : { a: number; }
+>              : ^^^^^^^^^^^^^^
 >b2 : { b: number; }
+>   : ^^^^^      ^^^
 >{ a: 0 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 b2 = {b: 0, a: 0 };
 >b2 = {b: 0, a: 0 } : { b: number; a: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { b: number; }
+>   : ^^^^^      ^^^
 >{b: 0, a: 0 } : { b: number; a: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var b3: { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; };
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
+>   : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^^^      ^^^^^^      ^^^^^ ^^   ^^^   ^^^
 >f : (n: number) => number
+>  : ^ ^^      ^^^^^      
 >n : number
+>  : ^^^^^^
 >g : (s: string) => number
+>  : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 >m : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 >k : (a: any) => any
+>  : ^ ^^   ^^^^^   
 >a : any
+>  : ^^^
 
 b3 = {
 >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => number; g: (s: string) => number; m: number; }
+>                                                                         : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
+>   : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^^^      ^^^^^^      ^^^^^ ^^   ^^^   ^^^
 >{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => number; g: (s: string) => number; m: number; }
+>                                                                    : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f: (n) => { return 0; },
 >f : (n: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => { return 0; } : (n: number) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     g: (s) => { return 0; },
 >g : (s: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(s) => { return 0; } : (s: string) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     m: 0,
 >m : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 }; // ok
 
 b3 = {
 >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => number; g: (s: string) => number; }
+>                                                                : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
+>   : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^^^      ^^^^^^      ^^^^^ ^^   ^^^   ^^^
 >{    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => number; g: (s: string) => number; }
+>                                                           : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     f: (n) => { return 0; },
 >f : (n: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => { return 0; } : (n: number) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     g: (s) => { return 0; },
 >g : (s: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(s) => { return 0; } : (s: string) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 }; // error
 
 b3 = {
 >b3 = {    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => number; m: number; }
+>                                             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
+>   : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^^^      ^^^^^^      ^^^^^ ^^   ^^^   ^^^
 >{    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => number; m: number; }
+>                                        : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f: (n) => { return 0; },
 >f : (n: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => { return 0; } : (n: number) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     m: 0,
 >m : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 }; // error
 
 b3 = {
 >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
+>                                                                                                                : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
+>   : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^^^      ^^^^^^      ^^^^^ ^^   ^^^   ^^^
 >{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
+>                                                                                                           : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 
     f: (n) => { return 0; },
 >f : (n: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => { return 0; } : (n: number) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     g: (s) => { return 0; },
 >g : (s: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(s) => { return 0; } : (s: string) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     m: 0,
 >m : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     n: 0,
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     k: (a) =>{ return null; },
 >k : (a: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >(a) =>{ return null; } : (a: any) => any
+>                       : ^ ^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
 }; // ok
 
 b3 = {
 >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
+>                                                                                                       : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
+>   : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^^^      ^^^^^^      ^^^^^ ^^   ^^^   ^^^
 >{    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
+>                                                                                                  : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 
     f: (n) => { return 0; },
 >f : (n: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => { return 0; } : (n: number) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     g: (s) => { return 0; },
 >g : (s: string) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(s) => { return 0; } : (s: string) => number
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     n: 0,
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     k: (a) =>{ return null; },
 >k : (a: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >(a) =>{ return null; } : (a: any) => any
+>                       : ^ ^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
 }; // error

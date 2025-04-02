@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts] ////
+
+=== declFileTypeAnnotationVisibilityErrorTypeLiteral.ts ===
 module m {
 >m : Symbol(m, Decl(declFileTypeAnnotationVisibilityErrorTypeLiteral.ts, 0, 0))
 

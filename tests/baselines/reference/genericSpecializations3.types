@@ -1,79 +1,116 @@
-=== tests/cases/compiler/genericSpecializations3.ts ===
+//// [tests/cases/compiler/genericSpecializations3.ts] ////
+
+=== genericSpecializations3.ts ===
 interface IFoo<T> {
     foo(x: T): T;
 >foo : (x: T) => T
+>    : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 var iFoo: IFoo<number>;
 >iFoo : IFoo<number>
+>     : ^^^^^^^^^^^^
 
 iFoo.foo(1);
 >iFoo.foo(1) : number
+>            : ^^^^^^
 >iFoo.foo : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >iFoo : IFoo<number>
+>     : ^^^^^^^^^^^^
 >foo : (x: number) => number
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 class IntFooBad implements IFoo<number> { // error
 >IntFooBad : IntFooBad
+>          : ^^^^^^^^^
 
     foo(x: string): string { return null; }
 >foo : (x: string) => string
+>    : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 }
 
 var intFooBad: IntFooBad;
 >intFooBad : IntFooBad
+>          : ^^^^^^^^^
 
 class IntFoo implements IFoo<number> {
 >IntFoo : IntFoo
+>       : ^^^^^^
 
     foo(x: number): number { return null; }
 >foo : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 }
 
 var intFoo: IntFoo;
 >intFoo : IntFoo
+>       : ^^^^^^
 
 class StringFoo2 implements IFoo<string> {
 >StringFoo2 : StringFoo2
+>           : ^^^^^^^^^^
 
     foo(x: string): string { return null; }
 >foo : (x: string) => string
+>    : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 }
 
 var stringFoo2: StringFoo2;
 >stringFoo2 : StringFoo2
+>           : ^^^^^^^^^^
 
 stringFoo2.foo("hm");
 >stringFoo2.foo("hm") : string
+>                     : ^^^^^^
 >stringFoo2.foo : (x: string) => string
+>               : ^ ^^      ^^^^^      
 >stringFoo2 : StringFoo2
+>           : ^^^^^^^^^^
 >foo : (x: string) => string
+>    : ^ ^^      ^^^^^      
 >"hm" : "hm"
+>     : ^^^^
 
 
 intFoo = stringFoo2; // error
 >intFoo = stringFoo2 : StringFoo2
+>                    : ^^^^^^^^^^
 >intFoo : IntFoo
+>       : ^^^^^^
 >stringFoo2 : StringFoo2
+>           : ^^^^^^^^^^
 
 stringFoo2 = intFoo; // error
 >stringFoo2 = intFoo : IntFoo
+>                    : ^^^^^^
 >stringFoo2 : StringFoo2
+>           : ^^^^^^^^^^
 >intFoo : IntFoo
+>       : ^^^^^^
 
 
 class StringFoo3 implements IFoo<string> { // error
 >StringFoo3 : StringFoo3
+>           : ^^^^^^^^^^
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 var stringFoo3: StringFoo3;
 >stringFoo3 : StringFoo3
+>           : ^^^^^^^^^^
 

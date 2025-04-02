@@ -1,17 +1,27 @@
-=== tests/cases/conformance/controlFlow/definiteAssignmentAssertionsWithObjectShortHand.ts ===
+//// [tests/cases/conformance/controlFlow/definiteAssignmentAssertionsWithObjectShortHand.ts] ////
+
+=== definiteAssignmentAssertionsWithObjectShortHand.ts ===
 const a: string | undefined = 'ff';
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >'ff' : "ff"
+>     : ^^^^
 
 const foo = { a! }
 >foo : { a: string; }
+>    : ^^^^^^^^^^^^^^
 >{ a! } : { a: string; }
+>       : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 const bar = {
 >bar : { a?(): void; }
+>    : ^^^^^^^^^^^^^^^
 >{    a ? () { }} : { a?(): void; }
+>                 : ^^^^^^^^^^^^^^^
 
     a ? () { }
 >a : (() => void) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }

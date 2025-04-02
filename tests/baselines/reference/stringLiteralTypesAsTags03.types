@@ -1,26 +1,34 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags03.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags03.ts] ////
+
+=== stringLiteralTypesAsTags03.ts ===
 type Kind = "A" | "B"
->Kind : "A" | "B"
+>Kind : Kind
+>     : ^^^^
 
 interface Entity {
     kind: Kind;
 >kind : Kind
+>     : ^^^^
 }
 
 interface A extends Entity {
     kind: "A";
 >kind : "A"
+>     : ^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 interface B extends Entity {
     kind: "B";
 >kind : "B"
+>     : ^^^
 
     b: string;
 >b : string
+>  : ^^^^^^
 }
 
 // Currently (2015-12-14), we write '"A" | "A"' and '"B" | "B"' to avoid
@@ -28,70 +36,107 @@ interface B extends Entity {
 // That way, we can avoid the need to look for a compatible overload
 // signature and simply check compatibility with the implementation.
 function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
->hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+>hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >entity : Entity
+>       : ^^^^^^
 >kind : "A"
+>     : ^^^
 
 function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
+>hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >entity : Entity
+>       : ^^^^^^
 >kind : "B"
+>     : ^^^
 
 function hasKind(entity: Entity, kind: Kind): entity is Entity {
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+>hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >entity : Entity
+>       : ^^^^^^
 >kind : Kind
+>     : ^^^^
 
     return entity.kind === kind;
 >entity.kind === kind : boolean
+>                     : ^^^^^^^
 >entity.kind : Kind
+>            : ^^^^
 >entity : Entity
+>       : ^^^^^^
 >kind : Kind
+>     : ^^^^
 >kind : Kind
+>     : ^^^^
 }
 
 let x: A = {
 >x : A
+>  : ^
 >{    kind: "A",    a: 100,} : { kind: "A"; a: number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     kind: "A",
 >kind : "A"
+>     : ^^^
 >"A" : "A"
+>    : ^^^
 
     a: 100,
 >a : number
+>  : ^^^^^^
 >100 : 100
+>    : ^^^
 }
 
 if (hasKind(x, "A")) {
 >hasKind(x, "A") : boolean
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+>                : ^^^^^^^
+>hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >x : A
+>  : ^
 >"A" : "A"
+>    : ^^^
 
     let a = x;
 >a : A
+>  : ^
 >x : A
+>  : ^
 }
 else {
     let b = x;
 >b : never
+>  : ^^^^^
 >x : never
+>  : ^^^^^
 }
 
 if (!hasKind(x, "B")) {
 >!hasKind(x, "B") : boolean
+>                 : ^^^^^^^
 >hasKind(x, "B") : boolean
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+>                : ^^^^^^^
+>hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
+>        : ^^^      ^^      ^^    ^^         ^^^           ^^^      ^^      ^^    ^^         ^^^           ^^^
 >x : A
+>  : ^
 >"B" : "B"
+>    : ^^^
 
     let c = x;
 >c : A
+>  : ^
 >x : A
+>  : ^
 }
 else {
     let d = x;
 >d : never
+>  : ^^^^^
 >x : never
+>  : ^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_withAugmentation.ts] ////
+
 === /a.ts ===
 declare module "foo" {
 >"foo" : Symbol("foo", Decl(a.ts, 0, 0))

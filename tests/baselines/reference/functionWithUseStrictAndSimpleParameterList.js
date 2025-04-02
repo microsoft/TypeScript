@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList.ts] ////
+
 //// [functionWithUseStrictAndSimpleParameterList.ts]
 function a(a = 10) {
     "use strict";

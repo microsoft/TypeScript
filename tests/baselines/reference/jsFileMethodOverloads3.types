@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileMethodOverloads3.ts] ////
+
 === /a.js ===
 /**
  * @overload
@@ -15,21 +17,32 @@
  */
 function id(x) {
 >id : { (x: number): any; (x: string): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     return x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 export let a = id(123);
 >a : any
+>  : ^^^
 >id(123) : any
+>        : ^^^
 >id : { (x: number): any; (x: string): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >123 : 123
+>    : ^^^
 
 export let b = id("hello");
 >b : any
+>  : ^^^
 >id("hello") : any
+>            : ^^^
 >id : { (x: number): any; (x: string): any; }
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

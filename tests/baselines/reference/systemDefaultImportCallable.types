@@ -1,45 +1,72 @@
-=== tests/cases/compiler/core-js.d.ts ===
+//// [tests/cases/compiler/systemDefaultImportCallable.ts] ////
+
+=== core-js.d.ts ===
 declare module core {
 >core : typeof core
+>     : ^^^^^^^^^^^
 
     var String: {
 >String : { repeat(text: string, count: number): string; }
+>       : ^^^^^^^^^    ^^      ^^     ^^      ^^^      ^^^
 
         repeat(text: string, count: number): string;
 >repeat : (text: string, count: number) => string
+>       : ^    ^^      ^^     ^^      ^^^^^      
 >text : string
+>     : ^^^^^^
 >count : number
+>      : ^^^^^^
 
     };
 }
 declare module "core-js/fn/string/repeat" {
 >"core-js/fn/string/repeat" : typeof import("core-js/fn/string/repeat")
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var repeat: typeof core.String.repeat;
 >repeat : (text: string, count: number) => string
+>       : ^    ^^      ^^     ^^      ^^^^^      
 >core.String.repeat : (text: string, count: number) => string
+>                   : ^    ^^      ^^     ^^      ^^^^^      
 >core.String : { repeat(text: string, count: number): string; }
+>            : ^^^^^^^^^    ^^      ^^     ^^      ^^^      ^^^
 >core : typeof core
+>     : ^^^^^^^^^^^
 >String : { repeat(text: string, count: number): string; }
+>       : ^^^^^^^^^    ^^      ^^     ^^      ^^^      ^^^
 >repeat : (text: string, count: number) => string
+>       : ^    ^^      ^^     ^^      ^^^^^      
 
     export default repeat;
 >repeat : (text: string, count: number) => string
+>       : ^    ^^      ^^     ^^      ^^^^^      
 }
-=== tests/cases/compiler/greeter.ts ===
+=== greeter.ts ===
 import repeat from "core-js/fn/string/repeat";
 >repeat : (text: string, count: number) => string
+>       : ^    ^^      ^^     ^^      ^^^^^      
 
 const _: string = repeat(new Date().toUTCString() + " ", 2);
 >_ : string
+>  : ^^^^^^
 >repeat(new Date().toUTCString() + " ", 2) : string
+>                                          : ^^^^^^
 >repeat : (text: string, count: number) => string
+>       : ^    ^^      ^^     ^^      ^^^^^      
 >new Date().toUTCString() + " " : string
+>                               : ^^^^^^
 >new Date().toUTCString() : string
+>                         : ^^^^^^
 >new Date().toUTCString : () => string
+>                       : ^^^^^^      
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >toUTCString : () => string
+>            : ^^^^^^      
 >" " : " "
+>    : ^^^
 >2 : 2
+>  : ^
 

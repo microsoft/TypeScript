@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/json.stringify.ts] ////
+
 //// [json.stringify.ts]
 var value = null;
 JSON.stringify(value, undefined, 2);

@@ -1,24 +1,35 @@
-=== tests/cases/compiler/deeplyNestedConstraints.ts ===
+//// [tests/cases/compiler/deeplyNestedConstraints.ts] ////
+
+=== deeplyNestedConstraints.ts ===
 // Repro from #41931
 
 type Enum = Record<string, string | number>;
->Enum : { [x: string]: string | number; }
+>Enum : Enum
+>     : ^^^^
 
 type TypeMap<E extends Enum> = { [key in E[keyof E]]: number | boolean | string | number[] };
 >TypeMap : TypeMap<E>
+>        : ^^^^^^^^^^
 
 class BufferPool<E extends Enum, M extends TypeMap<E>> {
 >BufferPool : BufferPool<E, M>
+>           : ^^^^^^^^^^^^^^^^
 
     setArray2<K extends E[keyof E]>(_: K, array: Extract<M[K], ArrayLike<any>>) {
 >setArray2 : <K extends E[keyof E]>(_: K, array: Extract<M[K], ArrayLike<any>>) => void
+>          : ^ ^^^^^^^^^          ^^ ^^ ^^     ^^                             ^^^^^^^^^
 >_ : K
+>  : ^
 >array : Extract<M[K], ArrayLike<any>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         array.length; // Requires exploration of >5 levels of constraints
 >array.length : number
+>             : ^^^^^^
 >array : string | number[]
+>      : ^^^^^^^^^^^^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 

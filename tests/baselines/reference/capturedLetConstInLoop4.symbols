@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop4.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop4.ts] ////
+
+=== capturedLetConstInLoop4.ts ===
 //======let
 export function exportedFoo() {
 >exportedFoo : Symbol(exportedFoo, Decl(capturedLetConstInLoop4.ts, 0, 0))

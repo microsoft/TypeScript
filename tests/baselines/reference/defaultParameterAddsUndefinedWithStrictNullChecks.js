@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultParameterAddsUndefinedWithStrictNullChecks.ts] ////
+
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.ts]
 function f(addUndefined1 = "J", addUndefined2?: number) {
     return addUndefined1.length + (addUndefined2 || 0);

@@ -1,164 +1,251 @@
-=== tests/cases/compiler/spreadInvalidArgumentType.ts ===
+//// [tests/cases/compiler/spreadInvalidArgumentType.ts] ////
+
+=== spreadInvalidArgumentType.ts ===
 enum E { v1, v2 };
 >E : E
+>  : ^
 >v1 : E.v1
+>   : ^^^^
 >v2 : E.v2
+>   : ^^^^
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {
 >f : <T extends { b: string; }>(p1: T, p2: T[]) => void
+>  : ^ ^^^^^^^^^              ^^  ^^ ^^  ^^   ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >p1 : T
+>   : ^
 >p2 : T[]
+>   : ^^^
 
     var t: T;
 >t : T
+>  : ^
 
     var i: T["b"];
 >i : T["b"]
+>  : ^^^^^^
 
     var k: keyof T;
 >k : keyof T
+>  : ^^^^^^^
 
     var mapped_generic: {[P in keyof T]: T[P]};
 >mapped_generic : { [P in keyof T]: T[P]; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var mapped: {[P in "b"]: T[P]};
 >mapped : { b: T["b"]; }
+>       : ^^^^^^^^^^^^^^
 
     var union_generic: T | { a: number };
 >union_generic : T | { a: number; }
+>              : ^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     var union_primitive: { a: number } | number;
 >union_primitive : number | { a: number; }
+>                : ^^^^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     var intersection_generic: T & { a: number };
 >intersection_generic : T & { a: number; }
+>                     : ^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     var intersection_primitive: { a: number } | string;
 >intersection_primitive : string | { a: number; }
+>                       : ^^^^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     var num: number;
 >num : number
+>    : ^^^^^^
 
     var str: number;
 >str : number
+>    : ^^^^^^
 
     var literal_string: "string";
 >literal_string : "string"
+>               : ^^^^^^^^
 
     var literal_number: 42;
 >literal_number : 42
+>               : ^^
 
     var u: undefined;
 >u : undefined
+>  : ^^^^^^^^^
 
     var n: null;
 >n : null
+>  : ^^^^
 
     var a: any;
 >a : any
+>  : ^^^
 
 
     var e: E;
 >e : E
+>  : ^
 
     var o1 = { ...p1 };  // OK, generic type paramterre
 >o1 : T
+>   : ^
 >{ ...p1 } : T
+>          : ^
 >p1 : T
+>   : ^
 
     var o2 = { ...p2 };  // OK
->o2 : { [x: number]: T; length: number; toString(): string; toLocaleString(): string; pop(): T; push(...items: T[]): number; concat(...items: ConcatArray<T>[]): T[]; concat(...items: (T | ConcatArray<T>)[]): T[]; join(separator?: string): string; reverse(): T[]; shift(): T; slice(start?: number, end?: number): T[]; sort(compareFn?: (a: T, b: T) => number): T[]; splice(start: number, deleteCount?: number): T[]; splice(start: number, deleteCount: number, ...items: T[]): T[]; unshift(...items: T[]): number; indexOf(searchElement: T, fromIndex?: number): number; lastIndexOf(searchElement: T, fromIndex?: number): number; every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>o2 : { [n: number]: T; length: number; toString(): string; toLocaleString(): string; pop(): T; push(...items: T[]): number; concat(...items: ConcatArray<T>[]): T[]; concat(...items: (T | ConcatArray<T>)[]): T[]; join(separator?: string): string; reverse(): T[]; shift(): T; slice(start?: number, end?: number): T[]; sort(compareFn?: (a: T, b: T) => number): T[]; splice(start: number, deleteCount?: number): T[]; splice(start: number, deleteCount: number, ...items: T[]): T[]; unshift(...items: T[]): number; indexOf(searchElement: T, fromIndex?: number): number; lastIndexOf(searchElement: T, fromIndex?: number): number; every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^             ^^^^^         ^^^      ^^^      ^^^^^^^^^^^^^^             ^^^^^         ^^^      ^^^      ^^^^^^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^    ^^^^^^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^
 >{ ...p2 } : { [n: number]: T; length: number; toString(): string; toLocaleString(): string; pop(): T; push(...items: T[]): number; concat(...items: ConcatArray<T>[]): T[]; concat(...items: (T | ConcatArray<T>)[]): T[]; join(separator?: string): string; reverse(): T[]; shift(): T; slice(start?: number, end?: number): T[]; sort(compareFn?: (a: T, b: T) => number): T[]; splice(start: number, deleteCount?: number): T[]; splice(start: number, deleteCount: number, ...items: T[]): T[]; unshift(...items: T[]): number; indexOf(searchElement: T, fromIndex?: number): number; lastIndexOf(searchElement: T, fromIndex?: number): number; every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^             ^^^^^         ^^^      ^^^      ^^^^^^^^^^^^^^             ^^^^^         ^^^      ^^^      ^^^^^^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^    ^^^^^^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^
 >p2 : T[]
+>   : ^^^
 
     var o3 = { ...t };   // OK, generic type paramter
 >o3 : T
+>   : ^
 >{ ...t } : T
+>         : ^
 >t : T
+>  : ^
 
     var o4 = { ...i };   // Error, index access
 >o4 : any
+>   : ^^^
 >{ ...i } : any
+>         : ^^^
 >i : T["b"]
+>  : ^^^^^^
 
     var o5 = { ...k };   // Error, index
 >o5 : any
+>   : ^^^
 >{ ...k } : any
+>         : ^^^
 >k : keyof T
+>  : ^^^^^^^
 
     var o6 = { ...mapped_generic }; // OK, generic mapped object type
 >o6 : { [P in keyof T]: T[P]; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >{ ...mapped_generic } : { [P in keyof T]: T[P]; }
+>                      : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >mapped_generic : { [P in keyof T]: T[P]; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var o7 = { ...mapped };  // OK, non-generic mapped type
 >o7 : { b: T["b"]; }
+>   : ^^^^^^^^^^^^^^
 >{ ...mapped } : { b: T["b"]; }
+>              : ^^^^^^^^^^^^^^
 >mapped : { b: T["b"]; }
+>       : ^^^^^^^^^^^^^^
 
     var o8 = { ...union_generic };  // OK, union with generic type parameter
 >o8 : T | { a: number; }
+>   : ^^^^^^^^^      ^^^
 >{ ...union_generic } : T | { a: number; }
+>                     : ^^^^^^^^^      ^^^
 >union_generic : T | { a: number; }
+>              : ^^^^^^^^^      ^^^
 
     var o9 = { ...union_primitive };  // Error, union with generic type parameter
 >o9 : any
+>   : ^^^
 >{ ...union_primitive } : any
+>                       : ^^^
 >union_primitive : number | { a: number; }
+>                : ^^^^^^^^^^^^^^      ^^^
 
     var o10 = { ...intersection_generic };  // OK, intersection with generic type parameter
 >o10 : T & { a: number; }
+>    : ^^^^^^^^^      ^^^
 >{ ...intersection_generic } : T & { a: number; }
+>                            : ^^^^^^^^^      ^^^
 >intersection_generic : T & { a: number; }
+>                     : ^^^^^^^^^      ^^^
 
     var o11 = { ...intersection_primitive };  // Error, intersection with generic type parameter
 >o11 : any
+>    : ^^^
 >{ ...intersection_primitive } : any
+>                              : ^^^
 >intersection_primitive : string | { a: number; }
+>                       : ^^^^^^^^^^^^^^      ^^^
 
     var o12 = { ...num };  // Error
 >o12 : any
+>    : ^^^
 >{ ...num } : any
+>           : ^^^
 >num : number
+>    : ^^^^^^
 
     var o13 = { ...str };  // Error
 >o13 : any
+>    : ^^^
 >{ ...str } : any
+>           : ^^^
 >str : number
+>    : ^^^^^^
 
     var o14 = { ...u };  // error, undefined-only not allowed
 >o14 : any
+>    : ^^^
 >{ ...u } : any
+>         : ^^^
 >u : undefined
+>  : ^^^^^^^^^
 
     var o15 = { ...n };  // error, null-only not allowed
 >o15 : any
+>    : ^^^
 >{ ...n } : any
+>         : ^^^
 >n : null
+>  : ^^^^
 
     var o16 = { ...a };  // OK
 >o16 : any
+>    : ^^^
 >{ ...a } : any
+>         : ^^^
 >a : any
+>  : ^^^
 
     var o17 = { ...literal_string };  // Error
 >o17 : any
+>    : ^^^
 >{ ...literal_string } : any
+>                      : ^^^
 >literal_string : "string"
+>               : ^^^^^^^^
 
     var o18 = { ...literal_number };  // Error
 >o18 : any
+>    : ^^^
 >{ ...literal_number } : any
+>                      : ^^^
 >literal_number : 42
+>               : ^^
 
     var o19 = { ...e };  // Error, enum
 >o19 : any
+>    : ^^^
 >{ ...e } : any
+>         : ^^^
 >e : E
+>  : ^
 }
 

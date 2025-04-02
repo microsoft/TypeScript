@@ -1,7 +1,7 @@
-tests/cases/compiler/file2.js(3,36): error TS2344: Type 'T' does not satisfy the constraint 'string'.
+file2.js(3,36): error TS2344: Type 'T' does not satisfy the constraint 'string'.
 
 
-==== tests/cases/compiler/file1.js (0 errors) ====
+==== file1.js (0 errors) ====
     /**
      * @template {string} T
      * @typedef {{ foo: T }} Foo
@@ -9,12 +9,12 @@ tests/cases/compiler/file2.js(3,36): error TS2344: Type 'T' does not satisfy the
     
     export default {};
     
-==== tests/cases/compiler/file2.js (1 errors) ====
+==== file2.js (1 errors) ====
     /**
      * @template T
      * @typedef {import('./file1').Foo<T>} Bar
                                        ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'string'.
-!!! related TS2208 tests/cases/compiler/file2.js:2:14: This type parameter might need an `extends string` constraint.
+!!! related TS2208 file2.js:2:14: This type parameter might need an `extends string` constraint.
      */
     

@@ -1,51 +1,80 @@
-=== tests/cases/compiler/specializedInheritedConstructors1.ts ===
+//// [tests/cases/compiler/specializedInheritedConstructors1.ts] ////
+
+=== specializedInheritedConstructors1.ts ===
 interface ViewOptions<TModel> {
     model: TModel;
 >model : TModel
+>      : ^^^^^^
 }
 
 class View<TModel> {
 >View : View<TModel>
+>     : ^^^^^^^^^^^^
 
     constructor(options: ViewOptions<TModel>) { }
 >options : ViewOptions<TModel>
+>        : ^^^^^^^^^^^^^^^^^^^
 
     model: TModel;
 >model : TModel
+>      : ^^^^^^
 }
 
 class Model { }
 >Model : Model
+>      : ^^^^^
 
 class MyView extends View<Model> { }
 >MyView : MyView
+>       : ^^^^^^
 >View : View<Model>
+>     : ^^^^^^^^^^^
 
 var m: ViewOptions<Model> = { model: new Model() };
 >m : ViewOptions<Model>
+>  : ^^^^^^^^^^^^^^^^^^
 >{ model: new Model() } : { model: Model; }
+>                       : ^^^^^^^^^^^^^^^^^
 >model : Model
+>      : ^^^^^
 >new Model() : Model
+>            : ^^^^^
 >Model : typeof Model
+>      : ^^^^^^^^^^^^
 
 var aView = new View({ model: new Model() }); 
 >aView : View<Model>
+>      : ^^^^^^^^^^^
 >new View({ model: new Model() }) : View<Model>
+>                                 : ^^^^^^^^^^^
 >View : typeof View
+>     : ^^^^^^^^^^^
 >{ model: new Model() } : { model: Model; }
+>                       : ^^^^^^^^^^^^^^^^^
 >model : Model
+>      : ^^^^^
 >new Model() : Model
+>            : ^^^^^
 >Model : typeof Model
+>      : ^^^^^^^^^^^^
 
 var aView2 = new View(m); 
 >aView2 : View<Model>
+>       : ^^^^^^^^^^^
 >new View(m) : View<Model>
+>            : ^^^^^^^^^^^
 >View : typeof View
+>     : ^^^^^^^^^^^
 >m : ViewOptions<Model>
+>  : ^^^^^^^^^^^^^^^^^^
 
 var myView = new MyView(m); // was error
 >myView : MyView
+>       : ^^^^^^
 >new MyView(m) : MyView
+>              : ^^^^^^
 >MyView : typeof MyView
+>       : ^^^^^^^^^^^^^
 >m : ViewOptions<Model>
+>  : ^^^^^^^^^^^^^^^^^^
 

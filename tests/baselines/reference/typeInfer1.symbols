@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInfer1.ts ===
+//// [tests/cases/compiler/typeInfer1.ts] ////
+
+=== typeInfer1.ts ===
 interface ITextWriter2 {
 >ITextWriter2 : Symbol(ITextWriter2, Decl(typeInfer1.ts, 0, 0))
 

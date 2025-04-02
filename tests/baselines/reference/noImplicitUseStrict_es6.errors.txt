@@ -1,6 +1,6 @@
-error TS5101: Option 'noImplicitUseStrict' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
 
 
-!!! error TS5101: Option 'noImplicitUseStrict' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/compiler/noImplicitUseStrict_es6.ts (0 errors) ====
+!!! error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+==== noImplicitUseStrict_es6.ts (0 errors) ====
     export var x = 0;

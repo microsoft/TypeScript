@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceNameAsIdentifier.ts ===
+//// [tests/cases/compiler/interfaceNameAsIdentifier.ts] ////
+
+=== interfaceNameAsIdentifier.ts ===
 interface C {
 >C : Symbol(C, Decl(interfaceNameAsIdentifier.ts, 0, 0))
 

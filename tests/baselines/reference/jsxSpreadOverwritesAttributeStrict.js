@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxSpreadOverwritesAttributeStrict.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

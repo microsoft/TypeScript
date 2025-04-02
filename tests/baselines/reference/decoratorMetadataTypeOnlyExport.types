@@ -1,26 +1,37 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/decoratorMetadataTypeOnlyExport.ts] ////
+
+=== ./a.ts ===
 class Foo {}
 >Foo : Foo
+>    : ^^^
 
 export type { Foo };
 >Foo : Foo
+>    : ^^^
 
-=== tests/cases/compiler/b.ts ===
+=== ./b.ts ===
 import { Foo } from "./a";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 const Decorator: ClassDecorator = () => undefined;
 >Decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 >() => undefined : () => any
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 @Decorator
 >Decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
     constructor(par: Foo) {}
 >par : Foo
+>    : ^^^
 }
 

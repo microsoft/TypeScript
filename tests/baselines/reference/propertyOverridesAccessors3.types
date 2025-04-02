@@ -1,73 +1,115 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors3.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors3.ts] ////
+
+=== propertyOverridesAccessors3.ts ===
 class Animal {
 >Animal : Animal
+>       : ^^^^^^
 
     _sound = 'rustling noise in the bushes'
 >_sound : string
+>       : ^^^^^^
 >'rustling noise in the bushes' : "rustling noise in the bushes"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get sound() { return this._sound }
 >sound : string
+>      : ^^^^^^
 >this._sound : string
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >_sound : string
+>       : ^^^^^^
 
     set sound(val) {
 >sound : string
+>      : ^^^^^^
 >val : string
+>    : ^^^^^^
 
       this._sound = val;
 >this._sound = val : string
+>                  : ^^^^^^
 >this._sound : string
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >_sound : string
+>       : ^^^^^^
 >val : string
+>    : ^^^^^^
 
       /* some important code here, perhaps tracking known sounds, etc */
     }
 
     makeSound() {
 >makeSound : () => void
+>          : ^^^^^^^^^^
 
         console.log(this._sound)
 >console.log(this._sound) : void
+>                         : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this._sound : string
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >_sound : string
+>       : ^^^^^^
     }
 }
 
 const a = new Animal
 >a : Animal
+>  : ^^^^^^
 >new Animal : Animal
+>           : ^^^^^^
 >Animal : typeof Animal
+>       : ^^^^^^^^^^^^^
 
 a.makeSound() // 'rustling noise in the bushes'
 >a.makeSound() : void
+>              : ^^^^
 >a.makeSound : () => void
+>            : ^^^^^^^^^^
 >a : Animal
+>  : ^^^^^^
 >makeSound : () => void
+>          : ^^^^^^^^^^
 
 class Lion extends Animal {
 >Lion : Lion
+>     : ^^^^
 >Animal : Animal
+>       : ^^^^^^
 
     sound = 'RAWR!' // error here
 >sound : string
+>      : ^^^^^^
 >'RAWR!' : "RAWR!"
+>        : ^^^^^^^
 }
 
 const lion = new Lion
 >lion : Lion
+>     : ^^^^
 >new Lion : Lion
+>         : ^^^^
 >Lion : typeof Lion
+>     : ^^^^^^^^^^^
 
 lion.makeSound() // with [[Define]]: Expected "RAWR!" but got "rustling noise in the bushes"
 >lion.makeSound() : void
+>                 : ^^^^
 >lion.makeSound : () => void
+>               : ^^^^^^^^^^
 >lion : Lion
+>     : ^^^^
 >makeSound : () => void
+>          : ^^^^^^^^^^
 

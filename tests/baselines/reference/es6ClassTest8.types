@@ -1,17 +1,23 @@
-=== tests/cases/compiler/es6ClassTest8.ts ===
+//// [tests/cases/compiler/es6ClassTest8.ts] ////
+
+=== es6ClassTest8.ts ===
 function f1(x:any) {return x;}
 >f1 : (x: any) => any
+>   : ^ ^^   ^^^^^^^^
 >x : any
 >x : any
 
 class C {
 >C : C
+>  : ^
 
     constructor() {
         var bar:any = (function() {
 >bar : any
 >(function() {            return bar; // 'bar' should be resolvable        }) : () => any
+>                                                                             : ^^^^^^^^^
 >function() {            return bar; // 'bar' should be resolvable        } : () => any
+>                                                                           : ^^^^^^^^^
 
             return bar; // 'bar' should be resolvable
 >bar : any
@@ -21,8 +27,10 @@ class C {
 >b : any
 >f1(f1(bar)) : any
 >f1 : (x: any) => any
+>   : ^ ^^   ^^^^^^^^
 >f1(bar) : any
 >f1 : (x: any) => any
+>   : ^ ^^   ^^^^^^^^
 >bar : any
     }
   
@@ -30,133 +38,224 @@ class C {
 
 class Vector {
 >Vector : Vector
+>       : ^^^^^^
 
     static norm(v:Vector):Vector {return null;}
 >norm : (v: Vector) => Vector
+>     : ^ ^^      ^^^^^      
 >v : Vector
+>  : ^^^^^^
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
 >minus : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >v1 : Vector
+>   : ^^^^^^
 >v2 : Vector
+>   : ^^^^^^
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
 >times : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >v1 : Vector
+>   : ^^^^^^
 >v2 : Vector
+>   : ^^^^^^
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
 >cross : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >v1 : Vector
+>   : ^^^^^^
 >v2 : Vector
+>   : ^^^^^^
 
     constructor(public x: number,
 >x : number
+>  : ^^^^^^
 
                 public y: number,
 >y : number
+>  : ^^^^^^
 
                 public z: number) { 
 >z : number
+>  : ^^^^^^
     }
 
     static dot(v1:Vector, v2:Vector):Vector {return null;}    
 >dot : (v1: Vector, v2: Vector) => Vector
+>    : ^  ^^      ^^  ^^      ^^^^^      
 >v1 : Vector
+>   : ^^^^^^
 >v2 : Vector
+>   : ^^^^^^
 
 }              
 
 class Camera {
 >Camera : Camera
+>       : ^^^^^^
 
     public forward: Vector;
 >forward : Vector
+>        : ^^^^^^
 
     public right: Vector;
 >right : Vector
+>      : ^^^^^^
 
     public up: Vector;
 >up : Vector
+>   : ^^^^^^
 
     constructor(public pos: Vector, lookAt: Vector) { 
 >pos : Vector
+>    : ^^^^^^
 >lookAt : Vector
+>       : ^^^^^^
 
         var down = new Vector(0.0, -1.0, 0.0);
 >down : Vector
+>     : ^^^^^^
 >new Vector(0.0, -1.0, 0.0) : Vector
+>                           : ^^^^^^
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >0.0 : 0
+>    : ^
 >-1.0 : -1
+>     : ^^
 >1.0 : 1
+>    : ^
 >0.0 : 0
+>    : ^
 
         this.forward = Vector.norm(Vector.minus(lookAt,this.pos));
 >this.forward = Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
+>                                                          : ^^^^^^
 >this.forward : Vector
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >forward : Vector
+>        : ^^^^^^
 >Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
+>                                           : ^^^^^^
 >Vector.norm : (v: Vector) => Vector
+>            : ^ ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >norm : (v: Vector) => Vector
+>     : ^ ^^      ^^^^^      
 >Vector.minus(lookAt,this.pos) : Vector
+>                              : ^^^^^^
 >Vector.minus : (v1: Vector, v2: Vector) => Vector
+>             : ^  ^^      ^^  ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >minus : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >lookAt : Vector
+>       : ^^^^^^
 >this.pos : Vector
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >pos : Vector
+>    : ^^^^^^
 
         this.right = Vector.times(down, Vector.norm(Vector.cross(this.forward, down)));
 >this.right = Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
+>                                                                               : ^^^^^^
 >this.right : Vector
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >right : Vector
+>      : ^^^^^^
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
+>                                                                  : ^^^^^^
 >Vector.times : (v1: Vector, v2: Vector) => Vector
+>             : ^  ^^      ^^  ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >times : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >down : Vector
+>     : ^^^^^^
 >Vector.norm(Vector.cross(this.forward, down)) : Vector
+>                                              : ^^^^^^
 >Vector.norm : (v: Vector) => Vector
+>            : ^ ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >norm : (v: Vector) => Vector
+>     : ^ ^^      ^^^^^      
 >Vector.cross(this.forward, down) : Vector
+>                                 : ^^^^^^
 >Vector.cross : (v1: Vector, v2: Vector) => Vector
+>             : ^  ^^      ^^  ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >cross : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >this.forward : Vector
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >forward : Vector
+>        : ^^^^^^
 >down : Vector
+>     : ^^^^^^
 
         this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right)));    
 >this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
+>                                                                                  : ^^^^^^
 >this.up : Vector
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >up : Vector
+>   : ^^^^^^
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
+>                                                                        : ^^^^^^
 >Vector.times : (v1: Vector, v2: Vector) => Vector
+>             : ^  ^^      ^^  ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >times : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >down : Vector
+>     : ^^^^^^
 >Vector.norm(Vector.cross(this.forward, this.right)) : Vector
+>                                                    : ^^^^^^
 >Vector.norm : (v: Vector) => Vector
+>            : ^ ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >norm : (v: Vector) => Vector
+>     : ^ ^^      ^^^^^      
 >Vector.cross(this.forward, this.right) : Vector
+>                                       : ^^^^^^
 >Vector.cross : (v1: Vector, v2: Vector) => Vector
+>             : ^  ^^      ^^  ^^      ^^^^^      
 >Vector : typeof Vector
+>       : ^^^^^^^^^^^^^
 >cross : (v1: Vector, v2: Vector) => Vector
+>      : ^  ^^      ^^  ^^      ^^^^^      
 >this.forward : Vector
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >forward : Vector
+>        : ^^^^^^
 >this.right : Vector
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >right : Vector
+>      : ^^^^^^
     }
 }
 

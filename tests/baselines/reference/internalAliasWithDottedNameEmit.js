@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasWithDottedNameEmit.ts] ////
+
 //// [internalAliasWithDottedNameEmit.ts]
 module a.b.c {
       export var d;
@@ -20,8 +22,8 @@ var a;
 
 
 //// [internalAliasWithDottedNameEmit.d.ts]
-declare module a.b.c {
+declare namespace a.b.c {
     var d: any;
 }
-declare module a.e.f {
+declare namespace a.e.f {
 }

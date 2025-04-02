@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendsInterfaceInModule.ts] ////
+
 //// [classExtendsInterfaceInModule.ts]
 module M {
   export interface I1 {}

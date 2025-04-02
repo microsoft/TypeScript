@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts] ////
+
 //// [varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts]
 type Either<L, A> = Left<L, A> | Right<L, A>;
 

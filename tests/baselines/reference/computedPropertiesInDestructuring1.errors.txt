@@ -1,28 +1,28 @@
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(3,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(8,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(10,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(11,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(14,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(15,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(16,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(17,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(20,8): error TS2349: This expression is not callable.
+computedPropertiesInDestructuring1.ts(3,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(8,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(10,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(11,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(14,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(15,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(16,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(17,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(20,8): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(20,8): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(21,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(24,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(28,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(30,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(31,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(33,4): error TS2349: This expression is not callable.
+computedPropertiesInDestructuring1.ts(20,8): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1.ts(21,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
+computedPropertiesInDestructuring1.ts(24,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(28,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(30,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(31,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1.ts(33,4): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(33,4): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+computedPropertiesInDestructuring1.ts(33,4): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1.ts(34,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
 
 
-==== tests/cases/compiler/computedPropertiesInDestructuring1.ts (20 errors) ====
+==== computedPropertiesInDestructuring1.ts (20 errors) ====
     // destructuring in variable declarations
     let foo = "bar";
     let {[foo]: bar} = {bar: "bar"};

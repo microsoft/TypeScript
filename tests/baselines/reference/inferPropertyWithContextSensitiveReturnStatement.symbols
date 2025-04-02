@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferPropertyWithContextSensitiveReturnStatement.ts ===
+//// [tests/cases/compiler/inferPropertyWithContextSensitiveReturnStatement.ts] ////
+
+=== inferPropertyWithContextSensitiveReturnStatement.ts ===
 // repro #50687
 
 declare function repro<T>(config: {

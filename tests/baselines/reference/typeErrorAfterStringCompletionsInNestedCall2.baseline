@@ -1,0 +1,122 @@
+// === Syntax and Semantic Diagnostics ===
+Syntactic Diagnostics for file '/tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts':
+
+
+==== /tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts (0 errors) ====
+    
+    type ActionFunction<
+      TExpressionEvent extends { type: string },
+      out TEvent extends { type: string }
+    > = {
+      ({ event }: { event: TExpressionEvent }): void;
+      _out_TEvent?: TEvent;
+    };
+    
+    interface MachineConfig<TEvent extends { type: string }> {
+      types: {
+        events: TEvent;
+      };
+      on: {
+        [K in TEvent["type"]]?: ActionFunction<
+          Extract<TEvent, { type: K }>,
+          TEvent
+        >;
+      };
+    }
+    
+    declare function raise<
+      TExpressionEvent extends { type: string },
+      TEvent extends { type: string }
+    >(
+      resolve: ({ event }: { event: TExpressionEvent }) => TEvent
+    ): {
+      ({ event }: { event: TExpressionEvent }): void;
+      _out_TEvent?: TEvent;
+    };
+    
+    declare function createMachine<TEvent extends { type: string }>(
+      config: MachineConfig<TEvent>
+    ): void;
+    
+    createMachine({
+      types: {
+        events: {} as { type: "FOO" } | { type: "BAR" },
+      },
+      on: {
+        FOO: raise(({ event }) => {
+          return {
+            type: "BAR" as const,
+          };
+        }),
+      },
+    });
+
+Semantic Diagnostics for file '/tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts':
+/tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts(41,5): error TS2322: Type '{ ({ event }: { event: { type: "FOO"; }; }): void; _out_TEvent?: { type: "BARx"; } | undefined; }' is not assignable to type 'ActionFunction<{ type: "FOO"; }, { type: "FOO"; } | { type: "BAR"; }>'.
+  Types of property '_out_TEvent' are incompatible.
+    Type '{ type: "BARx"; } | undefined' is not assignable to type '{ type: "FOO"; } | { type: "BAR"; } | undefined'.
+      Type '{ type: "BARx"; }' is not assignable to type '{ type: "FOO"; } | { type: "BAR"; } | undefined'.
+        Type '{ type: "BARx"; }' is not assignable to type '{ type: "FOO"; } | { type: "BAR"; }'.
+          Type '{ type: "BARx"; }' is not assignable to type '{ type: "BAR"; }'.
+            Types of property 'type' are incompatible.
+              Type '"BARx"' is not assignable to type '"BAR"'.
+
+
+==== /tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts (1 errors) ====
+    
+    type ActionFunction<
+      TExpressionEvent extends { type: string },
+      out TEvent extends { type: string }
+    > = {
+      ({ event }: { event: TExpressionEvent }): void;
+      _out_TEvent?: TEvent;
+    };
+    
+    interface MachineConfig<TEvent extends { type: string }> {
+      types: {
+        events: TEvent;
+      };
+      on: {
+        [K in TEvent["type"]]?: ActionFunction<
+          Extract<TEvent, { type: K }>,
+          TEvent
+        >;
+      };
+    }
+    
+    declare function raise<
+      TExpressionEvent extends { type: string },
+      TEvent extends { type: string }
+    >(
+      resolve: ({ event }: { event: TExpressionEvent }) => TEvent
+    ): {
+      ({ event }: { event: TExpressionEvent }): void;
+      _out_TEvent?: TEvent;
+    };
+    
+    declare function createMachine<TEvent extends { type: string }>(
+      config: MachineConfig<TEvent>
+    ): void;
+    
+    createMachine({
+      types: {
+        events: {} as { type: "FOO" } | { type: "BAR" },
+      },
+      on: {
+        FOO: raise(({ event }) => {
+        ~~~
+!!! error TS2322: Type '{ ({ event }: { event: { type: "FOO"; }; }): void; _out_TEvent?: { type: "BARx"; } | undefined; }' is not assignable to type 'ActionFunction<{ type: "FOO"; }, { type: "FOO"; } | { type: "BAR"; }>'.
+!!! error TS2322:   Types of property '_out_TEvent' are incompatible.
+!!! error TS2322:     Type '{ type: "BARx"; } | undefined' is not assignable to type '{ type: "FOO"; } | { type: "BAR"; } | undefined'.
+!!! error TS2322:       Type '{ type: "BARx"; }' is not assignable to type '{ type: "FOO"; } | { type: "BAR"; } | undefined'.
+!!! error TS2322:         Type '{ type: "BARx"; }' is not assignable to type '{ type: "FOO"; } | { type: "BAR"; }'.
+!!! error TS2322:           Type '{ type: "BARx"; }' is not assignable to type '{ type: "BAR"; }'.
+!!! error TS2322:             Types of property 'type' are incompatible.
+!!! error TS2322:               Type '"BARx"' is not assignable to type '"BAR"'.
+!!! related TS6500 /tests/cases/fourslash/typeErrorAfterStringCompletionsInNestedCall2.ts:14:7: The expected type comes from property 'FOO' which is declared here on type '{ FOO?: ActionFunction<{ type: "FOO"; }, { type: "FOO"; } | { type: "BAR"; }> | undefined; BAR?: ActionFunction<{ type: "BAR"; }, { type: "FOO"; } | { type: "BAR"; }> | undefined; }'
+          return {
+            type: "BAR" as const,
+          };
+        }),
+      },
+    });

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts ===
+//// [tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts] ////
+
+=== internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts ===
 export module a {
 >a : Symbol(a, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts, 0, 0))
 

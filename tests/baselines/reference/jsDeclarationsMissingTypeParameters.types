@@ -1,23 +1,30 @@
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsMissingTypeParameters.ts] ////
+
+=== file.js ===
 /**
   * @param {Array=} y desc
   */
 function x(y) { }
 >x : (y?: any[] | undefined) => void
+>  : ^ ^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >y : any[]
+>  : ^^^^^
 
 // @ts-ignore
 /** @param {function (Array)} func Invoked
  */
 function y(func) { return; }
 >y : (func: (arg0: any[]) => any) => void
+>  : ^    ^^     ^^^^^^^     ^^^^^^^^^^^^
 >func : (arg0: any[]) => any
+>     : ^^^^^^^^^^^^^^^^^^^^
 
 /**
  * @return {(Array.<> | null)} list of devices
  */
 function z() { return null ;}
 >z : () => (any[] | null)
+>  : ^^^^^^ ^^^^^        
 
 /**
  * 
@@ -25,4 +32,5 @@ function z() { return null ;}
  */
 function w() { return null; }
 >w : () => Promise<any> | null
+>  : ^^^^^^^^^^^^^^^^^^   ^^^^
 

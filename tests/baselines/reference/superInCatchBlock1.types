@@ -1,16 +1,23 @@
-=== tests/cases/compiler/superInCatchBlock1.ts ===
+//// [tests/cases/compiler/superInCatchBlock1.ts] ////
+
+=== superInCatchBlock1.ts ===
 class A {
 >A : A
+>  : ^
 
  m(): void { }
 >m : () => void
+>  : ^^^^^^    
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
  m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
   try {
   }
@@ -19,9 +26,13 @@ class B extends A {
 
    super.m();
 >super.m() : void
+>          : ^^^^
 >super.m : () => void
+>        : ^^^^^^    
 >super : A
+>      : ^
 >m : () => void
+>  : ^^^^^^    
   }
  }
 }

@@ -1,30 +1,54 @@
-=== tests/cases/compiler/reactHOCSpreadprops.tsx ===
+//// [tests/cases/compiler/reactHOCSpreadprops.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== reactHOCSpreadprops.tsx ===
 /// <reference path="react16.d.ts" />
 import React = require("react");
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
 >f : <P>(App: React.ComponentClass<P> | React.StatelessComponent<P>) => void
+>  : ^ ^^   ^^                                                     ^^^^^    
 >App : React.ComponentClass<P, any> | React.StatelessComponent<P>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 >React : any
+>      : ^^^
 
     class C extends React.Component<P & { x: number }> {
 >C : C
+>  : ^
 >React.Component : React.Component<P & { x: number; }, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
             return <App {...this.props} />;
 ><App {...this.props} /> : JSX.Element
+>                        : ^^^^^^^^^^^
 >App : React.ComponentClass<P, any> | React.StatelessComponent<P>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >this : this
+>     : ^^^^
 >props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
         }
     }
 }

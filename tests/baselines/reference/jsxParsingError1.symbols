@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/jsxParsingError1.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
@@ -22,7 +24,7 @@ const class2 = "bar";
 
 const elem = <div className={class1, class2}/>;
 >elem : Symbol(elem, Decl(file.tsx, 10, 5))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >className : Symbol(className, Decl(file.tsx, 10, 17))
 >class1 : Symbol(class1, Decl(file.tsx, 8, 5))
 >class2 : Symbol(class2, Decl(file.tsx, 9, 5))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration3.ts ===
+//// [tests/cases/compiler/exportSpecifierReferencingOuterDeclaration3.ts] ////
+
+=== exportSpecifierReferencingOuterDeclaration3.ts ===
 declare module X { export interface bar { } }
 >X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 0, 0))
 >bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 0, 18))

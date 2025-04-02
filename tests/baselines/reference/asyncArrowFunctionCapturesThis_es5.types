@@ -1,15 +1,23 @@
-=== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunctionCapturesThis_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunctionCapturesThis_es5.ts] ////
+
+=== asyncArrowFunctionCapturesThis_es5.ts ===
 class C {
 >C : C
+>  : ^
 
    method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
       var fn = async () => await this;
 >fn : () => Promise<this>
+>   : ^^^^^^^^^^^^^^^^^^^
 >async () => await this : () => Promise<this>
+>                       : ^^^^^^^^^^^^^^^^^^^
 >await this : this
+>           : ^^^^
 >this : this
+>     : ^^^^
    }
 }
 

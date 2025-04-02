@@ -1,26 +1,37 @@
-=== tests/cases/compiler/exportSpecifierAndLocalMemberDeclaration.ts ===
+//// [tests/cases/compiler/exportSpecifierAndLocalMemberDeclaration.ts] ////
+
+=== exportSpecifierAndLocalMemberDeclaration.ts ===
 declare module "m2" {
 >"m2" : typeof import("m2")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     module X {
         interface I { }
     }
     function Y();
 >Y : () => any
+>  : ^^^^^^^^^
 
     export { Y as X };
 >Y : () => any
+>  : ^^^^^^^^^
 >X : () => any
+>  : ^^^^^^^^^
 
     function Z(): X.I;
 >Z : () => X.I
+>  : ^^^^^^   
 >X : any
+>  : ^^^
 }
 
 declare module "m2" {
 >"m2" : typeof import("m2")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     function Z2(): X.I;
 >Z2 : () => X.I
+>   : ^^^^^^   
 >X : any
+>  : ^^^
 }

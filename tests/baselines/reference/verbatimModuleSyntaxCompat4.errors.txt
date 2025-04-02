@@ -1,38 +1,29 @@
-/tsconfig.json(5,9): error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
-/tsconfig.json(5,9): error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/tsconfig.json(5,9): error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
-/tsconfig.json(5,9): error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-/tsconfig.json(6,9): error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/tsconfig.json(6,9): error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
-/tsconfig.json(6,9): error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 
 
-==== /tsconfig.json (5 errors) ====
+==== /tsconfig.json (2 errors) ====
     {
         "extends": "./tsconfig.base.json",
         "compilerOptions": {
             "isolatedModules": true,
             "preserveValueImports": true,
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
-            ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'verbatimModuleSyntax' instead.
-            ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
             "importsNotUsedAsValues": "error",
             ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'verbatimModuleSyntax' instead.
-            ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
         }
     }
+==== /index.ts (0 errors) ====
+    
 ==== /tsconfig.base.json (0 errors) ====
     {
         "compilerOptions": {
             "verbatimModuleSyntax": true
         }
     }
-==== /index.ts (0 errors) ====
-    

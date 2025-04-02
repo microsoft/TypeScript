@@ -1,20 +1,17 @@
-tests/cases/conformance/classes/members/privateNames/privateNameBadSuper.ts(4,3): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/members/privateNames/privateNameBadSuper.ts(5,5): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+privateNameBadSuper.ts(4,3): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+privateNameBadSuper.ts(5,5): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameBadSuper.ts (2 errors) ====
+==== privateNameBadSuper.ts (2 errors) ====
     class B {};
     class A extends B {
       #x;
       constructor() {
-      ~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
+!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
         this;
-    ~~~~~~~~~
         ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         super();
-    ~~~~~~~~~~~~
       }
-    ~~~
-!!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
     }

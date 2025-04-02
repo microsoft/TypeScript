@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfFunction.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfFunction.ts] ////
+
+=== typeGuardOfFormTypeOfFunction.ts ===
 function f1(x: any) {
 >f1 : Symbol(f1, Decl(typeGuardOfFormTypeOfFunction.ts, 0, 0))
 >x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 0, 12))

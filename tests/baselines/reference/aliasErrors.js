@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasErrors.ts] ////
+
 //// [aliasErrors.ts]
 module foo {    
     export class Provide {

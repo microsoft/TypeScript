@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyInterface.ts] ////
+
 //// [privacyInterface.ts]
 export module m1 {
     export class C1_public {
@@ -283,7 +285,7 @@ var m1;
         }
         return C2_private;
     }());
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
     var C1_public = /** @class */ (function () {

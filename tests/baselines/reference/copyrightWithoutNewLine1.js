@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/copyrightWithoutNewLine1.ts] ////
+
 //// [copyrightWithoutNewLine1.ts]
 /*****************************
 * (c) Copyright - Important

@@ -1,77 +1,122 @@
-=== tests/cases/compiler/thisBinding2.ts ===
+//// [tests/cases/compiler/thisBinding2.ts] ////
+
+=== thisBinding2.ts ===
 class C {
 >C : C
+>  : ^
 
  x: number;
 >x : number
+>  : ^^^^^^
 
     constructor() {
         this.x = (() => {
 >this.x = (() => {   var x = 1;   return this.x;  })() : number
+>                                                      : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >(() => {   var x = 1;   return this.x;  })() : number
+>                                             : ^^^^^^
 >(() => {   var x = 1;   return this.x;  }) : () => number
+>                                           : ^^^^^^^^^^^^
 >() => {   var x = 1;   return this.x;  } : () => number
+>                                         : ^^^^^^^^^^^^
 
    var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
    return this.x;
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 
   })();
   this.x = function() {
 >this.x = function() {   var x = 1;   return this.x;  }() : any
+>                                                         : ^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >function() {   var x = 1;   return this.x;  }() : any
+>                                                : ^^^
 >function() {   var x = 1;   return this.x;  } : () => any
+>                                              : ^^^^^^^^^
 
    var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
    return this.x;
 >this.x : any
+>       : ^^^
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 
   }();
     }  
 }
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^      ^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >expression : any
+>           : ^^^
 >msec : number
+>     : ^^^^^^
 >language : any
+>         : ^^^
 
 var messenger = {
 >messenger : { message: string; start: () => number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    message: "Hello World",    start: function () {        return setTimeout(() => { var x = this.message; }, 3000);    }} : { message: string; start: () => number; }
+>                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     message: "Hello World",
 >message : string
+>        : ^^^^^^
 >"Hello World" : "Hello World"
+>              : ^^^^^^^^^^^^^
 
     start: function () {
 >start : () => number
+>      : ^^^^^^^^^^^^
 >function () {        return setTimeout(() => { var x = this.message; }, 3000);    } : () => number
+>                                                                                    : ^^^^^^^^^^^^
 
         return setTimeout(() => { var x = this.message; }, 3000);
 >setTimeout(() => { var x = this.message; }, 3000) : number
+>                                                  : ^^^^^^
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^      ^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >() => { var x = this.message; } : () => void
+>                                : ^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >this.message : string
+>             : ^^^^^^
 >this : { message: string; start: () => number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >message : string
+>        : ^^^^^^
 >3000 : 3000
+>     : ^^^^
     }
 };
 

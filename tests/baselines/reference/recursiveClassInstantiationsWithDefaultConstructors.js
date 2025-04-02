@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts] ////
+
 //// [recursiveClassInstantiationsWithDefaultConstructors.ts]
 module TypeScript2 {
     export class MemberName {

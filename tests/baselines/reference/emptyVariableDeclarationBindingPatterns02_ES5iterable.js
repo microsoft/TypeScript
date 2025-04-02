@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5iterable.ts] ////
+
 //// [emptyVariableDeclarationBindingPatterns02_ES5iterable.ts]
 (function () {
     var {};

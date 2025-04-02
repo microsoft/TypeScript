@@ -1,7 +1,7 @@
-tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): error TS2304: Cannot find name 'React'.
+quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
-==== tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx (1 errors) ====
+==== quickIntersectionCheckCorrectlyCachesErrors.tsx (1 errors) ====
     interface F<P> {
         (props: P & { children?: boolean }): void;
         propTypes: { [K in keyof P]: null extends P ? K : K };
@@ -13,7 +13,7 @@ tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): err
                 g(CC)
                 return <CC {...(null as unknown as CP)} />;
                         ~~
-!!! error TS2304: Cannot find name 'React'.
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
             }
         }
     }

@@ -1,35 +1,49 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeOverloading.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeOverloading.ts] ////
+
+=== intersectionTypeOverloading.ts ===
 // Check that order is preserved in intersection types for purposes of
 // overload resolution
 
 type F = (s: string) => string;
->F : (s: string) => string
+>F : F
+>  : ^
 >s : string
+>  : ^^^^^^
 
 type G = (x: any) => any;
->G : (x: any) => any
+>G : G
+>  : ^
 >x : any
 
 var fg: F & G;
 >fg : F & G
+>   : ^^^^^
 
 var gf: G & F;
 >gf : G & F
+>   : ^^^^^
 
 var x = fg("abc");
 >x : string
+>  : ^^^^^^
 >fg("abc") : string
+>          : ^^^^^^
 >fg : F & G
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 var x: string;
 >x : string
+>  : ^^^^^^
 
 var y = gf("abc");
 >y : any
 >gf("abc") : any
 >gf : G & F
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 var y: any;
 >y : any

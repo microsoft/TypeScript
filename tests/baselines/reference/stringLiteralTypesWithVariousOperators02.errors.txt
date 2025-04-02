@@ -1,17 +1,17 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(6,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(7,9): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'string | number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(9,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'boolean'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(10,9): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'string | number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(12,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.
+stringLiteralTypesWithVariousOperators02.ts(6,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'number'.
+stringLiteralTypesWithVariousOperators02.ts(7,9): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
+stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'string | number'.
+stringLiteralTypesWithVariousOperators02.ts(9,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'boolean'.
+stringLiteralTypesWithVariousOperators02.ts(10,9): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'string | number'.
+stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+stringLiteralTypesWithVariousOperators02.ts(12,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+stringLiteralTypesWithVariousOperators02.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.
+stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2367: This comparison appears to be unintentional because the types '"ABC"' and '"XYZ"' have no overlap.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts (11 errors) ====
+==== stringLiteralTypesWithVariousOperators02.ts (11 errors) ====
     let abc: "ABC" = "ABC";
     let xyz: "XYZ" = "XYZ";
     let abcOrXyz: "ABC" | "XYZ" = abc || xyz;

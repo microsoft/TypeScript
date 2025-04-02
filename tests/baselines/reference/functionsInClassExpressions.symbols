@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionsInClassExpressions.ts ===
+//// [tests/cases/compiler/functionsInClassExpressions.ts] ////
+
+=== functionsInClassExpressions.ts ===
 let Foo = class {
 >Foo : Symbol(Foo, Decl(functionsInClassExpressions.ts, 0, 3))
 

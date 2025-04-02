@@ -1,81 +1,118 @@
-=== tests/cases/compiler/emptyOptionalBindingPatternInDeclarationSignature.ts ===
+//// [tests/cases/compiler/emptyOptionalBindingPatternInDeclarationSignature.ts] ////
+
+=== emptyOptionalBindingPatternInDeclarationSignature.ts ===
 // #50791
 
 declare function fn1({}?: { x: string }): void;
->fn1 : ({}?: {    x: string;}) => void
+>fn1 : ({}?: { x: string; }) => void
+>    : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
 declare function fn2({ x }?: { x: string }): void;
->fn2 : ({ x }?: {    x: string;}) => void
+>fn2 : ({ x }?: { x: string; }) => void
+>    : ^     ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 declare function fn3([]?: [ x: string ]): void;
 >fn3 : ([]?: [x: string]) => void
+>    : ^  ^^^           ^^^^^    
 
 declare function fn4([ x ]?: [ x: string ]): void;
 >fn4 : ([x]?: [x: string]) => void
+>    : ^   ^^^           ^^^^^    
 >x : string
+>  : ^^^^^^
 
 declare class C1 {
 >C1 : C1
+>   : ^^
 
     method({}?: { x: string }): void
->method : ({}?: {    x: string;}) => void
+>method : ({}?: { x: string; }) => void
+>       : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
     static method2({}?: { x: string }): void
->method2 : ({}?: {    x: string;}) => void
+>method2 : ({}?: { x: string; }) => void
+>        : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
     static field: ({}?: { x: string }) => void
->field : ({}?: {    x: string;}) => void
+>field : ({}?: { x: string; }) => void
+>      : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
     static field2: ({}?: { x: string }) => void
->field2 : ({}?: {    x: string;}) => void
+>field2 : ({}?: { x: string; }) => void
+>       : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 }
 
 interface I1 {
     method({}?: { x: string }): void
->method : ({}?: {    x: string;}) => void
+>method : ({}?: { x: string; }) => void
+>       : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
     method2: ({}?: { x: string }) => void
->method2 : ({}?: {    x: string;}) => void
+>method2 : ({}?: { x: string; }) => void
+>        : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 }
 
 type T1 = ({}?: { x: string }) => void
->T1 : ({}?: {    x: string;}) => void
+>T1 : T1
+>   : ^^
 >x : string
+>  : ^^^^^^
 
 type T2 = {
->T2 : { method({}?: {    x: string;}): void; method2: ({}?: {    x: string;}) => void; }
+>T2 : T2
+>   : ^^
 
     method({}?: { x: string }): void
->method : ({}?: {    x: string;}) => void
+>method : ({}?: { x: string; }) => void
+>       : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
     method2: ({}?: { x: string }) => void
->method2 : ({}?: {    x: string;}) => void
+>method2 : ({}?: { x: string; }) => void
+>        : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 }
 
 declare const val1: ({}?: { x: string }) => void
->val1 : ({}?: {    x: string;}) => void
+>val1 : ({}?: { x: string; }) => void
+>     : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
 declare const val2: {
->val2 : { method({}?: {    x: string;}): void; method2: ({}?: {    x: string;}) => void; }
+>val2 : { method({}?: { x: string; }): void; method2: ({}?: { x: string; }) => void; }
+>     : ^^^^^^^^^  ^^^              ^^^    ^^^^^^^^^^^                             ^^^
 
     method({}?: { x: string }): void
->method : ({}?: {    x: string;}) => void
+>method : ({}?: { x: string; }) => void
+>       : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 
     method2: ({}?: { x: string }) => void
->method2 : ({}?: {    x: string;}) => void
+>method2 : ({}?: { x: string; }) => void
+>        : ^  ^^^              ^^^^^    
 >x : string
+>  : ^^^^^^
 }
 

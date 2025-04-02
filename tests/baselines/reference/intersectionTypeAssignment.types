@@ -1,69 +1,111 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts] ////
+
+=== intersectionTypeAssignment.ts ===
 var a: { a: string };
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 var b: { b: string };
 >b : { b: string; }
+>  : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 
 var x: { a: string, b: string };
 >x : { a: string; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var y: { a: string } & { b: string };
 >y : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 a = x;
 >a = x : { a: string; b: string; }
+>      : ^^^^^      ^^^^^      ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >x : { a: string; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 
 a = y;
 >a = y : { a: string; } & { b: string; }
+>      : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >y : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
 x = a;  // Error
 >x = a : { a: string; }
+>      : ^^^^^      ^^^
 >x : { a: string; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 
 y = a;  // Error
 >y = a : { a: string; }
+>      : ^^^^^      ^^^
 >y : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 
 b = x;
 >b = x : { a: string; b: string; }
+>      : ^^^^^      ^^^^^      ^^^
 >b : { b: string; }
+>  : ^^^^^      ^^^
 >x : { a: string; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 
 b = y;
 >b = y : { a: string; } & { b: string; }
+>      : ^^^^^      ^^^^^^^^^^^      ^^^
 >b : { b: string; }
+>  : ^^^^^      ^^^
 >y : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
 x = b;  // Error
 >x = b : { b: string; }
+>      : ^^^^^      ^^^
 >x : { a: string; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >b : { b: string; }
+>  : ^^^^^      ^^^
 
 y = b;  // Error
 >y = b : { b: string; }
+>      : ^^^^^      ^^^
 >y : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >b : { b: string; }
+>  : ^^^^^      ^^^
 
 x = y;
 >x = y : { a: string; } & { b: string; }
+>      : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : { a: string; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >y : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
 y = x;
 >y = x : { a: string; b: string; }
+>      : ^^^^^      ^^^^^      ^^^
 >y : { a: string; } & { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : { a: string; b: string; }
+>  : ^^^^^      ^^^^^      ^^^
 

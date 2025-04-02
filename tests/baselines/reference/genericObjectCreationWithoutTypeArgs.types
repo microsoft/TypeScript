@@ -1,26 +1,41 @@
-=== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts ===
+//// [tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts] ////
+
+=== genericObjectCreationWithoutTypeArgs.ts ===
 class SS<T>{
 >SS : SS<T>
+>   : ^^^^^
 
 }
 
 var x1 = new SS<number>(); // OK
 >x1 : SS<number>
+>   : ^^^^^^^^^^
 >new SS<number>() : SS<number>
+>                 : ^^^^^^^^^^
 >SS : typeof SS
+>   : ^^^^^^^^^
 
 var x2 = new SS<number>;   // OK 
 >x2 : SS<number>
+>   : ^^^^^^^^^^
 >new SS<number> : SS<number>
+>               : ^^^^^^^^^^
 >SS : typeof SS
+>   : ^^^^^^^^^
 
 var x3 = new SS();         // OK
 >x3 : SS<unknown>
+>   : ^^^^^^^^^^^
 >new SS() : SS<unknown>
+>         : ^^^^^^^^^^^
 >SS : typeof SS
+>   : ^^^^^^^^^
 
 var x4 = new SS;           // OK
 >x4 : SS<unknown>
+>   : ^^^^^^^^^^^
 >new SS : SS<unknown>
+>       : ^^^^^^^^^^^
 >SS : typeof SS
+>   : ^^^^^^^^^
 

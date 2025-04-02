@@ -1,27 +1,41 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSfcReturnNull.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 const Foo = (props: any) => null;
 >Foo : (props: any) => any
+>    : ^     ^^   ^^^^^^^^
 >(props: any) => null : (props: any) => any
+>                     : ^     ^^   ^^^^^^^^
 >props : any
 
 function Greet(x: {name?: string}) {
->Greet : (x: {    name?: string;}) => any
+>Greet : (x: { name?: string; }) => any
+>      : ^ ^^                  ^^^^^^^^
 >x : { name?: string; }
+>  : ^^^^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 
 	return null;
 }
 
 const foo = <Foo />;
 >foo : JSX.Element
+>    : ^^^^^^^^^^^
 ><Foo /> : JSX.Element
+>        : ^^^^^^^^^^^
 >Foo : (props: any) => any
+>    : ^     ^^   ^^^^^^^^
 
 const G = <Greet />;
 >G : JSX.Element
+>  : ^^^^^^^^^^^
 ><Greet /> : JSX.Element
+>          : ^^^^^^^^^^^
 >Greet : (x: { name?: string; }) => any
+>      : ^ ^^                  ^^^^^^^^
 

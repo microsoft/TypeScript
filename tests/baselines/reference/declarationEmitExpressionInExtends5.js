@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionInExtends5.ts] ////
+
 //// [declarationEmitExpressionInExtends5.ts]
 namespace Test
 {

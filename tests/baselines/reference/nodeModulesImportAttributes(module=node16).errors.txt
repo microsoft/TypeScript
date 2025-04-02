@@ -1,0 +1,20 @@
+index.ts(1,35): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+otherc.cts(1,35): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+
+
+==== index.ts (1 errors) ====
+    import json from "./package.json" with { type: "json" };
+                                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+==== otherc.cts (1 errors) ====
+    import json from "./package.json" with { type: "json" }; // should error, cjs mode imports don't support attributes
+                                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+    const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
+==== package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "private": true,
+        "type": "module"
+    }
+    

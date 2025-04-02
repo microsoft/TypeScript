@@ -1,13 +1,17 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/tsxNamespacedAttributeName1.tsx] ////
+
+=== a.tsx ===
 const a = <svg:path a:b={1}></svg:path>;
 >a : error
 ><svg:path a:b={1}></svg:path> : error
 >svg : error
 >path : error
 >a:b : number
+>    : ^^^^^^
 >a : error
 >b : error
 >1 : 1
+>  : ^
 >svg : error
 >path : error
 
@@ -17,9 +21,11 @@ const b = <svg : path a:b={1}></svg : path>;
 >svg : error
 >path : error
 >a:b : number
+>    : ^^^^^^
 >a : error
 >b : error
 >1 : 1
+>  : ^
 >svg : error
 >path : error
 

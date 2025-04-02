@@ -1,1015 +1,1489 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts] ////
+
+=== derivedClassSuperProperties.ts ===
 declare const decorate: any;
 >decorate : any
+>         : ^^^
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(a?) { }
 >a : any
+>  : ^^^
 
     receivesAnything(param?) { }
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
 >param : any
+>      : ^^^
 }
 
 class Derived1 extends Base {
 >Derived1 : Derived1
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super.receivesAnything();
 >super.receivesAnything() : void
+>                         : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class Derived2 extends Base {
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super.receivesAnything(this);
 >super.receivesAnything(this) : void
+>                             : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class Derived3 extends Base {
 >Derived3 : Derived3
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super.receivesAnything();
 >super.receivesAnything() : void
+>                         : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
 
         super(this);
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Derived4 extends Base {
 >Derived4 : Derived4
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super.receivesAnything(this);
 >super.receivesAnything(this) : void
+>                             : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         super(this);
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Derived5 extends Base {
 >Derived5 : Derived5
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
         super.receivesAnything();
 >super.receivesAnything() : void
+>                         : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
     }
 }
 
 class Derived6 extends Base {
 >Derived6 : Derived6
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super(this);
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         super.receivesAnything();
 >super.receivesAnything() : void
+>                         : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
     }
 }
 
 class Derived7 extends Base {
 >Derived7 : Derived7
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
         super.receivesAnything(this);
 >super.receivesAnything(this) : void
+>                             : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Derived8 extends Base {
 >Derived8 : Derived8
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         super(this);
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         super.receivesAnything(this);
 >super.receivesAnything(this) : void
+>                             : ^^^^
 >super.receivesAnything : (param?: any) => void
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >receivesAnything : (param?: any) => void
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class DerivedWithArrowFunction extends Base {
 >DerivedWithArrowFunction : DerivedWithArrowFunction
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         (() => this)();
 >(() => this)() : this
+>               : ^^^^
 >(() => this) : () => this
+>             : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithArrowFunctionParameter extends Base {
 >DerivedWithArrowFunctionParameter : DerivedWithArrowFunctionParameter
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         const lambda = (param = this) => {};
 >lambda : (param?: this) => void
+>       : ^     ^^^^^^^^^^^^^^^^
 >(param = this) => {} : (param?: this) => void
+>                     : ^     ^^^^^^^^^^^^^^^^
 >param : this
+>      : ^^^^
 >this : this
+>     : ^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithDecoratorOnClass extends Base {
 >DerivedWithDecoratorOnClass : DerivedWithDecoratorOnClass
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         @decorate(this)
 >decorate(this) : any
+>               : ^^^
 >decorate : any
+>         : ^^^
 >this : this
+>     : ^^^^
 
         class InnerClass { }
 >InnerClass : InnerClass
+>           : ^^^^^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithDecoratorOnClassMethod extends Base {
 >DerivedWithDecoratorOnClassMethod : DerivedWithDecoratorOnClassMethod
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         class InnerClass {
 >InnerClass : InnerClass
+>           : ^^^^^^^^^^
 
             @decorate(this)
 >decorate(this) : any
+>               : ^^^
 >decorate : any
+>         : ^^^
 >this : this
+>     : ^^^^
 
             innerMethod() { }
 >innerMethod : () => void
+>            : ^^^^^^^^^^
         }
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithDecoratorOnClassProperty extends Base {
 >DerivedWithDecoratorOnClassProperty : DerivedWithDecoratorOnClassProperty
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         class InnerClass {
 >InnerClass : InnerClass
+>           : ^^^^^^^^^^
 
             @decorate(this)
 >decorate(this) : any
+>               : ^^^
 >decorate : any
+>         : ^^^
 >this : this
+>     : ^^^^
 
             innerProp = true;
 >innerProp : boolean
+>          : ^^^^^^^
 >true : true
+>     : ^^^^
         }
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithFunctionDeclaration extends Base {
 >DerivedWithFunctionDeclaration : DerivedWithFunctionDeclaration
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         function declaration() {
 >declaration : () => any
+>            : ^^^^^^^^^
 
             return this;
 >this : any
+>     : ^^^
         }
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithFunctionDeclarationAndThisParam extends Base {
 >DerivedWithFunctionDeclarationAndThisParam : DerivedWithFunctionDeclarationAndThisParam
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         function declaration(param = this) {
 >declaration : (param?: any) => any
+>            : ^     ^^^^^^^^^^^^^^
 >param : any
+>      : ^^^
 >this : any
+>     : ^^^
 
             return param;
 >param : any
+>      : ^^^
         }
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithFunctionExpression extends Base {
 >DerivedWithFunctionExpression : DerivedWithFunctionExpression
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         (function () {
 >(function () {            return this;        })() : any
+>                                                   : ^^^
 >(function () {            return this;        }) : () => any
+>                                                 : ^^^^^^^^^
 >function () {            return this;        } : () => any
+>                                               : ^^^^^^^^^
 
             return this;
 >this : any
+>     : ^^^
 
         })();
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithParenthesis extends Base {
 >DerivedWithParenthesis : DerivedWithParenthesis
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         (super());
 >(super()) : void
+>          : ^^^^
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithParenthesisAfterStatement extends Base {
 >DerivedWithParenthesisAfterStatement : DerivedWithParenthesisAfterStatement
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         this.prop;
 >this.prop : boolean
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prop : boolean
+>     : ^^^^^^^
 
         (super());
 >(super()) : void
+>          : ^^^^
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithParenthesisBeforeStatement extends Base {
 >DerivedWithParenthesisBeforeStatement : DerivedWithParenthesisBeforeStatement
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         (super());
 >(super()) : void
+>          : ^^^^
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
         this.prop;
 >this.prop : boolean
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >prop : boolean
+>     : ^^^^^^^
     }
 }
 
 class DerivedWithClassDeclaration extends Base {
 >DerivedWithClassDeclaration : DerivedWithClassDeclaration
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         class InnerClass {
 >InnerClass : InnerClass
+>           : ^^^^^^^^^^
 
             private method() {
 >method : () => this
+>       : ^^^^^^^^^^
 
                 return this;
 >this : this
+>     : ^^^^
             }
             private property = 7;
 >property : number
+>         : ^^^^^^
 >7 : 7
+>  : ^
 
             constructor() {
                 this.property;
 >this.property : number
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >property : number
+>         : ^^^^^^
 
                 this.method();
 >this.method() : this
+>              : ^^^^
 >this.method : () => this
+>            : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >method : () => this
+>       : ^^^^^^^^^^
             }
         }
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithClassDeclarationExtendingMember extends Base {
 >DerivedWithClassDeclarationExtendingMember : DerivedWithClassDeclarationExtendingMember
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     memberClass = class { };
 >memberClass : typeof (Anonymous class)
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class { } : typeof (Anonymous class)
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor() {
         class InnerClass extends this.memberClass {
 >InnerClass : InnerClass
+>           : ^^^^^^^^^^
 >this.memberClass : (Anonymous class)
+>                 : ^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >memberClass : typeof (Anonymous class)
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 
             private method() {
 >method : () => this
+>       : ^^^^^^^^^^
 
                 return this;
 >this : this
+>     : ^^^^
             }
             private property = 7;
 >property : number
+>         : ^^^^^^
 >7 : 7
+>  : ^
 
             constructor() {
                 super();
 >super() : void
+>        : ^^^^
 >super : typeof (Anonymous class)
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
                 this.property;
 >this.property : number
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >property : number
+>         : ^^^^^^
 
                 this.method();
 >this.method() : this
+>              : ^^^^
 >this.method : () => this
+>            : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >method : () => this
+>       : ^^^^^^^^^^
             }
         }
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithClassExpression extends Base {
 >DerivedWithClassExpression : DerivedWithClassExpression
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         console.log(class {
 >console.log(class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        }) : void
+>                                                                                                                                                                                                                                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        } : typeof (Anonymous class)
+>                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
             private method() {
 >method : () => this
+>       : ^^^^^^^^^^
 
                 return this;
 >this : this
+>     : ^^^^
             }
             private property = 7;
 >property : number
+>         : ^^^^^^
 >7 : 7
+>  : ^
 
             constructor() {
                 this.property;
 >this.property : number
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >property : number
+>         : ^^^^^^
 
                 this.method();
 >this.method() : this
+>              : ^^^^
 >this.method : () => this
+>            : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >method : () => this
+>       : ^^^^^^^^^^
             }
         });
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithClassExpressionExtendingMember extends Base {
 >DerivedWithClassExpressionExtendingMember : DerivedWithClassExpressionExtendingMember
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     memberClass = class { };
 >memberClass : typeof (Anonymous class)
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class { } : typeof (Anonymous class)
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor() {
         console.log(class extends this.memberClass { });
 >console.log(class extends this.memberClass { }) : void
+>                                                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >class extends this.memberClass { } : typeof (Anonymous class)
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.memberClass : (Anonymous class)
+>                 : ^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >memberClass : typeof (Anonymous class)
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithDerivedClassExpression extends Base {
 >DerivedWithDerivedClassExpression : DerivedWithDerivedClassExpression
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         console.log(class extends Base {
 >console.log(class extends Base {            constructor() {                super();            }            public foo() {                return this;            }            public bar = () => this;        }) : void
+>                                                                                                                                                                                                                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >class extends Base {            constructor() {                super();            }            public foo() {                return this;            }            public bar = () => this;        } : typeof (Anonymous class)
+>                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
             constructor() {
                 super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
             }
             public foo() {
 >foo : () => this
+>    : ^^^^^^^^^^
 
                 return this;
 >this : this
+>     : ^^^^
             }
             public bar = () => this;
 >bar : () => this
+>    : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         });
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithNewDerivedClassExpression extends Base {
 >DerivedWithNewDerivedClassExpression : DerivedWithNewDerivedClassExpression
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         console.log(new class extends Base {
 >console.log(new class extends Base {            constructor() {                super();            }        }()) : void
+>                                                                                                                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >new class extends Base {            constructor() {                super();            }        }() : (Anonymous class)
+>                                                                                                    : ^^^^^^^^^^^^^^^^^
 >class extends Base {            constructor() {                super();            }        } : typeof (Anonymous class)
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
             constructor() {
                 super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
             }
         }());
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithObjectAccessors extends Base {
 >DerivedWithObjectAccessors : DerivedWithObjectAccessors
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         const obj = {
 >obj : { prop: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^
 >{            get prop() {                return true;            },            set prop(param) {                this._prop = param;            }        } : { prop: boolean; }
+>                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^
 
             get prop() {
 >prop : boolean
+>     : ^^^^^^^
 
                 return true;
 >true : true
+>     : ^^^^
 
             },
             set prop(param) {
 >prop : boolean
+>     : ^^^^^^^
 >param : boolean
+>      : ^^^^^^^
 
                 this._prop = param;
 >this._prop = param : boolean
+>                   : ^^^^^^^
 >this._prop : any
+>           : ^^^
 >this : any
+>     : ^^^
 >_prop : any
+>      : ^^^
 >param : boolean
+>      : ^^^^^^^
             }
         };
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithObjectAccessorsUsingThisInKeys extends Base {
 >DerivedWithObjectAccessorsUsingThisInKeys : DerivedWithObjectAccessorsUsingThisInKeys
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     propName = "prop";
 >propName : string
+>         : ^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 
     constructor() {
         const obj = {
 >obj : { [x: string]: any; _prop: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            _prop: "prop",            get [this.propName]() {                return true;            },            set [this.propName](param) {                this._prop = param;            }        } : { [x: string]: any; _prop: string; }
+>                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             _prop: "prop",
 >_prop : string
+>      : ^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 
             get [this.propName]() {
 >[this.propName] : boolean
+>                : ^^^^^^^
 >this.propName : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >propName : string
+>         : ^^^^^^
 
                 return true;
 >true : true
+>     : ^^^^
 
             },
             set [this.propName](param) {
 >[this.propName] : any
+>                : ^^^
 >this.propName : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >propName : string
+>         : ^^^^^^
 >param : any
+>      : ^^^
 
                 this._prop = param;
 >this._prop = param : any
+>                   : ^^^
 >this._prop : any
+>           : ^^^
 >this : any
+>     : ^^^
 >_prop : any
+>      : ^^^
 >param : any
+>      : ^^^
             }
         };
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithObjectAccessorsUsingThisInBodies extends Base {
 >DerivedWithObjectAccessorsUsingThisInBodies : DerivedWithObjectAccessorsUsingThisInBodies
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     propName = "prop";
 >propName : string
+>         : ^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 
     constructor() {
         const obj = {
 >obj : { _prop: string; prop: any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            _prop: "prop",            get prop() {                return this._prop;            },            set prop(param) {                this._prop = param;            }        } : { _prop: string; prop: any; }
+>                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             _prop: "prop",
 >_prop : string
+>      : ^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 
             get prop() {
 >prop : any
+>     : ^^^
 
                 return this._prop;
 >this._prop : any
+>           : ^^^
 >this : any
+>     : ^^^
 >_prop : any
+>      : ^^^
 
             },
             set prop(param) {
 >prop : any
+>     : ^^^
 >param : any
+>      : ^^^
 
                 this._prop = param;
 >this._prop = param : any
+>                   : ^^^
 >this._prop : any
+>           : ^^^
 >this : any
+>     : ^^^
 >_prop : any
+>      : ^^^
 >param : any
+>      : ^^^
             }
         };
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithObjectComputedPropertyBody extends Base {
 >DerivedWithObjectComputedPropertyBody : DerivedWithObjectComputedPropertyBody
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     propName = "prop";
 >propName : string
+>         : ^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 
     constructor() {
         const obj = {
 >obj : { prop: string; }
+>    : ^^^^^^^^^^^^^^^^^
 >{            prop: this.propName,        } : { prop: string; }
+>                                           : ^^^^^^^^^^^^^^^^^
 
             prop: this.propName,
 >prop : string
+>     : ^^^^^^
 >this.propName : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >propName : string
+>         : ^^^^^^
 
         };
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithObjectComputedPropertyName extends Base {
 >DerivedWithObjectComputedPropertyName : DerivedWithObjectComputedPropertyName
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     propName = "prop";
 >propName : string
+>         : ^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 
     constructor() {
         const obj = {
 >obj : { [x: string]: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            [this.propName]: true,        } : { [x: string]: boolean; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
             [this.propName]: true,
 >[this.propName] : boolean
+>                : ^^^^^^^
 >this.propName : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >propName : string
+>         : ^^^^^^
 >true : true
+>     : ^^^^
 
         };
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 class DerivedWithObjectMethod extends Base {
 >DerivedWithObjectMethod : DerivedWithObjectMethod
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
     constructor() {
         const obj = {
 >obj : { getProp(): any; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >{            getProp() {                return this;            },        } : { getProp(): any; }
+>                                                                            : ^^^^^^^^^^^^^^^^^^^
 
             getProp() {
 >getProp : () => any
+>        : ^^^^^^^^^
 
                 return this;
 >this : any
+>     : ^^^
 
             },
         };
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 let a, b;
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 const DerivedWithLoops = [
 >DerivedWithLoops : (typeof (Anonymous class))[]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[    class extends Base {        prop = true;        constructor() {            for(super();;) {}        }    },    class extends Base {        prop = true;        constructor() {            for(a; super();) {}        }    },    class extends Base {        prop = true;        constructor() {            for(a; b; super()) {}        }    },    class extends Base {        prop = true;        constructor() {            for(; ; super()) { break; }        }    },    class extends Base {        prop = true;        constructor() {            for (const x of super()) {}        }    },    class extends Base {        prop = true;        constructor() {            while (super()) {}        }    },    class extends Base {        prop = true;        constructor() {            do {} while (super());        }    },    class extends Base {        prop = true;        constructor() {            if (super()) {}        }    },    class extends Base {        prop = true;        constructor() {            switch (super()) {}        }    },] : (typeof (Anonymous class))[]
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            for(super();;) {}        }    } : typeof (Anonymous class)
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             for(super();;) {}
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            for(a; super();) {}        }    } : typeof (Anonymous class)
+>                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             for(a; super();) {}
 >a : any
+>  : ^^^
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            for(a; b; super()) {}        }    } : typeof (Anonymous class)
+>                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             for(a; b; super()) {}
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            for(; ; super()) { break; }        }    } : typeof (Anonymous class)
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             for(; ; super()) { break; }
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            for (const x of super()) {}        }    } : typeof (Anonymous class)
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             for (const x of super()) {}
 >x : any
+>  : ^^^
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            while (super()) {}        }    } : typeof (Anonymous class)
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             while (super()) {}
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            do {} while (super());        }    } : typeof (Anonymous class)
+>                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             do {} while (super());
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            if (super()) {}        }    } : typeof (Anonymous class)
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             if (super()) {}
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
     class extends Base {
 >class extends Base {        prop = true;        constructor() {            switch (super()) {}        }    } : typeof (Anonymous class)
+>                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 
         prop = true;
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
         constructor() {
             switch (super()) {}
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
         }
     },
 ]

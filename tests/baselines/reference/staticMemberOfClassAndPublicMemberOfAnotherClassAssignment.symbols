@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts ===
+//// [tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts] ////
+
+=== staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts ===
 interface A {
 >A : Symbol(A, Decl(staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts, 0, 0))
 

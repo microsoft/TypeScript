@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/gettersAndSettersTypesAgree.ts] ////
+
 //// [gettersAndSettersTypesAgree.ts]
 class C {
     public get Foo() { return "foo";} // ok

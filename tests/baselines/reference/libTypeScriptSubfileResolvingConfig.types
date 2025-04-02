@@ -1,22 +1,32 @@
+//// [tests/cases/compiler/libTypeScriptSubfileResolvingConfig.ts] ////
+
+=== /somepath/index.ts ===
+/// <reference lib="dom.iterable" />
+const a: DOMIterable = { abc: "Hello" }
+>a : DOMIterable
+>  : ^^^^^^^^^^^
+>{ abc: "Hello" } : { abc: string; }
+>                 : ^^^^^^^^^^^^^^^^
+>abc : string
+>    : ^^^^^^
+>"Hello" : "Hello"
+>        : ^^^^^^^
+
+// This should fail because libdom has been replaced
+// by the module above ^
+window.localStorage
+>window.localStorage : any
+>                    : ^^^
+>window : any
+>       : ^^^
+>localStorage : any
+>             : ^^^
+
 === /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
 
 // NOOP
 === /somepath/node_modules/@typescript/lib-dom/iterable.d.ts ===
 interface DOMIterable { abc: string }
 >abc : string
-
-=== /somepath/index.ts ===
-/// <reference lib="dom.iterable" />
-const a: DOMIterable = { abc: "Hello" }
->a : DOMIterable
->{ abc: "Hello" } : { abc: string; }
->abc : string
->"Hello" : "Hello"
-
-// This should fail because libdom has been replaced
-// by the module above ^
-window.localStorage
->window.localStorage : any
->window : any
->localStorage : any
+>    : ^^^^^^
 

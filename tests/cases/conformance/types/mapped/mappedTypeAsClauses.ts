@@ -29,7 +29,8 @@ type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | numbe
 type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
 type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
-type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
+type TD3<U> = keyof DoubleProp<U>; // keyof DoubleProp<U>
+type TD4 = TD3<{ a: string, b: number }>;  // 'a1' | 'a2' | 'b1' | 'b2'
 
 // Repro from #40619
 
@@ -152,3 +153,26 @@ type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
 type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
 type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
 type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
+
+// repro from https://github.com/microsoft/TypeScript/issues/55129
+type Fruit =
+  | {
+      name: "apple";
+      color: "red";
+    }
+  | {
+      name: "banana";
+      color: "yellow";
+    }
+  | {
+      name: "orange";
+      color: "orange";
+    };
+type Result1<T extends {name: string | number; color: string | number }> = {
+  [Key in T as `${Key['name']}:${Key['color']}`]: unknown
+}; 
+type Result2<T extends {name: string | number; color: string | number }> = keyof {
+  [Key in T as `${Key['name']}:${Key['color']}`]: unknown
+}
+type Test1 = keyof Result1<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
+type Test2 = Result2<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"

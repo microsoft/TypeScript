@@ -1,27 +1,29 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportFormsErr.ts] ////
+
+=== cls.js ===
 export class Foo {}
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+=== bar.js ===
 import ns = require("./cls");
 >ns : Symbol(ns, Decl(bar.js, 0, 0))
 
 export = ns; // TS Only
 >ns : Symbol(ns, Decl(bar.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/bin.js ===
+=== bin.js ===
 import * as ns from "./cls";
 >ns : Symbol(ns, Decl(bin.js, 0, 6))
 
 module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
 >ns : Symbol(ns, Decl(bin.js, 0, 6))
 
-=== tests/cases/conformance/jsdoc/declarations/globalNs.js ===
+=== globalNs.js ===
 
 export * from "./cls";
 export as namespace GLO; // TS Only
 
-=== tests/cases/conformance/jsdoc/declarations/includeAll.js ===
+=== includeAll.js ===
 
 import "./bar";
 import "./bin";

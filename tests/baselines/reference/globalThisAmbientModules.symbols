@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/globalThisAmbientModules.ts ===
+//// [tests/cases/conformance/es2019/globalThisAmbientModules.ts] ////
+
+=== globalThisAmbientModules.ts ===
 declare module "ambientModule" {
 >"ambientModule" : Symbol("ambientModule", Decl(globalThisAmbientModules.ts, 0, 0))
 

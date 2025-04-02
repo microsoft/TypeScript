@@ -1,47 +1,76 @@
-=== tests/cases/compiler/unknownLikeUnionObjectFlagsNotPropagated.ts ===
+//// [tests/cases/compiler/unknownLikeUnionObjectFlagsNotPropagated.ts] ////
+
+=== unknownLikeUnionObjectFlagsNotPropagated.ts ===
 // repro from #52475#issuecomment-1411215277
 
 type MyType = {} | null | undefined;
->MyType : {} | null | undefined
+>MyType : MyType
+>       : ^^^^^^
 
 const myVar: MyType = null as MyType;
 >myVar : MyType
+>      : ^^^^^^
 >null as MyType : MyType
+>               : ^^^^^^
 
 myVar?.toLocaleString;
 >myVar?.toLocaleString : (() => string) | undefined
+>                      : ^^^^^^^      ^^^^^^^^^^^^^
 >myVar : MyType
+>      : ^^^^^^
 >toLocaleString : (() => string) | undefined
+>               : ^^^^^^^      ^^^^^^^^^^^^^
 
 myVar;
 >myVar : MyType
+>      : ^^^^^^
 
 async function myUnusedFunction() {
 >myUnusedFunction : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     const fetch1 = Promise.resolve(['hello', 'world']);
 >fetch1 : Promise<string[]>
+>       : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(['hello', 'world']) : Promise<string[]>
+>                                    : ^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >['hello', 'world'] : string[]
+>                   : ^^^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >'world' : "world"
+>        : ^^^^^^^
 
     const [data1] = await Promise.all([fetch1]);
 >data1 : string[]
+>      : ^^^^^^^^
 >await Promise.all([fetch1]) : [string[]]
+>                            : ^^^^^^^^^^
 >Promise.all([fetch1]) : Promise<[string[]]>
+>                      : ^^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >[fetch1] : [Promise<string[]>]
+>         : ^^^^^^^^^^^^^^^^^^^
 >fetch1 : Promise<string[]>
+>       : ^^^^^^^^^^^^^^^^^
 
     data1.length;
 >data1.length : number
+>             : ^^^^^^
 >data1 : string[]
+>      : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 }
 

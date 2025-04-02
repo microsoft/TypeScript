@@ -1,45 +1,69 @@
-=== tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts ===
+//// [tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts] ////
+
+=== excessPropertyCheckIntersectionWithRecursiveType.ts ===
 // repro from #44750
 
 type Request = { l1: { l2: boolean } };
->Request : { l1: {    l2: boolean;}; }
+>Request : Request
+>        : ^^^^^^^
 >l1 : { l2: boolean; }
+>   : ^^^^^^       ^^^
 >l2 : boolean
+>   : ^^^^^^^
 
 type Example<T> = { ex?: T | null };
 >Example : Example<T>
+>        : ^^^^^^^^^^
 >ex : T | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema1<T[P]> }; }) & Example<T>;
 >Schema1 : Schema1<T>
+>        : ^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >props : { [P in keyof T]: Schema1<T[P]>; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj1: Schema1<Request> = {
 >schemaObj1 : Schema1<Request>
+>           : ^^^^^^^^^^^^^^^^
 >{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+>                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   props: {
 >props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     l1: {
 >l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       props: {
 >props : { l2: { type: "boolean"; }; invalid: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         l2: { type: 'boolean' },
 >l2 : { type: "boolean"; }
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{ type: 'boolean' } : { type: "boolean"; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
         invalid: false,
 >invalid : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
       },
     },
@@ -48,34 +72,51 @@ export const schemaObj1: Schema1<Request> = {
 
 type Schema2<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: { [P in keyof T]: Schema2<T[P]> }; } & Example<T>);
 >Schema2 : Schema2<T>
+>        : ^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >props : { [P in keyof T]: Schema2<T[P]>; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj2: Schema2<Request> = {
 >schemaObj2 : { props: { l1: { props: { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; } & Example<{ l2: boolean; }>; }; } & Example<Request>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+>                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   props: {
 >props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     l1: {
 >l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       props: {
 >props : { l2: { type: "boolean"; }; invalid: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         l2: { type: 'boolean' },
 >l2 : { type: "boolean"; }
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{ type: 'boolean' } : { type: "boolean"; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
         invalid: false,
 >invalid : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
       },
     },
@@ -84,34 +125,51 @@ export const schemaObj2: Schema2<Request> = {
 
 type Schema3<T> = Example<T> & (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema3<T[P]> }; });
 >Schema3 : Schema3<T>
+>        : ^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >props : { [P in keyof T]: Schema3<T[P]>; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj3: Schema3<Request> = {
 >schemaObj3 : Schema3<Request>
+>           : ^^^^^^^^^^^^^^^^
 >{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+>                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   props: {
 >props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     l1: {
 >l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       props: {
 >props : { l2: { type: "boolean"; }; invalid: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         l2: { type: 'boolean' },
 >l2 : { type: "boolean"; }
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{ type: 'boolean' } : { type: "boolean"; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
         invalid: false,
 >invalid : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
       },
     },
@@ -120,34 +178,51 @@ export const schemaObj3: Schema3<Request> = {
 
 type Schema4<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: Example<T> & { [P in keyof T]: Schema4<T[P]> }; });
 >Schema4 : Schema4<T>
+>        : ^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >props : Example<T> & { [P in keyof T]: Schema4<T[P]>; }
+>      : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj4: Schema4<Request> = {
 >schemaObj4 : { props: Example<Request> & { l1: { props: Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; }; }; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  props: {    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  },} : { props: { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }; }
+>                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   props: {
 >props : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    l1: {      props: {        l2: { type: 'boolean' },        invalid: false,      },    },  } : { l1: { props: { l2: { type: "boolean"; }; invalid: boolean; }; }; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     l1: {
 >l1 : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      props: {        l2: { type: 'boolean' },        invalid: false,      },    } : { props: { l2: { type: "boolean"; }; invalid: boolean; }; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       props: {
 >props : { l2: { type: "boolean"; }; invalid: boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        l2: { type: 'boolean' },        invalid: false,      } : { l2: { type: "boolean"; }; invalid: boolean; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         l2: { type: 'boolean' },
 >l2 : { type: "boolean"; }
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{ type: 'boolean' } : { type: "boolean"; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >type : "boolean"
+>     : ^^^^^^^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
         invalid: false,
 >invalid : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
       },
     },
@@ -158,14 +233,19 @@ export const schemaObj4: Schema4<Request> = {
 
 type Length<T extends any[]> = T["length"];
 >Length : Length<T>
+>       : ^^^^^^^^^
 
 type Prepend<V, T extends any[]> = ((head: V, ...args: T) => void) extends (
 >Prepend : [head: V, ...args: T]
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >head : V
+>     : ^
 >args : T
+>     : ^
 
   ...args: infer R
 >args : R
+>     : ^
 
 ) => void
   ? R
@@ -173,73 +253,105 @@ type Prepend<V, T extends any[]> = ((head: V, ...args: T) => void) extends (
 
 type BuildTree<T, N extends number = -1, I extends any[] = []> = {
 >BuildTree : BuildTree<T, N, I>
+>          : ^^^^^^^^^^^^^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
   1: T;
 >1 : T
+>  : ^
 
   0: T & { children: BuildTree<T, N, Prepend<any, I>>[] };
 >0 : T & { children: BuildTree<T, N, Prepend<any, I>>[]; }
+>  : ^^^^^^^^^^^^^^^^                                  ^^^
 >children : BuildTree<T, N, [head: any, ...args: I]>[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }[Length<I> extends N ? 1 : 0];
 
 interface User {
   name: string;
 >name : string
+>     : ^^^^^^
 }
 
 type GrandUser = BuildTree<User, 2>;
 >GrandUser : User & { children: (User & { children: User[]; })[]; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const grandUser: GrandUser = {
 >grandUser : User & { children: (User & { children: User[]; })[]; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  name: "Grand User",  children: [    {      name: "Son",      children: [        {          name: "Grand son",          children: [            {              name: "123",              children: [                {                  name: "Some other name",                },              ],            },          ],        },      ],    },  ],} : { name: string; children: { name: string; children: { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]; }[]; }
+>                                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   name: "Grand User",
 >name : string
+>     : ^^^^^^
 >"Grand User" : "Grand User"
+>             : ^^^^^^^^^^^^
 
   children: [
 >children : { name: string; children: { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]; }[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[    {      name: "Son",      children: [        {          name: "Grand son",          children: [            {              name: "123",              children: [                {                  name: "Some other name",                },              ],            },          ],        },      ],    },  ] : { name: string; children: { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]; }[]
+>                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     {
 >{      name: "Son",      children: [        {          name: "Grand son",          children: [            {              name: "123",              children: [                {                  name: "Some other name",                },              ],            },          ],        },      ],    } : { name: string; children: { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]; }
+>                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       name: "Son",
 >name : string
+>     : ^^^^^^
 >"Son" : "Son"
+>      : ^^^^^
 
       children: [
 >children : { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[        {          name: "Grand son",          children: [            {              name: "123",              children: [                {                  name: "Some other name",                },              ],            },          ],        },      ] : { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]
+>                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         {
 >{          name: "Grand son",          children: [            {              name: "123",              children: [                {                  name: "Some other name",                },              ],            },          ],        } : { name: string; children: { name: string; children: { name: string; }[]; }[]; }
+>                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
           name: "Grand son",
 >name : string
+>     : ^^^^^^
 >"Grand son" : "Grand son"
+>            : ^^^^^^^^^^^
 
           children: [
 >children : { name: string; children: { name: string; }[]; }[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[            {              name: "123",              children: [                {                  name: "Some other name",                },              ],            },          ] : { name: string; children: { name: string; }[]; }[]
+>                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             {
 >{              name: "123",              children: [                {                  name: "Some other name",                },              ],            } : { name: string; children: { name: string; }[]; }
+>                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
               name: "123",
 >name : string
+>     : ^^^^^^
 >"123" : "123"
+>      : ^^^^^
 
               children: [
 >children : { name: string; }[]
+>         : ^^^^^^^^^^^^^^^^^^^
 >[                {                  name: "Some other name",                },              ] : { name: string; }[]
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^
                 {
 >{                  name: "Some other name",                } : { name: string; }
+>                                                             : ^^^^^^^^^^^^^^^^^
 
                   name: "Some other name",
 >name : string
+>     : ^^^^^^
 >"Some other name" : "Some other name"
+>                  : ^^^^^^^^^^^^^^^^^
 
                 },
               ],
@@ -253,17 +365,30 @@ const grandUser: GrandUser = {
 
 grandUser.children[0].children[0].children[0];
 >grandUser.children[0].children[0].children[0] : any
+>                                              : ^^^
 >grandUser.children[0].children[0].children : any
+>                                           : ^^^
 >grandUser.children[0].children[0] : User
+>                                  : ^^^^
 >grandUser.children[0].children : User[]
+>                               : ^^^^^^
 >grandUser.children[0] : User & { children: User[]; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >grandUser.children : (User & { children: User[]; })[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >grandUser : User & { children: (User & { children: User[]; })[]; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >children : (User & { children: User[]; })[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >children : User[]
+>         : ^^^^^^
 >0 : 0
+>  : ^
 >children : any
+>         : ^^^
 >0 : 0
+>  : ^
 
 

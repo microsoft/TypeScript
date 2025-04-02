@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsEnumTag.ts] ////
+
 //// [index.js]
 /** @enum {string} */
 export const Target = {
@@ -51,7 +53,9 @@ export function ff(s) {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ff = exports.consume = exports.Fs = exports.Second = exports.Target = void 0;
+exports.Fs = exports.Second = exports.Target = void 0;
+exports.consume = consume;
+exports.ff = ff;
 /** @enum {string} */
 exports.Target = {
     START: "start",
@@ -88,7 +92,6 @@ function consume(t, s, f) {
     var v = exports.Target.START;
     v = 'something else'; // allowed, like Typescript's classic enums and unlike its string enums
 }
-exports.consume = consume;
 /** @param {string} s */
 function ff(s) {
     // element access with arbitrary string is an error only with noImplicitAny
@@ -99,7 +102,6 @@ function ff(s) {
         return exports.Target[s];
     }
 }
-exports.ff = ff;
 
 
 //// [index.d.ts]

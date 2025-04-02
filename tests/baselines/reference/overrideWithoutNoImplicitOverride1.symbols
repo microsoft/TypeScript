@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts ===
+//// [tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts] ////
+
+=== overrideWithoutNoImplicitOverride1.ts ===
 export declare class AmbientClass {
 >AmbientClass : Symbol(AmbientClass, Decl(overrideWithoutNoImplicitOverride1.ts, 0, 0))
 

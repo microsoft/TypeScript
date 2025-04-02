@@ -1,12 +1,14 @@
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts] ////
+
 //// [namedTupleMembersErrors.ts]
-export type Segment1 = [length: number, number]; // partially named, disallowed
-export type Segment2 = [number, size: number]; // partially named, disallowed
+export type Segment1 = [length: number, number];
+export type Segment2 = [number, size: number];
 
-export type List = [item: any, ...any];  // partially named, disallowed
-export type List2 = [any, ...remainder: any];  // partially named, disallowed
+export type List = [item: any, ...any]; 
+export type List2 = [any, ...remainder: any]; 
 
-export type Pair = [item: any, any?];  // partially named, disallowed
-export type Pair2 = [any, last?: any];  // partially named, disallowed
+export type Pair = [item: any, any?]; 
+export type Pair2 = [any, last?: any]; 
 
 export type Opt = [element: string?]; // question mark on element disallowed
 

@@ -1,91 +1,137 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints.ts] ////
+
+=== genericCallWithObjectTypeArgsAndConstraints.ts ===
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected
 
 class C {
 >C : C
+>  : ^
 
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }
 
 class X<T> {
 >X : X<T>
+>  : ^^^^
 
     x: T;
 >x : T
+>  : ^
 }
 
 function foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
 >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
+>    : ^ ^^^^^^^^^              ^^ ^^    ^^  ^^    ^^^^^^
 >x : string
+>  : ^^^^^^
 >t : X<T>
+>  : ^^^^
 >t2 : X<T>
+>   : ^^^^
 
     var x: T;
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 var c1 = new X<C>();
 >c1 : X<C>
+>   : ^^^^
 >new X<C>() : X<C>
+>           : ^^^^
 >X : typeof X
+>  : ^^^^^^^^
 
 var d1 = new X<D>();
 >d1 : X<D>
+>   : ^^^^
 >new X<D>() : X<D>
+>           : ^^^^
 >X : typeof X
+>  : ^^^^^^^^
 
 var r = foo(c1, d1); 
 >r : C
+>  : ^
 >foo(c1, d1) : C
+>            : ^
 >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
+>    : ^ ^^^^^^^^^              ^^ ^^    ^^  ^^    ^^^^^^
 >c1 : X<C>
+>   : ^^^^
 >d1 : X<D>
+>   : ^^^^
 
 var r2 = foo(c1, c1);
 >r2 : C
+>   : ^
 >foo(c1, c1) : C
+>            : ^
 >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
+>    : ^ ^^^^^^^^^              ^^ ^^    ^^  ^^    ^^^^^^
 >c1 : X<C>
+>   : ^^^^
 >c1 : X<C>
+>   : ^^^^
 
 function foo2<T extends C>(t: X<T>, t2: X<T>) {
 >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
+>     : ^ ^^^^^^^^^ ^^ ^^    ^^  ^^    ^^^^^^
 >t : X<T>
+>  : ^^^^
 >t2 : X<T>
+>   : ^^^^
 
     var x: T;
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 var r = foo2(c1, d1); 
 >r : C
+>  : ^
 >foo2(c1, d1) : C
+>             : ^
 >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
+>     : ^ ^^^^^^^^^ ^^ ^^    ^^  ^^    ^^^^^^
 >c1 : X<C>
+>   : ^^^^
 >d1 : X<D>
+>   : ^^^^
 
 var r2 = foo2(c1, c1);
 >r2 : C
+>   : ^
 >foo2(c1, c1) : C
+>             : ^
 >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
+>     : ^ ^^^^^^^^^ ^^ ^^    ^^  ^^    ^^^^^^
 >c1 : X<C>
+>   : ^^^^
 >c1 : X<C>
+>   : ^^^^
 

@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_vacuousIntersectionOfContextualTypes.ts(1,7): error TS2322: Type '"foo"' is not assignable to type '"baz"'.
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_vacuousIntersectionOfContextualTypes.ts(2,7): error TS2322: Type '{ xyz: "foo"; }' is not assignable to type '{ xyz: "baz"; }'.
+typeSatisfaction_vacuousIntersectionOfContextualTypes.ts(1,7): error TS2322: Type '"foo"' is not assignable to type '"baz"'.
+typeSatisfaction_vacuousIntersectionOfContextualTypes.ts(2,7): error TS2322: Type '{ xyz: "foo"; }' is not assignable to type '{ xyz: "baz"; }'.
   Types of property 'xyz' are incompatible.
     Type '"foo"' is not assignable to type '"baz"'.
 
 
-==== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_vacuousIntersectionOfContextualTypes.ts (2 errors) ====
+==== typeSatisfaction_vacuousIntersectionOfContextualTypes.ts (2 errors) ====
     const a: "baz" = "foo" satisfies "foo" | "bar";
           ~
 !!! error TS2322: Type '"foo"' is not assignable to type '"baz"'.

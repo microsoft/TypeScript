@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInStaticMethod1.ts] ////
+
 //// [thisInStaticMethod1.ts]
 class foo {
  static x = 3;

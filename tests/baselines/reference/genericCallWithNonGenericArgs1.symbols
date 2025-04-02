@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCallWithNonGenericArgs1.ts ===
+//// [tests/cases/compiler/genericCallWithNonGenericArgs1.ts] ////
+
+=== genericCallWithNonGenericArgs1.ts ===
 function f<T>(x: any) { }
 >f : Symbol(f, Decl(genericCallWithNonGenericArgs1.ts, 0, 0))
 >T : Symbol(T, Decl(genericCallWithNonGenericArgs1.ts, 0, 11))

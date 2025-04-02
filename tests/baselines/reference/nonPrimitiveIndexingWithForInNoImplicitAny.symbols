@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts] ////
+
+=== nonPrimitiveIndexingWithForInNoImplicitAny.ts ===
 var a: object;
 >a : Symbol(a, Decl(nonPrimitiveIndexingWithForInNoImplicitAny.ts, 0, 3))
 

@@ -1,63 +1,108 @@
-=== tests/cases/compiler/spellingSuggestionJSXAttribute.tsx ===
+//// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== spellingSuggestionJSXAttribute.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 function MyComp2(props: { className?: string, htmlFor?: string }) {
->MyComp2 : (props: {    className?: string;    htmlFor?: string;}) => any
+>MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+>        : ^     ^^                                         ^^^^^^^^
 >props : { className?: string; htmlFor?: string; }
+>      : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >className : string
+>          : ^^^^^^
 >htmlFor : string
+>        : ^^^^^^
 
     return null!;
 >null! : null
+>      : ^^^^
 }
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : MyComp
+>       : ^^^^^^
 >React.Component : React.Component<{ className?: string; htmlFor?: string; }, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 >className : string
+>          : ^^^^^^
 >htmlFor : string
+>        : ^^^^^^
 
 <a class="" />;
 ><a class="" /> : JSX.Element
+>               : ^^^^^^^^^^^
 >a : any
+>  : ^^^
 >class : string
+>      : ^^^^^^
 
 <a for="" />; // should have no fix
 ><a for="" /> : JSX.Element
+>             : ^^^^^^^^^^^
 >a : any
+>  : ^^^
 >for : string
+>    : ^^^^^^
 
 <label for="" />;
 ><label for="" /> : JSX.Element
+>                 : ^^^^^^^^^^^
 >label : any
+>      : ^^^
 >for : string
+>    : ^^^^^^
 
 <label for="" class="" />;
 ><label for="" class="" /> : JSX.Element
+>                          : ^^^^^^^^^^^
 >label : any
+>      : ^^^
 >for : string
+>    : ^^^^^^
 >class : string
+>      : ^^^^^^
 
 <MyComp class="" />;
 ><MyComp class="" /> : JSX.Element
+>                    : ^^^^^^^^^^^
 >MyComp : typeof MyComp
+>       : ^^^^^^^^^^^^^
 >class : string
+>      : ^^^^^^
 
 <MyComp2 class="" />;
 ><MyComp2 class="" /> : JSX.Element
+>                     : ^^^^^^^^^^^
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+>        : ^     ^^                                         ^^^^^^^^
 >class : string
+>      : ^^^^^^
 
 <MyComp for="" />;
 ><MyComp for="" /> : JSX.Element
+>                  : ^^^^^^^^^^^
 >MyComp : typeof MyComp
+>       : ^^^^^^^^^^^^^
 >for : string
+>    : ^^^^^^
 
 <MyComp2 for="" />;
 ><MyComp2 for="" /> : JSX.Element
+>                   : ^^^^^^^^^^^
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+>        : ^     ^^                                         ^^^^^^^^
 >for : string
+>    : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStaticMethodAugmentation.ts] ////
+
 //// [source.js]
 export class Clazz {
     static method() { }

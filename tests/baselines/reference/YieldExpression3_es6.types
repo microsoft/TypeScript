@@ -1,6 +1,9 @@
-=== tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts] ////
+
+=== YieldExpression3_es6.ts ===
 function* foo() {
 >foo : () => Generator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   yield
 >yield : any

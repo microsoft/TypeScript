@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts ===
+//// [tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts] ////
+
+=== invalidTryStatements.ts ===
 function fn() {
 >fn : Symbol(fn, Decl(invalidTryStatements.ts, 0, 0))
 

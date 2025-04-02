@@ -1,120 +1,177 @@
-=== tests/cases/compiler/inheritedOverloadedSpecializedSignatures.ts ===
+//// [tests/cases/compiler/inheritedOverloadedSpecializedSignatures.ts] ////
+
+=== inheritedOverloadedSpecializedSignatures.ts ===
 interface A {
   (key:string):void;
 >key : string
+>    : ^^^^^^
 }
 
 interface B extends A {
   (key:'foo'):string;
 >key : "foo"
+>    : ^^^^^
 }
 
 var b:B;
 >b : B
+>  : ^
 
 // Should not error
 b('foo').charAt(0);
 >b('foo').charAt(0) : string
+>                   : ^^^^^^
 >b('foo').charAt : (pos: number) => string
+>                : ^   ^^      ^^^^^      
 >b('foo') : string
+>         : ^^^^^^
 >b : B
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 interface A {
     (x: 'A1'): string;
 >x : "A1"
+>  : ^^^^
 
     (x: string): void;
 >x : string
+>  : ^^^^^^
 }
 
 interface B extends A {
     (x: 'B1'): number;
 >x : "B1"
+>  : ^^^^
 }
 
 interface A {
     (x: 'A2'): boolean;
 >x : "A2"
+>  : ^^^^
 }
 
 interface B  {
     (x: 'B2'): string[];
 >x : "B2"
+>  : ^^^^
 }
 
 interface C1 extends B {
 	(x: 'C1'): number[];
 >x : "C1"
+>  : ^^^^
 }
 
 interface C2 extends B {
 	(x: 'C2'): boolean[];
 >x : "C2"
+>  : ^^^^
 }
 
 interface C extends C1, C2 {
 	(x: 'C'): string;
 >x : "C"
+>  : ^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 // none of these lines should error
 var x1: string[] = c('B2');
 >x1 : string[]
+>   : ^^^^^^^^
 >c('B2') : string[]
+>        : ^^^^^^^^
 >c : C
+>  : ^
 >'B2' : "B2"
+>     : ^^^^
 
 var x2: number = c('B1');
 >x2 : number
+>   : ^^^^^^
 >c('B1') : number
+>        : ^^^^^^
 >c : C
+>  : ^
 >'B1' : "B1"
+>     : ^^^^
 
 var x3: boolean = c('A2');
 >x3 : boolean
+>   : ^^^^^^^
 >c('A2') : boolean
+>        : ^^^^^^^
 >c : C
+>  : ^
 >'A2' : "A2"
+>     : ^^^^
 
 var x4: string = c('A1');
 >x4 : string
+>   : ^^^^^^
 >c('A1') : string
+>        : ^^^^^^
 >c : C
+>  : ^
 >'A1' : "A1"
+>     : ^^^^
 
 var x5: void = c('A0');
 >x5 : void
+>   : ^^^^
 >c('A0') : void
+>        : ^^^^
 >c : C
+>  : ^
 >'A0' : "A0"
+>     : ^^^^
 
 var x6: number[] = c('C1');
 >x6 : number[]
+>   : ^^^^^^^^
 >c('C1') : number[]
+>        : ^^^^^^^^
 >c : C
+>  : ^
 >'C1' : "C1"
+>     : ^^^^
 
 var x7: boolean[] = c('C2');
 >x7 : boolean[]
+>   : ^^^^^^^^^
 >c('C2') : boolean[]
+>        : ^^^^^^^^^
 >c : C
+>  : ^
 >'C2' : "C2"
+>     : ^^^^
 
 var x8: string = c('C');
 >x8 : string
+>   : ^^^^^^
 >c('C') : string
+>       : ^^^^^^
 >c : C
+>  : ^
 >'C' : "C"
+>    : ^^^
 
 var x9: void = c('generic');
 >x9 : void
+>   : ^^^^
 >c('generic') : void
+>             : ^^^^
 >c : C
+>  : ^
 >'generic' : "generic"
+>          : ^^^^^^^^^
 

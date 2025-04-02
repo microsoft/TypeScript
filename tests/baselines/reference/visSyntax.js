@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/visSyntax.ts] ////
+
 //// [visSyntax.ts]
 module M {
     export class C {

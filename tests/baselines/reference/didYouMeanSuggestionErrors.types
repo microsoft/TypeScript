@@ -1,121 +1,198 @@
-=== tests/cases/compiler/didYouMeanSuggestionErrors.ts ===
+//// [tests/cases/compiler/didYouMeanSuggestionErrors.ts] ////
+
+=== didYouMeanSuggestionErrors.ts ===
 describe("my test suite", () => {
 >describe("my test suite", () => {    it("should run", () => {        const a = $(".thing");    });}) : any
+>                                                                                                     : ^^^
 >describe : any
+>         : ^^^
 >"my test suite" : "my test suite"
+>                : ^^^^^^^^^^^^^^^
 >() => {    it("should run", () => {        const a = $(".thing");    });} : () => void
+>                                                                          : ^^^^^^^^^^
 
     it("should run", () => {
 >it("should run", () => {        const a = $(".thing");    }) : any
+>                                                             : ^^^
 >it : any
+>   : ^^^
 >"should run" : "should run"
+>             : ^^^^^^^^^^^^
 >() => {        const a = $(".thing");    } : () => void
+>                                           : ^^^^^^^^^^
 
         const a = $(".thing");
 >a : any
+>  : ^^^
 >$(".thing") : any
+>            : ^^^
 >$ : any
+>  : ^^^
 >".thing" : ".thing"
+>         : ^^^^^^^^
 
     });
 });
 
 suite("another suite", () => {
 >suite("another suite", () => {    test("everything else", () => {        console.log(process.env);        document.createElement("div");        const x = require("fs");        const y = Buffer.from([]);        const z = module.exports;        const a = new Map();        const b = new Set();        const c = new WeakMap();        const d = new WeakSet();        const e = Symbol();        const f = Promise.resolve(0);        const i: Iterator<any> = null as any;        const j: AsyncIterator<any> = null as any;        const k: Symbol = null as any;        const l: Promise<any> = null as any;    });}) : any
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^
 >suite : any
+>      : ^^^
 >"another suite" : "another suite"
+>                : ^^^^^^^^^^^^^^^
 >() => {    test("everything else", () => {        console.log(process.env);        document.createElement("div");        const x = require("fs");        const y = Buffer.from([]);        const z = module.exports;        const a = new Map();        const b = new Set();        const c = new WeakMap();        const d = new WeakSet();        const e = Symbol();        const f = Promise.resolve(0);        const i: Iterator<any> = null as any;        const j: AsyncIterator<any> = null as any;        const k: Symbol = null as any;        const l: Promise<any> = null as any;    });} : () => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^
 
     test("everything else", () => {
 >test("everything else", () => {        console.log(process.env);        document.createElement("div");        const x = require("fs");        const y = Buffer.from([]);        const z = module.exports;        const a = new Map();        const b = new Set();        const c = new WeakMap();        const d = new WeakSet();        const e = Symbol();        const f = Promise.resolve(0);        const i: Iterator<any> = null as any;        const j: AsyncIterator<any> = null as any;        const k: Symbol = null as any;        const l: Promise<any> = null as any;    }) : any
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^
 >test : any
+>     : ^^^
 >"everything else" : "everything else"
+>                  : ^^^^^^^^^^^^^^^^^
 >() => {        console.log(process.env);        document.createElement("div");        const x = require("fs");        const y = Buffer.from([]);        const z = module.exports;        const a = new Map();        const b = new Set();        const c = new WeakMap();        const d = new WeakSet();        const e = Symbol();        const f = Promise.resolve(0);        const i: Iterator<any> = null as any;        const j: AsyncIterator<any> = null as any;        const k: Symbol = null as any;        const l: Promise<any> = null as any;    } : () => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^
 
         console.log(process.env);
 >console.log(process.env) : any
+>                         : ^^^
 >console.log : any
+>            : ^^^
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >process.env : any
+>            : ^^^
 >process : any
+>        : ^^^
 >env : any
+>    : ^^^
 
         document.createElement("div");
 >document.createElement("div") : any
+>                              : ^^^
 >document.createElement : any
+>                       : ^^^
 >document : any
+>         : ^^^
 >createElement : any
+>              : ^^^
 >"div" : "div"
+>      : ^^^^^
 
         const x = require("fs");
 >x : any
+>  : ^^^
 >require("fs") : any
+>              : ^^^
 >require : any
+>        : ^^^
 >"fs" : "fs"
+>     : ^^^^
 
         const y = Buffer.from([]);
 >y : any
+>  : ^^^
 >Buffer.from([]) : any
+>                : ^^^
 >Buffer.from : any
+>            : ^^^
 >Buffer : any
+>       : ^^^
 >from : any
+>     : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         const z = module.exports;
 >z : any
+>  : ^^^
 >module.exports : any
+>               : ^^^
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 
         const a = new Map();
 >a : any
+>  : ^^^
 >new Map() : any
+>          : ^^^
 >Map : any
+>    : ^^^
 
         const b = new Set();
 >b : any
+>  : ^^^
 >new Set() : any
+>          : ^^^
 >Set : any
+>    : ^^^
 
         const c = new WeakMap();
 >c : any
+>  : ^^^
 >new WeakMap() : any
+>              : ^^^
 >WeakMap : any
+>        : ^^^
 
         const d = new WeakSet();
 >d : any
+>  : ^^^
 >new WeakSet() : any
+>              : ^^^
 >WeakSet : any
+>        : ^^^
 
         const e = Symbol();
 >e : any
+>  : ^^^
 >Symbol() : any
+>         : ^^^
 >Symbol : any
+>       : ^^^
 
         const f = Promise.resolve(0);
 >f : any
+>  : ^^^
 >Promise.resolve(0) : any
+>                   : ^^^
 >Promise.resolve : any
+>                : ^^^
 >Promise : any
+>        : ^^^
 >resolve : any
+>        : ^^^
 >0 : 0
+>  : ^
 
         const i: Iterator<any> = null as any;
 >i : Iterator<any>
+>  : ^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
         const j: AsyncIterator<any> = null as any;
 >j : AsyncIterator<any>
+>  : ^^^^^^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
         const k: Symbol = null as any;
 >k : Symbol
+>  : ^^^^^^
 >null as any : any
+>            : ^^^
 
         const l: Promise<any> = null as any;
 >l : Promise<any>
+>  : ^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
     });
 });

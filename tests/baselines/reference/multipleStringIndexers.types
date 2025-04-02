@@ -1,62 +1,83 @@
-=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleStringIndexers.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleStringIndexers.ts] ////
+
+=== multipleStringIndexers.ts ===
 // Multiple indexers of the same type are an error
 
 class C {
 >C : C
+>  : ^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 
 interface I {
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 
 var a: {
 >a : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 
 var b: {
 >b : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
 } = { y: '' }
 >{ y: '' } : { y: string; }
+>          : ^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 
 interface I2<T> {
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }

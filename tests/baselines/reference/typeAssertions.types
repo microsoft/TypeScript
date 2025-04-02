@@ -1,162 +1,257 @@
-=== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts ===
+//// [tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts] ////
+
+=== typeAssertions.ts ===
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1<T>(t: T) { }
 >fn1 : <T>(t: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 
 function fn2(t: any) { }
 >fn2 : (t: any) => void
+>    : ^ ^^   ^^^^^^^^^
 >t : any
+>  : ^^^
 
 fn1(fn2<string>(4)); // Error
 >fn1(fn2<string>(4)) : void
+>                    : ^^^^
 >fn1 : <T>(t: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >fn2<string>(4) : void
+>               : ^^^^
 >fn2 : (t: any) => void
+>    : ^ ^^   ^^^^^^^^^
 >4 : 4
+>  : ^
 
 var a: any;
 >a : any
+>  : ^^^
 
 var s: string;
 >s : string
+>  : ^^^^^^
 
 // Type assertion of non - unary expression
 var a = <any>"" + 4;
 >a : any
+>  : ^^^
 ><any>"" + 4 : any
+>            : ^^^
 ><any>"" : any
+>        : ^^^
 >"" : ""
+>   : ^^
 >4 : 4
+>  : ^
 
 var s = "" + <any>4;
 >s : string
+>  : ^^^^^^
 >"" + <any>4 : string
+>            : ^^^^^^
 >"" : ""
+>   : ^^
 ><any>4 : any
+>       : ^^^
 >4 : 4
+>  : ^
 
 class SomeBase {
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     private p;
 >p : any
+>  : ^^^
 }
 class SomeDerived extends SomeBase {
 >SomeDerived : SomeDerived
+>            : ^^^^^^^^^^^
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     private x;
 >x : any
+>  : ^^^
 }
 class SomeOther {
 >SomeOther : SomeOther
+>          : ^^^^^^^^^
 
     private q;
 >q : any
+>  : ^^^
 }
 
 // Type assertion should check for assignability in either direction
 var someBase = new SomeBase();
 >someBase : SomeBase
+>         : ^^^^^^^^
 >new SomeBase() : SomeBase
+>               : ^^^^^^^^
 >SomeBase : typeof SomeBase
+>         : ^^^^^^^^^^^^^^^
 
 var someDerived = new SomeDerived();
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 >new SomeDerived() : SomeDerived
+>                  : ^^^^^^^^^^^
 >SomeDerived : typeof SomeDerived
+>            : ^^^^^^^^^^^^^^^^^^
 
 var someOther = new SomeOther();
 >someOther : SomeOther
+>          : ^^^^^^^^^
 >new SomeOther() : SomeOther
+>                : ^^^^^^^^^
 >SomeOther : typeof SomeOther
+>          : ^^^^^^^^^^^^^^^^
 
 someBase = <SomeBase>someDerived;
 >someBase = <SomeBase>someDerived : SomeBase
+>                                 : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 ><SomeBase>someDerived : SomeBase
+>                      : ^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 
 someBase = <SomeBase>someBase;
 >someBase = <SomeBase>someBase : SomeBase
+>                              : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 ><SomeBase>someBase : SomeBase
+>                   : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 
 someBase = <SomeBase>someOther; // Error
 >someBase = <SomeBase>someOther : SomeBase
+>                               : ^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 ><SomeBase>someOther : SomeBase
+>                    : ^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 
 someDerived = <SomeDerived>someDerived;
 >someDerived = <SomeDerived>someDerived : SomeDerived
+>                                       : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 ><SomeDerived>someDerived : SomeDerived
+>                         : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 
 someDerived = <SomeDerived>someBase;
 >someDerived = <SomeDerived>someBase : SomeDerived
+>                                    : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 ><SomeDerived>someBase : SomeDerived
+>                      : ^^^^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 
 someDerived = <SomeDerived>someOther; // Error
 >someDerived = <SomeDerived>someOther : SomeDerived
+>                                     : ^^^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 ><SomeDerived>someOther : SomeDerived
+>                       : ^^^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 
 someOther = <SomeOther>someDerived; // Error
 >someOther = <SomeOther>someDerived : SomeOther
+>                                   : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 ><SomeOther>someDerived : SomeOther
+>                       : ^^^^^^^^^
 >someDerived : SomeDerived
+>            : ^^^^^^^^^^^
 
 someOther = <SomeOther>someBase; // Error
 >someOther = <SomeOther>someBase : SomeOther
+>                                : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 ><SomeOther>someBase : SomeOther
+>                    : ^^^^^^^^^
 >someBase : SomeBase
+>         : ^^^^^^^^
 
 someOther = <SomeOther>someOther;
 >someOther = <SomeOther>someOther : SomeOther
+>                                 : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 ><SomeOther>someOther : SomeOther
+>                     : ^^^^^^^^^
 >someOther : SomeOther
+>          : ^^^^^^^^^
 
 // Type assertion cannot be a type-predicate type
 var numOrStr: number | string;
 >numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
 
 var str: string;
 >str : string
+>    : ^^^^^^
 
 if(<numOrStr is string>(numOrStr === undefined)) { // Error
 ><numOrStr is : numOrStr
+>             : ^^^^^^^^
 >is : any
+>   : ^^^
 >string>(numOrStr === undefined) : boolean
+>                                : ^^^^^^^
 >string : any
+>       : ^^^
 >(numOrStr === undefined) : boolean
+>                         : ^^^^^^^
 >numOrStr === undefined : boolean
+>                       : ^^^^^^^
 >numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 	str = numOrStr; // Error, no narrowing occurred
 >str = numOrStr : string | number
+>               : ^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 >numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
 }
 
 if((numOrStr === undefined) as numOrStr is string) { // Error
 >(numOrStr === undefined) as numOrStr : numOrStr
+>                                     : ^^^^^^^^
 >(numOrStr === undefined) : boolean
+>                         : ^^^^^^^
 >numOrStr === undefined : boolean
+>                       : ^^^^^^^
 >numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >is : any
+>   : ^^^
 >string : any
+>       : ^^^
 }
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializeVarArgs1.ts] ////
+
 //// [specializeVarArgs1.ts]
 interface Observable<T>{ }
 

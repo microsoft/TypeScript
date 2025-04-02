@@ -1,100 +1,138 @@
-=== tests/cases/conformance/esDecorators/classDeclaration/global.ts ===
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.2.ts] ////
+
+=== global.ts ===
 /** @type {*} */
 var dec;
 >dec : any
+>    : ^^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file1.ts ===
+=== file1.ts ===
 // ok
 @dec export class C1 { }
 >dec : any
+>    : ^^^
 >C1 : C1
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file2.ts ===
+=== file2.ts ===
 // ok
 @dec export default class C2 {}
 >dec : any
+>    : ^^^
 >C2 : C2
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file3.ts ===
+=== file3.ts ===
 // error
 export @dec default class C3 {}
 >dec : any
+>    : ^^^
 >C3 : C3
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file4.ts ===
+=== file4.ts ===
 // ok
 export @dec class C4 {}
 >dec : any
+>    : ^^^
 >C4 : C4
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file5.ts ===
+=== file5.ts ===
 // ok
 export default @dec class C5 {}
 >dec : any
+>    : ^^^
 >C5 : C5
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file6.ts ===
+=== file6.ts ===
 // error
 @dec export @dec class C6 {}
 >dec : any
+>    : ^^^
 >dec : any
+>    : ^^^
 >C6 : C6
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file7.ts ===
+=== file7.ts ===
 // error
 @dec export default @dec class C7 {}
 >dec : any
+>    : ^^^
 >dec : any
+>    : ^^^
 >C7 : C7
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file8.ts ===
+=== file8.ts ===
 // ok
 @dec abstract class C8 {}
 >dec : any
+>    : ^^^
 >C8 : C8
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file9.ts ===
+=== file9.ts ===
 // ok
 @dec export abstract class C9 {}
 >dec : any
+>    : ^^^
 >C9 : C9
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file10.ts ===
+=== file10.ts ===
 // ok
 @dec export default abstract class C10 {}
 >dec : any
+>    : ^^^
 >C10 : C10
+>    : ^^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file11.ts ===
+=== file11.ts ===
 // ok
 export @dec abstract class C11 {}
 >dec : any
+>    : ^^^
 >C11 : C11
+>    : ^^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file12.ts ===
+=== file12.ts ===
 // ok
 export default @dec abstract class C12 {}
 >dec : any
+>    : ^^^
 >C12 : C12
+>    : ^^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file13.ts ===
+=== file13.ts ===
 // error
 abstract @dec class C13 {}
 >abstract : any
+>         : ^^^
 >dec : any
+>    : ^^^
 >C13 : C13
+>    : ^^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file14.ts ===
+=== file14.ts ===
 // error
 export abstract @dec class C14 {}
 >abstract : any
+>         : ^^^
 >dec : any
+>    : ^^^
 >C14 : C14
+>    : ^^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file15.ts ===
+=== file15.ts ===
 // error
 export default abstract @dec class C15 {}
 >abstract : any
+>         : ^^^
 >dec : any
+>    : ^^^
 >C15 : C15
+>    : ^^^
 

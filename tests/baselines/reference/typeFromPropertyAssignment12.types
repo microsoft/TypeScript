@@ -1,18 +1,27 @@
-=== tests/cases/conformance/salsa/module.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment12.ts] ////
+
+=== module.js ===
 var Outer = function(element, config) {};
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >function(element, config) {} : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
+>                             : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >element : any
 >config : any
 
-=== tests/cases/conformance/salsa/usage.js ===
+=== usage.js ===
 /** @constructor */
 Outer.Pos = function (line, ch) {};
 >Outer.Pos = function (line, ch) {} : typeof Pos
+>                                   : ^^^^^^^^^^
 >Outer.Pos : typeof Pos
+>          : ^^^^^^^^^^
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >Pos : typeof Pos
+>    : ^^^^^^^^^^
 >function (line, ch) {} : typeof Pos
+>                       : ^^^^^^^^^^
 >line : any
 >ch : any
 
@@ -20,24 +29,40 @@ Outer.Pos = function (line, ch) {};
 Outer.Pos.prototype.line;
 >Outer.Pos.prototype.line : any
 >Outer.Pos.prototype : any
+>                    : ^^^
 >Outer.Pos : typeof Pos
+>          : ^^^^^^^^^^
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >Pos : typeof Pos
+>    : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >line : any
+>     : ^^^
 
 var pos = new Outer.Pos(1, 'x');
 >pos : Pos
+>    : ^^^
 >new Outer.Pos(1, 'x') : Pos
+>                      : ^^^
 >Outer.Pos : typeof Pos
+>          : ^^^^^^^^^^
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >Pos : typeof Pos
+>    : ^^^^^^^^^^
 >1 : 1
+>  : ^
 >'x' : "x"
+>    : ^^^
 
 pos.line;
 >pos.line : number
+>         : ^^^^^^
 >pos : Pos
+>    : ^^^
 >line : number
+>     : ^^^^^^
 
 

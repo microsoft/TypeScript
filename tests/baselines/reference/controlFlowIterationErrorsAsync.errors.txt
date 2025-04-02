@@ -1,15 +1,15 @@
-tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(11,23): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+controlFlowIterationErrorsAsync.ts(11,23): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(22,23): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+controlFlowIterationErrorsAsync.ts(22,23): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(34,23): error TS2769: No overload matches this call.
+controlFlowIterationErrorsAsync.ts(34,23): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
     Argument of type 'string | number' is not assignable to parameter of type 'string'.
       Type 'number' is not assignable to type 'string'.
   Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
     Argument of type 'string | number' is not assignable to parameter of type 'number'.
       Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(45,23): error TS2769: No overload matches this call.
+controlFlowIterationErrorsAsync.ts(45,23): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
     Argument of type 'string | number' is not assignable to parameter of type 'string'.
       Type 'number' is not assignable to type 'string'.
@@ -18,7 +18,7 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts(45,23): e
       Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts (4 errors) ====
+==== controlFlowIterationErrorsAsync.ts (4 errors) ====
     let cond: boolean;
     
     async function len(s: string) {

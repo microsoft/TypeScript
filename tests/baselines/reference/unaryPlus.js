@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unaryPlus.ts] ////
+
 //// [unaryPlus.ts]
 // allowed per spec
 var a = +1;

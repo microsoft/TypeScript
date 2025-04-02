@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateMembers.ts] ////
+
 //// [unusedPrivateMembers.ts]
 class Test1 {
     private initializeInternal() {

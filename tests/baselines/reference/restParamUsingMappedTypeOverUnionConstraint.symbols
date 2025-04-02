@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParamUsingMappedTypeOverUnionConstraint.ts ===
+//// [tests/cases/compiler/restParamUsingMappedTypeOverUnionConstraint.ts] ////
+
+=== restParamUsingMappedTypeOverUnionConstraint.ts ===
 // repro 29919#issuecomment-470948453
 
 type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }

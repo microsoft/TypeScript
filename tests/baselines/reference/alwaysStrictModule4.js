@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/alwaysStrictModule4.ts] ////
+
 //// [alwaysStrictModule4.ts]
 // Module commonjs
 export const a = 1

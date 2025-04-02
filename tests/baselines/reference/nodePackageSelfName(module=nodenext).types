@@ -1,24 +1,32 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodePackageSelfName.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as self from "package";
 >self : typeof self
+>     : ^^^^^^^^^^^
 
 self;
 >self : typeof self
+>     : ^^^^^^^^^^^
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as self from "package";
 >self : typeof self
+>     : ^^^^^^^^^^^
 
 self;
 >self : typeof self
+>     : ^^^^^^^^^^^
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // esm format file
 import * as self from "package";
 >self : typeof self
+>     : ^^^^^^^^^^^
 
 self;
 >self : typeof self
+>     : ^^^^^^^^^^^
 

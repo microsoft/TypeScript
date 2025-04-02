@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
+
 //// [dependentDestructuredVariables.ts]
 type Action =
     | { kind: 'A', payload: number }
@@ -402,6 +404,68 @@ const bot = new Client();
 bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
 bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
 
+// Destructuring tuple types with different arities
+
+function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+    if (y === 2) {
+        x;  // 1
+    }
+    if (y === 4) {
+        x;  // 3
+    }
+    if (y === undefined) {
+        x;  // 5
+    }
+    if (x === 1) {
+        y;  // 2
+    }
+    if (x === 3) {
+        y;  // 4
+    }
+    if (x === 5) {
+        y;  // undefined
+    }
+}
+
+// Repro from #55661
+
+function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+    if (y === undefined) {
+        const shouldNotBeOk: never = x;  // Error
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/56312
+
+function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
+  if (Math.random()) {
+    x = 1;
+  }
+  if (y === 2) {
+    x; // 1 | 3
+  }
+}
+
+function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
+  if (Math.random()) {
+    y = 2;
+  }
+  if (y === 2) {
+    x; // 1 | 3
+  }
+}
+
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+
+const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (x, y) => {
+  if (Math.random()) {
+    y = 2;
+  }
+  if (y === 2) {
+    x; // 1 | 3
+  }
+}
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -418,8 +482,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -705,6 +770,59 @@ const fa3 = (guard, value) => {
 const bot = new Client();
 bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
 bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+// Destructuring tuple types with different arities
+function fz1([x, y]) {
+    if (y === 2) {
+        x; // 1
+    }
+    if (y === 4) {
+        x; // 3
+    }
+    if (y === undefined) {
+        x; // 5
+    }
+    if (x === 1) {
+        y; // 2
+    }
+    if (x === 3) {
+        y; // 4
+    }
+    if (x === 5) {
+        y; // undefined
+    }
+}
+// Repro from #55661
+function tooNarrow([x, y]) {
+    if (y === undefined) {
+        const shouldNotBeOk = x; // Error
+    }
+}
+// https://github.com/microsoft/TypeScript/issues/56312
+function parameterReassigned1([x, y]) {
+    if (Math.random()) {
+        x = 1;
+    }
+    if (y === 2) {
+        x; // 1 | 3
+    }
+}
+function parameterReassigned2([x, y]) {
+    if (Math.random()) {
+        y = 2;
+    }
+    if (y === 2) {
+        x; // 1 | 3
+    }
+}
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+const parameterReassignedContextualRest1 = (x, y) => {
+    if (Math.random()) {
+        y = 2;
+    }
+    if (y === 2) {
+        x; // 1 | 3
+    }
+};
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -853,3 +971,8 @@ declare class Client {
     on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
 }
 declare const bot: Client;
+declare function fz1([x, y]: [1, 2] | [3, 4] | [5]): void;
+declare function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]): void;
+declare function parameterReassigned1([x, y]: [1, 2] | [3, 4]): void;
+declare function parameterReassigned2([x, y]: [1, 2] | [3, 4]): void;
+declare const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void;

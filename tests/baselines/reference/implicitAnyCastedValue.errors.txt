@@ -1,12 +1,12 @@
-tests/cases/compiler/implicitAnyCastedValue.ts(10,5): error TS7008: Member 'bar' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyCastedValue.ts(11,5): error TS7008: Member 'foo' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyCastedValue.ts(26,5): error TS7008: Member 'getValue' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyCastedValue.ts(41,10): error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/implicitAnyCastedValue.ts(53,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
+implicitAnyCastedValue.ts(10,5): error TS7008: Member 'bar' implicitly has an 'any' type.
+implicitAnyCastedValue.ts(11,5): error TS7008: Member 'foo' implicitly has an 'any' type.
+implicitAnyCastedValue.ts(26,5): error TS7008: Member 'getValue' implicitly has an 'any' type.
+implicitAnyCastedValue.ts(41,10): error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyCastedValue.ts(53,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
+implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/implicitAnyCastedValue.ts (6 errors) ====
+==== implicitAnyCastedValue.ts (6 errors) ====
     var x = function () {
         return <any>0;  // this should not be an error
     }

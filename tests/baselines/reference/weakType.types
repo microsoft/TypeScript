@@ -1,163 +1,239 @@
-=== tests/cases/compiler/weakType.ts ===
+//// [tests/cases/compiler/weakType.ts] ////
+
+=== weakType.ts ===
 interface Settings {
     timeout?: number;
 >timeout : number
+>        : ^^^^^^
 
     onError?(): void;
 >onError : () => void
+>        : ^^^^^^    
 }
 
 function getDefaultSettings() {
 >getDefaultSettings : () => { timeout: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return { timeout: 1000 };
 >{ timeout: 1000 } : { timeout: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >timeout : number
+>        : ^^^^^^
 >1000 : 1000
+>     : ^^^^
 }
 interface CtorOnly {
     new(s: string): { timeout: 1000 }
 >s : string
+>  : ^^^^^^
 >timeout : 1000
+>        : ^^^^
 }
 
 function doSomething(settings: Settings) { /* ... */ }
 >doSomething : (settings: Settings) => void
+>            : ^        ^^        ^^^^^^^^^
 >settings : Settings
+>         : ^^^^^^^^
 
 // forgot to call `getDefaultSettings`
 doSomething(getDefaultSettings);
 >doSomething(getDefaultSettings) : void
+>                                : ^^^^
 >doSomething : (settings: Settings) => void
+>            : ^        ^^        ^^^^^^^^^
 >getDefaultSettings : () => { timeout: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 doSomething(() => ({ timeout: 1000 }));
 >doSomething(() => ({ timeout: 1000 })) : void
+>                                       : ^^^^
 >doSomething : (settings: Settings) => void
+>            : ^        ^^        ^^^^^^^^^
 >() => ({ timeout: 1000 }) : () => { timeout: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ timeout: 1000 }) : { timeout: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >{ timeout: 1000 } : { timeout: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >timeout : number
+>        : ^^^^^^
 >1000 : 1000
+>     : ^^^^
 
 doSomething(null as CtorOnly);
 >doSomething(null as CtorOnly) : void
+>                              : ^^^^
 >doSomething : (settings: Settings) => void
+>            : ^        ^^        ^^^^^^^^^
 >null as CtorOnly : CtorOnly
+>                 : ^^^^^^^^
 
 doSomething(12);
 >doSomething(12) : void
+>                : ^^^^
 >doSomething : (settings: Settings) => void
+>            : ^        ^^        ^^^^^^^^^
 >12 : 12
+>   : ^^
 
 doSomething('completely wrong');
 >doSomething('completely wrong') : void
+>                                : ^^^^
 >doSomething : (settings: Settings) => void
+>            : ^        ^^        ^^^^^^^^^
 >'completely wrong' : "completely wrong"
+>                   : ^^^^^^^^^^^^^^^^^^
 
 doSomething(false);
 >doSomething(false) : void
+>                   : ^^^^
 >doSomething : (settings: Settings) => void
+>            : ^        ^^        ^^^^^^^^^
 >false : false
+>      : ^^^^^
 
 // this is an oddly popular way of defining settings
 // this example is from services/textChanges.ts
 type ConfigurableStart = { useStart?: boolean }
->ConfigurableStart : { useStart?: boolean; }
+>ConfigurableStart : ConfigurableStart
+>                  : ^^^^^^^^^^^^^^^^^
 >useStart : boolean
+>         : ^^^^^^^
 
 type ConfigurableEnd = { useEnd?: boolean }
->ConfigurableEnd : { useEnd?: boolean; }
+>ConfigurableEnd : ConfigurableEnd
+>                : ^^^^^^^^^^^^^^^
 >useEnd : boolean
+>       : ^^^^^^^
 
 type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
->ConfigurableStartEnd : ConfigurableStart & ConfigurableEnd
+>ConfigurableStartEnd : ConfigurableStartEnd
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
 interface InsertOptions {
     prefix?: string
 >prefix : string
+>       : ^^^^^^
 
     suffix?: string
 >suffix : string
+>       : ^^^^^^
 }
 type ChangeOptions = ConfigurableStartEnd & InsertOptions;
->ChangeOptions : ConfigurableStart & ConfigurableEnd & InsertOptions
+>ChangeOptions : ChangeOptions
+>              : ^^^^^^^^^^^^^
 
 function del(options: ConfigurableStartEnd = {},
->del : (options?: ConfigurableStartEnd, error?: {    error?: number;}) => void
+>del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
+>    : ^       ^^^                    ^^     ^^^                   ^^^^^^^^^
 >options : ConfigurableStartEnd
+>        : ^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
              error: { error?: number } = {}) {
 >error : { error?: number; }
+>      : ^^^^^^^^^^      ^^^
 >error : number
+>      : ^^^^^^
 >{} : {}
+>   : ^^
 
     let changes: ChangeOptions[];
 >changes : ChangeOptions[]
+>        : ^^^^^^^^^^^^^^^
 
     changes.push(options);
 >changes.push(options) : number
+>                      : ^^^^^^
 >changes.push : (...items: ChangeOptions[]) => number
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >changes : ChangeOptions[]
+>        : ^^^^^^^^^^^^^^^
 >push : (...items: ChangeOptions[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >options : ConfigurableStartEnd
+>        : ^^^^^^^^^^^^^^^^^^^^
 
     changes.push(error);
 >changes.push(error) : number
+>                    : ^^^^^^
 >changes.push : (...items: ChangeOptions[]) => number
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >changes : ChangeOptions[]
+>        : ^^^^^^^^^^^^^^^
 >push : (...items: ChangeOptions[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >error : { error?: number; }
+>      : ^^^^^^^^^^      ^^^
 }
 
 class K {
 >K : K
+>  : ^
 
     constructor(s: string) { }
 >s : string
+>  : ^^^^^^
 }
 // Ctor isn't a weak type because it has a construct signature
 interface Ctor {
     new (s: string): K
 >s : string
+>  : ^^^^^^
 
     n?: number
 >n : number
+>  : ^^^^^^
 }
 let ctor: Ctor = K
 >ctor : Ctor
+>     : ^^^^
 >K : typeof K
+>  : ^^^^^^^^
 
 type Spoiler = { nope?: string }
->Spoiler : { nope?: string; }
+>Spoiler : Spoiler
+>        : ^^^^^^^
 >nope : string
+>     : ^^^^^^
 
 type Weak = {
->Weak : { a?: number; properties?: {    b?: number;}; }
+>Weak : Weak
+>     : ^^^^
 
     a?: number
 >a : number
+>  : ^^^^^^
 
     properties?: {
 >properties : { b?: number; }
+>           : ^^^^^^      ^^^
 
         b?: number
 >b : number
+>  : ^^^^^^
     }
 }
 declare let propertiesWrong: {
->propertiesWrong : { properties: {    wrong: string;}; }
+>propertiesWrong : { properties: { wrong: string; }; }
+>                : ^^^^^^^^^^^^^^                  ^^^
 
     properties: {
 >properties : { wrong: string; }
+>           : ^^^^^^^^^      ^^^
 
         wrong: string
 >wrong : string
+>      : ^^^^^^
     }
 }
 let weak: Weak & Spoiler = propertiesWrong
 >weak : Weak & Spoiler
+>     : ^^^^^^^^^^^^^^
 >propertiesWrong : { properties: { wrong: string; }; }
+>                : ^^^^^^^^^^^^^^                  ^^^
 
 

@@ -1,108 +1,180 @@
-=== tests/cases/compiler/ambientConstLiterals.ts ===
+//// [tests/cases/compiler/ambientConstLiterals.ts] ////
+
+=== ambientConstLiterals.ts ===
 function f<T>(x: T): T {
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 enum E { A, B, C, "non identifier" }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 >C : E.C
+>  : ^^^
 >"non identifier" : (typeof E)["non identifier"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const c1 = "abc";
 >c1 : "abc"
+>   : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 const c2 = 123;
 >c2 : 123
+>   : ^^^
 >123 : 123
+>    : ^^^
 
 const c3 = c1;
 >c3 : "abc"
+>   : ^^^^^
 >c1 : "abc"
+>   : ^^^^^
 
 const c4 = c2;
 >c4 : 123
+>   : ^^^
 >c2 : 123
+>   : ^^^
 
 const c5 = f(123);
 >c5 : 123
+>   : ^^^
 >f(123) : 123
+>       : ^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >123 : 123
+>    : ^^^
 
 const c6 = f(-123);
 >c6 : -123
+>   : ^^^^
 >f(-123) : -123
+>        : ^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >-123 : -123
+>     : ^^^^
 >123 : 123
+>    : ^^^
 
 const c7 = true;
 >c7 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 
 const c8 = E.A;
 >c8 : E.A
+>   : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
 const c8b = E["non identifier"];
 >c8b : (typeof E)["non identifier"]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >E["non identifier"] : (typeof E)["non identifier"]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 >"non identifier" : "non identifier"
+>                 : ^^^^^^^^^^^^^^^^
 
 const c9 = { x: "abc" };
 >c9 : { x: string; }
+>   : ^^^^^^^^^^^^^^
 >{ x: "abc" } : { x: string; }
+>             : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 const c10 = [123];
 >c10 : number[]
+>    : ^^^^^^^^
 >[123] : number[]
+>      : ^^^^^^^^
 >123 : 123
+>    : ^^^
 
 const c11 = "abc" + "def";
 >c11 : string
+>    : ^^^^^^
 >"abc" + "def" : string
+>              : ^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >"def" : "def"
+>      : ^^^^^
 
 const c12 = 123 + 456;
 >c12 : number
+>    : ^^^^^^
 >123 + 456 : number
+>          : ^^^^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 
 const c13 = Math.random() > 0.5 ? "abc" : "def";
 >c13 : "abc" | "def"
+>    : ^^^^^^^^^^^^^
 >Math.random() > 0.5 ? "abc" : "def" : "abc" | "def"
+>                                    : ^^^^^^^^^^^^^
 >Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
+>    : ^^^
 >"abc" : "abc"
+>      : ^^^^^
 >"def" : "def"
+>      : ^^^^^
 
 const c14 = Math.random() > 0.5 ? 123 : 456;
 >c14 : 123 | 456
+>    : ^^^^^^^^^
 >Math.random() > 0.5 ? 123 : 456 : 123 | 456
+>                                : ^^^^^^^^^
 >Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
+>    : ^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 

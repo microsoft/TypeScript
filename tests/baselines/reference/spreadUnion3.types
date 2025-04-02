@@ -1,63 +1,101 @@
-=== tests/cases/conformance/types/spread/spreadUnion3.ts ===
+//// [tests/cases/conformance/types/spread/spreadUnion3.ts] ////
+
+=== spreadUnion3.ts ===
 function f(x: { y: string } | undefined): { y: string } {
->f : (x: {    y: string;} | undefined) => {    y: string;}
+>f : (x: { y: string; } | undefined) => { y: string; }
+>  : ^ ^^                          ^^^^^              
 >x : { y: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     return { y: 123, ...x } // y: string | number
 >{ y: 123, ...x } : { y: string | number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >x : { y: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 }
 f(undefined)
 >f(undefined) : { y: string; }
+>             : ^^^^^      ^^^
 >f : (x: { y: string; } | undefined) => { y: string; }
+>  : ^ ^^                          ^^^^^              
 >undefined : undefined
+>          : ^^^^^^^^^
 
 
 function g(t?: { a: number } | null): void {
->g : (t?: {    a: number;} | null) => void
+>g : (t?: { a: number; } | null) => void
+>  : ^ ^^^                     ^^^^^    
 >t : { a: number; } | null | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     let b = { ...t };
 >b : { a?: number | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...t } : { a?: number | undefined; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : { a: number; } | null | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
     let c: number = b.a;  // might not have 'a'
 >c : number
+>  : ^^^^^^
 >b.a : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >b : { a?: number | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 g()
 >g() : void
->g : (t?: { a: number; } | null | undefined) => void
+>    : ^^^^
+>g : (t?: { a: number; } | null) => void
+>  : ^ ^^^                     ^^^^^    
 
 g(undefined)
 >g(undefined) : void
->g : (t?: { a: number; } | null | undefined) => void
+>             : ^^^^
+>g : (t?: { a: number; } | null) => void
+>  : ^ ^^^                     ^^^^^    
 >undefined : undefined
+>          : ^^^^^^^^^
 
 g(null)
 >g(null) : void
->g : (t?: { a: number; } | null | undefined) => void
+>        : ^^^^
+>g : (t?: { a: number; } | null) => void
+>  : ^ ^^^                     ^^^^^    
 
 // spreading nothing but null and undefined is not allowed
 declare const nullAndUndefinedUnion: null | undefined;
 >nullAndUndefinedUnion : null | undefined
+>                      : ^^^^^^^^^^^^^^^^
 
 var x = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
 >x : any
+>  : ^^^
 >{ ...nullAndUndefinedUnion, ...nullAndUndefinedUnion } : any
+>                                                       : ^^^
 >nullAndUndefinedUnion : null | undefined
+>                      : ^^^^^^^^^^^^^^^^
 >nullAndUndefinedUnion : null | undefined
+>                      : ^^^^^^^^^^^^^^^^
 
 var y = { ...nullAndUndefinedUnion };
 >y : any
+>  : ^^^
 >{ ...nullAndUndefinedUnion } : any
+>                             : ^^^
 >nullAndUndefinedUnion : null | undefined
+>                      : ^^^^^^^^^^^^^^^^
 

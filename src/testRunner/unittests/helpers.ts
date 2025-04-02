@@ -1,10 +1,10 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 
 const enum ChangedPart {
     none = 0,
     references = 1 << 0,
     importsAndExports = 1 << 1,
-    program = 1 << 2
+    program = 1 << 2,
 }
 
 export const newLine = "\r\n";
@@ -21,6 +21,7 @@ export interface NamedSourceText {
 export interface ProgramWithSourceTexts extends ts.Program {
     sourceTexts?: readonly NamedSourceText[];
     host: TestCompilerHost;
+    version: number;
 }
 
 export interface TestCompilerHost extends ts.CompilerHost {
@@ -31,11 +32,7 @@ export interface TestCompilerHost extends ts.CompilerHost {
 export class SourceText implements ts.IScriptSnapshot {
     private fullText: string | undefined;
 
-    constructor(private references: string,
-        private importsAndExports: string,
-        private program: string,
-        private changedPart = ChangedPart.none,
-        private version = 0) {
+    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart: ChangedPart = ChangedPart.none, private version = 0) {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {
@@ -62,7 +59,7 @@ export class SourceText implements ts.IScriptSnapshot {
         return new SourceText(this.references, this.importsAndExports, newProgram, this.changedPart | ChangedPart.program, this.version + 1);
     }
 
-    public getFullText() {
+    public getFullText(): string {
         return this.fullText || (this.fullText = this.references + this.importsAndExports + this.program);
     }
 
@@ -106,7 +103,7 @@ function createSourceFileWithText(fileName: string, sourceText: SourceText, targ
     return file;
 }
 
-export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ts.ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
+export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ts.ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean): TestCompilerHost {
     const files = ts.arrayToMap(texts, t => t.name, t => {
         if (oldProgram) {
             let oldFile = oldProgram.getSourceFile(t.name) as SourceFileWithText;
@@ -119,55 +116,72 @@ export function createTestCompilerHost(texts: readonly NamedSourceText[], target
         }
         return createSourceFileWithText(t.name, t.text, target);
     });
-    const useCaseSensitiveFileNames = ts.sys && ts.sys.useCaseSensitiveFileNames;
+    if (useCaseSensitiveFileNames === undefined) useCaseSensitiveFileNames = ts.sys && ts.sys.useCaseSensitiveFileNames;
     const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
+    const currentDirectory = "/";
+    const filesByPath = ts.mapEntries(files, (fileName, file) => [ts.toPath(fileName, currentDirectory, getCanonicalFileName), file]);
     const trace: string[] = [];
     const result: TestCompilerHost = {
         trace: s => trace.push(s),
         getTrace: () => trace,
         clearTrace: () => trace.length = 0,
-        getSourceFile: fileName => files.get(fileName),
+        getSourceFile: fileName => filesByPath.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName)),
         getDefaultLibFileName: () => "lib.d.ts",
         writeFile: ts.notImplemented,
-        getCurrentDirectory: () => "",
+        getCurrentDirectory: () => currentDirectory,
         getDirectories: () => [],
         getCanonicalFileName,
         useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
         getNewLine: () => ts.sys ? ts.sys.newLine : newLine,
-        fileExists: fileName => files.has(fileName),
+        fileExists: fileName => filesByPath.has(ts.toPath(fileName, currentDirectory, getCanonicalFileName)),
         readFile: fileName => {
-            const file = files.get(fileName);
+            const file = filesByPath.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName));
             return file && file.text;
         },
     };
     if (useGetSourceFileByPath) {
-        const filesByPath = ts.mapEntries(files, (fileName, file) => [ts.toPath(fileName, "", getCanonicalFileName), file]);
         result.getSourceFileByPath = (_fileName, path) => filesByPath.get(path);
     }
     return result;
 }
 
-export function newProgram(texts: NamedSourceText[], rootNames: string[], options: ts.CompilerOptions, useGetSourceFileByPath?: boolean): ProgramWithSourceTexts {
-    const host = createTestCompilerHost(texts, options.target!, /*oldProgram*/ undefined, useGetSourceFileByPath);
-    const program = ts.createProgram(rootNames, options, host) as ProgramWithSourceTexts;
-    program.sourceTexts = texts;
-    program.host = host;
-    return program;
+export function newProgram(texts: NamedSourceText[], rootNames: string[], options: ts.CompilerOptions, useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean): ProgramWithSourceTexts {
+    const host = createTestCompilerHost(texts, options.target!, /*oldProgram*/ undefined, useGetSourceFileByPath, useCaseSensitiveFileNames);
+    return programToProgramWithSourceTexts(
+        ts.createProgram(rootNames, options, host),
+        texts,
+        host,
+        1,
+    );
 }
 
-export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: readonly string[], options: ts.CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean) {
+function programToProgramWithSourceTexts(program: ts.Program, texts: NamedSourceText[], host: TestCompilerHost, version: number): ProgramWithSourceTexts {
+    const result = program as ProgramWithSourceTexts;
+    result.sourceTexts = texts;
+    result.host = host;
+    result.version = version;
+    return result;
+}
+
+export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: readonly string[], options: ts.CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean): ProgramWithSourceTexts {
     if (!newTexts) {
         newTexts = oldProgram.sourceTexts!.slice(0);
     }
     updater(newTexts);
-    const host = createTestCompilerHost(newTexts, options.target!, oldProgram, useGetSourceFileByPath);
-    const program = ts.createProgram(rootNames, options, host, oldProgram) as ProgramWithSourceTexts;
-    program.sourceTexts = newTexts;
-    program.host = host;
-    return program;
+    const host = createTestCompilerHost(newTexts, options.target!, oldProgram, useGetSourceFileByPath, useCaseSensitiveFileNames);
+    return programToProgramWithSourceTexts(
+        ts.createProgram(rootNames, options, host, oldProgram),
+        newTexts,
+        host,
+        oldProgram.version + 1,
+    );
 }
 
-export function updateProgramText(files: readonly NamedSourceText[], fileName: string, newProgramText: string) {
+export function updateProgramText(files: readonly NamedSourceText[], fileName: string, newProgramText: string): void {
     const file = ts.find(files, f => f.name === fileName)!;
     file.text = file.text.updateProgram(newProgramText);
+}
+
+export function jsonToReadableText(json: any): string {
+    return JSON.stringify(json, undefined, 2);
 }

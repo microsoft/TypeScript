@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts] ////
+
 //// [duplicateObjectLiteralProperty_computedName2.ts]
 const n = 1;
 const s = "s";

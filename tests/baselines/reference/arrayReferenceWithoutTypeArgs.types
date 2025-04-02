@@ -1,8 +1,13 @@
-=== tests/cases/compiler/arrayReferenceWithoutTypeArgs.ts ===
+//// [tests/cases/compiler/arrayReferenceWithoutTypeArgs.ts] ////
+
+=== arrayReferenceWithoutTypeArgs.ts ===
 class X {
 >X : X
+>  : ^
 
     public f(a: Array) { }
->f : (a: any) => void
+>f : (a: Array) => void
+>  : ^ ^^     ^^^^^^^^^
 >a : any
+>  : ^^^
 }

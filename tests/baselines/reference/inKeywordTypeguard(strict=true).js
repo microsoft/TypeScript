@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inKeywordTypeguard.ts] ////
+
 //// [inKeywordTypeguard.ts]
 class A { a: string; }
 class B { b: string; }

@@ -1,39 +1,55 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorExperimentalDecorators.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorExperimentalDecorators.ts] ////
+
+=== autoAccessorExperimentalDecorators.ts ===
 declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^    
 >target : any
+>       : ^^^
 >key : PropertyKey
+>    : ^^^^^^^^^^^
 >desc : PropertyDescriptor
+>     : ^^^^^^^^^^^^^^^^^^
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^    
 
     accessor a: any;
 >a : any
+>  : ^^^
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^    
 
     static accessor b: any;
 >b : any
+>  : ^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^    
 
     accessor #a: any;
 >#a : any
+>   : ^^^
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^    
 
     static accessor #b: any;
 >#b : any
+>   : ^^^
 }
 

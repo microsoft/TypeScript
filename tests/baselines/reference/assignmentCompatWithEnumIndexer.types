@@ -1,12 +1,18 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts] ////
+
+=== assignmentCompatWithEnumIndexer.ts ===
 enum E {
 >E : E
+>  : ^
 
     A
 >A : E.A
+>  : ^^^
 }
 
 let foo: Record<E, any> = {}
 >foo : Record<E, any>
+>    : ^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 

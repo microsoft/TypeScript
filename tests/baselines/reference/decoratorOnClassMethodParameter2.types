@@ -1,16 +1,27 @@
-=== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter2.ts ===
+//// [tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter2.ts] ////
+
+=== decoratorOnClassMethodParameter2.ts ===
 declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^    
 >target : Object
+>       : ^^^^^^
 >propertyKey : string | symbol
+>            : ^^^^^^^^^^^^^^^
 >parameterIndex : number
+>               : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     method(this: C, @dec p: number) {}
 >method : (this: C, p: number) => void
+>       : ^    ^^ ^^ ^^      ^^^^^^^^^
 >this : C
+>     : ^
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^    
 >p : number
+>  : ^^^^^^
 }

@@ -1,45 +1,72 @@
-=== tests/cases/compiler/contextualTypeOfIndexedAccessParameter.ts ===
+//// [tests/cases/compiler/contextualTypeOfIndexedAccessParameter.ts] ////
+
+=== contextualTypeOfIndexedAccessParameter.ts ===
 type Keys = "a" | "b";
->Keys : "a" | "b"
+>Keys : Keys
+>     : ^^^^
 
 type OptionsForKey = { a: { cb: (p: number) => number } } & { b: {} };
->OptionsForKey : { a: { cb: (p: number) => number; }; } & { b: {}; }
+>OptionsForKey : OptionsForKey
+>              : ^^^^^^^^^^^^^
 >a : { cb: (p: number) => number; }
+>  : ^^^^^^                     ^^^
 >cb : (p: number) => number
+>   : ^ ^^      ^^^^^      
 >p : number
+>  : ^^^^^^
 >b : {}
+>  : ^^
 
 declare function f<K extends Keys>(key: K, options: OptionsForKey[K]): void;
 >f : <K extends Keys>(key: K, options: OptionsForKey[K]) => void
+>  : ^ ^^^^^^^^^    ^^   ^^ ^^       ^^                ^^^^^    
 >key : K
+>    : ^
 >options : OptionsForKey[K]
+>        : ^^^^^^^^^^^^^^^^
 
 f("a", {
 >f("a", {    cb: p => p,}) : void
+>                          : ^^^^
 >f : <K extends Keys>(key: K, options: OptionsForKey[K]) => void
+>  : ^ ^^^^^^^^^    ^^   ^^ ^^       ^^                ^^^^^    
 >"a" : "a"
+>    : ^^^
 >{    cb: p => p,} : { cb: (p: number) => number; }
+>                  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     cb: p => p,
 >cb : (p: number) => number
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 >p => p : (p: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 >p : number
+>  : ^^^^^^
 
 });
 
 function g<
->g : <K extends "a" | "b">(x: ({    a: string;} & {    b: string;})[K], y: string) => void
+>g : <K extends "a" | "b">(x: ({ a: string; } & { b: string; })[K], y: string) => void
+>  : ^ ^^^^^^^^^         ^^ ^^                                    ^^ ^^      ^^^^^^^^^
 
     K extends "a" | "b">(x: ({ a: string } & { b: string })[K], y: string) {
 >x : ({ a: string; } & { b: string; })[K]
+>  : ^^^^^^      ^^^^^^^^^^^      ^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     x = y;
 >x = y : string
+>      : ^^^^^^
 >x : ({ a: string; } & { b: string; })[K]
+>  : ^^^^^^      ^^^^^^^^^^^      ^^^^^^^
 >y : string
+>  : ^^^^^^
 }
 

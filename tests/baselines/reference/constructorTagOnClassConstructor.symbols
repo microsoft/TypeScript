@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/bug27025.js ===
+//// [tests/cases/conformance/jsdoc/constructorTagOnClassConstructor.ts] ////
+
+=== bug27025.js ===
 export class Alpha { }
 >Alpha : Symbol(Alpha, Decl(bug27025.js, 0, 0))
 

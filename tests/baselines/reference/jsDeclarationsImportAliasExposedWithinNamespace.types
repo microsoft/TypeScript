@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsImportAliasExposedWithinNamespace.ts] ////
+
+=== file.js ===
 /**
  * @namespace myTypes
  * @global
@@ -6,7 +8,9 @@
  */
 const myTypes = {
 >myTypes : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{    // SOME PROPS HERE} : {}
+>                         : ^^
 
     // SOME PROPS HERE
 };
@@ -23,10 +27,12 @@ const myTypes = {
 
 export {myTypes};
 >myTypes : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/file2.js ===
+=== file2.js ===
 import {myTypes} from './file.js';
 >myTypes : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 
 /**
  * @namespace testFnTypes
@@ -35,7 +41,9 @@ import {myTypes} from './file.js';
  */
 const testFnTypes = {
 >testFnTypes : { [x: string]: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >{    // SOME PROPS HERE} : {}
+>                         : ^^
 
     // SOME PROPS HERE
 };
@@ -50,18 +58,27 @@ const testFnTypes = {
  */
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
->input : import("tests/cases/conformance/jsdoc/declarations/file2").testFnTypes.input
+>       : ^     ^^                 ^^^^^             
+>input : import("file2").testFnTypes.input
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
+>                          : ^^^^^^^
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->input : import("tests/cases/conformance/jsdoc/declarations/file2").testFnTypes.input
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : import("file2").testFnTypes.input
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'number' : "number"
+>         : ^^^^^^^^
 
         return 2 * input;
 >2 * input : number
+>          : ^^^^^^
 >2 : 2
+>  : ^
 >input : never
+>      : ^^^^^
 
     } else {
         return null;
@@ -69,6 +86,8 @@ function testFn(input) {
 }
 
 export {testFn, testFnTypes};
->testFn : (input: testFnTypes.input) => number
+>testFn : (input: testFnTypes.input) => number | null
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^             
 >testFnTypes : { [x: string]: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 

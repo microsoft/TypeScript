@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames52.ts] ////
+
 //// [computedPropertyNames52.js]
 const array = [];
 for (let i = 0; i < 10; ++i) {
@@ -15,7 +17,7 @@ for (let i = 0; i < 10; ++i) {
     let _b, _c;
     array.push((_c = class C {
             constructor() {
-                this[_b] = () => C;
+                this[_b] = () => _c;
             }
         },
         _b = i,

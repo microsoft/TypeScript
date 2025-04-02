@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessiveStackDepthFlatArray.ts] ////
+
 //// [index.tsx]
 interface MiddlewareArray<T> extends Array<T> {}
 declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;

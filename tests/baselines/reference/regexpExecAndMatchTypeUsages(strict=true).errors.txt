@@ -1,18 +1,18 @@
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(3,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(4,5): error TS18048: 'matchResult.index' is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(5,5): error TS18048: 'matchResult.input' is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(6,5): error TS18048: 'matchResult.groups' is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(6,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(7,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(10,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(13,5): error TS18048: 'execResult.groups' is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(13,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(14,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
-tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(20,9): error TS2375: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+regexpExecAndMatchTypeUsages.ts(3,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(4,5): error TS18048: 'matchResult.index' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(5,5): error TS18048: 'matchResult.input' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(6,5): error TS18048: 'matchResult.groups' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(6,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(7,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+regexpExecAndMatchTypeUsages.ts(10,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(13,5): error TS18048: 'execResult.groups' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(13,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(14,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+regexpExecAndMatchTypeUsages.ts(20,9): error TS2375: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
 
 
-==== tests/cases/compiler/regexpExecAndMatchTypeUsages.ts (11 errors) ====
+==== regexpExecAndMatchTypeUsages.ts (11 errors) ====
     export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
         matchResult[0].length;
         matchResult[999].length;

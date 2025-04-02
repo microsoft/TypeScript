@@ -9,14 +9,14 @@ import {
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
     GetCanonicalFileName,
+    getDeclarationFileExtension,
     getStringComparer,
     identity,
     lastOrUndefined,
     Path,
     some,
     startsWith,
-    stringContains,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.
@@ -47,7 +47,7 @@ export function isAnyDirectorySeparator(charCode: number): boolean {
  *
  * @internal
  */
-export function isUrl(path: string) {
+export function isUrl(path: string): boolean {
     return getEncodedRootLength(path) < 0;
 }
 
@@ -57,7 +57,7 @@ export function isUrl(path: string) {
  *
  * @internal
  */
-export function isRootedDiskPath(path: string) {
+export function isRootedDiskPath(path: string): boolean {
     return getEncodedRootLength(path) > 0;
 }
 
@@ -66,7 +66,7 @@ export function isRootedDiskPath(path: string) {
  *
  * @internal
  */
-export function isDiskPathRoot(path: string) {
+export function isDiskPathRoot(path: string): boolean {
     const rootLength = getEncodedRootLength(path);
     return rootLength > 0 && rootLength === path.length;
 }
@@ -98,7 +98,7 @@ export function pathIsAbsolute(path: string): boolean {
  * @internal
  */
 export function pathIsRelative(path: string): boolean {
-    return /^\.\.?($|[\\/])/.test(path);
+    return /^\.\.?(?:$|[\\/])/.test(path);
 }
 
 /**
@@ -113,7 +113,7 @@ export function pathIsBareSpecifier(path: string): boolean {
 
 /** @internal */
 export function hasExtension(fileName: string): boolean {
-    return stringContains(getBaseFileName(fileName), ".");
+    return getBaseFileName(fileName).includes(".");
 }
 
 /** @internal */
@@ -137,7 +137,7 @@ export function fileExtensionIsOneOf(path: string, extensions: readonly string[]
  *
  * @internal
  */
-export function hasTrailingDirectorySeparator(path: string) {
+export function hasTrailingDirectorySeparator(path: string): boolean {
     return path.length > 0 && isAnyDirectorySeparator(path.charCodeAt(path.length - 1));
 }
 
@@ -194,8 +194,10 @@ function getEncodedRootLength(path: string): number {
             // special case interpreted as "the machine from which the URL is being interpreted".
             const scheme = path.slice(0, schemeEnd);
             const authority = path.slice(authorityStart, authorityEnd);
-            if (scheme === "file" && (authority === "" || authority === "localhost") &&
-                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))) {
+            if (
+                scheme === "file" && (authority === "" || authority === "localhost") &&
+                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
+            ) {
                 const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
                 if (volumeSeparatorEnd !== -1) {
                     if (path.charCodeAt(volumeSeparatorEnd) === CharacterCodes.slash) {
@@ -245,7 +247,7 @@ function getEncodedRootLength(path: string): number {
  *
  * @internal
  */
-export function getRootLength(path: string) {
+export function getRootLength(path: string): number {
     const rootLength = getEncodedRootLength(path);
     return rootLength < 0 ? ~rootLength : rootLength;
 }
@@ -452,7 +454,7 @@ function pathComponents(path: string, rootLength: number) {
 }
 
 /** @internal */
-export type PathPathComponents = Path[] & { __pathComponensBrand: any };
+export type PathPathComponents = Path[] & { __pathComponensBrand: any; };
 
 /**
  * Parse a path into an array containing a root component (at index 0) and zero or more path
@@ -507,7 +509,7 @@ export function getPathComponents(path: string, currentDirectory = "") {
  *
  * @internal
  */
-export function getPathFromPathComponents<T extends string>(pathComponents: readonly T[], length?: number) {
+export function getPathFromPathComponents<T extends string>(pathComponents: readonly T[], length?: number): T {
     if (pathComponents.length === 0) return "" as T;
 
     const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
@@ -522,7 +524,7 @@ export function getPathFromPathComponents<T extends string>(pathComponents: read
  * @internal
  */
 export function normalizeSlashes(path: string): string {
-    return path.indexOf("\\") !== -1
+    return path.includes("\\")
         ? path.replace(backslashRegExp, directorySeparator)
         : path;
 }
@@ -533,7 +535,7 @@ export function normalizeSlashes(path: string): string {
  *
  * @internal
  */
-export function reducePathComponents(components: readonly string[]) {
+export function reducePathComponents(components: readonly string[]): string[] {
     if (!some(components)) return [];
     const reduced = [components[0]];
     for (let i = 1; i < components.length; i++) {
@@ -617,33 +619,133 @@ export function resolvePath(path: string, ...paths: (string | undefined)[]): str
  *
  * @internal
  */
-export function getNormalizedPathComponents(path: string, currentDirectory: string | undefined) {
+export function getNormalizedPathComponents(path: string, currentDirectory: string | undefined): string[] {
     return reducePathComponents(getPathComponents(path, currentDirectory));
 }
 
 /** @internal */
-export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string | undefined) {
-    return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
+export function getNormalizedAbsolutePath(path: string, currentDirectory: string | undefined): string {
+    let rootLength = getRootLength(path);
+    if (rootLength === 0 && currentDirectory) {
+        path = combinePaths(currentDirectory, path);
+        rootLength = getRootLength(path);
+    }
+    else {
+        // combinePaths normalizes slashes, so not necessary in the other branch
+        path = normalizeSlashes(path);
+    }
+
+    const simpleNormalized = simpleNormalizePath(path);
+    if (simpleNormalized !== undefined) {
+        return simpleNormalized.length > rootLength ? removeTrailingDirectorySeparator(simpleNormalized) : simpleNormalized;
+    }
+
+    const length = path.length;
+    const root = path.substring(0, rootLength);
+    // `normalized` is only initialized once `path` is determined to be non-normalized
+    let normalized;
+    let index = rootLength;
+    let segmentStart = index;
+    let normalizedUpTo = index;
+    let seenNonDotDotSegment = rootLength !== 0;
+    while (index < length) {
+        // At beginning of segment
+        segmentStart = index;
+        let ch = path.charCodeAt(index);
+        while (ch === CharacterCodes.slash && index + 1 < length) {
+            index++;
+            ch = path.charCodeAt(index);
+        }
+        if (index > segmentStart) {
+            // Seen superfluous separator
+            normalized ??= path.substring(0, segmentStart - 1);
+            segmentStart = index;
+        }
+        // Past any superfluous separators
+        let segmentEnd = path.indexOf(directorySeparator, index + 1);
+        if (segmentEnd === -1) {
+            segmentEnd = length;
+        }
+        const segmentLength = segmentEnd - segmentStart;
+        if (segmentLength === 1 && path.charCodeAt(index) === CharacterCodes.dot) {
+            // "." segment (skip)
+            normalized ??= path.substring(0, normalizedUpTo);
+        }
+        else if (segmentLength === 2 && path.charCodeAt(index) === CharacterCodes.dot && path.charCodeAt(index + 1) === CharacterCodes.dot) {
+            // ".." segment
+            if (!seenNonDotDotSegment) {
+                if (normalized !== undefined) {
+                    normalized += normalized.length === rootLength ? ".." : "/..";
+                }
+                else {
+                    normalizedUpTo = index + 2;
+                }
+            }
+            else if (normalized === undefined) {
+                if (normalizedUpTo - 2 >= 0) {
+                    normalized = path.substring(0, Math.max(rootLength, path.lastIndexOf(directorySeparator, normalizedUpTo - 2)));
+                }
+                else {
+                    normalized = path.substring(0, normalizedUpTo);
+                }
+            }
+            else {
+                const lastSlash = normalized.lastIndexOf(directorySeparator);
+                if (lastSlash !== -1) {
+                    normalized = normalized.substring(0, Math.max(rootLength, lastSlash));
+                }
+                else {
+                    normalized = root;
+                }
+                if (normalized.length === rootLength) {
+                    seenNonDotDotSegment = rootLength !== 0;
+                }
+            }
+        }
+        else if (normalized !== undefined) {
+            if (normalized.length !== rootLength) {
+                normalized += directorySeparator;
+            }
+            seenNonDotDotSegment = true;
+            normalized += path.substring(segmentStart, segmentEnd);
+        }
+        else {
+            seenNonDotDotSegment = true;
+            normalizedUpTo = segmentEnd;
+        }
+        index = segmentEnd + 1;
+    }
+    return normalized ?? (length > rootLength ? removeTrailingDirectorySeparator(path) : path);
 }
 
 /** @internal */
 export function normalizePath(path: string): string {
     path = normalizeSlashes(path);
+    let normalized = simpleNormalizePath(path);
+    if (normalized !== undefined) {
+        return normalized;
+    }
+    normalized = getNormalizedAbsolutePath(path, "");
+    return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
+}
+
+function simpleNormalizePath(path: string): string | undefined {
     // Most paths don't require normalization
     if (!relativePathSegmentRegExp.test(path)) {
         return path;
     }
     // Some paths only require cleanup of `/./` or leading `./`
-    const simplified = path.replace(/\/\.\//g, "/").replace(/^\.\//, "");
+    let simplified = path.replace(/\/\.\//g, "/");
+    if (simplified.startsWith("./")) {
+        simplified = simplified.slice(2);
+    }
     if (simplified !== path) {
         path = simplified;
         if (!relativePathSegmentRegExp.test(path)) {
             return path;
         }
     }
-    // Other paths require full normalization
-    const normalized = getPathFromPathComponents(reducePathComponents(getPathComponents(path)));
-    return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
+    return undefined;
 }
 
 function getPathWithoutRoot(pathComponents: readonly string[]) {
@@ -652,7 +754,7 @@ function getPathWithoutRoot(pathComponents: readonly string[]) {
 }
 
 /** @internal */
-export function getNormalizedAbsolutePathWithoutRoot(fileName: string, currentDirectory: string | undefined) {
+export function getNormalizedAbsolutePathWithoutRoot(fileName: string, currentDirectory: string | undefined): string {
     return getPathWithoutRoot(getNormalizedPathComponents(fileName, currentDirectory));
 }
 
@@ -755,10 +857,29 @@ export function changeAnyExtension(path: string, ext: string, extensions?: strin
     return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
 }
 
+/**
+ * @internal
+ * Like `changeAnyExtension`, but declaration file extensions are recognized
+ * and replaced starting from the `.d`.
+ *
+ * ```ts
+ * changeAnyExtension("file.d.ts", ".js") === "file.d.js"
+ * changeFullExtension("file.d.ts", ".js") === "file.js"
+ * ```
+ */
+export function changeFullExtension(path: string, newExtension: string): string {
+    const declarationExtension = getDeclarationFileExtension(path);
+    if (declarationExtension) {
+        return path.slice(0, path.length - declarationExtension.length) +
+            (startsWith(newExtension, ".") ? newExtension : ("." + newExtension));
+    }
+    return changeAnyExtension(path, newExtension);
+}
+
 //// Path Comparisons
 
 // check path for these segments: '', '.'. '..'
-const relativePathSegmentRegExp = /(?:\/\/)|(?:^|\/)\.\.?(?:$|\/)/;
+const relativePathSegmentRegExp = /\/\/|(?:^|\/)\.\.?(?:$|\/)/;
 
 function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
     if (a === b) return Comparison.EqualTo;
@@ -801,7 +922,7 @@ function comparePathsWorker(a: string, b: string, componentComparer: (a: string,
  *
  * @internal
  */
-export function comparePathsCaseSensitive(a: string, b: string) {
+export function comparePathsCaseSensitive(a: string, b: string): Comparison {
     return comparePathsWorker(a, b, compareStringsCaseSensitive);
 }
 
@@ -810,7 +931,7 @@ export function comparePathsCaseSensitive(a: string, b: string) {
  *
  * @internal
  */
-export function comparePathsCaseInsensitive(a: string, b: string) {
+export function comparePathsCaseInsensitive(a: string, b: string): Comparison {
     return comparePathsWorker(a, b, compareStringsCaseInsensitive);
 }
 
@@ -886,8 +1007,7 @@ export function startsWithDirectory(fileName: string, directoryName: string, get
 
 //// Relative Paths
 
-/** @internal */
-export function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
+function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
     const fromComponents = reducePathComponents(getPathComponents(from));
     const toComponents = reducePathComponents(getPathComponents(to));
 
@@ -940,17 +1060,17 @@ export function convertToRelativePath(absoluteOrRelativePath: string, basePath: 
 }
 
 /** @internal */
-export function getRelativePathFromFile(from: string, to: string, getCanonicalFileName: GetCanonicalFileName) {
+export function getRelativePathFromFile(from: string, to: string, getCanonicalFileName: GetCanonicalFileName): string {
     return ensurePathIsNonModuleName(getRelativePathFromDirectory(getDirectoryPath(from), to, getCanonicalFileName));
 }
 
 /** @internal */
-export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean) {
+export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean): string {
     const pathComponents = getPathComponentsRelativeTo(
         resolvePath(currentDirectory, directoryPathOrUrl),
         resolvePath(currentDirectory, relativeOrAbsolutePath),
         equateStringsCaseSensitive,
-        getCanonicalFileName
+        getCanonicalFileName,
     );
 
     const firstComponent = pathComponents[0];
@@ -990,6 +1110,6 @@ export function forEachAncestorDirectory<T, P extends string>(directory: P, call
 }
 
 /** @internal */
-export function isNodeModulesDirectory(dirPath: Path) {
+export function isNodeModulesDirectory(dirPath: Path): boolean {
     return endsWith(dirPath, "/node_modules");
 }

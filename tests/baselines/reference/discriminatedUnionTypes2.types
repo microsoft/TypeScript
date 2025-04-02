@@ -1,407 +1,630 @@
-=== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts ===
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes2.ts] ////
+
+=== discriminatedUnionTypes2.ts ===
 function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
->f10 : (x: {    kind: false;    a: string;} | {    kind: true;    b: string;} | {    kind: string;    c: string;}) => void
+>f10 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
+>    : ^ ^^                                                                                       ^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 >a : string
+>  : ^^^^^^
 >kind : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >b : string
+>  : ^^^^^^
 >kind : string
+>     : ^^^^^^
 >c : string
+>  : ^^^^^^
 
     if (x.kind === false) {
 >x.kind === false : boolean
+>                 : ^^^^^^^
 >x.kind : string | boolean
+>       : ^^^^^^^^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : string | boolean
+>     : ^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
         x.a;
 >x.a : string
+>    : ^^^^^^
 >x : { kind: false; a: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
     }
     else if (x.kind === true) {
 >x.kind === true : boolean
+>                : ^^^^^^^
 >x.kind : string | true
+>       : ^^^^^^^^^^^^^
 >x : { kind: true; b: string; } | { kind: string; c: string; }
+>  : ^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : string | true
+>     : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
         x.b;
 >x.b : string
+>    : ^^^^^^
 >x : { kind: true; b: string; }
+>  : ^^^^^^^^    ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
     }
     else {
         x.c;
 >x.c : string
+>    : ^^^^^^
 >x : { kind: string; c: string; }
+>  : ^^^^^^^^      ^^^^^      ^^^
 >c : string
+>  : ^^^^^^
     }
 }
 
 function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
->f11 : (x: {    kind: false;    a: string;} | {    kind: true;    b: string;} | {    kind: string;    c: string;}) => void
+>f11 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
+>    : ^ ^^                                                                                       ^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 >a : string
+>  : ^^^^^^
 >kind : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >b : string
+>  : ^^^^^^
 >kind : string
+>     : ^^^^^^
 >c : string
+>  : ^^^^^^
 
     switch (x.kind) {
 >x.kind : string | boolean
+>       : ^^^^^^^^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : string | boolean
+>     : ^^^^^^^^^^^^^^^^
 
         case false:
 >false : false
+>      : ^^^^^
 
             x.a;
 >x.a : string
+>    : ^^^^^^
 >x : { kind: false; a: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
             break;
         case true:
 >true : true
+>     : ^^^^
 
             x.b;
 >x.b : string
+>    : ^^^^^^
 >x : { kind: true; b: string; }
+>  : ^^^^^^^^    ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 
             break;
         default:
             x.c;
 >x.c : string
+>    : ^^^^^^
 >x : { kind: string; c: string; }
+>  : ^^^^^^^^      ^^^^^      ^^^
 >c : string
+>  : ^^^^^^
     }
 }
 
 function f13(x: { a: null; b: string } | { a: string, c: number }) {
->f13 : (x: {    a: null;    b: string;} | {    a: string;    c: number;}) => void
+>f13 : (x: { a: null; b: string; } | { a: string; c: number; }) => void
+>    : ^ ^^                                                   ^^^^^^^^^
 >x : { a: null; b: string; } | { a: string; c: number; }
+>  : ^^^^^    ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >a : null
+>  : ^^^^
 >b : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
     x = { a: null, b: "foo", c: 4};  // Error
 >x = { a: null, b: "foo", c: 4} : { a: null; b: string; c: number; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { a: null; b: string; } | { a: string; c: number; }
+>  : ^^^^^    ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >{ a: null, b: "foo", c: 4} : { a: null; b: string; c: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : null
+>  : ^^^^
 >b : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >c : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 }
 
 function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
->f14 : <T>(x: {    a: 0;    b: string;} | {    a: T;    c: number;}) => void
+>f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
+>    : ^ ^^ ^^                                           ^^^^^^^^^
 >x : { a: 0; b: string; } | { a: T; c: number; }
+>  : ^^^^^ ^^^^^      ^^^^^^^^^^^ ^^^^^      ^^^
 >a : 0
+>  : ^
 >b : string
+>  : ^^^^^^
 >a : T
+>  : ^
 >c : number
+>  : ^^^^^^
 
     if (x.a === 0) {
 >x.a === 0 : boolean
+>          : ^^^^^^^
 >x.a : 0 | T
+>    : ^^^^^
 >x : { a: 0; b: string; } | { a: T; c: number; }
+>  : ^^^^^ ^^^^^      ^^^^^^^^^^^ ^^^^^      ^^^
 >a : 0 | T
+>  : ^^^^^
 >0 : 0
+>  : ^
 
         x.b;  // Error
 >x.b : any
+>    : ^^^
 >x : { a: 0; b: string; } | { a: T; c: number; }
+>  : ^^^^^ ^^^^^      ^^^^^^^^^^^ ^^^^^      ^^^
 >b : any
+>  : ^^^
     }
 }
 
 type Result<T> = { error?: undefined, value: T } | { error: Error };
 >Result : Result<T>
+>       : ^^^^^^^^^
 >error : undefined
+>      : ^^^^^^^^^
 >value : T
+>      : ^
 >error : Error
+>      : ^^^^^
 
 function f15(x: Result<number>) {
 >f15 : (x: Result<number>) => void
+>    : ^ ^^              ^^^^^^^^^
 >x : Result<number>
+>  : ^^^^^^^^^^^^^^
 
     if (!x.error) {
 >!x.error : boolean
+>         : ^^^^^^^
 >x.error : Error | undefined
+>        : ^^^^^^^^^^^^^^^^^
 >x : Result<number>
+>  : ^^^^^^^^^^^^^^
 >error : Error | undefined
+>      : ^^^^^^^^^^^^^^^^^
 
         x.value;
 >x.value : number
+>        : ^^^^^^
 >x : { error?: undefined; value: number; }
+>  : ^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
     }
     else {
         x.error.message;
 >x.error.message : string
+>                : ^^^^^^
 >x.error : Error
+>        : ^^^^^
 >x : { error: Error; }
+>  : ^^^^^^^^^     ^^^
 >error : Error
+>      : ^^^^^
 >message : string
+>        : ^^^^^^
     }
 }
 
 f15({ value: 10 });
 >f15({ value: 10 }) : void
+>                   : ^^^^
 >f15 : (x: Result<number>) => void
+>    : ^ ^^              ^^^^^^^^^
 >{ value: 10 } : { value: number; }
+>              : ^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
 f15({ error: new Error("boom") });
 >f15({ error: new Error("boom") }) : void
+>                                  : ^^^^
 >f15 : (x: Result<number>) => void
+>    : ^ ^^              ^^^^^^^^^
 >{ error: new Error("boom") } : { error: Error; }
+>                             : ^^^^^^^^^^^^^^^^^
 >error : Error
+>      : ^^^^^
 >new Error("boom") : Error
+>                  : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"boom" : "boom"
+>       : ^^^^^^
 
 // Repro from #24193
 
 interface WithError {
     error: Error
 >error : Error
+>      : ^^^^^
 
     data: null
 >data : null
+>     : ^^^^
 }
 
 interface WithoutError<Data> {
     error: null
 >error : null
+>      : ^^^^
 
     data: Data
 >data : Data
+>     : ^^^^
 }
 
 type DataCarrier<Data> = WithError | WithoutError<Data>
 >DataCarrier : DataCarrier<Data>
+>            : ^^^^^^^^^^^^^^^^^
 
 function f20<Data>(carrier: DataCarrier<Data>) {
 >f20 : <Data>(carrier: DataCarrier<Data>) => void
+>    : ^    ^^       ^^                 ^^^^^^^^^
 >carrier : DataCarrier<Data>
+>        : ^^^^^^^^^^^^^^^^^
 
     if (carrier.error === null) {
 >carrier.error === null : boolean
+>                       : ^^^^^^^
 >carrier.error : Error | null
+>              : ^^^^^^^^^^^^
 >carrier : DataCarrier<Data>
+>        : ^^^^^^^^^^^^^^^^^
 >error : Error | null
+>      : ^^^^^^^^^^^^
 
         const error: null = carrier.error
 >error : null
+>      : ^^^^
 >carrier.error : null
+>              : ^^^^
 >carrier : WithoutError<Data>
+>        : ^^^^^^^^^^^^^^^^^^
 >error : null
+>      : ^^^^
 
         const data: Data = carrier.data
 >data : Data
+>     : ^^^^
 >carrier.data : Data
+>             : ^^^^
 >carrier : WithoutError<Data>
+>        : ^^^^^^^^^^^^^^^^^^
 >data : Data
+>     : ^^^^
 
     } else {
         const error: Error = carrier.error
 >error : Error
+>      : ^^^^^
 >carrier.error : Error
+>              : ^^^^^
 >carrier : WithError
+>        : ^^^^^^^^^
 >error : Error
+>      : ^^^^^
 
         const data: null = carrier.data
 >data : null
+>     : ^^^^
 >carrier.data : null
+>             : ^^^^
 >carrier : WithError
+>        : ^^^^^^^^^
 >data : null
+>     : ^^^^
     }
 }
 
 // Repro from #28935
 
 type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
->Foo : { tag: true; x: number; } | { tag: false; y: number; } | { [x: string]: string; }
+>Foo : Foo
+>    : ^^^
 >tag : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >tag : false
+>    : ^^^^^
 >false : false
+>      : ^^^^^
 >y : number
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 function f30(foo: Foo) {
 >f30 : (foo: Foo) => void
+>    : ^   ^^   ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 
     if (foo.tag) {
 >foo.tag : string | boolean
+>        : ^^^^^^^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >tag : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 
         foo;
 >foo : { tag: true; x: number; } | { [x: string]: string; }
+>    : ^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     else {
         foo;
 >foo : { tag: false; y: number; } | { [x: string]: string; }
+>    : ^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f31(foo: Foo) {
 >f31 : (foo: Foo) => void
+>    : ^   ^^   ^^^^^^^^^
 >foo : Foo
+>    : ^^^
 
     if (foo.tag === true) {
 >foo.tag === true : boolean
+>                 : ^^^^^^^
 >foo.tag : string | boolean
+>        : ^^^^^^^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >tag : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
         foo;
 >foo : { tag: true; x: number; }
+>    : ^^^^^^^    ^^^^^      ^^^
     }
     else {
         foo;
 >foo : { tag: false; y: number; } | { [x: string]: string; }
+>    : ^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 // Repro from #33448
 
 type a = {
->a : { type: 'a'; data: string; }
+>a : a
+>  : ^
 
     type: 'a',
 >type : "a"
+>     : ^^^
 
     data: string
 >data : string
+>     : ^^^^^^
 }
 type b = {
->b : { type: 'b'; name: string; }
+>b : b
+>  : ^
 
     type: 'b',
 >type : "b"
+>     : ^^^
 
     name: string
 >name : string
+>     : ^^^^^^
 }
 type c = {
->c : { type: 'c'; other: string; }
+>c : c
+>  : ^
 
     type: 'c',
 >type : "c"
+>     : ^^^
 
     other: string
 >other : string
+>      : ^^^^^^
 }
 
 type abc = a | b | c;
->abc : a | b | c
+>abc : abc
+>    : ^^^
 
 function f(problem: abc & (b | c)) {
 >f : (problem: abc & (b | c)) => void
+>  : ^       ^^             ^^^^^^^^^
 >problem : b | c
+>        : ^^^^^
 
     if (problem.type === 'b') {
 >problem.type === 'b' : boolean
+>                     : ^^^^^^^
 >problem.type : "b" | "c"
+>             : ^^^^^^^^^
 >problem : b | c
+>        : ^^^^^
 >type : "b" | "c"
+>     : ^^^^^^^^^
 >'b' : "b"
+>    : ^^^
 
         problem.name;
 >problem.name : string
+>             : ^^^^^^
 >problem : b
+>        : ^
 >name : string
+>     : ^^^^^^
     }
     else {
         problem.other;
 >problem.other : string
+>              : ^^^^^^
 >problem : c
+>        : ^
 >other : string
+>      : ^^^^^^
     }
 }
 
 type RuntimeValue =
->RuntimeValue : { type: 'number'; value: number; } | { type: 'string'; value: string; } | { type: 'boolean'; value: boolean; }
+>RuntimeValue : RuntimeValue
+>             : ^^^^^^^^^^^^
 
     | { type: 'number', value: number }
 >type : "number"
+>     : ^^^^^^^^
 >value : number
+>      : ^^^^^^
 
     | { type: 'string', value: string }
 >type : "string"
+>     : ^^^^^^^^
 >value : string
+>      : ^^^^^^
 
     | { type: 'boolean', value: boolean };
 >type : "boolean"
+>     : ^^^^^^^^^
 >value : boolean
+>      : ^^^^^^^
 
 function foo1(x: RuntimeValue & { type: 'number' }) {
->foo1 : (x: RuntimeValue & {    type: 'number';}) => void
->x : { type: "number"; value: number; } & { type: 'number'; }
+>foo1 : (x: RuntimeValue & { type: "number"; }) => void
+>     : ^ ^^                                  ^^^^^^^^^
+>x : { type: "number"; value: number; } & { type: "number"; }
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >type : "number"
+>     : ^^^^^^^^
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
+>                    : ^^^^^^^
 >x.type : "number"
+>       : ^^^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >type : "number"
+>     : ^^^^^^^^
 >'number' : "number"
+>         : ^^^^^^^^
 
         x.value;  // number
 >x.value : number
+>        : ^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : number
+>      : ^^^^^^
     }
     else {
         x.value;  // number
 >x.value : number
+>        : ^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : number
+>      : ^^^^^^
     }
 }
 
 function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
->foo2 : (x: RuntimeValue & ({    type: 'number';} | {    type: 'string';})) => void
->x : ({ type: "number"; value: number; } & { type: 'number'; }) | ({ type: "string"; value: string; } & { type: 'string'; })
+>foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
+>     : ^ ^^                                                          ^^^^^^^^^
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
+>  : ^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^
 >type : "number"
+>     : ^^^^^^^^
 >type : "string"
+>     : ^^^^^^^^
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
+>                    : ^^^^^^^
 >x.type : "string" | "number"
+>       : ^^^^^^^^^^^^^^^^^^^
 >x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
+>  : ^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^
 >type : "string" | "number"
+>     : ^^^^^^^^^^^^^^^^^^^
 >'number' : "number"
+>         : ^^^^^^^^
 
         x.value;  // number
 >x.value : number
+>        : ^^^^^^
 >x : { type: "number"; value: number; } & { type: "number"; }
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : number
+>      : ^^^^^^
     }
     else {
         x.value;  // string
 >x.value : string
+>        : ^^^^^^
 >x : { type: "string"; value: string; } & { type: "string"; }
+>  : ^^^^^^^^        ^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >value : string
+>      : ^^^^^^
     }
 }
 

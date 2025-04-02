@@ -1,8 +1,11 @@
+//// [tests/cases/compiler/inlineSourceMap2.ts] ////
+
 //// [inlineSourceMap2.ts]
 // configuration errors
 
 var x = 0;
 console.log(x);
+
 
 //// [outfile.js]
 // configuration errors

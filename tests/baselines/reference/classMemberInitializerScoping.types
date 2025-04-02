@@ -1,58 +1,88 @@
-=== tests/cases/compiler/classMemberInitializerScoping.ts ===
+//// [tests/cases/compiler/classMemberInitializerScoping.ts] ////
+
+=== classMemberInitializerScoping.ts ===
 var aaa = 1;
 >aaa : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 class CCC {
 >CCC : CCC
+>    : ^^^
 
     y: number = aaa;
 >y : number
+>  : ^^^^^^
 >aaa : any
+>    : ^^^
 
     static staticY: number = aaa; // This shouldnt be error
 >staticY : number
+>        : ^^^^^^
 >aaa : number
+>    : ^^^^^^
 
     constructor(aaa) {
 >aaa : any
+>    : ^^^
 
         this.y = ''; // was: error, cannot assign string to number
 >this.y = '' : ""
+>            : ^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >'' : ""
+>   : ^^
     }
 }
 
 // above is equivalent to this:
 var aaaa = 1;
 >aaaa : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 class CCCC {
 >CCCC : CCCC
+>     : ^^^^
 
     y: any;
 >y : any
+>  : ^^^
 
     constructor(aaaa) {
 >aaaa : any
+>     : ^^^
 
         this.y = aaaa;
 >this.y = aaaa : any
+>              : ^^^
 >this.y : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >aaaa : any
+>     : ^^^
 
         this.y = '';
 >this.y = '' : ""
+>            : ^^
 >this.y : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >'' : ""
+>   : ^^
     }
 }
  

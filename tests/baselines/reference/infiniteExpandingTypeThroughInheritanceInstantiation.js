@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infiniteExpandingTypeThroughInheritanceInstantiation.ts] ////
+
 //// [infiniteExpandingTypeThroughInheritanceInstantiation.ts]
 interface A<T>
 {

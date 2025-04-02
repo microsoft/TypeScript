@@ -1,4 +1,6 @@
-=== tests/cases/compiler/express.d.ts ===
+//// [tests/cases/compiler/augmentExportEquals5.ts] ////
+
+=== express.d.ts ===
 declare module Express {
     export interface Request { }
     export interface Response { }
@@ -7,69 +9,92 @@ declare module Express {
 
 declare module "express" {
 >"express" : typeof import("express")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     function e(): e.Express;
->e : typeof import("tests/cases/compiler/express.d.ts")
+>e : typeof import("express.d.ts")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : any
+>  : ^^^
 
     namespace e {
->e : typeof import("tests/cases/compiler/express.d.ts")
+>e : typeof import("express.d.ts")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         interface IRoute {
             all(...handler: RequestHandler[]): IRoute;
 >all : (...handler: RequestHandler[]) => IRoute
+>    : ^^^^       ^^                ^^^^^      
 >handler : RequestHandler[]
+>        : ^^^^^^^^^^^^^^^^
         }
 
         interface IRouterMatcher<T> {
             (name: string|RegExp, ...handlers: RequestHandler[]): T;
 >name : string | RegExp
+>     : ^^^^^^^^^^^^^^^
 >handlers : RequestHandler[]
+>         : ^^^^^^^^^^^^^^^^
         }
 
         interface IRouter<T> extends RequestHandler {
             route(path: string): IRoute;
 >route : (path: string) => IRoute
+>      : ^    ^^      ^^^^^      
 >path : string
+>     : ^^^^^^
         }
 
         export function Router(options?: any): Router;
 >Router : (options?: any) => Router
+>       : ^       ^^^   ^^^^^      
 >options : any
 
         export interface Router extends IRouter<Router> {}
 
         interface Errback { (err: Error): void; }
 >err : Error
+>    : ^^^^^
 
         interface Request extends Express.Request {
 >Express : any
+>        : ^^^
 
             get (name: string): string;
 >get : (name: string) => string
+>    : ^    ^^      ^^^^^      
 >name : string
+>     : ^^^^^^
         }
 
         interface Response extends Express.Response {
 >Express : any
+>        : ^^^
 
             charset: string;
 >charset : string
+>        : ^^^^^^
         }
 
         interface ErrorRequestHandler {
             (err: any, req: Request, res: Response, next: Function): any;
 >err : any
 >req : Request
+>    : ^^^^^^^
 >res : Response
+>    : ^^^^^^^^
 >next : Function
+>     : ^^^^^^^^
         }
 
         interface RequestHandler {
             (req: Request, res: Response, next: Function): any;
 >req : Request
+>    : ^^^^^^^
 >res : Response
+>    : ^^^^^^^^
 >next : Function
+>     : ^^^^^^^^
         }
 
         interface Handler extends RequestHandler {}
@@ -77,13 +102,17 @@ declare module "express" {
         interface RequestParamHandler {
             (req: Request, res: Response, next: Function, param: any): any;
 >req : Request
+>    : ^^^^^^^
 >res : Response
+>    : ^^^^^^^^
 >next : Function
+>     : ^^^^^^^^
 >param : any
         }
 
         interface Application extends IRouter<Application>, Express.Application {
 >Express : any
+>        : ^^^
 
             routes: any;
 >routes : any
@@ -92,6 +121,7 @@ declare module "express" {
         interface Express extends Application {
             createApplication(): Application;
 >createApplication : () => Application
+>                  : ^^^^^^           
         }
 
         var static: any;
@@ -99,34 +129,44 @@ declare module "express" {
     }
 
     export = e;
->e : typeof import("tests/cases/compiler/express.d.ts")
+>e : typeof import("express.d.ts")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-=== tests/cases/compiler/augmentation.ts ===
+=== augmentation.ts ===
 /// <reference path="express.d.ts"/>
 import * as e from "express";
 >e : typeof e
+>  : ^^^^^^^^
 
 declare module "express" {
 >"express" : typeof e
+>          : ^^^^^^^^
 
     interface Request {
         id: number;
 >id : number
+>   : ^^^^^^
     }
 }
 
-=== tests/cases/compiler/consumer.ts ===
+=== consumer.ts ===
 import { Request } from "express";
 >Request : any
+>        : ^^^
 
 import "./augmentation";
 let x: Request;
 >x : Request
+>  : ^^^^^^^
 
 const y = x.id;
 >y : number
+>  : ^^^^^^
 >x.id : number
+>     : ^^^^^^
 >x : Request
+>  : ^^^^^^^
 >id : number
+>   : ^^^^^^
 

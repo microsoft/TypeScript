@@ -1,12 +1,12 @@
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(5,8): error TS1325: Argument of dynamic import cannot be spread element.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(7,17): error TS1325: Argument of dynamic import cannot be spread element.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(8,12): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,19): error TS2307: Cannot find module 'pathToModule' or its corresponding type declarations.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,35): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,35): error TS2559: Type '"secondModule"' has no properties in common with type 'ImportCallOptions'.
+importCallExpressionGrammarError.ts(5,8): error TS1325: Argument of dynamic import cannot be spread element.
+importCallExpressionGrammarError.ts(7,17): error TS1325: Argument of dynamic import cannot be spread element.
+importCallExpressionGrammarError.ts(8,12): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+importCallExpressionGrammarError.ts(9,19): error TS2307: Cannot find module 'pathToModule' or its corresponding type declarations.
+importCallExpressionGrammarError.ts(9,35): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
+importCallExpressionGrammarError.ts(9,35): error TS2559: Type '"secondModule"' has no properties in common with type 'ImportCallOptions'.
 
 
-==== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts (6 errors) ====
+==== importCallExpressionGrammarError.ts (6 errors) ====
     declare function getSpecifier(): string;
     declare var whatToLoad: boolean;
     
@@ -20,11 +20,11 @@ tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,35):
 !!! error TS1325: Argument of dynamic import cannot be spread element.
     const p2 = import();
                ~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const p4 = import("pathToModule", "secondModule");
                       ~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'pathToModule' or its corresponding type declarations.
                                       ~~~~~~~~~~~~~~
-!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
+!!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.
                                       ~~~~~~~~~~~~~~
 !!! error TS2559: Type '"secondModule"' has no properties in common with type 'ImportCallOptions'.

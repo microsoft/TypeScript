@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxExcessPropsAndAssignability.tsx ===
+//// [tests/cases/compiler/jsxExcessPropsAndAssignability.tsx] ////
+
+=== jsxExcessPropsAndAssignability.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from 'react';

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/breakTarget4.ts] ////
+
 //// [breakTarget4.ts]
 target1:
 target2:

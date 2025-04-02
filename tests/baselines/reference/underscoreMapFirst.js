@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/underscoreMapFirst.ts] ////
+
 //// [underscoreMapFirst.ts]
 declare module _ {
     interface Collection<T> { }

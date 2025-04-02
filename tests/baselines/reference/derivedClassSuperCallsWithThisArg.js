@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts] ////
+
 //// [derivedClassSuperCallsWithThisArg.ts]
 class Base {
     x: string;
@@ -52,7 +54,7 @@ var Base = /** @class */ (function () {
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super.call(this, _this) || this;
+        var _this = _super.call(this, _this) || this; // ok
         return _this;
     }
     return Derived;
@@ -60,7 +62,7 @@ var Derived = /** @class */ (function (_super) {
 var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2(a) {
-        var _this = _super.call(this, _this) || this;
+        var _this = _super.call(this, _this) || this; // error
         _this.a = a;
         return _this;
     }
@@ -69,7 +71,7 @@ var Derived2 = /** @class */ (function (_super) {
 var Derived3 = /** @class */ (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
-        var _this = _super.call(this, function () { return _this; }) || this;
+        var _this = _super.call(this, function () { return _this; }) || this; // error
         _this.a = a;
         return _this;
     }
@@ -78,7 +80,7 @@ var Derived3 = /** @class */ (function (_super) {
 var Derived4 = /** @class */ (function (_super) {
     __extends(Derived4, _super);
     function Derived4(a) {
-        var _this = _super.call(this, function () { return this; }) || this;
+        var _this = _super.call(this, function () { return this; }) || this; // ok
         _this.a = a;
         return _this;
     }

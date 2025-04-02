@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericMappedTypeAsClause.ts ===
+//// [tests/cases/compiler/genericMappedTypeAsClause.ts] ////
+
+=== genericMappedTypeAsClause.ts ===
 type Model = {
 >Model : Symbol(Model, Decl(genericMappedTypeAsClause.ts, 0, 0))
 

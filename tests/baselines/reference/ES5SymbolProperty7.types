@@ -1,24 +1,37 @@
-=== tests/cases/conformance/Symbols/ES5SymbolProperty7.ts ===
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty7.ts] ////
+
+=== ES5SymbolProperty7.ts ===
 var Symbol: { iterator: any };
 >Symbol : { iterator: any; }
+>       : ^^^^^^^^^^^^   ^^^
 >iterator : any
 
 class C {
 >C : C
+>  : ^
 
     [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
+>                  : ^^^^^^^^^^
 >Symbol.iterator : any
 >Symbol : { iterator: any; }
+>       : ^^^^^^^^^^^^   ^^^
 >iterator : any
+>         : ^^^
 }
 
 (new C)[Symbol.iterator]
->(new C)[Symbol.iterator] : error
+>(new C)[Symbol.iterator] : () => void
+>                         : ^^^^^^^^^^
 >(new C) : C
+>        : ^
 >new C : C
+>      : ^
 >C : typeof C
+>  : ^^^^^^^^
 >Symbol.iterator : any
 >Symbol : { iterator: any; }
+>       : ^^^^^^^^^^^^   ^^^
 >iterator : any
+>         : ^^^
 

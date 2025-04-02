@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInModuleFunction1.ts ===
+//// [tests/cases/compiler/thisInModuleFunction1.ts] ////
+
+=== thisInModuleFunction1.ts ===
 module bar {
 >bar : Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 0))
 

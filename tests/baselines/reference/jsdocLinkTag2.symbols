@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag2.ts] ////
+
 === /a.js ===
 export class A {}
 >A : Symbol(A, Decl(a.js, 0, 0))

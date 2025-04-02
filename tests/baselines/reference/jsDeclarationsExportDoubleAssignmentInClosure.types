@@ -1,22 +1,33 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportDoubleAssignmentInClosure.ts] ////
+
+=== index.js ===
 // @ts-nocheck
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     module.exports = exports = function (o) {
 >module.exports = exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : { (o: any): any; methods: () => void; }
+>                                                                                                                                    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { (o: any): any; methods: () => void; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { (o: any): any; methods: () => void; }; }
+>       : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (o: any): any; methods: () => void; }
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
+>                                                                                                                   : ^ ^^^^^^^^^^^^^
 >exports : any
 >function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
+>                                                                                                         : ^ ^^^^^^^^^^^^^
 >o : any
 
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
->(o == null) ? create(base) : defineProperties(Object(o), descriptors) : any
+>(o == null) ? create(base) : defineProperties(Object(o), descriptors) : error
 >(o == null) : boolean
+>            : ^^^^^^^
 >o == null : boolean
+>          : ^^^^^^^
 >o : any
 >create(base) : error
 >create : error
@@ -25,21 +36,28 @@ function foo() {
 >defineProperties : error
 >Object(o) : any
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >o : any
 >descriptors : error
 
     };
     const m = function () {
 >m : () => void
+>  : ^^^^^^^^^^
 >function () {        // I have no idea what to put here    } : () => void
+>                                                             : ^^^^^^^^^^
 
         // I have no idea what to put here
     }
     exports.methods = m;
 >exports.methods = m : () => void
+>                    : ^^^^^^^^^^
 >exports.methods : any
 >exports : any
+>        : ^^^
 >methods : any
+>        : ^^^
 >m : () => void
+>  : ^^^^^^^^^^
 }
 

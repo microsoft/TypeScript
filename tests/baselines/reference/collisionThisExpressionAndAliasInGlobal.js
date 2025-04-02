@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndAliasInGlobal.ts] ////
+
 //// [collisionThisExpressionAndAliasInGlobal.ts]
 module a {
     export var b = 10;

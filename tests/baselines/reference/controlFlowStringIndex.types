@@ -1,39 +1,61 @@
-=== tests/cases/conformance/controlFlow/controlFlowStringIndex.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowStringIndex.ts] ////
+
+=== controlFlowStringIndex.ts ===
 type A = {
->A : { [index: string]: number | null; other: number | null; }
+>A : A
+>  : ^
 
     other: number | null;
 >other : number | null
+>      : ^^^^^^^^^^^^^
 
     [index: string]: number | null
 >index : string
+>      : ^^^^^^
 
 };
 declare const value: A;
 >value : A
+>      : ^
 
 if (value.foo !== null) {
 >value.foo !== null : boolean
+>                   : ^^^^^^^
 >value.foo : number | null
+>          : ^^^^^^^^^^^^^
 >value : A
+>      : ^
 >foo : number | null
+>    : ^^^^^^^^^^^^^
 
     value.foo.toExponential()
 >value.foo.toExponential() : string
->value.foo.toExponential : (fractionDigits?: number | undefined) => string
+>                          : ^^^^^^
+>value.foo.toExponential : (fractionDigits?: number) => string
+>                        : ^              ^^^      ^^^^^      
 >value.foo : number
+>          : ^^^^^^
 >value : A
+>      : ^
 >foo : number
->toExponential : (fractionDigits?: number | undefined) => string
+>    : ^^^^^^
+>toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 
     value.other // should still be number | null
 >value.other : number | null
+>            : ^^^^^^^^^^^^^
 >value : A
+>      : ^
 >other : number | null
+>      : ^^^^^^^^^^^^^
 
     value.bar // should still be number | null
 >value.bar : number | null
+>          : ^^^^^^^^^^^^^
 >value : A
+>      : ^
 >bar : number | null
+>    : ^^^^^^^^^^^^^
 }
 

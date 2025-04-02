@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxEmitSpreadAttribute.ts] ////
+
 //// [test.tsx]
 declare const React: any;
 

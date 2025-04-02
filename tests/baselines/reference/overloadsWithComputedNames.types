@@ -1,162 +1,237 @@
-=== tests/cases/compiler/overloadsWithComputedNames.ts ===
+//// [tests/cases/compiler/overloadsWithComputedNames.ts] ////
+
+=== overloadsWithComputedNames.ts ===
 // https://github.com/microsoft/TypeScript/issues/52329
 class Person {
 >Person : Person
+>       : ^^^^^^
 
     ["B"](a: number): string;
 >["B"] : (a: number) => string
+>      : ^ ^^      ^^^^^      
 >"B" : "B"
+>    : ^^^
 >a : number
+>  : ^^^^^^
 
     ["A"](a: string|number): number | string {
 >["A"] : (a: string | number) => number | string
+>      : ^ ^^               ^^^^^               
 >"A" : "A"
+>    : ^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 
       return 0;
 >0 : 0
+>  : ^
     }
 }
 let p = new Person();
 >p : Person
+>  : ^^^^^^
 >new Person() : Person
+>             : ^^^^^^
 >Person : typeof Person
+>       : ^^^^^^^^^^^^^
 
 p.A(0)
 >p.A(0) : string | number
->p.A : (a: string | number) => string | number
+>       : ^^^^^^^^^^^^^^^
+>p.A : (a: string | number) => number | string
+>    : ^ ^^               ^^^^^               
 >p : Person
->A : (a: string | number) => string | number
+>  : ^^^^^^
+>A : (a: string | number) => number | string
+>  : ^ ^^               ^^^^^               
 >0 : 0
+>  : ^
 
 p.B(0)
 >p.B(0) : string
+>       : ^^^^^^
 >p.B : (a: number) => string
+>    : ^ ^^      ^^^^^      
 >p : Person
+>  : ^^^^^^
 >B : (a: number) => string
+>  : ^ ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 // https://github.com/microsoft/TypeScript/issues/17345
 class C {
 >C : C
+>  : ^
 
     ["foo"](): void
 >["foo"] : { (): void; (): number; }
+>        : ^^^^^^    ^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     ["bar"](): void;
 >["bar"] : () => void
+>        : ^^^^^^    
 >"bar" : "bar"
+>      : ^^^^^
 
     ["foo"]() {
 >["foo"] : { (): void; (): number; }
+>        : ^^^^^^    ^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 
 declare const uniqueSym: unique symbol;
 >uniqueSym : unique symbol
+>          : ^^^^^^^^^^^^^
 
 declare const uniqueSym2: unique symbol;
 >uniqueSym2 : unique symbol
+>           : ^^^^^^^^^^^^^
 
 declare const sym: symbol;
 >sym : symbol
+>    : ^^^^^^
 
 declare const strUnion: 'foo' | 'bar';
 >strUnion : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     [sym](): void;  // should error
 >[sym] : () => void
+>      : ^^^^^^    
 >sym : symbol
+>    : ^^^^^^
 
     [uniqueSym2](): void;   // should error
 >[uniqueSym2] : () => void
+>             : ^^^^^^    
 >uniqueSym2 : unique symbol
+>           : ^^^^^^^^^^^^^
 
     [uniqueSym](): void;
 >[uniqueSym] : () => void
+>            : ^^^^^^    
 >uniqueSym : unique symbol
+>          : ^^^^^^^^^^^^^
 
     [uniqueSym]() { }
 >[uniqueSym] : () => void
+>            : ^^^^^^    
 >uniqueSym : unique symbol
+>          : ^^^^^^^^^^^^^
 }
 
 interface I1 {
     [sym](): void;  // should error
 >[sym] : () => void
+>      : ^^^^^^    
 >sym : symbol
+>    : ^^^^^^
 
     [uniqueSym2](): void;
 >[uniqueSym2] : () => void
+>             : ^^^^^^    
 >uniqueSym2 : unique symbol
+>           : ^^^^^^^^^^^^^
 
     [uniqueSym](): void;
 >[uniqueSym] : { (): void; (): void; }
+>            : ^^^^^^    ^^^^^^    ^^^
 >uniqueSym : unique symbol
+>          : ^^^^^^^^^^^^^
 
     [uniqueSym](): void;
 >[uniqueSym] : { (): void; (): void; }
+>            : ^^^^^^    ^^^^^^    ^^^
 >uniqueSym : unique symbol
+>          : ^^^^^^^^^^^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     [strUnion](): void; // should error
 >[strUnion] : () => void
+>           : ^^^^^^    
 >strUnion : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 
     [strUnion]() { }
 >[strUnion] : () => void
+>           : ^^^^^^^^^^
 >strUnion : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 }
 
 class I2 {
 >I2 : I2
+>   : ^^
 
     [strUnion](): void; // should error
 >[strUnion] : () => void
+>           : ^^^^^^    
 >strUnion : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 
     [strUnion]() { }
 >[strUnion] : () => void
+>           : ^^^^^^^^^^
 >strUnion : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 }
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     [1](): void;  // should error
 >[1] : () => void
+>    : ^^^^^^    
 >1 : 1
+>  : ^
 
     [2](): void;
 >[2] : () => void
+>    : ^^^^^^    
 >2 : 2
+>  : ^
 
     [2]() { }
 >[2] : () => void
+>    : ^^^^^^    
 >2 : 2
+>  : ^
 }
 
 interface I3 {
     [1](): void;
 >[1] : () => void
+>    : ^^^^^^    
 >1 : 1
+>  : ^
 
     [2](): void;
 >[2] : { (): void; (): void; }
+>    : ^^^^^^    ^^^^^^    ^^^
 >2 : 2
+>  : ^
 
     [2](): void;
 >[2] : { (): void; (): void; }
+>    : ^^^^^^    ^^^^^^    ^^^
 >2 : 2
+>  : ^
 }

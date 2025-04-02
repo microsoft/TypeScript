@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts] ////
+
 //// [bitwiseCompoundAssignmentOperators.ts]
 var a = true;
 var b = 1;

@@ -1,143 +1,228 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType2.ts] ////
+
+=== a.d.ts ===
 type O = { a: string; b: number; c: number; };
->O : { a: string; b: number; c: number; }
+>O : O
+>  : ^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type F1 = (arg: number) => any; 
->F1 : (arg: number) => any
+>F1 : F1
+>   : ^^
 >arg : number
+>    : ^^^^^^
 
 type F2 = ({ a: string }: O) => any; 
->F2 : ({ a: string }: O) => any
+>F2 : F2
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type F3 = ({ a: string, b, c }: O) => any; 
->F3 : ({ a: string, b, c }: O) => any
+>F3 : F3
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type F4 = ({ a: string }: O) => any; 
->F4 : ({ a: string }: O) => any
+>F4 : F4
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type F5 = ({ a: string, b, c }: O) => any; 
->F5 : ({ a: string, b, c }: O) => any
+>F5 : F5
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type F6 = ({ a: string }) => typeof string; 
->F6 : ({ a: string }: { a: any; }) => any
+>F6 : F6
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >string : any
 
 type F7 = ({ a: string, b: number }) => typeof number; 
->F7 : ({ a: string, b: number }: { a: any; b: any; }) => any
+>F7 : F7
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
 
 type F8 = ({ a, b: number }) => typeof number; 
->F8 : ({ a, b: number }: { a: any; b: any; }) => any
+>F8 : F8
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
 
 type F9 = ([a, b, c]) => void; 
->F9 : ([a, b, c]: [any, any, any]) => void
+>F9 : F9
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 type G1 = (arg: number) => any; 
->G1 : (arg: number) => any
+>G1 : G1
+>   : ^^
 >arg : number
+>    : ^^^^^^
 
 type G2 = ({ a: string }: O) => any; 
->G2 : ({ a: string }: O) => any
+>G2 : G2
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type G3 = ({ a: string, b, c }: O) => any; 
->G3 : ({ a: string, b, c }: O) => any
+>G3 : G3
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type G4 = ({ a: string }: O) => any; 
->G4 : ({ a: string }: O) => any
+>G4 : G4
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 
 type G5 = ({ a: string, b, c }: O) => any; 
->G5 : ({ a: string, b, c }: O) => any
+>G5 : G5
+>   : ^^
 >a : any
+>  : ^^^
 >string : string
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 type G6 = ({ a: string }) => typeof string; 
->G6 : ({ a: string }: { a: any; }) => any
+>G6 : G6
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >string : any
 
 type G7 = ({ a: string, b: number }) => typeof number; 
->G7 : ({ a: string, b: number }: { a: any; b: any; }) => any
+>G7 : G7
+>   : ^^
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
 
 type G8 = ({ a, b: number }) => typeof number; 
->G8 : ({ a, b: number }: { a: any; b: any; }) => any
+>G8 : G8
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >number : any
+>       : ^^^
 >number : any
 
 type G9 = ([a, b, c]) => void; 
->G9 : ([a, b, c]: [any, any, any]) => void
+>G9 : G9
+>   : ^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 interface I {
   method1(arg: number): any; 
 >method1 : (arg: number) => any
+>        : ^   ^^      ^^^^^   
 >arg : number
+>    : ^^^^^^
 
   method2({ a: string }): any; 
 >method2 : ({ a: string }: { a: any; }) => any
+>        : ^             ^^^^^^^^^^^^^^^^^^   
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 
   (arg: number): any; 
 >arg : number
+>    : ^^^^^^
 
   ({ a: string }): any; 
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 
   new (arg: number): any; 
 >arg : number
+>    : ^^^^^^
 
   new ({ a: string }): any; 
 >a : any
+>  : ^^^
 >string : any
+>       : ^^^
 }
 
 

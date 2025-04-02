@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mixingApparentTypeOverrides.ts] ////
+
 //// [mixingApparentTypeOverrides.ts]
 type Constructor<T> = new(...args: any[]) => T;
 function Tagged<T extends Constructor<{}>>(Base: T) {

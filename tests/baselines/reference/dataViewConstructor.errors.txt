@@ -1,13 +1,13 @@
-tests/cases/compiler/dataViewConstructor.ts(1,14): error TS2345: Argument of type 'Uint8Array' is not assignable to parameter of type 'ArrayBuffer & { BYTES_PER_ELEMENT?: never; }'.
-  Type 'Uint8Array' is not assignable to type '{ BYTES_PER_ELEMENT?: never; }'.
+dataViewConstructor.ts(1,14): error TS2345: Argument of type 'Uint8Array<ArrayBuffer>' is not assignable to parameter of type 'ArrayBuffer & { BYTES_PER_ELEMENT?: never; }'.
+  Type 'Uint8Array<ArrayBuffer>' is not assignable to type '{ BYTES_PER_ELEMENT?: never; }'.
     Types of property 'BYTES_PER_ELEMENT' are incompatible.
       Type 'number' is not assignable to type 'never'.
 
 
-==== tests/cases/compiler/dataViewConstructor.ts (1 errors) ====
+==== dataViewConstructor.ts (1 errors) ====
     new DataView(new Uint8Array(32)); // should error
                  ~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'Uint8Array' is not assignable to parameter of type 'ArrayBuffer & { BYTES_PER_ELEMENT?: never; }'.
-!!! error TS2345:   Type 'Uint8Array' is not assignable to type '{ BYTES_PER_ELEMENT?: never; }'.
+!!! error TS2345: Argument of type 'Uint8Array<ArrayBuffer>' is not assignable to parameter of type 'ArrayBuffer & { BYTES_PER_ELEMENT?: never; }'.
+!!! error TS2345:   Type 'Uint8Array<ArrayBuffer>' is not assignable to type '{ BYTES_PER_ELEMENT?: never; }'.
 !!! error TS2345:     Types of property 'BYTES_PER_ELEMENT' are incompatible.
 !!! error TS2345:       Type 'number' is not assignable to type 'never'.

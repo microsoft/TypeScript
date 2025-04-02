@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uncalledFunctionChecksInConditional2.ts ===
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
+
+=== uncalledFunctionChecksInConditional2.ts ===
 {
   const perf = window.performance
 >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
@@ -171,4 +173,41 @@ declare let inBrowser: boolean;
     }
   }
 };
+
+let _isMobile: boolean;
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+
+function isMobile() {
+>isMobile : Symbol(isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 23))
+
+  if (_isMobile === undefined) {
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+>undefined : Symbol(undefined)
+
+    const isMobileMatch =
+>isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+
+      typeof window !== 'undefined' &&
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+      window.matchMedia && // no error
+>window.matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+      window.matchMedia('(max-device-width: 680px)');
+>window.matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    _isMobile = isMobileMatch && isMobileMatch.matches;
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+>isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+>isMobileMatch.matches : Symbol(MediaQueryList.matches, Decl(lib.dom.d.ts, --, --))
+>isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+>matches : Symbol(MediaQueryList.matches, Decl(lib.dom.d.ts, --, --))
+  }
+  return _isMobile;
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+}
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofUsedBeforeBlockScoped.ts ===
+//// [tests/cases/compiler/typeofUsedBeforeBlockScoped.ts] ////
+
+=== typeofUsedBeforeBlockScoped.ts ===
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
 >T : Symbol(T, Decl(typeofUsedBeforeBlockScoped.ts, 0, 0))
 >C : Symbol(C, Decl(typeofUsedBeforeBlockScoped.ts, 0, 55))

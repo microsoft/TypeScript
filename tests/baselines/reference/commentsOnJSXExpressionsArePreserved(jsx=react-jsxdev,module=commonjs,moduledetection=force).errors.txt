@@ -1,7 +1,7 @@
-tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2307: Cannot find module 'react/jsx-dev-runtime' or its corresponding type declarations.
+commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2875: This JSX tag requires the module path 'react/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 
 
-==== tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
+==== commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
     // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
     namespace JSX {}
     class Component {
@@ -34,6 +34,6 @@ tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS230
     ~~~~~~~~~~~~~~~~~~~~~~~~
             </div>;
     ~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'react/jsx-dev-runtime' or its corresponding type declarations.
+!!! error TS2875: This JSX tag requires the module path 'react/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
         }
     }

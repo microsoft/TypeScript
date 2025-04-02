@@ -1,4 +1,6 @@
-=== tests/cases/compiler/topFunctionTypeNotCallable.ts ===
+//// [tests/cases/compiler/topFunctionTypeNotCallable.ts] ////
+
+=== topFunctionTypeNotCallable.ts ===
 // repro from #48840
 
 declare let foo: (...args: never) => void;

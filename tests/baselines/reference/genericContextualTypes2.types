@@ -1,92 +1,132 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes2.ts] ////
+
+=== genericContextualTypes2.ts ===
 type LowInfer<T> = T & {};
 >LowInfer : LowInfer<T>
+>         : ^^^^^^^^^^^
 
 type PartialAssigner<TContext, TKey extends keyof TContext> = (
 >PartialAssigner : PartialAssigner<TContext, TKey>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   context: TContext
 >context : TContext
+>        : ^^^^^^^^
 
 ) => TContext[TKey];
 
 type PropertyAssigner<TContext> = {
 >PropertyAssigner : PropertyAssigner<TContext>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof TContext]?: PartialAssigner<TContext, K> | TContext[K];
 };
 
 type Meta<TContext> = {
 >Meta : Meta<TContext>
+>     : ^^^^^^^^^^^^^^
 
   action: (ctx: TContext) => void
 >action : (ctx: TContext) => void
+>       : ^   ^^        ^^^^^    
 >ctx : TContext
+>    : ^^^^^^^^
 }
 
 interface AssignAction<TContext> {
   type: "xstate.assign";
 >type : "xstate.assign"
+>     : ^^^^^^^^^^^^^^^
 
   exec: (arg: TContext, meta: Meta<TContext>) => void;
 >exec : (arg: TContext, meta: Meta<TContext>) => void
+>     : ^   ^^        ^^    ^^              ^^^^^    
 >arg : TContext
+>    : ^^^^^^^^
 >meta : Meta<TContext>
+>     : ^^^^^^^^^^^^^^
 }
 
 declare function assign<TContext>(
 >assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => AssignAction<TContext>
+>       : ^        ^^          ^^                                    ^^^^^                      
 
   assignment: PropertyAssigner<LowInfer<TContext>>
 >assignment : PropertyAssigner<LowInfer<TContext>>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ): AssignAction<TContext>;
 
 type Config<TContext> = {
 >Config : Config<TContext>
+>       : ^^^^^^^^^^^^^^^^
 
   context: TContext;
 >context : TContext
+>        : ^^^^^^^^
 
   entry?: AssignAction<TContext>;
 >entry : AssignAction<TContext> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 declare function createMachine<TContext>(config: Config<TContext>): void;
 >createMachine : <TContext>(config: Config<TContext>) => void
+>              : ^        ^^      ^^                ^^^^^    
 >config : Config<TContext>
+>       : ^^^^^^^^^^^^^^^^
 
 createMachine<{ count: number }>({
 >createMachine<{ count: number }>({  context: {    count: 0,  },  entry: assign({    count: (ctx: { count: number }) => ++ctx.count,  }),}) : void
+>                                                                                                                                           : ^^^^
 >createMachine : <TContext>(config: Config<TContext>) => void
+>              : ^        ^^      ^^                ^^^^^    
 >count : number
+>      : ^^^^^^
 >{  context: {    count: 0,  },  entry: assign({    count: (ctx: { count: number }) => ++ctx.count,  }),} : { context: { count: number; }; entry: AssignAction<{ count: number; }>; }
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^
 
   context: {
 >context : { count: number; }
+>        : ^^^^^^^^^^^^^^^^^^
 >{    count: 0,  } : { count: number; }
+>                  : ^^^^^^^^^^^^^^^^^^
 
     count: 0,
 >count : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
   },
   entry: assign({
 >entry : AssignAction<{ count: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >assign({    count: (ctx: { count: number }) => ++ctx.count,  }) : AssignAction<{ count: number; }>
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => AssignAction<TContext>
->{    count: (ctx: { count: number }) => ++ctx.count,  } : { count: (ctx: {    count: number;}) => number; }
+>       : ^        ^^          ^^                                    ^^^^^                      
+>{    count: (ctx: { count: number }) => ++ctx.count,  } : { count: (ctx: { count: number; }) => number; }
+>                                                        : ^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^
 
     count: (ctx: { count: number }) => ++ctx.count,
->count : (ctx: {    count: number;}) => number
->(ctx: { count: number }) => ++ctx.count : (ctx: {    count: number;}) => number
+>count : (ctx: { count: number; }) => number
+>      : ^   ^^                  ^^^^^^^^^^^
+>(ctx: { count: number }) => ++ctx.count : (ctx: { count: number; }) => number
+>                                        : ^   ^^                  ^^^^^^^^^^^
 >ctx : { count: number; }
+>    : ^^^^^^^^^      ^^^
 >count : number
+>      : ^^^^^^
 >++ctx.count : number
+>            : ^^^^^^
 >ctx.count : number
+>          : ^^^^^^
 >ctx : { count: number; }
+>    : ^^^^^^^^^      ^^^
 >count : number
+>      : ^^^^^^
 
   }),
 });

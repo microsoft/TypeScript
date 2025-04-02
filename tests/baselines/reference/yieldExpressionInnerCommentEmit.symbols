@@ -1,4 +1,6 @@
-=== tests/cases/compiler/yieldExpressionInnerCommentEmit.ts ===
+//// [tests/cases/compiler/yieldExpressionInnerCommentEmit.ts] ////
+
+=== yieldExpressionInnerCommentEmit.ts ===
 function * foo2() {
 >foo2 : Symbol(foo2, Decl(yieldExpressionInnerCommentEmit.ts, 0, 0))
 

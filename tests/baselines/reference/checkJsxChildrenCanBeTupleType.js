@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx] ////
+
 //// [checkJsxChildrenCanBeTupleType.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

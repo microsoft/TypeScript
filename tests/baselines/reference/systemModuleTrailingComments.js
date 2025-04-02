@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModuleTrailingComments.ts] ////
+
 //// [systemModuleTrailingComments.ts]
 export const test = "TEST";
 

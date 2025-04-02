@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/test.js ===
+//// [tests/cases/conformance/salsa/unannotatedParametersAreOptional.ts] ////
+
+=== test.js ===
 function f(x) {}
 >f : Symbol(f, Decl(test.js, 0, 0))
 >x : Symbol(x, Decl(test.js, 0, 11))

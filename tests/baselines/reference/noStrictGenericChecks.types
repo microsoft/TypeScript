@@ -1,27 +1,44 @@
-=== tests/cases/compiler/noStrictGenericChecks.ts ===
+//// [tests/cases/compiler/noStrictGenericChecks.ts] ////
+
+=== noStrictGenericChecks.ts ===
 type A = <T, U>(x: T, y: U) => [T, U];
->A : <T, U>(x: T, y: U) => [T, U]
+>A : A
+>  : ^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 type B = <S>(x: S, y: S) => [S, S];
->B : <S>(x: S, y: S) => [S, S]
+>B : B
+>  : ^
 >x : S
+>  : ^
 >y : S
+>  : ^
 
 function f(a: A, b: B) {
 >f : (a: A, b: B) => void
+>  : ^ ^^ ^^ ^^ ^^^^^^^^^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
     a = b;  // Error disabled here
 >a = b : B
+>      : ^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
     b = a;  // Ok
 >b = a : A
+>      : ^
 >b : B
+>  : ^
 >a : A
+>  : ^
 }
 

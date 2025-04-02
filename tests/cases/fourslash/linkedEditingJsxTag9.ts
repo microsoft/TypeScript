@@ -28,15 +28,20 @@
 ////    <//*23*/ /*24*///*25*/* even/*26*/ more comment *//*27*/ d/*28*/iv /* b/*29*/ye */>
 ////);
 
+const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
+
 const markers = test.markers();
 const linkedCursors1 = {
     ranges: [{ start: markers[1].position, length: 3 }, { start: markers[5].position, length: 3 }],
+    wordPattern,
 };
 const linkedCursors2 = {
     ranges: [{ start: markers[7].position, length: 3 }, { start: markers[10].position, length: 3 }],
+    wordPattern,
 };
 const linkedCursors3 = {
     ranges: [{ start: markers[20].position - 2, length: 3 }, { start: markers[28].position - 1, length: 3 }],
+    wordPattern,
 };
 
 verify.linkedEditing( {

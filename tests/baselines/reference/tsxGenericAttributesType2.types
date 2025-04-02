@@ -1,23 +1,40 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType2.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
 >decorator4 : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>           : ^ ^^^^^^^^^              ^^         ^^                           ^^^^^                           
 >function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} y={"blah"} ></Component>} : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>                                                                                                                                                                               : ^ ^^^^^^^^^              ^^         ^^                           ^^^^^                           
 >x : number
+>  : ^^^^^^
 >Component : React.StatelessComponent<T>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 >React : any
+>      : ^^^
 
     return (props) => <Component {...props} y={"blah"} ></Component>
 >(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
+>                                                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : T & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><Component {...props} y={"blah"} ></Component> : JSX.Element
+>                                               : ^^^^^^^^^^^
 >Component : React.StatelessComponent<T>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : T & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >"blah" : "blah"
+>       : ^^^^^^
 >Component : React.StatelessComponent<T>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };

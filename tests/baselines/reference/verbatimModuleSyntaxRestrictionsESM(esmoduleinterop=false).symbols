@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxRestrictionsESM.ts] ////
+
 === /decl.d.ts ===
 declare class CJSy {}
 >CJSy : Symbol(CJSy, Decl(decl.d.ts, 0, 0))

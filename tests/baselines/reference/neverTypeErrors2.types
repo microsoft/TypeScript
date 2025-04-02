@@ -1,77 +1,113 @@
-=== tests/cases/conformance/types/never/neverTypeErrors2.ts ===
+//// [tests/cases/conformance/types/never/neverTypeErrors2.ts] ////
+
+=== neverTypeErrors2.ts ===
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x: never;
 >x : never
+>  : ^^^^^
 
     x = 1;
 >x = 1 : 1
+>      : ^
 >x : never
+>  : ^^^^^
 >1 : 1
+>  : ^
 
     x = "abc";
 >x = "abc" : "abc"
+>          : ^^^^^
 >x : never
+>  : ^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
     x = false;
 >x = false : false
+>          : ^^^^^
 >x : never
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
     x = undefined;
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : never
+>  : ^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     x = null;
 >x = null : null
+>         : ^^^^
 >x : never
+>  : ^^^^^
 
     x = {};
 >x = {} : {}
+>       : ^^
 >x : never
+>  : ^^^^^
 >{} : {}
+>   : ^^
 
     x();
 >x() : any
+>    : ^^^
 >x : never
+>  : ^^^^^
 }
 
 function f2(): never {
 >f2 : () => never
+>   : ^^^^^^     
 
     return;
 }
 
 function f3(): never {
 >f3 : () => never
+>   : ^^^^^^     
 
     return 1;
 >1 : 1
+>  : ^
 }
 
 function f4(): never {
 >f4 : () => never
+>   : ^^^^^^     
 }
 
 for (const n of f4()) {}
 >n : any
+>  : ^^^
 >f4() : never
+>     : ^^^^^
 >f4 : () => never
+>   : ^^^^^^     
 
 for (const n in f4()) {}
 >n : string
+>  : ^^^^^^
 >f4() : never
+>     : ^^^^^
 >f4 : () => never
+>   : ^^^^^^     
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     let x: never[] = [];  // Ok
 >x : never[]
+>  : ^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 }
 
 // Repro from #46032
@@ -79,26 +115,34 @@ function f5() {
 interface A {
     foo: "a";
 >foo : "a"
+>    : ^^^
 }
 
 interface B {
     foo: "b";
 >foo : "b"
+>    : ^^^
 }
 
 type Union = A & B;
 >Union : never
+>      : ^^^^^
 
 function func(): { value: Union[] } {
->func : () => {    value: Union[];}
+>func : () => { value: Union[]; }
+>     : ^^^^^^                   
 >value : never[]
+>      : ^^^^^^^
 
     return {
 >{        value: [],    } : { value: never[]; }
+>                         : ^^^^^^^^^^^^^^^^^^^
 
         value: [],
 >value : never[]
+>      : ^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
     };
 }

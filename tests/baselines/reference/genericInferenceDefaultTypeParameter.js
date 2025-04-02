@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericInferenceDefaultTypeParameter.ts] ////
+
 //// [genericInferenceDefaultTypeParameter.ts]
 // Repro from #50858
 

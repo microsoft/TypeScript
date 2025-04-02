@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty2.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty2.ts] ////
+
+=== accessorsOverrideProperty2.ts ===
 class Base {
 >Base : Symbol(Base, Decl(accessorsOverrideProperty2.ts, 0, 0))
 

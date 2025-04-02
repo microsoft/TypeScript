@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts ===
+//// [tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts] ////
+
+=== unresolvableSelfReferencingAwaitedUnion.ts ===
 // repro #49646
 
 type EnvFunction = <T>() => T;
@@ -57,7 +59,7 @@ export async function handleEffectResult(result: EffectResult) {
 
   if (result instanceof Function) {
 >result : Symbol(result, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 24, 41))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
 
     await handleEffectResult(result());
 >handleEffectResult : Symbol(handleEffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 22, 26))

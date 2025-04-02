@@ -1,16 +1,23 @@
-=== tests/cases/compiler/dist/bar.ts ===
+//// [tests/cases/compiler/resolutionCandidateFromPackageJsonField2.ts] ////
+
+=== dist/bar.ts ===
 export const a = 1234;
 >a : 1234
+>  : ^^^^
 >1234 : 1234
+>     : ^^^^
 
-=== tests/cases/compiler/types/main.d.ts ===
+=== types/main.d.ts ===
 export const b: string;
 >b : string
+>  : ^^^^^^
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { a } from "foo/bar.ts";
 >a : 1234
+>  : ^^^^
 
 import { b } from "baz/main.ts";
 >b : string
+>  : ^^^^^^
 

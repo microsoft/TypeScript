@@ -1,28 +1,41 @@
-=== tests/cases/compiler/numericIndexerConstraint4.ts ===
+//// [tests/cases/compiler/numericIndexerConstraint4.ts] ////
+
+=== numericIndexerConstraint4.ts ===
 class A {
 >A : A
+>  : ^
 
     foo: number;
 >foo : number
+>    : ^^^^^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 var x: {
 >x : { [idx: number]: A; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     [idx: number]: A;
 >idx : number
+>    : ^^^^^^
 
 } = { 0: new B() }
 >{ 0: new B() } : { 0: B; }
+>               : ^^^^^^^^^
 >0 : B
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 

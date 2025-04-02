@@ -1,8 +1,8 @@
-tests/cases/conformance/types/unknown/unknownType2.ts(216,13): error TS2322: Type '"yes" | "no" | "maybe"' is not assignable to type 'SomeResponse'.
+unknownType2.ts(216,13): error TS2322: Type '"yes" | "no" | "maybe"' is not assignable to type 'SomeResponse'.
   Type '"maybe"' is not assignable to type 'SomeResponse'.
 
 
-==== tests/cases/conformance/types/unknown/unknownType2.ts (1 errors) ====
+==== unknownType2.ts (1 errors) ====
     type isUnknown<T> = unknown extends T ? true : false;
     type isTrue<T extends true> = T;
     

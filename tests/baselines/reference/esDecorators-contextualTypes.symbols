@@ -1,4 +1,6 @@
-=== tests/cases/conformance/esDecorators/esDecorators-contextualTypes.ts ===
+//// [tests/cases/conformance/esDecorators/esDecorators-contextualTypes.ts] ////
+
+=== esDecorators-contextualTypes.ts ===
 @((t, c) => { })
 >t : Symbol(t, Decl(esDecorators-contextualTypes.ts, 0, 3))
 >c : Symbol(c, Decl(esDecorators-contextualTypes.ts, 0, 5))

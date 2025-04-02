@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.js ===
+//// [tests/cases/compiler/unmetTypeConstraintInJSDocImportCall.ts] ////
+
+=== file1.js ===
 /**
  * @template {string} T
  * @typedef {{ foo: T }} Foo
@@ -6,8 +8,9 @@
 
 export default {};
 >{} : {}
+>   : ^^
 
-=== tests/cases/compiler/file2.js ===
+=== file2.js ===
 
 /**
  * @template T

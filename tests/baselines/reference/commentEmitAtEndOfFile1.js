@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentEmitAtEndOfFile1.ts] ////
+
 //// [commentEmitAtEndOfFile1.ts]
 // test
 var f = ''

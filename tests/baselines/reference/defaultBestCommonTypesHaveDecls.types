@@ -1,54 +1,88 @@
-=== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts ===
+//// [tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts] ////
+
+=== defaultBestCommonTypesHaveDecls.ts ===
 var obj1: {};
 >obj1 : {}
+>     : ^^
 
 obj1.length;
 >obj1.length : any
+>            : ^^^
 >obj1 : {}
+>     : ^^
 >length : any
+>       : ^^^
 
 var obj2: Object;
 >obj2 : Object
+>     : ^^^^^^
 
 obj2.length;
 >obj2.length : any
+>            : ^^^
 >obj2 : Object
+>     : ^^^^^^
 >length : any
+>       : ^^^
 
 function concat<T>(x: T, y: T): T { return null; }
 >concat : <T>(x: T, y: T) => T
+>       : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 var result = concat(1, ""); // error
 >result : number
+>       : ^^^^^^
 >concat(1, "") : 1
+>              : ^
 >concat : <T>(x: T, y: T) => T
+>       : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 >"" : ""
+>   : ^^
 
 var elementCount = result.length; 
 >elementCount : any
+>             : ^^^
 >result.length : any
+>              : ^^^
 >result : number
+>       : ^^^^^^
 >length : any
+>       : ^^^
 
 function concat2<T, U>(x: T, y: U) { return null; }
 >concat2 : <T, U>(x: T, y: U) => any
+>        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 var result2 = concat2(1, ""); // result2 will be number|string
 >result2 : any
+>        : ^^^
 >concat2(1, "") : any
+>               : ^^^
 >concat2 : <T, U>(x: T, y: U) => any
+>        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >1 : 1
+>  : ^
 >"" : ""
+>   : ^^
 
 var elementCount2 = result.length; 
 >elementCount2 : any
+>              : ^^^
 >result.length : any
+>              : ^^^
 >result : number
+>       : ^^^^^^
 >length : any
+>       : ^^^
 
 

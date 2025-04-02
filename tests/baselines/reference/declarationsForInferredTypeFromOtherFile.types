@@ -1,23 +1,31 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/declarationsForInferredTypeFromOtherFile.ts] ////
+
+=== file1.ts ===
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export function foo(): import("./file1").Foo {
 >foo : () => import("./file1").Foo
+>    : ^^^^^^                     
 
     return null as any;
 >null as any : any
 }
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 import {foo} from "./file2";
->foo : () => import("tests/cases/compiler/file1").Foo
+>foo : () => import("file1").Foo
+>    : ^^^^^^                   
 
 export function bar() {
->bar : () => import("tests/cases/compiler/file1").Foo
+>bar : () => import("file1").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return foo();
->foo() : import("tests/cases/compiler/file1").Foo
->foo : () => import("tests/cases/compiler/file1").Foo
+>foo() : import("file1").Foo
+>      : ^^^^^^^^^^^^^^^^^^^
+>foo : () => import("file1").Foo
+>    : ^^^^^^                   
 }
 

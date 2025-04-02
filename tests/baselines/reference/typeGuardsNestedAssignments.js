@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/typeGuardsNestedAssignments.ts] ////
+
 //// [typeGuardsNestedAssignments.ts]
 class Foo {
     x: string;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateLocalVariable3.ts ===
+//// [tests/cases/compiler/duplicateLocalVariable3.ts] ////
+
+=== duplicateLocalVariable3.ts ===
 var x = 1;
 >x : Symbol(x, Decl(duplicateLocalVariable3.ts, 0, 3), Decl(duplicateLocalVariable3.ts, 1, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTupleWithSimplifiableElements.ts ===
+//// [tests/cases/compiler/genericTupleWithSimplifiableElements.ts] ////
+
+=== genericTupleWithSimplifiableElements.ts ===
 // repro from #52354
 
 type SS1 = string;

@@ -1,38 +1,55 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardEnums.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardEnums.ts] ////
+
+=== typeGuardEnums.ts ===
 enum E {}
 >E : E
+>  : ^
 
 enum V {}
 >V : V
+>  : ^
 
 let x: number|string|E|V;
 >x : string | number | E | V
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | E | V
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     x; // number|E|V
 >x : number | E | V
+>  : ^^^^^^^^^^^^^^
 }
 else {
     x; // string
 >x : string
+>  : ^^^^^^
 }
 
 if (typeof x !== "number") {
 >typeof x !== "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | E | V
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     x; // string
 >x : string
+>  : ^^^^^^
 }
 else {
     x; // number|E|V
 >x : number | E | V
+>  : ^^^^^^^^^^^^^^
 }
 

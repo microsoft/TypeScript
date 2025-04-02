@@ -1,11 +1,18 @@
-=== tests/cases/compiler/unresolvedTypeAssertionSymbol.ts ===
+//// [tests/cases/compiler/unresolvedTypeAssertionSymbol.ts] ////
+
+=== unresolvedTypeAssertionSymbol.ts ===
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var y = <asdf>x;
 >y : asdf
+>  : ^^^^
 ><asdf>x : asdf
+>        : ^^^^
 >x : number
+>  : ^^^^^^
  
 

@@ -25,4 +25,4 @@ Object.defineProperty(exports, "GridViewSizing", { enumerable: true, get: functi
 var Sizing;
 (function (Sizing) {
     Sizing.Distribute = { type: 'distribute' };
-})(Sizing = exports.Sizing || (exports.Sizing = {}));
+})(Sizing || (exports.Sizing = Sizing = {}));

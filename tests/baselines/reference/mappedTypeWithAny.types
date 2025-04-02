@@ -1,59 +1,83 @@
-=== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeWithAny.ts] ////
+
+=== mappedTypeWithAny.ts ===
 type Item = { value: string };
->Item : { value: string; }
+>Item : Item
+>     : ^^^^
 >value : string
+>      : ^^^^^^
 
 type ItemMap<T> = { [P in keyof T]: Item };
 >ItemMap : ItemMap<T>
+>        : ^^^^^^^^^^
 
 declare let x0: keyof any;
 >x0 : string | number | symbol
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x1: { [P in any]: Item };
 >x1 : { [x: string]: Item; [x: number]: Item; [x: symbol]: Item; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x2: { [P in string]: Item };
 >x2 : { [x: string]: Item; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x3: { [P in keyof any]: Item };
 >x3 : { [x: string]: Item; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x4: ItemMap<any>;
 >x4 : ItemMap<any>
+>   : ^^^^^^^^^^^^
 
 // Repro from #19152
 
 type Data = {
->Data : { value: string; }
+>Data : Data
+>     : ^^^^
 
   value: string;
 >value : string
+>      : ^^^^^^
 }
 
 type StrictDataMap<T> = {
 >StrictDataMap : StrictDataMap<T>
+>              : ^^^^^^^^^^^^^^^^
 
   [P in keyof T]: Data
 }
 
 declare let z: StrictDataMap<any>;
 >z : StrictDataMap<any>
+>  : ^^^^^^^^^^^^^^^^^^
 
 for (let id in z) {
 >id : string
+>   : ^^^^^^
 >z : StrictDataMap<any>
+>  : ^^^^^^^^^^^^^^^^^^
 
   let data = z[id];
 >data : Data
+>     : ^^^^
 >z[id] : Data
+>      : ^^^^
 >z : StrictDataMap<any>
+>  : ^^^^^^^^^^^^^^^^^^
 >id : string
+>   : ^^^^^^
 
   let x = data.notAValue;  // Error
 >x : any
+>  : ^^^
 >data.notAValue : any
+>               : ^^^
 >data : Data
+>     : ^^^^
 >notAValue : any
+>          : ^^^
 }
 
 // Issue #46169.
@@ -62,9 +86,11 @@ for (let id in z) {
 // is constrained to array and tuple types.
 type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
 >Arrayish : Arrayish<T>
+>         : ^^^^^^^^^^^
 
 type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
 >Objectish : Objectish<T>
+>          : ^^^^^^^^^^^^
 
 // When a mapped type whose constraint is `keyof T` is instantiated,
 // `T` may be instantiated with a `U` which is constrained to
@@ -75,65 +101,98 @@ type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
 // depending on the usage-site. As a result, `IndirectArrayish` does not act like `Arrayish`.
 type IndirectArrayish<U extends unknown[]> = Objectish<U>;
 >IndirectArrayish : Objectish<U>
+>                 : ^^^^^^^^^^^^
 
 function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
 >bar : (arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) => void
+>    : ^        ^^             ^^         ^^              ^^                ^^                     ^^^^^^^^^
 >arrayish : any[]
+>         : ^^^^^
 >objectish : Objectish<any>
+>          : ^^^^^^^^^^^^^^
 >indirectArrayish : Objectish<any>
+>                 : ^^^^^^^^^^^^^^
 
     let arr: any[];
 >arr : any[]
+>    : ^^^^^
 
     arr = arrayish;
 >arr = arrayish : any[]
+>               : ^^^^^
 >arr : any[]
+>    : ^^^^^
 >arrayish : any[]
+>         : ^^^^^
 
     arr = objectish;
 >arr = objectish : Objectish<any>
+>                : ^^^^^^^^^^^^^^
 >arr : any[]
+>    : ^^^^^
 >objectish : Objectish<any>
+>          : ^^^^^^^^^^^^^^
 
     arr = indirectArrayish;
 >arr = indirectArrayish : Objectish<any>
+>                       : ^^^^^^^^^^^^^^
 >arr : any[]
+>    : ^^^^^
 >indirectArrayish : Objectish<any>
+>                 : ^^^^^^^^^^^^^^
 }
 
 declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
 >stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
+>               : ^ ^^^^^^^^^              ^^   ^^ ^^^^^                                     
 >arr : T
+>    : ^
 
 let abc: any[] = stringifyArray(void 0 as any);
 >abc : any[]
+>    : ^^^^^
 >stringifyArray(void 0 as any) : string[]
+>                              : ^^^^^^^^
 >stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
+>               : ^ ^^^^^^^^^              ^^   ^^ ^^^^^                                     
 >void 0 as any : any
+>              : ^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
 >stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
+>              : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^                                     
 >arr : T
+>    : ^
 
 let def: [any, any] = stringifyPair(void 0 as any);
 >def : [any, any]
+>    : ^^^^^^^^^^
 >stringifyPair(void 0 as any) : string[]
+>                             : ^^^^^^^^
 >stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
+>              : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^                                     
 >void 0 as any : any
+>              : ^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 // Repro from #46582
 
 type Evolvable<E extends Evolver> = {
 >Evolvable : Evolvable<E>
+>          : ^^^^^^^^^^^^
 
   [P in keyof E]: never;
 };
 type Evolver<T extends Evolvable<any> = any> = {
 >Evolver : Evolver<T>
+>        : ^^^^^^^^^^
 
   [key in keyof Partial<T>]: never;
 };

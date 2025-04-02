@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingOptionalChain.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingOptionalChain.ts] ////
+
+=== classExtendingOptionalChain.ts ===
 namespace A {
 >A : Symbol(A, Decl(classExtendingOptionalChain.ts, 0, 0))
 

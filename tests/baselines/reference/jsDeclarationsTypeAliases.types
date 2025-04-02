@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeAliases.ts] ////
+
+=== index.js ===
 
 export {}; // flag file as module
 /**
@@ -27,7 +29,7 @@ export {}; // flag file as module
  * @returns {T}
  */
 
-=== tests/cases/conformance/jsdoc/declarations/mixed.js ===
+=== mixed.js ===
 /**
  * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
  */
@@ -37,41 +39,61 @@ export {}; // flag file as module
  */
 function doTheThing(x) {
 >doTheThing : (x: number) => SomeType
+>           : ^ ^^      ^^^^^        
 >x : number
+>  : ^^^^^^
 
     return {x: ""+x};
 >{x: ""+x} : { x: string; }
+>          : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >""+x : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 >x : number
+>  : ^^^^^^
 }
 class ExportedThing {
 >ExportedThing : ExportedThing
+>              : ^^^^^^^^^^^^^
 
     z = "ok"
 >z : string
+>  : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 }
 module.exports = {
 >module.exports = {    doTheThing,    ExportedThing,} : typeof module.exports
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
+>                                    : ^^^^^^^^^^^^^^^ ^^      ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     doTheThing,
 >doTheThing : (x: number) => SomeType
+>           : ^ ^^      ^^^^^        
 
     ExportedThing,
 >ExportedThing : typeof ExportedThing
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 };
 class LocalThing {
 >LocalThing : LocalThing
+>           : ^^^^^^^^^^
 
     y = "ok"
 >y : string
+>  : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 }
 

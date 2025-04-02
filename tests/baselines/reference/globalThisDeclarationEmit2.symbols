@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/globalThisDeclarationEmit2.ts] ////
+
+=== index.ts ===
 import { variable } from "./variable";
 >variable : Symbol(variable, Decl(index.ts, 0, 8))
 
@@ -6,7 +8,7 @@ export { variable as globalThis };
 >variable : Symbol(variable, Decl(index.ts, 0, 8))
 >globalThis : Symbol(globalThis, Decl(index.ts, 1, 8))
 
-=== tests/cases/compiler/variable.ts ===
+=== variable.ts ===
 export const variable = globalThis;
 >variable : Symbol(variable, Decl(variable.ts, 0, 12))
 >globalThis : Symbol(globalThis)

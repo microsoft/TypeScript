@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts ===
+//// [tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts] ////
+
+=== decoratorMetadata-jsdoc.ts ===
 declare var decorator: any;
 >decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
 

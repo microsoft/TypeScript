@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/classFieldSuperNotAccessible.ts] ////
+
+=== classFieldSuperNotAccessible.ts ===
+class T {
+>T : Symbol(T, Decl(classFieldSuperNotAccessible.ts, 0, 0))
+
+    field = () => {}
+>field : Symbol(T.field, Decl(classFieldSuperNotAccessible.ts, 0, 9))
+}
+class T2 extends T {
+>T2 : Symbol(T2, Decl(classFieldSuperNotAccessible.ts, 2, 1))
+>T : Symbol(T, Decl(classFieldSuperNotAccessible.ts, 0, 0))
+
+    f() {
+>f : Symbol(T2.f, Decl(classFieldSuperNotAccessible.ts, 3, 20))
+
+        super.field() // error
+>super.field : Symbol(T.field, Decl(classFieldSuperNotAccessible.ts, 0, 9))
+>super : Symbol(T, Decl(classFieldSuperNotAccessible.ts, 0, 0))
+>field : Symbol(T.field, Decl(classFieldSuperNotAccessible.ts, 0, 9))
+    }
+}
+
+new T2().f()
+>new T2().f : Symbol(T2.f, Decl(classFieldSuperNotAccessible.ts, 3, 20))
+>T2 : Symbol(T2, Decl(classFieldSuperNotAccessible.ts, 2, 1))
+>f : Symbol(T2.f, Decl(classFieldSuperNotAccessible.ts, 3, 20))
+

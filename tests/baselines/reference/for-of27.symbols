@@ -1,15 +1,17 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of27.ts ===
-class StringIterator {
->StringIterator : Symbol(StringIterator, Decl(for-of27.ts, 0, 0))
+//// [tests/cases/conformance/es6/for-ofStatements/for-of27.ts] ////
+
+=== for-of27.ts ===
+class MyStringIterator {
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of27.ts, 0, 0))
 
     [Symbol.iterator]: any;
->[Symbol.iterator] : Symbol(StringIterator[Symbol.iterator], Decl(for-of27.ts, 0, 22))
+>[Symbol.iterator] : Symbol(MyStringIterator[Symbol.iterator], Decl(for-of27.ts, 0, 24))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }
 >v : Symbol(v, Decl(for-of27.ts, 4, 8))
->StringIterator : Symbol(StringIterator, Decl(for-of27.ts, 0, 0))
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of27.ts, 0, 0))
 

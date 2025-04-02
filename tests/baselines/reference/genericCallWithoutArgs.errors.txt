@@ -1,8 +1,8 @@
-tests/cases/compiler/genericCallWithoutArgs.ts(4,2): error TS1477: An instantiation expression cannot be followed by a property access.
-tests/cases/compiler/genericCallWithoutArgs.ts(4,18): error TS1003: Identifier expected.
+genericCallWithoutArgs.ts(4,2): error TS1477: An instantiation expression cannot be followed by a property access.
+genericCallWithoutArgs.ts(4,18): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/genericCallWithoutArgs.ts (2 errors) ====
+==== genericCallWithoutArgs.ts (2 errors) ====
     function f<X, Y>(x: X, y: Y) {
     }
     

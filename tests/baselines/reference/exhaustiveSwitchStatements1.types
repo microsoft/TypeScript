@@ -1,79 +1,116 @@
-=== tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts ===
+//// [tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts] ////
+
+=== exhaustiveSwitchStatements1.ts ===
 function f1(x: 1 | 2): string {
 >f1 : (x: 1 | 2) => string
+>   : ^ ^^     ^^^^^      
 >x : 1 | 2
+>  : ^^^^^
 
     if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
         switch (x) {
 >x : 1 | 2
+>  : ^^^^^
 
             case 1: return 'a';
 >1 : 1
+>  : ^
 >'a' : "a"
+>    : ^^^
 
             case 2: return 'b';
 >2 : 2
+>  : ^
 >'b' : "b"
+>    : ^^^
         }
         x;  // Unreachable
 >x : never
+>  : ^^^^^
     }
     else {
         throw 0;
 >0 : 0
+>  : ^
     }
 }
 
 function f2(x: 1 | 2) {
 >f2 : (x: 1 | 2) => void
+>   : ^ ^^     ^^^^^^^^^
 >x : 1 | 2
+>  : ^^^^^
 
     let z: number;
 >z : number
+>  : ^^^^^^
 
     switch (x) {
 >x : 1 | 2
+>  : ^^^^^
 
         case 1: z = 10; break;
 >1 : 1
+>  : ^
 >z = 10 : 10
+>       : ^^
 >z : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         case 2: z = 20; break;
 >2 : 2
+>  : ^
 >z = 20 : 20
+>       : ^^
 >z : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
     }
     z;  // Definitely assigned
 >z : number
+>  : ^^^^^^
 }
 
 function f3(x: 1 | 2) {
 >f3 : (x: 1 | 2) => 10 | 20
+>   : ^ ^^     ^^^^^^^^^^^^
 >x : 1 | 2
+>  : ^^^^^
 
     switch (x) {
 >x : 1 | 2
+>  : ^^^^^
 
         case 1: return 10;
 >1 : 1
+>  : ^
 >10 : 10
+>   : ^^
 
         case 2: return 20;
 >2 : 2
+>  : ^
 >20 : 20
+>   : ^^
 
         // Default considered reachable to allow defensive coding
         default: throw new Error("Bad input");
 >new Error("Bad input") : Error
+>                       : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"Bad input" : "Bad input"
+>            : ^^^^^^^^^^^
     }
 }
 
@@ -81,57 +118,86 @@ function f3(x: 1 | 2) {
 
 enum E { A, B }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 
 function f(e: E): number {
 >f : (e: E) => number
+>  : ^ ^^ ^^^^^      
 >e : E
+>  : ^
 
     switch (e) {
 >e : E
+>  : ^
 
         case E.A: return 0
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 >0 : 0
+>  : ^
 
         case E.B: return 1
 >E.B : E.B
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >B : E.B
+>  : ^^^
 >1 : 1
+>  : ^
     }
 }
 
 function g(e: E): number {
 >g : (e: E) => number
+>  : ^ ^^ ^^^^^      
 >e : E
+>  : ^
 
     if (!true)
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
         return -1
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
     else
         switch (e) {
 >e : E
+>  : ^
 
             case E.A: return 0
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 >0 : 0
+>  : ^
 
             case E.B: return 1
 >E.B : E.B
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >B : E.B
+>  : ^^^
 >1 : 1
+>  : ^
         }
 }
 
@@ -139,271 +205,447 @@ function g(e: E): number {
 
 interface Square { kind: "square"; size: number; }
 >kind : "square"
+>     : ^^^^^^^^
 >size : number
+>     : ^^^^^^
 
 interface Rectangle { kind: "rectangle"; width: number; height: number; }
 >kind : "rectangle"
+>     : ^^^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >height : number
+>       : ^^^^^^
 
 interface Circle { kind: "circle"; radius: number; }
 >kind : "circle"
+>     : ^^^^^^^^
 >radius : number
+>       : ^^^^^^
 
 interface Triangle { kind: "triangle"; side: number; }
 >kind : "triangle"
+>     : ^^^^^^^^^^
 >side : number
+>     : ^^^^^^
 
 type Shape = Square | Rectangle | Circle | Triangle;
->Shape : Square | Rectangle | Circle | Triangle
+>Shape : Shape
+>      : ^^^^^
 
 function area(s: Shape): number {
 >area : (s: Shape) => number
+>     : ^ ^^     ^^^^^      
 >s : Shape
+>  : ^^^^^
 
     let area;
 >area : any
+>     : ^^^
 
     switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle" | "triangle"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >kind : "square" | "rectangle" | "circle" | "triangle"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case "square": area = s.size * s.size; break;
 >"square" : "square"
+>         : ^^^^^^^^
 >area = s.size * s.size : number
+>                       : ^^^^^^
 >area : any
+>     : ^^^
 >s.size * s.size : number
+>                : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 
         case "rectangle": area = s.width * s.height; break;
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 >area = s.width * s.height : number
+>                          : ^^^^^^
 >area : any
+>     : ^^^
 >s.width * s.height : number
+>                   : ^^^^^^
 >s.width : number
+>        : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >s.height : number
+>         : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >height : number
+>       : ^^^^^^
 
         case "circle": area = Math.PI * s.radius * s.radius; break;
 >"circle" : "circle"
+>         : ^^^^^^^^
 >area = Math.PI * s.radius * s.radius : number
+>                                     : ^^^^^^
 >area : any
+>     : ^^^
 >Math.PI * s.radius * s.radius : number
+>                              : ^^^^^^
 >Math.PI * s.radius : number
+>                   : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 
         case "triangle": area = Math.sqrt(3) / 4 * s.side * s.side; break;
 >"triangle" : "triangle"
+>           : ^^^^^^^^^^
 >area = Math.sqrt(3) / 4 * s.side * s.side : number
+>                                          : ^^^^^^
 >area : any
+>     : ^^^
 >Math.sqrt(3) / 4 * s.side * s.side : number
+>                                   : ^^^^^^
 >Math.sqrt(3) / 4 * s.side : number
+>                          : ^^^^^^
 >Math.sqrt(3) / 4 : number
+>                 : ^^^^^^
 >Math.sqrt(3) : number
+>             : ^^^^^^
 >Math.sqrt : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >sqrt : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >s.side : number
+>       : ^^^^^^
 >s : Triangle
+>  : ^^^^^^^^
 >side : number
+>     : ^^^^^^
 >s.side : number
+>       : ^^^^^^
 >s : Triangle
+>  : ^^^^^^^^
 >side : number
+>     : ^^^^^^
     }
     return area;
 >area : number
+>     : ^^^^^^
 }
 
 function areaWrapped(s: Shape): number {
 >areaWrapped : (s: Shape) => number
+>            : ^ ^^     ^^^^^      
 >s : Shape
+>  : ^^^^^
 
     let area;
 >area : any
+>     : ^^^
 
     area = (() => {
 >area = (() => {        switch (s.kind) {            case "square": return s.size * s.size;            case "rectangle": return s.width * s.height;            case "circle": return Math.PI * s.radius * s.radius;            case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;        }    })() : number
+>                                                                                                                                                                                                                                                                                                           : ^^^^^^
 >area : any
+>     : ^^^
 >(() => {        switch (s.kind) {            case "square": return s.size * s.size;            case "rectangle": return s.width * s.height;            case "circle": return Math.PI * s.radius * s.radius;            case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;        }    })() : number
+>                                                                                                                                                                                                                                                                                                    : ^^^^^^
 >(() => {        switch (s.kind) {            case "square": return s.size * s.size;            case "rectangle": return s.width * s.height;            case "circle": return Math.PI * s.radius * s.radius;            case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;        }    }) : () => number
+>                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^
 >() => {        switch (s.kind) {            case "square": return s.size * s.size;            case "rectangle": return s.width * s.height;            case "circle": return Math.PI * s.radius * s.radius;            case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;        }    } : () => number
+>                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^
 
         switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle" | "triangle"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Shape
+>  : ^^^^^
 >kind : "square" | "rectangle" | "circle" | "triangle"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             case "square": return s.size * s.size;
 >"square" : "square"
+>         : ^^^^^^^^
 >s.size * s.size : number
+>                : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 >s.size : number
+>       : ^^^^^^
 >s : Square
+>  : ^^^^^^
 >size : number
+>     : ^^^^^^
 
             case "rectangle": return s.width * s.height;
 >"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 >s.width * s.height : number
+>                   : ^^^^^^
 >s.width : number
+>        : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >width : number
+>      : ^^^^^^
 >s.height : number
+>         : ^^^^^^
 >s : Rectangle
+>  : ^^^^^^^^^
 >height : number
+>       : ^^^^^^
 
             case "circle": return Math.PI * s.radius * s.radius;
 >"circle" : "circle"
+>         : ^^^^^^^^
 >Math.PI * s.radius * s.radius : number
+>                              : ^^^^^^
 >Math.PI * s.radius : number
+>                   : ^^^^^^
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 >s.radius : number
+>         : ^^^^^^
 >s : Circle
+>  : ^^^^^^
 >radius : number
+>       : ^^^^^^
 
             case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;
 >"triangle" : "triangle"
+>           : ^^^^^^^^^^
 >Math.sqrt(3) / 4 * s.side * s.side : number
+>                                   : ^^^^^^
 >Math.sqrt(3) / 4 * s.side : number
+>                          : ^^^^^^
 >Math.sqrt(3) / 4 : number
+>                 : ^^^^^^
 >Math.sqrt(3) : number
+>             : ^^^^^^
 >Math.sqrt : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >sqrt : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >s.side : number
+>       : ^^^^^^
 >s : Triangle
+>  : ^^^^^^^^
 >side : number
+>     : ^^^^^^
 >s.side : number
+>       : ^^^^^^
 >s : Triangle
+>  : ^^^^^^^^
 >side : number
+>     : ^^^^^^
         }
     })();
     return area;
 >area : number
+>     : ^^^^^^
 }
 
 // Repro from #13241
 
 enum MyEnum {
 >MyEnum : MyEnum
+>       : ^^^^^^
 
 	A,
 >A : MyEnum.A
+>  : ^^^^^^^^
 
 	B
 >B : MyEnum.B
+>  : ^^^^^^^^
 }
 
 function thisGivesError(e: MyEnum): string {
 >thisGivesError : (e: MyEnum) => string
+>               : ^ ^^      ^^^^^      
 >e : MyEnum
+>  : ^^^^^^
 
 	let s: string;
 >s : string
+>  : ^^^^^^
 
 	switch (e) {
 >e : MyEnum
+>  : ^^^^^^
 
 		case MyEnum.A: s = "it was A"; break;
 >MyEnum.A : MyEnum.A
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >A : MyEnum.A
+>  : ^^^^^^^^
 >s = "it was A" : "it was A"
+>               : ^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"it was A" : "it was A"
+>           : ^^^^^^^^^^
 
 		case MyEnum.B: s = "it was B"; break;
 >MyEnum.B : MyEnum.B
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >B : MyEnum.B
+>  : ^^^^^^^^
 >s = "it was B" : "it was B"
+>               : ^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"it was B" : "it was B"
+>           : ^^^^^^^^^^
 	}
 	return s;
 >s : string
+>  : ^^^^^^
 }
 
 function good1(e: MyEnum): string {
 >good1 : (e: MyEnum) => string
+>      : ^ ^^      ^^^^^      
 >e : MyEnum
+>  : ^^^^^^
 
 	let s: string;
 >s : string
+>  : ^^^^^^
 
 	switch (e) {
 >e : MyEnum
+>  : ^^^^^^
 
 		case MyEnum.A: s = "it was A"; break;
 >MyEnum.A : MyEnum.A
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >A : MyEnum.A
+>  : ^^^^^^^^
 >s = "it was A" : "it was A"
+>               : ^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"it was A" : "it was A"
+>           : ^^^^^^^^^^
 
 		case MyEnum.B: s = "it was B"; break;
 >MyEnum.B : MyEnum.B
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >B : MyEnum.B
+>  : ^^^^^^^^
 >s = "it was B" : "it was B"
+>               : ^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"it was B" : "it was B"
+>           : ^^^^^^^^^^
 
 		default: s = "it was something else"; break;
 >s = "it was something else" : "it was something else"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"it was something else" : "it was something else"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 	}
 	return s;
 >s : string
+>  : ^^^^^^
 }
 
 function good2(e: MyEnum): string {
 >good2 : (e: MyEnum) => string
+>      : ^ ^^      ^^^^^      
 >e : MyEnum
+>  : ^^^^^^
 
 	switch (e) {
 >e : MyEnum
+>  : ^^^^^^
 
 		case MyEnum.A: return "it was A";
 >MyEnum.A : MyEnum.A
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >A : MyEnum.A
+>  : ^^^^^^^^
 >"it was A" : "it was A"
+>           : ^^^^^^^^^^
 
 		case MyEnum.B: return "it was B";
 >MyEnum.B : MyEnum.B
+>         : ^^^^^^^^
 >MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
 >B : MyEnum.B
+>  : ^^^^^^^^
 >"it was B" : "it was B"
+>           : ^^^^^^^^^^
 	}
 }
 
@@ -411,54 +653,79 @@ function good2(e: MyEnum): string {
 
 enum Level {
 >Level : Level
+>      : ^^^^^
 
   One,
 >One : Level.One
+>    : ^^^^^^^^^
 
   Two,
 >Two : Level.Two
+>    : ^^^^^^^^^
 }
 
 const doSomethingWithLevel = (level: Level) => {
 >doSomethingWithLevel : (level: Level) => Level
+>                     : ^     ^^     ^^^^^^^^^^
 >(level: Level) => {  let next: Level;  switch (level) {    case Level.One:      next = Level.Two;      break;    case Level.Two:      next = Level.One;      break;  }  return next;} : (level: Level) => Level
+>                                                                                                                                                                                      : ^     ^^     ^^^^^^^^^^
 >level : Level
+>      : ^^^^^
 
   let next: Level;
 >next : Level
+>     : ^^^^^
 
   switch (level) {
 >level : Level
+>      : ^^^^^
 
     case Level.One:
 >Level.One : Level.One
+>          : ^^^^^^^^^
 >Level : typeof Level
+>      : ^^^^^^^^^^^^
 >One : Level.One
+>    : ^^^^^^^^^
 
       next = Level.Two;
 >next = Level.Two : Level.Two
+>                 : ^^^^^^^^^
 >next : Level
+>     : ^^^^^
 >Level.Two : Level.Two
+>          : ^^^^^^^^^
 >Level : typeof Level
+>      : ^^^^^^^^^^^^
 >Two : Level.Two
+>    : ^^^^^^^^^
 
       break;
     case Level.Two:
 >Level.Two : Level.Two
+>          : ^^^^^^^^^
 >Level : typeof Level
+>      : ^^^^^^^^^^^^
 >Two : Level.Two
+>    : ^^^^^^^^^
 
       next = Level.One;
 >next = Level.One : Level.One
+>                 : ^^^^^^^^^
 >next : Level
+>     : ^^^^^
 >Level.One : Level.One
+>          : ^^^^^^^^^
 >Level : typeof Level
+>      : ^^^^^^^^^^^^
 >One : Level.One
+>    : ^^^^^^^^^
 
       break;
   }
   return next;
 >next : Level
+>     : ^^^^^
 
 };
 
@@ -467,100 +734,138 @@ const doSomethingWithLevel = (level: Level) => {
 interface Square2 {
     kind: "square";
 >kind : "square"
+>     : ^^^^^^^^
 
     size: number;
 >size : number
+>     : ^^^^^^
 }
 
 interface Circle2 {
     kind: "circle";
 >kind : "circle"
+>     : ^^^^^^^^
 
     radius: number;
 >radius : number
+>       : ^^^^^^
 }
 
 type Shape2 = Square2 | Circle2;
->Shape2 : Square2 | Circle2
+>Shape2 : Shape2
+>       : ^^^^^^
 
 function withDefault(s1: Shape2, s2: Shape2): string {
 >withDefault : (s1: Shape2, s2: Shape2) => string
+>            : ^  ^^      ^^  ^^      ^^^^^      
 >s1 : Shape2
+>   : ^^^^^^
 >s2 : Shape2
+>   : ^^^^^^
 
     switch (s1.kind) {
 >s1.kind : "square" | "circle"
+>        : ^^^^^^^^^^^^^^^^^^^
 >s1 : Shape2
+>   : ^^^^^^
 >kind : "square" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^
 
         case "square":
 >"square" : "square"
+>         : ^^^^^^^^
 
             return "1";
 >"1" : "1"
+>    : ^^^
 
         case "circle":
 >"circle" : "circle"
+>         : ^^^^^^^^
 
             switch (s2.kind) {
 >s2.kind : "square" | "circle"
+>        : ^^^^^^^^^^^^^^^^^^^
 >s2 : Shape2
+>   : ^^^^^^
 >kind : "square" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^
 
                 case "square":
 >"square" : "square"
+>         : ^^^^^^^^
 
                     return "2";
 >"2" : "2"
+>    : ^^^
 
                 case "circle":
 >"circle" : "circle"
+>         : ^^^^^^^^
 
                     return "3";
 >"3" : "3"
+>    : ^^^
 
                 default:
                     return "never";
 >"never" : "never"
+>        : ^^^^^^^
             }
     }
 }
 
 function withoutDefault(s1: Shape2, s2: Shape2): string {
 >withoutDefault : (s1: Shape2, s2: Shape2) => string
+>               : ^  ^^      ^^  ^^      ^^^^^      
 >s1 : Shape2
+>   : ^^^^^^
 >s2 : Shape2
+>   : ^^^^^^
 
     switch (s1.kind) {
 >s1.kind : "square" | "circle"
+>        : ^^^^^^^^^^^^^^^^^^^
 >s1 : Shape2
+>   : ^^^^^^
 >kind : "square" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^
 
         case "square":
 >"square" : "square"
+>         : ^^^^^^^^
 
             return "1";
 >"1" : "1"
+>    : ^^^
 
         case "circle":
 >"circle" : "circle"
+>         : ^^^^^^^^
 
             switch (s2.kind) {
 >s2.kind : "square" | "circle"
+>        : ^^^^^^^^^^^^^^^^^^^
 >s2 : Shape2
+>   : ^^^^^^
 >kind : "square" | "circle"
+>     : ^^^^^^^^^^^^^^^^^^^
 
                 case "square":
 >"square" : "square"
+>         : ^^^^^^^^
 
                     return "2";
 >"2" : "2"
+>    : ^^^
 
                 case "circle":
 >"circle" : "circle"
+>         : ^^^^^^^^
 
                     return "3";
 >"3" : "3"
+>    : ^^^
             }
     }
 }
@@ -569,68 +874,106 @@ function withoutDefault(s1: Shape2, s2: Shape2): string {
 
 function test4(value: 1 | 2) {
 >test4 : (value: 1 | 2) => string
+>      : ^     ^^     ^^^^^^^^^^^
 >value : 1 | 2
+>      : ^^^^^
 
     let x: string;
 >x : string
+>  : ^^^^^^
 
     switch (value) {
 >value : 1 | 2
+>      : ^^^^^
 
         case 1: x = "one"; break;
 >1 : 1
+>  : ^
 >x = "one" : "one"
+>          : ^^^^^
 >x : string
+>  : ^^^^^^
 >"one" : "one"
+>      : ^^^^^
 
         case 2: x = "two"; break;
 >2 : 2
+>  : ^
 >x = "two" : "two"
+>          : ^^^^^
 >x : string
+>  : ^^^^^^
 >"two" : "two"
+>      : ^^^^^
     }
     return x;
 >x : string
+>  : ^^^^^^
 }
 
 // Repro from #34661
 
 enum Animal { DOG, CAT }
 >Animal : Animal
+>       : ^^^^^^
 >DOG : Animal.DOG
+>    : ^^^^^^^^^^
 >CAT : Animal.CAT
+>    : ^^^^^^^^^^
 
 declare const zoo: { animal: Animal } | undefined;
 >zoo : { animal: Animal; } | undefined
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >animal : Animal
+>       : ^^^^^^
 
 function expression(): Animal {
 >expression : () => Animal
+>           : ^^^^^^      
 
     switch (zoo?.animal ?? Animal.DOG) {
 >zoo?.animal ?? Animal.DOG : Animal
+>                          : ^^^^^^
 >zoo?.animal : Animal | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 >zoo : { animal: Animal; } | undefined
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >animal : Animal | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >Animal.DOG : Animal.DOG
+>           : ^^^^^^^^^^
 >Animal : typeof Animal
+>       : ^^^^^^^^^^^^^
 >DOG : Animal.DOG
+>    : ^^^^^^^^^^
 
         case Animal.DOG: return Animal.DOG
 >Animal.DOG : Animal.DOG
+>           : ^^^^^^^^^^
 >Animal : typeof Animal
+>       : ^^^^^^^^^^^^^
 >DOG : Animal.DOG
+>    : ^^^^^^^^^^
 >Animal.DOG : Animal.DOG
+>           : ^^^^^^^^^^
 >Animal : typeof Animal
+>       : ^^^^^^^^^^^^^
 >DOG : Animal.DOG
+>    : ^^^^^^^^^^
 
         case Animal.CAT: return Animal.CAT
 >Animal.CAT : Animal.CAT
+>           : ^^^^^^^^^^
 >Animal : typeof Animal
+>       : ^^^^^^^^^^^^^
 >CAT : Animal.CAT
+>    : ^^^^^^^^^^
 >Animal.CAT : Animal.CAT
+>           : ^^^^^^^^^^
 >Animal : typeof Animal
+>       : ^^^^^^^^^^^^^
 >CAT : Animal.CAT
+>    : ^^^^^^^^^^
     }
 }
 
@@ -638,26 +981,35 @@ function expression(): Animal {
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     const foo: number | undefined = 0;
 >foo : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         const stats = foo;
 >stats : number
+>      : ^^^^^^
 >foo : number
+>    : ^^^^^^
 
         switch (stats) {
 >stats : number
+>      : ^^^^^^
 
             case 1: break;
 >1 : 1
+>  : ^
 
             case 2: break;
 >2 : 2
+>  : ^
         }
     }
 }
@@ -665,71 +1017,103 @@ function foo() {
 // Repro from #35070
 
 type O = {
->O : { a: number; b: number; }
+>O : O
+>  : ^
 
     a: number,
 >a : number
+>  : ^^^^^^
 
     b: number
 >b : number
+>  : ^^^^^^
 
 };
 type K = keyof O | 'c';
->K : keyof O | "c"
+>K : K
+>  : ^
 
 function ff(o: O, k: K) {
 >ff : (o: O, k: K) => number
+>   : ^ ^^ ^^ ^^ ^^^^^^^^^^^
 >o : O
+>  : ^
 >k : K
+>  : ^
 
     switch(k) {
 >k : K
+>  : ^
 
         case 'c':
 >'c' : "c"
+>    : ^^^
 
             k = 'a';
 >k = 'a' : "a"
+>        : ^^^
 >k : K
+>  : ^
 >'a' : "a"
+>    : ^^^
     }
     k === 'c';  // Error
 >k === 'c' : boolean
+>          : ^^^^^^^
 >k : keyof O
+>  : ^^^^^^^
 >'c' : "c"
+>    : ^^^
 
     return o[k];
 >o[k] : number
+>     : ^^^^^^
 >o : O
+>  : ^
 >k : keyof O
+>  : ^^^^^^^
 }
 
 // Repro from #35431
 type A = { kind: "abc" } | { kind: "def" };
->A : { kind: "abc"; } | { kind: "def"; }
+>A : A
+>  : ^
 >kind : "abc"
+>     : ^^^^^
 >kind : "def"
+>     : ^^^^^
 
 function f35431(a: A) {
 >f35431 : (a: A) => void
+>       : ^ ^^ ^^^^^^^^^
 >a : A
+>  : ^
 
   switch (a.kind) {
 >a.kind : "abc" | "def"
+>       : ^^^^^^^^^^^^^
 >a : A
+>  : ^
 >kind : "abc" | "def"
+>     : ^^^^^^^^^^^^^
 
     case "abc":
 >"abc" : "abc"
+>      : ^^^^^
 
     case "def": return;
 >"def" : "def"
+>      : ^^^^^
 
     default:
       a!.kind; // Error expected
 >a!.kind : any
+>        : ^^^
 >a! : never
+>   : ^^^^^
 >a : never
+>  : ^^^^^
 >kind : any
+>     : ^^^
   }
 }

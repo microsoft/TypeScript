@@ -1,6 +1,9 @@
+//// [tests/cases/conformance/jsdoc/inferThis.ts] ////
+
 === /a.js ===
 export class C {
 >C : C
+>  : ^
 
     /**
      * @template T
@@ -9,9 +12,11 @@ export class C {
      */
     static a() {
 >a : <T>(this: T) => T
+>  : ^ ^^^^^^^^^^^^^^ 
 
         return this;
 >this : T
+>     : ^
     }
 
     /**
@@ -21,34 +26,51 @@ export class C {
      */
     b() {
 >b : <T>(this: T) => T
+>  : ^ ^^^^^^^^^^^^^^ 
 
         return this;
 >this : T
+>     : ^
     }
 }
 
 const a = C.a();
 >a : typeof C
+>  : ^^^^^^^^
 >C.a() : typeof C
+>      : ^^^^^^^^
 >C.a : <T>(this: T) => T
+>    : ^ ^^^^^^^^^^^^^^ 
 >C : typeof C
+>  : ^^^^^^^^
 >a : <T>(this: T) => T
+>  : ^ ^^^^^^^^^^^^^^ 
 
 a; // typeof C
 >a : typeof C
+>  : ^^^^^^^^
 
 const c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 const b = c.b();
 >b : C
+>  : ^
 >c.b() : C
+>      : ^
 >c.b : <T>(this: T) => T
+>    : ^ ^^^^^^^^^^^^^^ 
 >c : C
+>  : ^
 >b : <T>(this: T) => T
+>  : ^ ^^^^^^^^^^^^^^ 
 
 b; // C
 >b : C
+>  : ^
 

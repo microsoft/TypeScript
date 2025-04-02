@@ -1,152 +1,244 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNumericLiteral.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNumericLiteral.ts] ////
+
+=== comparisonOperatorWithNumericLiteral.ts ===
 type BrandedNum = number & { __numberBrand: any };
->BrandedNum : number & { __numberBrand: any; }
+>BrandedNum : BrandedNum
+>           : ^^^^^^^^^^
 >__numberBrand : any
 
 var x : BrandedNum;
 >x : BrandedNum
+>  : ^^^^^^^^^^
 
 // operator >
 x > 0;
 >x > 0 : boolean
+>      : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x > <number>0;
 >x > <number>0 : boolean
+>              : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x > <BrandedNum>0;
 >x > <BrandedNum>0 : boolean
+>                  : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 // operator <
 x < 0;
 >x < 0 : boolean
+>      : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x < <number>0;
 >x < <number>0 : boolean
+>              : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x < <BrandedNum>0;
 >x < <BrandedNum>0 : boolean
+>                  : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 // operator >=
 x >= 0;
 >x >= 0 : boolean
+>       : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x >= <number>0;
 >x >= <number>0 : boolean
+>               : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x >= <BrandedNum>0;
 >x >= <BrandedNum>0 : boolean
+>                   : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 // operator <=
 x <= 0;
 >x <= 0 : boolean
+>       : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x <= <number>0;
 >x <= <number>0 : boolean
+>               : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x <= <BrandedNum>0;
 >x <= <BrandedNum>0 : boolean
+>                   : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 // operator ==
 x == 0;
 >x == 0 : boolean
+>       : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x == <number>0;
 >x == <number>0 : boolean
+>               : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x == <BrandedNum>0;
 >x == <BrandedNum>0 : boolean
+>                   : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 // operator !=
 x != 0;
 >x != 0 : boolean
+>       : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x != <number>0;
 >x != <number>0 : boolean
+>               : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x != <BrandedNum>0;
 >x != <BrandedNum>0 : boolean
+>                   : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 // operator ===
 x === 0;
 >x === 0 : boolean
+>        : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x === <number>0;
 >x === <number>0 : boolean
+>                : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x === <BrandedNum>0;
 >x === <BrandedNum>0 : boolean
+>                    : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 // operator !==
 x !== 0;
 >x !== 0 : boolean
+>        : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 x !== <number>0;
 >x !== <number>0 : boolean
+>                : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><number>0 : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 x !== <BrandedNum>0;
 >x !== <BrandedNum>0 : boolean
+>                    : ^^^^^^^
 >x : BrandedNum
+>  : ^^^^^^^^^^
 ><BrandedNum>0 : BrandedNum
+>              : ^^^^^^^^^^
 >0 : 0
+>  : ^
 

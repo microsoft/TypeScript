@@ -1,114 +1,114 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(20,15): error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base<T>'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(20,15): error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base<T>'.
   Types of property 'a' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new () => T'.
       Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(50,15): error TS2430: Interface 'I10<T>' incorrectly extends interface 'Base<T>'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(50,15): error TS2430: Interface 'I10<T>' incorrectly extends interface 'Base<T>'.
   Types of property 'a3' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new (x: T) => T'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(100,15): error TS2430: Interface 'I1<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(100,15): error TS2430: Interface 'I1<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a()' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(104,15): error TS2430: Interface 'I2<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(104,15): error TS2430: Interface 'I2<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(108,15): error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(108,15): error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base2'.
   Types of property 'a' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>() => T'.
       Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(113,15): error TS2430: Interface 'I4<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(113,15): error TS2430: Interface 'I4<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a2(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(117,15): error TS2430: Interface 'I5<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(117,15): error TS2430: Interface 'I5<T>' incorrectly extends interface 'Base2'.
   Types of property 'a2' are incompatible.
     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(121,15): error TS2430: Interface 'I6<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(121,15): error TS2430: Interface 'I6<T>' incorrectly extends interface 'Base2'.
   Types of property 'a2' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(126,15): error TS2430: Interface 'I7<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(126,15): error TS2430: Interface 'I7<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a3(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(130,15): error TS2430: Interface 'I8<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(130,15): error TS2430: Interface 'I8<T>' incorrectly extends interface 'Base2'.
   Types of property 'a3' are incompatible.
     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(134,15): error TS2430: Interface 'I9<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(134,15): error TS2430: Interface 'I9<T>' incorrectly extends interface 'Base2'.
   Types of property 'a3' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(138,15): error TS2430: Interface 'I10<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(138,15): error TS2430: Interface 'I10<T>' incorrectly extends interface 'Base2'.
   Types of property 'a3' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x: T) => T'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(143,15): error TS2430: Interface 'I11<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(143,15): error TS2430: Interface 'I11<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a4(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(147,15): error TS2430: Interface 'I12<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(147,15): error TS2430: Interface 'I12<T>' incorrectly extends interface 'Base2'.
   Types of property 'a4' are incompatible.
     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(151,15): error TS2430: Interface 'I13<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(151,15): error TS2430: Interface 'I13<T>' incorrectly extends interface 'Base2'.
   Types of property 'a4' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(155,15): error TS2430: Interface 'I14<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(155,15): error TS2430: Interface 'I14<T>' incorrectly extends interface 'Base2'.
   Types of property 'a4' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(160,15): error TS2430: Interface 'I15<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(160,15): error TS2430: Interface 'I15<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a5(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(164,15): error TS2430: Interface 'I16<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(164,15): error TS2430: Interface 'I16<T>' incorrectly extends interface 'Base2'.
   Types of property 'a5' are incompatible.
     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(168,15): error TS2430: Interface 'I17<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(168,15): error TS2430: Interface 'I17<T>' incorrectly extends interface 'Base2'.
   Types of property 'a5' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(172,15): error TS2430: Interface 'I18<T>' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(172,15): error TS2430: Interface 'I18<T>' incorrectly extends interface 'Base2'.
   Types of property 'a5' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(196,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(196,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   Types of property 'a' are incompatible.
     Type 'new <T>(x: T) => T' is not assignable to type 'new <T>() => T'.
       Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(226,15): error TS2430: Interface 'I10' incorrectly extends interface 'Base2'.
+subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(226,15): error TS2430: Interface 'I10' incorrectly extends interface 'Base2'.
   Types of property 'a3' are incompatible.
     Type 'new <T>(x: T, y: T) => T' is not assignable to type 'new <T>(x: T) => T'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts (22 errors) ====
+==== subtypingWithGenericConstructSignaturesWithOptionalParameters.ts (22 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
     module ClassTypeParam {
@@ -224,7 +224,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   The types returned by 'new a()' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:100:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:100:18: This type parameter might need an `extends T` constraint.
             a: new () => T; 
         }
     
@@ -234,7 +234,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   The types returned by 'new a(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:18: This type parameter might need an `extends T` constraint.
             a: new (x?: T) => T;
         }
     
@@ -254,7 +254,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   The types returned by 'new a2(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:113:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:113:18: This type parameter might need an `extends T` constraint.
             a2: new () => T; 
         }
     
@@ -266,7 +266,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18: This type parameter might need an `extends T` constraint.
             a2: new (x?: T) => T
         }
     
@@ -278,7 +278,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18: This type parameter might need an `extends T` constraint.
             a2: new (x: T) => T;
         }
     
@@ -289,7 +289,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   The types returned by 'new a3(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:126:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:126:18: This type parameter might need an `extends T` constraint.
             a3: new () => T;
         }
     
@@ -301,7 +301,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18: This type parameter might need an `extends T` constraint.
             a3: new (x?: T) => T; 
         }
     
@@ -313,7 +313,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18: This type parameter might need an `extends T` constraint.
             a3: new (x: T) => T; 
         }
     
@@ -333,7 +333,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   The types returned by 'new a4(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:143:19: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:143:19: This type parameter might need an `extends T` constraint.
             a4: new () => T; 
         }
     
@@ -345,7 +345,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18: This type parameter might need an `extends T` constraint.
             a4: new (x?: T, y?: T) => T; 
         }
     
@@ -357,7 +357,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18: This type parameter might need an `extends T` constraint.
             a4: new (x: T) => T; 
         }
     
@@ -369,7 +369,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18: This type parameter might need an `extends T` constraint.
             a4: new (x: T, y: T) => T; 
         }
     
@@ -380,7 +380,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   The types returned by 'new a5(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:160:19: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:160:19: This type parameter might need an `extends T` constraint.
             a5: new () => T; 
         }
     
@@ -392,7 +392,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18: This type parameter might need an `extends T` constraint.
             a5: new (x?: T, y?: T) => T; 
         }
     
@@ -404,7 +404,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18: This type parameter might need an `extends T` constraint.
             a5: new (x: T) => T;
         }
     
@@ -416,7 +416,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18: This type parameter might need an `extends T` constraint.
             a5: new (x: T, y: T) => T; 
         }
     }

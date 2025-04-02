@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/module.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment10.ts] ////
+
+=== module.js ===
 var Outer = Outer || {};
 >Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(someview.js, 5, 5), Decl(someview.js, 13, 10) ... and 1 more)
 >Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(someview.js, 5, 5), Decl(someview.js, 13, 10) ... and 1 more)
@@ -11,7 +13,7 @@ Outer.app = Outer.app || {};
 >Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(someview.js, 5, 5), Decl(someview.js, 13, 10) ... and 1 more)
 >app : Symbol(Outer.app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(someview.js, 6, 6), Decl(someview.js, 15, 6), Decl(application.js, 0, 6))
 
-=== tests/cases/conformance/salsa/someview.js ===
+=== someview.js ===
 Outer.app.SomeView = (function () {
 >Outer.app.SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 >Outer.app : Symbol(Outer.app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(someview.js, 6, 6), Decl(someview.js, 15, 6), Decl(application.js, 0, 6))
@@ -70,7 +72,7 @@ Outer.app.statische = function (k) {
 >k : Symbol(k, Decl(someview.js, 15, 32))
 >k : Symbol(k, Decl(someview.js, 15, 32))
 }
-=== tests/cases/conformance/salsa/application.js ===
+=== application.js ===
 Outer.app.Application = (function () {
 >Outer.app.Application : Symbol(Outer.app.Application, Decl(application.js, 0, 0))
 >Outer.app : Symbol(Outer.app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(someview.js, 6, 6), Decl(someview.js, 15, 6), Decl(application.js, 0, 6))
@@ -91,7 +93,7 @@ Outer.app.Application = (function () {
 
         me.view = new Outer.app.SomeView();
 >me.view : Symbol(Application.view, Decl(application.js, 7, 22))
->me : Symbol(Application.view, Decl(application.js, 7, 22))
+>me : Symbol(me, Decl(application.js, 7, 11))
 >view : Symbol(Application.view, Decl(application.js, 7, 22))
 >Outer.app.SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 >Outer.app : Symbol(Outer.app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(someview.js, 6, 6), Decl(someview.js, 15, 6), Decl(application.js, 0, 6))
@@ -104,7 +106,7 @@ Outer.app.Application = (function () {
 >Application : Symbol(Application, Decl(application.js, 6, 7))
 
 })();
-=== tests/cases/conformance/salsa/main.js ===
+=== main.js ===
 var app = new Outer.app.Application();
 >app : Symbol(app, Decl(main.js, 0, 3))
 >Outer.app.Application : Symbol(Outer.app.Application, Decl(application.js, 0, 0))

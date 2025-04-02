@@ -1,137 +1,213 @@
-=== tests/cases/compiler/constEnumErrors.ts ===
+//// [tests/cases/compiler/constEnumErrors.ts] ////
+
+=== constEnumErrors.ts ===
 const enum E {
 >E : E
+>  : ^
 
     A
 >A : E.A
+>  : ^^^
 }
 
 module E {
 >E : typeof E
+>  : ^^^^^^^^
 
     var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 const enum E1 {
 >E1 : E1
+>   : ^^
 
     // illegal case
     // forward reference to the element of the same enum
     X = Y,
 >X : E1.X
+>  : ^^^^
 >Y : E1.Y
+>  : ^^^^
 
     // forward reference to the element of the same enum
     Y = E1.Z,
 >Y : E1.Y
+>  : ^^^^
 >E1.Z : any
+>     : ^^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >Z : any
+>  : ^^^
 
     Y1 = E1["Z"]
 >Y1 : E1.Y1
+>   : ^^^^^
 >E1["Z"] : any
+>        : ^^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >"Z" : "Z"
+>    : ^^^
 }
 
 const enum E2 {
 >E2 : E2
+>   : ^^
 
     A
 >A : E2.A
+>  : ^^^^
 }
 
 var y0 = E2[1]
 >y0 : any
+>   : ^^^
 >E2[1] : any
+>      : ^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
 var name = "A";
 >name : string
+>     : ^^^^^^
 >"A" : "A"
+>    : ^^^
 
 var y1 = E2[name];
 >y1 : any
+>   : ^^^
 >E2[name] : any
+>         : ^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >name : string
+>     : ^^^^^^
 
 var y2 = E2[`${name}`];
 >y2 : any
+>   : ^^^
 >E2[`${name}`] : any
+>              : ^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >`${name}` : string
+>          : ^^^^^^
 >name : string
+>     : ^^^^^^
 
 var x = E2;
 >x : typeof E2
+>  : ^^^^^^^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 
 var y = [E2];
 >y : (typeof E2)[]
+>  : ^^^^^^^^^^^^^
 >[E2] : (typeof E2)[]
+>     : ^^^^^^^^^^^^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 
 function foo(t: any): void {
 >foo : (t: any) => void
+>    : ^ ^^   ^^^^^    
 >t : any
+>  : ^^^
 }
 
 foo(E2);
 >foo(E2) : void
+>        : ^^^^
 >foo : (t: any) => void
+>    : ^ ^^   ^^^^^    
 >E2 : typeof E2
+>   : ^^^^^^^^^
 
 const enum NaNOrInfinity {
 >NaNOrInfinity : NaNOrInfinity
+>              : ^^^^^^^^^^^^^
 
     A = 9007199254740992,
 >A : NaNOrInfinity.A
+>  : ^^^^^^^^^^^^^^^
 >9007199254740992 : 9007199254740992
+>                 : ^^^^^^^^^^^^^^^^
 
     B = A * A,
 >B : NaNOrInfinity.B
+>  : ^^^^^^^^^^^^^^^
 >A * A : number
+>      : ^^^^^^
 >A : NaNOrInfinity.A
+>  : ^^^^^^^^^^^^^^^
 >A : NaNOrInfinity.A
+>  : ^^^^^^^^^^^^^^^
 
     C = B * B,
 >C : NaNOrInfinity.C
+>  : ^^^^^^^^^^^^^^^
 >B * B : number
+>      : ^^^^^^
 >B : NaNOrInfinity.B
+>  : ^^^^^^^^^^^^^^^
 >B : NaNOrInfinity.B
+>  : ^^^^^^^^^^^^^^^
 
     D = C * C,
 >D : NaNOrInfinity.D
+>  : ^^^^^^^^^^^^^^^
 >C * C : number
+>      : ^^^^^^
 >C : NaNOrInfinity.C
+>  : ^^^^^^^^^^^^^^^
 >C : NaNOrInfinity.C
+>  : ^^^^^^^^^^^^^^^
 
     E = D * D,
 >E : NaNOrInfinity.E
+>  : ^^^^^^^^^^^^^^^
 >D * D : number
+>      : ^^^^^^
 >D : NaNOrInfinity.D
+>  : ^^^^^^^^^^^^^^^
 >D : NaNOrInfinity.D
+>  : ^^^^^^^^^^^^^^^
 
     F = E * E, // overflow
 >F : NaNOrInfinity.F
+>  : ^^^^^^^^^^^^^^^
 >E * E : number
+>      : ^^^^^^
 >E : NaNOrInfinity.E
+>  : ^^^^^^^^^^^^^^^
 >E : NaNOrInfinity.E
+>  : ^^^^^^^^^^^^^^^
 
     G = 1 / 0, // overflow
 >G : NaNOrInfinity.F
+>  : ^^^^^^^^^^^^^^^
 >1 / 0 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 
     H = 0 / 0  // NaN
 >H : NaNOrInfinity.H
+>  : ^^^^^^^^^^^^^^^
 >0 / 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-static.ts] ////
+
 //// [esDecorators-classDeclaration-accessors-static.ts]
 declare let dec: any;
 

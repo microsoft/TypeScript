@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.tsx ===
+//// [tests/cases/compiler/tsxTypeArgumentPartialDefinitionStillErrors.ts] ////
+
+=== file.tsx ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 

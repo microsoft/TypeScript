@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule02.ts ===
+//// [tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule02.ts] ////
+
+=== asiPreventsParsingAsAmbientExternalModule02.ts ===
 var declare: number;
 >declare : Symbol(declare, Decl(asiPreventsParsingAsAmbientExternalModule02.ts, 0, 3))
 

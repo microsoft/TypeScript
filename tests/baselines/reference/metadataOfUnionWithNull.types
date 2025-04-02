@@ -1,86 +1,118 @@
-=== tests/cases/compiler/metadataOfUnionWithNull.ts ===
+//// [tests/cases/compiler/metadataOfUnionWithNull.ts] ////
+
+=== metadataOfUnionWithNull.ts ===
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 >target : Object
+>       : ^^^^^^
 >propKey : string | symbol
+>        : ^^^^^^^^^^^^^^^
 
 class A {
 >A : A
+>  : ^
 }
 
 class B {
 >B : B
+>  : ^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     x: "foo" | null;
 >x : "foo"
+>  : ^^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     y: true | never;
 >y : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     z: "foo" | undefined;
 >z : "foo"
+>  : ^^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     a: null;
 >a : null
+>  : ^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     b: never;
 >b : never
+>  : ^^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     c: undefined;
 >c : undefined
+>  : ^^^^^^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     d: undefined | null;
 >d : null
+>  : ^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     e: symbol | null;
 >e : symbol
+>  : ^^^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     f: symbol | A;
 >f : symbol | A
+>  : ^^^^^^^^^^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     g: A | null;
 >g : A
+>  : ^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     h: null | B;
 >h : B
+>  : ^
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     j: null | symbol;
 >j : symbol
+>  : ^^^^^^
 }

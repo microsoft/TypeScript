@@ -1,107 +1,151 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignableToEveryType.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignableToEveryType.ts] ////
+
+=== nullAssignableToEveryType.ts ===
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 var ac: C;
 >ac : C
+>   : ^
 
 interface I {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 var ai: I;
 >ai : I
+>   : ^
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 var ae: E;
 >ae : E
+>   : ^
 
 var b: number = null;
 >b : number
+>  : ^^^^^^
 
 var c: string = null;
 >c : string
+>  : ^^^^^^
 
 var d: boolean = null;
 >d : boolean
+>  : ^^^^^^^
 
 var e: Date = null;
 >e : Date
+>  : ^^^^
 
 var f: any = null;
 >f : any
 
 var g: void = null;
 >g : void
+>  : ^^^^
 
 var h: Object = null;
 >h : Object
+>  : ^^^^^^
 
 var i: {} = null;
 >i : {}
+>  : ^^
 
 var j: () => {} = null;
 >j : () => {}
+>  : ^^^^^^  
 
 var k: Function = null;
 >k : Function
+>  : ^^^^^^^^
 
 var l: (x: number) => string = null;
 >l : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
 ac = null;
 >ac = null : null
+>          : ^^^^
 >ac : C
+>   : ^
 
 ai = null;
 >ai = null : null
+>          : ^^^^
 >ai : I
+>   : ^
 
 ae = null;
 >ae = null : null
+>          : ^^^^
 >ae : E
+>   : ^
 
 var m: number[] = null;
 >m : number[]
+>  : ^^^^^^^^
 
 var n: { foo: string } = null;
 >n : { foo: string; }
+>  : ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 
 var o: <T>(x: T) => T = null;
 >o : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 var p: Number = null;
 >p : Number
+>  : ^^^^^^
 
 var q: String = null;
 >q : String
+>  : ^^^^^^
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
+>    : ^ ^^ ^^ ^^^^^^^^^    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 >z : V
+>  : ^
 
     x = null;
 >x = null : null
+>         : ^^^^
 >x : T
+>  : ^
 
     y = null;
 >y = null : null
+>         : ^^^^
 >y : U
+>  : ^
 
     z = null;
 >z = null : null
+>         : ^^^^
 >z : V
+>  : ^
 }
 
 //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {

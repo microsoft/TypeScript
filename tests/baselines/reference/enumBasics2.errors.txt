@@ -1,11 +1,11 @@
-tests/cases/compiler/enumBasics2.ts(4,9): error TS2339: Property 'b' does not exist on type 'Foo.a'.
-tests/cases/compiler/enumBasics2.ts(5,9): error TS2339: Property 'a' does not exist on type 'Foo.b'.
-tests/cases/compiler/enumBasics2.ts(6,9): error TS2339: Property 'x' does not exist on type 'Foo.y'.
-tests/cases/compiler/enumBasics2.ts(6,15): error TS2339: Property 'x' does not exist on type 'Foo.a'.
-tests/cases/compiler/enumBasics2.ts(13,13): error TS2339: Property 'a' does not exist on type 'Foo.a'.
+enumBasics2.ts(4,9): error TS2339: Property 'b' does not exist on type 'Foo.a'.
+enumBasics2.ts(5,9): error TS2339: Property 'a' does not exist on type 'Foo.b'.
+enumBasics2.ts(6,9): error TS2339: Property 'x' does not exist on type 'Foo.y'.
+enumBasics2.ts(6,15): error TS2339: Property 'x' does not exist on type 'Foo.a'.
+enumBasics2.ts(13,13): error TS2339: Property 'a' does not exist on type 'Foo.a'.
 
 
-==== tests/cases/compiler/enumBasics2.ts (5 errors) ====
+==== enumBasics2.ts (5 errors) ====
     enum Foo {
       a = 2,
       b = 3,

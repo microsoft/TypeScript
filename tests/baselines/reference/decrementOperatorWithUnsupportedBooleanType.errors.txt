@@ -1,35 +1,35 @@
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(23,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(26,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(27,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(28,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(31,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(32,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(33,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(34,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(36,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(37,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(38,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(39,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(42,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(43,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(44,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(45,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(46,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(47,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(49,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(50,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(51,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(52,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(53,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(54,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(23,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(26,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(27,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(28,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(31,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(32,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(33,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(34,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(36,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(37,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(38,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(39,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(42,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(43,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(44,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(45,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(46,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(47,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(49,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(50,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(51,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(52,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(53,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(54,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts (29 errors) ====
+==== decrementOperatorWithUnsupportedBooleanType.ts (29 errors) ====
     // -- operator on boolean type
     var BOOLEAN: boolean;
     

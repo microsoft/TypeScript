@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts] ////
+
 //// [collisionExportsRequireAndInternalModuleAlias.ts]
 export module m {
     export class c {
@@ -35,7 +37,7 @@ define(["require", "exports"], function (require, exports) {
             return c;
         }());
         m.c = c;
-    })(m = exports.m || (exports.m = {}));
+    })(m || (exports.m = m = {}));
     var exports = m.c;
     var require = m.c;
     new exports();

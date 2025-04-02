@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyWrappedInTry.ts] ////
+
 //// [propertyWrappedInTry.ts]
 class Foo {
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts] ////
+
 //// [derivedClassWithAny.ts]
 class C {
     x: number;

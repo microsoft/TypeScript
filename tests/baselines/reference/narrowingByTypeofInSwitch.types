@@ -1,714 +1,1107 @@
-=== tests/cases/compiler/narrowingByTypeofInSwitch.ts ===
+//// [tests/cases/compiler/narrowingByTypeofInSwitch.ts] ////
+
+=== narrowingByTypeofInSwitch.ts ===
 function assertNever(x: never) {
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
     return x;
 >x : never
+>  : ^^^^^
 }
 
 function assertNumber(x: number) {
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     return x;
 >x : number
+>  : ^^^^^^
 }
 
 function assertBoolean(x: boolean) {
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
     return x;
 >x : boolean
+>  : ^^^^^^^
 }
 
 function assertString(x: string) {
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     return x;
 >x : string
+>  : ^^^^^^
 }
 
 function assertSymbol(x: symbol) {
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
     return x;
 >x : symbol
+>  : ^^^^^^
 }
 
 function assertFunction(x: Function) {
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
     return x;
 >x : Function
+>  : ^^^^^^^^
 }
 
 function assertObject(x: object) {
 >assertObject : (x: object) => object
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
     return x;
 >x : object
+>  : ^^^^^^
 }
 
 function assertObjectOrNull(x: object | null) {
 >assertObjectOrNull : (x: object | null) => object | null
+>                   : ^ ^^             ^^^^^^^^^^^^^^^^^^
 >x : object | null
+>  : ^^^^^^^^^^^^^
 
     return x;
 >x : object | null
+>  : ^^^^^^^^^^^^^
 }
 
 function assertUndefined(x: undefined) {
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 
     return x;
 >x : undefined
+>  : ^^^^^^^^^
 }
 
 function assertAll(x: Basic) {
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
     return x;
 >x : Basic
+>  : ^^^^^
 }
 
 function assertStringOrNumber(x: string | number) {
 >assertStringOrNumber : (x: string | number) => string | number
+>                     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     return x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function assertBooleanOrObject(x: boolean | object) {
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
+>                      : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean | object
+>  : ^^^^^^^^^^^^^^^^
 
     return x;
 >x : boolean | object
+>  : ^^^^^^^^^^^^^^^^
 }
 
 type Basic = number | boolean | string | symbol | object | Function | undefined;
->Basic : string | number | boolean | symbol | object | Function | undefined
+>Basic : Basic
+>      : ^^^^^
 
 function testUnion(x: Basic) {
 >testUnion : (x: Basic) => void
+>          : ^ ^^     ^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertFunction(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertFunction(x) : Function
+>                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         case 'object': assertObject(x); return;
 >'object' : "object"
+>         : ^^^^^^^^
 >assertObject(x) : object
+>                : ^^^^^^
 >assertObject : (x: object) => object
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
         case 'string': assertString(x); return;
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'undefined': assertUndefined(x); return;
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 >assertUndefined(x) : undefined
+>                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
     }
     assertNever(x);
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 }
 
 function testExtendsUnion<T extends Basic>(x: T) {
 >testExtendsUnion : <T extends Basic>(x: T) => void
+>                 : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertAll(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         case 'object': assertAll(x); return;
 >'object' : "object"
+>         : ^^^^^^^^
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
         case 'string': assertString(x); return;
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'undefined': assertUndefined(x); return;
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 >assertUndefined(x) : undefined
+>                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
     }
     assertAll(x);
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 }
 
 function testAny(x: any) {
 >testAny : (x: any) => void
+>        : ^ ^^   ^^^^^^^^^
 >x : any
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertFunction(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertFunction(x) : Function
+>                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : any
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         case 'object': assertObject(x); return;
 >'object' : "object"
+>         : ^^^^^^^^
 >assertObject(x) : object
+>                : ^^^^^^
 >assertObject : (x: object) => object
+>             : ^ ^^      ^^^^^^^^^^^
 >x : any
 
         case 'string': assertString(x); return;
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'undefined': assertUndefined(x); return;
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 >assertUndefined(x) : undefined
+>                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
     }
     assertAll(x); // is any
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : any
 }
 
 function a1(x: string | object | undefined) {
 >a1 : (x: string | object | undefined) => string | object | undefined
+>   : ^ ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | object | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return x;
 >x : string | object | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function testUnionExplicitDefault(x: Basic) {
 >testUnionExplicitDefault : (x: Basic) => void
+>                         : ^ ^^     ^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertFunction(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertFunction(x) : Function
+>                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         default: a1(x); return;
 >a1(x) : string | object | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : (x: string | object | undefined) => string | object | undefined
+>   : ^ ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | object | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function testUnionImplicitDefault(x: Basic) {
 >testUnionImplicitDefault : (x: Basic) => string | object | undefined
+>                         : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertFunction(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertFunction(x) : Function
+>                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
     }
     return a1(x);
 >a1(x) : string | object | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : (x: string | object | undefined) => string | object | undefined
+>   : ^ ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | object | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >testExtendsExplicitDefault : <T extends Basic>(x: T) => void
+>                           : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertAll(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         default: assertAll(x); return;
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : string | object | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     }
 }
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
+>                           : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^^
 >x : T
+>  : ^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertAll(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
     }
     return assertAll(x);
 >assertAll(x) : Basic
+>             : ^^^^^
 >assertAll : (x: Basic) => Basic
+>          : ^ ^^     ^^^^^^^^^^
 >x : string | object | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type L = (x: number) => string;
->L : (x: number) => string
+>L : L
+>  : ^
 >x : number
+>  : ^^^^^^
 
 type R = { x: string, y: number }
->R : { x: string; y: number; }
+>R : R
+>  : ^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 function exhaustiveChecks(x: number | string | L | R): string {
 >exhaustiveChecks : (x: number | string | L | R) => string
+>                 : ^ ^^                       ^^^^^      
 >x : string | number | R | L
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | R | L
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'number': return x.toString(2);
 >'number' : "number"
+>         : ^^^^^^^^
 >x.toString(2) : string
->x.toString : (radix?: number | undefined) => string
+>              : ^^^^^^
+>x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 >2 : 2
+>  : ^
 
         case 'string': return x;
 >'string' : "string"
+>         : ^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'function': return x(42);
 >'function' : "function"
+>           : ^^^^^^^^^^
 >x(42) : string
+>      : ^^^^^^
 >x : L
+>  : ^
 >42 : 42
+>   : ^^
 
         case 'object': return x.x;
 >'object' : "object"
+>         : ^^^^^^^^
 >x.x : string
+>    : ^^^^^^
 >x : R
+>  : ^
 >x : string
+>  : ^^^^^^
     }
 }
 
 function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
->exhaustiveChecksGenerics : <T extends string | number | R | L>(x: T) => string
+>exhaustiveChecksGenerics : <T extends L | R | number | string>(x: T) => string
+>                         : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
         case 'number': return x.toString(2);
 >'number' : "number"
+>         : ^^^^^^^^
 >x.toString(2) : string
->x.toString : (radix?: number | undefined) => string
+>              : ^^^^^^
+>x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
->toString : (radix?: number | undefined) => string
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 >2 : 2
+>  : ^
 
         case 'string': return x;
 >'string' : "string"
+>         : ^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'function': return (x as L)(42); // Can't narrow generic
 >'function' : "function"
+>           : ^^^^^^^^^^
 >(x as L)(42) : string
+>             : ^^^^^^
 >(x as L) : L
+>         : ^
 >x as L : L
+>       : ^
 >x : L
+>  : ^
 >42 : 42
+>   : ^^
 
         case 'object': return (x as R).x;            // Can't narrow generic
 >'object' : "object"
+>         : ^^^^^^^^
 >(x as R).x : string
+>           : ^^^^^^
 >(x as R) : R
+>         : ^
 >x as R : R
+>       : ^
 >x : R
+>  : ^
 >x : string
+>  : ^^^^^^
     }
 }
 
 function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGeneric : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
+>                : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^  ^^     ^^^^^                         
 >xy : X | Y
+>   : ^^^^^
 
     switch (typeof xy) {
 >typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
+>   : ^^^^^
 
         case 'function': return [xy, xy(42)];
 >'function' : "function"
+>           : ^^^^^^^^^^
 >[xy, xy(42)] : [X, string]
+>             : ^^^^^^^^^^^
 >xy : X
+>   : ^
 >xy(42) : string
+>       : ^^^^^^
 >xy : X
+>   : ^
 >42 : 42
+>   : ^^
 
         case 'object': return [xy, xy.y];
 >'object' : "object"
+>         : ^^^^^^^^
 >[xy, xy.y] : [Y, number]
+>           : ^^^^^^^^^^^
 >xy : Y
+>   : ^
 >xy.y : number
+>     : ^^^^^^
 >xy : Y
+>   : ^
 >y : number
+>  : ^^^^^^
 
         default: return assertNever(xy);
 >assertNever(xy) : never
+>                : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >xy : never
+>   : ^^^^^
     }
 }
 
 function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
->multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
+>multipleGenericFuse : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
+>                    : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^  ^^     ^^^^^                                     
 >xy : X | Y
+>   : ^^^^^
 
     switch (typeof xy) {
 >typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
+>   : ^^^^^
 
         case 'function': return [xy, 1];
 >'function' : "function"
+>           : ^^^^^^^^^^
 >[xy, 1] : [X & Function, number]
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >xy : X & Function
+>   : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         case 'object': return [xy, 'two'];
 >'object' : "object"
+>         : ^^^^^^^^
 >[xy, 'two'] : [Y & object, string]
+>            : ^^^^^^^^^^^^^^^^^^^^
 >xy : Y & object
+>   : ^^^^^^^^^^
 >'two' : "two"
+>      : ^^^^^
 
         case 'number': return [xy]
 >'number' : "number"
+>         : ^^^^^^^^
 >[xy] : [(X & number) | (Y & number)]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : (X & number) | (Y & number)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGenericExhaustive : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
+>                          : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^  ^^     ^^^^^                         
 >xy : X | Y
+>   : ^^^^^
 
     switch (typeof xy) {
 >typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
+>   : ^^^^^
 
         case 'object': return [xy, xy.y];
 >'object' : "object"
+>         : ^^^^^^^^
 >[xy, xy.y] : [Y, number]
+>           : ^^^^^^^^^^^
 >xy : Y
+>   : ^
 >xy.y : number
+>     : ^^^^^^
 >xy : Y
+>   : ^
 >y : number
+>  : ^^^^^^
 
         case 'function': return [xy, xy(42)];
 >'function' : "function"
+>           : ^^^^^^^^^^
 >[xy, xy(42)] : [X, string]
+>             : ^^^^^^^^^^^
 >xy : X
+>   : ^
 >xy(42) : string
+>       : ^^^^^^
 >xy : X
+>   : ^
 >42 : 42
+>   : ^^
     }
 }
 
 function switchOrdering(x: string | number | boolean) {
 >switchOrdering : (x: string | number | boolean) => string | number | boolean
+>               : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'string': return assertString(x);
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'number': return assertNumber(x);
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': return assertBoolean(x);
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'number': return assertNever(x);
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
     }
 }
 
 function switchOrderingWithDefault(x: string | number | boolean) {
 >switchOrderingWithDefault : (x: string | number | boolean) => string | number | boolean
+>                          : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function local(y: string | number | boolean) {
 >local : (y: string | number | boolean) => string | number | boolean
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return x;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'string':
 >'string' : "string"
+>         : ^^^^^^^^
 
         case 'number':
 >'number' : "number"
+>         : ^^^^^^^^
 
         default: return local(x)
 >local(x) : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >local : (y: string | number | boolean) => string | number | boolean
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'string': return assertNever(x);
 >'string' : "string"
+>         : ^^^^^^^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         case 'number': return assertNever(x);
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
     }
 }
 
 function fallThroughTest(x: string | number | boolean | object) {
 >fallThroughTest : (x: string | number | boolean | object) => void
+>                : ^ ^^                                  ^^^^^^^^^
 >x : string | number | boolean | object
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean | object
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'number':
 >'number' : "number"
+>         : ^^^^^^^^
 
             assertNumber(x)
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'string':
 >'string' : "string"
+>         : ^^^^^^^^
 
             assertStringOrNumber(x)
 >assertStringOrNumber(x) : string | number
+>                        : ^^^^^^^^^^^^^^^
 >assertStringOrNumber : (x: string | number) => string | number
+>                     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
             break;
         default:
             assertObject(x);
 >assertObject(x) : object
+>                : ^^^^^^
 >assertObject : (x: object) => object
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
         case 'number':
 >'number' : "number"
+>         : ^^^^^^^^
 
         case 'boolean':
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
             assertBooleanOrObject(x);
 >assertBooleanOrObject(x) : boolean | object
+>                         : ^^^^^^^^^^^^^^^^
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
+>                      : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean | object
+>  : ^^^^^^^^^^^^^^^^
 
             break;
     }
@@ -716,221 +1109,359 @@ function fallThroughTest(x: string | number | boolean | object) {
 
 function unknownNarrowing(x: unknown) {
 >unknownNarrowing : (x: unknown) => void
+>                 : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertFunction(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertFunction(x) : Function
+>                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         case 'object': assertObjectOrNull(x); return;
 >'object' : "object"
+>         : ^^^^^^^^
 >assertObjectOrNull(x) : object | null
+>                      : ^^^^^^^^^^^^^
 >assertObjectOrNull : (x: object | null) => object | null
+>                   : ^ ^^             ^^^^^^^^^^^^^^^^^^
 >x : object | null
+>  : ^^^^^^^^^^^^^
 
         case 'string': assertString(x); return;
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'undefined': assertUndefined(x); return;
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 >assertUndefined(x) : undefined
+>                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
     }
 }
 
 function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
+>               : ^ ^^^^^^^^^                           ^^ ^^       ^^^^^^^^^
 >k : keyof S
+>  : ^^^^^^^
 
     function assertKeyofS(k1: keyof S) { }
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k1 : keyof S
+>   : ^^^^^^^
 
     switch (typeof k) {
 >typeof k : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : keyof S
+>  : ^^^^^^^
 
         case 'number': assertNumber(k); assertKeyofS(k); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(k) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >k : number
+>  : ^^^^^^
 >assertKeyofS(k) : void
+>                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & number
+>  : ^^^^^^^^^^^^^^^^
 
         case 'symbol': assertSymbol(k); assertKeyofS(k); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(k) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >k : symbol
+>  : ^^^^^^
 >assertKeyofS(k) : void
+>                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & symbol
+>  : ^^^^^^^^^^^^^^^^
 
         case 'string': assertString(k); assertKeyofS(k); return;
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(k) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 >assertKeyofS(k) : void
+>                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & string
+>  : ^^^^^^^^^^^^^^^^
     }
 }
 
 function narrowingNarrows(x: {} | undefined) {
 >narrowingNarrows : (x: {} | undefined) => void
+>                 : ^ ^^              ^^^^^^^^^
 >x : {} | undefined
+>  : ^^^^^^^^^^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {} | undefined
+>  : ^^^^^^^^^^^^^^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case 'function': assertFunction(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertFunction(x) : Function
+>                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         case 'object': const _: {} = x; return;
 >'object' : "object"
+>         : ^^^^^^^^
 >_ : {}
+>  : ^^
 >x : object
+>  : ^^^^^^
 
         case 'string': assertString(x); return;
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case 'undefined': assertUndefined(x); return;
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 >assertUndefined(x) : undefined
+>                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 
         case 'number': assertNever(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         default: const _y: {} = x; return;
 >_y : {}
+>   : ^^
 >x : {}
+>  : ^^
     }
 }
 
 function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
->narrowingNarrows2 : (x: true | 3 | 'hello' | undefined) => void
+>narrowingNarrows2 : (x: true | 3 | "hello" | undefined) => void
+>                  : ^ ^^                              ^^^^^^^^^
 >x : true | 3 | "hello" | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : true | 3 | "hello" | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case 'number': assertNumber(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : 3
+>  : ^
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : true
+>  : ^^^^
 
         case 'function': assertNever(x); return;
 >'function' : "function"
+>           : ^^^^^^^^^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         case 'symbol': assertNever(x); return;
 >'symbol' : "symbol"
+>         : ^^^^^^^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         case 'object': const _: {} = assertNever(x); return;
 >'object' : "object"
+>         : ^^^^^^^^
 >_ : {}
+>  : ^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         case 'string': assertString(x); return;
 >'string' : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : "hello"
+>  : ^^^^^^^
 
         case 'undefined': assertUndefined(x); return;
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 >assertUndefined(x) : undefined
+>                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 
         case 'number': assertNever(x); return;
 >'number' : "number"
+>         : ^^^^^^^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         default: const _y: {} = assertNever(x); return;
 >_y : {}
+>   : ^^
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
     }
 }
 
@@ -938,101 +1469,156 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 
 function testUnionWithTempalte(x: Basic) {
 >testUnionWithTempalte : (x: Basic) => void
+>                      : ^ ^^     ^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
+>  : ^^^^^
 
         case `number`: assertNumber(x); return;
 >`number` : "number"
+>         : ^^^^^^^^
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case `boolean`: assertBoolean(x); return;
 >`boolean` : "boolean"
+>          : ^^^^^^^^^
 >assertBoolean(x) : boolean
+>                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
         case `function`: assertFunction(x); return;
 >`function` : "function"
+>           : ^^^^^^^^^^
 >assertFunction(x) : Function
+>                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
+>  : ^^^^^^^^
 
         case `symbol`: assertSymbol(x); return;
 >`symbol` : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(x) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 
         case `object`: assertObject(x); return;
 >`object` : "object"
+>         : ^^^^^^^^
 >assertObject(x) : object
+>                : ^^^^^^
 >assertObject : (x: object) => object
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
         case `string`: assertString(x); return;
 >`string` : "string"
+>         : ^^^^^^^^
 >assertString(x) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
         case `undefined`: assertUndefined(x); return;
 >`undefined` : "undefined"
+>            : ^^^^^^^^^^^
 >assertUndefined(x) : undefined
+>                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
     }
     assertNever(x);
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
+>  : ^^^^^
 }
 
 function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 >fallThroughTestWithTempalte : (x: string | number | boolean | object) => void
+>                            : ^ ^^                                  ^^^^^^^^^
 >x : string | number | boolean | object
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean | object
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         case `number`:
 >`number` : "number"
+>         : ^^^^^^^^
 
             assertNumber(x)
 >assertNumber(x) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         case `string`:
 >`string` : "string"
+>         : ^^^^^^^^
 
             assertStringOrNumber(x)
 >assertStringOrNumber(x) : string | number
+>                        : ^^^^^^^^^^^^^^^
 >assertStringOrNumber : (x: string | number) => string | number
+>                     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
             break;
         default:
             assertObject(x);
 >assertObject(x) : object
+>                : ^^^^^^
 >assertObject : (x: object) => object
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
+>  : ^^^^^^
 
         case `number`:
 >`number` : "number"
+>         : ^^^^^^^^
 
         case `boolean`:
 >`boolean` : "boolean"
+>          : ^^^^^^^^^
 
             assertBooleanOrObject(x);
 >assertBooleanOrObject(x) : boolean | object
+>                         : ^^^^^^^^^^^^^^^^
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
+>                      : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean | object
+>  : ^^^^^^^^^^^^^^^^
 
             break;
     }
@@ -1040,71 +1626,113 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 
 function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
+>                           : ^ ^^^^^^^^^                           ^^ ^^       ^^^^^^^^^
 >k : keyof S
+>  : ^^^^^^^
 
     function assertKeyofS(k1: keyof S) { }
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k1 : keyof S
+>   : ^^^^^^^
 
     switch (typeof k) {
 >typeof k : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : keyof S
+>  : ^^^^^^^
 
         case `number`: assertNumber(k); assertKeyofS(k); return;
 >`number` : "number"
+>         : ^^^^^^^^
 >assertNumber(k) : number
+>                : ^^^^^^
 >assertNumber : (x: number) => number
+>             : ^ ^^      ^^^^^^^^^^^
 >k : number
+>  : ^^^^^^
 >assertKeyofS(k) : void
+>                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & number
+>  : ^^^^^^^^^^^^^^^^
 
         case `symbol`: assertSymbol(k); assertKeyofS(k); return;
 >`symbol` : "symbol"
+>         : ^^^^^^^^
 >assertSymbol(k) : symbol
+>                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
+>             : ^ ^^      ^^^^^^^^^^^
 >k : symbol
+>  : ^^^^^^
 >assertKeyofS(k) : void
+>                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & symbol
+>  : ^^^^^^^^^^^^^^^^
 
         case `string`: assertString(k); assertKeyofS(k); return;
 >`string` : "string"
+>         : ^^^^^^^^
 >assertString(k) : string
+>                : ^^^^^^
 >assertString : (x: string) => string
+>             : ^ ^^      ^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 >assertKeyofS(k) : void
+>                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & string
+>  : ^^^^^^^^^^^^^^^^
     }
 }
 
 /* Both string literals and template literals */
 
 function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
->multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
+>multipleGenericFuseWithBoth : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
+>                            : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^  ^^     ^^^^^                                     
 >xy : X | Y
+>   : ^^^^^
 
     switch (typeof xy) {
 >typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : X | Y
+>   : ^^^^^
 
         case `function`: return [xy, 1];
 >`function` : "function"
+>           : ^^^^^^^^^^
 >[xy, 1] : [X & Function, number]
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >xy : X & Function
+>   : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         case 'object': return [xy, 'two'];
 >'object' : "object"
+>         : ^^^^^^^^
 >[xy, 'two'] : [Y & object, string]
+>            : ^^^^^^^^^^^^^^^^^^^^
 >xy : Y & object
+>   : ^^^^^^^^^^
 >'two' : "two"
+>      : ^^^^^
 
         case `number`: return [xy]
 >`number` : "number"
+>         : ^^^^^^^^
 >[xy] : [(X & number) | (Y & number)]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >xy : (X & number) | (Y & number)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

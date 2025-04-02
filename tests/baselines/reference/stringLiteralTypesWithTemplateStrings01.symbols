@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts] ////
+
+=== stringLiteralTypesWithTemplateStrings01.ts ===
 let ABC: "ABC" = `ABC`;
 >ABC : Symbol(ABC, Decl(stringLiteralTypesWithTemplateStrings01.ts, 0, 3))
 

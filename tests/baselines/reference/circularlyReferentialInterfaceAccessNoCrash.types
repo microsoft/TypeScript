@@ -1,18 +1,25 @@
-=== tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts ===
+//// [tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts] ////
+
+=== circularlyReferentialInterfaceAccessNoCrash.ts ===
 type Mxs = Mx<'list', Mxs['p1']>;
->Mxs : Mx<any, any>
+>Mxs : Mxs
+>    : ^^^
 
 interface Mx<T, K> {
   p1: T;
 >p1 : T
+>   : ^
 
   p2: K;
 >p2 : K
+>   : ^
 }
 
 type ArrElem = ['list', ArrElem[number][0]][];
->ArrElem : [any, any][]
+>ArrElem : ArrElem
+>        : ^^^^^^^
 
 type TupleElem = [['list', TupleElem[0][0]]];
->TupleElem : [[any, any]]
+>TupleElem : TupleElem
+>          : ^^^^^^^^^
 

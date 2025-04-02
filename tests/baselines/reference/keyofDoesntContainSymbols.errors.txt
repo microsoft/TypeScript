@@ -1,11 +1,9 @@
-error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-tests/cases/compiler/keyofDoesntContainSymbols.ts(11,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/compiler/keyofDoesntContainSymbols.ts(14,23): error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"str" | "num"'.
-tests/cases/compiler/keyofDoesntContainSymbols.ts(17,23): error TS2345: Argument of type '0' is not assignable to parameter of type '"str" | "num"'.
+error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
+keyofDoesntContainSymbols.ts(11,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
-!!! error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/compiler/keyofDoesntContainSymbols.ts (3 errors) ====
+!!! error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
+==== keyofDoesntContainSymbols.ts (1 errors) ====
     const sym = Symbol();
     const num = 0;
     const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
@@ -22,13 +20,9 @@ tests/cases/compiler/keyofDoesntContainSymbols.ts(17,23): error TS2345: Argument
     // Expect type error
     // Argument of type '""' is not assignable to parameter of type 'number'.
     const valC = set(obj, sym, sym);
-                          ~~~
-!!! error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"str" | "num"'.
     // Expect type error
     // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
     const valD = set(obj, num, num);
-                          ~~~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type '"str" | "num"'.
     // Expect type error
     // Argument of type '0' is not assignable to parameter of type "str" | "num"
     type KeyofObj = keyof typeof obj;

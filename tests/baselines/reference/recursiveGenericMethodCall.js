@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveGenericMethodCall.ts] ////
+
 //// [recursiveGenericMethodCall.ts]
 interface Generator<T> { (): T; }
 

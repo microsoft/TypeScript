@@ -1,8 +1,13 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.js ===
+//// [tests/cases/conformance/externalModules/typeOnly/exportSpecifiers_js.ts] ////
+
+=== ./a.js ===
 const foo = 0;
 >foo : 0
+>    : ^
 >0 : 0
+>  : ^
 
 export { type foo };
 >foo : 0
+>    : ^
 

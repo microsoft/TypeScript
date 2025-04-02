@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsReference.ts] ////
+
 //// [compoundAssignmentLHSIsReference.ts]
 var value;
 

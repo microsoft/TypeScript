@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportTsExtensions.ts] ////
+
 === /project/a.ts ===
 
 export {};

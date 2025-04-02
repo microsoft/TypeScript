@@ -1,23 +1,35 @@
-=== tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts] ////
+
+=== implicitAnyDeclareMemberWithoutType2.ts ===
 // this should be an error
 class C {
 >C : C
+>  : ^
 
     public x = null;// error at "x"
 >x : any
+>  : ^^^
 
     public x1: string  // no error
 >x1 : string
+>   : ^^^^^^
 
     constructor(c1, c2, c3: string) { }  // error at "c1, c2"
 >c1 : any
+>   : ^^^
 >c2 : any
+>   : ^^^
 >c3 : string
+>   : ^^^^^^
 
     funcOfC(f1, f2, f3: number) { }     // error at "f1,f2"
 >funcOfC : (f1: any, f2: any, f3: number) => void
+>        : ^  ^^^^^^^  ^^^^^^^  ^^      ^^^^^^^^^
 >f1 : any
+>   : ^^^
 >f2 : any
+>   : ^^^
 >f3 : number
+>   : ^^^^^^
 }
 

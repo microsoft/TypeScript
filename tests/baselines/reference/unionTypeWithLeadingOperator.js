@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithLeadingOperator.ts] ////
+
 //// [unionTypeWithLeadingOperator.ts]
 type A = | string;
 type B =

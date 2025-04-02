@@ -1,88 +1,131 @@
-=== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts ===
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts] ////
+
+=== asyncFunctionDeclaration15_es6.ts ===
 declare class Thenable { then(): void; }
 >Thenable : Thenable
+>         : ^^^^^^^^
 >then : () => void
+>     : ^^^^^^    
 
 declare let a: any;
 >a : any
+>  : ^^^
 
 declare let obj: { then: string; };
 >obj : { then: string; }
+>    : ^^^^^^^^      ^^^
 >then : string
+>     : ^^^^^^
 
 declare let thenable: Thenable;
 >thenable : Thenable
+>         : ^^^^^^^^
 
 async function fn1() { } // valid: Promise<void>
 >fn1 : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
 
 async function fn2(): { } { } // error
 >fn2 : () => {}
+>    : ^^^^^^  
 
 async function fn3(): any { } // error
 >fn3 : () => any
+>    : ^^^^^^   
 
 async function fn4(): number { } // error
 >fn4 : () => number
+>    : ^^^^^^      
 
 async function fn5(): PromiseLike<void> { } // error
 >fn5 : () => PromiseLike<void>
+>    : ^^^^^^                 
 
 async function fn6(): Thenable { } // error
 >fn6 : () => Thenable
+>    : ^^^^^^        
 
 async function fn7() { return; } // valid: Promise<void>
 >fn7 : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
 
 async function fn8() { return 1; } // valid: Promise<number>
 >fn8 : () => Promise<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 async function fn9() { return null; } // valid: Promise<any>
 >fn9 : () => Promise<any>
+>    : ^^^^^^^^^^^^^^^^^^
 
 async function fn10() { return undefined; } // valid: Promise<any>
 >fn10 : () => Promise<any>
+>     : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 async function fn11() { return a; } // valid: Promise<any>
 >fn11 : () => Promise<any>
+>     : ^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
 async function fn12() { return obj; } // valid: Promise<{ then: string; }>
 >fn12 : () => Promise<{ then: string; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >obj : { then: string; }
+>    : ^^^^^^^^      ^^^
 
 async function fn13() { return thenable; } // error
 >fn13 : () => Promise<any>
+>     : ^^^^^^^^^^^^^^^^^^
 >thenable : Thenable
+>         : ^^^^^^^^
 
 async function fn14() { await 1; } // valid: Promise<void>
 >fn14 : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
 async function fn15() { await null; } // valid: Promise<void>
 >fn15 : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 >await null : null
+>           : ^^^^
 
 async function fn16() { await undefined; } // valid: Promise<void>
 >fn16 : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 >await undefined : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 async function fn17() { await a; } // valid: Promise<void>
 >fn17 : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 
 async function fn18() { await obj; } // valid: Promise<void>
 >fn18 : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 >await obj : { then: string; }
+>          : ^^^^^^^^      ^^^
 >obj : { then: string; }
+>    : ^^^^^^^^      ^^^
 
 async function fn19() { await thenable; } // error
 >fn19 : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 >await thenable : any
+>               : ^^^
 >thenable : Thenable
+>         : ^^^^^^^^
 

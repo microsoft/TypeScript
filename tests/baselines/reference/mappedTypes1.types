@@ -1,108 +1,153 @@
-=== tests/cases/conformance/types/mapped/mappedTypes1.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes1.ts] ////
+
+=== mappedTypes1.ts ===
 type Item = { a: string, b: number, c: boolean };
->Item : { a: string; b: number; c: boolean; }
+>Item : Item
+>     : ^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
 type T00 = { [P in "x" | "y"]: number };
->T00 : { x: number; y: number; }
+>T00 : T00
+>    : ^^^
 
 type T01 = { [P in "x" | "y"]: P };
->T01 : { x: "x"; y: "y"; }
+>T01 : T01
+>    : ^^^
 
 type T02 = { [P in "a" | "b"]: Item[P]; }
->T02 : { a: string; b: number; }
+>T02 : T02
+>    : ^^^
 
 type T03 = { [P in keyof Item]: Date };
->T03 : { a: Date; b: Date; c: Date; }
+>T03 : T03
+>    : ^^^
 
 type T10 = { [P in keyof Item]: Item[P] };
->T10 : { a: string; b: number; c: boolean; }
+>T10 : T10
+>    : ^^^
 
 type T11 = { [P in keyof Item]?: Item[P] };
->T11 : { a?: string | undefined; b?: number | undefined; c?: boolean | undefined; }
+>T11 : T11
+>    : ^^^
 
 type T12 = { readonly [P in keyof Item]: Item[P] };
->T12 : { readonly a: string; readonly b: number; readonly c: boolean; }
+>T12 : T12
+>    : ^^^
 
 type T13 = { readonly [P in keyof Item]?: Item[P] };
->T13 : { readonly a?: string | undefined; readonly b?: number | undefined; readonly c?: boolean | undefined; }
+>T13 : T13
+>    : ^^^
 
 type T20 = { [P in keyof Item]: Item[P] | null };
->T20 : { a: string | null; b: number | null; c: boolean | null; }
+>T20 : T20
+>    : ^^^
 
 type T21 = { [P in keyof Item]: Array<Item[P]> };
->T21 : { a: string[]; b: number[]; c: boolean[]; }
+>T21 : T21
+>    : ^^^
 
 type T30 = { [P in keyof any]: void };
->T30 : { [x: string]: void; }
+>T30 : T30
+>    : ^^^
 
 type T31 = { [P in keyof string]: void };
->T31 : { [x: number]: void; toString: void; charAt: void; charCodeAt: void; concat: void; indexOf: void; lastIndexOf: void; localeCompare: void; match: void; replace: void; search: void; slice: void; split: void; substring: void; toLowerCase: void; toLocaleLowerCase: void; toUpperCase: void; toLocaleUpperCase: void; trim: void; readonly length: void; substr: void; valueOf: void; }
+>T31 : T31
+>    : ^^^
 
 type T32 = { [P in keyof number]: void };
->T32 : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }
+>T32 : T32
+>    : ^^^
 
 type T33 = { [P in keyof boolean]: void };
->T33 : { valueOf: void; }
+>T33 : T33
+>    : ^^^
 
 type T34 = { [P in keyof undefined]: void };
->T34 : {}
+>T34 : T34
+>    : ^^^
 
 type T35 = { [P in keyof null]: void };
->T35 : {}
+>T35 : T35
+>    : ^^^
 
 type T36 = { [P in keyof void]: void };
->T36 : {}
+>T36 : T36
+>    : ^^^
 
 type T37 = { [P in keyof symbol]: void };
->T37 : { toString: void; valueOf: void; }
+>T37 : T37
+>    : ^^^
 
 type T38 = { [P in keyof never]: void };
->T38 : {}
+>T38 : T38
+>    : ^^^
 
 type T40 = { [P in string]: void };
->T40 : { [x: string]: void; }
+>T40 : T40
+>    : ^^^
 
 type T43 = { [P in "a" | "b"]: void };
->T43 : { a: void; b: void; }
+>T43 : T43
+>    : ^^^
 
 type T44 = { [P in "a" | "b" | "0" | "1"]: void };
->T44 : { a: void; b: void; 0: void; 1: void; }
+>T44 : T44
+>    : ^^^
 
 type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
->T47 : { [x: string]: void; }
+>T47 : T47
+>    : ^^^
 
 declare function f1<T1>(): { [P in keyof T1]: void };
 >f1 : <T1>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^                          
 
 declare function f2<T1 extends string>(): { [P in keyof T1]: void };
 >f2 : <T1 extends string>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^^^      ^^^^^^^                          
 
 declare function f3<T1 extends number>(): { [P in keyof T1]: void };
 >f3 : <T1 extends number>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^^^      ^^^^^^^                          
 
 declare function f4<T1 extends Number>(): { [P in keyof T1]: void };
 >f4 : <T1 extends Number>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^^^      ^^^^^^^                          
 
 let x1 = f1();
 >x1 : {}
+>   : ^^
 >f1() : {}
+>     : ^^
 >f1 : <T1>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^                          
 
 let x2 = f2();
 >x2 : string
+>   : ^^^^^^
 >f2() : string
+>     : ^^^^^^
 >f2 : <T1 extends string>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^^^      ^^^^^^^                          
 
 let x3 = f3();
 >x3 : number
+>   : ^^^^^^
 >f3() : number
+>     : ^^^^^^
 >f3 : <T1 extends number>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^^^      ^^^^^^^                          
 
 let x4 = f4();
 >x4 : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f4() : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f4 : <T1 extends Number>() => { [P in keyof T1]: void; }
+>   : ^  ^^^^^^^^^      ^^^^^^^                          
 

@@ -1,7 +1,7 @@
-tests/cases/compiler/amdDependencyCommentName1.ts(3,21): error TS2307: Cannot find module 'm2' or its corresponding type declarations.
+amdDependencyCommentName1.ts(3,21): error TS2307: Cannot find module 'm2' or its corresponding type declarations.
 
 
-==== tests/cases/compiler/amdDependencyCommentName1.ts (1 errors) ====
+==== amdDependencyCommentName1.ts (1 errors) ====
     ///<amd-dependency path='bar' name='b'/>
     
     import m1 = require("m2")

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModule6.ts ===
+//// [tests/cases/compiler/systemModule6.ts] ////
+
+=== systemModule6.ts ===
 export class C {}
 >C : Symbol(C, Decl(systemModule6.ts, 0, 0))
 

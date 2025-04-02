@@ -1,11 +1,11 @@
-tests/cases/compiler/index.js(3,21): error TS8026: Expected Foo<T> type arguments; provide these with an '@extends' tag.
+index.js(3,21): error TS8026: Expected Foo<T> type arguments; provide these with an '@extends' tag.
 
 
-==== tests/cases/compiler/somelib.d.ts (0 errors) ====
+==== somelib.d.ts (0 errors) ====
     export declare class Foo<T> {
         prop: T;
     }
-==== tests/cases/compiler/index.js (1 errors) ====
+==== index.js (1 errors) ====
     import {Foo} from "./somelib";
     
     class MyFoo extends Foo {

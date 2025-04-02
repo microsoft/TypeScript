@@ -1,0 +1,65 @@
+/a.js(29,16): error TS2344: Type '{ a: string; b: string; }' does not satisfy the constraint 'Foo'.
+  Types of property 'b' are incompatible.
+    Type 'string' is not assignable to type 'boolean | string[]'.
+/a.js(42,16): error TS2344: Type '{ a: string; b: string; }' does not satisfy the constraint 'Foo'.
+  Types of property 'b' are incompatible.
+    Type 'string' is not assignable to type 'boolean | string[]'.
+
+
+==== /a.js (2 errors) ====
+    /**
+     * @typedef {{
+    *     a: number | string;
+    *     b: boolean | string[];
+    * }} Foo
+    */
+    
+    /**
+    * @template {Foo} T
+    */
+    class A {
+       /**
+        * @param {T} a
+        */
+       constructor(a) {
+           return a
+       }
+    }
+    
+    /**
+    * @extends {A<{
+    *     a: string,
+    *     b: string[]
+    * }>}
+    */
+    class B extends A {}
+    
+    /**
+     * @extends {A<{
+                   ~
+     *     a: string,
+    ~~~~~~~~~~~~~~~~~
+     *     b: string
+    ~~~~~~~~~~~~~~~~
+     * }>}
+    ~~~~
+!!! error TS2344: Type '{ a: string; b: string; }' does not satisfy the constraint 'Foo'.
+!!! error TS2344:   Types of property 'b' are incompatible.
+!!! error TS2344:     Type 'string' is not assignable to type 'boolean | string[]'.
+     */
+    class C extends A {}
+    
+    /**
+     * @extends {A<{a: string, b: string[]}>}
+     */
+    class D extends A {}
+    
+    /**
+     * @extends {A<{a: string, b: string}>}
+                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ a: string; b: string; }' does not satisfy the constraint 'Foo'.
+!!! error TS2344:   Types of property 'b' are incompatible.
+!!! error TS2344:     Type 'string' is not assignable to type 'boolean | string[]'.
+     */
+    class E extends A {}
+    

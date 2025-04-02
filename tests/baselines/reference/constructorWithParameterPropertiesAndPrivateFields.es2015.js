@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorWithParameterPropertiesAndPrivateFields.es2015.ts] ////
+
 //// [constructorWithParameterPropertiesAndPrivateFields.es2015.ts]
 // https://github.com/microsoft/TypeScript/issues/48771
 

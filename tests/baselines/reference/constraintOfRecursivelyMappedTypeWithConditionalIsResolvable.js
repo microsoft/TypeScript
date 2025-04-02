@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts] ////
+
 //// [constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts]
 // https://github.com/Microsoft/TypeScript/issues/25379
 

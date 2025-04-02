@@ -1,260 +1,481 @@
-=== tests/cases/compiler/nonNullReferenceMatching.ts ===
+//// [tests/cases/compiler/nonNullReferenceMatching.ts] ////
+
+=== nonNullReferenceMatching.ts ===
 type ElementRef = (element: HTMLElement | null) => void;
->ElementRef : (element: HTMLElement | null) => void
+>ElementRef : ElementRef
+>           : ^^^^^^^^^^
 >element : HTMLElement | null
+>        : ^^^^^^^^^^^^^^^^^^
 
 type ThumbProps = {
->ThumbProps : { elementRef?: ElementRef | undefined; }
+>ThumbProps : ThumbProps
+>           : ^^^^^^^^^^
 
     elementRef?: ElementRef;
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type ComponentProps = {
->ComponentProps : { thumbYProps?: ThumbProps | undefined; thumbXProps: ThumbProps; }
+>ComponentProps : ComponentProps
+>               : ^^^^^^^^^^^^^^
 
     thumbYProps?: ThumbProps;
 >thumbYProps : ThumbProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 
     thumbXProps: ThumbProps;
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 }
 
 class Component {
 >Component : Component
+>          : ^^^^^^^^^
 
     props!: ComponentProps;
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 
     public thumbYElementRef = (ref: HTMLElement | null) => {
 >thumbYElementRef : (ref: HTMLElement | null) => void
+>                 : ^   ^^                  ^^^^^^^^^
 >(ref: HTMLElement | null) => {        typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref);        typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref);        typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && this.props.thumbXProps.elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && (this.props).thumbXProps.elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && (this.props.thumbXProps).elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);        typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);        typeof this.props!.thumbXProps!.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);    } : (ref: HTMLElement | null) => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^   ^^                  ^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref);
 >typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref) : false | void
+>                                                                                                    : ^^^^^^^^^^^^
 >typeof this.props.thumbYProps!.elementRef === 'function' : boolean
+>                                                         : ^^^^^^^
 >typeof this.props.thumbYProps!.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbYProps!.elementRef : ElementRef | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbYProps! : ThumbProps
+>                        : ^^^^^^^^^^
 >this.props.thumbYProps : ThumbProps | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbYProps : ThumbProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >this.props.thumbYProps!.elementRef(ref) : void
+>                                        : ^^^^
 >this.props.thumbYProps!.elementRef : ElementRef
+>                                   : ^^^^^^^^^^
 >this.props.thumbYProps! : ThumbProps
+>                        : ^^^^^^^^^^
 >this.props.thumbYProps : ThumbProps | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbYProps : ThumbProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref);
 >typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref) : false | void
+>                                                                                                      : ^^^^^^^^^^^^
 >typeof (this.props.thumbYProps!.elementRef) === 'function' : boolean
+>                                                           : ^^^^^^^
 >typeof (this.props.thumbYProps!.elementRef) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(this.props.thumbYProps!.elementRef) : ElementRef | undefined
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbYProps!.elementRef : ElementRef | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbYProps! : ThumbProps
+>                        : ^^^^^^^^^^
 >this.props.thumbYProps : ThumbProps | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbYProps : ThumbProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >this.props.thumbYProps!.elementRef(ref) : void
+>                                        : ^^^^
 >this.props.thumbYProps!.elementRef : ElementRef
+>                                   : ^^^^^^^^^^
 >this.props.thumbYProps! : ThumbProps
+>                        : ^^^^^^^^^^
 >this.props.thumbYProps : ThumbProps | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbYProps : ThumbProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref);
 >typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref) : false | void
+>                                                                                                         : ^^^^^^^^^^^^
 >typeof ((this.props).thumbYProps!.elementRef)! === 'function' : boolean
+>                                                              : ^^^^^^^
 >typeof ((this.props).thumbYProps!.elementRef)! : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >((this.props).thumbYProps!.elementRef)! : ElementRef
+>                                        : ^^^^^^^^^^
 >((this.props).thumbYProps!.elementRef) : ElementRef | undefined
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^
 >(this.props).thumbYProps!.elementRef : ElementRef | undefined
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^
 >(this.props).thumbYProps! : ThumbProps
+>                          : ^^^^^^^^^^
 >(this.props).thumbYProps : ThumbProps | undefined
+>                         : ^^^^^^^^^^^^^^^^^^^^^^
 >(this.props) : ComponentProps
+>             : ^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbYProps : ThumbProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >this.props.thumbYProps!.elementRef(ref) : void
+>                                        : ^^^^
 >this.props.thumbYProps!.elementRef : ElementRef
+>                                   : ^^^^^^^^^^
 >this.props.thumbYProps! : ThumbProps
+>                        : ^^^^^^^^^^
 >this.props.thumbYProps : ThumbProps | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbYProps : ThumbProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && this.props.thumbXProps.elementRef(ref);
 >typeof this.props.thumbXProps.elementRef === 'function' && this.props.thumbXProps.elementRef(ref) : false | void
+>                                                                                                  : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
+>                                                        : ^^^^^^^
 >typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps : ThumbProps
+>                       : ^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >this.props.thumbXProps.elementRef(ref) : void
+>                                       : ^^^^
 >this.props.thumbXProps.elementRef : ElementRef
+>                                  : ^^^^^^^^^^
 >this.props.thumbXProps : ThumbProps
+>                       : ^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && (this.props).thumbXProps.elementRef(ref);
 >typeof this.props.thumbXProps.elementRef === 'function' && (this.props).thumbXProps.elementRef(ref) : false | void
+>                                                                                                    : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
+>                                                        : ^^^^^^^
 >typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps : ThumbProps
+>                       : ^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >(this.props).thumbXProps.elementRef(ref) : void
+>                                         : ^^^^
 >(this.props).thumbXProps.elementRef : ElementRef
+>                                    : ^^^^^^^^^^
 >(this.props).thumbXProps : ThumbProps
+>                         : ^^^^^^^^^^
 >(this.props) : ComponentProps
+>             : ^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && (this.props.thumbXProps).elementRef(ref);
 >typeof this.props.thumbXProps.elementRef === 'function' && (this.props.thumbXProps).elementRef(ref) : false | void
+>                                                                                                    : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
+>                                                        : ^^^^^^^
 >typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps : ThumbProps
+>                       : ^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >(this.props.thumbXProps).elementRef(ref) : void
+>                                         : ^^^^
 >(this.props.thumbXProps).elementRef : ElementRef
+>                                    : ^^^^^^^^^^
 >(this.props.thumbXProps) : ThumbProps
+>                         : ^^^^^^^^^^
 >this.props.thumbXProps : ThumbProps
+>                       : ^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);
 >typeof this.props.thumbXProps.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : false | void
+>                                                                                                        : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
+>                                                        : ^^^^^^^
 >typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps : ThumbProps
+>                       : ^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >((this.props)!.thumbXProps)!.elementRef(ref) : void
+>                                             : ^^^^
 >((this.props)!.thumbXProps)!.elementRef : ElementRef
+>                                        : ^^^^^^^^^^
 >((this.props)!.thumbXProps)! : ThumbProps
+>                             : ^^^^^^^^^^
 >((this.props)!.thumbXProps) : ThumbProps
+>                            : ^^^^^^^^^^
 >(this.props)!.thumbXProps : ThumbProps
+>                          : ^^^^^^^^^^
 >(this.props)! : ComponentProps
+>              : ^^^^^^^^^^^^^^
 >(this.props) : ComponentProps
+>             : ^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);
 >typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : false | void
+>                                                                                                          : ^^^^^^^^^^^^
 >typeof (this.props.thumbXProps).elementRef === 'function' : boolean
+>                                                          : ^^^^^^^
 >typeof (this.props.thumbXProps).elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(this.props.thumbXProps).elementRef : ElementRef | undefined
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^
 >(this.props.thumbXProps) : ThumbProps
+>                         : ^^^^^^^^^^
 >this.props.thumbXProps : ThumbProps
+>                       : ^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >((this.props)!.thumbXProps)!.elementRef(ref) : void
+>                                             : ^^^^
 >((this.props)!.thumbXProps)!.elementRef : ElementRef
+>                                        : ^^^^^^^^^^
 >((this.props)!.thumbXProps)! : ThumbProps
+>                             : ^^^^^^^^^^
 >((this.props)!.thumbXProps) : ThumbProps
+>                            : ^^^^^^^^^^
 >(this.props)!.thumbXProps : ThumbProps
+>                          : ^^^^^^^^^^
 >(this.props)! : ComponentProps
+>              : ^^^^^^^^^^^^^^
 >(this.props) : ComponentProps
+>             : ^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props!.thumbXProps!.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);
 >typeof this.props!.thumbXProps!.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : false | void
+>                                                                                                          : ^^^^^^^^^^^^
 >typeof this.props!.thumbXProps!.elementRef === 'function' : boolean
+>                                                          : ^^^^^^^
 >typeof this.props!.thumbXProps!.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props!.thumbXProps!.elementRef : ElementRef | undefined
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^
 >this.props!.thumbXProps! : ThumbProps
+>                         : ^^^^^^^^^^
 >this.props!.thumbXProps : ThumbProps
+>                        : ^^^^^^^^^^
 >this.props! : ComponentProps
+>            : ^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 >((this.props)!.thumbXProps)!.elementRef(ref) : void
+>                                             : ^^^^
 >((this.props)!.thumbXProps)!.elementRef : ElementRef
+>                                        : ^^^^^^^^^^
 >((this.props)!.thumbXProps)! : ThumbProps
+>                             : ^^^^^^^^^^
 >((this.props)!.thumbXProps) : ThumbProps
+>                            : ^^^^^^^^^^
 >(this.props)!.thumbXProps : ThumbProps
+>                          : ^^^^^^^^^^
 >(this.props)! : ComponentProps
+>              : ^^^^^^^^^^^^^^
 >(this.props) : ComponentProps
+>             : ^^^^^^^^^^^^^^
 >this.props : ComponentProps
+>           : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 >thumbXProps : ThumbProps
+>            : ^^^^^^^^^^
 >elementRef : ElementRef
+>           : ^^^^^^^^^^
 >ref : HTMLElement | null
+>    : ^^^^^^^^^^^^^^^^^^
 
     };
 }

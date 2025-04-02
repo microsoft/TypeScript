@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_ensureInterfaceImpl.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_ensureInterfaceImpl.ts] ////
+
+=== typeSatisfaction_ensureInterfaceImpl.ts ===
 type Movable = {
 >Movable : Symbol(Movable, Decl(typeSatisfaction_ensureInterfaceImpl.ts, 0, 0))
 

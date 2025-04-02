@@ -1,51 +1,70 @@
-=== tests/cases/compiler/getAndSetAsMemberNames.ts ===
+//// [tests/cases/compiler/getAndSetAsMemberNames.ts] ////
+
+=== getAndSetAsMemberNames.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     set: boolean;
 >set : boolean
+>    : ^^^^^^^
 
     get = 1;
 >get : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }
 class C2 {
 >C2 : C2
+>   : ^^
 
     set;
 >set : any
 }
 class C3 {
 >C3 : C3
+>   : ^^
 
     set (x) {
 >set : (x: any) => any
+>    : ^ ^^^^^^^^^^^^^
 >x : any
 
         return x + 1;
 >x + 1 : any
 >x : any
 >1 : 1
+>  : ^
     }
 }
 class C4 {
 >C4 : C4
+>   : ^^
 
     get: boolean = true;
 >get : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 class C5 {
 >C5 : C5
+>   : ^^
 
     public set: () => boolean = function () { return true; };
 >set : () => boolean
+>    : ^^^^^^       
 >function () { return true; } : () => true
+>                             : ^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     get (): boolean { return true; }
 >get : () => boolean
+>    : ^^^^^^       
 >true : true
+>     : ^^^^
 
     set t(x) { }
 >t : any

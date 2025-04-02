@@ -1,92 +1,154 @@
-=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializer.ts ===
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializer.ts] ////
+
+=== contextuallyTypedBindingInitializer.ts ===
 interface Show {
     show: (x: number) => string;
 >show : (x: number) => string
+>     : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 }
 function f({ show = v => v.toString() }: Show) {}
 >f : ({ show }: Show) => void
+>  : ^        ^^    ^^^^^^^^^
 >show : (x: number) => string
+>     : ^ ^^      ^^^^^      
 >v => v.toString() : (v: number) => string
+>                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v.toString() : string
+>             : ^^^^^^
 >v.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >v : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 function f2({ "show": showRename = v => v.toString() }: Show) {}
 >f2 : ({ "show": showRename }: Show) => void
+>   : ^                      ^^    ^^^^^^^^^
 >showRename : (x: number) => string
+>           : ^ ^^      ^^^^^      
 >v => v.toString() : (v: number) => string
+>                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v.toString() : string
+>             : ^^^^^^
 >v.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >v : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >f3 : ({ ["show"]: showRename }: Show) => void
+>   : ^                        ^^    ^^^^^^^^^
 >"show" : "show"
+>       : ^^^^^^
 >showRename : (x: number) => string
+>           : ^ ^^      ^^^^^      
 >v => v.toString() : (v: number) => string
+>                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v.toString() : string
+>             : ^^^^^^
 >v.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >v : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 interface Nested {
     nested: Show
 >nested : Show
+>       : ^^^^
 }
 function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >ff : ({ nested }: Nested) => void
+>   : ^          ^^      ^^^^^^^^^
 >nested : Show
+>       : ^^^^
 >{ show: v => v.toString() } : { show: (v: number) => string; }
+>                            : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >show : (v: number) => string
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >v => v.toString() : (v: number) => string
+>                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v.toString() : string
+>             : ^^^^^^
 >v.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >v : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 interface Tuples {
     prop: [string, number];
 >prop : [string, number]
+>     : ^^^^^^^^^^^^^^^^
 }
 function g({ prop = ["hello", 1234] }: Tuples) {}
 >g : ({ prop }: Tuples) => void
+>  : ^        ^^      ^^^^^^^^^
 >prop : [string, number]
+>     : ^^^^^^^^^^^^^^^^
 >["hello", 1234] : [string, number]
+>                : ^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >1234 : 1234
+>     : ^^^^
 
 interface StringUnion {
     prop: "foo" | "bar";
 >prop : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 }
 function h({ prop = "foo" }: StringUnion) {}
 >h : ({ prop }: StringUnion) => void
+>  : ^        ^^           ^^^^^^^^^
 >prop : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 interface StringIdentity {
     stringIdentity(s: string): string;
 >stringIdentity : (s: string) => string
+>               : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 }
 let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x => x};
 >stringIdentity : any
+>               : ^^^
 >id : (s: string) => string
+>   : ^ ^^      ^^^^^      
 >arg => arg : (arg: string) => string
+>           : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : string
+>    : ^^^^^^
 >arg : string
+>    : ^^^^^^
 >{ stringIdentity: x => x} : { stringIdentity: (x: string) => string; }
+>                          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >stringIdentity : (x: string) => string
+>               : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: string) => string
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 
 

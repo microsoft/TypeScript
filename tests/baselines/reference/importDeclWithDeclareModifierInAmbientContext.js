@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts] ////
+
 //// [importDeclWithDeclareModifierInAmbientContext.ts]
 declare module "m" {
     module x {

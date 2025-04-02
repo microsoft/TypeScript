@@ -1,13 +1,9 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-tests/cases/conformance/salsa/a.js(14,13): error TS7008: Member 'inMethodNullable' implicitly has an 'any' type.
-tests/cases/conformance/salsa/a.js(20,9): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/salsa/a.js(39,9): error TS2322: Type 'boolean' is not assignable to type 'number'.
+a.js(14,13): error TS7008: Member 'inMethodNullable' implicitly has an 'any' type.
+a.js(20,9): error TS2322: Type 'string' is not assignable to type 'number'.
+a.js(39,9): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/conformance/salsa/a.js (3 errors) ====
+==== a.js (3 errors) ====
     class C {
         constructor() {
             if (Math.random()) {
@@ -114,7 +110,7 @@ tests/cases/conformance/salsa/a.js(39,9): error TS2322: Type 'boolean' is not as
         }
     }
     
-==== tests/cases/conformance/salsa/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     var c = new C();
     
     var stringOrNumber: string | number;

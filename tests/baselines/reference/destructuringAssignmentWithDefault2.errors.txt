@@ -1,11 +1,11 @@
-tests/cases/compiler/destructuringAssignmentWithDefault2.ts(11,4): error TS2322: Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/destructuringAssignmentWithDefault2.ts(11,4): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+destructuringAssignmentWithDefault2.ts(11,4): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/destructuringAssignmentWithDefault2.ts(12,7): error TS2322: Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/destructuringAssignmentWithDefault2.ts(13,7): error TS2322: Type 'undefined' is not assignable to type 'number'.
+destructuringAssignmentWithDefault2.ts(11,4): error TS2322: Type 'undefined' is not assignable to type 'number'.
+destructuringAssignmentWithDefault2.ts(12,7): error TS2322: Type 'undefined' is not assignable to type 'number'.
+destructuringAssignmentWithDefault2.ts(13,7): error TS2322: Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/destructuringAssignmentWithDefault2.ts (4 errors) ====
+==== destructuringAssignmentWithDefault2.ts (4 errors) ====
     const a: { x?: number; y?: number } = { };
     
     let x: number;
@@ -18,10 +18,10 @@ tests/cases/compiler/destructuringAssignmentWithDefault2.ts(13,7): error TS2322:
     // Should be error
     ({ x = undefined } = a);
        ~
-!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
-       ~
 !!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
+       ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
     ({ x: x = undefined } = a);
           ~
 !!! error TS2322: Type 'undefined' is not assignable to type 'number'.

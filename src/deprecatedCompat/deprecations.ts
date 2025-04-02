@@ -2,8 +2,8 @@ import {
     hasProperty,
     UnionToIntersection,
     Version,
-} from "./_namespaces/ts";
-import { deprecate } from "./deprecate";
+} from "./_namespaces/ts.js";
+import { deprecate } from "./deprecate.js";
 
 /** @internal */
 export interface DeprecationOptions {
@@ -15,7 +15,6 @@ export interface DeprecationOptions {
     typeScriptVersion?: Version | string;
     name?: string;
 }
-
 
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
@@ -78,7 +77,7 @@ export type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKey
  */
 export type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
 
-/** @internal */
+/** @internal @knipignore */
 export function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) {
     Object.defineProperty(call, "name", { ...Object.getOwnPropertyDescriptor(call, "name"), value: name });
 
@@ -138,16 +137,16 @@ export interface BoundOverloadBuilder<T extends OverloadDefinitions> extends Fin
 // NOTE: We only use this "builder" because we don't infer correctly when calling `createOverload` directly in < TS 4.7,
 //       but lib is currently at TS 4.4. We can switch to directly calling `createOverload` when we update LKG in main.
 
-/** @internal */
+/** @internal @knipignore */
 export function buildOverload(name: string): OverloadBuilder {
     return {
         overload: overloads => ({
             bind: binder => ({
                 finish: () => createOverload(name, overloads, binder),
                 deprecate: deprecations => ({
-                    finish: () => createOverload(name, overloads, binder, deprecations)
-                })
-            })
-        })
+                    finish: () => createOverload(name, overloads, binder, deprecations),
+                }),
+            }),
+        }),
     };
 }

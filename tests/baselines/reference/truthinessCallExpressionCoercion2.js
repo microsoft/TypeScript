@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion2.ts] ////
+
 //// [truthinessCallExpressionCoercion2.ts]
 declare class A {
     static from(): string;

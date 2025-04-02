@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/assertionTypePredicates2.ts] ////
+
 //// [assertionTypePredicates2.js]
 /**
  * @typedef {{ x: number }} A

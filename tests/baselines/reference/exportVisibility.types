@@ -1,18 +1,27 @@
-=== tests/cases/compiler/exportVisibility.ts ===
+//// [tests/cases/compiler/exportVisibility.ts] ////
+
+=== exportVisibility.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 }
 
 export var foo = new Foo();
 >foo : Foo
+>    : ^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export function test(foo: Foo) {
 >test : (foo: Foo) => boolean
+>     : ^   ^^   ^^^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 
     return true;
 >true : true
+>     : ^^^^
 }
 

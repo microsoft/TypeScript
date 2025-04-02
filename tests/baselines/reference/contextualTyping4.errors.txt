@@ -1,9 +1,7 @@
-tests/cases/compiler/contextualTyping4.ts(1,46): error TS2322: Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
-  Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
+contextualTyping4.ts(1,46): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
 
 
-==== tests/cases/compiler/contextualTyping4.ts (1 errors) ====
+==== contextualTyping4.ts (1 errors) ====
     class foo { public bar:{id:number;} = {id:5, name:"foo"}; }
                                                  ~~~~
-!!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.

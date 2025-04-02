@@ -1,561 +1,899 @@
-=== tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts] ////
+
+=== objectTypeWithStringNamedNumericProperty.ts ===
 // string named numeric properties are legal and distinct when indexed by string values
 // indexed numerically the value is converted to a number
 // no errors expected below
 
 class C {
 >C : C
+>  : ^
 
     "0.1": void;
 >"0.1" : void
+>      : ^^^^
 
     ".1": Object;
 >".1" : Object
+>     : ^^^^^^
 
     "1": number;
 >"1" : number
+>    : ^^^^^^
 
     "1.": string;
 >"1." : string
+>     : ^^^^^^
 
     "1..": boolean;
 >"1.." : boolean
+>      : ^^^^^^^
 
     "1.0": Date;
 >"1.0" : Date
+>      : ^^^^
 
     "-1.0": RegExp;
 >"-1.0" : RegExp
+>       : ^^^^^^
 
     "-1": Date;
 >"-1" : Date
+>     : ^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var r1 = c['0.1'];
 >r1 : void
+>   : ^^^^
 >c['0.1'] : void
+>         : ^^^^
 >c : C
+>  : ^
 >'0.1' : "0.1"
+>      : ^^^^^
 
 var r2 = c['.1'];
 >r2 : Object
+>   : ^^^^^^
 >c['.1'] : Object
+>        : ^^^^^^
 >c : C
+>  : ^
 >'.1' : ".1"
+>     : ^^^^
 
 var r3 = c['1'];
 >r3 : number
+>   : ^^^^^^
 >c['1'] : number
+>       : ^^^^^^
 >c : C
+>  : ^
 >'1' : "1"
+>    : ^^^
 
 var r3 = c[1];
 >r3 : number
+>   : ^^^^^^
 >c[1] : number
+>     : ^^^^^^
 >c : C
+>  : ^
 >1 : 1
+>  : ^
 
 var r4 = c['1.'];
 >r4 : string
+>   : ^^^^^^
 >c['1.'] : string
+>        : ^^^^^^
 >c : C
+>  : ^
 >'1.' : "1."
+>     : ^^^^
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.] : number
+>      : ^^^^^^
 >c : C
+>  : ^
 >1. : 1
+>   : ^
 
 var r5 = c['1..'];
 >r5 : boolean
+>   : ^^^^^^^
 >c['1..'] : boolean
+>         : ^^^^^^^
 >c : C
+>  : ^
 >'1..' : "1.."
+>      : ^^^^^
 
 var r6 = c['1.0'];
 >r6 : Date
+>   : ^^^^
 >c['1.0'] : Date
+>         : ^^^^
 >c : C
+>  : ^
 >'1.0' : "1.0"
+>      : ^^^^^
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.0] : number
+>       : ^^^^^^
 >c : C
+>  : ^
 >1.0 : 1
+>    : ^
 
 // BUG 823822
 var r7 = i[-1];
 >r7 : Date
+>   : ^^^^
 >i[-1] : Date
+>      : ^^^^
 >i : I
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 var r7 = i[-1.0];
 >r7 : Date
+>   : ^^^^
 >i[-1.0] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-1.0 : -1
+>     : ^^
 >1.0 : 1
+>    : ^
 
 var r8 = i["-1.0"];
 >r8 : RegExp
+>   : ^^^^^^
 >i["-1.0"] : RegExp
+>          : ^^^^^^
 >i : I
+>  : ^
 >"-1.0" : "-1.0"
+>       : ^^^^^^
 
 var r9 = i["-1"];
 >r9 : Date
+>   : ^^^^
 >i["-1"] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >"-1" : "-1"
+>     : ^^^^
 
 var r10 = i[0x1]
 >r10 : number
+>    : ^^^^^^
 >i[0x1] : number
+>       : ^^^^^^
 >i : I
+>  : ^
 >0x1 : 1
+>    : ^
 
 var r11 = i[-0x1]
 >r11 : Date
+>    : ^^^^
 >i[-0x1] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-0x1 : -1
+>     : ^^
 >0x1 : 1
+>    : ^
 
 var r12 = i[01]
 >r12 : number
+>    : ^^^^^^
 >i[01] : number
+>      : ^^^^^^
 >i : I
+>  : ^
 >01 : 1
+>   : ^
 
 var r13 = i[-01]
 >r13 : Date
+>    : ^^^^
 >i[-01] : Date
+>       : ^^^^
 >i : I
+>  : ^
 >-01 : -1
+>    : ^^
 >01 : 1
+>   : ^
 
 interface I {
     "0.1": void;
 >"0.1" : void
+>      : ^^^^
 
     ".1": Object;
 >".1" : Object
+>     : ^^^^^^
 
     "1": number;
 >"1" : number
+>    : ^^^^^^
 
     "1.": string;
 >"1." : string
+>     : ^^^^^^
 
     "1..": boolean;
 >"1.." : boolean
+>      : ^^^^^^^
 
     "1.0": Date;
 >"1.0" : Date
+>      : ^^^^
 
     "-1.0": RegExp;
 >"-1.0" : RegExp
+>       : ^^^^^^
 
     "-1": Date;
 >"-1" : Date
+>     : ^^^^
 }
 
 var i: I;
 >i : I
+>  : ^
 
 var r1 = i['0.1'];
 >r1 : void
+>   : ^^^^
 >i['0.1'] : void
+>         : ^^^^
 >i : I
+>  : ^
 >'0.1' : "0.1"
+>      : ^^^^^
 
 var r2 = i['.1'];
 >r2 : Object
+>   : ^^^^^^
 >i['.1'] : Object
+>        : ^^^^^^
 >i : I
+>  : ^
 >'.1' : ".1"
+>     : ^^^^
 
 var r3 = i['1'];
 >r3 : number
+>   : ^^^^^^
 >i['1'] : number
+>       : ^^^^^^
 >i : I
+>  : ^
 >'1' : "1"
+>    : ^^^
 
 var r3 = c[1];
 >r3 : number
+>   : ^^^^^^
 >c[1] : number
+>     : ^^^^^^
 >c : C
+>  : ^
 >1 : 1
+>  : ^
 
 var r4 = i['1.'];
 >r4 : string
+>   : ^^^^^^
 >i['1.'] : string
+>        : ^^^^^^
 >i : I
+>  : ^
 >'1.' : "1."
+>     : ^^^^
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.] : number
+>      : ^^^^^^
 >c : C
+>  : ^
 >1. : 1
+>   : ^
 
 var r5 = i['1..'];
 >r5 : boolean
+>   : ^^^^^^^
 >i['1..'] : boolean
+>         : ^^^^^^^
 >i : I
+>  : ^
 >'1..' : "1.."
+>      : ^^^^^
 
 var r6 = i['1.0'];
 >r6 : Date
+>   : ^^^^
 >i['1.0'] : Date
+>         : ^^^^
 >i : I
+>  : ^
 >'1.0' : "1.0"
+>      : ^^^^^
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.0] : number
+>       : ^^^^^^
 >c : C
+>  : ^
 >1.0 : 1
+>    : ^
 
 // BUG 823822
 var r7 = i[-1]; 
 >r7 : Date
+>   : ^^^^
 >i[-1] : Date
+>      : ^^^^
 >i : I
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 var r7 = i[-1.0]; 
 >r7 : Date
+>   : ^^^^
 >i[-1.0] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-1.0 : -1
+>     : ^^
 >1.0 : 1
+>    : ^
 
 var r8 = i["-1.0"];
 >r8 : RegExp
+>   : ^^^^^^
 >i["-1.0"] : RegExp
+>          : ^^^^^^
 >i : I
+>  : ^
 >"-1.0" : "-1.0"
+>       : ^^^^^^
 
 var r9 = i["-1"];
 >r9 : Date
+>   : ^^^^
 >i["-1"] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >"-1" : "-1"
+>     : ^^^^
 
 var r10 = i[0x1]
 >r10 : number
+>    : ^^^^^^
 >i[0x1] : number
+>       : ^^^^^^
 >i : I
+>  : ^
 >0x1 : 1
+>    : ^
 
 var r11 = i[-0x1]
 >r11 : Date
+>    : ^^^^
 >i[-0x1] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-0x1 : -1
+>     : ^^
 >0x1 : 1
+>    : ^
 
 var r12 = i[01]
 >r12 : number
+>    : ^^^^^^
 >i[01] : number
+>      : ^^^^^^
 >i : I
+>  : ^
 >01 : 1
+>   : ^
 
 var r13 = i[-01]
 >r13 : Date
+>    : ^^^^
 >i[-01] : Date
+>       : ^^^^
 >i : I
+>  : ^
 >-01 : -1
+>    : ^^
 >01 : 1
+>   : ^
 
 var a: {
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+>  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 
     "0.1": void;
 >"0.1" : void
+>      : ^^^^
 
     ".1": Object;
 >".1" : Object
+>     : ^^^^^^
 
     "1": number;
 >"1" : number
+>    : ^^^^^^
 
     "1.": string;
 >"1." : string
+>     : ^^^^^^
 
     "1..": boolean;
 >"1.." : boolean
+>      : ^^^^^^^
 
     "1.0": Date;
 >"1.0" : Date
+>      : ^^^^
 
     "-1.0": RegExp;
 >"-1.0" : RegExp
+>       : ^^^^^^
 
     "-1": Date;
 >"-1" : Date
+>     : ^^^^
 }
 
 var r1 = a['0.1'];
 >r1 : void
+>   : ^^^^
 >a['0.1'] : void
+>         : ^^^^
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+>  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 >'0.1' : "0.1"
+>      : ^^^^^
 
 var r2 = a['.1'];
 >r2 : Object
+>   : ^^^^^^
 >a['.1'] : Object
+>        : ^^^^^^
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+>  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 >'.1' : ".1"
+>     : ^^^^
 
 var r3 = a['1'];
 >r3 : number
+>   : ^^^^^^
 >a['1'] : number
+>       : ^^^^^^
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+>  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 >'1' : "1"
+>    : ^^^
 
 var r3 = c[1];
 >r3 : number
+>   : ^^^^^^
 >c[1] : number
+>     : ^^^^^^
 >c : C
+>  : ^
 >1 : 1
+>  : ^
 
 var r4 = a['1.'];
 >r4 : string
+>   : ^^^^^^
 >a['1.'] : string
+>        : ^^^^^^
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+>  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 >'1.' : "1."
+>     : ^^^^
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.] : number
+>      : ^^^^^^
 >c : C
+>  : ^
 >1. : 1
+>   : ^
 
 var r5 = a['1..'];
 >r5 : boolean
+>   : ^^^^^^^
 >a['1..'] : boolean
+>         : ^^^^^^^
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+>  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 >'1..' : "1.."
+>      : ^^^^^
 
 var r6 = a['1.0'];
 >r6 : Date
+>   : ^^^^
 >a['1.0'] : Date
+>         : ^^^^
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+>  : ^^^^^^^^^    ^^^^^^^^      ^^^^^^^      ^^^^^^^^      ^^^^^^^^^       ^^^^^^^^^    ^^^^^^^^^^      ^^^^^^^^    ^^^
 >'1.0' : "1.0"
+>      : ^^^^^
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.0] : number
+>       : ^^^^^^
 >c : C
+>  : ^
 >1.0 : 1
+>    : ^
 
 // BUG 823822
 var r7 = i[-1];
 >r7 : Date
+>   : ^^^^
 >i[-1] : Date
+>      : ^^^^
 >i : I
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 var r7 = i[-1.0];
 >r7 : Date
+>   : ^^^^
 >i[-1.0] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-1.0 : -1
+>     : ^^
 >1.0 : 1
+>    : ^
 
 var r8 = i["-1.0"];
 >r8 : RegExp
+>   : ^^^^^^
 >i["-1.0"] : RegExp
+>          : ^^^^^^
 >i : I
+>  : ^
 >"-1.0" : "-1.0"
+>       : ^^^^^^
 
 var r9 = i["-1"];
 >r9 : Date
+>   : ^^^^
 >i["-1"] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >"-1" : "-1"
+>     : ^^^^
 
 var r10 = i[0x1]
 >r10 : number
+>    : ^^^^^^
 >i[0x1] : number
+>       : ^^^^^^
 >i : I
+>  : ^
 >0x1 : 1
+>    : ^
 
 var r11 = i[-0x1]
 >r11 : Date
+>    : ^^^^
 >i[-0x1] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-0x1 : -1
+>     : ^^
 >0x1 : 1
+>    : ^
 
 var r12 = i[01]
 >r12 : number
+>    : ^^^^^^
 >i[01] : number
+>      : ^^^^^^
 >i : I
+>  : ^
 >01 : 1
+>   : ^
 
 var r13 = i[-01]
 >r13 : Date
+>    : ^^^^
 >i[-01] : Date
+>       : ^^^^
 >i : I
+>  : ^
 >-01 : -1
+>    : ^^
 >01 : 1
+>   : ^
 
 var b = {
 >b : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    "0.1": <void>null,    ".1": new Object(),    "1": 1,    "1.": "",    "1..": true,    "1.0": new Date(),    "-1.0": /123/,    "-1": Date} : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>                                                                                                                                              : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "0.1": <void>null,
 >"0.1" : void
+>      : ^^^^
 ><void>null : void
+>           : ^^^^
 
     ".1": new Object(),
 >".1" : Object
+>     : ^^^^^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     "1": 1,
 >"1" : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     "1.": "",
 >"1." : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
     "1..": true,
 >"1.." : boolean
+>      : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "1.0": new Date(),
 >"1.0" : Date
+>      : ^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     "-1.0": /123/,
 >"-1.0" : RegExp
+>       : ^^^^^^
 >/123/ : RegExp
+>      : ^^^^^^
 
     "-1": Date
 >"-1" : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
 };
 
 var r1 = b['0.1'];
 >r1 : void
+>   : ^^^^
 >b['0.1'] : void
+>         : ^^^^
 >b : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'0.1' : "0.1"
+>      : ^^^^^
 
 var r2 = b['.1'];
 >r2 : Object
+>   : ^^^^^^
 >b['.1'] : Object
+>        : ^^^^^^
 >b : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'.1' : ".1"
+>     : ^^^^
 
 var r3 = b['1'];
 >r3 : number
+>   : ^^^^^^
 >b['1'] : number
+>       : ^^^^^^
 >b : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 
 var r3 = c[1];
 >r3 : number
+>   : ^^^^^^
 >c[1] : number
+>     : ^^^^^^
 >c : C
+>  : ^
 >1 : 1
+>  : ^
 
 var r4 = b['1.'];
 >r4 : string
+>   : ^^^^^^
 >b['1.'] : string
+>        : ^^^^^^
 >b : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1.' : "1."
+>     : ^^^^
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.] : number
+>      : ^^^^^^
 >c : C
+>  : ^
 >1. : 1
+>   : ^
 
 var r5 = b['1..'];
 >r5 : boolean
+>   : ^^^^^^^
 >b['1..'] : boolean
+>         : ^^^^^^^
 >b : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1..' : "1.."
+>      : ^^^^^
 
 var r6 = b['1.0'];
 >r6 : Date
+>   : ^^^^
 >b['1.0'] : Date
+>         : ^^^^
 >b : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1.0' : "1.0"
+>      : ^^^^^
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
 >r3 : number
+>   : ^^^^^^
 >c[1.0] : number
+>       : ^^^^^^
 >c : C
+>  : ^
 >1.0 : 1
+>    : ^
 
 // BUG 823822
 var r7 = i[-1];
 >r7 : Date
+>   : ^^^^
 >i[-1] : Date
+>      : ^^^^
 >i : I
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 var r7 = i[-1.0];
 >r7 : Date
+>   : ^^^^
 >i[-1.0] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-1.0 : -1
+>     : ^^
 >1.0 : 1
+>    : ^
 
 var r8 = i["-1.0"];
 >r8 : RegExp
+>   : ^^^^^^
 >i["-1.0"] : RegExp
+>          : ^^^^^^
 >i : I
+>  : ^
 >"-1.0" : "-1.0"
+>       : ^^^^^^
 
 var r9 = i["-1"];
 >r9 : Date
+>   : ^^^^
 >i["-1"] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >"-1" : "-1"
+>     : ^^^^
 
 var r10 = i[0x1]
 >r10 : number
+>    : ^^^^^^
 >i[0x1] : number
+>       : ^^^^^^
 >i : I
+>  : ^
 >0x1 : 1
+>    : ^
 
 var r11 = i[-0x1]
 >r11 : Date
+>    : ^^^^
 >i[-0x1] : Date
+>        : ^^^^
 >i : I
+>  : ^
 >-0x1 : -1
+>     : ^^
 >0x1 : 1
+>    : ^
 
 var r12 = i[01]
 >r12 : number
+>    : ^^^^^^
 >i[01] : number
+>      : ^^^^^^
 >i : I
+>  : ^
 >01 : 1
+>   : ^
 
 var r13 = i[-01]
 >r13 : Date
+>    : ^^^^
 >i[-01] : Date
+>       : ^^^^
 >i : I
+>  : ^
 >-01 : -1
+>    : ^^
 >01 : 1
+>   : ^
 

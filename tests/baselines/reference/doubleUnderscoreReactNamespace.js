@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doubleUnderscoreReactNamespace.ts] ////
+
 //// [index.tsx]
 declare global {
     function __make (params: object): any;

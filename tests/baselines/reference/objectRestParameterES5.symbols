@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRestParameterES5.ts ===
+//// [tests/cases/conformance/types/rest/objectRestParameterES5.ts] ////
+
+=== objectRestParameterES5.ts ===
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 >cloneAgain : Symbol(cloneAgain, Decl(objectRestParameterES5.ts, 0, 0))
 >a : Symbol(a, Decl(objectRestParameterES5.ts, 0, 21))

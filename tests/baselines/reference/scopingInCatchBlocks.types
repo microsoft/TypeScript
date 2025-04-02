@@ -1,18 +1,26 @@
-=== tests/cases/compiler/scopingInCatchBlocks.ts ===
+//// [tests/cases/compiler/scopingInCatchBlocks.ts] ////
+
+=== scopingInCatchBlocks.ts ===
 try { } catch(ex1) { 
 >ex1 : any
+>    : ^^^
 
 	throw ex1;
 >ex1 : any
+>    : ^^^
 }
 
 try { } catch(ex1) { } // should not error
 >ex1 : any
+>    : ^^^
 
 try { } catch(ex1) { } // should not error
 >ex1 : any
+>    : ^^^
 
 var x = ex1; // should error
 >x : any
+>  : ^^^
 >ex1 : any
+>    : ^^^
 

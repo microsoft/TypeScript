@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/recursiveMappedTypes.ts] ////
+
 //// [recursiveMappedTypes.ts]
 // Recursive mapped types simply appear empty
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithStringNamedPropertyOfIllegalCharacters.ts] ////
+
 //// [objectTypeWithStringNamedPropertyOfIllegalCharacters.ts]
 class C {
     "   ": number;

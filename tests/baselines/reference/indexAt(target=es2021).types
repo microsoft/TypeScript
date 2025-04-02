@@ -1,104 +1,183 @@
-=== tests/cases/compiler/indexAt.ts ===
+//// [tests/cases/compiler/indexAt.ts] ////
+
+=== indexAt.ts ===
 [0].at(0);
 >[0].at(0) : any
+>          : ^^^
 >[0].at : any
+>       : ^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 "foo".at(0);
 >"foo".at(0) : any
+>            : ^^^
 >"foo".at : any
+>         : ^^^
 >"foo" : "foo"
+>      : ^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Int8Array().at(0);
 >new Int8Array().at(0) : any
+>                      : ^^^
 >new Int8Array().at : any
->new Int8Array() : Int8Array
+>                   : ^^^
+>new Int8Array() : Int8Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Uint8Array().at(0);
 >new Uint8Array().at(0) : any
+>                       : ^^^
 >new Uint8Array().at : any
->new Uint8Array() : Uint8Array
+>                    : ^^^
+>new Uint8Array() : Uint8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Uint8ClampedArray().at(0);
 >new Uint8ClampedArray().at(0) : any
+>                              : ^^^
 >new Uint8ClampedArray().at : any
->new Uint8ClampedArray() : Uint8ClampedArray
+>                           : ^^^
+>new Uint8ClampedArray() : Uint8ClampedArray<ArrayBuffer>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Int16Array().at(0);
 >new Int16Array().at(0) : any
+>                       : ^^^
 >new Int16Array().at : any
->new Int16Array() : Int16Array
+>                    : ^^^
+>new Int16Array() : Int16Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Uint16Array().at(0);
 >new Uint16Array().at(0) : any
+>                        : ^^^
 >new Uint16Array().at : any
->new Uint16Array() : Uint16Array
+>                     : ^^^
+>new Uint16Array() : Uint16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Int32Array().at(0);
 >new Int32Array().at(0) : any
+>                       : ^^^
 >new Int32Array().at : any
->new Int32Array() : Int32Array
+>                    : ^^^
+>new Int32Array() : Int32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Uint32Array().at(0);
 >new Uint32Array().at(0) : any
+>                        : ^^^
 >new Uint32Array().at : any
->new Uint32Array() : Uint32Array
+>                     : ^^^
+>new Uint32Array() : Uint32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Float32Array().at(0);
 >new Float32Array().at(0) : any
+>                         : ^^^
 >new Float32Array().at : any
->new Float32Array() : Float32Array
+>                      : ^^^
+>new Float32Array() : Float32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new Float64Array().at(0);
 >new Float64Array().at(0) : any
+>                         : ^^^
 >new Float64Array().at : any
->new Float64Array() : Float64Array
+>                      : ^^^
+>new Float64Array() : Float64Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new BigInt64Array().at(0);
 >new BigInt64Array().at(0) : any
+>                          : ^^^
 >new BigInt64Array().at : any
->new BigInt64Array() : BigInt64Array
+>                       : ^^^
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 
 new BigUint64Array().at(0);
 >new BigUint64Array().at(0) : any
+>                           : ^^^
 >new BigUint64Array().at : any
->new BigUint64Array() : BigUint64Array
+>                        : ^^^
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >at : any
+>   : ^^^
 >0 : 0
+>  : ^
 

@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(11,7): error TS2339: Property 'p' does not exist on type 'string'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(18,7): error TS2339: Property 'p' does not exist on type 'number'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(25,7): error TS2339: Property 'p' does not exist on type 'boolean'.
+typeGuardsWithAny.ts(11,7): error TS2339: Property 'p' does not exist on type 'string'.
+typeGuardsWithAny.ts(18,7): error TS2339: Property 'p' does not exist on type 'number'.
+typeGuardsWithAny.ts(25,7): error TS2339: Property 'p' does not exist on type 'boolean'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts (3 errors) ====
+==== typeGuardsWithAny.ts (3 errors) ====
     var x: any = { p: 0 };
     
     if (x instanceof Object) {

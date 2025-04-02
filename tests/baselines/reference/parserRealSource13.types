@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts] ////
+
+=== parserRealSource13.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
@@ -6,664 +8,1068 @@
 
 module TypeScript.AstWalkerWithDetailCallback {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 >AstWalkerWithDetailCallback : typeof AstWalkerWithDetailCallback
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export interface AstWalkerDetailCallback {
         EmptyCallback? (pre, ast: AST): boolean;
 >EmptyCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         EmptyExprCallback? (pre, ast: AST): boolean;
 >EmptyExprCallback : (pre: any, ast: AST) => boolean
+>                  : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         TrueCallback? (pre, ast: AST): boolean;
 >TrueCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         FalseCallback? (pre, ast: AST): boolean;
 >FalseCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ThisCallback? (pre, ast: AST): boolean;
 >ThisCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         SuperCallback? (pre, ast: AST): boolean;
 >SuperCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         QStringCallback? (pre, ast: AST): boolean;
 >QStringCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         RegexCallback? (pre, ast: AST): boolean;
 >RegexCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NullCallback? (pre, ast: AST): boolean;
 >NullCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ArrayLitCallback? (pre, ast: AST): boolean;
 >ArrayLitCallback : (pre: any, ast: AST) => boolean
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ObjectLitCallback? (pre, ast: AST): boolean;
 >ObjectLitCallback : (pre: any, ast: AST) => boolean
+>                  : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         VoidCallback? (pre, ast: AST): boolean;
 >VoidCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         CommaCallback? (pre, ast: AST): boolean;
 >CommaCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         PosCallback? (pre, ast: AST): boolean;
 >PosCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NegCallback? (pre, ast: AST): boolean;
 >NegCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DeleteCallback? (pre, ast: AST): boolean;
 >DeleteCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AwaitCallback? (pre, ast: AST): boolean;
 >AwaitCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         InCallback? (pre, ast: AST): boolean;
 >InCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DotCallback? (pre, ast: AST): boolean;
 >DotCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         FromCallback? (pre, ast: AST): boolean;
 >FromCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         IsCallback? (pre, ast: AST): boolean;
 >IsCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         InstOfCallback? (pre, ast: AST): boolean;
 >InstOfCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         TypeofCallback? (pre, ast: AST): boolean;
 >TypeofCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NumberLitCallback? (pre, ast: AST): boolean;
 >NumberLitCallback : (pre: any, ast: AST) => boolean
+>                  : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NameCallback? (pre, identifierAst: Identifier): boolean;
 >NameCallback : (pre: any, identifierAst: Identifier) => boolean
+>             : ^   ^^^^^^^             ^^          ^^^^^       
 >pre : any
+>    : ^^^
 >identifierAst : Identifier
+>              : ^^^^^^^^^^
 
         TypeRefCallback? (pre, ast: AST): boolean;
 >TypeRefCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         IndexCallback? (pre, ast: AST): boolean;
 >IndexCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         CallCallback? (pre, ast: AST): boolean;
 >CallCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NewCallback? (pre, ast: AST): boolean;
 >NewCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgCallback? (pre, ast: AST): boolean;
 >AsgCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgAddCallback? (pre, ast: AST): boolean;
 >AsgAddCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgSubCallback? (pre, ast: AST): boolean;
 >AsgSubCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgDivCallback? (pre, ast: AST): boolean;
 >AsgDivCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgMulCallback? (pre, ast: AST): boolean;
 >AsgMulCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgModCallback? (pre, ast: AST): boolean;
 >AsgModCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgAndCallback? (pre, ast: AST): boolean;
 >AsgAndCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgXorCallback? (pre, ast: AST): boolean;
 >AsgXorCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgOrCallback? (pre, ast: AST): boolean;
 >AsgOrCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgLshCallback? (pre, ast: AST): boolean;
 >AsgLshCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgRshCallback? (pre, ast: AST): boolean;
 >AsgRshCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AsgRs2Callback? (pre, ast: AST): boolean;
 >AsgRs2Callback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         QMarkCallback? (pre, ast: AST): boolean;
 >QMarkCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         LogOrCallback? (pre, ast: AST): boolean;
 >LogOrCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         LogAndCallback? (pre, ast: AST): boolean;
 >LogAndCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         OrCallback? (pre, ast: AST): boolean;
 >OrCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         XorCallback? (pre, ast: AST): boolean;
 >XorCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AndCallback? (pre, ast: AST): boolean;
 >AndCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         EqCallback? (pre, ast: AST): boolean;
 >EqCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NeCallback? (pre, ast: AST): boolean;
 >NeCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         EqvCallback? (pre, ast: AST): boolean;
 >EqvCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NEqvCallback? (pre, ast: AST): boolean;
 >NEqvCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         LtCallback? (pre, ast: AST): boolean;
 >LtCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         LeCallback? (pre, ast: AST): boolean;
 >LeCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         GtCallback? (pre, ast: AST): boolean;
 >GtCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         GeCallback? (pre, ast: AST): boolean;
 >GeCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         AddCallback? (pre, ast: AST): boolean;
 >AddCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         SubCallback? (pre, ast: AST): boolean;
 >SubCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         MulCallback? (pre, ast: AST): boolean;
 >MulCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DivCallback? (pre, ast: AST): boolean;
 >DivCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ModCallback? (pre, ast: AST): boolean;
 >ModCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         LshCallback? (pre, ast: AST): boolean;
 >LshCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         RshCallback? (pre, ast: AST): boolean;
 >RshCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         Rs2Callback? (pre, ast: AST): boolean;
 >Rs2Callback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         NotCallback? (pre, ast: AST): boolean;
 >NotCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         LogNotCallback? (pre, ast: AST): boolean;
 >LogNotCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         IncPreCallback? (pre, ast: AST): boolean;
 >IncPreCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DecPreCallback? (pre, ast: AST): boolean;
 >DecPreCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         IncPostCallback? (pre, ast: AST): boolean;
 >IncPostCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DecPostCallback? (pre, ast: AST): boolean;
 >DecPostCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         TypeAssertionCallback? (pre, ast: AST): boolean;
 >TypeAssertionCallback : (pre: any, ast: AST) => boolean
+>                      : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         FuncDeclCallback? (pre, funcDecl: FuncDecl): boolean;
 >FuncDeclCallback : (pre: any, funcDecl: FuncDecl) => boolean
+>                 : ^   ^^^^^^^        ^^        ^^^^^       
 >pre : any
+>    : ^^^
 >funcDecl : FuncDecl
+>         : ^^^^^^^^
 
         MemberCallback? (pre, ast: AST): boolean;
 >MemberCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         VarDeclCallback? (pre, varDecl: VarDecl): boolean;
 >VarDeclCallback : (pre: any, varDecl: VarDecl) => boolean
+>                : ^   ^^^^^^^       ^^       ^^^^^       
 >pre : any
+>    : ^^^
 >varDecl : VarDecl
+>        : ^^^^^^^
 
         ArgDeclCallback? (pre, ast: AST): boolean;
 >ArgDeclCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ReturnCallback? (pre, ast: AST): boolean;
 >ReturnCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         BreakCallback? (pre, ast: AST): boolean;
 >BreakCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ContinueCallback? (pre, ast: AST): boolean;
 >ContinueCallback : (pre: any, ast: AST) => boolean
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ThrowCallback? (pre, ast: AST): boolean;
 >ThrowCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ForCallback? (pre, ast: AST): boolean;
 >ForCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ForInCallback? (pre, ast: AST): boolean;
 >ForInCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         IfCallback? (pre, ast: AST): boolean;
 >IfCallback : (pre: any, ast: AST) => boolean
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         WhileCallback? (pre, ast: AST): boolean;
 >WhileCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DoWhileCallback? (pre, ast: AST): boolean;
 >DoWhileCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         BlockCallback? (pre, block: Block): boolean;
 >BlockCallback : (pre: any, block: Block) => boolean
+>              : ^   ^^^^^^^     ^^     ^^^^^       
 >pre : any
+>    : ^^^
 >block : Block
+>      : ^^^^^
 
         CaseCallback? (pre, ast: AST): boolean;
 >CaseCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         SwitchCallback? (pre, ast: AST): boolean;
 >SwitchCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         TryCallback? (pre, ast: AST): boolean;
 >TryCallback : (pre: any, ast: AST) => boolean
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         TryCatchCallback? (pre, ast: AST): boolean;
 >TryCatchCallback : (pre: any, ast: AST) => boolean
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         TryFinallyCallback? (pre, ast: AST): boolean;
 >TryFinallyCallback : (pre: any, ast: AST) => boolean
+>                   : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         FinallyCallback? (pre, ast: AST): boolean;
 >FinallyCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         CatchCallback? (pre, ast: AST): boolean;
 >CatchCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ListCallback? (pre, astList: ASTList): boolean;
 >ListCallback : (pre: any, astList: ASTList) => boolean
+>             : ^   ^^^^^^^       ^^       ^^^^^       
 >pre : any
+>    : ^^^
 >astList : ASTList
+>        : ^^^^^^^
 
         ScriptCallback? (pre, script: Script): boolean;
 >ScriptCallback : (pre: any, script: Script) => boolean
+>               : ^   ^^^^^^^      ^^      ^^^^^       
 >pre : any
+>    : ^^^
 >script : Script
+>       : ^^^^^^
 
         ClassDeclarationCallback? (pre, ast: AST): boolean;
 >ClassDeclarationCallback : (pre: any, ast: AST) => boolean
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         InterfaceDeclarationCallback? (pre, interfaceDecl: InterfaceDeclaration): boolean;
 >InterfaceDeclarationCallback : (pre: any, interfaceDecl: InterfaceDeclaration) => boolean
+>                             : ^   ^^^^^^^             ^^                    ^^^^^       
 >pre : any
+>    : ^^^
 >interfaceDecl : InterfaceDeclaration
+>              : ^^^^^^^^^^^^^^^^^^^^
 
         ModuleDeclarationCallback? (pre, moduleDecl: ModuleDeclaration): boolean;
 >ModuleDeclarationCallback : (pre: any, moduleDecl: ModuleDeclaration) => boolean
+>                          : ^   ^^^^^^^          ^^                 ^^^^^       
 >pre : any
+>    : ^^^
 >moduleDecl : ModuleDeclaration
+>           : ^^^^^^^^^^^^^^^^^
 
         ImportDeclarationCallback? (pre, ast: AST): boolean;
 >ImportDeclarationCallback : (pre: any, ast: AST) => boolean
+>                          : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         WithCallback? (pre, ast: AST): boolean;
 >WithCallback : (pre: any, ast: AST) => boolean
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         LabelCallback? (pre, labelAST: AST): boolean;
 >LabelCallback : (pre: any, labelAST: AST) => boolean
+>              : ^   ^^^^^^^        ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >labelAST : AST
+>         : ^^^
 
         LabeledStatementCallback? (pre, ast: AST): boolean;
 >LabeledStatementCallback : (pre: any, ast: AST) => boolean
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         EBStartCallback? (pre, ast: AST): boolean;
 >EBStartCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         GotoEBCallback? (pre, ast: AST): boolean;
 >GotoEBCallback : (pre: any, ast: AST) => boolean
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         EndCodeCallback? (pre, ast: AST): boolean;
 >EndCodeCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         ErrorCallback? (pre, ast: AST): boolean;
 >ErrorCallback : (pre: any, ast: AST) => boolean
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         CommentCallback? (pre, ast: AST): boolean;
 >CommentCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DebuggerCallback? (pre, ast: AST): boolean;
 >DebuggerCallback : (pre: any, ast: AST) => boolean
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
 
         DefaultCallback? (pre, ast: AST): boolean;
 >DefaultCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
+>    : ^^^
 >ast : AST
+>    : ^^^
     }
 
     export function walk(script: Script, callback: AstWalkerDetailCallback): void {
 >walk : (script: Script, callback: AstWalkerDetailCallback) => void
+>     : ^      ^^      ^^        ^^                       ^^^^^    
 >script : Script
+>       : ^^^^^^
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
         var pre = (cur: AST, parent: AST) => {
 >pre : (cur: AST, parent: AST) => AST
+>    : ^   ^^   ^^      ^^   ^^^^^^^^
 >(cur: AST, parent: AST) => {            walker.options.goChildren = AstWalkerCallback(true, cur, callback);            return cur;        } : (cur: AST, parent: AST) => AST
+>                                                                                                                                            : ^   ^^   ^^      ^^   ^^^^^^^^
 >cur : AST
+>    : ^^^
 >parent : AST
+>       : ^^^
 
             walker.options.goChildren = AstWalkerCallback(true, cur, callback);
 >walker.options.goChildren = AstWalkerCallback(true, cur, callback) : boolean
+>                                                                   : ^^^^^^^
 >walker.options.goChildren : any
+>                          : ^^^
 >walker.options : any
+>               : ^^^
 >walker : any
+>       : ^^^
 >options : any
+>        : ^^^
 >goChildren : any
+>           : ^^^
 >AstWalkerCallback(true, cur, callback) : boolean
+>                                       : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^       
 >true : true
+>     : ^^^^
 >cur : AST
+>    : ^^^
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
             return cur;
 >cur : AST
+>    : ^^^
         }
 
         var post = (cur: AST, parent: AST) => {
 >post : (cur: AST, parent: AST) => AST
+>     : ^   ^^   ^^      ^^   ^^^^^^^^
 >(cur: AST, parent: AST) => {            AstWalkerCallback(false, cur, callback);            return cur;        } : (cur: AST, parent: AST) => AST
+>                                                                                                                 : ^   ^^   ^^      ^^   ^^^^^^^^
 >cur : AST
+>    : ^^^
 >parent : AST
+>       : ^^^
 
             AstWalkerCallback(false, cur, callback);
 >AstWalkerCallback(false, cur, callback) : boolean
+>                                        : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^       
 >false : false
+>      : ^^^^^
 >cur : AST
+>    : ^^^
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
             return cur;
 >cur : AST
+>    : ^^^
         }
 
         var walker = TypeScript.getAstWalkerFactory().getWalker(pre, post);
 >walker : any
+>       : ^^^
 >TypeScript.getAstWalkerFactory().getWalker(pre, post) : any
+>                                                      : ^^^
 >TypeScript.getAstWalkerFactory().getWalker : any
+>                                           : ^^^
 >TypeScript.getAstWalkerFactory() : any
+>                                 : ^^^
 >TypeScript.getAstWalkerFactory : any
+>                               : ^^^
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 >getAstWalkerFactory : any
+>                    : ^^^
 >getWalker : any
+>          : ^^^
 >pre : (cur: AST, parent: AST) => AST
+>    : ^   ^^   ^^      ^^   ^^^^^^^^
 >post : (cur: AST, parent: AST) => AST
+>     : ^   ^^   ^^      ^^   ^^^^^^^^
 
         walker.walk(script, null);
 >walker.walk(script, null) : any
+>                          : ^^^
 >walker.walk : any
+>            : ^^^
 >walker : any
+>       : ^^^
 >walk : any
+>     : ^^^
 >script : Script
+>       : ^^^^^^
     }
 
     function AstWalkerCallback(pre: boolean, ast: AST, callback: AstWalkerDetailCallback): boolean {
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^       
 >pre : boolean
+>    : ^^^^^^^
 >ast : AST
+>    : ^^^
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
         // See if the Callback needs to be handled using specific one or default one
         var nodeType = ast.nodeType;
 >nodeType : any
+>         : ^^^
 >ast.nodeType : any
+>             : ^^^
 >ast : AST
+>    : ^^^
 >nodeType : any
+>         : ^^^
 
         var callbackString = (<any>NodeType)._map[nodeType] + "Callback";
 >callbackString : string
+>               : ^^^^^^
 >(<any>NodeType)._map[nodeType] + "Callback" : string
+>                                            : ^^^^^^
 >(<any>NodeType)._map[nodeType] : any
+>                               : ^^^
 >(<any>NodeType)._map : any
+>                     : ^^^
 >(<any>NodeType) : any
+>                : ^^^
 ><any>NodeType : any
+>              : ^^^
 >NodeType : any
+>         : ^^^
 >_map : any
+>     : ^^^
 >nodeType : any
+>         : ^^^
 >"Callback" : "Callback"
+>           : ^^^^^^^^^^
 
         if (callback[callbackString]) {
 >callback[callbackString] : any
+>                         : ^^^
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >callbackString : string
+>               : ^^^^^^
 
             return callback[callbackString](pre, ast);
 >callback[callbackString](pre, ast) : any
+>                                   : ^^^
 >callback[callbackString] : any
+>                         : ^^^
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >callbackString : string
+>               : ^^^^^^
 >pre : boolean
+>    : ^^^^^^^
 >ast : AST
+>    : ^^^
         }
 
         if (callback.DefaultCallback) {
 >callback.DefaultCallback : (pre: any, ast: AST) => boolean
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >DefaultCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 
             return callback.DefaultCallback(pre, ast);
 >callback.DefaultCallback(pre, ast) : boolean
+>                                   : ^^^^^^^
 >callback.DefaultCallback : (pre: any, ast: AST) => boolean
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >callback : AstWalkerDetailCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >DefaultCallback : (pre: any, ast: AST) => boolean
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : boolean
+>    : ^^^^^^^
 >ast : AST
+>    : ^^^
         }
 
         return true;
 >true : true
+>     : ^^^^
     }
 }

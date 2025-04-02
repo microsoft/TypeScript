@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess4.ts(5,16): error TS2335: 'super' can only be referenced in a derived class.
+superSymbolIndexedAccess4.ts(5,16): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess4.ts (1 errors) ====
+==== superSymbolIndexedAccess4.ts (1 errors) ====
     var symbol = Symbol.for('myThing');
     
     class Bar {

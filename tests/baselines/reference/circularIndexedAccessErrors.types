@@ -1,59 +1,79 @@
-=== tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts ===
+//// [tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts] ////
+
+=== circularIndexedAccessErrors.ts ===
 type T1 = {
->T1 : { x: any; }
+>T1 : T1
+>   : ^^
 
     x: T1["x"];  // Error
 >x : any
+>  : ^^^
 
 };
 
 type T2<K extends "x" | "y"> = {
 >T2 : T2<K>
+>   : ^^^^^
 
     x: T2<K>[K];  // Error
 >x : T2<K>[K]
+>  : ^^^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 }
 
 declare let x2: T2<"x">;
 >x2 : T2<"x">
+>   : ^^^^^^^
 
 let x2x = x2.x;
 >x2x : any
+>    : ^^^
 >x2.x : any
+>     : ^^^
 >x2 : T2<"x">
+>   : ^^^^^^^
 >x : any
+>  : ^^^
 
 interface T3<T extends T3<T>> {
     x: T["x"];
 >x : T["x"]
+>  : ^^^^^^
 }
 
 interface T4<T extends T4<T>> {
     x: T4<T>["x"];  // Error
 >x : any
+>  : ^^^
 }
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     x: C1["x"];  // Error
 >x : any
+>  : ^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     x: this["y"];
 >x : this["y"]
+>  : ^^^^^^^^^
 
     y: this["z"];
 >y : this["z"]
+>  : ^^^^^^^^^
 
     z: this["x"];
 >z : this["x"]
+>  : ^^^^^^^^^
 }
 
 // Repro from #12627
@@ -61,9 +81,11 @@ class C2 {
 interface Foo {
     hello: boolean;
 >hello : boolean
+>      : ^^^^^^^
 }
 
 function foo<T extends Foo | T["hello"]>() {
 >foo : <T>() => void
+>    : ^ ^^^^^^^^^^^
 }
 

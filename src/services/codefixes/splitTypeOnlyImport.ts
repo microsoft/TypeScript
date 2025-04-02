@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixContextBase,
     Debug,
     Diagnostics,
@@ -10,12 +15,7 @@ import {
     SourceFile,
     textChanges,
     TextSpan,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
 const fixId = "splitTypeOnlyImport";
@@ -30,9 +30,10 @@ registerCodeFix({
             return [createCodeFixAction(fixId, changes, Diagnostics.Split_into_two_separate_import_declarations, fixId, Diagnostics.Split_all_invalid_type_only_imports)];
         }
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, error) => {
-        splitTypeOnlyImport(changes, getImportDeclaration(context.sourceFile, error), context);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, error) => {
+            splitTypeOnlyImport(changes, getImportDeclaration(context.sourceFile, error), context);
+        }),
 });
 
 function getImportDeclaration(sourceFile: SourceFile, span: TextSpan) {
@@ -44,16 +45,26 @@ function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclarati
         return;
     }
     const importClause = Debug.checkDefined(importDeclaration.importClause);
-    changes.replaceNode(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
+    changes.replaceNode(
+        context.sourceFile,
         importDeclaration,
-        importDeclaration.modifiers,
-        factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined),
-        importDeclaration.moduleSpecifier,
-        importDeclaration.assertClause));
+        factory.updateImportDeclaration(
+            importDeclaration,
+            importDeclaration.modifiers,
+            factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined),
+            importDeclaration.moduleSpecifier,
+            importDeclaration.attributes,
+        ),
+    );
 
-    changes.insertNodeAfter(context.sourceFile, importDeclaration, factory.createImportDeclaration(
-        /*modifiers*/ undefined,
-        factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
-        importDeclaration.moduleSpecifier,
-        importDeclaration.assertClause));
+    changes.insertNodeAfter(
+        context.sourceFile,
+        importDeclaration,
+        factory.createImportDeclaration(
+            /*modifiers*/ undefined,
+            factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
+            importDeclaration.moduleSpecifier,
+            importDeclaration.attributes,
+        ),
+    );
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts] ////
+
 //// [controlFlowOptionalChain.ts]
 // assignments in shortcutting chain
 declare const o: undefined | {

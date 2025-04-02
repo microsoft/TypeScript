@@ -1,4 +1,6 @@
-=== tests/cases/conformance/constEnums/constEnum2.ts ===
+//// [tests/cases/conformance/constEnums/constEnum2.ts] ////
+
+=== constEnum2.ts ===
 // An enum declaration that specifies a const modifier is a constant enum declaration.
 // In a constant enum declaration, all members must have constant values and
 // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
@@ -7,51 +9,89 @@
 
 const CONST = 9000 % 2;
 >CONST : number
+>      : ^^^^^^
 >9000 % 2 : number
+>         : ^^^^^^
 >9000 : 9000
+>     : ^^^^
 >2 : 2
+>  : ^
 
 const enum D {
 >D : D
+>  : ^
 
     d = 10,
 >d : D.d
+>  : ^^^
 >10 : 10
+>   : ^^
 
     e = 199 * Math.floor(Math.random() * 1000),
 >e : D.e
+>  : ^^^
 >199 * Math.floor(Math.random() * 1000) : number
+>                                       : ^^^^^^
 >199 : 199
+>    : ^^^
 >Math.floor(Math.random() * 1000) : number
+>                                 : ^^^^^^
 >Math.floor : (x: number) => number
+>           : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >floor : (x: number) => number
+>      : ^ ^^      ^^^^^      
 >Math.random() * 1000 : number
+>                     : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >1000 : 1000
+>     : ^^^^
 
     f = d - (100 * Math.floor(Math.random() % 8)),
 >f : D.f
+>  : ^^^
 >d - (100 * Math.floor(Math.random() % 8)) : number
+>                                          : ^^^^^^
 >d : D.d
+>  : ^^^
 >(100 * Math.floor(Math.random() % 8)) : number
+>                                      : ^^^^^^
 >100 * Math.floor(Math.random() % 8) : number
+>                                    : ^^^^^^
 >100 : 100
+>    : ^^^
 >Math.floor(Math.random() % 8) : number
+>                              : ^^^^^^
 >Math.floor : (x: number) => number
+>           : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >floor : (x: number) => number
+>      : ^ ^^      ^^^^^      
 >Math.random() % 8 : number
+>                  : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >8 : 8
+>  : ^
 
     g = CONST,
 >g : D.g
+>  : ^^^
 >CONST : number
+>      : ^^^^^^
 }

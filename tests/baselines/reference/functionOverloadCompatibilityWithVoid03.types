@@ -1,11 +1,17 @@
-=== tests/cases/conformance/functions/functionOverloadCompatibilityWithVoid03.ts ===
+//// [tests/cases/conformance/functions/functionOverloadCompatibilityWithVoid03.ts] ////
+
+=== functionOverloadCompatibilityWithVoid03.ts ===
 function f(x: string): void;
 >f : (x: string) => void
+>  : ^ ^^      ^^^^^    
 >x : string
+>  : ^^^^^^
 
 function f(x: string): void {
 >f : (x: string) => void
+>  : ^ ^^      ^^^^^    
 >x : string
+>  : ^^^^^^
 
     return;
 } 

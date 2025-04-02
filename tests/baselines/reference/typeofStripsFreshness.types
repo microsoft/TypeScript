@@ -1,40 +1,59 @@
-=== tests/cases/compiler/typeofStripsFreshness.ts ===
+//// [tests/cases/compiler/typeofStripsFreshness.ts] ////
+
+=== typeofStripsFreshness.ts ===
 interface Collection<T> {
     elems: T[];
 >elems : T[]
+>      : ^^^
 }
 interface CollectionStatic {
     new <T>(): Collection<T>;
 }
 declare const Collection: CollectionStatic;
 >Collection : CollectionStatic
+>           : ^^^^^^^^^^^^^^^^
 
 const ALL = "all";
 >ALL : "all"
+>    : ^^^^^
 >"all" : "all"
+>      : ^^^^^
 
 type All = typeof ALL;
 >All : "all"
+>    : ^^^^^
 >ALL : "all"
+>    : ^^^^^
 
 const result: Collection<All> = new Collection();
 >result : Collection<"all">
+>       : ^^^^^^^^^^^^^^^^^
 >new Collection() : Collection<"all">
+>                 : ^^^^^^^^^^^^^^^^^
 >Collection : CollectionStatic
+>           : ^^^^^^^^^^^^^^^^
 
 const ANOTHER = "another";
 >ANOTHER : "another"
+>        : ^^^^^^^^^
 >"another" : "another"
+>          : ^^^^^^^^^
 
 type Another = typeof ANOTHER;
 >Another : "another"
+>        : ^^^^^^^^^
 >ANOTHER : "another"
+>        : ^^^^^^^^^
 
 type Both = Another | All;
->Both : "all" | "another"
+>Both : Both
+>     : ^^^^
 
 const result2: Collection<Both> = new Collection();
 >result2 : Collection<Both>
+>        : ^^^^^^^^^^^^^^^^
 >new Collection() : Collection<Both>
+>                 : ^^^^^^^^^^^^^^^^
 >Collection : CollectionStatic
+>           : ^^^^^^^^^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedObjectRest.ts ===
+//// [tests/cases/compiler/nestedObjectRest.ts] ////
+
+=== nestedObjectRest.ts ===
 // https://github.com/microsoft/TypeScript/issues/43400
 var x, y;
 >x : any
@@ -6,21 +8,33 @@ var x, y;
 
 [{ ...x }] = [{ abc: 1 }];
 >[{ ...x }] = [{ abc: 1 }] : [{ abc: number; }]
+>                          : ^^^^^^^^^^^^^^^^^^
 >[{ ...x }] : [any]
+>           : ^^^^^
 >{ ...x } : any
 >x : any
 >[{ abc: 1 }] : [{ abc: number; }]
+>             : ^^^^^^^^^^^^^^^^^^
 >{ abc: 1 } : { abc: number; }
+>           : ^^^^^^^^^^^^^^^^
 >abc : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 for ([{ ...y }] of [[{ abc: 1 }]]) ;
 >[{ ...y }] : [any]
+>           : ^^^^^
 >{ ...y } : any
 >y : any
 >[[{ abc: 1 }]] : { abc: number; }[][]
+>               : ^^^^^^^^^^^^^^^^^^^^
 >[{ abc: 1 }] : { abc: number; }[]
+>             : ^^^^^^^^^^^^^^^^^^
 >{ abc: 1 } : { abc: number; }
+>           : ^^^^^^^^^^^^^^^^
 >abc : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 

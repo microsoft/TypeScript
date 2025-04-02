@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedParameterProperty1.ts ===
+//// [tests/cases/compiler/unusedParameterProperty1.ts] ////
+
+=== unusedParameterProperty1.ts ===
 class A {
 >A : Symbol(A, Decl(unusedParameterProperty1.ts, 0, 0))
 

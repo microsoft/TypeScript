@@ -1,16 +1,14 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(33,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(34,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(64,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(65,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(94,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(95,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(124,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
-tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts(125,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+objectTypeWithStringNamedNumericProperty.ts(33,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(34,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+objectTypeWithStringNamedNumericProperty.ts(64,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(65,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+objectTypeWithStringNamedNumericProperty.ts(94,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(95,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+objectTypeWithStringNamedNumericProperty.ts(124,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(125,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts (8 errors) ====
+==== objectTypeWithStringNamedNumericProperty.ts (8 errors) ====
     // string named numeric properties are legal and distinct when indexed by string values
     // indexed numerically the value is converted to a number
     // no errors expected below

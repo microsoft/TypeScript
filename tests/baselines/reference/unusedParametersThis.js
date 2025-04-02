@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParametersThis.ts] ////
+
 //// [unusedParametersThis.ts]
 class A {
     public a: number;

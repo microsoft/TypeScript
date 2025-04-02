@@ -1,99 +1,149 @@
-=== tests/cases/compiler/listFailure.ts ===
+//// [tests/cases/compiler/listFailure.ts] ////
+
+=== listFailure.ts ===
 module Editor {
 >Editor : typeof Editor
+>       : ^^^^^^^^^^^^^
 
     export class Buffer {
 >Buffer : Buffer
+>       : ^^^^^^
 
     	lines: List<Line> = ListMakeHead<Line>();
 >lines : List<Line>
+>      : ^^^^^^^^^^
 >ListMakeHead<Line>() : List<Line>
+>                     : ^^^^^^^^^^
 >ListMakeHead : <U>() => List<U>
+>             : ^ ^^^^^^^       
         
         addLine(lineText: string): List<Line> {
 >addLine : (lineText: string) => List<Line>
+>        : ^        ^^      ^^^^^          
 >lineText : string
+>         : ^^^^^^
             
             var line: Line = new Line();
 >line : Line
+>     : ^^^^
 >new Line() : Line
+>           : ^^^^
 >Line : typeof Line
+>     : ^^^^^^^^^^^
 
             var lineEntry = this.lines.add(line);
 >lineEntry : List<Line>
+>          : ^^^^^^^^^^
 >this.lines.add(line) : List<Line>
+>                     : ^^^^^^^^^^
 >this.lines.add : (data: Line) => List<Line>
+>               : ^    ^^^^^^^^^^^^^^^^^^^^^
 >this.lines : List<Line>
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >lines : List<Line>
+>      : ^^^^^^^^^^
 >add : (data: Line) => List<Line>
+>    : ^    ^^^^^^^^^^^^^^^^^^^^^
 >line : Line
+>     : ^^^^
 
             return lineEntry;
 >lineEntry : List<Line>
+>          : ^^^^^^^^^^
         }    
     }
     
     export function ListRemoveEntry<U>(entry: List<U>): List<U> { 
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
+>                : ^ ^^     ^^       ^^^^^       
 >entry : List<U>
+>      : ^^^^^^^
 
     	return entry;
 >entry : List<U>
+>      : ^^^^^^^
     }
 
     export function ListMakeHead<U>(): List<U> {
 >ListMakeHead : <U>() => List<U>
+>             : ^ ^^^^^^^       
 
 		return null;
     }
 
     export function ListMakeEntry<U>(data: U): List<U> {
 >ListMakeEntry : <U>(data: U) => List<U>
+>              : ^ ^^    ^^ ^^^^^       
 >data : U
+>     : ^
 
 		return null;
     }    
 
     class List<T> { 
 >List : List<T>
+>     : ^^^^^^^
 
         public next: List<T>; 
 >next : List<T>
+>     : ^^^^^^^
 
         add(data: T): List<T> {
 >add : (data: T) => List<T>
+>    : ^    ^^ ^^^^^       
 >data : T
+>     : ^
 
             this.next = ListMakeEntry(data);
 >this.next = ListMakeEntry(data) : List<T>
+>                                : ^^^^^^^
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
 >ListMakeEntry(data) : List<T>
+>                    : ^^^^^^^
 >ListMakeEntry : <U>(data: U) => List<U>
+>              : ^ ^^    ^^ ^^^^^       
 >data : T
+>     : ^
 
             return this.next;
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
         }
 
         popEntry(head: List<T>): List<T> {
 >popEntry : (head: List<T>) => List<T>
+>         : ^    ^^       ^^^^^       
 >head : List<T>
+>     : ^^^^^^^
 
             return (ListRemoveEntry(this.next));
 >(ListRemoveEntry(this.next)) : List<T>
+>                             : ^^^^^^^
 >ListRemoveEntry(this.next) : List<T>
+>                           : ^^^^^^^
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
+>                : ^ ^^     ^^       ^^^^^       
 >this.next : List<T>
+>          : ^^^^^^^
 >this : this
+>     : ^^^^
 >next : List<T>
+>     : ^^^^^^^
         }      
     }
 
 	export class Line {}
 >Line : Line
+>     : ^^^^
 }

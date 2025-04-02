@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts] ////
+
 //// [functionsWithImplicitReturnTypeAssignableToUndefined.ts]
 function f1(): unknown {
     if (Math.random() < 0.5) return true;

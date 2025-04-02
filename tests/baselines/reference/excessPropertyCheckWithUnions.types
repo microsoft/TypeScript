@@ -1,312 +1,495 @@
-=== tests/cases/compiler/excessPropertyCheckWithUnions.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithUnions.ts] ////
+
+=== excessPropertyCheckWithUnions.ts ===
 type ADT = {
->ADT : { tag: "A"; a1: string; } | { tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; } | { tag: "T"; }
+>ADT : ADT
+>    : ^^^
 
     tag: "A",
 >tag : "A"
+>    : ^^^
 
     a1: string
 >a1 : string
+>   : ^^^^^^
 
 } | {
     tag: "D",
 >tag : "D"
+>    : ^^^
 
     d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20
 >d20 : 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 } | {
     tag: "T",
 >tag : "T"
+>    : ^^^
 }
 let wrong: ADT = { tag: "T", a1: "extra" }
 >wrong : ADT
+>      : ^^^
 >{ tag: "T", a1: "extra" } : { tag: "T"; a1: string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "T"
+>    : ^^^
 >"T" : "T"
+>    : ^^^
 >a1 : string
+>   : ^^^^^^
 >"extra" : "extra"
+>        : ^^^^^^^
 
 wrong = { tag: "A", d20: 12 }
 >wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >wrong : ADT
+>      : ^^^
 >{ tag: "A", d20: 12 } : { tag: "A"; d20: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 >d20 : number
+>    : ^^^^^^
 >12 : 12
+>   : ^^
 
 wrong = { tag: "D" }
 >wrong = { tag: "D" } : { tag: "D"; }
+>                     : ^^^^^^^^^^^^^
 >wrong : ADT
+>      : ^^^
 >{ tag: "D" } : { tag: "D"; }
+>             : ^^^^^^^^^^^^^
 >tag : "D"
+>    : ^^^
 >"D" : "D"
+>    : ^^^
 
 type Ambiguous = {
->Ambiguous : { tag: "A"; x: string; } | { tag: "A"; y: number; } | { tag: "B"; z: boolean; } | { tag: "C"; }
+>Ambiguous : Ambiguous
+>          : ^^^^^^^^^
 
     tag: "A",
 >tag : "A"
+>    : ^^^
 
     x: string
 >x : string
+>  : ^^^^^^
 
 } | {
     tag: "A",
 >tag : "A"
+>    : ^^^
 
     y: number
 >y : number
+>  : ^^^^^^
 
 } | {
     tag: "B",
 >tag : "B"
+>    : ^^^
 
     z: boolean
 >z : boolean
+>  : ^^^^^^^
 
 } | {
     tag: "C"
 >tag : "C"
+>    : ^^^
 }
 let amb: Ambiguous
 >amb : Ambiguous
+>    : ^^^^^^^^^
 
 // no error for ambiguous tag, even when it could satisfy both constituents at once
 amb = { tag: "A", x: "hi" }
 >amb = { tag: "A", x: "hi" } : { tag: "A"; x: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >amb : Ambiguous
+>    : ^^^^^^^^^
 >{ tag: "A", x: "hi" } : { tag: "A"; x: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 >x : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
 amb = { tag: "A", y: 12 }
 >amb = { tag: "A", y: 12 } : { tag: "A"; y: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >amb : Ambiguous
+>    : ^^^^^^^^^
 >{ tag: "A", y: 12 } : { tag: "A"; y: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 >y : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 amb = { tag: "A", x: "hi", y: 12 }
 >amb = { tag: "A", x: "hi", y: 12 } : { tag: "A"; x: string; y: number; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >amb : Ambiguous
+>    : ^^^^^^^^^
 >{ tag: "A", x: "hi", y: 12 } : { tag: "A"; x: string; y: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 >x : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 // correctly error on excess property 'extra', even when ambiguous
 amb = { tag: "A", x: "hi", extra: 12 }
 >amb = { tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: string; extra: number; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >amb : Ambiguous
+>    : ^^^^^^^^^
 >{ tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: string; extra: number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 >x : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 >extra : number
+>      : ^^^^^^
 >12 : 12
+>   : ^^
 
 amb = { tag: "A", y: 12, extra: 12 }
 >amb = { tag: "A", y: 12, extra: 12 } : { tag: "A"; y: number; extra: number; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >amb : Ambiguous
+>    : ^^^^^^^^^
 >{ tag: "A", y: 12, extra: 12 } : { tag: "A"; y: number; extra: number; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 >y : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >extra : number
+>      : ^^^^^^
 >12 : 12
+>   : ^^
 
 // assignability errors still work
 amb = { tag: "A" }
 >amb = { tag: "A" } : { tag: "A"; }
+>                   : ^^^^^^^^^^^^^
 >amb : Ambiguous
+>    : ^^^^^^^^^
 >{ tag: "A" } : { tag: "A"; }
+>             : ^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 
 amb = { tag: "A", z: true }
 >amb = { tag: "A", z: true } : { tag: "A"; z: boolean; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >amb : Ambiguous
+>    : ^^^^^^^^^
 >{ tag: "A", z: true } : { tag: "A"; z: boolean; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : "A"
+>    : ^^^
 >"A" : "A"
+>    : ^^^
 >z : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 type Overlapping =
->Overlapping : { a: 1; b: 1; first: string; } | { a: 2; second: string; } | { b: 3; third: string; }
+>Overlapping : Overlapping
+>            : ^^^^^^^^^^^
 
     | { a: 1, b: 1, first: string }
 >a : 1
+>  : ^
 >b : 1
+>  : ^
 >first : string
+>      : ^^^^^^
 
     | { a: 2, second: string }
 >a : 2
+>  : ^
 >second : string
+>       : ^^^^^^
 
     | { b: 3, third: string }
 >b : 3
+>  : ^
 >third : string
+>      : ^^^^^^
 
 let over: Overlapping
 >over : Overlapping
+>     : ^^^^^^^^^^^
 
 // these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
 >over = { a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >over : Overlapping
+>     : ^^^^^^^^^^^
 >{ a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 >b : 1
+>  : ^
 >1 : 1
+>  : ^
 >first : string
+>      : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 >second : string
+>       : ^^^^^^
 >"error" : "error"
+>        : ^^^^^^^
 
 over = { a: 1, b: 1, first: "ok", third: "error" }
 >over = { a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: string; third: string; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >over : Overlapping
+>     : ^^^^^^^^^^^
 >{ a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: string; third: string; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 >b : 1
+>  : ^
 >1 : 1
+>  : ^
 >first : string
+>      : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 >third : string
+>      : ^^^^^^
 >"error" : "error"
+>        : ^^^^^^^
 
 // Freshness disappears after spreading a union
 declare let t0: { a: any, b: any } | { d: any, e: any }
 >t0 : { a: any; b: any; } | { d: any; e: any; }
+>   : ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 
 declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
 >t1 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>   : ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^^^   ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 
 let t2 = { ...t1 }
 >t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>   : ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^^^   ^^^
 >{ ...t1 } : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>          : ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^^^   ^^^
 >t1 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>   : ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^^^   ^^^
 
 t0 = t2
 >t0 = t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>        : ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^^^   ^^^
 >t0 : { a: any; b: any; } | { d: any; e: any; }
+>   : ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^
 >t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+>   : ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^^^^   ^^^^^   ^^^^^   ^^^
 
 // Nested excess property checks work with discriminated unions
 type AN = { a: string } | { c: string }
->AN : { a: string; } | { c: string; }
+>AN : AN
+>   : ^^
 >a : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 type BN = { b: string }
->BN : { b: string; }
+>BN : BN
+>   : ^^
 >b : string
+>  : ^^^^^^
 
 type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
->AB : { kind: "A"; n: AN; } | { kind: "B"; n: BN; }
+>AB : AB
+>   : ^^
 >kind : "A"
+>     : ^^^
 >n : AN
+>  : ^^
 >kind : "B"
+>     : ^^^
 >n : BN
+>  : ^^
 
 const abab: AB = {
 >abab : AB
+>     : ^^
 >{    kind: "A",    n: {        a: "a",        b: "b", // excess -- kind: "A"    }} : { kind: "A"; n: { a: string; b: string; }; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     kind: "A",
 >kind : "A"
+>     : ^^^
 >"A" : "A"
+>    : ^^^
 
     n: {
 >n : { a: string; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        a: "a",        b: "b", // excess -- kind: "A"    } : { a: string; b: string; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: "a",
 >a : string
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 
         b: "b", // excess -- kind: "A"
 >b : string
+>  : ^^^^^^
 >"b" : "b"
+>    : ^^^
     }
 }
 const abac: AB = {
 >abac : AB
+>     : ^^
 >{    kind: "A",    n: {        a: "a",        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }    }} : { kind: "A"; n: { a: string; c: string; }; }
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     kind: "A",
 >kind : "A"
+>     : ^^^
 >"A" : "A"
+>    : ^^^
 
     n: {
 >n : { a: string; c: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        a: "a",        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }    } : { a: string; c: string; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: "a",
 >a : string
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 
         c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
 >c : string
+>  : ^^^^^^
 >"c" : "c"
+>    : ^^^
     }
 }
 
 // Excess property checks must match all discriminable properties
 type Button = { tag: 'button'; type?: 'submit'; };
->Button : { tag: 'button'; type?: "submit" | undefined; }
+>Button : Button
+>       : ^^^^^^
 >tag : "button"
+>    : ^^^^^^^^
 >type : "submit" | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^
 
 type Anchor = { tag: 'a'; type?: string; href: string };
->Anchor : { tag: 'a'; type?: string | undefined; href: string; }
+>Anchor : Anchor
+>       : ^^^^^^
 >tag : "a"
+>    : ^^^
 >type : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >href : string
+>     : ^^^^^^
 
 type Union = Button | Anchor;
->Union : Button | Anchor
+>Union : Union
+>      : ^^^^^
 
 const obj: Union = {
 >obj : Union
+>    : ^^^^^
 >{    tag: 'button',    type: 'submit',    // should have error here    href: 'foo',} : { tag: "button"; type: "submit"; href: string; }
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     tag: 'button',
 >tag : "button"
+>    : ^^^^^^^^
 >'button' : "button"
+>         : ^^^^^^^^
 
     type: 'submit',
 >type : "submit"
+>     : ^^^^^^^^
 >'submit' : "submit"
+>         : ^^^^^^^^
 
     // should have error here
     href: 'foo',
 >href : string
+>     : ^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 };
 
@@ -315,30 +498,38 @@ const obj: Union = {
 interface IValue {
   value: string
 >value : string
+>      : ^^^^^^
 }
 
 interface StringKeys {
     [propertyName: string]: IValue;
 >propertyName : string
+>             : ^^^^^^
 
 };
 
 interface NumberKeys {
     [propertyName: number]: IValue;
 >propertyName : number
+>             : ^^^^^^
 }
 
 type ObjectDataSpecification = StringKeys | NumberKeys;
->ObjectDataSpecification : StringKeys | NumberKeys
+>ObjectDataSpecification : ObjectDataSpecification
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
 
 const dataSpecification: ObjectDataSpecification = {  // Error
 >dataSpecification : ObjectDataSpecification
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >{  // Error    foo: "asdfsadffsd"} : { foo: string; }
+>                                   : ^^^^^^^^^^^^^^^^
 
     foo: "asdfsadffsd"
 >foo : string
+>    : ^^^^^^
 >"asdfsadffsd" : "asdfsadffsd"
+>              : ^^^^^^^^^^^^^
 
 };
 
@@ -346,32 +537,48 @@ const dataSpecification: ObjectDataSpecification = {  // Error
 
 const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
 >obj1 : { [x: string]: number; } | { [x: number]: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >{ a: 'abc' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
 const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
 >obj2 : { [x: string]: number; } | { a: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >{ a: 5, c: 'abc' } : { a: number; c: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >c : string
+>  : ^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
 // Repro from #33732
 
 interface I1 {
     prop1: string;
 >prop1 : string
+>      : ^^^^^^
 }
 
 interface I2 {
     prop2: string;
 >prop2 : string
+>      : ^^^^^^
 }
 
 interface I3 extends Record<string, string> {
@@ -379,10 +586,12 @@ interface I3 extends Record<string, string> {
 }
 
 type Properties =
->Properties : I1 | I2 | I3 | { [key: string]: never; }
+>Properties : Properties
+>           : ^^^^^^^^^^
 
     | { [key: string]: never }
 >key : string
+>    : ^^^^^^
 
     | I1
     | I2
@@ -392,47 +601,66 @@ type Properties =
 
 declare const prop1: string;
 >prop1 : string
+>      : ^^^^^^
 
 declare const prop2: string | undefined;
 >prop2 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
 function F1(_arg: { props: Properties }) { }
->F1 : (_arg: {    props: Properties;}) => void
+>F1 : (_arg: { props: Properties; }) => void
+>   : ^    ^^                      ^^^^^^^^^
 >_arg : { props: Properties; }
+>     : ^^^^^^^^^          ^^^
 >props : Properties
+>      : ^^^^^^^^^^
 
 F1({
 >F1({    props: {        prop1,        prop2,    },}) : void
+>                                                     : ^^^^
 >F1 : (_arg: { props: Properties; }) => void
+>   : ^    ^^                      ^^^^^^^^^
 >{    props: {        prop1,        prop2,    },} : { props: { prop1: string; prop2: string | undefined; }; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     props: {
 >props : { prop1: string; prop2: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        prop1,        prop2,    } : { prop1: string; prop2: string | undefined; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         prop1,
 >prop1 : string
+>      : ^^^^^^
 
         prop2,
 >prop2 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     },
 });
 
 function F2(_props: Properties) { }
 >F2 : (_props: Properties) => void
+>   : ^      ^^          ^^^^^^^^^
 >_props : Properties
+>       : ^^^^^^^^^^
 
 F2({
 >F2({    prop1,    prop2,}) : void
+>                           : ^^^^
 >F2 : (_props: Properties) => void
+>   : ^      ^^          ^^^^^^^^^
 >{    prop1,    prop2,} : { prop1: string; prop2: string | undefined; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     prop1,
 >prop1 : string
+>      : ^^^^^^
 
     prop2,
 >prop2 : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
 });
 

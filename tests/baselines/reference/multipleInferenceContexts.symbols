@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multipleInferenceContexts.ts ===
+//// [tests/cases/compiler/multipleInferenceContexts.ts] ////
+
+=== multipleInferenceContexts.ts ===
 type ConstructorOptions<Data> =
 >ConstructorOptions : Symbol(ConstructorOptions, Decl(multipleInferenceContexts.ts, 0, 0))
 >Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 0, 24))

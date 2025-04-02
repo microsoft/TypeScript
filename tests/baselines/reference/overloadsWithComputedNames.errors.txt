@@ -1,15 +1,11 @@
-tests/cases/compiler/overloadsWithComputedNames.ts(4,5): error TS2389: Function implementation name must be '["B"]'.
-tests/cases/compiler/overloadsWithComputedNames.ts(14,5): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadsWithComputedNames.ts(16,5): error TS2389: Function implementation name must be '["bar"]'.
-tests/cases/compiler/overloadsWithComputedNames.ts(28,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/overloadsWithComputedNames.ts(29,5): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadsWithComputedNames.ts(35,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/overloadsWithComputedNames.ts(42,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/overloadsWithComputedNames.ts(47,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadsWithComputedNames.ts(4,5): error TS2389: Function implementation name must be '["B"]'.
+overloadsWithComputedNames.ts(14,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadsWithComputedNames.ts(16,5): error TS2389: Function implementation name must be '["bar"]'.
+overloadsWithComputedNames.ts(29,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== tests/cases/compiler/overloadsWithComputedNames.ts (9 errors) ====
+==== overloadsWithComputedNames.ts (5 errors) ====
     // https://github.com/microsoft/TypeScript/issues/52329
     class Person {
         ["B"](a: number): string;
@@ -44,8 +40,6 @@ tests/cases/compiler/overloadsWithComputedNames.ts(52,5): error TS2391: Function
     
     class C1 {
         [sym](): void;  // should error
-        ~~~~~
-!!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         [uniqueSym2](): void;   // should error
         ~~~~~~~~~~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
@@ -55,8 +49,6 @@ tests/cases/compiler/overloadsWithComputedNames.ts(52,5): error TS2391: Function
     
     interface I1 {
         [sym](): void;  // should error
-        ~~~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
         [uniqueSym2](): void;
         [uniqueSym](): void;
         [uniqueSym](): void;
@@ -64,15 +56,11 @@ tests/cases/compiler/overloadsWithComputedNames.ts(52,5): error TS2391: Function
     
     class C2 {
         [strUnion](): void; // should error
-        ~~~~~~~~~~
-!!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         [strUnion]() { }
     }
     
     class I2 {
         [strUnion](): void; // should error
-        ~~~~~~~~~~
-!!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         [strUnion]() { }
     }
     

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeProperties.ts] ////
+
 //// [mappedTypeProperties.ts]
 export type PlaceType = 'openSky' | 'roofed' | 'garage'
 type Before = {

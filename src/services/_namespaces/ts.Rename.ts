@@ -1,3 +1,3 @@
 /* Generated file to emulate the ts.Rename namespace. */
 
-export * from "../rename";
+export * from "../rename.js";

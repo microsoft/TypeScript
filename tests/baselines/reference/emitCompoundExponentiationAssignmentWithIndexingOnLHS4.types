@@ -1,89 +1,160 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts] ////
+
+=== emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts ===
 var globalCounter = 0;
 >globalCounter : number
+>              : ^^^^^^
 >0 : 0
+>  : ^
 
 function incrementIdx(max: number) {
 >incrementIdx : (max: number) => number
+>             : ^   ^^      ^^^^^^^^^^^
 >max : number
+>    : ^^^^^^
 
     globalCounter += 1;
 >globalCounter += 1 : number
+>                   : ^^^^^^
 >globalCounter : number
+>              : ^^^^^^
 >1 : 1
+>  : ^
 
     let idx = Math.floor(Math.random() * max);
 >idx : number
+>    : ^^^^^^
 >Math.floor(Math.random() * max) : number
+>                                : ^^^^^^
 >Math.floor : (x: number) => number
+>           : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >floor : (x: number) => number
+>      : ^ ^^      ^^^^^      
 >Math.random() * max : number
+>                    : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >max : number
+>    : ^^^^^^
 
     return idx;
 >idx : number
+>    : ^^^^^^
 }
 
 var array1 = [1, 2, 3, 4, 5];
 >array1 : number[]
+>       : ^^^^^^^^
 >[1, 2, 3, 4, 5] : number[]
+>                : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >5 : 5
+>  : ^
 
 array1[incrementIdx(array1.length)] **= 3;
 >array1[incrementIdx(array1.length)] **= 3 : number
+>                                          : ^^^^^^
 >array1[incrementIdx(array1.length)] : number
+>                                    : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >incrementIdx(array1.length) : number
+>                            : ^^^^^^
 >incrementIdx : (max: number) => number
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
+>              : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >3 : 3
+>  : ^
 
 array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] **= 2;
 >array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] **= 2 : number
+>                                                                                  : ^^^^^^
 >array1[incrementIdx(array1.length)] : number
+>                                    : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >incrementIdx(array1.length) : number
+>                            : ^^^^^^
 >incrementIdx : (max: number) => number
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
+>              : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >array1[incrementIdx(array1.length)] **= 2 : number
+>                                          : ^^^^^^
 >array1[incrementIdx(array1.length)] : number
+>                                    : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >incrementIdx(array1.length) : number
+>                            : ^^^^^^
 >incrementIdx : (max: number) => number
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
+>              : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >2 : 2
+>  : ^
 
 array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2;
 >array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2 : number
+>                                                                                 : ^^^^^^
 >array1[incrementIdx(array1.length)] : number
+>                                    : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >incrementIdx(array1.length) : number
+>                            : ^^^^^^
 >incrementIdx : (max: number) => number
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
+>              : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >array1[incrementIdx(array1.length)] ** 2 : number
+>                                         : ^^^^^^
 >array1[incrementIdx(array1.length)] : number
+>                                    : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >incrementIdx(array1.length) : number
+>                            : ^^^^^^
 >incrementIdx : (max: number) => number
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
+>              : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 >2 : 2
+>  : ^
 

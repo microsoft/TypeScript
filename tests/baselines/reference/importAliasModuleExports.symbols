@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/mod1.js ===
+//// [tests/cases/conformance/salsa/importAliasModuleExports.ts] ////
+
+=== mod1.js ===
 class Alias {
 >Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
 
@@ -11,7 +13,7 @@ module.exports = Alias;
 >exports : Symbol(export=, Decl(mod1.js, 2, 1))
 >Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
 
-=== tests/cases/conformance/salsa/main.js ===
+=== main.js ===
 import A from './mod1'
 >A : Symbol(A, Decl(main.js, 0, 6))
 

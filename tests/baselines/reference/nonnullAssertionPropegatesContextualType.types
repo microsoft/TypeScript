@@ -1,10 +1,22 @@
-=== tests/cases/compiler/nonnullAssertionPropegatesContextualType.ts ===
+//// [tests/cases/compiler/nonnullAssertionPropegatesContextualType.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== nonnullAssertionPropegatesContextualType.ts ===
 let rect2: SVGRectElement = document.querySelector('.svg-rectangle')!; // Error: Element
 >rect2 : SVGRectElement
+>      : ^^^^^^^^^^^^^^
 >document.querySelector('.svg-rectangle')! : SVGRectElement
+>                                          : ^^^^^^^^^^^^^^
 >document.querySelector('.svg-rectangle') : SVGRectElement | null
+>                                         : ^^^^^^^^^^^^^^^^^^^^^
 >document.querySelector : { <K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null; <K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null; <K extends keyof MathMLElementTagNameMap>(selectors: K): MathMLElementTagNameMap[K] | null; <K extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K): HTMLElementDeprecatedTagNameMap[K] | null; <E extends Element = Element>(selectors: string): E | null; }
+>                       : ^^^ ^^^^^^^^^                           ^^         ^^ ^^^                               ^^^ ^^^^^^^^^                          ^^         ^^ ^^^                              ^^^ ^^^^^^^^^                             ^^         ^^ ^^^                                 ^^^ ^^^^^^^^^                                     ^^         ^^ ^^^                                         ^^^ ^^^^^^^^^       ^^^^^^^^^^^^         ^^      ^^^        ^^^
 >document : Document
+>         : ^^^^^^^^
 >querySelector : { <K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null; <K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null; <K extends keyof MathMLElementTagNameMap>(selectors: K): MathMLElementTagNameMap[K] | null; <K extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K): HTMLElementDeprecatedTagNameMap[K] | null; <E extends Element = Element>(selectors: string): E | null; }
+>              : ^^^ ^^^^^^^^^                           ^^         ^^ ^^^                               ^^^ ^^^^^^^^^                          ^^         ^^ ^^^                              ^^^ ^^^^^^^^^                             ^^         ^^ ^^^                                 ^^^ ^^^^^^^^^                                     ^^         ^^ ^^^                                         ^^^ ^^^^^^^^^       ^^^^^^^^^^^^         ^^      ^^^        ^^^
 >'.svg-rectangle' : ".svg-rectangle"
+>                 : ^^^^^^^^^^^^^^^^
 

@@ -1,10 +1,13 @@
-=== tests/cases/conformance/async/es6/asyncWithVarShadowing_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncWithVarShadowing_es6.ts] ////
+
+=== asyncWithVarShadowing_es6.ts ===
 // https://github.com/Microsoft/TypeScript/issues/20461
 declare const y: any;
 >y : any
 
 async function fn1(x) {
 >fn1 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var x;
@@ -13,6 +16,7 @@ async function fn1(x) {
 
 async function fn2(x) {
 >fn2 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var x, z;
@@ -22,6 +26,7 @@ async function fn2(x) {
 
 async function fn3(x) {
 >fn3 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var z;
@@ -30,6 +35,7 @@ async function fn3(x) {
 
 async function fn4(x) {
 >fn4 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var x = y;
@@ -39,133 +45,170 @@ async function fn4(x) {
 
 async function fn5(x) {
 >fn5 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var { x } = y;
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn6(x) {
 >fn6 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var { x, z } = y;
 >x : any
+>  : ^^^
 >z : any
+>  : ^^^
 >y : any
 }
 
 async function fn7(x) {
 >fn7 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var { x = y } = y;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >y : any
 }
 
 async function fn8(x) {
 >fn8 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var { z: x } = y;
 >z : any
+>  : ^^^
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn9(x) {
 >fn9 : (x: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var { z: { x } } = y;
 >z : any
+>  : ^^^
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn10(x) {
 >fn10 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var { z: { x } = y } = y;
 >z : any
+>  : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >y : any
 }
 
 async function fn11(x) {
 >fn11 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var { ...x } = y;
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn12(x) {
 >fn12 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var [x] = y;
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn13(x) {
 >fn13 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var [x = y] = y;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >y : any
 }
 
 async function fn14(x) {
 >fn14 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var [, x] = y;
 > : undefined
+> : ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn15(x) {
 >fn15 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var [...x] = y;
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn16(x) {
 >fn16 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var [[x]] = y;
 >x : any
+>  : ^^^
 >y : any
 }
 
 async function fn17(x) {
 >fn17 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     var [[x] = y] = y;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >y : any
 }
 
 async function fn18({ x }) {
 >fn18 : ({ x }: { x: any; }) => Promise<void>
+>     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     var x;
 >x : any
@@ -173,7 +216,9 @@ async function fn18({ x }) {
 
 async function fn19([x]) {
 >fn19 : ([x]: [any]) => Promise<void>
+>     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     var x;
 >x : any
@@ -181,6 +226,7 @@ async function fn19([x]) {
 
 async function fn20(x) {
 >fn20 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
     {
         var x;
@@ -190,6 +236,7 @@ async function fn20(x) {
 
 async function fn21(x) {
 >fn21 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     if (y) {
@@ -202,6 +249,7 @@ async function fn21(x) {
 
 async function fn22(x) {
 >fn22 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     if (y) {
@@ -215,6 +263,7 @@ async function fn22(x) {
 
 async function fn23(x) {
 >fn23 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     try {
@@ -228,6 +277,7 @@ async function fn23(x) {
 
 async function fn24(x) {
 >fn24 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     try {
@@ -243,6 +293,7 @@ async function fn24(x) {
 
 async function fn25(x) {
 >fn25 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     try {
@@ -258,6 +309,7 @@ async function fn25(x) {
 
 async function fn26(x) {
 >fn26 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     try {
@@ -265,6 +317,7 @@ async function fn26(x) {
     }
     catch ({ x }) {
 >x : any
+>  : ^^^
 
         var x;
 >x : any
@@ -273,6 +326,7 @@ async function fn26(x) {
 
 async function fn27(x) {
 >fn27 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     try {
@@ -285,6 +339,7 @@ async function fn27(x) {
 
 async function fn28(x) {
 >fn28 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     while (y) {
@@ -297,6 +352,7 @@ async function fn28(x) {
 
 async function fn29(x) {
 >fn29 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     do {
@@ -309,6 +365,7 @@ async function fn29(x) {
 
 async function fn30(x) {
 >fn30 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     for (var x = y;;) {
@@ -320,16 +377,19 @@ async function fn30(x) {
 
 async function fn31(x) {
 >fn31 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     for (var { x } = y;;) {
 >x : any
+>  : ^^^
 >y : any
     }
 }
 
 async function fn32(x) {
 >fn32 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     for (;;) {
@@ -340,20 +400,25 @@ async function fn32(x) {
 
 async function fn33(x: string) {
 >fn33 : (x: string) => Promise<void>
+>     : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     for (var x in y) {
 >x : string
+>  : ^^^^^^
 >y : any
     }
 }
 
 async function fn34(x) {
 >fn34 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     for (var z in y) {
 >z : string
+>  : ^^^^^^
 >y : any
 
         var x;
@@ -363,6 +428,7 @@ async function fn34(x) {
 
 async function fn35(x) {
 >fn35 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     for (var x of y) {
@@ -373,16 +439,19 @@ async function fn35(x) {
 
 async function fn36(x) {
 >fn36 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     for (var { x } of y) {
 >x : any
+>  : ^^^
 >y : any
     }
 }
 
 async function fn37(x) {
 >fn37 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     for (var z of y) {
@@ -396,6 +465,7 @@ async function fn37(x) {
 
 async function fn38(x) {
 >fn38 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     switch (y) {
@@ -411,21 +481,25 @@ async function fn38(x) {
 
 async function fn39(x) {
 >fn39 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     foo: {
 >foo : any
+>    : ^^^
 
         var x;
 >x : any
 
         break foo;
 >foo : any
+>    : ^^^
     }
 }
 
 async function fn40(x) {
 >fn40 : (x: any) => Promise<void>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
     try {

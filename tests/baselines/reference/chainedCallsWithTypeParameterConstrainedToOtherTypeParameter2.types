@@ -1,101 +1,180 @@
-=== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts ===
+//// [tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts] ////
+
+=== chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts ===
 class Chain<T> {
 >Chain : Chain<T>
+>      : ^^^^^^^^
 
     constructor(public value: T) { }
 >value : T
+>      : ^
 
     then<S extends T>(cb: (x: T) => S): Chain<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >cb : (x: T) => S
+>   : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
         var t: T;
 >t : T
+>  : ^
 
         var s: S;
 >s : S
+>  : ^
 
         // Ok to go down the chain, but error to climb up the chain
         (new Chain(t)).then(tt => s).then(ss => t);
 >(new Chain(t)).then(tt => s).then(ss => t) : Chain<S>
->(new Chain(t)).then(tt => s).then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>                                           : ^^^^^^^^
+>(new Chain(t)).then(tt => s).then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>                                  : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(t)).then(tt => s) : Chain<S>
+>                             : ^^^^^^^^
 >(new Chain(t)).then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>                    : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >(new Chain(t)) : Chain<T>
+>               : ^^^^^^^^
 >new Chain(t) : Chain<T>
+>             : ^^^^^^^^
 >Chain : typeof Chain
+>      : ^^^^^^^^^^^^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >tt => s : (tt: T) => S
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => t : (ss: S) => T
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >t : T
+>  : ^
 
         // But error to try to climb up the chain
         (new Chain(s)).then(ss => t);
 >(new Chain(s)).then(ss => t) : Chain<S>
->(new Chain(s)).then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>                             : ^^^^^^^^
+>(new Chain(s)).then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>                    : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(s)) : Chain<S>
+>               : ^^^^^^^^
 >new Chain(s) : Chain<S>
+>             : ^^^^^^^^
 >Chain : typeof Chain
+>      : ^^^^^^^^^^^^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => t : (ss: S) => T
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >t : T
+>  : ^
 
         // Staying at T or S should be fine
         (new Chain(t)).then(tt => t).then(tt => t).then(tt => t);
 >(new Chain(t)).then(tt => t).then(tt => t).then(tt => t) : Chain<T>
+>                                                         : ^^^^^^^^
 >(new Chain(t)).then(tt => t).then(tt => t).then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>                                                : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >(new Chain(t)).then(tt => t).then(tt => t) : Chain<T>
+>                                           : ^^^^^^^^
 >(new Chain(t)).then(tt => t).then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>                                  : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >(new Chain(t)).then(tt => t) : Chain<T>
+>                             : ^^^^^^^^
 >(new Chain(t)).then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>                    : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >(new Chain(t)) : Chain<T>
+>               : ^^^^^^^^
 >new Chain(t) : Chain<T>
+>             : ^^^^^^^^
 >Chain : typeof Chain
+>      : ^^^^^^^^^^^^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >tt => t : (tt: T) => T
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >tt => t : (tt: T) => T
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >tt => t : (tt: T) => T
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >t : T
+>  : ^
 
         (new Chain(s)).then(ss => s).then(ss => s).then(ss => s);
 >(new Chain(s)).then(ss => s).then(ss => s).then(ss => s) : Chain<S>
->(new Chain(s)).then(ss => s).then(ss => s).then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>                                                         : ^^^^^^^^
+>(new Chain(s)).then(ss => s).then(ss => s).then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>                                                : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(s)).then(ss => s).then(ss => s) : Chain<S>
->(new Chain(s)).then(ss => s).then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>                                           : ^^^^^^^^
+>(new Chain(s)).then(ss => s).then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>                                  : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(s)).then(ss => s) : Chain<S>
->(new Chain(s)).then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>                             : ^^^^^^^^
+>(new Chain(s)).then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>                    : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(s)) : Chain<S>
+>               : ^^^^^^^^
 >new Chain(s) : Chain<S>
+>             : ^^^^^^^^
 >Chain : typeof Chain
+>      : ^^^^^^^^^^^^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => s : (ss: S) => S
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => s : (ss: S) => S
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => s : (ss: S) => S
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >s : S
+>  : ^
 
         return null;
     }
@@ -105,126 +184,225 @@ class Chain<T> {
 interface I {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 class Chain2<T extends I> {
 >Chain2 : Chain2<T>
+>       : ^^^^^^^^^
 
     constructor(public value: T) { }
 >value : T
+>      : ^
 
     then<S extends T>(cb: (x: T) => S): Chain2<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >cb : (x: T) => S
+>   : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
         var i: I;
 >i : I
+>  : ^
 
         var t: T;
 >t : T
+>  : ^
 
         var s: S;
 >s : S
+>  : ^
 
         // Ok to go down the chain, check the constraint at the end.
         // Should get an error that we are assigning a string to a number
         (new Chain2(i)).then(ii => t).then(tt => s).value.x = "";
 >(new Chain2(i)).then(ii => t).then(tt => s).value.x = "" : ""
+>                                                         : ^^
 >(new Chain2(i)).then(ii => t).then(tt => s).value.x : number
+>                                                    : ^^^^^^
 >(new Chain2(i)).then(ii => t).then(tt => s).value : S
+>                                                  : ^
 >(new Chain2(i)).then(ii => t).then(tt => s) : Chain2<S>
+>                                            : ^^^^^^^^^
 >(new Chain2(i)).then(ii => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>                                   : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >(new Chain2(i)).then(ii => t) : Chain2<T>
+>                              : ^^^^^^^^^
 >(new Chain2(i)).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>                     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain2(i)) : Chain2<I>
+>                : ^^^^^^^^^
 >new Chain2(i) : Chain2<I>
+>              : ^^^^^^^^^
 >Chain2 : typeof Chain2
+>       : ^^^^^^^^^^^^^
 >i : I
+>  : ^
 >then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >ii => t : (ii: I) => T
+>        : ^  ^^^^^^^^^
 >ii : I
+>   : ^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >tt => s : (tt: T) => S
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >s : S
+>  : ^
 >value : S
+>      : ^
 >x : number
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
         // Staying at T or S should keep the constraint.
         // Get an error when we assign a string to a number in both cases
         (new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value.x = "";
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value.x = "" : ""
+>                                                                                     : ^^
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value.x : number
+>                                                                                : ^^^^^^
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value : T
+>                                                                              : ^
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t) : Chain2<T>
+>                                                                        : ^^^^^^^^^
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>                                                               : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t) : Chain2<T>
+>                                                          : ^^^^^^^^^
 >(new Chain2(i)).then(ii => t).then(tt => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>                                                 : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >(new Chain2(i)).then(ii => t).then(tt => t) : Chain2<T>
+>                                            : ^^^^^^^^^
 >(new Chain2(i)).then(ii => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>                                   : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >(new Chain2(i)).then(ii => t) : Chain2<T>
+>                              : ^^^^^^^^^
 >(new Chain2(i)).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>                     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain2(i)) : Chain2<I>
+>                : ^^^^^^^^^
 >new Chain2(i) : Chain2<I>
+>              : ^^^^^^^^^
 >Chain2 : typeof Chain2
+>       : ^^^^^^^^^^^^^
 >i : I
+>  : ^
 >then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >ii => t : (ii: I) => T
+>        : ^  ^^^^^^^^^
 >ii : I
+>   : ^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >tt => t : (tt: T) => T
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >tt => t : (tt: T) => T
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >t : T
+>  : ^
 >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^         
 >tt => t : (tt: T) => T
+>        : ^  ^^^^^^^^^
 >tt : T
+>   : ^
 >t : T
+>  : ^
 >value : T
+>      : ^
 >x : number
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
         (new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x = "";
 >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x = "" : ""
+>                                                                                     : ^^
 >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x : number
+>                                                                                : ^^^^^^
 >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value : S
+>                                                                              : ^
 >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s) : Chain2<S>
->(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then : <S extends S>(cb: (x: S) => S) => Chain2<S>
+>                                                                        : ^^^^^^^^^
+>(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
+>                                                               : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s) : Chain2<S>
->(new Chain2(i)).then(ii => s).then(ss => s).then : <S extends S>(cb: (x: S) => S) => Chain2<S>
+>                                                          : ^^^^^^^^^
+>(new Chain2(i)).then(ii => s).then(ss => s).then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
+>                                                 : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain2(i)).then(ii => s).then(ss => s) : Chain2<S>
->(new Chain2(i)).then(ii => s).then : <S extends S>(cb: (x: S) => S) => Chain2<S>
+>                                            : ^^^^^^^^^
+>(new Chain2(i)).then(ii => s).then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
+>                                   : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain2(i)).then(ii => s) : Chain2<S>
+>                              : ^^^^^^^^^
 >(new Chain2(i)).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>                     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain2(i)) : Chain2<I>
+>                : ^^^^^^^^^
 >new Chain2(i) : Chain2<I>
+>              : ^^^^^^^^^
 >Chain2 : typeof Chain2
+>       : ^^^^^^^^^^^^^
 >i : I
+>  : ^
 >then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >ii => s : (ii: I) => S
+>        : ^  ^^^^^^^^^
 >ii : I
+>   : ^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain2<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => s : (ss: S) => S
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain2<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => s : (ss: S) => S
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain2<S>
+>  : ^
+>then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
+>     : ^ ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ss => s : (ss: S) => S
+>        : ^  ^^^^^^^^^
 >ss : S
+>   : ^
 >s : S
+>  : ^
 >value : S
+>      : ^
 >x : number
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
         return null;
     }

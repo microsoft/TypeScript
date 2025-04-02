@@ -1,28 +1,42 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentWithDefaultTypeParameter2.tsx] ////
+
+=== file.tsx ===
 import React = require('react')
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface MyComponentProp {
     values: string;
 >values : string
+>       : ^^^^^^
 }
 
 function MyComponent1<T extends MyComponentProp>(attr: T) {
 >MyComponent1 : <T extends MyComponentProp>(attr: T) => JSX.Element
+>             : ^ ^^^^^^^^^               ^^    ^^ ^^^^^^^^^^^^^^^^
 >attr : T
+>     : ^
 
     return <div>attr.values</div>
 ><div>attr.values</div> : JSX.Element
+>                       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 }
 
 
 // Error
 let i1 = <MyComponent1 values={5}/>;
 >i1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MyComponent1 values={5}/> : JSX.Element
+>                           : ^^^^^^^^^^^
 >MyComponent1 : <T extends MyComponentProp>(attr: T) => JSX.Element
+>             : ^ ^^^^^^^^^               ^^    ^^ ^^^^^^^^^^^^^^^^
 >values : number
+>       : ^^^^^^
 >5 : 5
+>  : ^
 

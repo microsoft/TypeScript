@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/exportDefaultExpressionComments.ts] ////
+
 //// [exportDefaultExpressionComments.ts]
 /**
  * JSDoc Comments

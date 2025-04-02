@@ -1,11 +1,13 @@
-=== tests/cases/compiler/typeGuardConstructorNarrowAny.ts ===
+//// [tests/cases/compiler/typeGuardConstructorNarrowAny.ts] ////
+
+=== typeGuardConstructorNarrowAny.ts ===
 // Narrowing any to primitives
 let var1: any;
 >var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
 
 if (var1.constructor === String) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
 
     var1; // String
 >var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))

@@ -1,0 +1,35 @@
+fileJs.js(1,1): error TS2304: Cannot find name 'a'.
+fileJs.js(1,11): error TS2304: Cannot find name 'c'.
+fileJs.js(1,11): error TS8010: Type annotations can only be used in TypeScript files.
+fileJs.js(1,17): error TS2304: Cannot find name 'd'.
+fileJs.js(1,27): error TS2304: Cannot find name 'f'.
+fileTs.ts(1,1): error TS2304: Cannot find name 'a'.
+fileTs.ts(1,11): error TS2304: Cannot find name 'c'.
+fileTs.ts(1,17): error TS2304: Cannot find name 'd'.
+fileTs.ts(1,27): error TS2304: Cannot find name 'f'.
+
+
+==== fileJs.js (5 errors) ====
+    a ? (b) : c => (d) : e => f // Not legal JS; "Unexpected token ':'" at last colon
+    ~
+!!! error TS2304: Cannot find name 'a'.
+              ~
+!!! error TS2304: Cannot find name 'c'.
+              ~
+!!! error TS8010: Type annotations can only be used in TypeScript files.
+                    ~
+!!! error TS2304: Cannot find name 'd'.
+                              ~
+!!! error TS2304: Cannot find name 'f'.
+    
+==== fileTs.ts (4 errors) ====
+    a ? (b) : c => (d) : e => f
+    ~
+!!! error TS2304: Cannot find name 'a'.
+              ~
+!!! error TS2304: Cannot find name 'c'.
+                    ~
+!!! error TS2304: Cannot find name 'd'.
+                              ~
+!!! error TS2304: Cannot find name 'f'.
+    

@@ -1,20 +1,28 @@
-=== tests/cases/compiler/wrappedIncovations2.ts ===
+//// [tests/cases/compiler/wrappedIncovations2.ts] ////
+
+=== wrappedIncovations2.ts ===
 var v = this.
 >v : any
 >this.  foo().  bar().  baz() : any
 >this.  foo().  bar().  baz : any
 >this.  foo().  bar() : any
+>                     : ^^^
 >this.  foo().  bar : any
 >this.  foo() : any
+>             : ^^^
 >this.  foo : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 
   foo().
 >foo : any
+>    : ^^^
 
   bar().
 >bar : any
+>    : ^^^
 
   baz();
 >baz : any
+>    : ^^^
 

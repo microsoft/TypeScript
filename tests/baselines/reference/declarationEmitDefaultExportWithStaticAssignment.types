@@ -1,76 +1,114 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/declarationEmitDefaultExportWithStaticAssignment.ts] ////
+
+=== foo.ts ===
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 
-=== tests/cases/compiler/index1.ts ===
+=== index1.ts ===
 import {Foo} from './foo';
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export default function Example() {}
 >Example : typeof Example
+>        : ^^^^^^^^^^^^^^
 
 Example.Foo = Foo
 >Example.Foo = Foo : typeof Foo
+>                  : ^^^^^^^^^^
 >Example.Foo : typeof Foo
+>            : ^^^^^^^^^^
 >Example : typeof Example
+>        : ^^^^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
-=== tests/cases/compiler/index2.ts ===
+=== index2.ts ===
 import {Foo} from './foo';
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export {Foo};
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export default function Example() {}
 >Example : typeof Example
+>        : ^^^^^^^^^^^^^^
 
 Example.Foo = Foo
 >Example.Foo = Foo : typeof Foo
+>                  : ^^^^^^^^^^
 >Example.Foo : typeof Foo
+>            : ^^^^^^^^^^
 >Example : typeof Example
+>        : ^^^^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
-=== tests/cases/compiler/index3.ts ===
+=== index3.ts ===
 export class Bar {}
 >Bar : Bar
+>    : ^^^
 
 export default function Example() {}
 >Example : typeof Example
+>        : ^^^^^^^^^^^^^^
 
 Example.Bar = Bar
 >Example.Bar = Bar : typeof Bar
+>                  : ^^^^^^^^^^
 >Example.Bar : typeof Bar
+>            : ^^^^^^^^^^
 >Example : typeof Example
+>        : ^^^^^^^^^^^^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
-=== tests/cases/compiler/index4.ts ===
+=== index4.ts ===
 function A() {  }
 >A : () => void
+>  : ^^^^^^^^^^
 
 function B() { }
 >B : () => void
+>  : ^^^^^^^^^^
 
 export function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
   return null;
 }
 
 C.A = A;
 >C.A = A : () => void
+>        : ^^^^^^^^^^
 >C.A : () => void
+>    : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >A : () => void
+>  : ^^^^^^^^^^
 >A : () => void
+>  : ^^^^^^^^^^
 
 C.B = B;
 >C.B = B : () => void
+>        : ^^^^^^^^^^
 >C.B : () => void
+>    : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >B : () => void
+>  : ^^^^^^^^^^
 >B : () => void
+>  : ^^^^^^^^^^
 

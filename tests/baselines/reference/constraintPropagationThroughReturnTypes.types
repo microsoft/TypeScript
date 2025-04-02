@@ -1,24 +1,37 @@
-=== tests/cases/compiler/constraintPropagationThroughReturnTypes.ts ===
+//// [tests/cases/compiler/constraintPropagationThroughReturnTypes.ts] ////
+
+=== constraintPropagationThroughReturnTypes.ts ===
 function g<T>(x: T): T {
 >g : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
   return x;
 >x : T
+>  : ^
 }
  
 function f<S extends { foo: string }>(x: S) {
 >f : <S extends { foo: string; }>(x: S) => void
+>  : ^ ^^^^^^^^^                ^^ ^^ ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >x : S
+>  : ^
 
   var y = g(x);
 >y : S
+>  : ^
 >g(x) : S
+>     : ^
 >g : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : S
+>  : ^
 
   y;
 >y : S
+>  : ^
 }
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/types/union/discriminatedUnionTypes1.ts(89,9): error TS2367: This comparison appears to be unintentional because the types '"A" | "B" | "C" | "D"' and '"X"' have no overlap.
+discriminatedUnionTypes1.ts(89,9): error TS2367: This comparison appears to be unintentional because the types '"A" | "B" | "C" | "D"' and '"X"' have no overlap.
 
 
-==== tests/cases/conformance/types/union/discriminatedUnionTypes1.ts (1 errors) ====
+==== discriminatedUnionTypes1.ts (1 errors) ====
     interface Square {
         kind: "square";
         size: number;

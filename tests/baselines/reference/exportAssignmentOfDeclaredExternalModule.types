@@ -1,36 +1,53 @@
-=== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts ===
+//// [tests/cases/compiler/exportAssignmentOfDeclaredExternalModule.ts] ////
+
+=== exportAssignmentOfDeclaredExternalModule_1.ts ===
 ///<reference path='exportAssignmentOfDeclaredExternalModule_0.ts'/>
 import Sammy = require('./exportAssignmentOfDeclaredExternalModule_0');
 >Sammy : any
+>      : ^^^
 
 var x = new Sammy(); // error to use as constructor as there is not constructor symbol
 >x : any
+>  : ^^^
 >new Sammy() : any
+>            : ^^^
 >Sammy : any
+>      : ^^^
 
 var y = Sammy(); // error to use interface name as call target
 >y : any
+>  : ^^^
 >Sammy() : any
+>        : ^^^
 >Sammy : any
+>      : ^^^
 
 var z: Sammy; // no error - z is of type interface Sammy from module 'M'
 >z : Sammy
+>  : ^^^^^
 
 var a = new z(); // constructor - no error
 >a : any
+>  : ^^^
 >new z() : any
+>        : ^^^
 >z : Sammy
+>  : ^^^^^
 
 var b = z(); // call signature - no error
 >b : number
+>  : ^^^^^^
 >z() : number
+>    : ^^^^^^
 >z : Sammy
+>  : ^^^^^
 
-=== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_0.ts ===
+=== exportAssignmentOfDeclaredExternalModule_0.ts ===
 interface Sammy {
     new (): any; // a constructor signature
         (): number; // a 0 arg call signature
     }
 export = Sammy;
 >Sammy : Sammy
+>      : ^^^^^
 

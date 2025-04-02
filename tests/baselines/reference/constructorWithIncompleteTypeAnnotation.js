@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts] ////
+
 //// [constructorWithIncompleteTypeAnnotation.ts]
 declare module "fs" {
     export class File {

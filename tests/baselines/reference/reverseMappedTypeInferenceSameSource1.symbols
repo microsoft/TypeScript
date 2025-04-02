@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/reverseMappedTypeInferenceSameSource1.ts] ////
+
+=== reverseMappedTypeInferenceSameSource1.ts ===
+type Action<T extends string = string> = {
+>Action : Symbol(Action, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 12))
+
+  type: T;
+>type : Symbol(type, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 42))
+>T : Symbol(T, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 12))
+
+};
+interface UnknownAction extends Action {
+>UnknownAction : Symbol(UnknownAction, Decl(reverseMappedTypeInferenceSameSource1.ts, 2, 2))
+>Action : Symbol(Action, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 0))
+
+  [extraProps: string]: unknown;
+>extraProps : Symbol(extraProps, Decl(reverseMappedTypeInferenceSameSource1.ts, 4, 3))
+}
+type Reducer<S = any, A extends Action = UnknownAction> = (
+>Reducer : Symbol(Reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 5, 1))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 6, 13))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 6, 21))
+>Action : Symbol(Action, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 0))
+>UnknownAction : Symbol(UnknownAction, Decl(reverseMappedTypeInferenceSameSource1.ts, 2, 2))
+
+  state: S | undefined,
+>state : Symbol(state, Decl(reverseMappedTypeInferenceSameSource1.ts, 6, 59))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 6, 13))
+
+  action: A,
+>action : Symbol(action, Decl(reverseMappedTypeInferenceSameSource1.ts, 7, 23))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 6, 21))
+
+) => S;
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 6, 13))
+
+type ReducersMapObject<S = any, A extends Action = UnknownAction> = {
+>ReducersMapObject : Symbol(ReducersMapObject, Decl(reverseMappedTypeInferenceSameSource1.ts, 9, 7))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 11, 23))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 11, 31))
+>Action : Symbol(Action, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 0))
+>UnknownAction : Symbol(UnknownAction, Decl(reverseMappedTypeInferenceSameSource1.ts, 2, 2))
+
+  [K in keyof S]: Reducer<S[K], A>;
+>K : Symbol(K, Decl(reverseMappedTypeInferenceSameSource1.ts, 12, 3))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 11, 23))
+>Reducer : Symbol(Reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 5, 1))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 11, 23))
+>K : Symbol(K, Decl(reverseMappedTypeInferenceSameSource1.ts, 12, 3))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 11, 31))
+
+};
+
+interface ConfigureStoreOptions<S = any, A extends Action = UnknownAction> {
+>ConfigureStoreOptions : Symbol(ConfigureStoreOptions, Decl(reverseMappedTypeInferenceSameSource1.ts, 13, 2))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 15, 32))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 15, 40))
+>Action : Symbol(Action, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 0))
+>UnknownAction : Symbol(UnknownAction, Decl(reverseMappedTypeInferenceSameSource1.ts, 2, 2))
+
+  reducer: Reducer<S, A> | ReducersMapObject<S, A>;
+>reducer : Symbol(ConfigureStoreOptions.reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 15, 76))
+>Reducer : Symbol(Reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 5, 1))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 15, 32))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 15, 40))
+>ReducersMapObject : Symbol(ReducersMapObject, Decl(reverseMappedTypeInferenceSameSource1.ts, 9, 7))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 15, 32))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 15, 40))
+}
+
+declare function configureStore<S = any, A extends Action = UnknownAction>(
+>configureStore : Symbol(configureStore, Decl(reverseMappedTypeInferenceSameSource1.ts, 17, 1))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 19, 32))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 19, 40))
+>Action : Symbol(Action, Decl(reverseMappedTypeInferenceSameSource1.ts, 0, 0))
+>UnknownAction : Symbol(UnknownAction, Decl(reverseMappedTypeInferenceSameSource1.ts, 2, 2))
+
+  options: ConfigureStoreOptions<S, A>,
+>options : Symbol(options, Decl(reverseMappedTypeInferenceSameSource1.ts, 19, 75))
+>ConfigureStoreOptions : Symbol(ConfigureStoreOptions, Decl(reverseMappedTypeInferenceSameSource1.ts, 13, 2))
+>S : Symbol(S, Decl(reverseMappedTypeInferenceSameSource1.ts, 19, 32))
+>A : Symbol(A, Decl(reverseMappedTypeInferenceSameSource1.ts, 19, 40))
+
+): void;
+
+{
+  const reducer: Reducer<number> = () => 0;
+>reducer : Symbol(reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 24, 7))
+>Reducer : Symbol(Reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 5, 1))
+
+  const store1 = configureStore({ reducer });
+>store1 : Symbol(store1, Decl(reverseMappedTypeInferenceSameSource1.ts, 25, 7))
+>configureStore : Symbol(configureStore, Decl(reverseMappedTypeInferenceSameSource1.ts, 17, 1))
+>reducer : Symbol(reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 25, 33))
+}
+
+const counterReducer1: Reducer<number> = () => 0;
+>counterReducer1 : Symbol(counterReducer1, Decl(reverseMappedTypeInferenceSameSource1.ts, 28, 5))
+>Reducer : Symbol(Reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 5, 1))
+
+const store2 = configureStore({
+>store2 : Symbol(store2, Decl(reverseMappedTypeInferenceSameSource1.ts, 30, 5))
+>configureStore : Symbol(configureStore, Decl(reverseMappedTypeInferenceSameSource1.ts, 17, 1))
+
+  reducer: {
+>reducer : Symbol(reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 30, 31))
+
+    counter1: counterReducer1,
+>counter1 : Symbol(counter1, Decl(reverseMappedTypeInferenceSameSource1.ts, 31, 12))
+>counterReducer1 : Symbol(counterReducer1, Decl(reverseMappedTypeInferenceSameSource1.ts, 28, 5))
+
+  },
+});
+
+export {}
+

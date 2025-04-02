@@ -1,18 +1,27 @@
-=== tests/cases/compiler/typeInferenceReturnTypeCallback.ts ===
+//// [tests/cases/compiler/typeInferenceReturnTypeCallback.ts] ////
+
+=== typeInferenceReturnTypeCallback.ts ===
 interface IList<A> {
     map<B>(f: (t: A) => B): IList<B>;
 >map : <B>(f: (t: A) => B) => IList<B>
+>    : ^ ^^ ^^           ^^^^^        
 >f : (t: A) => B
+>  : ^ ^^ ^^^^^ 
 >t : A
+>  : ^
 }
 
 class Nil<C> implements IList<C>{
 >Nil : Nil<C>
+>    : ^^^^^^
 
     map<D>(f: (t: C) => D): IList<D> {
 >map : <D>(f: (t: C) => D) => IList<D>
+>    : ^ ^^ ^^           ^^^^^        
 >f : (t: C) => D
+>  : ^ ^^ ^^^^^ 
 >t : C
+>  : ^
 
         return null;
     }
@@ -20,36 +29,56 @@ class Nil<C> implements IList<C>{
 
 class Cons<T> implements IList<T>{
 >Cons : Cons<T>
+>     : ^^^^^^^
 
     map<U>(f: (t: T) => U): IList<U> {
 >map : <U>(f: (t: T) => U) => IList<U>
+>    : ^ ^^ ^^           ^^^^^        
 >f : (t: T) => U
+>  : ^ ^^ ^^^^^ 
 >t : T
+>  : ^
 
         return this.foldRight(new Nil<U>(), (t, acc) => {
 >this.foldRight(new Nil<U>(), (t, acc) => {            return new Cons<U>();        }) : Nil<U>
+>                                                                                      : ^^^^^^
 >this.foldRight : <E>(z: E, f: (t: T, acc: E) => E) => E
+>               : ^ ^^ ^^ ^^ ^^                   ^^^^^ 
 >this : this
+>     : ^^^^
 >foldRight : <E>(z: E, f: (t: T, acc: E) => E) => E
+>          : ^ ^^ ^^ ^^ ^^                   ^^^^^ 
 >new Nil<U>() : Nil<U>
+>             : ^^^^^^
 >Nil : typeof Nil
+>    : ^^^^^^^^^^
 >(t, acc) => {            return new Cons<U>();        } : (t: T, acc: Nil<U>) => Cons<U>
+>                                                        : ^ ^^^^^   ^^^^^^^^^^^^^^^^^^^^
 >t : T
+>  : ^
 >acc : Nil<U>
+>    : ^^^^^^
 
             return new Cons<U>();
 >new Cons<U>() : Cons<U>
+>              : ^^^^^^^
 >Cons : typeof Cons
+>     : ^^^^^^^^^^^
 
         });
     }
 
     foldRight<E>(z: E, f: (t: T, acc: E) => E): E {
 >foldRight : <E>(z: E, f: (t: T, acc: E) => E) => E
+>          : ^ ^^ ^^ ^^ ^^                   ^^^^^ 
 >z : E
+>  : ^
 >f : (t: T, acc: E) => E
+>  : ^ ^^ ^^   ^^ ^^^^^ 
 >t : T
+>  : ^
 >acc : E
+>    : ^
 
         return null;
     }

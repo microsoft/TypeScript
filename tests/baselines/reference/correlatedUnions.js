@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
 //// [correlatedUnions.ts]
 // Various repros from #30581
 
@@ -526,12 +528,12 @@ declare function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]
 declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
 declare const clickEvent: {
     readonly name: "click";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: MouseEvent) => void;
 };
 declare const scrollEvent: {
     readonly name: "scroll";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: Event) => void;
 };
 declare function ff1(): void;
@@ -600,7 +602,7 @@ type SameKeys<T> = {
     };
 };
 type MappedFromOriginal = SameKeys<Original>;
-declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
+declare const getStringAndNumberFromOriginalAndMapped: <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
 interface Config {
     string: string;
     number: number;

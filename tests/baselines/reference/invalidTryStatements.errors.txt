@@ -1,13 +1,13 @@
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(2,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(6,12): error TS1472: 'catch' or 'finally' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(11,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(15,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(17,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(19,20): error TS1003: Identifier expected.
+invalidTryStatements.ts(2,5): error TS1005: 'try' expected.
+invalidTryStatements.ts(6,12): error TS1472: 'catch' or 'finally' expected.
+invalidTryStatements.ts(10,5): error TS1005: 'try' expected.
+invalidTryStatements.ts(11,5): error TS1005: 'try' expected.
+invalidTryStatements.ts(15,5): error TS1005: 'try' expected.
+invalidTryStatements.ts(17,5): error TS1005: 'try' expected.
+invalidTryStatements.ts(19,20): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts (7 errors) ====
+==== invalidTryStatements.ts (7 errors) ====
     function fn() {
         catch(x) { } // error missing try
         ~~~~~

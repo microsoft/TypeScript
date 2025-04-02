@@ -1,283 +1,430 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts] ////
+
+=== privateNameInInExpression.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     #field = 1;
 >#field : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     static #staticField = 2;
 >#staticField : number
+>             : ^^^^^^
 >2 : 2
+>  : ^
 
     #method() {}
 >#method : () => void
+>        : ^^^^^^^^^^
 
     static #staticMethod() {}
 >#staticMethod : () => void
+>              : ^^^^^^^^^^
 
     goodRhs(v: any) {
 >goodRhs : (v: any) => void
+>        : ^ ^^   ^^^^^^^^^
 >v : any
+>  : ^^^
 
         const a = #field in v;
 >a : boolean
+>  : ^^^^^^^
 >#field in v : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >v : any
+>  : ^^^
 
         const b = #field in v.p1.p2;
 >b : boolean
+>  : ^^^^^^^
 >#field in v.p1.p2 : boolean
+>                  : ^^^^^^^
 >#field : any
+>       : ^^^
 >v.p1.p2 : any
+>        : ^^^
 >v.p1 : any
+>     : ^^^
 >v : any
+>  : ^^^
 >p1 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 
         const c = #field in (v as {});
 >c : boolean
+>  : ^^^^^^^
 >#field in (v as {}) : boolean
+>                    : ^^^^^^^
 >#field : any
+>       : ^^^
 >(v as {}) : {}
+>          : ^^
 >v as {} : {}
+>        : ^^
 >v : any
+>  : ^^^
 
         const d = #field in (v as Foo);
 >d : boolean
+>  : ^^^^^^^
 >#field in (v as Foo) : boolean
+>                     : ^^^^^^^
 >#field : any
+>       : ^^^
 >(v as Foo) : Foo
+>           : ^^^
 >v as Foo : Foo
+>         : ^^^
 >v : any
+>  : ^^^
 
         const e = #field in (v as never);
 >e : boolean
+>  : ^^^^^^^
 >#field in (v as never) : boolean
+>                       : ^^^^^^^
 >#field : any
+>       : ^^^
 >(v as never) : never
+>             : ^^^^^
 >v as never : never
+>           : ^^^^^
 >v : any
+>  : ^^^
 
         for (let f in #field in v as any) { /**/ } // unlikely but valid
 >f : string
+>  : ^^^^^^
 >#field in v as any : any
+>                   : ^^^
 >#field in v : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >v : any
+>  : ^^^
     }
     badRhs(v: any) {
 >badRhs : (v: any) => void
+>       : ^ ^^   ^^^^^^^^^
 >v : any
+>  : ^^^
 
         const a = #field in (v as unknown); // Bad - RHS of in must be object type or any
 >a : boolean
+>  : ^^^^^^^
 >#field in (v as unknown) : boolean
+>                         : ^^^^^^^
 >#field : any
+>       : ^^^
 >(v as unknown) : unknown
+>               : ^^^^^^^
 >v as unknown : unknown
+>             : ^^^^^^^
 >v : any
+>  : ^^^
 
         const b = #fiel in v; // Bad - typo in privateID
 >b : boolean
+>  : ^^^^^^^
 >#fiel in v : boolean
+>           : ^^^^^^^
 >#fiel : any
+>      : ^^^
 >v : any
+>  : ^^^
 
         const c = (#field) in v; // Bad - privateID is not an expression on its own
 >c : boolean
+>  : ^^^^^^^
 >(#field) in v : boolean
+>              : ^^^^^^^
 >(#field) : any
+>         : ^^^
 >v : any
+>  : ^^^
 
         for (#field in v) { /**/ } // Bad - 'in' not allowed
 >v : any
+>  : ^^^
 
         for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
 >d : string
+>  : ^^^^^^
 >#field in v : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >v : any
+>  : ^^^
     }
     whitespace(v: any) {
 >whitespace : (v: any) => void
+>           : ^ ^^   ^^^^^^^^^
 >v : any
+>  : ^^^
 
         const a = v && /*0*/#field/*1*/
 >a : any
+>  : ^^^
 >v && /*0*/#field/*1*/            /*2*/in/*3*/                /*4*/v : any
+>                                                                    : ^^^
 >v : any
+>  : ^^^
 >#field/*1*/            /*2*/in/*3*/                /*4*/v : boolean
+>                                                          : ^^^^^^^
 >#field : any
+>       : ^^^
 
             /*2*/in/*3*/
                 /*4*/v/*5*/
 >v : any
+>  : ^^^
     }
     flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
 >flow : (u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) => void
+>     : ^ ^^       ^^ ^^     ^^  ^^         ^^  ^^      ^^ ^^   ^^   ^^            ^^    ^^                  ^^^^^^^^^
 >u : unknown
+>  : ^^^^^^^
 >n : never
+>  : ^^^^^
 >fb : Foo | Bar
+>   : ^^^^^^^^^
 >fs : FooSub
+>   : ^^^^^^
 >b : Bar
+>  : ^^^
 >fsb : Bar | FooSub
+>    : ^^^^^^^^^^^^
 >fsfb : Foo | Bar | FooSub
+>     : ^^^^^^^^^^^^^^^^^^
 
         if (typeof u === 'object') {
 >typeof u === 'object' : boolean
+>                      : ^^^^^^^
 >typeof u : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >u : unknown
+>  : ^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
             if (#field in n) {
 >#field in n : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >n : never
+>  : ^^^^^
 
                 n; // good n is never
 >n : never
+>  : ^^^^^
             }
 
             if (#field in u) {
 >#field in u : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >u : object | null
+>  : ^^^^^^^^^^^^^
 
                 u; // good u is Foo
 >u : Foo
+>  : ^^^
 
             } else {
                 u; // good u is object | null
 >u : object | null
+>  : ^^^^^^^^^^^^^
             }
 
             if (u !== null) {
 >u !== null : boolean
+>           : ^^^^^^^
 >u : object | null
+>  : ^^^^^^^^^^^^^
 
                 if (#field in u) {
 >#field in u : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >u : object
+>  : ^^^^^^
 
                     u; // good u is Foo
 >u : Foo
+>  : ^^^
 
                 } else {
                     u; // good u is object
 >u : object
+>  : ^^^^^^
                 }
 
                 if (#method in u) {
 >#method in u : boolean
+>             : ^^^^^^^
 >#method : any
+>        : ^^^
 >u : object
+>  : ^^^^^^
 
                     u; // good u is Foo
 >u : Foo
+>  : ^^^
                 }
 
                 if (#staticField in u) {
 >#staticField in u : boolean
+>                  : ^^^^^^^
 >#staticField : any
+>             : ^^^
 >u : object
+>  : ^^^^^^
 
                     u; // good u is typeof Foo
 >u : typeof Foo
+>  : ^^^^^^^^^^
                 }
 
                 if (#staticMethod in u) {
 >#staticMethod in u : boolean
+>                   : ^^^^^^^
 >#staticMethod : any
+>              : ^^^
 >u : object
+>  : ^^^^^^
 
                     u; // good u is typeof Foo
 >u : typeof Foo
+>  : ^^^^^^^^^^
                 }
             }
         }
 
         if (#field in fb) {
 >#field in fb : boolean
+>             : ^^^^^^^
 >#field : any
+>       : ^^^
 >fb : Foo | Bar
+>   : ^^^^^^^^^
 
             fb; // good fb is Foo
 >fb : Foo
+>   : ^^^
 
         } else {
             fb; // good fb is Bar
 >fb : Bar
+>   : ^^^
         }
 
         if (#field in fs) {
 >#field in fs : boolean
+>             : ^^^^^^^
 >#field : any
+>       : ^^^
 >fs : FooSub
+>   : ^^^^^^
 
             fs; // good fs is FooSub
 >fs : FooSub
+>   : ^^^^^^
 
         } else {
             fs; // good fs is never
 >fs : never
+>   : ^^^^^
         }
 
         if (#field in b) {
 >#field in b : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >b : Bar
+>  : ^^^
 
             b; // good b is 'Bar & Foo'
 >b : Bar & Foo
+>  : ^^^^^^^^^
 
         } else {
             b; // good b is Bar
 >b : Bar
+>  : ^^^
         }
 
         if (#field in fsb) {
 >#field in fsb : boolean
+>              : ^^^^^^^
 >#field : any
+>       : ^^^
 >fsb : Bar | FooSub
+>    : ^^^^^^^^^^^^
 
             fsb; // good fsb is FooSub
 >fsb : FooSub
+>    : ^^^^^^
 
         } else {
             fsb; // good fsb is Bar
 >fsb : Bar
+>    : ^^^
         }
 
         if (#field in fsfb) {
 >#field in fsfb : boolean
+>               : ^^^^^^^
 >#field : any
+>       : ^^^
 >fsfb : Foo | Bar | FooSub
+>     : ^^^^^^^^^^^^^^^^^^
 
             fsfb; // good fsfb is 'Foo | FooSub'
 >fsfb : Foo | FooSub
+>     : ^^^^^^^^^^^^
 
         } else {
             fsfb; // good fsfb is Bar
 >fsfb : Bar
+>     : ^^^
         }
 
         class Nested {
 >Nested : Nested
+>       : ^^^^^^
 
             m(v: any) {
 >m : (v: any) => void
+>  : ^ ^^   ^^^^^^^^^
 >v : any
+>  : ^^^
 
                 if (#field in v) {
 >#field in v : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >v : any
+>  : ^^^
 
                     v; // good v is Foo
 >v : Foo
+>  : ^^^
                 }
             }
         }
@@ -286,22 +433,34 @@ class Foo {
 
 class FooSub extends Foo { subTypeOfFoo = true }
 >FooSub : FooSub
+>       : ^^^^^^
 >Foo : Foo
+>    : ^^^
 >subTypeOfFoo : boolean
+>             : ^^^^^^^
 >true : true
+>     : ^^^^
 
 class Bar { notFoo = true }
 >Bar : Bar
+>    : ^^^
 >notFoo : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
 function badSyntax(v: Foo) {
 >badSyntax : (v: Foo) => boolean
+>          : ^ ^^   ^^^^^^^^^^^^
 >v : Foo
+>  : ^^^
 
     return #field in v; // Bad - outside of class
 >#field in v : boolean
+>            : ^^^^^^^
 >#field : any
+>       : ^^^
 >v : Foo
+>  : ^^^
 }
 

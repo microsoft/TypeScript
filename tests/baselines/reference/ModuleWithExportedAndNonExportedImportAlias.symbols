@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts] ////
+
+=== ModuleWithExportedAndNonExportedImportAlias.ts ===
 module A {
 >A : Symbol(A, Decl(ModuleWithExportedAndNonExportedImportAlias.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofUsedBeforeBlockScoped.ts] ////
+
 //// [typeofUsedBeforeBlockScoped.ts]
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
 class C {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts ===
+//// [tests/cases/compiler/unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts] ////
+
+=== unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts ===
 interface IStringDictionary<V> {
 >IStringDictionary : Symbol(IStringDictionary, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 0, 0))
 >V : Symbol(V, Decl(unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts, 0, 28))

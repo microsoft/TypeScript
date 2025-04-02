@@ -1,284 +1,401 @@
-=== tests/cases/compiler/tryCatchFinallyControlFlow.ts ===
+//// [tests/cases/compiler/tryCatchFinallyControlFlow.ts] ////
+
+=== tryCatchFinallyControlFlow.ts ===
 // Repro from #34797
 
 function f1() {
 >f1 : () => number
+>   : ^^^^^^^^^^^^
 
     let a: number | null = null;
 >a : number | null
+>  : ^^^^^^^^^^^^^
 
     try {
         a = 123;
 >a = 123 : 123
+>        : ^^^
 >a : number | null
+>  : ^^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
         return a;
 >a : number
+>  : ^^^^^^
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         throw e;
 >e : unknown
+>  : ^^^^^^^
     }
     finally {
         if (a != null && a.toFixed(0) == "123") { 
 >a != null && a.toFixed(0) == "123" : boolean
+>                                   : ^^^^^^^
 >a != null : boolean
+>          : ^^^^^^^
 >a : number | null
+>  : ^^^^^^^^^^^^^
 >a.toFixed(0) == "123" : boolean
+>                      : ^^^^^^^
 >a.toFixed(0) : string
->a.toFixed : (fractionDigits?: number | undefined) => string
+>             : ^^^^^^
+>a.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >a : number
->toFixed : (fractionDigits?: number | undefined) => string
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 >0 : 0
+>  : ^
 >"123" : "123"
+>      : ^^^^^
         }
     }
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
         throw e;
 >e : unknown
+>  : ^^^^^^^
     }
     finally {
         x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
     }
     x;  // 1
 >x : 1
+>  : ^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
         return;
     }
     finally {
         x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
     }
     x;  // 1
 >x : 1
+>  : ^
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
     }
     finally {
         x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
     }
     x;  // 1 | 2
 >x : 1 | 2
+>  : ^^^^^
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         return;
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
     }
     finally {
         x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
     }
     x;  // 2
 >x : 2
+>  : ^
 }
 
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
         return;
     }
     finally {
         x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
     }
     x;  // 1
 >x : 1
+>  : ^
 }
 
 function f7() {
 >f7 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         return;
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
         return;
     }
     finally {
         x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
     }
     x;  // Unreachable
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 }
 
 function f8() {
 >f8 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 = 0;
 >x : 0 | 1
+>  : ^^^^^
 >0 : 0
+>  : ^
 
     (() => {
 >(() => {        try {            x = 1;            return;        }        finally {            x;  // 0 | 1        }        x;  // Unreachable    })() : void
+>                                                                                                                                                        : ^^^^
 >(() => {        try {            x = 1;            return;        }        finally {            x;  // 0 | 1        }        x;  // Unreachable    }) : () => void
+>                                                                                                                                                      : ^^^^^^^^^^
 >() => {        try {            x = 1;            return;        }        finally {            x;  // 0 | 1        }        x;  // Unreachable    } : () => void
+>                                                                                                                                                    : ^^^^^^^^^^
 
         try {
             x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1
+>  : ^^^^^
 >1 : 1
+>  : ^
 
             return;
         }
         finally {
             x;  // 0 | 1
 >x : 0 | 1
+>  : ^^^^^
         }
         x;  // Unreachable
 >x : 0 | 1
+>  : ^^^^^
 
     })();
     x;  // 1
 >x : 1
+>  : ^
 }
 
 function f9() {
 >f9 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 = 0;
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 >0 : 0
+>  : ^
 
     (() => {
 >(() => {        try {            if (!!true) {                x = 1;                return;            }        }        finally {            x;  // 0 | 1        }        x;  // 0        x = 2;    })() : void
+>                                                                                                                                                                                                          : ^^^^
 >(() => {        try {            if (!!true) {                x = 1;                return;            }        }        finally {            x;  // 0 | 1        }        x;  // 0        x = 2;    }) : () => void
+>                                                                                                                                                                                                        : ^^^^^^^^^^
 >() => {        try {            if (!!true) {                x = 1;                return;            }        }        finally {            x;  // 0 | 1        }        x;  // 0        x = 2;    } : () => void
+>                                                                                                                                                                                                      : ^^^^^^^^^^
 
         try {
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 >1 : 1
+>  : ^
 
                 return;
             }
@@ -286,258 +403,372 @@ function f9() {
         finally {
             x;  // 0 | 1
 >x : 0 | 1
+>  : ^^^^^
         }
         x;  // 0
 >x : 0
+>  : ^
 
         x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 >2 : 2
+>  : ^
 
     })();
     x;  // 1 | 2
 >x : 1 | 2
+>  : ^^^^^
 }
 
 function f10() {
 >f10 : () => void
+>    : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     (() => {
 >(() => {        try {            x = 1;            return;        }        catch (e) {            x = 2;        }        finally {            x;  // 0 | 1 | 2        }        x;  // 2        x = 3;    })() : void
+>                                                                                                                                                                                                              : ^^^^
 >(() => {        try {            x = 1;            return;        }        catch (e) {            x = 2;        }        finally {            x;  // 0 | 1 | 2        }        x;  // 2        x = 3;    }) : () => void
+>                                                                                                                                                                                                            : ^^^^^^^^^^
 >() => {        try {            x = 1;            return;        }        catch (e) {            x = 2;        }        finally {            x;  // 0 | 1 | 2        }        x;  // 2        x = 3;    } : () => void
+>                                                                                                                                                                                                          : ^^^^^^^^^^
 
         try {
             x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
             return;
         }
         catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
             x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
         }
         finally {
             x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
         }
         x;  // 2
 >x : 2
+>  : ^
 
         x = 3;
 >x = 3 : 3
+>      : ^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
     })();
     x;  // 1 | 3
 >x : 1 | 3
+>  : ^^^^^
 }
 
 function f11() {
 >f11 : () => void
+>    : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 | 4 | 5 = 0;
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     (() => {
 >(() => {        try {            if (!!true) {                x = 1;                return;            }            if (!!true) {                x = 2;                throw 0;            }        }        catch (e) {            x;  // 0 | 1 | 2            x = 3;        }        finally {            x;  // 0 | 1 | 2 | 3            if (!!true) {                x = 4;            }        }        x;  // 0 | 3 | 4        x = 5;    })() : void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                    : ^^^^
 >(() => {        try {            if (!!true) {                x = 1;                return;            }            if (!!true) {                x = 2;                throw 0;            }        }        catch (e) {            x;  // 0 | 1 | 2            x = 3;        }        finally {            x;  // 0 | 1 | 2 | 3            if (!!true) {                x = 4;            }        }        x;  // 0 | 3 | 4        x = 5;    }) : () => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^
 >() => {        try {            if (!!true) {                x = 1;                return;            }            if (!!true) {                x = 2;                throw 0;            }        }        catch (e) {            x;  // 0 | 1 | 2            x = 3;        }        finally {            x;  // 0 | 1 | 2 | 3            if (!!true) {                x = 4;            }        }        x;  // 0 | 3 | 4        x = 5;    } : () => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^
 
         try {
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
                 return;
             }
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
                 throw 0;
 >0 : 0
+>  : ^
             }
         }
         catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
             x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 
             x = 3;
 >x = 3 : 3
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
         }
         finally {
             x;  // 0 | 1 | 2 | 3
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 4;
 >x = 4 : 4
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
             }
         }
         x;  // 0 | 3 | 4
 >x : 0 | 3 | 4
+>  : ^^^^^^^^^
 
         x = 5;
 >x = 5 : 5
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
     })();
     x;  // 1 | 4 | 5
 >x : 1 | 4 | 5
+>  : ^^^^^^^^^
 }
 
 function f12() {
 >f12 : () => void
+>    : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 = 0;
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     (() => {
 >(() => {        try {            if (!!true) {                x = 1;                return;            }            if (!!true) {                x = 2;                throw 0;            }        }        catch (e) {            x;  // 0 | 1 | 2            x = 3;        }        finally {            x;  // 0 | 1 | 2 | 3            if (!!true) {                x = 4;                return;            }            if (!!true) {                x = 5;                return;            }            x = 6;            return;            x; // unreachable        }        x; // unreachable        x = 7; // no effect    })() : void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^^
 >(() => {        try {            if (!!true) {                x = 1;                return;            }            if (!!true) {                x = 2;                throw 0;            }        }        catch (e) {            x;  // 0 | 1 | 2            x = 3;        }        finally {            x;  // 0 | 1 | 2 | 3            if (!!true) {                x = 4;                return;            }            if (!!true) {                x = 5;                return;            }            x = 6;            return;            x; // unreachable        }        x; // unreachable        x = 7; // no effect    }) : () => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^
 >() => {        try {            if (!!true) {                x = 1;                return;            }            if (!!true) {                x = 2;                throw 0;            }        }        catch (e) {            x;  // 0 | 1 | 2            x = 3;        }        finally {            x;  // 0 | 1 | 2 | 3            if (!!true) {                x = 4;                return;            }            if (!!true) {                x = 5;                return;            }            x = 6;            return;            x; // unreachable        }        x; // unreachable        x = 7; // no effect    } : () => void
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^
 
         try {
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
                 return;
             }
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
                 throw 0;
 >0 : 0
+>  : ^
             }
         }
         catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
             x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
+>  : ^^^^^^^^^
 
             x = 3;
 >x = 3 : 3
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
         }
         finally {
             x;  // 0 | 1 | 2 | 3
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 4;
 >x = 4 : 4
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
 
                 return;
             }
             if (!!true) {
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
                 x = 5;
 >x = 5 : 5
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
                 return;
             }
             x = 6;
 >x = 6 : 6
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >6 : 6
+>  : ^
 
             return;
             x; // unreachable
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
         x; // unreachable
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x = 7; // no effect
 >x = 7 : 7
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >7 : 7
+>  : ^
 
     })();
     x;  // 4 | 5 | 6
 >x : 4 | 5 | 6
+>  : ^^^^^^^^^
 }
 
 // Repro from #35644
 
 const main = () => {
 >main : () => void
+>     : ^^^^^^^^^^
 >() => {    let hoge: string | undefined = undefined;    try {        hoge = 'hoge!';        return;    }    catch {        return;    }    finally {        if (hoge) {            hoge.length;        }        return;    }} : () => void
+>                                                                                                                                                                                                                              : ^^^^^^^^^^
 
     let hoge: string | undefined = undefined;
 >hoge : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     try {
         hoge = 'hoge!';
 >hoge = 'hoge!' : "hoge!"
+>               : ^^^^^^^
 >hoge : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >'hoge!' : "hoge!"
+>        : ^^^^^^^
 
         return;
     }
@@ -547,11 +778,15 @@ const main = () => {
     finally {
         if (hoge) {
 >hoge : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
             hoge.length;
 >hoge.length : number
+>            : ^^^^^^
 >hoge : string
+>     : ^^^^^^
 >length : number
+>       : ^^^^^^
         }
         return;
     }
@@ -561,215 +796,327 @@ const main = () => {
 
 function t1() {
 >t1 : () => void
+>   : ^^^^^^^^^^
 
     const x = (() => {
 >x : "x" | null
+>  : ^^^^^^^^^^
 >(() => {        try {            return 'x';        }        catch (e) {            return null;        }        x;  // Unreachable    })() : "x" | null
+>                                                                                                                                            : ^^^^^^^^^^
 >(() => {        try {            return 'x';        }        catch (e) {            return null;        }        x;  // Unreachable    }) : () => "x" | null
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^
 >() => {        try {            return 'x';        }        catch (e) {            return null;        }        x;  // Unreachable    } : () => "x" | null
+>                                                                                                                                        : ^^^^^^^^^^^^^^^^
 
         try {
             return 'x';
 >'x' : "x"
+>    : ^^^
         }
         catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
             return null;
         }
         x;  // Unreachable
 >x : "x" | null
+>  : ^^^^^^^^^^
 
     })();
     x;  // Reachable
 >x : "x" | null
+>  : ^^^^^^^^^^
 }
 
 // Repro from #39043
 
 type State = { tag: "one" } | { tag: "two" } | { tag: "three" };
->State : { tag: "one"; } | { tag: "two"; } | { tag: "three"; }
+>State : State
+>      : ^^^^^
 >tag : "one"
+>    : ^^^^^
 >tag : "two"
+>    : ^^^^^
 >tag : "three"
+>    : ^^^^^^^
 
 function notallowed(arg: number) {
 >notallowed : (arg: number) => void
+>           : ^   ^^      ^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 
     let state: State = { tag: "one" };
 >state : State
+>      : ^^^^^
 >{ tag: "one" } : { tag: "one"; }
+>               : ^^^^^^^^^^^^^^^
 >tag : "one"
+>    : ^^^^^
 >"one" : "one"
+>      : ^^^^^
 
     try {
         state = { tag: "two" };
 >state = { tag: "two" } : { tag: "two"; }
+>                       : ^^^^^^^^^^^^^^^
 >state : State
+>      : ^^^^^
 >{ tag: "two" } : { tag: "two"; }
+>               : ^^^^^^^^^^^^^^^
 >tag : "two"
+>    : ^^^^^
 >"two" : "two"
+>      : ^^^^^
 
         try {
             state = { tag: "three" };
 >state = { tag: "three" } : { tag: "three"; }
+>                         : ^^^^^^^^^^^^^^^^^
 >state : State
+>      : ^^^^^
 >{ tag: "three" } : { tag: "three"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >tag : "three"
+>    : ^^^^^^^
 >"three" : "three"
+>        : ^^^^^^^
         }
         finally { }
     }
     catch (err) {
 >err : unknown
+>    : ^^^^^^^
 
         state.tag;
 >state.tag : "one" | "two" | "three"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
+>      : ^^^^^
 >tag : "one" | "two" | "three"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 
         if (state.tag !== "one" && state.tag !== "two") {
 >state.tag !== "one" && state.tag !== "two" : boolean
+>                                           : ^^^^^^^
 >state.tag !== "one" : boolean
+>                    : ^^^^^^^
 >state.tag : "one" | "two" | "three"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
+>      : ^^^^^
 >tag : "one" | "two" | "three"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >"one" : "one"
+>      : ^^^^^
 >state.tag !== "two" : boolean
+>                    : ^^^^^^^
 >state.tag : "two" | "three"
+>          : ^^^^^^^^^^^^^^^
 >state : { tag: "two"; } | { tag: "three"; }
+>      : ^^^^^^^     ^^^^^^^^^^^^^       ^^^
 >tag : "two" | "three"
+>    : ^^^^^^^^^^^^^^^
 >"two" : "two"
+>      : ^^^^^
 
             console.log(state.tag);
 >console.log(state.tag) : void
+>                       : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >state.tag : "three"
+>          : ^^^^^^^
 >state : { tag: "three"; }
+>      : ^^^^^^^       ^^^
 >tag : "three"
+>    : ^^^^^^^
         }
     }
 }
 
 function f20() {
 >f20 : () => void
+>    : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 0;
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         try {
             x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
             try {
                 x = 3;
 >x = 3 : 3
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
             }
             finally {
                 if (!!true) x = 4;
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >x = 4 : 4
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
             }
             x;  // 3 | 4
 >x : 3 | 4
+>  : ^^^^^
         }
         finally {
             if (!!true) x = 5;
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >x = 5 : 5
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
         }
         x;  // 3 | 4 | 5
 >x : 3 | 4 | 5
+>  : ^^^^^^^^^
     }
     finally {
         if (!!true) x = 6;
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >x = 6 : 6
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >6 : 6
+>  : ^
     }
     x;  // 3 | 4 | 5 | 6
 >x : 3 | 4 | 5 | 6
+>  : ^^^^^^^^^^^^^
 }
 
 function f21() {
 >f21 : () => void
+>    : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 | 4 | 5 = 0;
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     try {
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         try {
             x = 2;
 >x = 2 : 2
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
             try {
                 x = 3;
 >x = 3 : 3
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
             }
             finally {
                 if (!!true) x = 4;
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >x = 4 : 4
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
             }
             x;  // 3 | 4
 >x : 3 | 4
+>  : ^^^^^
         }
         finally {
             if (!!true) x = 5;
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >x = 5 : 5
+>      : ^
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
         }
         x;  // 3 | 4 | 5
 >x : 3 | 4 | 5
+>  : ^^^^^^^^^
     }
     catch (e) {
 >e : unknown
+>  : ^^^^^^^
 
         x;  // 0 | 1 | 2 | 3 | 4 | 5
 >x : 0 | 1 | 2 | 3 | 4 | 5
+>  : ^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

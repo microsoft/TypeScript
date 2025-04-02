@@ -1,12 +1,18 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/reexportMissingDefault3.ts] ////
+
+=== b.ts ===
 export const b = null;
 >b : any
+>  : ^^^
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 export { b } from "./b";
 >b : any
+>  : ^^^
 
 export { default as a } from "./b";
 >default : any
+>        : ^^^
 >a : any
+>  : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedFunctionAssignmentCompatibility.ts] ////
+
 //// [inheritedFunctionAssignmentCompatibility.ts]
 interface IResultCallback extends Function { }
 

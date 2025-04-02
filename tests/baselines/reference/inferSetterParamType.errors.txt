@@ -1,7 +1,7 @@
-tests/cases/compiler/inferSetterParamType.ts(13,9): error TS2322: Type 'number' is not assignable to type 'string'.
+inferSetterParamType.ts(13,9): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/inferSetterParamType.ts (1 errors) ====
+==== inferSetterParamType.ts (1 errors) ====
     class Foo {
     
         get bar() {

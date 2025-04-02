@@ -1,8 +1,8 @@
-tests/cases/conformance/salsa/constructorNameInAccessor.ts(2,9): error TS1341: Class constructor may not be an accessor.
-tests/cases/conformance/salsa/constructorNameInAccessor.ts(3,9): error TS1341: Class constructor may not be an accessor.
+constructorNameInAccessor.ts(2,9): error TS1341: Class constructor may not be an accessor.
+constructorNameInAccessor.ts(3,9): error TS1341: Class constructor may not be an accessor.
 
 
-==== tests/cases/conformance/salsa/constructorNameInAccessor.ts (2 errors) ====
+==== constructorNameInAccessor.ts (2 errors) ====
     class C1 {
         get constructor() { return }
             ~~~~~~~~~~~

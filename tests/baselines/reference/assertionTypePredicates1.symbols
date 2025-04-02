@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts ===
+//// [tests/cases/conformance/controlFlow/assertionTypePredicates1.ts] ////
+
+=== assertionTypePredicates1.ts ===
 declare function isString(value: unknown): value is string;
 >isString : Symbol(isString, Decl(assertionTypePredicates1.ts, 0, 0))
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 0, 26))
@@ -547,5 +549,177 @@ function example1(things: Thing[]) {
 >thing : Symbol(thing, Decl(assertionTypePredicates1.ts, 190, 12))
 >good : Symbol(good, Decl(assertionTypePredicates1.ts, 180, 17), Decl(assertionTypePredicates1.ts, 185, 21))
     }
+}
+
+class TestPropertyDeclaration1 {
+>TestPropertyDeclaration1 : Symbol(TestPropertyDeclaration1, Decl(assertionTypePredicates1.ts, 194, 1))
+
+  assert = (value: unknown): asserts value => {};
+>assert : Symbol(TestPropertyDeclaration1.assert, Decl(assertionTypePredicates1.ts, 196, 32))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 197, 12))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 197, 12))
+
+  other(x: unknown) {
+>other : Symbol(TestPropertyDeclaration1.other, Decl(assertionTypePredicates1.ts, 197, 49))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 198, 8))
+
+    this.assert(x); // error
+>this.assert : Symbol(TestPropertyDeclaration1.assert, Decl(assertionTypePredicates1.ts, 196, 32))
+>this : Symbol(TestPropertyDeclaration1, Decl(assertionTypePredicates1.ts, 194, 1))
+>assert : Symbol(TestPropertyDeclaration1.assert, Decl(assertionTypePredicates1.ts, 196, 32))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 198, 8))
+
+    x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 198, 8))
+  }
+}
+
+class TestPropertyDeclaration2 {
+>TestPropertyDeclaration2 : Symbol(TestPropertyDeclaration2, Decl(assertionTypePredicates1.ts, 202, 1))
+
+  assert: (v: unknown) => asserts v = (value) => {};
+>assert : Symbol(TestPropertyDeclaration2.assert, Decl(assertionTypePredicates1.ts, 204, 32))
+>v : Symbol(v, Decl(assertionTypePredicates1.ts, 205, 11))
+>v : Symbol(v, Decl(assertionTypePredicates1.ts, 205, 11))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 205, 39))
+
+  other(x: unknown) {
+>other : Symbol(TestPropertyDeclaration2.other, Decl(assertionTypePredicates1.ts, 205, 52))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 206, 8))
+
+    this.assert(x); // ok
+>this.assert : Symbol(TestPropertyDeclaration2.assert, Decl(assertionTypePredicates1.ts, 204, 32))
+>this : Symbol(TestPropertyDeclaration2, Decl(assertionTypePredicates1.ts, 202, 1))
+>assert : Symbol(TestPropertyDeclaration2.assert, Decl(assertionTypePredicates1.ts, 204, 32))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 206, 8))
+
+    x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 206, 8))
+  }
+}
+
+declare class ParentInheritedPropertyDeclaration {
+>ParentInheritedPropertyDeclaration : Symbol(ParentInheritedPropertyDeclaration, Decl(assertionTypePredicates1.ts, 210, 1))
+
+  assert: (value: unknown) => asserts value;
+>assert : Symbol(ParentInheritedPropertyDeclaration.assert, Decl(assertionTypePredicates1.ts, 212, 50))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 213, 11))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 213, 11))
+}
+class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
+>ChildInheritedPropertyDeclaration : Symbol(ChildInheritedPropertyDeclaration, Decl(assertionTypePredicates1.ts, 214, 1))
+>ParentInheritedPropertyDeclaration : Symbol(ParentInheritedPropertyDeclaration, Decl(assertionTypePredicates1.ts, 210, 1))
+
+  other(x: unknown) {
+>other : Symbol(ChildInheritedPropertyDeclaration.other, Decl(assertionTypePredicates1.ts, 215, 84))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 216, 8))
+
+    this.assert(x); // ok
+>this.assert : Symbol(ParentInheritedPropertyDeclaration.assert, Decl(assertionTypePredicates1.ts, 212, 50))
+>this : Symbol(ChildInheritedPropertyDeclaration, Decl(assertionTypePredicates1.ts, 214, 1))
+>assert : Symbol(ParentInheritedPropertyDeclaration.assert, Decl(assertionTypePredicates1.ts, 212, 50))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 216, 8))
+
+    x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 216, 8))
+  }
+}
+
+interface TestPropertySignature {
+>TestPropertySignature : Symbol(TestPropertySignature, Decl(assertionTypePredicates1.ts, 220, 1))
+
+  assert: (value: unknown) => asserts value;
+>assert : Symbol(TestPropertySignature.assert, Decl(assertionTypePredicates1.ts, 222, 33))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 223, 11))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 223, 11))
+}
+function testPropertySignature(
+>testPropertySignature : Symbol(testPropertySignature, Decl(assertionTypePredicates1.ts, 224, 1))
+
+  x: TestPropertySignature,
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 225, 31))
+>TestPropertySignature : Symbol(TestPropertySignature, Decl(assertionTypePredicates1.ts, 220, 1))
+
+  y: unknown,
+>y : Symbol(y, Decl(assertionTypePredicates1.ts, 226, 27))
+
+) {
+  x.assert(y); // ok
+>x.assert : Symbol(TestPropertySignature.assert, Decl(assertionTypePredicates1.ts, 222, 33))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 225, 31))
+>assert : Symbol(TestPropertySignature.assert, Decl(assertionTypePredicates1.ts, 222, 33))
+>y : Symbol(y, Decl(assertionTypePredicates1.ts, 226, 27))
+
+  x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 225, 31))
+}
+function testFunctionThisParameter1(
+>testFunctionThisParameter1 : Symbol(testFunctionThisParameter1, Decl(assertionTypePredicates1.ts, 231, 1))
+
+  this: TestPropertySignature,
+>this : Symbol(this, Decl(assertionTypePredicates1.ts, 232, 36))
+>TestPropertySignature : Symbol(TestPropertySignature, Decl(assertionTypePredicates1.ts, 220, 1))
+
+  x: unknown,
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 233, 30))
+
+) {
+  this.assert(x); // ok
+>this.assert : Symbol(TestPropertySignature.assert, Decl(assertionTypePredicates1.ts, 222, 33))
+>this : Symbol(this, Decl(assertionTypePredicates1.ts, 232, 36))
+>assert : Symbol(TestPropertySignature.assert, Decl(assertionTypePredicates1.ts, 222, 33))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 233, 30))
+
+  x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 233, 30))
+}
+
+interface TestMethodSignature {
+>TestMethodSignature : Symbol(TestMethodSignature, Decl(assertionTypePredicates1.ts, 238, 1))
+
+  assert(value: unknown): asserts value;
+>assert : Symbol(TestMethodSignature.assert, Decl(assertionTypePredicates1.ts, 240, 31))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 241, 9))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 241, 9))
+}
+function testMethodSignature(
+>testMethodSignature : Symbol(testMethodSignature, Decl(assertionTypePredicates1.ts, 242, 1))
+
+  x: TestMethodSignature,
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 243, 29))
+>TestMethodSignature : Symbol(TestMethodSignature, Decl(assertionTypePredicates1.ts, 238, 1))
+
+  y: unknown,
+>y : Symbol(y, Decl(assertionTypePredicates1.ts, 244, 25))
+
+) {
+  x.assert(y); // ok
+>x.assert : Symbol(TestMethodSignature.assert, Decl(assertionTypePredicates1.ts, 240, 31))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 243, 29))
+>assert : Symbol(TestMethodSignature.assert, Decl(assertionTypePredicates1.ts, 240, 31))
+>y : Symbol(y, Decl(assertionTypePredicates1.ts, 244, 25))
+
+  x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 243, 29))
+}
+function testFunctionThisParameter2(
+>testFunctionThisParameter2 : Symbol(testFunctionThisParameter2, Decl(assertionTypePredicates1.ts, 249, 1))
+
+  this: TestMethodSignature,
+>this : Symbol(this, Decl(assertionTypePredicates1.ts, 250, 36))
+>TestMethodSignature : Symbol(TestMethodSignature, Decl(assertionTypePredicates1.ts, 238, 1))
+
+  x: unknown,
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 251, 28))
+
+) {
+  this.assert(x); // ok
+>this.assert : Symbol(TestMethodSignature.assert, Decl(assertionTypePredicates1.ts, 240, 31))
+>this : Symbol(this, Decl(assertionTypePredicates1.ts, 250, 36))
+>assert : Symbol(TestMethodSignature.assert, Decl(assertionTypePredicates1.ts, 240, 31))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 251, 28))
+
+  x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 251, 28))
 }
 

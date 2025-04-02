@@ -1,20 +1,29 @@
+//// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmit1.ts] ////
+
 === /index.ts ===
 export type LocalInterface =
->LocalInterface : import("/node_modules/pkg/require").RequireInterface & import("/node_modules/pkg/import").ImportInterface
+>LocalInterface : LocalInterface
+>               : ^^^^^^^^^^^^^^
 
     & import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface
     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
 
 export const a = (null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface);
 >a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
 
 export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
 >b : import("/node_modules/pkg/import").ImportInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
 
 === /node_modules/pkg/import.d.ts ===

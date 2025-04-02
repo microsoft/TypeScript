@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts] ////
+
+=== unionTypeLiterals.ts ===
 // basic valid forms of union literals
 
 var simpleUnion: string | number;

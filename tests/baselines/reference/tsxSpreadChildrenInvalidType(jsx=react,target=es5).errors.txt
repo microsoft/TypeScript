@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
+tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
 
 
-==== tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx (1 errors) ====
+==== tsxSpreadChildrenInvalidType.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

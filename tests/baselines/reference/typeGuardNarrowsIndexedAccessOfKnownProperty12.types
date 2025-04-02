@@ -1,35 +1,57 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty12.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty12.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty12.ts ===
 enum E {
 >E : E
+>  : ^
 
     A = "A",
 >A : E.A
+>  : ^^^
 >"A" : "A"
+>    : ^^^
 
     B = "B"
 >B : E.B
+>  : ^^^
 >"B" : "B"
+>    : ^^^
 }
 
 declare const m: { [K in E]: string | null };
 >m : { A: string | null; B: string | null; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (m[E.A] !== null) {
 >m[E.A] !== null : boolean
+>                : ^^^^^^^
 >m[E.A] : string | null
+>       : ^^^^^^^^^^^^^
 >m : { A: string | null; B: string | null; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
     m[E.A].toString(); // string
 >m[E.A].toString() : string
+>                  : ^^^^^^
 >m[E.A].toString : () => string
+>                : ^^^^^^      
 >m[E.A] : string
+>       : ^^^^^^
 >m : { A: string | null; B: string | null; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 >toString : () => string
+>         : ^^^^^^      
 }
 

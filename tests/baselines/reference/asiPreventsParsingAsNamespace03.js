@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace03.ts] ////
+
 //// [asiPreventsParsingAsNamespace03.ts]
 var namespace: number;
 var n: string;

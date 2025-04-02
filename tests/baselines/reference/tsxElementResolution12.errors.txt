@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
-tests/cases/conformance/jsx/file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
-tests/cases/conformance/jsx/file.tsx(26,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
-tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
+file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
+file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
+file.tsx(26,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
+file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+==== file.tsx (4 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementAttributesProperty { pr: any; }
@@ -46,5 +46,5 @@ tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type 'string' is not a
     <Obj4 x={'10'} />; // Error
           ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:29:37: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
+!!! related TS6500 file.tsx:29:37: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
     

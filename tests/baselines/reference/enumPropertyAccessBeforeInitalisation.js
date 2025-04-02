@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts] ////
+
 //// [enumPropertyAccessBeforeInitalisation.ts]
 enum E {
     A = A,

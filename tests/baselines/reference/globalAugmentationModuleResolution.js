@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/globalAugmentationModuleResolution.ts] ////
+
 //// [a.ts]
 export { };
 

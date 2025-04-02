@@ -1,33 +1,33 @@
-tests/cases/compiler/inKeywordTypeguard.ts(6,11): error TS2339: Property 'b' does not exist on type 'A'.
-tests/cases/compiler/inKeywordTypeguard.ts(8,11): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(14,11): error TS2339: Property 'b' does not exist on type 'A'.
-tests/cases/compiler/inKeywordTypeguard.ts(16,11): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(27,11): error TS2339: Property 'b' does not exist on type 'AWithOptionalProp | BWithOptionalProp'.
+inKeywordTypeguard.ts(6,11): error TS2339: Property 'b' does not exist on type 'A'.
+inKeywordTypeguard.ts(8,11): error TS2339: Property 'a' does not exist on type 'B'.
+inKeywordTypeguard.ts(14,11): error TS2339: Property 'b' does not exist on type 'A'.
+inKeywordTypeguard.ts(16,11): error TS2339: Property 'a' does not exist on type 'B'.
+inKeywordTypeguard.ts(27,11): error TS2339: Property 'b' does not exist on type 'AWithOptionalProp | BWithOptionalProp'.
   Property 'b' does not exist on type 'AWithOptionalProp'.
-tests/cases/compiler/inKeywordTypeguard.ts(42,11): error TS2339: Property 'b' does not exist on type 'AWithMethod'.
-tests/cases/compiler/inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
+inKeywordTypeguard.ts(42,11): error TS2339: Property 'b' does not exist on type 'AWithMethod'.
+inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
   Property 'a' does not exist on type 'BWithMethod & Record<"c", unknown>'.
-tests/cases/compiler/inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
+inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type '(AWithMethod | BWithMethod) & Record<"c", unknown>'.
   Property 'b' does not exist on type 'AWithMethod & Record<"c", unknown>'.
-tests/cases/compiler/inKeywordTypeguard.ts(52,11): error TS2339: Property 'a' does not exist on type 'AWithMethod | BWithMethod'.
+inKeywordTypeguard.ts(52,11): error TS2339: Property 'a' does not exist on type 'AWithMethod | BWithMethod'.
   Property 'a' does not exist on type 'BWithMethod'.
-tests/cases/compiler/inKeywordTypeguard.ts(53,11): error TS2339: Property 'b' does not exist on type 'AWithMethod | BWithMethod'.
+inKeywordTypeguard.ts(53,11): error TS2339: Property 'b' does not exist on type 'AWithMethod | BWithMethod'.
   Property 'b' does not exist on type 'AWithMethod'.
-tests/cases/compiler/inKeywordTypeguard.ts(62,11): error TS2339: Property 'b' does not exist on type 'A | C | D'.
+inKeywordTypeguard.ts(62,11): error TS2339: Property 'b' does not exist on type 'A | C | D'.
   Property 'b' does not exist on type 'A'.
-tests/cases/compiler/inKeywordTypeguard.ts(64,11): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(72,32): error TS2339: Property 'b' does not exist on type 'A'.
-tests/cases/compiler/inKeywordTypeguard.ts(74,32): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' does not exist on type 'A'.
-tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
-tests/cases/compiler/inKeywordTypeguard.ts(155,16): error TS2322: Type 'unknown' is not assignable to type 'object'.
-tests/cases/compiler/inKeywordTypeguard.ts(158,21): error TS2322: Type 'unknown' is not assignable to type 'object'.
-tests/cases/compiler/inKeywordTypeguard.ts(183,16): error TS2322: Type 'T' is not assignable to type 'object'.
-tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is not assignable to type 'object'.
+inKeywordTypeguard.ts(64,11): error TS2339: Property 'a' does not exist on type 'B'.
+inKeywordTypeguard.ts(72,32): error TS2339: Property 'b' does not exist on type 'A'.
+inKeywordTypeguard.ts(74,32): error TS2339: Property 'a' does not exist on type 'B'.
+inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' does not exist on type 'A'.
+inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
+inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
+inKeywordTypeguard.ts(155,16): error TS2322: Type 'unknown' is not assignable to type 'object'.
+inKeywordTypeguard.ts(158,21): error TS2322: Type 'unknown' is not assignable to type 'object'.
+inKeywordTypeguard.ts(183,16): error TS2322: Type 'T' is not assignable to type 'object'.
+inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is not assignable to type 'object'.
 
 
-==== tests/cases/compiler/inKeywordTypeguard.ts (21 errors) ====
+==== inKeywordTypeguard.ts (21 errors) ====
     class A { a: string; }
     class B { b: string; }
     
@@ -257,13 +257,13 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is no
         if ("a" in x) {
                    ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
+!!! related TS2208 inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
             x.a;
         }
         if (x && "a" in x) {
                         ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
+!!! related TS2208 inKeywordTypeguard.ts:182:13: This type parameter might need an `extends object` constraint.
             x.a;
         }
         if (x && typeof x === "object" && "a" in x) {

@@ -1,28 +1,37 @@
-=== tests/cases/conformance/types/import/foo.ts ===
+//// [tests/cases/conformance/types/import/importTypeGenericTypes.ts] ////
+
+=== foo.ts ===
 interface Point<T> {
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     data: T;
 >data : T
+>     : ^
 }
 export = Point;
 >Point : Point<T>
+>      : ^^^^^^^^
 
-=== tests/cases/conformance/types/import/foo2.ts ===
+=== foo2.ts ===
 namespace Bar {
     export interface I<T> {
         a: string;
 >a : string
+>  : ^^^^^^
 
         b: number;
 >b : number
+>  : ^^^^^^
 
         data: T;
 >data : T
+>     : ^
     }
 }
 
@@ -30,78 +39,120 @@ export namespace Baz {
     export interface J<T> {
         a: number;
 >a : number
+>  : ^^^^^^
 
         b: string;
 >b : string
+>  : ^^^^^^
 
         data: T;
 >data : T
+>     : ^
     }
 }
 
 class Bar<T> {
 >Bar : Bar<T>
+>    : ^^^^^^
 
     item: Bar.I<T>;
 >item : Bar.I<T>
+>     : ^^^^^^^^
 >Bar : any
+>    : ^^^
 
     constructor(input: Baz.J<T>) {}
 >input : Baz.J<T>
+>      : ^^^^^^^^
 >Baz : any
+>    : ^^^
 }
 export { Bar }
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
-=== tests/cases/conformance/types/import/usage.ts ===
+=== usage.ts ===
 export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
->x : import("tests/cases/conformance/types/import/foo")<{ x: number; }>
+>x : import("foo")<{ x: number; }>
+>  : ^^^^^^^^^^^^^^^^^^^      ^^^^
 >x : number
+>  : ^^^^^^
 >{ x: 0, y: 0, data: {x: 12} } : { x: number; y: number; data: { x: number; }; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >data : { x: number; }
+>     : ^^^^^^^^^^^^^^
 >{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
->y : import("tests/cases/conformance/types/import/foo2").Bar.I<{ x: number; }>
+>y : import("foo2").Bar.I<{ x: number; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >Bar : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >data : { x: number; }
+>     : ^^^^^^^^^^^^^^
 >{x: 12} : { x: number; }
+>        : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 export class Bar2<T> {
 >Bar2 : Bar2<T>
+>     : ^^^^^^^
 
     item: {a: string, b: number, c: object, data: T};
 >item : { a: string; b: number; c: object; data: T; }
+>     : ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^ ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : object
+>  : ^^^^^^
 >data : T
+>     : ^
 
     constructor(input?: any) {}
 >input : any
 }
 
 export let shim: typeof import("./foo2") = {
->shim : typeof import("tests/cases/conformance/types/import/foo2")
+>shim : typeof import("foo2")
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >{    Bar: Bar2} : { Bar: typeof Bar2; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
 
     Bar: Bar2
 >Bar : typeof Bar2
+>    : ^^^^^^^^^^^
 >Bar2 : typeof Bar2
+>     : ^^^^^^^^^^^
 
 };
 

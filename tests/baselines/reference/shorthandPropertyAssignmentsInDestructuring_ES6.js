@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts] ////
+
 //// [shorthandPropertyAssignmentsInDestructuring_ES6.ts]
 (function() {
 	var s0;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitAmdModuleDefault.ts] ////
+
 //// [declarationEmitAmdModuleDefault.ts]
 export default class DefaultClass { }
 

@@ -1,15 +1,21 @@
-=== /root/a.ts ===
-import { foo } from "/foo";
->foo : () => void
-
-import { bar } from "/bar";
->bar : () => void
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_rootImport_noAliasWithRoot.ts] ////
 
 === /root/src/foo.ts ===
 export function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 
 === /root/src/bar.js ===
 export function bar() {}
 >bar : () => void
+>    : ^^^^^^^^^^
+
+=== /root/a.ts ===
+import { foo } from "/foo";
+>foo : () => void
+>    : ^^^^^^^^^^
+
+import { bar } from "/bar";
+>bar : () => void
+>    : ^^^^^^^^^^
 

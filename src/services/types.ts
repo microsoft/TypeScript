@@ -9,10 +9,12 @@ import {
     DocumentPositionMapper,
     EmitOutput,
     ExportInfoMap,
+    ExportMapInfoKey,
     FileReference,
     GetEffectiveTypeRootsHost,
     HasChangedAutomaticTypeDirectiveNames,
     HasInvalidatedResolutions,
+    JSDocParsingMode,
     LineAndCharacter,
     MinimalResolutionCacheHost,
     ModuleResolutionCache,
@@ -39,17 +41,17 @@ import {
     TextRange,
     TextSpan,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
-        getChildren(sourceFile?: SourceFile): Node[];
+        getChildren(sourceFile?: SourceFile): readonly Node[];
         /** @internal */
-        getChildren(sourceFile?: SourceFileLike): Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
+        getChildren(sourceFile?: SourceFileLike): readonly Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         /** @internal */
         getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
@@ -71,21 +73,21 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Identifier {
         readonly text: string;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface PrivateIdentifier {
         readonly text: string;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Symbol {
         readonly name: string;
@@ -95,14 +97,14 @@ declare module "../compiler/types" {
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /** @internal */
-        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
+        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
         /** @internal */
         getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[];
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Type {
         getFlags(): TypeFlags;
@@ -134,14 +136,14 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface TypeReference {
         typeArguments?: readonly Type[];
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
@@ -154,7 +156,7 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceFile {
         /** @internal */ version: string;
@@ -173,14 +175,14 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
@@ -215,7 +217,6 @@ export interface IScriptSnapshot {
 
 export namespace ScriptSnapshot {
     class StringScriptSnapshot implements IScriptSnapshot {
-
         constructor(private text: string) {
         }
 
@@ -315,6 +316,9 @@ export interface IncompleteCompletionsCache {
 export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalResolutionCacheHost {
     getCompilationSettings(): CompilerOptions;
     getNewLine?(): string;
+    /** @internal */ updateFromProject?(): void;
+    /** @internal */ updateFromProjectInProgress?: boolean;
+
     getProjectVersion?(): string;
     getScriptFileNames(): string[];
     getScriptKind?(fileName: string): ScriptKind;
@@ -336,7 +340,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      */
     readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     realpath?(path: string): string;
-    /** @internal */ createHash?(data: string): string;
+    /** @internal */ createHash?: ((data: string) => string) | undefined;
 
     /*
      * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
@@ -376,9 +380,22 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
         redirectedReference: ResolvedProjectReference | undefined,
         options: CompilerOptions,
         containingSourceFile: SourceFile | undefined,
-        reusedNames: readonly T[] | undefined
+        reusedNames: readonly T[] | undefined,
     ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
-    /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
+    /** @internal */
+    resolveLibrary?(
+        libraryName: string,
+        resolveFrom: string,
+        options: CompilerOptions,
+        libFileName: string,
+    ): ResolvedModuleWithFailedLookupLocations;
+    /**
+     * If provided along with custom resolveLibrary, used to determine if we should redo library resolutions
+     * @internal
+     */
+    hasInvalidatedLibResolutions?: ((libFileName: string) => boolean) | undefined;
+
+    /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions | undefined;
     /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
     /** @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
@@ -413,7 +430,10 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean, newSourceFileByResolvedPath: SourceFile | undefined): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
+    /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
+    jsDocParsingMode?: JSDocParsingMode | undefined;
 }
 
 /** @internal */
@@ -423,7 +443,13 @@ export type WithMetadata<T> = T & { metadata?: unknown; };
 
 export const enum SemanticClassificationFormat {
     Original = "original",
-    TwentyTwenty = "2020"
+    TwentyTwenty = "2020",
+}
+
+/** @internal */
+export interface RegionDiagnosticsResult {
+    diagnostics: Diagnostic[];
+    spans: TextSpan[];
 }
 
 //
@@ -469,6 +495,12 @@ export interface LanguageService {
      * @param fileName A path to the file you want semantic diagnostics for
      */
     getSemanticDiagnostics(fileName: string): Diagnostic[];
+
+    /**
+     * Similar to {@link getSemanticDiagnostics}, but only checks the specified ranges of the file for diagnostics.
+     * @internal
+     */
+    getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined;
 
     /**
      * Gets suggestion diagnostics for a specific file. These diagnostics tend to
@@ -562,6 +594,8 @@ export interface LanguageService {
     /** @deprecated Use the signature with `UserPreferences` instead. */
     getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
 
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): readonly RenameLocation[] | undefined;
+    /** @deprecated Pass `providePrefixAndSuffixTextForRename` as part of a `UserPreferences` parameter. */
     findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
 
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
@@ -580,7 +614,7 @@ export interface LanguageService {
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
     getFileReferences(fileName: string): ReferenceEntry[];
 
-    getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
+    getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean, excludeLibFiles?: boolean): NavigateToItem[];
     getNavigationBarItems(fileName: string): NavigationBarItem[];
     getNavigationTree(fileName: string): NavigationTree;
 
@@ -588,7 +622,7 @@ export interface LanguageService {
     provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
     provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
-    provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[]
+    provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
 
     getOutliningSpans(fileName: string): OutliningSpan[];
     getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -637,7 +671,8 @@ export interface LanguageService {
      * arguments for any interactive action before offering it.
      */
     getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
-    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
+    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): { newFileName: string; files: string[]; };
     organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
     getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 
@@ -661,7 +696,14 @@ export interface LanguageService {
 
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
+    /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
+
     dispose(): void;
+    preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
+    getPasteEdits(
+        args: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits;
 }
 
 export interface JsxClosingTagInfo {
@@ -673,12 +715,28 @@ export interface LinkedEditingInfo {
     wordPattern?: string;
 }
 
-export interface CombinedCodeFixScope { type: "file"; fileName: string; }
+export interface CombinedCodeFixScope {
+    type: "file";
+    fileName: string;
+}
 
 export const enum OrganizeImportsMode {
     All = "All",
     SortAndCombine = "SortAndCombine",
     RemoveUnused = "RemoveUnused",
+}
+
+export interface PasteEdits {
+    edits: readonly FileTextChanges[];
+    fixId?: {};
+}
+
+export interface PasteEditsArgs {
+    targetFile: string;
+    pastedText: string[];
+    pasteLocations: TextRange[];
+    copiedFrom: { file: string; range: TextRange[]; } | undefined;
+    preferences: UserPreferences;
 }
 
 export interface OrganizeImportsArgs extends CombinedCodeFixScope {
@@ -713,7 +771,7 @@ export interface GetCompletionsAtPositionOptions extends UserPreferences {
      * so use caution when serializing or retaining completion entries retrieved with this option.
      * @default false
      */
-    includeSymbol?: boolean
+    includeSymbol?: boolean;
     /** @deprecated Use includeCompletionsForModuleExports */
     includeExternalModuleExports?: boolean;
     /** @deprecated Use includeCompletionsWithInsertText */
@@ -850,11 +908,19 @@ export const enum InlayHintKind {
 }
 
 export interface InlayHint {
+    /** This property will be the empty string when displayParts is set. */
     text: string;
     position: number;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintDisplayPart[];
+}
+
+export interface InlayHintDisplayPart {
+    text: string;
+    span?: TextSpan;
+    file?: string;
 }
 
 export interface TodoCommentDescriptor {
@@ -975,6 +1041,11 @@ export interface RefactorActionInfo {
      * when calling `getEditsForRefactor`.
      */
     isInteractive?: boolean;
+
+    /**
+     * Range of code the refactoring will be applied to.
+     */
+    range?: { start: { line: number; offset: number; }; end: { line: number; offset: number; }; };
 }
 
 /**
@@ -986,6 +1057,7 @@ export interface RefactorEditInfo {
     renameFilename?: string;
     renameLocation?: number;
     commands?: CodeActionCommand[];
+    notApplicableReason?: string;
 }
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -1156,12 +1228,12 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
         placeOpenBraceOnNewLineForControlBlocks: false,
         semicolons: SemicolonPreference.Ignore,
         trimTrailingWhitespace: true,
-        indentSwitchCase: true
+        indentSwitchCase: true,
     };
 }
 
 /** @internal */
-export const testFormatSettings = getDefaultFormatCodeSettings("\n");
+export const testFormatSettings: FormatCodeSettings = getDefaultFormatCodeSettings("\n");
 
 export interface DefinitionInfo extends DocumentSpan {
     kind: ScriptElementKind;
@@ -1226,7 +1298,13 @@ export enum SymbolDisplayPartKind {
 }
 
 export interface SymbolDisplayPart {
+    /**
+     * Text of an item describing the symbol.
+     */
     text: string;
+    /**
+     * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
+     */
     kind: string;
 }
 
@@ -1257,6 +1335,10 @@ export interface RenameInfoSuccess {
      */
     fileToRename?: string;
     displayName: string;
+    /**
+     * Full display name of item to be renamed.
+     * If item to be renamed is a file, then this is the original text of the module specifer
+     */
     fullDisplayName: string;
     kind: ScriptElementKind;
     kindModifiers: string;
@@ -1278,6 +1360,13 @@ export interface DocCommentTemplateOptions {
     readonly generateReturnInDocTemplate?: boolean;
 }
 
+export interface InteractiveRefactorArguments {
+    targetFile: string;
+}
+
+/**
+ * Signature help information for a single parameter
+ */
 export interface SignatureHelpParameter {
     name: string;
     documentation: SymbolDisplayPart[];
@@ -1351,6 +1440,10 @@ export interface CompletionInfo {
      */
     isIncomplete?: true;
     entries: CompletionEntry[];
+    /**
+     * Default commit characters for the completion entries.
+     */
+    defaultCommitCharacters?: string[];
 }
 
 export interface CompletionEntryDataAutoImport {
@@ -1359,7 +1452,7 @@ export interface CompletionEntryDataAutoImport {
      * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
      */
     exportName: string;
-    exportMapKey?: string;
+    exportMapKey?: ExportMapInfoKey;
     moduleSpecifier?: string;
     /** The file name declaring the export's module symbol, if it was an external module */
     fileName?: string;
@@ -1370,7 +1463,7 @@ export interface CompletionEntryDataAutoImport {
 }
 
 export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-    exportMapKey: string;
+    exportMapKey: ExportMapInfoKey;
 }
 
 export interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
@@ -1384,8 +1477,25 @@ export interface CompletionEntry {
     name: string;
     kind: ScriptElementKind;
     kindModifiers?: string; // see ScriptElementKindModifier, comma separated
+    /**
+     * A string that is used for comparing completion items so that they can be ordered. This
+     * is often the same as the name but may be different in certain circumstances.
+     */
     sortText: string;
+    /**
+     * Text to insert instead of `name`.
+     * This is used to support bracketed completions; If `name` might be "a-b" but `insertText` would be `["a-b"]`,
+     * coupled with `replacementSpan` to replace a dotted access with a bracket access.
+     */
     insertText?: string;
+    /**
+     * A string that should be used when filtering a set of
+     * completion items.
+     */
+    filterText?: string;
+    /**
+     * `insertText` should be interpreted as a snippet if true.
+     */
     isSnippet?: true;
     /**
      * An optional span that indicates the text to be replaced by this completion item.
@@ -1393,20 +1503,50 @@ export interface CompletionEntry {
      * It will be set if the required span differs from the one generated by the default replacement behavior.
      */
     replacementSpan?: TextSpan;
+    /**
+     * Indicates whether commiting this completion entry will require additional code actions to be
+     * made to avoid errors. The CompletionEntryDetails will have these actions.
+     */
     hasAction?: true;
+    /**
+     * Identifier (not necessarily human-readable) identifying where this completion came from.
+     */
     source?: string;
+    /**
+     * Human-readable description of the `source`.
+     */
     sourceDisplay?: SymbolDisplayPart[];
+    /**
+     * Additional details for the label.
+     */
     labelDetails?: CompletionEntryLabelDetails;
+    /**
+     * If true, this completion should be highlighted as recommended. There will only be one of these.
+     * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
+     * Then either that enum/class or a namespace containing it will be the recommended symbol.
+     */
     isRecommended?: true;
+    /**
+     * If true, this completion was generated from traversing the name table of an unchecked JS file,
+     * and therefore may not be accurate.
+     */
     isFromUncheckedFile?: true;
+    /**
+     * If true, this completion was for an auto-import of a module not yet in the program, but listed
+     * in the project package.json. Used for telemetry reporting.
+     */
     isPackageJsonImport?: true;
+    /**
+     * If true, this completion was an auto-import-style completion of an import statement (i.e., the
+     * module specifier was inserted along with the imported identifier). Used for telemetry reporting.
+     */
     isImportStatementCompletion?: true;
     /**
      * For API purposes.
      * Included for non-string completions only when `includeSymbol: true` option is passed to `getCompletionsAtPosition`.
      * @example Get declaration of completion: `symbol.valueDeclaration`
      */
-    symbol?: Symbol
+    symbol?: Symbol;
     /**
      * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
      * that allows TS Server to look up the symbol represented by the completion item, disambiguating
@@ -1416,17 +1556,31 @@ export interface CompletionEntry {
      * is an auto-import.
      */
     data?: CompletionEntryData;
+    /**
+     * If this completion entry is selected, typing a commit character will cause the entry to be accepted.
+     */
+    commitCharacters?: string[];
 }
 
 export interface CompletionEntryLabelDetails {
+    /**
+     * An optional string which is rendered less prominently directly after
+     * {@link CompletionEntry.name name}, without any spacing. Should be
+     * used for function signatures or type annotations.
+     */
     detail?: string;
+    /**
+     * An optional string which is rendered less prominently after
+     * {@link CompletionEntryLabelDetails.detail}. Should be used for fully qualified
+     * names or file path.
+     */
     description?: string;
 }
 
 export interface CompletionEntryDetails {
     name: string;
     kind: ScriptElementKind;
-    kindModifiers: string;   // see ScriptElementKindModifier, comma separated
+    kindModifiers: string; // see ScriptElementKindModifier, comma separated
     displayParts: SymbolDisplayPart[];
     documentation?: SymbolDisplayPart[];
     tags?: JSDocTagInfo[];
@@ -1469,13 +1623,13 @@ export const enum OutliningSpanKind {
     Code = "code",
 
     /** Contiguous blocks of import declarations */
-    Imports = "imports"
+    Imports = "imports",
 }
 
 export const enum OutputFileType {
     JavaScript,
     SourceMap,
-    Declaration
+    Declaration,
 }
 
 export const enum EndOfLineState {
@@ -1573,6 +1727,12 @@ export const enum ScriptElementKind {
 
     /** Inside function */
     localVariableElement = "local var",
+
+    /** using foo = ... */
+    variableUsingElement = "using",
+
+    /** await using foo = ... */
+    variableAwaitUsingElement = "await using",
 
     /**
      * Inside module and script only
@@ -1770,10 +1930,10 @@ export interface Refactor {
     kinds?: string[];
 
     /** Compute the associated code actions */
-    getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
+    getEditsForAction(context: RefactorContext, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
 
     /** Compute (quickly) which actions are available here */
-    getAvailableActions(context: RefactorContext, includeInteractive?: boolean): readonly ApplicableRefactorInfo[];
+    getAvailableActions(context: RefactorContext, includeInteractive?: boolean, interactiveRefactorArguments?: InteractiveRefactorArguments): readonly ApplicableRefactorInfo[];
 }
 
 /** @internal */

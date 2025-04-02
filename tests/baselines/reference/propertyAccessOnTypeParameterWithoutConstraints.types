@@ -1,116 +1,190 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithoutConstraints.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithoutConstraints.ts] ////
+
+=== propertyAccessOnTypeParameterWithoutConstraints.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     f() {
 >f : () => string
+>  : ^^^^^^^^^^^^
 
         var x: T;
 >x : T
+>  : ^
 
         var a = x['toString'](); // should be string
 >a : string
+>  : ^^^^^^
 >x['toString']() : string
+>                : ^^^^^^
 >x['toString'] : () => string
+>              : ^^^^^^      
 >x : T
+>  : ^
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
         return a + x.toString();
 >a + x.toString() : string
+>                 : ^^^^^^
 >a : string
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : () => string
+>           : ^^^^^^      
 >x : T
+>  : ^
 >toString : () => string
+>         : ^^^^^^      
     }
 }
 
 var r = (new C<number>()).f();
 >r : string
+>  : ^^^^^^
 >(new C<number>()).f() : string
+>                      : ^^^^^^
 >(new C<number>()).f : () => string
+>                    : ^^^^^^^^^^^^
 >(new C<number>()) : C<number>
+>                  : ^^^^^^^^^
 >new C<number>() : C<number>
+>                : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f : () => string
+>  : ^^^^^^^^^^^^
 
 interface I<T> {
     foo: T;
 >foo : T
+>    : ^
 }
 var i: I<number>;
 >i : I<number>
+>  : ^^^^^^^^^
 
 var r2 = i.foo.toString();
 >r2 : string
+>   : ^^^^^^
 >i.foo.toString() : string
+>                 : ^^^^^^
 >i.foo.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >i.foo : number
+>      : ^^^^^^
 >i : I<number>
+>  : ^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var r2b = i.foo['toString']();
 >r2b : string
+>    : ^^^^^^
 >i.foo['toString']() : string
+>                    : ^^^^^^
 >i.foo['toString'] : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >i.foo : number
+>      : ^^^^^^
 >i : I<number>
+>  : ^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
 var a: {
 >a : <T>() => T
+>  : ^ ^^^^^^^ 
 
     <T>(): T;
 }
 var r3: string = a().toString();
 >r3 : string
+>   : ^^^^^^
 >a().toString() : string
+>               : ^^^^^^
 >a().toString : () => string
+>             : ^^^^^^      
 >a() : unknown
+>    : ^^^^^^^
 >a : <T>() => T
+>  : ^ ^^^^^^^ 
 >toString : () => string
+>         : ^^^^^^      
 
 var r3b: string = a()['toString']();
 >r3b : string
+>    : ^^^^^^
 >a()['toString']() : string
+>                  : ^^^^^^
 >a()['toString'] : () => string
+>                : ^^^^^^      
 >a() : unknown
+>    : ^^^^^^^
 >a : <T>() => T
+>  : ^ ^^^^^^^ 
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
 var b = {
 >b : { foo: <T>(x: T) => string; }
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >{    foo: <T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    }} : { foo: <T>(x: T) => string; }
+>                                                                                                                   : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 
     foo: <T>(x: T) => {
 >foo : <T>(x: T) => string
+>    : ^ ^^ ^^ ^^^^^^^^^^^
 ><T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    } : <T>(x: T) => string
+>                                                                                                        : ^ ^^ ^^ ^^^^^^^^^^^
 >x : T
+>  : ^
 
         var a = x['toString'](); // should be string
 >a : string
+>  : ^^^^^^
 >x['toString']() : string
+>                : ^^^^^^
 >x['toString'] : () => string
+>              : ^^^^^^      
 >x : T
+>  : ^
 >'toString' : "toString"
+>           : ^^^^^^^^^^
 
         return a + x.toString();
 >a + x.toString() : string
+>                 : ^^^^^^
 >a : string
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : () => string
+>           : ^^^^^^      
 >x : T
+>  : ^
 >toString : () => string
+>         : ^^^^^^      
     }
 }
 
 var r4 = b.foo(1);
 >r4 : string
+>   : ^^^^^^
 >b.foo(1) : string
+>         : ^^^^^^
 >b.foo : <T>(x: T) => string
+>      : ^ ^^ ^^ ^^^^^^^^^^^
 >b : { foo: <T>(x: T) => string; }
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >foo : <T>(x: T) => string
+>    : ^ ^^ ^^ ^^^^^^^^^^^
 >1 : 1
+>  : ^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_optionalMemberConformance.ts] ////
+
 //// [typeSatisfaction_optionalMemberConformance.ts]
 type Point2d = { x: number, y: number };
 // Undesirable behavior today with type annotation

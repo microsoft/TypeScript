@@ -1,42 +1,61 @@
-=== tests/cases/compiler/aliasUsageInVarAssignment_main.ts ===
+//// [tests/cases/compiler/aliasUsageInVarAssignment.ts] ////
+
+=== aliasUsageInVarAssignment_main.ts ===
 import Backbone = require("./aliasUsageInVarAssignment_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 import moduleA = require("./aliasUsageInVarAssignment_moduleA");
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone.Model : typeof Backbone.Model
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 }
 var i: IHasVisualizationModel;
 >i : IHasVisualizationModel
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
 var m: typeof moduleA = i;
 >m : typeof moduleA
+>  : ^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 >i : IHasVisualizationModel
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/aliasUsageInVarAssignment_backbone.ts ===
+=== aliasUsageInVarAssignment_backbone.ts ===
 export class Model {
 >Model : Model
+>      : ^^^^^
 
     public someData: string;
 >someData : string
+>         : ^^^^^^
 }
 
-=== tests/cases/compiler/aliasUsageInVarAssignment_moduleA.ts ===
+=== aliasUsageInVarAssignment_moduleA.ts ===
 import Backbone = require("./aliasUsageInVarAssignment_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
+>                   : ^^^^^^^^^^^^^^^^^^
 >Backbone.Model : Backbone.Model
+>               : ^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     // interesting stuff here
 }

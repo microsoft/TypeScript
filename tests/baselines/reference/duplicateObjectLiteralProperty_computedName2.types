@@ -1,86 +1,137 @@
-=== tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts ===
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts] ////
+
+=== duplicateObjectLiteralProperty_computedName2.ts ===
 const n = 1;
 >n : 1
+>  : ^
 >1 : 1
+>  : ^
 
 const s = "s";
 >s : "s"
+>  : ^^^
 >"s" : "s"
+>    : ^^^
 
 enum E1 { A = "ENUM_KEY" }
 >E1 : E1
+>   : ^^
 >A : E1.A
+>  : ^^^^
 >"ENUM_KEY" : "ENUM_KEY"
+>           : ^^^^^^^^^^
 
 enum E2 { B }
 >E2 : E2
+>   : ^^
 >B : E2.B
+>  : ^^^^
 
 const t1 = {
 >t1 : { 1: number; }
+>   : ^^^^^^^^^^^^^^
 >{    [n]: 1,    [n]: 1, // duplicate} : { 1: number; }
+>                                      : ^^^^^^^^^^^^^^
 
     [n]: 1,
 >[n] : number
+>    : ^^^^^^
 >n : 1
+>  : ^
 >1 : 1
+>  : ^
 
     [n]: 1, // duplicate
 >[n] : number
+>    : ^^^^^^
 >n : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 
 const t2 = {
 >t2 : { s: number; }
+>   : ^^^^^^^^^^^^^^
 >{    [s]: 1,    [s]: 1, // duplicate} : { s: number; }
+>                                      : ^^^^^^^^^^^^^^
 
     [s]: 1,
 >[s] : number
+>    : ^^^^^^
 >s : "s"
+>  : ^^^
 >1 : 1
+>  : ^
 
     [s]: 1, // duplicate
 >[s] : number
+>    : ^^^^^^
 >s : "s"
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 const t3 = {
 >t3 : { ENUM_KEY: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >{    [E1.A]: 1,    [E1.A]: 1, // duplicate} : { ENUM_KEY: number; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^
 
     [E1.A]: 1,
 >[E1.A] : number
+>       : ^^^^^^
 >E1.A : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >A : E1
+>  : ^^
 >1 : 1
+>  : ^
 
     [E1.A]: 1, // duplicate
 >[E1.A] : number
+>       : ^^^^^^
 >E1.A : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >A : E1
+>  : ^^
 >1 : 1
+>  : ^
 }
 
 const t4 = {
 >t4 : { 0: number; }
+>   : ^^^^^^^^^^^^^^
 >{    [E2.B]: 1,    [E2.B]: 1, // duplicate} : { 0: number; }
+>                                            : ^^^^^^^^^^^^^^
 
     [E2.B]: 1,
 >[E2.B] : number
+>       : ^^^^^^
 >E2.B : E2
+>     : ^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >B : E2
+>  : ^^
 >1 : 1
+>  : ^
 
     [E2.B]: 1, // duplicate
 >[E2.B] : number
+>       : ^^^^^^
 >E2.B : E2
+>     : ^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >B : E2
+>  : ^^
 >1 : 1
+>  : ^
 }
 

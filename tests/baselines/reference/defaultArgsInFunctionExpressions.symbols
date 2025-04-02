@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultArgsInFunctionExpressions.ts ===
+//// [tests/cases/compiler/defaultArgsInFunctionExpressions.ts] ////
+
+=== defaultArgsInFunctionExpressions.ts ===
 var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
 >f : Symbol(f, Decl(defaultArgsInFunctionExpressions.ts, 0, 3))
 >a : Symbol(a, Decl(defaultArgsInFunctionExpressions.ts, 0, 18))

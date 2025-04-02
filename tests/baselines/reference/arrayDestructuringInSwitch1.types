@@ -1,66 +1,105 @@
-=== tests/cases/compiler/arrayDestructuringInSwitch1.ts ===
+//// [tests/cases/compiler/arrayDestructuringInSwitch1.ts] ////
+
+=== arrayDestructuringInSwitch1.ts ===
 export type Expression = BooleanLogicExpression | 'true' | 'false';
->Expression : BooleanLogicExpression | "true" | "false"
+>Expression : Expression
+>           : ^^^^^^^^^^
 
 export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expression];
->BooleanLogicExpression : ["and", ...Expression[]] | ["not", Expression]
+>BooleanLogicExpression : BooleanLogicExpression
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
 export function evaluate(expression: Expression): boolean {
 >evaluate : (expression: Expression) => boolean
+>         : ^          ^^          ^^^^^       
 >expression : Expression
+>           : ^^^^^^^^^^
 
   if (Array.isArray(expression)) {
 >Array.isArray(expression) : boolean
+>                          : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >expression : Expression
+>           : ^^^^^^^^^^
 
     const [operator, ...operands] = expression;
 >operator : "and" | "not"
+>         : ^^^^^^^^^^^^^
 >operands : Expression[] | [Expression]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >expression : BooleanLogicExpression
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 
     switch (operator) {
 >operator : "and" | "not"
+>         : ^^^^^^^^^^^^^
 
       case 'and': {
 >'and' : "and"
+>      : ^^^^^
 
         return operands.every((child) => evaluate(child));
 >operands.every((child) => evaluate(child)) : boolean
+>                                           : ^^^^^^^
 >operands.every : { <S extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; } | { <S extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >operands : Expression[] | [Expression]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >every : { <S extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; } | { <S extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >(child) => evaluate(child) : (child: Expression) => boolean
+>                           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >child : Expression
+>      : ^^^^^^^^^^
 >evaluate(child) : boolean
+>                : ^^^^^^^
 >evaluate : (expression: Expression) => boolean
+>         : ^          ^^          ^^^^^       
 >child : Expression
+>      : ^^^^^^^^^^
       }
       case 'not': {
 >'not' : "not"
+>      : ^^^^^
 
         return !evaluate(operands[0]);
 >!evaluate(operands[0]) : boolean
+>                       : ^^^^^^^
 >evaluate(operands[0]) : boolean
+>                      : ^^^^^^^
 >evaluate : (expression: Expression) => boolean
+>         : ^          ^^          ^^^^^       
 >operands[0] : Expression
+>            : ^^^^^^^^^^
 >operands : Expression[] | [Expression]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
       }
       default: {
         throw new Error(`${operator} is not a supported operator`);
 >new Error(`${operator} is not a supported operator`) : Error
+>                                                     : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >`${operator} is not a supported operator` : string
+>                                          : ^^^^^^
 >operator : never
+>         : ^^^^^
       }
     }
   } else {
     return expression === 'true';
 >expression === 'true' : boolean
+>                      : ^^^^^^^
 >expression : "true" | "false"
+>           : ^^^^^^^^^^^^^^^^
 >'true' : "true"
+>       : ^^^^^^
   }
 }

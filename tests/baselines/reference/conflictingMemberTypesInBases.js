@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conflictingMemberTypesInBases.ts] ////
+
 //// [conflictingMemberTypesInBases.ts]
 interface A {
     m: string;

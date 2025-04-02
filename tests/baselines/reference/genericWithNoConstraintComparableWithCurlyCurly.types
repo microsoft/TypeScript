@@ -1,72 +1,104 @@
-=== tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts ===
+//// [tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts] ////
+
+=== genericWithNoConstraintComparableWithCurlyCurly.ts ===
 function foo<T>() {
 >foo : <T>() => void
+>    : ^ ^^^^^^^^^^^
 
     let x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     x as T;
 >x as T : T
+>       : ^
 >x : {}
+>  : ^^
 }
 
 function bar<T extends unknown>() {
 >bar : <T extends unknown>() => void
+>    : ^ ^^^^^^^^^       ^^^^^^^^^^^
 
     let x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     x as T;
 >x as T : T
+>       : ^
 >x : {}
+>  : ^^
 }
 
 function baz<T extends {}>() {
 >baz : <T extends {}>() => void
+>    : ^ ^^^^^^^^^  ^^^^^^^^^^^
 
     let x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     x as T;
 >x as T : T
+>       : ^
 >x : {}
+>  : ^^
 }
 
 function bat<T extends object>() {
 >bat : <T extends object>() => void
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
     let x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     x as T;
 >x as T : T
+>       : ^
 >x : {}
+>  : ^^
 }
 
 function no<T extends null | undefined>() {
 >no : <T extends null | undefined>() => void
+>   : ^ ^^^^^^^^^                ^^^^^^^^^^^
 
     let x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     x as T; // should error
 >x as T : T
+>       : ^
 >x : {}
+>  : ^^
 }
 
 function yes<T extends object | null | undefined>() {
 >yes : <T extends object | null | undefined>() => void
+>    : ^ ^^^^^^^^^                         ^^^^^^^^^^^
 
     let x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
     x as T;
 >x as T : T
+>       : ^
 >x : {}
+>  : ^^
 }

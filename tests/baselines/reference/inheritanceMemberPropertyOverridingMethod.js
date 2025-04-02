@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceMemberPropertyOverridingMethod.ts] ////
+
 //// [inheritanceMemberPropertyOverridingMethod.ts]
 class a {
     x() {

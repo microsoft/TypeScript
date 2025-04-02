@@ -1,40 +1,61 @@
-=== tests/cases/conformance/externalModules/usage.ts ===
+//// [tests/cases/conformance/externalModules/exportTypeMergedWithExportStarAsNamespace.ts] ////
+
+=== usage.ts ===
 import { Something } from "./prelude"
->Something : typeof import("tests/cases/conformance/externalModules/Something")
+>Something : typeof import("Something")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const myValue: Something<string> = Something.of("abc")
 >myValue : Something<string>
->Something.of("abc") : import("tests/cases/conformance/externalModules/Something").Something<string>
->Something.of : <A>(value: A) => import("tests/cases/conformance/externalModules/Something").Something<A>
->Something : typeof import("tests/cases/conformance/externalModules/Something")
->of : <A>(value: A) => import("tests/cases/conformance/externalModules/Something").Something<A>
+>        : ^^^^^^^^^^^^^^^^^
+>Something.of("abc") : import("Something").Something<string>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Something.of : <A>(value: A) => import("Something").Something<A>
+>             : ^ ^^     ^^ ^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^   
+>Something : typeof import("Something")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>of : <A>(value: A) => import("Something").Something<A>
+>   : ^ ^^     ^^ ^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^   
 >"abc" : "abc"
+>      : ^^^^^
 
 export type MyType = Something.SubType<string>
->MyType : { value: string; }
+>MyType : MyType
+>       : ^^^^^^
 >Something : any
+>          : ^^^
 
-=== tests/cases/conformance/externalModules/Something.ts ===
+=== Something.ts ===
 export type Something<A> = { value: A }
 >Something : Something<A>
+>          : ^^^^^^^^^^^^
 >value : A
+>      : ^
 
 export type SubType<A> = { value: A }
 >SubType : SubType<A>
+>        : ^^^^^^^^^^
 >value : A
+>      : ^
 
 export declare function of<A>(value: A): Something<A>
 >of : <A>(value: A) => Something<A>
+>   : ^ ^^     ^^ ^^^^^            
 >value : A
+>      : ^
 
-=== tests/cases/conformance/externalModules/prelude.ts ===
+=== prelude.ts ===
 import * as S from "./Something"
 >S : typeof S
+>  : ^^^^^^^^
 
 export * as Something from "./Something"
 >Something : typeof S
+>          : ^^^^^^^^
 
 export type Something<A> = S.Something<A>
 >Something : Something<A>
+>          : ^^^^^^^^^^^^
 >S : any
+>  : ^^^
 

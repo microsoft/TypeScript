@@ -1,35 +1,52 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility3.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility3.ts] ////
+
+=== classConstructorParametersAccessibility3.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(protected p: number) { }
 >p : number
+>  : ^^^^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor(public p: number) {
 >p : number
+>  : ^^^^^^
 
         super(p);
 >super(p) : void
+>         : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 
         this.p; // OK
 >this.p : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >p : number
+>  : ^^^^^^
     }
 }
 
 var d: Derived;
 >d : Derived
+>  : ^^^^^^^
 
 d.p;  // public, OK
 >d.p : number
+>    : ^^^^^^
 >d : Derived
+>  : ^^^^^^^
 >p : number
+>  : ^^^^^^
 

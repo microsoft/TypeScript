@@ -1,11 +1,11 @@
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(10,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(15,1): error TS2629: Cannot assign to 'C' because it is a class.
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(20,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(23,1): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(30,1): error TS2630: Cannot assign to 'i' because it is a function.
+validNullAssignments.ts(10,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
+validNullAssignments.ts(15,1): error TS2629: Cannot assign to 'C' because it is a class.
+validNullAssignments.ts(20,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
+validNullAssignments.ts(23,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+validNullAssignments.ts(30,1): error TS2630: Cannot assign to 'i' because it is a function.
 
 
-==== tests/cases/conformance/types/primitives/null/validNullAssignments.ts (5 errors) ====
+==== validNullAssignments.ts (5 errors) ====
     var a: number = null;
     var b: boolean = null;
     var c: string = null;

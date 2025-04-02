@@ -1,7 +1,16 @@
-=== tests/cases/compiler/variableDeclarationInStrictMode1.ts ===
+//// [tests/cases/compiler/variableDeclarationInStrictMode1.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 2,500
+
+=== variableDeclarationInStrictMode1.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 var eval;
 >eval : any
+>     : ^^^
 

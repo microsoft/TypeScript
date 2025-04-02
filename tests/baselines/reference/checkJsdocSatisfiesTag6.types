@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag6.ts] ////
+
 === /a.js ===
 /**
  * @typedef {Object} Point2d
@@ -8,28 +10,47 @@
 // Undesirable behavior today with type annotation
 const a = /** @satisfies {Partial<Point2d>} */ ({ x: 10 });
 >a : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >({ x: 10 }) : { x: number; }
+>            : ^^^^^^^^^^^^^^
 >{ x: 10 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 // Should OK
 console.log(a.x.toFixed());
 >console.log(a.x.toFixed()) : void
+>                           : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >a.x.toFixed() : string
+>              : ^^^^^^
 >a.x.toFixed : (fractionDigits?: number) => string
+>            : ^              ^^^      ^^^^^      
 >a.x : number
+>    : ^^^^^^
 >a : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 // Should error
 let p = a.y;
 >p : any
+>  : ^^^
 >a.y : any
+>    : ^^^
 >a : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >y : any
+>  : ^^^
 

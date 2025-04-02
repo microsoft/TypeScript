@@ -1,79 +1,115 @@
-=== tests/cases/compiler/genericsWithoutTypeParameters1.ts ===
+//// [tests/cases/compiler/genericsWithoutTypeParameters1.ts] ////
+
+=== genericsWithoutTypeParameters1.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     foo(): T { return null }
 >foo : () => T
+>    : ^^^^^^ 
 }
 
 interface I<T> {
     bar(): T;
 >bar : () => T
+>    : ^^^^^^ 
 }
 
 var c1: C;
 >c1 : any
+>   : ^^^
 
 var i1: I;
 >i1 : any
+>   : ^^^
 
 var c2: C<I>;
 >c2 : C<any>
+>   : ^^^^^^
 
 var i2: I<C>;
 >i2 : I<any>
+>   : ^^^^^^
 
 function foo(x: C, y: I) { }
->foo : (x: any, y: any) => void
+>foo : (x: C, y: I) => void
+>    : ^ ^^ ^^ ^^ ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 function foo2(x: C<I>, y: I<C>) { }
 >foo2 : (x: C<I>, y: I<C>) => void
+>     : ^ ^^    ^^ ^^    ^^^^^^^^^
 >x : C<any>
+>  : ^^^^^^
 >y : I<any>
+>  : ^^^^^^
 
 var x: { a: C } = { a: new C<number>() };
->x : { a: any; }
+>x : { a: C; }
+>  : ^^^^^ ^^^
 >a : any
+>  : ^^^
 >{ a: new C<number>() } : { a: C<number>; }
+>                       : ^^^^^^^^^^^^^^^^^
 >a : C<number>
+>  : ^^^^^^^^^
 >new C<number>() : C<number>
+>                : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var x2: { a: I } = { a: { bar() { return 1 } } };
->x2 : { a: any; }
+>x2 : { a: I; }
+>   : ^^^^^ ^^^
 >a : any
+>  : ^^^
 >{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { bar(): number; }
+>  : ^^^^^^^^^^^^^^^^^^
 >{ bar() { return 1 } } : { bar(): number; }
+>                       : ^^^^^^^^^^^^^^^^^^
 >bar : () => number
+>    : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     x: C;
 >x : any
+>  : ^^^
 
     y: D;
 >y : any
+>  : ^^^
 }
 
 interface J<T> {
     x: I;
 >x : any
+>  : ^^^
 
     y: J;
 >y : any
+>  : ^^^
 }
 
 class A<T> { }
 >A : A<T>
+>  : ^^^^
 
 function f<T>(x: T): A {
->f : <T>(x: T) => any
+>f : <T>(x: T) => A
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     return null;
 }

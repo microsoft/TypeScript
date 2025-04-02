@@ -1,282 +1,424 @@
-=== tests/cases/conformance/types/intersection/intersectionReductionStrict.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionReductionStrict.ts] ////
+
+=== intersectionReductionStrict.ts ===
 declare const sym1: unique symbol;
 >sym1 : unique symbol
+>     : ^^^^^^^^^^^^^
 
 declare const sym2: unique symbol;
 >sym2 : unique symbol
+>     : ^^^^^^^^^^^^^
 
 type T1 = string & 'a';  // 'a'
 >T1 : "a"
+>   : ^^^
 
 type T2 = 'a' & string & 'b';  // never
 >T2 : never
+>   : ^^^^^
 
 type T3 = number & 10;  // 10
 >T3 : 10
+>   : ^^
 
 type T4 = 10 & number & 20;  // never
 >T4 : never
+>   : ^^^^^
 
 type T5 = symbol & typeof sym1;  // typeof sym1
 >T5 : unique symbol
+>   : ^^^^^^^^^^^^^
 >sym1 : unique symbol
+>     : ^^^^^^^^^^^^^
 
 type T6 = typeof sym1 & symbol & typeof sym2;  // never
 >T6 : never
+>   : ^^^^^
 >sym1 : unique symbol
+>     : ^^^^^^^^^^^^^
 >sym2 : unique symbol
+>     : ^^^^^^^^^^^^^
 
 type T7 = string & 'a' & number & 10 & symbol & typeof sym1;  // never
 >T7 : never
+>   : ^^^^^
 >sym1 : unique symbol
+>     : ^^^^^^^^^^^^^
 
 type T10 = string & ('a' | 'b');  // 'a' | 'b'
->T10 : "a" | "b"
+>T10 : T10
+>    : ^^^
 
 type T11 = (string | number) & ('a' | 10);  // 'a' | 10
 >T11 : "a" | 10
+>    : ^^^^^^^^
 
 type N1 = 'a' & 'b';
 >N1 : never
+>   : ^^^^^
 
 type N2 = { a: string } & null;
 >N2 : never
+>   : ^^^^^
 >a : string
+>  : ^^^^^^
 
 type N3 = { a: string } & undefined;
 >N3 : never
+>   : ^^^^^
 >a : string
+>  : ^^^^^^
 
 type N4 = string & number;
 >N4 : never
+>   : ^^^^^
 
 type N5 = number & object;
 >N5 : never
+>   : ^^^^^
 
 type N6 = symbol & string;
 >N6 : never
+>   : ^^^^^
 
 type N7 = void & string;
 >N7 : never
+>   : ^^^^^
 
 type X = { x: string };
->X : { x: string; }
+>X : X
+>  : ^
 >x : string
+>  : ^^^^^^
 
 type X1 = X | 'a' & 'b';
 >X1 : X
+>   : ^
 
 type X2 = X | { a: string } & null;
 >X2 : X
+>   : ^
 >a : string
+>  : ^^^^^^
 
 type X3 = X | { a: string } & undefined;
 >X3 : X
+>   : ^
 >a : string
+>  : ^^^^^^
 
 type X4 = X | string & number;
 >X4 : X
+>   : ^
 
 type X5 = X | number & object;
 >X5 : X
+>   : ^
 
 type X6 = X | symbol & string;
 >X6 : X
+>   : ^
 
 type X7 = X | void & string;
 >X7 : X
+>   : ^
 
 type A = { kind: 'a', foo: string };
->A : { kind: 'a'; foo: string; }
+>A : A
+>  : ^
 >kind : "a"
+>     : ^^^
 >foo : string
+>    : ^^^^^^
 
 type B = { kind: 'b', foo: number };
->B : { kind: 'b'; foo: number; }
+>B : B
+>  : ^
 >kind : "b"
+>     : ^^^
 >foo : number
+>    : ^^^^^^
 
 type C = { kind: 'c', foo: number };
->C : { kind: 'c'; foo: number; }
+>C : C
+>  : ^
 >kind : "c"
+>     : ^^^
 >foo : number
+>    : ^^^^^^
 
 declare let ab: A & B;
 >ab : never
+>   : ^^^^^
 
 ab.kind;  // Error
 >ab.kind : any
+>        : ^^^
 >ab : never
+>   : ^^^^^
 >kind : any
+>     : ^^^
 
 declare let x: A | (B & C);  // A
 >x : A
+>  : ^
 
 let a: A = x;
 >a : A
+>  : ^
 >x : A
+>  : ^
 
 type AB = A & B;  // never
 >AB : never
+>   : ^^^^^
 
 type BC = B & C;  // never
 >BC : never
+>   : ^^^^^
 
 type U1 = Partial<A & B>;  // never
 >U1 : never
+>   : ^^^^^
 
 type U2 = Readonly<A & B>;  // never
 >U2 : never
+>   : ^^^^^
 
 type U3 = (A & B)['kind'];  // never
 >U3 : never
+>   : ^^^^^
 
 type U4 = A & B | B & C;  // never
 >U4 : never
+>   : ^^^^^
 
 type U5 = A | B & C;  // A
 >U5 : A
+>   : ^
 
 type K1 = keyof (A & B);  // string | number | symbol
 >K1 : string | number | symbol
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 type K2 = keyof A | keyof B;  // 'kind' | 'foo'
->K2 : "kind" | "foo"
+>K2 : K2
+>   : ^^
 
 type Merge1<T, U> = { [P in keyof (T & U)]: P extends keyof T ? T[P] : U[P & keyof U] }
 >Merge1 : Merge1<T, U>
+>       : ^^^^^^^^^^^^
 
 type Merge2<T, U> = { [P in keyof T | keyof U]: P extends keyof T ? T[P] : U[P & keyof U] }
 >Merge2 : Merge2<T, U>
+>       : ^^^^^^^^^^^^
 
 type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
 >M1 : never
+>   : ^^^^^
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 >a : 2
+>  : ^
 >c : 3
+>  : ^
 
 type M2 = Merge1<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // {}
->M2 : {}
+>M2 : M2
+>   : ^^
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 >a : 2
+>  : ^
 >c : 3
+>  : ^
 
 type M3 = Merge2<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // { a: 1, b: 2, c: 3 }
->M3 : { a: 1; b: 2; c: 3; }
+>M3 : M3
+>   : ^^
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 >a : 2
+>  : ^
 >c : 3
+>  : ^
 
 // Repro from #31663
 
 const x1 = { a: 'foo', b: 42 };
 >x1 : { a: string; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 'foo', b: 42 } : { a: string; b: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >b : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 const x2 = { a: 'foo', b: true };
 >x2 : { a: string; b: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 'foo', b: true } : { a: string; b: boolean; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 declare let k: 'a' | 'b';
 >k : "a" | "b"
+>  : ^^^^^^^^^
 
 x1[k] = 'bar' as any;  // Error
 >x1[k] = 'bar' as any : any
+>                     : ^^^
 >x1[k] : never
+>      : ^^^^^
 >x1 : { a: string; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >'bar' as any : any
+>             : ^^^
 >'bar' : "bar"
+>      : ^^^^^
 
 x2[k] = 'bar' as any;  // Error
 >x2[k] = 'bar' as any : any
+>                     : ^^^
 >x2[k] : never
+>      : ^^^^^
 >x2 : { a: string; b: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >'bar' as any : any
+>             : ^^^
 >'bar' : "bar"
+>      : ^^^^^
 
 const enum Tag1 {}
 >Tag1 : Tag1
+>     : ^^^^
 
 const enum Tag2 {}
 >Tag2 : Tag2
+>     : ^^^^
 
 declare let s1: string & Tag1;
 >s1 : never
+>   : ^^^^^
 
 declare let s2: string & Tag2;
 >s2 : never
+>   : ^^^^^
 
 declare let t1: string & Tag1 | undefined;
 >t1 : undefined
+>   : ^^^^^^^^^
 
 declare let t2: string & Tag2 | undefined;
 >t2 : undefined
+>   : ^^^^^^^^^
 
 s1 = s2;
 >s1 = s2 : never
+>        : ^^^^^
 >s1 : never
+>   : ^^^^^
 >s2 : never
+>   : ^^^^^
 
 s2 = s1;
 >s2 = s1 : never
+>        : ^^^^^
 >s2 : never
+>   : ^^^^^
 >s1 : never
+>   : ^^^^^
 
 t1 = t2;
 >t1 = t2 : undefined
+>        : ^^^^^^^^^
 >t1 : undefined
+>   : ^^^^^^^^^
 >t2 : undefined
+>   : ^^^^^^^^^
 
 t2 = t1;
 >t2 = t1 : undefined
+>        : ^^^^^^^^^
 >t2 : undefined
+>   : ^^^^^^^^^
 >t1 : undefined
+>   : ^^^^^^^^^
 
 // Repro from #36736
 
 const f1 = (t: "a" | ("b" & "c")): "a" => t;
 >f1 : (t: "a" | ("b" & "c")) => "a"
+>   : ^ ^^                 ^^^^^   
 >(t: "a" | ("b" & "c")): "a" => t : (t: "a" | ("b" & "c")) => "a"
+>                                 : ^ ^^                 ^^^^^   
 >t : "a"
+>  : ^^^
 >t : "a"
+>  : ^^^
 
 type Container<Type extends string> = {
 >Container : Container<Type>
+>          : ^^^^^^^^^^^^^^^
 
     type: Type;
 >type : Type
+>     : ^^^^
 }
 
 const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t;
 >f2 : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
+>   : ^ ^^                                                  ^^^^^              
 >(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
+>                                                                             : ^ ^^                                                  ^^^^^              
 >t : Container<"a">
+>  : ^^^^^^^^^^^^^^
 >t : Container<"a">
+>  : ^^^^^^^^^^^^^^
 
 const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t;
->f3 : (t: Container<"a"> | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => Container<"a">
->(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => Container<"a">
+>f3 : (t: Container<"a"> | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => Container<"a">
+>   : ^ ^^                                                                        ^^^^^              
+>(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => Container<"a">
+>                                                                                                  : ^ ^^                                                                        ^^^^^              
 >t : Container<"a">
+>  : ^^^^^^^^^^^^^^
 >dataB : boolean
+>      : ^^^^^^^
 >t : Container<"a">
+>  : ^^^^^^^^^^^^^^
 
 const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t;
->f4 : (t: number | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => number
->(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => number
+>f4 : (t: number | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => number
+>   : ^ ^^                                                                ^^^^^      
+>(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => number
+>                                                                                  : ^ ^^                                                                ^^^^^      
 >t : number
+>  : ^^^^^^
 >dataB : boolean
+>      : ^^^^^^^
 >t : number
+>  : ^^^^^^
 

@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/XY.ts]
 
@@ -7,15 +7,23 @@ export const b = 2;
 
 
 //// [/user/username/projects/myproject/link.ts] symlink(/user/username/projects/myproject/Xy.ts)
+
 //// [/user/username/projects/myproject/b.ts]
 
-import { a } from "./yX";
+import { a } from "./xY";
 import { b } from "./link";
 
 a;b;
 
 
-//// [/a/lib/lib.d.ts]
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -27,82 +35,51 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
-
-/a/lib/tsc.js --w --p . --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --w --p . --explainFiles --extendedDiagnostics
 Output::
->> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './yX' or its corresponding type declarations.
+Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/XY.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/link.ts"]
+  options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/XY.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/xY.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
+  The file is in the program because:
+    Matched by default include pattern '**/*'
+    Imported via "./xY" from file '/user/username/projects/myproject/b.ts'
 
-[7m2[0m import { a } from "./yX";
+[7m2[0m import { a } from "./xY";
 [7m [0m [91m                  ~~~~~~[0m
 
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY.ts
   Matched by default include pattern '**/*'
+  Imported via "./xY" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
   Matched by default include pattern '**/*'
 b.ts
   Matched by default include pattern '**/*'
-[[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
-
-Program root files: ["/user/username/projects/myproject/XY.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/link.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/XY.ts
-/user/username/projects/myproject/link.ts
-/user/username/projects/myproject/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/XY.ts
-/user/username/projects/myproject/link.ts
-/user/username/projects/myproject/b.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/xy.ts (used version)
-/user/username/projects/myproject/link.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/yx: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/xy.ts: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/user/username/projects/myproject: *new*
-  {}
-/user/username/projects/myproject/link.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/XY.js]
 "use strict";
@@ -123,12 +100,68 @@ exports.b = 2;
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var yX_1 = require("./yX");
+var xY_1 = require("./xY");
 var link_1 = require("./link");
-yX_1.a;
+xY_1.a;
 link_1.b;
 
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/XY.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/link.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/XY.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/link.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/XY.ts
+/user/username/projects/myproject/link.ts
+/user/username/projects/myproject/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/XY.ts
+/user/username/projects/myproject/link.ts
+/user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/myproject/xy.ts (used version)
+/user/username/projects/myproject/link.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Prepend a line to moduleA
 
@@ -141,47 +174,51 @@ export const b = 2;
 
 
 
+Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/XY.ts 1:: WatchInfo: /user/username/projects/myproject/XY.ts 250 undefined Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/XY.ts 1:: WatchInfo: /user/username/projects/myproject/XY.ts 250 undefined Source file
+FileWatcher:: Triggered with /user/username/projects/myproject/link.ts 1:: WatchInfo: /user/username/projects/myproject/link.ts 250 undefined Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/link.ts 1:: WatchInfo: /user/username/projects/myproject/link.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
+2: timerToUpdateProgram
+
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
->> Screen clear
-[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
+Synchronizing program
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './yX' or its corresponding type declarations.
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/XY.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/link.ts"]
+  options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/xY.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
+  The file is in the program because:
+    Matched by default include pattern '**/*'
+    Imported via "./xY" from file '/user/username/projects/myproject/b.ts'
 
-[7m2[0m import { a } from "./yX";
+[7m2[0m import { a } from "./xY";
 [7m [0m [91m                  ~~~~~~[0m
 
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY.ts
   Matched by default include pattern '**/*'
+  Imported via "./xY" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
   Matched by default include pattern '**/*'
 b.ts
   Matched by default include pattern '**/*'
-[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/XY.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/link.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/XY.ts
-/user/username/projects/myproject/link.ts
-/user/username/projects/myproject/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/XY.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/xy.ts (computed .d.ts)
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/XY.js]
 "use strict";
@@ -192,3 +229,46 @@ exports.a = 1;
 exports.b = 2;
 
 
+//// [/user/username/projects/myproject/link.js]
+"use strict";
+// some comment
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = 1;
+exports.b = 2;
+
+
+//// [/user/username/projects/myproject/b.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/XY.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/link.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/myproject/XY.ts
+/user/username/projects/myproject/link.ts
+/user/username/projects/myproject/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/XY.ts
+/user/username/projects/myproject/link.ts
+/user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/xy.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+/user/username/projects/myproject/link.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

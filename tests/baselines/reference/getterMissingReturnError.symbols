@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getterMissingReturnError.ts ===
+//// [tests/cases/compiler/getterMissingReturnError.ts] ////
+
+=== getterMissingReturnError.ts ===
 class test {
 >test : Symbol(test, Decl(getterMissingReturnError.ts, 0, 0))
 

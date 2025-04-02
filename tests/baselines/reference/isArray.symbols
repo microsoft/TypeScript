@@ -1,4 +1,6 @@
-=== tests/cases/compiler/isArray.ts ===
+//// [tests/cases/compiler/isArray.ts] ////
+
+=== isArray.ts ===
 var maybeArray: number | number[];
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
 

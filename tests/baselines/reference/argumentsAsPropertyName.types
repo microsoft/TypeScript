@@ -1,55 +1,88 @@
-=== tests/cases/compiler/argumentsAsPropertyName.ts ===
+//// [tests/cases/compiler/argumentsAsPropertyName.ts] ////
+
+=== argumentsAsPropertyName.ts ===
 // target: es5
 type MyType = {
->MyType : { arguments: Array<string>; }
+>MyType : MyType
+>       : ^^^^^^
 
     arguments: Array<string>
 >arguments : string[]
+>          : ^^^^^^^^
 }
 
 declare function use(s: any);
 >use : (s: any) => any
+>    : ^ ^^   ^^^^^^^^
 >s : any
 
 function myFunction(myType: MyType) {
 >myFunction : (myType: MyType) => void
+>           : ^      ^^      ^^^^^^^^^
 >myType : MyType
+>       : ^^^^^^
 
     for (let i = 0; i < 10; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 10 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
         use(myType.arguments[i]);
 >use(myType.arguments[i]) : any
 >use : (s: any) => any
+>    : ^ ^^   ^^^^^^^^
 >myType.arguments[i] : string
+>                    : ^^^^^^
 >myType.arguments : string[]
+>                 : ^^^^^^^^
 >myType : MyType
+>       : ^^^^^^
 >arguments : string[]
+>          : ^^^^^^^^
 >i : number
+>  : ^^^^^^
 
         // create closure so that tsc will turn loop body into function
         const x = 5;
 >x : 5
+>  : ^
 >5 : 5
+>  : ^
 
         [1, 2, 3].forEach(function(j) { use(x); })
 >[1, 2, 3].forEach(function(j) { use(x); }) : void
+>                                           : ^^^^
 >[1, 2, 3].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>                  : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function(j) { use(x); } : (j: number) => void
+>                        : ^ ^^^^^^^^^^^^^^^^^
 >j : number
+>  : ^^^^^^
 >use(x) : any
 >use : (s: any) => any
+>    : ^ ^^   ^^^^^^^^
 >x : 5
+>  : ^
     }
 }

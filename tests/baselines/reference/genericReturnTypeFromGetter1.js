@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericReturnTypeFromGetter1.ts] ////
+
 //// [genericReturnTypeFromGetter1.ts]
 export interface A<T> {
    new (dbSet: DbSet<T>): T;

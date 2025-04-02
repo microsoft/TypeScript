@@ -1,110 +1,165 @@
-=== tests/cases/conformance/enums/enumMergingErrors.ts ===
+//// [tests/cases/conformance/enums/enumMergingErrors.ts] ////
+
+=== enumMergingErrors.ts ===
 // Enum with constant, computed, constant members split across 3 declarations with the same root module
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export enum E1 { A = 0 }
 >E1 : E1
+>   : ^^
 >A : E1.A
+>  : ^^^^
 >0 : 0
+>  : ^
 
     export enum E2 { C }
 >E2 : E2
+>   : ^^
 >C : E2.C
+>  : ^^^^
 
     export enum E3 { A = 0 }
 >E3 : E3
+>   : ^^
 >A : E3.A
+>  : ^^^^
 >0 : 0
+>  : ^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export enum E1 { B = 'foo'.length }
 >E1 : E1
+>   : ^^
 >B : E1.B
+>  : ^^^^
 >'foo'.length : number
+>             : ^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >length : number
+>       : ^^^^^^
 
     export enum E2 { B = 'foo'.length }
 >E2 : E2
+>   : ^^
 >B : E2.B
+>  : ^^^^
 >'foo'.length : number
+>             : ^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >length : number
+>       : ^^^^^^
 
     export enum E3 { C }
 >E3 : E3
+>   : ^^
 >C : E3.A
+>  : ^^^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export enum E1 { C }
 >E1 : E1
+>   : ^^
 >C : E1.A
+>  : ^^^^
 
     export enum E2 { A = 0 }
 >E2 : E2
+>   : ^^
 >A : E2.C
+>  : ^^^^
 >0 : 0
+>  : ^
 
     export enum E3 { B = 'foo'.length }
 >E3 : E3
+>   : ^^
 >B : E3.B
+>  : ^^^^
 >'foo'.length : number
+>             : ^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 // Enum with no initializer in either declaration with constant members with the same root module
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     export enum E1 { A = 0 }
 >E1 : E1
+>   : ^^
 >A : E1.A
+>  : ^^^^
 >0 : 0
+>  : ^
 }
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     export enum E1 { B }
 >E1 : E1
+>   : ^^
 >B : E1.A
+>  : ^^^^
 }
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     export enum E1 { C }
 >E1 : E1
+>   : ^^
 >C : E1.A
+>  : ^^^^
 }
 
 
 // Enum with initializer in only one of three declarations with constant members with the same root module
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export enum E1 { A }
 >E1 : E1
+>   : ^^
 >A : E1.A
+>  : ^^^^
 }
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export enum E1 { B = 0 }
 >E1 : E1
+>   : ^^
 >B : E1.A
+>  : ^^^^
 >0 : 0
+>  : ^
 }
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export enum E1 { C }
 >E1 : E1
+>   : ^^
 >C : E1.A
+>  : ^^^^
 }
 
 

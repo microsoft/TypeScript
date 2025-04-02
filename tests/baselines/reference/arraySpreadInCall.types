@@ -1,142 +1,450 @@
-=== tests/cases/conformance/es6/spread/arraySpreadInCall.ts ===
+//// [tests/cases/conformance/es6/spread/arraySpreadInCall.ts] ////
+
+=== arraySpreadInCall.ts ===
 declare function f1(a: number, b: number, c: number, d: number, e: number, f: number): void;
 >f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >e : number
+>  : ^^^^^^
 >f : number
+>  : ^^^^^^
 
 f1(1, 2, 3, 4, ...[5, 6]);
 >f1(1, 2, 3, 4, ...[5, 6]) : void
+>                          : ^^^^
 >f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^    
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >...[5, 6] : number
->[5, 6] : readonly [number, number]
+>          : ^^^^^^
+>[5, 6] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
 
 f1(...[1], 2, 3, 4, 5, 6);
 >f1(...[1], 2, 3, 4, 5, 6) : void
+>                          : ^^^^
 >f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^    
 >...[1] : number
->[1] : readonly [number]
+>       : ^^^^^^
+>[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
 
 f1(1, 2, ...[3, 4], 5, 6);
 >f1(1, 2, ...[3, 4], 5, 6) : void
+>                          : ^^^^
 >f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^    
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...[3, 4] : number
->[3, 4] : readonly [number, number]
+>          : ^^^^^^
+>[3, 4] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
 
 f1(1, 2, ...[3], 4, ...[5, 6]);
 >f1(1, 2, ...[3], 4, ...[5, 6]) : void
+>                               : ^^^^
 >f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^    
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...[3] : number
->[3] : readonly [number]
+>       : ^^^^^^
+>[3] : [number]
+>    : ^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >...[5, 6] : number
->[5, 6] : readonly [number, number]
+>          : ^^^^^^
+>[5, 6] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
 
 f1(...[1, 2], ...[3, 4], ...[5, 6]);
 >f1(...[1, 2], ...[3, 4], ...[5, 6]) : void
+>                                    : ^^^^
 >f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^    
 >...[1, 2] : number
->[1, 2] : readonly [number, number]
+>          : ^^^^^^
+>[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...[3, 4] : number
->[3, 4] : readonly [number, number]
+>          : ^^^^^^
+>[3, 4] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >...[5, 6] : number
->[5, 6] : readonly [number, number]
+>          : ^^^^^^
+>[5, 6] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >6 : 6
+>  : ^
+
+f1(...(([1, 2])), ...(((([3, 4])))), ...([5, 6]));
+>f1(...(([1, 2])), ...(((([3, 4])))), ...([5, 6])) : void
+>                                                  : ^^^^
+>f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
+>   : ^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^    
+>...(([1, 2])) : number
+>              : ^^^^^^
+>(([1, 2])) : [number, number]
+>           : ^^^^^^^^^^^^^^^^
+>([1, 2]) : [number, number]
+>         : ^^^^^^^^^^^^^^^^
+>[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>...(((([3, 4])))) : number
+>                  : ^^^^^^
+>(((([3, 4])))) : [number, number]
+>               : ^^^^^^^^^^^^^^^^
+>((([3, 4]))) : [number, number]
+>             : ^^^^^^^^^^^^^^^^
+>(([3, 4])) : [number, number]
+>           : ^^^^^^^^^^^^^^^^
+>([3, 4]) : [number, number]
+>         : ^^^^^^^^^^^^^^^^
+>[3, 4] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+>...([5, 6]) : number
+>            : ^^^^^^
+>([5, 6]) : [number, number]
+>         : ^^^^^^^^^^^^^^^^
+>[5, 6] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
 
 declare function f2<T extends unknown[]>(...args: T): T;
 >f2 : <T extends unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >args : T
+>     : ^
 
 const x21 = f2(...[1, 'foo'])
 >x21 : [number, string]
+>    : ^^^^^^^^^^^^^^^^
 >f2(...[1, 'foo']) : [number, string]
+>                  : ^^^^^^^^^^^^^^^^
 >f2 : <T extends unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >...[1, 'foo'] : string | number
->[1, 'foo'] : readonly [number, string]
+>              : ^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 
 const x22 = f2(true, ...[1, 'foo'])
 >x22 : [boolean, number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2(true, ...[1, 'foo']) : [boolean, number, string]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >true : true
+>     : ^^^^
 >...[1, 'foo'] : string | number
->[1, 'foo'] : readonly [number, string]
+>              : ^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
+
+const x23 = f2(...([1, 'foo']))
+>x23 : [number, string]
+>    : ^^^^^^^^^^^^^^^^
+>f2(...([1, 'foo'])) : [number, string]
+>                    : ^^^^^^^^^^^^^^^^
+>f2 : <T extends unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
+>...([1, 'foo']) : string | number
+>                : ^^^^^^^^^^^^^^^
+>([1, 'foo']) : [number, string]
+>             : ^^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
+
+const x24 = f2(true, ...([1, 'foo']))
+>x24 : [boolean, number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f2(true, ...([1, 'foo'])) : [boolean, number, string]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f2 : <T extends unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>...([1, 'foo']) : string | number
+>                : ^^^^^^^^^^^^^^^
+>([1, 'foo']) : [number, string]
+>             : ^^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
 
 declare function f3<T extends readonly unknown[]>(...args: T): T;
 >f3 : <T extends readonly unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >args : T
+>     : ^
 
 const x31 = f3(...[1, 'foo'])
 >x31 : [number, string]
+>    : ^^^^^^^^^^^^^^^^
 >f3(...[1, 'foo']) : [number, string]
+>                  : ^^^^^^^^^^^^^^^^
 >f3 : <T extends readonly unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >...[1, 'foo'] : string | number
->[1, 'foo'] : readonly [number, string]
+>              : ^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 
 const x32 = f3(true, ...[1, 'foo'])
 >x32 : [boolean, number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f3(true, ...[1, 'foo']) : [boolean, number, string]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f3 : <T extends readonly unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >true : true
+>     : ^^^^
 >...[1, 'foo'] : string | number
->[1, 'foo'] : readonly [number, string]
+>              : ^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
+
+const x33 = f3(...([1, 'foo']))
+>x33 : [number, string]
+>    : ^^^^^^^^^^^^^^^^
+>f3(...([1, 'foo'])) : [number, string]
+>                    : ^^^^^^^^^^^^^^^^
+>f3 : <T extends readonly unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>...([1, 'foo']) : string | number
+>                : ^^^^^^^^^^^^^^^
+>([1, 'foo']) : [number, string]
+>             : ^^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
+
+const x34 = f3(true, ...([1, 'foo']))
+>x34 : [boolean, number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f3(true, ...([1, 'foo'])) : [boolean, number, string]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f3 : <T extends readonly unknown[]>(...args: T) => T
+>   : ^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>...([1, 'foo']) : string | number
+>                : ^^^^^^^^^^^^^^^
+>([1, 'foo']) : [number, string]
+>             : ^^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
+
+declare function f4<const T extends readonly unknown[]>(...args: T): T;
+>f4 : <const T extends readonly unknown[]>(...args: T) => T
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>args : T
+>     : ^
+
+const x41 = f4(...[1, 'foo'])
+>x41 : readonly [number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4(...[1, 'foo']) : readonly [number, string]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4 : <const T extends readonly unknown[]>(...args: T) => T
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>...[1, 'foo'] : string | number
+>              : ^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
+
+const x42 = f4(true, ...[1, 'foo'])
+>x42 : readonly [true, number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4(true, ...[1, 'foo']) : readonly [true, number, string]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4 : <const T extends readonly unknown[]>(...args: T) => T
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>...[1, 'foo'] : string | number
+>              : ^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
+
+const x43 = f4(...([1, 'foo']))
+>x43 : readonly [number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4(...([1, 'foo'])) : readonly [number, string]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4 : <const T extends readonly unknown[]>(...args: T) => T
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>...([1, 'foo']) : string | number
+>                : ^^^^^^^^^^^^^^^
+>([1, 'foo']) : [number, string]
+>             : ^^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
+
+const x44 = f4(true, ...([1, 'foo']))
+>x44 : readonly [true, number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4(true, ...([1, 'foo'])) : readonly [true, number, string]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4 : <const T extends readonly unknown[]>(...args: T) => T
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>...([1, 'foo']) : string | number
+>                : ^^^^^^^^^^^^^^^
+>([1, 'foo']) : [number, string]
+>             : ^^^^^^^^^^^^^^^^
+>[1, 'foo'] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'foo' : "foo"
+>      : ^^^^^
 
 // dicovered in #52845#issuecomment-1459132562
 interface IAction {
     run(event?: unknown): unknown;
 >run : (event?: unknown) => unknown
+>    : ^     ^^^       ^^^^^       
 >event : unknown
+>      : ^^^^^^^
 }
 declare const action: IAction
 >action : IAction
+>       : ^^^^^^^
 
 action.run(...[100, 'foo']) // error
 >action.run(...[100, 'foo']) : unknown
+>                            : ^^^^^^^
 >action.run : (event?: unknown) => unknown
+>           : ^     ^^^       ^^^^^       
 >action : IAction
+>       : ^^^^^^^
 >run : (event?: unknown) => unknown
+>    : ^     ^^^       ^^^^^       
 >...[100, 'foo'] : string | number
->[100, 'foo'] : readonly [number, string]
+>                : ^^^^^^^^^^^^^^^
+>[100, 'foo'] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >100 : 100
+>    : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
 

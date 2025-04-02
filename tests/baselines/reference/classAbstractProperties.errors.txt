@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(5,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(12,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
+classAbstractProperties.ts(5,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
+classAbstractProperties.ts(12,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts (2 errors) ====
+==== classAbstractProperties.ts (2 errors) ====
     abstract class A {
         abstract x : number;
         public abstract y : number;

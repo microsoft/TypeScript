@@ -1,4 +1,7 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationExportAssignmentSyntax.ts] ////
+
+=== a.js ===
 export = b;
 >b : any
+>  : ^^^
 

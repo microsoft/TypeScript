@@ -1,107 +1,174 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs2.ts] ////
+
+=== genericCallWithObjectTypeArgs2.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     x: string;
 >x : string
+>  : ^^^^^^
 }
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }
 class Derived2 extends Base {
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     z: string;
 >z : string
+>  : ^^^^^^
 }
 
 // returns {}[]
 function f<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f : <T extends Base, U extends Base>(a: {    x: T;    y: U;}) => (T | U)[]
+>f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[]
+>  : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^^^^^^^^^^^^^
 >a : { x: T; y: U; }
+>  : ^^^^^ ^^^^^ ^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     return [a.x, a.y];
 >[a.x, a.y] : (T | U)[]
+>           : ^^^^^^^^^
 >a.x : T
+>    : ^
 >a : { x: T; y: U; }
+>  : ^^^^^ ^^^^^ ^^^
 >x : T
+>  : ^
 >a.y : U
+>    : ^
 >a : { x: T; y: U; }
+>  : ^^^^^ ^^^^^ ^^^
 >y : U
+>  : ^
 }
 
 var r = f({ x: new Derived(), y: new Derived2() }); // {}[]
 >r : (Derived | Derived2)[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >f({ x: new Derived(), y: new Derived2() }) : (Derived | Derived2)[]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^
 >f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[]
+>  : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^^^^^^^^^^^^^
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Derived
+>  : ^^^^^^^
 >new Derived() : Derived
+>              : ^^^^^^^
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 >y : Derived2
+>  : ^^^^^^^^
 >new Derived2() : Derived2
+>               : ^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 
 var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
 >r2 : (Base | Derived2)[]
+>   : ^^^^^^^^^^^^^^^^^^^
 >f({ x: new Base(), y: new Derived2() }) : (Base | Derived2)[]
+>                                        : ^^^^^^^^^^^^^^^^^^^
 >f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[]
+>  : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^^^^^^^^^^^^^
 >{ x: new Base(), y: new Derived2() } : { x: Base; y: Derived2; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Base
+>  : ^^^^
 >new Base() : Base
+>           : ^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 >y : Derived2
+>  : ^^^^^^^^
 >new Derived2() : Derived2
+>               : ^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 
 
 function f2<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f2 : <T extends Base, U extends Base>(a: {    x: T;    y: U;}) => (x: T) => U
+>f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^^^^^    ^^^^^^
 >a : { x: T; y: U; }
+>  : ^^^^^ ^^^^^ ^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     return (x: T) => a.y;
 >(x: T) => a.y : (x: T) => U
+>              : ^ ^^ ^^^^^^
 >x : T
+>  : ^
 >a.y : U
+>    : ^
 >a : { x: T; y: U; }
+>  : ^^^^^ ^^^^^ ^^^
 >y : U
+>  : ^
 }
 
 var r3 = f2({ x: new Derived(), y: new Derived2() }); // Derived => Derived2
 >r3 : (x: Derived) => Derived2
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >f2({ x: new Derived(), y: new Derived2() }) : (x: Derived) => Derived2
+>                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^^^^^    ^^^^^^
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Derived
+>  : ^^^^^^^
 >new Derived() : Derived
+>              : ^^^^^^^
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 >y : Derived2
+>  : ^^^^^^^^
 >new Derived2() : Derived2
+>               : ^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 
 interface I<T, U> {
     x: T;
 >x : T
+>  : ^
 
     y: U;
 >y : U
+>  : ^
 }
 
 var i: I<Base, Derived>;
 >i : I<Base, Derived>
+>  : ^^^^^^^^^^^^^^^^
 
 var r4 = f2(i); // Base => Derived
 >r4 : (x: Base) => Derived
+>   : ^ ^^^^^^^^^^^^^^^^^^
 >f2(i) : (x: Base) => Derived
+>      : ^ ^^^^^^^^^^^^^^^^^^
 >f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^^^^^    ^^^^^^
 >i : I<Base, Derived>
+>  : ^^^^^^^^^^^^^^^^
 

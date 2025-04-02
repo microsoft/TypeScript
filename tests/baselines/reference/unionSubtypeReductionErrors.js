@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionSubtypeReductionErrors.ts] ////
+
 //// [unionSubtypeReductionErrors.ts]
 let a = [
     0 as 0,

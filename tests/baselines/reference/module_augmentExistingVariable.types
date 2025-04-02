@@ -1,11 +1,17 @@
-=== tests/cases/compiler/module_augmentExistingVariable.ts ===
+//// [tests/cases/compiler/module_augmentExistingVariable.ts] ////
+
+=== module_augmentExistingVariable.ts ===
 var console: any;
 >console : any
+>        : ^^^
 
 module console {
 >console : typeof console
+>        : ^^^^^^^^^^^^^^
 
     export var x = 2;
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 }

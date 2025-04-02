@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts(6,5): error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
+typeArgumentInferenceWithClassExpression2.ts(6,5): error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
   Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo<unknown>.(Anonymous class)'.
-tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts(6,38): error TS2339: Property 'length' does not exist on type 'unknown'.
+typeArgumentInferenceWithClassExpression2.ts(6,38): error TS2339: Property 'length' does not exist on type 'unknown'.
 
 
-==== tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts (2 errors) ====
+==== typeArgumentInferenceWithClassExpression2.ts (2 errors) ====
     function foo<T>(x = class { prop: T }): T {
         return undefined;
     }
@@ -13,6 +13,6 @@ tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpre
         ~~~~~
 !!! error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
 !!! error TS2345:   Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo<unknown>.(Anonymous class)'.
-!!! related TS2728 tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts:1:29: 'prop' is declared here.
+!!! related TS2728 typeArgumentInferenceWithClassExpression2.ts:1:29: 'prop' is declared here.
                                          ~~~~~~
 !!! error TS2339: Property 'length' does not exist on type 'unknown'.

@@ -1,7 +1,11 @@
-=== tests/cases/compiler/classMethodWithKeywordName1.ts ===
+//// [tests/cases/compiler/classMethodWithKeywordName1.ts] ////
+
+=== classMethodWithKeywordName1.ts ===
 class C {
 >C : C
+>  : ^
 
  static try() {}
 >try : () => void
+>    : ^^^^^^^^^^
 }

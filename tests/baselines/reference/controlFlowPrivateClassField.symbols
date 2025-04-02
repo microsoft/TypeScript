@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowPrivateClassField.ts ===
+//// [tests/cases/compiler/controlFlowPrivateClassField.ts] ////
+
+=== controlFlowPrivateClassField.ts ===
 class Example {
 >Example : Symbol(Example, Decl(controlFlowPrivateClassField.ts, 0, 0))
 

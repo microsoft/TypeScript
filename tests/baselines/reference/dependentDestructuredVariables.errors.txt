@@ -1,8 +1,9 @@
-tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): error TS7022: 'value1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): error TS7031: Binding element 'value1' implicitly has an 'any' type.
+dependentDestructuredVariables.ts(334,5): error TS7022: 'value1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+dependentDestructuredVariables.ts(334,5): error TS7031: Binding element 'value1' implicitly has an 'any' type.
+dependentDestructuredVariables.ts(431,15): error TS2322: Type '1' is not assignable to type 'never'.
 
 
-==== tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts (2 errors) ====
+==== dependentDestructuredVariables.ts (3 errors) ====
     type Action =
         | { kind: 'A', payload: number }
         | { kind: 'B', payload: string };
@@ -409,4 +410,68 @@ tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): er
     const bot = new Client();
     bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
     bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+    
+    // Destructuring tuple types with different arities
+    
+    function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+        if (y === 2) {
+            x;  // 1
+        }
+        if (y === 4) {
+            x;  // 3
+        }
+        if (y === undefined) {
+            x;  // 5
+        }
+        if (x === 1) {
+            y;  // 2
+        }
+        if (x === 3) {
+            y;  // 4
+        }
+        if (x === 5) {
+            y;  // undefined
+        }
+    }
+    
+    // Repro from #55661
+    
+    function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+        if (y === undefined) {
+            const shouldNotBeOk: never = x;  // Error
+                  ~~~~~~~~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'never'.
+        }
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/56312
+    
+    function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
+      if (Math.random()) {
+        x = 1;
+      }
+      if (y === 2) {
+        x; // 1 | 3
+      }
+    }
+    
+    function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
+      if (Math.random()) {
+        y = 2;
+      }
+      if (y === 2) {
+        x; // 1 | 3
+      }
+    }
+    
+    // https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+    
+    const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (x, y) => {
+      if (Math.random()) {
+        y = 2;
+      }
+      if (y === 2) {
+        x; // 1 | 3
+      }
+    }
     

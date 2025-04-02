@@ -1,350 +1,620 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpread.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread.ts] ////
+
+=== callWithSpread.ts ===
 interface X {
     foo(x: number, y: number, ...z: string[]): X;
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
 }
 
 function foo(x: number, y: number, ...z: string[]) {
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
 }
 
 var a: string[];
 >a : string[]
+>  : ^^^^^^^^
 
 var z: number[];
 >z : number[]
+>  : ^^^^^^^^
 
 var obj: X;
 >obj : X
+>    : ^
 
 var xa: X[];
 >xa : X[]
+>   : ^^^
 
 foo(1, 2, "abc");
 >foo(1, 2, "abc") : void
+>                 : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 foo(1, 2, ...a);
 >foo(1, 2, ...a) : void
+>                : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 foo(1, 2, ...a, "abc");
 >foo(1, 2, ...a, "abc") : void
+>                       : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, "abc");
 >obj.foo(1, 2, "abc") : X
+>                     : ^
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, ...a);
 >obj.foo(1, 2, ...a) : X
+>                    : ^
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 obj.foo(1, 2, ...a, "abc");
 >obj.foo(1, 2, ...a, "abc") : X
+>                           : ^
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, ...a).foo(1, 2, "abc");
 >obj.foo(1, 2, ...a).foo(1, 2, "abc") : X
+>                                     : ^
 >obj.foo(1, 2, ...a).foo : (x: number, y: number, ...z: string[]) => X
+>                        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo(1, 2, ...a) : X
+>                    : ^
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, ...a).foo(1, 2, ...a);
 >obj.foo(1, 2, ...a).foo(1, 2, ...a) : X
+>                                    : ^
 >obj.foo(1, 2, ...a).foo : (x: number, y: number, ...z: string[]) => X
+>                        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo(1, 2, ...a) : X
+>                    : ^
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc") : X
+>                                           : ^
 >obj.foo(1, 2, ...a).foo : (x: number, y: number, ...z: string[]) => X
+>                        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo(1, 2, ...a) : X
+>                    : ^
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 (obj.foo)(1, 2, "abc");
 >(obj.foo)(1, 2, "abc") : X
+>                       : ^
 >(obj.foo) : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 (obj.foo)(1, 2, ...a);
 >(obj.foo)(1, 2, ...a) : X
+>                      : ^
 >(obj.foo) : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 (obj.foo)(1, 2, ...a, "abc");
 >(obj.foo)(1, 2, ...a, "abc") : X
+>                             : ^
 >(obj.foo) : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, "abc");
 >((obj.foo)(1, 2, ...a).foo)(1, 2, "abc") : X
+>                                         : ^
 >((obj.foo)(1, 2, ...a).foo) : (x: number, y: number, ...z: string[]) => X
+>                            : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >(obj.foo)(1, 2, ...a).foo : (x: number, y: number, ...z: string[]) => X
+>                          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >(obj.foo)(1, 2, ...a) : X
+>                      : ^
 >(obj.foo) : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, ...a);
 >((obj.foo)(1, 2, ...a).foo)(1, 2, ...a) : X
+>                                        : ^
 >((obj.foo)(1, 2, ...a).foo) : (x: number, y: number, ...z: string[]) => X
+>                            : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >(obj.foo)(1, 2, ...a).foo : (x: number, y: number, ...z: string[]) => X
+>                          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >(obj.foo)(1, 2, ...a) : X
+>                      : ^
 >(obj.foo) : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, ...a, "abc");
 >((obj.foo)(1, 2, ...a).foo)(1, 2, ...a, "abc") : X
+>                                               : ^
 >((obj.foo)(1, 2, ...a).foo) : (x: number, y: number, ...z: string[]) => X
+>                            : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >(obj.foo)(1, 2, ...a).foo : (x: number, y: number, ...z: string[]) => X
+>                          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >(obj.foo)(1, 2, ...a) : X
+>                      : ^
 >(obj.foo) : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj.foo : (x: number, y: number, ...z: string[]) => X
+>        : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >obj : X
+>    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 xa[1].foo(1, 2, "abc");
 >xa[1].foo(1, 2, "abc") : X
+>                       : ^
 >xa[1].foo : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >xa[1] : X
+>      : ^
 >xa : X[]
+>   : ^^^
 >1 : 1
+>  : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 xa[1].foo(1, 2, ...a);
 >xa[1].foo(1, 2, ...a) : X
+>                      : ^
 >xa[1].foo : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >xa[1] : X
+>      : ^
 >xa : X[]
+>   : ^^^
 >1 : 1
+>  : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 xa[1].foo(1, 2, ...a, "abc");
 >xa[1].foo(1, 2, ...a, "abc") : X
+>                             : ^
 >xa[1].foo : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >xa[1] : X
+>      : ^
 >xa : X[]
+>   : ^^^
 >1 : 1
+>  : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
 >(<Function>xa[1].foo)(...[1, 2, "abc"]) : any
 >(<Function>xa[1].foo) : Function
+>                      : ^^^^^^^^
 ><Function>xa[1].foo : Function
+>                    : ^^^^^^^^
 >xa[1].foo : (x: number, y: number, ...z: string[]) => X
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >xa[1] : X
+>      : ^
 >xa : X[]
+>   : ^^^
 >1 : 1
+>  : ^
 >foo : (x: number, y: number, ...z: string[]) => X
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
 >...[1, 2, "abc"] : string | number
->[1, 2, "abc"] : readonly [number, number, string]
+>                 : ^^^^^^^^^^^^^^^
+>[1, 2, "abc"] : [number, number, string]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 class C {
 >C : C
+>  : ^
 
     constructor(x: number, y: number, ...z: string[]) {
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
 
         this.foo(x, y);
 >this.foo(x, y) : void
+>               : ^^^^
 >this.foo : (x: number, y: number, ...z: string[]) => void
+>         : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >this : this
+>     : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
         this.foo(x, y, ...z);
 >this.foo(x, y, ...z) : void
+>                     : ^^^^
 >this.foo : (x: number, y: number, ...z: string[]) => void
+>         : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >this : this
+>     : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >...z : string
+>     : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
     }
     foo(x: number, y: number, ...z: string[]) {
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : string[]
+>  : ^^^^^^^^
     }
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     constructor() {
         super(1, 2);
 >super(1, 2) : void
+>            : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
         super(1, 2, ...a);
 >super(1, 2, ...a) : void
+>                  : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
     }
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         super.foo(1, 2);
 >super.foo(1, 2) : void
+>                : ^^^^
 >super.foo : (x: number, y: number, ...z: string[]) => void
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >super : C
+>      : ^
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
         super.foo(1, 2, ...a);
 >super.foo(1, 2, ...a) : void
+>                      : ^^^^
 >super.foo : (x: number, y: number, ...z: string[]) => void
+>          : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >super : C
+>      : ^
 >foo : (x: number, y: number, ...z: string[]) => void
+>    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
     }
 }
 

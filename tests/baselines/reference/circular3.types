@@ -1,16 +1,24 @@
+//// [tests/cases/conformance/externalModules/typeOnly/circular3.ts] ////
+
 === /a.ts ===
 import type { A } from './b';
 >A : any
+>  : ^^^
 
 export type { A as B };
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 
 === /b.ts ===
 import type { B } from './a';
 >B : any
+>  : ^^^
 
 export type { B as A };
 >B : any
+>  : ^^^
 >A : any
+>  : ^^^
 

@@ -1,15 +1,25 @@
-=== tests/cases/compiler/letInLetDeclarations_ES6.ts ===
+//// [tests/cases/compiler/letInLetDeclarations_ES6.ts] ////
+
+=== letInLetDeclarations_ES6.ts ===
 // All use of let in const declaration should be an error
 let x = 50, let = 5;
 >x : number
+>  : ^^^^^^
 >50 : 50
+>   : ^^
 >let : number
+>    : ^^^^^^
 >5 : 5
+>  : ^
 
 {
     let x = 10, let = 20;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >let : number
+>    : ^^^^^^
 >20 : 20
+>   : ^^
 }

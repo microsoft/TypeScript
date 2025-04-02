@@ -1,9 +1,9 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "compilerOptions": { "module": "commonjs" } }
 
-// @Filename: /node_modules/@types/ts-node/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/ts-node/index.d.ts
 //// export {};
 //// declare const REGISTER_INSTANCE: unique symbol;
 //// declare global {
@@ -14,7 +14,7 @@
 ////   }
 //// }
 
-// @Filename: /node_modules/@types/node/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts
 //// declare module "process" {
 ////     global {
 ////         var process: NodeJS.Process;
@@ -27,7 +27,7 @@
 ////     export = process;
 //// }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// I/**/
 
 verify.completions({

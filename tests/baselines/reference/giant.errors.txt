@@ -1,253 +1,237 @@
-tests/cases/compiler/giant.ts(22,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(23,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(23,20): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(24,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(25,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(25,29): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(26,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(27,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(27,21): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(28,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(29,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(29,30): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(32,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(33,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(33,29): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(34,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(35,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(35,20): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(60,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(60,6): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(61,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(62,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(75,5): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(86,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(87,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(87,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(88,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(89,20): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(89,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(90,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(91,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(91,25): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(92,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(93,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(93,34): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(96,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(97,20): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(97,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(98,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(99,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(99,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(124,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(124,10): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(125,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(126,10): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(139,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(153,39): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(165,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(166,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(166,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(167,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(168,20): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(168,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(169,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(170,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(170,25): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(171,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(172,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(172,34): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(175,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(176,20): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(176,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(177,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(178,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(178,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(203,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(203,10): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(204,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(205,10): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(218,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(232,39): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(237,35): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(239,24): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(242,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(243,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(244,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(244,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(245,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(246,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(246,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(247,20): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(248,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(248,23): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(249,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(250,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(250,32): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(251,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(253,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(254,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(254,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(255,20): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(256,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(256,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(257,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(261,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(261,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(266,30): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(280,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(281,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(281,20): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(282,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(283,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(283,29): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(284,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(285,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(285,21): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(286,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(287,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(287,30): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(290,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(291,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(291,29): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(292,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(293,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(293,20): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(318,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(318,6): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(319,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(320,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(333,5): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(344,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(345,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(345,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(346,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(347,20): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(347,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(348,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(349,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(349,25): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(350,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(351,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(351,34): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(354,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(355,20): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(355,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(356,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(357,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(357,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(382,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(382,10): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(383,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(384,10): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(397,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(411,39): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(423,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(424,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(424,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(425,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(426,20): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(426,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(427,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(428,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(428,25): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(429,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(430,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(430,34): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(433,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(434,20): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(434,33): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(435,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(436,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(436,24): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(461,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(461,10): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(462,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(463,10): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(476,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(490,39): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(495,35): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(497,24): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(500,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(501,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(502,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(502,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(503,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(504,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(504,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(505,20): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(506,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(506,23): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(507,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(508,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(508,32): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(509,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(511,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(512,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(512,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(513,20): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(514,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(514,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(515,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(519,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(519,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(524,30): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(531,31): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(533,20): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(536,17): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(537,18): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(538,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(538,18): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(539,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(540,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(540,27): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(541,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(542,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(542,19): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(543,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(544,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(544,28): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(545,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(547,17): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(548,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(548,27): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(549,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(550,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(550,18): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(551,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(555,18): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(555,21): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(557,24): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(560,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(562,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(586,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(586,10): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(587,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(588,10): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(601,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(605,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(605,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(610,30): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(614,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(615,39): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(620,26): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(622,24): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(625,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(627,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(652,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/giant.ts(652,10): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/giant.ts(653,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(654,10): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(667,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(671,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(671,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(23,12): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(24,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(24,20): error TS1005: '{' expected.
+giant.ts(25,12): error TS2300: Duplicate identifier 'psF'.
+giant.ts(26,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(26,29): error TS1005: '{' expected.
+giant.ts(27,13): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(28,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(28,21): error TS1005: '{' expected.
+giant.ts(29,13): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(30,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(30,30): error TS1005: '{' expected.
+giant.ts(33,12): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(34,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(34,29): error TS1005: '{' expected.
+giant.ts(35,12): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(36,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(36,20): error TS1005: '{' expected.
+giant.ts(62,5): error TS1021: An index signature must have a type annotation.
+giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
+giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
+giant.ts(87,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(88,20): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(88,24): error TS1005: '{' expected.
+giant.ts(89,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(90,20): error TS2300: Duplicate identifier 'psF'.
+giant.ts(90,33): error TS1005: '{' expected.
+giant.ts(91,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(92,21): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(92,25): error TS1005: '{' expected.
+giant.ts(93,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(94,21): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(94,34): error TS1005: '{' expected.
+giant.ts(97,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(98,20): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(98,33): error TS1005: '{' expected.
+giant.ts(99,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(100,20): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(100,24): error TS1005: '{' expected.
+giant.ts(126,9): error TS1021: An index signature must have a type annotation.
+giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
+giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(154,39): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(166,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(167,20): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(167,24): error TS1005: '{' expected.
+giant.ts(168,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(169,20): error TS2300: Duplicate identifier 'psF'.
+giant.ts(169,33): error TS1005: '{' expected.
+giant.ts(170,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(171,21): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(171,25): error TS1005: '{' expected.
+giant.ts(172,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(173,21): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(173,34): error TS1005: '{' expected.
+giant.ts(176,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(177,20): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(177,33): error TS1005: '{' expected.
+giant.ts(178,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(179,20): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(179,24): error TS1005: '{' expected.
+giant.ts(205,9): error TS1021: An index signature must have a type annotation.
+giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
+giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(233,39): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(238,35): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(240,24): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(243,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(244,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(245,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(245,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(246,20): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(247,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(247,31): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(248,20): error TS2300: Duplicate identifier 'psF'.
+giant.ts(249,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(249,23): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(250,21): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(251,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(251,32): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(252,21): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(254,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(255,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(255,31): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(256,20): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(257,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(257,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(258,20): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(262,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(262,25): error TS1036: Statements are not allowed in ambient contexts.
+giant.ts(267,30): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(281,12): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(282,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(282,20): error TS1005: '{' expected.
+giant.ts(283,12): error TS2300: Duplicate identifier 'psF'.
+giant.ts(284,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(284,29): error TS1005: '{' expected.
+giant.ts(285,13): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(286,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(286,21): error TS1005: '{' expected.
+giant.ts(287,13): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(288,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(288,30): error TS1005: '{' expected.
+giant.ts(291,12): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(292,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(292,29): error TS1005: '{' expected.
+giant.ts(293,12): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(294,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(294,20): error TS1005: '{' expected.
+giant.ts(320,5): error TS1021: An index signature must have a type annotation.
+giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
+giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
+giant.ts(345,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(346,20): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(346,24): error TS1005: '{' expected.
+giant.ts(347,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(348,20): error TS2300: Duplicate identifier 'psF'.
+giant.ts(348,33): error TS1005: '{' expected.
+giant.ts(349,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(350,21): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(350,25): error TS1005: '{' expected.
+giant.ts(351,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(352,21): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(352,34): error TS1005: '{' expected.
+giant.ts(355,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(356,20): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(356,33): error TS1005: '{' expected.
+giant.ts(357,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(358,20): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(358,24): error TS1005: '{' expected.
+giant.ts(384,9): error TS1021: An index signature must have a type annotation.
+giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
+giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(412,39): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(424,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(425,20): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(425,24): error TS1005: '{' expected.
+giant.ts(426,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(427,20): error TS2300: Duplicate identifier 'psF'.
+giant.ts(427,33): error TS1005: '{' expected.
+giant.ts(428,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(429,21): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(429,25): error TS1005: '{' expected.
+giant.ts(430,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(431,21): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(431,34): error TS1005: '{' expected.
+giant.ts(434,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(435,20): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(435,33): error TS1005: '{' expected.
+giant.ts(436,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(437,20): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(437,24): error TS1005: '{' expected.
+giant.ts(463,9): error TS1021: An index signature must have a type annotation.
+giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
+giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(491,39): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(496,35): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(498,24): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(501,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(502,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(503,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(503,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(504,20): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(505,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(505,31): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(506,20): error TS2300: Duplicate identifier 'psF'.
+giant.ts(507,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(507,23): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(508,21): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(509,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(509,32): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(510,21): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(512,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(513,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(513,31): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(514,20): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(515,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(515,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(516,20): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(520,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(520,25): error TS1036: Statements are not allowed in ambient contexts.
+giant.ts(525,30): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(532,31): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(534,20): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(537,17): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(538,18): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(539,12): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(539,18): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(540,16): error TS2300: Duplicate identifier 'pgF'.
+giant.ts(541,12): error TS2300: Duplicate identifier 'psF'.
+giant.ts(541,27): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(542,16): error TS2300: Duplicate identifier 'psF'.
+giant.ts(543,13): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(543,19): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(544,17): error TS2300: Duplicate identifier 'rgF'.
+giant.ts(545,13): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(545,28): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(546,17): error TS2300: Duplicate identifier 'rsF'.
+giant.ts(548,17): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(549,12): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(549,27): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(550,16): error TS2300: Duplicate identifier 'tsF'.
+giant.ts(551,12): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(551,18): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(552,16): error TS2300: Duplicate identifier 'tgF'.
+giant.ts(556,18): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(556,21): error TS1036: Statements are not allowed in ambient contexts.
+giant.ts(558,24): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(561,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(563,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(588,9): error TS1021: An index signature must have a type annotation.
+giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
+giant.ts(602,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(606,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(606,25): error TS1036: Statements are not allowed in ambient contexts.
+giant.ts(611,30): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+giant.ts(616,39): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+giant.ts(618,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+giant.ts(621,26): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(623,24): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(626,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(628,21): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(654,9): error TS1021: An index signature must have a type annotation.
+giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
+giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
+giant.ts(672,22): error TS1183: An implementation cannot be declared in ambient contexts.
+giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
+giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/giant.ts (247 errors) ====
+==== giant.ts (231 errors) ====
     /*
         Prefixes
         p -> public
@@ -261,6 +245,7 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
         MAX DEPTH 3 LEVELS
     */
+    const p = "propName";
     var V;
     function F() { };
     class C {
@@ -344,10 +329,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
         //Index Signature
         [p];
-        ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-         ~
-!!! error TS2304: Cannot find name 'p'.
         [p1: string];
         ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -454,10 +435,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
             //Index Signature
             [p];
-            ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-             ~
-!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -581,10 +558,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
             //Index Signature
             [p];
-            ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-             ~
-!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -796,10 +769,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
         //Index Signature
         [p];
-        ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-         ~
-!!! error TS2304: Cannot find name 'p'.
         [p1: string];
         ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -906,10 +875,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
             //Index Signature
             [p];
-            ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-             ~
-!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1033,10 +998,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
             //Index Signature
             [p];
-            ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-             ~
-!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1278,10 +1239,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
             //Index Signature
             [p];
-            ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-             ~
-!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1378,10 +1335,6 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
     
             //Index Signature
             [p];
-            ~~~
-!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
-             ~
-!!! error TS2304: Cannot find name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.

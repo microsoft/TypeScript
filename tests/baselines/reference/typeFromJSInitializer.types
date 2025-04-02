@@ -1,262 +1,433 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromJSInitializer.ts] ////
+
+=== a.js ===
 function A () {
 >A : typeof A
+>  : ^^^^^^^^
 
     // should get any on this-assignments in constructor
     this.unknown = null
 >this.unknown = null : null
+>                    : ^^^^
 >this.unknown : any
+>             : ^^^
 >this : this
+>     : ^^^^
 >unknown : any
+>        : ^^^
 
     this.unknowable = undefined
 >this.unknowable = undefined : undefined
+>                            : ^^^^^^^^^
 >this.unknowable : any
+>                : ^^^
 >this : this
+>     : ^^^^
 >unknowable : any
+>           : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     this.empty = []
 >this.empty = [] : never[]
+>                : ^^^^^^^
 >this.empty : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >empty : any
+>      : ^^^
 >[] : never[]
+>   : ^^^^^^^
 }
 var a = new A()
 >a : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 a.unknown = 1
 >a.unknown = 1 : 1
+>              : ^
 >a.unknown : any
+>          : ^^^
 >a : A
+>  : ^
 >unknown : any
+>        : ^^^
 >1 : 1
+>  : ^
 
 a.unknown = true
 >a.unknown = true : true
+>                 : ^^^^
 >a.unknown : any
+>          : ^^^
 >a : A
+>  : ^
 >unknown : any
+>        : ^^^
 >true : true
+>     : ^^^^
 
 a.unknown = {}
 >a.unknown = {} : {}
+>               : ^^
 >a.unknown : any
+>          : ^^^
 >a : A
+>  : ^
 >unknown : any
+>        : ^^^
 >{} : {}
+>   : ^^
 
 a.unknown = 'hi'
 >a.unknown = 'hi' : "hi"
+>                 : ^^^^
 >a.unknown : any
+>          : ^^^
 >a : A
+>  : ^
 >unknown : any
+>        : ^^^
 >'hi' : "hi"
+>     : ^^^^
 
 a.unknowable = 1
 >a.unknowable = 1 : 1
+>                 : ^
 >a.unknowable : any
+>             : ^^^
 >a : A
+>  : ^
 >unknowable : any
+>           : ^^^
 >1 : 1
+>  : ^
 
 a.unknowable = true
 >a.unknowable = true : true
+>                    : ^^^^
 >a.unknowable : any
+>             : ^^^
 >a : A
+>  : ^
 >unknowable : any
+>           : ^^^
 >true : true
+>     : ^^^^
 
 a.unknowable = {}
 >a.unknowable = {} : {}
+>                  : ^^
 >a.unknowable : any
+>             : ^^^
 >a : A
+>  : ^
 >unknowable : any
+>           : ^^^
 >{} : {}
+>   : ^^
 
 a.unknowable = 'hi'
 >a.unknowable = 'hi' : "hi"
+>                    : ^^^^
 >a.unknowable : any
+>             : ^^^
 >a : A
+>  : ^
 >unknowable : any
+>           : ^^^
 >'hi' : "hi"
+>     : ^^^^
 
 a.empty.push(1)
 >a.empty.push(1) : number
+>                : ^^^^^^
 >a.empty.push : (...items: any[]) => number
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
+>        : ^^^^^
 >a : A
+>  : ^
 >empty : any[]
+>      : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >1 : 1
+>  : ^
 
 a.empty.push(true)
 >a.empty.push(true) : number
+>                   : ^^^^^^
 >a.empty.push : (...items: any[]) => number
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
+>        : ^^^^^
 >a : A
+>  : ^
 >empty : any[]
+>      : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
+>     : ^^^^
 
 a.empty.push({})
 >a.empty.push({}) : number
+>                 : ^^^^^^
 >a.empty.push : (...items: any[]) => number
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
+>        : ^^^^^
 >a : A
+>  : ^
 >empty : any[]
+>      : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >{} : {}
+>   : ^^
 
 a.empty.push('hi')
 >a.empty.push('hi') : number
+>                   : ^^^^^^
 >a.empty.push : (...items: any[]) => number
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
+>        : ^^^^^
 >a : A
+>  : ^
 >empty : any[]
+>      : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >'hi' : "hi"
+>     : ^^^^
 
 /** @type {number | undefined} */
 var n;
 >n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 // should get any on parameter initialisers
 function f(a = null, b = n, l = []) {
 >f : (a?: null, b?: number | undefined, l?: any[]) => void
+>  : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : null
+>  : ^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >l : any[]
+>  : ^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
     // a should be null in strict mode
     a = undefined
 >a = undefined : undefined
+>              : ^^^^^^^^^
 >a : null
+>  : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     a = null
 >a = null : null
+>         : ^^^^
 >a : null
+>  : ^^^^
 
     a = 1
 >a = 1 : 1
+>      : ^
 >a : null
+>  : ^^^^
 >1 : 1
+>  : ^
 
     a = true
 >a = true : true
+>         : ^^^^
 >a : null
+>  : ^^^^
 >true : true
+>     : ^^^^
 
     a = {}
 >a = {} : {}
+>       : ^^
 >a : null
+>  : ^^^^
 >{} : {}
+>   : ^^
 
     a = 'ok'
 >a = 'ok' : "ok"
+>         : ^^^^
 >a : null
+>  : ^^^^
 >'ok' : "ok"
+>     : ^^^^
 
     // b should be number | undefined, not any
     b = 1
 >b = 1 : 1
+>      : ^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     b = undefined
 >b = undefined : undefined
+>              : ^^^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     b = 'error'
 >b = 'error' : "error"
+>            : ^^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >'error' : "error"
+>        : ^^^^^^^
 
     // l should be any[]
     l.push(1)
 >l.push(1) : number
+>          : ^^^^^^
 >l.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >l : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >1 : 1
+>  : ^
 
     l.push('ok')
 >l.push('ok') : number
+>             : ^^^^^^
 >l.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >l : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >'ok' : "ok"
+>     : ^^^^
 }
 
 // should get any on variable initialisers
 var u = undefined;
 >u : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var l = [];
 >l : any[]
+>  : ^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
 u = undefined
 >u = undefined : undefined
+>              : ^^^^^^^^^
 >u : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 u = 1
 >u = 1 : 1
+>      : ^
 >u : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 u = true
 >u = true : true
+>         : ^^^^
 >u : any
+>  : ^^^
 >true : true
+>     : ^^^^
 
 u = {}
 >u = {} : {}
+>       : ^^
 >u : any
+>  : ^^^
 >{} : {}
+>   : ^^
 
 u = 'ok'
 >u = 'ok' : "ok"
+>         : ^^^^
 >u : any
+>  : ^^^
 >'ok' : "ok"
+>     : ^^^^
 
 l.push('ok')
 >l.push('ok') : number
+>             : ^^^^^^
 >l.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
 >l : any[]
+>  : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >'ok' : "ok"
+>     : ^^^^
 
 /** @type {(v: unknown) => v is undefined} */
 const isUndef = v => v === undefined;
 >isUndef : (v: unknown) => v is undefined
+>        : ^ ^^       ^^^^^              
 >v => v === undefined : (v: unknown) => v is undefined
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : unknown
+>  : ^^^^^^^
 >v === undefined : boolean
+>                : ^^^^^^^
 >v : unknown
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 const e = [1, undefined];
 >e : (number | undefined)[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >[1, undefined] : (number | undefined)[]
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // should be undefined[]
 const g = e.filter(isUndef);
 >g : undefined[]
+>  : ^^^^^^^^^^^
 >e.filter(isUndef) : undefined[]
+>                  : ^^^^^^^^^^^
 >e.filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : (number | undefined)[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isUndef : (v: unknown) => v is undefined
+>        : ^ ^^       ^^^^^              
 

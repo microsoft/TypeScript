@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock28.ts] ////
+
 //// [classStaticBlock28.ts]
 let foo: number;
 

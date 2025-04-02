@@ -1,96 +1,147 @@
-=== tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts ===
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== inferFromGenericFunctionReturnTypes3.ts ===
 // Repros from #5487
 
 function truePromise(): Promise<true> {
 >truePromise : () => Promise<true>
+>            : ^^^^^^             
 >true : true
+>     : ^^^^
 
     return Promise.resolve(true);
 >Promise.resolve(true) : Promise<true>
+>                      : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >true : true
+>     : ^^^^
 }
 
 interface Wrap<T> {
     value: T;
 >value : T
+>      : ^
 }
 
 function wrap<T>(value: T): Wrap<T> {
 >wrap : <T>(value: T) => Wrap<T>
+>     : ^ ^^     ^^ ^^^^^       
 >value : T
+>      : ^
 
     return { value };
 >{ value } : { value: T; }
+>          : ^^^^^^^^^^^^^
 >value : T
+>      : ^
 }
 
 function wrappedFoo(): Wrap<'foo'> {
->wrappedFoo : () => Wrap<'foo'>
+>wrappedFoo : () => Wrap<"foo">
+>           : ^^^^^^           
 
     return wrap('foo');
 >wrap('foo') : Wrap<"foo">
+>            : ^^^^^^^^^^^
 >wrap : <T>(value: T) => Wrap<T>
+>     : ^ ^^     ^^ ^^^^^       
 >'foo' : "foo"
+>      : ^^^^^
 }
 
 function wrapBar(value: 'bar'): Wrap<'bar'> {
->wrapBar : (value: 'bar') => Wrap<'bar'>
+>wrapBar : (value: "bar") => Wrap<"bar">
+>        : ^     ^^     ^^^^^           
 >value : "bar"
+>      : ^^^^^
 
     return { value };
 >{ value } : { value: "bar"; }
+>          : ^^^^^^^^^^^^^^^^^
 >value : "bar"
+>      : ^^^^^
 }
 
 function wrappedBar(): Wrap<'bar'> {
->wrappedBar : () => Wrap<'bar'>
+>wrappedBar : () => Wrap<"bar">
+>           : ^^^^^^           
 
     const value = 'bar';
 >value : "bar"
+>      : ^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
     const inferred = wrapBar(value);
 >inferred : Wrap<"bar">
+>         : ^^^^^^^^^^^
 >wrapBar(value) : Wrap<"bar">
+>               : ^^^^^^^^^^^
 >wrapBar : (value: "bar") => Wrap<"bar">
+>        : ^     ^^     ^^^^^           
 >value : "bar"
+>      : ^^^^^
 
     const literal = wrapBar('bar');
 >literal : Wrap<"bar">
+>        : ^^^^^^^^^^^
 >wrapBar('bar') : Wrap<"bar">
+>               : ^^^^^^^^^^^
 >wrapBar : (value: "bar") => Wrap<"bar">
+>        : ^     ^^     ^^^^^           
 >'bar' : "bar"
+>      : ^^^^^
 
     const value2: string = 'bar';
 >value2 : string
+>       : ^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
     const literal2 = wrapBar(value2);  // Error
 >literal2 : Wrap<"bar">
+>         : ^^^^^^^^^^^
 >wrapBar(value2) : Wrap<"bar">
+>                : ^^^^^^^^^^^
 >wrapBar : (value: "bar") => Wrap<"bar">
+>        : ^     ^^     ^^^^^           
 >value2 : string
+>       : ^^^^^^
 
     return wrap(value);
 >wrap(value) : Wrap<"bar">
+>            : ^^^^^^^^^^^
 >wrap : <T>(value: T) => Wrap<T>
+>     : ^ ^^     ^^ ^^^^^       
 >value : "bar"
+>      : ^^^^^
 }
 
 function wrappedBaz(): Wrap<'baz'> {
->wrappedBaz : () => Wrap<'baz'>
+>wrappedBaz : () => Wrap<"baz">
+>           : ^^^^^^           
 
     const value: 'baz' = 'baz';
 >value : "baz"
+>      : ^^^^^
 >'baz' : "baz"
+>      : ^^^^^
 
     return wrap(value);
 >wrap(value) : Wrap<"baz">
+>            : ^^^^^^^^^^^
 >wrap : <T>(value: T) => Wrap<T>
+>     : ^ ^^     ^^ ^^^^^       
 >value : "baz"
+>      : ^^^^^
 }
 
 // Repro from #11152
@@ -98,54 +149,90 @@ function wrappedBaz(): Wrap<'baz'> {
 interface FolderContentItem {
     type: 'folder' | 'file';
 >type : "folder" | "file"
+>     : ^^^^^^^^^^^^^^^^^
 }
 
 let a: FolderContentItem[] = [];
 >a : FolderContentItem[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' })) : { type: "folder"; }[]
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^
 >a : FolderContentItem[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4, 5].map(v => ({ type: 'folder' })) : { type: "folder"; }[]
+>                                               : ^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4, 5].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>                    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1, 2, 3, 4, 5] : number[]
+>                : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >5 : 5
+>  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >v => ({ type: 'folder' }) : (v: number) => { type: "folder"; }
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >({ type: 'folder' }) : { type: "folder"; }
+>                     : ^^^^^^^^^^^^^^^^^^^
 >{ type: 'folder' } : { type: "folder"; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >type : "folder"
+>     : ^^^^^^^^
 >'folder' : "folder"
+>         : ^^^^^^^^
 
 // Repro from #11312
 
 let arr: Array<[number, number]> = [[1, 2]]
 >arr : [number, number][]
+>    : ^^^^^^^^^^^^^^^^^^
 >[[1, 2]] : [number, number][]
+>         : ^^^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
 >mappedArr : [number, number][]
+>          : ^^^^^^^^^^^^^^^^^^
 >arr.map(([x, y]) => {    return [x, y];}) : [number, number][]
+>                                          : ^^^^^^^^^^^^^^^^^^
 >arr.map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
+>        : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >arr : [number, number][]
+>    : ^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >([x, y]) => {    return [x, y];} : ([x, y]: [number, number]) => [number, number]
+>                                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     return [x, y];
 >[x, y] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 })
 
@@ -153,68 +240,98 @@ let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
 
 export namespace DiagnosticSeverity {
 >DiagnosticSeverity : typeof DiagnosticSeverity
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	export const Error = 1;
 >Error : 1
+>      : ^
 >1 : 1
+>  : ^
 
 	export const Warning = 2;
 >Warning : 2
+>        : ^
 >2 : 2
+>  : ^
 
 	export const Information = 3;
 >Information : 3
+>            : ^
 >3 : 3
+>  : ^
 
 	export const Hint = 4;
 >Hint : 4
+>     : ^
 >4 : 4
+>  : ^
 }
 
 export type DiagnosticSeverity = 1 | 2 | 3 | 4;
->DiagnosticSeverity : 1 | 2 | 3 | 4
+>DiagnosticSeverity : DiagnosticSeverity
+>                   : ^^^^^^^^^^^^^^^^^^
 
 export interface Diagnostic {
 	severity?: DiagnosticSeverity;
 >severity : DiagnosticSeverity | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	code?: number | string;
 >code : string | number | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	source?: string;
 >source : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 
 	message: string;
 >message : string
+>        : ^^^^^^
 }
 
 function bug(): Diagnostic[] {
 >bug : () => Diagnostic[]
+>    : ^^^^^^            
 
 	let values: any[] = [];
 >values : any[]
+>       : ^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
 	return values.map((value) => {
 >values.map((value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	}) : { severity: 1; message: string; }[]
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >values.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>           : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >values : any[]
+>       : ^^^^^
 >map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	} : (value: any) => { severity: 1; message: string; }
+>                                                                                       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 
 		return {
 >{			severity: DiagnosticSeverity.Error,			message: 'message'		} : { severity: 1; message: string; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 			severity: DiagnosticSeverity.Error,
 >severity : 1
+>         : ^
 >DiagnosticSeverity.Error : 1
+>                         : ^
 >DiagnosticSeverity : typeof DiagnosticSeverity
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Error : 1
+>      : ^
 
 			message: 'message'
 >message : string
+>        : ^^^^^^
 >'message' : "message"
+>          : ^^^^^^^^^
 		}
 	});
 }
@@ -223,26 +340,45 @@ function bug(): Diagnostic[] {
 
 function objectToMap(obj: any) {
 >objectToMap : (obj: any) => Map<string, any>
+>            : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^
 >obj : any
+>    : ^^^
 
 	return new Map(Object.keys(obj).map(key => [key, obj[key]]));
 >new Map(Object.keys(obj).map(key => [key, obj[key]])) : Map<string, any>
+>                                                      : ^^^^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 >Object.keys(obj).map(key => [key, obj[key]]) : [string, any][]
+>                                             : ^^^^^^^^^^^^^^^
 >Object.keys(obj).map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>                     : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >Object.keys(obj) : string[]
+>                 : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >obj : any
+>    : ^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >key => [key, obj[key]] : (key: string) => [string, any]
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >[key, obj[key]] : [string, any]
+>                : ^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >obj[key] : any
+>         : ^^^
 >obj : any
+>    : ^^^
 >key : string
+>    : ^^^^^^
 
 };
 
@@ -250,34 +386,49 @@ function objectToMap(obj: any) {
 
 interface Person {
   phoneNumbers: {
->phoneNumbers : { __typename: 'PhoneNumber'; }[]
+>phoneNumbers : { __typename: "PhoneNumber"; }[]
+>             : ^^^^^^^^^^^^^^             ^^^^^
 
     __typename: 'PhoneNumber';
 >__typename : "PhoneNumber"
+>           : ^^^^^^^^^^^^^
 
   }[];
 }
 
 function createPerson(): Person {
 >createPerson : () => Person
+>             : ^^^^^^      
 
   return {
 >{    phoneNumbers: [1].map(() => ({      __typename: 'PhoneNumber'    }))  } : { phoneNumbers: { __typename: "PhoneNumber"; }[]; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     phoneNumbers: [1].map(() => ({
 >phoneNumbers : { __typename: "PhoneNumber"; }[]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1].map(() => ({      __typename: 'PhoneNumber'    })) : { __typename: "PhoneNumber"; }[]
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>        : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >() => ({      __typename: 'PhoneNumber'    }) : () => { __typename: "PhoneNumber"; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({      __typename: 'PhoneNumber'    }) : { __typename: "PhoneNumber"; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      __typename: 'PhoneNumber'    } : { __typename: "PhoneNumber"; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       __typename: 'PhoneNumber'
 >__typename : "PhoneNumber"
+>           : ^^^^^^^^^^^^^
 >'PhoneNumber' : "PhoneNumber"
+>              : ^^^^^^^^^^^^^
 
     }))
   };
@@ -287,165 +438,240 @@ function createPerson(): Person {
 
 type Box<T> = { value: T };
 >Box : Box<T>
+>    : ^^^^^^
 >value : T
+>      : ^
 
 declare function box<T>(value: T): Box<T>;
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >value : T
+>      : ^
 
 type WinCondition =
->WinCondition : { type: 'win'; player: string; } | { type: 'draw'; }
+>WinCondition : WinCondition
+>             : ^^^^^^^^^^^^
 
     | { type: 'win', player: string }
 >type : "win"
+>     : ^^^^^
 >player : string
+>       : ^^^^^^
 
     | { type: 'draw' };
 >type : "draw"
+>     : ^^^^^^
 
 let zz: Box<WinCondition> = box({ type: 'draw' });
 >zz : Box<WinCondition>
+>   : ^^^^^^^^^^^^^^^^^
 >box({ type: 'draw' }) : Box<{ type: "draw"; }>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >{ type: 'draw' } : { type: "draw"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >type : "draw"
+>     : ^^^^^^
 >'draw' : "draw"
+>       : ^^^^^^
 
 type WinType = 'win' | 'draw';
->WinType : "win" | "draw"
+>WinType : WinType
+>        : ^^^^^^^
 
 let yy: Box<WinType> = box('draw');
 >yy : Box<WinType>
+>   : ^^^^^^^^^^^^
 >box('draw') : Box<"draw">
+>            : ^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
+>    : ^ ^^     ^^ ^^^^^      
 >'draw' : "draw"
+>       : ^^^^^^
 
 // Repro from #27074
 
 interface OK<T> {
     kind: "OK";
 >kind : "OK"
+>     : ^^^^
 
     value: T;
 >value : T
+>      : ^
 }
 export function ok<T>(value: T): OK<T> {
 >ok : <T>(value: T) => OK<T>
+>   : ^ ^^     ^^ ^^^^^     
 >value : T
+>      : ^
 
     return {
 >{        kind: "OK",        value: value    } : { kind: "OK"; value: T; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         kind: "OK",
 >kind : "OK"
+>     : ^^^^
 >"OK" : "OK"
+>     : ^^^^
 
         value: value
 >value : T
+>      : ^
 >value : T
+>      : ^
 
     };
 }
 
 let result: OK<[string, number]> = ok(["hello", 12]);
 >result : OK<[string, number]>
+>       : ^^^^^^^^^^^^^^^^^^^^
 >ok(["hello", 12]) : OK<[string, number]>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >ok : <T>(value: T) => OK<T>
+>   : ^ ^^     ^^ ^^^^^     
 >["hello", 12] : [string, number]
+>              : ^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >12 : 12
+>   : ^^
 
 // Repro from #25889
 
 interface I {
     code: 'mapped',
 >code : "mapped"
+>     : ^^^^^^^^
 
     name: string,
 >name : string
+>     : ^^^^^^
 }
 
 const a3: I[] = ['a', 'b'].map(name => {
 >a3 : I[]
+>   : ^^^
 >['a', 'b'].map(name => {    return {        code: 'mapped',        name,    }}) : { code: "mapped"; name: string; }[]
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['a', 'b'].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>               : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >['a', 'b'] : string[]
+>           : ^^^^^^^^
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >name => {    return {        code: 'mapped',        name,    }} : (name: string) => { code: "mapped"; name: string; }
+>                                                                : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 
     return {
 >{        code: 'mapped',        name,    } : { code: "mapped"; name: string; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         code: 'mapped',
 >code : "mapped"
+>     : ^^^^^^^^
 >'mapped' : "mapped"
+>         : ^^^^^^^^
 
         name,
 >name : string
+>     : ^^^^^^
     }
 });
 
 // Repro from https://www.memsql.com/blog/porting-30k-lines-of-code-from-flow-to-typescript/
 	
 type Player = {
->Player : { name: string; age: number; position: "STRIKER" | "GOALKEEPER"; }
+>Player : Player
+>       : ^^^^^^
 
     name: string;
 >name : string
+>     : ^^^^^^
 
     age: number;
 >age : number
+>    : ^^^^^^
 
     position: "STRIKER" | "GOALKEEPER",
 >position : "STRIKER" | "GOALKEEPER"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
  
 type F = () => Promise<Array<Player>>;
->F : () => Promise<Array<Player>>
+>F : F
+>  : ^
  
 const f1: F = () => {
 >f1 : F
+>   : ^
 >() => {    return Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]);} : () => Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
+>                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return Promise.all([
 >Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>        : ^^^^^^^^^^^^^^^^^^
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >[        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ] : ({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]
+>                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         {
 >{            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        } : { name: string; age: number; position: "GOALKEEPER"; }
+>                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             name: "David Gomes",
 >name : string
+>     : ^^^^^^
 >"David Gomes" : "David Gomes"
+>              : ^^^^^^^^^^^^^
 
             age: 23,
 >age : number
+>    : ^^^^^^
 >23 : 23
+>   : ^^
 
             position: "GOALKEEPER",
 >position : "GOALKEEPER"
+>         : ^^^^^^^^^^^^
 >"GOALKEEPER" : "GOALKEEPER"
+>             : ^^^^^^^^^^^^
 
         }, {
 >{            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        } : { name: string; age: number; position: "STRIKER"; }
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             name: "Cristiano Ronaldo",
 >name : string
+>     : ^^^^^^
 >"Cristiano Ronaldo" : "Cristiano Ronaldo"
+>                    : ^^^^^^^^^^^^^^^^^^^
 
             age: 33,
 >age : number
+>    : ^^^^^^
 >33 : 33
+>   : ^^
 
             position: "STRIKER",
 >position : "STRIKER"
+>         : ^^^^^^^^^
 >"STRIKER" : "STRIKER"
+>          : ^^^^^^^^^
         }
     ]);
 };
@@ -454,122 +680,208 @@ const f1: F = () => {
 
 declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
+>         : ^ ^^ ^^ ^^ ^^                         ^^^^^ 
 >z : U
+>  : ^
 >f : (acc: U, t: boolean) => U
+>  : ^   ^^ ^^ ^^       ^^^^^ 
 >acc : U
+>    : ^
 >t : boolean
+>  : ^^^^^^^
 
 let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
 >res : boolean
+>    : ^^^^^^^
 >foldLeft(true, (acc, t) => acc && t) : boolean
+>                                     : ^^^^^^^
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
+>         : ^ ^^ ^^ ^^ ^^                         ^^^^^ 
 >true : true
+>     : ^^^^
 >(acc, t) => acc && t : (acc: boolean, t: boolean) => boolean
+>                     : ^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >acc : boolean
+>    : ^^^^^^^
 >t : boolean
+>  : ^^^^^^^
 >acc && t : boolean
+>         : ^^^^^^^
 >acc : boolean
+>    : ^^^^^^^
 >t : boolean
+>  : ^^^^^^^
 
 enum State { A, B }
 >State : State
+>      : ^^^^^
 >A : State.A
+>  : ^^^^^^^
 >B : State.B
+>  : ^^^^^^^
 
 type Foo = { state: State }
->Foo : { state: State; }
+>Foo : Foo
+>    : ^^^
 >state : State
+>      : ^^^^^
 
 declare function bar<T>(f: () => T[]): T[];
 >bar : <T>(f: () => T[]) => T[]
+>    : ^ ^^ ^^         ^^^^^   
 >f : () => T[]
+>  : ^^^^^^   
 
 let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
 >x : Foo[]
+>  : ^^^^^
 >bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : { state: State.A; }[]
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^
 >bar : <T>(f: () => T[]) => T[]
+>    : ^ ^^ ^^         ^^^^^   
 >() => !!true ? [{ state: State.A }] : [{ state: State.B }] : () => { state: State.A; }[] | { state: State.B; }[]
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!!true ? [{ state: State.A }] : [{ state: State.B }] : { state: State.A; }[] | { state: State.B; }[]
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!!true : true
+>       : ^^^^
 >!true : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 >[{ state: State.A }] : { state: State.A; }[]
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >{ state: State.A } : { state: State.A; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >state : State.A
+>      : ^^^^^^^
 >State.A : State.A
+>        : ^^^^^^^
 >State : typeof State
+>      : ^^^^^^^^^^^^
 >A : State.A
+>  : ^^^^^^^
 >[{ state: State.B }] : { state: State.B; }[]
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >{ state: State.B } : { state: State.B; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >state : State.B
+>      : ^^^^^^^
 >State.B : State.B
+>        : ^^^^^^^
 >State : typeof State
+>      : ^^^^^^^^^^^^
 >B : State.B
+>  : ^^^^^^^
 
 // Repros from #31443
 
 enum Enum { A, B }
 >Enum : Enum
+>     : ^^^^
 >A : Enum.A
+>  : ^^^^^^
 >B : Enum.B
+>  : ^^^^^^
 
 class ClassWithConvert<T> {
 >ClassWithConvert : ClassWithConvert<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
   constructor(val: T) { }
 >val : T
+>    : ^
 
   convert(converter: { to: (v: T) => T; }) { }
 >convert : (converter: { to: (v: T) => T; }) => void
+>        : ^         ^^                    ^^^^^^^^^
 >converter : { to: (v: T) => T; }
+>          : ^^^^^^           ^^^
 >to : (v: T) => T
+>   : ^ ^^ ^^^^^ 
 >v : T
+>  : ^
 }
 
 function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
 >fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
+>   : ^ ^^   ^^                   ^^ ^^                         ^^^^^^^^^
 >arg : ClassWithConvert<T>
+>    : ^^^^^^^^^^^^^^^^^^^
 >f : () => ClassWithConvert<T>
+>  : ^^^^^^                   
 
 fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
 >fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A)) : void
+>                                                                     : ^^^^
 >fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
+>   : ^ ^^   ^^                   ^^ ^^                         ^^^^^^^^^
 >new ClassWithConvert(Enum.A) : ClassWithConvert<Enum>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >ClassWithConvert : typeof ClassWithConvert
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Enum.A : Enum.A
+>       : ^^^^^^
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 >A : Enum.A
+>  : ^^^^^^
 >() => new ClassWithConvert(Enum.A) : () => ClassWithConvert<Enum>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new ClassWithConvert(Enum.A) : ClassWithConvert<Enum>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >ClassWithConvert : typeof ClassWithConvert
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Enum.A : Enum.A
+>       : ^^^^^^
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 >A : Enum.A
+>  : ^^^^^^
 
 type Func<T> = (x: T) => T;
 >Func : Func<T>
+>     : ^^^^^^^
 >x : T
+>  : ^
 
 declare function makeFoo<T>(x: T): Func<T>;
 >makeFoo : <T>(x: T) => Func<T>
+>        : ^ ^^ ^^ ^^^^^       
 >x : T
+>  : ^
 
 declare function baz<U>(x: Func<U>, y: Func<U>): void;
 >baz : <U>(x: Func<U>, y: Func<U>) => void
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^    
 >x : Func<U>
+>  : ^^^^^^^
 >y : Func<U>
+>  : ^^^^^^^
 
 baz(makeFoo(Enum.A), makeFoo(Enum.A));
 >baz(makeFoo(Enum.A), makeFoo(Enum.A)) : void
+>                                      : ^^^^
 >baz : <U>(x: Func<U>, y: Func<U>) => void
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^    
 >makeFoo(Enum.A) : Func<Enum>
+>                : ^^^^^^^^^^
 >makeFoo : <T>(x: T) => Func<T>
+>        : ^ ^^ ^^ ^^^^^       
 >Enum.A : Enum.A
+>       : ^^^^^^
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 >A : Enum.A
+>  : ^^^^^^
 >makeFoo(Enum.A) : Func<Enum>
+>                : ^^^^^^^^^^
 >makeFoo : <T>(x: T) => Func<T>
+>        : ^ ^^ ^^ ^^^^^       
 >Enum.A : Enum.A
+>       : ^^^^^^
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 >A : Enum.A
+>  : ^^^^^^
 

@@ -1,40 +1,60 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameConstructorSignature.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameConstructorSignature.ts] ////
+
+=== privateNameConstructorSignature.ts ===
 interface D {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 class C {
 >C : C
+>  : ^
 
     #x;
 >#x : any
 
     static test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         new C().#x = 10;
 >new C().#x = 10 : 10
+>                : ^^
 >new C().#x : any
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >10 : 10
+>   : ^^
 
         const y = new C();
 >y : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
         const z = new y();
 >z : D
+>  : ^
 >new y() : D
+>        : ^
 >y : C
+>  : ^
 
         z.x = 123;
 >z.x = 123 : 123
+>          : ^^^
 >z.x : number
+>    : ^^^^^^
 >z : D
+>  : ^
 >x : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
     }
 }
 interface C {

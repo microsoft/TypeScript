@@ -1,81 +1,122 @@
-=== tests/cases/compiler/varianceCallbacksAndIndexedAccesses.ts ===
+//// [tests/cases/compiler/varianceCallbacksAndIndexedAccesses.ts] ////
+
+=== varianceCallbacksAndIndexedAccesses.ts ===
 type Source = {
->Source : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>Source : Source
+>       : ^^^^^^
 
     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 >type : K
+>     : ^
 >listener : (this: Window, ev: WindowEventMap[K]) => any
+>         : ^    ^^      ^^  ^^                 ^^^^^   
 >this : Window
+>     : ^^^^^^
 >ev : WindowEventMap[K]
+>   : ^^^^^^^^^^^^^^^^^
 >options : boolean | AddEventListenerOptions
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 >type : string
+>     : ^^^^^^
 >listener : EventListenerOrEventListenerObject
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : boolean | AddEventListenerOptions
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface Action1<T> {
     (arg: T): void;
 >arg : T
+>    : ^
 }
 interface MessageEventLike<T> {
     source: WindowLike<T>;
 >source : WindowLike<T>
+>       : ^^^^^^^^^^^^^
 
     origin: string;
 >origin : string
+>       : ^^^^^^
 
     data: T;
 >data : T
+>     : ^
 }
 interface PostMessageObject<T> {
     postMessage(message: T, host: string): void;
 >postMessage : (message: T, host: string) => void
+>            : ^       ^^ ^^    ^^      ^^^^^    
 >message : T
+>        : ^
 >host : string
+>     : ^^^^^^
 }
 interface WindowLike<T> extends PostMessageObject<T> {
     addEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
 >addEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
+>                 : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : "message"
+>     : ^^^^^^^^^
 >handler : Action1<MessageEventLike<T>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     addEventListener(type: string, handler: Action1<any>): void;
 >addEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
+>                 : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : string
+>     : ^^^^^^
 >handler : Action1<any>
+>        : ^^^^^^^^^^^^
 
     removeEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
 >removeEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
+>                    : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : "message"
+>     : ^^^^^^^^^
 >handler : Action1<MessageEventLike<T>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     removeEventListener(type: string, handler: Action1<any>): void;
 >removeEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
+>                    : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : string
+>     : ^^^^^^
 >handler : Action1<any>
+>        : ^^^^^^^^^^^^
 }
 type Target = {
->Target : { (type: "message", handler: Action1<MessageEventLike<any>>): void; (type: string, handler: Action1<any>): void; }
+>Target : Target
+>       : ^^^^^^
 
     (type: "message", handler: Action1<MessageEventLike<any>>): void;
 >type : "message"
+>     : ^^^^^^^^^
 >handler : Action1<MessageEventLike<any>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     (type: string, handler: Action1<any>): void;
 >type : string
+>     : ^^^^^^
 >handler : Action1<any>
+>        : ^^^^^^^^^^^^
 
 };
 
 function f1(s: Source, t: Target) {
 >f1 : (s: Source, t: Target) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >s : Source
+>  : ^^^^^^
 >t : Target
+>  : ^^^^^^
 
     t = s;
 >t = s : Source
+>      : ^^^^^^
 >t : Target
+>  : ^^^^^^
 >s : Source
+>  : ^^^^^^
 }

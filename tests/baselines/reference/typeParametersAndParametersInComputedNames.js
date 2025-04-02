@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParametersAndParametersInComputedNames.ts] ////
+
 //// [typeParametersAndParametersInComputedNames.ts]
 function foo<T>(a: T) : string {
     return "";

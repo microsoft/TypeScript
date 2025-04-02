@@ -1,181 +1,286 @@
-=== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts] ////
+
+=== inOperatorWithInvalidOperands.ts ===
 class Foo {}
 >Foo : Foo
+>    : ^^^
 
 enum E { a }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 
 var x: any;
 >x : any
+>  : ^^^
 
 // invalid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
 var a1: boolean;
 >a1 : boolean
+>   : ^^^^^^^
 
 var a2: void;
 >a2 : void
+>   : ^^^^
 
 var a3: {};
 >a3 : {}
+>   : ^^
 
 var a4: E;
 >a4 : E
+>   : ^
 
 var a5: Foo | string;
 >a5 : string | Foo
+>   : ^^^^^^^^^^^^
 
 var a6: Foo;
 >a6 : Foo
+>   : ^^^
 
 var ra1 = a1 in x;
 >ra1 : boolean
+>    : ^^^^^^^
 >a1 in x : boolean
+>        : ^^^^^^^
 >a1 : boolean
+>   : ^^^^^^^
 >x : any
+>  : ^^^
 
 var ra2 = a2 in x;
 >ra2 : boolean
+>    : ^^^^^^^
 >a2 in x : boolean
+>        : ^^^^^^^
 >a2 : void
+>   : ^^^^
 >x : any
+>  : ^^^
 
 var ra3 = a3 in x;
 >ra3 : boolean
+>    : ^^^^^^^
 >a3 in x : boolean
+>        : ^^^^^^^
 >a3 : {}
+>   : ^^
 >x : any
+>  : ^^^
 
 var ra4 = a4 in x;
 >ra4 : boolean
+>    : ^^^^^^^
 >a4 in x : boolean
+>        : ^^^^^^^
 >a4 : E
+>   : ^
 >x : any
+>  : ^^^
 
 var ra5 = null in x;
 >ra5 : boolean
+>    : ^^^^^^^
 >null in x : boolean
+>          : ^^^^^^^
 >x : any
+>  : ^^^
 
 var ra6 = undefined in x;
 >ra6 : boolean
+>    : ^^^^^^^
 >undefined in x : boolean
+>               : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : any
+>  : ^^^
 
 var ra7 = E.a in x;
 >ra7 : boolean
+>    : ^^^^^^^
 >E.a in x : boolean
+>         : ^^^^^^^
 >E.a : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E
+>  : ^
 >x : any
+>  : ^^^
 
 var ra8 = false in x;
 >ra8 : boolean
+>    : ^^^^^^^
 >false in x : boolean
+>           : ^^^^^^^
 >false : false
+>      : ^^^^^
 >x : any
+>  : ^^^
 
 var ra9 = {} in x;
 >ra9 : boolean
+>    : ^^^^^^^
 >{} in x : boolean
+>        : ^^^^^^^
 >{} : {}
+>   : ^^
 >x : any
+>  : ^^^
 
 var ra10 = a5 in x;
 >ra10 : boolean
+>     : ^^^^^^^
 >a5 in x : boolean
+>        : ^^^^^^^
 >a5 : string | Foo
+>   : ^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 var ra11 = a6 in x;
 >ra11 : boolean
+>     : ^^^^^^^
 >a6 in x : boolean
+>        : ^^^^^^^
 >a6 : Foo
+>   : ^^^
 >x : any
+>  : ^^^
 
 // invalid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
 var b1: number;
 >b1 : number
+>   : ^^^^^^
 
 var b2: boolean;
 >b2 : boolean
+>   : ^^^^^^^
 
 var b3: string;
 >b3 : string
+>   : ^^^^^^
 
 var b4: void;
 >b4 : void
+>   : ^^^^
 
 var b5: string | number;
 >b5 : string | number
+>   : ^^^^^^^^^^^^^^^
 
 var rb1 = x in b1;
 >rb1 : boolean
+>    : ^^^^^^^
 >x in b1 : boolean
+>        : ^^^^^^^
 >x : any
+>  : ^^^
 >b1 : number
+>   : ^^^^^^
 
 var rb2 = x in b2;
 >rb2 : boolean
+>    : ^^^^^^^
 >x in b2 : boolean
+>        : ^^^^^^^
 >x : any
+>  : ^^^
 >b2 : boolean
+>   : ^^^^^^^
 
 var rb3 = x in b3;
 >rb3 : boolean
+>    : ^^^^^^^
 >x in b3 : boolean
+>        : ^^^^^^^
 >x : any
+>  : ^^^
 >b3 : string
+>   : ^^^^^^
 
 var rb4 = x in b4;
 >rb4 : boolean
+>    : ^^^^^^^
 >x in b4 : boolean
+>        : ^^^^^^^
 >x : any
+>  : ^^^
 >b4 : void
+>   : ^^^^
 
 var rb5 = x in b5;
 >rb5 : boolean
+>    : ^^^^^^^
 >x in b5 : boolean
+>        : ^^^^^^^
 >x : any
+>  : ^^^
 >b5 : string | number
+>   : ^^^^^^^^^^^^^^^
 
 var rb6 = x in 0;
 >rb6 : boolean
+>    : ^^^^^^^
 >x in 0 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
 
 var rb7 = x in false;
 >rb7 : boolean
+>    : ^^^^^^^
 >x in false : boolean
+>           : ^^^^^^^
 >x : any
+>  : ^^^
 >false : false
+>      : ^^^^^
 
 var rb8 = x in '';
 >rb8 : boolean
+>    : ^^^^^^^
 >x in '' : boolean
+>        : ^^^^^^^
 >x : any
+>  : ^^^
 >'' : ""
+>   : ^^
 
 var rb9 = x in null;
 >rb9 : boolean
+>    : ^^^^^^^
 >x in null : boolean
+>          : ^^^^^^^
 >x : any
+>  : ^^^
 
 var rb10 = x in undefined;
 >rb10 : boolean
+>     : ^^^^^^^
 >x in undefined : boolean
+>               : ^^^^^^^
 >x : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // both operands are invalid
 var rc1 = {} in '';
 >rc1 : boolean
+>    : ^^^^^^^
 >{} in '' : boolean
+>         : ^^^^^^^
 >{} : {}
+>   : ^^
 >'' : ""
+>   : ^^
 

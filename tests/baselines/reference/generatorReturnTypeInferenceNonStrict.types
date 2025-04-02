@@ -1,309 +1,441 @@
-=== tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts ===
+//// [tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts] ////
+
+=== generatorReturnTypeInferenceNonStrict.ts ===
 declare const iterableIterator: IterableIterator<number>;
 >iterableIterator : IterableIterator<number>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const generator: Generator<number, string, boolean>;
 >generator : Generator<number, string, boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const never: never;
 >never : never
+>      : ^^^^^
 
 function* g000() { // Generator<never, void, unknown>
 >g000 : () => Generator<never, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // 'yield' iteration type inference
 function* g001() { // Generator<any (implicit), void, unknown>
 >g001 : () => Generator<any, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
+>      : ^^^
 }
 
 function* g002() { // Generator<number, void, unknown>
 >g002 : () => Generator<number, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 }
 
 function* g003() { // Generator<any (implicit), void, unknown>
->g003 : () => Generator<any, void, undefined>
+>g003 : () => Generator<any, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // NOTE: In strict mode, `[]` produces the type `never[]`.
     //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.
     yield* [];
 >yield* [] : any
+>          : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }
 
 function* g004() { // Generator<number, void, undefined>
->g004 : () => Generator<number, void, undefined>
+>g004 : () => Generator<number, void, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* iterableIterator;
 >yield* iterableIterator : any
+>                        : ^^^
 >iterableIterator : IterableIterator<number>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function* g005() { // Generator<number, void, boolean>
 >g005 : () => Generator<number, void, boolean>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield* generator;
 >x : string
+>  : ^^^^^^
 >yield* generator : string
+>                 : ^^^^^^
 >generator : Generator<number, string, boolean>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function* g006() { // Generator<1 | 2, void, unknown>
 >g006 : () => Generator<1 | 2, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
     yield 2;
 >yield 2 : any
+>        : ^^^
 >2 : 2
+>  : ^
 }
 
 function* g007() { // Generator<never, void, unknown>
 >g007 : () => Generator<never, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield never;
 >yield never : any
+>            : ^^^
 >never : never
+>      : ^^^^^
 }
 
 // 'return' iteration type inference
 function* g102() { // Generator<never, number, unknown>
 >g102 : () => Generator<never, number, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return 1;
 >1 : 1
+>  : ^
 }
 
 function* g103() { // Generator<never, 1 | 2, unknown>
 >g103 : () => Generator<never, 1 | 2, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (Math.random()) return 1;
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >1 : 1
+>  : ^
 
     return 2;
 >2 : 2
+>  : ^
 }
 
 function* g104() { // Generator<never, never, unknown>
 >g104 : () => Generator<never, never, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return never;
 >never : never
+>      : ^^^^^
 }
 
 // 'next' iteration type inference
 function* g201() { // Generator<number, void, string>
 >g201 : () => Generator<number, void, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let a: string = yield 1;
 >a : string
+>  : ^^^^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 }
 
 function* g202() { // Generator<1 | 2, void, never>
 >g202 : () => Generator<1 | 2, void, never>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let a: string = yield 1;
 >a : string
+>  : ^^^^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
     let b: number = yield 2;
 >b : number
+>  : ^^^^^^
 >yield 2 : any
+>        : ^^^
 >2 : 2
+>  : ^
 }
 
 declare function f1(x: string): void;
 >f1 : { (x: string): void; (x: number): void; }
+>   : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >x : string
+>  : ^^^^^^
 
 declare function f1(x: number): void;
 >f1 : { (x: string): void; (x: number): void; }
+>   : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >x : number
+>  : ^^^^^^
 
 function* g203() { // Generator<number, void, string>
 >g203 : () => Generator<number, void, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	const x = f1(yield 1);
 >x : void
+>  : ^^^^
 >f1(yield 1) : void
+>            : ^^^^
 >f1 : { (x: string): void; (x: number): void; }
+>   : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 }
 
 declare function f2<T>(x: T): T;
 >f2 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 function* g204() { // Generator<number, void, any>
 >g204 : () => Generator<number, void, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	const x = f2(yield 1);
 >x : any
+>  : ^^^
 >f2(yield 1) : any
+>            : ^^^
 >f2 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 }
 
 // mixed iteration types inference
 
 function* g301() { // Generator<any (implicit), void, unknown>
 >g301 : () => Generator<any, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
+>      : ^^^
 
     return;
 }
 
 function* g302() { // Generator<number, void, unknown>
 >g302 : () => Generator<number, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
     return;
 }
 
 function* g303() { // Generator<any (implicit), string, unknown>
 >g303 : () => Generator<any, string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
+>      : ^^^
 
     return "a";
 >"a" : "a"
+>    : ^^^
 }
 
 function* g304() { // Generator<number, string, unknown>
 >g304 : () => Generator<number, string, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
     return "a";
 >"a" : "a"
+>    : ^^^
 }
 
 function* g305() { // Generator<1 | 2, "a" | "b", unknown>
 >g305 : () => Generator<1 | 2, "a" | "b", unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (Math.random()) yield 1;
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
     yield 2;
 >yield 2 : any
+>        : ^^^
 >2 : 2
+>  : ^
 
     if (Math.random()) return "a";
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >"a" : "a"
+>    : ^^^
 
     return "b";
 >"b" : "b"
+>    : ^^^
 }
 
 function* g306() { // Generator<number, boolean, "hi">
 >g306 : () => Generator<number, boolean, "hi">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const a: "hi" = yield 1;
 >a : "hi"
+>  : ^^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
     return true;
 >true : true
+>     : ^^^^
 }
 
 function* g307<T>() { // Generator<number, T, T>
 >g307 : <T>() => Generator<number, T, T>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const a: T = yield 0;
 >a : T
+>  : ^
 >yield 0 : any
+>        : ^^^
 >0 : 0
+>  : ^
 
     return a;
 >a : T
+>  : ^
 }
 
 function* g308<T>(x: T) { // Generator<T, T, T>
 >g308 : <T>(x: T) => Generator<T, T, T>
+>     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     const a: T = yield x;
 >a : T
+>  : ^
 >yield x : any
+>        : ^^^
 >x : T
+>  : ^
 
     return a;
 >a : T
+>  : ^
 }
 
 function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
 >g309 : <T, U, V>(x: T, y: U) => Generator<T, U, V>
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     const a: V = yield x;
 >a : V
+>  : ^
 >yield x : any
+>        : ^^^
 >x : T
+>  : ^
 
     return y;
 >y : U
+>  : ^
 }
 
 function* g310() { // Generator<any (implicit), void, [(1 | undefined)?, (2 | undefined)?]>
 >g310 : () => Generator<any, void, [1?, 2?]>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	const [a = 1, b = 2] = yield;
 >a : any
+>  : ^^^
 >1 : 1
+>  : ^
 >b : any
+>  : ^^^
 >2 : 2
+>  : ^
 >yield : any
+>      : ^^^
 }
 
 function* g311() { // Generator<any (implicit), void, string>
 >g311 : () => Generator<any, void, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	yield* (function*() {
 >yield* (function*() {		const y: string = yield;	})() : void
+>                                                     : ^^^^
 >(function*() {		const y: string = yield;	})() : Generator<any, void, string>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(function*() {		const y: string = yield;	}) : () => Generator<any, void, string>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function*() {		const y: string = yield;	} : () => Generator<any, void, string>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 		const y: string = yield;
 >y : string
+>  : ^^^^^^
 >yield : any
+>      : ^^^
 
 	})();
 }

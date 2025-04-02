@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashInGetTextOfComputedPropertyName.ts] ////
+
 //// [crashInGetTextOfComputedPropertyName.ts]
 // https://github.com/Microsoft/TypeScript/issues/29006
 export interface A { type: 'a' }

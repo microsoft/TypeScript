@@ -1,10 +1,10 @@
-tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts(12,9): error TS2322: Type 'T' is not assignable to type 'Modify<T>'.
-tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts(22,9): error TS2322: Type 'T' is not assignable to type 'ModifyInclOpt<T>'.
-tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts(23,9): error TS2322: Type 'T' is not assignable to type 'FilterExclOpt<T>'.
-tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts(24,9): error TS2322: Type 'T' is not assignable to type 'ModifyExclOpt<T>'.
+mappedTypeAsClauseRelationships.ts(12,9): error TS2322: Type 'T' is not assignable to type 'Modify<T>'.
+mappedTypeAsClauseRelationships.ts(22,9): error TS2322: Type 'T' is not assignable to type 'ModifyInclOpt<T>'.
+mappedTypeAsClauseRelationships.ts(23,9): error TS2322: Type 'T' is not assignable to type 'FilterExclOpt<T>'.
+mappedTypeAsClauseRelationships.ts(24,9): error TS2322: Type 'T' is not assignable to type 'ModifyExclOpt<T>'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts (4 errors) ====
+==== mappedTypeAsClauseRelationships.ts (4 errors) ====
     // From original issue #45212:
     type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
     type H<T> = T[keyof Methods<T>]; // Ok
@@ -19,7 +19,7 @@ tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts(24,9): e
         let y: Modify<T> = val; // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'Modify<T>'.
-!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts:10:14: This type parameter might need an `extends Modify<T>` constraint.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:10:14: This type parameter might need an `extends Modify<T>` constraint.
     }
     
     type FilterInclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]+?: T[P] };
@@ -32,15 +32,15 @@ tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts(24,9): e
         let y: ModifyInclOpt<T> = val; // Ok
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'ModifyInclOpt<T>'.
-!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends ModifyInclOpt<T>` constraint.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends ModifyInclOpt<T>` constraint.
         let z: FilterExclOpt<T> = val; // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'FilterExclOpt<T>'.
-!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends FilterExclOpt<T>` constraint.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends FilterExclOpt<T>` constraint.
         let w: ModifyExclOpt<T> = val; // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'ModifyExclOpt<T>'.
-!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends ModifyExclOpt<T>` constraint.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends ModifyExclOpt<T>` constraint.
     }
     
     

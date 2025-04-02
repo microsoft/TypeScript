@@ -1,497 +1,770 @@
-=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithAnyAndNumber.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithAnyAndNumber.ts] ////
+
+=== arithmeticOperatorWithAnyAndNumber.ts ===
 var a: any;
 >a : any
 
 var b: number;
 >b : number
+>  : ^^^^^^
 
 // operator *
 var ra1 = a * a;
 >ra1 : number
+>    : ^^^^^^
 >a * a : number
+>      : ^^^^^^
 >a : any
 >a : any
 
 var ra2 = a * b;
 >ra2 : number
+>    : ^^^^^^
 >a * b : number
+>      : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var ra3 = a * 0;
 >ra3 : number
+>    : ^^^^^^
 >a * 0 : number
+>      : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var ra4 = 0 * a;
 >ra4 : number
+>    : ^^^^^^
 >0 * a : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var ra5 = 0 * 0;
 >ra5 : number
+>    : ^^^^^^
 >0 * 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var ra6 = b * 0;
 >ra6 : number
+>    : ^^^^^^
 >b * 0 : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var ra7 = 0 * b;
 >ra7 : number
+>    : ^^^^^^
 >0 * b : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var ra8 = b * b;
 >ra8 : number
+>    : ^^^^^^
 >b * b : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator /
 var rb1 = a / a;
 >rb1 : number
+>    : ^^^^^^
 >a / a : number
+>      : ^^^^^^
 >a : any
 >a : any
 
 var rb2 = a / b;
 >rb2 : number
+>    : ^^^^^^
 >a / b : number
+>      : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var rb3 = a / 0;
 >rb3 : number
+>    : ^^^^^^
 >a / 0 : number
+>      : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var rb4 = 0 / a;
 >rb4 : number
+>    : ^^^^^^
 >0 / a : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var rb5 = 0 / 0;
 >rb5 : number
+>    : ^^^^^^
 >0 / 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var rb6 = b / 0;
 >rb6 : number
+>    : ^^^^^^
 >b / 0 : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var rb7 = 0 / b;
 >rb7 : number
+>    : ^^^^^^
 >0 / b : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var rb8 = b / b;
 >rb8 : number
+>    : ^^^^^^
 >b / b : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator %
 var rc1 = a % a;
 >rc1 : number
+>    : ^^^^^^
 >a % a : number
+>      : ^^^^^^
 >a : any
 >a : any
 
 var rc2 = a % b;
 >rc2 : number
+>    : ^^^^^^
 >a % b : number
+>      : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var rc3 = a % 0;
 >rc3 : number
+>    : ^^^^^^
 >a % 0 : number
+>      : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var rc4 = 0 % a;
 >rc4 : number
+>    : ^^^^^^
 >0 % a : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var rc5 = 0 % 0;
 >rc5 : number
+>    : ^^^^^^
 >0 % 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var rc6 = b % 0;
 >rc6 : number
+>    : ^^^^^^
 >b % 0 : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var rc7 = 0 % b;
 >rc7 : number
+>    : ^^^^^^
 >0 % b : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var rc8 = b % b;
 >rc8 : number
+>    : ^^^^^^
 >b % b : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator -
 var rd1 = a - a;
 >rd1 : number
+>    : ^^^^^^
 >a - a : number
+>      : ^^^^^^
 >a : any
 >a : any
 
 var rd2 = a - b;
 >rd2 : number
+>    : ^^^^^^
 >a - b : number
+>      : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var rd3 = a - 0;
 >rd3 : number
+>    : ^^^^^^
 >a - 0 : number
+>      : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var rd4 = 0 - a;
 >rd4 : number
+>    : ^^^^^^
 >0 - a : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var rd5 = 0 - 0;
 >rd5 : number
+>    : ^^^^^^
 >0 - 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var rd6 = b - 0;
 >rd6 : number
+>    : ^^^^^^
 >b - 0 : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var rd7 = 0 - b;
 >rd7 : number
+>    : ^^^^^^
 >0 - b : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var rd8 = b - b;
 >rd8 : number
+>    : ^^^^^^
 >b - b : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator <<
 var re1 = a << a;
 >re1 : number
+>    : ^^^^^^
 >a << a : number
+>       : ^^^^^^
 >a : any
 >a : any
 
 var re2 = a << b;
 >re2 : number
+>    : ^^^^^^
 >a << b : number
+>       : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var re3 = a << 0;
 >re3 : number
+>    : ^^^^^^
 >a << 0 : number
+>       : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var re4 = 0 << a;
 >re4 : number
+>    : ^^^^^^
 >0 << a : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var re5 = 0 << 0;
 >re5 : number
+>    : ^^^^^^
 >0 << 0 : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var re6 = b << 0;
 >re6 : number
+>    : ^^^^^^
 >b << 0 : number
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var re7 = 0 << b;
 >re7 : number
+>    : ^^^^^^
 >0 << b : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var re8 = b << b;
 >re8 : number
+>    : ^^^^^^
 >b << b : number
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator >>
 var rf1 = a >> a;
 >rf1 : number
+>    : ^^^^^^
 >a >> a : number
+>       : ^^^^^^
 >a : any
 >a : any
 
 var rf2 = a >> b;
 >rf2 : number
+>    : ^^^^^^
 >a >> b : number
+>       : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var rf3 = a >> 0;
 >rf3 : number
+>    : ^^^^^^
 >a >> 0 : number
+>       : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var rf4 = 0 >> a;
 >rf4 : number
+>    : ^^^^^^
 >0 >> a : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var rf5 = 0 >> 0;
 >rf5 : number
+>    : ^^^^^^
 >0 >> 0 : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var rf6 = b >> 0;
 >rf6 : number
+>    : ^^^^^^
 >b >> 0 : number
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var rf7 = 0 >> b;
 >rf7 : number
+>    : ^^^^^^
 >0 >> b : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var rf8 = b >> b;
 >rf8 : number
+>    : ^^^^^^
 >b >> b : number
+>       : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator >>>
 var rg1 = a >>> a;
 >rg1 : number
+>    : ^^^^^^
 >a >>> a : number
+>        : ^^^^^^
 >a : any
 >a : any
 
 var rg2 = a >>> b;
 >rg2 : number
+>    : ^^^^^^
 >a >>> b : number
+>        : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var rg3 = a >>> 0;
 >rg3 : number
+>    : ^^^^^^
 >a >>> 0 : number
+>        : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var rg4 = 0 >>> a;
 >rg4 : number
+>    : ^^^^^^
 >0 >>> a : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var rg5 = 0 >>> 0;
 >rg5 : number
+>    : ^^^^^^
 >0 >>> 0 : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var rg6 = b >>> 0;
 >rg6 : number
+>    : ^^^^^^
 >b >>> 0 : number
+>        : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var rg7 = 0 >>> b;
 >rg7 : number
+>    : ^^^^^^
 >0 >>> b : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var rg8 = b >>> b;
 >rg8 : number
+>    : ^^^^^^
 >b >>> b : number
+>        : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator &
 var rh1 = a & a;
 >rh1 : number
+>    : ^^^^^^
 >a & a : number
+>      : ^^^^^^
 >a : any
 >a : any
 
 var rh2 = a & b;
 >rh2 : number
+>    : ^^^^^^
 >a & b : number
+>      : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var rh3 = a & 0;
 >rh3 : number
+>    : ^^^^^^
 >a & 0 : number
+>      : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var rh4 = 0 & a;
 >rh4 : number
+>    : ^^^^^^
 >0 & a : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var rh5 = 0 & 0;
 >rh5 : number
+>    : ^^^^^^
 >0 & 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var rh6 = b & 0;
 >rh6 : number
+>    : ^^^^^^
 >b & 0 : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var rh7 = 0 & b;
 >rh7 : number
+>    : ^^^^^^
 >0 & b : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var rh8 = b & b;
 >rh8 : number
+>    : ^^^^^^
 >b & b : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator ^
 var ri1 = a ^ a;
 >ri1 : number
+>    : ^^^^^^
 >a ^ a : number
+>      : ^^^^^^
 >a : any
 >a : any
 
 var ri2 = a ^ b;
 >ri2 : number
+>    : ^^^^^^
 >a ^ b : number
+>      : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var ri3 = a ^ 0;
 >ri3 : number
+>    : ^^^^^^
 >a ^ 0 : number
+>      : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var ri4 = 0 ^ a;
 >ri4 : number
+>    : ^^^^^^
 >0 ^ a : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var ri5 = 0 ^ 0;
 >ri5 : number
+>    : ^^^^^^
 >0 ^ 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var ri6 = b ^ 0;
 >ri6 : number
+>    : ^^^^^^
 >b ^ 0 : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var ri7 = 0 ^ b;
 >ri7 : number
+>    : ^^^^^^
 >0 ^ b : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var ri8 = b ^ b;
 >ri8 : number
+>    : ^^^^^^
 >b ^ b : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // operator |
 var rj1 = a | a;
 >rj1 : number
+>    : ^^^^^^
 >a | a : number
+>      : ^^^^^^
 >a : any
 >a : any
 
 var rj2 = a | b;
 >rj2 : number
+>    : ^^^^^^
 >a | b : number
+>      : ^^^^^^
 >a : any
 >b : number
+>  : ^^^^^^
 
 var rj3 = a | 0;
 >rj3 : number
+>    : ^^^^^^
 >a | 0 : number
+>      : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 
 var rj4 = 0 | a;
 >rj4 : number
+>    : ^^^^^^
 >0 | a : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >a : any
 
 var rj5 = 0 | 0;
 >rj5 : number
+>    : ^^^^^^
 >0 | 0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var rj6 = b | 0;
 >rj6 : number
+>    : ^^^^^^
 >b | 0 : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var rj7 = 0 | b;
 >rj7 : number
+>    : ^^^^^^
 >0 | b : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 
 var rj8 = b | b;
 >rj8 : number
+>    : ^^^^^^
 >b | b : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 

@@ -1,52 +1,82 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpression6ES2020.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : B
+>  : ^
 
     print() { return "I am B"}
 >print : () => string
+>      : ^^^^^^^^^^^^
 >"I am B" : "I am B"
+>         : ^^^^^^^^
 }
 
 export function foo() { return "foo" }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 export function backup() { return "backup"; }
 >backup : () => string
+>       : ^^^^^^^^^^^^
 >"backup" : "backup"
+>         : ^^^^^^^^
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 declare function bar(): boolean;
 >bar : () => boolean
+>    : ^^^^^^       
 
 const specify = bar() ? "./0" : undefined;
 >specify : "./0"
+>        : ^^^^^
 >bar() ? "./0" : undefined : "./0"
+>                          : ^^^^^
 >bar() : boolean
+>      : ^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^       
 >"./0" : "./0"
+>      : ^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let myModule = import(specify);
 >myModule : Promise<any>
+>         : ^^^^^^^^^^^^
 >import(specify) : Promise<any>
+>                : ^^^^^^^^^^^^
 >specify : "./0"
+>        : ^^^^^
 
 let myModule1 = import(undefined);
 >myModule1 : Promise<any>
+>          : ^^^^^^^^^^^^
 >import(undefined) : Promise<any>
+>                  : ^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let myModule2 = import(bar() ? "./1" : null);
 >myModule2 : Promise<any>
+>          : ^^^^^^^^^^^^
 >import(bar() ? "./1" : null) : Promise<any>
+>                             : ^^^^^^^^^^^^
 >bar() ? "./1" : null : "./1"
+>                     : ^^^^^
 >bar() : boolean
+>      : ^^^^^^^
 >bar : () => boolean
+>    : ^^^^^^       
 >"./1" : "./1"
+>      : ^^^^^
 
 let myModule3 = import(null);
 >myModule3 : Promise<any>
+>          : ^^^^^^^^^^^^
 >import(null) : Promise<any>
+>             : ^^^^^^^^^^^^
 

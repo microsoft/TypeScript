@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseIdentityWithConstraints.ts] ////
+
 //// [promiseIdentityWithConstraints.ts]
 export interface IPromise<T, V> {
     then<U extends T, W extends V>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;

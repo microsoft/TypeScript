@@ -1,298 +1,471 @@
-=== tests/cases/conformance/expressions/functionCalls/overloadResolution.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/overloadResolution.ts] ////
+
+=== overloadResolution.ts ===
 class SomeBase {
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     private n;
 >n : any
+>  : ^^^
 
     public s: string;
 >s : string
+>  : ^^^^^^
 }
 class SomeDerived1 extends SomeBase {
 >SomeDerived1 : SomeDerived1
+>             : ^^^^^^^^^^^^
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     private m;
 >m : any
+>  : ^^^
 }
 class SomeDerived2 extends SomeBase {
 >SomeDerived2 : SomeDerived2
+>             : ^^^^^^^^^^^^
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     private m;
 >m : any
+>  : ^^^
 }
 class SomeDerived3 extends SomeBase {
 >SomeDerived3 : SomeDerived3
+>             : ^^^^^^^^^^^^
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     private m;
 >m : any
+>  : ^^^
 }
 
 
 // Ambiguous call picks the first overload in declaration order
 function fn1(s: string): string;
 >fn1 : { (s: string): string; (s: number): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
 function fn1(s: number): number;
 >fn1 : { (s: string): string; (s: number): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : number
+>  : ^^^^^^
 
 function fn1() { return null; }
 >fn1 : { (s: string): string; (s: number): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
 var s = fn1(undefined);
 >s : string
+>  : ^^^^^^
 >fn1(undefined) : string
+>               : ^^^^^^
 >fn1 : { (s: string): string; (s: number): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var s: string;
 >s : string
+>  : ^^^^^^
 
 
 // No candidate overloads found
 fn1({}); // Error
 >fn1({}) : never
+>        : ^^^^^
 >fn1 : { (s: string): string; (s: number): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >{} : {}
+>   : ^^
 
 // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
 function fn2(s: string, n: number): number;
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
+>    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^      ^^ ^^ ^^^ ^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
 function fn2<T>(n: number, t: T): T;
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
+>    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^      ^^ ^^ ^^^ ^^^
 >n : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
 function fn2() { return undefined; }
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
+>    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^      ^^ ^^ ^^^ ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var d = fn2<Date>(0, undefined);
 >d : Date
+>  : ^^^^
 >fn2<Date>(0, undefined) : Date
+>                        : ^^^^
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
+>    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^      ^^ ^^ ^^^ ^^^
 >0 : 0
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var d: Date;
 >d : Date
+>  : ^^^^
 
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = fn2(0, '');
 >s : string
+>  : ^^^^^^
 >fn2(0, '') : ""
+>           : ^^
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
+>    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^      ^^ ^^ ^^^ ^^^
 >0 : 0
+>  : ^
 >'' : ""
+>   : ^^
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
 fn2<Date>('', 0); // Error
 >fn2<Date>('', 0) : number
+>                 : ^^^^^^
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
+>    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^      ^^ ^^ ^^^ ^^^
 >'' : ""
+>   : ^^
 >0 : 0
+>  : ^
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 fn2('', 0); // OK
 >fn2('', 0) : number
+>           : ^^^^^^
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
+>    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^      ^^ ^^ ^^^ ^^^
 >'' : ""
+>   : ^^
 >0 : 0
+>  : ^
 
 // Generic overloads with differing arity called without type arguments
 function fn3<T>(n: T): string;
->fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>fn3 : { <T>(n: T): string; <T_1, U>(s: string, t: T_1, u: U): U; <T_1, U, V>(v: V, u: U, t: T_1): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^^^^^^ ^^ ^^      ^^ ^^   ^^ ^^ ^^^ ^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^   ^^^      ^^^
 >n : T
+>  : ^
 
 function fn3<T, U>(s: string, t: T, u: U): U;
->fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>fn3 : { <T_1>(n: T_1): string; <T, U>(s: string, t: T, u: U): U; <T_1, U_1, V>(v: V, u: U_1, t: T_1): number; }
+>    : ^^^^^^^^ ^^   ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^^^^^ ^^ ^^ ^^ ^^   ^^ ^^   ^^^      ^^^
 >s : string
+>  : ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
 function fn3<T, U, V>(v: V, u: U, t: T): number;
->fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>fn3 : { <T_1>(n: T_1): string; <T_1, U_1>(s: string, t: T_1, u: U_1): U_1; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^^^^^^ ^^   ^^^      ^^^^^^^^^^^^^ ^^      ^^ ^^   ^^ ^^   ^^^   ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >v : V
+>  : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
 function fn3() { return null; }
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 
 var s = fn3(3);
 >s : string
+>  : ^^^^^^
 >fn3(3) : string
+>       : ^^^^^^
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >3 : 3
+>  : ^
 
 var s = fn3('', 3, '');
 >s : string
+>  : ^^^^^^
 >fn3('', 3, '') : ""
+>               : ^^
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >'' : ""
+>   : ^^
 >3 : 3
+>  : ^
 >'' : ""
+>   : ^^
 
 var n = fn3(5, 5, 5);
 >n : number
+>  : ^^^^^^
 >fn3(5, 5, 5) : number
+>             : ^^^^^^
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >5 : 5
+>  : ^
 >5 : 5
+>  : ^
 >5 : 5
+>  : ^
 
 var n: number;
 >n : number
+>  : ^^^^^^
 
 // Generic overloads with differing arity called with type arguments matching each overload type parameter count
 var s = fn3<number>(4);
 >s : string
+>  : ^^^^^^
 >fn3<number>(4) : string
+>               : ^^^^^^
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >4 : 4
+>  : ^
 
 var s = fn3<string, string>('', '', '');
 >s : string
+>  : ^^^^^^
 >fn3<string, string>('', '', '') : string
+>                                : ^^^^^^
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >'' : ""
+>   : ^^
 >'' : ""
+>   : ^^
 >'' : ""
+>   : ^^
 
 var n = fn3<number, string, string>('', '', 3);
 >n : number
+>  : ^^^^^^
 >fn3<number, string, string>('', '', 3) : number
+>                                       : ^^^^^^
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >'' : ""
+>   : ^^
 >'' : ""
+>   : ^^
 >3 : 3
+>  : ^
 
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 fn3<number, number, number, number>(); // Error
 >fn3<number, number, number, number>() : string
+>                                      : ^^^^^^
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
+>    : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 
 // Generic overloads with constraints called with type arguments that satisfy the constraints
 function fn4<T extends string, U extends number>(n: T, m: U);
->fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T_1 extends number, U_1 extends string>(n: T_1, m: U_1): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^ ^^   ^^ ^^   ^^^^^^^^^
 >n : T
+>  : ^
 >m : U
+>  : ^
 
 function fn4<T extends number, U extends string>(n: T, m: U);
->fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>fn4 : { <T_1 extends string, U_1 extends number>(n: T_1, m: U_1): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >n : T
+>  : ^
 >m : U
+>  : ^
 
 function fn4() { }
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 
 fn4<string, number>('', 3);
 >fn4<string, number>('', 3) : any
+>                           : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >'' : ""
+>   : ^^
 >3 : 3
+>  : ^
 
 fn4<string, number>(3, ''); // Error
 >fn4<string, number>(3, '') : any
+>                           : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >3 : 3
+>  : ^
 >'' : ""
+>   : ^^
 
 fn4<number, string>('', 3); // Error
 >fn4<number, string>('', 3) : any
+>                           : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >'' : ""
+>   : ^^
 >3 : 3
+>  : ^
 
 fn4<number, string>(3, ''); 
 >fn4<number, string>(3, '') : any
+>                           : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >3 : 3
+>  : ^
 >'' : ""
+>   : ^^
 
 // Generic overloads with constraints called without type arguments but with types that satisfy the constraints
 fn4('', 3);
 >fn4('', 3) : any
+>           : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >'' : ""
+>   : ^^
 >3 : 3
+>  : ^
 
 fn4(3, '');
 >fn4(3, '') : any
+>           : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >3 : 3
+>  : ^
 >'' : ""
+>   : ^^
 
 fn4(3, undefined);
 >fn4(3, undefined) : any
+>                  : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >3 : 3
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 fn4('', null);
 >fn4('', null) : any
+>              : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
 fn4<boolean, Date>(null, null); // Error
 >fn4<boolean, Date>(null, null) : any
+>                               : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 fn4(true, null); // Error
 >fn4(true, null) : any
+>                : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 fn4(null, true); // Error
 >fn4(null, true) : any
+>                : ^^^
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 // Non - generic overloads where contextual typing of function arguments has errors
 function fn5(f: (n: string) => void): string;
 >fn5 : { (f: (n: string) => void): string; (f: (n: number) => void): number; }
+>    : ^^^ ^^                   ^^^      ^^^ ^^                   ^^^      ^^^
 >f : (n: string) => void
+>  : ^ ^^      ^^^^^    
 >n : string
+>  : ^^^^^^
 
 function fn5(f: (n: number) => void): number;
 >fn5 : { (f: (n: string) => void): string; (f: (n: number) => void): number; }
+>    : ^^^ ^^                   ^^^      ^^^ ^^                   ^^^      ^^^
 >f : (n: number) => void
+>  : ^ ^^      ^^^^^    
 >n : number
+>  : ^^^^^^
 
 function fn5() { return undefined; }
 >fn5 : { (f: (n: string) => void): string; (f: (n: number) => void): number; }
+>    : ^^^ ^^                   ^^^      ^^^ ^^                   ^^^      ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var n = fn5((n) => n.toFixed());
 >n : number
+>  : ^^^^^^
 >fn5((n) => n.toFixed()) : string
+>                        : ^^^^^^
 >fn5 : { (f: (n: string) => void): string; (f: (n: number) => void): number; }
+>    : ^^^ ^^                   ^^^      ^^^ ^^                   ^^^      ^^^
 >(n) => n.toFixed() : (n: string) => any
+>                   : ^ ^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >n.toFixed() : any
+>            : ^^^
 >n.toFixed : any
+>          : ^^^
 >n : string
+>  : ^^^^^^
 >toFixed : any
+>        : ^^^
 
 var s = fn5((n) => n.substr(0));
 >s : string
+>  : ^^^^^^
 >fn5((n) => n.substr(0)) : string
+>                        : ^^^^^^
 >fn5 : { (f: (n: string) => void): string; (f: (n: number) => void): number; }
+>    : ^^^ ^^                   ^^^      ^^^ ^^                   ^^^      ^^^
 >(n) => n.substr(0) : (n: string) => string
+>                   : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >n.substr(0) : string
+>            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
+>         : ^    ^^      ^^      ^^^      ^^^^^      
 >n : string
+>  : ^^^^^^
 >substr : (from: number, length?: number) => string
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 

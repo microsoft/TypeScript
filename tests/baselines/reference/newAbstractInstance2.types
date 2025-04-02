@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newAbstractInstance2.ts] ////
+
 === /a.ts ===
 
 export default abstract class {}
@@ -5,8 +7,11 @@ export default abstract class {}
 === /b.ts ===
 import A from "./a";
 >A : typeof A
+>  : ^^^^^^^^
 
 new A();
 >new A() : any
+>        : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 

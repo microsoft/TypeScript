@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleLet.ts] ////
+
 //// [es6ModuleLet.ts]
 export let a = "hello";
 export let x: string = a, y = x;

@@ -12,11 +12,13 @@ import {
     factory,
     first,
     getContainingFunction,
+    getLeftmostExpression,
     getLocaleSpecificMessage,
     getTokenAtPosition,
     isArrowFunction,
     isBlock,
     isExpression,
+    isObjectLiteralExpression,
     isReturnStatement,
     needsParentheses,
     rangeContainsRange,
@@ -26,31 +28,31 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
     RefactorErrorInfo,
     refactorKindBeginsWith,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Add or remove braces in an arrow function";
-const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
+const refactorDescription = getLocaleSpecificMessage(Diagnostics.Add_or_remove_braces_in_an_arrow_function);
 
 const addBracesAction = {
     name: "Add braces to arrow function",
-    description: Diagnostics.Add_braces_to_arrow_function.message,
+    description: getLocaleSpecificMessage(Diagnostics.Add_braces_to_arrow_function),
     kind: "refactor.rewrite.arrow.braces.add",
 };
 const removeBracesAction = {
     name: "Remove braces from arrow function",
-    description: Diagnostics.Remove_braces_from_arrow_function.message,
-    kind: "refactor.rewrite.arrow.braces.remove"
+    description: getLocaleSpecificMessage(Diagnostics.Remove_braces_from_arrow_function),
+    kind: "refactor.rewrite.arrow.braces.remove",
 };
 registerRefactor(refactorName, {
     kinds: [removeBracesAction.kind],
     getEditsForAction: getRefactorEditsToRemoveFunctionBraces,
-    getAvailableActions: getRefactorActionsToRemoveFunctionBraces
+    getAvailableActions: getRefactorActionsToRemoveFunctionBraces,
 });
 
 interface FunctionBracesInfo {
@@ -70,8 +72,8 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
             name: refactorName,
             description: refactorDescription,
             actions: [
-                info.addBraces ? addBracesAction : removeBracesAction
-            ]
+                info.addBraces ? addBracesAction : removeBracesAction,
+            ],
         }];
     }
 
@@ -82,7 +84,7 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
             actions: [
                 { ...addBracesAction, notApplicableReason: info.error },
                 { ...removeBracesAction, notApplicableReason: info.error },
-            ]
+            ],
         }];
     }
 
@@ -127,13 +129,13 @@ function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: 
 
     if (!func) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function)
+            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function),
         };
     }
 
     if (!isArrowFunction(func)) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function)
+            error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function),
         };
     }
 
@@ -147,7 +149,8 @@ function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: 
     else if (refactorKindBeginsWith(removeBracesAction.kind, kind) && isBlock(func.body) && func.body.statements.length === 1) {
         const firstStatement = first(func.body.statements);
         if (isReturnStatement(firstStatement)) {
-            return { func, addBraces: false, expression: firstStatement.expression, returnStatement: firstStatement };
+            const expression = firstStatement.expression && isObjectLiteralExpression(getLeftmostExpression(firstStatement.expression, /*stopAtCallExpressions*/ false)) ? factory.createParenthesizedExpression(firstStatement.expression) : firstStatement.expression;
+            return { func, addBraces: false, expression, returnStatement: firstStatement };
         }
     }
     return undefined;

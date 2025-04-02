@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-ambient.ts] ////
+
 //// [constDeclarations-ambient.ts]
 // No error
 declare const c1: boolean;

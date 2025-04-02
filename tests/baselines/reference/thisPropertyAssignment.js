@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/thisPropertyAssignment.ts] ////
+
 //// [a.js]
 // This test is asserting that a single property/element access
 // on `this` is a special assignment declaration, but chaining

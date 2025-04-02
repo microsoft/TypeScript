@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/0.js(3,20): error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
+0.js(3,20): error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
 
 
-==== tests/cases/conformance/jsdoc/0.js (1 errors) ====
+==== 0.js (1 errors) ====
     /**
      * @param {Object} notSpecial
      * @param {string} unrelated - not actually related because it's not notSpecial.unrelated

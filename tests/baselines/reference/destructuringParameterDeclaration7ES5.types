@@ -1,28 +1,43 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration7ES5.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration7ES5.ts] ////
+
+=== destructuringParameterDeclaration7ES5.ts ===
 interface ISomething {
     foo: string,
 >foo : string
+>    : ^^^^^^
 
     bar: string
 >bar : string
+>    : ^^^^^^
 }
 
 function foo({}, {foo, bar}: ISomething) {}
 >foo : ({}: {}, { foo, bar }: ISomething) => void
+>    : ^  ^^^^^^            ^^          ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
 function baz([], {foo, bar}: ISomething) {}
 >baz : ([]: any[], { foo, bar }: ISomething) => void
+>    : ^  ^^^^^^^^^            ^^          ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
 function one([], {}) {}
 >one : ([]: any[], {}: {}) => void
+>    : ^  ^^^^^^^^^  ^^^^^^^^^^^^^
 
 function two([], [a, b, c]: number[]) {}
 >two : ([]: any[], [a, b, c]: number[]) => void
+>    : ^  ^^^^^^^^^         ^^        ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 

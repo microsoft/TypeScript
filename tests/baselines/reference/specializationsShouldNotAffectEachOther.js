@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializationsShouldNotAffectEachOther.ts] ////
+
 //// [specializationsShouldNotAffectEachOther.ts]
 interface Series  {
     data: string[];

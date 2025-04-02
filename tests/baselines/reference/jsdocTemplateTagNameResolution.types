@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/file.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTagNameResolution.ts] ////
+
+=== file.js ===
 /**
  * @template T
  * @template {keyof T} K
@@ -7,12 +9,18 @@
 
 const x = { a: 1 };
 >x : { a: number; }
+>  : ^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 /** @type {Foo<typeof x, "a">} */
 const y = "a";
 >y : number
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 

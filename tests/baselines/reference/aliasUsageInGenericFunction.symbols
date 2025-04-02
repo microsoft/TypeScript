@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInGenericFunction_main.ts ===
+//// [tests/cases/compiler/aliasUsageInGenericFunction.ts] ////
+
+=== aliasUsageInGenericFunction_main.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInGenericFunction_main.ts, 0, 0))
 
@@ -37,7 +39,7 @@ var r2 = foo({ a: <IHasVisualizationModel>null });
 >a : Symbol(a, Decl(aliasUsageInGenericFunction_main.ts, 9, 14))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInGenericFunction_main.ts, 1, 66))
 
-=== tests/cases/compiler/aliasUsageInGenericFunction_backbone.ts ===
+=== aliasUsageInGenericFunction_backbone.ts ===
 export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 0))
 
@@ -45,7 +47,7 @@ export class Model {
 >someData : Symbol(Model.someData, Decl(aliasUsageInGenericFunction_backbone.ts, 0, 20))
 }
 
-=== tests/cases/compiler/aliasUsageInGenericFunction_moduleA.ts ===
+=== aliasUsageInGenericFunction_moduleA.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInGenericFunction_moduleA.ts, 0, 0))
 

@@ -1,14 +1,16 @@
-tests/cases/conformance/jsdoc/foo.js(7,10): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/jsdoc/foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/foo.js(16,60): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/jsdoc/foo.js(21,20): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/jsdoc/foo.js(31,10): error TS2534: A function returning 'never' cannot have a reachable end point.
-tests/cases/conformance/jsdoc/foo.js(37,5): error TS2322: Type 'string' is not assignable to type 'never'.
-tests/cases/conformance/jsdoc/foo.js(40,56): error TS2534: A function returning 'never' cannot have a reachable end point.
-tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachable end point.
+foo.js(7,10): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+foo.js(11,12): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
+foo.js(16,60): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+foo.js(21,20): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+foo.js(31,10): error TS2534: A function returning 'never' cannot have a reachable end point.
+foo.js(35,12): error TS1065: The return type of an async function or method must be the global Promise<T> type.
+foo.js(37,5): error TS2322: Type '"asd"' is not assignable to type 'never'.
+foo.js(40,56): error TS2534: A function returning 'never' cannot have a reachable end point.
+foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachable end point.
 
 
-==== tests/cases/conformance/jsdoc/foo.js (8 errors) ====
+==== foo.js (10 errors) ====
     /**
      * @callback FunctionReturningPromise
      * @returns {Promise<number>}
@@ -22,6 +24,8 @@ tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 
     }
     
     /** @type {FunctionReturningPromise} */
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
     async function testPromise2() {
         return "asd";
         ~~~~~~
@@ -54,10 +58,13 @@ tests/cases/conformance/jsdoc/foo.js(45,18): error TS2534: A function returning 
     }
     
     /** @type {FunctionReturningNever} */
+               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1065: The return type of an async function or method must be the global Promise<T> type.
+!!! related TS1055 foo.js:27:14: Type 'never' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
     async function testNever2() {
         return "asd";
         ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'never'.
+!!! error TS2322: Type '"asd"' is not assignable to type 'never'.
     }
     
     var testNever3 = /** @type {FunctionReturningNever} */ function() {

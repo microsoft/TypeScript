@@ -1,34 +1,52 @@
-=== tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts ===
+//// [tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts] ////
+
+=== intersectionOfTypeVariableHasApparentSignatures.ts ===
 interface Component<P> {
     props: Readonly<P> & Readonly<{ children?: {} }>;
->props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
+>props : Readonly<P> & Readonly<{ children?: {}; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^
 >children : {} | undefined
+>         : ^^^^^^^^^^^^^^
 }
 
 interface Props {
     children?: (items: {x: number}) => void
->children : ((items: {    x: number;}) => void) | undefined
+>children : ((items: { x: number; }) => void) | undefined
+>         : ^^     ^^              ^^^^^    ^^^^^^^^^^^^^
 >items : { x: number; }
+>      : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 }
 
 declare function f<T extends Props>(i: Component<T>): void;
 >f : <T extends Props>(i: Component<T>) => void
+>  : ^ ^^^^^^^^^     ^^ ^^            ^^^^^    
 >i : Component<T>
+>  : ^^^^^^^^^^^^
 
 f({
 >f({    props: {        children: (({ x }) => { })    }}) : void
+>                                                         : ^^^^
 >f : <T extends Props>(i: Component<T>) => void
+>  : ^ ^^^^^^^^^     ^^ ^^            ^^^^^    
 >{    props: {        children: (({ x }) => { })    }} : { props: { children: ({ x }: { x: number; }) => void; }; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^^^^^
 
     props: {
 >props : { children: ({ x }: { x: number; }) => void; }
+>      : ^^^^^^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^^
 >{        children: (({ x }) => { })    } : { children: ({ x }: { x: number; }) => void; }
+>                                         : ^^^^^^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^^
 
         children: (({ x }) => { })
 >children : ({ x }: { x: number; }) => void
+>         : ^     ^^^^^^^      ^^^^^^^^^^^^
 >(({ x }) => { }) : ({ x }: { x: number; }) => void
+>                 : ^     ^^^^^^^      ^^^^^^^^^^^^
 >({ x }) => { } : ({ x }: { x: number; }) => void
+>               : ^     ^^^^^^^      ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 });

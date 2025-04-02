@@ -1,71 +1,103 @@
-=== tests/cases/conformance/statements/forStatements/forStatements.ts ===
+//// [tests/cases/conformance/statements/forStatements/forStatements.ts] ////
+
+=== forStatements.ts ===
 interface I {
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class C implements I {
 >C : C
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class D<T>{
 >D : D<T>
+>  : ^^^^
 
     source: T;
 >source : T
+>       : ^
 
     recurse: D<T>;
 >recurse : D<T>
+>        : ^^^^
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
+>        : ^^^^^^^
 }
 
 function F(x: string): number { return 42; }
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class A {
 >A : A
+>  : ^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 }
 
 for(var aNumber: number = 9.9;;){} 
 >aNumber : number
+>        : ^^^^^^
 >9.9 : 9.9
+>    : ^^^
 
 for(var aString: string = 'this is a string';;){}
 >aString : string
+>        : ^^^^^^
 >'this is a string' : "this is a string"
+>                   : ^^^^^^^^^^^^^^^^^^
 
 for(var aDate: Date = new Date(12);;){}
 >aDate : Date
+>      : ^^^^
 >new Date(12) : Date
+>             : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 
 for(var anObject: Object = new Object();;){}
 >anObject : Object
+>         : ^^^^^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 for(var anAny: any = null;;){}
 >anAny : any
@@ -73,74 +105,121 @@ for(var anAny: any = null;;){}
 for(var aSecondAny: any = undefined;;){}
 >aSecondAny : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
 for(var aVoid: void = undefined;;){}
 >aVoid : void
+>      : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 for(var anInterface: I = new C();;){}
 >anInterface : I
+>            : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 for(var aClass: C = new C();;){}
 >aClass : C
+>       : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 for(var aGenericClass: D<string> = new D<string>();;){}
 >aGenericClass : D<string>
+>              : ^^^^^^^^^
 >new D<string>() : D<string>
+>                : ^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 for(var anObjectLiteral: I = { id: 12 };;){}
 >anObjectLiteral : I
+>                : ^
 >{ id: 12 } : { id: number; }
+>           : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >12 : 12
+>   : ^^
 
 for(var anOtherObjectLiteral: { id: number } = new C();;){}
 >anOtherObjectLiteral : { id: number; }
+>                     : ^^^^^^      ^^^
 >id : number
+>   : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 for(var aFunction: typeof F = F;;){}
 >aFunction : (x: string) => number
+>          : ^ ^^      ^^^^^      
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 
 for(var anOtherFunction: (x: string) => number = F;;){}
 >anOtherFunction : (x: string) => number
+>                : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 
 for(var aLambda: typeof F = (x) => 2;;){}
 >aLambda : (x: string) => number
+>        : ^ ^^      ^^^^^      
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >(x) => 2 : (x: string) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 for(var aModule: typeof M = M;;){}
 >aModule : typeof M
+>        : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 for(var aClassInModule: M.A = new M.A();;){}
 >aClassInModule : M.A
+>               : ^^^
 >M : any
+>  : ^^^
 >new M.A() : M.A
+>          : ^^^
 >M.A : typeof M.A
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >A : typeof M.A
+>  : ^^^^^^^^^^
 
 for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
 >aFunctionInModule : (x: number) => string
+>                  : ^ ^^      ^^^^^      
 >M.F2 : (x: number) => string
+>     : ^ ^^      ^^^^^      
 >M : typeof M
+>  : ^^^^^^^^
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >(x) => 'this is a string' : (x: number) => string
+>                          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >'this is a string' : "this is a string"
+>                   : ^^^^^^^^^^^^^^^^^^
 

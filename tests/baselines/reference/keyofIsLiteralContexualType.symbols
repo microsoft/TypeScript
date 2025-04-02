@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keyofIsLiteralContexualType.ts ===
+//// [tests/cases/compiler/keyofIsLiteralContexualType.ts] ////
+
+=== keyofIsLiteralContexualType.ts ===
 // keyof T is a literal contextual type
 
 function foo<T extends { a: string, b: string }>() {

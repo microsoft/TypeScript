@@ -1,39 +1,54 @@
-=== tests/cases/compiler/node_modules/aws-lambda/index.d.ts ===
+//// [tests/cases/compiler/importedAliasedConditionalTypeInstantiation.ts] ////
+
+=== node_modules/aws-lambda/index.d.ts ===
 export type Handler<TEvent = any, TResult = any> = (
 >Handler : Handler<TEvent, TResult>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     event: TEvent,
 >event : TEvent
+>      : ^^^^^^
 
     context: {},
 >context : {}
+>        : ^^
 
     callback: Callback<TResult>,
 >callback : Callback<TResult>
+>         : ^^^^^^^^^^^^^^^^^
 
 ) => void | Promise<TResult>;
 
 export type Callback<TResult = any> = (error?: Error | string | null, result?: TResult) => void;
 >Callback : Callback<TResult>
+>         : ^^^^^^^^^^^^^^^^^
 >error : string | Error
+>      : ^^^^^^^^^^^^^^
 >result : TResult
+>       : ^^^^^^^
 
-=== tests/cases/compiler/node_modules/lambda-tester/index.d.ts ===
+=== node_modules/lambda-tester/index.d.ts ===
 import { Handler, Callback } from 'aws-lambda';
 >Handler : any
+>        : ^^^
 >Callback : any
+>         : ^^^
 
 declare namespace lambdaTester {
 >lambdaTester : typeof lambdaTester
+>             : ^^^^^^^^^^^^^^^^^^^
 
     type HandlerEvent<T extends Handler> = T extends Handler<infer TEvent> ? TEvent : never;
 >HandlerEvent : HandlerEvent<T>
+>             : ^^^^^^^^^^^^^^^
 
     type HandlerResult<T extends Handler> = T extends Handler<any, infer TResult> ? TResult : never;
 >HandlerResult : HandlerResult<T>
+>              : ^^^^^^^^^^^^^^^^
 
     type HandlerError<T extends Handler> = T extends Handler<any, infer TResult>
 >HandlerError : HandlerError<T>
+>             : ^^^^^^^^^^^^^^^
 
         ? NonNullable<Parameters<Callback<TResult>>['0']>
         : never;
@@ -41,15 +56,19 @@ declare namespace lambdaTester {
     interface VerifierFn<S> {
         (result: S, additional?: any): void | Promise<void>;
 >result : S
+>       : ^
 >additional : any
 
         (result: S, additional?: any, done?: () => {}): void;
 >result : S
+>       : ^
 >additional : any
 >done : () => {}
+>     : ^^^^^^  
     }
     type Verifier<S> = S extends HandlerError<Handler>
 >Verifier : Verifier<S>
+>         : ^^^^^^^^^^^
 
         ? S extends string
             ? VerifierFn<string>
@@ -60,35 +79,50 @@ declare namespace lambdaTester {
 
     class LambdaTester<T extends Handler> {
 >LambdaTester : LambdaTester<T>
+>             : ^^^^^^^^^^^^^^^
 
         event(event: HandlerEvent<T>): this;
 >event : (event: HandlerEvent<T>) => this
+>      : ^     ^^               ^^^^^    
 >event : HandlerEvent<T>
+>      : ^^^^^^^^^^^^^^^
     }
 }
 
 declare function lambdaTester<T extends Handler>(handler: T): lambdaTester.LambdaTester<T>;
 >lambdaTester : typeof lambdaTester
+>             : ^^^^^^^^^^^^^^^^^^^
 >handler : T
+>        : ^
 >lambdaTester : any
+>             : ^^^
 
 export = lambdaTester;
 >lambdaTester : typeof lambdaTester
+>             : ^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as lambdaTester from 'lambda-tester';
 >lambdaTester : typeof lambdaTester
+>             : ^^^^^^^^^^^^^^^^^^^
 
 import { Handler } from 'aws-lambda';
 >Handler : any
+>        : ^^^
 
 type Actual = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler>>;
 >Actual : lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error> | lambdaTester.VerifierFn<any>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lambdaTester : any
+>             : ^^^
 >lambdaTester : any
+>             : ^^^
 
 type Expected = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler<any, any>>>;
 >Expected : lambdaTester.VerifierFn<string> | lambdaTester.VerifierFn<Error> | lambdaTester.VerifierFn<any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lambdaTester : any
+>             : ^^^
 >lambdaTester : any
+>             : ^^^
 

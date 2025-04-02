@@ -1,7 +1,7 @@
-import * as documents from "./_namespaces/documents";
-import { Compiler } from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
+import * as documents from "./_namespaces/documents.js";
+import { Compiler } from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
 
 interface SourceMapSpanWithDecodeErrors {
     sourceMapSpan: ts.Mapping;
@@ -44,7 +44,7 @@ namespace SourceMapDecoder {
 namespace SourceMapSpanWriter {
     let sourceMapRecorder: Compiler.WriterAggregator;
     let sourceMapSources: string[];
-    let sourceMapNames: string[] | null | undefined;
+    let sourceMapNames: string[] | null | undefined; // eslint-disable-line no-restricted-syntax
 
     let jsFile: documents.TextDocument;
     let jsLineMap: readonly number[];
@@ -149,7 +149,6 @@ namespace SourceMapSpanWriter {
         if (!SourceMapDecoder.hasCompletedDecoding()) {
             sourceMapRecorder.WriteLine("!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded");
             sourceMapRecorder.WriteLine("!!!! **** Remaining decoded string: " + SourceMapDecoder.getRemainingDecodeString());
-
         }
 
         // write remaining js lines
@@ -278,7 +277,7 @@ namespace SourceMapSpanWriter {
     }
 }
 
-export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
+export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]): string {
     const sourceMapRecorder = new Compiler.WriterAggregator();
 
     for (let i = 0; i < sourceMapDataList.length; i++) {
@@ -325,7 +324,7 @@ export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitR
     return sourceMapRecorder.lines.join("\r\n");
 }
 
-export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
+export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string): string {
     const sourceMapRecorder = new Compiler.WriterAggregator();
     let prevSourceFile: documents.TextDocument | undefined;
     const files = new Map<string, documents.TextDocument>();

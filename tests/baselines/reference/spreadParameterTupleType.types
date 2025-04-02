@@ -1,37 +1,57 @@
-=== tests/cases/compiler/spreadParameterTupleType.ts ===
+//// [tests/cases/compiler/spreadParameterTupleType.ts] ////
+
+=== spreadParameterTupleType.ts ===
 function f1() {
 >f1 : () => (s: string, s_1: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type A = [s: string];
 >A : [s: string]
+>  : ^^^^^^^^^^^
 
     type C = [...A, ...A];
 >C : [s: string, s: string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
-    return function fn(...args: C) { }
+    return function fn(...args: C) { } satisfies any
+>function fn(...args: C) { } satisfies any : (s: string, s_1: string) => void
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function fn(...args: C) { } : (s: string, s_1: string) => void
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : (s: string, s_1: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : [s: string, s: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f2() {
 >f2 : () => (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type A = [a: string];
 >A : [a: string]
+>  : ^^^^^^^^^^^
 
     type B = [b: string];
 >B : [b: string]
+>  : ^^^^^^^^^^^
 
     type C = [c: string];
 >C : [c: string]
+>  : ^^^^^^^^^^^
 
     type D = [...A, ...A, ...B, ...A, ...B, ...B, ...A, ...C];
 >D : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    return function fn(...args: D) { }
+    return function fn(...args: D) { } satisfies any;
+>function fn(...args: D) { } satisfies any : (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function fn(...args: D) { } : (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

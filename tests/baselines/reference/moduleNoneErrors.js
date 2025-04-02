@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleNoneErrors.ts] ////
+
 //// [a.ts]
 export class Foo {
     foo: string;

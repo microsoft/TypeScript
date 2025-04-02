@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/cachedModuleResolution8.ts] ////
+
 === /a/b/c/d/e/app.ts ===
 import {x} from "foo";
 >x : any
+>  : ^^^
 
 === /a/b/c/lib.ts ===
 import {x} from "foo";
 >x : any
+>  : ^^^
 

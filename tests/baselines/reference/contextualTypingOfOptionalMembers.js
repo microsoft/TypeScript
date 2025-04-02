@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingOfOptionalMembers.tsx] ////
+
 //// [index.tsx]
 interface ActionsObject<State> {
     [prop: string]: (state: State) => State;

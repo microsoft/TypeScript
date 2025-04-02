@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx] ////
+
+=== jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx ===
+// https://github.com/microsoft/TypeScript/issues/55240
+
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 0, 0))
+
+  interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 2, 23))
+
+    [k: `foo${string}`]: { prop: string };
+>k : Symbol(k, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 5))
+>prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 26))
+
+    [k: `foobar${string}`]: { prop: 'literal' };
+>k : Symbol(k, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 5, 5))
+>prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 5, 29))
+  }
+}
+
+<foobaz prop="smth" />;
+>foobaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31))
+>prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 9, 7))
+
+<foobaz prop={10} />;
+>foobaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31))
+>prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 10, 7))
+
+<foobarbaz prop="literal"/>;
+>foobarbaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 42))
+>prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 12, 10))
+
+<foobarbaz prop="smth"/>;
+>foobarbaz : Symbol(JSX.IntrinsicElements.__index, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 3, 31), Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 4, 42))
+>prop : Symbol(prop, Decl(jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx, 13, 10))
+

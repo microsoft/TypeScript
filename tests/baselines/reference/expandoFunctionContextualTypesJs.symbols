@@ -1,4 +1,6 @@
-=== tests/cases/compiler/input.js ===
+//// [tests/cases/compiler/expandoFunctionContextualTypesJs.ts] ////
+
+=== input.js ===
 /** @typedef {{ color: "red" | "blue" }} MyComponentProps */
 
 /**

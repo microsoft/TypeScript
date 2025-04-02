@@ -1,24 +1,35 @@
-=== tests/cases/conformance/types/spread/spreadContextualTypedBindingPattern.ts ===
+//// [tests/cases/conformance/types/spread/spreadContextualTypedBindingPattern.ts] ////
+
+=== spreadContextualTypedBindingPattern.ts ===
 // #18308
 interface Person {
   naam: string,
 >naam : string
+>     : ^^^^^^
 
   age: number
 >age : number
+>    : ^^^^^^
 }
 
 declare const bob: Person
 >bob : Person
+>    : ^^^^^^
 
 declare const alice: Person
 >alice : Person
+>      : ^^^^^^
 
 // [ts] Initializer provides no value for this binding element and the binding element has no default value.
 const { naam, age } = {...bob, ...alice}
 >naam : string
+>     : ^^^^^^
 >age : number
+>    : ^^^^^^
 >{...bob, ...alice} : { naam: string; age: number; }
+>                   : ^^^^^^^^      ^^^^^^^      ^^^
 >bob : Person
+>    : ^^^^^^
 >alice : Person
+>      : ^^^^^^
 

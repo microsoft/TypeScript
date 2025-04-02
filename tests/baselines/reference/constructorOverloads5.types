@@ -1,50 +1,71 @@
-=== tests/cases/compiler/constructorOverloads5.ts ===
+//// [tests/cases/compiler/constructorOverloads5.ts] ////
+
+=== constructorOverloads5.ts ===
  interface IArguments {}
 
  declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function RegExp(pattern: string): RegExp;
 >RegExp : typeof RegExp
+>       : ^^^^^^^^^^^^^
 >pattern : string
+>        : ^^^^^^
 
     export function RegExp(pattern: string, flags: string): RegExp;
 >RegExp : typeof RegExp
+>       : ^^^^^^^^^^^^^
 >pattern : string
+>        : ^^^^^^
 >flags : string
+>      : ^^^^^^
 
     export class RegExp {
 >RegExp : RegExp
+>       : ^^^^^^
 
         constructor(pattern: string);
 >pattern : string
+>        : ^^^^^^
 
         constructor(pattern: string, flags: string);
 >pattern : string
+>        : ^^^^^^
 >flags : string
+>      : ^^^^^^
 
         exec(string: string): string[];
 >exec : (string: string) => string[]
+>     : ^      ^^      ^^^^^        
 >string : string
+>       : ^^^^^^
 
         test(string: string): boolean;
 >test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
 >string : string
+>       : ^^^^^^
 
         source: string;
 >source : string
+>       : ^^^^^^
 
         global: boolean;
 >global : boolean
+>       : ^^^^^^^
 
         ignoreCase: boolean;
 >ignoreCase : boolean
+>           : ^^^^^^^
 
         multiline: boolean;
 >multiline : boolean
+>          : ^^^^^^^
 
         lastIndex: boolean;
 >lastIndex : boolean
+>          : ^^^^^^^
     }
 }
 

@@ -1,11 +1,23 @@
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(36,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(39,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(58,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(61,23): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(63,32): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(28,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(29,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(30,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(31,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(32,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(33,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(36,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(39,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(51,20): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(52,24): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(53,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(54,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(55,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(56,32): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsObjectType.ts(58,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(61,23): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(63,32): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
-==== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts (5 errors) ====
+==== conditionalOperatorConditionIsObjectType.ts (17 errors) ====
     //Cond ? Expr1 : Expr2,  Cond is of object type, Expr1 and Expr2 have the same type
     var condObject: Object;
     
@@ -34,11 +46,23 @@ tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorCondit
     
     //Cond is an object type literal
     ((a: string) => a.length) ? exprAny1 : exprAny2;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     ((a: string) => a.length) ? exprBoolean1 : exprBoolean2;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     ({}) ? exprNumber1 : exprNumber2;
+    ~~~~
+!!! error TS2872: This kind of expression is always truthy.
     ({ a: 1, b: "s" }) ? exprString1 : exprString2;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     ({ a: 1, b: "s" }) ? exprString1: exprBoolean1; // union
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     
     //Cond is an object type expression
     foo() ? exprAny1 : exprAny2;
@@ -61,11 +85,23 @@ tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorCondit
     var resultIsStringOrBoolean1 = condObject ? exprString1 : exprBoolean1; // union
     
     var resultIsAny2 = ((a: string) => a.length) ? exprAny1 : exprAny2;
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsBoolean2 = ((a: string) => a.length) ? exprBoolean1 : exprBoolean2;
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsNumber2 = ({}) ? exprNumber1 : exprNumber2;
+                          ~~~~
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsString2 = ({ a: 1, b: "s" }) ? exprString1 : exprString2;
+                          ~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsObject2 = ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
+                          ~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsStringOrBoolean2 = ({ a: 1, b: "s" }) ? exprString1 : exprBoolean1; // union
+                                   ~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     
     var resultIsAny3 = foo() ? exprAny1 : exprAny2;
                        ~~~~~

@@ -1,38 +1,56 @@
-=== tests/cases/compiler/indexedAccessRelation.ts ===
+//// [tests/cases/compiler/indexedAccessRelation.ts] ////
+
+=== indexedAccessRelation.ts ===
 // Repro from #14723
 
 class Component<S> {
 >Component : Component<S>
+>          : ^^^^^^^^^^^^
 
     setState<K extends keyof S>(state: Pick<S, K>) {}
 >setState : <K extends keyof S>(state: Pick<S, K>) => void
+>         : ^ ^^^^^^^^^       ^^     ^^          ^^^^^^^^^
 >state : Pick<S, K>
+>      : ^^^^^^^^^^
 }
 
 export interface State<T> {
     a?: T;
 >a : T
+>  : ^
 }
 
 class Foo {}
 >Foo : Foo
+>    : ^^^
 
 class Comp<T extends Foo, S> extends Component<S & State<T>>
 >Comp : Comp<T, S>
+>     : ^^^^^^^^^^
 >Component : Component<S & State<T>>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 {
     foo(a: T) {
 >foo : (a: T) => void
+>    : ^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
         this.setState({ a: a });
 >this.setState({ a: a }) : void
+>                        : ^^^^
 >this.setState : <K extends keyof S | "a">(state: Pick<S & State<T>, K>) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >setState : <K extends keyof S | "a">(state: Pick<S & State<T>, K>) => void
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: a } : { a: T; }
+>         : ^^^^^^^^^
 >a : T
+>  : ^
 >a : T
+>  : ^
     }
 }
 

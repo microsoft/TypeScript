@@ -1,29 +1,48 @@
-=== tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts ===
+//// [tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts] ////
+
+=== typeArgumentsOnFunctionsWithNoTypeParameters.ts ===
 function foo<T, U>(f: (v: T) => U) {
 >foo : <T, U>(f: (v: T) => U) => void
+>    : ^ ^^ ^^ ^^           ^^^^^^^^^
 >f : (v: T) => U
+>  : ^ ^^ ^^^^^ 
 >v : T
+>  : ^
 
    var r1 = f<number>(1);
 >r1 : U
+>   : ^
 >f<number>(1) : U
+>             : ^
 >f : (v: T) => U
+>  : ^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 
    var r2 = f(1);
 >r2 : U
+>   : ^
 >f(1) : U
+>     : ^
 >f : (v: T) => U
+>  : ^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 
    var r3 = f<any>(null);
 >r3 : U
+>   : ^
 >f<any>(null) : U
+>             : ^
 >f : (v: T) => U
+>  : ^ ^^ ^^^^^ 
 
    var r4 = f(null);
 >r4 : U
+>   : ^
 >f(null) : U
+>        : ^
 >f : (v: T) => U
+>  : ^ ^^ ^^^^^ 
 }
 

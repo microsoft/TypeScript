@@ -1,32 +1,49 @@
-=== tests/cases/compiler/relatedViaDiscriminatedTypeNoError2.ts ===
+//// [tests/cases/compiler/relatedViaDiscriminatedTypeNoError2.ts] ////
+
+=== relatedViaDiscriminatedTypeNoError2.ts ===
 type AObjOrBObj = { name: "A" } | { name: "B" };
->AObjOrBObj : { name: "A"; } | { name: "B"; }
+>AObjOrBObj : AObjOrBObj
+>           : ^^^^^^^^^^
 >name : "A"
+>     : ^^^
 >name : "B"
+>     : ^^^
 
 type AOrBObj = { name: "A" | "B" };
->AOrBObj : { name: "A" | "B"; }
+>AOrBObj : AOrBObj
+>        : ^^^^^^^
 >name : "A" | "B"
+>     : ^^^^^^^^^
 
 type Generic<T extends AObjOrBObj> = T;
 >Generic : T
+>        : ^
 
 type T = Generic<AOrBObj>;
 >T : AOrBObj
+>  : ^^^^^^^
 
 declare let x: AObjOrBObj;
 >x : AObjOrBObj
+>  : ^^^^^^^^^^
 
 declare let y: AOrBObj;
 >y : AOrBObj
+>  : ^^^^^^^
 
 x = y;
 >x = y : AOrBObj
+>      : ^^^^^^^
 >x : AObjOrBObj
+>  : ^^^^^^^^^^
 >y : AOrBObj
+>  : ^^^^^^^
 
 y = x;
 >y = x : AObjOrBObj
+>      : ^^^^^^^^^^
 >y : AOrBObj
+>  : ^^^^^^^
 >x : AObjOrBObj
+>  : ^^^^^^^^^^
 

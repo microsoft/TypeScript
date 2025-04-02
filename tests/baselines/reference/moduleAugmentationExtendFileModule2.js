@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Observable = void 0;
 var Observable;
 (function (Observable) {
-})(Observable = exports.Observable || (exports.Observable = {}));
+})(Observable || (exports.Observable = Observable = {}));
 //// [map.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

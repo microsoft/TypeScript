@@ -1,310 +1,452 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/es6ExportEqualsInterop.ts] ////
+
+=== main.ts ===
 /// <reference path="modules.d.ts"/>
 
 // import-equals
 import z1 = require("interface");
 >z1 : any
+>   : ^^^
 
 import z2 = require("variable");
 >z2 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 
 import z3 = require("interface-variable");
 >z3 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 
 import z4 = require("module");
 >z4 : typeof z4
+>   : ^^^^^^^^^
 
 import z5 = require("interface-module");
 >z5 : typeof z5
+>   : ^^^^^^^^^
 
 import z6 = require("variable-module");
 >z6 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 
 import z7 = require("function");
 >z7 : () => any
+>   : ^^^^^^^^^
 
 import z8 = require("function-module");
 >z8 : typeof z8
+>   : ^^^^^^^^^
 
 import z9 = require("class");
 >z9 : typeof z9
+>   : ^^^^^^^^^
 
 import z0 = require("class-module");
 >z0 : typeof z0
+>   : ^^^^^^^^^
 
 z1.a;
 >z1.a : any
+>     : ^^^
 >z1 : any
+>   : ^^^
 >a : any
+>  : ^^^
 
 z2.a;
 >z2.a : number
+>     : ^^^^^^
 >z2 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 z3.a;
 >z3.a : number
+>     : ^^^^^^
 >z3 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 z4.a;
 >z4.a : number
+>     : ^^^^^^
 >z4 : typeof z4
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 z5.a;
 >z5.a : number
+>     : ^^^^^^
 >z5 : typeof z5
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 z6.a;
 >z6.a : number
+>     : ^^^^^^
 >z6 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 z7.a;
 >z7.a : any
+>     : ^^^
 >z7 : () => any
+>   : ^^^^^^^^^
 >a : any
+>  : ^^^
 
 z8.a;
 >z8.a : number
+>     : ^^^^^^
 >z8 : typeof z8
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 z9.a;
 >z9.a : any
+>     : ^^^
 >z9 : typeof z9
+>   : ^^^^^^^^^
 >a : any
+>  : ^^^
 
 z0.a;
 >z0.a : number
+>     : ^^^^^^
 >z0 : typeof z0
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 // default import
 import x1 from "interface";
 >x1 : any
+>   : ^^^
 
 import x2 from "variable";
 >x2 : any
+>   : ^^^
 
 import x3 from "interface-variable";
 >x3 : any
+>   : ^^^
 
 import x4 from "module";
 >x4 : any
+>   : ^^^
 
 import x5 from "interface-module";
 >x5 : any
+>   : ^^^
 
 import x6 from "variable-module";
 >x6 : any
+>   : ^^^
 
 import x7 from "function";
 >x7 : any
+>   : ^^^
 
 import x8 from "function-module";
 >x8 : any
+>   : ^^^
 
 import x9 from "class";
 >x9 : any
+>   : ^^^
 
 import x0 from "class-module";
 >x0 : any
+>   : ^^^
 
 // namespace import
 import * as y1 from "interface";
 >y1 : any
+>   : ^^^
 
 import * as y2 from "variable";
 >y2 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 
 import * as y3 from "interface-variable";
 >y3 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 
 import * as y4 from "module";
 >y4 : typeof z4
+>   : ^^^^^^^^^
 
 import * as y5 from "interface-module";
 >y5 : typeof z5
+>   : ^^^^^^^^^
 
 import * as y6 from "variable-module";
 >y6 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 
 import * as y7 from "function";
 >y7 : () => any
+>   : ^^^^^^^^^
 
 import * as y8 from "function-module";
 >y8 : typeof z8
+>   : ^^^^^^^^^
 
 import * as y9 from "class";
 >y9 : typeof z9
+>   : ^^^^^^^^^
 
 import * as y0 from "class-module";
 >y0 : typeof z0
+>   : ^^^^^^^^^
 
 y1.a;
 >y1.a : any
+>     : ^^^
 >y1 : any
+>   : ^^^
 >a : any
+>  : ^^^
 
 y2.a;
 >y2.a : number
+>     : ^^^^^^
 >y2 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 y3.a;
 >y3.a : number
+>     : ^^^^^^
 >y3 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 y4.a;
 >y4.a : number
+>     : ^^^^^^
 >y4 : typeof z4
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 y5.a;
 >y5.a : number
+>     : ^^^^^^
 >y5 : typeof z5
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 y6.a;
 >y6.a : number
+>     : ^^^^^^
 >y6 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
 y7.a;
 >y7.a : any
+>     : ^^^
 >y7 : () => any
+>   : ^^^^^^^^^
 >a : any
+>  : ^^^
 
 y8.a;
 >y8.a : number
+>     : ^^^^^^
 >y8 : typeof z8
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 y9.a;
 >y9.a : any
+>     : ^^^
 >y9 : typeof z9
+>   : ^^^^^^^^^
 >a : any
+>  : ^^^
 
 y0.a;
 >y0.a : number
+>     : ^^^^^^
 >y0 : typeof z0
+>   : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 // named import
 import { a as a1 } from "interface";
 >a : any
+>  : ^^^
 >a1 : any
+>   : ^^^
 
 import { a as a2 } from "variable";
 >a : number
+>  : ^^^^^^
 >a2 : number
+>   : ^^^^^^
 
 import { a as a3 } from "interface-variable";
 >a : number
+>  : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 import { a as a4 } from "module";
 >a : number
+>  : ^^^^^^
 >a4 : number
+>   : ^^^^^^
 
 import { a as a5 } from "interface-module";
 >a : number
+>  : ^^^^^^
 >a5 : number
+>   : ^^^^^^
 
 import { a as a6 } from "variable-module";
 >a : number
+>  : ^^^^^^
 >a6 : number
+>   : ^^^^^^
 
 import { a as a7 } from "function";
 >a : any
+>  : ^^^
 >a7 : any
+>   : ^^^
 
 import { a as a8 } from "function-module";
 >a : number
+>  : ^^^^^^
 >a8 : number
+>   : ^^^^^^
 
 import { a as a9 } from "class";
 >a : any
+>  : ^^^
 >a9 : any
+>   : ^^^
 
 import { a as a0 } from "class-module";
 >a : number
+>  : ^^^^^^
 >a0 : number
+>   : ^^^^^^
 
 a1;
 >a1 : any
+>   : ^^^
 
 a2;
 >a2 : number
+>   : ^^^^^^
 
 a3;
 >a3 : number
+>   : ^^^^^^
 
 a4;
 >a4 : number
+>   : ^^^^^^
 
 a5;
 >a5 : number
+>   : ^^^^^^
 
 a6;
 >a6 : number
+>   : ^^^^^^
 
 a7;
 >a7 : any
+>   : ^^^
 
 a8;
 >a8 : number
+>   : ^^^^^^
 
 a9;
 >a9 : any
+>   : ^^^
 
 a0;
 >a0 : number
+>   : ^^^^^^
 
 // named export
 export { a as a1 } from "interface";
 >a : any
+>  : ^^^
 >a1 : any
+>   : ^^^
 
 export { a as a2 } from "variable";
 >a : number
+>  : ^^^^^^
 >a2 : number
+>   : ^^^^^^
 
 export { a as a3 } from "interface-variable";
 >a : number
+>  : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 export { a as a4 } from "module";
 >a : number
+>  : ^^^^^^
 >a4 : number
+>   : ^^^^^^
 
 export { a as a5 } from "interface-module";
 >a : number
+>  : ^^^^^^
 >a5 : number
+>   : ^^^^^^
 
 export { a as a6 } from "variable-module";
 >a : number
+>  : ^^^^^^
 >a6 : number
+>   : ^^^^^^
 
 export { a as a7 } from "function";
 >a : any
+>  : ^^^
 >a7 : any
+>   : ^^^
 
 export { a as a8 } from "function-module";
 >a : number
+>  : ^^^^^^
 >a8 : number
+>   : ^^^^^^
 
 export { a as a9 } from "class";
 >a : any
+>  : ^^^
 >a9 : any
+>   : ^^^
 
 export { a as a0 } from "class-module";
 >a : number
+>  : ^^^^^^
 >a0 : number
+>   : ^^^^^^
 
 // export-star
 export * from "interface";
@@ -318,191 +460,248 @@ export * from "function-module";
 export * from "class";
 export * from "class-module";
 
-=== tests/cases/compiler/modules.d.ts ===
+=== modules.d.ts ===
 declare module "interface" {
 >"interface" : typeof import("interface")
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface Foo {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : Foo
+>    : ^^^
 }
 
 declare module "variable" {
 >"variable" : typeof import("variable")
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var Foo: {
 >Foo : { a: number; b: number; }
+>    : ^^^^^      ^^^^^      ^^^
 
         a: number;
 >a : number
+>  : ^^^^^^
 
         b: number;
 >b : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : { a: number; b: number; }
+>    : ^^^^^      ^^^^^      ^^^
 }
 
 declare module "interface-variable" {
 >"interface-variable" : typeof import("interface-variable")
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface Foo {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
     var Foo: {
 >Foo : { a: number; b: number; }
+>    : ^^^^^      ^^^^^      ^^^
 
         a: number;
 >a : number
+>  : ^^^^^^
 
         b: number;
 >b : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : Foo
+>    : ^^^
 }
 
 declare module "module" {
 >"module" : typeof import("module")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
     module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
         export var a: number;
 >a : number
+>  : ^^^^^^
 
         export var b: number;
 >b : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 }
 
 declare module "interface-module" {
 >"interface-module" : typeof import("interface-module")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface Foo {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
     module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
         export var a: number;
 >a : number
+>  : ^^^^^^
 
         export var b: number;
 >b : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : Foo
+>    : ^^^
 }
 
 declare module "variable-module" {
 >"variable-module" : typeof import("variable-module")
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     module Foo {
         interface Bar {
             x: number;
 >x : number
+>  : ^^^^^^
 
             y: number;
 >y : number
+>  : ^^^^^^
         }
     }
     var Foo: {
 >Foo : { a: number; b: number; }
+>    : ^^^^^      ^^^^^      ^^^
 
         a: number;
 >a : number
+>  : ^^^^^^
 
         b: number;
 >b : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : { a: number; b: number; }
+>    : ^^^^^      ^^^^^      ^^^
 }
 
 declare module "function" {
 >"function" : typeof import("function")
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 
     export = foo;
 >foo : () => any
+>    : ^^^^^^^^^
 }
 
 declare module "function-module" {
 >"function-module" : typeof import("function-module")
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function foo();
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     module foo {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
         export var a: number;
 >a : number
+>  : ^^^^^^
 
         export var b: number;
 >b : number
+>  : ^^^^^^
     }
     export = foo;
 >foo : typeof foo
+>    : ^^^^^^^^^^
 }
 
 declare module "class" {
 >"class" : typeof import("class")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     class Foo {
 >Foo : Foo
+>    : ^^^
 
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : Foo
+>    : ^^^
 }
 
 declare module "class-module" {
 >"class-module" : typeof import("class-module")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class Foo {
 >Foo : Foo
+>    : ^^^
 
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
     module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
         export var a: number;
 >a : number
+>  : ^^^^^^
 
         export var b: number;
 >b : number
+>  : ^^^^^^
     }
     export = Foo;
 >Foo : Foo
+>    : ^^^
 }
 

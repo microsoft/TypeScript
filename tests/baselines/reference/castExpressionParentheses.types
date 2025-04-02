@@ -1,4 +1,6 @@
-=== tests/cases/compiler/castExpressionParentheses.ts ===
+//// [tests/cases/compiler/castExpressionParentheses.ts] ////
+
+=== castExpressionParentheses.ts ===
 declare var a;
 >a : any
 
@@ -8,65 +10,81 @@ declare var a;
 >(<any>{a:0}) : any
 ><any>{a:0} : any
 >{a:0} : { a: number; }
+>      : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 (<any>[1,3,]); 
 >(<any>[1,3,]) : any
 ><any>[1,3,] : any
 >[1,3,] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >3 : 3
+>  : ^
 
 (<any>"string"); 
 >(<any>"string") : any
 ><any>"string" : any
 >"string" : "string"
+>         : ^^^^^^^^
 
 (<any>23.0); 
 >(<any>23.0) : any
 ><any>23.0 : any
 >23.0 : 23
+>     : ^^
 
 (<any>1); 
 >(<any>1) : any
 ><any>1 : any
 >1 : 1
+>  : ^
 
 (<any>1.);
 >(<any>1.) : any
 ><any>1. : any
 >1. : 1
+>   : ^
 
 (<any>1.0);
 >(<any>1.0) : any
 ><any>1.0 : any
 >1.0 : 1
+>    : ^
 
 (<any>12e+34);
 >(<any>12e+34) : any
 ><any>12e+34 : any
 >12e+34 : 1.2e+35
+>       : ^^^^^^^
 
 (<any>0xff);
 >(<any>0xff) : any
 ><any>0xff : any
 >0xff : 255
+>     : ^^^
 
 (<any>/regexp/g); 
 >(<any>/regexp/g) : any
 ><any>/regexp/g : any
 >/regexp/g : RegExp
+>          : ^^^^^^
 
 (<any>false); 
 >(<any>false) : any
 ><any>false : any
 >false : false
+>      : ^^^^^
 
 (<any>true); 
 >(<any>true) : any
 ><any>true : any
 >true : true
+>     : ^^^^
 
 (<any>null); 
 >(<any>null) : any
@@ -77,22 +95,27 @@ declare var a;
 >(<any>this) : any
 ><any>this : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 
 (<any>this.x); 
 >(<any>this.x) : any
 ><any>this.x : any
 >this.x : any
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 (<any>(<any>a).x);
 >(<any>(<any>a).x) : any
 ><any>(<any>a).x : any
 >(<any>a).x : any
 >(<any>a) : any
+>         : ^^^
 ><any>a : any
 >a : any
 >x : any
+>  : ^^^
 
 (<any><any>a);
 >(<any><any>a) : any
@@ -106,6 +129,7 @@ declare var a;
 >a[0] : any
 >a : any
 >0 : 0
+>  : ^
 
 (<any>a.b["0"]);
 >(<any>a.b["0"]) : any
@@ -113,51 +137,71 @@ declare var a;
 >a.b["0"] : any
 >a.b : any
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >"0" : "0"
+>    : ^^^
 
 (<any>a()).x;
 >(<any>a()).x : any
 >(<any>a()) : any
+>           : ^^^
 ><any>a() : any
 >a() : any
 >a : any
 >x : any
+>  : ^^^
 
 (<any>1).foo;
 >(<any>1).foo : any
 >(<any>1) : any
+>         : ^^^
 ><any>1 : any
 >1 : 1
+>  : ^
 >foo : any
+>    : ^^^
 
 (<any>1.).foo;
 >(<any>1.).foo : any
 >(<any>1.) : any
+>          : ^^^
 ><any>1. : any
 >1. : 1
+>   : ^
 >foo : any
+>    : ^^^
 
 (<any>1.0).foo;
 >(<any>1.0).foo : any
 >(<any>1.0) : any
+>           : ^^^
 ><any>1.0 : any
 >1.0 : 1
+>    : ^
 >foo : any
+>    : ^^^
 
 (<any>12e+34).foo;
 >(<any>12e+34).foo : any
 >(<any>12e+34) : any
+>              : ^^^
 ><any>12e+34 : any
 >12e+34 : 1.2e+35
+>       : ^^^^^^^
 >foo : any
+>    : ^^^
 
 (<any>0xff).foo;
 >(<any>0xff).foo : any
 >(<any>0xff) : any
+>            : ^^^
 ><any>0xff : any
 >0xff : 255
+>     : ^^^
 >foo : any
+>    : ^^^
 
 declare var A;
 >A : any
@@ -167,31 +211,41 @@ declare var A;
 >(<any>(1.0)) : any
 ><any>(1.0) : any
 >(1.0) : 1
+>      : ^
 >1.0 : 1
+>    : ^
 
 (<any>new A).foo; 
 >(<any>new A).foo : any
 >(<any>new A) : any
+>             : ^^^
 ><any>new A : any
 >new A : any
 >A : any
 >foo : any
+>    : ^^^
 
 (<any>typeof A).x; 
 >(<any>typeof A).x : any
 >(<any>typeof A) : any
+>                : ^^^
 ><any>typeof A : any
 >typeof A : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A : any
 >x : any
+>  : ^^^
 
 (<any>-A).x; 
 >(<any>-A).x : any
 >(<any>-A) : any
+>          : ^^^
 ><any>-A : any
 >-A : number
+>   : ^^^^^^
 >A : any
 >x : any
+>  : ^^^
 
 new (<any>A());
 >new (<any>A()) : any
@@ -202,37 +256,50 @@ new (<any>A());
 
 (<Tany>()=> {})();
 >(<Tany>()=> {})() : void
+>                  : ^^^^
 >(<Tany>()=> {}) : <Tany>() => void
+>                : ^    ^^^^^^^^^^^
 ><Tany>()=> {} : <Tany>() => void
+>              : ^    ^^^^^^^^^^^
 
 (<any>function foo() { })();
 >(<any>function foo() { })() : any
 >(<any>function foo() { }) : any
 ><any>function foo() { } : any
 >function foo() { } : () => void
+>                   : ^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 (<any><number><any>-A).x; 
 >(<any><number><any>-A).x : any
 >(<any><number><any>-A) : any
+>                       : ^^^
 ><any><number><any>-A : any
 ><number><any>-A : number
+>                : ^^^^^^
 ><any>-A : any
 >-A : number
+>   : ^^^^^^
 >A : any
 >x : any
+>  : ^^^
 
 // nested cast, should keep one pair of parenthese
 (<any><number>(<any>-A)).x; 
 >(<any><number>(<any>-A)).x : any
 >(<any><number>(<any>-A)) : any
+>                         : ^^^
 ><any><number>(<any>-A) : any
 ><number>(<any>-A) : number
+>                  : ^^^^^^
 >(<any>-A) : any
 ><any>-A : any
 >-A : number
+>   : ^^^^^^
 >A : any
 >x : any
+>  : ^^^
 
 // nested parenthesized expression, should keep one pair of parenthese
 (<any>(A)) 

@@ -1,11 +1,16 @@
-=== tests/cases/compiler/commentOnClassAccessor1.ts ===
+//// [tests/cases/compiler/commentOnClassAccessor1.ts] ////
+
+=== commentOnClassAccessor1.ts ===
 class C {
 >C : C
+>  : ^
 
   /**
    * @type {number}
    */
   get bar(): number { return 1;}
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }

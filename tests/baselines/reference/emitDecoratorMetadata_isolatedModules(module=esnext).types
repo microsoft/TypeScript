@@ -1,87 +1,127 @@
-=== tests/cases/compiler/type1.ts ===
+//// [tests/cases/compiler/emitDecoratorMetadata_isolatedModules.ts] ////
+
+=== type1.ts ===
 interface T1 {}
 export type { T1 }
 >T1 : T1
+>   : ^^
 
-=== tests/cases/compiler/type2.ts ===
+=== type2.ts ===
 
 export interface T2 {}
 
-=== tests/cases/compiler/class3.ts ===
+=== class3.ts ===
 export class C3 {}
 >C3 : C3
+>   : ^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { T1 } from "./type1";
 >T1 : any
+>   : ^^^
 
 import * as t1 from "./type1";
 >t1 : typeof t1
+>   : ^^^^^^^^^
 
 import type { T2 } from "./type2";
 >T2 : T2
+>   : ^^
 
 import { C3 } from "./class3";
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
 declare var EventListener: any;
 >EventListener : any
+>              : ^^^
 
 class HelloWorld {
 >HelloWorld : HelloWorld
+>           : ^^^^^^^^^^
 
   @EventListener('1')
 >EventListener('1') : any
+>                   : ^^^
 >EventListener : any
+>              : ^^^
 >'1' : "1"
+>    : ^^^
 
   handleEvent1(event: T1) {} // Error
 >handleEvent1 : (event: T1) => void
+>             : ^     ^^  ^^^^^^^^^
 >event : T1
+>      : ^^
   
   @EventListener('2')
 >EventListener('2') : any
+>                   : ^^^
 >EventListener : any
+>              : ^^^
 >'2' : "2"
+>    : ^^^
 
   handleEvent2(event: T2) {} // Ok
 >handleEvent2 : (event: T2) => void
+>             : ^     ^^  ^^^^^^^^^
 >event : T2
+>      : ^^
 
   @EventListener('1')
 >EventListener('1') : any
+>                   : ^^^
 >EventListener : any
+>              : ^^^
 >'1' : "1"
+>    : ^^^
 
   p1!: T1; // Error
 >p1 : T1
+>   : ^^
 
   @EventListener('1')
 >EventListener('1') : any
+>                   : ^^^
 >EventListener : any
+>              : ^^^
 >'1' : "1"
+>    : ^^^
 
   p1_ns!: t1.T1; // Ok
 >p1_ns : T1
+>      : ^^
 >t1 : any
+>   : ^^^
 
   @EventListener('2')
 >EventListener('2') : any
+>                   : ^^^
 >EventListener : any
+>              : ^^^
 >'2' : "2"
+>    : ^^^
 
   p2!: T2; // Ok
 >p2 : T2
+>   : ^^
 
   @EventListener('3')
 >EventListener('3') : any
+>                   : ^^^
 >EventListener : any
+>              : ^^^
 >'3' : "3"
+>    : ^^^
 
   handleEvent3(event: C3): T1 { return undefined! } // Ok, Error
 >handleEvent3 : (event: C3) => T1
+>             : ^     ^^  ^^^^^  
 >event : C3
+>      : ^^
 >undefined! : undefined
+>           : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 

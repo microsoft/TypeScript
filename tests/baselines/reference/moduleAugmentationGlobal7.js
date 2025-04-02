@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationGlobal7.ts] ////
+
 //// [moduleAugmentationGlobal7.ts]
 namespace A {
     declare global {

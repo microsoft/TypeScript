@@ -1,12 +1,12 @@
-tests/cases/compiler/superPropertyAccess.ts(21,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superPropertyAccess.ts(23,15): error TS2341: Property 'p1' is private and only accessible within class 'MyBase'.
-tests/cases/compiler/superPropertyAccess.ts(25,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superPropertyAccess.ts(27,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superPropertyAccess.ts(31,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superPropertyAccess.ts(33,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess.ts(21,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess.ts(23,15): error TS2341: Property 'p1' is private and only accessible within class 'MyBase'.
+superPropertyAccess.ts(25,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess.ts(27,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess.ts(31,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess.ts(33,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/compiler/superPropertyAccess.ts (6 errors) ====
+==== superPropertyAccess.ts (6 errors) ====
     class MyBase {
         m1(a: string) { return a; }
         private p1() { }

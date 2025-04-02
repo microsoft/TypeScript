@@ -1,71 +1,115 @@
-=== tests/cases/compiler/es6ModuleVariableStatement.ts ===
+//// [tests/cases/compiler/es6ModuleVariableStatement.ts] ////
+
+=== es6ModuleVariableStatement.ts ===
 export var a = "hello";
 >a : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 export var x: string = a, y = x;
 >x : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 var b = y;
 >b : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 var c: string = b, d = c;
 >c : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 export module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export var k = a;
 >k : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     export var l: string = b, m = k;
 >l : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >m : string
+>  : ^^^^^^
 >k : string
+>  : ^^^^^^
 
     var n = m1.k;
 >n : string
+>  : ^^^^^^
 >m1.k : string
+>     : ^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >k : string
+>  : ^^^^^^
 
     var o: string = n, p = k;
 >o : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 >p : string
+>  : ^^^^^^
 >k : string
+>  : ^^^^^^
 }
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export var k = a;
 >k : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     export var l: string = b, m = k;
 >l : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >m : string
+>  : ^^^^^^
 >k : string
+>  : ^^^^^^
 
     var n = m1.k;
 >n : string
+>  : ^^^^^^
 >m1.k : string
+>     : ^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >k : string
+>  : ^^^^^^
 
     var o: string = n, p = k;
 >o : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 >p : string
+>  : ^^^^^^
 >k : string
+>  : ^^^^^^
 }

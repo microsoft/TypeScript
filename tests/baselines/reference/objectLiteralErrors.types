@@ -1,338 +1,586 @@
-=== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts ===
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts] ////
+
+=== objectLiteralErrors.ts ===
 // Multiple properties with the same name
 var e1 = { a: 0, a: 0 };
 >e1 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >{ a: 0, a: 0 } : { a: number; }
+>               : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var e2 = { a: '', a: '' };
 >e2 : { a: string; }
+>   : ^^^^^^^^^^^^^^
 >{ a: '', a: '' } : { a: string; }
+>                 : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var e3 = { a: 0, a: '' };
 >e3 : { a: string; }
+>   : ^^^^^^^^^^^^^^
 >{ a: 0, a: '' } : { a: string; }
+>                : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >a : number
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var e4 = { a: true, a: false };
 >e4 : { a: boolean; }
+>   : ^^^^^^^^^^^^^^^
 >{ a: true, a: false } : { a: boolean; }
+>                      : ^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >a : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var e5 = { a: {}, a: {} };
 >e5 : { a: {}; }
+>   : ^^^^^^^^^^
 >{ a: {}, a: {} } : { a: {}; }
+>                 : ^^^^^^^^^^
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 var e6 = { a: 0, 'a': 0 };
 >e6 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >{ a: 0, 'a': 0 } : { a: number; }
+>                 : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e7 = { 'a': 0, a: 0 };
 >e7 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >{ 'a': 0, a: 0 } : { a: number; }
+>                 : ^^^^^^^^^^^^^^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var e8 = { 'a': 0, "a": 0 };
 >e8 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >{ 'a': 0, "a": 0 } : { a: number; }
+>                   : ^^^^^^^^^^^^^^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >"a" : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e9 = { 'a': 0, 'a': 0 };
 >e9 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >{ 'a': 0, 'a': 0 } : { a: number; }
+>                   : ^^^^^^^^^^^^^^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e10 = { "a": 0, 'a': 0 };
 >e10 : { a: number; }
+>    : ^^^^^^^^^^^^^^
 >{ "a": 0, 'a': 0 } : { a: number; }
+>                   : ^^^^^^^^^^^^^^
 >"a" : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e11 = { 1.0: 0, '1': 0 };
 >e11 : { 1: number; }
+>    : ^^^^^^^^^^^^^^
 >{ 1.0: 0, '1': 0 } : { 1: number; }
+>                   : ^^^^^^^^^^^^^^
 >1.0 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >'1' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e12 = { 0: 0, 0: 0 };
 >e12 : { 0: number; }
+>    : ^^^^^^^^^^^^^^
 >{ 0: 0, 0: 0 } : { 0: number; }
+>               : ^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var e13 = { 0: 0, 0: 0 };
 >e13 : { 0: number; }
+>    : ^^^^^^^^^^^^^^
 >{ 0: 0, 0: 0 } : { 0: number; }
+>               : ^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var e14 = { 0: 0, 0x0: 0 };
 >e14 : { 0: number; }
+>    : ^^^^^^^^^^^^^^
 >{ 0: 0, 0x0: 0 } : { 0: number; }
+>                 : ^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0x0 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e14 = { 0: 0, 0o0: 0 };
 >e14 : { 0: number; }
+>    : ^^^^^^^^^^^^^^
 >{ 0: 0, 0o0: 0 } : { 0: number; }
+>                 : ^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0o0 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e15 = { "100": 0, 1e2: 0 };
 >e15 : { 100: number; }
+>    : ^^^^^^^^^^^^^^^^
 >{ "100": 0, 1e2: 0 } : { 100: number; }
+>                     : ^^^^^^^^^^^^^^^^
 >"100" : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >1e2 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var e16 = { 0x20: 0, 3.2e1: 0 };
 >e16 : { 32: number; }
+>    : ^^^^^^^^^^^^^^^
 >{ 0x20: 0, 3.2e1: 0 } : { 32: number; }
+>                      : ^^^^^^^^^^^^^^^
 >0x20 : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 >3.2e1 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
 var e17 = { a: 0, b: 1, a: 0 };
 >e17 : { a: number; b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 0, b: 1, a: 0 } : { a: number; b: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 // Accessor and property with the same name
 var f1 = { a: 0, get a() { return 0; } };
 >f1 : { readonly a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 0, get a() { return 0; } } : { readonly a: number; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var f2 = { a: '', get a() { return ''; } };
 >f2 : { readonly a: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: '', get a() { return ''; } } : { readonly a: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var f3 = { a: 0, get a() { return ''; } };
 >f3 : { readonly a: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 0, get a() { return ''; } } : { readonly a: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var f4 = { a: true, get a() { return false; } };
 >f4 : { readonly a: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: true, get a() { return false; } } : { readonly a: boolean; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >a : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var f5 = { a: {}, get a() { return {}; } };
 >f5 : { readonly a: {}; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >{ a: {}, get a() { return {}; } } : { readonly a: {}; }
+>                                  : ^^^^^^^^^^^^^^^^^^^
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 var f6 = { a: 0, get 'a'() { return 0; } };
 >f6 : { readonly a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 0, get 'a'() { return 0; } } : { readonly a: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f7 = { 'a': 0, get a() { return 0; } };
 >f7 : { readonly a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ 'a': 0, get a() { return 0; } } : { readonly a: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var f8 = { 'a': 0, get "a"() { return 0; } };
 >f8 : { readonly a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ 'a': 0, get "a"() { return 0; } } : { readonly a: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >"a" : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f9 = { 'a': 0, get 'a'() { return 0; } };
 >f9 : { readonly a: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ 'a': 0, get 'a'() { return 0; } } : { readonly a: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f10 = { "a": 0, get 'a'() { return 0; } };
 >f10 : { readonly a: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ "a": 0, get 'a'() { return 0; } } : { readonly a: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >'a' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f11 = { 1.0: 0, get '1'() { return 0; } };
 >f11 : { readonly '1': number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ 1.0: 0, get '1'() { return 0; } } : { readonly '1': number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1.0 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >'1' : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f12 = { 0: 0, get 0() { return 0; } };
 >f12 : { readonly 0: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ 0: 0, get 0() { return 0; } } : { readonly 0: number; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var f13 = { 0: 0, get 0() { return 0; } };
 >f13 : { readonly 0: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ 0: 0, get 0() { return 0; } } : { readonly 0: number; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var f14 = { 0: 0, get 0x0() { return 0; } };
 >f14 : { readonly 0: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ 0: 0, get 0x0() { return 0; } } : { readonly 0: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0x0 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f14 = { 0: 0, get 0o0() { return 0; } };
 >f14 : { readonly 0: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ 0: 0, get 0o0() { return 0; } } : { readonly 0: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >0o0 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f15 = { "100": 0, get 1e2() { return 0; } };
 >f15 : { readonly 100: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "100": 0, get 1e2() { return 0; } } : { readonly 100: number; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"100" : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >1e2 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
 >f16 : { readonly 32: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ 0x20: 0, get 3.2e1() { return 0; } } : { readonly 32: number; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >0x20 : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 >3.2e1 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
 var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
 >f17 : { readonly a: number; readonly b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 0, get b() { return 1; }, get a() { return 0; } } : { readonly a: number; readonly b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 // Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)
 var g1 = { get a(): number { return 4; }, set a(n: string) { } };
->g1 : { a: number; }
->{ get a(): number { return 4; }, set a(n: string) { } } : { a: number; }
+>g1 : { get a(): number; set a(n: string); }
+>   : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
+>{ get a(): number { return 4; }, set a(n: string) { } } : { get a(): number; set a(n: string); }
+>                                                        : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >a : number
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
 var g2 = { get a() { return 4; }, set a(n: string) { } };
 >g2 : { a: string; }
+>   : ^^^^^      ^^^
 >{ get a() { return 4; }, set a(n: string) { } } : { a: string; }
+>                                                : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >a : string
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
 var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
->g3 : { a: number; }
->{ get a(): number { return undefined; }, set a(n: string) { } } : { a: number; }
+>g3 : { get a(): number; set a(n: string); }
+>   : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
+>{ get a(): number { return undefined; }, set a(n: string) { } } : { get a(): number; set a(n: string); }
+>                                                                : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >a : number
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >n : string
+>  : ^^^^^^
 
 // did you mean colon errors
 var h1 = {
 >h1 : { x: number; y: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    x = 1,    y = 2,    #z: 3} : { x: number; y: number; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = 1,
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
     y = 2,
 >y : any
+>  : ^^^
 >2 : 2
+>  : ^
 
     #z: 3
 >#z : number
+>   : ^^^^^^
 >3 : 3
+>  : ^
 }
 

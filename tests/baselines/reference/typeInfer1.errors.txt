@@ -1,8 +1,7 @@
-tests/cases/compiler/typeInfer1.ts(12,5): error TS2322: Type '{ Moo: () => string; }' is not assignable to type 'ITextWriter2'.
-  Object literal may only specify known properties, and 'Moo' does not exist in type 'ITextWriter2'.
+typeInfer1.ts(12,5): error TS2353: Object literal may only specify known properties, and 'Moo' does not exist in type 'ITextWriter2'.
 
 
-==== tests/cases/compiler/typeInfer1.ts (1 errors) ====
+==== typeInfer1.ts (1 errors) ====
     interface ITextWriter2 {
         Write(s:string):void;
         WriteLine(s:string):void;
@@ -16,6 +15,5 @@ tests/cases/compiler/typeInfer1.ts(12,5): error TS2322: Type '{ Moo: () => strin
     var yyyyyyyy: ITextWriter2 = {
         Moo: function() { return "cow"; }
         ~~~
-!!! error TS2322: Type '{ Moo: () => string; }' is not assignable to type 'ITextWriter2'.
-!!! error TS2322:   Object literal may only specify known properties, and 'Moo' does not exist in type 'ITextWriter2'.
+!!! error TS2353: Object literal may only specify known properties, and 'Moo' does not exist in type 'ITextWriter2'.
     }

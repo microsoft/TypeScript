@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts ===
+//// [tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts] ////
+
+=== callOfConditionalTypeWithConcreteBranches.ts ===
 type Q<T> = number extends T ? (n: number) => void : never;
 >Q : Symbol(Q, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 0))
 >T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 7))

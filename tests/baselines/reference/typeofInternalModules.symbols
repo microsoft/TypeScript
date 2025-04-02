@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofInternalModules.ts ===
+//// [tests/cases/compiler/typeofInternalModules.ts] ////
+
+=== typeofInternalModules.ts ===
 module Outer {
 >Outer : Symbol(Outer, Decl(typeofInternalModules.ts, 0, 0))
 

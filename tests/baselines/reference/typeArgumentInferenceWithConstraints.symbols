@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts] ////
+
+=== typeArgumentInferenceWithConstraints.ts ===
 // Generic call with no parameters
 function noParams<T extends {}>() { }
 >noParams : Symbol(noParams, Decl(typeArgumentInferenceWithConstraints.ts, 0, 0))

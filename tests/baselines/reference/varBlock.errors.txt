@@ -1,26 +1,26 @@
-tests/cases/compiler/varBlock.ts(8,18): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(11,22): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/varBlock.ts(11,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/compiler/varBlock.ts(15,17): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(21,18): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(22,22): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(25,21): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(26,26): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(26,35): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(27,29): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(28,35): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(28,45): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(32,13): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(33,18): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(33,26): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(34,21): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(35,27): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(35,37): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/varBlock.ts(39,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
-tests/cases/compiler/varBlock.ts(39,17): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(8,18): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(11,22): error TS2369: A parameter property is only allowed in a constructor implementation.
+varBlock.ts(11,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+varBlock.ts(15,17): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(21,18): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(22,22): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(25,21): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(26,26): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(26,35): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(27,29): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(28,35): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(28,45): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(32,13): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(33,18): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(33,26): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(34,21): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(35,27): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(35,37): error TS1039: Initializers are not allowed in ambient contexts.
+varBlock.ts(39,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
+varBlock.ts(39,17): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== tests/cases/compiler/varBlock.ts (20 errors) ====
+==== varBlock.ts (20 errors) ====
     module m2 {
     
         export var a, b2: number = 10, b;
@@ -98,6 +98,6 @@ tests/cases/compiler/varBlock.ts(39,17): error TS1039: Initializers are not allo
     declare var c = 10;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/compiler/varBlock.ts:38:13: 'c' was also declared here.
+!!! related TS6203 varBlock.ts:38:13: 'c' was also declared here.
                     ~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.

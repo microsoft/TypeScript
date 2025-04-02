@@ -1,6 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression1.ts] ////
+
+=== parserArrowFunctionExpression1.ts ===
 var v = (public x: string) => { };
 >v : (x: string) => void
+>  : ^ ^^      ^^^^^^^^^
 >(public x: string) => { } : (x: string) => void
+>                          : ^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 

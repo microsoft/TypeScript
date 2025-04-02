@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors1.ts] ////
+
+=== parserAccessors1.ts ===
 class C {
 >C : Symbol(C, Decl(parserAccessors1.ts, 0, 0))
 

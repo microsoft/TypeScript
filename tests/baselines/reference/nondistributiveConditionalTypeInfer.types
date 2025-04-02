@@ -1,35 +1,51 @@
-=== tests/cases/compiler/nondistributiveConditionalTypeInfer.ts ===
+//// [tests/cases/compiler/nondistributiveConditionalTypeInfer.ts] ////
+
+=== nondistributiveConditionalTypeInfer.ts ===
 type _R<T> = [T] extends [{ _R: (_: infer R) => void }] ? R : never;
 >_R : _R<T>
+>   : ^^^^^
 >_R : (_: infer R) => void
+>   : ^ ^^       ^^^^^    
 >_ : R
+>  : ^
 
 type _E<T> = [T] extends [{ _E: () => infer E }] ? E : never;
 >_E : _E<T>
+>   : ^^^^^
 >_E : () => infer E
+>   : ^^^^^^       
 
 type _A<T> = [T] extends [{ _A: () => infer A }] ? A : never;
 >_A : _A<T>
+>   : ^^^^^
 >_A : () => infer A
+>   : ^^^^^^       
 
 interface Sync<R, E, A> {
   _R: (_: R) => void;
 >_R : (_: R) => void
+>   : ^ ^^ ^^^^^    
 >_ : R
+>  : ^
 
   _E: () => E;
 >_E : () => E
+>   : ^^^^^^ 
 
   _A: () => A;
 >_A : () => A
+>   : ^^^^^^ 
 }
 
 type R = _R<Sync<number, string, void>>;
 >R : number
+>  : ^^^^^^
 
 type E = _E<Sync<number, string, void>>;
 >E : string
+>  : ^^^^^^
 
 type A = _A<Sync<number, string, void>>;
 >A : void
+>  : ^^^^
 

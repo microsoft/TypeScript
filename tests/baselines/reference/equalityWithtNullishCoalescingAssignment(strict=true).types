@@ -1,55 +1,87 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithtNullishCoalescingAssignment.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithtNullishCoalescingAssignment.ts] ////
+
+=== equalityWithtNullishCoalescingAssignment.ts ===
 function f1(a?: boolean): void {
 >f1 : (a?: boolean) => void
+>   : ^ ^^^       ^^^^^    
 >a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
     a ??= true;
 >a ??= true : boolean
+>           : ^^^^^^^
 >a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     if (a === false) {
 >a === false : boolean
+>            : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         console.log(a);
 >console.log(a) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >a : false
+>  : ^^^^^
     }
 }
 f1(false);
 >f1(false) : void
->f1 : (a?: boolean | undefined) => void
+>          : ^^^^
+>f1 : (a?: boolean) => void
+>   : ^ ^^^       ^^^^^    
 >false : false
+>      : ^^^^^
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x: 0 | 1 | 2 | 3 = 0 as any;
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 as any : any
 >0 : 0
+>  : ^
 
     x ??= 1;
 >x ??= 1 : 0 | 1 | 2 | 3
+>        : ^^^^^^^^^^^^^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     if (x === 0) {
 >x === 0 : boolean
+>        : ^^^^^^^
 >x : 0 | 1 | 2 | 3
+>  : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
         console.log(x);
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : 0
+>  : ^
     }
 }
 

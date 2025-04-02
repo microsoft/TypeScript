@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantAccessibilityModifierInModule1.ts(3,5): error TS1128: Declaration or statement expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantAccessibilityModifierInModule1.ts(3,13): error TS2304: Cannot find name 'y'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantAccessibilityModifierInModule1.ts(4,18): error TS2304: Cannot find name 'y'.
+parserErrantAccessibilityModifierInModule1.ts(3,5): error TS1128: Declaration or statement expected.
+parserErrantAccessibilityModifierInModule1.ts(3,13): error TS2304: Cannot find name 'y'.
+parserErrantAccessibilityModifierInModule1.ts(4,18): error TS2304: Cannot find name 'y'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantAccessibilityModifierInModule1.ts (3 errors) ====
+==== parserErrantAccessibilityModifierInModule1.ts (3 errors) ====
     module M {
         var x=10;  // variable local to this module body
         private y=x;  // property visible only in module

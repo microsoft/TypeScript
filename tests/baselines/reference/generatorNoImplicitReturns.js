@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorNoImplicitReturns.ts] ////
+
 //// [generatorNoImplicitReturns.ts]
  
 function* testGenerator () { 

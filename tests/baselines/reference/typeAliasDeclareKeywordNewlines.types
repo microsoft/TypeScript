@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/typeAliasDeclareKeywordNewlines.ts] ////
+
+=== typeAliasDeclareKeywordNewlines.ts ===
+var declare: string, type: number;
+>declare : string
+>        : ^^^^^^
+>type : number
+>     : ^^^^^^
+
+// The following is invalid but should declare a type alias named 'T1':
+declare type /*unexpected newline*/
+T1 = null;
+>T1 : null
+>   : ^^^^
+
+const t1: T1 = null; // Assert that T1 is the null type.
+>t1 : null
+>   : ^^^^
+
+let T: null;
+>T : null
+>  : ^^^^
+
+// The following should use a variable named 'declare', use a variable named
+// 'type', and assign to a variable named 'T'.
+declare /*ASI*/
+>declare : string
+>        : ^^^^^^
+
+type /*ASI*/
+>type : number
+>     : ^^^^^^
+
+T = null;
+>T = null : null
+>         : ^^^^
+>T : null
+>  : ^^^^
+
+// The following should use a variable named 'declare' and declare a type alias
+// named 'T2':
+declare /*ASI*/
+>declare : string
+>        : ^^^^^^
+
+type T2 = null;
+>T2 : null
+>   : ^^^^
+
+const t2: T2 = null; // Assert that T2 is the null type.
+>t2 : null
+>   : ^^^^
+

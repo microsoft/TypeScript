@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag11.ts] ////
+
 === /a.js ===
 /**
  * @typedef {Object} T1
@@ -15,15 +17,22 @@
  */
 const t1 = { a: 1 };
 >t1 : { a: number; }
+>   : ^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 /**
  * @satisfies {number}
  */
 const t2 = /** @satisfies {number} */ (1);
 >t2 : 1
+>   : ^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 

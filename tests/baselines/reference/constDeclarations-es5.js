@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-es5.ts] ////
+
 //// [constDeclarations-es5.ts]
 const z7 = false;
 const z8: number = 23;

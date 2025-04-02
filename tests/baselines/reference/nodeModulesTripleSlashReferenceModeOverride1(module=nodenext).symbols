@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverride1.ts] ////
+
 === /index.ts ===
 /// <reference types="pkg" />
 foo;

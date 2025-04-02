@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterConstraints1.ts ===
+//// [tests/cases/compiler/typeParameterConstraints1.ts] ////
+
+=== typeParameterConstraints1.ts ===
 function foo1<T extends any>(test: T) { }
 >foo1 : Symbol(foo1, Decl(typeParameterConstraints1.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 0, 14))

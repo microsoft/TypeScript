@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRestReadonly.ts] ////
+
 //// [objectRestReadonly.ts]
 // #23734
 type ObjType = {

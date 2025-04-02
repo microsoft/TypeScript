@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStatic.ts] ////
+
 //// [source.js]
 class Handler {
 	static get OPTIONS() {

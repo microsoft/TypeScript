@@ -1,29 +1,41 @@
-=== tests/cases/conformance/types/import/a.d.ts ===
+//// [tests/cases/conformance/types/import/importTypeGeneric.ts] ////
+
+=== a.d.ts ===
 export interface Foo {
     a: string;
 >a : string
+>  : ^^^^^^
 }
-=== tests/cases/conformance/types/import/b.d.ts ===
+=== b.d.ts ===
 export interface Foo {
     a: number;
 >a : number
+>  : ^^^^^^
 }
-=== tests/cases/conformance/types/import/usage.ts ===
+=== usage.ts ===
 export function getFooFrom<T extends "./a" | "./b">(v: T): import(T).Foo {
->getFooFrom : <T extends "./a" | "./b">(v: T) => any
+>getFooFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo
+>           : ^ ^^^^^^^^^             ^^ ^^ ^^^^^             
 >v : T
+>  : ^
 
     return undefined as any;
 >undefined as any : any
+>                 : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 export function getFooValueFrom<T extends "./a" | "./b">(v: T): import(T).Foo["a"] {
->getFooValueFrom : <T extends "./a" | "./b">(v: T) => any
+>getFooValueFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo["a"]
+>                : ^ ^^^^^^^^^             ^^ ^^ ^^^^^                  
 >v : T
+>  : ^
 
     return undefined as any;
 >undefined as any : any
+>                 : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 

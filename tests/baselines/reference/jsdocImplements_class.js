@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_class.ts] ////
+
 //// [a.js]
 class A {
     /** @return {number} */

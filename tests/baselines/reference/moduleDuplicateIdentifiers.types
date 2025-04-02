@@ -1,81 +1,113 @@
-=== tests/cases/compiler/moduleDuplicateIdentifiers.ts ===
+//// [tests/cases/compiler/moduleDuplicateIdentifiers.ts] ////
+
+=== moduleDuplicateIdentifiers.ts ===
 export var Foo = 2;
 >Foo : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
 export var Foo = 42; // Should error
 >Foo : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 
 export interface Bar {
 	_brand1: any;
 >_brand1 : any
+>        : ^^^
 }
 
 export interface Bar { // Shouldn't error
 	_brand2: any;
 >_brand2 : any
+>        : ^^^
 }
 
 export namespace FooBar {
 >FooBar : typeof FooBar
+>       : ^^^^^^^^^^^^^
 
 	export var member1 = 2;
 >member1 : number
+>        : ^^^^^^
 >2 : 2
+>  : ^
 }
 
 export namespace FooBar { // Shouldn't error
 >FooBar : typeof FooBar
+>       : ^^^^^^^^^^^^^
 
 	export var member2 = 42;
 >member2 : number
+>        : ^^^^^^
 >42 : 42
+>   : ^^
 }
 
 export class Kettle {
 >Kettle : Kettle
+>       : ^^^^^^
 
 	member1 = 2;
 >member1 : number
+>        : ^^^^^^
 >2 : 2
+>  : ^
 }
 
 export class Kettle { // Should error
->Kettle : import("tests/cases/compiler/moduleDuplicateIdentifiers").Kettle
+>Kettle : import("moduleDuplicateIdentifiers").Kettle
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	member2 = 42;
 >member2 : number
+>        : ^^^^^^
 >42 : 42
+>   : ^^
 }
 
 export var Pot = 2;
 >Pot : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
 Pot = 42; // Shouldn't error
 >Pot = 42 : 42
+>         : ^^
 >Pot : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 
 export enum Utensils {
 >Utensils : Utensils
+>         : ^^^^^^^^
 
 	Spoon,
 >Spoon : Utensils.Spoon
+>      : ^^^^^^^^^^^^^^
 
 	Fork,
 >Fork : Utensils.Fork
+>     : ^^^^^^^^^^^^^
 
 	Knife
 >Knife : Utensils.Knife
+>      : ^^^^^^^^^^^^^^
 }
 
 export enum Utensils { // Shouldn't error
 >Utensils : Utensils
+>         : ^^^^^^^^
 
 	Spork = 3
 >Spork : Utensils.Spork
+>      : ^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 }
 

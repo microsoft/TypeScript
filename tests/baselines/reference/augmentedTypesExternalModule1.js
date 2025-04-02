@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesExternalModule1.ts] ////
+
 //// [augmentedTypesExternalModule1.ts]
 export var a = 1;
 class c5 { public foo() { } }

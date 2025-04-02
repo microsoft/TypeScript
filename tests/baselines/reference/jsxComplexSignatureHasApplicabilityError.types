@@ -1,24 +1,36 @@
-=== tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx ===
+//// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== jsxComplexSignatureHasApplicabilityError.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 
 interface Props<T extends OptionValues> {
     value?: Option<T> | T;
 >value : T | Option<T> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     onChange?(value: Option<T> | undefined): void;
 >onChange : ((value: Option<T> | undefined) => void) | undefined
+>         : ^^     ^^                     ^^^^^    ^^^^^^^^^^^^^
 >value : Option<T> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 type ExtractValueType<T> = T extends ReactSelectProps<infer U> ? U : never;
 >ExtractValueType : ExtractValueType<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
 export type ReactSingleSelectProps<
 >ReactSingleSelectProps : ReactSingleSelectProps<WrappedProps>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     WrappedProps extends ReactSelectProps<any>
 > = Overwrite<
@@ -28,64 +40,97 @@ export type ReactSingleSelectProps<
 
 export function createReactSingleSelect<
 >createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: React.ComponentType<WrappedProps>) => React.ComponentType<ReactSingleSelectProps<WrappedProps>>
+>                        : ^            ^^^^^^^^^                     ^^                ^^                                 ^^^^^                                                         
 
     WrappedProps extends ReactSelectProps<any>
 >(
     WrappedComponent: React.ComponentType<WrappedProps>
 >WrappedComponent : React.ComponentType<WrappedProps>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 ): React.ComponentType<ReactSingleSelectProps<WrappedProps>> {
 >React : any
+>      : ^^^
 
     return (props) => {
->(props) => {        return (            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        );    } : (props: Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }) => JSX.Element
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>(props) => {        return (            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        );    } : (props: Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }) => JSX.Element
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return (
 >(            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        ) : JSX.Element
+>                                                                                                                                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^
 
             <ReactSelectClass<ExtractValueType<WrappedProps>>
 ><ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            /> : JSX.Element
+>                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^^^^
 >ReactSelectClass : typeof ReactSelectClass
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
                 {...props}
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 multi={false}
 >multi : false
+>      : ^^^^^
 >false : false
+>      : ^^^^^
 
                 autosize={false}
 >autosize : false
+>         : ^^^^^
 >false : false
+>      : ^^^^^
 
                 value={props.value}
 >value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props.value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 onChange={(value) => {
 >onChange : (value: Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null) => void
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                } : (value: Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null) => void
+>                                                                                                                                                                       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                     if (props.onChange) {
 >props.onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>               : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
+>         : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^
 
                         props.onChange(value === null ? undefined : value);
 >props.onChange(value === null ? undefined : value) : void
+>                                                   : ^^^^
 >props.onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >value === null ? undefined : value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value === null : boolean
+>               : ^^^^^^^
 >value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                     }
                 }}
             />
@@ -97,175 +142,263 @@ export function createReactSingleSelect<
 // Copied from "type-zoo" version 3.4.0
 export type Omit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
 >Omit : Omit<T, K>
+>     : ^^^^^^^^^^
 
 export type Overwrite<T, U> = Omit<T, keyof T & keyof U> & U;
 >Overwrite : Overwrite<T, U>
+>          : ^^^^^^^^^^^^^^^
 
 // Everything below here copied from "@types/react-select" version 1.3.4
 declare class ReactSelectClass<TValue = OptionValues> extends React.Component<ReactSelectProps<TValue>> {
 >ReactSelectClass : ReactSelectClass<TValue>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >React.Component : React.Component<ReactSelectProps<TValue>, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     focus(): void;
 >focus : () => void
+>      : ^^^^^^    
 
     setValue(value: Option<TValue>): void;
 >setValue : (value: Option<TValue>) => void
+>         : ^     ^^              ^^^^^    
 >value : Option<TValue>
+>      : ^^^^^^^^^^^^^^
 }
 
 export type OptionComponentType<TValue = OptionValues> = React.ComponentType<OptionComponentProps<TValue>>;
 >OptionComponentType : OptionComponentType<TValue>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 export type ValueComponentType<TValue = OptionValues> =  React.ComponentType<ValueComponentProps<TValue>>;
 >ValueComponentType : ValueComponentType<TValue>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 export type HandlerRendererResult = JSX.Element | null | false;
->HandlerRendererResult : false | JSX.Element | null
+>HandlerRendererResult : HandlerRendererResult
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 >false : false
+>      : ^^^^^
 
 // Handlers
 export type FocusOptionHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
 >FocusOptionHandler : FocusOptionHandler<TValue>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 
 export type SelectValueHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
 >SelectValueHandler : SelectValueHandler<TValue>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 
 export type ArrowRendererHandler = (props: ArrowRendererProps) => HandlerRendererResult;
->ArrowRendererHandler : (props: ArrowRendererProps) => HandlerRendererResult
+>ArrowRendererHandler : ArrowRendererHandler
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >props : ArrowRendererProps
+>      : ^^^^^^^^^^^^^^^^^^
 
 export type ClearRendererHandler = () => HandlerRendererResult;
->ClearRendererHandler : () => HandlerRendererResult
+>ClearRendererHandler : ClearRendererHandler
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
 export type FilterOptionHandler<TValue = OptionValues> = (option: Option<TValue>, filter: string) => boolean;
 >FilterOptionHandler : FilterOptionHandler<TValue>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 >filter : string
+>       : ^^^^^^
 
 export type FilterOptionsHandler<TValue = OptionValues> = (options: Options<TValue>, filter: string, currentValues: Options<TValue>) => Options<TValue>;
 >FilterOptionsHandler : FilterOptionsHandler<TValue>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : Options<TValue>
+>        : ^^^^^^^^^^^^^^^
 >filter : string
+>       : ^^^^^^
 >currentValues : Options<TValue>
+>              : ^^^^^^^^^^^^^^^
 
 export type InputRendererHandler = (props: { [key: string]: any }) => HandlerRendererResult;
->InputRendererHandler : (props: { [key: string]: any; }) => HandlerRendererResult
+>InputRendererHandler : InputRendererHandler
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >props : { [key: string]: any; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 export type MenuRendererHandler<TValue = OptionValues> = (props: MenuRendererProps<TValue>) => HandlerRendererResult;
 >MenuRendererHandler : MenuRendererHandler<TValue>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : MenuRendererProps<TValue>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type OnCloseHandler = () => void;
->OnCloseHandler : () => void
+>OnCloseHandler : OnCloseHandler
+>               : ^^^^^^^^^^^^^^
 
 export type OnInputChangeHandler = (inputValue: string) => string;
->OnInputChangeHandler : (inputValue: string) => string
+>OnInputChangeHandler : OnInputChangeHandler
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >inputValue : string
+>           : ^^^^^^
 
 export type OnInputKeyDownHandler = React.KeyboardEventHandler<HTMLDivElement | HTMLInputElement>;
->OnInputKeyDownHandler : (event: React.KeyboardEvent<HTMLDivElement | HTMLInputElement>) => void
+>OnInputKeyDownHandler : OnInputKeyDownHandler
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 export type OnMenuScrollToBottomHandler = () => void;
->OnMenuScrollToBottomHandler : () => void
+>OnMenuScrollToBottomHandler : OnMenuScrollToBottomHandler
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type OnOpenHandler = () => void;
->OnOpenHandler : () => void
+>OnOpenHandler : OnOpenHandler
+>              : ^^^^^^^^^^^^^
 
 export type OnFocusHandler = React.FocusEventHandler<HTMLDivElement | HTMLInputElement>;
->OnFocusHandler : (event: React.FocusEvent<HTMLDivElement | HTMLInputElement>) => void
+>OnFocusHandler : OnFocusHandler
+>               : ^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 export type OnBlurHandler = React.FocusEventHandler<HTMLDivElement | HTMLInputElement>;
->OnBlurHandler : (event: React.FocusEvent<HTMLDivElement | HTMLInputElement>) => void
+>OnBlurHandler : OnBlurHandler
+>              : ^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 export type OptionRendererHandler<TValue = OptionValues> = (option: Option<TValue>) => HandlerRendererResult;
 >OptionRendererHandler : OptionRendererHandler<TValue>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 
 export type ValueRendererHandler<TValue = OptionValues> = (option: Option<TValue>, index?: number) => HandlerRendererResult;
 >ValueRendererHandler : ValueRendererHandler<TValue>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 >index : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
 export type OnValueClickHandler<TValue = OptionValues> = (option: Option<TValue>, event: React.MouseEvent<HTMLAnchorElement>) => void;
 >OnValueClickHandler : OnValueClickHandler<TValue>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 >event : React.MouseEvent<HTMLAnchorElement>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Option<TValue>, options: Options<TValue>, labelKey: string, valueKey: string }) => boolean;
 >IsOptionUniqueHandler : IsOptionUniqueHandler<TValue>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { option: Option<TValue>; options: Options<TValue>; labelKey: string; valueKey: string; }
+>    : ^^^^^^^^^^              ^^^^^^^^^^^               ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 >options : Options<TValue>
+>        : ^^^^^^^^^^^^^^^
 >labelKey : string
+>         : ^^^^^^
 >valueKey : string
+>         : ^^^^^^
 
 export type IsValidNewOptionHandler = (arg: { label: string }) => boolean;
->IsValidNewOptionHandler : (arg: {    label: string;}) => boolean
+>IsValidNewOptionHandler : IsValidNewOptionHandler
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { label: string; }
+>    : ^^^^^^^^^      ^^^
 >label : string
+>      : ^^^^^^
 
 export type NewOptionCreatorHandler<TValue = OptionValues> = (arg: { label: string, labelKey: string, valueKey: string }) => Option<TValue>;
 >NewOptionCreatorHandler : NewOptionCreatorHandler<TValue>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { label: string; labelKey: string; valueKey: string; }
+>    : ^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >label : string
+>      : ^^^^^^
 >labelKey : string
+>         : ^^^^^^
 >valueKey : string
+>         : ^^^^^^
 
 export type PromptTextCreatorHandler = (filterText: string) => string;
->PromptTextCreatorHandler : (filterText: string) => string
+>PromptTextCreatorHandler : PromptTextCreatorHandler
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >filterText : string
+>           : ^^^^^^
 
 export type ShouldKeyDownEventCreateNewOptionHandler = (arg: { keyCode: number }) => boolean;
->ShouldKeyDownEventCreateNewOptionHandler : (arg: {    keyCode: number;}) => boolean
+>ShouldKeyDownEventCreateNewOptionHandler : ShouldKeyDownEventCreateNewOptionHandler
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { keyCode: number; }
+>    : ^^^^^^^^^^^      ^^^
 >keyCode : number
+>        : ^^^^^^
 
 export type OnChangeSingleHandler<TValue = OptionValues> = OnChangeHandler<TValue, Option<TValue>>;
 >OnChangeSingleHandler : OnChangeSingleHandler<TValue>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type OnChangeMultipleHandler<TValue = OptionValues> = OnChangeHandler<TValue, Options<TValue>>;
 >OnChangeMultipleHandler : OnChangeMultipleHandler<TValue>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type OnChangeHandler<TValue = OptionValues, TOption = Option<TValue> | Options<TValue>> = (newValue: TOption | null) => void;
 >OnChangeHandler : OnChangeHandler<TValue, TOption>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >newValue : TOption | null
+>         : ^^^^^^^^^^^^^^
 
 export type OnNewOptionClickHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
 >OnNewOptionClickHandler : OnNewOptionClickHandler<TValue>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 
 export type LoadOptionsHandler<TValue = OptionValues> = LoadOptionsAsyncHandler<TValue> | LoadOptionsLegacyHandler<TValue>;
 >LoadOptionsHandler : LoadOptionsHandler<TValue>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type LoadOptionsAsyncHandler<TValue = OptionValues> = (input: string) => Promise<AutocompleteResult<TValue>>;
 >LoadOptionsAsyncHandler : LoadOptionsAsyncHandler<TValue>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : string
+>      : ^^^^^^
 
 export type LoadOptionsLegacyHandler<TValue = OptionValues> = (input: string, callback: (err: any, result: AutocompleteResult<TValue>) => void) => void;
 >LoadOptionsLegacyHandler : LoadOptionsLegacyHandler<TValue>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : string
+>      : ^^^^^^
 >callback : (err: any, result: AutocompleteResult<TValue>) => void
+>         : ^   ^^   ^^      ^^                          ^^^^^    
 >err : any
 >result : AutocompleteResult<TValue>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export interface AutocompleteResult<TValue = OptionValues> {
     /** The search-results to be displayed  */
     options: Options<TValue>;
 >options : Options<TValue>
+>        : ^^^^^^^^^^^^^^^
 
     /**
      * Should be set to true, if and only if a longer query with the same prefix
@@ -274,19 +407,23 @@ export interface AutocompleteResult<TValue = OptionValues> {
      */
     complete: boolean;
 >complete : boolean
+>         : ^^^^^^^
 }
 
 export type Options<TValue = OptionValues> = Array<Option<TValue>>;
 >Options : Options<TValue>
+>        : ^^^^^^^^^^^^^^^
 
 export interface Option<TValue = OptionValues> {
     /** Text for rendering */
     label?: string;
 >label : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     /** Value for searching */
     value?: TValue;
 >value : TValue | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     /**
      * Allow this option to be cleared
@@ -294,6 +431,7 @@ export interface Option<TValue = OptionValues> {
      */
     clearableValue?: boolean;
 >clearableValue : boolean | undefined
+>               : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * Do not allow this option to be selected
@@ -301,6 +439,7 @@ export interface Option<TValue = OptionValues> {
      */
     disabled?: boolean;
 >disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * In the event that a custom menuRenderer is provided, Option should be able
@@ -308,10 +447,12 @@ export interface Option<TValue = OptionValues> {
      */
     [property: string]: any;
 >property : string
+>         : ^^^^^^
 }
 
 export type OptionValues = string | number | boolean;
->OptionValues : string | number | boolean
+>OptionValues : OptionValues
+>             : ^^^^^^^^^^^^
 
 export interface MenuRendererProps<TValue = OptionValues> {
     /**
@@ -320,48 +461,56 @@ export interface MenuRendererProps<TValue = OptionValues> {
      */
     focusedOption: Option<TValue>;
 >focusedOption : Option<TValue>
+>              : ^^^^^^^^^^^^^^
 
     /**
      * Callback to focus a new option; receives the option as a parameter.
      */
     focusOption: FocusOptionHandler<TValue>;
 >focusOption : FocusOptionHandler<TValue>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * Option labels are accessible with this string key.
      */
     labelKey: string;
 >labelKey : string
+>         : ^^^^^^
 
     /**
      * Ordered array of options to render.
      */
     options: Options<TValue>;
 >options : Options<TValue>
+>        : ^^^^^^^^^^^^^^^
 
     /**
      * Callback to select a new option; receives the option as a parameter.
      */
     selectValue: SelectValueHandler<TValue>;
 >selectValue : SelectValueHandler<TValue>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * Array of currently selected options.
      */
     valueArray: Options<TValue>;
 >valueArray : Options<TValue>
+>           : ^^^^^^^^^^^^^^^
 
     /**
      * Callback to remove selection from option; receives the option as a parameter.
      */
     removeValue: SelectValueHandler<TValue>;
 >removeValue : SelectValueHandler<TValue>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * function which returns a custom way to render the options in the menu
      */
     optionRenderer: OptionRendererHandler<TValue>;
 >optionRenderer : OptionRendererHandler<TValue>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export interface OptionComponentProps<TValue = OptionValues> {
@@ -370,43 +519,52 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     className?: string;
 >className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     /**
      * Currently focused option.
      */
     focusOption?: Option<TValue>;
 >focusOption : Option<TValue> | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     inputValue?: string;
 >inputValue : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 
     instancePrefix?: string;
 >instancePrefix : string | undefined
+>               : ^^^^^^^^^^^^^^^^^^
 
     /**
      * True if this option is disabled.
      */
     isDisabled?: boolean;
 >isDisabled : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * True if this option is focused.
      */
     isFocused?: boolean;
 >isFocused : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * True if this option is selected.
      */
     isSelected?: boolean;
 >isSelected : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * Callback to be invoked when this option is focused.
      */
     onFocus?: (option: Option<TValue>, event: any) => void;
 >onFocus : ((option: Option<TValue>, event: any) => void) | undefined
+>        : ^^      ^^              ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 >event : any
 
     /**
@@ -414,7 +572,9 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     onSelect?: (option: Option<TValue>, event: any) => void;
 >onSelect : ((option: Option<TValue>, event: any) => void) | undefined
+>         : ^^      ^^              ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 >event : any
 
     /**
@@ -422,12 +582,14 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     option: Option<TValue>;
 >option : Option<TValue>
+>       : ^^^^^^^^^^^^^^
 
     /**
      * Index of the option being rendered in the list
      */
     optionIndex?: number;
 >optionIndex : number | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 
     /**
      * Callback to invoke when removing an option from a multi-selection. (Not necessarily the one
@@ -435,14 +597,18 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     removeValue?: (value: TValue | TValue[]) => void;
 >removeValue : ((value: TValue | TValue[]) => void) | undefined
+>            : ^^     ^^                 ^^^^^    ^^^^^^^^^^^^^
 >value : TValue | TValue[]
+>      : ^^^^^^^^^^^^^^^^^
 
     /**
      * Callback to invoke to select an option. (Not necessarily the one being rendered)
      */
     selectValue?: (value: TValue | TValue[]) => void;
 >selectValue : ((value: TValue | TValue[]) => void) | undefined
+>            : ^^     ^^                 ^^^^^    ^^^^^^^^^^^^^
 >value : TValue | TValue[]
+>      : ^^^^^^^^^^^^^^^^^
 }
 
 export interface ArrowRendererProps {
@@ -451,43 +617,55 @@ export interface ArrowRendererProps {
      */
     onMouseDown: React.MouseEventHandler<any>;
 >onMouseDown : React.MouseEventHandler<any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
     /**
      * whether the Select is open or not.
      */
     isOpen: boolean;
 >isOpen : boolean
+>       : ^^^^^^^
 }
 
 export interface ValueComponentProps<TValue = OptionValues> {
     disabled: ReactSelectProps<TValue>['disabled'];
 >disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     id: string;
 >id : string
+>   : ^^^^^^
 
     instancePrefix: string;
 >instancePrefix : string
+>               : ^^^^^^
 
     onClick: OnValueClickHandler<TValue> | null;
 >onClick : OnValueClickHandler<TValue> | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     onRemove?: SelectValueHandler<TValue>;
 >onRemove : SelectValueHandler<TValue> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     placeholder: ReactSelectProps<TValue>['placeholder'];
 >placeholder : string | JSX.Element | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     value: Option<TValue>;
 >value : Option<TValue>
+>      : ^^^^^^^^^^^^^^
 
     values?: Array<Option<TValue>>;
 >values : Option<TValue>[] | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export interface ReactSelectProps<TValue = OptionValues> extends React.Props<ReactSelectClass<TValue>> {
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
     /**
      * text to display when `allowCreate` is true.
@@ -495,6 +673,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     addLabelText?: string;
 >addLabelText : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 
     /**
      * renders a custom drop-down arrow to be shown in the right-hand side of the select.
@@ -502,6 +681,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     arrowRenderer?: ArrowRendererHandler | null;
 >arrowRenderer : ArrowRendererHandler | null | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * blurs the input element after a selection has been made. Handy for lowering the keyboard on mobile devices.
@@ -509,6 +689,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     autoBlur?: boolean;
 >autoBlur : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * autofocus the component on mount
@@ -517,6 +698,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     autofocus?: boolean;
 >autofocus : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * autofocus the component on mount
@@ -524,12 +706,14 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     autoFocus?: boolean;
 >autoFocus : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 
     /**
      *  If enabled, the input will expand as the length of its value increases
      */
     autosize?: boolean;
 >autosize : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether pressing backspace removes the last item when there is no input value
@@ -537,6 +721,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     backspaceRemoves?: boolean;
 >backspaceRemoves : boolean | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * Message to use for screenreaders to press backspace to remove the current item
@@ -545,18 +730,21 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     backspaceToRemoveMessage?: string;
 >backspaceToRemoveMessage : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
 
     /**
      * CSS className for the outer element
      */
     className?: string;
 >className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     /**
      * Prefix prepended to element default className if no className is defined
      */
     classNamePrefix?: string;
 >classNamePrefix : string | undefined
+>                : ^^^^^^^^^^^^^^^^^^
 
     /**
      * title for the "clear" control when `multi` is true
@@ -564,6 +752,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     clearAllText?: string;
 >clearAllText : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 
     /**
      * Renders a custom clear to be shown in the right-hand side of the select when clearable true
@@ -571,6 +760,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     clearRenderer?: ClearRendererHandler;
 >clearRenderer : ClearRendererHandler | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * title for the "clear" control
@@ -578,6 +768,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     clearValueText?: string;
 >clearValueText : string | undefined
+>               : ^^^^^^^^^^^^^^^^^^
 
     /**
      * whether to close the menu when a value is selected
@@ -585,6 +776,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     closeOnSelect?: boolean;
 >closeOnSelect : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether it is possible to reset value. if enabled, an X button will appear at the right side.
@@ -592,6 +784,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     clearable?: boolean;
 >clearable : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether backspace removes an item if there is no text input
@@ -599,6 +792,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     deleteRemoves?: boolean;
 >deleteRemoves : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * delimiter to use to join multiple values
@@ -606,6 +800,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     delimiter?: string;
 >delimiter : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     /**
      * whether the Select is disabled or not
@@ -613,6 +808,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     disabled?: boolean;
 >disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether escape clears the value when the menu is closed
@@ -620,18 +816,21 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     escapeClearsValue?: boolean;
 >escapeClearsValue : boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * method to filter a single option
      */
     filterOption?: FilterOptionHandler<TValue>;
 >filterOption : FilterOptionHandler<TValue> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * method to filter the options array
      */
     filterOptions?: FilterOptionsHandler<TValue>;
 >filterOptions : FilterOptionsHandler<TValue> | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * id for the underlying HTML input element
@@ -639,6 +838,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     id?: string;
 >id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
     /**
      * whether to strip diacritics when filtering
@@ -646,6 +846,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     ignoreAccents?: boolean;
 >ignoreAccents : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether to perform case-insensitive filtering
@@ -653,6 +854,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     ignoreCase?: boolean;
 >ignoreCase : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * custom attributes for the Input (in the Select-control) e.g: {'data-foo': 'bar'}
@@ -660,13 +862,16 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     inputProps?: { [key: string]: any };
 >inputProps : { [key: string]: any; } | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
     /**
      * renders a custom input
      */
     inputRenderer?: InputRendererHandler;
 >inputRenderer : InputRendererHandler | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * allows for synchronization of component id's on server and client.
@@ -674,6 +879,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     instanceId?: string;
 >instanceId : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 
     /**
      * whether the Select is loading externally or not (such as options being loaded).
@@ -682,6 +888,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     isLoading?: boolean;
 >isLoading : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * (legacy mode) joins multiple values into a single form field with the delimiter
@@ -689,6 +896,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     joinValues?: boolean;
 >joinValues : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * the option property to use for the label
@@ -696,6 +904,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     labelKey?: string;
 >labelKey : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     /**
      * (any, start) match the start or entire string when filtering
@@ -703,6 +912,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     matchPos?: string;
 >matchPos : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     /**
      * (any, label, value) which option property to filter on
@@ -710,6 +920,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     matchProp?: string;
 >matchProp : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     /**
      * buffer of px between the base of the dropdown and the viewport to shift if menu doesnt fit in viewport
@@ -717,26 +928,32 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     menuBuffer?: number;
 >menuBuffer : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 
     /**
      * optional style to apply to the menu container
      */
     menuContainerStyle?: React.CSSProperties;
 >menuContainerStyle : React.CSSProperties | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
     /**
      * renders a custom menu with options
      */
     menuRenderer?: MenuRendererHandler<TValue>;
 >menuRenderer : MenuRendererHandler<TValue> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * optional style to apply to the menu
      */
     menuStyle?: React.CSSProperties;
 >menuStyle : React.CSSProperties | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
     /**
      * multi-value input
@@ -744,12 +961,14 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     multi?: boolean;
 >multi : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * field name, for hidden `<input>` tag
      */
     name?: string;
 >name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
     /**
      * placeholder displayed when there are no matching search results or a falsy value to hide it
@@ -757,13 +976,16 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     noResultsText?: string | JSX.Element;
 >noResultsText : string | JSX.Element | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 
     /**
      * onBlur handler: function (event) {}
      */
     onBlur?: OnBlurHandler;
 >onBlur : OnBlurHandler | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether to clear input on blur or not
@@ -771,6 +993,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     onBlurResetsInput?: boolean;
 >onBlurResetsInput : boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether the input value should be reset when options are selected.
@@ -780,6 +1003,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     onSelectResetsInput?: boolean;
 >onSelectResetsInput : boolean | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether to clear input when closing the menu through the arrow
@@ -787,48 +1011,56 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     onCloseResetsInput?: boolean;
 >onCloseResetsInput : boolean | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * onChange handler: function (newValue) {}
      */
     onChange?: OnChangeHandler<TValue>;
 >onChange : OnChangeHandler<TValue, Option<TValue> | Options<TValue>> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * fires when the menu is closed
      */
     onClose?: OnCloseHandler;
 >onClose : OnCloseHandler | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * onFocus handler: function (event) {}
      */
     onFocus?: OnFocusHandler;
 >onFocus : OnFocusHandler | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * onInputChange handler: function (inputValue) {}
      */
     onInputChange?: OnInputChangeHandler;
 >onInputChange : OnInputChangeHandler | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * onInputKeyDown handler: function (keyboardEvent) {}
      */
     onInputKeyDown?: OnInputKeyDownHandler;
 >onInputKeyDown : OnInputKeyDownHandler | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * fires when the menu is scrolled to the bottom; can be used to paginate options
      */
     onMenuScrollToBottom?: OnMenuScrollToBottomHandler;
 >onMenuScrollToBottom : OnMenuScrollToBottomHandler | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * fires when the menu is opened
      */
     onOpen?: OnOpenHandler;
 >onOpen : OnOpenHandler | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * boolean to enable opening dropdown when focused
@@ -836,6 +1068,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     openOnClick?: boolean;
 >openOnClick : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * open the options menu when the input gets focus (requires searchable = true)
@@ -843,24 +1076,28 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     openOnFocus?: boolean;
 >openOnFocus : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * className to add to each option component
      */
     optionClassName?: string;
 >optionClassName : string | undefined
+>                : ^^^^^^^^^^^^^^^^^^
 
     /**
      * option component to render in dropdown
      */
     optionComponent?: OptionComponentType<TValue>;
 >optionComponent : OptionComponentType<TValue> | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * function which returns a custom way to render the options in the menu
      */
     optionRenderer?: OptionRendererHandler<TValue>;
 >optionRenderer : OptionRendererHandler<TValue> | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * array of Select options
@@ -868,6 +1105,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     options?: Options<TValue>;
 >options : Options<TValue> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * number of options to jump when using page up/down keys
@@ -875,6 +1113,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     pageSize?: number;
 >pageSize : number | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     /**
      * field placeholder, displayed when there's no value
@@ -882,7 +1121,9 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     placeholder?: string | JSX.Element;
 >placeholder : string | JSX.Element | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 
     /**
      * whether the selected option is removed from the dropdown on multi selects
@@ -890,6 +1131,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     removeSelected?: boolean;
 >removeSelected : boolean | undefined
+>               : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * applies HTML5 required attribute when needed
@@ -897,6 +1139,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     required?: boolean;
 >required : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * value to use when you clear the control
@@ -910,6 +1153,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     rtl?: boolean;
 >rtl : boolean | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether the viewport will shift to display the entire menu when engaged
@@ -917,6 +1161,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     scrollMenuIntoView?: boolean;
 >scrollMenuIntoView : boolean | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether to enable searching feature or not
@@ -924,18 +1169,21 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     searchable?: boolean;
 >searchable : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * whether to select the currently focused value when the  [tab]  key is pressed
      */
     tabSelectsValue?: boolean;
 >tabSelectsValue : boolean | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 
     /**
      * initial field value
      */
     value?: Option<TValue> | Options<TValue> | string | string[] | number | number[] | boolean;
 >value : string | number | boolean | Option<TValue> | Options<TValue> | string[] | number[] | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      * the option property to use for the value
@@ -943,6 +1191,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     valueKey?: string;
 >valueKey : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     /**
      * function which returns a custom way to render the value selected
@@ -950,43 +1199,52 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     valueRenderer?: ValueRendererHandler<TValue>;
 >valueRenderer : ValueRendererHandler<TValue> | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      *  optional style to apply to the control
      */
     style?: React.CSSProperties;
 >style : React.CSSProperties | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
     /**
      *  optional tab index of the control
      */
     tabIndex?: string | number;
 >tabIndex : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      *  value component to render
      */
     valueComponent?: ValueComponentType<TValue>;
 >valueComponent : ValueComponentType<TValue> | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      *  optional style to apply to the component wrapper
      */
     wrapperStyle?: React.CSSProperties;
 >wrapperStyle : React.CSSProperties | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
     /**
      * onClick handler for value labels: function (value, event) {}
      */
     onValueClick?: OnValueClickHandler<TValue>;
 >onValueClick : OnValueClickHandler<TValue> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**
      *  pass the value to onChange as a simple value (legacy pre 1.0 mode), defaults to false
      */
     simpleValue?: boolean;
 >simpleValue : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 }
 

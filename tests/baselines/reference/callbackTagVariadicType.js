@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/callbackTagVariadicType.ts] ////
+
 //// [callbackTagVariadicType.js]
 /**
  * @callback Foo

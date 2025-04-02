@@ -1,169 +1,270 @@
-=== tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts] ////
+
+=== protectedInstanceMemberAccessibility.ts ===
 class A {
 >A : A
+>  : ^
 
     protected x: string;
 >x : string
+>  : ^^^^^^
 
     protected f(): string {
 >f : () => string
+>  : ^^^^^^      
 
         return "hello";
 >"hello" : "hello"
+>        : ^^^^^^^
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     protected y: string;
 >y : string
+>  : ^^^^^^
 
     g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
         var t1 = this.x;
 >t1 : string
+>   : ^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 
         var t2 = this.f();
 >t2 : string
+>   : ^^^^^^
 >this.f() : string
+>         : ^^^^^^
 >this.f : () => string
+>       : ^^^^^^      
 >this : this
+>     : ^^^^
 >f : () => string
+>  : ^^^^^^      
 
         var t3 = this.y;
 >t3 : string
+>   : ^^^^^^
 >this.y : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : string
+>  : ^^^^^^
 
         var t4 = this.z;     // error
 >t4 : any
+>   : ^^^
 >this.z : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >z : any
+>  : ^^^
 
         var s1 = super.x;    // error
 >s1 : string
+>   : ^^^^^^
 >super.x : string
+>        : ^^^^^^
 >super : A
+>      : ^
 >x : string
+>  : ^^^^^^
 
         var s2 = super.f();
 >s2 : string
+>   : ^^^^^^
 >super.f() : string
+>          : ^^^^^^
 >super.f : () => string
+>        : ^^^^^^      
 >super : A
+>      : ^
 >f : () => string
+>  : ^^^^^^      
 
         var s3 = super.y;    // error
 >s3 : any
+>   : ^^^
 >super.y : any
+>        : ^^^
 >super : A
+>      : ^
 >y : any
+>  : ^^^
 
         var s4 = super.z;    // error
 >s4 : any
+>   : ^^^
 >super.z : any
+>        : ^^^
 >super : A
+>      : ^
 >z : any
+>  : ^^^
 
         var a: A;
 >a : A
+>  : ^
 
         var a1 = a.x;    // error
 >a1 : string
+>   : ^^^^^^
 >a.x : string
+>    : ^^^^^^
 >a : A
+>  : ^
 >x : string
+>  : ^^^^^^
 
         var a2 = a.f();  // error
 >a2 : string
+>   : ^^^^^^
 >a.f() : string
+>      : ^^^^^^
 >a.f : () => string
+>    : ^^^^^^      
 >a : A
+>  : ^
 >f : () => string
+>  : ^^^^^^      
 
         var a3 = a.y;    // error
 >a3 : any
+>   : ^^^
 >a.y : any
+>    : ^^^
 >a : A
+>  : ^
 >y : any
+>  : ^^^
 
         var a4 = a.z;    // error
 >a4 : any
+>   : ^^^
 >a.z : any
+>    : ^^^
 >a : A
+>  : ^
 >z : any
+>  : ^^^
 
         var b: B;
 >b : B
+>  : ^
 
         var b1 = b.x;
 >b1 : string
+>   : ^^^^^^
 >b.x : string
+>    : ^^^^^^
 >b : B
+>  : ^
 >x : string
+>  : ^^^^^^
 
         var b2 = b.f();
 >b2 : string
+>   : ^^^^^^
 >b.f() : string
+>      : ^^^^^^
 >b.f : () => string
+>    : ^^^^^^      
 >b : B
+>  : ^
 >f : () => string
+>  : ^^^^^^      
 
         var b3 = b.y;
 >b3 : string
+>   : ^^^^^^
 >b.y : string
+>    : ^^^^^^
 >b : B
+>  : ^
 >y : string
+>  : ^^^^^^
 
         var b4 = b.z;    // error
 >b4 : any
+>   : ^^^
 >b.z : any
+>    : ^^^
 >b : B
+>  : ^
 >z : any
+>  : ^^^
 
         var c: C;
 >c : C
+>  : ^
 
         var c1 = c.x;    // error
 >c1 : string
+>   : ^^^^^^
 >c.x : string
+>    : ^^^^^^
 >c : C
+>  : ^
 >x : string
+>  : ^^^^^^
 
         var c2 = c.f();  // error
 >c2 : string
+>   : ^^^^^^
 >c.f() : string
+>      : ^^^^^^
 >c.f : () => string
+>    : ^^^^^^      
 >c : C
+>  : ^
 >f : () => string
+>  : ^^^^^^      
 
         var c3 = c.y;    // error
 >c3 : any
+>   : ^^^
 >c.y : any
+>    : ^^^
 >c : C
+>  : ^
 >y : any
+>  : ^^^
 
         var c4 = c.z;    // error
 >c4 : string
+>   : ^^^^^^
 >c.z : string
+>    : ^^^^^^
 >c : C
+>  : ^
 >z : string
+>  : ^^^^^^
     }
 }
 
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     protected z: string;
 >z : string
+>  : ^^^^^^
 }
 

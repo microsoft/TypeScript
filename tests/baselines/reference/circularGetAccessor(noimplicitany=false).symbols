@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularGetAccessor.ts ===
+//// [tests/cases/compiler/circularGetAccessor.ts] ////
+
+=== circularGetAccessor.ts ===
 declare class C {
 >C : Symbol(C, Decl(circularGetAccessor.ts, 0, 0))
 

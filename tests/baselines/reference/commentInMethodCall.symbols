@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentInMethodCall.ts ===
+//// [tests/cases/compiler/commentInMethodCall.ts] ////
+
+=== commentInMethodCall.ts ===
 //commment here
 var s: string[];
 >s : Symbol(s, Decl(commentInMethodCall.ts, 1, 3))

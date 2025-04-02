@@ -1,38 +1,38 @@
-tests/cases/conformance/functions/strictBindCallApply1.ts(11,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(17,15): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(18,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(19,44): error TS2554: Expected 3 arguments, but got 4.
-tests/cases/conformance/functions/strictBindCallApply1.ts(22,32): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+strictBindCallApply1.ts(11,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(17,15): error TS2554: Expected 3 arguments, but got 2.
+strictBindCallApply1.ts(18,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(19,44): error TS2554: Expected 3 arguments, but got 4.
+strictBindCallApply1.ts(22,32): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
   Source has 1 element(s) but target requires 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(23,37): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(24,32): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+strictBindCallApply1.ts(23,37): error TS2322: Type 'number' is not assignable to type 'string'.
+strictBindCallApply1.ts(24,32): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
   Source has 3 element(s) but target allows only 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(41,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(42,22): error TS2769: No overload matches this call.
+strictBindCallApply1.ts(41,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(42,22): error TS2769: No overload matches this call.
   Overload 1 of 2, '(this: (this: C, a: number, b: string) => string, thisArg: C): (a: number, b: string) => string', gave the following error.
     Argument of type 'undefined' is not assignable to parameter of type 'C'.
   Overload 2 of 2, '(this: (this: C, a: number, b: string) => string, thisArg: C): (a: number, b: string) => string', gave the following error.
     Argument of type 'undefined' is not assignable to parameter of type 'C'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(48,17): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(49,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(50,38): error TS2554: Expected 3 arguments, but got 4.
-tests/cases/conformance/functions/strictBindCallApply1.ts(51,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(54,26): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+strictBindCallApply1.ts(48,17): error TS2554: Expected 3 arguments, but got 2.
+strictBindCallApply1.ts(49,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(50,38): error TS2554: Expected 3 arguments, but got 4.
+strictBindCallApply1.ts(51,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+strictBindCallApply1.ts(54,26): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
   Source has 1 element(s) but target requires 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(55,31): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(56,26): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+strictBindCallApply1.ts(55,31): error TS2322: Type 'number' is not assignable to type 'string'.
+strictBindCallApply1.ts(56,26): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
   Source has 3 element(s) but target allows only 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(57,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(62,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(65,3): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(66,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(67,24): error TS2554: Expected 3 arguments, but got 4.
-tests/cases/conformance/functions/strictBindCallApply1.ts(70,12): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+strictBindCallApply1.ts(57,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+strictBindCallApply1.ts(62,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(65,3): error TS2554: Expected 3 arguments, but got 2.
+strictBindCallApply1.ts(66,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+strictBindCallApply1.ts(67,24): error TS2554: Expected 3 arguments, but got 4.
+strictBindCallApply1.ts(70,12): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
   Source has 1 element(s) but target requires 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(71,17): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+strictBindCallApply1.ts(71,17): error TS2322: Type 'number' is not assignable to type 'string'.
+strictBindCallApply1.ts(72,12): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
   Source has 3 element(s) but target allows only 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(76,5): error TS2769: No overload matches this call.
+strictBindCallApply1.ts(76,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(this: (this: 1, ...args: T) => void, thisArg: 1): (...args: T) => void', gave the following error.
     Argument of type '2' is not assignable to parameter of type '1'.
   Overload 2 of 2, '(this: (this: 1, ...args: unknown[]) => void, thisArg: 1): (...args: unknown[]) => void', gave the following error.
@@ -40,7 +40,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(76,5): error TS2769: N
       Types of parameters 'args' and 'args' are incompatible.
         Type 'unknown[]' is not assignable to type 'T'.
           'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown[]'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(81,5): error TS2769: No overload matches this call.
+strictBindCallApply1.ts(81,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(this: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void, thisArg: 1): (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void', gave the following error.
     Argument of type '2' is not assignable to parameter of type '1'.
   Overload 2 of 2, '(this: (this: 1, args_0: unknown) => void, thisArg: 1): (args_0: unknown) => void', gave the following error.
@@ -49,7 +49,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(81,5): error TS2769: N
         Type '[unknown]' is not assignable to type 'T extends 1 ? [unknown] : [unknown, unknown]'.
 
 
-==== tests/cases/conformance/functions/strictBindCallApply1.ts (26 errors) ====
+==== strictBindCallApply1.ts (26 errors) ====
     declare function foo(a: number, b: string): string;
     
     declare function overloaded(s: string): number;
@@ -69,7 +69,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(81,5): error TS2769: N
     
     let c00 = foo.call(undefined, 10, "hello");
     let c01 = foo.call(undefined, 10);  // Error
-                  ~~~~~~~~~~~~~~~~~~~
+                  ~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     let c02 = foo.call(undefined, 10, 20);  // Error
                                       ~~
@@ -122,7 +122,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(81,5): error TS2769: N
     
     let c10 = c.foo.call(c, 10, "hello");
     let c11 = c.foo.call(c, 10);  // Error
-                    ~~~~~~~~~~~
+                    ~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     let c12 = c.foo.call(c, 10, 20);  // Error
                                 ~~
@@ -159,7 +159,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(81,5): error TS2769: N
     
     C.call(c, 10, "hello");
     C.call(c, 10);  // Error
-      ~~~~~~~~~~~
+      ~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     C.call(c, 10, 20);  // Error
                   ~~
@@ -184,7 +184,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(81,5): error TS2769: N
     function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
         callback.bind(1);
         callback.bind(2); // Error
-        ~~~~~~~~~~~~~~~~
+                 ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(this: (this: 1, ...args: T) => void, thisArg: 1): (...args: T) => void', gave the following error.
 !!! error TS2769:     Argument of type '2' is not assignable to parameter of type '1'.
@@ -198,7 +198,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(81,5): error TS2769: N
     function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
         callback.bind(1);
         callback.bind(2); // Error
-        ~~~~~~~~~~~~~~~~
+                 ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(this: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void, thisArg: 1): (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void', gave the following error.
 !!! error TS2769:     Argument of type '2' is not assignable to parameter of type '1'.

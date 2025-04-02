@@ -1,144 +1,212 @@
-=== tests/cases/compiler/restInvalidArgumentType.ts ===
+//// [tests/cases/compiler/restInvalidArgumentType.ts] ////
+
+=== restInvalidArgumentType.ts ===
 enum E { v1, v2 };
 >E : E
+>  : ^
 >v1 : E.v1
+>   : ^^^^
 >v2 : E.v2
+>   : ^^^^
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {
 >f : <T extends { b: string; }>(p1: T, p2: T[]) => void
+>  : ^ ^^^^^^^^^              ^^  ^^ ^^  ^^   ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >p1 : T
+>   : ^
 >p2 : T[]
+>   : ^^^
 
     var t: T;
 >t : T
+>  : ^
 
     var i: T["b"];
 >i : T["b"]
+>  : ^^^^^^
 
     var k: keyof T;
 >k : keyof T
+>  : ^^^^^^^
 
     var mapped_generic: {[P in keyof T]: T[P]};
 >mapped_generic : { [P in keyof T]: T[P]; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var mapped: {[P in "b"]: T[P]};
 >mapped : { b: T["b"]; }
+>       : ^^^^^^^^^^^^^^
 
     var union_generic: T | { a: number };
 >union_generic : T | { a: number; }
+>              : ^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     var union_primitive: { a: number } | number;
 >union_primitive : number | { a: number; }
+>                : ^^^^^^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     var intersection_generic: T & { a: number };
 >intersection_generic : T & { a: number; }
+>                     : ^^^^^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 
     var intersection_primitive: { a: number } & string;
 >intersection_primitive : { a: number; } & string
+>                       : ^^^^^      ^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     var num: number;
 >num : number
+>    : ^^^^^^
 
     var str: string;
 >str : string
+>    : ^^^^^^
 
     var literal_string: "string";
 >literal_string : "string"
+>               : ^^^^^^^^
 
     var literal_number: 42;
 >literal_number : 42
+>               : ^^
 
     var e: E;
 >e : E
+>  : ^
 
     var u: undefined;
 >u : undefined
+>  : ^^^^^^^^^
 
     var n: null;
 >n : null
+>  : ^^^^
 
     var a: any;
 >a : any
+>  : ^^^
 
     var {...r1} = p1;   // Error, generic type paramterre
 >r1 : T
+>   : ^
 >p1 : T
+>   : ^
 
     var {...r2} = p2;   // OK
 >r2 : { [n: number]: T; length: number; toString(): string; toLocaleString(): string; pop(): T; push(...items: T[]): number; concat(...items: ConcatArray<T>[]): T[]; concat(...items: (T | ConcatArray<T>)[]): T[]; join(separator?: string): string; reverse(): T[]; shift(): T; slice(start?: number, end?: number): T[]; sort(compareFn?: (a: T, b: T) => number): T[]; splice(start: number, deleteCount?: number): T[]; splice(start: number, deleteCount: number, ...items: T[]): T[]; unshift(...items: T[]): number; indexOf(searchElement: T, fromIndex?: number): number; lastIndexOf(searchElement: T, fromIndex?: number): number; every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^             ^^^^^         ^^^      ^^^      ^^^^^^^^^^^^^^             ^^^^^         ^^^      ^^^      ^^^^^^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^    ^^^^^^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^
 >p2 : T[]
+>   : ^^^
 
     var {...r3} = t;   // Error, generic type paramter
 >r3 : T
+>   : ^
 >t : T
+>  : ^
 
     var {...r4} = i;   // Error, index access
 >r4 : any
+>   : ^^^
 >i : T["b"]
+>  : ^^^^^^
 
     var {...r5} = k;   // Error, index
 >r5 : any
+>   : ^^^
 >k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     var {...r6} = mapped_generic; // Error, generic mapped object type
 >r6 : { [P in keyof T]: T[P]; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >mapped_generic : { [P in keyof T]: T[P]; }
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var {...r7} = mapped;  // OK, non-generic mapped type
 >r7 : { b: T["b"]; }
+>   : ^^^^^^^^^^^^^^
 >mapped : { b: T["b"]; }
+>       : ^^^^^^^^^^^^^^
 
     var {...r8} = union_generic;  // Error, union with generic type parameter
 >r8 : T | { a: number; }
+>   : ^^^^^^^^^      ^^^
 >union_generic : T | { a: number; }
+>              : ^^^^^^^^^      ^^^
 
     var {...r9} = union_primitive;  // Error, union with generic type parameter
 >r9 : any
+>   : ^^^
 >union_primitive : number | { a: number; }
+>                : ^^^^^^^^^^^^^^      ^^^
 
     var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
 >r10 : T & { a: number; }
+>    : ^^^^^^^^^      ^^^
 >intersection_generic : T & { a: number; }
+>                     : ^^^^^^^^^      ^^^
 
     var {...r11} = intersection_primitive;  // Error, intersection with generic type parameter
 >r11 : any
+>    : ^^^
 >intersection_primitive : { a: number; } & string
+>                       : ^^^^^      ^^^^^^^^^^^^
 
     var {...r12} = num;  // Error
 >r12 : any
+>    : ^^^
 >num : number
+>    : ^^^^^^
 
     var {...r13} = str;  // Error
 >r13 : any
+>    : ^^^
 >str : string
+>    : ^^^^^^
 
     var {...r14} = u;  // error, undefined-only not allowed
 >r14 : any
+>    : ^^^
 >u : undefined
+>  : ^^^^^^^^^
 
     var {...r15} = n;  // error, null-only not allowed
 >r15 : any
+>    : ^^^
 >n : null
+>  : ^^^^
 
     var {...r16} = a;  // OK
 >r16 : any
+>    : ^^^
 >a : any
+>  : ^^^
 
     var {...r17} = literal_string;  // Error
 >r17 : any
+>    : ^^^
 >literal_string : "string"
+>               : ^^^^^^^^
 
     var {...r18} = literal_number;  // Error
 >r18 : any
+>    : ^^^
 >literal_number : 42
+>               : ^^
 
     var {...r19} = e;  // Error, enum
 >r19 : any
+>    : ^^^
 >e : E
+>  : ^
 }
 

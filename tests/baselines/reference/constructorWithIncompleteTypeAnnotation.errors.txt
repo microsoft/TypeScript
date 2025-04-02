@@ -1,96 +1,96 @@
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,34): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,17): error TS2304: Cannot find name 'retValue'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,26): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,28): error TS2304: Cannot find name 'bfs'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(35,21): error TS2304: Cannot find name 'retValue'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(38,17): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,17): error TS2304: Cannot find name 'retValue'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,28): error TS2304: Cannot find name 'bfs'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,41): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,45): error TS1002: Unterminated string literal.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(41,21): error TS2304: Cannot find name 'retValue'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(46,13): error TS1005: 'try' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(47,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(53,13): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(58,5): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(69,13): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(72,37): error TS1127: Invalid character.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(81,13): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(89,23): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(90,13): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(105,29): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(106,13): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(108,24): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(138,13): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(141,32): error TS1005: '{' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(143,13): error TS1005: 'try' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,24): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,30): error TS1005: '{' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,31): error TS2304: Cannot find name 'Property'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(166,13): error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(181,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(183,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(187,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(191,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(205,28): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(213,16): error TS2304: Cannot find name 'bool'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,10): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(223,23): error TS2304: Cannot find name 'bool'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(227,13): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(234,14): error TS1005: '{' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,16): error TS2304: Cannot find name 'method1'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,24): error TS2304: Cannot find name 'val'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,27): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,28): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,36): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,16): error TS2304: Cannot find name 'method2'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,26): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(241,5): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(246,25): error TS2551: Property 'method1' does not exist on type 'B'. Did you mean 'method2'?
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,9): error TS2390: Constructor implementation is missing.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,21): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,44): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,69): error TS1110: Type expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,16): error TS2304: Cannot find name 'Overloads'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,26): error TS2304: Cannot find name 'value'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,31): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,33): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,16): error TS2304: Cannot find name 'Overloads'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,27): error TS1135: Argument expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,33): error TS1005: '(' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,35): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,43): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,52): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,59): error TS1011: An element access expression should take an argument.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,60): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,65): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,9): error TS2304: Cannot find name 'public'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,16): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,16): error TS2304: Cannot find name 'DefaultValue'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,29): error TS2304: Cannot find name 'value'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,35): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
+constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
+constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
+constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
+constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
+constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: ',' expected.
+constructorWithIncompleteTypeAnnotation.ts(28,34): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(34,17): error TS2304: Cannot find name 'retValue'.
+constructorWithIncompleteTypeAnnotation.ts(34,26): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(34,28): error TS2304: Cannot find name 'bfs'.
+constructorWithIncompleteTypeAnnotation.ts(35,21): error TS2304: Cannot find name 'retValue'.
+constructorWithIncompleteTypeAnnotation.ts(38,17): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(40,17): error TS2304: Cannot find name 'retValue'.
+constructorWithIncompleteTypeAnnotation.ts(40,28): error TS2304: Cannot find name 'bfs'.
+constructorWithIncompleteTypeAnnotation.ts(40,41): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(40,45): error TS1002: Unterminated string literal.
+constructorWithIncompleteTypeAnnotation.ts(41,21): error TS2304: Cannot find name 'retValue'.
+constructorWithIncompleteTypeAnnotation.ts(46,13): error TS1005: 'try' expected.
+constructorWithIncompleteTypeAnnotation.ts(47,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+constructorWithIncompleteTypeAnnotation.ts(53,13): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+constructorWithIncompleteTypeAnnotation.ts(58,5): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(69,13): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(72,37): error TS1127: Invalid character.
+constructorWithIncompleteTypeAnnotation.ts(81,13): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(89,23): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+constructorWithIncompleteTypeAnnotation.ts(90,13): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(105,29): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(106,13): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(108,24): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+constructorWithIncompleteTypeAnnotation.ts(138,13): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(141,32): error TS1005: '{' expected.
+constructorWithIncompleteTypeAnnotation.ts(143,13): error TS1005: 'try' expected.
+constructorWithIncompleteTypeAnnotation.ts(159,24): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(159,30): error TS1005: '{' expected.
+constructorWithIncompleteTypeAnnotation.ts(159,31): error TS2304: Cannot find name 'Property'.
+constructorWithIncompleteTypeAnnotation.ts(166,13): error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
+constructorWithIncompleteTypeAnnotation.ts(180,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
+constructorWithIncompleteTypeAnnotation.ts(181,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
+constructorWithIncompleteTypeAnnotation.ts(183,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
+constructorWithIncompleteTypeAnnotation.ts(187,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
+constructorWithIncompleteTypeAnnotation.ts(191,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
+constructorWithIncompleteTypeAnnotation.ts(205,28): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(213,16): error TS2304: Cannot find name 'bool'.
+constructorWithIncompleteTypeAnnotation.ts(218,10): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+constructorWithIncompleteTypeAnnotation.ts(223,23): error TS2304: Cannot find name 'bool'.
+constructorWithIncompleteTypeAnnotation.ts(227,13): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(234,14): error TS1005: '{' expected.
+constructorWithIncompleteTypeAnnotation.ts(235,9): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(235,16): error TS2304: Cannot find name 'method1'.
+constructorWithIncompleteTypeAnnotation.ts(235,24): error TS2304: Cannot find name 'val'.
+constructorWithIncompleteTypeAnnotation.ts(235,27): error TS1005: ',' expected.
+constructorWithIncompleteTypeAnnotation.ts(235,28): error TS2693: 'number' only refers to a type, but is being used as a value here.
+constructorWithIncompleteTypeAnnotation.ts(235,36): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(238,9): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(238,16): error TS2304: Cannot find name 'method2'.
+constructorWithIncompleteTypeAnnotation.ts(238,26): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(241,5): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(246,25): error TS2551: Property 'method1' does not exist on type 'B'. Did you mean 'method2'?
+constructorWithIncompleteTypeAnnotation.ts(254,9): error TS2390: Constructor implementation is missing.
+constructorWithIncompleteTypeAnnotation.ts(254,21): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructorWithIncompleteTypeAnnotation.ts(254,44): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructorWithIncompleteTypeAnnotation.ts(254,69): error TS1110: Type expected.
+constructorWithIncompleteTypeAnnotation.ts(256,9): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(256,16): error TS2304: Cannot find name 'Overloads'.
+constructorWithIncompleteTypeAnnotation.ts(256,26): error TS2304: Cannot find name 'value'.
+constructorWithIncompleteTypeAnnotation.ts(256,31): error TS1005: ',' expected.
+constructorWithIncompleteTypeAnnotation.ts(256,33): error TS2693: 'string' only refers to a type, but is being used as a value here.
+constructorWithIncompleteTypeAnnotation.ts(257,9): error TS1128: Declaration or statement expected.
+constructorWithIncompleteTypeAnnotation.ts(257,16): error TS2304: Cannot find name 'Overloads'.
+constructorWithIncompleteTypeAnnotation.ts(257,27): error TS1135: Argument expression expected.
+constructorWithIncompleteTypeAnnotation.ts(257,33): error TS1005: '(' expected.
+constructorWithIncompleteTypeAnnotation.ts(257,35): error TS2693: 'string' only refers to a type, but is being used as a value here.
+constructorWithIncompleteTypeAnnotation.ts(257,43): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(257,52): error TS2693: 'string' only refers to a type, but is being used as a value here.
+constructorWithIncompleteTypeAnnotation.ts(257,59): error TS1011: An element access expression should take an argument.
+constructorWithIncompleteTypeAnnotation.ts(257,60): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(257,65): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(259,9): error TS2304: Cannot find name 'public'.
+constructorWithIncompleteTypeAnnotation.ts(259,16): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(259,16): error TS2304: Cannot find name 'DefaultValue'.
+constructorWithIncompleteTypeAnnotation.ts(259,29): error TS2304: Cannot find name 'value'.
+constructorWithIncompleteTypeAnnotation.ts(259,35): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2693: 'string' only refers to a type, but is being used as a value here.
+constructorWithIncompleteTypeAnnotation.ts(259,55): error TS1005: ';' expected.
+constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (90 errors) ====
+==== constructorWithIncompleteTypeAnnotation.ts (90 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -121,7 +121,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                     if (retValue != 0 ^=  {
                                       ~~
 !!! error TS1005: ')' expected.
-!!! related TS1007 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts:22:20: The parser expected to find a ')' to match the '(' token here.
+!!! related TS1007 constructorWithIncompleteTypeAnnotation.ts:22:20: The parser expected to find a ')' to match the '(' token here.
                                           ~
     
     
@@ -467,7 +467,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                 return this.method1(2);
                             ~~~~~~~
 !!! error TS2551: Property 'method1' does not exist on type 'B'. Did you mean 'method2'?
-!!! related TS2728 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts:245:16: 'method2' is declared here.
+!!! related TS2728 constructorWithIncompleteTypeAnnotation.ts:245:16: 'method2' is declared here.
             }
         }
     
@@ -476,7 +476,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
             private otherValue = 42;
     
             constructor(private value: number, public name: string)  :  }
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~~
 !!! error TS2390: Constructor implementation is missing.
                         ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitOptionalMethod.ts] ////
+
 //// [declarationEmitOptionalMethod.ts]
 export const Foo = (opts: {
     a?(): void,

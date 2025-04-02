@@ -1,11 +1,11 @@
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts(26,20): error TS2322: Type 'T' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts(30,20): error TS2322: Type 'T | U' is not assignable to type 'object'.
+inOperatorWithValidOperands.ts(26,20): error TS2322: Type 'T' is not assignable to type 'object'.
+inOperatorWithValidOperands.ts(30,20): error TS2322: Type 'T | U' is not assignable to type 'object'.
   Type 'T' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts(34,20): error TS2322: Type 'object | T' is not assignable to type 'object'.
+inOperatorWithValidOperands.ts(34,20): error TS2322: Type 'object | T' is not assignable to type 'object'.
   Type 'T' is not assignable to type 'object'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts (3 errors) ====
+==== inOperatorWithValidOperands.ts (3 errors) ====
     var x: any;
     
     // valid left operands
@@ -34,7 +34,7 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithVal
         var rb3 = x in t;
                        ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts:25:14: This type parameter might need an `extends object` constraint.
+!!! related TS2208 inOperatorWithValidOperands.ts:25:14: This type parameter might need an `extends object` constraint.
     }
     
     function unionCase<T, U>(t: T | U) {
@@ -42,7 +42,7 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithVal
                        ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'object'.
 !!! error TS2322:   Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts:29:20: This type parameter might need an `extends object` constraint.
+!!! related TS2208 inOperatorWithValidOperands.ts:29:20: This type parameter might need an `extends object` constraint.
     }
     
     function unionCase2<T>(t: T | object) {
@@ -50,7 +50,7 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithVal
                        ~
 !!! error TS2322: Type 'object | T' is not assignable to type 'object'.
 !!! error TS2322:   Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts:33:21: This type parameter might need an `extends object` constraint.
+!!! related TS2208 inOperatorWithValidOperands.ts:33:21: This type parameter might need an `extends object` constraint.
     }
     
     interface X { x: number }

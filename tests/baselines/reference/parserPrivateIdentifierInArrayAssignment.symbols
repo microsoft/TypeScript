@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parserPrivateIdentifierInArrayAssignment.ts ===
+//// [tests/cases/compiler/parserPrivateIdentifierInArrayAssignment.ts] ////
+
+=== parserPrivateIdentifierInArrayAssignment.ts ===
 
 [#abc]=
 

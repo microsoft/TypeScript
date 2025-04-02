@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts] ////
+
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts]
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
 // for having too many instances of the same symbol nesting.
@@ -94,7 +96,7 @@ void p3.result.three;
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.d.ts]
 export type Key<U> = keyof U;
 export type Value<K extends Key<U>, U> = U[K];
-export declare const updateIfChanged: <T>(t: T) => (<K extends keyof T>(key: K) => (<K_1 extends keyof Value<K, T>>(key: K_1) => (<K_2 extends keyof Value<K_1, Value<K, T>>>(key: K_2) => (<K_3 extends keyof Value<K_2, Value<K_1, Value<K, T>>>>(key: K_3) => (<K_4 extends keyof Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>(key: K_4) => (<K_5 extends keyof Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>(key: K_5) => (<K_6 extends keyof Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>(key: K_6) => (<K_7 extends keyof Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>(key: K_7) => (<K_8 extends keyof Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>(key: K_8) => (<K_9 extends keyof Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>(key: K_9) => (<K_10 extends keyof Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>(key: K_10) => any & {
+export declare const updateIfChanged: <T>(t: T) => (<K extends keyof T>(key: K) => (<K_1 extends keyof Value<K, T>>(key: K_1) => (<K_2 extends keyof Value<K_1, Value<K, T>>>(key: K_2) => (<K_3 extends keyof Value<K_2, Value<K_1, Value<K, T>>>>(key: K_3) => (<K_4 extends keyof Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>(key: K_4) => (<K_5 extends keyof Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>(key: K_5) => (<K_6 extends keyof Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>(key: K_6) => (<K_7 extends keyof Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>(key: K_7) => (<K_8 extends keyof Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>(key: K_8) => (<K_9 extends keyof Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>(key: K_9) => (<K_10 extends keyof Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>(key: K_10) => /*elided*/ any & {
     map: (updater: (u: Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => T;
     set: (newU: Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => T;
 }) & {
@@ -153,7 +155,7 @@ export declare const testRecFun: <T extends Object>(parent: T) => {
                                         result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8;
                                         deeper: <U_9 extends Object>(child: U_9) => {
                                             result: T & U & U_1 & U_2 & U_3 & U_4 & U_5 & U_6 & U_7 & U_8 & U_9;
-                                            deeper: <U_10 extends Object>(child: U_10) => any;
+                                            deeper: <U_10 extends Object>(child: U_10) => /*elided*/ any;
                                         };
                                     };
                                 };

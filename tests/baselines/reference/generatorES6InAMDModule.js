@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorES6InAMDModule.ts] ////
+
 //// [generatorES6InAMDModule.ts]
 export function* foo() {
     yield
@@ -7,9 +9,8 @@ export function* foo() {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = void 0;
+    exports.foo = foo;
     function* foo() {
         yield;
     }
-    exports.foo = foo;
 });

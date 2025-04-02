@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypePartialNonHomomorphicBaseConstraint.ts] ////
+
 //// [mappedTypePartialNonHomomorphicBaseConstraint.ts]
 export type Errors<D> = { readonly [K in keyof D | "base"]?: string[] };
 

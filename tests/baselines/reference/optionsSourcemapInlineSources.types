@@ -1,5 +1,9 @@
-=== tests/cases/compiler/optionsSourcemapInlineSources.ts ===
+//// [tests/cases/compiler/optionsSourcemapInlineSources.ts] ////
+
+=== optionsSourcemapInlineSources.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

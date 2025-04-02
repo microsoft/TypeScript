@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/typeSatisfaction/a.ts(4,19): error TS1360: Type '{}' does not satisfy the expected type 'Foo'.
+a.ts(4,19): error TS1360: Type '{}' does not satisfy the expected type 'Foo'.
   Property 'a' is missing in type '{}' but required in type 'Foo'.
 
 
-==== tests/cases/conformance/expressions/typeSatisfaction/a.ts (1 errors) ====
+==== ./a.ts (1 errors) ====
     interface Foo {
         a: number;
     }
@@ -10,9 +10,9 @@ tests/cases/conformance/expressions/typeSatisfaction/a.ts(4,19): error TS1360: T
                       ~~~~~~~~~
 !!! error TS1360: Type '{}' does not satisfy the expected type 'Foo'.
 !!! error TS1360:   Property 'a' is missing in type '{}' but required in type 'Foo'.
-!!! related TS2728 tests/cases/conformance/expressions/typeSatisfaction/a.ts:2:5: 'a' is declared here.
+!!! related TS2728 a.ts:2:5: 'a' is declared here.
     
-==== tests/cases/conformance/expressions/typeSatisfaction/b.ts (0 errors) ====
+==== ./b.ts (0 errors) ====
     interface Foo {
         a: number;
     }

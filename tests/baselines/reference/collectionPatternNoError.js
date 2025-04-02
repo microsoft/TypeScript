@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collectionPatternNoError.ts] ////
+
 //// [collectionPatternNoError.ts]
 interface MsgConstructor<T extends Message> {
   new(data: Array<{}>): T;

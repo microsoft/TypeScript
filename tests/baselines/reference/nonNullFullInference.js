@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonNullFullInference.ts] ////
+
 //// [nonNullFullInference.ts]
 // https://github.com/microsoft/TypeScript/issues/19577
 

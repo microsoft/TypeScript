@@ -1,82 +1,139 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts] ////
+
+=== sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 
     log(msg: string): void;
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >msg : string
+>    : ^^^^^^
 }
 type MultiSkilledRobot = [string, [string, string]];
->MultiSkilledRobot : [string, [string, string]]
+>MultiSkilledRobot : MultiSkilledRobot
+>                  : ^^^^^^^^^^^^^^^^^
 
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >["mower", ["mowing", ""]] : [string, [string, string]]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"mower" : "mower"
+>        : ^^^^^^^
 >["mowing", ""] : [string, string]
+>               : ^^^^^^^^^^^^^^^^
 >"mowing" : "mowing"
+>         : ^^^^^^^^
 >"" : ""
+>   : ^^
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : [string, string]
+>                       : ^^^^^^^^^^^^^^^^
 >"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >"edging" : "edging"
+>         : ^^^^^^^^
 
 let [, skillA] = multiRobotA;
 > : undefined
+> : ^^^^^^^^^
 >skillA : [string, string]
+>       : ^^^^^^^^^^^^^^^^
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 
 let [nameMB] = multiRobotB;
 >nameMB : string
+>       : ^^^^^^
 >multiRobotB : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 
 let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
 >nameMA : string
+>       : ^^^^^^
 >primarySkillA : string
+>              : ^^^^^^
 >secondarySkillA : string
+>                : ^^^^^^
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 
 let [nameMC] = ["roomba", ["vacuum", "mopping"]];
 >nameMC : string
+>       : ^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+>                                  : ^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : string[]
+>                      : ^^^^^^^^
 >"vacuum" : "vacuum"
+>         : ^^^^^^^^
 >"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
 >nameMC2 : string
+>        : ^^^^^^
 >primarySkillC : string
+>              : ^^^^^^
 >secondarySkillC : string
+>                : ^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : [string, string]
+>                      : ^^^^^^^^^^^^^^^^
 >"vacuum" : "vacuum"
+>         : ^^^^^^^^
 >"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 let [...multiRobotAInfo] = multiRobotA;
 >multiRobotAInfo : [string, [string, string]]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >multiRobotA : MultiSkilledRobot
+>            : ^^^^^^^^^^^^^^^^^
 
 if (nameMB == nameMA) {
 >nameMB == nameMA : boolean
+>                 : ^^^^^^^
 >nameMB : string
+>       : ^^^^^^
 >nameMA : string
+>       : ^^^^^^
 
     console.log(skillA[0] + skillA[1]);
 >console.log(skillA[0] + skillA[1]) : void
+>                                   : ^^^^
 >console.log : (msg: string) => void
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >skillA[0] + skillA[1] : string
+>                      : ^^^^^^
 >skillA[0] : string
+>          : ^^^^^^
 >skillA : [string, string]
+>       : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >skillA[1] : string
+>          : ^^^^^^
 >skillA : [string, string]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }

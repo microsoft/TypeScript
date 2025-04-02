@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxNamespacePrefixInName.tsx ===
+//// [tests/cases/compiler/jsxNamespacePrefixInName.tsx] ////
+
+=== jsxNamespacePrefixInName.tsx ===
 var justElement1 = <a:element />;
 >justElement1 : Symbol(justElement1, Decl(jsxNamespacePrefixInName.tsx, 0, 3))
 

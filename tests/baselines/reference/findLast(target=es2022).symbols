@@ -1,4 +1,6 @@
-=== tests/cases/compiler/findLast.ts ===
+//// [tests/cases/compiler/findLast.ts] ////
+
+=== findLast.ts ===
 const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 >itemNumber : Symbol(itemNumber, Decl(findLast.ts, 0, 5))
 >item : Symbol(item, Decl(findLast.ts, 0, 53))
@@ -10,47 +12,47 @@ const itemString: string | undefined = ["string"].findLast((item) => item === "s
 >item : Symbol(item, Decl(findLast.ts, 1, 60))
 
 new Int8Array().findLast((item) => item === 0);
->Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 2, 26))
 >item : Symbol(item, Decl(findLast.ts, 2, 26))
 
 new Uint8Array().findLast((item) => item === 0);
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 3, 27))
 >item : Symbol(item, Decl(findLast.ts, 3, 27))
 
 new Uint8ClampedArray().findLast((item) => item === 0);
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 4, 34))
 >item : Symbol(item, Decl(findLast.ts, 4, 34))
 
 new Int16Array().findLast((item) => item === 0);
->Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 5, 27))
 >item : Symbol(item, Decl(findLast.ts, 5, 27))
 
 new Uint16Array().findLast((item) => item === 0);
->Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 6, 28))
 >item : Symbol(item, Decl(findLast.ts, 6, 28))
 
 new Int32Array().findLast((item) => item === 0);
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 7, 27))
 >item : Symbol(item, Decl(findLast.ts, 7, 27))
 
 new Uint32Array().findLast((item) => item === 0);
->Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 8, 28))
 >item : Symbol(item, Decl(findLast.ts, 8, 28))
 
 new Float32Array().findLast((item) => item === 0);
->Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 9, 29))
 >item : Symbol(item, Decl(findLast.ts, 9, 29))
 
 new Float64Array().findLast((item) => item === 0);
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 10, 29))
 >item : Symbol(item, Decl(findLast.ts, 10, 29))
 
@@ -77,47 +79,47 @@ const indexString: number = ["string"].findLastIndex((item) => item === "string"
 >item : Symbol(item, Decl(findLast.ts, 15, 54))
 
 new Int8Array().findLastIndex((item) => item === 0);
->Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 16, 31))
 >item : Symbol(item, Decl(findLast.ts, 16, 31))
 
 new Uint8Array().findLastIndex((item) => item === 0);
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 17, 32))
 >item : Symbol(item, Decl(findLast.ts, 17, 32))
 
 new Uint8ClampedArray().findLastIndex((item) => item === 0);
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 18, 39))
 >item : Symbol(item, Decl(findLast.ts, 18, 39))
 
 new Int16Array().findLastIndex((item) => item === 0);
->Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 19, 32))
 >item : Symbol(item, Decl(findLast.ts, 19, 32))
 
 new Uint16Array().findLastIndex((item) => item === 0);
->Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 20, 33))
 >item : Symbol(item, Decl(findLast.ts, 20, 33))
 
 new Int32Array().findLastIndex((item) => item === 0);
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 21, 32))
 >item : Symbol(item, Decl(findLast.ts, 21, 32))
 
 new Uint32Array().findLastIndex((item) => item === 0);
->Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 22, 33))
 >item : Symbol(item, Decl(findLast.ts, 22, 33))
 
 new Float32Array().findLastIndex((item) => item === 0);
->Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 23, 34))
 >item : Symbol(item, Decl(findLast.ts, 23, 34))
 
 new Float64Array().findLastIndex((item) => item === 0);
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >item : Symbol(item, Decl(findLast.ts, 24, 34))
 >item : Symbol(item, Decl(findLast.ts, 24, 34))
 

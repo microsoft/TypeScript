@@ -1,4 +1,6 @@
-=== tests/cases/compiler/binopAssignmentShouldHaveType.ts ===
+//// [tests/cases/compiler/binopAssignmentShouldHaveType.ts] ////
+
+=== binopAssignmentShouldHaveType.ts ===
 declare var console;
 >console : Symbol(console, Decl(binopAssignmentShouldHaveType.ts, 0, 11))
 

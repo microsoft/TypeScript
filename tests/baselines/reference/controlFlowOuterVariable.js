@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowOuterVariable.ts] ////
+
 //// [controlFlowOuterVariable.ts]
 // Repros from #10641
 

@@ -1,31 +1,42 @@
-=== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess5.ts ===
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess5.ts] ////
+
+=== superSymbolIndexedAccess5.ts ===
 var symbol: any;
 >symbol : any
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     [symbol]() {
 >[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : any
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 
 class Bar extends Foo {
 >Bar : Bar
+>    : ^^^
 >Foo : Foo
+>    : ^^^
 
     [symbol]() {
->[symbol] : () => any
+>[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : any
 
         return super[symbol]();
->super[symbol]() : error
->super[symbol] : error
+>super[symbol]() : number
+>                : ^^^^^^
+>super[symbol] : () => number
+>              : ^^^^^^^^^^^^
 >super : Foo
+>      : ^^^
 >symbol : any
     }
 }

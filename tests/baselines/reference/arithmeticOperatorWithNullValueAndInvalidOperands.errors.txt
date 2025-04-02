@@ -1,246 +1,246 @@
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(9,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(9,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(10,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(10,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(11,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(11,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(13,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(13,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(14,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(14,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(15,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(15,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(17,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(17,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(18,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(18,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(19,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(19,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(21,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(21,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(22,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(22,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(23,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(23,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(26,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(26,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(27,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(27,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(28,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(28,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(30,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(30,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(31,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(31,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(32,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(32,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(34,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(34,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(35,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(35,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(36,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(36,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(38,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(38,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(39,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(39,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(40,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(40,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(43,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(43,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(44,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(44,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(45,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(45,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(47,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(47,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(48,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(48,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(49,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(49,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(51,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(51,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(52,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(52,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(53,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(53,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(55,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(55,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(56,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(56,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(57,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(57,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(60,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(60,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(61,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(61,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(62,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(62,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(64,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(64,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(65,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(65,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(66,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(66,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(68,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(68,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(69,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(69,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(70,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(70,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(72,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(72,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(73,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(73,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(74,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(74,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(77,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(77,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(78,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(78,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(79,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(79,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(81,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(81,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(82,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(82,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(83,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(83,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(85,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(85,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(86,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(86,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(87,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(87,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(89,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(89,20): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(90,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(90,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(91,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(91,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(94,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(94,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(95,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(95,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(96,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(96,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(98,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(98,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(99,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(99,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(100,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(100,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(102,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(102,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(103,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(103,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(104,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(104,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(106,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(106,20): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(107,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(107,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(108,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(108,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(111,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(111,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(112,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(112,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(113,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(113,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(115,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(115,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(116,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(116,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(117,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(117,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(119,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(119,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(120,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(120,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(121,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(121,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(123,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(123,21): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(124,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(124,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(125,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(125,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(128,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(128,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(129,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(129,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(130,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(130,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(132,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(132,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(133,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(133,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(134,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(134,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(136,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(136,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(137,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(137,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(138,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(138,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(140,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(140,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(141,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(141,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(142,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(142,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(145,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(145,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(146,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(146,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(147,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(147,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(149,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(149,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(150,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(150,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(151,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(151,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(153,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(153,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(154,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(154,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(155,12): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(155,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(157,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(157,19): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(158,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(158,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(159,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(159,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(162,13): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(162,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(163,13): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(163,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(164,13): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(164,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(166,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(166,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(167,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(167,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(168,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(168,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(170,13): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(170,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(171,13): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(171,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(172,13): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(172,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(174,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(174,20): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(175,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(175,18): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(176,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts(176,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(9,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(9,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(10,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(10,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(11,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(11,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(13,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(13,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(14,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(14,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(15,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(15,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(17,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(17,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(18,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(18,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(19,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(19,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(21,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(21,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(22,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(22,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(23,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(23,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(26,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(26,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(27,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(27,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(28,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(28,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(30,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(30,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(31,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(31,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(32,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(32,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(34,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(34,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(35,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(35,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(36,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(36,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(38,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(38,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(39,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(39,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(40,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(40,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(43,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(43,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(44,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(44,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(45,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(45,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(47,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(47,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(48,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(48,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(49,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(49,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(51,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(51,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(52,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(52,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(53,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(53,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(55,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(55,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(56,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(56,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(57,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(57,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(60,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(60,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(61,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(61,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(62,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(62,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(64,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(64,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(65,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(65,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(66,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(66,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(68,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(68,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(69,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(69,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(70,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(70,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(72,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(72,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(73,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(73,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(74,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(74,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(77,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(77,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(78,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(78,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(79,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(79,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(81,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(81,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(82,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(82,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(83,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(83,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(85,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(85,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(86,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(86,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(87,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(87,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(89,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(89,20): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(90,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(90,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(91,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(91,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(94,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(94,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(95,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(95,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(96,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(96,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(98,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(98,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(99,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(99,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(100,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(100,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(102,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(102,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(103,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(103,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(104,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(104,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(106,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(106,20): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(107,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(107,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(108,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(108,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(111,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(111,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(112,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(112,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(113,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(113,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(115,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(115,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(116,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(116,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(117,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(117,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(119,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(119,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(120,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(120,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(121,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(121,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(123,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(123,21): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(124,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(124,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(125,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(125,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(128,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(128,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(129,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(129,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(130,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(130,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(132,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(132,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(133,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(133,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(134,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(134,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(136,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(136,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(137,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(137,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(138,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(138,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(140,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(140,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(141,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(141,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(142,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(142,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(145,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(145,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(146,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(146,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(147,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(147,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(149,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(149,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(150,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(150,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(151,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(151,16): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(153,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(153,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(154,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(154,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(155,12): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(155,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(157,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(157,19): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(158,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(158,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(159,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(159,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(162,13): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(162,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(163,13): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(163,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(164,13): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(164,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(166,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(166,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(167,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(167,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(168,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(168,17): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(170,13): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(170,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(171,13): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(171,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(172,13): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(172,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(174,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(174,20): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(175,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(175,18): error TS18050: The value 'null' cannot be used here.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(176,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithNullValueAndInvalidOperands.ts(176,18): error TS18050: The value 'null' cannot be used here.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts (240 errors) ====
+==== arithmeticOperatorWithNullValueAndInvalidOperands.ts (240 errors) ====
     // If one operand is the null or undefined value, it is treated as having the type of the
     // other operand.
     

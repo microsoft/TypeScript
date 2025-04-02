@@ -1,40 +1,62 @@
-=== tests/cases/compiler/genericBaseClassLiteralProperty2.ts ===
+//// [tests/cases/compiler/genericBaseClassLiteralProperty2.ts] ////
+
+=== genericBaseClassLiteralProperty2.ts ===
 class CollectionItem2 { }
 >CollectionItem2 : CollectionItem2
+>                : ^^^^^^^^^^^^^^^
 
 class BaseCollection2<TItem extends CollectionItem2> {
 >BaseCollection2 : BaseCollection2<TItem>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
     _itemsByKey: { [key: string]: TItem; };
 >_itemsByKey : { [key: string]: TItem; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
     constructor() {
         this._itemsByKey = {};
 >this._itemsByKey = {} : {}
+>                      : ^^
 >this._itemsByKey : { [key: string]: TItem; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_itemsByKey : { [key: string]: TItem; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
     }
 }
 
 class DataView2 extends BaseCollection2<CollectionItem2> {
 >DataView2 : DataView2
+>          : ^^^^^^^^^
 >BaseCollection2 : BaseCollection2<CollectionItem2>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fillItems(item: CollectionItem2) {
 >fillItems : (item: CollectionItem2) => void
+>          : ^    ^^               ^^^^^^^^^
 >item : CollectionItem2
+>     : ^^^^^^^^^^^^^^^
 
         this._itemsByKey['dummy'] = item;
 >this._itemsByKey['dummy'] = item : CollectionItem2
+>                                 : ^^^^^^^^^^^^^^^
 >this._itemsByKey['dummy'] : CollectionItem2
+>                          : ^^^^^^^^^^^^^^^
 >this._itemsByKey : { [key: string]: CollectionItem2; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_itemsByKey : { [key: string]: CollectionItem2; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'dummy' : "dummy"
+>        : ^^^^^^^
 >item : CollectionItem2
+>     : ^^^^^^^^^^^^^^^
     }
 }
 

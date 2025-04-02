@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerClass2.ts] ////
+
 //// [scannerClass2.ts]
     export class LoggerAdapter implements ILogger {
         constructor (public logger: ILogger) { 

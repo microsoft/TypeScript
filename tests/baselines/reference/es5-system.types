@@ -1,6 +1,9 @@
-=== tests/cases/compiler/es5-system.ts ===
+//// [tests/cases/compiler/es5-system.ts] ////
+
+=== es5-system.ts ===
 export default class A
 >A : A
+>  : ^
 {
     constructor ()
     {
@@ -9,9 +12,11 @@ export default class A
 
     public B()
 >B : () => number
+>  : ^^^^^^^^^^^^
     {
         return 42;
 >42 : 42
+>   : ^^
     }
 }
 

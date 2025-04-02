@@ -1,350 +1,569 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts] ////
+
+=== comparisonOperatorWithIdenticalPrimitiveType.ts ===
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var a: number;
 >a : number
+>  : ^^^^^^
 
 var b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
 var c: string;
 >c : string
+>  : ^^^^^^
 
 var d: void;
 >d : void
+>  : ^^^^
 
 var e: E;
 >e : E
+>  : ^
 
 // operator <
 var ra1 = a < a;
 >ra1 : boolean
+>    : ^^^^^^^
 >a < a : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var ra2 = b < b;
 >ra2 : boolean
+>    : ^^^^^^^
 >b < b : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var ra3 = c < c;
 >ra3 : boolean
+>    : ^^^^^^^
 >c < c : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var ra4 = d < d;
 >ra4 : boolean
+>    : ^^^^^^^
 >d < d : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var ra5 = e < e;
 >ra5 : boolean
+>    : ^^^^^^^
 >e < e : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var ra6 = null < null;
 >ra6 : boolean
+>    : ^^^^^^^
 >null < null : boolean
+>            : ^^^^^^^
 
 var ra7 = undefined < undefined;
 >ra7 : boolean
+>    : ^^^^^^^
 >undefined < undefined : boolean
+>                      : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator >
 var rb1 = a > a;
 >rb1 : boolean
+>    : ^^^^^^^
 >a > a : boolean
+>      : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var rb2 = b > b;
 >rb2 : boolean
+>    : ^^^^^^^
 >b > b : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var rb3 = c > c;
 >rb3 : boolean
+>    : ^^^^^^^
 >c > c : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var rb4 = d > d;
 >rb4 : boolean
+>    : ^^^^^^^
 >d > d : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var rb5 = e > e;
 >rb5 : boolean
+>    : ^^^^^^^
 >e > e : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var rb6 = null > null;
 >rb6 : boolean
+>    : ^^^^^^^
 >null > null : boolean
+>            : ^^^^^^^
 
 var rb7 = undefined > undefined;
 >rb7 : boolean
+>    : ^^^^^^^
 >undefined > undefined : boolean
+>                      : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator <=
 var rc1 = a <= a;
 >rc1 : boolean
+>    : ^^^^^^^
 >a <= a : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var rc2 = b <= b;
 >rc2 : boolean
+>    : ^^^^^^^
 >b <= b : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var rc3 = c <= c;
 >rc3 : boolean
+>    : ^^^^^^^
 >c <= c : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var rc4 = d <= d;
 >rc4 : boolean
+>    : ^^^^^^^
 >d <= d : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var rc5 = e <= e;
 >rc5 : boolean
+>    : ^^^^^^^
 >e <= e : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var rc6 = null <= null;
 >rc6 : boolean
+>    : ^^^^^^^
 >null <= null : boolean
+>             : ^^^^^^^
 
 var rc7 = undefined <= undefined;
 >rc7 : boolean
+>    : ^^^^^^^
 >undefined <= undefined : boolean
+>                       : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator >=
 var rd1 = a >= a;
 >rd1 : boolean
+>    : ^^^^^^^
 >a >= a : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var rd2 = b >= b;
 >rd2 : boolean
+>    : ^^^^^^^
 >b >= b : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var rd3 = c >= c;
 >rd3 : boolean
+>    : ^^^^^^^
 >c >= c : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var rd4 = d >= d;
 >rd4 : boolean
+>    : ^^^^^^^
 >d >= d : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var rd5 = e >= e;
 >rd5 : boolean
+>    : ^^^^^^^
 >e >= e : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var rd6 = null >= null;
 >rd6 : boolean
+>    : ^^^^^^^
 >null >= null : boolean
+>             : ^^^^^^^
 
 var rd7 = undefined >= undefined;
 >rd7 : boolean
+>    : ^^^^^^^
 >undefined >= undefined : boolean
+>                       : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator ==
 var re1 = a == a;
 >re1 : boolean
+>    : ^^^^^^^
 >a == a : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var re2 = b == b;
 >re2 : boolean
+>    : ^^^^^^^
 >b == b : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var re3 = c == c;
 >re3 : boolean
+>    : ^^^^^^^
 >c == c : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var re4 = d == d;
 >re4 : boolean
+>    : ^^^^^^^
 >d == d : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var re5 = e == e;
 >re5 : boolean
+>    : ^^^^^^^
 >e == e : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var re6 = null == null;
 >re6 : boolean
+>    : ^^^^^^^
 >null == null : boolean
+>             : ^^^^^^^
 
 var re7 = undefined == undefined;
 >re7 : boolean
+>    : ^^^^^^^
 >undefined == undefined : boolean
+>                       : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator !=
 var rf1 = a != a;
 >rf1 : boolean
+>    : ^^^^^^^
 >a != a : boolean
+>       : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var rf2 = b != b;
 >rf2 : boolean
+>    : ^^^^^^^
 >b != b : boolean
+>       : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var rf3 = c != c;
 >rf3 : boolean
+>    : ^^^^^^^
 >c != c : boolean
+>       : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var rf4 = d != d;
 >rf4 : boolean
+>    : ^^^^^^^
 >d != d : boolean
+>       : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var rf5 = e != e;
 >rf5 : boolean
+>    : ^^^^^^^
 >e != e : boolean
+>       : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var rf6 = null != null;
 >rf6 : boolean
+>    : ^^^^^^^
 >null != null : boolean
+>             : ^^^^^^^
 
 var rf7 = undefined != undefined;
 >rf7 : boolean
+>    : ^^^^^^^
 >undefined != undefined : boolean
+>                       : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator ===
 var rg1 = a === a;
 >rg1 : boolean
+>    : ^^^^^^^
 >a === a : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var rg2 = b === b;
 >rg2 : boolean
+>    : ^^^^^^^
 >b === b : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var rg3 = c === c;
 >rg3 : boolean
+>    : ^^^^^^^
 >c === c : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var rg4 = d === d;
 >rg4 : boolean
+>    : ^^^^^^^
 >d === d : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var rg5 = e === e;
 >rg5 : boolean
+>    : ^^^^^^^
 >e === e : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var rg6 = null === null;
 >rg6 : boolean
+>    : ^^^^^^^
 >null === null : boolean
+>              : ^^^^^^^
 
 var rg7 = undefined === undefined;
 >rg7 : boolean
+>    : ^^^^^^^
 >undefined === undefined : boolean
+>                        : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator !==
 var rh1 = a !== a;
 >rh1 : boolean
+>    : ^^^^^^^
 >a !== a : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var rh2 = b !== b;
 >rh2 : boolean
+>    : ^^^^^^^
 >b !== b : boolean
+>        : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var rh3 = c !== c;
 >rh3 : boolean
+>    : ^^^^^^^
 >c !== c : boolean
+>        : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 var rh4 = d !== d;
 >rh4 : boolean
+>    : ^^^^^^^
 >d !== d : boolean
+>        : ^^^^^^^
 >d : void
+>  : ^^^^
 >d : void
+>  : ^^^^
 
 var rh5 = e !== e;
 >rh5 : boolean
+>    : ^^^^^^^
 >e !== e : boolean
+>        : ^^^^^^^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 var rh6 = null !== null;
 >rh6 : boolean
+>    : ^^^^^^^
 >null !== null : boolean
+>              : ^^^^^^^
 
 var rh7 = undefined !== undefined;
 >rh7 : boolean
+>    : ^^^^^^^
 >undefined !== undefined : boolean
+>                        : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

@@ -1,22 +1,38 @@
-=== tests/cases/compiler/node_modules/package/index.d.ts ===
+//// [tests/cases/compiler/syntheticDefaultExportsWithDynamicImports.ts] ////
+
+=== node_modules/package/index.d.ts ===
 declare function packageExport(x: number): string;
 >packageExport : (x: number) => string
+>              : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
 export = packageExport;
 >packageExport : (x: number) => string
+>              : ^ ^^      ^^^^^      
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import("package").then(({default: foo}) => foo(42));
 >import("package").then(({default: foo}) => foo(42)) : Promise<string>
+>                                                    : ^^^^^^^^^^^^^^^
 >import("package").then : <TResult1 = { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: { default: (x: number) => string; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                       : ^        ^^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("package") : Promise<{ default: (x: number) => string; }>
+>                  : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^
 >"package" : "package"
+>          : ^^^^^^^^^
 >then : <TResult1 = { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: { default: (x: number) => string; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({default: foo}) => foo(42) : ({ default: foo }: { default: (x: number) => string; }) => string
+>                            : ^                ^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^
 >default : any
+>        : ^^^
 >foo : (x: number) => string
+>    : ^ ^^      ^^^^^      
 >foo(42) : string
+>        : ^^^^^^
 >foo : (x: number) => string
+>    : ^ ^^      ^^^^^      
 >42 : 42
+>   : ^^
 

@@ -1,19 +1,31 @@
-=== tests/cases/compiler/keywordExpressionInternalComments.ts ===
+//// [tests/cases/compiler/keywordExpressionInternalComments.ts] ////
+
+=== keywordExpressionInternalComments.ts ===
 /*1*/ new /*2*/ Array /*3*/;
 >new /*2*/ Array : any[]
+>                : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 /*1*/ typeof /*2*/ Array /*3*/;
 >typeof /*2*/ Array : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 /*1*/ void /*2*/ Array /*3*/;
 >void /*2*/ Array : undefined
+>                 : ^^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 /*1*/ delete /*2*/ Array.toString /*3*/;
 >delete /*2*/ Array.toString : boolean
+>                            : ^^^^^^^
 >Array.toString : () => string
+>               : ^^^^^^      
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 

@@ -1,60 +1,94 @@
-=== tests/cases/conformance/nonjsExtensions/component.d.html.ts ===
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForHtmlFileWithinDeclarationFile.ts] ////
+
+=== component.d.html.ts ===
 // html modules were proposed at https://github.com/WICG/webcomponents/blob/gh-pages/proposals/html-modules-explainer.md
 
 // per proposal, `default` is user-defined, but if not present, will be the document of the imported module
 declare var doc: Document;
 >doc : Document
+>    : ^^^^^^^^
 
 export default doc;
 >doc : Document
+>    : ^^^^^^^^
 
 // all other exports are just whatever was exported in module script blocks in the html file
 export const blogPost: Element;
 >blogPost : Element
+>         : ^^^^^^^
 
 export class HTML5Element extends HTMLElement {
 >HTML5Element : HTML5Element
+>             : ^^^^^^^^^^^^
 >HTMLElement : HTMLElement
+>            : ^^^^^^^^^^^
 
     connectedCallback(): void;
 >connectedCallback : () => void
+>                  : ^^^^^^    
 }
 
-=== tests/cases/conformance/nonjsExtensions/file.d.ts ===
+=== file.d.ts ===
 export * as mod from "./component.html";
->mod : typeof import("tests/cases/conformance/nonjsExtensions/component.d.html")
+>mod : typeof import("component.d.html")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/nonjsExtensions/main.ts ===
+=== main.ts ===
 import { mod } from "./file.js";
 >mod : typeof mod
+>    : ^^^^^^^^^^
 
 window.customElements.define("my-html5-element", mod.HTML5Element);
 >window.customElements.define("my-html5-element", mod.HTML5Element) : void
+>                                                                   : ^^^^
 >window.customElements.define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
+>                             : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^    
 >window.customElements : CustomElementRegistry
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >customElements : CustomElementRegistry
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
+>       : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^    
 >"my-html5-element" : "my-html5-element"
+>                   : ^^^^^^^^^^^^^^^^^^
 >mod.HTML5Element : typeof mod.HTML5Element
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >mod : typeof mod
+>    : ^^^^^^^^^^
 >HTML5Element : typeof mod.HTML5Element
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 
 if (document !== mod.default) {
 >document !== mod.default : boolean
+>                         : ^^^^^^^
 >document : Document
+>         : ^^^^^^^^
 >mod.default : Document
+>            : ^^^^^^^^
 >mod : typeof mod
+>    : ^^^^^^^^^^
 >default : Document
+>        : ^^^^^^^^
 
     document.body.appendChild(mod.blogPost);
 >document.body.appendChild(mod.blogPost) : Element
+>                                        : ^^^^^^^
 >document.body.appendChild : <T extends Node>(node: T) => T
+>                          : ^ ^^^^^^^^^    ^^    ^^ ^^^^^ 
 >document.body : HTMLElement
+>              : ^^^^^^^^^^^
 >document : Document
+>         : ^^^^^^^^
 >body : HTMLElement
+>     : ^^^^^^^^^^^
 >appendChild : <T extends Node>(node: T) => T
+>            : ^ ^^^^^^^^^    ^^    ^^ ^^^^^ 
 >mod.blogPost : Element
+>             : ^^^^^^^
 >mod : typeof mod
+>    : ^^^^^^^^^^
 >blogPost : Element
+>         : ^^^^^^^
 }

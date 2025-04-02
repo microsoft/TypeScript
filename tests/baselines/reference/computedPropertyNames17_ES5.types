@@ -1,36 +1,57 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames17_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames17_ES5.ts] ////
+
+=== computedPropertyNames17_ES5.ts ===
 var b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     get [b]() { return 0;}
 >[b] : number
+>    : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >0 : 0
+>  : ^
 
     static set [true](v) { }
 >[true] : any
+>       : ^^^
 >true : true
+>     : ^^^^
 >v : any
+>  : ^^^
 
     get [[]]() { return 0; }
 >[[]] : number
+>     : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     set [{}](v) { }
 >[{}] : any
+>     : ^^^
 >{} : {}
+>   : ^^
 >v : any
+>  : ^^^
 
     static get [undefined]() { return 0; }
 >[undefined] : number
+>            : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >0 : 0
+>  : ^
 
     set [null](v) { }
 >[null] : any
+>       : ^^^
 >v : any
+>  : ^^^
 }

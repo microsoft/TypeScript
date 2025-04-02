@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts] ////
+
+=== numberAssignableToEnum.ts ===
 enum E { A }
 >E : Symbol(E, Decl(numberAssignableToEnum.ts, 0, 0))
 >A : Symbol(E.A, Decl(numberAssignableToEnum.ts, 0, 8))

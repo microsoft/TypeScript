@@ -1,66 +1,95 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsEnumTag.ts] ////
+
+=== index.js ===
 /** @enum {string} */
 export const Target = {
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >{    START: "start",    MIDDLE: "middle",    END: "end",    /** @type {number} */    OK_I_GUESS: 2} : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     START: "start",
 >START : string
+>      : ^^^^^^
 >"start" : "start"
+>        : ^^^^^^^
 
     MIDDLE: "middle",
 >MIDDLE : string
+>       : ^^^^^^
 >"middle" : "middle"
+>         : ^^^^^^^^
 
     END: "end",
 >END : string
+>    : ^^^^^^
 >"end" : "end"
+>      : ^^^^^
 
     /** @type {number} */
     OK_I_GUESS: 2
 >OK_I_GUESS : number
+>           : ^^^^^^
 >2 : 2
+>  : ^
 }
 /** @enum number */
 export const Second = {
 >Second : { OK: number; FINE: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^      ^^^
 >{    OK: 1,    /** @type {number} */    FINE: 2,} : { OK: number; FINE: number; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^      ^^^
 
     OK: 1,
 >OK : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     /** @type {number} */
     FINE: 2,
 >FINE : number
+>     : ^^^^^^
 >2 : 2
+>  : ^
 }
 /** @enum {function(number): number} */
 export const Fs = {
 >Fs : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
+>   : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >{    ADD1: n => n + 1,    ID: n => n,    SUB1: n => n - 1} : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
+>                                                           : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 
     ADD1: n => n + 1,
 >ADD1 : (n: any) => any
+>     : ^ ^^^^^^^^^^^^^
 >n => n + 1 : (n: any) => any
+>           : ^ ^^^^^^^^^^^^^
 >n : any
 >n + 1 : any
 >n : any
 >1 : 1
+>  : ^
 
     ID: n => n,
 >ID : (n: any) => any
+>   : ^ ^^^^^^^^^^^^^
 >n => n : (n: any) => any
+>       : ^ ^^^^^^^^^^^^^
 >n : any
 >n : any
 
     SUB1: n => n - 1
 >SUB1 : (n: any) => number
+>     : ^ ^^^^^^^^^^^^^^^^
 >n => n - 1 : (n: any) => number
+>           : ^ ^^^^^^^^^^^^^^^^
 >n : any
 >n - 1 : number
+>      : ^^^^^^
 >n : any
 >1 : 1
+>  : ^
 }
 
 /**
@@ -70,48 +99,70 @@ export const Fs = {
  */
 export function consume(t,s,f) {
 >consume : (t: Target, s: Second, f: Fs) => void
+>        : ^ ^^      ^^ ^^      ^^ ^^  ^^^^^^^^^
 >t : string
+>  : ^^^^^^
 >s : number
+>  : ^^^^^^
 >f : Fs
+>  : ^^
 
     /** @type {string} */
     var str = t
 >str : string
+>    : ^^^^^^
 >t : string
+>  : ^^^^^^
 
     /** @type {number} */
     var num = s
 >num : number
+>    : ^^^^^^
 >s : number
+>  : ^^^^^^
 
     /** @type {(n: number) => number} */
     var fun = f
 >fun : (n: number) => number
+>    : ^ ^^      ^^^^^      
 >f : Fs
+>  : ^^
 
     /** @type {Target} */
     var v = Target.START
 >v : string
+>  : ^^^^^^
 >Target.START : string
+>             : ^^^^^^
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >START : string
+>      : ^^^^^^
 
     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
 >v = 'something else' : "something else"
+>                     : ^^^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >'something else' : "something else"
+>                 : ^^^^^^^^^^^^^^^^
 }
 /** @param {string} s */
 export function ff(s) {
 >ff : (s: string) => any
+>   : ^ ^^      ^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     // element access with arbitrary string is an error only with noImplicitAny
     if (!Target[s]) {
 >!Target[s] : boolean
+>           : ^^^^^^^
 >Target[s] : error
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string
+>  : ^^^^^^
 
         return null
     }
@@ -119,7 +170,9 @@ export function ff(s) {
         return Target[s]
 >Target[s] : error
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string
+>  : ^^^^^^
     }
 }
 

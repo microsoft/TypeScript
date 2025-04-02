@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/topLevel.ts] ////
+
 //// [topLevel.ts]
 interface IPoint {
     x:number;

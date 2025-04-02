@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx] ////
+
 //// [jsxNamespacePrefixInNameReact.tsx]
 declare var React: any;
 

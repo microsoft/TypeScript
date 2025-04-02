@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts ===
+//// [tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts] ////
+
+=== assignmentCompatInterfaceWithStringIndexSignature.ts ===
 interface IHandler {
 >IHandler : Symbol(IHandler, Decl(assignmentCompatInterfaceWithStringIndexSignature.ts, 0, 0))
 

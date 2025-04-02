@@ -1,119 +1,183 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference1.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference1.ts] ////
+
+=== unionAndIntersectionInference1.ts ===
 // Repro from #2264
 
 interface Y { 'i am a very certain type': Y }
 >'i am a very certain type' : Y
+>                           : ^
 
 var y: Y = <Y>undefined;
 >y : Y
+>  : ^
 ><Y>undefined : Y
+>             : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 function destructure<a, r>(
 >destructure : <a, r>(something: a | Y, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
+>            : ^ ^^ ^^         ^^     ^^         ^^               ^^     ^^               ^^^^^ 
 
     something: a | Y,
 >something : Y | a
+>          : ^^^^^
 
     haveValue: (value: a) => r,
 >haveValue : (value: a) => r
+>          : ^     ^^ ^^^^^ 
 >value : a
+>      : ^
 
     haveY: (value: Y) => r
 >haveY : (value: Y) => r
+>      : ^     ^^ ^^^^^ 
 >value : Y
+>      : ^
 
 ): r {
     return something === y ? haveY(y) : haveValue(<a>something);
 >something === y ? haveY(y) : haveValue(<a>something) : r
+>                                                     : ^
 >something === y : boolean
+>                : ^^^^^^^
 >something : Y | a
+>          : ^^^^^
 >y : Y
+>  : ^
 >haveY(y) : r
+>         : ^
 >haveY : (value: Y) => r
+>      : ^     ^^ ^^^^^ 
 >y : Y
+>  : ^
 >haveValue(<a>something) : r
+>                        : ^
 >haveValue : (value: a) => r
+>          : ^     ^^ ^^^^^ 
 ><a>something : a
+>             : ^
 >something : Y | a
+>          : ^^^^^
 }
 
 var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >value : string | Y
+>      : ^^^^^^^^^^
 >Math.random() > 0.5 ? 'hey!' : <Y>undefined : Y | "hey!"
+>                                            : ^^^^^^^^^^
 >Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
+>    : ^^^
 >'hey!' : "hey!"
+>       : ^^^^^^
 ><Y>undefined : Y
+>             : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var result = destructure(value, text => 'string', y => 'other one'); // text: string, y: Y
 >result : string
+>       : ^^^^^^
 >destructure(value, text => 'string', y => 'other one') : string
->destructure : <a, r>(something: Y | a, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
+>                                                       : ^^^^^^
+>destructure : <a, r>(something: a | Y, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
+>            : ^ ^^ ^^         ^^     ^^         ^^               ^^     ^^               ^^^^^ 
 >value : string | Y
+>      : ^^^^^^^^^^
 >text => 'string' : (text: string) => string
+>                 : ^    ^^^^^^^^^^^^^^^^^^^
 >text : string
+>     : ^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 >y => 'other one' : (y: Y) => string
+>                 : ^ ^^^^^^^^^^^^^^
 >y : Y
+>  : ^
 >'other one' : "other one"
+>            : ^^^^^^^^^^^
 
 // Repro from #4212
 
 function isVoid<a>(value: void | a): value is void {
 >isVoid : <a>(value: void | a) => value is void
+>       : ^ ^^     ^^        ^^^^^             
 >value : void | a
+>      : ^^^^^^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 function isNonVoid<a>(value: void | a) : value is a {
 >isNonVoid : <a>(value: void | a) => value is a
+>          : ^ ^^     ^^        ^^^^^          
 >value : void | a
+>      : ^^^^^^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 function foo1<a>(value: void|a): void {
 >foo1 : <a>(value: void | a) => void
+>     : ^ ^^     ^^        ^^^^^    
 >value : void | a
+>      : ^^^^^^^^
 
     if (isVoid(value)) {
 >isVoid(value) : boolean
->isVoid : <a>(value: void | a) => value is void
+>              : ^^^^^^^
+>isVoid : <a_1>(value: void | a_1) => value is void
+>       : ^^^^^^     ^^          ^^^^^             
 >value : void | a
+>      : ^^^^^^^^
 
         value; // value is void
 >value : void
+>      : ^^^^
 
     } else {
         value; // value is a
 >value : a
+>      : ^
     }
 }
 
 function baz1<a>(value: void|a): void {
 >baz1 : <a>(value: void | a) => void
+>     : ^ ^^     ^^        ^^^^^    
 >value : void | a
+>      : ^^^^^^^^
 
       if (isNonVoid(value)) {
 >isNonVoid(value) : boolean
->isNonVoid : <a>(value: void | a) => value is a
+>                 : ^^^^^^^
+>isNonVoid : <a_1>(value: void | a_1) => value is a_1
+>          : ^^^^^^     ^^          ^^^^^            
 >value : void | a
+>      : ^^^^^^^^
 
           value; // value is a
 >value : a
+>      : ^
 
       } else {
           value; // value is void
 >value : void
+>      : ^^^^
       }
 }
 
@@ -121,142 +185,220 @@ function baz1<a>(value: void|a): void {
 
 type Maybe<T> = T | void;
 >Maybe : Maybe<T>
+>      : ^^^^^^^^
 
 function get<U>(x: U | void): U {
 >get : <U>(x: U | void) => U
+>    : ^ ^^ ^^        ^^^^^ 
 >x : void | U
+>  : ^^^^^^^^
 
    return null; // just an example
 }
 
 let foo: Maybe<string>;
 >foo : Maybe<string>
+>    : ^^^^^^^^^^^^^
 
 get(foo).toUpperCase(); // Ok
 >get(foo).toUpperCase() : string
+>                       : ^^^^^^
 >get(foo).toUpperCase : () => string
+>                     : ^^^^^^      
 >get(foo) : string
->get : <U>(x: void | U) => U
+>         : ^^^^^^
+>get : <U>(x: U | void) => U
+>    : ^ ^^ ^^        ^^^^^ 
 >foo : Maybe<string>
+>    : ^^^^^^^^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
 
 // Repro from #5456
 
 interface Man {
     walks: boolean;
 >walks : boolean
+>      : ^^^^^^^
 }
 
 interface Bear {
     roars: boolean;
 >roars : boolean
+>      : ^^^^^^^
 }
 
 interface Pig {
     oinks: boolean;
 >oinks : boolean
+>      : ^^^^^^^
 }
 
 declare function pigify<T>(y: T & Bear): T & Pig;
 >pigify : <T>(y: T & Bear) => T & Pig
+>       : ^ ^^ ^^        ^^^^^       
 >y : T & Bear
+>  : ^^^^^^^^
 
 declare var mbp: Man & Bear;
 >mbp : Man & Bear
+>    : ^^^^^^^^^^
 
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 >pigify(mbp).oinks : boolean
+>                  : ^^^^^^^
 >pigify(mbp) : Man & Pig
+>            : ^^^^^^^^^
 >pigify : <T>(y: T & Bear) => T & Pig
+>       : ^ ^^ ^^        ^^^^^       
 >mbp : Man & Bear
+>    : ^^^^^^^^^^
 >oinks : boolean
+>      : ^^^^^^^
 
 pigify(mbp).walks; // Ok, mbp is treated as Man
 >pigify(mbp).walks : boolean
+>                  : ^^^^^^^
 >pigify(mbp) : Man & Pig
+>            : ^^^^^^^^^
 >pigify : <T>(y: T & Bear) => T & Pig
+>       : ^ ^^ ^^        ^^^^^       
 >mbp : Man & Bear
+>    : ^^^^^^^^^^
 >walks : boolean
+>      : ^^^^^^^
 
 // Repros from #29815
 
 interface ITest {
   name: 'test'
 >name : "test"
+>     : ^^^^^^
 }
 
 const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
 >createTestAsync : () => Promise<ITest>
+>                : ^^^^^^              
 >(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
+>                                                                       : ^^^^^^              
 >Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                       : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
+>                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({ name: 'test' }) : () => { name: "test"; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >({ name: 'test' }) : { name: "test"; }
+>                   : ^^^^^^^^^^^^^^^^^
 >{ name: 'test' } : { name: "test"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >name : "test"
+>     : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
 const createTest = (): ITest => {
 >createTest : () => ITest
+>           : ^^^^^^     
 >(): ITest => {  return { name: 'test' }} : () => ITest
+>                                         : ^^^^^^     
 
   return { name: 'test' }
 >{ name: 'test' } : { name: "test"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >name : "test"
+>     : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 }
 
 declare function f1<T, U>(x: T | U): T | U;
 >f1 : <T, U>(x: T | U) => T | U
+>   : ^ ^^ ^^ ^^     ^^^^^     
 >x : T | U
+>  : ^^^^^
 
 declare function f2<T, U>(x: T, y: U): T | U;
 >f2 : <T, U>(x: T, y: U) => T | U
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 let x1: string = f1('a');
 >x1 : string
+>   : ^^^^^^
 >f1('a') : "a"
+>        : ^^^
 >f1 : <T, U>(x: T | U) => T | U
+>   : ^ ^^ ^^ ^^     ^^^^^     
 >'a' : "a"
+>    : ^^^
 
 let x2: string = f2('a', 'b');
 >x2 : string
+>   : ^^^^^^
 >f2('a', 'b') : "a" | "b"
+>             : ^^^^^^^^^
 >f2 : <T, U>(x: T, y: U) => T | U
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 
 // Repro from #30442
 
 const func = <T>() => {};
 >func : <T>() => void
+>     : ^ ^^^^^^^^^^^
 ><T>() => {} : <T>() => void
+>            : ^ ^^^^^^^^^^^
 
 const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 >assign : <T, U>(a: T, b: U) => T & U
+>       : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 ><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => T & U
+>                                          : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >a : T
+>  : ^
 >b : U
+>  : ^
 >Object.assign(a, b) : T & U
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>                    : ^^^^^
+>Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
+>              : ^^^^^^^^^^^^^^^  ^^^^^^^      ^^   ^^      ^^   ^^^         ^^^^^^^^^^^^^^^  ^^^^^^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^             ^^^^^^^^^^^^^^^  ^^^^^^^ ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^       ^^ ^^^                 ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
+>       : ^^^^^^^^^^^^^^^  ^^^^^^^      ^^   ^^      ^^   ^^^         ^^^^^^^^^^^^^^^  ^^^^^^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^             ^^^^^^^^^^^^^^^  ^^^^^^^ ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^       ^^ ^^^                 ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >a : T
+>  : ^
 >b : U
+>  : ^
 
 const res: (() => void) & { func: any } = assign(() => {}, { func });
 >res : (() => void) & { func: any; }
+>    : ^^^^^^^    ^^^^^^^^^^^^   ^^^
 >func : any
 >assign(() => {}, { func }) : (() => void) & { func: <T>() => void; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >assign : <T, U>(a: T, b: U) => T & U
+>       : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 >{ func } : { func: <T>() => void; }
+>         : ^^^^^^^^^ ^^^^^^^^^^^^^^
 >func : <T>() => void
+>     : ^ ^^^^^^^^^^^
 

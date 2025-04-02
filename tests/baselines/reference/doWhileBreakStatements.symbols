@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts ===
+//// [tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts] ////
+
+=== doWhileBreakStatements.ts ===
 do {
     break;
 } while(true)

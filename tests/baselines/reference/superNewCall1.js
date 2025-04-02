@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superNewCall1.ts] ////
+
 //// [superNewCall1.ts]
 class A<T1, T2> {
     constructor(private map: (value: T1) => T2) {

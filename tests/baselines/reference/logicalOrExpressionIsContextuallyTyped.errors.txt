@@ -1,16 +1,17 @@
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts(6,33): error TS2322: Type '{ a: string; b: number; } | { a: string; b: boolean; }' is not assignable to type '{ a: string; }'.
-  Type '{ a: string; b: number; }' is not assignable to type '{ a: string; }'.
-    Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
+logicalOrExpressionIsContextuallyTyped.ts(6,24): error TS2872: This kind of expression is always truthy.
+logicalOrExpressionIsContextuallyTyped.ts(6,33): error TS2322: Type '{ a: string; b: number; } | { a: string; b: boolean; }' is not assignable to type '{ a: string; }'.
+  Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts (1 errors) ====
+==== logicalOrExpressionIsContextuallyTyped.ts (2 errors) ====
     // The || operator permits the operands to be of any type.
     // If the || expression is contextually typed, the operands are contextually typed by the
     // same type and the result is of the best common type of the contextual type and the two
     // operand types.
     
     var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
+                           ~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
                                     ~
 !!! error TS2322: Type '{ a: string; b: number; } | { a: string; b: boolean; }' is not assignable to type '{ a: string; }'.
-!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type '{ a: string; }'.
-!!! error TS2322:     Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.

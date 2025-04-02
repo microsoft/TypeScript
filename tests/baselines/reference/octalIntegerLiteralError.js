@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts] ////
+
 //// [octalIntegerLiteralError.ts]
 // error
 var oct1 = 0O13334823;

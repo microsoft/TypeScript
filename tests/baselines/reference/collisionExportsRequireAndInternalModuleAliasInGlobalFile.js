@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts] ////
+
 //// [collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts]
 module mOfGloalFile {
     export class c {

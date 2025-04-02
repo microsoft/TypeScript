@@ -1,92 +1,145 @@
-=== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts] ////
+
+=== stringLiteralsWithSwitchStatements03.ts ===
 let x: "foo";
 >x : "foo"
+>  : ^^^^^
 
 let y: "foo" | "bar"; 
 >y : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 
 let z: "bar";
 >z : "bar"
+>  : ^^^^^
 
 declare function randBool(): boolean;
 >randBool : () => boolean
+>         : ^^^^^^       
 
 switch (x) {
 >x : "foo"
+>  : ^^^^^
 
     case randBool() ? "foo" : "baz":
 >randBool() ? "foo" : "baz" : "foo" | "baz"
+>                           : ^^^^^^^^^^^^^
 >randBool() : boolean
+>           : ^^^^^^^
 >randBool : () => boolean
+>         : ^^^^^^       
 >"foo" : "foo"
+>      : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
         break;
     case (randBool() ? ("bar") : "baz" ? "bar" : "baz"):
 >(randBool() ? ("bar") : "baz" ? "bar" : "baz") : "bar" | "baz"
+>                                               : ^^^^^^^^^^^^^
 >randBool() ? ("bar") : "baz" ? "bar" : "baz" : "bar" | "baz"
+>                                             : ^^^^^^^^^^^^^
 >randBool() : boolean
+>           : ^^^^^^^
 >randBool : () => boolean
+>         : ^^^^^^       
 >("bar") : "bar"
+>        : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 >"baz" ? "bar" : "baz" : "bar" | "baz"
+>                      : ^^^^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
         break;
     case (("bar")):
 >(("bar")) : "bar"
+>          : ^^^^^
 >("bar") : "bar"
+>        : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
         break;
     case (x, y, ("baz")):
 >(x, y, ("baz")) : "baz"
+>                : ^^^^^
 >x, y, ("baz") : "baz"
+>              : ^^^^^
 >x, y : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >x : "foo"
+>  : ^^^^^
 >y : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >("baz") : "baz"
+>        : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
         x;
 >x : never
+>  : ^^^^^
 
         y;
 >y : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 
         break;
     case (("foo" || ("bar"))):
 >(("foo" || ("bar"))) : "foo" | "bar"
+>                     : ^^^^^^^^^^^^^
 >("foo" || ("bar")) : "foo" | "bar"
+>                   : ^^^^^^^^^^^^^
 >"foo" || ("bar") : "foo" | "bar"
+>                 : ^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >("bar") : "bar"
+>        : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
         break;
     case (("bar" || ("baz"))):
 >(("bar" || ("baz"))) : "bar" | "baz"
+>                     : ^^^^^^^^^^^^^
 >("bar" || ("baz")) : "bar" | "baz"
+>                   : ^^^^^^^^^^^^^
 >"bar" || ("baz") : "bar" | "baz"
+>                 : ^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 >("baz") : "baz"
+>        : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
         break;
     case z || "baz":
 >z || "baz" : "bar" | "baz"
+>           : ^^^^^^^^^^^^^
 >z : "bar"
+>  : ^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
     case "baz" || z:
 >"baz" || z : "bar" | "baz"
+>           : ^^^^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 >z : "bar"
+>  : ^^^^^
 
         z;
 >z : "bar"
+>  : ^^^^^
 
         break;
 }

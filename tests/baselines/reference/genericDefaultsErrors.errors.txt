@@ -1,32 +1,31 @@
-tests/cases/compiler/genericDefaultsErrors.ts(3,41): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/compiler/genericDefaultsErrors.ts(4,59): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+genericDefaultsErrors.ts(3,41): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+genericDefaultsErrors.ts(4,59): error TS2344: Type 'T' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(5,44): error TS2344: Type 'T' does not satisfy the constraint 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(6,39): error TS2344: Type 'number' does not satisfy the constraint 'T'.
+genericDefaultsErrors.ts(5,44): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+genericDefaultsErrors.ts(6,39): error TS2344: Type 'number' does not satisfy the constraint 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(10,5): error TS2558: Expected 2-3 type arguments, but got 1.
-tests/cases/compiler/genericDefaultsErrors.ts(13,5): error TS2558: Expected 2-3 type arguments, but got 4.
-tests/cases/compiler/genericDefaultsErrors.ts(17,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(19,11): error TS2428: All declarations of 'i00' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(20,11): error TS2428: All declarations of 'i00' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(22,11): error TS2428: All declarations of 'i01' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(23,11): error TS2428: All declarations of 'i01' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(25,27): error TS2706: Required type parameters may not follow optional type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(26,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/compiler/genericDefaultsErrors.ts(27,52): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+genericDefaultsErrors.ts(10,5): error TS2558: Expected 2-3 type arguments, but got 1.
+genericDefaultsErrors.ts(13,5): error TS2558: Expected 2-3 type arguments, but got 4.
+genericDefaultsErrors.ts(17,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+genericDefaultsErrors.ts(19,11): error TS2428: All declarations of 'i00' must have identical type parameters.
+genericDefaultsErrors.ts(20,11): error TS2428: All declarations of 'i00' must have identical type parameters.
+genericDefaultsErrors.ts(22,11): error TS2428: All declarations of 'i01' must have identical type parameters.
+genericDefaultsErrors.ts(23,11): error TS2428: All declarations of 'i01' must have identical type parameters.
+genericDefaultsErrors.ts(25,27): error TS2706: Required type parameters may not follow optional type parameters.
+genericDefaultsErrors.ts(26,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+genericDefaultsErrors.ts(27,52): error TS2344: Type 'T' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(28,37): error TS2344: Type 'T' does not satisfy the constraint 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(29,32): error TS2344: Type 'number' does not satisfy the constraint 'T'.
+genericDefaultsErrors.ts(28,37): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+genericDefaultsErrors.ts(29,32): error TS2344: Type 'number' does not satisfy the constraint 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(32,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(33,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(36,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(38,20): error TS2304: Cannot find name 'T'.
-tests/cases/compiler/genericDefaultsErrors.ts(38,20): error TS4033: Property 'x' of exported interface has or is using private name 'T'.
-tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type parameter 'T' has a circular default.
+genericDefaultsErrors.ts(32,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+genericDefaultsErrors.ts(33,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+genericDefaultsErrors.ts(36,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+genericDefaultsErrors.ts(38,20): error TS2304: Cannot find name 'T'.
+genericDefaultsErrors.ts(42,29): error TS2716: Type parameter 'T' has a circular default.
 
 
-==== tests/cases/compiler/genericDefaultsErrors.ts (22 errors) ====
+==== genericDefaultsErrors.ts (21 errors) ====
     declare const x: any;
     
     declare function f03<T extends string = number>(): void; // error
@@ -39,7 +38,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
     declare function f05<T, U extends number = T>(): void; // error
                                                ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
-!!! related TS2208 tests/cases/compiler/genericDefaultsErrors.ts:5:22: This type parameter might need an `extends number` constraint.
+!!! related TS2208 genericDefaultsErrors.ts:5:22: This type parameter might need an `extends number` constraint.
     declare function f06<T, U extends T = number>(): void; // error
                                           ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
@@ -89,7 +88,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
     interface i07<T, U extends number = T> { } // error
                                         ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
-!!! related TS2208 tests/cases/compiler/genericDefaultsErrors.ts:28:15: This type parameter might need an `extends number` constraint.
+!!! related TS2208 genericDefaultsErrors.ts:28:15: This type parameter might need an `extends number` constraint.
     interface i08<T, U extends T = number> { } // error
                                    ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
@@ -111,8 +110,6 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
     interface i10 { x: T; } // error
                        ~
 !!! error TS2304: Cannot find name 'T'.
-                       ~
-!!! error TS4033: Property 'x' of exported interface has or is using private name 'T'.
     interface i10<T = number> {}
     
     // https://github.com/Microsoft/TypeScript/issues/16221

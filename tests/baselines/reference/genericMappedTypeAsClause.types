@@ -1,74 +1,111 @@
-=== tests/cases/compiler/genericMappedTypeAsClause.ts ===
+//// [tests/cases/compiler/genericMappedTypeAsClause.ts] ////
+
+=== genericMappedTypeAsClause.ts ===
 type Model = {
->Model : { a: string; b: number; }
+>Model : Model
+>      : ^^^^^
 
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
 };
 
 type MappedModel<Suffix extends string> = {
 >MappedModel : MappedModel<Suffix>
+>            : ^^^^^^^^^^^^^^^^^^^
 
     [K in keyof Model as `${K}${Suffix}`]: Model[K];
 };
 
 const foo1: MappedModel<'Foo'> = { aFoo: 'test', bFoo: 42 };
 >foo1 : MappedModel<"Foo">
+>     : ^^^^^^^^^^^^^^^^^^
 >{ aFoo: 'test', bFoo: 42 } : { aFoo: string; bFoo: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >aFoo : string
+>     : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 >bFoo : number
+>     : ^^^^^^
 >42 : 42
+>   : ^^
 
 const foo2: MappedModel<'Foo'> = { bFoo: 'bar' };  // Error
 >foo2 : MappedModel<"Foo">
+>     : ^^^^^^^^^^^^^^^^^^
 >{ bFoo: 'bar' } : { bFoo: string; }
+>                : ^^^^^^^^^^^^^^^^^
 >bFoo : string
+>     : ^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
 function f1<T extends string>() {
 >f1 : <T extends string>() => void
+>   : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
     const x1: MappedModel<T> = 42;  // Error
 >x1 : MappedModel<T>
+>   : ^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     const x2: MappedModel<T> = 'test';  // Error
 >x2 : MappedModel<T>
+>   : ^^^^^^^^^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
     const x3: MappedModel<T> = [1, 2, 3];  // Error
 >x3 : MappedModel<T>
+>   : ^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     const x4: MappedModel<T> = false;  // Error
 >x4 : MappedModel<T>
+>   : ^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     const x5: MappedModel<T> = { a: 'bar', b: 42 };  // Error
 >x5 : MappedModel<T>
+>   : ^^^^^^^^^^^^^^
 >{ a: 'bar', b: 42 } : { a: string; b: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 >b : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
     const x6: MappedModel<T> = undefined;  // Error
 >x6 : MappedModel<T>
+>   : ^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 // repro from #43189
 
 type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
 >RemapRecord : RemapRecord<K, V>
+>            : ^^^^^^^^^^^^^^^^^
 
 interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error
 

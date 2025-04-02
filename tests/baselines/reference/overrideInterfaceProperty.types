@@ -1,35 +1,50 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/overrideInterfaceProperty.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/overrideInterfaceProperty.ts] ////
+
+=== overrideInterfaceProperty.ts ===
 interface Mup<K, V> {
     readonly size: number;
 >size : number
+>     : ^^^^^^
 }
 interface MupConstructor {
     new(): Mup<any, any>;
     new<K, V>(entries?: readonly (readonly [K, V])[] | null): Mup<K, V>;
 >entries : readonly (readonly [K, V])[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     readonly prototype: Mup<any, any>;
 >prototype : Mup<any, any>
+>          : ^^^^^^^^^^^^^
 }
 declare var Mup: MupConstructor;
 >Mup : MupConstructor
+>    : ^^^^^^^^^^^^^^
 
 class Sizz extends Mup {
 >Sizz : Sizz
+>     : ^^^^
 >Mup : Mup<any, any>
+>    : ^^^^^^^^^^^^^
 
     // ok, because Mup is an interface
     get size() { return 0 }
 >size : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 }
 class Kasizz extends Mup {
 >Kasizz : Kasizz
+>       : ^^^^^^
 >Mup : Mup<any, any>
+>    : ^^^^^^^^^^^^^
 
     size = -1
 >size : number
+>     : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 }
 

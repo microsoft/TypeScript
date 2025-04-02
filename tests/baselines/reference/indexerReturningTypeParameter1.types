@@ -1,36 +1,55 @@
-=== tests/cases/compiler/indexerReturningTypeParameter1.ts ===
+//// [tests/cases/compiler/indexerReturningTypeParameter1.ts] ////
+
+=== indexerReturningTypeParameter1.ts ===
 interface f {
     groupBy<T>(): { [key: string]: T[]; };
 >groupBy : <T>() => { [key: string]: T[]; }
+>        : ^ ^^^^^^^                       
 >key : string
+>    : ^^^^^^
 }
 var a: f;
 >a : f
+>  : ^
 
 var r = a.groupBy();
 >r : { [key: string]: unknown[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.groupBy() : { [key: string]: unknown[]; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.groupBy : <T>() => { [key: string]: T[]; }
+>          : ^ ^^^^^^^                       
 >a : f
+>  : ^
 >groupBy : <T>() => { [key: string]: T[]; }
+>        : ^ ^^^^^^^                       
 
 class c {
 >c : c
+>  : ^
 
     groupBy<T>(): { [key: string]: T[]; } {
 >groupBy : <T>() => { [key: string]: T[]; }
+>        : ^ ^^^^^^^                       
 >key : string
+>    : ^^^^^^
 
         return null;
     }
 }
 var a2: c;
 >a2 : c
+>   : ^
 
 var r2 = a2.groupBy();
 >r2 : { [key: string]: unknown[]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a2.groupBy() : { [key: string]: unknown[]; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a2.groupBy : <T>() => { [key: string]: T[]; }
+>           : ^ ^^^^^^^                       
 >a2 : c
+>   : ^
 >groupBy : <T>() => { [key: string]: T[]; }
+>        : ^ ^^^^^^^                       
 

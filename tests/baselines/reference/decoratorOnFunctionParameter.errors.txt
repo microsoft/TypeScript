@@ -1,8 +1,8 @@
-tests/cases/conformance/decorators/invalid/decoratorOnFunctionParameter.ts(5,17): error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
-tests/cases/conformance/decorators/invalid/decoratorOnFunctionParameter.ts(6,17): error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
+decoratorOnFunctionParameter.ts(5,17): error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
+decoratorOnFunctionParameter.ts(6,17): error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
 
 
-==== tests/cases/conformance/decorators/invalid/decoratorOnFunctionParameter.ts (2 errors) ====
+==== decoratorOnFunctionParameter.ts (2 errors) ====
     declare const dec: any;
     
     class C { n = true; }

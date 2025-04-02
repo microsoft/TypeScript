@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/github20832.js ===
+//// [tests/cases/conformance/jsdoc/typedefTagTypeResolution.ts] ////
+
+=== github20832.js ===
 // #20832
 /** @typedef {U} T - should be "error, can't find type named 'U' */
 /**
@@ -7,17 +9,22 @@
  * @return {T}
  */
 function f(x) {
->f : <U>(x: U) => U
+>f : <U>(x: U) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >x : U
+>  : ^
 
     return x;
 >x : U
+>  : ^
 }
 
 /** @type T - should be fine, since T will be any */
 const x = 3;
 >x : U
+>  : ^
 >3 : 3
+>  : ^
 
 /**
  * @callback Cb
@@ -29,12 +36,17 @@ const x = 3;
  */
 function g(vvvvv) {
 >g : <V>(vvvvv: V) => void
+>  : ^ ^^     ^^ ^^^^^^^^^
 >vvvvv : V
+>      : ^
 }
 
 /** @type {Cb} */
 const cb = x => {}
 >cb : Cb
+>   : ^^
 >x => {} : (x: V) => any
+>        : ^ ^^^^^^^^^^^
 >x : V
+>  : ^
 

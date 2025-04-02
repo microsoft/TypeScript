@@ -5,6 +5,7 @@ export {};
 //// [main.ts]
 import "test"
 
+
 //// [outputfile.js]
 define("test", ["require", "exports"], function (require, exports) {
     "use strict";

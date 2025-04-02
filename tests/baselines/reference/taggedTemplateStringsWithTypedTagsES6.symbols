@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTagsES6.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTagsES6.ts] ////
+
+=== taggedTemplateStringsWithTypedTagsES6.ts ===
 interface I {
 >I : Symbol(I, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 0, 0))
 

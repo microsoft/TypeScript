@@ -1,7 +1,11 @@
-=== tests/cases/compiler/enumWithQuotedElementName2.ts ===
+//// [tests/cases/compiler/enumWithQuotedElementName2.ts] ////
+
+=== enumWithQuotedElementName2.ts ===
 enum E {
 >E : E
+>  : ^
 
    "fo'o",
 >"fo'o" : (typeof E)["fo'o"]
+>       : ^^^^^^^^^^^^^^^^^^
 }

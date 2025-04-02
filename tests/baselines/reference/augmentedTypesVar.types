@@ -1,78 +1,114 @@
-=== tests/cases/compiler/augmentedTypesVar.ts ===
+//// [tests/cases/compiler/augmentedTypesVar.ts] ////
+
+=== augmentedTypesVar.ts ===
 // var then var
 var x1 = 1;
 >x1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 var x1 = 2;
 >x1 : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
 // var then function
 var x2 = 1; // error
 >x2 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 function x2() { } // error
 >x2 : () => void
+>   : ^^^^^^^^^^
 
 var x3 = 1; 
 >x3 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 var x3 = () => { } // error
 >x3 : number
+>   : ^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 // var then class
 var x4 = 1; // error
 >x4 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 class x4 { } // error
 >x4 : x4
+>   : ^^
 
 var x4a = 1; // error
 >x4a : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 class x4a { public foo() { } } // error
 >x4a : x4a
+>    : ^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 // var then enum
 var x5 = 1;
 >x5 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 enum x5 { One } // error
 >x5 : x5
+>   : ^^
 >One : x5.One
+>    : ^^^^^^
 
 // var then module
 var x6 = 1;
 >x6 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 module x6 { } // ok since non-instantiated
 
 var x6a = 1; // error
 >x6a : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 module x6a { var y = 2; } // error since instantiated
 >x6a : typeof x6a
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 var x6b = 1; // error
 >x6b : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 module x6b { export var y = 2; } // error
 >x6b : typeof x6b
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 // var then import, messes with other error reporting
 //var x7 = 1;

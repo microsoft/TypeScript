@@ -1,138 +1,219 @@
-=== tests/cases/compiler/mod.ts ===
+//// [tests/cases/compiler/esModuleInteropDefaultImports.ts] ////
+
+=== mod.ts ===
 declare function fun(): void;
 >fun : () => void
+>    : ^^^^^^    
 
 export default fun;
 >fun : () => void
+>    : ^^^^^^    
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import mod = require("./mod");
 >mod : typeof mod
+>    : ^^^^^^^^^^
 
 export = mod;
 >mod : typeof mod
+>    : ^^^^^^^^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 import { default as b } from "./a";
 >default : typeof a
+>        : ^^^^^^^^
 >b : typeof a
+>  : ^^^^^^^^
 
 import c, { default as d } from "./a";
 >c : typeof a
+>  : ^^^^^^^^
 >default : typeof a
+>        : ^^^^^^^^
 >d : typeof a
+>  : ^^^^^^^^
 
 import * as self from "./b";
 >self : typeof self
+>     : ^^^^^^^^^^^
 
 export { default } from "./a";
 >default : typeof a
+>        : ^^^^^^^^
 
 export { default as def } from "./a";
 >default : typeof a
+>        : ^^^^^^^^
 >def : typeof a
+>    : ^^^^^^^^
 
 a === b;
 >a === b : boolean
+>        : ^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >b : typeof a
+>  : ^^^^^^^^
 
 b === c;
 >b === c : boolean
+>        : ^^^^^^^
 >b : typeof a
+>  : ^^^^^^^^
 >c : typeof a
+>  : ^^^^^^^^
 
 c === d;
 >c === d : boolean
+>        : ^^^^^^^
 >c : typeof a
+>  : ^^^^^^^^
 >d : typeof a
+>  : ^^^^^^^^
 
 d === self.default;
 >d === self.default : boolean
+>                   : ^^^^^^^
 >d : typeof a
+>  : ^^^^^^^^
 >self.default : typeof a
+>             : ^^^^^^^^
 >self : typeof self
+>     : ^^^^^^^^^^^
 >default : typeof a
+>        : ^^^^^^^^
 
 self.default === self.def;
 >self.default === self.def : boolean
+>                          : ^^^^^^^
 >self.default : typeof a
+>             : ^^^^^^^^
 >self : typeof self
+>     : ^^^^^^^^^^^
 >default : typeof a
+>        : ^^^^^^^^
 >self.def : typeof a
+>         : ^^^^^^^^
 >self : typeof self
+>     : ^^^^^^^^^^^
 >def : typeof a
+>    : ^^^^^^^^
 
 // should all fail
 a();
 >a() : any
+>    : ^^^
 >a : typeof a
+>  : ^^^^^^^^
 
 b();
 >b() : any
+>    : ^^^
 >b : typeof a
+>  : ^^^^^^^^
 
 c();
 >c() : any
+>    : ^^^
 >c : typeof a
+>  : ^^^^^^^^
 
 d();
 >d() : any
+>    : ^^^
 >d : typeof a
+>  : ^^^^^^^^
 
 self.default();
 >self.default() : any
+>               : ^^^
 >self.default : typeof a
+>             : ^^^^^^^^
 >self : typeof self
+>     : ^^^^^^^^^^^
 >default : typeof a
+>        : ^^^^^^^^
 
 self.def();
 >self.def() : any
+>           : ^^^
 >self.def : typeof a
+>         : ^^^^^^^^
 >self : typeof self
+>     : ^^^^^^^^^^^
 >def : typeof a
+>    : ^^^^^^^^
 
 // should all work
 a.default();
 >a.default() : void
+>            : ^^^^
 >a.default : () => void
+>          : ^^^^^^    
 >a : typeof a
+>  : ^^^^^^^^
 >default : () => void
+>        : ^^^^^^    
 
 b.default();
 >b.default() : void
+>            : ^^^^
 >b.default : () => void
+>          : ^^^^^^    
 >b : typeof a
+>  : ^^^^^^^^
 >default : () => void
+>        : ^^^^^^    
 
 c.default();
 >c.default() : void
+>            : ^^^^
 >c.default : () => void
+>          : ^^^^^^    
 >c : typeof a
+>  : ^^^^^^^^
 >default : () => void
+>        : ^^^^^^    
 
 d.default();
 >d.default() : void
+>            : ^^^^
 >d.default : () => void
+>          : ^^^^^^    
 >d : typeof a
+>  : ^^^^^^^^
 >default : () => void
+>        : ^^^^^^    
 
 self.default.default();
 >self.default.default() : void
+>                       : ^^^^
 >self.default.default : () => void
+>                     : ^^^^^^    
 >self.default : typeof a
+>             : ^^^^^^^^
 >self : typeof self
+>     : ^^^^^^^^^^^
 >default : typeof a
+>        : ^^^^^^^^
 >default : () => void
+>        : ^^^^^^    
 
 self.def.default();
 >self.def.default() : void
+>                   : ^^^^
 >self.def.default : () => void
+>                 : ^^^^^^    
 >self.def : typeof a
+>         : ^^^^^^^^
 >self : typeof self
+>     : ^^^^^^^^^^^
 >def : typeof a
+>    : ^^^^^^^^
 >default : () => void
+>        : ^^^^^^    
 

@@ -1,10 +1,10 @@
-tests/cases/conformance/async/es2017/await_incorrectThisType.ts(40,1): error TS2684: The 'this' context of type 'EPromise<number, string>' is not assignable to method's 'this' of type 'EPromise<never, string>'.
+await_incorrectThisType.ts(40,1): error TS2684: The 'this' context of type 'EPromise<number, string>' is not assignable to method's 'this' of type 'EPromise<never, string>'.
   Type 'number' is not assignable to type 'never'.
-tests/cases/conformance/async/es2017/await_incorrectThisType.ts(43,5): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+await_incorrectThisType.ts(43,5): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
   The 'this' context of type 'EPromise<number, string>' is not assignable to method's 'this' of type 'EPromise<never, string>'.
 
 
-==== tests/cases/conformance/async/es2017/await_incorrectThisType.ts (2 errors) ====
+==== await_incorrectThisType.ts (2 errors) ====
     // https://github.com/microsoft/TypeScript/issues/47711
     type Either<E, A> = Left<E> | Right<A>;
     type Left<E> = { tag: 'Left', e: E };

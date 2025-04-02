@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-1.ts] ////
+
 //// [privateNamesInNestedClasses-1.ts]
 class A {
    #foo = "A's #foo";

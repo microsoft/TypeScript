@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxNestedWithinTernaryParsesCorrectly.tsx ===
+//// [tests/cases/compiler/jsxNestedWithinTernaryParsesCorrectly.tsx] ////
+
+=== jsxNestedWithinTernaryParsesCorrectly.tsx ===
 const emptyMessage = null as any;
 >emptyMessage : any
 >null as any : any
@@ -10,10 +12,12 @@ const a = (
     <div>
 ><div>      {0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      )}    </div> : error
 >div : any
+>    : ^^^
 
       {0 ? (
->0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      ) : any
+>0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      ) : error
 >0 : 0
+>  : ^
 >(        emptyMessage // must be identifier?      ) : any
 
         emptyMessage // must be identifier?
@@ -26,16 +30,21 @@ const a = (
         <span>
 ><span>          {0}{0}        </span> : error
 >span : any
+>     : ^^^
 
           {0}{0}
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
         </span>
 >span : any
+>     : ^^^
 
       )}
     </div>
 >div : any
+>    : ^^^
 
 );

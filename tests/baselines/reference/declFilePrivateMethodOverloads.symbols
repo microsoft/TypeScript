@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFilePrivateMethodOverloads.ts ===
+//// [tests/cases/compiler/declFilePrivateMethodOverloads.ts] ////
+
+=== declFilePrivateMethodOverloads.ts ===
 interface IContext {
 >IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
 

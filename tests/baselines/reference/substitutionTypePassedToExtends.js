@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substitutionTypePassedToExtends.ts] ////
+
 //// [substitutionTypePassedToExtends.ts]
 type Foo1<A,B> = [A, B] extends unknown[][] ? Bar1<[A, B]> : 'else'
 type Bar1<T extends unknown[][]> = T

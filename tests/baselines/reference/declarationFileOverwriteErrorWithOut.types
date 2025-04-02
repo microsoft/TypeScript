@@ -1,10 +1,14 @@
-=== tests/cases/compiler/out.d.ts ===
+//// [tests/cases/compiler/declarationFileOverwriteErrorWithOut.ts] ////
+
+=== /out.d.ts ===
 declare class c {
 >c : c
+>  : ^
 }
 
-=== tests/cases/compiler/a.ts ===
+=== /a.ts ===
 class d {
 >d : d
+>  : ^
 }
 

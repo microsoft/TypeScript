@@ -1,18 +1,20 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/moduleLocalImportNotIncorrectlyRedirected.ts] ////
+
+=== index.ts ===
 import { ISpinButton } from "troublesome-lib";
 >ISpinButton : Symbol(ISpinButton, Decl(index.ts, 0, 8))
 
-=== tests/cases/compiler/node_modules/troublesome-lib/lib/index.d.ts ===
+=== node_modules/troublesome-lib/lib/index.d.ts ===
 import { Position } from './utilities/positioning';
 >Position : Symbol(Position, Decl(index.d.ts, 0, 8))
 
 export interface ISpinButton {}
 >ISpinButton : Symbol(ISpinButton, Decl(index.d.ts, 0, 51))
 
-=== tests/cases/compiler/node_modules/troublesome-lib/lib/utilities/positioning.d.ts ===
+=== node_modules/troublesome-lib/lib/utilities/positioning.d.ts ===
 
 export * from './positioning/index';
-=== tests/cases/compiler/node_modules/troublesome-lib/lib/utilities/positioning/index.d.ts ===
+=== node_modules/troublesome-lib/lib/utilities/positioning/index.d.ts ===
 export declare enum Position {
 >Position : Symbol(Position, Decl(index.d.ts, 0, 0))
 

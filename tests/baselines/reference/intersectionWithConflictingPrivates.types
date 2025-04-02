@@ -1,128 +1,194 @@
-=== tests/cases/compiler/intersectionWithConflictingPrivates.ts ===
+//// [tests/cases/compiler/intersectionWithConflictingPrivates.ts] ////
+
+=== intersectionWithConflictingPrivates.ts ===
 class A { private x: unknown; y?: string; }
 >A : A
+>  : ^
 >x : unknown
+>  : ^^^^^^^
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 class B { private x: unknown; y?: string; }
 >B : B
+>  : ^
 >x : unknown
+>  : ^^^^^^^
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let ab: A & B;
 >ab : never
+>   : ^^^^^
 
 ab.y = 'hello';
 >ab.y = 'hello' : "hello"
+>               : ^^^^^^^
 >ab.y : any
+>     : ^^^
 >ab : never
+>   : ^^^^^
 >y : any
+>  : ^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 
 ab = {};
 >ab = {} : {}
+>        : ^^
 >ab : never
+>   : ^^^^^
 >{} : {}
+>   : ^^
 
 function f1(node: A | B) {
 >f1 : (node: A | B) => void
+>   : ^    ^^     ^^^^^^^^^
 >node : A | B
+>     : ^^^^^
 
   if (node instanceof A || node instanceof A) {
 >node instanceof A || node instanceof A : boolean
+>                                       : ^^^^^^^
 >node instanceof A : boolean
+>                  : ^^^^^^^
 >node : A | B
+>     : ^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >node instanceof A : boolean
+>                  : ^^^^^^^
 >node : B
+>     : ^
 >A : typeof A
+>  : ^^^^^^^^
 
     node;  // A
 >node : A
+>     : ^
   }
   else {
     node;  // B
 >node : B
+>     : ^
   }
   node;  // A | B
 >node : A | B
+>     : ^^^^^
 }
 
 // Repro from #37659
 
 abstract class ViewNode { }
 >ViewNode : ViewNode
+>         : ^^^^^^^^
 
 abstract class ViewRefNode extends ViewNode { }
 >ViewRefNode : ViewRefNode
+>            : ^^^^^^^^^^^
 >ViewNode : ViewNode
+>         : ^^^^^^^^
 
 abstract class ViewRefFileNode extends ViewRefNode { }
 >ViewRefFileNode : ViewRefFileNode
+>                : ^^^^^^^^^^^^^^^
 >ViewRefNode : ViewRefNode
+>            : ^^^^^^^^^^^
 
 class CommitFileNode extends ViewRefFileNode {
 >CommitFileNode : CommitFileNode
+>               : ^^^^^^^^^^^^^^
 >ViewRefFileNode : ViewRefFileNode
+>                : ^^^^^^^^^^^^^^^
 
   private _id: any;
 >_id : any
+>    : ^^^
 }
 
 class ResultsFileNode extends ViewRefFileNode {
 >ResultsFileNode : ResultsFileNode
+>                : ^^^^^^^^^^^^^^^
 >ViewRefFileNode : ViewRefFileNode
+>                : ^^^^^^^^^^^^^^^
 
   private _id: any;
 >_id : any
+>    : ^^^
 }
 
 class StashFileNode extends CommitFileNode { 
 >StashFileNode : StashFileNode
+>              : ^^^^^^^^^^^^^
 >CommitFileNode : CommitFileNode
+>               : ^^^^^^^^^^^^^^
 
   private _id2: any;
 >_id2 : any
+>     : ^^^
 }
 
 class StatusFileNode extends ViewNode {
 >StatusFileNode : StatusFileNode
+>               : ^^^^^^^^^^^^^^
 >ViewNode : ViewNode
+>         : ^^^^^^^^
 
   private _id: any;
 >_id : any
+>    : ^^^
 }
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   private async foo(node: CommitFileNode | ResultsFileNode | StashFileNode) {
 >foo : (node: CommitFileNode | ResultsFileNode | StashFileNode) => Promise<void>
+>    : ^    ^^                                                ^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode | StashFileNode
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 		if (
 			!(node instanceof CommitFileNode) &&
 >!(node instanceof CommitFileNode) &&			!(node instanceof StashFileNode) &&			!(node instanceof ResultsFileNode) : boolean
+>                                                                                                                : ^^^^^^^
 >!(node instanceof CommitFileNode) &&			!(node instanceof StashFileNode) : boolean
+>                                                                        : ^^^^^^^
 >!(node instanceof CommitFileNode) : boolean
+>                                  : ^^^^^^^
 >(node instanceof CommitFileNode) : boolean
+>                                 : ^^^^^^^
 >node instanceof CommitFileNode : boolean
+>                               : ^^^^^^^
 >node : CommitFileNode | ResultsFileNode | StashFileNode
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >CommitFileNode : typeof CommitFileNode
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
 			!(node instanceof StashFileNode) &&
 >!(node instanceof StashFileNode) : boolean
+>                                 : ^^^^^^^
 >(node instanceof StashFileNode) : boolean
+>                                : ^^^^^^^
 >node instanceof StashFileNode : boolean
+>                              : ^^^^^^^
 >node : ResultsFileNode
+>     : ^^^^^^^^^^^^^^^
 >StashFileNode : typeof StashFileNode
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 			!(node instanceof ResultsFileNode)
 >!(node instanceof ResultsFileNode) : boolean
+>                                   : ^^^^^^^
 >(node instanceof ResultsFileNode) : boolean
+>                                  : ^^^^^^^
 >node instanceof ResultsFileNode : boolean
+>                                : ^^^^^^^
 >node : ResultsFileNode
+>     : ^^^^^^^^^^^^^^^
 >ResultsFileNode : typeof ResultsFileNode
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
 		) {
 			return;
@@ -130,24 +196,38 @@ class Foo {
 
 		await this.bar(node);
 >await this.bar(node) : undefined
+>                     : ^^^^^^^^^
 >this.bar(node) : Promise<undefined>
->this.bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
+>               : ^^^^^^^^^^^^^^^^^^
+>this.bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
+>         : ^    ^^                                                                 ^^       ^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
->bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
+>     : ^^^^
+>bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
+>    : ^    ^^                                                                 ^^       ^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	}
 
   private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
 >bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
+>    : ^    ^^                                                                 ^^       ^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : {} | undefined
+>        : ^^^^^^^^^^^^^^
 
     return Promise.resolve(undefined);
 >Promise.resolve(undefined) : Promise<undefined>
+>                           : ^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
   }
 }
 

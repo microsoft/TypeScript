@@ -1,69 +1,116 @@
-=== tests/cases/compiler/moduleExportsUnaryExpression.ts ===
+//// [tests/cases/compiler/moduleExportsUnaryExpression.ts] ////
+
+=== moduleExportsUnaryExpression.ts ===
 let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 export function foo(y: number) {
 >foo : (y: number) => boolean
+>    : ^ ^^      ^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 
     if (y <= x++) return y <= x++;
 >y <= x++ : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y <= x++ : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     if (y <= x--) return y <= x--;
 >y <= x-- : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >x-- : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y <= x-- : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >x-- : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     if (y <= ++x) return y <= ++x;
 >y <= ++x : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >++x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y <= ++x : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >++x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     if (y <= --x) return y <= --x;
 >y <= --x : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >--x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y <= --x : boolean
+>         : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >--x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     x++;
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     x--;
 >x-- : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     ++x;
 >++x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     --x;
 >--x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 export { x };
 >x : number
+>  : ^^^^^^
 

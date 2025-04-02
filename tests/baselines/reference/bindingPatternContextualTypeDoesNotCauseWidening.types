@@ -1,29 +1,53 @@
-=== tests/cases/compiler/bindingPatternContextualTypeDoesNotCauseWidening.ts ===
+//// [tests/cases/compiler/bindingPatternContextualTypeDoesNotCauseWidening.ts] ////
+
+=== bindingPatternContextualTypeDoesNotCauseWidening.ts ===
 declare function pick<O, T extends keyof O>(keys: T[], obj?: O): Pick<O, T>;
 >pick : <O, T extends keyof O>(keys: T[], obj?: O) => Pick<O, T>
+>     : ^ ^^ ^^^^^^^^^       ^^    ^^   ^^   ^^^ ^^^^^          
 >keys : T[]
+>     : ^^^
 >obj : O
+>    : ^
 
 const _    = pick(['b'], { a: 'a', b: 'b' }); // T: "b"
 >_ : Pick<{ a: string; b: string; }, "b">
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick(['b'], { a: 'a', b: 'b' }) : Pick<{ a: string; b: string; }, "b">
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick : <O, T extends keyof O>(keys: T[], obj?: O) => Pick<O, T>
+>     : ^ ^^ ^^^^^^^^^       ^^    ^^   ^^   ^^^ ^^^^^          
 >['b'] : "b"[]
+>      : ^^^^^
 >'b' : "b"
+>    : ^^^
 >{ a: 'a', b: 'b' } : { a: string; b: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 >b : string
+>  : ^^^^^^
 >'b' : "b"
+>    : ^^^
 
 const {  } = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)
 >pick(['b'], { a: 'a', b: 'b' }) : Pick<{ a: string; b: string; }, "b">
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick : <O, T extends keyof O>(keys: T[], obj?: O) => Pick<O, T>
+>     : ^ ^^ ^^^^^^^^^       ^^    ^^   ^^   ^^^ ^^^^^          
 >['b'] : "b"[]
+>      : ^^^^^
 >'b' : "b"
+>    : ^^^
 >{ a: 'a', b: 'b' } : { a: string; b: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 >b : string
+>  : ^^^^^^
 >'b' : "b"
+>    : ^^^
 

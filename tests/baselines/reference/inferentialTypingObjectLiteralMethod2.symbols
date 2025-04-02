@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferentialTypingObjectLiteralMethod2.ts ===
+//// [tests/cases/compiler/inferentialTypingObjectLiteralMethod2.ts] ////
+
+=== inferentialTypingObjectLiteralMethod2.ts ===
 interface Int<T, U> {
 >Int : Symbol(Int, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 0))
 >T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod2.ts, 0, 14))

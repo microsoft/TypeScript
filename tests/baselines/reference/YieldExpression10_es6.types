@@ -1,13 +1,21 @@
-=== tests/cases/conformance/es6/yieldExpressions/YieldExpression10_es6.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression10_es6.ts] ////
+
+=== YieldExpression10_es6.ts ===
 var v = { * foo() {
 >v : { foo(): Generator<any, void, unknown>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ * foo() {    yield(foo);  }} : { foo(): Generator<any, void, unknown>; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => Generator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield(foo);
 >yield(foo) : any
+>           : ^^^
 >(foo) : any
+>      : ^^^
 >foo : any
+>    : ^^^
   }
 }
 

@@ -1,46 +1,71 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty3.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface IUser {
     Name: string;
 >Name : string
+>     : ^^^^^^
 }
 
 interface IFetchUserProps {
     children: (user: IUser) => JSX.Element;
 >children : (user: IUser) => JSX.Element
+>         : ^    ^^     ^^^^^           
 >user : IUser
+>     : ^^^^^
 >JSX : any
+>    : ^^^
 }
 
 class FetchUser extends React.Component<IFetchUserProps, any> {
 >FetchUser : FetchUser
+>          : ^^^^^^^^^
 >React.Component : React.Component<IFetchUserProps, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return this.state
 >this.state            ? this.props.children(this.state.result)            : null : JSX.Element
+>                                                                                 : ^^^^^^^^^^^
 >this.state : any
 >this : this
+>     : ^^^^
 >state : any
+>      : ^^^
 
             ? this.props.children(this.state.result)
 >this.props.children(this.state.result) : JSX.Element
+>                                       : ^^^^^^^^^^^
 >this.props.children : ((user: IUser) => JSX.Element) & React.ReactNode
+>                    : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^
 >this.props : IFetchUserProps & { children?: React.ReactNode; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : IFetchUserProps & { children?: React.ReactNode; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >children : ((user: IUser) => JSX.Element) & React.ReactNode
+>         : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^
 >this.state.result : any
 >this.state : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >state : any
+>      : ^^^
 >result : any
+>       : ^^^
 
             : null;
     }
@@ -49,60 +74,88 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 // Ok
 function UserName0() {
 >UserName0 : () => JSX.Element
+>          : ^^^^^^^^^^^^^^^^^
 
     return (
 >(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : JSX.Element
+>                                                                                                                          : ^^^^^^^^^^^
 
         <FetchUser>
 ><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : JSX.Element
+>                                                                                                            : ^^^^^^^^^^^
 >FetchUser : typeof FetchUser
+>          : ^^^^^^^^^^^^^^^^
 
             { user => (
 >user => (                <h1>{ user.Name }</h1>            ) : (user: IUser) => JSX.Element
+>                                                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^
 >user : IUser
+>     : ^^^^^
 >(                <h1>{ user.Name }</h1>            ) : JSX.Element
+>                                                     : ^^^^^^^^^^^
 
                 <h1>{ user.Name }</h1>
 ><h1>{ user.Name }</h1> : JSX.Element
+>                       : ^^^^^^^^^^^
 >h1 : any
+>   : ^^^
 >user.Name : string
+>          : ^^^^^^
 >user : IUser
+>     : ^^^^^
 >Name : string
+>     : ^^^^^^
 >h1 : any
+>   : ^^^
 
             ) }
         </FetchUser>
 >FetchUser : typeof FetchUser
+>          : ^^^^^^^^^^^^^^^^
 
     );
 }
 
 function UserName1() {
 >UserName1 : () => JSX.Element
+>          : ^^^^^^^^^^^^^^^^^
 
     return (
 >(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : JSX.Element
+>                                                                                                                          : ^^^^^^^^^^^
 
         <FetchUser>
 ><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : JSX.Element
+>                                                                                                            : ^^^^^^^^^^^
 >FetchUser : typeof FetchUser
+>          : ^^^^^^^^^^^^^^^^
 
             { user => (
 >user => (                <h1>{ user.Name }</h1>            ) : (user: IUser) => JSX.Element
+>                                                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^
 >user : IUser
+>     : ^^^^^
 >(                <h1>{ user.Name }</h1>            ) : JSX.Element
+>                                                     : ^^^^^^^^^^^
 
                 <h1>{ user.Name }</h1>
 ><h1>{ user.Name }</h1> : JSX.Element
+>                       : ^^^^^^^^^^^
 >h1 : any
+>   : ^^^
 >user.Name : string
+>          : ^^^^^^
 >user : IUser
+>     : ^^^^^
 >Name : string
+>     : ^^^^^^
 >h1 : any
+>   : ^^^
 
             ) }
         </FetchUser>
 >FetchUser : typeof FetchUser
+>          : ^^^^^^^^^^^^^^^^
 
     );
 }

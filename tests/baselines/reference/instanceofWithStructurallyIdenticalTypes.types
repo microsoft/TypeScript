@@ -1,189 +1,289 @@
-=== tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts ===
+//// [tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts] ////
+
+=== instanceofWithStructurallyIdenticalTypes.ts ===
 // Repro from #7271
 
 class C1 { item: string }
 >C1 : C1
+>   : ^^
 >item : string
+>     : ^^^^^^
 
 class C2 { item: string[] }
 >C2 : C2
+>   : ^^
 >item : string[]
+>     : ^^^^^^^^
 
 class C3 { item: string }
 >C3 : C3
+>   : ^^
 >item : string
+>     : ^^^^^^
 
 function foo1(x: C1 | C2 | C3): string {
 >foo1 : (x: C1 | C2 | C3) => string
+>     : ^ ^^            ^^^^^      
 >x : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 
     if (x instanceof C1) {
 >x instanceof C1 : boolean
+>                : ^^^^^^^
 >x : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
         return x.item;
 >x.item : string
+>       : ^^^^^^
 >x : C1
+>  : ^^
 >item : string
+>     : ^^^^^^
     }
     else if (x instanceof C2) {
 >x instanceof C2 : boolean
+>                : ^^^^^^^
 >x : C2 | C3
+>  : ^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
         return x.item[0];
 >x.item[0] : string
+>          : ^^^^^^
 >x.item : string[]
+>       : ^^^^^^^^
 >x : C2
+>  : ^^
 >item : string[]
+>     : ^^^^^^^^
 >0 : 0
+>  : ^
     }
     else if (x instanceof C3) {
 >x instanceof C3 : boolean
+>                : ^^^^^^^
 >x : C3
+>  : ^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
         return x.item;
 >x.item : string
+>       : ^^^^^^
 >x : C3
+>  : ^^
 >item : string
+>     : ^^^^^^
     }
     return "error";
 >"error" : "error"
+>        : ^^^^^^^
 }
 
 function isC1(c: C1 | C2 | C3): c is C1 { return c instanceof C1 }
 >isC1 : (c: C1 | C2 | C3) => c is C1
+>     : ^ ^^            ^^^^^       
 >c : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 >c instanceof C1 : boolean
+>                : ^^^^^^^
 >c : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
 function isC2(c: C1 | C2 | C3): c is C2 { return c instanceof C2 }
 >isC2 : (c: C1 | C2 | C3) => c is C2
+>     : ^ ^^            ^^^^^       
 >c : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 >c instanceof C2 : boolean
+>                : ^^^^^^^
 >c : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 function isC3(c: C1 | C2 | C3): c is C3 { return c instanceof C3 }
 >isC3 : (c: C1 | C2 | C3) => c is C3
+>     : ^ ^^            ^^^^^       
 >c : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 >c instanceof C3 : boolean
+>                : ^^^^^^^
 >c : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
 function foo2(x: C1 | C2 | C3): string {
 >foo2 : (x: C1 | C2 | C3) => string
+>     : ^ ^^            ^^^^^      
 >x : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 
     if (isC1(x)) {
 >isC1(x) : boolean
+>        : ^^^^^^^
 >isC1 : (c: C1 | C2 | C3) => c is C1
+>     : ^ ^^            ^^^^^       
 >x : C1 | C2 | C3
+>  : ^^^^^^^^^^^^
 
         return x.item;
 >x.item : string
+>       : ^^^^^^
 >x : C1 | C3
+>  : ^^^^^^^
 >item : string
+>     : ^^^^^^
     }
     else if (isC2(x)) {
 >isC2(x) : boolean
+>        : ^^^^^^^
 >isC2 : (c: C1 | C2 | C3) => c is C2
+>     : ^ ^^            ^^^^^       
 >x : C2
+>  : ^^
 
         return x.item[0];
 >x.item[0] : string
+>          : ^^^^^^
 >x.item : string[]
+>       : ^^^^^^^^
 >x : C2
+>  : ^^
 >item : string[]
+>     : ^^^^^^^^
 >0 : 0
+>  : ^
     }
     else if (isC3(x)) {
 >isC3(x) : boolean
+>        : ^^^^^^^
 >isC3 : (c: C1 | C2 | C3) => c is C3
+>     : ^ ^^            ^^^^^       
 >x : never
+>  : ^^^^^
 
         return x.item;
 >x.item : any
+>       : ^^^
 >x : never
+>  : ^^^^^
 >item : any
+>     : ^^^
     }
     return "error";
 >"error" : "error"
+>        : ^^^^^^^
 }
 
 // More tests
 
 class A { a: string }
 >A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 class A1 extends A { }
 >A1 : A1
+>   : ^^
 >A : A
+>  : ^
 
 class A2 { a: string }
 >A2 : A2
+>   : ^^
 >a : string
+>  : ^^^^^^
 
 class B extends A { b: string }
 >B : B
+>  : ^
 >A : A
+>  : ^
 >b : string
+>  : ^^^^^^
 
 function goo(x: A) {
 >goo : (x: A) => void
+>    : ^ ^^ ^^^^^^^^^
 >x : A
+>  : ^
 
     if (x instanceof A) {
 >x instanceof A : boolean
+>               : ^^^^^^^
 >x : A
+>  : ^
 >A : typeof A
+>  : ^^^^^^^^
 
         x;  // A
 >x : A
+>  : ^
     }
     else {
         x;  // never
 >x : never
+>  : ^^^^^
     }
     if (x instanceof A1) {
 >x instanceof A1 : boolean
+>                : ^^^^^^^
 >x : A
+>  : ^
 >A1 : typeof A1
+>   : ^^^^^^^^^
 
         x;  // A1
 >x : A1
+>  : ^^
     }
     else {
         x;  // A
 >x : A
+>  : ^
     }
     if (x instanceof A2) {
 >x instanceof A2 : boolean
+>                : ^^^^^^^
 >x : A
+>  : ^
 >A2 : typeof A2
+>   : ^^^^^^^^^
 
         x;  // A2
 >x : A2
+>  : ^^
     }
     else {
         x;  // A
 >x : A
+>  : ^
     }
     if (x instanceof B) {
 >x instanceof B : boolean
+>               : ^^^^^^^
 >x : A
+>  : ^
 >B : typeof B
+>  : ^^^^^^^^
 
         x;  // B
 >x : B
+>  : ^
     }
     else {
         x;  // A
 >x : A
+>  : ^
     }
 }
 

@@ -1,35 +1,65 @@
-=== tests/cases/compiler/forOfTransformsExpression.ts ===
+//// [tests/cases/compiler/forOfTransformsExpression.ts] ////
+
+=== forOfTransformsExpression.ts ===
 // https://github.com/Microsoft/TypeScript/issues/11024
 let items = [{ name: "A" }, { name: "C" }, { name: "B" }];
 >items : { name: string; }[]
+>      : ^^^^^^^^^^^^^^^^^^^
 >[{ name: "A" }, { name: "C" }, { name: "B" }] : { name: string; }[]
+>                                              : ^^^^^^^^^^^^^^^^^^^
 >{ name: "A" } : { name: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"A" : "A"
+>    : ^^^
 >{ name: "C" } : { name: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"C" : "C"
+>    : ^^^
 >{ name: "B" } : { name: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"B" : "B"
+>    : ^^^
 
 for (var item of items.sort((a, b) => a.name.localeCompare(b.name))) {
 >item : { name: string; }
+>     : ^^^^^^^^^^^^^^^^^
 >items.sort((a, b) => a.name.localeCompare(b.name)) : { name: string; }[]
+>                                                   : ^^^^^^^^^^^^^^^^^^^
 >items.sort : (compareFn?: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
+>           : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >items : { name: string; }[]
+>      : ^^^^^^^^^^^^^^^^^^^
 >sort : (compareFn?: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
+>     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >(a, b) => a.name.localeCompare(b.name) : (a: { name: string; }, b: { name: string; }) => number
+>                                       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { name: string; }
+>  : ^^^^^^^^^^^^^^^^^
 >b : { name: string; }
+>  : ^^^^^^^^^^^^^^^^^
 >a.name.localeCompare(b.name) : number
+>                             : ^^^^^^
 >a.name.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; }
+>                     : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^
 >a.name : string
+>       : ^^^^^^
 >a : { name: string; }
+>  : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; }
+>              : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^
 >b.name : string
+>       : ^^^^^^
 >b : { name: string; }
+>  : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 
 }

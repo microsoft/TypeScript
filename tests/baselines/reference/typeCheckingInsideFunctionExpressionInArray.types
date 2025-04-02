@@ -1,31 +1,51 @@
-=== tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts ===
+//// [tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts] ////
+
+=== typeCheckingInsideFunctionExpressionInArray.ts ===
 var functions = [function () {
 >functions : (() => void)[]
+>          : ^^^^^^^^^^^^^^
 >[function () {  var k: string = 10;    k = new Object();    [1, 2, 3].NonexistantMethod();    derp();}] : (() => void)[]
+>                                                                                                        : ^^^^^^^^^^^^^^
 >function () {  var k: string = 10;    k = new Object();    [1, 2, 3].NonexistantMethod();    derp();} : () => void
+>                                                                                                      : ^^^^^^^^^^
 
   var k: string = 10;
 >k : string
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     k = new Object();
 >k = new Object() : Object
+>                 : ^^^^^^
 >k : string
+>  : ^^^^^^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     [1, 2, 3].NonexistantMethod();
 >[1, 2, 3].NonexistantMethod() : any
+>                              : ^^^
 >[1, 2, 3].NonexistantMethod : any
+>                            : ^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >NonexistantMethod : any
+>                  : ^^^
 
     derp();
 >derp() : any
+>       : ^^^
 >derp : any
+>     : ^^^
 
 }];
 

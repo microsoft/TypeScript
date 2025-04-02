@@ -1,435 +1,702 @@
-=== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts ===
+//// [tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts] ////
+
+=== shorthandPropertyAssignmentsInDestructuring_ES6.ts ===
 (function() {
 >(function() {	var s0;	for ({ s0 = 5 } of [{ s0: 1 }]) {	}}) : () => void
+>                                                            : ^^^^^^^^^^
 >function() {	var s0;	for ({ s0 = 5 } of [{ s0: 1 }]) {	}} : () => void
+>                                                          : ^^^^^^^^^^
 
 	var s0;
 >s0 : any
+>   : ^^^
 
 	for ({ s0 = 5 } of [{ s0: 1 }]) {
 >{ s0 = 5 } : { s0?: any; }
+>           : ^^^^^^^^^^^^^
 >s0 : any
+>   : ^^^
 >5 : 5
+>  : ^
 >[{ s0: 1 }] : { s0: number; }[]
+>            : ^^^^^^^^^^^^^^^^^
 >{ s0: 1 } : { s0: number; }
+>          : ^^^^^^^^^^^^^^^
 >s0 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 	}
 });
 (function() {
 >(function() {	var s0;	for ({ s0:s0 = 5 } of [{ s0: 1 }]) {	}}) : () => void
+>                                                               : ^^^^^^^^^^
 >function() {	var s0;	for ({ s0:s0 = 5 } of [{ s0: 1 }]) {	}} : () => void
+>                                                             : ^^^^^^^^^^
 
 	var s0;
 >s0 : any
+>   : ^^^
 
 	for ({ s0:s0 = 5 } of [{ s0: 1 }]) {
 >{ s0:s0 = 5 } : { s0?: number; }
+>              : ^^^^^^^^^^^^^^^^
 >s0 : number
+>   : ^^^^^^
 >s0 = 5 : 5
+>       : ^
 >s0 : any
+>   : ^^^
 >5 : 5
+>  : ^
 >[{ s0: 1 }] : { s0: number; }[]
+>            : ^^^^^^^^^^^^^^^^^
 >{ s0: 1 } : { s0: number; }
+>          : ^^^^^^^^^^^^^^^
 >s0 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 	}
 });
 
 (function() {
 >(function() {	var s1;	for ({ s1 = 5 } of [{}]) {	}}) : () => void
+>                                                     : ^^^^^^^^^^
 >function() {	var s1;	for ({ s1 = 5 } of [{}]) {	}} : () => void
+>                                                   : ^^^^^^^^^^
 
 	var s1;
 >s1 : any
+>   : ^^^
 
 	for ({ s1 = 5 } of [{}]) {
 >{ s1 = 5 } : { s1?: any; }
+>           : ^^^^^^^^^^^^^
 >s1 : any
+>   : ^^^
 >5 : 5
+>  : ^
 >[{}] : {}[]
+>     : ^^^^
 >{} : {}
+>   : ^^
 	}
 });
 
 (function() {
 >(function() {	var s1;	for ({ s1:s1 = 5 } of [{}]) {	}}) : () => void
+>                                                        : ^^^^^^^^^^
 >function() {	var s1;	for ({ s1:s1 = 5 } of [{}]) {	}} : () => void
+>                                                      : ^^^^^^^^^^
 
 	var s1;
 >s1 : any
+>   : ^^^
 
 	for ({ s1:s1 = 5 } of [{}]) {
 >{ s1:s1 = 5 } : { s1?: number; }
+>              : ^^^^^^^^^^^^^^^^
 >s1 : number
+>   : ^^^^^^
 >s1 = 5 : 5
+>       : ^
 >s1 : any
+>   : ^^^
 >5 : 5
+>  : ^
 >[{}] : {}[]
+>     : ^^^^
 >{} : {}
+>   : ^^
 	}
 });
 
 (function() {
 >(function() {	var s2;	for ({ s2 = 5 } of [{ s2: "" }]) {	}}) : () => void
+>                                                             : ^^^^^^^^^^
 >function() {	var s2;	for ({ s2 = 5 } of [{ s2: "" }]) {	}} : () => void
+>                                                           : ^^^^^^^^^^
 
 	var s2;
 >s2 : any
+>   : ^^^
 
 	for ({ s2 = 5 } of [{ s2: "" }]) {
 >{ s2 = 5 } : { s2?: any; }
+>           : ^^^^^^^^^^^^^
 >s2 : any
+>   : ^^^
 >5 : 5
+>  : ^
 >[{ s2: "" }] : { s2: string; }[]
+>             : ^^^^^^^^^^^^^^^^^
 >{ s2: "" } : { s2: string; }
+>           : ^^^^^^^^^^^^^^^
 >s2 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 	}
 });
 
 (function() {
 >(function() {	var s2;	for ({ s2:s2 = 5 } of [{ s2: "" }]) {	}}) : () => void
+>                                                                : ^^^^^^^^^^
 >function() {	var s2;	for ({ s2:s2 = 5 } of [{ s2: "" }]) {	}} : () => void
+>                                                              : ^^^^^^^^^^
 
 	var s2;
 >s2 : any
+>   : ^^^
 
 	for ({ s2:s2 = 5 } of [{ s2: "" }]) {
 >{ s2:s2 = 5 } : { s2?: number; }
+>              : ^^^^^^^^^^^^^^^^
 >s2 : number
+>   : ^^^^^^
 >s2 = 5 : 5
+>       : ^
 >s2 : any
+>   : ^^^
 >5 : 5
+>  : ^
 >[{ s2: "" }] : { s2: string; }[]
+>             : ^^^^^^^^^^^^^^^^^
 >{ s2: "" } : { s2: string; }
+>           : ^^^^^^^^^^^^^^^
 >s2 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 	}
 });
 
 (function() {
 >(function() {	var s3: string;	for ({ s3 = 5 } of [{ s3: "" }]) {	}}) : () => void
+>                                                                     : ^^^^^^^^^^
 >function() {	var s3: string;	for ({ s3 = 5 } of [{ s3: "" }]) {	}} : () => void
+>                                                                   : ^^^^^^^^^^
 
 	var s3: string;
 >s3 : string
+>   : ^^^^^^
 
 	for ({ s3 = 5 } of [{ s3: "" }]) {
 >{ s3 = 5 } : { s3?: string; }
+>           : ^^^^^^^^^^^^^^^^
 >s3 : string
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >[{ s3: "" }] : { s3: string; }[]
+>             : ^^^^^^^^^^^^^^^^^
 >{ s3: "" } : { s3: string; }
+>           : ^^^^^^^^^^^^^^^
 >s3 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 	}
 });
 
 (function() {
 >(function() {	var s3: string;	for ({ s3:s3 = 5 } of [{ s3: "" }]) {	}}) : () => void
+>                                                                        : ^^^^^^^^^^
 >function() {	var s3: string;	for ({ s3:s3 = 5 } of [{ s3: "" }]) {	}} : () => void
+>                                                                      : ^^^^^^^^^^
 
 	var s3: string;
 >s3 : string
+>   : ^^^^^^
 
 	for ({ s3:s3 = 5 } of [{ s3: "" }]) {
 >{ s3:s3 = 5 } : { s3?: number; }
+>              : ^^^^^^^^^^^^^^^^
 >s3 : number
+>   : ^^^^^^
 >s3 = 5 : 5
+>       : ^
 >s3 : string
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >[{ s3: "" }] : { s3: string; }[]
+>             : ^^^^^^^^^^^^^^^^^
 >{ s3: "" } : { s3: string; }
+>           : ^^^^^^^^^^^^^^^
 >s3 : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 	}
 });
 
 (function() {
 >(function() {	let y;	({ y = 5 } = { y: 1 })}) : () => void
+>                                              : ^^^^^^^^^^
 >function() {	let y;	({ y = 5 } = { y: 1 })} : () => void
+>                                            : ^^^^^^^^^^
 
 	let y;
 >y : any
+>  : ^^^
 
 	({ y = 5 } = { y: 1 })
 >({ y = 5 } = { y: 1 }) : { y?: number; }
+>                       : ^^^^^^^^^^^^^^^
 >{ y = 5 } = { y: 1 } : { y?: number; }
+>                     : ^^^^^^^^^^^^^^^
 >{ y = 5 } : { y?: any; }
+>          : ^^^^^^^^^^^^
 >y : any
+>  : ^^^
 >5 : 5
+>  : ^
 >{ y: 1 } : { y?: number; }
+>         : ^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 });
 
 (function() {
 >(function() {	let y;	({ y:y = 5 } = { y: 1 })}) : () => void
+>                                                : ^^^^^^^^^^
 >function() {	let y;	({ y:y = 5 } = { y: 1 })} : () => void
+>                                              : ^^^^^^^^^^
 
 	let y;
 >y : any
+>  : ^^^
 
 	({ y:y = 5 } = { y: 1 })
 >({ y:y = 5 } = { y: 1 }) : { y?: number; }
+>                         : ^^^^^^^^^^^^^^^
 >{ y:y = 5 } = { y: 1 } : { y?: number; }
+>                       : ^^^^^^^^^^^^^^^
 >{ y:y = 5 } : { y?: number; }
+>            : ^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >y = 5 : 5
+>      : ^
 >y : any
+>  : ^^^
 >5 : 5
+>  : ^
 >{ y: 1 } : { y?: number; }
+>         : ^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 });
 
 (function() {
 >(function() {	let y0: number;	({ y0 = 5 } = { y0: 1 })}) : () => void
+>                                                         : ^^^^^^^^^^
 >function() {	let y0: number;	({ y0 = 5 } = { y0: 1 })} : () => void
+>                                                       : ^^^^^^^^^^
 
 	let y0: number;
 >y0 : number
+>   : ^^^^^^
 
 	({ y0 = 5 } = { y0: 1 })
 >({ y0 = 5 } = { y0: 1 }) : { y0?: number; }
+>                         : ^^^^^^^^^^^^^^^^
 >{ y0 = 5 } = { y0: 1 } : { y0?: number; }
+>                       : ^^^^^^^^^^^^^^^^
 >{ y0 = 5 } : { y0?: number; }
+>           : ^^^^^^^^^^^^^^^^
 >y0 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >{ y0: 1 } : { y0?: number; }
+>          : ^^^^^^^^^^^^^^^^
 >y0 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 });
 
 (function() {
 >(function() {	let y0: number;	({ y0:y0 = 5 } = { y0: 1 })}) : () => void
+>                                                            : ^^^^^^^^^^
 >function() {	let y0: number;	({ y0:y0 = 5 } = { y0: 1 })} : () => void
+>                                                          : ^^^^^^^^^^
 
 	let y0: number;
 >y0 : number
+>   : ^^^^^^
 
 	({ y0:y0 = 5 } = { y0: 1 })
 >({ y0:y0 = 5 } = { y0: 1 }) : { y0?: number; }
+>                            : ^^^^^^^^^^^^^^^^
 >{ y0:y0 = 5 } = { y0: 1 } : { y0?: number; }
+>                          : ^^^^^^^^^^^^^^^^
 >{ y0:y0 = 5 } : { y0?: number; }
+>              : ^^^^^^^^^^^^^^^^
 >y0 : number
+>   : ^^^^^^
 >y0 = 5 : 5
+>       : ^
 >y0 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >{ y0: 1 } : { y0?: number; }
+>          : ^^^^^^^^^^^^^^^^
 >y0 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 });
 
 (function() {
 >(function() {	let y1: string;	({ y1 = 5 } = {})}) : () => void
+>                                                  : ^^^^^^^^^^
 >function() {	let y1: string;	({ y1 = 5 } = {})} : () => void
+>                                                : ^^^^^^^^^^
 
 	let y1: string;
 >y1 : string
+>   : ^^^^^^
 
 	({ y1 = 5 } = {})
->({ y1 = 5 } = {}) : { y1?: string; }
->{ y1 = 5 } = {} : { y1?: string; }
+>({ y1 = 5 } = {}) : {}
+>                  : ^^
+>{ y1 = 5 } = {} : {}
+>                : ^^
 >{ y1 = 5 } : { y1?: string; }
+>           : ^^^^^^^^^^^^^^^^
 >y1 : string
+>   : ^^^^^^
 >5 : 5
->{} : { y1?: string; }
+>  : ^
+>{} : {}
+>   : ^^
 
 });
 
 (function() {
 >(function() {	let y1: string;	({ y1:y1 = 5 } = {})}) : () => void
+>                                                     : ^^^^^^^^^^
 >function() {	let y1: string;	({ y1:y1 = 5 } = {})} : () => void
+>                                                   : ^^^^^^^^^^
 
 	let y1: string;
 >y1 : string
+>   : ^^^^^^
 
 	({ y1:y1 = 5 } = {})
->({ y1:y1 = 5 } = {}) : { y1?: number; }
->{ y1:y1 = 5 } = {} : { y1?: number; }
+>({ y1:y1 = 5 } = {}) : {}
+>                     : ^^
+>{ y1:y1 = 5 } = {} : {}
+>                   : ^^
 >{ y1:y1 = 5 } : { y1?: number; }
+>              : ^^^^^^^^^^^^^^^^
 >y1 : number
+>   : ^^^^^^
 >y1 = 5 : 5
+>       : ^
 >y1 : string
+>   : ^^^^^^
 >5 : 5
->{} : { y1?: number; }
+>  : ^
+>{} : {}
+>   : ^^
 
 });
 
 (function() {
 >(function() {	let y2: string, y3: { x: string };	({ y2 = 5, y3 = { x: 1 } } = {})}) : () => void
+>                                                                                    : ^^^^^^^^^^
 >function() {	let y2: string, y3: { x: string };	({ y2 = 5, y3 = { x: 1 } } = {})} : () => void
+>                                                                                  : ^^^^^^^^^^
 
 	let y2: string, y3: { x: string };
 >y2 : string
+>   : ^^^^^^
 >y3 : { x: string; }
+>   : ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 
 	({ y2 = 5, y3 = { x: 1 } } = {})
->({ y2 = 5, y3 = { x: 1 } } = {}) : { y2?: string; y3?: { x: string; }; }
->{ y2 = 5, y3 = { x: 1 } } = {} : { y2?: string; y3?: { x: string; }; }
+>({ y2 = 5, y3 = { x: 1 } } = {}) : {}
+>                                 : ^^
+>{ y2 = 5, y3 = { x: 1 } } = {} : {}
+>                               : ^^
 >{ y2 = 5, y3 = { x: 1 } } : { y2?: string; y3?: { x: string; }; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >y2 : string
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >y3 : { x: string; }
+>   : ^^^^^      ^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
->{} : { y2?: string; y3?: { x: string; }; }
+>  : ^
+>{} : {}
+>   : ^^
 
 });
 
 (function() {
 >(function() {	let y2: string, y3: { x: string };	({ y2:y2 = 5, y3:y3 = { x: 1 } } = {})}) : () => void
+>                                                                                          : ^^^^^^^^^^
 >function() {	let y2: string, y3: { x: string };	({ y2:y2 = 5, y3:y3 = { x: 1 } } = {})} : () => void
+>                                                                                        : ^^^^^^^^^^
 
 	let y2: string, y3: { x: string };
 >y2 : string
+>   : ^^^^^^
 >y3 : { x: string; }
+>   : ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 
 	({ y2:y2 = 5, y3:y3 = { x: 1 } } = {})
->({ y2:y2 = 5, y3:y3 = { x: 1 } } = {}) : { y2?: number; y3?: { x: number; }; }
->{ y2:y2 = 5, y3:y3 = { x: 1 } } = {} : { y2?: number; y3?: { x: number; }; }
+>({ y2:y2 = 5, y3:y3 = { x: 1 } } = {}) : {}
+>                                       : ^^
+>{ y2:y2 = 5, y3:y3 = { x: 1 } } = {} : {}
+>                                     : ^^
 >{ y2:y2 = 5, y3:y3 = { x: 1 } } : { y2?: number; y3?: { x: number; }; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y2 : number
+>   : ^^^^^^
 >y2 = 5 : 5
+>       : ^
 >y2 : string
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >y3 : { x: number; }
+>   : ^^^^^^^^^^^^^^
 >y3 = { x: 1 } : { x: number; }
+>              : ^^^^^^^^^^^^^^
 >y3 : { x: string; }
+>   : ^^^^^      ^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
->{} : { y2?: number; y3?: { x: number; }; }
+>  : ^
+>{} : {}
+>   : ^^
 
 });
 
 (function() {
 >(function() {	let y4: number, y5: { x: number };	({ y4 = 5, y5 = { x: 1 } } = {})}) : () => void
+>                                                                                    : ^^^^^^^^^^
 >function() {	let y4: number, y5: { x: number };	({ y4 = 5, y5 = { x: 1 } } = {})} : () => void
+>                                                                                  : ^^^^^^^^^^
 
 	let y4: number, y5: { x: number };
 >y4 : number
+>   : ^^^^^^
 >y5 : { x: number; }
+>   : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 	({ y4 = 5, y5 = { x: 1 } } = {})
->({ y4 = 5, y5 = { x: 1 } } = {}) : { y4?: number; y5?: { x: number; }; }
->{ y4 = 5, y5 = { x: 1 } } = {} : { y4?: number; y5?: { x: number; }; }
+>({ y4 = 5, y5 = { x: 1 } } = {}) : {}
+>                                 : ^^
+>{ y4 = 5, y5 = { x: 1 } } = {} : {}
+>                               : ^^
 >{ y4 = 5, y5 = { x: 1 } } : { y4?: number; y5?: { x: number; }; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >y4 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >y5 : { x: number; }
+>   : ^^^^^      ^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
->{} : { y4?: number; y5?: { x: number; }; }
+>  : ^
+>{} : {}
+>   : ^^
 
 });
 
 (function() {
 >(function() {	let y4: number, y5: { x: number };	({ y4:y4 = 5, y5:y5 = { x: 1 } } = {})}) : () => void
+>                                                                                          : ^^^^^^^^^^
 >function() {	let y4: number, y5: { x: number };	({ y4:y4 = 5, y5:y5 = { x: 1 } } = {})} : () => void
+>                                                                                        : ^^^^^^^^^^
 
 	let y4: number, y5: { x: number };
 >y4 : number
+>   : ^^^^^^
 >y5 : { x: number; }
+>   : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 
 	({ y4:y4 = 5, y5:y5 = { x: 1 } } = {})
->({ y4:y4 = 5, y5:y5 = { x: 1 } } = {}) : { y4?: number; y5?: { x: number; }; }
->{ y4:y4 = 5, y5:y5 = { x: 1 } } = {} : { y4?: number; y5?: { x: number; }; }
+>({ y4:y4 = 5, y5:y5 = { x: 1 } } = {}) : {}
+>                                       : ^^
+>{ y4:y4 = 5, y5:y5 = { x: 1 } } = {} : {}
+>                                     : ^^
 >{ y4:y4 = 5, y5:y5 = { x: 1 } } : { y4?: number; y5?: { x: number; }; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y4 : number
+>   : ^^^^^^
 >y4 = 5 : 5
+>       : ^
 >y4 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 >y5 : { x: number; }
+>   : ^^^^^^^^^^^^^^
 >y5 = { x: 1 } : { x: number; }
+>              : ^^^^^^^^^^^^^^
 >y5 : { x: number; }
+>   : ^^^^^      ^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
->{} : { y4?: number; y5?: { x: number; }; }
+>  : ^
+>{} : {}
+>   : ^^
 
 });
 
 
 (function() {
 >(function() {	let z;	({ z = { x: 5 } } = { z: { x: 1 } });}) : () => void
+>                                                             : ^^^^^^^^^^
 >function() {	let z;	({ z = { x: 5 } } = { z: { x: 1 } });} : () => void
+>                                                           : ^^^^^^^^^^
 
 	let z;
 >z : any
+>  : ^^^
 
 	({ z = { x: 5 } } = { z: { x: 1 } });
 >({ z = { x: 5 } } = { z: { x: 1 } }) : { z?: { x: number; }; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ z = { x: 5 } } = { z: { x: 1 } } : { z?: { x: number; }; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ z = { x: 5 } } : { z?: any; }
+>                 : ^^^^^^^^^^^^
 >z : any
+>  : ^^^
 >{ x: 5 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >{ z: { x: 1 } } : { z?: { x: number; }; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >z : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 });
 
 
 (function() {
 >(function() {	let z;	({ z:z = { x: 5 } } = { z: { x: 1 } });}) : () => void
+>                                                               : ^^^^^^^^^^
 >function() {	let z;	({ z:z = { x: 5 } } = { z: { x: 1 } });} : () => void
+>                                                             : ^^^^^^^^^^
 
 	let z;
 >z : any
+>  : ^^^
 
 	({ z:z = { x: 5 } } = { z: { x: 1 } });
 >({ z:z = { x: 5 } } = { z: { x: 1 } }) : { z?: { x: number; }; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ z:z = { x: 5 } } = { z: { x: 1 } } : { z?: { x: number; }; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ z:z = { x: 5 } } : { z?: { x: number; }; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >z : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >z = { x: 5 } : { x: number; }
+>             : ^^^^^^^^^^^^^^
 >z : any
+>  : ^^^
 >{ x: 5 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >{ z: { x: 1 } } : { z?: { x: number; }; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >z : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 });
 
 (function() {
 >(function() {	let a = { s = 5 };}) : () => void
+>                                   : ^^^^^^^^^^
 >function() {	let a = { s = 5 };} : () => void
+>                                 : ^^^^^^^^^^
 
 	let a = { s = 5 };
 >a : { s: number; }
+>  : ^^^^^^^^^^^^^^
 >{ s = 5 } : { s: number; }
+>          : ^^^^^^^^^^^^^^
 >s : any
+>  : ^^^
 >5 : 5
+>  : ^
 
 });
 
 function foo({a = 4, b = { x: 5 }}) {
 >foo : ({ a, b }: { a?: number; b?: { x: number; }; }) => void
+>    : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 >b : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{ x: 5 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 }

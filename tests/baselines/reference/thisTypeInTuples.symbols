@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInTuples.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInTuples.ts] ////
+
+=== thisTypeInTuples.ts ===
 interface Array<T> {
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(thisTypeInTuples.ts, 0, 0))
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(thisTypeInTuples.ts, 0, 16))

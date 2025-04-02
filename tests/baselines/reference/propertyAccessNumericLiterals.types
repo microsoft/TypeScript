@@ -1,79 +1,133 @@
-=== tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts ===
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts] ////
+
+=== propertyAccessNumericLiterals.ts ===
 0xffffffff.toString();
 >0xffffffff.toString() : string
+>                      : ^^^^^^
 >0xffffffff.toString : (radix?: number) => string
+>                    : ^     ^^^      ^^^^^      
 >0xffffffff : 4294967295
+>           : ^^^^^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 0o01234.toString();
 >0o01234.toString() : string
+>                   : ^^^^^^
 >0o01234.toString : (radix?: number) => string
+>                 : ^     ^^^      ^^^^^      
 >0o01234 : 668
+>        : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 0b01101101.toString();
 >0b01101101.toString() : string
+>                      : ^^^^^^
 >0b01101101.toString : (radix?: number) => string
+>                    : ^     ^^^      ^^^^^      
 >0b01101101 : 109
+>           : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 1234..toString();
 >1234..toString() : string
+>                 : ^^^^^^
 >1234..toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >1234. : 1234
+>      : ^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 1e0.toString();
 >1e0.toString() : string
+>               : ^^^^^^
 >1e0.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >1e0 : 1
+>    : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 000.toString();
 >000.toString() : string
+>               : ^^^^^^
 >000.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >000 : 0
+>    : ^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 08.8e5.toString();
 >08.8e5.toString() : string
+>                  : ^^^^^^
 >08.8e5.toString : (radix?: number) => string
+>                : ^     ^^^      ^^^^^      
 >08.8e5 : 880000
+>       : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 0_8.8e5.toString();
 >0_8.8e5.toString() : string
+>                   : ^^^^^^
 >0_8.8e5.toString : (radix?: number) => string
+>                 : ^     ^^^      ^^^^^      
 >0_8.8e5 : 880000
+>        : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 8.8e5.toString();
 >8.8e5.toString() : string
+>                 : ^^^^^^
 >8.8e5.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >8.8e5 : 880000
+>      : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 088e4.toString();
 >088e4.toString() : string
+>                 : ^^^^^^
 >088e4.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >088e4 : 880000
+>      : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 88_e4.toString();
 >88_e4.toString() : string
+>                 : ^^^^^^
 >88_e4.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >88_e4 : 880000
+>      : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 88e4.toString();
 >88e4.toString() : string
+>                : ^^^^^^
 >88e4.toString : (radix?: number) => string
+>              : ^     ^^^      ^^^^^      
 >88e4 : 880000
+>     : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 8_8e4.toString();
 >8_8e4.toString() : string
+>                 : ^^^^^^
 >8_8e4.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >8_8e4 : 880000
+>      : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 

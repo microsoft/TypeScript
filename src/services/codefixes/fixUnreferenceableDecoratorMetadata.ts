@@ -1,4 +1,8 @@
 import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     append,
     CodeFixAction,
     Diagnostics,
@@ -23,11 +27,7 @@ import {
     SyntaxKind,
     textChanges,
     tryCast,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixUnreferenceableDecoratorMetadata";
 const errorCodes = [Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code];
@@ -44,7 +44,7 @@ registerCodeFix({
             actions = append(actions, createCodeFixActionWithoutFixAll(fixId, namespaceChanges, Diagnostics.Convert_named_imports_to_namespace_import));
         }
         if (typeOnlyChanges.length) {
-            actions = append(actions, createCodeFixActionWithoutFixAll(fixId, typeOnlyChanges, Diagnostics.Convert_to_type_only_import));
+            actions = append(actions, createCodeFixActionWithoutFixAll(fixId, typeOnlyChanges, Diagnostics.Use_import_type));
         }
         return actions;
     },

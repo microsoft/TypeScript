@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infinitelyExpandingTypes3.ts ===
+//// [tests/cases/compiler/infinitelyExpandingTypes3.ts] ////
+
+=== infinitelyExpandingTypes3.ts ===
 interface List<T> {
 >List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
 >T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloadsOnGenericArity2.ts ===
+//// [tests/cases/compiler/functionOverloadsOnGenericArity2.ts] ////
+
+=== functionOverloadsOnGenericArity2.ts ===
 interface I {
 >I : Symbol(I, Decl(functionOverloadsOnGenericArity2.ts, 0, 0))
 

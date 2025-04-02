@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/exportDefaultWithJSDoc1.ts] ////
+
+=== a.js ===
 
 /**
  * A number, or a string containing a number.
@@ -7,7 +9,7 @@
 
 /** @type {NumberLike[]} */export default ([ ]);
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import A from './a'
 >A : Symbol(A, Decl(b.ts, 0, 6))
 

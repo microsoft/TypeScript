@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/extensionLoadingPriority.ts] ////
+
 === /project/a.js ===
 
 export default "a.js";

@@ -1,102 +1,154 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts] ////
+
+=== callWithSpread4.ts ===
 type R = { a: number }
->R : { a: number; }
+>R : R
+>  : ^
 >a : number
+>  : ^^^^^^
 
 type W = { b: number }
->W : { b: number; }
+>W : W
+>  : ^
 >b : number
+>  : ^^^^^^
 
 type RW = { a: number, b: number }
->RW : { a: number; b: number; }
+>RW : RW
+>   : ^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 declare const pli: {
 >pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
+>    : ^^^  ^^ ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^^             ^^^       ^^                         ^^^             ^^^  ^^ ^^  ^^      ^^^^^       ^^             ^^^             ^^^
 
     (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>;
 >s1 : R
+>   : ^
 >s2 : RW
+>   : ^^
 >s3 : RW
+>   : ^^
 >s4 : RW
+>   : ^^
 >s5 : W
+>   : ^
 
     (streams: ReadonlyArray<R | W | RW>): Promise<void>;
 >streams : readonly (R | W | RW)[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 
     (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>;
 >s1 : R
+>   : ^
 >s2 : W | RW
+>   : ^^^^^^
 >streams : (W | RW)[]
+>        : ^^^^^^^^^^
 }
 
 declare var writes: W
 >writes : W
+>       : ^
 
 declare var reads: R
 >reads : R
+>      : ^
 
 declare var tr: W
 >tr : W
+>   : ^
 
 declare var gun: RW[]
 >gun : RW[]
+>    : ^^^^
 
 declare var gz: RW[]
 >gz : RW[]
+>   : ^^^^
 
 declare var fun: (inp: any) => AsyncGenerator<string, void, unknown>
 >fun : (inp: any) => AsyncGenerator<string, void, unknown>
+>    : ^   ^^   ^^^^^                                     
 >inp : any
+>    : ^^^
 
 pli(
 >pli(    reads,    ...gun,    tr,    fun,    ...gz,    writes) : Promise<void>
->pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: readonly (R | W | RW)[]): Promise<void>; (s1: R, s2: W | RW, ...streams: (W | RW)[]): Promise<void>; }
+>                                                              : ^^^^^^^^^^^^^
+>pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
+>    : ^^^  ^^ ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^^             ^^^       ^^                         ^^^             ^^^  ^^ ^^  ^^      ^^^^^       ^^             ^^^             ^^^
 
     reads,
 >reads : R
+>      : ^
 
     ...gun,
 >...gun : RW
+>       : ^^
 >gun : RW[]
+>    : ^^^^
 
     tr,
 >tr : W
+>   : ^
 
     fun,
 >fun : (inp: any) => AsyncGenerator<string, void, unknown>
+>    : ^   ^^   ^^^^^                                     
 
     ...gz,
 >...gz : RW
+>      : ^^
 >gz : RW[]
+>   : ^^^^
 
     writes
 >writes : W
+>       : ^
 
 );
 
 declare function test(x: any, y: () => string): string | undefined;
 >test : (x: any, y: () => string) => string | undefined
+>     : ^ ^^   ^^ ^^            ^^^^^                  
 >x : any
+>  : ^^^
 >y : () => string
+>  : ^^^^^^      
 
 declare var anys: any[]
 >anys : any[]
+>     : ^^^^^
 
 test(...anys)
 >test(...anys) : string | undefined
+>              : ^^^^^^^^^^^^^^^^^^
 >test : (x: any, y: () => string) => string | undefined
+>     : ^ ^^   ^^ ^^            ^^^^^                  
 >...anys : any
+>        : ^^^
 >anys : any[]
+>     : ^^^^^
 
 pli(...[reads, writes, writes] as const)
 >pli(...[reads, writes, writes] as const) : Promise<void>
->pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: readonly (R | W | RW)[]): Promise<void>; (s1: R, s2: W | RW, ...streams: (W | RW)[]): Promise<void>; }
+>                                         : ^^^^^^^^^^^^^
+>pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
+>    : ^^^  ^^ ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^ ^^^             ^^^       ^^                         ^^^             ^^^  ^^ ^^  ^^      ^^^^^       ^^             ^^^             ^^^
 >...[reads, writes, writes] as const : R | W
+>                                    : ^^^^^
 >[reads, writes, writes] as const : readonly [R, W, W]
+>                                 : ^^^^^^^^^^^^^^^^^^
 >[reads, writes, writes] : readonly [R, W, W]
+>                        : ^^^^^^^^^^^^^^^^^^
 >reads : R
+>      : ^
 >writes : W
+>       : ^
 >writes : W
+>       : ^
 

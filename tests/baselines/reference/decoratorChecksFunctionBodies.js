@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts] ////
+
 //// [decoratorChecksFunctionBodies.ts]
 // from #2971
 function func(s: string): void {

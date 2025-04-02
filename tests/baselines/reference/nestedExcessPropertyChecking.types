@@ -1,160 +1,314 @@
-=== tests/cases/compiler/nestedExcessPropertyChecking.ts ===
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
+=== nestedExcessPropertyChecking.ts ===
 type A1 = { x: { a?: string } };
->A1 : { x: {    a?: string;}; }
->x : { a?: string | undefined; }
+>A1 : A1
+>   : ^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 type B1 = { x: { b?: string } };
->B1 : { x: {    b?: string;}; }
->x : { b?: string | undefined; }
+>B1 : B1
+>   : ^^
+>x : { b?: string; }
+>  : ^^^^^^      ^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 type C1 = { x: { c: string } };
->C1 : { x: {    c: string;}; }
+>C1 : C1
+>   : ^^
 >x : { c: string; }
+>  : ^^^^^      ^^^
 >c : string
+>  : ^^^^^^
 
 const ab1: A1 & B1 = {} as C1;  // Error
 >ab1 : A1 & B1
+>    : ^^^^^^^
 >{} as C1 : C1
+>         : ^^
 >{} : {}
+>   : ^^
 
 type A2 = { a?: string };
->A2 : { a?: string | undefined; }
+>A2 : A2
+>   : ^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 type B2 = { b?: string };
->B2 : { b?: string | undefined; }
+>B2 : B2
+>   : ^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 type C2 = { c: string };
->C2 : { c: string; }
+>C2 : C2
+>   : ^^
 >c : string
+>  : ^^^^^^
 
 const ab2: A2 & B2 = {} as C2;  // Error
 >ab2 : A2 & B2
+>    : ^^^^^^^
 >{} as C2 : C2
+>         : ^^
 >{} : {}
+>   : ^^
 
 enum E { A = "A" }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 >"A" : "A"
+>    : ^^^
 
 let x: { nope?: any } = E.A;  // Error
 >x : { nope?: any; }
+>  : ^^^^^^^^^   ^^^
 >nope : any
+>     : ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 let y: { nope?: any } = "A";  // Error
 >y : { nope?: any; }
+>  : ^^^^^^^^^   ^^^
 >nope : any
+>     : ^^^
 >"A" : "A"
+>    : ^^^
 
 // Repros from #51043
 
 type OverridesInput = {
->OverridesInput : { someProp?: "A" | "B" | undefined; }
+>OverridesInput : OverridesInput
+>               : ^^^^^^^^^^^^^^
 
     someProp?: 'A' | 'B'
 >someProp : "A" | "B" | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 const foo1: Partial<{ something: any }> & { variables: {
->foo1 : Partial<{ something: any; }> & { variables: {    overrides?: OverridesInput;} & Partial<{    overrides?: OverridesInput;}>; }
+>foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^                                                                          ^^^
 >something : any
->variables : { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>
+>          : ^^^
+>variables : { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>
+>          : ^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^
 
     overrides?: OverridesInput;
 >overrides : OverridesInput | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 } & Partial<{
     overrides?: OverridesInput;
 >overrides : OverridesInput | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }>} = { variables: { overrides: false } };  // Error
 >{ variables: { overrides: false } } : { variables: { overrides: boolean; }; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >variables : { overrides: boolean; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ overrides: false } : { overrides: boolean; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >overrides : boolean
+>          : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 
 interface Unrelated { _?: any }
 >_ : any
+>  : ^^^
 
 interface VariablesA { overrides?: OverridesInput; }
 >overrides : OverridesInput | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 interface VariablesB { overrides?: OverridesInput; }
 >overrides : OverridesInput | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
 >foo2 : Unrelated & { variables: VariablesA & VariablesB; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^
 >variables : VariablesA & VariablesB
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    variables: {        overrides: false  // Error    }} : { variables: { overrides: boolean; }; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     variables: {
 >variables : { overrides: boolean; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >{        overrides: false  // Error    } : { overrides: boolean; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^
 
         overrides: false  // Error
 >overrides : boolean
+>          : ^^^^^^^
 >false : false
+>      : ^^^^^
     }
 };
 
 // Simplified repro from #52252
 
 type T1 = {
->T1 : { primary: {    __typename?: 'Feature';} & {    colors: {        light: number;        dark: number;    };}; }
+>T1 : T1
+>   : ^^
 
     primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
->primary : { __typename?: "Feature" | undefined; } & { colors: {    light: number;    dark: number;}; }
+>primary : { __typename?: "Feature"; } & { colors: { light: number; dark: number; }; }
+>        : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^                                ^^^
 >__typename : "Feature" | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >colors : { light: number; dark: number; }
+>       : ^^^^^^^^^      ^^^^^^^^      ^^^
 >light : number
+>      : ^^^^^^
 >dark : number
+>     : ^^^^^^
 
 };
 
 type T2 = {
->T2 : { primary: {    __typename?: 'Feature';} & {    colors: {        light: number;    };}; }
+>T2 : T2
+>   : ^^
 
     primary: { __typename?: 'Feature' } & { colors: { light: number } },
->primary : { __typename?: "Feature" | undefined; } & { colors: {    light: number;}; }
+>primary : { __typename?: "Feature"; } & { colors: { light: number; }; }
+>        : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^                  ^^^
 >__typename : "Feature" | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >colors : { light: number; }
+>       : ^^^^^^^^^      ^^^
 >light : number
+>      : ^^^^^^
 
 };
 
 type Query = T1 & T2;
->Query : T1 & T2
+>Query : Query
+>      : ^^^^^
 
 const response: Query = {
 >response : Query
+>         : ^^^^^
 >{    primary: {        colors: {            light: 1,            dark: 3,        },    },} : { primary: { colors: { light: number; dark: number; }; }; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     primary: {
 >primary : { colors: { light: number; dark: number; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        colors: {            light: 1,            dark: 3,        },    } : { colors: { light: number; dark: number; }; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         colors: {
 >colors : { light: number; dark: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            light: 1,            dark: 3,        } : { light: number; dark: number; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             light: 1,
 >light : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
             dark: 3,
 >dark : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
         },
     },
+};
+
+// Repro from #53412
+
+type BaseItem = {
+>BaseItem : BaseItem
+>         : ^^^^^^^^
+
+    id: number;
+>id : number
+>   : ^^^^^^
+}
+type ExtendedItem = BaseItem & {
+>ExtendedItem : ExtendedItem
+>             : ^^^^^^^^^^^^
+
+    description: string | null
+>description : string | null
+>            : ^^^^^^^^^^^^^
+
+};
+  
+type BaseValue = {
+>BaseValue : BaseValue
+>          : ^^^^^^^^^
+
+    // there are other fields
+    items: BaseItem[];
+>items : BaseItem[]
+>      : ^^^^^^^^^^
+}
+type ExtendedValue = BaseValue & {
+>ExtendedValue : ExtendedValue
+>              : ^^^^^^^^^^^^^
+
+    // there are other fields
+    items: ExtendedItem[];
+>items : ExtendedItem[]
+>      : ^^^^^^^^^^^^^^
+}
+
+const TEST_VALUE: ExtendedValue = {
+>TEST_VALUE : ExtendedValue
+>           : ^^^^^^^^^^^^^
+>{    items: [        {id: 1, description: null},        {id: 2, description: 'wigglytubble'},    ]} : { items: ({ id: number; description: null; } | { id: number; description: string; })[]; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    items: [
+>items : ({ id: number; description: null; } | { id: number; description: string; })[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[        {id: 1, description: null},        {id: 2, description: 'wigglytubble'},    ] : ({ id: number; description: null; } | { id: number; description: string; })[]
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        {id: 1, description: null},
+>{id: 1, description: null} : { id: number; description: null; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+>description : null
+>            : ^^^^
+
+        {id: 2, description: 'wigglytubble'},
+>{id: 2, description: 'wigglytubble'} : { id: number; description: string; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : number
+>   : ^^^^^^
+>2 : 2
+>  : ^
+>description : string
+>            : ^^^^^^
+>'wigglytubble' : "wigglytubble"
+>               : ^^^^^^^^^^^^^^
+
+    ]
 };
 

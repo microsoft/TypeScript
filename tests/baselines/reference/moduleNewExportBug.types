@@ -1,24 +1,34 @@
-=== tests/cases/compiler/moduleNewExportBug.ts ===
+//// [tests/cases/compiler/moduleNewExportBug.ts] ////
+
+=== moduleNewExportBug.ts ===
 module mod1 {
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 
 	interface mInt {
 		new (bar:any):any;
 >bar : any
+>    : ^^^
 
         foo (bar:any):any;
 >foo : (bar: any) => any
+>    : ^   ^^   ^^^^^   
 >bar : any
+>    : ^^^
 	}
  
     class C { public moo() {}}
 >C : C
+>  : ^
 >moo : () => void
+>    : ^^^^^^^^^^
 }
 
 var c : mod1.C; // ERROR: C should not be visible
 >c : mod1.C
+>  : ^^^^^^
 >mod1 : any
+>     : ^^^
 
 
 

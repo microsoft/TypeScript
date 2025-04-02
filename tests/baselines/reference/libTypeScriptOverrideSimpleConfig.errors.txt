@@ -3,8 +3,6 @@
 
 ==== /somepath/tsconfig.json (0 errors) ====
     { }
-==== /somepath/node_modules/@typescript/lib-dom/index.d.ts (0 errors) ====
-    interface ABC { abc: string }
 ==== /somepath/index.ts (1 errors) ====
     /// <reference lib="dom" />
     const a: ABC = { abc: "Hello" }
@@ -14,3 +12,6 @@
     window.localStorage
     ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
+    
+==== /somepath/node_modules/@typescript/lib-dom/index.d.ts (0 errors) ====
+    interface ABC { abc: string }

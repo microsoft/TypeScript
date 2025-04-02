@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts] ////
+
+=== classConstructorParametersAccessibility2.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(classConstructorParametersAccessibility2.ts, 0, 0))
 

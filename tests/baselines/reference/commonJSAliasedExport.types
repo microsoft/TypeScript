@@ -1,48 +1,74 @@
-=== tests/cases/conformance/salsa/bug43713.js ===
+//// [tests/cases/conformance/salsa/commonJSAliasedExport.ts] ////
+
+=== bug43713.js ===
 const { funky } = require('./commonJSAliasedExport');
 >funky : (declaration: any) => boolean
+>      : ^           ^^^^^^^^^^^^^^^^^
 >require('./commonJSAliasedExport') : (ast: any) => any
+>                                   : ^   ^^^^^^^^^^^^^
 >require : any
 >'./commonJSAliasedExport' : "./commonJSAliasedExport"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /** @type {boolean} */
 var diddy
 >diddy : boolean
+>      : ^^^^^^^
 
 var diddy = funky(1)
 >diddy : boolean
+>      : ^^^^^^^
 >funky(1) : boolean
+>         : ^^^^^^^
 >funky : (declaration: any) => boolean
+>      : ^           ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 
-=== tests/cases/conformance/salsa/commonJSAliasedExport.js ===
+=== commonJSAliasedExport.js ===
 const donkey = (ast) =>  ast;
 >donkey : (ast: any) => any
+>       : ^   ^^^^^^^^^^^^^
 >(ast) =>  ast : (ast: any) => any
+>              : ^   ^^^^^^^^^^^^^
 >ast : any
 >ast : any
 
 function funky(declaration) {
 >funky : (declaration: any) => boolean
+>      : ^           ^^^^^^^^^^^^^^^^^
 >declaration : any
 
     return false;
 >false : false
+>      : ^^^^^
 }
 module.exports = donkey;
 >module.exports = donkey : { (ast: any): any; funky: (declaration: any) => boolean; }
+>                        : ^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >module.exports : { (ast: any): any; funky: (declaration: any) => boolean; }
+>               : ^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { (ast: any): any; funky: (declaration: any) => boolean; }; }
+>       : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (ast: any): any; funky: (declaration: any) => boolean; }
+>        : ^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >donkey : (ast: any) => any
+>       : ^   ^^^^^^^^^^^^^
 
 module.exports.funky = funky;
 >module.exports.funky = funky : (declaration: any) => boolean
+>                             : ^           ^^^^^^^^^^^^^^^^^
 >module.exports.funky : (declaration: any) => boolean
+>                     : ^           ^^^^^^^^^^^^^^^^^
 >module.exports : { (ast: any): any; funky: (declaration: any) => boolean; }
+>               : ^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { (ast: any): any; funky: (declaration: any) => boolean; }; }
+>       : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (ast: any): any; funky: (declaration: any) => boolean; }
+>        : ^^^   ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >funky : (declaration: any) => boolean
+>      : ^           ^^^^^^^^^^^^^^^^^
 >funky : (declaration: any) => boolean
+>      : ^           ^^^^^^^^^^^^^^^^^
 

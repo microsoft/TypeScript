@@ -1,29 +1,29 @@
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(9,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(9,7): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(10,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(10,11): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(11,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(11,10): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(12,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(12,10): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(13,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(13,10): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(16,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(16,2): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(17,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(17,2): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(18,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(18,2): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(19,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(19,2): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(20,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(20,2): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(23,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(23,3): error TS1109: Expression expected.
-tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts(23,5): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(9,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(9,7): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(10,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(10,11): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(11,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(11,10): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(12,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(12,10): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(13,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(13,10): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(16,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(16,2): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(17,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(17,2): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(18,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(18,2): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(19,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(19,2): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(20,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(20,2): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(23,2): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperatorWithoutOperand.ts(23,3): error TS1109: Expression expected.
+commaOperatorWithoutOperand.ts(23,5): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts (23 errors) ====
+==== commaOperatorWithoutOperand.ts (23 errors) ====
     var ANY: any;
     var BOOLEAN: boolean;
     var NUMBER: number;

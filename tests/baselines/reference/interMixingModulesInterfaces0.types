@@ -1,12 +1,17 @@
-=== tests/cases/compiler/interMixingModulesInterfaces0.ts ===
+//// [tests/cases/compiler/interMixingModulesInterfaces0.ts] ////
+
+=== interMixingModulesInterfaces0.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export module B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export function createB(): B {
 >createB : () => B
+>        : ^^^^^^ 
 
             return null;
         }
@@ -15,19 +20,29 @@ module A {
     export interface B {
         name: string;
 >name : string
+>     : ^^^^^^
 
         value: number;
 >value : number
+>      : ^^^^^^
     }
 }
 
 var x: A.B = A.B.createB();
 >x : A.B
+>  : ^^^
 >A : any
+>  : ^^^
 >A.B.createB() : A.B
+>              : ^^^
 >A.B.createB : () => A.B
+>            : ^^^^^^^^^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >createB : () => A.B
+>        : ^^^^^^^^^
 

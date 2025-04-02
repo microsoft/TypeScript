@@ -1,55 +1,79 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/elidedJSImport2.ts] ////
+
+=== index.js ===
 import { Foo } from "./other.js";
 >Foo : any
+>    : ^^^
 
 import * as other from "./other.js";
 >other : typeof other
+>      : ^^^^^^^^^^^^
 
 import defaultFoo from "./other.js";
 >defaultFoo : any
+>           : ^^^
 
 const x = new Foo();
->x : error
->new Foo() : error
->Foo : error
+>x : any
+>  : ^^^
+>new Foo() : any
+>          : ^^^
+>Foo : any
+>    : ^^^
 
 const y = other.Foo();
->y : error
->other.Foo() : error
->other.Foo : error
+>y : any
+>  : ^^^
+>other.Foo() : any
+>            : ^^^
+>other.Foo : any
+>          : ^^^
 >other : typeof other
+>      : ^^^^^^^^^^^^
 >Foo : any
+>    : ^^^
 
 const z = new defaultFoo();
->z : error
->new defaultFoo() : error
->defaultFoo : error
+>z : any
+>  : ^^^
+>new defaultFoo() : any
+>                 : ^^^
+>defaultFoo : any
+>           : ^^^
 
-=== tests/cases/compiler/other.d.ts ===
+=== other.d.ts ===
 export interface Foo {
     bar: number;
 >bar : number
+>    : ^^^^^^
 }
 
 export default interface Bar {
     foo: number;
 >foo : number
+>    : ^^^^^^
 }
 
-=== tests/cases/compiler/other.js ===
+=== other.js ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     bar = 2.4;
 >bar : number
+>    : ^^^^^^
 >2.4 : 2.4
+>    : ^^^
 }
 
 export default class Bar {
 >Bar : Bar
+>    : ^^^
 
     foo = 1.2;
 >foo : number
+>    : ^^^^^^
 >1.2 : 1.2
+>    : ^^^
 }
 

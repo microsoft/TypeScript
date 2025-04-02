@@ -1,55 +1,78 @@
-=== tests/cases/compiler/controlFlowCommaExpressionAssertionMultiple.ts ===
+//// [tests/cases/compiler/controlFlowCommaExpressionAssertionMultiple.ts] ////
+
+=== controlFlowCommaExpressionAssertionMultiple.ts ===
 function Narrow<T>(value: any): asserts value is T {}
 >Narrow : <T>(value: any) => asserts value is T
+>       : ^ ^^     ^^   ^^^^^                  
 >value : any
 
 function func(foo: any, bar: any) {
 >func : (foo: any, bar: any) => void
+>     : ^   ^^   ^^   ^^   ^^^^^^^^^
 >foo : any
 >bar : any
 
     Narrow<number>(foo), Narrow<string>(bar);
 >Narrow<number>(foo), Narrow<string>(bar) : void
+>                                         : ^^^^
 >Narrow<number>(foo) : void
+>                    : ^^^^
 >Narrow : <T>(value: any) => asserts value is T
+>       : ^ ^^     ^^   ^^^^^                  
 >foo : any
 >Narrow<string>(bar) : void
+>                    : ^^^^
 >Narrow : <T>(value: any) => asserts value is T
+>       : ^ ^^     ^^   ^^^^^                  
 >bar : any
 
     foo;
 >foo : number
+>    : ^^^^^^
 
     bar;
 >bar : string
+>    : ^^^^^^
 }
 
 function func2(foo: any, bar: any, baz: any) {
 >func2 : (foo: any, bar: any, baz: any) => void
+>      : ^   ^^   ^^   ^^   ^^   ^^   ^^^^^^^^^
 >foo : any
 >bar : any
 >baz : any
 
     Narrow<number>(foo), Narrow<string>(bar), Narrow<boolean>(baz);
 >Narrow<number>(foo), Narrow<string>(bar), Narrow<boolean>(baz) : void
+>                                                               : ^^^^
 >Narrow<number>(foo), Narrow<string>(bar) : void
+>                                         : ^^^^
 >Narrow<number>(foo) : void
+>                    : ^^^^
 >Narrow : <T>(value: any) => asserts value is T
+>       : ^ ^^     ^^   ^^^^^                  
 >foo : any
 >Narrow<string>(bar) : void
+>                    : ^^^^
 >Narrow : <T>(value: any) => asserts value is T
+>       : ^ ^^     ^^   ^^^^^                  
 >bar : any
 >Narrow<boolean>(baz) : void
+>                     : ^^^^
 >Narrow : <T>(value: any) => asserts value is T
+>       : ^ ^^     ^^   ^^^^^                  
 >baz : any
 
     foo;
 >foo : number
+>    : ^^^^^^
 
     bar;
 >bar : string
+>    : ^^^^^^
 
     baz;
 >baz : boolean
+>    : ^^^^^^^
 }
 

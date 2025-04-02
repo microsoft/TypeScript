@@ -1,42 +1,62 @@
-=== tests/cases/compiler/items.ts ===
+//// [tests/cases/compiler/exportDefaultStripsFreshness.ts] ////
+
+=== items.ts ===
 export default {
 >{    foob: "a"} : { foob: string; }
+>                : ^^^^^^^^^^^^^^^^^
 
     foob: "a"
 >foob : string
+>     : ^^^^^^
 >"a" : "a"
+>    : ^^^
 }
 
 export const q = {
 >q : { foob: string; }
+>  : ^^^^^^^^^^^^^^^^^
 >{    foob: "b"} : { foob: string; }
+>                : ^^^^^^^^^^^^^^^^^
 
     foob: "b"
 >foob : string
+>     : ^^^^^^
 >"b" : "b"
+>    : ^^^
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import B, {q} from "./items";
 >B : { foob: string; }
+>  : ^^^^^^^^^^^^^^^^^
 >q : { foob: string; }
+>  : ^^^^^^^^^^^^^^^^^
 
 interface IFoo {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 function nFoo(x: IFoo) {}
 >nFoo : (x: IFoo) => void
+>     : ^ ^^    ^^^^^^^^^
 >x : IFoo
+>  : ^^^^
 
 
 nFoo(q); // for comparison
 >nFoo(q) : void
+>        : ^^^^
 >nFoo : (x: IFoo) => void
+>     : ^ ^^    ^^^^^^^^^
 >q : { foob: string; }
+>  : ^^^^^^^^^^^^^^^^^
 
 nFoo(B);
 >nFoo(B) : void
+>        : ^^^^
 >nFoo : (x: IFoo) => void
+>     : ^ ^^    ^^^^^^^^^
 >B : { foob: string; }
+>  : ^^^^^^^^^^^^^^^^^
 

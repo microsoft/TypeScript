@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/file.tsx(9,7): error TS2304: Cannot find name 'div'.
-tests/cases/conformance/jsx/file.tsx(9,7): error TS17015: Expected corresponding closing tag for JSX fragment.
-tests/cases/conformance/jsx/file.tsx(9,11): error TS17014: JSX fragment has no corresponding closing tag.
-tests/cases/conformance/jsx/file.tsx(11,17): error TS1005: '</' expected.
+file.tsx(9,7): error TS2304: Cannot find name 'div'.
+file.tsx(9,7): error TS17015: Expected corresponding closing tag for JSX fragment.
+file.tsx(9,11): error TS17014: JSX fragment has no corresponding closing tag.
+file.tsx(11,17): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+==== file.tsx (4 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

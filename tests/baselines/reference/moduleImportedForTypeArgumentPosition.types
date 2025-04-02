@@ -1,18 +1,25 @@
-=== tests/cases/compiler/moduleImportedForTypeArgumentPosition_1.ts ===
+//// [tests/cases/compiler/moduleImportedForTypeArgumentPosition.ts] ////
+
+=== moduleImportedForTypeArgumentPosition_1.ts ===
 /**This is on import declaration*/
 import M2 = require("moduleImportedForTypeArgumentPosition_0");
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
 class C1<T>{ }
 >C1 : C1<T>
+>   : ^^^^^
 
 class Test1 extends C1<M2.M2C> {
 >Test1 : Test1
+>      : ^^^^^
 >C1 : C1<M2.M2C>
+>   : ^^^^^^^^^^
 >M2 : any
+>   : ^^^
 }
 
-=== tests/cases/compiler/moduleImportedForTypeArgumentPosition_0.ts ===
+=== moduleImportedForTypeArgumentPosition_0.ts ===
 
 export interface M2C { }
 

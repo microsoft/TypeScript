@@ -1,25 +1,34 @@
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.hexNegative.ts] ////
+
+=== 1.ts ===
 0x00_
 >0x00_ : 0
+>      : ^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
+=== 2.ts ===
 0x_110
 >0x_110 : 272
+>       : ^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
+=== 3.ts ===
 0_X0101
 >0_ : 0
+>   : ^
 >X0101 : any
+>      : ^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
+=== 4.ts ===
 0x01__11
 >0x01__11 : 273
+>         : ^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
+=== 5.ts ===
 0X0110_0110__
 >0X0110_0110__ : 17826064
+>              : ^^^^^^^^
 
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
+=== 6.ts ===
 0x___0111010_0101_1
 >0x___0111010_0101_1 : 1172542853137
+>                    : ^^^^^^^^^^^^^
 

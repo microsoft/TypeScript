@@ -1,19 +1,31 @@
-=== tests/cases/compiler/functionOverloads.ts ===
+//// [tests/cases/compiler/functionOverloads.ts] ////
+
+=== functionOverloads.ts ===
 function foo(): string;
 >foo : { (): string; (bar: string): number; }
+>    : ^^^^^^      ^^^   ^^      ^^^      ^^^
 
 function foo(bar: string): number;
 >foo : { (): string; (bar: string): number; }
+>    : ^^^^^^      ^^^   ^^      ^^^      ^^^
 >bar : string
+>    : ^^^^^^
 
 function foo(bar?: string): any { return "" };
 >foo : { (): string; (bar: string): number; }
+>    : ^^^^^^      ^^^   ^^      ^^^      ^^^
 >bar : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 
 var x = foo(5);
 >x : never
+>  : ^^^^^
 >foo(5) : never
+>       : ^^^^^
 >foo : { (): string; (bar: string): number; }
+>    : ^^^^^^      ^^^   ^^      ^^^      ^^^
 >5 : 5
+>  : ^
 

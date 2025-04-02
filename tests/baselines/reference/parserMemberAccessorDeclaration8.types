@@ -1,8 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration8.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration8.ts] ////
+
+=== parserMemberAccessorDeclaration8.ts ===
 class C {
 >C : C
+>  : ^
 
     static static get Foo() { }
 >static : any
+>       : ^^^
 >Foo : void
+>    : ^^^^
 }

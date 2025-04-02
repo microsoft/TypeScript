@@ -1,142 +1,211 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts] ////
+
+=== interfaceExtendsObjectIntersectionErrors.ts ===
 type T1 = { a: number };
->T1 : { a: number; }
+>T1 : T1
+>   : ^^
 >a : number
+>  : ^^^^^^
 
 type T2 = T1 & { b: number };
->T2 : T1 & { b: number; }
+>T2 : T2
+>   : ^^
 >b : number
+>  : ^^^^^^
 
 type T3 = number[];
->T3 : number[]
+>T3 : T3
+>   : ^^
 
 type T4 = [string, number];
->T4 : [string, number]
+>T4 : T4
+>   : ^^
 
 type T5 = { [P in 'a' | 'b' | 'c']: string };
->T5 : { a: string; b: string; c: string; }
+>T5 : T5
+>   : ^^
 
 interface I1 extends T1 { a: string }
 >a : string
+>  : ^^^^^^
 
 interface I2 extends T2 { b: string }
 >b : string
+>  : ^^^^^^
 
 interface I3 extends T3 { length: string }
 >length : string
+>       : ^^^^^^
 
 interface I4 extends T4 { 0: number }
 >0 : number
+>  : ^^^^^^
 
 interface I5 extends T5 { c: number }
 >c : number
+>  : ^^^^^^
 
 type Constructor<T> = new () => T;
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 
 declare function Constructor<T>(): Constructor<T>;
 >Constructor : <T>() => Constructor<T>
+>            : ^ ^^^^^^^              
 
 class C1 extends Constructor<T1>() { a: string }
 >C1 : C1
+>   : ^^
 >Constructor<T1>() : T1
+>                  : ^^
 >Constructor : <T>() => Constructor<T>
+>            : ^ ^^^^^^^              
 >a : string
+>  : ^^^^^^
 
 class C2 extends Constructor<T2>() { b: string }
 >C2 : C2
+>   : ^^
 >Constructor<T2>() : T2
+>                  : ^^
 >Constructor : <T>() => Constructor<T>
+>            : ^ ^^^^^^^              
 >b : string
+>  : ^^^^^^
 
 class C3 extends Constructor<T3>() { length: string }
 >C3 : C3
+>   : ^^
 >Constructor<T3>() : number[]
+>                  : ^^^^^^^^
 >Constructor : <T>() => Constructor<T>
+>            : ^ ^^^^^^^              
 >length : string
+>       : ^^^^^^
 
 class C4 extends Constructor<T4>() { 0: number }
 >C4 : C4
+>   : ^^
 >Constructor<T4>() : [string, number]
+>                  : ^^^^^^^^^^^^^^^^
 >Constructor : <T>() => Constructor<T>
+>            : ^ ^^^^^^^              
 >0 : number
+>  : ^^^^^^
 
 class C5 extends Constructor<T5>() { c: number }
 >C5 : C5
+>   : ^^
 >Constructor<T5>() : T5
+>                  : ^^
 >Constructor : <T>() => Constructor<T>
+>            : ^ ^^^^^^^              
 >c : number
+>  : ^^^^^^
 
 declare class CX { static a: string }
 >CX : CX
+>   : ^^
 >a : string
+>  : ^^^^^^
 
 declare enum EX { A, B, C }
 >EX : EX
+>   : ^^
 >A : EX.A
+>  : ^^^^
 >B : EX.B
+>  : ^^^^
 >C : EX.C
+>  : ^^^^
 
 declare namespace NX { export const a = "hello" }
 >NX : typeof NX
+>   : ^^^^^^^^^
 >a : "hello"
+>  : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 type TCX = typeof CX;
 >TCX : typeof CX
+>    : ^^^^^^^^^
 >CX : typeof CX
+>   : ^^^^^^^^^
 
 type TEX = typeof EX;
 >TEX : typeof EX
+>    : ^^^^^^^^^
 >EX : typeof EX
+>   : ^^^^^^^^^
 
 type TNX = typeof NX;
 >TNX : typeof NX
+>    : ^^^^^^^^^
 >NX : typeof NX
+>   : ^^^^^^^^^
 
 interface I10 extends TCX { a: number }
 >a : number
+>  : ^^^^^^
 
 interface I11 extends TEX { C: string }
 >C : string
+>  : ^^^^^^
 
 interface I12 extends TNX { a: number }
 >a : number
+>  : ^^^^^^
 
 interface I14 extends TCX { [x: string]: number }
 >x : string
+>  : ^^^^^^
 
 interface I15 extends TEX { [x: string]: number }
 >x : string
+>  : ^^^^^^
 
 interface I16 extends TNX { [x: string]: number }
 >x : string
+>  : ^^^^^^
 
 type Identifiable<T> = { _id: string } & T;
 >Identifiable : Identifiable<T>
+>             : ^^^^^^^^^^^^^^^
 >_id : string
+>    : ^^^^^^
 
 interface I20 extends Partial<T1> { a: string }
 >a : string
+>  : ^^^^^^
 
 interface I21 extends Readonly<T1> { a: string }
 >a : string
+>  : ^^^^^^
 
 interface I22 extends Identifiable<T1> { a: string }
 >a : string
+>  : ^^^^^^
 
 interface I23 extends Identifiable<T1 & { b: number}> { a: string }
 >b : number
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
 type U = { a: number } | { b: string };
->U : { a: number; } | { b: string; }
+>U : U
+>  : ^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 interface I30 extends U { x: string }
 >x : string
+>  : ^^^^^^
 
 interface I31<T> extends T { x: string }
 >x : string
+>  : ^^^^^^
 

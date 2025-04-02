@@ -1,18 +1,32 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/a/b/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/output/AnotherDependency/file1.d.ts]
+//// [/home/src/projects/a/b/output/AnotherDependency/file1.d.ts]
 declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }
 
-//// [/a/b/dependencies/file2.d.ts]
+//// [/home/src/projects/a/b/dependencies/file2.d.ts]
 declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }
 
-//// [/a/b/project/src/main.ts]
+//// [/home/src/projects/a/b/project/src/main.ts]
 namespace Main { export function fooBar() {} }
 
-//// [/a/b/project/src/main2.ts]
+//// [/home/src/projects/a/b/project/src/main2.ts]
 namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/projects/a/b/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../output/common.js",
+    "target": "es5"
+  },
+  "files": [
+    "/home/src/projects/a/b/output/AnotherDependency/file1.d.ts",
+    "/home/src/projects/a/b/dependencies/file2.d.ts",
+    "/home/src/projects/a/b/project/src/main.ts",
+    "/home/src/projects/a/b/project/src/main2.ts"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -24,60 +38,25 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/a/b/project/tsconfig.json]
-{"compilerOptions":{"outFile":"../output/common.js","target":"es5"},"files":["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]}
 
-
-/a/lib/tsc.js --w -p /a/b/project/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
-[[90m12:00:31 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96ma/b/project/src/main2.ts[0m:[93m1[0m:[93m114[0m - [91merror[0m[90m TS2724: [0m'Common.SomeComponent.DynamicMenu' has no exported member named 'z'. Did you mean 'Z'?
+[96msrc/main2.ts[0m:[93m1[0m:[93m114[0m - [91merror[0m[90m TS2724: [0m'Common.SomeComponent.DynamicMenu' has no exported member named 'z'. Did you mean 'Z'?
 
 [7m1[0m namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
 [7m [0m [91m                                                                                                                 ~[0m
 
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]
-Program options: {"outFile":"/a/b/output/common.js","target":1,"watch":true,"project":"/a/b/project/tsconfig.json","configFilePath":"/a/b/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/output/AnotherDependency/file1.d.ts
-/a/b/dependencies/file2.d.ts
-/a/b/project/src/main.ts
-/a/b/project/src/main2.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-PolledWatches::
-/a/b/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/project/tsconfig.json: *new*
-  {}
-/a/b/output/anotherdependency/file1.d.ts: *new*
-  {}
-/a/b/dependencies/file2.d.ts: *new*
-  {}
-/a/b/project/src/main.ts: *new*
-  {}
-/a/b/project/src/main2.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
-//// [/a/b/output/common.js]
+//// [/home/src/projects/a/b/output/common.js]
 var Main;
 (function (Main) {
     function fooBar() { }
@@ -93,3 +72,58 @@ var main;
 })(main || (main = {}));
 
 
+
+PolledWatches::
+/home/src/projects/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/a/b/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/projects/a/b/dependencies/file2.d.ts: *new*
+  {}
+/home/src/projects/a/b/output/AnotherDependency/file1.d.ts: *new*
+  {}
+/home/src/projects/a/b/project/src/main.ts: *new*
+  {}
+/home/src/projects/a/b/project/src/main2.ts: *new*
+  {}
+/home/src/projects/a/b/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/home/src/projects/a/b/output/AnotherDependency/file1.d.ts",
+  "/home/src/projects/a/b/dependencies/file2.d.ts",
+  "/home/src/projects/a/b/project/src/main.ts",
+  "/home/src/projects/a/b/project/src/main2.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/a/b/output/common.js",
+  "target": 1,
+  "watch": true,
+  "configFilePath": "/home/src/projects/a/b/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/b/output/AnotherDependency/file1.d.ts
+/home/src/projects/a/b/dependencies/file2.d.ts
+/home/src/projects/a/b/project/src/main.ts
+/home/src/projects/a/b/project/src/main2.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/b/output/AnotherDependency/file1.d.ts
+/home/src/projects/a/b/dependencies/file2.d.ts
+/home/src/projects/a/b/project/src/main.ts
+/home/src/projects/a/b/project/src/main2.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

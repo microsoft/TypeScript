@@ -1,10 +1,10 @@
-tests/cases/compiler/f2.ts(1,9): error TS2440: Import declaration conflicts with local declaration of 'N'.
+f2.ts(1,9): error TS2440: Import declaration conflicts with local declaration of 'N'.
 
 
-==== tests/cases/compiler/f1.ts (0 errors) ====
+==== f1.ts (0 errors) ====
     export namespace N { export var x = 1; }
     
-==== tests/cases/compiler/f2.ts (1 errors) ====
+==== f2.ts (1 errors) ====
     import {N} from "./f1";
             ~
 !!! error TS2440: Import declaration conflicts with local declaration of 'N'.

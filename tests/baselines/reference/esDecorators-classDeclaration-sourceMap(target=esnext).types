@@ -1,4 +1,6 @@
-=== tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.ts ===
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.ts] ////
+
+=== esDecorators-classDeclaration-sourceMap.ts ===
 declare var dec: any;
 >dec : any
 
@@ -10,6 +12,7 @@ declare var dec: any;
 
 class C {
 >C : C
+>  : ^
 
     @dec
 >dec : any
@@ -19,6 +22,7 @@ class C {
 
     method() {}
 >method : () => void
+>       : ^^^^^^^^^^
 
     @dec
 >dec : any
@@ -28,7 +32,9 @@ class C {
 
     get x() { return 1; }
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @dec
 >dec : any
@@ -38,7 +44,9 @@ class C {
 
     set x(value: number) { }
 >x : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     @dec
 >dec : any
@@ -48,7 +56,9 @@ class C {
 
     y = 1;
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @dec
 >dec : any
@@ -58,7 +68,9 @@ class C {
 
     accessor z = 1;
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     @dec
 >dec : any
@@ -68,6 +80,7 @@ class C {
 
     static #method() {}
 >#method : () => void
+>        : ^^^^^^^^^^
 
     @dec
 >dec : any
@@ -77,7 +90,9 @@ class C {
 
     static get #x() { return 1; }
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     @dec
 >dec : any
@@ -87,7 +102,9 @@ class C {
 
     static set #x(value: number) { }
 >#x : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     @dec
 >dec : any
@@ -97,7 +114,9 @@ class C {
 
     static #y = 1;
 >#y : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     @dec
 >dec : any
@@ -107,6 +126,8 @@ class C {
 
     static accessor #z = 1;
 >#z : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 }
 

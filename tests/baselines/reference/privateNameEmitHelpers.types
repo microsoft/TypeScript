@@ -1,37 +1,60 @@
-=== tests/cases/conformance/classes/members/privateNames/main.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameEmitHelpers.ts] ////
+
+=== main.ts ===
 export class C {
 >C : C
+>  : ^
 
     #a = 1;
 >#a : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     #b() { this.#c = 42; }
 >#b : () => void
+>   : ^^^^^^^^^^
 >this.#c = 42 : 42
+>             : ^^
 >this.#c : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >42 : 42
+>   : ^^
 
     set #c(v: number) { this.#a += v; }
 >#c : number
+>   : ^^^^^^
 >v : number
+>  : ^^^^^^
 >this.#a += v : number
+>             : ^^^^^^
 >this.#a : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >v : number
+>  : ^^^^^^
 }
 
-=== tests/cases/conformance/classes/members/privateNames/tslib.d.ts ===
+=== tslib.d.ts ===
 // these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
 export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;
 >__classPrivateFieldGet : <T extends object, V>(receiver: T, state: any) => V
+>                       : ^ ^^^^^^^^^      ^^ ^^        ^^ ^^     ^^   ^^^^^ 
 >receiver : T
+>         : ^
 >state : any
+>      : ^^^
 
 export declare function __classPrivateFieldSet<T extends object, V>(receiver: T, state: any, value: V): V;
 >__classPrivateFieldSet : <T extends object, V>(receiver: T, state: any, value: V) => V
+>                       : ^ ^^^^^^^^^      ^^ ^^        ^^ ^^     ^^   ^^     ^^ ^^^^^ 
 >receiver : T
+>         : ^
 >state : any
+>      : ^^^
 >value : V
+>      : ^
 

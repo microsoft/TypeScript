@@ -1,22 +1,32 @@
-=== tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule.ts] ////
+
+=== privateStaticNotAccessibleInClodule.ts ===
 // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 
 class C {
 >C : C
+>  : ^
 
     private foo: string;
 >foo : string
+>    : ^^^^^^
 
     private static bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 module C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export var y = C.bar; // error
 >y : string
+>  : ^^^^^^
 >C.bar : string
+>      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >bar : string
+>    : ^^^^^^
 }

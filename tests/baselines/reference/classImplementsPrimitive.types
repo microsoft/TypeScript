@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/classImplementsPrimitive.ts] ////
+
+=== classImplementsPrimitive.ts ===
+// classes cannot implement primitives
+
+class C implements number { }
+>C : C
+>  : ^
+
+class C2 implements string { }
+>C2 : C2
+>   : ^^
+
+class C3 implements boolean { }
+>C3 : C3
+>   : ^^
+
+const C4 = class implements number {}
+>C4 : typeof C4
+>   : ^^^^^^^^^
+>class implements number {} : typeof C4
+>                           : ^^^^^^^^^
+
+const C5 = class implements string {}
+>C5 : typeof C5
+>   : ^^^^^^^^^
+>class implements string {} : typeof C5
+>                           : ^^^^^^^^^
+
+const C6 = class implements boolean {}
+>C6 : typeof C6
+>   : ^^^^^^^^^
+>class implements boolean {} : typeof C6
+>                            : ^^^^^^^^^
+
+const C7 = class A implements number { }
+>C7 : typeof A
+>   : ^^^^^^^^
+>class A implements number { } : typeof A
+>                              : ^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+
+const C8 = class B implements string { }
+>C8 : typeof B
+>   : ^^^^^^^^
+>class B implements string { } : typeof B
+>                              : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+const C9 = class C implements boolean { }
+>C9 : typeof C
+>   : ^^^^^^^^
+>class C implements boolean { } : typeof C
+>                               : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+

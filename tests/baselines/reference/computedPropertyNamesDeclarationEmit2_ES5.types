@@ -1,24 +1,39 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts] ////
+
+=== computedPropertyNamesDeclarationEmit2_ES5.ts ===
 class C {
 >C : C
+>  : ^
 
     static ["" + ""]() { }
 >["" + ""] : () => void
+>          : ^^^^^^^^^^
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 
     static get ["" + ""]() { return 0; }
 >["" + ""] : number
+>          : ^^^^^^
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 
     static set ["" + ""](x) { }
 >["" + ""] : any
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 >x : any
 }

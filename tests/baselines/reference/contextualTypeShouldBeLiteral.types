@@ -1,238 +1,329 @@
-=== tests/cases/compiler/contextualTypeShouldBeLiteral.ts ===
+//// [tests/cases/compiler/contextualTypeShouldBeLiteral.ts] ////
+
+=== contextualTypeShouldBeLiteral.ts ===
 interface X {
     type: 'x';
 >type : "x"
+>     : ^^^
 
     value: string;
 >value : string
+>      : ^^^^^^
 
     method(): void;
 >method : () => void
+>       : ^^^^^^    
 }
 
 interface Y {
     type: 'y';
 >type : "y"
+>     : ^^^
 
     value: 'none' | 'done';
 >value : "none" | "done"
+>      : ^^^^^^^^^^^^^^^
 
     method(): void;
 >method : () => void
+>       : ^^^^^^    
 }
 
 function foo(bar: X | Y) { }
 >foo : (bar: X | Y) => void
+>    : ^   ^^     ^^^^^^^^^
 >bar : X | Y
+>    : ^^^^^
 
 foo({
 >foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
+>                                                                                                             : ^^^^
 >foo : (bar: X | Y) => void
+>    : ^   ^^     ^^^^^^^^^
 >{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method(): void; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: 'y',
 >type : "y"
+>     : ^^^
 >'y' : "y"
+>    : ^^^
 
     value: 'done',
 >value : "done"
+>      : ^^^^^^
 >'done' : "done"
+>       : ^^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         this;
 >this : Y
+>     : ^
 
         this.type;
 >this.type : "y"
+>          : ^^^
 >this : Y
+>     : ^
 >type : "y"
+>     : ^^^
 
         this.value;
 >this.value : "none" | "done"
+>           : ^^^^^^^^^^^^^^^
 >this : Y
+>     : ^
 >value : "none" | "done"
+>      : ^^^^^^^^^^^^^^^
     }
 });
 
 interface X2 {
     type1: 'x';
 >type1 : "x"
+>      : ^^^
 
     value: string;
 >value : string
+>      : ^^^^^^
 
     method(): void;
 >method : () => void
+>       : ^^^^^^    
 }
 
 interface Y2 {
     type2: 'y';
 >type2 : "y"
+>      : ^^^
 
     value: 'none' | 'done';
 >value : "none" | "done"
+>      : ^^^^^^^^^^^^^^^
 
     method(): void;
 >method : () => void
+>       : ^^^^^^    
 }
 
 function foo2(bar: X2 | Y2) { }
 >foo2 : (bar: X2 | Y2) => void
+>     : ^   ^^       ^^^^^^^^^
 >bar : X2 | Y2
+>    : ^^^^^^^
 
 foo2({
 >foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
+>                                                                                             : ^^^^
 >foo2 : (bar: X2 | Y2) => void
+>     : ^   ^^       ^^^^^^^^^
 >{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type2: 'y',
 >type2 : "y"
+>      : ^^^
 >'y' : "y"
+>    : ^^^
 
     value: 'done',
 >value : "done"
+>      : ^^^^^^
 >'done' : "done"
+>       : ^^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         this;
 >this : X2 | Y2
+>     : ^^^^^^^
 
         this.value;
 >this.value : string
+>           : ^^^^^^
 >this : X2 | Y2
+>     : ^^^^^^^
 >value : string
+>      : ^^^^^^
     }
 });
 
 interface X3 {
     type: 'x';
 >type : "x"
+>     : ^^^
 
     value: 1 | 2 | 3;
 >value : 1 | 2 | 3
+>      : ^^^^^^^^^
 
     xtra: number;
 >xtra : number
+>     : ^^^^^^
 }
 
 interface Y3 {
     type: 'y';
 >type : "y"
+>     : ^^^
 
     value: 11 | 12 | 13;
 >value : 11 | 12 | 13
+>      : ^^^^^^^^^^^^
 
     ytra: number;
 >ytra : number
+>     : ^^^^^^
 }
 
 let xy: X3 | Y3 = {
 >xy : X3 | Y3
+>   : ^^^^^^^
 >{    type: 'y',    value: 11,    ytra: 12} : { type: "y"; value: 11; ytra: number; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: 'y',
 >type : "y"
+>     : ^^^
 >'y' : "y"
+>    : ^^^
 
     value: 11,
 >value : 11
+>      : ^^
 >11 : 11
+>   : ^^
 
     ytra: 12
 >ytra : number
+>     : ^^^^^^
 >12 : 12
+>   : ^^
 
 };
 
 xy;
 >xy : Y3
+>   : ^^
 
 
 interface LikeA {
     x: 'x';
 >x : "x"
+>  : ^^^
 
     y: 'y';
 >y : "y"
+>  : ^^^
 
     value: string;
 >value : string
+>      : ^^^^^^
 
     method(): void;
 >method : () => void
+>       : ^^^^^^    
 }
 
 interface LikeB {
     x: 'xx';
 >x : "xx"
+>  : ^^^^
 
     y: 'yy';
 >y : "yy"
+>  : ^^^^
 
     value: number;
 >value : number
+>      : ^^^^^^
 
     method(): void;
 >method : () => void
+>       : ^^^^^^    
 }
 
 let xyz: LikeA | LikeB = {
 >xyz : LikeA | LikeB
+>    : ^^^^^^^^^^^^^
 >{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method(): void; }
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 'x',
 >x : "x"
+>  : ^^^
 >'x' : "x"
+>    : ^^^
 
     y: 'y',
 >y : "y"
+>  : ^^^
 >'y' : "y"
+>    : ^^^
 
     value: "foo",
 >value : string
+>      : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         this;
 >this : LikeA
+>     : ^^^^^
 
         this.x;
 >this.x : "x"
+>       : ^^^
 >this : LikeA
+>     : ^^^^^
 >x : "x"
+>  : ^^^
 
         this.y;
 >this.y : "y"
+>       : ^^^
 >this : LikeA
+>     : ^^^^^
 >y : "y"
+>  : ^^^
 
         this.value;
 >this.value : string
+>           : ^^^^^^
 >this : LikeA
+>     : ^^^^^
 >value : string
+>      : ^^^^^^
     }
 };
 
 xyz;
 >xyz : LikeA
+>    : ^^^^^
 
 // Repro from #29168
 
 interface TestObject {
   type?: 'object';
 >type : "object" | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^
 
   items: {
 >items : { [k: string]: TestGeneric; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [k: string]: TestGeneric;
 >k : string
+>  : ^^^^^^
 
   };
 }
@@ -240,39 +331,58 @@ interface TestObject {
 interface TestString {
   type: 'string';
 >type : "string"
+>     : ^^^^^^^^
 }
 
 type TestGeneric = (TestString | TestObject) & { [k: string]: any; };
->TestGeneric : (TestObject | TestString) & { [k: string]: any; }
+>TestGeneric : TestGeneric
+>            : ^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 
 const test: TestGeneric = {
 >test : TestGeneric
+>     : ^^^^^^^^^^^
 >{  items: {    hello: { type: 'string' },    world: {      items: {        nested: { type: 'string' }      }    }  }} : { items: { hello: { type: "string"; }; world: { items: { nested: { type: "string"; }; }; }; }; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   items: {
 >items : { hello: { type: "string"; }; world: { items: { nested: { type: "string"; }; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    hello: { type: 'string' },    world: {      items: {        nested: { type: 'string' }      }    }  } : { hello: { type: "string"; }; world: { items: { nested: { type: "string"; }; }; }; }
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     hello: { type: 'string' },
 >hello : { type: "string"; }
+>      : ^^^^^^^^^^^^^^^^^^^
 >{ type: 'string' } : { type: "string"; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >type : "string"
+>     : ^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
     world: {
 >world : { items: { nested: { type: "string"; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      items: {        nested: { type: 'string' }      }    } : { items: { nested: { type: "string"; }; }; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       items: {
 >items : { nested: { type: "string"; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        nested: { type: 'string' }      } : { nested: { type: "string"; }; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         nested: { type: 'string' }
 >nested : { type: "string"; }
+>       : ^^^^^^^^^^^^^^^^^^^
 >{ type: 'string' } : { type: "string"; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >type : "string"
+>     : ^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
       }
     }
   }

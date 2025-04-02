@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/constructorHasPrototypeProperty.ts] ////
+
 //// [constructorHasPrototypeProperty.ts]
 module NonGeneric {
     class C {

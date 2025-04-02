@@ -1,19 +1,33 @@
-=== tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts ===
+//// [tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts] ////
+
+=== excessPropertyErrorForFunctionTypes.ts ===
 type FunctionType = () => any;
->FunctionType : () => any
+>FunctionType : FunctionType
+>             : ^^^^^^^^^^^^
 
 type DoesntWork = { a: number, c: number } | FunctionType;
->DoesntWork : { a: number; c: number; } | FunctionType
+>DoesntWork : DoesntWork
+>           : ^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 let doesntWork: DoesntWork = { a: 1, c: 2, d: 3 }
 >doesntWork : DoesntWork
+>           : ^^^^^^^^^^
 >{ a: 1, c: 2, d: 3 } : { a: number; c: number; d: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >c : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >d : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 

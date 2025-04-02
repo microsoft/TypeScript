@@ -16,7 +16,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local function",
-    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void",
+    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: () => ...) => void): void",
     "displayParts": [
      {
       "text": "(",
@@ -148,6 +148,26 @@
      },
      {
       "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
       "kind": "punctuation"
      },
      {
@@ -218,7 +238,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local function",
-    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void",
+    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: () => ...) => void): void",
     "displayParts": [
      {
       "text": "(",
@@ -350,6 +370,26 @@
      },
      {
       "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
       "kind": "punctuation"
      },
      {
@@ -420,7 +460,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local function",
-    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void",
+    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: () => ...) => void): void",
     "displayParts": [
      {
       "text": "(",
@@ -552,6 +592,26 @@
      },
      {
       "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
       "kind": "punctuation"
      },
      {
@@ -622,7 +682,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local function",
-    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void",
+    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: () => ...) => void): void",
     "displayParts": [
      {
       "text": "(",
@@ -754,6 +814,26 @@
      },
      {
       "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
       "kind": "punctuation"
      },
      {
@@ -824,7 +904,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local function",
-    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void",
+    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: () => ...) => void): void",
     "displayParts": [
      {
       "text": "(",
@@ -956,6 +1036,26 @@
      },
      {
       "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
       "kind": "punctuation"
      },
      {
@@ -1026,7 +1126,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local function",
-    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void",
+    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: () => ...) => void): void",
     "displayParts": [
      {
       "text": "(",
@@ -1158,6 +1258,26 @@
      },
      {
       "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
       "kind": "punctuation"
      },
      {
@@ -1228,7 +1348,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "local function",
-    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void",
+    "name": "(local function) foo(a?: void, b?: () => (a?: void, b?: () => ...) => void): void",
     "displayParts": [
      {
       "text": "(",
@@ -1360,6 +1480,26 @@
      },
      {
       "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
       "kind": "punctuation"
      },
      {

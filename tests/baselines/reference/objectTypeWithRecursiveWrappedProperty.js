@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedProperty.ts] ////
+
 //// [objectTypeWithRecursiveWrappedProperty.ts]
 // Basic recursive type
 

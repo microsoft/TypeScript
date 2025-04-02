@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts] ////
+
 //// [exhaustiveSwitchStatements1.ts]
 function f1(x: 1 | 2): string {
     if (!!true) {

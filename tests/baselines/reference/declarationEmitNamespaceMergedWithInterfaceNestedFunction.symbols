@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts ===
+//// [tests/cases/compiler/declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts] ////
+
+=== declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts ===
 export interface Foo {
 >Foo : Symbol(Foo, Decl(declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts, 0, 0))
 

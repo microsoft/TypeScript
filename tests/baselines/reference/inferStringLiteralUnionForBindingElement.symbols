@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferStringLiteralUnionForBindingElement.ts ===
+//// [tests/cases/compiler/inferStringLiteralUnionForBindingElement.ts] ////
+
+=== inferStringLiteralUnionForBindingElement.ts ===
 declare function func<T extends string>(arg: { keys: T[] }): { readonly keys: T[]; readonly firstKey: T; };
 >func : Symbol(func, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 0))
 >T : Symbol(T, Decl(inferStringLiteralUnionForBindingElement.ts, 0, 22))

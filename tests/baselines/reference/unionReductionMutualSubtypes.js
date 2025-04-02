@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionReductionMutualSubtypes.ts] ////
+
 //// [unionReductionMutualSubtypes.ts]
 // Repro from #35414
 

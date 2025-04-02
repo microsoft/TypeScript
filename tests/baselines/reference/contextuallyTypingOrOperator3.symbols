@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypingOrOperator3.ts ===
+//// [tests/cases/compiler/contextuallyTypingOrOperator3.ts] ////
+
+=== contextuallyTypingOrOperator3.ts ===
 function foo<T, U extends T>(u: U) {
 >foo : Symbol(foo, Decl(contextuallyTypingOrOperator3.ts, 0, 0))
 >T : Symbol(T, Decl(contextuallyTypingOrOperator3.ts, 0, 13))

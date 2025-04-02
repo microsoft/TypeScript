@@ -1,63 +1,97 @@
-=== tests/cases/compiler/narrowingIntersection.ts ===
+//// [tests/cases/compiler/narrowingIntersection.ts] ////
+
+=== narrowingIntersection.ts ===
 // Somehow this being an intersection matters.
 type FooAndBaz = { foo: unknown } & { baz: unknown };
->FooAndBaz : { foo: unknown; } & { baz: unknown; }
+>FooAndBaz : FooAndBaz
+>          : ^^^^^^^^^
 >foo : unknown
+>    : ^^^^^^^
 >baz : unknown
+>    : ^^^^^^^
 
 type Disjoint =
->Disjoint : { readonly value: string; readonly err?: never; } | { readonly value?: never; readonly err: FooAndBaz; }
+>Disjoint : Disjoint
+>         : ^^^^^^^^
 
  | { readonly value: string; readonly err?: never; }
 >value : string
+>      : ^^^^^^
 >err : never
+>    : ^^^^^
 
  | { readonly value?: never; readonly err: FooAndBaz; };
 >value : never
+>      : ^^^^^
 >err : FooAndBaz
+>    : ^^^^^^^^^
 
 function test1(result: Disjoint): string {
 >test1 : (result: Disjoint) => string
+>      : ^      ^^        ^^^^^      
 >result : Disjoint
+>       : ^^^^^^^^
 
     if (result.err) {
 >result.err : FooAndBaz
+>           : ^^^^^^^^^
 >result : Disjoint
+>       : ^^^^^^^^
 >err : FooAndBaz
+>    : ^^^^^^^^^
 
         throw result.err;
 >result.err : FooAndBaz
+>           : ^^^^^^^^^
 >result : Disjoint
+>       : ^^^^^^^^
 >err : FooAndBaz
+>    : ^^^^^^^^^
     }
     // Error, should OK
     return result.value;
 >result.value : string
+>             : ^^^^^^
 >result : Disjoint
+>       : ^^^^^^^^
 >value : string
+>      : ^^^^^^
 }
 
 type TrivialIntersection = { a: 1 } & { a: 1 };
->TrivialIntersection : { a: 1; } & { a: 1; }
+>TrivialIntersection : TrivialIntersection
+>                    : ^^^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >a : 1
+>  : ^
 
 function want0(x: 0) {}
 >want0 : (x: 0) => void
+>      : ^ ^^ ^^^^^^^^^
 >x : 0
+>  : ^
 
 function test2(a: 0 | TrivialIntersection) {
 >test2 : (a: 0 | TrivialIntersection) => void
+>      : ^ ^^                       ^^^^^^^^^
 >a : 0 | TrivialIntersection
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     if (a === 0) {
 >a === 0 : boolean
+>        : ^^^^^^^
 >a : 0 | TrivialIntersection
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
         want0(a); // Fails, but expect to work
 >want0(a) : void
+>         : ^^^^
 >want0 : (x: 0) => void
+>      : ^ ^^ ^^^^^^^^^
 >a : 0
+>  : ^
     }
 }

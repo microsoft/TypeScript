@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesCommonJS.ts] ////
+
 //// [exportNonInitializedVariablesCommonJS.ts]
 var;
 let;

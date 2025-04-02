@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInTupleTypeParameterConstraints.ts ===
+//// [tests/cases/compiler/thisInTupleTypeParameterConstraints.ts] ////
+
+=== thisInTupleTypeParameterConstraints.ts ===
 /// <reference no-default-lib="true"/>
 
 interface Boolean {}

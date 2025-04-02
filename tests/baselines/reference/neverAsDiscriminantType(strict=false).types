@@ -1,51 +1,83 @@
-=== tests/cases/compiler/neverAsDiscriminantType.ts ===
+//// [tests/cases/compiler/neverAsDiscriminantType.ts] ////
+
+=== neverAsDiscriminantType.ts ===
 type Foo1 = { kind: 'a', a: number } | { kind: 'b' } | { kind: never };
->Foo1 : { kind: 'a'; a: number; } | { kind: 'b'; } | { kind: never; }
+>Foo1 : Foo1
+>     : ^^^^
 >kind : "a"
+>     : ^^^
 >a : number
+>  : ^^^^^^
 >kind : "b"
+>     : ^^^
 >kind : never
+>     : ^^^^^
 
 function f1(foo: Foo1) {
 >f1 : (foo: Foo1) => void
+>   : ^   ^^    ^^^^^^^^^
 >foo : Foo1
+>    : ^^^^
 
     if (foo.kind === 'a') {
 >foo.kind === 'a' : boolean
+>                 : ^^^^^^^
 >foo.kind : "a" | "b"
+>         : ^^^^^^^^^
 >foo : Foo1
+>    : ^^^^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
         foo.a;
 >foo.a : number
+>      : ^^^^^^
 >foo : { kind: "a"; a: number; }
+>    : ^^^^^^^^   ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
     }
 }
 
 type Foo2 = { kind?: 'a', a: number } | { kind?: 'b' } | { kind?: never };
->Foo2 : { kind?: 'a'; a: number; } | { kind?: 'b'; } | { kind?: never; }
+>Foo2 : Foo2
+>     : ^^^^
 >kind : "a"
+>     : ^^^
 >a : number
+>  : ^^^^^^
 >kind : "b"
+>     : ^^^
 >kind : never
+>     : ^^^^^
 
 function f2(foo: Foo2) {
 >f2 : (foo: Foo2) => void
+>   : ^   ^^    ^^^^^^^^^
 >foo : Foo2
+>    : ^^^^
 
     if (foo.kind === 'a') {
 >foo.kind === 'a' : boolean
+>                 : ^^^^^^^
 >foo.kind : "a" | "b"
+>         : ^^^^^^^^^
 >foo : Foo2
+>    : ^^^^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
         foo.a;
 >foo.a : number
+>      : ^^^^^^
 >foo : { kind?: "a"; a: number; }
+>    : ^^^^^^^^^   ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
     }
 }
 
@@ -54,26 +86,33 @@ function f2(foo: Foo2) {
 export interface GatewayPayloadStructure<O extends GatewayOpcode, T extends keyof GatewayEvents, D> {
     op: O
 >op : O
+>   : ^
 
     d: D
 >d : D
+>  : ^
 
     t?: T
 >t : T
+>  : ^
 
     s?: number
 >s : number
+>  : ^^^^^^
 }
 
 export type GatewayPayload = {
->GatewayPayload : GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_CREATE", { a: 1; }> | GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_UPDATE", { a: 2; }> | GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_DELETE", { a: 3; }> | GatewayPayloadStructure<GatewayOpcode.HEARTBEAT, never, never> | GatewayPayloadStructure<GatewayOpcode.IDENTIFY, never, never> | GatewayPayloadStructure<GatewayOpcode.PRESENCE_UPDATE, never, never> | GatewayPayloadStructure<GatewayOpcode.VOICE_STATE_UPDATE, never, never> | GatewayPayloadStructure<GatewayOpcode.RESUME, never, never> | GatewayPayloadStructure<GatewayOpcode.RECONNECT, never, never> | GatewayPayloadStructure<GatewayOpcode.REQUEST_GUILD_MEMBERS, never, never> | GatewayPayloadStructure<GatewayOpcode.INVALID_SESSION, never, never> | GatewayPayloadStructure<GatewayOpcode.HELLO, never, { b: 1; }> | GatewayPayloadStructure<GatewayOpcode.HEARTBEAT_ACK, never, never>
+>GatewayPayload : GatewayPayload
+>               : ^^^^^^^^^^^^^^
 
     [O in GatewayOpcode]: O extends GatewayOpcode.DISPATCH
 >GatewayOpcode : any
+>              : ^^^
 
     ? {
         [T in keyof GatewayEvents]: GatewayPayloadStructure<GatewayOpcode.DISPATCH, T, GatewayEvents[T]>
 >GatewayOpcode : any
+>              : ^^^
 
     }[keyof GatewayEvents]
     : GatewayPayloadStructure<O, never, O extends keyof GatewayParams ? GatewayParams[O] : never>
@@ -82,96 +121,145 @@ export type GatewayPayload = {
 export interface GatewayParams {
     [GatewayOpcode.HELLO]: { b: 1 }
 >[GatewayOpcode.HELLO] : { b: 1; }
+>                      : ^^^^^ ^^^
 >GatewayOpcode.HELLO : GatewayOpcode.HELLO
+>                    : ^^^^^^^^^^^^^^^^^^^
 >GatewayOpcode : typeof GatewayOpcode
+>              : ^^^^^^^^^^^^^^^^^^^^
 >HELLO : GatewayOpcode.HELLO
+>      : ^^^^^^^^^^^^^^^^^^^
 >b : 1
+>  : ^
 }
 
 export enum GatewayOpcode {
 >GatewayOpcode : GatewayOpcode
+>              : ^^^^^^^^^^^^^
 
     DISPATCH = 0,
 >DISPATCH : GatewayOpcode.DISPATCH
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     HEARTBEAT = 1,
 >HEARTBEAT : GatewayOpcode.HEARTBEAT
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     IDENTIFY = 2,
 >IDENTIFY : GatewayOpcode.IDENTIFY
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
     PRESENCE_UPDATE = 3,
 >PRESENCE_UPDATE : GatewayOpcode.PRESENCE_UPDATE
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
     VOICE_STATE_UPDATE = 4,
 >VOICE_STATE_UPDATE : GatewayOpcode.VOICE_STATE_UPDATE
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
 
     RESUME = 6,
 >RESUME : GatewayOpcode.RESUME
+>       : ^^^^^^^^^^^^^^^^^^^^
 >6 : 6
+>  : ^
 
     RECONNECT = 7,
 >RECONNECT : GatewayOpcode.RECONNECT
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >7 : 7
+>  : ^
 
     REQUEST_GUILD_MEMBERS = 8,
 >REQUEST_GUILD_MEMBERS : GatewayOpcode.REQUEST_GUILD_MEMBERS
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >8 : 8
+>  : ^
 
     INVALID_SESSION = 9,
 >INVALID_SESSION : GatewayOpcode.INVALID_SESSION
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >9 : 9
+>  : ^
 
     HELLO = 10,
 >HELLO : GatewayOpcode.HELLO
+>      : ^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
     HEARTBEAT_ACK = 11,
 >HEARTBEAT_ACK : GatewayOpcode.HEARTBEAT_ACK
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >11 : 11
+>   : ^^
 }
 
 export interface GatewayEvents {
     MESSAGE_CREATE: { a: 1 }
 >MESSAGE_CREATE : { a: 1; }
+>               : ^^^^^ ^^^
 >a : 1
+>  : ^
 
     MESSAGE_UPDATE: { a: 2 }
 >MESSAGE_UPDATE : { a: 2; }
+>               : ^^^^^ ^^^
 >a : 2
+>  : ^
 
     MESSAGE_DELETE: { a: 3 }
 >MESSAGE_DELETE : { a: 3; }
+>               : ^^^^^ ^^^
 >a : 3
+>  : ^
 }
 
 function assertMessage(event: { a: 1 }) { }
->assertMessage : (event: {    a: 1;}) => void
+>assertMessage : (event: { a: 1; }) => void
+>              : ^     ^^         ^^^^^^^^^
 >event : { a: 1; }
+>      : ^^^^^ ^^^
 >a : 1
+>  : ^
 
 export async function adaptSession(input: GatewayPayload) {
 >adaptSession : (input: GatewayPayload) => Promise<void>
+>             : ^     ^^              ^^^^^^^^^^^^^^^^^^
 >input : GatewayPayload
+>      : ^^^^^^^^^^^^^^
 
     if (input.t === 'MESSAGE_CREATE') {
 >input.t === 'MESSAGE_CREATE' : boolean
+>                             : ^^^^^^^
 >input.t : "MESSAGE_CREATE" | "MESSAGE_UPDATE" | "MESSAGE_DELETE"
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : GatewayPayload
+>      : ^^^^^^^^^^^^^^
 >t : "MESSAGE_CREATE" | "MESSAGE_UPDATE" | "MESSAGE_DELETE"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'MESSAGE_CREATE' : "MESSAGE_CREATE"
+>                 : ^^^^^^^^^^^^^^^^
 
         assertMessage(input.d)
 >assertMessage(input.d) : void
+>                       : ^^^^
 >assertMessage : (event: { a: 1; }) => void
+>              : ^     ^^         ^^^^^^^^^
 >input.d : { a: 1; }
+>        : ^^^^^ ^^^
 >input : GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_CREATE", { a: 1; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^
 >d : { a: 1; }
+>  : ^^^^^ ^^^
     }
 }
 

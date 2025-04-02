@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unicodeEscapesInJSDoc.ts] ////
+
 //// [file.js]
 /**
  * @param {number} \u0061

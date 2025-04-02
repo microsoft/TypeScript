@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty3.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

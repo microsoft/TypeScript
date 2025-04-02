@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeGenericIndexedAccess.ts] ////
+
 //// [mappedTypeGenericIndexedAccess.ts]
 // Repro from #49242
 

@@ -1,28 +1,45 @@
-=== tests/cases/compiler/noErrorsInCallback.ts ===
+//// [tests/cases/compiler/noErrorsInCallback.ts] ////
+
+=== noErrorsInCallback.ts ===
 class Bar {
 >Bar : Bar
+>    : ^^^
 
     constructor(public foo: string) { }
 >foo : string
+>    : ^^^^^^
 }
 var one = new Bar({}); // Error
 >one : Bar
+>    : ^^^
 >new Bar({}) : Bar
+>            : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 [].forEach(() => {
 >[].forEach(() => {    var two = new Bar({}); // No error?}) : void
+>                                                            : ^^^^
 >[].forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>           : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >() => {    var two = new Bar({}); // No error?} : () => void
+>                                                : ^^^^^^^^^^
 
     var two = new Bar({}); // No error?
 >two : Bar
+>    : ^^^
 >new Bar({}) : Bar
+>            : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 });
  

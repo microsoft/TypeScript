@@ -1,18 +1,31 @@
-=== tests/cases/compiler/excessPropertyCheckingIntersectionWithConditional.ts ===
+//// [tests/cases/compiler/excessPropertyCheckingIntersectionWithConditional.ts] ////
+
+=== excessPropertyCheckingIntersectionWithConditional.ts ===
 type Foo<K> = K extends unknown ? { a: number } : unknown
 >Foo : Foo<K>
+>    : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 const createDefaultExample = <K,>(x: K): Foo<K> & { x: K; } => {
 >createDefaultExample : <K>(x: K) => Foo<K> & { x: K; }
+>                     : ^ ^^ ^^ ^^^^^                  
 ><K,>(x: K): Foo<K> & { x: K; } => {  return { a: 1, x: x }; // okay in TS 4.7.4, error in TS 4.8.2} : <K>(x: K) => Foo<K> & { x: K; }
+>                                                                                                    : ^ ^^ ^^ ^^^^^                  
 >x : K
+>  : ^
 >x : K
+>  : ^
 
   return { a: 1, x: x }; // okay in TS 4.7.4, error in TS 4.8.2
 >{ a: 1, x: x } : { a: number; x: K; }
+>               : ^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >x : K
+>  : ^
 >x : K
+>  : ^
 }
