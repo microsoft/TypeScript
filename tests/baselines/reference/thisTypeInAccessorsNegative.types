@@ -12,7 +12,7 @@ interface Foo {
 }
 interface Bar {
     wrong: "place" | "time" | "method" | "technique";
->wrong : "place" | "time" | "method" | "technique"
+>wrong : "method" | "place" | "technique" | "time"
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 const mismatch = {
@@ -48,11 +48,11 @@ const mismatch = {
 >  : ^^^^^^
 >this.wrong = "method" : "method"
 >                      : ^^^^^^^^
->this.wrong : "place" | "time" | "method" | "technique"
+>this.wrong : "method" | "place" | "technique" | "time"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : Bar
 >     : ^^^
->wrong : "place" | "time" | "method" | "technique"
+>wrong : "method" | "place" | "technique" | "time"
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"method" : "method"
 >         : ^^^^^^^^

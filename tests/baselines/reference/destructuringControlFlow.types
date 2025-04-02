@@ -50,7 +50,7 @@ function f1(obj: { a?: string }) {
 function f2(obj: [number, string] | null[]) {
 >f2 : (obj: [number, string] | null[]) => void
 >   : ^   ^^                         ^^^^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let a0 = obj[0];  // number | null
@@ -58,7 +58,7 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^^^^^^^^
 >obj[0] : number | null
 >       : ^^^^^^^^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
@@ -68,7 +68,7 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^^^^^^^^
 >obj[1] : string | null
 >       : ^^^^^^^^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
@@ -78,13 +78,13 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^^^^^^^^
 >b1 : string | null
 >   : ^^^^^^^^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ([a0, a1] = obj);
->([a0, a1] = obj) : [number, string] | null[]
+>([a0, a1] = obj) : null[] | [number, string]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
->[a0, a1] = obj : [number, string] | null[]
+>[a0, a1] = obj : null[] | [number, string]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[a0, a1] : [number | null, string | null]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -92,7 +92,7 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^^^^^^^^
 >a1 : string | null
 >   : ^^^^^^^^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (obj[0] && obj[1]) {
@@ -100,13 +100,13 @@ function f2(obj: [number, string] | null[]) {
 >                 : ^^^^^^^^^^^^^^^^^
 >obj[0] : number | null
 >       : ^^^^^^^^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >obj[1] : string | null
 >       : ^^^^^^^^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
@@ -116,7 +116,7 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^
 >obj[0] : number
 >       : ^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
@@ -126,7 +126,7 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^
 >obj[1] : string
 >       : ^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
@@ -136,13 +136,13 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^
 >d1 : string
 >   : ^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ([c0, c1] = obj);
->([c0, c1] = obj) : [number, string] | null[]
+>([c0, c1] = obj) : null[] | [number, string]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
->[c0, c1] = obj : [number, string] | null[]
+>[c0, c1] = obj : null[] | [number, string]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[c0, c1] : [number, string]
 >         : ^^^^^^^^^^^^^^^^
@@ -150,7 +150,7 @@ function f2(obj: [number, string] | null[]) {
 >   : ^^^^^^
 >c1 : string
 >   : ^^^^^^
->obj : [number, string] | null[]
+>obj : null[] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

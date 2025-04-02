@@ -8,7 +8,7 @@ export class Foo {
     #a = true ? 1 : "1"
 >#a : string | number
 >   : ^^^^^^^^^^^^^^^
->true ? 1 : "1" : 1 | "1"
+>true ? 1 : "1" : "1" | 1
 >               : ^^^^^^^
 >true : true
 >     : ^^^^

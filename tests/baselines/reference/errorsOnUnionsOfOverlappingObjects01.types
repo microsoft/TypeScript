@@ -101,7 +101,7 @@ g({ a: '', b: '' })
 declare function h(x: Foo | Bar | Other): any;
 >h : (x: Foo | Bar | Other) => any
 >  : ^ ^^                 ^^^^^   
->x : Foo | Bar | Other
+>x : Bar | Foo | Other
 >  : ^^^^^^^^^^^^^^^^^
 
 h(x);

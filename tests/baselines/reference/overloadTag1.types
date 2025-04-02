@@ -29,7 +29,7 @@ export function overloaded(a,b) {
 >                                               : ^^^^^^^
 >typeof a === "string" : boolean
 >                      : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -37,7 +37,7 @@ export function overloaded(a,b) {
 >         : ^^^^^^^^
 >typeof b === "string" : boolean
 >                      : ^^^^^^^
->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -57,7 +57,7 @@ export function overloaded(a,b) {
 >                                               : ^^^^^^^
 >typeof a === "number" : boolean
 >                      : ^^^^^^^
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -65,7 +65,7 @@ export function overloaded(a,b) {
 >         : ^^^^^^^^
 >typeof b === "number" : boolean
 >                      : ^^^^^^^
->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string | number
 >  : ^^^^^^^^^^^^^^^

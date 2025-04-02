@@ -27,7 +27,7 @@ class C extends A {
     override f(a: number, b: string): this;
     override f(a: string, b: number): Function;
     override f(a: string): Function;
-    override f(a: unknown, b?: unknown): boolean | Function | this {
+    override f(a: unknown, b?: unknown): boolean | this | Function {
         throw new Error("Method not implemented.");
     }
     override foo(): number {
