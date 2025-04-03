@@ -118,6 +118,7 @@ describe("unittests:: tscWatch:: watchAPI:: tsc-watch with custom module resolut
                         },
                     ],
                     watchOrSolution: watch,
+                    userResolvedModuleNames: true,
                 });
             });
         }
